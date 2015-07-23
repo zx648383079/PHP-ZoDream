@@ -39,7 +39,6 @@
 	    public function sendText($text='')
 	    {
 	        $CreateTime = time();
-	        $FuncFlag = $this->setFlag ? 1 : 0;
 	        $textTpl = "<xml>
 	            <ToUserName><![CDATA[{$this->msg['FromUserName']}]]></ToUserName>
 	            <FromUserName><![CDATA[{$this->msg['ToUserName']}]]></FromUserName>
@@ -55,7 +54,6 @@
 	    public function sendNews($newsData=array())
 	    {
 	        $CreateTime = time();
-	        $FuncFlag = $this->setFlag ? 1 : 0;
 	        $newTplHeader = "<xml>
 	            <ToUserName><![CDATA[{$this->msg['FromUserName']}]]></ToUserName>
 	            <FromUserName><![CDATA[{$this->msg['ToUserName']}]]></FromUserName>
@@ -70,7 +68,7 @@
 	            <Url><![CDATA[%s]]></Url>
 	            </item>";
 	        $newTplFoot = "</Articles>
-	            <FuncFlag>%s</FuncFlag>
+	            <FuncFlag>0</FuncFlag>
 	            </xml>";
 	        $Content = '';
 	        $itemsCount = count($newsData['items']);
@@ -83,7 +81,7 @@
 	            }
 	        }
 	        $header = sprintf($newTplHeader,$newsData['content'],$itemsCount);
-	        $footer = sprintf($newTplFoot,$FuncFlag);
+	        $footer = $newTplFoot;
 	        return $header . $Content . $footer;
 	    }
 		
