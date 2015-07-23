@@ -2,8 +2,8 @@
 	$mysql_info=include_once("config.php");
 	
 	$mysqli=new mysqli();
-	$mysqli = mysqli_connect($mysql_info['host'],
-		$mysql_info['user'],$mysql_info['password'],$mysql_info['database']);
+	$mysqli = mysqli_connect($mysql_info['mysql']['host'],
+		$mysql_info['mysql']['user'],$mysql_info['mysql']['password'],$mysql_info['mysql']['database']);
 	if ( $mysqli ) {
 	         echo "数据库连接成功！";
 	}else {

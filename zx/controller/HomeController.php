@@ -1,7 +1,7 @@
 <?php
 	class HomeController extends Controller{
 		function index(){
-			!auth()?go("/?c=auth"):"";
-			
+			Auth::guest()?go("/?c=auth"):"";
+			$this->show();
 		}
 	} 

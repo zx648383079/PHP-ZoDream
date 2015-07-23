@@ -1,10 +1,10 @@
 <?php
-	/*
+	/**************************************************
 	*微信公众平台操作类
 	*
 	*
 	*
-	*/
+	****************************************************/
 	class WeChat{
 		
 		private $token;
@@ -32,7 +32,6 @@
 	            $this->msgtype = strtolower($this->msg['MsgType']);
 	        }
 			
-			return $this->msg;
 	    }
 		
 		 //回复文本消息
@@ -84,7 +83,7 @@
 	        $footer = $newTplFoot;
 	        return $header . $Content . $footer;
 	    }
-		
+		//TOKEN验证
 		public function valid()
 	    {
 	        $echoStr = $_GET["echostr"];
@@ -95,7 +94,7 @@
 	        	exit;
 	        }
 	    }
-		
+		//验证
 		private function checkSignature()
 		{
 	        

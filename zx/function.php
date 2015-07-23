@@ -1,11 +1,11 @@
 <?php
-	/***************
+	/*****************************************************
 	*全局方法
 	*
 	*
 	*作者：zx
-	*2015/7/22
-	*/
+	*2015/7/23
+	********************************************************/
 	
 	//跳转
 	function go($url, $time=0, $msg='') {
@@ -30,28 +30,34 @@
 	    }
 	}
 	
-	//验证是否登录
-	function auth(){
-		if(isset($_SESSION['user']))
-		{
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
 	//视图中用
 	function extand($name){
 		include(ZXV."layout/".$name.".php");
 	}
 	
-	
+	//加载数据库操作类
 	function sql($table){
 		require(ZXF."zxsql".ZXP);
 		return new WeChat(ZXC."config.php");
 	}
-	
+	//加载微信操作类
 	function WeChat(){
 		require(ZXF."wechat".ZXP);
 		return new WeChat(ZXC."config.php");
+	}
+	
+	//写日志
+	function writeLog($logs){
+		$log='';
+		if(is_array($logs))
+		{
+			foreach($arr as $k=>$r){
+			     $log.="{$k}='{$r}',";
+			}
+		}else{
+			$log=$logs;
+		}
+		$logFile = date('Y-m-d').'.txt';
+		$log = date('Y-m-d H:i:s').' >>> '.$log."\r\n";
+		file_put_contents($logFile,$log,FILE_APPEND );
 	}

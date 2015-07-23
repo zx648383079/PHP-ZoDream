@@ -1,6 +1,7 @@
 <?php
 	class AuthController extends Controller{
 		function index(){
+			$title="登录";
 			$this->show('login');
 		}
 		

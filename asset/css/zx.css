@@ -3,6 +3,67 @@
 	margin:0px;
 }
 
+.container{
+	width: 80%;
+	margin:0 auto;
+}
+
+.head{
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.navbar{
+	width: 100%;
+	background-color: black;
+	padding:0 10%;
+	position: fixed;
+	bottom: 0px;
+	color: white;
+	font-size: 30px;
+}
+.brand{
+	position: fixed;
+	bottom: 0px;
+}
+
+.inline{
+	list-style-type: none;
+	text-decoration: none;
+	float: right;
+	margin-right: 20%;
+}
+.inline>li{
+	display: inline;
+	padding: 0 5px;
+}
+
+.up{
+	display: none;
+	position: absolute;
+	bottom: 50px;
+	background-color: black;
+	list-style-type: none;
+}
+
+
+.inline a{
+	color: white;
+}
+
+.inline li:hover{
+	background-color: #001100;
+}
+
+.inline a:hover{
+	color: burlywood;
+}
+
+a{
+	text-decoration: none;
+}
+
 .form{
 	width: 40%;
 	margin:auto;

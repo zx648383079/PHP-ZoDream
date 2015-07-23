@@ -1,15 +1,24 @@
 <?php
-	class zxsql{
+	/****************************************************
+	*数据库操作类
+	*
+	*
+	*
+	*作者：zx
+	*更新时间：2015/7/23
+	*******************************************************/
+	
+	class Zxsql{
 		
 		private $host; //数据库主机
 	    private $user; //数据库用户名
 	    private $pwd; //数据库用户名密码
 	    private $database; //数据库名
 	    private $coding; //数据库编码，GBK,UTF8,gb2312
-		private $prefix;
 		private $table;
 		private $link;
 		private $sql;
+		private $result;
 			
 		public function __construct($table,$config_path)
 		{
@@ -25,8 +34,8 @@
 	        $this->pwd = $config['mysql']['password'];
 	        $this->database = $config['mysql']['databse'];
 	        $this->coding = $config['mysql']['encoding'];
-			$this->prefix=$config['mysql']['prefix'];
-			$this->table=$table;
+			$prefix=$config['mysql']['prefix'];
+			$this->table=$prefix.$table;
 	        $this->connect();
 	    }
 	 
@@ -39,15 +48,13 @@
 	 
 	    /*数据库执行语句，可执行查询添加修改删除等任何sql语句*/
 	    public function query($sql) {
-	        $result = mysqli_query($this->link,$sql);
-	        return $result;
+	        $this->result = mysqli_query($this->link,$sql);
+	        return $this->result;
 	    }
-	 	
+	 	//创建表格
 		 public function create($data)
 		 {
-			 
-			$tableComplete=$this->prefix.$this->table; 
-			$result =mysqli_num_rows($this->query("SHOW TABLES LIKE '$tableComplete'"));
+			$result =mysqli_num_rows($this->query("SHOW TABLES LIKE '{$this->table}'"));
 			if($result>0){
 				return "";
 			}else{
@@ -60,13 +67,13 @@
 						 {
 							 $query="{$k} {$v}";
 						 }else{
-							 $query=",{$k} {$v}";
+							 $query.=",{$k} {$v}";
 						 }
 					 }
 				 }else{
 					 $query=$data;
 				 }
-				$result=$this->query("CREATE TABLE $tableComplete(
+				$result=$this->query("CREATE TABLE {$this->table}(
 					id INT(10) not null AUTO_INCREMENT,
 					$query,
 					created datetime,
@@ -75,36 +82,79 @@
 					) 
 					charset =utf8;");
 				if($result){
-					echo $result;
+					return $result;
 				}else{
-					echo "";
+					return "";
 				}
 			}
 		 }
 		 
-		 
-		 public function select($where,$)
+		 //查询
+		 public function select($where)
 		 {
 			 
 		 }
-	 
-	 	public function update()
+	 	//更新
+	 	public function update($data)
 		 {
-			 
+			$query='';
+			if(is_array($data))
+			{
+				while(list($k,$v) =each($data))
+				{
+					if(empty($query))
+					{
+						 $query="{$k}={$v}";
+					}else{
+						 $query.=",{$k}={$v}";
+					}
+				}
+			}else{
+				 $query=$data;
+			}
+			
+			return $this->query("UPDATE {$this->table} SET {$query};");
+				 
 		 }
-		 
-		 public function insert()
+		 //插入
+		 public function insert($sql)
 		 {
+			 $col="";
+			 $val="";
+			 if(is_array($sql))
+			 {
+				 foreach($sql as $k=>$v)
+				 {
+					 if(empty($col))
+					 {
+						 $col=$k;
+						 $val=$v;
+					 }else{
+						 $col.=",".$k;
+						 $val.=",".$v;
+					 }
+				 }
+			 }else{
+				 $val=$sql;
+			 }
 			 
+			 $col=empty($col)?"":"(".$col.")";	
+			 
+			 return $this->query("INSERT INTO {$this->table}{$col} VALUES ({$val}) ;");
+			 	 
 		 }
-		 
-		 public function delete()
+		 //删除
+		 public function delete($where)
 		 {
-			 
+			 return $this->query("DELETE FROM {$this->table} WHERE {$where};");
 		 }
-		 
+		 //关闭
 		 public function close()
 		 {
-			 return mysqli_close($this->link);
+			 if(!empty($result))
+			 {
+				 mysqli_free_result($result);
+			 }
+			 mysqli_close($this->link);
 		 }
 	}
