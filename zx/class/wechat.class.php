@@ -85,22 +85,27 @@
 	        return $header . $Content . $footer;
 	    }
 		
-		public function valid(){
-			$echoStr=$_GET['echostr'];
-			if($this->checkSignature()){
-				echo $echoStr;
-				exit;
-			}
-		}
+		public function valid()
+	    {
+	        $echoStr = $_GET["echostr"];
+	
+	        //valid signature , option
+	        if($this->checkSignature()){
+	        	echo $echoStr;
+	        	exit;
+	        }
+	    }
 		
 		private function checkSignature()
 		{
-		    $signature = $_GET["signature"];
-		    $timestamp = $_GET["timestamp"];
-		    $nonce = $_GET["nonce"];	
-		        		
-			$token = TOKEN;
+	        
+	        $signature = $_GET["signature"];
+	        $timestamp = $_GET["timestamp"];
+	        $nonce = $_GET["nonce"];
+	        		
+			$token = $this->token;
 			$tmpArr = array($token, $timestamp, $nonce);
+	        // use SORT_STRING rule
 			sort($tmpArr, SORT_STRING);
 			$tmpStr = implode( $tmpArr );
 			$tmpStr = sha1( $tmpStr );

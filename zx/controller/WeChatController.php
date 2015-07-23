@@ -1,5 +1,5 @@
 <?php
-	class WeChatController extends Controller{
+	class WechatController extends Controller{
 		function index(){
 			$wechat=WeChat();
 			$wechat->valid();
