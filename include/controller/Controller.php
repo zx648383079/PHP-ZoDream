@@ -3,8 +3,6 @@
 	*控制器基类
 	*
 	*
-	*作者：zx
-	*更新时间：2015/7/23
 	*******************************************************/
 	
 	
@@ -14,9 +12,11 @@
 		//加载视图
 		function show($name="index")
 		{
-			require(ZXV.$name.".php");
+			header( 'Content-Type:text/html;charset=utf-8 ');
+			require(NWAYSVIEW.$name.".php");
 		} 
 		
+		//返回JSON数据
 		function ajaxJson($data,$type='JSON')
 		{
 			switch (strtoupper($type)){

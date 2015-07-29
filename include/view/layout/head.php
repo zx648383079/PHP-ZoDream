@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -10,6 +10,8 @@
 <link href="/asset/img/favicon.png" rel="shortcut icon"/>
 
 <link type="text/css" rel="stylesheet" href="/asset/css/zx.css" />
+
+
 
 </head>
 <body>

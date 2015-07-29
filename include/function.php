@@ -3,12 +3,11 @@
 	*全局方法
 	*
 	*
-	*作者：zx
-	*2015/7/23
+	*
 	********************************************************/
 	
 	//跳转
-	function go($url, $time=0, $msg='') {
+	function redirect($url, $time=0, $msg='') {
 	    //多行URL地址支持
 	    $url        = str_replace(array("\n", "\r"), '', $url);
 	    if (empty($msg))
@@ -32,18 +31,18 @@
 	
 	//视图中用
 	function extand($name){
-		include(ZXV."layout/".$name.".php");
+		include(NWAYSVIEW."layout/".$name.".php");
 	}
 	
 	//加载数据库操作类
-	function sql($table){
-		require(ZXF."zxsql".ZXP);
-		return new WeChat(ZXC."config.php");
+	function pdo($table){
+		require(NWAYSCLASS."pdo".NWAYSFILE);
+		return new PdoClass($table,NWAYSCONF."config.php");
 	}
 	//加载微信操作类
 	function WeChat(){
-		require(ZXF."wechat".ZXP);
-		return new WeChat(ZXC."config.php");
+		require(NWAYSCLASS."wechat".NWAYSFILE);
+		return new WeChat(NWAYSCONF."config.php");
 	}
 	
 	//写日志

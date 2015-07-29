@@ -4,8 +4,6 @@
 	*
 	*
 	*
-	*作者：zx
-	*更新时间：2015/7/23
 	*******************************************************/
 	
 	class Zxsql{
@@ -51,6 +49,7 @@
 	        $this->result = mysqli_query($this->link,$sql);
 	        return $this->result;
 	    }
+		
 	 	//创建表格
 		 public function create($data)
 		 {
@@ -89,11 +88,12 @@
 			}
 		 }
 		 
-		 //查询
-		 public function select($where)
-		 {
+		//查询
+		public function select($where)
+		{
 			 
-		 }
+		}
+		
 	 	//更新
 	 	public function update($data)
 		 {
