@@ -14,6 +14,10 @@
 			'password'=>'root',					//密码
 			'prefix'=>'',					//前缀
 			'encoding'=>'utf8'					//编码
+		),
+		'upload'=>array(
+			'maxsize'=>'',                  //最大上传大小 ，单位kb
+			'allowtype'=>'',				//允许上次类型，用‘；’分开
+			'savepath'=>'',                 //文件保存路径
 		)
-	
 	);

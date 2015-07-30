@@ -7,6 +7,7 @@
 			<input type="password" name="pwd" placeholder="密码" required ng-model="formData.pwd"/>
 			<span class="help-block" ng-show="errorPwd">{{ errorPwd }}</span>
 			<input type="text" name="code" placeholder="验证码" required ng-model="formData.code"/>
+			<img id="code" src="/verify-index" alt="验证码"/>
 			<span class="help-block" ng-show="errorCode">{{ errorCode }}</span>
 			<button type="submit">提交</button>
 		</form>

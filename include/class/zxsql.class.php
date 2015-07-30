@@ -24,15 +24,16 @@
 			if(is_array($config_path)){
 				$config=$config_path;
 			}else{
-				$config=require($config_path);
+				$configTem=require($config_path);
+		    	$config=$configTem['mysql'];
 			}
 			
-			$this->host = $config['mysql']['host'];
-	        $this->user = $config['mysql']['user'];
-	        $this->pwd = $config['mysql']['password'];
-	        $this->database = $config['mysql']['databse'];
-	        $this->coding = $config['mysql']['encoding'];
-			$prefix=$config['mysql']['prefix'];
+			$this->host = $config['host'];
+	        $this->user = $config['user'];
+	        $this->pwd = $config['password'];
+	        $this->database = $config['databse'];
+	        $this->coding = $config['encoding'];
+			$prefix=$config['prefix'];
 			$this->table=$prefix.$table;
 	        $this->connect();
 	    }

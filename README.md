@@ -13,6 +13,8 @@ PHP-WeChat
 
 >>css			css样式
 
+>>font			字体文件
+
 >>img			图片资源
 
 >>js			js脚本
@@ -42,9 +44,11 @@ PHP-WeChat
 
 5.优化 installl.php
 
+6.增加验证码
+
 
 
 # 更多详情请关注微信 `zx_zszh`
 
-更新时间：2015/7/29
+更新时间：2015/7/30
 

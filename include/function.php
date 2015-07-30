@@ -45,6 +45,19 @@
 		return new WeChat(NWAYSCONF."config.php");
 	}
 	
+	//上传文件
+	function upload($rand=true)
+	{
+		require(NWAYSCLASS."upload".NWAYSFILE);
+		return new Upload($file,$rand,NWAYSCONF."config.php");
+	}
+	
+	function verify($codelen=4,$width=150,$height=50)
+	{
+		require(NWAYSCLASS."verify".NWAYSFILE);
+		return new Verify($codelen,$width,$height,"asset/font/AcademyKiller.ttf");
+	}
+	
 	//写日志
 	function writeLog($logs){
 		$log='';

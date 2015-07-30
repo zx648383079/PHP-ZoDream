@@ -38,16 +38,17 @@ class PdoClass
 		if(is_array($config_path)){
 			$config=$config_path;
 		}else{
-			$config=require($config_path);
+			$configTem=require($config_path);
+		    $config=$configTem['mysql'];
 		}
         
-        $host = $config['mysql']['host'];
-	    $user = $config['mysql']['user'];
-	    $pwd = $config['mysql']['password'];
-	    $database = $config['mysql']['database'];
-	    $coding = $config['mysql']['encoding'];
+        $host = $config['host'];
+	    $user = $config['user'];
+	    $pwd = $config['password'];
+	    $database = $config['database'];
+	    $coding = $config['encoding'];
         
-	    $this->prefix=$config['mysql']['prefix'];
+	    $this->prefix=$config['prefix'];
         
         $this->table=$this->prefix.$table;
         
