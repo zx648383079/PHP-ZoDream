@@ -14,6 +14,7 @@
 		{
 			header( 'Content-Type:text/html;charset=utf-8 ');
 			require(NWAYSVIEW.$name.".php");
+			exit;
 		} 
 		
 		//返回JSON数据
@@ -38,5 +39,7 @@
 	                header('Content-Type:text/html; charset=utf-8');
 	                exit($data);            
 	        }
+			
+			exit;
 		}
 	}

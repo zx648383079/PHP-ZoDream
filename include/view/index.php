@@ -1,13 +1,14 @@
 <?php extand("head"); ?>
 	
-	<div class="container" ng-app ng-controller="phonelist">
+	<div class="container" ng-app ng-init="aa='aaa'" ng-controller="phonelist">
+		<div><a href="/auth-logout">登出</a></div>
 		<div class="head">
 			Hello {{'World'}}!
 			<br/>
 			输入数据：<input type="text" ng-model="name" placeholder="World">
 			<br/>
 			
-			{{ yourname || 'word' }}
+			{{ name || 'word' }}
 			
 			<p>1+2= {{ 1+2 }}</p>
 			<select ng-model="orderProp">
@@ -33,8 +34,6 @@
 					<td>{{ i+1 }}</td>
 				</tr>
 			</table>
-			
-		</div>
 	</div>
 	
 	<form>

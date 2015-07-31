@@ -17,7 +17,7 @@ function phonelist($scope)
 
 var formApp=angular.module("formApp",[]);
 
-function formController($scope,$http)
+formApp.controller('formController',['$scope','$http','$window','$interval',function($scope,$http,$window,$interval)
 {
 	$scope.formData={};
 	
@@ -34,15 +34,26 @@ function formController($scope,$http)
 			data:topost($scope.formData),
 			headers:{"Content-Type":"application/x-www-form-urlencoded"}
 		}).success(function(data){
-			console.log(data);
+			//console.log(data);
 			if(!data.success)
 			{
 				$scope.errorEmail = data.errors.email;
 				$scope.errorPwd = data.errors.pwd;
 				$scope.errorCode = data.errors.code;
 			}else{
-				$scope.message = data.message;
+				var i=5;
+				var a=$interval(function()
+					{
+						if(i==0)
+						{
+							$window.location.href="/";
+							$interval.cancel(a);
+						}else{
+							$scope.message="登录成功！将在"+i+"秒后进入……";
+						}
+						i--;
+					},1000);
 			}
 		});
 	};
-}
+}]);

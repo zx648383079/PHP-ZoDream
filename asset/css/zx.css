@@ -65,15 +65,16 @@ a{
 }
 
 .form{
-	width: 40%;
+	width: 60%;
 	margin:auto;
 	background-color: rgba(0, 0, 0, 0.36);
 }
 
-.form input[type="text"]{
+.form input[type="text"],.form input[type="email"],.form input[type="password"],.form button[type="submit"]{
 	display: inline-block;
 	background: none;
 	border-color: blue;
 	border-radius: 5px;
 	font-size: 30px;
 }
+
