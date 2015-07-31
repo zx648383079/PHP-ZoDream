@@ -7,13 +7,27 @@
 	
 	
 	class Controller{
-
+		
+		private $data;
+		
+		//要传的数据
+		function send($key,$value="")
+		{
+			if(is_array($key))
+			{
+				$this->data=$key;
+			}else
+			{
+				$this->data[$key]=$value;
+			}
+		}
 		
 		//加载视图
 		function show($name="index")
 		{
+			extract($this->data);    //从数组导成变量；
 			header( 'Content-Type:text/html;charset=utf-8 ');
-			require(NWAYSVIEW.$name.".php");
+			include(NWAYSVIEW.$name.".php");
 			exit;
 		} 
 		

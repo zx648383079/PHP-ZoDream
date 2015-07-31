@@ -1,8 +1,16 @@
 <?php
 	class AuthController extends Controller{
+		
+		
 		function index(){
-			$title="登录";
+			$this->send('title','登录');
 			$this->show('login');
+		}
+		
+		function qrcode()
+		{
+			$this->send(['title'=>'扫扫二维码','img'=>qrcode("http://www.baidu.com")]);
+			$this->show('qrcode');
 		}
 		
 		function login(){

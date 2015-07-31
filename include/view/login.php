@@ -21,9 +21,12 @@
 				<span class="help-block" ng-show="errorCode">{{ errorCode }}</span>
 			</div>
 			<div class="row" ng-show="message">{{ message }}</div>
-			<button type="submit">提交</button>
+			<div class="row">
+				<button type="submit">提交</button>
+				<a href="/auth-qrcode">二维码</a>
+			</div>
 		</form>
-		
+	
 	</div>
 	
 <?php extand("foot"); ?>
