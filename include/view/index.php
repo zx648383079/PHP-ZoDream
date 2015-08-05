@@ -1,7 +1,7 @@
 <?php extand("head"); ?>
 	
 	<div class="container" ng-app ng-init="aa='aaa'" ng-controller="phonelist">
-		<div><a href="/auth-logout">登出</a></div>
+		<div><a href="/?c=auth">登出</a></div>
 		<div class="head">
 			Hello {{'World'}}!
 			<br/>

@@ -30,7 +30,7 @@ formApp.controller('formController',['$scope','$http','$window','$interval',func
 		
 		$http({
 			method:"POST",
-			url:"/auth-login",
+			url:"/?c=auth&v=login",
 			data:topost($scope.formData),
 			headers:{"Content-Type":"application/x-www-form-urlencoded"}
 		}).success(function(data){
@@ -41,6 +41,9 @@ formApp.controller('formController',['$scope','$http','$window','$interval',func
 				$scope.errorPwd = data.errors.pwd;
 				$scope.errorCode = data.errors.code;
 			}else{
+                $scope.errorEmail = "";
+				$scope.errorPwd = "";
+				$scope.errorCode = "";
 				var i=5;
 				var a=$interval(function()
 					{

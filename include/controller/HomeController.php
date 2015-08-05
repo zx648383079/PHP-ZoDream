@@ -1,7 +1,7 @@
 <?php
 	class HomeController extends Controller{
 		function index(){
-			Auth::guest()?redirect("/auth-index"):"";
+			Auth::user()?"":redirect("/?c=auth");
 			$this->show();
 		}
 	} 

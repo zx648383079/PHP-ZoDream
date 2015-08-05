@@ -6,7 +6,15 @@
 	*
 	********************************************************/
 	
-	//跳转
+	/**
+	 * 跳转页面
+	 *
+	 * @access globe
+	 *
+	 * @param string $url 要跳转的网址
+	 * @param int $time 停顿的时间
+	 * @param string $msg 显示的消息.
+	 */
 	function redirect($url, $time=0, $msg='') {
 	    //多行URL地址支持
 	    $url        = str_replace(array("\n", "\r"), '', $url);
@@ -29,29 +37,78 @@
 	    }
 	}
 	
-	//视图中用
+	/**
+	 * 视图中包含其他视图
+	 *
+	 * @access globe
+	 *
+	 * @param string $name 文件名
+	 */
 	function extand($name){
 		include(NWAYSVIEW."layout/".$name.".php");
 	}
+
+	/**
+    * 网址生成
+    *
+    *
+    */
+
+	function url($controller,$view,$model=""){
+		
 	
-	//加载数据库操作类
+	}
+	
+        
+	/**
+	 * 加载数据库操作类
+	 *
+	 * @access globe
+	 *
+	 * @param string $table 要操作的表
+	 * @return 返回数据库操作对象,
+	 */
 	function pdo($table){
 		require(NWAYSCLASS."pdo".NWAYSFILE);
 		return new PdoClass($table,NWAYSCONF."config.php");
 	}
-	//加载微信操作类
+	
+	 /**
+	 * 加载微信操作类
+	 *
+	 * @access globe
+	 *
+	 * @return 返回微信操作对象,
+	 */
 	function WeChat(){
 		require(NWAYSCLASS."wechat".NWAYSFILE);
 		return new WeChat(NWAYSCONF."config.php");
 	}
 	
-	//上传文件
+	/**
+	 * 上传文件
+	 *
+	 * @access globe
+	 *
+	 * @param boolen $rand 是否随机生成文件名
+	 * @return 返回上传操作对象,
+	 */
 	function upload($rand=true)
 	{
 		require(NWAYSCLASS."upload".NWAYSFILE);
 		return new Upload($file,$rand,NWAYSCONF."config.php");
 	}
-	//加载验证码
+	
+	/**
+	 * 加载验证码
+	 *
+	 * @access globe
+	 *
+	 * @param int $codelen 验证码的长度.
+	 * @param int $width 验证码图片的宽度.
+	 * @param int $height 验证码图片的高度.
+	 * @return 返回验证码操作对象,
+	 */
 	function verify($codelen=4,$width=150,$height=50)
 	{
 		require(NWAYSCLASS."verify".NWAYSFILE);
@@ -59,16 +116,16 @@
 	}
 	
 	
-	  /**
+	 /**
 	 * 生成二维码
 	 *
-	 * @access 
+	 * @access globe
 	 *
 	 * @param string $url 要生成的网址
 	 * @param string $file 要生成的路径
 	 * @param boolen $refresh 是否强制刷新.
 	 * @param string $logo    图标的路径 
-	 * @return 返回路径或False,
+	 * @return 返回路径,
 	 */
 	function qrcode($url,$refresh=false,$file='asset/img/qrcode.png',$logo=null)
 	{
@@ -106,7 +163,13 @@
 		return $file;
 	}
 	
-	//写日志
+	/**
+	 * 写日志记录
+	 *
+	 * @access globe
+	 *
+	 * @param string|array $logs 信息
+	 */
 	function writeLog($logs){
 		$log='';
 		if(is_array($logs))

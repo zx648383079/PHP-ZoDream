@@ -25,7 +25,11 @@
 		//加载视图
 		function show($name="index")
 		{
-			extract($this->data);    //从数组导成变量；
+			if(!empty($this->data))
+			{
+				extract($this->data);    //从数组导成变量；
+			}
+			
 			header( 'Content-Type:text/html;charset=utf-8 ');
 			include(NWAYSVIEW.$name.".php");
 			exit;

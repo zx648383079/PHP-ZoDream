@@ -10,7 +10,17 @@ class Verify
 	 private $font;				//指定的字体
 	 private $fontsize=30 ;			//指定字体大小
 	 private $fontcolor;		//指定字体颜色
-	 //构造方法初始化
+	 
+	 /**
+	 * 公有构造
+	 *
+	 * @access public
+	 *
+	 * @param int $codelen 验证码的长度.
+	 * @param int $width 验证码图片的宽度.
+	 * @param int $height 验证码图片的高度.
+	 * @param string $font 验证码字体.
+	 */
 	 public function __construct($codelen,$width,$height,$font)
 	{
 		
@@ -18,7 +28,6 @@ class Verify
 		$this->width=$width;
 		$this->height=$height;
 		$this->font=$font;
-		
 		
 	}
 	

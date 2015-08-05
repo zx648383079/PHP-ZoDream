@@ -27,7 +27,7 @@ class PdoClass
     /**
 	 * 公有构造
 	 *
-	 * @access private
+	 * @access public
 	 *
 	 * @param string $table 操作的表.
 	 * @param string|array $config_path 数据库的配置信息.

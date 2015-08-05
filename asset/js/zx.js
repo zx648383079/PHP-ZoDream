@@ -24,5 +24,5 @@ function topost(data)
 var code= document.getElementById("code");
 code.onclick=function()
 {
-	code.setAttribute("src","/verify-index?"+Math.random());
+	code.setAttribute("src","/?c=verify&"+Math.random());
 }

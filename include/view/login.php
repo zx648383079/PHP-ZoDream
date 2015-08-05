@@ -16,14 +16,14 @@
 			</div>
 			<div class="row">
 				<input type="text" name="code" placeholder="验证码" required ng-model="formData.code"/>
-				<img id="code" src="/verify-index" alt="验证码"/>
+				<img id="code" src="/?c=verify" alt="验证码"/>
 				<span ng-show="myForm.code.$error.required">*这是必须的</span>
 				<span class="help-block" ng-show="errorCode">{{ errorCode }}</span>
 			</div>
 			<div class="row" ng-show="message">{{ message }}</div>
 			<div class="row">
 				<button type="submit">提交</button>
-				<a href="/auth-qrcode">二维码</a>
+				<a href="/?c=auth&v=qrcode">二维码</a>
 			</div>
 		</form>
 	
