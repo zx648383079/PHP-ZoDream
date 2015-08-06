@@ -1,3 +1,37 @@
+(function(){
+	var canvas = document.getElementById("cas");
+	var ctx = canvas.getContext("2d");
+	
+	var x=0;
+	var y=0;
+	var index=0;
+	
+	setInterval(function() {
+		draw(ctx,x,y);
+		index++;
+		x=(index%10)*50;
+		y=Math.floor(index/10)*50;
+		if(index>=90)
+		{
+			x=0;
+			y=0;
+			index=0;			
+		}
+	}, 100); 
+	
+}());
+
+function draw(ctx,x,y) {
+	//var a=Math.round(Math.random()*255);
+	//var b=Math.round(Math.random()*255);
+	//var c=Math.round(Math.random()*255);
+	//var d=Math.random();
+	ctx.fillStyle="rgba(255,255,255,0.1)"
+	ctx.fillRect(0,0,700,500);
+	ctx.fillStyle ="rgb(200,200,0)"; // "rgba("+a+","+b+","+c+","+d+")";
+	ctx.fillRect (x, y, 50, 50);
+}
+
 //把数组转成能提交的数据
 function topost(data)
 {
@@ -26,3 +60,4 @@ code.onclick=function()
 {
 	code.setAttribute("src","/?c=verify&"+Math.random());
 }
+

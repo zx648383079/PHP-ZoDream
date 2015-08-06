@@ -36,6 +36,23 @@
 	        exit($str);
 	    }
 	}
+	/**
+	 * 判断是否是首页
+	 *
+	 * @access globe
+	 *
+	 * @return true|false,
+	 */
+	function is_home()
+	{
+		$home=false;
+		if(!isset($_GET['c']) || $_GET['c']=="home")
+		{
+			$home=true;
+		}
+		
+		return $home;
+	}
 	
 	/**
 	 * 视图中包含其他视图
@@ -50,13 +67,31 @@
 
 	/**
     * 网址生成
-    *
-    *
+    * @access globe
+	*
+	* @param string $controller 控制器
+	* @param string $view   方法
+	* @param string $model  其他数据
+	* @return 无返回值，输出网址,
     */
 
-	function url($controller,$view,$model=""){
+	function url($controller,$view=null,$model=null){
+		$url="/";
+		if($controller != "/")
+		{
+			$url="/?c={$controller}";
+		}
 		
-	
+		if(!empty($view))
+		{
+			$url.="&v={$view}";
+		}
+		
+		if(!empty($model))
+		{
+			$url.="&{$model}";
+		}
+		return $url;
 	}
 	
         

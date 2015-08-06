@@ -6,6 +6,7 @@
 .container{
 	width: 80%;
 	margin:0 auto;
+	padding-top: 50px;
 }
 
 .head{
@@ -15,36 +16,45 @@
 }
 
 .navbar{
-	width: 100%;
+	width: 80%;
 	background-color: black;
 	padding:0 10%;
 	position: fixed;
-	bottom: 0px;
+	top: 0px;
 	color: white;
 	font-size: 30px;
 }
 .brand{
 	position: fixed;
-	bottom: 0px;
+	top: 0px;
+}
+
+.brand img{
+	height: 50px;
 }
 
 .inline{
-	list-style-type: none;
-	text-decoration: none;
+	
+	position: relative;
 	float: right;
-	margin-right: 20%;
 }
-.inline>li{
-	display: inline;
+.inline li{
+	display: inline-block;
+	position: relative;
 	padding: 0 5px;
 }
 
-.up{
+.inline li ul{
 	display: none;
 	position: absolute;
-	bottom: 50px;
 	background-color: black;
 	list-style-type: none;
+	width:200px;
+	float: right;
+	transition: all 2s;
+	-moz-transition: all 2s;	/* Firefox 4 */
+	-webkit-transition: all 2s;	/* Safari 和 Chrome */
+	-o-transition: all 2s;	/* Opera */
 }
 
 
@@ -53,7 +63,11 @@
 }
 
 .inline li:hover{
-	background-color: #001100;
+	background-color: #dde;
+}
+
+.inline li:hover ul{
+	display: block;
 }
 
 .inline a:hover{

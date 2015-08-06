@@ -43,6 +43,7 @@
 	{
 		echo "<div><form action=\"?step=2\" method=\"POST\">
 		数据库主机：<input type=\"text\" name=\"host\" value=\"localhost\" required/>
+		数据库主机：<input type=\"port\" name=\"port\" value=\"3306\" required/>
 		数据库名：<input type=\"text\" name=\"db\" required/>
 		用户名：<input type=\"text\" name=\"user\" value=\"root\" required/>
 		密码：<input type=\"password\" name=\"pwd\" required/>
@@ -69,6 +70,7 @@
 			$text="<?php\r\nreturn array(
 				\r\n\t'mysql'=>array(							//MYSQL数据库的信息
 				\r\n\t\t'host'=>'{$config['host']}',                //服务器
+				\r\n\t\t'host'=>'{$config['port']}',                //端口
 				\r\n\t\t'database'=>'{$config['db']}',				//数据库
 				\r\n\t\t'user'=>'{$config['user']}',						//账号
 				\r\n\t\t'password'=>'{$config['pwd']}',					//密码

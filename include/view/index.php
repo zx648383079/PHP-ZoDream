@@ -1,7 +1,12 @@
 <?php extand("head"); ?>
 	
 	<div class="container" ng-app ng-init="aa='aaa'" ng-controller="phonelist">
-		<div><a href="/?c=auth">登出</a></div>
+		<div><a href="<?php echo url("auth"); ?>">登出</a></div>
+		
+		<canvas id="cas" height="500" width="700">
+			<p>不支持HTM5</p>
+		</canvas>
+		
 		<div class="head">
 			Hello {{'World'}}!
 			<br/>
@@ -40,21 +45,6 @@
 			
 	</form>
 	
-	<!--<div class="navbar">
-		<div class="brand">
-			<img src="/asset/img/favicon.png" alt=""/>
-		</div>
-		<ul class="inline">
-			<li><a href="#">主页</a></li>
-			<li><a href="#">消息</a>
-				<ul class="up">
-					<li><a href="#">普通消息</a></li>
-					<li><a href="#">图文消息</a></li>
-				</ul>
-			</li>
-			<li><a href="#">会员</a></li>
-			<li><a href="#">回复</a></li>
-		</ul>
-	</div>-->
+	
 	
 <?php extand("foot"); ?>
