@@ -2,11 +2,15 @@
 	class MessageController extends Controller{
 		function index(){
 			//Auth::user()?"":redirect("/?c=auth");
+			$this->send('title','登录');
 			
+			$message=pdo('message');
+			$data= $message->select();
+			$this->send($data);
 			$this->show('message');
 		}
 		
-		function postMessage()
+		function addMsg()
 		{
 			$data['user_id']=$_POST["id"];
 			$data['type']=$_POST["type"];
@@ -19,6 +23,13 @@
 			{
 				redirect(url('message'));
 			}
-			
+		}
+		
+		function delMsg()
+		{
+			$id=$_GET['id'];
+			$message=pdo('message');
+			$row= $message->delete('id = '.$id);
+			redirect(url('message'));
 		}
 	} 

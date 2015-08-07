@@ -47,7 +47,7 @@ class PdoClass
 	    $pwd = $config['password'];
 	    $database = $config['database'];
 	    $coding = $config['encoding'];
-        
+        $port=$config['port'];
 	    $this->prefix=$config['prefix'];
         
         $this->table=$this->prefix.$table;
@@ -55,7 +55,7 @@ class PdoClass
 
         
         try {  
-            $this->pdo = new PDO('mysql:host='.$host.';dbname='.$database, $user, $pwd ,
+            $this->pdo = new PDO('mysql:host='.$host.';port='.$port.';dbname='.$database, $user, $pwd ,
                                  array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES {$coding}"));  
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  
         } catch (PDOException $ex) {  
@@ -135,15 +135,20 @@ class PdoClass
 	 *
 	 * @access public
 	 *
-	 * @param array $_param 条件
+	 * @param array|string $_param 条件
 	 * @return 返回影响的行数,
 	 */
-    public function delete(Array $_param) {  
+    public function delete($_param) {  
         $_where = '';  
-        foreach ($_param as $_key=>$_value) {  
+        if(is_array($_param))
+        {
+            foreach ($_param as $_key=>$_value) {  
             $_where .= $_value.' AND ';  
-        }  
-        $_where = 'WHERE '.substr($_where, 0, -4);  
+            }  
+            $_where = 'WHERE '.substr($_where, 0, -4);  
+        }else{
+            $_where='WHERE '.$_param;
+        }
         $_sql = "DELETE FROM {$this->table} $_where LIMIT 1";  
         return $this->execute($_sql)->rowCount();  
     }  
@@ -153,31 +158,45 @@ class PdoClass
 	 *
 	 * @access public
 	 *
-	 * @param string|null $_table 另一张表
      * @param array $_fileld 要显示的字段
      * @param array|null $_param 条件
 	 * @return 返回查询结果,
 	 */  
-    public function select( Array $_fileld=array(),$_table=null, Array $_param = array()) {  
-        $_limit = $_order = $_where = $_like = '';  
+    public function select( Array $_param = array(),Array $_fileld=array()) {  
+        $_limit = $_order =$_group = $_where = $_like = '';  
         if (is_array($_param) && !empty($_param)) {  
             $_limit = isset($_param['limit']) ? 'LIMIT '.$_param['limit'] : '';  
             $_order = isset($_param['order']) ? 'ORDER BY '.$_param['order'] : '';  
+            $_group = isset($_param['group']) ? 'GROUP BY '.$_param['group'] : '';  
             if (isset($_param['where'])) {  
                 foreach ($_param['where'] as $_key=>$_value) {  
-                    $_where .= $_value.' AND ';  
+                    if(empty($_where))
+                    {
+                        $_where='WHERE'.$_value;
+                    }else{
+                        if(is_array($_value))
+                        {
+                            switch($_value[1])
+                            {
+                                case "or":
+                                    $_where .= 'OR'.$_value;
+                                case "and":
+                                    $_where .= 'AND'.$_value;
+                            }
+                        }else{
+                            $_where .= 'AND'.$_value;
+                        }
+                    }
                 }  
-                $_where = 'WHERE '.substr($_where, 0, -4);  
             }  
-            if (isset($_param['like'])) {  
+            /*if (isset($_param['like'])) {  
                 foreach ($_param['like'] as $_key=>$_value) {  
                     $_like = "WHERE $_key LIKE '%$_value%'";  
                 }  
-            }  
+            }  */
         }  
         $_selectFields = empty($_fileld)?"*":implode(',', $_fileld);  
-        $_table = empty($_table) ? "" : ",".$this->prefix.$_table;  
-        $_sql = "SELECT $_selectFields FROM {$this->table}{$_table} $_where $_like $_order $_limit";  
+        $_sql = "SELECT $_selectFields FROM {$this->table} $_where $_group $_order $_limit";  
         $_stmt = $this->execute($_sql);  
         $_result = array();  
         while (!!$_objs = $_stmt->fetchObject()) {  

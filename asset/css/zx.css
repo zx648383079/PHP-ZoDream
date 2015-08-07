@@ -41,8 +41,9 @@
 .inline li{
 	display: inline-block;
 	position: relative;
-	padding: 0 5px;
+	line-height: 40px;
 }
+
 
 .inline li ul{
 	display: none;
@@ -50,13 +51,23 @@
 	background-color: black;
 	list-style-type: none;
 	width:200px;
-	float: right;
 	transition: all 2s;
 	-moz-transition: all 2s;	/* Firefox 4 */
 	-webkit-transition: all 2s;	/* Safari 和 Chrome */
 	-o-transition: all 2s;	/* Opera */
 }
 
+.inline li li ul{
+	margin:-40px 0 0 200px;
+}
+
+.inline li ul{
+	padding-right: 200;
+}
+
+.inline ul li{
+	width: 100%;
+}
 
 .inline a{
 	color: white;
@@ -66,7 +77,7 @@
 	background-color: #dde;
 }
 
-.inline li:hover ul{
+.inline>li:hover>ul,.inline>li>ul>li:hover>ul{
 	display: block;
 }
 
@@ -92,3 +103,18 @@ a{
 	font-size: 30px;
 }
 
+table{
+	text-align: center;
+	font-size: 20px;
+}
+
+table th{
+	background-color: #eee;
+	line-height: 30px;
+	padding: 5px;
+}
+
+table td{
+	padding:5px 10px;
+	background-color: #ffe;
+}

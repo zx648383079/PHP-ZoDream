@@ -13,9 +13,9 @@
 		//要传的数据
 		function send($key,$value="")
 		{
-			if(is_array($key))
+			if(empty($value))
 			{
-				$this->data=$key;
+				$this->data['data']=$key;
 			}else
 			{
 				$this->data[$key]=$value;

@@ -39,7 +39,9 @@
 					<td>{{ i+1 }}</td>
 				</tr>
 			</table>
+		</div>
 	</div>
+	
 	
 	<form>
 			

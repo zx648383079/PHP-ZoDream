@@ -1,9 +1,10 @@
 
 
-
-<script src="/asset/js/angular.min.js"></script>
-<script src="/asset/js/zx.js"></script>
-<script src="/asset/js/controller.js"></script>
+<?php 
+	asset("angular.min");
+	asset("zx");
+	asset("controller");
+?>
 
 </body>
 </html>

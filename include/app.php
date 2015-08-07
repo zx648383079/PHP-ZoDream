@@ -29,6 +29,8 @@
 	
 	
 	include_once(NWAYSCONTROLLER."Controller.php");               //加载控制器基类
+	
+	//$_SERVER["REQUEST_URI"];    //获取网址
 	//加载控制器
 	$con = isset($_GET['c'])?ucfirst($_GET['c']):'Home';
 	$name=$con."Controller";

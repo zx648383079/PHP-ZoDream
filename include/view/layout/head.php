@@ -7,15 +7,18 @@
 <meta name="keywords" content="Find Me，找到我" />
 
 <title><?php echo empty($title)?"主页":$title; ?></title>
-<link href="/asset/img/favicon.png" rel="shortcut icon"/>
 
-<link type="text/css" rel="stylesheet" href="/asset/css/zx.css" />
+<?php 
+	asset('favicon','favicon');
+	asset("zx","css");
+ ?>
 
 </head>
 <body>
 <?php 
 	//首页显示的内容
-	if(is_home()) { ?>
+	if(is_home()) { 
+	?>
 
 
 
@@ -28,10 +31,17 @@
 			<img src="/asset/img/favicon.png" alt=""/>
 		</div>
 		<ul class="inline">
-			<li><a href="#">主页</a></li>
+			<li><a href="<?php echo url('/'); ?>">主页</a></li>
 			<li><a href="<?php echo url('message'); ?>">消息</a>
 				<ul>
 					<li><a href="#">普通消息</a></li>
+					<li><a href="#">图文消息</a></li>
+					<li><a href="">消息</a>
+						<ul>
+							<li><a href="#">普通消息</a></li>
+							<li><a href="#">图文消息</a></li>
+						</ul>
+					</li>
 					<li><a href="#">图文消息</a></li>
 				</ul>
 			</li>

@@ -5,16 +5,26 @@
 		<div>
 			<table>
 				<tr>
-					<th></th>
+					<th>ID</th>
+					<th>用户</th>
+					<th>类型</th>
+					<th>内容</th>
+					<th>时间</th>
+					<th>操作</th>
 				</tr>
-				<tr>
-					<td></td>
-				</tr>
+					<?php foreach( $data as $value ){
+						echo "<tr>";
+						foreach( $value as $row ){
+							echo "<td>{$row}</td>";
+						}
+						echo "<td><a href=\"".url('message','delMsg','id='.$value->id)."\">删除</a></td></tr>";
+					} ?>
 			</table>
 		</div>
+
 		
 		<div>
-			<form action="<?php echo url("message","postMessage"); ?>" method="POST">
+			<form action="<?php echo url("message","addMsg"); ?>" method="POST">
 				<div class="row">
 					<input type="number" name="id"/>
 				</div>

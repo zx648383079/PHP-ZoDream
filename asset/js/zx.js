@@ -2,6 +2,18 @@
 	var canvas = document.getElementById("cas");
 	var ctx = canvas.getContext("2d");
 	
+	ctx.beginPath();
+	ctx.moveTo(20,10);
+	ctx.lineTo(300,10);
+	ctx.strokeStyle="red";
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.moveTo(20,30);
+	ctx.lineTo(300,30);
+	ctx.strokeStyle="black";
+	ctx.stroke();
+	
 	var x=0;
 	var y=0;
 	var index=0;

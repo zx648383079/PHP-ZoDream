@@ -94,6 +94,31 @@
 		return $url;
 	}
 	
+	function asset($name,$kind="js",$echo=true)
+	{
+		$tem="";
+		switch($kind)
+		{
+			case "js":
+				$tem='<script src="/asset/js/'.$name.'.js"></script>';
+				break;
+			case "css":
+				$tem='<link type="text/css" rel="stylesheet" href="/asset/css/'.$name.'.css" />';
+				break;
+			case "favicon":
+				$tem='<link href="/asset/img/'.$name.'.png" rel="shortcut icon"/>';
+				break;
+			default:
+				break;
+		}
+		
+		if($echo)
+		{
+			echo $tem;
+		}else{
+			return $tem;
+		}
+	}
         
 	/**
 	 * 加载数据库操作类
