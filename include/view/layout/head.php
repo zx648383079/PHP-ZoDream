@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="<?php echo getLang(); ?>">
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -19,10 +19,6 @@
 	//首页显示的内容
 	if(is_home()) { 
 	?>
-
-
-
-
 
 <?php } ?>
 

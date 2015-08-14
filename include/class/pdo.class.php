@@ -2,16 +2,16 @@
 class PdoClass
 {
 	//pdo对象  
-    private $pdo = null;  
+    protected $pdo = null;  
     //用于存放实例化的对象  
-    static private $instance = null;  
+    static protected $instance = null;  
     //存放表名前缀
-    private $prefix = null;
-    //存放当前要操作的表
-    private $table=null;
+    protected $prefix = null;
     
     //存放当前操作的错误信息
-    private $error=null;
+    protected $error=null;
+    
+    
        
     //公共静态方法获取实例化的对象  
     static public function getInstance() {  
@@ -22,25 +22,20 @@ class PdoClass
     }  
        
     //私有克隆  
-    private function __clone() {}  
+    protected function __clone() {}  
        
     /**
 	 * 公有构造
 	 *
 	 * @access public
 	 *
-	 * @param string $table 操作的表.
 	 * @param string|array $config_path 数据库的配置信息.
 	 * @return 可能会返回False,
 	 */
-    public function __construct($table,$config_path) {  
-        $config=array();
-		if(is_array($config_path)){
-			$config=$config_path;
-		}else{
-			$configTem=require($config_path);
-		    $config=$configTem['mysql'];
-		}
+    public function __construct() {  
+        
+		$configTem=require_once(NWAYSCONF."config.php");
+		$config=$configTem['mysql'];
         
         $host = $config['host'];
 	    $user = $config['user'];
@@ -50,8 +45,7 @@ class PdoClass
         $port=$config['port'];
 	    $this->prefix=$config['prefix'];
         
-        $this->table=$this->prefix.$table;
-        
+        $this->table=$this->prefix.$this->table;
 
         
         try {  
@@ -202,6 +196,9 @@ class PdoClass
         while (!!$_objs = $_stmt->fetchObject()) {  
             $_result[] = $_objs;  
         }  
+        
+        out();
+        
         return $_result;  
     }  
        
@@ -239,6 +236,31 @@ class PdoClass
         return $_stmt->fetchObject()->Auto_increment;  
     }  
    
+    /**
+	 * 执行SQL语句
+	 *
+	 * @access public
+	 *
+     * @param array $_param 条件
+	 * @return 返回查询结果,
+	 */ 
+    public function query($param)
+    {
+        $result=array();
+        if(empty($param))
+        {
+            require_once(NWAYSCLASS."sql_join".NWAYSCF);
+            $sql =new SQL_Join();    
+            $_stmt=$this->execute($sql->getSQL($param));            //获取SQL语句
+            while (!!$_objs = $_stmt->fetchObject()) {  
+                $_result[] = $_objs;  
+            }
+            
+            out();
+        }
+        return $result;
+    }
+    
    
     /**
 	 * 执行SQL语句
@@ -248,7 +270,7 @@ class PdoClass
      * @param array|null $_param 条件
 	 * @return 返回查询结果,
 	 */ 
-    private function execute($_sql) {  
+    protected function execute($_sql) {  
         try {  
             $_stmt = $this->pdo->prepare($_sql);  
             $_stmt->execute();  

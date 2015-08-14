@@ -7,6 +7,22 @@
 	********************************************************/
 	
 	/**
+	 * 加载未定义的数据类文件
+	 *
+	 * @access globe
+	 *
+	 */
+	function __autoload($model)
+	{
+		$file=NWAYSMODEL.strtolower($model).NWAYSMF;
+		if(is_file($file))
+		{
+			require_once($file);
+		}
+	}
+	
+	
+	/**
 	 * 跳转页面
 	 *
 	 * @access globe
@@ -35,6 +51,7 @@
 	            $str .= $msg;
 	        exit($str);
 	    }
+		
 	}
 	/**
 	 * 判断是否是首页
@@ -52,6 +69,7 @@
 		}
 		
 		return $home;
+		
 	}
 	
 	/**
@@ -66,6 +84,107 @@
 	}
 
 	/**
+	 * 加载控制器和视图
+	 *
+	 * @access globe
+	 *
+	 */
+	function getCAV()
+	{
+		$url = request_uri();
+	
+		//  /c/v 取最后两个        /c.*/v       ?c= & v=
+		
+		$arr = explode('?',$url);
+		
+		$arr1=explode('/',$arr[0]);
+		
+		$v=array_slice($arr1,-1)[0];
+		
+		$c=array_slice($arr1,-2)[0];
+		
+		if(empty($c))
+		{
+			$c=$v;
+			$v=null;
+		}
+		
+		
+		if(!empty($c) && strpos($c,'.')!=false)
+		{
+			$arr2=explode('.',$c);
+			$c=$arr2[0];
+		}
+		
+		if(!empty($c) && strtolower($c) =='index')
+		{
+			$c=null;
+		}
+		
+		if(empty($c))
+		{
+			$c = isset($_GET['c'])?$_GET['c']:'home';
+		}
+		
+		if(empty($v))
+		{
+			$v=isset($_GET['v'])?$_GET['v']:'index';
+		}
+		
+		//return array($c,$v);
+		
+		$con = ucfirst(strtolower($c));
+		$name=$con."Controller";
+		$view=strtolower($v);
+		
+		$controllerfile=NWAYSCONTROLLER.$name.".php";
+		
+		if(is_file($controllerfile))
+		{
+			require_once($controllerfile);
+			if( class_exists($name))
+			{
+				$controller=new $name;
+				if(method_exists($controller,$view))
+				{
+					$controller->$view();
+				}else{
+					error404();
+				}
+			}else{
+				error404();
+			}
+		}else{
+			error404();
+		}
+		
+	}
+
+	//获取请求的网址
+	function request_uri()
+	{
+		if (isset($_SERVER['REQUEST_URI']))
+		{
+			$uri = $_SERVER['REQUEST_URI'];
+		}
+		else
+		{
+			if (isset($_SERVER['argv']))
+			{
+				$uri = $_SERVER['PHP_SELF'] .'?'. $_SERVER['argv'][0];
+			}
+			else
+			{
+				$uri = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
+			}
+		}
+		return $uri;
+	}
+
+
+
+
+	/**
     * 网址生成
     * @access globe
 	*
@@ -74,7 +193,6 @@
 	* @param string $model  其他数据
 	* @return 无返回值，输出网址,
     */
-
 	function url($controller,$view=null,$model=null){
 		$url="/";
 		if($controller != "/")
@@ -94,7 +212,26 @@
 		return $url;
 	}
 	
-	function asset($name,$kind="js",$echo=true)
+	/**
+    * 获取语言类型
+    * @access globe
+	*
+	* @return 返回语言,
+    */
+	function getLang() {
+        $language = $_SERVER ['HTTP_ACCEPT_LANGUAGE'];  
+        preg_match_all ( "/[\w-]+/", $language, $language );  
+        return $language [0] [0];
+    } 
+	
+	/**
+    * 资源文件
+    * @access globe
+	*
+	* @param string $name 不包括扩展名的文件名
+	* @param string $kind  文件类型，默认是 js
+    */
+	function asset($name,$kind="js")
 	{
 		$tem="";
 		switch($kind)
@@ -112,12 +249,7 @@
 				break;
 		}
 		
-		if($echo)
-		{
-			echo $tem;
-		}else{
-			return $tem;
-		}
+		echo $tem;
 	}
         
 	/**
@@ -128,10 +260,10 @@
 	 * @param string $table 要操作的表
 	 * @return 返回数据库操作对象,
 	 */
-	function pdo($table){
-		require(NWAYSCLASS."pdo".NWAYSFILE);
-		return new PdoClass($table,NWAYSCONF."config.php");
-	}
+	/*function pdo($table){
+		require(NWAYSCLASS."pdo".NWAYSCF);
+		return new PdoClass($table,);
+	}*/
 	
 	 /**
 	 * 加载微信操作类
@@ -141,7 +273,7 @@
 	 * @return 返回微信操作对象,
 	 */
 	function WeChat(){
-		require(NWAYSCLASS."wechat".NWAYSFILE);
+		require(NWAYSCLASS."wechat".NWAYSCF);
 		return new WeChat(NWAYSCONF."config.php");
 	}
 	
@@ -155,7 +287,7 @@
 	 */
 	function upload($rand=true)
 	{
-		require(NWAYSCLASS."upload".NWAYSFILE);
+		require(NWAYSCLASS."upload".NWAYSCF);
 		return new Upload($file,$rand,NWAYSCONF."config.php");
 	}
 	
@@ -171,7 +303,7 @@
 	 */
 	function verify($codelen=4,$width=150,$height=50)
 	{
-		require(NWAYSCLASS."verify".NWAYSFILE);
+		require(NWAYSCLASS."verify".NWAYSCF);
 		return new Verify($codelen,$width,$height,"asset/font/AcademyKiller.ttf");
 	}
 	
@@ -195,7 +327,7 @@
 			return $file;
 		}
 		
-		include(NWAYSCLASS.'phpqrcode'.NWAYSFILE); 
+		include(NWAYSCLASS.'phpqrcode'.NWAYSCF); 
 		$errorCorrectionLevel = 'L';//容错级别 
 		$matrixPointSize = 12;//生成图片大小
 		
@@ -221,6 +353,84 @@
 		}
 		
 		return $file;
+	}
+	
+	 /**
+	 * 获取真实IP
+	 *
+	 * @access globe
+	 *
+	 * @return 返回路径,
+	 */
+	function getIp(){  
+		$realip = '';  
+		$unknown = 'unknown';  
+		if (isset($_SERVER)){  
+			if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) && strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], $unknown)){  
+				$arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);  
+				foreach($arr as $ip){  
+					$ip = trim($ip);  
+					if ($ip != 'unknown'){  
+						$realip = $ip;  
+						break;  
+					}  
+				}  
+			}else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']) && strcasecmp($_SERVER['HTTP_CLIENT_IP'], $unknown)){  
+				$realip = $_SERVER['HTTP_CLIENT_IP'];  
+			}else if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']) && strcasecmp($_SERVER['REMOTE_ADDR'], $unknown)){  
+				$realip = $_SERVER['REMOTE_ADDR'];  
+			}else{  
+				$realip = $unknown;  
+			}  
+		}else{  
+			if(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), $unknown)){  
+				$realip = getenv("HTTP_X_FORWARDED_FOR");  
+			}else if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), $unknown)){  
+				$realip = getenv("HTTP_CLIENT_IP");  
+			}else if(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), $unknown)){  
+				$realip = getenv("REMOTE_ADDR");  
+			}else{  
+				$realip = $unknown;  
+			}  
+		}  
+		$realip = preg_match("/[\d\.]{7,15}/", $realip, $matches) ? $matches[0] : $unknown;  
+		return $realip;  
+	}
+	
+	/**
+	 * 输出404页面
+	 *
+	 * @access globe
+	 *
+	 */
+	function error404()
+	{
+		header( 'Content-Type:text/html;charset=utf-8 ');
+		include(NWAYSVIEW."404.php");
+		exit;
+	}
+	
+	/**
+	 * 调试时的输出信息
+	 *
+	 * @access globe
+	 *
+	 * @param any $info 信息
+	 */
+	function out($info=null)
+	{
+		if(defined('DEBUG') && DEBUG)
+		{
+			$error=error_get_last();
+			
+			if(!empty($error) || !empty($info))
+			{
+				echo "<div style=\"text-align:center;color:red;font-weight:700;font-size:20px\">";
+				empty($error)?'':printf("错误提示：%s！在%s中第%u行。",$error['message'],$error['file'],$error['line']);
+				empty($info)?'':var_dump($info);
+				echo '</div>';
+			}
+		}
 	}
 	
 	/**

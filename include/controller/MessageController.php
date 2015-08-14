@@ -4,7 +4,7 @@
 			//Auth::user()?"":redirect("/?c=auth");
 			$this->send('title','登录');
 			
-			$message=pdo('message');
+			$message=new Message();
 			$data= $message->select();
 			$this->send($data);
 			$this->show('message');
@@ -17,7 +17,7 @@
 			$data['content']=$_POST["content"];
 			date_default_timezone_set('Etc/GMT-8');     //这里设置了时区
 			$data['created']=date("Y-m-d H:i:s");
-			$message= pdo("message");
+			$message= new Message();
 			$row= $message->add($data);
 			if(!empty($row))
 			{
@@ -28,7 +28,7 @@
 		function delMsg()
 		{
 			$id=$_GET['id'];
-			$message=pdo('message');
+			$message=new Message();
 			$row= $message->delete('id = '.$id);
 			redirect(url('message'));
 		}
