@@ -1,9 +1,12 @@
 <?php
+	namespace Controller;
+	
+	use Model\Message;
+	
 	class MessageController extends Controller{
 		function index(){
 			//Auth::user()?"":redirect("/?c=auth");
-			$this->send('title','登录');
-			
+			$this->send('title','消息');
 			$message=new Message();
 			$data= $message->select();
 			$this->send($data);

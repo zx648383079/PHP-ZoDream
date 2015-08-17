@@ -23,14 +23,7 @@ class Upload
 	 * @param string|array $config_path 数据库的配置信息.
 	 * @return 可能会返回False,
 	 */
-    public function __construct($rand=true,$config_path) {  
-        $config=array();
-		if(is_array($config_path)){
-			$config=$config_path;
-		}else{
-			$configTem=require($config_path);
-		    $config=$configTem['upload'];
-        }
+    public function __construct($rand=true,$config) {  
         
         $this->maxsize = $config['maxsize'];
         $this->allowtype =explode(';',$config['allowtype']);

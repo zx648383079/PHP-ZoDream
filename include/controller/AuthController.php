@@ -1,6 +1,7 @@
 <?php
+	namespace Controller;
+	
 	class AuthController extends Controller{
-		
 		
 		function index(){
 			$this->send('title','登录');
@@ -46,6 +47,7 @@
 		
 		function logout()
 		{
+			out('gg');
 			$_SESSION['user']=null;
 			redirect('/?c=auth');
 		}

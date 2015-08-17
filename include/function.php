@@ -6,21 +6,59 @@
 	*
 	********************************************************/
 	
+	
 	/**
-	 * 加载未定义的数据类文件
+	 * 获取配置文件
 	 *
 	 * @access globe
 	 *
+	 * @param string|null $key 要获取的配置名
+	 * @return array,
 	 */
-	function __autoload($model)
+	function config($key=null)
 	{
-		$file=NWAYSMODEL.strtolower($model).NWAYSMF;
-		if(is_file($file))
+		$configs=require("include/conf/config.php");
+		if(!empty($key))
 		{
-			require_once($file);
+			$configs=$configs[$key];
 		}
+		return $configs;
 	}
 	
+	/**
+	 * Smarty中加载的自定义方法 主要是加载 js、css 文件
+	 *
+	 * @access globe
+	 *
+	 * @param array $file 获取到的值
+	 *
+	 * @return string     返回的值即输出的值
+	 */
+	function jcs($file)
+	{
+		$result='';
+		$file=$file['name'];
+		$arr=explode('.',$file);
+		if(count($arr)==1)
+		{
+			$result= '<script src="/asset/js/'.$file.'.js"></script>';
+		}else{
+			switch(end($arr))
+			{
+				case 'js':
+					$result= '<script src="/asset/js/'.$file.'"></script>';
+					break;
+				case 'css':
+					$result= '<link rel="stylesheet" type="text/css" href="/asset/css/'.$file.'"/>';
+					break;
+				default:
+					$result= '<script src="/asset/js/'.$file.'.js"></script>';
+					break;
+			}
+		}
+			
+		return $result;
+	}
 	
 	/**
 	 * 跳转页面
@@ -73,17 +111,6 @@
 	}
 	
 	/**
-	 * 视图中包含其他视图
-	 *
-	 * @access globe
-	 *
-	 * @param string $name 文件名
-	 */
-	function extand($name){
-		include(NWAYSVIEW."layout/".$name.".php");
-	}
-
-	/**
 	 * 加载控制器和视图
 	 *
 	 * @access globe
@@ -133,29 +160,23 @@
 		
 		//return array($c,$v);
 		
+		
 		$con = ucfirst(strtolower($c));
-		$name=$con."Controller";
+		$name='Controller\\'.$con."Controller";
 		$view=strtolower($v);
-		
-		$controllerfile=NWAYSCONTROLLER.$name.".php";
-		
-		if(is_file($controllerfile))
+		if( class_exists($name))
 		{
-			require_once($controllerfile);
-			if( class_exists($name))
+			$controller=new $name;
+			if(method_exists($controller,$view))
 			{
-				$controller=new $name;
-				if(method_exists($controller,$view))
-				{
-					$controller->$view();
-				}else{
-					error404();
-				}
+				$controller->$view();
 			}else{
-				error404();
+				out($con);
+				out($view);
 			}
 		}else{
-			error404();
+			out($con);
+			out($view);
 		}
 		
 	}
@@ -182,36 +203,6 @@
 	}
 
 
-
-
-	/**
-    * 网址生成
-    * @access globe
-	*
-	* @param string $controller 控制器
-	* @param string $view   方法
-	* @param string $model  其他数据
-	* @return 无返回值，输出网址,
-    */
-	function url($controller,$view=null,$model=null){
-		$url="/";
-		if($controller != "/")
-		{
-			$url="/?c={$controller}";
-		}
-		
-		if(!empty($view))
-		{
-			$url.="&v={$view}";
-		}
-		
-		if(!empty($model))
-		{
-			$url.="&{$model}";
-		}
-		return $url;
-	}
-	
 	/**
     * 获取语言类型
     * @access globe
@@ -224,47 +215,6 @@
         return $language [0] [0];
     } 
 	
-	/**
-    * 资源文件
-    * @access globe
-	*
-	* @param string $name 不包括扩展名的文件名
-	* @param string $kind  文件类型，默认是 js
-    */
-	function asset($name,$kind="js")
-	{
-		$tem="";
-		switch($kind)
-		{
-			case "js":
-				$tem='<script src="/asset/js/'.$name.'.js"></script>';
-				break;
-			case "css":
-				$tem='<link type="text/css" rel="stylesheet" href="/asset/css/'.$name.'.css" />';
-				break;
-			case "favicon":
-				$tem='<link href="/asset/img/'.$name.'.png" rel="shortcut icon"/>';
-				break;
-			default:
-				break;
-		}
-		
-		echo $tem;
-	}
-        
-	/**
-	 * 加载数据库操作类
-	 *
-	 * @access globe
-	 *
-	 * @param string $table 要操作的表
-	 * @return 返回数据库操作对象,
-	 */
-	/*function pdo($table){
-		require(NWAYSCLASS."pdo".NWAYSCF);
-		return new PdoClass($table,);
-	}*/
-	
 	 /**
 	 * 加载微信操作类
 	 *
@@ -273,7 +223,7 @@
 	 * @return 返回微信操作对象,
 	 */
 	function WeChat(){
-		return new WeChat(NWAYSCONF."config.php");
+		return new WeChat(config("wecaht"));
 	}
 	
 	/**
@@ -286,7 +236,7 @@
 	 */
 	function upload($rand=true)
 	{
-		return new Upload($file,$rand,NWAYSCONF."config.php");
+		return new Upload($file,$rand,config("wecaht"));
 	}
 	
 	/**
@@ -324,7 +274,6 @@
 			return $file;
 		}
 		
-		include(NWAYSCLASS.'phpqrcode'.NWAYSCF); 
 		$errorCorrectionLevel = 'L';//容错级别 
 		$matrixPointSize = 12;//生成图片大小
 		
@@ -392,19 +341,6 @@
 		}  
 		$realip = preg_match("/[\d\.]{7,15}/", $realip, $matches) ? $matches[0] : $unknown;  
 		return $realip;  
-	}
-	
-	/**
-	 * 输出404页面
-	 *
-	 * @access globe
-	 *
-	 */
-	function error404()
-	{
-		header( 'Content-Type:text/html;charset=utf-8 ');
-		include(NWAYSVIEW."404.php");
-		exit;
 	}
 	
 	/**

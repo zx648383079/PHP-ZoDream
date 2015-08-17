@@ -2,6 +2,10 @@
 	/*********************************
 	用户表的连接
 	*********************************/
-	class Users extends PdoClass{
+	namespace Model;
+	
+	use \PdoSQL;
+	
+	class Users extends PdoSQL{
 		public $table="users";
 	}

@@ -12,14 +12,16 @@
 	//获取域名或主机地址 
 	define('HTTP_HOST', $_SERVER['HTTP_HOST']); #localhost 
 	
-	define("NWAYSVIEW","include/view/");                         //定义视图目录
+	
 	
 	/************************* ↑定义常量↑ ***********************************/
 	
 	
 	/************************ ↓包含文件↓ ************************/
 	
-	include_once(NWAYS."function.php");                  //加载全局方法文件
+	require_once("vendor/autoload.php");
+	
+	include_once("include/function.php");                  //加载全局方法文件
 
 
 	
@@ -29,7 +31,7 @@
 	
 	new Lang(getLang());                                 //加载语言包 
 	
-	if(!is_file(NWAYSCONF."config.php"))
+	if(!is_file("include/conf/config.php"))
 	{
 		redirect('/install.php');
 	}

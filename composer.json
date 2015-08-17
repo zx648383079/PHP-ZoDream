@@ -1,4 +1,7 @@
 {
+	"require": {
+   		"smarty/smarty": "~3.1"
+	},
 	"autoload":{
 		"classmap":[
 			"include\\class",
@@ -6,5 +9,14 @@
 			"include\\controller"
 		],
 		"files":["include\\function.php"]
-	}
+	},
+	"authors": [{
+            "name": "PHP WeChat",
+            "email": "jason.zou@nwayschina.com",
+            "homepage": "http://nwayschina.com/",
+            "role": "Developer"
+    }],
+	"support": {
+        "email": "jason.zou@nwayschina.com"
+    }
 }

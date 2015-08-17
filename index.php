@@ -9,5 +9,4 @@
 	
 	define("DEBUG",true);                  //是否开启测试模式
 	
-	define("NWAYS","include/");                               //定义主目录
-	include_once(NWAYS."app.php");           //入口
+	include_once("include/app.php");           //入口

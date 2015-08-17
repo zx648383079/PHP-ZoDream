@@ -30,15 +30,8 @@
     	#}
     	
     	
-    	public function __construct($config_path)
+    	public function __construct($config)
 		{
-			$config=array();
-			if(is_array($config_path)){
-				$config=$config_path;
-			}else{
-				$configTem=require($config_path);
-		        $config=$configTem['wechat'];
-			}
 			
 			$this->token = $config['token'];
 	    }

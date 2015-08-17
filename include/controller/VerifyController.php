@@ -1,4 +1,6 @@
 <?php
+	namespace Controller;
+	
 	class VerifyController extends Controller{
 		function index(){
 			

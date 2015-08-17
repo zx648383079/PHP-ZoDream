@@ -23,5 +23,10 @@
 		),
         'wechat'=>array(					//微信
 			'token'=>'zxzszh'
+		),
+		'smarty'=>array(
+			'dir'=>'templates/',
+			'left'=>'({',
+			'right'=>'})'
 		)
 	);

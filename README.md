@@ -32,11 +32,19 @@ PHP-WeChat
 
 >>model			针对具体表的连接
 
->>view			视图
+>templates      模板文件
 
->>>layout		共享视图
+>>cache			Smarty生成的缓存文件
 
+>>compile		Smarty生成的编译文件
 
+>>config		Smarty需要的模板配置文件
+
+>vendor			Composer生成的主文件
+
+>>composer		Composer生成的自动加载文件
+
+>>smarty		Smarty
 
 # 修改
 1.增加Angular.js的支持
@@ -67,10 +75,20 @@ PHP-WeChat
 
 14.增加ip监控
 
+15.引入Composer实现自动加载
 
+16.引入Smarty实现分离
+
+17.引入NAMESPACE,初步实现NAMESPACE管理
+
+
+已知问题
+-------
+
+没有很好的控制前端图片地址
 
 
 # 更多详情请关注微信 `zx_zszh`
 
-更新时间：2015/8/14
+更新时间：2015/8/17
 

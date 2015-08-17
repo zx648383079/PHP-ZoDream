@@ -1,5 +1,5 @@
 <?php
-class PdoClass
+class PdoSQL
 {
 	//pdo对象  
     protected $pdo = null;  
@@ -34,9 +34,7 @@ class PdoClass
 	 */
     public function __construct() {  
         
-		$configTem=require_once(NWAYSCONF."config.php");
-		$config=$configTem['mysql'];
-        
+		$config=config('mysql');
         $host = $config['host'];
 	    $user = $config['user'];
 	    $pwd = $config['password'];
@@ -191,6 +189,7 @@ class PdoClass
         }  
         $_selectFields = empty($_fileld)?"*":implode(',', $_fileld);  
         $_sql = "SELECT $_selectFields FROM {$this->table} $_where $_group $_order $_limit";  
+
         $_stmt = $this->execute($_sql);  
         $_result = array();  
         while (!!$_objs = $_stmt->fetchObject()) {  
@@ -249,7 +248,6 @@ class PdoClass
         $result=array();
         if(empty($param))
         {
-            require_once(NWAYSCLASS."sql_join".NWAYSCF);
             $sql =new SQL_Join();    
             $_stmt=$this->execute($sql->getSQL($param));            //获取SQL语句
             while (!!$_objs = $_stmt->fetchObject()) {  
@@ -273,6 +271,7 @@ class PdoClass
     protected function execute($_sql) {  
         try {  
             $_stmt = $this->pdo->prepare($_sql);  
+            
             $_stmt->execute();  
         } catch (PDOException  $ex) {  
             $this->error=$ex->getMessage();

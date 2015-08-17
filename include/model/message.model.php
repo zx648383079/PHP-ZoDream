@@ -2,6 +2,10 @@
 	/*********************************
 	用户表的连接
 	*********************************/
-	class Message extends PdoClass{
+	namespace Model;
+	
+	use \PdoSQL;
+	
+	class Message extends PdoSQL{
 		public $table="message";
 	}

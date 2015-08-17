@@ -1,4 +1,6 @@
 <?php
+	namespace Controller;
+	
 	class ModelController extends Controller{
 		function index(){
 			$user=pdo("user");

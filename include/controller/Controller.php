@@ -4,35 +4,53 @@
 	*
 	*
 	*******************************************************/
+	namespace Controller;
 	
 	
+
 	class Controller{
 		
-		private $data;
+		private $smarty;
+		
+		function __construct()
+		{
+			
+			$config=config('smarty');
+			
+			$this->smarty=new \Smarty();
+			
+			$this->smarty->debugging =defined(DEBUG)?DEBUG:FALSE;
+			//$this->smarty->caching = true;
+			$this->smarty->cache_lifetime = 120;
+			$this->smarty->cache_dir=$config['dir'].'cache/';         //缓存目录
+			$this->smarty->compile_dir=$config['dir'].'compile/';     //编译目录
+			$this->smarty->config_dir=$config['dir'].'config/';       //模板配置文件信息
+			// 设置模板目录
+			$this->smarty->template_dir=$config['dir'];
+			
+			//修改左右边界符号
+			$this->smarty -> left_delimiter=$config['left'];
+			$this->smarty -> right_delimiter=$config['right'];
+			
+			$this->smarty->assign('title','首页');
+			$this->smarty->assign('lang',getLang());
+			
+			$this->smarty->registerPlugin('function','jcs','jcs');
+			
+		}
+		
+		
 		
 		//要传的数据
-		function send($key,$value="")
+		function send($key,$value=null,$cache=FALSE)
 		{
-			if(empty($value))
-			{
-				$this->data['data']=$key;
-			}else
-			{
-				$this->data[$key]=$value;
-			}
+			$this->smarty->assign($key,$value,$cache);
 		}
 		
 		//加载视图
 		function show($name="index")
 		{
-			if(!empty($this->data))
-			{
-				extract($this->data);    //从数组导成变量；
-			}
-			
-			header( 'Content-Type:text/html;charset=utf-8 ');
-			include(NWAYSVIEW.$name.".php");
-			exit;
+			$this->smarty->display($name.'.html');
 		} 
 		
 		//返回JSON数据

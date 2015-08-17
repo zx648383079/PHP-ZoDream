@@ -1,4 +1,6 @@
 <?php
+	namespace Controller;
+	
 	class WechatController extends Controller{
 		function index(){
 			$wechat=WeChat();
