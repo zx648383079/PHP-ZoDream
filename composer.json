@@ -1,0 +1,10 @@
+{
+	"autoload":{
+		"classmap":[
+			"include\\class",
+			"include\\model",
+			"include\\controller"
+		],
+		"files":["include\\function.php"]
+	}
+}

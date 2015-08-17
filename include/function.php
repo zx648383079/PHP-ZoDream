@@ -273,7 +273,6 @@
 	 * @return 返回微信操作对象,
 	 */
 	function WeChat(){
-		require(NWAYSCLASS."wechat".NWAYSCF);
 		return new WeChat(NWAYSCONF."config.php");
 	}
 	
@@ -287,7 +286,6 @@
 	 */
 	function upload($rand=true)
 	{
-		require(NWAYSCLASS."upload".NWAYSCF);
 		return new Upload($file,$rand,NWAYSCONF."config.php");
 	}
 	
@@ -303,7 +301,6 @@
 	 */
 	function verify($codelen=4,$width=150,$height=50)
 	{
-		require(NWAYSCLASS."verify".NWAYSCF);
 		return new Verify($codelen,$width,$height,"asset/font/AcademyKiller.ttf");
 	}
 	
