@@ -21,7 +21,7 @@
 	
 	require_once("vendor/autoload.php");
 	
-	include_once("include/function.php");                  //加载全局方法文件
+	//include_once("include/function.php");                  //加载全局方法文件
 
 
 	
