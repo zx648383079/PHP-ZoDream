@@ -1,4 +1,5 @@
 <?php  
+namespace App\Lib;
 /** 
  * Lang 语言包类 
  * 

@@ -1,5 +1,7 @@
 <?php
-	namespace Controller;
+	namespace App\Controller;
+	
+	use App\Controller\Controller;
 	
 	class AuthController extends Controller{
 		

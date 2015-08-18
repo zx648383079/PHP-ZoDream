@@ -17,7 +17,7 @@
 	 */
 	function config($key=null)
 	{
-		$configs=require("include/conf/config.php");
+		$configs=require("app/conf/config.php");
 		if(!empty($key))
 		{
 			$configs=$configs[$key];
@@ -162,7 +162,7 @@
 		
 		
 		$con = ucfirst(strtolower($c));
-		$name='Controller\\'.$con."Controller";
+		$name='App\\Controller\\'.$con."Controller";
 		$view=strtolower($v);
 		if( class_exists($name))
 		{
@@ -171,7 +171,6 @@
 			{
 				$controller->$view();
 			}else{
-				out($con);
 				out($view);
 			}
 		}else{
@@ -223,7 +222,7 @@
 	 * @return 返回微信操作对象,
 	 */
 	function WeChat(){
-		return new WeChat(config("wecaht"));
+		return new App\Lib\WeChat(config("wecaht"));
 	}
 	
 	/**
@@ -236,7 +235,7 @@
 	 */
 	function upload($rand=true)
 	{
-		return new Upload($file,$rand,config("wecaht"));
+		return new App\Lib\Upload($file,$rand,config("wecaht"));
 	}
 	
 	/**
@@ -251,7 +250,7 @@
 	 */
 	function verify($codelen=4,$width=150,$height=50)
 	{
-		return new Verify($codelen,$width,$height,"asset/font/AcademyKiller.ttf");
+		return new App\Lib\Verify($codelen,$width,$height,"asset/font/AcademyKiller.ttf");
 	}
 	
 	

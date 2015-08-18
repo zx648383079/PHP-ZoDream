@@ -1,4 +1,5 @@
 <?php 
+namespace App\Lib;
 /**
 * SQL语句的拼接和过滤
 *

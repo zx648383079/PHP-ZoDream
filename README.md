@@ -10,6 +10,18 @@ SAE认证通过了，开始编写
 
 PHP-WeChat
 
+>app    		php总文件目录
+
+>>Lib			类文件
+
+>>conf			配置文件
+
+>>Controller	控制器
+
+>>Model			针对具体表的连接
+
+>>plugin		其他插件
+
 >asset			资源文件
 
 >>css			css样式
@@ -21,16 +33,6 @@ PHP-WeChat
 >>js			js脚本
 
 >>lang			语言包
-
->include    	php总文件目录
-
->>class			类文件
-
->>conf			配置文件
-
->>controller	控制器
-
->>model			针对具体表的连接
 
 >templates      模板文件
 
@@ -90,5 +92,5 @@ PHP-WeChat
 
 # 更多详情请关注微信 `zx_zszh`
 
-更新时间：2015/8/17
+更新时间：2015/8/18
 

@@ -3,13 +3,13 @@
    		"smarty/smarty": "~3.1"
 	},
 	"autoload":{
-		"files":["include/function.php"],
+		"files":["app/function.php"],
+		"psr-4":{
+			"App\\":"app/"
+		},
 		"classmap":[
-			"include\\class",
-			"include\\model",
-			"include\\controller"
+			"app\\plugin"
 		]
-		
 	},
 	"authors": [{
             "name": "PHP WeChat",

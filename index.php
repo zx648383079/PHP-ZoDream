@@ -9,4 +9,4 @@
 	
 	define("DEBUG",true);                  //是否开启测试模式
 	
-	include_once("include/app.php");           //入口
+	include_once("app/app.php");           //入口

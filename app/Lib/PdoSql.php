@@ -1,5 +1,8 @@
 <?php
-class PdoSQL
+namespace App\Lib;
+
+    
+class PdoSql
 {
 	//pdo对象  
     protected $pdo = null;  
@@ -47,10 +50,10 @@ class PdoSQL
 
         
         try {  
-            $this->pdo = new PDO('mysql:host='.$host.';port='.$port.';dbname='.$database, $user, $pwd ,
-                                 array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES {$coding}"));  
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  
-        } catch (PDOException $ex) {  
+            $this->pdo = new \PDO('mysql:host='.$host.';port='.$port.';dbname='.$database, $user, $pwd ,
+                                 array(\PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES {$coding}"));  
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);  
+        } catch (\PDOException $ex) {  
             $this->error=$ex->getMessage();
             return false;
         }  
@@ -273,7 +276,7 @@ class PdoSQL
             $_stmt = $this->pdo->prepare($_sql);  
             
             $_stmt->execute();  
-        } catch (PDOException  $ex) {  
+        } catch (\PDOException  $ex) {  
             $this->error=$ex->getMessage();
         }  
         return $_stmt;  

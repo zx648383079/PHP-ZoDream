@@ -1,4 +1,6 @@
 <?php
+namespace App\Lib; 
+   
 class Upload
 {
     private $savepath;          //上传文件保存的路径

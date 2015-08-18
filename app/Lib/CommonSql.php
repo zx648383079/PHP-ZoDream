@@ -1,11 +1,12 @@
 <?php
+    namespace App\Lib;
 /**
  *	数据库操作类 
  *
  *
  *
  **/
-class ZxSql
+class CommonSql
 {
     /**
      * 表前缀

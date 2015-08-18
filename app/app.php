@@ -29,9 +29,9 @@
 	
 	/************************ ↓执行文件中的方法↓ ************************/
 	
-	new Lang(getLang());                                 //加载语言包 
+	new App\Lib\Lang(getLang());                                 //加载语言包 
 	
-	if(!is_file("include/conf/config.php"))
+	if(!is_file("app/conf/config.php"))
 	{
 		redirect('/install.php');
 	}

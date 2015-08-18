@@ -1,4 +1,6 @@
 <?php
+namespace App\Lib;
+	
 class Verify
 {
 	 private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';//随机因子

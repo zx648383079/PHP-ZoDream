@@ -2,10 +2,10 @@
 	/*********************************
 	用户表的连接
 	*********************************/
-	namespace Model;
+	namespace App\Model;
 	
-	use \PdoSQL;
+	use App\Lib\PdoSql;
 	
-	class Message extends PdoSQL{
+	class MessageModel extends PdoSql{
 		public $table="message";
 	}
