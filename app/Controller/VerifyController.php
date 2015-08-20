@@ -1,7 +1,6 @@
 <?php
 	namespace App\Controller;
 	
-	use App\Controller\Controller;
 	
 	class VerifyController extends Controller{
 		function index(){

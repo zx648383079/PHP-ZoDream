@@ -1,7 +1,6 @@
 <?php
 	namespace App\Controller;
 	
-	use App\Controller\Controller;
 	
 	class WechatController extends Controller{
 		function index(){

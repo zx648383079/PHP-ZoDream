@@ -42,6 +42,8 @@ PHP-WeChat
 
 >>config		Smarty需要的模板配置文件
 
+>typings		VSCode自动提示文件
+
 >vendor			Composer生成的主文件
 
 >>composer		Composer生成的自动加载文件

@@ -1,5 +1,5 @@
 <?php
-	require_once("include/function.php");
+	require_once("vendor/autoload.php");
 	
 	
 	$step=isset($_GET['step'])?$_GET['step']:1;
@@ -80,12 +80,12 @@
 	
 	function write()
 	{
-		if(file_exists("include/conf/config.php"))
+		if(file_exists("app/conf/config.php"))
 		{
 			echo "配置文件已存在<a href=\"/\">进入主页</a>";
 			return;
 		}else{
-			$file="include/conf/config.php";
+			$file="app/conf/config.php";
 			$config=$_POST;
 			$text="<?php\nreturn array(
 				\n\t'mysql'=>array(							//MYSQL数据库的信息
@@ -121,8 +121,8 @@
 			/***********************************************************/
 			
 			$tables=array(
-				'users'=>'name varchar(20),pwd varchar(32)'
-				
+				'users'=>'name varchar(20),pwd varchar(32)',
+				'message'=>'type varchar(10),content varchar(255),user_id int(10)'
 			);
 			
 			/***********************************************************/

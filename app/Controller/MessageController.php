@@ -1,7 +1,6 @@
 <?php
 	namespace App\Controller;
 	
-	use App\Controller\Controller;
 	
 	use App\Model\MessageModel;
 	
@@ -17,26 +16,10 @@
 			$this->show('message');
 		}
 		
-		function addMsg()
+		function add()
 		{
-			$data['user_id']=$_POST["id"];
-			$data['type']=$_POST["type"];
-			$data['content']=$_POST["content"];
-			date_default_timezone_set('Etc/GMT-8');     //这里设置了时区
-			$data['created']=date("Y-m-d H:i:s");
-			$message= new MessageModel();
-			$row= $message->add($data);
-			if(!empty($row))
-			{
-				redirect(url('message'));
-			}
-		}
-		
-		function delMsg()
-		{
-			$id=$_GET['id'];
-			$message=new MessageModel();
-			$row= $message->delete('id = '.$id);
-			redirect(url('message'));
+			$message = new MessageModel();
+			$message->fill($_POST["type"],$_POST["content"],$_POST["id"]);
+			
 		}
 	} 

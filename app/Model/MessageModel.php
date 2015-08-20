@@ -4,8 +4,10 @@
 	*********************************/
 	namespace App\Model;
 	
-	use App\Lib\PdoSql;
 	
-	class MessageModel extends PdoSql{
-		public $table="message";
+	class MessageModel extends Model{
+		protected $table="message";
+		
+		protected $fillable=['type','content','user_id','created'];
+		
 	}

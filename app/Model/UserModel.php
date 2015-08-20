@@ -4,8 +4,7 @@
 	*********************************/
 	namespace App\Model;
 	
-	use App\Lib\PdoSql;
 	
-	class Users extends PdoSql{
-		public $table="users";
+	class UserModel extends Model{
+		protected $table="users";
 	}
