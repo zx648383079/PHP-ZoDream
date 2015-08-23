@@ -17,9 +17,6 @@
 				$param=array_shift($param);
 			}
 			
-			out($param);
-			out($this->fillable);
-			
 			$arr=array_combine($this->fillable,$param);
 			date_default_timezone_set('Etc/GMT-8');     //这里设置了时区
 			$arr['created']=date("Y-m-d H:i:s");

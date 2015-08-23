@@ -1,18 +1,16 @@
 <?php 
 	/*********************************
-	用户表的连接
+	访问纪录
 	*********************************/
 	namespace App\Model;
 	
 	
-	class MessageModel extends Model{
-		protected $table="message";
+	class LogModel extends Model{
+		protected $table="logs";
 		
 		protected $fillable=array(
-			'type',
-			'content',
-			'user_id',
+			'ip',
+			'url',
 			'created'
 			);
-		
 	}

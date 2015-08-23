@@ -1,17 +1,15 @@
 <?php 
 	/*********************************
-	用户表的连接
+	用户权限表
 	*********************************/
 	namespace App\Model;
 	
 	
-	class UserModel extends Model{
-		protected $table="users";
+	class UserGroupModel extends Model{
+		protected $table="user_group";
 		
 		protected $fillable=array(
-			'openid',
-			'username',
-			'password',
-			'role_id',
+			'id',
+			'name'
 		);
 	}

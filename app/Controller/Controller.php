@@ -6,7 +6,7 @@
 	*******************************************************/
 	namespace App\Controller;
 	
-	
+	use App\Lib\Validation;
 
 	class Controller{
 		
@@ -38,8 +38,18 @@
 			$this->smarty->registerPlugin('function','jcs','jcs');
 			
 		}
-		
-		
+		//验证数据
+		function validata($request,$param,$return=FALSE)
+		{
+			$_vali=new Validation();
+			$result=$_vali->make($request,$param);
+			if($isRer)
+			{
+				return $_vali->error;
+			}else{
+				
+			}
+		}
 		
 		//要传的数据
 		function send($key,$value=null,$cache=FALSE)
