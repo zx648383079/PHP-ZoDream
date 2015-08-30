@@ -17,20 +17,20 @@
 			
 			$config=config('smarty');
 			
-			$this->smarty=new \Smarty();
+			$this->smarty = new \Smarty();
 			
-			$this->smarty->debugging =defined(DEBUG)?DEBUG:FALSE;
+			$this->smarty->debugging = defined(DEBUG)?DEBUG:FALSE;
 			//$this->smarty->caching = true;
 			$this->smarty->cache_lifetime = 120;
-			$this->smarty->cache_dir=$config['dir'].'cache/';         //缓存目录
-			$this->smarty->compile_dir=$config['dir'].'compile/';     //编译目录
-			$this->smarty->config_dir=$config['dir'].'config/';       //模板配置文件信息
+			$this->smarty->cache_dir = $config['dir'].'cache/';         //缓存目录
+			$this->smarty->compile_dir = $config['dir'].'compile/';     //编译目录
+			$this->smarty->config_dir = $config['dir'].'config/';       //模板配置文件信息
 			// 设置模板目录
-			$this->smarty->template_dir=$config['dir'];
+			$this->smarty->template_dir = $config['dir'];
 			
 			//修改左右边界符号
-			$this->smarty -> left_delimiter=$config['left'];
-			$this->smarty -> right_delimiter=$config['right'];
+			$this->smarty -> left_delimiter = $config['left'];
+			$this->smarty -> right_delimiter = $config['right'];
 			
 			$this->smarty->assign('title','首页');
 			$this->smarty->assign('lang',getLang());
@@ -41,9 +41,9 @@
 		//验证数据
 		function validata($request,$param,$return=FALSE)
 		{
-			$_vali=new Validation();
-			$result=$_vali->make($request,$param);
-			if($isRer)
+			$_vali = new Validation();
+			$result = $_vali->make($request,$param);
+			if( $isRer )
 			{
 				return $_vali->error;
 			}else{
@@ -52,19 +52,25 @@
 		}
 		
 		//要传的数据
-		function send($key,$value=null,$cache=FALSE)
+		function send($key,$value = null,$cache = FALSE)
 		{
-			$this->smarty->assign($key,$value,$cache);
+			$this->smarty->assign( $key, $value, $cache );
 		}
 		
 		//加载视图
-		function show($name="index")
+		function show($name = "index")
 		{
-			$this->smarty->display($name.'.html');
+			if ( APP_API )
+			{
+				$this->ajaxJson( $this->smarty->getTemplateVars() );
+			}else{
+				$this->smarty->display( $name.'.html' );
+			}
+			
 		} 
 		
 		//返回JSON数据
-		function ajaxJson($data,$type='JSON')
+		function ajaxJson($data,$type = 'JSON')
 		{
 			switch (strtoupper($type)){
 	            case 'JSON' :
