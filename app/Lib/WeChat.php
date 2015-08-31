@@ -1,6 +1,7 @@
 <?php
     namespace App\Lib;
-    
+    //签名
+    define ( 'TOKEN', config('wechat.token'));
     
 	/**************************************************
 	*微信公众平台操作类
@@ -9,41 +10,30 @@
 	*
 	****************************************************/
 	class WeChat{
-		
-		//签名
-        private $token = '';
     
         //消息类型
-        private $msgtype;
+        public static $msgtype;
     
         //消息内容
-        private $msgobj;
+        public static $msgobj;
     
         //事件类型
-        private $eventtype;
+        public static $eventtype;
     
         //事件key值
-        private $eventkey;
+        public static $eventkey;
     
     	#{服务号才可得到
         //AppId
-        private $appid = "";
+        public static $appid = "";
         //AppSecret
-        private $secret = "";
+        public static $secret = "";
     	#}
     	
-    	
-    	public function __construct($config)
-		{
-			
-			$this->token = $config['token'];
-	    }
-    	
-    
     	/**
          *  初次校验
          */
-    	public function valid(){
+    	public static function valid(){
             $echoStr = $_GET["echostr"];
 	
 	        //valid signature , option
@@ -121,7 +111,7 @@
         /**
          *  获取消息
          */
-        public function getMsg(){
+        public static function getMsg(){
             //验证消息的真实性
             if(!$this->checkSignature()){
                 exit();
@@ -132,7 +122,7 @@
             if(!empty($poststr)){
                 $this->msgobj = simplexml_load_string($poststr,
                                 'SimpleXMLElement',LIBXML_NOCDATA);
-                $this->msgtype = strtolower($this->msgobj->MsgType);
+                $this->msgtype = strtolower( $this-> msgobj-> MsgType);
             }
             else{
                 $this->msgobj = null;
@@ -186,7 +176,7 @@
         /**
          *  回复文本消息
          */
-        public function textMsg($content=''){
+        public static function textMsg($content=''){
             $textxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
             </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType>
@@ -203,7 +193,7 @@
         /**
          *  回复图片消息
          */
-        private function imgMsg($img){
+        public static function imgMsg($img){
             $imgxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
             </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType>
@@ -216,7 +206,7 @@
         /**
          *  回复语音消息
          */
-        private function voiceMsg($voice){
+        public static function voiceMsg($voice){
             $voicexml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
             </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[voice]]></MsgType>
@@ -229,7 +219,7 @@
         /**
          *  回复视频消息
          */
-        private function videoMsg($video,$title="",$description=""){
+        public static function videoMsg($video,$title="",$description=""){
             $videoxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
             </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[video]]></MsgType>
@@ -243,7 +233,7 @@
         /**
          *  回复音乐消息
          */
-        private function musicMsg($pic,$music="",$title="",$description="",$hgmusic=""){
+        public static function musicMsg($pic,$music="",$title="",$description="",$hgmusic=""){
             $musicxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
             </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[music]]></MsgType>
@@ -258,7 +248,7 @@
         /**
          *  回复图文消息
          */
-        private function newsMsg($data){
+        public static function newsMsg($data){
             if(!is_array($data)){
             	exit();
             }
@@ -280,7 +270,7 @@
         /**
          *  事件处理
          */
-        private function eventOpt(){
+        public static function eventOpt(){
             $this->eventtype = strtolower($this->msgobj->Event);
             switch ($this->eventtype) {
                 case 'subscribe':
@@ -349,7 +339,7 @@
 	        $timestamp = $_GET["timestamp"];
 	        $nonce = $_GET["nonce"];
 	        		
-			$token = $this->token;
+			$token = TOKEN;
 			$tmpArr = array($token, $timestamp, $nonce);
 	        // use SORT_STRING rule
 			sort($tmpArr, SORT_STRING);

@@ -6,9 +6,9 @@
 	
 	
 	class UserGroupModel extends Model{
-		protected $table="user_group";
+		protected $table = "user_group";
 		
-		protected $fillable=array(
+		protected $fillable = array(
 			'id',
 			'name'
 		);

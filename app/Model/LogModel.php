@@ -6,11 +6,11 @@
 	
 	
 	class LogModel extends Model{
-		protected $table="logs";
+		protected $table = "logs";
 		
-		protected $fillable=array(
+		protected $fillable = array(
 			'ip',
 			'url',
-			'created'
+			'cdate'
 			);
 	}

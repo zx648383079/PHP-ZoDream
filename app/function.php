@@ -31,8 +31,18 @@
 			$configs=require("app/conf/config.php");
 			if(!empty($key))
 			{
-				$configs=$configs[$key];
+				$arr = explode('.',$key);
+				foreach ($arr as $value) {
+					if(isset($configs[$value]))
+					{
+						$configs = $configs[$value];
+					}else{
+						$configs = '';	
+						continue;
+					}
+				}
 			}
+			return $configs;
 		}
 	}
 
@@ -251,19 +261,6 @@
 		} 
 	}
 	
-	if(!function_exists('WeChat'))
-	{
-		/**
-		* 加载微信操作类
-		*
-		* @access globe
-		*
-		* @return 返回微信操作对象,
-		*/
-		function WeChat(){
-			return new App\Lib\WeChat(config("wecaht"));
-		}
-	}
 	 
 	if(!function_exists('upload'))
 	{

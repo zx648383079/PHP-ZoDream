@@ -5,14 +5,12 @@
 	namespace App\Model;
 	
 	
-	class MessageModel extends Model{
-		protected $table = "message";
+	class WechatModel extends Model{
+		protected $table = "wechat";
 		
 		protected $fillable = array(
+			'openid',
 			'type',
-			'content',
-			'user_id',
-			'cdate'
-			);
-		
+			'content'
+		);
 	}
