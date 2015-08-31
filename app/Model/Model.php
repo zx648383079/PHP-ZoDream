@@ -6,7 +6,7 @@
 	
 	use App\Lib\PdoSql;
 	
-	class Model extends PdoSql{
+	abstract class Model extends PdoSql{
 		
 		public function fill()
 		{
