@@ -15,7 +15,7 @@
 		 */
 		public function __construct()
 		{
-			if(!isset($_SESSION)){
+			if( !isset( $_SESSION ) ){
 			    session_start();
 			}
 		}
@@ -28,7 +28,7 @@
 		 * @return 返回True|False,
 		 */
 		public static function user(){
-			if(isset($_SESSION['user']))
+			if( isset( $_SESSION['user'] ) )
 			{
 				return true;
 			}else{

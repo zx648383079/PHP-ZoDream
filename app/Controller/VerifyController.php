@@ -5,10 +5,10 @@
 	class VerifyController extends Controller{
 		function index(){
 			
-			$code= verify();
+			$code = verify();
 			$code->showImg();
 			
-			$_SESSION['verify']=$code->getCode();
+			$_SESSION['verify'] = $code->getCode();
 		}
 	} 
 
