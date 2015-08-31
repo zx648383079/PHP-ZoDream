@@ -22,6 +22,11 @@
     
         //事件key值
         public static $eventkey;
+        
+        //主要内容
+        public static $mainMsg;
+        
+        public static $access_token;
     
     	#{服务号才可得到
         //AppId
@@ -120,27 +125,27 @@
             //接收消息
             $poststr = $GLOBALS["HTTP_RAW_POST_DATA"];
             if(!empty($poststr)){
-                $this->msgobj = simplexml_load_string($poststr,
+                self::$msgobj = simplexml_load_string($poststr,
                                 'SimpleXMLElement',LIBXML_NOCDATA);
-                $this->msgtype = strtolower( $this-> msgobj-> MsgType);
+                self::$msgtype = strtolower( self::$msgobj-> MsgType);
             }
             else{
-                $this->msgobj = null;
+                self::$msgobj = null;
             }
             
-            return $this->msgobj;
+            return self::$msgobj;
         }
     
         /**
          *  回复消息
          */
         private function responseMsg(){
-            switch ($this->msgtype) {
+            switch (self::$msgtype) {
                 case 'text':
-                    $data = $this->getData($this->msgobj->Content);
+                    $data = $this->getData(self::$msgobj->Content);
                     if(empty($data) || !is_array($data)){
                         $content = "zx";
-                    	$this->textMsg($content);//查询不到记录返回提示信息
+                    	self::$textMsg($content);//查询不到记录返回提示信息
                     }
                     else{
                     	$this->newsMsg($data);
@@ -177,8 +182,8 @@
          *  回复文本消息
          */
         public static function textMsg($content=''){
-            $textxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
-            </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
+            $textxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
+            </ToUserName><FromUserName><![CDATA[{self::$msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType>
             <![CDATA[text]]></MsgType><Content><![CDATA[%s]]></Content></xml>";
             
@@ -194,8 +199,8 @@
          *  回复图片消息
          */
         public static function imgMsg($img){
-            $imgxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
-            </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
+            $imgxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
+            </ToUserName><FromUserName><![CDATA[{self::$msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType>
             <Image><MediaId><![CDATA[%s]]></MediaId></Image></xml>";
             
@@ -207,8 +212,8 @@
          *  回复语音消息
          */
         public static function voiceMsg($voice){
-            $voicexml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
-            </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
+            $voicexml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
+            </ToUserName><FromUserName><![CDATA[{self::$msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[voice]]></MsgType>
             <Voice><MediaId><![CDATA[%s]]></MediaId></Voice></xml>";
             
@@ -220,8 +225,8 @@
          *  回复视频消息
          */
         public static function videoMsg($video,$title="",$description=""){
-            $videoxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
-            </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
+            $videoxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
+            </ToUserName><FromUserName><![CDATA[{self::$msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[video]]></MsgType>
             <Video><MediaId><![CDATA[%s]]></MediaId><Title><![CDATA[%s]]></Title>
             <Description><![CDATA[%s]]></Description></Video></xml>";
@@ -234,8 +239,8 @@
          *  回复音乐消息
          */
         public static function musicMsg($pic,$music="",$title="",$description="",$hgmusic=""){
-            $musicxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]>
-            </ToUserName><FromUserName><![CDATA[{$this->msgobj->ToUserName}]]>
+            $musicxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
+            </ToUserName><FromUserName><![CDATA[{self::$msgobj->ToUserName}]]>
             </FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[music]]></MsgType>
             <Music><Title><![CDATA[%s]]></Title><Description><![CDATA[%s]]></Description>
             <MusicUrl><![CDATA[%s]]></MusicUrl><HQMusicUrl><![CDATA[%s]]></HQMusicUrl>
@@ -253,8 +258,8 @@
             	exit();
             }
             $newscount = (count($data) > 10)?10:count($data);
-            $newsxml = "<xml><ToUserName><![CDATA[{$this->msgobj->FromUserName}]]></ToUserName><FromUserName>
-            <![CDATA[{$this->msgobj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType>
+            $newsxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]></ToUserName><FromUserName>
+            <![CDATA[{self::$msgobj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType>
             <![CDATA[news]]></MsgType><ArticleCount>{$newscount}</ArticleCount><Articles>%s</Articles></xml>";
             $itemxml = "";
             foreach ($data as $key => $value) {
@@ -271,17 +276,17 @@
          *  事件处理
          */
         public static function eventOpt(){
-            $this->eventtype = strtolower($this->msgobj->Event);
-            switch ($this->eventtype) {
+            self::$eventtype = strtolower(self::$msgobj->Event);
+            switch (self::$eventtype) {
                 case 'subscribe':
     
                     //做用户绑定处理 
-                    if(!empty($this->msgobj-EventKey))
+                    if(!empty(self::$msgobj->EventKey))
                     {
                         //新关注扫码
                     }
                     $content = "欢迎";
-                    $this->textMsg($content);
+                    self::$textMsg($content);
                     break;
                 case 'unsubscribe':
                     
@@ -310,8 +315,8 @@
          *  自定义菜单事件处理
          */
         private function menuClick(){
-            $this->eventkey = $this->msgobj->EventKey;
-            switch ($this->eventkey) {
+            self::$eventkey = self::$msgobj->EventKey;
+            switch (self::$eventkey) {
                 case 'V1001_NEW':
                 	$data = $this->getData();
                     $this->newsMsg($data);
@@ -322,14 +327,7 @@
             }
         }
     
-        /**
-    	 *	获取本地数据
-         */
-        private function getData($key='zx'){
-    		$data = $key;
-    		//写你自己相关的程序
-        	return $data;
-        }
+
     	
         /**
          *  校验签名
@@ -356,14 +354,57 @@
         /**
          *  获取access token
          */
-        private function getAccessToken(){
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appid&secret=$this->secret";
+        private function getAccessToken()
+        {
+            $url = config('wechat.access_token');
             $atjson=file_get_contents($url);
             $result=json_decode($atjson,true);//json解析成数组
-            if(!isset($result['access_token'])){
-                exit( '获取access_token失败！' );
-            }
+            
+            self::$access_token = isset($result['access_token']) ? $result['access_token'] :'';
+            /*if(!isset($result['access_token']))
+            {
+                //exit( '获取access_token失败！' );
+                
+            }*/
             return $result["access_token"];
+        }
+        
+        public static function getMainMsg()
+        {
+            $mainMsg['openid'] = self::$msgobj->FromUserName;
+            $mainMsg['type'] = self::$msgtype;
+            
+            switch (self::$msgtype) {
+                case 'text':
+                    
+                case 'event':
+                    $this->eventOpt();
+                    break;
+                case 'image':
+                    //图片消息
+                    break;
+                case 'voice':
+                    //语音消息
+                    break;
+                case 'video':
+                    //视频消息
+                    break;
+                case 'shortvideo':
+                    //小视频消息
+                    break;
+                case 'location':
+                    //地理位置消息
+                    break;
+                case 'link':
+                    //链接消息
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            
+            
+            return self::$mainMsg;
         }
 		
 	}

@@ -24,7 +24,8 @@
 			'savepath' => ''               //文件保存路径
 		),
         'wechat' => array(					//微信
-			'token' => 'zxzszh'
+			'token' => 'zxzszh',
+			'access_token' => 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET'
 		),
 		'smarty' => array(
 			'dir' => 'templates/',
