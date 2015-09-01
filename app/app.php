@@ -7,7 +7,7 @@
 	
 	/************************ ↓包含文件↓ ************************/
 	
-	require_once("vendor/autoload.php");
+	require_once(APP_DIR."/vendor/autoload.php");
 
 	
 	/************************* ↑包含文件↑ ***********************************/
@@ -18,7 +18,7 @@
 	
 	//获取域名或主机地址 
 	define('APP_URL', Main::config('app.host')); 
-	define('APP_DIR', dirname(__FILE__));
+	
 	define('APP_API' , isset($_GET['api'])?TRUE:FALSE);    //是否是API模式
 	
 	
@@ -30,18 +30,21 @@
 	
 	/************************ ↓执行文件中的方法↓ ************************/
 	
-	Main::out(APP_DIR);
 	
 	App\Lib\Lang::setLang();                                //加载语言包 
 	
-	if( !is_file( "app/conf/config.php" ) )
+	if( !is_file(APP_DIR."/app/conf/config.php" ) )
 	{
 		Main::redirect('/install.php');
 	}
 	
 	session_start();                                  //打开session 因为所有的地方都会先判断session
-	
-	Main::getCAV();
+	if(defined('SHORT_URL') && SHORT_URL)
+	{
+		Main::short();
+	}else{
+		Main::getCAV();		
+	}
 	
 	/************************* ↑执行文件中的方法↑ ***********************/
 	

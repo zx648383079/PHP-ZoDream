@@ -1,8 +1,11 @@
-({extends 'layout.html'})
-({block 'body'})
+<?php 
+use App\Main;	
+
+Main::extend('~layout.head');
+?>
 	
 	<div class="form">
 		<img src="/({$img})" alt="二维码"/>
 	</div>
 	
-({/block})
+<?php Main::extend('~layout.foot');?>

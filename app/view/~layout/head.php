@@ -1,11 +1,10 @@
 <?php
 	
 use App\Main;	
-
 ?>
 
 <!DOCTYPE html>
-<html lang="({$lang})">
+<html lang="<?php echo $lang;?>">
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1"/>

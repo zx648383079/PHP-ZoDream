@@ -20,7 +20,7 @@ class Main{
 	*/
 	public static function config( $key = null )
 	{
-		$configs=require("app/conf/config.php");
+		$configs=require(APP_DIR."/app/conf/config.php");
 		if(!empty($key))
 		{
 			$arr = explode('.',$key);
@@ -36,8 +36,23 @@ class Main{
 		}
 		return $configs;
 	}
-
-		
+	
+	/**
+	* 产生完整的网址
+	*
+	* @access globe
+	*
+	*/
+	public static function url($file,$echo = TRUE)
+	{
+		$url = APP_URL.$file;
+		if($echo)
+		{
+			echo $url;
+		}else{
+			return $url;	
+		} 
+	}	
 
 	/**
 	* Smarty中加载的自定义方法 主要是加载 js、css 文件
@@ -54,22 +69,21 @@ class Main{
 		$arr=explode('.',$file);
 		if(count($arr)==1)
 		{
-			$result= '<script src="/asset/js/'.$file.'.js"></script>';
+			$result= '<script src="'.self::url('asset/js/'.$file.'.js',false).'"></script>';
 		}else{
 			switch(end($arr))
 			{
 				case 'js':
-					$result= '<script src="/asset/js/'.$file.'"></script>';
+					$result= '<script src="'.self::url('asset/js/'.$file,false).'"></script>';
 					break;
 				case 'css':
-					$result= '<link rel="stylesheet" type="text/css" href="/asset/css/'.$file.'"/>';
+					$result= '<link rel="stylesheet" type="text/css" href="'.self::url('asset/css/'.$file,false).'"/>';
 					break;
 				default:
-					$result= '<script src="/asset/js/'.$file.'.js"></script>';
+					$result= '<script src="'.self::url('asset/js/'.$file,false).'.js"></script>';
 					break;
 			}
 		}
-			
 		echo $result;
 	}
 
@@ -104,6 +118,8 @@ class Main{
 		}
 		
 	}
+	
+	public static $data;
 	/**
 	* 包含文件
 	*
@@ -113,23 +129,25 @@ class Main{
 	* @param string $ext 拓展名
 	* @,
 	*/
-	public static function extend( $name ,$ext = '.php')
+	public static function extend( $name , $ext = '.php')
 	{
 		$configs = self::config('view');
 				
 		$view_dir = isset($configs['dir'])?$configs['dir']:'view';
 		$view_ext = isset($configs['ext'])?$configs['ext']:$ext;
 		
-		$name = str_replace('.','\\',$name);
+		$name = str_replace('.','/',$name);
 		
-		$file = APP_DIR.'\\'.$view_dir.'\\'.$name;
+		$file = APP_DIR.'/app/'.$view_dir.'/'.$name;
 		
-		$file = str_replace('\\\\','\\',$file);
+		$file = str_replace('//','/',$file);
 		
 		if(substr( $ext , 0, 1 ) != '.')
 		{
 			$ext = '.'.$ext;
 		}
+		
+		extract(self::$data);
 		
 		include($file.$ext);
 	}
@@ -151,7 +169,27 @@ class Main{
 	}
 
 	/**
-	* 加载控制器和视图
+	* 执行短链接
+	*
+	* @access globe
+	*
+	* @return true|false,
+	*/
+	public static function short()
+	{
+		$shorts = self::config('short');
+		
+		$key = isset($_GET['s'])?$_GET['s']:'*';
+		
+		if(isset($shorts[$key]))
+		{
+			$arr = explode('.',$shorts[$key]);
+			self::loadController($arr[0],$arr[1]);
+		}
+		
+	}
+	/**
+	* 解析控制器和视图
 	*
 	* @access globe
 	*
@@ -159,6 +197,7 @@ class Main{
 	public static function getCAV()
 	{
 		$url = self::request_uri();
+		
 	
 		//  /c/v 取最后两个        /c.*/v       ?c= & v=
 		
@@ -200,7 +239,16 @@ class Main{
 		
 		//return array($c,$v);
 		
-		
+		self::loadController($c,$v);
+	}
+	/**
+	* 加载控制器和视图
+	*
+	* @access globe
+	*
+	*/
+	public static function loadController($c,$v)
+	{
 		$con = ucfirst(strtolower($c));
 		$name='App\\Controller\\'.$con."Controller";
 		$view=strtolower($v);

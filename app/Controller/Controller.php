@@ -11,15 +11,10 @@
 	use App\Lib\Validation;
 
 	class Controller{
-		
-		private $data;
-		
 		function __construct()
 		{
-			
-			$this->data = Main::config('app');
-			$this->data['lang'] = Lang::$language;
-			
+			Main::$data = Main::config('app');
+			Main::$data['lang'] = Lang::$language;
 		}
 		
 		//验证数据
@@ -36,14 +31,14 @@
 		}
 		
 		//要传的数据
-		function send($key,$value="")
+		function send($key , $value = "")
 		{
 			if(empty($value))
 			{
-				$this->data['data']=$key;
+				Main::$data['data'] = $key;
 			}else
 			{
-				$this->data[$key]=$value;
+				Main::$data[$key] = $value;
 			}
 		}
 		
@@ -54,16 +49,8 @@
 		{
 			if ( APP_API )
 			{
-				$this->ajaxJson( $this->data );
+				$this->ajaxJson(Main::$data);
 			}else{
-				
-				if(!empty($this->data))
-				{
-					extract($this->data);    //从数组导成变量；
-				}
-				
-				
-				
 				header( 'Content-Type:text/html;charset=utf-8 ');
 				Main::extend($name);
 				exit;

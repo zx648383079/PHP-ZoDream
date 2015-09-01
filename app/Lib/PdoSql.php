@@ -200,7 +200,7 @@ class PdoSql
             $_result[] = $_objs;  
         }  
         
-        out();
+        Main::out();
         
         return $_result;  
     }  

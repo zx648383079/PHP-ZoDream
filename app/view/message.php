@@ -1,5 +1,8 @@
-({extends 'layout.html'})
-({block 'body'})
+<?php 
+use App\Main;	
+
+Main::extend('~layout.head');
+?>
 	
 	<div class="container">
 		
@@ -37,4 +40,4 @@
 	
 	
 	
-({/block})
+<?php Main::extend('~layout.foot');?>

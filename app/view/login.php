@@ -1,5 +1,8 @@
-({extends 'layout.html'})
-({block 'body'})
+<?php 
+use App\Main;	
+
+Main::extend('~layout.head');
+?>
 	
 	<div class="form" ng-app="formApp" ng-controller="formController">
 		<form name="myForm" ng-submit="sendForm()">
@@ -31,4 +34,4 @@
 	</div>
 	
 	
-({/block})
+<?php Main::extend('~layout.foot');?>

@@ -73,9 +73,11 @@ PHP-WeChat
 
 15.引入Composer实现自动加载
 
-16.引入Smarty实现分离
+`16.引入Smarty实现分离`
 
 17.引入NAMESPACE,初步实现NAMESPACE管理
+
+18.添加短链接功能
 
 
 已知问题
