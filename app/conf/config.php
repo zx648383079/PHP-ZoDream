@@ -31,5 +31,11 @@
 			'dir' => 'templates/',
 			'left' => '({',
 			'right' => '})'
+		),
+		'verify' => array(                    //验证码的配置信息
+			'length' => 4,
+			'width' => 150,
+			'height' => 50,
+			'font' => 'asset/font/AcademyKiller.ttf'
 		)
 	);

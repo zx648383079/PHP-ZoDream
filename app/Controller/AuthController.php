@@ -11,7 +11,7 @@
 		
 		function qrcode()
 		{
-			$this->send(array('title'=>'扫扫二维码','img'=>qrcode("http://www.baidu.com")));
+			$this->send(array('title'=>'扫扫二维码','img'=>''));
 			$this->show('qrcode');
 		}
 		

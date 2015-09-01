@@ -6,21 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'FrameFiller' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRbitstream' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRcode' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRencode' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRimage' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRinput' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRinputItem' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRmask' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRrawcode' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRrs' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRrsItem' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRrsblock' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRspec' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRsplit' => $baseDir . '/app/plugin/phpqrcode.php',
-    'QRtools' => $baseDir . '/app/plugin/phpqrcode.php',
     'Smarty' => $vendorDir . '/smarty/smarty/libs/Smarty.class.php',
     'SmartyBC' => $vendorDir . '/smarty/smarty/libs/SmartyBC.class.php',
     'SmartyCompilerException' => $vendorDir . '/smarty/smarty/libs/sysplugins/smartycompilerexception.php',
@@ -132,5 +117,4 @@ return array(
     'TPC_yyToken' => $vendorDir . '/smarty/smarty/libs/sysplugins/smarty_internal_configfileparser.php',
     'TP_yyStackEntry' => $vendorDir . '/smarty/smarty/libs/sysplugins/smarty_internal_templateparser.php',
     'TP_yyToken' => $vendorDir . '/smarty/smarty/libs/sysplugins/smarty_internal_templateparser.php',
-    'qrstr' => $baseDir . '/app/plugin/phpqrcode.php',
 );

@@ -371,12 +371,10 @@
         
         public static function getMainMsg()
         {
-            $mainMsg['openid'] = self::$msgobj->FromUserName;
-            $mainMsg['type'] = self::$msgtype;
-            
             switch (self::$msgtype) {
                 case 'text':
-                    
+                    self::$mainMsg = self::$msgobj->Content;
+                    break;
                 case 'event':
                     $this->eventOpt();
                     break;

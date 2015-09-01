@@ -94,4 +94,11 @@
 			
 			exit;
 		}
+		
+		function showImg($img)
+		{
+			header('Content-type:image/png');
+			imagepng($img);
+			imagedestroy($img);
+		}
 	}

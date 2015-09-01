@@ -55,5 +55,107 @@
         "keywords": [
             "templating"
         ]
+    },
+    {
+        "name": "alchemy/zippy",
+        "version": "0.2.1",
+        "version_normalized": "0.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/alchemy-fr/Zippy.git",
+            "reference": "16285231eb37587c6c32b86fa483c35853cd7515"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/alchemy-fr/Zippy/zipball/16285231eb37587c6c32b86fa483c35853cd7515",
+            "reference": "16285231eb37587c6c32b86fa483c35853cd7515",
+            "shasum": ""
+        },
+        "time": "2014-12-10 15:03:17",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.2.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Alchemy": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Alchemy",
+                "email": "dev.team@alchemy.fr",
+                "homepage": "http://www.alchemy.fr/"
+            }
+        ],
+        "description": "Zippy, the archive manager companion",
+        "keywords": [
+            "bzip",
+            "compression",
+            "tar",
+            "zip"
+        ]
+    },
+    {
+        "name": "endroid/qrcode",
+        "version": "1.5.4",
+        "version_normalized": "1.5.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/endroid/QrCode.git",
+            "reference": "89dbd7418715f48056da2948fba00f728b56afc3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/endroid/QrCode/zipball/89dbd7418715f48056da2948fba00f728b56afc3",
+            "reference": "89dbd7418715f48056da2948fba00f728b56afc3",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gd": "*",
+            "php": ">=5.3.0"
+        },
+        "time": "2015-07-04 19:44:13",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Endroid\\QrCode\\": [
+                    "src/",
+                    "tests/"
+                ]
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jeroen van den Enden",
+                "email": "info@endroid.nl",
+                "homepage": "http://endroid.nl/"
+            }
+        ],
+        "description": "Endroid QR Code",
+        "homepage": "https://github.com/endroid/QrCode",
+        "keywords": [
+            "code",
+            "endroid",
+            "qr",
+            "qrcode"
+        ]
     }
 ]
