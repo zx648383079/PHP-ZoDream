@@ -10,7 +10,7 @@ class SQL_Join{
 	/********
 	SQL中的关键字数组
 	*********/
-	const SQL_KEYS=array(/*'show','alter','drop','create,'*/'select','update','set','delete','insert','from','values','left','right','inner','exec','where','and','or','group','having','order','asc','desc','limit');
+	const SQL_KEYS = array(/*'show','alter','drop','create,'*/'select','update','set','delete','insert','from','values','left','right','inner','exec','where','and','or','group','having','order','asc','desc','limit');
 	/**
 	 * 公有构造函数
 	 *

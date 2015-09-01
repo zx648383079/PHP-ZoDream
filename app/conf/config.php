@@ -7,7 +7,12 @@
 	
 	return array(
 		'app' => array(                           //网站信息
-			'title' => '个人财务系统'
+			'title' => '主页',
+			'host' => ''                          //主目录
+		),
+		'view' =>array(                           //视图文件信息
+			'dir' => '\\view\\',
+			'ext' => '.php'
 		),
 		'mysql' => array(							//MYSQL数据库的信息
 			'host' => 'localhost',                //服务器
@@ -26,11 +31,6 @@
         'wechat' => array(					//微信
 			'token' => 'zxzszh',
 			'access_token' => 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET'
-		),
-		'smarty' => array(
-			'dir' => 'templates/',
-			'left' => '({',
-			'right' => '})'
 		),
 		'verify' => array(                    //验证码的配置信息
 			'length' => 4,

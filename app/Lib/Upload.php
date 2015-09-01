@@ -1,5 +1,7 @@
 <?php
 namespace App\Lib; 
+ 
+use App\Main;
    
 class Upload
 {
@@ -25,8 +27,8 @@ class Upload
 	 * @param string|array $config_path 数据库的配置信息.
 	 * @return 可能会返回False,
 	 */
-    public function __construct($rand=true,$config) {  
-        
+    public function __construct($rand=true) {  
+        $config = Main::config("upload");
         $this->maxsize = $config['maxsize'];
         $this->allowtype =explode(';',$config['allowtype']);
         $this->savepath = $config['savepath'];

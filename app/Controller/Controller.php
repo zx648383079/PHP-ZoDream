@@ -6,38 +6,22 @@
 	*******************************************************/
 	namespace App\Controller;
 	
+	use App\Main;
+	use App\Lib\Lang;
 	use App\Lib\Validation;
 
 	class Controller{
 		
-		private $smarty;
+		private $data;
 		
 		function __construct()
 		{
 			
-			$config=config('smarty');
-			
-			$this->smarty = new \Smarty();
-			
-			$this->smarty->debugging = defined(DEBUG)?DEBUG:FALSE;
-			//$this->smarty->caching = true;
-			$this->smarty->cache_lifetime = 120;
-			$this->smarty->cache_dir = $config['dir'].'cache/';         //缓存目录
-			$this->smarty->compile_dir = $config['dir'].'compile/';     //编译目录
-			$this->smarty->config_dir = $config['dir'].'config/';       //模板配置文件信息
-			// 设置模板目录
-			$this->smarty->template_dir = $config['dir'];
-			
-			//修改左右边界符号
-			$this->smarty -> left_delimiter = $config['left'];
-			$this->smarty -> right_delimiter = $config['right'];
-			
-			$this->smarty->assign('title','首页');
-			$this->smarty->assign('lang',getLang());
-			
-			$this->smarty->registerPlugin('function','jcs','jcs');
+			$this->data = Main::config('app');
+			$this->data['lang'] = Lang::$language;
 			
 		}
+		
 		//验证数据
 		function validata($request,$param,$return=FALSE)
 		{
@@ -52,19 +36,37 @@
 		}
 		
 		//要传的数据
-		function send($key,$value = null,$cache = FALSE)
+		function send($key,$value="")
 		{
-			$this->smarty->assign( $key, $value, $cache );
+			if(empty($value))
+			{
+				$this->data['data']=$key;
+			}else
+			{
+				$this->data[$key]=$value;
+			}
 		}
+		
+		
 		
 		//加载视图
 		function show($name = "index")
 		{
 			if ( APP_API )
 			{
-				$this->ajaxJson( $this->smarty->getTemplateVars() );
+				$this->ajaxJson( $this->data );
 			}else{
-				$this->smarty->display( $name.'.html' );
+				
+				if(!empty($this->data))
+				{
+					extract($this->data);    //从数组导成变量；
+				}
+				
+				
+				
+				header( 'Content-Type:text/html;charset=utf-8 ');
+				Main::extend($name);
+				exit;
 			}
 			
 		} 

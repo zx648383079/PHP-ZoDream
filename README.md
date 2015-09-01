@@ -20,7 +20,7 @@ PHP-WeChat
 
 >>Model			针对具体表的连接
 
->>plugin		其他插件
+>>view			视图文件
 
 >asset			资源文件
 
@@ -33,14 +33,6 @@ PHP-WeChat
 >>js			js脚本
 
 >>lang			语言包
-
->templates      模板文件
-
->>cache			Smarty生成的缓存文件
-
->>compile		Smarty生成的编译文件
-
->>config		Smarty需要的模板配置文件
 
 >typings		VSCode自动提示文件
 

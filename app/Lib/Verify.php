@@ -1,6 +1,8 @@
 <?php
 namespace App\Lib;
 	
+use App\Main;
+	
 class Verify
 {
 	 const CHARSET = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';//随机因子
@@ -25,7 +27,7 @@ class Verify
 	 */
 	 public function load()
 	{
-		$configs = array_merge( config('verify'), func_get_args() );
+		$configs = array_merge( Main::config('verify'), func_get_args() );
 	
 		$this->codelen = isset($configs['length'])?$configs['length']:4;
 		$this->width = isset($configs['width'])?$configs['width'] : 130 ;

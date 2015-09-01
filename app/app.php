@@ -5,12 +5,20 @@
 	*
 	*******************************************************/
 	
+	/************************ ↓包含文件↓ ************************/
 	
+	require_once("vendor/autoload.php");
+
+	
+	/************************* ↑包含文件↑ ***********************************/
+	
+	use App\Main;
 	
 	/************************ ↓定义常量↓ ************************/
 	
 	//获取域名或主机地址 
-	define('HTTP_HOST', $_SERVER['HTTP_HOST']); #localhost 
+	define('APP_URL', Main::config('app.host')); 
+	define('APP_DIR', dirname(__FILE__));
 	define('APP_API' , isset($_GET['api'])?TRUE:FALSE);    //是否是API模式
 	
 	
@@ -18,27 +26,22 @@
 	/************************* ↑定义常量↑ ***********************************/
 	
 	
-	/************************ ↓包含文件↓ ************************/
-	
-	require_once("vendor/autoload.php");
-	
-	//include_once("include/function.php");                  //加载全局方法文件
 
-
-	
-	/************************* ↑包含文件↑ ***********************************/
 	
 	/************************ ↓执行文件中的方法↓ ************************/
 	
-	new App\Lib\Lang( getLang() );                                 //加载语言包 
+	Main::out(APP_DIR);
+	
+	App\Lib\Lang::setLang();                                //加载语言包 
 	
 	if( !is_file( "app/conf/config.php" ) )
 	{
-		redirect('/install.php');
+		Main::redirect('/install.php');
 	}
 	
 	session_start();                                  //打开session 因为所有的地方都会先判断session
-	getCAV();
+	
+	Main::getCAV();
 	
 	/************************* ↑执行文件中的方法↑ ***********************/
 	

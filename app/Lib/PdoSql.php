@@ -1,6 +1,7 @@
 <?php
 namespace App\Lib;
 
+use App\Main;
     
 class PdoSql
 {
@@ -37,16 +38,16 @@ class PdoSql
 	 */
     public function __construct() {  
         
-		$config=config('mysql');
+		$config = Main::config('mysql');
         $host = $config['host'];
 	    $user = $config['user'];
 	    $pwd = $config['password'];
 	    $database = $config['database'];
 	    $coding = $config['encoding'];
-        $port=$config['port'];
-	    $this->prefix=$config['prefix'];
+        $port = $config['port'];
+	    $this->prefix = $config['prefix'];
         
-        $this->table=$this->prefix.$this->table;
+        $this->table = $this->prefix.$this->table;
 
         
         try {  
