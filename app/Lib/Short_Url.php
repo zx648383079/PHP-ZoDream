@@ -7,6 +7,12 @@ class Short_Url {
 	#字符表
 	public static $charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
+	/**
+	 * 生成短链接
+	 *
+	 * @param $url
+	 * @return array
+     */
 	public static function short($url) {
 		$key = "alexis";
 		$urlhash = md5($key . $url);
@@ -29,6 +35,7 @@ class Short_Url {
 
 			$short_url_list[] = $short_url;
 		}
+
 
 		return $short_url_list;
 	}

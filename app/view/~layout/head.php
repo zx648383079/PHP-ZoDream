@@ -4,7 +4,7 @@ use App\Main;
 ?>
 
 <!DOCTYPE html>
-<html lang="<?php echo $lang;?>">
+<html lang="<?php echo isset($lang)?$lang:'zh-CN';?>">
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1"/>

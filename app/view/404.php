@@ -1,11 +1,13 @@
 <?php 
-	$title="404页面";
-	extand("head"); 
+use App\Main;
+
+	Main::$data['title'] = "404页面";
+	Main::extend('~layout.head');
 ?>
 
 <div class="container">
 	404
-	<?php out(); ?>
+	<?php echo $error; ?>
 </div>
 
-<?php extand("foot"); ?>
+<?php Main::extend('~layout.foot'); ?>

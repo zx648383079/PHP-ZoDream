@@ -4,7 +4,7 @@
 	*
 	*
 	*******************************************************/
-	
+
 	/************************ ↓包含文件↓ ************************/
 	
 	require_once(APP_DIR."/vendor/autoload.php");
@@ -29,7 +29,10 @@
 
 	
 	/************************ ↓执行文件中的方法↓ ************************/
-	
+
+	set_error_handler(array('App\Main','error'));         //自定义错误输出
+
+	register_shutdown_function(array('App\Main','out'));   //程序结束时输出
 	
 	App\Lib\Lang::setLang();                                //加载语言包 
 	
@@ -39,6 +42,8 @@
 	}
 	
 	session_start();                                  //打开session 因为所有的地方都会先判断session
+
+
 	if(defined('SHORT_URL') && SHORT_URL)
 	{
 		Main::short();

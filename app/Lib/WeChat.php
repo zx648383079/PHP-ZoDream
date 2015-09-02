@@ -44,17 +44,17 @@
             $echoStr = $_GET["echostr"];
 	
 	        //valid signature , option
-	        if($this->checkSignature()){
+	        if(self::checkSignature()){
 	        	echo $echoStr;
 	        }
         }
-    
+
         /**
          *  创建自定义菜单
          */
-        private function createMenu(){
+        private static function createMenu(){
             $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token="
-                    .$this->getAccessToken();
+                    .self::getAccessToken();
             $menujson = '{
                 "button":[
                     {
@@ -74,30 +74,30 @@
                     }
                 ]
             }';
-    
+
             $ch = curl_init($url);
-    
+
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS,$menujson);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-    
+
             $info = curl_exec($ch);
-    
+
             if (curl_errno($ch)) {
                 echo 'Errno'.curl_error($ch);
             }
-    
+
             curl_close($ch);
-    
+
             var_dump($info);
         }
-    
+
         /**
          *  删除自定义菜单
          */
-        private function deleteMenu(){
+        private static function deleteMenu(){
             $url = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token="
-                    .$this->getAccessToken();
+                    .self::getAccessToken();
     
             $ch = curl_init($url);
     
@@ -120,7 +120,7 @@
          */
         public static function getMsg(){
             //验证消息的真实性
-            if(!$this->checkSignature()){
+            if(!self::checkSignature()){
                 exit();
             }
     
@@ -141,20 +141,20 @@
         /**
          *  回复消息
          */
-        private function responseMsg(){
+        private static function responseMsg(){
             switch (self::$msgtype) {
                 case 'text':
-                    $data = $this->getData(self::$msgobj->Content);
+                    $data = self::getData(self::$msgobj->Content);
                     if(empty($data) || !is_array($data)){
                         $content = "zx";
                     	self::$textMsg($content);//查询不到记录返回提示信息
                     }
                     else{
-                    	$this->newsMsg($data);
+                    	self::newsMsg($data);
                     }
                     break;
                 case 'event':
-                    $this->eventOpt();
+                    self::eventOpt();
                     break;
                 case 'image':
                     //图片消息
@@ -179,9 +179,10 @@
                     break;
             }
         }
-    
+
         /**
          *  回复文本消息
+         * @param string $content
          */
         public static function textMsg($content=''){
             $textxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
@@ -196,9 +197,10 @@
             $resultstr = sprintf($textxml,$content);
             echo $resultstr;
         }
-        
+
         /**
          *  回复图片消息
+         * @param $img
          */
         public static function imgMsg($img){
             $imgxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
@@ -209,9 +211,10 @@
             $resultstr = sprintf($imgxml,$img);
             echo $resultstr;
         }
-        
+
         /**
          *  回复语音消息
+         * @param $voice
          */
         public static function voiceMsg($voice){
             $voicexml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
@@ -222,9 +225,12 @@
             $resultstr = sprintf($voicexml,$voice);
             echo $resultstr;
         }
-    
+
         /**
          *  回复视频消息
+         * @param $video
+         * @param string $title
+         * @param string $description
          */
         public static function videoMsg($video,$title="",$description=""){
             $videoxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
@@ -236,9 +242,14 @@
             $resultstr = sprintf($videoxml,$video,$title,$description);
             echo $resultstr;
         }
-        
+
         /**
          *  回复音乐消息
+         * @param $pic
+         * @param string $music
+         * @param string $title
+         * @param string $description
+         * @param string $hgmusic
          */
         public static function musicMsg($pic,$music="",$title="",$description="",$hgmusic=""){
             $musicxml = "<xml><ToUserName><![CDATA[{self::$msgobj->FromUserName}]]>
@@ -251,9 +262,10 @@
             $resultstr = sprintf($musicxml,$title,$description,$music,$hgmusic,$pic);
             echo $resultstr;
         }
-        
+
         /**
          *  回复图文消息
+         * @param $data
          */
         public static function newsMsg($data){
             if(!is_array($data)){
@@ -296,7 +308,7 @@
     
                     break;
                 case 'click':
-                    $this->menuClick();
+                    self::menuClick();
                     break;
                 case 'view':
                     //点击菜单跳转链接时的事件推送 
@@ -316,12 +328,12 @@
         /**
          *  自定义菜单事件处理
          */
-        private function menuClick(){
+        private static function menuClick(){
             self::$eventkey = self::$msgobj->EventKey;
             switch (self::$eventkey) {
                 case 'V1001_NEW':
-                	$data = $this->getData();
-                    $this->newsMsg($data);
+                	$data = self::getData();
+                    self::newsMsg($data);
                     break;
                 default:
                     # code...
@@ -334,7 +346,7 @@
         /**
          *  校验签名
          */
-    	private function checkSignature(){
+    	private static function checkSignature(){
             $signature = $_GET["signature"];
 	        $timestamp = $_GET["timestamp"];
 	        $nonce = $_GET["nonce"];
@@ -356,9 +368,9 @@
         /**
          *  获取access token
          */
-        private function getAccessToken()
+        private static function getAccessToken()
         {
-            $url = config('wechat.access_token');
+            $url = Main::config('wechat.access_token');
             $atjson=file_get_contents($url);
             $result=json_decode($atjson,true);//json解析成数组
             
@@ -378,7 +390,7 @@
                     self::$mainMsg = self::$msgobj->Content;
                     break;
                 case 'event':
-                    $this->eventOpt();
+                    self::eventOpt();
                     break;
                 case 'image':
                     //图片消息

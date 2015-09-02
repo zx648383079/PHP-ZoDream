@@ -11,7 +11,7 @@
 			'host' => 'http://c.test:8080/'                          //主目录
 		),
 		'view' =>array(                           //视图文件信息
-			'dir' => '\\view\\',
+			'dir' => 'app/view',
 			'ext' => '.php'
 		),
 		'mysql' => array(							//MYSQL数据库的信息

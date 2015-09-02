@@ -1,6 +1,7 @@
 <?php
 	namespace App\Controller;
-	
+
+	use App\Main;
 	
 	class AuthController extends Controller{
 		
@@ -48,8 +49,8 @@
 		
 		function logout()
 		{
-			out('gg');
+			Main::out('gg');
 			$_SESSION['user'] = null;
-			redirect('/?c=auth');
+			Main::redirect('/?c=auth');
 		}
 	} 

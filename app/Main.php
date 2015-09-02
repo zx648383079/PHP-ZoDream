@@ -6,7 +6,6 @@ namespace App;
 	*
 	*
 	********************************************************/
-use App\Lib\Lang;
 
 class Main{
 	
@@ -36,13 +35,17 @@ class Main{
 		}
 		return $configs;
 	}
-	
+
 	/**
-	* 产生完整的网址
-	*
-	* @access globe
-	*
-	*/
+	 * 产生完整的网址
+	 *
+	 * @access globe
+	 *
+	 * @param string $file 本站链接
+	 * @param bool $echo 是否输出
+	 *
+	 * @return string
+	 */
 	public static function url($file,$echo = TRUE)
 	{
 		$url = APP_URL.$file;
@@ -185,8 +188,8 @@ class Main{
 	*
 	* @access globe
 	*
-	* @param string $fle 路径加文件名
-	* @param string $param 要传的额外的值
+	* @param string $name 路径加文件名
+	* @param string|null $param 要传的额外的值
 	* @,
 	*/
 	public static function extend( $name ,$param = null)
@@ -195,12 +198,12 @@ class Main{
 		
 		$configs = self::config('view');
 				
-		$view_dir = isset($configs['dir'])?$configs['dir']:'view';
+		$view_dir = isset($configs['dir'])?$configs['dir']:'app/view';
 		$ext = isset($configs['ext'])?$configs['ext']:'.php';
 		
 		$name = str_replace('.','/',$name);
 		
-		$file = APP_DIR.'/app/'.$view_dir.'/'.$name;
+		$file = APP_DIR.'/'.$view_dir.'/'.$name;
 		
 		$file = str_replace('//','/',$file);
 		
@@ -213,22 +216,7 @@ class Main{
 		
 		include($file.$ext);
 	}
-	
-	/**
-	* 判断是否是首页
-	*
-	* @access globe
-	*
-	* @return true|false,
-	*/
-	public static function is_home()
-	{
-		$home = false;
-		if( !isset($_GET['c']) || $_GET['c'] == "home" )
-		{
-			$home = true;
-		}
-	}
+
 
 	/**
 	* 执行短链接
@@ -303,12 +291,14 @@ class Main{
 		
 		self::loadController($c,$v);
 	}
+
 	/**
-	* 加载控制器和视图
-	*
-	* @access globe
-	*
-	*/
+	 * 加载控制器和视图
+	 *
+	 * @access globe
+	 * @param $c string 控制器的名称
+	 * @param $v string 视图所在的方法名
+	 */
 	public static function loadController($c,$v)
 	{
 		$con = ucfirst(strtolower($c));
@@ -330,10 +320,14 @@ class Main{
 	}
 
 
-	//获取请求的网址
+	/**
+	 * 获取网址
+	 *
+	 * @return string 真实显示的网址
+     */
 	public static function request_uri()
 	{
-		
+		$uri = '';
 		if ( isset($_SERVER['REQUEST_URI'] ) )
 		{
 			$uri = $_SERVER['REQUEST_URI'];
@@ -355,8 +349,8 @@ class Main{
 					$uri = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
 				}
 			}
-			return $uri;
 		}
+		return $uri;
 	}
 	
 	
@@ -366,7 +360,7 @@ class Main{
 	*
 	* @access globe
 	*
-	* @return 返回路径,
+	* @return string IP,
 	*/
 	public static function getIp(){  
 		$realip = '';  
@@ -404,22 +398,16 @@ class Main{
 	}
 
 	/**
-	* 调试时的输出信息
-	*
-	* @access globe
-	*
-	* @param any $info 信息
-	*/
+	 * @param array|string $info 调试的信息
+     */
 	public static function out($info=null)
 	{
 		if( defined('DEBUG') && DEBUG )
 		{
 			$error = error_get_last();
-			
+
 			if( !empty($error) || !empty($info))
 			{
-				$error=error_get_last();
-				
 				if(!empty($error) || !empty($info))
 				{
 					echo "<div style=\"text-align:center;color:red;font-weight:700;font-size:20px\">";
@@ -429,6 +417,30 @@ class Main{
 				}
 			}
 		}
+	}
+
+	/**
+	 * 调试时的输出错误信息
+	 *
+	 * @access globe
+	 *
+	 * @param int $errno 包含了错误的级别
+	 * @param string $errstr 包含了错误的信息
+	 * @param string $errfile  包含了发生错误的文件名
+	 * @param int $errline 包含了错误发生的行号
+	 * @param array $errcontext 是一个指向错误发生时活动符号表的 array
+	 * @internal param array|null|string $info 信息
+	 */
+	public static function error($errno, $errstr, $errfile, $errline)
+	{
+		if( defined('DEBUG') && DEBUG )
+		{
+			self::$data['error'] = '错误级别：'.$errno.'错误的信息：'.$errstr.'<br>发生在 '.$errfile.' 第 '.$errline.' 行！';
+		}else{
+			self::$data['error'] = '出错了！';
+		}
+		self::extend('404');
+		die();
 	}
 	
 	/**
@@ -443,7 +455,7 @@ class Main{
 		$log = '';
 		if(is_array($logs))
 		{
-			foreach($arr as $k => $r){
+			foreach($logs as $k => $r){
 				$log .= "{$k}='{$r}',";
 			}
 		}else{

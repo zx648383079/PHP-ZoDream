@@ -6,7 +6,7 @@ use App\Main;
 class Verify
 {
 	 const CHARSET = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';//随机因子
-	 public static $code;         	//验证码
+	 public $code;         	//验证码
 	 private $codelen = 4;  	//验证码长度
 	 private $width = 130; 		//宽度
 	 private $height = 50; 		//高度
@@ -20,10 +20,7 @@ class Verify
 	 *
 	 * @access public
 	 *
-	 * @param int $codelen 验证码的长度.
-	 * @param int $width 验证码图片的宽度.
-	 * @param int $height 验证码图片的高度.
-	 * @param string $font 验证码字体.
+	 *
 	 */
 	 public function load()
 	{
@@ -37,11 +34,15 @@ class Verify
 		
 	}
 	
-	 //生成随机码
-	 private function createCode() {
-		  $_len = strlen(self::CHARSET)-1;
+
+	/**
+	 *生成随机码
+     */
+	private function createCode() {
+		 $charset = self::CHARSET;
+		  $_len = strlen($charset)-1;
 		  for ($i=0;$i<$this->codelen;$i++) {
-		   	self::$code .= self::CHARSET[mt_rand(0,$_len)];
+		   	$this->code .= $charset[mt_rand(0,$_len)];
 		  }
 	 }
 	 //生成背景
@@ -55,7 +56,7 @@ class Verify
 		  $_x = $this->width / $this->codelen;
 		  for ($i=0;$i<$this->codelen;$i++) {
 			   $this->fontcolor = imagecolorallocate($this->img,mt_rand(0,156),mt_rand(0,156),mt_rand(0,156));
-			   imagettftext($this->img,$this->fontsize,mt_rand(-30,30),$_x*$i+mt_rand(1,5),$this->height / 1.4,$this->fontcolor,$this->font,self::$code[$i]);
+			   imagettftext($this->img,$this->fontsize,mt_rand(-30,30),$_x*$i+mt_rand(1,5),$this->height / 1.4,$this->fontcolor,$this->font,$this->code[$i]);
 		  }
 	 }
 	 //生成线条、雪花
@@ -71,13 +72,7 @@ class Verify
 			   imagestring($this->img,mt_rand(1,5),mt_rand(0,$this->width),mt_rand(0,$this->height),'*',$color);
 		  }
 	 }
-	 //输出
-	 private function outPut() {
-		  header('Content-type:image/png');
-		  imagepng($this->img);
-		  imagedestroy($this->img);
-	 }
-	 //对外生成
+	//对外生成
 	 public function render() {
 		 if(empty($this->font))
 		 {

@@ -21,14 +21,15 @@ class SQL_Join{
 	{
 		
 	}
+
 	/**
 	 * 根据数组获取SQL语句
 	 *
 	 * @access public
 	 *
-	 * @param array $arr 要操作的数组.
-	 * @param boolen $sort 是否先进行排序.
-	 * @return 返回排序的数组,
+	 * @param array $param 要执行的数组
+	 * @param bool $sort 是否先进行排序.
+	 * @return array 返回排序的数组
 	 */
 	public function getSQL($param,$sort=FALSE)
 	{
@@ -47,7 +48,7 @@ class SQL_Join{
 	 *
 	 * @param string $key 关键字.
 	 * @param string|array $value 值.
-	 * @return 返回拼接后的SQL语句,
+	 * @return string 返回拼接后的SQL语句,
 	 */
 	private function sqlJoin($key,$value)
 	{
@@ -132,7 +133,7 @@ class SQL_Join{
 	 *
 	 * @param string|array $value 要检查的语句或数组.
 	 * @param string $link 数组之间的连接符.
-	 * @return 返回拼接的语句,
+	 * @return string 返回拼接的语句,
 	 */
 	private function sqlCheck($value,$link=' ')
 	{
@@ -191,7 +192,7 @@ class SQL_Join{
 	 * @param string $scope 排除语句的标志.
 	 * @param string|array $find 要查找的关键字.
 	 * @param string|array $enresplace 替换的字符或数组.
-	 * @return 返回完成检查的语句,
+	 * @return string 返回完成检查的语句,
 	 */
 	private function safeCheck($unsafe,$scope,$find,$enresplace)
 	{
@@ -224,7 +225,7 @@ class SQL_Join{
 	 *
 	 * @param array $arr 要排序的数组.
 	 * @param array $keys 关键字数组.
-	 * @return 返回排序的数组,
+	 * @return array 返回排序的数组,
 	 */
 	private function sortarr($arr,$keys)
 	{

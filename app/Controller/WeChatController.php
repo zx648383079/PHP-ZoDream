@@ -6,8 +6,11 @@
 	class WechatController extends Controller{
 		function index(){
             //Wechat::valid();
-            $content = Wechat::getMsg()->Content;
-            Wechat::textMsg('你好啊'.$content);
+			$content = '你好啊';
+			if (isset(Wechat::getMsg()->Content)) {
+				$content .= Wechat::getMsg()->Content;
+			}
+            Wechat::textMsg($content);
 			//writeLog($wechat->msg);
 			exit;
 		}

@@ -26,16 +26,15 @@ class PdoSql
     }  
        
     //私有克隆  
-    protected function __clone() {}  
-       
+    protected function __clone() {}
+
     /**
-	 * 公有构造
-	 *
-	 * @access public
-	 *
-	 * @param string|array $config_path 数据库的配置信息.
-	 * @return 可能会返回False,
-	 */
+     * 公有构造
+     *
+     * @access public
+     *
+     * @internal param array|string $config_path 数据库的配置信息.
+     */
     public function __construct() {  
         
 		$config = Main::config('mysql');
@@ -66,7 +65,7 @@ class PdoSql
 	 * @access public
 	 *
 	 * @param array $_addData 需要添加的集合
-	 * @return 返回影响的行数,
+	 * @return int 返回影响的行数,
 	 */
     public function add(Array $_addData) {  
         $_addFields = array();  
@@ -88,7 +87,7 @@ class PdoSql
 	 *
 	 * @param array $_param 条件
      * @param array $_updateData 需要修改的内容
-	 * @return 返回影响的行数,
+	 * @return int 返回影响的行数,
 	 */
     public function update(Array $_param, Array $_updateData) {  
         $_where = $_setData = '';  
@@ -114,7 +113,7 @@ class PdoSql
 	 * @access public
 	 *
 	 * @param array $_param 条件
-	 * @return 返回影响的行数,
+	 * @return int 返回影响的行数,
 	 */
     public function isOne(Array $_param) {  
         $_where = '';  
@@ -132,7 +131,7 @@ class PdoSql
 	 * @access public
 	 *
 	 * @param array|string $_param 条件
-	 * @return 返回影响的行数,
+	 * @return int 返回影响的行数,
 	 */
     public function delete($_param) {  
         $_where = '';  
@@ -156,7 +155,7 @@ class PdoSql
 	 *
      * @param array $_fileld 要显示的字段
      * @param array|null $_param 条件
-	 * @return 返回查询结果,
+	 * @return array 返回查询结果,
 	 */  
     public function select( Array $_param = array(),Array $_fileld=array()) {  
         $_limit = $_order =$_group = $_where = $_like = '';  
@@ -211,7 +210,7 @@ class PdoSql
 	 * @access public
 	 *
      * @param array|null $_param 条件
-	 * @return 返回总数,
+	 * @return int 返回总数,
 	 */ 
     public function total( Array $_param = array()) {  
         $_where = '';  
@@ -231,7 +230,7 @@ class PdoSql
 	 *
 	 * @access public
 	 *
-	 * @return 返回id,
+	 * @return string 返回id,
 	 */  
     public function nextId() {  
         $_sql = "SHOW TABLE STATUS LIKE '{$this->table}'";  
@@ -245,7 +244,7 @@ class PdoSql
 	 * @access public
 	 *
      * @param array $_param 条件
-	 * @return 返回查询结果,
+	 * @return array 返回查询结果,
 	 */ 
     public function query($param)
     {
@@ -258,7 +257,7 @@ class PdoSql
                 $_result[] = $_objs;  
             }
             
-            out();
+            Main::out();
         }
         return $result;
     }
@@ -270,7 +269,7 @@ class PdoSql
 	 * @access public
 	 *
      * @param array|null $_param 条件
-	 * @return 返回查询结果,
+	 * @return array 返回查询结果,
 	 */ 
     protected function execute($_sql) {  
         try {  
@@ -288,7 +287,7 @@ class PdoSql
 	 *
 	 * @access public
 	 *
-	 * @return 返回错误信息,
+	 * @return string 返回错误信息,
 	 */ 
     public function getError()
     {

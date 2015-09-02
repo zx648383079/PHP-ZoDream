@@ -52,7 +52,7 @@ class Lang
      * @return void 
      */  
     public static function setOptions($options) {  
-        if (!emptyempty($options)) {  
+        if (!empty($options)) {
             foreach ($options as $key => $option) {  
                 self::$options[$key] = $option;  
             }  
@@ -63,7 +63,7 @@ class Lang
 	* 获取语言类型
 	* @access globe
 	*
-	* @return 返回语言,
+	* @return string 返回语言,
 	*/
 	public static function getLang() {
         if( empty( self::$language ))
@@ -73,13 +73,13 @@ class Lang
             self::$language = $language [0] [0];
         }
 		return self::$language;
-	} 
-  
-    /** 
-     * 设置应用程序语言包 
-     * @access public 
-     * @return void 
-     */  
+	}
+
+    /**
+     * 设置应用程序语言包
+     * @access public
+     * @param null $lang 语言
+     */
     public static function setLang( $lang = null) 
     {  
         if(empty(self::$options))
