@@ -70,7 +70,7 @@
 				} 
 				header( 'Content-Type:text/html;charset=utf-8 ');
 				Main::extend($name);
-				ob_end_flush();  
+				ob_end_flush();
 				exit;
 			}
 			

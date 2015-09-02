@@ -248,6 +248,7 @@ class Main{
 	{
 		$url = self::request_uri();
 		
+		//self::out($url);
 	
 		//  /c/v 取最后两个        /c.*/v       ?c= & v=
 		

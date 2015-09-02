@@ -20,7 +20,7 @@ Main::extend('~layout.head');
 			</div>
 			<div class="row">
 				<input type="text" name="code" placeholder="验证码" required ng-model="formData.code"/>
-				<img id="code" src="/verify" alt="验证码"/>
+				<img id="code" src="<?php Main::url('?c=image&v=verify'); ?>" alt="验证码"/>
 				<span ng-show="myForm.code.$error.required">*这是必须的</span>
 				<span class="help-block" ng-show="errorCode">{{ errorCode }}</span>
 			</div>
