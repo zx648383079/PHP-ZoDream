@@ -1,5 +1,7 @@
 <?php
 namespace App\Lib; 
+ 
+use App\Main;
    
 class Upload
 {
@@ -15,18 +17,16 @@ class Upload
     private $newFileName;              //新文件名
     private $errorNum = 0;             //错误号
     private $errorMess="";             //错误报告消息
-	/**
-	 * 公有构造
-	 *
-	 * @access private
-	 *
-	 * @param string $file 上传的表单名.
-     * @param string $rand 文件命名方式.
-	 * @param string|array $config_path 数据库的配置信息.
-	 * @return 可能会返回False,
-	 */
-    public function __construct($rand=true,$config) {  
-        
+
+    /**
+     * 公有构造
+     *
+     * @access private
+     *
+     * @param bool $rand 文件命名方式.
+     */
+    public function __construct($rand=true) {  
+        $config = Main::config("upload");
         $this->maxsize = $config['maxsize'];
         $this->allowtype =explode(';',$config['allowtype']);
         $this->savepath = $config['savepath'];
@@ -49,11 +49,12 @@ class Upload
       }
       return $this;
     }
-  
+
     /**
      * 调用该方法上传文件
-     * @param  string $fileFile  上传文件的表单名称 
-     * @return bool        如果上传成功返回数true 
+     * @param $fileField
+     * @return bool 如果上传成功返回数true
+     * @internal param string $fileFile 上传文件的表单名称
      */
   
     public function upload($fileField) {
@@ -137,7 +138,7 @@ class Upload
   
     /** 
      * 获取上传后的文件名称
-     * @param  void   没有参数
+     *
      * @return string 上传后，新文件的名称， 如果是多文件上传返回数组
      */
     public function getFileName(){
@@ -146,7 +147,7 @@ class Upload
   
     /**
      * 上传失败后，调用该方法则返回，上传出错信息
-     * @param  void   没有参数
+     *
      * @return string  返回上传文件出错的信息报告，如果是多文件上传返回数组
      */
     public function getErrorMsg(){

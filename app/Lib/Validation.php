@@ -82,10 +82,14 @@ class Validation{
 		
 		return $result;
 	}
-    /**
-     * 数字验证
-     * param:$flag : int是否是整数，float是否是浮点型
-     */      
+
+	/**
+	 * 数字验证
+	 *
+	 * @param $str
+	 * @param string $flag int是否是整数，float是否是浮点型
+	 * @return bool
+	 */
     private function isNum($str,$flag = 'int'){
         if(strtolower($flag) == 'int'){
             return ((string)(int)$str === (string)$str) ? true : false;
@@ -93,35 +97,48 @@ class Validation{
             return ((string)(float)$str === (string)$str) ? true : false;
         }
     }
-    /**
-     * 邮箱验证
-     */      
+
+	/**
+	 * 邮箱验证
+	 * @param $str
+	 * @return bool
+	 */
     private function isEmail($str){
         return preg_match("/([a-z0-9]*[-_\.]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?/i",$str) ? true : false;
     }
     //手机号码验证
-    private function isMobile($str){
-        $exp = "/^13[0-9]{1}[0-9]{8}$|15[012356789]{1}[0-9]{8}$|18[012356789]{1}[0-9]{8}$|14[57]{1}[0-9]$/";
+	/**
+	 * @param $str
+	 * @return bool
+     */
+	private function isMobile($str){
+        $exp = '#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[0,6,7,8]{1}\d{8}$|^18[\d]{9}$#';
         if(preg_match($exp,$str)){
             return true;
         }else{
             return false;
         }
     }
-    /**
-     * URL验证，纯网址格式，不支持IP验证
-     */      
+
+	/**
+	 * URL验证，纯网址格式，不支持IP验证
+	 * @param $str
+	 * @return bool
+	 */
     private function isUrl($str){
         return preg_match('#(http|https|ftp|ftps)://([w-]+.)+[w-]+(/[w-./?%&=]*)?#i',$str) ? true : false;
     }
-    /**
-     * 验证长度
-     * @param: string $str
-     * @param: int $type(方式，默认min <= $str <= max)
-     * @param: int $min,最小值;$max,最大值;
-     * @param: string $charset 字符
-    */
-    private function length($str,$type=3,$min=0,$max=0,$charset = 'utf-8'){
+
+	/**
+	 * 验证长度
+	 * @param string $str
+	 * @param int $type(方式，默认min <= $str <= max)
+	 * @param int $min,最小值;
+	 * @param int $max,最大值;
+	 * @param string $charset 字符
+	 * @return bool
+	 */
+    private function length($str, $type = 3, $min = 0 ,$max = 0, $charset = 'utf-8'){
         $len = mb_strlen($str,$charset);
         switch($type){
             case 1: //只匹配最小值
@@ -134,11 +151,13 @@ class Validation{
                 return (($min <= $len) && ($len <= $max)) ? true : false;
         }
     }
+
 	/**
-     * 正则验证
-     * @param: string $str
-     * @param: string $patten 正则字符串
-    */
+	 * 正则验证
+	 * @param: string $str
+	 * @param: string $patten 正则字符串
+	 * @return bool
+	 */
 	private function regular($str,$patten)
 	{
         return preg_match($str,$patten)?TRUE:false;

@@ -1,6 +1,7 @@
 <?php
 	namespace App\Controller;
-	
+
+	use App\Main;
 	
 	class AuthController extends Controller{
 		
@@ -11,36 +12,36 @@
 		
 		function qrcode()
 		{
-			$this->send(array('title'=>'扫扫二维码','img'=>qrcode("http://www.baidu.com")));
+			$this->send(array('title'=>'扫扫二维码','img'=>''));
 			$this->show('qrcode');
 		}
 		
 		function login(){
 			
-			$guid=$_POST['guid'];
+			$guid = $_POST['guid'];
 			
 			if(!empty($guid))
 			{
-				if($guid==5)
+				if( $guid == 5 )
 				{
-					$_SESSION['user']='1';
-					$data['success']="true";
+					$_SESSION['user'] = '1';
+					$data['success'] = "true";
 				}else{
-					$data['errors']['guid']="";
+					$data['errors']['guid'] = "";
 				}
 			}else{
-				$email=$_POST['email'];
+				$email = $_POST['email'];
 				$pwd=$_POST['pwd'];
 				//$data['success']="成功";
 				//$data['errors']['email']='邮箱错误';
 				//$data['errors']['pwd']='密码错误';
 				
 				if($_SESSION['verify'] != $_POST['code']){
-					$data['errors']['code']='验证码错误';
+					$data['errors']['code'] = '验证码错误';
 					
 				}else{
-					$_SESSION['user']='1';
-					$data['success']="true";
+					$_SESSION['user'] = '1';
+					$data['success'] = "true";
 				}
 			}
 			$this->ajaxJson($data);
@@ -48,8 +49,8 @@
 		
 		function logout()
 		{
-			out('gg');
-			$_SESSION['user']=null;
-			redirect('/?c=auth');
+			Main::out('gg');
+			$_SESSION['user'] = null;
+			Main::redirect('/?c=auth');
 		}
 	} 

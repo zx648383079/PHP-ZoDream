@@ -1,10 +1,12 @@
 <?php
 namespace App\Lib;
 	
+use App\Main;
+	
 class Verify
 {
-	 private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';//随机因子
-	 private $code;         	//验证码
+	 const CHARSET = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';//随机因子
+	 public $code;         	//验证码
 	 private $codelen = 4;  	//验证码长度
 	 private $width = 130; 		//宽度
 	 private $height = 50; 		//高度
@@ -18,26 +20,29 @@ class Verify
 	 *
 	 * @access public
 	 *
-	 * @param int $codelen 验证码的长度.
-	 * @param int $width 验证码图片的宽度.
-	 * @param int $height 验证码图片的高度.
-	 * @param string $font 验证码字体.
+	 *
 	 */
-	 public function __construct($codelen,$width,$height,$font)
+	 public function load()
 	{
-		
-		$this->codelen=$codelen;
-		$this->width=$width;
-		$this->height=$height;
-		$this->font=$font;
+		$configs = array_merge( Main::config('verify'), func_get_args() );
+	
+		$this->codelen = isset($configs['length'])?$configs['length']:4;
+		$this->width = isset($configs['width'])?$configs['width'] : 130 ;
+		$this->height = isset($configs['height'])?$configs['height'] : 50 ;
+		$this->fontsize = isset($configs['fontsize'])?$configs['fontsize'] : 30 ;
+		$this->font = isset($configs['font'])?$configs['font'] : 'asset/font/AcademyKiller.ttf';
 		
 	}
 	
-	 //生成随机码
-	 private function createCode() {
-		  $_len = strlen($this->charset)-1;
+
+	/**
+	 *生成随机码
+     */
+	private function createCode() {
+		 $charset = self::CHARSET;
+		  $_len = strlen($charset)-1;
 		  for ($i=0;$i<$this->codelen;$i++) {
-		   	$this->code .= $this->charset[mt_rand(0,$_len)];
+		   	$this->code .= $charset[mt_rand(0,$_len)];
 		  }
 	 }
 	 //生成背景
@@ -67,22 +72,18 @@ class Verify
 			   imagestring($this->img,mt_rand(1,5),mt_rand(0,$this->width),mt_rand(0,$this->height),'*',$color);
 		  }
 	 }
-	 //输出
-	 private function outPut() {
-		  header('Content-type:image/png');
-		  imagepng($this->img);
-		  imagedestroy($this->img);
-	 }
-	 //对外生成
-	 public function showImg() {
+	//对外生成
+	 public function render() {
+		 if(empty($this->font))
+		 {
+			$this->load();	 
+		 }
+		 
 		  $this->createBg();
 		  $this->createCode();
 		  $this->createLine();
 		  $this->createFont();
-		  $this->outPut();
-	 }
-	 //获取验证码
-	 public function getCode() {
-	  	return strtolower($this->code);
+		  
+		  return $this->img;
 	 }
 }

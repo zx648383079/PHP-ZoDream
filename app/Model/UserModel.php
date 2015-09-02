@@ -6,5 +6,12 @@
 	
 	
 	class UserModel extends Model{
-		protected $table="users";
+		protected $table = "users";
+		
+		protected $fillable = array(
+			'openid',
+			'username',
+			'password',
+			'role_id'
+		);
 	}

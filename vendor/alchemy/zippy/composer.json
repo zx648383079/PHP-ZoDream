@@ -1,0 +1,24 @@
+{
+    "name": "alchemy/zippy",
+    "type": "library",
+    "description": "Zippy, the archive manager companion",
+    "keywords": ["zip", "tar", "bzip", "compression"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alchemy",
+            "email": "dev.team@alchemy.fr",
+            "homepage": "http://www.alchemy.fr/"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Alchemy": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2.x-dev"
+        }
+    }
+}

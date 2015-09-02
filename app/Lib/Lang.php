@@ -6,6 +6,8 @@ namespace App\Lib;
  */  
 class Lang  
 {  
+    
+    public static $language;
     /** 
      * _options 设置语言包的选项 
      * $this->_options['lang'] 应用程序使用什么语言包.php-gettext支持的所有语言都可以. 
@@ -14,7 +16,7 @@ class Lang
      * @var array 
      * @access protected 
      */  
-    protected $_options;  
+    public static $options;  
   
     /** 
      * 构造函数 
@@ -23,26 +25,25 @@ class Lang
      * @access public 
      * @return void 
      */  
-    public function __construct($lang=null) {  
+    public static function load($lang=null) {  
         switch ( strtolower($lang) ) {  
             case 'zh_cn':  
-                $this->_options = array('lang' => 'zh_CN.UTF8', 'domain' => 'nways');  
+                self::$options = array('lang' => 'zh_CN.UTF8', 'domain' => 'nways');  
                 break;  
             case 'en':  
-                $this->_options = array('lang' => 'en_US.UTF8', 'domain' => 'nways');  
+                self::$options = array('lang' => 'en_US.UTF8', 'domain' => 'nways');  
                 break;  
             case 'en_us':  
-                $this->_options = array('lang' => 'en_US.UTF8', 'domain' => 'nways');  
+                self::$options = array('lang' => 'en_US.UTF8', 'domain' => 'nways');  
                 break;  
             case 'en_gb':  
-                $this->_options = array('lang' => 'en_US.UTF8', 'domain' => 'nways');  
+                self::$options = array('lang' => 'en_US.UTF8', 'domain' => 'nways');  
                 break;  
             default:  
-                $this->_options = array('lang' => 'zh_CN.UTF8', 'domain' => 'nways');  
+                self::$options = array('lang' => 'zh_CN.UTF8', 'domain' => 'nways');  
             break;  
-        }  
-  
-        $this->setLang();  
+        }
+        self::setLang();  
     }  
   
     /** 
@@ -50,26 +51,52 @@ class Lang
      * @param mixed $options 
      * @return void 
      */  
-    public function setOptions($options) {  
-        if (!emptyempty($options)) {  
+    public static function setOptions($options) {  
+        if (!empty($options)) {
             foreach ($options as $key => $option) {  
-                $this->_options[$key] = $option;  
+                self::$options[$key] = $option;  
             }  
         }  
     }  
-  
-    /** 
-     * 设置应用程序语言包 
-     * @access public 
-     * @return void 
-     */  
-    public function setLang() {  
-        putenv('LANG='.$this->_options['lang']);  
-        putenv('LANGUAGE='.$this->_options['lang']);  
-        setlocale(LC_ALL, $this->_options['lang']);  
-        bindtextdomain($this->_options['domain'], 'asset/lang/');  
-        textdomain($this->_options['domain']);  
-        bind_textdomain_codeset($this->_options['domain'], 'UTF-8');  
+    
+    /**
+	* 获取语言类型
+	* @access globe
+	*
+	* @return string 返回语言,
+	*/
+	public static function getLang() {
+        if( empty( self::$language ))
+        {
+            $language = $_SERVER ['HTTP_ACCEPT_LANGUAGE'];  
+            preg_match_all ( "/[\w-]+/", $language, $language );  
+            self::$language = $language [0] [0];
+        }
+		return self::$language;
+	}
+
+    /**
+     * 设置应用程序语言包
+     * @access public
+     * @param null $lang 语言
+     */
+    public static function setLang( $lang = null) 
+    {  
+        if(empty(self::$options))
+        {
+            if(empty($lang))
+            {
+                $lang = self::getLang();
+            }
+            self::load($lang);
+        }
+        
+        putenv('LANG='.self::$options['lang']);  
+        putenv('LANGUAGE='.self::$options['lang']);  
+        setlocale(LC_ALL, self::$options['lang']);  
+        bindtextdomain(self::$options['domain'], 'asset/lang/');  
+        textdomain(self::$options['domain']);  
+        bind_textdomain_codeset(self::$options['domain'], 'UTF-8');  
     }  
   
 }  

@@ -20,7 +20,7 @@ PHP-WeChat
 
 >>Model			针对具体表的连接
 
->>plugin		其他插件
+>>view			视图文件
 
 >asset			资源文件
 
@@ -33,14 +33,6 @@ PHP-WeChat
 >>js			js脚本
 
 >>lang			语言包
-
->templates      模板文件
-
->>cache			Smarty生成的缓存文件
-
->>compile		Smarty生成的编译文件
-
->>config		Smarty需要的模板配置文件
 
 >typings		VSCode自动提示文件
 
@@ -81,9 +73,15 @@ PHP-WeChat
 
 15.引入Composer实现自动加载
 
-16.引入Smarty实现分离
+`16.引入Smarty实现分离`
 
 17.引入NAMESPACE,初步实现NAMESPACE管理
+
+18.添加短链接功能
+
+19.添加错误输出控制
+
+20.添加 gzip 压缩支持
 
 
 已知问题

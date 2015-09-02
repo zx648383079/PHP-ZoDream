@@ -6,8 +6,13 @@
 	
 	
 	class MessageModel extends Model{
-		protected $table="message";
+		protected $table = "message";
 		
-		protected $fillable=['type','content','user_id','created'];
+		protected $fillable = array(
+			'type',
+			'content',
+			'user_id',
+			'cdate'
+			);
 		
 	}

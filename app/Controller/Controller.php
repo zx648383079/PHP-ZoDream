@@ -6,55 +6,78 @@
 	*******************************************************/
 	namespace App\Controller;
 	
-	
+	use App\Main;
+	use App\Lib\Lang;
+	use App\Lib\Validation;
 
 	class Controller{
-		
-		private $smarty;
-		
 		function __construct()
 		{
-			
-			$config=config('smarty');
-			
-			$this->smarty=new \Smarty();
-			
-			$this->smarty->debugging =defined(DEBUG)?DEBUG:FALSE;
-			//$this->smarty->caching = true;
-			$this->smarty->cache_lifetime = 120;
-			$this->smarty->cache_dir=$config['dir'].'cache/';         //缓存目录
-			$this->smarty->compile_dir=$config['dir'].'compile/';     //编译目录
-			$this->smarty->config_dir=$config['dir'].'config/';       //模板配置文件信息
-			// 设置模板目录
-			$this->smarty->template_dir=$config['dir'];
-			
-			//修改左右边界符号
-			$this->smarty -> left_delimiter=$config['left'];
-			$this->smarty -> right_delimiter=$config['right'];
-			
-			$this->smarty->assign('title','首页');
-			$this->smarty->assign('lang',getLang());
-			
-			$this->smarty->registerPlugin('function','jcs','jcs');
-			
+			Main::$data = Main::config('app');
+			Main::$data['lang'] = Lang::$language;
 		}
 		
-		
+
+		/**
+		 * 验证数据
+		 *
+		 * @param $request array 要验证的数据
+		 * @param $param array  验证的规则
+		 * @param bool|FALSE $return  是否需要返回结果
+		 * @return array
+         */
+		function validata($request,$param,$return=FALSE)
+		{
+			$_vali = new Validation();
+			$result = $_vali->make($request,$param);
+			if( $return)
+			{
+				return $_vali->error;
+			}else if(!$result)
+			{
+
+			}
+		}
 		
 		//要传的数据
-		function send($key,$value=null,$cache=FALSE)
+		function send($key , $value = "")
 		{
-			$this->smarty->assign($key,$value,$cache);
+			if(empty($value))
+			{
+				Main::$data['data'] = $key;
+			}else
+			{
+				Main::$data[$key] = $value;
+			}
 		}
 		
+		
+		
 		//加载视图
-		function show($name="index")
+		function show($name = "index")
 		{
-			$this->smarty->display($name.'.html');
+			if ( APP_API )
+			{
+				$this->ajaxJson(Main::$data);
+			}else{
+				 if (extension_loaded('zlib')) { 
+					if (  !headers_sent() AND isset($_SERVER['HTTP_ACCEPT_ENCODING']) && 
+						strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE) 
+					//页面没有输出且浏览器可以接受GZIP的页面 
+					{ 
+						ob_start('ob_gzhandler'); 
+					} 
+				} 
+				header( 'Content-Type:text/html;charset=utf-8 ');
+				Main::extend($name);
+				ob_end_flush();
+				exit;
+			}
+			
 		} 
 		
 		//返回JSON数据
-		function ajaxJson($data,$type='JSON')
+		function ajaxJson($data,$type = 'JSON')
 		{
 			switch (strtoupper($type)){
 	            case 'JSON' :
@@ -64,7 +87,7 @@
 	            case 'XML'  :
 	                // 返回xml格式数据
 	                header('Content-Type:text/xml; charset=utf-8');
-	                exit(xml_encode($data));
+	                exit($this->xml_encode($data));
 	            case 'JSONP':
 	                // 返回JSON数据格式到客户端 包含状态信息
 	                header('Content-Type:application/json; charset=utf-8');
@@ -77,5 +100,65 @@
 	        }
 			
 			exit;
+		}
+
+		/**
+		 * 数组转XML
+		 *
+		 * @param array $data 要转的数组
+		 * @param string $rootNodeName
+		 * @param null $xml
+		 * @return mixed
+         */
+		function xml_encode($data, $rootNodeName = 'data', $xml=null)
+		{
+			// turn off compatibility mode as simple xml throws a wobbly if you don't.
+			if (ini_get('zend.ze1_compatibility_mode') == 1)
+			{
+				ini_set ('zend.ze1_compatibility_mode', 0);
+			}
+
+			if ($xml == null)
+			{
+				$xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
+			}
+
+			// loop through the data passed in.
+			foreach($data as $key => $value)
+			{
+				// no numeric keys in our xml please!
+				if (is_numeric($key))
+				{
+					// make string key...
+					$key = "unknownNode_". (string) $key;
+				}
+
+				// replace anything not alpha numeric
+				$key = preg_replace('/[^a-z]/i', '', $key);
+
+				// if there is another array found recrusively call this function
+				if (is_array($value))
+				{
+					$node = $xml->addChild($key);
+					// recrusive call.
+					$this->xml_encode($value, $rootNodeName, $node);
+				}
+				else
+				{
+					// add single node.
+					$value = htmlentities($value);
+					$xml->addChild($key,$value);
+				}
+
+			}
+			// pass back as string. or simple xml object if you want!
+			return $xml->asXML();
+		}
+		
+		function showImg($img)
+		{
+			header('Content-type:image/png');
+			imagepng($img);
+			imagedestroy($img);
 		}
 	}
