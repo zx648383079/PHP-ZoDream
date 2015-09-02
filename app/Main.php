@@ -46,7 +46,7 @@ class Main{
 	 *
 	 * @return string
 	 */
-	public static function url($file,$echo = TRUE)
+	public static function url($file='',$echo = TRUE)
 	{
 		$url = APP_URL.$file;
 		if($echo)

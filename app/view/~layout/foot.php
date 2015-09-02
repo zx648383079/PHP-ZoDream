@@ -5,6 +5,8 @@ use App\Main;
 
 <?php 
 	Main::jcs(
+		'jquery',
+		'jquery.fabric',
 		'angular.min',
 		'zx',
 		'controller',

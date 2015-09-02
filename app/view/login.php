@@ -3,35 +3,48 @@ use App\Main;
 
 Main::extend('~layout.head');
 ?>
-	
-	<div class="form" ng-app="formApp" ng-controller="formController">
-		<form name="myForm" ng-submit="sendForm()">
-			<div class="row">
-				<input type="email" name="email" placeholder="账号" required ng-model="formData.email"/>
-				<span ng-show="myForm.email.$error.required">*这是必须的</span>
-				<span ng-show="myForm.email.$error.email">*请输入正确的邮箱</span>
-				<span class="help-block" ng-show="errorEmail">{{ errorEmail }}</span>
+<div class="ms-Grid">
+  <div class="ms-Grid-row">
+    <div class="ms-Grid-col ms-u-md2 ms-u-lg3"></div>
+    <div class="ms-Grid-col ms-u-sm12 ms-u-md8 ms-u-lg6">
+		<main class="Container">
+			<div class="Header ms-bgColor-neutralPrimary ms-borderColor-greenLight">
+				<div class="Header-text ms-fontColor-white">
+					<div class="u-contentCenter">
+						<h1 class="Header-title">登录</h1>
+					</div>
+				</div>
 			</div>
-			<div class="row">
-				<input type="password" name="pwd" placeholder="密码" required ng-minlength="6" ng-model="formData.pwd"/>
-				<span ng-show="myForm.pwd.$error.required">*这是必须的</span>
-				<span class="error" ng-show="myForm.pwd.$error.minlength">*请输入6位以上的密码</span>
-				<span class="help-block" ng-show="errorPwd">{{ errorPwd }}</span>
+		
+			<div class="Content">
+				<div class="u-contentCenter">
+		
+				<form class="Form">
+		
+				<div class="ms-TextField is-required">
+					<label class="ms-Label">账号</label>
+					<input class="ms-TextField-field" type="text">
+				</div>
+		
+				<div class="ms-TextField is-required">
+					<label class="ms-Label">密码</label>
+					<input class="ms-TextField-field" type="password">
+				</div>
+		
+				<div class="SubmitButton">
+					<button class="ms-Button ms-Button--primary"><span class="ms-Button-label">登录</span></button>
+					<button class="ms-Button">
+						<span class="ms-Button-label">注册</span>
+					</button>
+				</div>
+				</form>
 			</div>
-			<div class="row">
-				<input type="text" name="code" placeholder="验证码" required ng-model="formData.code"/>
-				<img id="code" src="<?php Main::url('?c=image&v=verify'); ?>" alt="验证码"/>
-				<span ng-show="myForm.code.$error.required">*这是必须的</span>
-				<span class="help-block" ng-show="errorCode">{{ errorCode }}</span>
 			</div>
-			<div class="row" ng-show="message">{{ message }}</div>
-			<div class="row">
-				<button type="submit">提交</button>
-				<a href="/auth/qrcode">二维码</a>
-			</div>
-		</form>
-	
+		</main>
 	</div>
+  </div>
+</div>
+  
 	
 	
 <?php Main::extend('~layout.foot');?>

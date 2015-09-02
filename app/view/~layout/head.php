@@ -13,31 +13,22 @@ use App\Main;
 
 <title><?php echo $title;?></title>
 
-<?php Main::jcs(Main::$extra,'zx.css');?>
+<?php Main::jcs(Main::$extra,'fabric.css','fabric.components.css','zx.css');?>
 
 </head>
 <body>
 
-	<div class="navbar">
-		<div class="brand">
-			<img src="/asset/img/favicon.png" alt=""/>
-		</div>
-		<ul class="inline">
-			<li><a href="/">主页</a></li>
-			<li><a href="/message">消息</a>
-				<ul>
-					<li><a href="#">普通消息</a></li>
-					<li><a href="#">图文消息</a></li>
-					<li><a href="">消息</a>
-						<ul>
-							<li><a href="#">普通消息</a></li>
-							<li><a href="#">图文消息</a></li>
-						</ul>
-					</li>
-					<li><a href="#">图文消息</a></li>
-				</ul>
-			</li>
-			<li><a href="#">会员</a></li>
-			<li><a href="#">回复</a></li>
-		</ul>
-	</div>
+<div class="ms-NavBar">
+  <div class="ms-NavBar-openMenu js-openMenu">
+    <i class="ms-Icon ms-Icon--menu"></i>
+  </div>
+  <ul class="ms-NavBar-items">
+    <li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php Main::url(); ?>">首页</a></li>
+    <li class="ms-NavBar-item ms-NavBar-item--search ms-u-hiddenSm">
+      <div class="ms-TextField">
+        <input class="ms-TextField-field" placeholder="搜索">
+      </div>
+    </li>
+    <li class="ms-NavBar-item ms-NavBar-item--right"><a class="ms-NavBar-link" href="<?php Main::url('?c=auth'); ?>"><i class="ms-Icon ms-Icon--person"></i>登录</a></li>
+  </ul>
+</div>
