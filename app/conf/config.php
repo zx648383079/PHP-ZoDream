@@ -40,6 +40,7 @@
 		),
 		'short' => array(                        //手动添加短链接
 			'm' => 'message.index',
+			'a' =>'admin.index',
 			'*' => 'home.index'                  //默认
 		)
 	);

@@ -188,29 +188,54 @@ class Main{
 	*
 	* @access globe
 	*
-	* @param string $name 路径加文件名
+	* @param string $names 路径加文件名
 	* @param string|null $param 要传的额外的值
+	* @param string|null $replace 额外值是否替换
 	* @,
 	*/
-	public static function extend( $name ,$param = null)
+	public static function extend( $names ,$param = null,$replace = null)
 	{
-		self::$extra = $param;
+		if($replace == '+')
+		{
+			self::$extra[] = $param;
+		}else{
+			self::$extra = $param;
+		}
 		
 		$configs = self::config('view');
 				
 		$view_dir = isset($configs['dir'])?$configs['dir']:'app/view';
 		$ext = isset($configs['ext'])?$configs['ext']:'.php';
 		
+		if(substr( $ext , 0, 1 ) != '.')
+		{
+			$ext = '.'.$ext;
+		}
+		
+		
+		
+		if(is_array($names))
+		{
+			foreach ($names as $value) {
+				self::inc_file($view_dir,$value,$ext);
+			}
+		}else{
+			self::inc_file($view_dir,$names,$ext);
+		}
+		
+	}
+	
+	private static function inc_file($view_dir, $name ,$ext)
+	{
+		if(empty($name))
+		{
+			return;
+		}
 		$name = str_replace('.','/',$name);
 		
 		$file = APP_DIR.'/'.$view_dir.'/'.$name;
 		
 		$file = str_replace('//','/',$file);
-		
-		if(substr( $ext , 0, 1 ) != '.')
-		{
-			$ext = '.'.$ext;
-		}
 		
 		extract(self::$data);
 		
