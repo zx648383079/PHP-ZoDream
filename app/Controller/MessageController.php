@@ -10,9 +10,9 @@
 			//Auth::user()?"":redirect("/?c=auth");
 			$this->send('title','消息');
 			
-			$message = new MessageModel();
+			/*$message = new MessageModel();
 			$data= $message->select();
-			$this->send($data);
+			$this->send($data);*/
 			$this->show('message');
 		}
 		

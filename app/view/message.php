@@ -1,7 +1,7 @@
 <?php 
 use App\Main;	
 
-Main::extend('~layout.head');
+Main::extend('~layout.head',array('fabric.css','fabric.components.css'));
 ?>
 	
 	<div class="container">
@@ -39,5 +39,15 @@ Main::extend('~layout.head');
 	</div>
 	
 	
-	
-<?php Main::extend('~layout.foot');?>
+
+<?php
+	Main::extend(
+		'~layout.foot',
+		array(
+			'before' => array(
+				'jquery',
+				'jquery.fabric'
+				)
+			)
+		);
+	?>

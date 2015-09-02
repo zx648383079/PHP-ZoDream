@@ -13,7 +13,7 @@ use App\Main;
 
 <title><?php echo $title;?></title>
 
-<?php Main::jcs('zx.css');?>
+<?php Main::jcs(Main::$extra,'zx.css');?>
 
 </head>
 <body>

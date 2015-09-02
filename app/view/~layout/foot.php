@@ -4,9 +4,12 @@ use App\Main;
 
 
 <?php 
-	Main::jcs('angular.min');
-	Main::jcs('zx');
-	Main::jcs('controller');
+	Main::jcs(
+		'angular.min',
+		'zx',
+		'controller',
+		Main::$extra
+		);
 ?>
 </body>
 </html>

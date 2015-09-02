@@ -8,7 +8,7 @@
 	return array(
 		'app' => array(                           //网站信息
 			'title' => '主页',
-			'host' => 'http://www.we.cc/'                          //主目录
+			'host' => 'http://c.test:8080/'                          //主目录
 		),
 		'view' =>array(                           //视图文件信息
 			'dir' => '\\view\\',
@@ -40,6 +40,7 @@
 		),
 		'short' => array(                        //手动添加短链接
 			'm' => 'message.index',
+			't' => 'test.index',
 			'*' => 'home.index'                  //默认
 		)
 	);

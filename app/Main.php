@@ -59,32 +59,89 @@ class Main{
 	*
 	* @access globe
 	*
-	* @param array $file 获取到的值
 	*
-	* @return string     返回的值即输出的值
+	* @return null
 	*/
-	public static function jcs($file)
+	public static function jcs()
 	{
-		$result='';
-		$arr=explode('.',$file);
-		if(count($arr)==1)
-		{
-			$result= '<script src="'.self::url('asset/js/'.$file.'.js',false).'"></script>';
-		}else{
-			switch(end($arr))
+		$main = new Main();
+		
+		$main->arr_list(func_get_args());
+		
+		$files = array_merge($main->before , $main->content, $main->after);
+		
+		foreach ($files as $file) {
+			if(is_string($file))
 			{
-				case 'js':
-					$result= '<script src="'.self::url('asset/js/'.$file,false).'"></script>';
+				$result='';
+				$arr=explode('.',$file);
+				if(count($arr) == 1)
+				{
+					if(!empty($file))
+					{
+						$result= '<script src="'.self::url('asset/js/'.$file.'.js',false).'"></script>';
+					}
+				}else{
+					switch(end($arr))
+					{
+						case 'js':
+							$result= '<script src="'.self::url('asset/js/'.$file,false).'"></script>';
+							break;
+						case 'css':
+							$result= '<link rel="stylesheet" type="text/css" href="'.self::url('asset/css/'.$file,false).'"/>';
+							break;
+						default:
+							$result= '<script src="'.self::url('asset/js/'.$file,false).'.js"></script>';
+							break;
+					}
+				}
+				echo $result;
+			}else if(is_object($file)){
+				$file();
+			}
+		}
+		
+		
+		
+	}
+	
+	public $before = array();
+	
+	public $content = array();
+	
+	public $after = array();
+	
+	public function arr_list($arr)
+	{
+		foreach ($arr as $key => $value)
+		{
+			switch ($key) {
+				case 'before':
+					if(is_array($value))
+					{
+						$this->before = array_merge($this->before , $value);
+					}else{
+						$this->before[] = $value;
+					}
 					break;
-				case 'css':
-					$result= '<link rel="stylesheet" type="text/css" href="'.self::url('asset/css/'.$file,false).'"/>';
+				case 'after':
+					if(is_array($value))
+					{
+						$this->after = array_merge($this->after , $value);
+					}else{
+						$this->after[] = $value;
+					}
 					break;
 				default:
-					$result= '<script src="'.self::url('asset/js/'.$file,false).'.js"></script>';
+					if(is_array($value))
+					{
+						$this->arr_list($value);
+					}else{
+						$this->content[] = $value;
+					}
 					break;
 			}
 		}
-		echo $result;
 	}
 
 	/**
@@ -119,22 +176,27 @@ class Main{
 		
 	}
 	
+	//要传的值
 	public static $data;
+	//额外的值
+	public static $extra;
 	/**
 	* 包含文件
 	*
 	* @access globe
 	*
 	* @param string $fle 路径加文件名
-	* @param string $ext 拓展名
+	* @param string $param 要传的额外的值
 	* @,
 	*/
-	public static function extend( $name , $ext = '.php')
+	public static function extend( $name ,$param = null)
 	{
+		self::$extra = $param;
+		
 		$configs = self::config('view');
 				
 		$view_dir = isset($configs['dir'])?$configs['dir']:'view';
-		$view_ext = isset($configs['ext'])?$configs['ext']:$ext;
+		$ext = isset($configs['ext'])?$configs['ext']:'.php';
 		
 		$name = str_replace('.','/',$name);
 		
@@ -181,11 +243,11 @@ class Main{
 		
 		$key = isset($_GET['s'])?$_GET['s']:'*';
 		
-		if(isset($shorts[$key]))
-		{
-			$arr = explode('.',$shorts[$key]);
-			self::loadController($arr[0],$arr[1]);
-		}
+		$url = isset($shorts[$key])?$shorts[$key]:'home.index';
+
+		$arr = explode('.', $url);
+		
+		self::loadController($arr[0],$arr[1]);
 		
 	}
 	/**
