@@ -53,4 +53,9 @@
 			$_SESSION['user'] = null;
 			Main::redirect('/?c=auth');
 		}
+		
+		function register()
+		{
+			$this->show('register',['title' => '注册']);
+		}
 	} 

@@ -1,8 +1,13 @@
 <?php 
 use App\Main;	
 
-Main::extend('~layout.head');
-Main::extend('~layout.menu');
+Main::extend(array(
+	'~layout'=>array(
+		'head',
+		'menu'
+		)
+	)
+);
 ?>
 	
 	  <h1 class="ms-font-su ms-fontColor-white ms-bgColor-themeDarker">这里是测试页</h1>

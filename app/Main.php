@@ -6,6 +6,8 @@ namespace App;
 	*
 	*
 	********************************************************/
+	
+use App\Lib\ToList;
 
 class Main{
 	
@@ -67,11 +69,9 @@ class Main{
 	*/
 	public static function jcs()
 	{
-		$main = new Main();
+		$list = new ToList();
 		
-		$main->arr_list(func_get_args());
-		
-		$files = array_merge($main->before , $main->content, $main->after);
+		$files = $list->sort(func_get_args());
 		
 		foreach ($files as $file) {
 			if(is_string($file))
@@ -108,44 +108,7 @@ class Main{
 		
 	}
 	
-	public $before = array();
-	
-	public $content = array();
-	
-	public $after = array();
-	
-	public function arr_list($arr)
-	{
-		foreach ($arr as $key => $value)
-		{
-			switch ($key) {
-				case 'before':
-					if(is_array($value))
-					{
-						$this->before = array_merge($this->before , $value);
-					}else{
-						$this->before[] = $value;
-					}
-					break;
-				case 'after':
-					if(is_array($value))
-					{
-						$this->after = array_merge($this->after , $value);
-					}else{
-						$this->after[] = $value;
-					}
-					break;
-				default:
-					if(is_array($value))
-					{
-						$this->arr_list($value);
-					}else{
-						$this->content[] = $value;
-					}
-					break;
-			}
-		}
-	}
+
 
 	/**
 	* 跳转页面
@@ -212,15 +175,10 @@ class Main{
 			$ext = '.'.$ext;
 		}
 		
+		$list =new ToList();
 		
-		
-		if(is_array($names))
-		{
-			foreach ($names as $value) {
-				self::inc_file($view_dir,$value,$ext);
-			}
-		}else{
-			self::inc_file($view_dir,$names,$ext);
+		foreach ($list->to($names,'.') as $value) {
+			self::inc_file($view_dir,$value,$ext);
 		}
 		
 	}

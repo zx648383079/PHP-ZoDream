@@ -54,8 +54,13 @@
 		
 		
 		//加载视图
-		function show($name = "index")
+		function show($name = "index",$data = array())
 		{
+			if(!empty($data))
+			{
+				Main::$data = array_merge(Main::$data , $data);
+			}
+			
 			if ( APP_API )
 			{
 				$this->ajaxJson(Main::$data);

@@ -10,7 +10,7 @@ Main::extend('~layout.head');
 			<div class="Header ms-bgColor-neutralPrimary ms-borderColor-greenLight">
 				<div class="Header-text ms-fontColor-white">
 					<div class="u-contentCenter">
-						<h1 class="Header-title">登录</h1>
+						<h1 class="Header-title">注册</h1>
 					</div>
 				</div>
 			</div>
@@ -18,7 +18,7 @@ Main::extend('~layout.head');
 			<div class="Content">
 				<div class="u-contentCenter">
 		
-				<form class="Form" action="<?php Main::url('?c=admin'); ?>" method="POST">
+				<form class="Form">
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">账号</label>
@@ -29,15 +29,15 @@ Main::extend('~layout.head');
 					<label class="ms-Label">密码</label>
 					<input class="ms-TextField-field" type="password">
 				</div>
-				
-				<div class="ms-ChoiceField">
-					<input id="demo-checkbox-selected" class="ms-ChoiceField-input" type="checkbox" checked>
-					<label for="demo-checkbox-selected" class="ms-ChoiceField-field"><span class="ms-Label">保持登录</span></label>
+		
+				<div class="ms-TextField is-required">
+					<label class="ms-Label">确认密码</label>
+					<input class="ms-TextField-field" type="password">
 				</div>
 				
 				<div class="SubmitButton">
-					<button class="ms-Button ms-Button--primary"><span class="ms-Button-label">登录</span></button>
-					<a href="<?php Main::url('?c=auth&v=register'); ?>" class="ms-font-l ms-Link">注册</a>
+					<button class="ms-Button ms-Button--primary"><span class="ms-Button-label">注册</span></button>
+					<a href="<?php Main::url('?c=auth'); ?>" class="ms-font-l ms-Link">登录</a>
 				</div>
 				</form>
 			</div>
