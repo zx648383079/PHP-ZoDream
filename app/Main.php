@@ -60,7 +60,7 @@ class Main{
 	}	
 
 	/**
-	* Smarty中加载的自定义方法 主要是加载 js、css 文件
+	* 主要是加载 js、css 文件
 	*
 	* @access globe
 	*
@@ -74,17 +74,12 @@ class Main{
 		$files = $list->sort(func_get_args());
 		
 		foreach ($files as $file) {
-			if(is_string($file))
+			if(is_string($file) && !empty($file))
 			{
 				$result='';
-				$arr=explode('.',$file);
-				if(count($arr) == 1)
+				if(!strstr($file,'://'))
 				{
-					if(!empty($file))
-					{
-						$result= '<script src="'.self::url('asset/js/'.$file.'.js',false).'"></script>';
-					}
-				}else{
+					$arr=explode('.',$file);
 					switch(end($arr))
 					{
 						case 'js':
@@ -97,8 +92,24 @@ class Main{
 							$result= '<script src="'.self::url('asset/js/'.$file,false).'.js"></script>';
 							break;
 					}
+					echo $result;
+				}else{
+					$arr=explode('.',$file);
+					switch(end($arr))
+						{
+							case 'js':
+								$result= '<script src="'.$file.'"></script>';
+								break;
+							case 'css':
+								$result= '<link rel="stylesheet" type="text/css" href="'.$file.'"/>';
+								break;
+							default:
+								$result= '<script src="'.$file.'"></script>';
+								break;
+						}
 				}
-				echo $result;
+				
+				
 			}else if(is_object($file)){
 				$file();
 			}
@@ -295,11 +306,10 @@ class Main{
 			{
 				$controller->$view();
 			}else{
-				self::out($view);
+				self::error(0,$view,__FILE__,__LINE__);
 			}
 		}else{
-			self::out($name);
-			self::out($view);
+			self::error(0,$name.$view,__FILE__,__LINE__);
 		}
 	}
 

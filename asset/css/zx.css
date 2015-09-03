@@ -5,3 +5,7 @@
 .ms-NavBar{
 	z-index: 1000;
 }
+
+.ms-ContextualMenu.zx-open{
+	display: block;
+}

@@ -16,37 +16,6 @@
 			$this->show('qrcode');
 		}
 		
-		function login(){
-			
-			$guid = $_POST['guid'];
-			
-			if(!empty($guid))
-			{
-				if( $guid == 5 )
-				{
-					$_SESSION['user'] = '1';
-					$data['success'] = "true";
-				}else{
-					$data['errors']['guid'] = "";
-				}
-			}else{
-				$email = $_POST['email'];
-				$pwd=$_POST['pwd'];
-				//$data['success']="成功";
-				//$data['errors']['email']='邮箱错误';
-				//$data['errors']['pwd']='密码错误';
-				
-				if($_SESSION['verify'] != $_POST['code']){
-					$data['errors']['code'] = '验证码错误';
-					
-				}else{
-					$_SESSION['user'] = '1';
-					$data['success'] = "true";
-				}
-			}
-			$this->ajaxJson($data);
-		}
-		
 		function logout()
 		{
 			Main::out('gg');
@@ -56,6 +25,18 @@
 		
 		function register()
 		{
-			$this->show('register',['title' => '注册']);
+			$post = $_POST;
+			if(empty($post))
+			{
+				$this->show('register',['title' => '注册']);
+			}else{
+				$error = $this->validata($post, array(
+					'name' => 'required',
+					'email' =>'email|required',
+					'pwd' => 'min:6|required'
+				));
+				$this->ajaxJson($error);
+			}
+			
 		}
 	} 

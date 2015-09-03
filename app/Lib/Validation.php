@@ -10,11 +10,12 @@ namespace App\Lib;
 	
 class Validation{
 	
-	public $error=array();
+	public $error = array();
 	
 	public function make($request,$pattent)
 	{
-		foreach($pattent as $key=>$val)
+		$success = true;
+		foreach($pattent as $key => $val)
 		{
 			$arr=explode('|',$val);
 			
@@ -22,61 +23,62 @@ class Validation{
 			{
 				foreach($arr as $v)
 				{
-					$result=$this -> check($request[$key],$v);
-				 	if($result != true)
+					$result = $this -> check($request[$key],$v);
+					
+				 	if(!is_bool($result))
 					{
-						$this->error[$key][]=$key.$result;
-						return false;
+						$this->error[$key][] = $key.$result;
+						$success = false;
 					}
 				}
 			}else{
 				if(in_array('required',$arr))
 				{
-					$this->error[$key][]=$key.' is required';
-					return false;
+					$this->error[$key][] = $key.' is required';
+					$success = false;
 				}
 			}
 		}
 		
-		return true;
+		return $success;
 	}
 	
-	private function check($value,$patten)
+	private function check($value, $patten)
 	{
-		$result=FALSE;
-		$arr=explode(':',$patten,2);
-		switch(strtolower($arr[0]))
+		$result = FALSE;
+		$arr = explode(':' , $patten , 2);
+		switch(strtolower( $arr[0] ))
 		{
 			case 'required':
-				$result= true;
+				$result = true;
 				break;
 			case 'number':
-				$result= $this->isNum($value)?TRUE:' is not number';
+				$result = $this->isNum($value)?TRUE:' is not number';
 				break;
 			case 'email':
-				$result= $this->isEmail($value)?TRUE:' is not email';
+				$result = $this->isEmail($value)?TRUE:' is not email';
 				break;
 			case 'phone':
-				$result= $this->isMobile($value)?TRUE:' is not phone';
+				$result = $this->isMobile($value)?TRUE:' is not phone';
 				break;
 			case 'url':
-				$result= $this->isUrl($value)?TRUE:' is not url';
+				$result = $this->isUrl($value)?TRUE:' is not url';
 				break;
 			case 'length':
-				$len=explode('-',$arr[1]);
-				$result= $this->length($value,3,intval($len[0]),intval($len[1]))?TRUE:'\'s length is not between '.$len[0].' and '.$len[1];
+				$len = explode('-',$arr[1]);
+				$result = $this->length($value,3,intval($len[0]),intval($len[1]))?TRUE:'\'s length is not between '.$len[0].' and '.$len[1];
 				break;
 			case 'min':
-				$result= $this->length($value,1,intval($arr[1]))?TRUE:' min length is '.$arr[1];
+				$result = $this->length($value,1,intval($arr[1]))?TRUE:' min length is '.$arr[1];
 				break;
 			case 'max':
-				$result= $this->length($value,2,0,intval($arr[1]))?TRUE:' max length is '.$arr[1];
+				$result = $this->length($value,2,0,intval($arr[1]))?TRUE:' max length is '.$arr[1];
 				break;
 			case 'regular':
-				$result= $this->regular($value,$arr[1])?TRUE:' is not match';
+				$result = $this->regular($value,$arr[1])?TRUE:' is not match';
 				break;
 			default:
-				$result=TRUE;
+				$result = TRUE;
 				break;
 		}
 		

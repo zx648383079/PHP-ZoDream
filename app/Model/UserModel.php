@@ -4,14 +4,44 @@
 	*********************************/
 	namespace App\Model;
 	
+	use App\Lib\TimeDeal;
 	
 	class UserModel extends Model{
 		protected $table = "users";
 		
 		protected $fillable = array(
 			'openid',
-			'username',
-			'password',
-			'role_id'
+			'email',
+			'name',
+			'pwd',
+			'udate',
+			'cdate'
 		);
+		/******
+		从网页注册
+		*/
+		public function fillWeb( $email, $name , $pwd)
+		{
+			$arr = array();
+			$arr['email'] = $email;
+			$arr['name'] = $name;
+			$arr['pwd'] = $pwd;
+			$arr['udate'] = $arr['cdate'] = TimeDeal::Now();
+			return $this->add($arr);
+		}
+		
+		public function findByEmail($email)
+		{
+			return $this->isOne("email = '{$email}'");
+		}
+		
+		public function findByUser($email, $pwd)
+		{
+			return $this->isOne("email = '{$email}'");
+		}
+		
+		public function findRole( $id )
+		{
+			
+		}
 	}

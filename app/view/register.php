@@ -18,21 +18,27 @@ Main::extend('~layout.head');
 			<div class="Content">
 				<div class="u-contentCenter">
 		
-				<form class="Form">
+				<form class="Form" action="<?php Main::url('?c=auth&v=register'); ?>" method="POST">
+
 		
 				<div class="ms-TextField is-required">
-					<label class="ms-Label">账号</label>
-					<input class="ms-TextField-field" type="text">
+					<label class="ms-Label">用户名</label>
+					<input class="ms-TextField-field" type="text" name="name" placeholder="用户名" required>
+				</div>
+		
+				<div class="ms-TextField is-required">
+					<label class="ms-Label">邮箱</label>
+					<input class="ms-TextField-field" type="email" name="email" placeholder="邮箱" required>
 				</div>
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">密码</label>
-					<input class="ms-TextField-field" type="password">
+					<input class="ms-TextField-field" type="password" name="pwd" placeholder="密码" required>
 				</div>
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">确认密码</label>
-					<input class="ms-TextField-field" type="password">
+					<input class="ms-TextField-field" type="password" placeholder="确认密码" required>
 				</div>
 				
 				<div class="SubmitButton">

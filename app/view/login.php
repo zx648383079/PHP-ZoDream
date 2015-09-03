@@ -21,13 +21,13 @@ Main::extend('~layout.head');
 				<form class="Form" action="<?php Main::url('?c=admin'); ?>" method="POST">
 		
 				<div class="ms-TextField is-required">
-					<label class="ms-Label">账号</label>
-					<input class="ms-TextField-field" type="text">
+					<label class="ms-Label">邮箱</label>
+					<input class="ms-TextField-field" type="email" placeholder="邮箱">
 				</div>
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">密码</label>
-					<input class="ms-TextField-field" type="password">
+					<input class="ms-TextField-field" type="password" placeholder="密码">
 				</div>
 				
 				<div class="ms-ChoiceField">

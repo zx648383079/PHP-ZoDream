@@ -23,20 +23,19 @@
 		 *
 		 * @param $request array 要验证的数据
 		 * @param $param array  验证的规则
-		 * @param bool|FALSE $return  是否需要返回结果
 		 * @return array
          */
-		function validata($request,$param,$return=FALSE)
+		function validata($request,$param)
 		{
 			$_vali = new Validation();
 			$result = $_vali->make($request,$param);
-			if( $return)
+			
+			if(!$result)
 			{
-				return $_vali->error;
-			}else if(!$result)
-			{
-
+				$result = $_vali->error;
 			}
+			
+			return $result;
 		}
 		
 		//要传的数据
