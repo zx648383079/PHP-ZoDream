@@ -7,14 +7,20 @@
 */
 namespace App\Lib;
 
+use App\Lib\PdoSql;
 	
 class Validation{
 	
 	public $error = array();
 	
+	private $request;
+	
 	public function make($request,$pattent)
 	{
 		$success = true;
+		
+		$this->request = $request;
+		
 		foreach($pattent as $key => $val)
 		{
 			$arr=explode('|',$val);
@@ -23,7 +29,7 @@ class Validation{
 			{
 				foreach($arr as $v)
 				{
-					$result = $this -> check($request[$key],$v);
+					$result = $this -> check($key, $v );
 					
 				 	if(!is_bool($result))
 					{
@@ -43,8 +49,9 @@ class Validation{
 		return $success;
 	}
 	
-	private function check($value, $patten)
+	private function check($key, $patten)
 	{
+		$value = $this->request[$key];
 		$result = FALSE;
 		$arr = explode(':' , $patten , 2);
 		switch(strtolower( $arr[0] ))
@@ -77,12 +84,69 @@ class Validation{
 			case 'regular':
 				$result = $this->regular($value,$arr[1])?TRUE:' is not match';
 				break;
+			case 'confirm':
+				$result = $this->confirm($value , $arr[1])?TRUE:' is not the same as '.$arr[1];
+				break;
+			case 'conform':
+				$result = ($value === $arr[1])?TRUE:' is not equal '.$arr[1];
+				break;
+			case 'unique':
+				$tables = explode('.' , $arr[1],2);
+				$colum = $key;
+				if(!empty($tables[1]))
+				{
+					$colum =$tables[1];
+				}
+				$result =$this->unique($tables[0],$colum , $value)?TRUE:' is exist in '.$tables[0];
+				break;
 			default:
 				$result = TRUE;
 				break;
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * 对比确认
+	 *
+	 * @param string $table  不带前缀的表名
+	 * @param string $value  要验证的列
+	 * @param string $value  要验证的值
+	 * @return bool
+	 */
+	public function unique($table , $colum ,$value)
+	{
+		$pdo =new PdoSql();
+		$data = $pdo->query(array(
+			'select' => 'COUNT(*) as num',
+			'from' => $table,
+			'where' => "$colum = '$value'" 
+		));
+		if(empty($data) || intval($data['num']) == 0)
+		{
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	/**
+	 * 对比确认
+	 *
+	 * @param string $value  要验证的值
+	 * @param string $key 对比值得关键字
+	 * @return bool
+	 */
+	private function confirm( $value, $key)
+	{
+		if(!isset($this->request[$key]))
+		{
+			return false;
+		}
+		
+		return ($value === $this->request[$key]);
+		
 	}
 
 	/**

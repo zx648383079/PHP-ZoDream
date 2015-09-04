@@ -18,16 +18,16 @@ Main::extend('~layout.head');
 			<div class="Content">
 				<div class="u-contentCenter">
 		
-				<form class="Form" action="<?php Main::url('?c=admin'); ?>" method="POST">
+				<form class="Form" action="<?php Main::url('?c=auth'); ?>" method="POST">
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">邮箱</label>
-					<input class="ms-TextField-field" type="email" placeholder="邮箱">
+					<input class="ms-TextField-field" type="email" name="email" placeholder="邮箱" required>
 				</div>
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">密码</label>
-					<input class="ms-TextField-field" type="password" placeholder="密码">
+					<input class="ms-TextField-field" type="password" name="pwd" placeholder="密码" required>
 				</div>
 				
 				<div class="ms-ChoiceField">

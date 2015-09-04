@@ -5,9 +5,20 @@
 	
 	class AuthController extends Controller{
 		
+		protected $rules = array(
+			'logout' => '1'	
+		);
+		
 		function index(){
-			$this->send('title','登录');
-			$this->show('login');
+			$post = $_POST;
+			if(empty($post))
+			{
+				$this->show('login',['title' => '登录']);
+			}else{
+				
+				
+				Main::redirect('?c=admin');
+			}
 		}
 		
 		function qrcode()
@@ -32,10 +43,14 @@
 			}else{
 				$error = $this->validata($post, array(
 					'name' => 'required',
-					'email' =>'email|required',
-					'pwd' => 'min:6|required'
+					'email' =>'unique:user|email|required',
+					'pwd' => 'confirm:cpwd|min:6|required'
 				));
-				$this->ajaxJson($error);
+				
+				if(!is_bool($error))
+				{
+					$this->ajaxJson($error);
+				}
 			}
 			
 		}

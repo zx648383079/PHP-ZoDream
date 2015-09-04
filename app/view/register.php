@@ -38,7 +38,7 @@ Main::extend('~layout.head');
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">确认密码</label>
-					<input class="ms-TextField-field" type="password" placeholder="确认密码" required>
+					<input class="ms-TextField-field" type="password" name="cpwd" placeholder="确认密码" required>
 				</div>
 				
 				<div class="SubmitButton">

@@ -22,4 +22,9 @@
 			
 			return $this->add($arr);
 		}
+		
+		public function hasOne($model, $forkey , $key)
+		{
+			
+		}
 	}

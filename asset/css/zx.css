@@ -9,3 +9,13 @@
 .ms-ContextualMenu.zx-open{
 	display: block;
 }
+
+.error{
+	text-align: center;
+}
+.error .head{
+	font-size: 10em;
+	font-weight: 700;
+	color: red;
+	text-shadow: 5px 5px 5px #999;
+}

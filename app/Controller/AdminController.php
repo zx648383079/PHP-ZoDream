@@ -3,6 +3,11 @@
 	
 	
 	class AdminController extends Controller{
+		
+		protected $rules = array(
+			'*' => '2'
+		);
+		
 		function index(){
 			//Auth::user()?"":redirect("/?c=auth");
 			$this->send('title','后台');

@@ -16,7 +16,25 @@
 			Main::$data = Main::config('app');
 			Main::$data['lang'] = Lang::$language;
 		}
-		
+		/**
+		 * 在执行之前做验证
+		 *
+		 * @param $request array 要验证的数据
+		 * @param $param array  验证的规则
+		 * @return array
+         */
+		function before($func)
+		{
+			if(isset($this->rules))
+			{
+				$role = isset($this->rules['*'])?$this->rules['*']:'';
+				$role = isset($this->rules[$func])?$this->rules[$func]:$role;
+				if(!Main::role($role)){
+					Main::redirect('?c=auth' , 10 ,'您无权操作！','401');
+					die();
+				}
+			}
+		}
 
 		/**
 		 * 验证数据

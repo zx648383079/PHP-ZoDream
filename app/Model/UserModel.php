@@ -40,8 +40,8 @@
 			return $this->isOne("email = '{$email}'");
 		}
 		
-		public function findRole( $id )
+		public function role()
 		{
-			
+			return $this->hasOne('App\Model\Roles','id','role');
 		}
 	}

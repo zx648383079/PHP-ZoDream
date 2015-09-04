@@ -1,15 +1,19 @@
 <?php 
 use App\Main;
 
-	Main::$data['title'] = "404页面";
-	Main::extend('~layout.head');
+	Main::$data['title'] = "出错了！";
+	Main::extend('~layout.head',function(){
+		echo isset($meta)?$meta:'';
+	});
 ?>
 
 <div class="ms-Grid">
 	<div class="ms-Grid-row">
     	<div class="ms-Grid-col ms-u-sm12 ms-u-mdPush2 ms-u-md8 ms-u-lgPush3 ms-u-lg6">
-			<h1>404</h1>
-			<div class="error"><?php echo $error; ?></div>
+			<div class="error">
+				<div class="head"><?php echo isset($code)?$code:'404'; ?></div>
+				<div class="info"><?php echo isset($error)?$error:''; ?></div>
+			</div>
 		</div>
 	</div>
 </div>

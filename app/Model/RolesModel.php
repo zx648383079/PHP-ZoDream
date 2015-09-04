@@ -5,7 +5,7 @@
 	namespace App\Model;
 	
 	
-	class UserGroupModel extends Model{
+	class RolesModel extends Model{
 		protected $table = "user_group";
 		
 		protected $fillable = array(

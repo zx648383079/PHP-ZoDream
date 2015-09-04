@@ -8,6 +8,7 @@ namespace App;
 	********************************************************/
 	
 use App\Lib\ToList;
+use App\Lib\Auth;
 
 class Main{
 	
@@ -38,6 +39,26 @@ class Main{
 		return $configs;
 	}
 
+	/**
+	 * 判断权限是否符合
+	 *
+	 * @access globe
+	 *
+	 * @param int $role 权限编号
+	 *
+	 * @return string
+	 */
+	public static function role( $role )
+	{
+		if(Auth::guest())
+		{
+			return empty($role);
+		}else{
+			$roles =explode(',', Auth::user()->role() );
+			return in_array($role,$roles);
+		}
+	}
+	
 	/**
 	 * 产生完整的网址
 	 *
@@ -129,8 +150,9 @@ class Main{
 	* @param string $url 要跳转的网址
 	* @param int $time 停顿的时间
 	* @param string $msg 显示的消息.
+	* @param string $code 显示的代码标志.
 	*/
-	public static function redirect($url, $time=0, $msg='') {
+	public static function redirect($url, $time=0, $msg='',$code = '') {
 		//多行URL地址支持
 		$url        = str_replace(array("\n", "\r"), '', $url);
 		if (empty($msg))
@@ -141,16 +163,16 @@ class Main{
 				header('Location: ' . $url);
 			} else {
 				header("refresh:{$time};url={$url}");
-				echo($msg);
+				
 			}
-			exit();
 		} else {
 			$str    = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
-			if ($time != 0)
-				$str .= $msg;
-			exit($str);
+			self::$data['meta'] = $str;
 		}
-		
+		self::$data['code'] = $code;
+		self::$data['error'] = $msg;
+		self::extend('404');
+		exit();
 	}
 	
 	//要传的值
@@ -297,11 +319,14 @@ class Main{
 	public static function loadController($c,$v)
 	{
 		$con = ucfirst(strtolower($c));
-		$name='App\\Controller\\'.$con."Controller";
-		$view=strtolower($v);
+		$name = 'App\\Controller\\'.$con."Controller";
+		$view = strtolower($v);
 		if( class_exists($name))
 		{
-			$controller=new $name;
+			$controller = new $name;
+			
+			$controller -> before($view);
+			
 			if(method_exists($controller,$view))
 			{
 				$controller->$view();

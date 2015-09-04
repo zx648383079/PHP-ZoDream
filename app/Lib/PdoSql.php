@@ -46,7 +46,10 @@ class PdoSql
         $port = $config['port'];
 	    $this->prefix = $config['prefix'];
         
-        $this->table = $this->prefix.$this->table;
+        if(isset($this->table))
+        {
+            $this->table = $this->prefix.$this->table;            
+        }
 
         
         try {  
