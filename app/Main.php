@@ -140,7 +140,62 @@ class Main{
 		
 	}
 	
+	/**
+	* 判断是否存在并输出
+	*
+	*
+	* @param string $name 要显示的
+	* @param string $text 默认值.
+	*/
+	public static function ech($name,$text = '')
+	{
+		$result = isset(self::$data[$name])?self::$data[$name]:$text;
+		if(is_array($text) || is_array($result))
+		{
+			return $result;
+		}else{
+			echo $result;
+		}
+		
+	}
 
+	public static function session( $keys, $value = '')
+	{
+		if(isset($_SESSION))
+		{
+			session_start();
+		}
+		if(empty($value))
+		{
+			$result = $_SESSION;
+			$arr = explode('.',$keys);
+			foreach ($arr as $value) {
+				$result = isset($result[$value])?$result[$value]:'';
+			}
+			
+			return $result;
+		}else{
+			$arr = explode('.',$keys);
+			switch (count($arr)) {
+				case 1:
+					$_SESSION[$arr[0]] = $value;
+					break;
+				case 2:
+					$_SESSION[$arr[0]][$arr[1]] = $value;
+					break;
+				case 3:
+					$_SESSION[$arr[0]][$arr[1]][$arr[2]] = $value;
+					break;
+				case 4:
+					$_SESSION[$arr[0]][$arr[1]][$arr[2]][$arr[3]] = $value;
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
+		
+	}
 
 	/**
 	* 跳转页面
@@ -228,7 +283,7 @@ class Main{
 		
 		$file = str_replace('//','/',$file);
 		
-		extract(self::$data);
+		//extract(self::$data);
 		
 		include($file.$ext);
 	}

@@ -80,7 +80,7 @@ class PdoSql
         $_addFields = implode(',', $_addFields);  
         $_addValues = implode("','", $_addValues);  
         $_sql = "INSERT INTO {$this->table} ($_addFields) VALUES ('$_addValues')";  
-        return $this->execute($_sql)->rowCount();  
+        return $this->execute($_sql)->lastInsertId();  
     }  
        
     /**
@@ -116,7 +116,7 @@ class PdoSql
 	 * @access public
 	 *
 	 * @param array $_param 条件
-	 * @return int 返回影响的行数,
+	 * @return string|bool 返回id,
 	 */
     public function isOne(Array $_param) {  
         $_where = '';  
@@ -125,7 +125,13 @@ class PdoSql
         }  
         $_where = 'WHERE '.substr($_where, 0, -4);  
         $_sql = "SELECT id FROM {$this->table} $_where LIMIT 1";  
-        return $this->execute($_sql)->rowCount();  
+        $result = $this->execute($_sql);
+        if($result->rowCount() > 0)
+        {
+            return $result->fetchObject();
+        }else{
+            return false;
+        } 
     }  
        
     /**

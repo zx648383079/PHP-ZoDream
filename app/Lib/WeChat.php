@@ -25,8 +25,8 @@
         //事件key值
         public static $eventkey;
         
-        //主要内容
-        public static $mainMsg;
+        //全部内容
+        public static $msg;
         
         public static $access_token;
     
@@ -125,7 +125,7 @@
             }
     
             //接收消息
-            $poststr = $GLOBALS["HTTP_RAW_POST_DATA"];
+            self::$msg = $poststr = $GLOBALS["HTTP_RAW_POST_DATA"];
             if(!empty($poststr)){
                 self::$msgobj = simplexml_load_string($poststr,
                                 'SimpleXMLElement',LIBXML_NOCDATA);
@@ -385,38 +385,65 @@
         
         public static function getMainMsg()
         {
+            $result = array(
+                'openid' => self::$msgobj->FromUserName,
+                'type' => self::$msgobj->MsgType,
+                'msg' => self::$msg,
+                'cdate' => self::$msgobj->CreateTime
+            );
             switch (self::$msgtype) {
                 case 'text':
-                    self::$mainMsg = self::$msgobj->Content;
+                    $result['content'] = self::$msgobj->Content;
                     break;
                 case 'event':
-                    self::eventOpt();
+                    $result['keyword'] = self::$msgobj->Event;
+                    $event = strtolower(self::$msgobj->Event);
+                    switch ($event) {
+                        case 'subscribe':
+                            $result['content'] = isset(self::$msgobj->EventKey)?self::$msgobj->EventKey:'';
+                            break;
+                        case 'unsubscribe':
+                            break;
+                        case 'click':
+                            $result['content'] = self::$msgobj->EventKey;
+                            break;
+                        case 'view':
+                            $result['content'] = self::$msgobj->EventKey;
+                            break;
+                        case 'scan':
+                            $result['content'] = self::$msgobj->EventKey;
+                            break;
+                        case 'location':
+                            $result['content'] = self::$msgobj->Latitude.','.self::$msgobj->Longitude;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 case 'image':
-                    //图片消息
+                    $result['content'] = self::$msgobj->MediaId;
                     break;
                 case 'voice':
-                    //语音消息
+                    $result['content'] = self::$msgobj->MediaId;
                     break;
                 case 'video':
-                    //视频消息
+                    $result['content'] = self::$msgobj->MediaId;
                     break;
                 case 'shortvideo':
-                    //小视频消息
+                    $result['content'] = self::$msgobj->MediaId;
                     break;
                 case 'location':
-                    //地理位置消息
+                    $result['content'] = self::$msgobj->Location_X.','.self::$msgobj->Location_Y;
                     break;
                 case 'link':
-                    //链接消息
+                    $result['content'] = self::$msgobj->Url;
                     break;
                 default:
-                    # code...
                     break;
             }
             
             
-            return self::$mainMsg;
+            return $result;
         }
 		
 	}

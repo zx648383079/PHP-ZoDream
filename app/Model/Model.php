@@ -17,8 +17,10 @@
 				$param=array_shift($param);
 			}
 			$arr = array_combine($this->fillable,$param);
-			
-			$arr['cdate'] = time();
+			if(!isset($arr['cdate']) || empty($arr['cdate']))
+			{
+				$arr['cdate'] = time();
+			}
 			
 			return $this->add($arr);
 		}

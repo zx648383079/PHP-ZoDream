@@ -5,8 +5,8 @@
 	namespace App\Model;
 	
 	
-	class RolesModel extends Model{
-		protected $table = "roles";
+	class GroupModel extends Model{
+		protected $table = "group";
 		
 		protected $fillable = array(
 			'id',

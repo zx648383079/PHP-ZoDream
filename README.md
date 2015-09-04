@@ -40,7 +40,6 @@ PHP-WeChat
 
 >>composer		Composer生成的自动加载文件
 
->>smarty		Smarty
 
 # 修改
 1.增加Angular.js的支持

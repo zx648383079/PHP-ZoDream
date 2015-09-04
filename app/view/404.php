@@ -11,8 +11,8 @@ use App\Main;
 	<div class="ms-Grid-row">
     	<div class="ms-Grid-col ms-u-sm12 ms-u-mdPush2 ms-u-md8 ms-u-lgPush3 ms-u-lg6">
 			<div class="error">
-				<div class="head"><?php echo isset($code)?$code:'404'; ?></div>
-				<div class="info"><?php echo isset($error)?$error:''; ?></div>
+				<div class="head"><?php Main::ech('code','404'); ?></div>
+				<div class="info"><?php Main::ech('error'); ?></div>
 			</div>
 		</div>
 	</div>

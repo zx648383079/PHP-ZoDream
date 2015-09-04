@@ -11,6 +11,7 @@ Main::extend('~layout.head');
 				<div class="Header-text ms-fontColor-white">
 					<div class="u-contentCenter">
 						<h1 class="Header-title">登录</h1>
+						<div class="error"><?php Main::ech('error');?></div>
 					</div>
 				</div>
 			</div>
@@ -22,7 +23,7 @@ Main::extend('~layout.head');
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">邮箱</label>
-					<input class="ms-TextField-field" type="email" name="email" placeholder="邮箱" required>
+					<input class="ms-TextField-field" type="email" name="email" placeholder="邮箱" value="<?php Main::ech('email'); ?>" required>
 				</div>
 		
 				<div class="ms-TextField is-required">
@@ -31,7 +32,7 @@ Main::extend('~layout.head');
 				</div>
 				
 				<div class="ms-ChoiceField">
-					<input id="demo-checkbox-selected" class="ms-ChoiceField-input" type="checkbox" checked>
+					<input id="demo-checkbox-selected" class="ms-ChoiceField-input" type="checkbox" name="remember" value="1">
 					<label for="demo-checkbox-selected" class="ms-ChoiceField-field"><span class="ms-Label">保持登录</span></label>
 				</div>
 				

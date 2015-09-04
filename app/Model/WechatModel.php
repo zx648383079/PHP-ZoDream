@@ -9,8 +9,11 @@
 		protected $table = "wechat";
 		
 		protected $fillable = array(
-			'openid',
 			'type',
-			'content'
+			'keyword',
+			'content',
+			'user_id',
+			'msg',
+			'cdate'
 		);
 	}

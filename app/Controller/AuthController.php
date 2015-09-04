@@ -2,6 +2,8 @@
 	namespace App\Controller;
 
 	use App\Main;
+	use App\Model\UserModel;
+	use App\Lib\ToList;
 	
 	class AuthController extends Controller{
 		
@@ -15,9 +17,31 @@
 			{
 				$this->show('login',['title' => '登录']);
 			}else{
-				
-				
-				Main::redirect('?c=admin');
+				$error = $this->validata($post,array(
+					'email' => 'email|required',
+					'pwd' => 'min:6|required'
+				));
+				if(is_bool($error))
+				{
+					$user = new UserModel();
+					$result = $user->findByUser($post['email'],$post['pwd']);
+					if(!is_bool($result))
+					{
+						Main::session('user', $result );
+						Main::redirect('?c=admin');
+					}else{
+						$this->show('login',array(
+						'error' => '邮箱不存在或密码有误！',
+						'email' => isset($error['email'])?'':$post['email']
+					));
+					}
+				}else{
+					$this->show('login',array(
+						'error' => (new ToList()) -> tostring($error,','),
+						'email' => isset($error['email'])?'':$post['email']
+					));
+				}
+				//
 			}
 		}
 		

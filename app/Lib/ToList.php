@@ -94,6 +94,20 @@ class ToList
 		return $list;
 	}
 	
-	
-	
+	/****
+	把多维数组转换成字符串
+	*******/
+	public function tostring($arr ,$link)
+	{
+		$str = '';
+		if(is_array($arr))
+		{
+			foreach ($arr as $value) {
+				$str .= $this->tostring($value , $link);
+			}
+		}else{
+			$str .= $arr.$link;
+		}
+		return $str;
+	}
 }

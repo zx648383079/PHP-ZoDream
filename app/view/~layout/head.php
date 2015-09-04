@@ -4,14 +4,14 @@ use App\Main;
 ?>
 
 <!DOCTYPE html>
-<html lang="<?php echo isset($lang)?$lang:'zh-CN';?>">
+<html lang="<?php Main::ech('lang','zh-CN');?>">
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Find Me，找到我" />
 
-<title><?php echo $title;?></title>
+<title><?php Main::ech('title');?></title>
 
 <?php Main::jcs(Main::$extra,'fabric.css','fabric.components.css','zx.css');?>
 

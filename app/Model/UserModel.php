@@ -37,7 +37,7 @@
 		
 		public function findByUser($email, $pwd)
 		{
-			return $this->isOne("email = '{$email}'");
+			return $this->isOne(array("email = '{$email}'","pwd = '{$pwd}'"));
 		}
 		
 		public function role()
