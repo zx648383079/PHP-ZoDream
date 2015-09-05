@@ -11,6 +11,7 @@ Main::extend('~layout.head');
 				<div class="Header-text ms-fontColor-white">
 					<div class="u-contentCenter">
 						<h1 class="Header-title">注册</h1>
+						<div class="error"><?php Main::ech('error');?></div>
 					</div>
 				</div>
 			</div>
@@ -23,12 +24,12 @@ Main::extend('~layout.head');
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">用户名</label>
-					<input class="ms-TextField-field" type="text" name="name" placeholder="用户名" required>
+					<input class="ms-TextField-field" type="text" name="name" value="<?php Main::ech('name');?>" placeholder="用户名" required>
 				</div>
 		
 				<div class="ms-TextField is-required">
 					<label class="ms-Label">邮箱</label>
-					<input class="ms-TextField-field" type="email" name="email" placeholder="邮箱" required>
+					<input class="ms-TextField-field" type="email" name="email" value="<?php Main::ech('email');?>" placeholder="邮箱" required>
 				</div>
 		
 				<div class="ms-TextField is-required">

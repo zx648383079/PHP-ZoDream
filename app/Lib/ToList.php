@@ -97,7 +97,7 @@ class ToList
 	/****
 	把多维数组转换成字符串
 	*******/
-	public function tostring($arr ,$link)
+	public function tostring($arr ,$link  = '')
 	{
 		$str = '';
 		if(is_array($arr))

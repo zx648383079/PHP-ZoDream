@@ -10,7 +10,10 @@ class ImageController extends Controller{
 	{
 		die(_('这里是生成的图片库。'));
 	}
-		
+
+	/**
+	 *生成验证码
+     */
 	function verify()
 	{
 		$verify = new Verify();
@@ -18,7 +21,12 @@ class ImageController extends Controller{
 		$this->showImg($img);
 		$_SESSION['verify'] = $verify->code;
 	}
-	
+
+	/**
+	 * 生成二维码
+	 *
+	 * @throws \Endroid\QrCode\Exceptions\ImageFunctionUnknownException
+     */
 	function qrcode()
 	{
 		$qrCode = new QrCode();

@@ -9,6 +9,7 @@
 	use App\Main;
 	use App\Lib\Lang;
 	use App\Lib\Validation;
+	use App\Lib\Auth;
 
 	class Controller{
 		function __construct()
@@ -17,19 +18,25 @@
 			Main::$data['lang'] = Lang::$language;
 		}
 		/**
-		 * 在执行之前做验证
+		 * 在执行之前做规则验证
 		 *
-		 * @param $request array 要验证的数据
-		 * @param $param array  验证的规则
-		 * @return array
+		 * @param string $request 方法名
          */
 		function before($func)
 		{
 			if(isset($this->rules))
 			{
-				$role = isset($this->rules['*'])?$this->rules['*']:'';
-				$role = isset($this->rules[$func])?$this->rules[$func]:$role;
-				if(!Main::role($role)){
+				$role = isset($this->rules['*']) ? $this->rules['*'] : '';
+				$role = isset($this->rules[$func]) ? $this->rules[$func] : $role;
+				
+				if($role == '?')
+				{
+					if(!Auth::guest())
+					{
+						Main::redirect('?c=home');
+					}
+					
+				}else if(!Main::role($role)){
 					Main::redirect('?c=auth' , 10 ,'您无权操作！','401');
 					die();
 				}
@@ -56,21 +63,36 @@
 			return $result;
 		}
 		
-		//要传的数据
+
+		/**
+		 * 传递数据
+		 *
+		 * @param string|array $key 要传的数组或关键字
+		 * @param string $value  要传的值
+         */
 		function send($key , $value = "")
 		{
 			if(empty($value))
 			{
-				Main::$data['data'] = $key;
+				if(is_array($key))
+				{
+					Main::$data = array_merge(Main::$data , $key);
+				}else{
+					Main::$data['data'] = $key;	
+				}
 			}else
 			{
 				Main::$data[$key] = $value;
 			}
 		}
 		
-		
-		
-		//加载视图
+
+		/**
+		 * 加载视图
+		 *
+		 * @param string $name 视图的文件名
+		 * @param array $data 要传的数据
+         */
 		function show($name = "index",$data = array())
 		{
 			if(!empty($data))
@@ -97,8 +119,13 @@
 			}
 			
 		} 
-		
-		//返回JSON数据
+
+		/**
+		 * 返回JSON数据
+		 *
+		 * @param $data 要传的值
+		 * @param string $type 返回类型
+         */
 		function ajaxJson($data,$type = 'JSON')
 		{
 			switch (strtoupper($type)){
@@ -176,7 +203,12 @@
 			// pass back as string. or simple xml object if you want!
 			return $xml->asXML();
 		}
-		
+
+		/**
+		 * 显示图片
+		 *
+		 * @param $img
+         */
 		function showImg($img)
 		{
 			header('Content-type:image/png');

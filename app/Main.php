@@ -50,11 +50,11 @@ class Main{
 	 */
 	public static function role( $role )
 	{
-		if(Auth::guest())
+		if( Auth::guest() )
 		{
 			return empty($role);
 		}else{
-			$roles =explode(',', Auth::user()->role() );
+			$roles = explode(',', Auth::user()->role()->roles );
 			return in_array($role,$roles);
 		}
 	}
@@ -150,22 +150,37 @@ class Main{
 	public static function ech($name,$text = '')
 	{
 		$result = isset(self::$data[$name])?self::$data[$name]:$text;
-		if(is_array($text) || is_array($result))
+		if(is_array($text))
 		{
 			return $result;
 		}else{
-			echo $result;
+			$list = new ToList();
+			echo $list->tostring($result);
 		}
 		
 	}
 
-	public static function session( $keys, $value = '')
+	/**
+	 * 操作session 设置和获取值
+	 *
+	 * @param string $keys 关键字 多层用‘.’ 分割
+	 * @param string $value 要设置的值
+	 * @return string
+     */
+	public static function session( $keys, $value = false , $life = '')
 	{
-		if(isset($_SESSION))
+		if(!isset($_SESSION))
 		{
 			session_start();
 		}
-		if(empty($value))
+		
+		if(empty($keys))
+		{
+			session_destroy();
+			return;
+		}
+		
+		if(is_bool($value))
 		{
 			$result = $_SESSION;
 			$arr = explode('.',$keys);
@@ -270,7 +285,14 @@ class Main{
 		}
 		
 	}
-	
+
+	/**
+	 * 加载视图文件
+	 *
+	 * @param string $view_dir 视图的路径
+	 * @param string $name 视图文件名
+	 * @param string $ext 视图文件的后缀
+     */
 	private static function inc_file($view_dir, $name ,$ext)
 	{
 		if(empty($name))
@@ -378,7 +400,7 @@ class Main{
 		$view = strtolower($v);
 		if( class_exists($name))
 		{
-			$controller = new $name;
+			$controller = new $name();
 			
 			$controller -> before($view);
 			

@@ -6,7 +6,7 @@
 	
 	
 	class GroupModel extends Model{
-		protected $table = "group";
+		protected $table = "groups";
 		
 		protected $fillable = array(
 			'id',

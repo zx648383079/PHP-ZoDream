@@ -5,31 +5,34 @@ namespace App\Lib;
 *
 *
 */
-class SQL_Join{
+class SqlHelper{
 	
 	/********
 	SQL中的关键字数组
 	*********/
-	const SQL_KEYS = array(/*'show','alter','drop','create,'*/'select','update','set','delete','insert','from','values','left','right','inner','exec','where','and','or','group','having','order','asc','desc','limit');
+	const SQL_KEYS=array(/*'show','alter','drop','create,'*/'select','update','set','delete','insert','from','values','left','right','inner','exec','where','and','or','group','having','order','asc','desc','limit');
+	
+	private $prefix=NULL;
 	/**
 	 * 公有构造函数
 	 *
 	 * @access public
 	 *
+	 * @param boolen $sort 是否先进行排序.
+	 *
 	 */
-	public function __construct()
+	public function __construct($prefix=NULL)
 	{
-		
+		$this->prefix=$prefix;
 	}
-
 	/**
 	 * 根据数组获取SQL语句
 	 *
 	 * @access public
 	 *
-	 * @param array $param 要执行的数组
-	 * @param bool $sort 是否先进行排序.
-	 * @return array 返回排序的数组
+	 * @param array $arr 要操作的数组.
+	 * @param boolen $sort 是否先进行排序.
+	 * @return 返回排序的数组,
 	 */
 	public function getSQL($param,$sort=FALSE)
 	{
@@ -48,7 +51,7 @@ class SQL_Join{
 	 *
 	 * @param string $key 关键字.
 	 * @param string|array $value 值.
-	 * @return string 返回拼接后的SQL语句,
+	 * @return 返回拼接后的SQL语句,
 	 */
 	private function sqlJoin($key,$value)
 	{
@@ -74,7 +77,7 @@ class SQL_Join{
 				$result.='SELECT '.$this->sqlCheck($value,',');
 				break;
 			case 'from':
-				$result.='FROM '.$this->sqlCheck($value,',');
+				$result.='FROM '.$this->sqlCheck($value,',',$this->prefix);
 				break;
 			case 'update':
 				$result.='UPDATE '.$this->sqlCheck($value,',');
@@ -119,7 +122,7 @@ class SQL_Join{
 				$result.=$this->sqlCheck($value,',').' ASC';
 				break;
 			default:															//默认为是这些关键词 'left','right','inner'
-				$result.=strtoupper($key).' JOIN '.$this->sqlCheck($value,' ON ');
+				$result.=strtoupper($key).' JOIN '.$this->sqlCheck($value,' ON ',$this->prefix);
 				break;
 		}
 		
@@ -133,9 +136,9 @@ class SQL_Join{
 	 *
 	 * @param string|array $value 要检查的语句或数组.
 	 * @param string $link 数组之间的连接符.
-	 * @return string 返回拼接的语句,
+	 * @return 返回拼接的语句,
 	 */
-	private function sqlCheck($value,$link=' ')
+	private function sqlCheck($value,$link=' ',$pre=null,$end=null)
 	{
 		
 		$result='';
@@ -148,20 +151,21 @@ class SQL_Join{
 				
 				//把关键字转换成小写进行检测
 				$low=strtolower($key);
-				if(in_array($low,self::SQL_KEYS,true))
+				$lowkey=str_replace('`','',$low);                   //解决重关键字冲突关键
+				if(in_array($lowkey,self::SQL_KEYS,TRUE))
 				{
-					$space.=$this->sqlJoin($low,$v);
+					$space.=$this->sqlJoin($lowkey,$v);
 				}else{
 					if(is_numeric($key))
 					{
 						if(empty($result))
 						{
-							$space.=$this->sqlCheck($v);
+							$space.=$this->sqlCheck($v,' ',$pre,$end);
 						}else{
 							$space.=$link.$this->sqlCheck($v);
 						}
 					}else{
-						$space.=$key.$link.$this->sqlCheck($v);
+						$space.=$pre.$key.$end.$link.$this->sqlCheck($v);
 					}
 				}
 				
@@ -173,7 +177,12 @@ class SQL_Join{
 			array_push($unsafe,';');                        //替换SQL关键字和其他非法字符，
 			$safe=$this->safeCheck($value,'\'',$unsafe,' ');
 			$safe=$this->safeCheck($value,'"',$unsafe,' ');
-			$result.=$safe;
+			if(strpos($safe,'(')!==FALSE)                      //验证是表名还是其他
+			{
+				$result.=$safe;
+			}else{
+				$result.=$pre.$safe.$end;
+			}
 		}
 		
 		$result=preg_replace('/\s+/', ' ', $result);
@@ -192,7 +201,7 @@ class SQL_Join{
 	 * @param string $scope 排除语句的标志.
 	 * @param string|array $find 要查找的关键字.
 	 * @param string|array $enresplace 替换的字符或数组.
-	 * @return string 返回完成检查的语句,
+	 * @return 返回完成检查的语句,
 	 */
 	private function safeCheck($unsafe,$scope,$find,$enresplace)
 	{
@@ -225,7 +234,7 @@ class SQL_Join{
 	 *
 	 * @param array $arr 要排序的数组.
 	 * @param array $keys 关键字数组.
-	 * @return array 返回排序的数组,
+	 * @return 返回排序的数组,
 	 */
 	private function sortarr($arr,$keys)
 	{

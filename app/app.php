@@ -41,8 +41,6 @@
 		Main::redirect('/install.php');
 	}
 	
-	session_start();                                  //打开session 因为所有的地方都会先判断session
-
 
 	if(defined('SHORT_URL') && SHORT_URL && isset($_GET['s']))
 	{

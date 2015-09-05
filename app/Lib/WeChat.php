@@ -382,7 +382,12 @@
             }*/
             return $result["access_token"];
         }
-        
+
+        /**
+         * 得到主要信息
+         *
+         * @return array
+         */
         public static function getMainMsg()
         {
             $result = array(

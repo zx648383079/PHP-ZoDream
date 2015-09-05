@@ -14,7 +14,14 @@ class Validation{
 	public $error = array();
 	
 	private $request;
-	
+
+	/**
+	 * 开始验证
+	 *
+	 * @param $request 要验证的数组
+	 * @param $pattent 规则数组
+	 * @return bool
+     */
 	public function make($request,$pattent)
 	{
 		$success = true;
@@ -48,7 +55,14 @@ class Validation{
 		
 		return $success;
 	}
-	
+
+	/**
+	 * 验证
+	 *
+	 * @param $key 关键字
+	 * @param $patten 规则名
+	 * @return bool|string
+     */
 	private function check($key, $patten)
 	{
 		$value = $this->request[$key];
@@ -97,7 +111,7 @@ class Validation{
 				{
 					$colum =$tables[1];
 				}
-				$result =$this->unique($tables[0],$colum , $value)?TRUE:' is exist in '.$tables[0];
+				$result =$this->unique($tables[0],$colum , $value)?TRUE:' is exist.';
 				break;
 			default:
 				$result = TRUE;
@@ -122,12 +136,12 @@ class Validation{
 			'select' => 'COUNT(*) as num',
 			'from' => $table,
 			'where' => "$colum = '$value'" 
-		));
-		if(empty($data) || intval($data['num']) == 0)
+		),false,true);
+		if(empty($data) || $data->num != '0')
 		{
-			return true;
-		}else{
 			return false;
+		}else{
+			return true;
 		}
 	}
 	

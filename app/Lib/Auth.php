@@ -6,9 +6,11 @@
 	*
 	*********************************************************/
 	use App\Model\UserModel;
+	use App\Main;
 	
 	class Auth{
 		
+		public static $userModel;
 		/*
 		 * 判断是否登录
 		 *
@@ -17,28 +19,30 @@
 		 * @return 返回True|False,
 		 */
 		public static function user(){
-			if( !isset( $_SESSION ) ){
-			    session_start();
-			}
-			if( isset( $_SESSION['user'] ) )
+			$id = Main::session('user');
+			if( !empty($id ) )
 			{
-				$user = new UserModel();
-				return $user;
+				if(empty(self::$userModel))
+				{
+					$user = new UserModel();
+					$user ->id = $id;
+					$user ->assignRow('id',$id);
+					self::$userModel = $user;
+				}
+				return self::$userModel;
 			}else{
 				return false;
 			}
 		}
-		
+
+		/**
+		 * 判断是否是游客
+		 *
+		 * @return bool
+         */
 		public static function guest()
 		{
-			if( !isset( $_SESSION ) ){
-			    session_start();
-			}
-			if( isset( $_SESSION['user'] ) )
-			{
-				return false;
-			}else{
-				return true;
-			}
+			$id = Main::session('user');
+			return empty($id);
 		}
 	}

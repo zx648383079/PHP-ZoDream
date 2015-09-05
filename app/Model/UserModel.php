@@ -4,10 +4,12 @@
 	*********************************/
 	namespace App\Model;
 	
+	use App\Main;
 	use App\Lib\TimeDeal;
 	
 	class UserModel extends Model{
 		protected $table = "users";
+		
 		
 		protected $fillable = array(
 			'openid',
@@ -20,7 +22,7 @@
 		/******
 		从网页注册
 		*/
-		public function fillWeb( $email, $name , $pwd)
+		public function fillWeb($name ,  $email, $pwd)
 		{
 			$arr = array();
 			$arr['email'] = $email;
@@ -42,6 +44,6 @@
 		
 		public function role()
 		{
-			return $this->hasOne('App\Model\Roles','id','role');
+			return $this->hasOne('App\Model\GroupModel','group','id');
 		}
 	}

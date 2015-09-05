@@ -1,6 +1,7 @@
 <?php
 	
 use App\Main;	
+use App\Lib\Auth;
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@ use App\Main;
   </div>
   <ul class="ms-NavBar-items">
     <li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php Main::url(); ?>">首页</a></li>
-    <?php if(Main::role(2)){?>
+    <?php if(Main::role('2')){?>
     <li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php Main::url('?s=a'); ?>">后台</a></li>
    <?php } ?>
     <li class="ms-NavBar-item ms-NavBar-item--search ms-u-hiddenSm">
@@ -32,6 +33,12 @@ use App\Main;
         <input class="ms-TextField-field" placeholder="搜索">
       </div>
     </li>
-    <li class="ms-NavBar-item ms-NavBar-item--right"><a class="ms-NavBar-link" href="<?php Main::url('?c=auth'); ?>"><i class="ms-Icon ms-Icon--person"></i>登录</a></li>
+    <li class="ms-NavBar-item ms-NavBar-item--right">
+      <a class="ms-NavBar-link" href="<?php if(Auth::guest()){Main::url('?c=auth');}else{Main::url('?c=auth&v=logout');}; ?>">
+      <i class="ms-Icon ms-Icon--person"></i><?php if(Auth::guest()){echo '登录';}else{
+        echo Auth::user()->name.'(登出)';}
+        ?>
+      </a>
+     </li>
   </ul>
 </div>

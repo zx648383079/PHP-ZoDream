@@ -80,7 +80,8 @@ class PdoSql
         $_addFields = implode(',', $_addFields);  
         $_addValues = implode("','", $_addValues);  
         $_sql = "INSERT INTO {$this->table} ($_addFields) VALUES ('$_addValues')";  
-        return $this->execute($_sql)->lastInsertId();  
+        $this->execute($_sql);
+        return $this->pdo->lastInsertId();  
     }  
        
     /**
@@ -128,7 +129,7 @@ class PdoSql
         $result = $this->execute($_sql);
         if($result->rowCount() > 0)
         {
-            return $result->fetchObject();
+            return $result->fetchObject()->id;
         }else{
             return false;
         } 
@@ -166,7 +167,7 @@ class PdoSql
      * @param array|null $_param 条件
 	 * @return array 返回查询结果,
 	 */  
-    public function select( Array $_param = array(),Array $_fileld=array()) {  
+    public function find( Array $_param = array(),Array $_fileld=array()) {  
         $_limit = $_order =$_group = $_where = $_like = '';  
         if (is_array($_param) && !empty($_param)) {  
             $_limit = isset($_param['limit']) ? 'LIMIT '.$_param['limit'] : '';  
@@ -207,8 +208,6 @@ class PdoSql
         while (!!$_objs = $_stmt->fetchObject()) {  
             $_result[] = $_objs;  
         }  
-        
-        Main::out();
         
         return $_result;  
     }  
@@ -252,21 +251,23 @@ class PdoSql
 	 *
 	 * @access public
 	 *
-     * @param array $_param 条件
+     * @param array $param 条件
+     * @param bool $isList 返回类型
+     * @param bool $need 是否需要表的前缀
 	 * @return array 返回查询结果,
 	 */ 
-    public function query($param)
+    public function query($param ,$isList = TRUE , $need = false)
     {
-        $result=array();
-        if(empty($param))
+        $result = array();
+        if(!empty($param))
         {
-            $sql =new SQL_Join();    
-            $_stmt=$this->execute($sql->getSQL($param));            //获取SQL语句
+            $prefix = $need?$this->prefix:'';
+            $sql = new SqlHelper($prefix);
+              
+            $_stmt = $this->execute($sql->getSQL($param));            //获取SQL语句
             while (!!$_objs = $_stmt->fetchObject()) {  
-                $_result[] = $_objs;  
+                $result[] = $_objs;  
             }
-            
-            Main::out();
         }
         return $result;
     }
