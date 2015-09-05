@@ -13,7 +13,7 @@
 			}
 			
 			$wechat = new WechatModel();
-			$wechat->add();
+			$wechat->add(WeChat::getMainMsg());
 			
             Wechat::textMsg($content);
 			//writeLog($wechat->msg);
