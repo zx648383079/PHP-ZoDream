@@ -29,17 +29,27 @@
 				$role = isset($this->rules['*']) ? $this->rules['*'] : '';
 				$role = isset($this->rules[$func]) ? $this->rules[$func] : $role;
 				
-				if($role == '?')
-				{
-					if(!Auth::guest())
-					{
-						Main::redirect('?c=home');
-					}
-					
-				}else if(!Main::role($role)){
-					Main::redirect('?c=auth' , 10 ,'您无权操作！','401');
-					die();
+				switch ($role) {
+					case '?':
+						if(!Auth::guest())
+						{
+							Main::redirect('?c=home');
+						}
+						break;
+					case '1':
+						if(Auth::guest())
+						{
+							Main::redirect('?c=auth');
+						}
+						break;
+					default:
+						if(!Main::role($role))
+						{
+							Main::redirect('?c=auth' , 10 ,'您无权操作！','401');
+						}
+						break;
 				}
+				
 			}
 		}
 

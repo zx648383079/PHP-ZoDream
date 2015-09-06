@@ -1,7 +1,6 @@
 {
 	"require": {
-		"alchemy/zippy": "0.2.*",
-		"endroid/qrcode": "~1.5"
+		"alchemy/zippy": "0.2.*"
 	},
 	"autoload":{
 		"psr-4":{

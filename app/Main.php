@@ -191,23 +191,12 @@ class Main{
 			return $result;
 		}else{
 			$arr = explode('.',$keys);
-			switch (count($arr)) {
-				case 1:
-					$_SESSION[$arr[0]] = $value;
-					break;
-				case 2:
-					$_SESSION[$arr[0]][$arr[1]] = $value;
-					break;
-				case 3:
-					$_SESSION[$arr[0]][$arr[1]][$arr[2]] = $value;
-					break;
-				case 4:
-					$_SESSION[$arr[0]][$arr[1]][$arr[2]][$arr[3]] = $value;
-					break;
-				default:
-					# code...
-					break;
+			$str = '$_SESSION';
+			foreach ($arr as $val) {
+				$str.="[{$val}]";
 			}
+			$str.=' = $value;';
+			eval($str);
 		}
 		
 	}

@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src', $vendorDir . '/endroid/qrcode/tests'),
     'App\\' => array($baseDir . '/app'),
 );

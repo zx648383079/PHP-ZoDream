@@ -15,6 +15,8 @@ class PdoSql
     //存放当前操作的错误信息
     protected $error=null;
     
+    protected $result;
+    
     
        
     //公共静态方法获取实例化的对象  
@@ -274,6 +276,18 @@ class PdoSql
         return $result;
     }
     
+    
+    public function prepare($_sql)
+    {
+        $this->result = $this->pdo->prepare($_sql); 
+    }
+    
+    public function bind($param)
+    {
+        foreach ($param as $key => $value) {
+           $this->result->bindParam( $key, $value);
+        }
+    }
    
     /**
 	 * 执行SQL语句
@@ -283,15 +297,17 @@ class PdoSql
      * @param array|null $_param 条件
 	 * @return array 返回查询结果,
 	 */ 
-    protected function execute($_sql) {  
+    public function execute($_sql = null) {  
         try {  
-            $_stmt = $this->pdo->prepare($_sql);  
-            
-            $_stmt->execute();  
+            if(!empty($_sql))
+            {
+                $this->result = $this->pdo->prepare($_sql);  
+            }
+            $this -> result ->execute();  
         } catch (\PDOException  $ex) {  
             $this->error=$ex->getMessage();
         }  
-        return $_stmt;  
+        return $this -> result;  
     } 
     
     /**
