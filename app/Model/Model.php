@@ -4,9 +4,10 @@
 	*********************************/
 	namespace App\Model;
 	
-	use App\Lib\PdoSql;
+	//use App\Lib\PdoSql;
+	use App\Lib\CommonSql;
 	
-	abstract class Model extends PdoSql{
+	abstract class Model extends CommonSql{
 
 		/**
 		 * 填充数据
@@ -87,19 +88,16 @@
 			
 			if(count($arr) > 0)
 			{
-				$str = '';
 				foreach ($arr[0] as $key => $value) {
-					$str.='$this->'.$key.' = "'.$value.'";';
+					$this->$key = $value;
 				}
-				eval($str);
 			}
 		}
 		
 		public function hasOne($model , $key , $forkey = 'id')
 		{
 			$table = new $model();
-			$str = '$table->assignRow($forkey , $this->'.$key.');';
-			eval($str);
+			$table->assignRow($forkey , $this->$key);
 			return $table;
 		}
 	}

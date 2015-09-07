@@ -171,6 +171,7 @@ class Main{
 	{
 		if(!isset($_SESSION))
 		{
+			//session_save_path(APP_DIR.'/tmp');
 			session_start();
 		}
 		
@@ -193,7 +194,7 @@ class Main{
 			$arr = explode('.',$keys);
 			$str = '$_SESSION';
 			foreach ($arr as $val) {
-				$str.="[{$val}]";
+				$str.="['{$val}']";
 			}
 			$str.=' = $value;';
 			eval($str);

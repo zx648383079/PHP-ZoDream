@@ -73,7 +73,7 @@ class CommonSql
         if (empty ($this->host))
             die ('Mysql host is not set');
 
-        $this->_mysqli = new mysqli ($this->host, $this->username, $this->password, $this->db, $this->port)
+        $this->_mysqli = new \mysqli ($this->host, $this->username, $this->password, $this->db, $this->port)
             or die('There was a problem connecting to the database');
         /* check connection */
         /*if (mysqli_connect_errno()) {
@@ -166,6 +166,32 @@ class CommonSql
         $_sql = "DELETE FROM {$this->table} $_where LIMIT 1";  
         return $this->execute($_sql)->affectRow();  
     } 
+    
+    /**
+	 * 验证一条数据
+	 *
+	 * @access public
+	 *
+	 * @param array $_param 条件
+	 * @return string|bool 返回id,
+	 */
+    public function isOne(Array $_param) {  
+        $_where = '';  
+        foreach ($_param as $_key=>$_value) {  
+            $_where .=$_value.' AND ';  
+        }  
+        $_where = 'WHERE '.substr($_where, 0, -4);  
+        $_sql = "SELECT id FROM {$this->table} $_where LIMIT 1";  
+        $result = $this->execute($_sql);
+        if( $result->rowCount(FALSE) > 0)
+        {
+            return $result->getObject()[0]->id;
+        }else{
+            $this->close();
+            return false;
+        } 
+    }
+    
     /**
 	 * 执行简单查询
 	 *
@@ -182,7 +208,9 @@ class CommonSql
         {
             $_sql .= $param;
         }
-        return $this->execute($_sql);
+        $this->execute($_sql);
+        $_result = $this->getList();
+        return $_result;
     }
     
     /**
@@ -215,9 +243,14 @@ class CommonSql
 	 * @access public
 	 *
 	 */
-    public function affectRow()
+    public function affectRow( $end = TRUE )
     {
-        return mysqli_affected_rows($this->_mysqli);
+        $rows = mysqli_affected_rows($this->_mysqli);
+        if($end)
+        {
+            $this->close();                            
+        }
+        return $rows;
     }
     
     /**
@@ -226,9 +259,14 @@ class CommonSql
 	 * @access public
 	 *
 	 */
-    public function lastId()
+    public function lastId($end = TRUE)
     {
-        return mysqli_insert_id($this->_mysqli);
+        $id = mysqli_insert_id($this->_mysqli);
+        if($end)
+        {
+            $this->close();                            
+        }       
+        return $id;
     }
     /**
 	 * 返回结果集的行数
@@ -236,9 +274,14 @@ class CommonSql
 	 * @access public
 	 *
 	 */
-    public function rowCount()
+    public function rowCount($end = TRUE)
     {
-        return mysqli_num_rows($this->result);
+        $count = mysqli_num_rows($this->result);
+        if($end)
+        {
+            $this->close();                            
+        }
+        return $count;
     }
     /**
 	 * 返回关联数组
@@ -246,11 +289,15 @@ class CommonSql
 	 * @access public
 	 *
 	 */
-    public function getList()
+    public function getList($end = TRUE)
     {
         $_result = array();
         while (!!$_objs = mysqli_fetch_assoc($this->result) ) {  
             $_result[] = $_objs;  
+        }
+        if($end)
+        {
+            $this->close();                            
         }
         return $_result;
     }
@@ -260,11 +307,16 @@ class CommonSql
 	 * @access public
 	 *
 	 */
-    public function getObject()
+    public function getObject($end = TRUE)
     {
         $_result = array();
         while (!!$_objs = mysqli_fetch_object($this->result) ) {  
             $_result[] = $_objs;  
+        }
+        
+        if($end)
+        {
+            $this->close();                            
         }
         return $_result;
     }
