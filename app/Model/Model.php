@@ -8,7 +8,8 @@
 	use App\Lib\CommonSql;
 	
 	abstract class Model extends CommonSql{
-
+		/*查询到的数据*/
+		protected $models;
 		/**
 		 * 填充数据
 		 *
@@ -63,7 +64,7 @@
 			}
 			return $this->query( $sql, FALSE);;
 		}
-
+		
 		/**
 		 * 返回array
 		 *
@@ -88,9 +89,7 @@
 			
 			if(count($arr) > 0)
 			{
-				foreach ($arr[0] as $key => $value) {
-					$this->$key = $value;
-				}
+				$this->models = $arr[0];
 			}
 		}
 		
@@ -99,5 +98,23 @@
 			$table = new $model();
 			$table->assignRow($forkey , $this->$key);
 			return $table;
+		}
+		
+		/*
+		* 魔术变量
+		* 指定获取的数据来源
+		*
+		*
+		*/
+		public function __get($name)
+		{
+			if(isset($this->$name))
+			{
+				return $this->$name;
+			}else if(isset($this->models[$name])){
+				return isset($this->models[$name]);
+			}else{
+				return null;
+			}
 		}
 	}
