@@ -120,9 +120,12 @@
 					//页面没有输出且浏览器可以接受GZIP的页面 
 					{ 
 						ob_start('ob_gzhandler'); 
-					} 
+					}else{
+						ob_start();
+					}
 				} 
 				header( 'Content-Type:text/html;charset=utf-8 ');
+				ob_implicit_flush(FALSE);
 				Main::extend($name);
 				ob_end_flush();
 				exit;

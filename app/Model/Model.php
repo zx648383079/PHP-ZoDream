@@ -43,7 +43,36 @@
 			$sql = "SELECT * FROM {$this->table} WHERE id = {$id}";
 			return $this->execute($_sql)->fetchObject();
 		}
-
+		
+		/**
+		 * 设置bool值
+		 *
+		 * @param string $filed
+		 * @param string $where
+		 * @return int
+         */
+		public function updateBool($filed , $where )
+		{
+			$sql = "UPDATE {$this->table} SET {$filed} = CASE WHEN {$filed} = 1 THEN 0 ELSE 1 END WHERE ";
+			$sql .= $where;
+			return $this->execute($_sql)->rowCount();
+		}
+		
+		/**
+		 * int加
+		 *
+		 * @param string $filed
+		 * @param string $where
+		 * @param string $num
+		 * @return int
+         */
+		public function updateOne( $filed , $where ,$num = 1)
+		{
+			$sql = "UPDATE {$this->table} SET {$filed} = {$filed} + {$sum} WHERE ";
+			$sql .= $where;
+			return $this->execute($_sql)->rowCount();
+		}
+		
 		/**
 		 * 返回Object
 		 *

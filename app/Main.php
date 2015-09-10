@@ -273,7 +273,6 @@ class Main{
 		foreach ($list->to($names,'.') as $value) {
 			self::inc_file($view_dir,$value,$ext);
 		}
-		
 	}
 
 	/**
@@ -296,8 +295,7 @@ class Main{
 		$file = str_replace('//','/',$file);
 		
 		//extract(self::$data);
-		
-		include($file.$ext);
+		require($file.$ext);
 	}
 
 
