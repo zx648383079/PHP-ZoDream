@@ -26,7 +26,7 @@ use App\Lib\Auth;
   <ul class="ms-NavBar-items">
     <li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php Main::url(); ?>">首页</a></li>
     <?php if(Main::role('2')){?>
-    <li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php Main::url('?s=a'); ?>">后台</a></li>
+    <li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php Main::url('?c=admin'); ?>">后台</a></li>
    <?php } ?>
     <li class="ms-NavBar-item ms-NavBar-item--search ms-u-hiddenSm">
       <div class="ms-TextField">

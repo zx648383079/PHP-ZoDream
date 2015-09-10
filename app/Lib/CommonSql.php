@@ -292,9 +292,15 @@ class CommonSql
     public function getList($end = TRUE)
     {
         $_result = array();
-        while (!!$_objs = mysqli_fetch_assoc($this->result) ) {  
-            $_result[] = $_objs;  
+        if(!is_bool($this->result))
+        {
+            while (!!$_objs = mysqli_fetch_assoc($this->result) ) {  
+                $_result[] = $_objs;  
+            }
+        }else{
+            $result = $this->result;
         }
+        
         if($end)
         {
             $this->close();                            
@@ -398,7 +404,7 @@ class CommonSql
 	 */
     public function close()
     {
-        if(!empty($this->result))
+        if(!empty($this->result) && !is_bool($this->result))
         {
             mysqli_free_result($this->result);
         }

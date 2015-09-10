@@ -8,7 +8,7 @@ use App\Main;
 	<div class="ms-Grid-row">
             <div class="ms-Grid-col ms-u-sm0 ms-u-md2">
                   <ul class="ms-ContextualMenu zx-open">
-                        <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link is-selected" href="#">消息</a></li>
+                        <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link is-selected" href="<?php Main::url('?c=admin');?>">消息</a></li>
                         <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="#">动态</a></li>
                         <li class="ms-ContextualMenu-item ms-ContextualMenu-item--divider"></li>
                         <li class="ms-ContextualMenu-item">
@@ -30,7 +30,7 @@ use App\Main;
                         <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="#">Flag</a></li>
                         <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="#">Important</a></li>
                         <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link is-selected" href="#">Label</a></li>
-                        <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="#">Snooze</a></li>
+                        <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="<?php Main::url('?c=admin&v=mysql');?>">高级</a></li>
                         </ul>
                         </li>
                         <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="#">账号管理</a></li>

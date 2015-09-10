@@ -1,11 +1,12 @@
 <?php
 namespace App\Controller;
 
+use App\Model\RolesModel;
 
 class AdminController extends Controller{
 
 	protected $rules = array(
-		'mysql' => '99',
+		'mysql' => '1',
 		'*' => '2'
 	);
 
@@ -27,9 +28,11 @@ class AdminController extends Controller{
 		$this->show('wechat');
 	}
 	
-	function roles()
+	function users()
 	{
-		$this->show('role');
+		$roles = new RolesModel();
+		$model = $roles->findList();
+		$this->show('users' ,array('roles'=>$model));
 	}
 	
 	/******
@@ -37,7 +40,18 @@ class AdminController extends Controller{
 	*/
 	function mysql()
 	{
+		$sql = isset($_POST['sql'])?$_POST['sql']:'';
+		$arr = explode('@@',$sql,3);
+		$model = array();
+		if(!empty($arr[1]))
+		{
+			$roles = new RolesModel();
+			$model = $roles->execute($arr[1])->getList();
+		}
 		
-		$this->show('mysql');
+		$this->show('mysql',array(
+			'model'=>$model,
+			'sql'=>$sql
+			));
 	}
 }

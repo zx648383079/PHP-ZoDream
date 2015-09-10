@@ -172,7 +172,7 @@ class Main{
 	{
 		if(!isset($_SESSION))
 		{
-			//session_save_path(APP_DIR.'/tmp');
+			session_save_path(APP_DIR.'/tmp');
 			session_start();
 		}
 		

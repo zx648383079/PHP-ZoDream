@@ -140,8 +140,9 @@
 			if(isset($this->$name))
 			{
 				return $this->$name;
-			}else if(isset($this->models[$name])){
-				return isset($this->models[$name]);
+			}
+			else if(isset($this->models[$name])){
+				return $this->models[$name];
 			}else{
 				return null;
 			}
