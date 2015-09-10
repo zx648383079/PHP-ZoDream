@@ -1,5 +1,5 @@
 <?php 
-namespace App\Lib;
+namespace App\Lib\Helper;
 
 /*短连接生成算法*/
 

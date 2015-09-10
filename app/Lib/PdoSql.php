@@ -266,7 +266,7 @@ class PdoSql
         if(!empty($param))
         {
             $prefix = $need?$this->prefix:'';
-            $sql = new SqlHelper($prefix);
+            $sql = new Helper\SqlHelper($prefix);
               
             $_stmt = $this->execute($sql->getSQL($param));            //获取SQL语句
             while (!!$_objs = $_stmt->fetchObject()) {  

@@ -1,5 +1,5 @@
 <?php 
-namespace App\Lib;
+namespace App\Lib\Helper;
 
 /**
 *把数组或字符串转为单列数组

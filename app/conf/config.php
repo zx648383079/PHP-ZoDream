@@ -8,7 +8,8 @@
 	return array(
 		'app' => array(                           //网站信息
 			'title' => '主页',
-			'host' => 'http://c.test:8080/'                          //主目录
+			'host' => 'http://c.test:8080/',                          //主目录
+			'url' => 0
 		),
 		'view' =>array(                           //视图文件信息
 			'dir' => 'app/view',

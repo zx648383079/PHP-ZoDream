@@ -229,7 +229,7 @@ class CommonSql
         if(!empty($param))
         {
             $prefix = $need?$this->prefix:'';
-            $sql = new SqlHelper($prefix);
+            $sql = new Helper\SqlHelper($prefix);
               
             $this->execute($sql->getSQL($param));            //获取SQL语句
             $_result = $islist?$this->getList():$this->getObject();

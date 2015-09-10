@@ -14,6 +14,8 @@ PHP-WeChat
 
 >>Lib			类文件
 
+>>>Helper		辅助类文件
+
 >>conf			配置文件
 
 >>Controller	控制器
@@ -34,8 +36,6 @@ PHP-WeChat
 
 >>lang			语言包
 
->typings		VSCode自动提示文件
-
 >vendor			Composer生成的主文件
 
 >>composer		Composer生成的自动加载文件
@@ -50,7 +50,7 @@ PHP-WeChat
 
 4.引入url 重写
 
-5.优化 installl.php
+`5.优化 installl.php`
 
 6.增加验证码
 
@@ -91,5 +91,5 @@ PHP-WeChat
 
 # 更多详情请关注微信 `zx_zszh`
 
-更新时间：2015/8/18
+更新时间：2015/9/10
 

@@ -7,8 +7,9 @@ namespace App;
 	*
 	********************************************************/
 	
-use App\Lib\ToList;
 use App\Lib\Auth;
+use App\Lib\Helper\ToList;
+use App\Lib\Helper\Url;
 
 class Main{
 	
@@ -298,82 +299,6 @@ class Main{
 		require($file.$ext);
 	}
 
-
-	/**
-	* 执行短链接
-	*
-	* @access globe
-	*
-	* @return true|false,
-	*/
-	public static function short()
-	{
-		$shorts = self::config('short');
-		
-		$key = isset($_GET['s'])?$_GET['s']:'*';
-		
-		$url = isset($shorts[$key])?$shorts[$key]:'home.index';
-
-		$arr = explode('.', $url);
-		
-		self::loadController($arr[0],$arr[1]);
-		
-	}
-	/**
-	* 解析控制器和视图
-	*
-	* @access globe
-	*
-	*/
-	public static function getCAV()
-	{
-		$url = self::request_uri();
-		
-		//self::out($url);
-	
-		//  /c/v 取最后两个        /c.*/v       ?c= & v=
-		
-		$arr = explode('?',$url);
-		
-		$arr1=explode('/',$arr[0]);
-		
-		$v=array_slice($arr1,-1)[0];
-		
-		$c=array_slice($arr1,-2)[0];
-		
-		if(empty($c))
-		{
-			$c=$v;
-			$v=null;
-		}
-		
-		
-		if(!empty($c) && strpos($c,'.')!=false)
-		{
-			$arr2=explode('.',$c);
-			$c=$arr2[0];
-		}
-		
-		if(!empty($c) && strtolower($c) =='index')
-		{
-			$c=null;
-		}
-		
-		if(empty($c))
-		{
-			$c = isset($_GET['c'])?$_GET['c']:'home';
-		}
-		
-		if(empty($v))
-		{
-			$v=isset($_GET['v'])?$_GET['v']:'index';
-		}
-		
-		//return array($c,$v);
-		
-		self::loadController($c,$v);
-	}
-
 	/**
 	 * 加载控制器和视图
 	 *
@@ -381,11 +306,13 @@ class Main{
 	 * @param $c string 控制器的名称
 	 * @param $v string 视图所在的方法名
 	 */
-	public static function loadController($c,$v)
+	public static function load()
 	{
-		$con = ucfirst(strtolower($c));
+		$url = Url::get();
+		
+		$con = ucfirst(strtolower($url[0]));
 		$name = 'App\\Controller\\'.$con."Controller";
-		$view = strtolower($v);
+		$view = strtolower($url[1]);
 		if( class_exists($name))
 		{
 			$controller = new $name();
@@ -404,40 +331,6 @@ class Main{
 	}
 
 
-	/**
-	 * 获取网址
-	 *
-	 * @return string 真实显示的网址
-     */
-	public static function request_uri()
-	{
-		$uri = '';
-		if ( isset($_SERVER['REQUEST_URI'] ) )
-		{
-			$uri = $_SERVER['REQUEST_URI'];
-		}
-		else
-		{
-			if ( isset( $_SERVER['argv'] ) )
-			{
-				$uri = $_SERVER['REQUEST_URI'];
-			}
-			else
-			{
-				if (isset($_SERVER['argv']))
-				{
-					$uri = $_SERVER['PHP_SELF'] .'?'. $_SERVER['argv'][0];
-				}
-				else
-				{
-					$uri = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
-				}
-			}
-		}
-		return $uri;
-	}
-	
-	
 
 	/**
 	* 获取真实IP
