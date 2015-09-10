@@ -40,6 +40,8 @@ PHP-WeChat
 
 >>composer		Composer生成的自动加载文件
 
+>doc			文档
+
 
 # 修改
 1.增加Angular.js的支持

@@ -27,6 +27,14 @@ class AdminController extends Controller{
 		$this->show('wechat');
 	}
 	
+	function roles()
+	{
+		$this->show('role');
+	}
+	
+	/******
+	数据库语句执行页面
+	*/
 	function mysql()
 	{
 		
