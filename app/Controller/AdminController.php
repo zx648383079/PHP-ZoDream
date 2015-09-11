@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Main;
+use App\App;
 use App\Model\RolesModel;
 use App\Model\UserModel;
 
@@ -36,7 +36,7 @@ class AdminController extends Controller{
 		$roles = new RolesModel();
 		$model = $roles->findList();
 		$users = new UserModel();
-		$user = $users ->findList("id <> {Main::session('user')}",'id,name');
+		$user = $users ->findList("id <> {App::session('user')}",'id,name');
 		
 		$this->show('users' ,array(
 			'roles' => $model,

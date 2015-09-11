@@ -1,7 +1,7 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend(array(
+App::extend(array(
 	'~layout'=>array(
 		'head',
 		'menu'
@@ -14,7 +14,7 @@ Main::extend(array(
     	<div class="ms-Grid-col ms-u-md10">
 			<h1 class="ms-font-su ms-fontColor-white ms-bgColor-themeDarker">Breadcrumb</h1>
 			<?php
-				$model = Main::ech('model',array());
+				$model = App::ech('model',array());
 				if(!empty($model) && is_array($model))
 				{
 					$str = '<table><tr>';
@@ -42,7 +42,7 @@ Main::extend(array(
 			<form method="post">
 				<div class="ms-TextField ms-TextField--multiline">
 					<label class="ms-Label">查询</label>
-					<textarea class="ms-TextField-field" name="sql" rows="10"><?php Main::ech('sql');?></textarea>
+					<textarea class="ms-TextField-field" name="sql" rows="10"><?php App::ech('sql');?></textarea>
 				</div>
 				<button class="ms-Button ms-Button--primary"><span class="ms-Button-label">执行</span></button>
 			</form>
@@ -52,4 +52,4 @@ Main::extend(array(
 </div>
 	
 	
-<?php Main::extend('~layout.foot');?>
+<?php App::extend('~layout.foot');?>

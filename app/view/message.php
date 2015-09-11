@@ -1,7 +1,7 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend(array(
+App::extend(array(
 	'~layout'=>array(
 		'head',
 		'menu'
@@ -124,4 +124,4 @@ Main::extend(array(
 </div>
 	
 	
-<?php Main::extend('~layout.foot');?>
+<?php App::extend('~layout.foot');?>

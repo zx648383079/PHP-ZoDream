@@ -6,7 +6,7 @@ namespace App\Lib;
 *
 *********************************************************/
 use App\Model\UserModel;
-use App\Main;
+use App\App;
 
 class Auth
 {
@@ -21,7 +21,7 @@ class Auth
 		*/
 	public static function user()
 	{
-		$id = Main::session('user');
+		$id = App::session('user');
 		if( !empty($id ) )
 		{
 			if(empty(self::$userModel))
@@ -44,7 +44,7 @@ class Auth
 		*/
 	public static function guest()
 	{
-		$id = Main::session('user');
+		$id = App::session('user');
 		return empty($id);
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Main;
+use App\App;
 use App\Model\UserModel;
 use App\Lib\ToList;
 
@@ -29,8 +29,8 @@ class AuthController extends Controller{
 				$result = $user->findByUser($post['email'],$post['pwd']);
 				if(!is_bool($result))
 				{
-					Main::session('user', $result );
-					Main::redirect('?c=home');
+					App::session('user', $result );
+					App::redirect('?c=home');
 					exit;
 				}else{
 					$this->send(array(
@@ -65,8 +65,8 @@ class AuthController extends Controller{
 		*/
 	function logout()
 	{
-		Main::session('user', '');
-		Main::redirect('/?c=auth');
+		App::session('user', '');
+		App::redirect('/?c=auth');
 	}
 
 	/**
@@ -91,8 +91,8 @@ class AuthController extends Controller{
 			}else{
 				$user = new UserModel();
 				$id = $user -> fillWeb($post['name'], $post['email'], $post['pwd']);
-				Main::session('user', $id );
-				Main::redirect('?c=home');
+				App::session('user', $id );
+				App::redirect('?c=home');
 				
 			}
 		}

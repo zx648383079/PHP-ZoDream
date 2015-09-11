@@ -6,7 +6,7 @@ namespace App\Lib\Db;
  *
  **/
  
- use App\Main;
+ use App\App;
  use App\Lib\Helper\HSql;
  
 class DMysqli implements IBase
@@ -47,7 +47,7 @@ class DMysqli implements IBase
      */
     public function __construct()
     {
-        $config = Main::config('mysql');
+        $config = App::config('mysql');
         $this->host = $config['host'];
 	    $this->username = $config['user'];
 	    $this->password = $config['password'];

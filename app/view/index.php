@@ -1,7 +1,7 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend('~layout.head');
+App::extend('~layout.head');
 ?>
 
 
@@ -14,4 +14,4 @@ Main::extend('~layout.head');
 
 	
 	
-<?php Main::extend('~layout.foot');?>
+<?php App::extend('~layout.foot');?>

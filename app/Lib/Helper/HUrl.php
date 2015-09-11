@@ -1,18 +1,18 @@
 <?php 
 namespace App\Lib\Helper;
 
-use App\Main;
+use App\App;
 
 class HUrl{
 	
 	public static function get()
 	{
-		$key = Main::config('app.url');
+		$key = App::config('app.url');
 		if(empty($key))
 		{
 			$key = 0;
 		}
-		$url = new Url();
+		$url = new HUrl();
 		switch ($key) {
 			case 0:
 				return $url -> c();

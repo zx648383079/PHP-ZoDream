@@ -1,7 +1,7 @@
 <?php
 namespace App\Lib\Db;
 
-use App\Main;
+use App\App;
 use App\Lib\Helper\HSql;
     
 class DPdo
@@ -40,7 +40,7 @@ class DPdo
      */
     public function __construct() {  
         
-		$config = Main::config('mysql');
+		$config = App::config('mysql');
         $host = $config['host'];
 	    $user = $config['user'];
 	    $pwd = $config['password'];

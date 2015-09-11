@@ -6,7 +6,7 @@
 *******************************************************/
 namespace App\Controller;
 
-use App\Main;
+use App\App;
 use App\Lib\Lang;
 use App\Lib\Validation;
 use App\Lib\Auth;
@@ -14,8 +14,8 @@ use App\Lib\Auth;
 class Controller{
 	function __construct()
 	{
-		Main::$data = Main::config('app');
-		Main::$data['lang'] = Lang::$language;
+		App::$data = App::config('app');
+		App::$data['lang'] = Lang::$language;
 	}
 	/**
 		* 在执行之前做规则验证
@@ -33,19 +33,19 @@ class Controller{
 				case '?':
 					if(!Auth::guest())
 					{
-						Main::redirect('?c=home');
+						App::redirect('?c=home');
 					}
 					break;
 				case '1':
 					if(Auth::guest())
 					{
-						Main::redirect('?c=auth');
+						App::redirect('?c=auth');
 					}
 					break;
 				default:
-					if(!Main::role($role))
+					if(!App::role($role))
 					{
-						Main::redirect('?c=auth' , 4 ,'您无权操作！','401');
+						App::redirect('?c=auth' , 4 ,'您无权操作！','401');
 					}
 					break;
 			}
@@ -86,13 +86,13 @@ class Controller{
 		{
 			if(is_array($key))
 			{
-				Main::$data = array_merge(Main::$data , $key);
+				App::$data = array_merge(App::$data , $key);
 			}else{
-				Main::$data['data'] = $key;	
+				App::$data['data'] = $key;	
 			}
 		}else
 		{
-			Main::$data[$key] = $value;
+			App::$data[$key] = $value;
 		}
 	}
 	
@@ -107,12 +107,12 @@ class Controller{
 	{
 		if(!empty($data))
 		{
-			Main::$data = array_merge(Main::$data , $data);
+			App::$data = array_merge(App::$data , $data);
 		}
 		
 		if ( APP_API )
 		{
-			$this->ajaxJson(Main::$data);
+			$this->ajaxJson(App::$data);
 		}else{
 				if (extension_loaded('zlib')) { 
 				if (  !headers_sent() AND isset($_SERVER['HTTP_ACCEPT_ENCODING']) && 
@@ -126,7 +126,7 @@ class Controller{
 			} 
 			header( 'Content-Type:text/html;charset=utf-8 ');
 			ob_implicit_flush(FALSE);
-			Main::extend($name);
+			App::extend($name);
 			ob_end_flush();
 			exit;
 		}

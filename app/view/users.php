@@ -1,7 +1,7 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend(array(
+App::extend(array(
 	'~layout'=>array(
 		'head',
 		'menu'
@@ -16,7 +16,7 @@ Main::extend(array(
 	<div class="ms-Grid-row">
 		<div class="ms-Grid-col ms-u-md3">
 			<ul>
-				<?php foreach (Main::ech('roles',array()) as $value) {
+				<?php foreach (App::ech('roles',array()) as $value) {
 					echo '<li><a href="'.$value['id'].'">'.$value['name'].'</a></li>';
 				} ?>
 			</ul>
@@ -24,7 +24,7 @@ Main::extend(array(
 
     	<div class="ms-Grid-col ms-u-md7">
 			<form method="post">
-				<?php foreach (Main::ech('roles',array()) as $value) {
+				<?php foreach (App::ech('roles',array()) as $value) {
 					echo '<div class="ms-ChoiceField"><input class="ms-ChoiceField-input" type="checkbox" value="'.$value['id'].'">';
 					echo '<label class="ms-ChoiceField-field"><span class="ms-Label">'.$value['name'].'</span></label></div>';
 				} ?>
@@ -38,4 +38,4 @@ Main::extend(array(
 </div>
 	
 	
-<?php Main::extend('~layout.foot');?>
+<?php App::extend('~layout.foot');?>

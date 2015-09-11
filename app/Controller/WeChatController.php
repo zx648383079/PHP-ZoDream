@@ -13,7 +13,7 @@ class WechatController extends Controller{
 		}
 		
 		$wechat = new WechatModel();
-		$wechat->add(WeChat::getMainMsg());
+		$wechat->add(WeChat::getAppMsg());
 		
 		Wechat::textMsg($content);
 		//writeLog($wechat->msg);

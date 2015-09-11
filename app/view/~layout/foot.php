@@ -1,16 +1,16 @@
 <?php 
-use App\Main;	
+use App\App;	
 ?>
 
 
 <?php 
-	Main::jcs(
+	App::jcs(
 		'jquery',
 		'jquery.fabric',
 		'angular.min',
 		'zx',
 		'controller',
-		Main::$extra
+		App::$extra
 		);
 ?>
 </body>

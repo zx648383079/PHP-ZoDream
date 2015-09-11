@@ -4,7 +4,7 @@
 	*********************************/
 	namespace App\Model;
 	
-	use App\Main;
+	use App\App;
 	use App\Lib\TimeDeal;
 	
 	class UserModel extends Model{

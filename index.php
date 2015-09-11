@@ -11,4 +11,5 @@
 
 
 	define('APP_DIR', dirname(__FILE__));
-	include_once(APP_DIR."/app/app.php");           //入口
+	require_once(APP_DIR."/vendor/autoload.php");
+	App\App::main();
