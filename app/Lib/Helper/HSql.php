@@ -5,7 +5,8 @@ namespace App\Lib\Helper;
 *
 *
 */
-class HSql{
+class HSql implements IBase
+{
 	
 	/********
 	SQL中的关键字数组

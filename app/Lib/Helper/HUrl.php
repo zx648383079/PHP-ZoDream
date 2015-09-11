@@ -3,7 +3,8 @@ namespace App\Lib\Helper;
 
 use App\App;
 
-class HUrl{
+class HUrl implements IBase
+{
 	
 	public static function get()
 	{

@@ -5,7 +5,8 @@ namespace App\Lib\Helper;
 
 */
 
-class HExport{
+class HExport implements IBase
+{
 	
 	public static function csv( $text , $file )
 	{
