@@ -5,7 +5,7 @@ namespace App\Lib\Helper;
 
 */
 
-class Export{
+class HExport{
 	
 	public static function csv( $text , $file )
 	{

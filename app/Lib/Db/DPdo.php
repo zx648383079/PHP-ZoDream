@@ -1,9 +1,10 @@
 <?php
-namespace App\Lib;
+namespace App\Lib\Db;
 
 use App\Main;
+use App\Lib\Helper\HSql;
     
-class PdoSql
+class DPdo
 {
 	//pdo对象  
     protected $pdo = null;  
@@ -97,7 +98,7 @@ class PdoSql
      * @param array $_updateData 需要修改的内容
 	 * @return int 返回影响的行数,
 	 */
-    public function update(Array $_param, Array $_updateData) {  
+    public function update(Array $_updateData , Array $_param) {  
         $_where = $_setData = '';  
         foreach ($_param as $_key=>$_value) {  
             $_where .= $_value.' AND ';  
@@ -123,17 +124,17 @@ class PdoSql
 	 * @param array $_param 条件
 	 * @return string|bool 返回id,
 	 */
-    public function isOne(Array $_param) {  
+    public function findOne(Array $_param) {  
         $_where = '';  
         foreach ($_param as $_key=>$_value) {  
             $_where .=$_value.' AND ';  
         }  
         $_where = 'WHERE '.substr($_where, 0, -4);  
-        $_sql = "SELECT id FROM {$this->table} $_where LIMIT 1";  
+        $_sql = "SELECT * FROM {$this->table} $_where LIMIT 1";  
         $result = $this->execute($_sql);
         if($result->rowCount() > 0)
         {
-            return $result->fetchObject()->id;
+            return $result->fetchObject();
         }else{
             return false;
         } 
@@ -224,7 +225,7 @@ class PdoSql
      * @param array|null $_param 条件
 	 * @return int 返回总数,
 	 */ 
-    public function total( Array $_param = array()) {  
+    public function count( Array $_param = array()) {  
         $_where = '';  
         if (isset($_param['where'])) {  
             foreach ($_param['where'] as $_key=>$_value) {  
@@ -260,13 +261,12 @@ class PdoSql
      * @param bool $need 是否需要表的前缀
 	 * @return array 返回查询结果,
 	 */ 
-    public function query($param ,$isList = TRUE , $need = false)
+    public function findByHelper($param ,$isList = TRUE)
     {
         $result = array();
         if(!empty($param))
         {
-            $prefix = $need?$this->prefix:'';
-            $sql = new Helper\SqlHelper($prefix);
+            $sql = new HSql($this->prefix);
               
             $_stmt = $this->execute($sql->getSQL($param));            //获取SQL语句
             while (!!$_objs = $_stmt->fetchObject()) {  

@@ -2,7 +2,8 @@
 namespace App\Lib;
 
  
-class QRcodeImg{
+class QRcodeImg
+{
     /**
      * 显示图片
      *

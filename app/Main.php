@@ -8,8 +8,8 @@ namespace App;
 	********************************************************/
 	
 use App\Lib\Auth;
-use App\Lib\Helper\ToList;
-use App\Lib\Helper\Url;
+use App\Lib\Object\OArray;
+use App\Lib\Helper\HUrl;
 
 class Main{
 	
@@ -91,7 +91,7 @@ class Main{
 	*/
 	public static function jcs()
 	{
-		$list = new ToList();
+		$list = new OArray();
 		
 		$files = $list->sort(func_get_args());
 		
@@ -155,7 +155,7 @@ class Main{
 		{
 			return $result;
 		}else{
-			$list = new ToList();
+			$list = new OArray();
 			echo $list->tostring($result);
 		}
 		
@@ -308,7 +308,7 @@ class Main{
 	 */
 	public static function load()
 	{
-		$url = Url::get();
+		$url = HUrl::get();
 		
 		$con = ucfirst(strtolower($url[0]));
 		$name = 'App\\Controller\\'.$con."Controller";

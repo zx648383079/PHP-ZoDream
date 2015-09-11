@@ -1,10 +1,10 @@
 <?php
-namespace App\Lib;
+namespace App\Lib\Object;
 /******
 时间处理类
 *******/
 
-class TimeDeal
+class OTime implements IBase
 {
 	/***
 	返回当前时间
@@ -20,5 +20,10 @@ class TimeDeal
 			$time = date($format , $time);
 		}
 		return $time;
+	}
+	
+	public static function to($arg)
+	{
+		return date( 'Y-m-d H:i:s' , $arg);
 	}
 }

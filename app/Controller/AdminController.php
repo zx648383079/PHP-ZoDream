@@ -1,12 +1,15 @@
 <?php
 namespace App\Controller;
 
+use App\Main;
 use App\Model\RolesModel;
+use App\Model\UserModel;
 
 class AdminController extends Controller{
 
 	protected $rules = array(
-		'mysql' => '1',
+		'users' => '99',
+		'mysql' => '99',
 		'*' => '2'
 	);
 
@@ -32,7 +35,13 @@ class AdminController extends Controller{
 	{
 		$roles = new RolesModel();
 		$model = $roles->findList();
-		$this->show('users' ,array('roles'=>$model));
+		$users = new UserModel();
+		$user = $users ->findList("id <> {Main::session('user')}",'id,name');
+		
+		$this->show('users' ,array(
+			'roles' => $model,
+			'users' => $user
+			));
 	}
 	
 	/******

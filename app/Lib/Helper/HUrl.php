@@ -3,7 +3,7 @@ namespace App\Lib\Helper;
 
 use App\Main;
 
-class Url{
+class HUrl{
 	
 	public static function get()
 	{

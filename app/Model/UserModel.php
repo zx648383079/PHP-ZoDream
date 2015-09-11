@@ -34,12 +34,12 @@
 		
 		public function findByEmail($email)
 		{
-			return $this->isOne("email = '{$email}'");
+			return $this->findOne("email = '{$email}'");
 		}
 		
 		public function findByUser($email, $pwd)
 		{
-			return $this->isOne(array("email = '{$email}'","pwd = '{$pwd}'"));
+			return $this->findOne(array("email = '{$email}'","pwd = '{$pwd}'"));
 		}
 		
 		public function role()

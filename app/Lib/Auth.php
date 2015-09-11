@@ -8,7 +8,8 @@ namespace App\Lib;
 use App\Model\UserModel;
 use App\Main;
 
-class Auth{
+class Auth
+{
 	
 	public static $userModel;
 	/*
@@ -18,7 +19,8 @@ class Auth{
 		*
 		* @return 返回True|False,
 		*/
-	public static function user(){
+	public static function user()
+	{
 		$id = Main::session('user');
 		if( !empty($id ) )
 		{

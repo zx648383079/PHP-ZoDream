@@ -3,7 +3,7 @@ namespace App\Lib\Helper;
 
 /*短连接生成算法*/
 
-class Short_Url {
+class HShortUrl {
 	#字符表
 	public static $charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 

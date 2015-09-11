@@ -5,7 +5,7 @@ namespace App\Lib\Helper;
 *
 *
 */
-class SqlHelper{
+class HSql{
 	
 	/********
 	SQL中的关键字数组

@@ -9,7 +9,8 @@ namespace App\Lib;
 
 use App\Lib\PdoSql;
 	
-class Validation{
+class Validation
+{
 	
 	public $error = array();
 	

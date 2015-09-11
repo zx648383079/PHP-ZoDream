@@ -1,5 +1,5 @@
 <?php
-namespace App\Lib;
+namespace App\Lib\Db;
 /**
  *	数据库操作类 
  *
@@ -7,8 +7,9 @@ namespace App\Lib;
  **/
  
  use App\Main;
+ use App\Lib\Helper\HSql;
  
-class CommonSql
+class DMysqli implements IBase
 {
     /**
      * 表前缀
@@ -55,7 +56,7 @@ class CommonSql
         $this->port = $config['port'];
 	    $this->prefix=$config['prefix'];
         
-        if(isset($this->table))
+        if( isset( $this->table ) )
         {
             $this->table = $this->prefix.$this->table;            
         }
@@ -103,10 +104,12 @@ class CommonSql
 	 * @param array $_addData 需要添加的集合
 	 * @return int 返回影响的行数,
 	 */
-    public function add(Array $_addData) {  
+    public function add(Array $_addData) 
+    {  
         $_addFields = array();  
         $_addValues = array();  
-        foreach ($_addData as $_key=>$_value) {  
+        foreach ($_addData as $_key=>$_value) 
+        {  
             $_addFields[] = $_key;  
             $_addValues[] = $_value;  
         }  
@@ -116,6 +119,7 @@ class CommonSql
         
         return $this->execute($_sql)->lastId();  
     }  
+
     
      /**
 	 * 修改记录
@@ -126,14 +130,18 @@ class CommonSql
      * @param array $_updateData 需要修改的内容
 	 * @return int 返回影响的行数,
 	 */
-    public function update(Array $_param, Array $_updateData) {  
+    public function update(Array $_param, Array $_updateData) 
+    {  
         $_where = $_setData = '';  
-        foreach ($_param as $_key=>$_value) {  
+        foreach ($_param as $_key=>$_value) 
+        {  
             $_where .= $_value.' AND ';  
         }  
         $_where = 'WHERE '.substr($_where, 0, -4);  
-        foreach ($_updateData as $_key=>$_value) {  
-            if (is_array($_value)) {  
+        foreach ($_updateData as $_key=>$_value) 
+        {  
+            if (is_array($_value)) 
+            {  
                 $_setData .= "$_key=$_value[0],";  
             } else {  
                 $_setData .= "$_key='$_value',";  
@@ -141,7 +149,7 @@ class CommonSql
         }  
         $_setData = substr($_setData, 0, -1);  
         $_sql = "UPDATE {$this->table} SET $_setData $_where";  
-        return $this->execute($_sql)->affectRow();  
+        return $this->execute($_sql)->rows();  
     }  
     
     /**
@@ -156,15 +164,17 @@ class CommonSql
         $_where = '';  
         if(is_array($_param))
         {
-            foreach ($_param as $_key=>$_value) {  
-            $_where .= $_value.' AND ';  
+            foreach ($_param as $_key=>$_value) 
+            {  
+                $_where .= $_value.' AND ';  
             }  
             $_where = 'WHERE '.substr($_where, 0, -4);  
-        }else{
+        }else
+        {
             $_where='WHERE '.$_param;
         }
         $_sql = "DELETE FROM {$this->table} $_where LIMIT 1";  
-        return $this->execute($_sql)->affectRow();  
+        return $this->execute($_sql)->rows();  
     } 
     
     /**
@@ -175,18 +185,21 @@ class CommonSql
 	 * @param array $_param 条件
 	 * @return string|bool 返回id,
 	 */
-    public function isOne(Array $_param) {  
+    public function findOne(Array $_param) 
+    {  
         $_where = '';  
-        foreach ($_param as $_key=>$_value) {  
+        foreach ($_param as $_key=>$_value) 
+        {  
             $_where .=$_value.' AND ';  
         }  
         $_where = 'WHERE '.substr($_where, 0, -4);  
-        $_sql = "SELECT id FROM {$this->table} $_where LIMIT 1";  
+        $_sql = "SELECT * FROM {$this->table} $_where LIMIT 1";  
         $result = $this->execute($_sql);
         if( $result->rowCount(FALSE) > 0)
         {
-            return $result->getObject()[0]->id;
-        }else{
+            return $result->getObject()[0];
+        } else
+        {
             $this->close();
             return false;
         } 
@@ -223,13 +236,12 @@ class CommonSql
      * @param bool $need 是否需要表的前缀
 	 * @return array 返回查询结果,
 	 */ 
-    public function query( $param ,$islist = false ,$need = false)
+    public function findByHelper($param , $islist = false)
     {
         $_result = array();
         if(!empty($param))
         {
-            $prefix = $need?$this->prefix:'';
-            $sql = new Helper\SqlHelper($prefix);
+            $sql = new HSql($prefix);
               
             $this->execute($sql->getSQL($param));            //获取SQL语句
             $_result = $islist?$this->getList():$this->getObject();
@@ -238,12 +250,31 @@ class CommonSql
     }
     
     /**
+	* 查询计数
+	*	
+	* @param array|string $where 数据的条件
+	*/
+	public function count( $_param = '')
+    {
+        $_where = '';  
+        if (isset($_param['where'])) {  
+            foreach ($_param['where'] as $_key=>$_value) {  
+                $_where .= $_value.' AND ';  
+            }  
+            $_where = 'WHERE '.substr($_where, 0, -4);  
+        }  
+        $_sql = "SELECT COUNT(*) as count FROM {$this->table} $_where";  
+        $this->execute($_sql);
+        return $this->getObject()->count;
+    }
+    
+    /**
 	 * 返回上一步执行受影响的行数
 	 *
 	 * @access public
 	 *
 	 */
-    public function affectRow( $end = TRUE )
+    public function rows( $end = TRUE )
     {
         $rows = mysqli_affected_rows($this->_mysqli);
         if($end)
@@ -410,5 +441,10 @@ class CommonSql
         }
         
         mysqli_close($this->_mysqli);
+    }
+    
+    public function getError()
+    {
+        return mysqli_error($this->_mysqli);
     }
 }

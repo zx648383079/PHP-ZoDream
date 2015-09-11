@@ -1,11 +1,11 @@
 <?php 
-namespace App\Lib\Helper;
+namespace App\Lib\Object;
 
 /**
 *把数组或字符串转为单列数组
 */
 
-class ToList
+class OArray implements IBase
 {
 	
 	private $before = array();

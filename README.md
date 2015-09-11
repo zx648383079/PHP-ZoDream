@@ -16,6 +16,14 @@ PHP-WeChat
 
 >>>Helper		辅助类文件
 
+>>>Db			数据库类文件
+
+>>>Html			网页类文件
+
+>>>Object		对象类文件
+
+>>>Plugin		插件类文件
+
 >>conf			配置文件
 
 >>Controller	控制器

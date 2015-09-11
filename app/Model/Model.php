@@ -4,10 +4,9 @@
 	*********************************/
 	namespace App\Model;
 	
-	//use App\Lib\PdoSql;
-	use App\Lib\CommonSql;
+	use App\Lib\Db\DPdo;
 	
-	abstract class Model extends CommonSql{
+	abstract class Model extends DPdo{
 		/*查询到的数据*/
 		protected $models;
 		/**
@@ -91,7 +90,7 @@
 			{
 				$sql['where'] = $param;
 			}
-			return $this->query( $sql, FALSE);;
+			return $this->findByHelper( $sql, FALSE);;
 		}
 		
 		/**
