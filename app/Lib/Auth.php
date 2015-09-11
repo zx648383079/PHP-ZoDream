@@ -5,8 +5,9 @@ namespace App\Lib;
 *用户类
 *
 *********************************************************/
-use App\Model\UserModel;
+
 use App\App;
+use App\Model\UserModel;
 
 class Auth
 {
