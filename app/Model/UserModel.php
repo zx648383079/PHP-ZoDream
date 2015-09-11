@@ -39,7 +39,12 @@
 		
 		public function findByUser($email, $pwd)
 		{
-			return $this->findOne(array("email = '{$email}'","pwd = '{$pwd}'"));
+			$result = $this->findOne(array("email = '{$email}'","pwd = '{$pwd}'"));
+			if(is_object($result))
+			{
+				$result = $result->id;
+			}
+			return $result;
 		}
 		
 		public function role()

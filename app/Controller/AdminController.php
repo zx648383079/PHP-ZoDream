@@ -63,4 +63,9 @@ class AdminController extends Controller{
 			'sql'=>$sql
 			));
 	}
+	
+	function about()
+	{
+		$this->show('about');
+	}
 }

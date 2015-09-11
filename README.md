@@ -23,6 +23,8 @@ PHP-WeChat
 
 >>>Plugin		插件类文件
 
+>>>Role			权限管理类文件
+
 >>conf			配置文件
 
 >>Controller	控制器

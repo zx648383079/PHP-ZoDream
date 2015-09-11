@@ -103,6 +103,7 @@
 		public function findList($param = '' , $filed = '*')
 		{
 			$_stmt = $this->findObject($param , $filed);  
+
 			$_result = array(); 
 			foreach ($_stmt as $key => $value) {
 				foreach ($value as $_key => $_value) {

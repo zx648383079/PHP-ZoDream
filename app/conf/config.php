@@ -8,7 +8,7 @@
 	return array(
 		'app' => array(                           //网站信息
 			'title' => '主页',
-			'host' => 'http://c.test:8080/',                          //主目录
+			'host' => 'http://www.we.cc/',                          //主目录
 			'url' => 0
 		),
 		'view' =>array(                           //视图文件信息
@@ -20,7 +20,7 @@
             'port' => '3306',						//端口
 			'database' => 'wechat',				//数据库
 			'user' => 'root',						//账号
-			'password' => 'root',					//密码
+			'password' => '',					//密码
 			'prefix' => 'zx_',					//前缀
 			'encoding' => 'utf8'					//编码
 		),

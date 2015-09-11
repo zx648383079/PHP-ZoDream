@@ -1,7 +1,13 @@
 <?php 
 use App\App;	
 
-App::extend('~layout.head');
+App::extend(array(
+	'~layout'=>array(
+		'head',
+		'nav'
+		)
+	)
+);
 ?>
 <div class="ms-Grid">
   <div class="ms-Grid-row">

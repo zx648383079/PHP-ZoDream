@@ -33,8 +33,8 @@ use App\App;
                         <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="<?php App::url('?c=admin&v=mysql');?>">高级</a></li>
                         </ul>
                         </li>
-                        <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="#">账号管理</a></li>
+                        <li class="ms-ContextualMenu-item"><a class="ms-ContextualMenu-link" href="<?php App::url('?c=admin&v=users');?>">账号管理</a></li>
                         <li class="ms-ContextualMenu-item ms-ContextualMenu-item--divider"></li>
-                        <li class="ms-ContextualMenu-item "><a class="ms-ContextualMenu-link is-disabled" href="#">关于</a></li>
+                        <li class="ms-ContextualMenu-item "><a class="ms-ContextualMenu-link" href="<?php App::url('?c=admin&v=about');?>">关于</a></li>
                   </ul>
              </div>

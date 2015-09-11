@@ -182,6 +182,10 @@ class HSql implements IBase
 			{
 				$result.=$safe;
 			}else{
+				if(!empty($pre) && strpos($safe,$pre) === 0)              //判断是否存在重复前缀；
+				{
+					$pre = '';
+				}
 				$result.=$pre.$safe.$end;
 			}
 		}
