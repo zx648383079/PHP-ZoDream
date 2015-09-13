@@ -124,7 +124,7 @@ class Controller{
 					ob_start();
 				}
 			} 
-			header( 'Content-Type:text/html;charset=utf-8 ');
+			header( 'Content-Type:text/html;charset=utf-8' );
 			ob_implicit_flush(FALSE);
 			App::extend($name);
 			ob_end_flush();

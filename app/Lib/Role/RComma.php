@@ -1,7 +1,7 @@
 <?php 
 namespace App\Lib\Role;
 /**
-* 二进制法
+* 符号分割法
 */
 
 class RComma implements IBase
