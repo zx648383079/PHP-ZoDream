@@ -44,3 +44,4 @@ Temporary Items
 
 # Session dir
 tmp/
+app/conf/config.php
