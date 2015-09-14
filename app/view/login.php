@@ -1,37 +1,59 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend('~layout.head');
+App::extend(array(
+	'~layout'=>array(
+		'head',
+		'nav'
+		)
+	)
+);
 ?>
-	
-	<div class="form" ng-app="formApp" ng-controller="formController">
-		<form name="myForm" ng-submit="sendForm()">
-			<div class="row">
-				<input type="email" name="email" placeholder="账号" required ng-model="formData.email"/>
-				<span ng-show="myForm.email.$error.required">*这是必须的</span>
-				<span ng-show="myForm.email.$error.email">*请输入正确的邮箱</span>
-				<span class="help-block" ng-show="errorEmail">{{ errorEmail }}</span>
+<div class="ms-Grid">
+  <div class="ms-Grid-row">
+    <div class="ms-Grid-col ms-u-sm12 ms-u-mdPush2 ms-u-md8 ms-u-lgPush3 ms-u-lg6">
+		<App class="Container">
+			<div class="Header ms-bgColor-neutralPrimary ms-borderColor-greenLight">
+				<div class="Header-text ms-fontColor-white">
+					<div class="u-contentCenter">
+						<h1 class="Header-title">登录</h1>
+						<div class="error"><?php App::ech('error');?></div>
+					</div>
+				</div>
 			</div>
-			<div class="row">
-				<input type="password" name="pwd" placeholder="密码" required ng-minlength="6" ng-model="formData.pwd"/>
-				<span ng-show="myForm.pwd.$error.required">*这是必须的</span>
-				<span class="error" ng-show="myForm.pwd.$error.minlength">*请输入6位以上的密码</span>
-				<span class="help-block" ng-show="errorPwd">{{ errorPwd }}</span>
+		
+			<div class="Content">
+				<div class="u-contentCenter">
+		
+				<form class="Form" action="<?php App::url('?c=auth'); ?>" method="POST">
+		
+				<div class="ms-TextField is-required">
+					<label class="ms-Label">邮箱</label>
+					<input class="ms-TextField-field" type="email" name="email" placeholder="邮箱" value="<?php App::ech('email'); ?>" required>
+				</div>
+		
+				<div class="ms-TextField is-required">
+					<label class="ms-Label">密码</label>
+					<input class="ms-TextField-field" type="password" name="pwd" placeholder="密码" required>
+				</div>
+				
+				<div class="ms-ChoiceField">
+					<input id="demo-checkbox-selected" class="ms-ChoiceField-input" type="checkbox" name="remember" value="1">
+					<label for="demo-checkbox-selected" class="ms-ChoiceField-field"><span class="ms-Label">保持登录</span></label>
+				</div>
+				
+				<div class="SubmitButton">
+					<button class="ms-Button ms-Button--primary"><span class="ms-Button-label">登录</span></button>
+					<a href="<?php App::url('?c=auth&v=register'); ?>" class="ms-font-l ms-Link">注册</a>
+				</div>
+				</form>
 			</div>
-			<div class="row">
-				<input type="text" name="code" placeholder="验证码" required ng-model="formData.code"/>
-				<img id="code" src="<?php Main::url('?c=image&v=verify'); ?>" alt="验证码"/>
-				<span ng-show="myForm.code.$error.required">*这是必须的</span>
-				<span class="help-block" ng-show="errorCode">{{ errorCode }}</span>
 			</div>
-			<div class="row" ng-show="message">{{ message }}</div>
-			<div class="row">
-				<button type="submit">提交</button>
-				<a href="/auth/qrcode">二维码</a>
-			</div>
-		</form>
-	
+		</App>
 	</div>
+  </div>
+</div>
+  
 	
 	
-<?php Main::extend('~layout.foot');?>
+<?php App::extend('~layout.foot');?>

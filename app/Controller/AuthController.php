@@ -1,56 +1,106 @@
 <?php
-	namespace App\Controller;
+namespace App\Controller;
 
-	use App\Main;
+use App\App;
+use App\Model\UserModel;
+use App\Lib\ToList;
+
+class AuthController extends Controller{
 	
-	class AuthController extends Controller{
-		
-		function index(){
-			$this->send('title','登录');
-			$this->show('login');
-		}
-		
-		function qrcode()
+	protected $rules = array(
+		'logout' => '1',
+		'*' => '?'
+	);
+
+	/**
+		*登陆界面
+		*/
+	function index(){
+		$post = $_POST;
+		if(!empty($post))
 		{
-			$this->send(array('title'=>'扫扫二维码','img'=>''));
-			$this->show('qrcode');
-		}
-		
-		function login(){
-			
-			$guid = $_POST['guid'];
-			
-			if(!empty($guid))
+			$error = $this->validata($post,array(
+				'email' => 'email|required',
+				'pwd' => 'min:6|required'
+			));
+			if(is_bool($error))
 			{
-				if( $guid == 5 )
+				$user = new UserModel();
+				$result = $user->findByUser($post['email'],$post['pwd']);
+				if(!is_bool($result))
 				{
-					$_SESSION['user'] = '1';
-					$data['success'] = "true";
+					App::session('user', $result );
+					App::redirect('?c=home');
+					exit;
 				}else{
-					$data['errors']['guid'] = "";
+					$this->send(array(
+					'error' => '邮箱不存在或密码有误！'
+				));
 				}
 			}else{
-				$email = $_POST['email'];
-				$pwd=$_POST['pwd'];
-				//$data['success']="成功";
-				//$data['errors']['email']='邮箱错误';
-				//$data['errors']['pwd']='密码错误';
-				
-				if($_SESSION['verify'] != $_POST['code']){
-					$data['errors']['code'] = '验证码错误';
-					
-				}else{
-					$_SESSION['user'] = '1';
-					$data['success'] = "true";
-				}
+				$this->send(array(
+					'error' => (new ToList()) -> tostring($error,',')
+				));
 			}
-			$this->ajaxJson($data);
+			//
 		}
 		
-		function logout()
+		$this->show('login',array(
+			'title' => '登录',
+			'email' => isset($post['email'])?$post['email']:''
+		));
+	}
+
+	/**
+		*扫码登录界面
+		*/
+	function qrcode()
+	{
+		$this->send(array('title'=>'扫扫二维码','img'=>''));
+		$this->show('qrcode');
+	}
+
+	/**
+		*执行登出操作
+		*/
+	function logout()
+	{
+		App::session('user', '');
+		App::redirect('/?c=auth');
+	}
+
+	/**
+		*注册界面
+		*/
+	function register()
+	{
+		$post = $_POST;
+		if(!empty($post))
 		{
-			Main::out('gg');
-			$_SESSION['user'] = null;
-			Main::redirect('/?c=auth');
+			$error = $this->validata($post, array(
+				'name' => 'required',
+				'email' =>'unique:users|email|required',
+				'pwd' => 'confirm:cpwd|min:6|required'
+			));
+			
+			if(!is_bool($error))
+			{
+				$this->send(array(
+					'error' => $error
+				));
+			}else{
+				$user = new UserModel();
+				$id = $user -> fillWeb($post['name'], $post['email'], $post['pwd']);
+				App::session('user', $id );
+				App::redirect('?c=home');
+				
+			}
 		}
-	} 
+		
+		$this->show('register',array(
+			'title' => '注册',
+			'name' => isset($post['name'])?$post['name']:'',
+			'email' => isset($post['email'])?$post['email']:''
+		));
+	}
+} 

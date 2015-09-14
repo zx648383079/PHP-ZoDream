@@ -1,53 +1,128 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend('~layout.head',array('fabric.css','fabric.components.css'));
+App::extend(array(
+	'~layout'=>array(
+		'head',
+		'nav',
+		'menu'
+		)
+	)
+);
 ?>
-	
-	<div class="container">
-		
-		<div>
-			<table>
-				<tr>
-					<th>ID</th>
-					<th>用户</th>
-					<th>类型</th>
-					<th>内容</th>
-					<th>时间</th>
-					<th>操作</th>
-				</tr>
-			</table>
-		</div>
 
-		
-		<div>
-			<form action="/message/add" method="POST">
-				<div class="row">
-					<input type="number" name="id"/>
+    	<div class="ms-Grid-col ms-u-md10">
+			
+			<ul class="ms-List">
+			<div class="ms-ListItem is-unread is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
 				</div>
-				<div class="row">
-					<input type="text" name="type"/>
+			</div>
+			<div class="ms-ListItem is-unread is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
 				</div>
-				<div class="row">
-					<textarea rows="4" name="content"></textarea>
+			</div>
+			<div class="ms-ListItem is-unread is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
 				</div>
-				<div class="row">
-					<button type="submit">提交</button>
+			</div>
+			<div class="ms-ListItem is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
 				</div>
-			</form>
+			</div>
+			<div class="ms-ListItem is-selected is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
+				</div>
+			</div>
+			<div class="ms-ListItem is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
+				</div>
+			</div>
+			<div class="ms-ListItem is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
+				</div>
+			</div>
+			<div class="ms-ListItem is-selectable">
+				<span class="ms-ListItem-primaryText">Alton Lafferty</span>
+				<span class="ms-ListItem-secondaryText">Meeting notes</span>
+				<span class="ms-ListItem-tertiaryText">Today we discussed the importance of a, b, and c in regards to d.</span>
+				<span class="ms-ListItem-metaText">2:42p</span>
+				<div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+				<div class="ms-ListItem-actions">
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--mail"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--trash"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--flag"></i></div>
+				<div class="ms-ListItem-action"><i class="ms-Icon ms-Icon--pinLeft"></i></div>
+				</div>
+			</div>
+			</ul>
+			
 		</div>
 	</div>
+</div>
 	
 	
-
-<?php
-	Main::extend(
-		'~layout.foot',
-		array(
-			'before' => array(
-				'jquery',
-				'jquery.fabric'
-				)
-			)
-		);
-	?>
+<?php App::extend('~layout.foot');?>

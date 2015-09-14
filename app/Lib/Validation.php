@@ -7,14 +7,29 @@
 */
 namespace App\Lib;
 
+use App\Lib\PdoSql;
 	
-class Validation{
+class Validation
+{
 	
-	public $error=array();
+	public $error = array();
 	
+	private $request;
+
+	/**
+	 * 开始验证
+	 *
+	 * @param $request 要验证的数组
+	 * @param $pattent 规则数组
+	 * @return bool
+     */
 	public function make($request,$pattent)
 	{
-		foreach($pattent as $key=>$val)
+		$success = true;
+		
+		$this->request = $request;
+		
+		foreach($pattent as $key => $val)
 		{
 			$arr=explode('|',$val);
 			
@@ -22,65 +37,131 @@ class Validation{
 			{
 				foreach($arr as $v)
 				{
-					$result=$this -> check($request[$key],$v);
-				 	if($result != true)
+					$result = $this -> check($key, $v );
+					
+				 	if(!is_bool($result))
 					{
-						$this->error[$key][]=$key.$result;
-						return false;
+						$this->error[$key][] = $key.$result;
+						$success = false;
 					}
 				}
 			}else{
 				if(in_array('required',$arr))
 				{
-					$this->error[$key][]=$key.' is required';
-					return false;
+					$this->error[$key][] = $key.' is required';
+					$success = false;
 				}
 			}
 		}
 		
-		return true;
+		return $success;
 	}
-	
-	private function check($value,$patten)
+
+	/**
+	 * 验证
+	 *
+	 * @param $key 关键字
+	 * @param $patten 规则名
+	 * @return bool|string
+     */
+	private function check($key, $patten)
 	{
-		$result=FALSE;
-		$arr=explode(':',$patten,2);
-		switch(strtolower($arr[0]))
+		$value = $this->request[$key];
+		$result = FALSE;
+		$arr = explode(':' , $patten , 2);
+		switch(strtolower( $arr[0] ))
 		{
 			case 'required':
-				$result= true;
+				$result = true;
 				break;
 			case 'number':
-				$result= $this->isNum($value)?TRUE:' is not number';
+				$result = $this->isNum($value)?TRUE:' is not number';
 				break;
 			case 'email':
-				$result= $this->isEmail($value)?TRUE:' is not email';
+				$result = $this->isEmail($value)?TRUE:' is not email';
 				break;
 			case 'phone':
-				$result= $this->isMobile($value)?TRUE:' is not phone';
+				$result = $this->isMobile($value)?TRUE:' is not phone';
 				break;
 			case 'url':
-				$result= $this->isUrl($value)?TRUE:' is not url';
+				$result = $this->isUrl($value)?TRUE:' is not url';
 				break;
 			case 'length':
-				$len=explode('-',$arr[1]);
-				$result= $this->length($value,3,intval($len[0]),intval($len[1]))?TRUE:'\'s length is not between '.$len[0].' and '.$len[1];
+				$len = explode('-',$arr[1]);
+				$result = $this->length($value,3,intval($len[0]),intval($len[1]))?TRUE:'\'s length is not between '.$len[0].' and '.$len[1];
 				break;
 			case 'min':
-				$result= $this->length($value,1,intval($arr[1]))?TRUE:' min length is '.$arr[1];
+				$result = $this->length($value,1,intval($arr[1]))?TRUE:' min length is '.$arr[1];
 				break;
 			case 'max':
-				$result= $this->length($value,2,0,intval($arr[1]))?TRUE:' max length is '.$arr[1];
+				$result = $this->length($value,2,0,intval($arr[1]))?TRUE:' max length is '.$arr[1];
 				break;
 			case 'regular':
-				$result= $this->regular($value,$arr[1])?TRUE:' is not match';
+				$result = $this->regular($value,$arr[1])?TRUE:' is not match';
+				break;
+			case 'confirm':
+				$result = $this->confirm($value , $arr[1])?TRUE:' is not the same as '.$arr[1];
+				break;
+			case 'conform':
+				$result = ($value === $arr[1])?TRUE:' is not equal '.$arr[1];
+				break;
+			case 'unique':
+				$tables = explode('.' , $arr[1],2);
+				$colum = $key;
+				if(!empty($tables[1]))
+				{
+					$colum =$tables[1];
+				}
+				$result =$this->unique($tables[0],$colum , $value)?TRUE:' is exist.';
 				break;
 			default:
-				$result=TRUE;
+				$result = TRUE;
 				break;
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * 对比确认
+	 *
+	 * @param string $table  不带前缀的表名
+	 * @param string $value  要验证的列
+	 * @param string $value  要验证的值
+	 * @return bool
+	 */
+	public function unique($table , $colum ,$value)
+	{
+		$pdo =new PdoSql();
+		$data = $pdo->query(array(
+			'select' => 'COUNT(*) as num',
+			'from' => $table,
+			'where' => "$colum = '$value'" 
+		),false,true);
+		if(empty($data) || $data->num != '0')
+		{
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	/**
+	 * 对比确认
+	 *
+	 * @param string $value  要验证的值
+	 * @param string $key 对比值得关键字
+	 * @return bool
+	 */
+	private function confirm( $value, $key)
+	{
+		if(!isset($this->request[$key]))
+		{
+			return false;
+		}
+		
+		return ($value === $this->request[$key]);
+		
 	}
 
 	/**

@@ -1,55 +1,23 @@
 <?php 
-use App\Main;	
+use App\App;	
 
-Main::extend('~layout.head');
+App::extend(array(
+	'~layout'=>array(
+		'head',
+		'nav'
+		)
+	)
+);
 ?>
-	
-	<div class="container" ng-app ng-init="aa='aaa'" ng-controller="phonelist">
-		<div><a href="/auth/logout">登出</a></div>
-		
-		<canvas id="cas" height="500" width="700">
-			<p>不支持HTM5</p>
-		</canvas>
-		
-		<div class="head">
-			Hello {{'World'}}!
-			<br/>
-			输入数据：<input type="text" ng-model="name" placeholder="World">
-			<br/>
-			
-			{{ name || 'word' }}
-			
-			<p>1+2= {{ 1+2 }}</p>
-			<select ng-model="orderProp">
-			  <option value="name">Alphabetical</option>
-			  <option value="age">Newest</option>
-			</select>
-			
-			<ul>
-				<li ng-repeat="phone in phones | filter:name | orderBy:orderProp">
-					{{ phone.name }}
-					<p>{{ phone.text }}</p>
-				</li>
-			</ul>
-			
-			{{ phones.length }}
-			{{ hello }}
-			
-			<br/>
-			
-			<table>
-				<tr><th>fdgd</th></tr>
-				<tr ng-repeat="i in [0,1,2,3,4,5,6,7,8]">
-					<td>{{ i+1 }}</td>
-				</tr>
-			</table>
+
+
+<div class="ms-Grid">
+	<div class="ms-Grid-row">
+		<div class="ms-Grid-col ms-u-sm0 ms-u-md2">
 		</div>
 	</div>
+</div>
+
 	
 	
-	<form>
-			
-	</form>
-	
-	
-<?php Main::extend('~layout.foot');?>
+<?php App::extend('~layout.foot');?>

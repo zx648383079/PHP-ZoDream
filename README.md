@@ -1,10 +1,9 @@
-# PHP-WeChat
-PHP微信公众平台开发
+# PHP-ZoDream
+PHP开发
 
 # 说明
-SAE认证通过了，开始编写
 
-1.进行MVC分离，主要参考ThinkPHP框架，但全部是原生编程，不会借助任何现成框架，目前还只是个花架子，慢慢完善吧
+进行MVC分离，目前参考Laravel、ThinkPHP、Yii框架
 
 # 文件目录
 
@@ -13,6 +12,18 @@ PHP-WeChat
 >app    		php总文件目录
 
 >>Lib			类文件
+
+>>>Helper		辅助类文件
+
+>>>Db			数据库类文件
+
+>>>Html			网页类文件
+
+>>>Object		对象类文件
+
+>>>Plugin		插件类文件
+
+>>>Role			权限管理类文件
 
 >>conf			配置文件
 
@@ -34,15 +45,15 @@ PHP-WeChat
 
 >>lang			语言包
 
->typings		VSCode自动提示文件
-
 >vendor			Composer生成的主文件
 
 >>composer		Composer生成的自动加载文件
 
->>smarty		Smarty
+>doc			文档
+
 
 # 修改
+
 1.增加Angular.js的支持
 
 2.引入PDO连接数据库
@@ -51,7 +62,7 @@ PHP-WeChat
 
 4.引入url 重写
 
-5.优化 installl.php
+`5.优化 installl.php`
 
 6.增加验证码
 
@@ -90,7 +101,7 @@ PHP-WeChat
 没有很好的控制前端图片地址
 
 
-# 更多详情请关注微信 `zx_zszh`
+# 更多详情请继续关注
 
-更新时间：2015/8/18
+更新时间：2015/9/11
 

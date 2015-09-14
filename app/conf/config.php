@@ -8,7 +8,8 @@
 	return array(
 		'app' => array(                           //网站信息
 			'title' => '主页',
-			'host' => 'http://c.test:8080/'                          //主目录
+			'host' => 'http://c.test:8080/',                          //主目录
+			'url' => 0
 		),
 		'view' =>array(                           //视图文件信息
 			'dir' => 'app/view',
@@ -17,10 +18,10 @@
 		'mysql' => array(							//MYSQL数据库的信息
 			'host' => 'localhost',                //服务器
             'port' => '3306',						//端口
-			'database' => 'test',				//数据库
+			'database' => 'wechat',				//数据库
 			'user' => 'root',						//账号
-			'password' => 'root',					//密码
-			'prefix' => '',					//前缀
+			'password' => '',					//密码
+			'prefix' => 'zx_',					//前缀
 			'encoding' => 'utf8'					//编码
 		),
 		'upload' => array(
@@ -40,7 +41,7 @@
 		),
 		'short' => array(                        //手动添加短链接
 			'm' => 'message.index',
-			't' => 'test.index',
+			'a' =>'admin.index',
 			'*' => 'home.index'                  //默认
 		)
 	);
