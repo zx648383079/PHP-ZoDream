@@ -44,6 +44,3 @@ Temporary Items
 
 # Session dir
 tmp/
-
-# config dir
-app/conf
