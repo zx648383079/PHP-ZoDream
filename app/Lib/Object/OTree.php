@@ -188,29 +188,34 @@ class OTree implements IBase
     }
     
     /**
-    * 此方法由@Tonton 提供
-    * http://my.oschina.net/u/918697
-    * @date 2012-12-12 
-    */
-    function genTree5($items) { 
-        foreach ($items as $item) 
-            $items[$item['pid']]['son'][$item['id']] = &$items[$item['id']]; 
-        return isset($items[0]['son']) ? $items[0]['son'] : array(); 
-    } 
-    
-    /**
     * 将数据格式化成树形结构
     * @author Xuefen.Tong
     * @param array $items
     * @return array 
     */
-    function genTree9($items) {
+    public function getTree($items) 
+    {
+        
         $tree = array(); //格式化好的树
-        foreach ($items as $item)
-            if (isset($items[$item['pid']]))
-                $items[$item['pid']]['son'][] = &$items[$item['id']];
-            else
-                $tree[] = &$items[$item['id']];
+        
+        $newItems = array();
+        
+        foreach ($items as $value) 
+        {
+            $newItems[$value['id']] = $value;
+        }
+        
+        
+        foreach ($newItems as $key => $item)
+        {
+            if (isset($newItems[$item['pid']]))
+            {
+                $newItems[$item['pid']]['son'][] = &$newItems[$key];
+            }else
+            {
+                $tree[] = &$newItems[$key];
+            }
+        }
         return $tree;
     }
 }
