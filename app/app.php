@@ -8,7 +8,7 @@ namespace App;
 	********************************************************/
 	
 use App\Lib\Auth;
-use App\Lib\Lang;
+//use App\Lib\Lang;
 use App\Lib\Object\OArray;
 use App\Lib\Helper\HUrl;
 
@@ -22,7 +22,7 @@ class App{
 	{
 		set_error_handler(array('App\App','error'));         //自定义错误输出
 		register_shutdown_function(array('App\App','out'));   //程序结束时输出
-		Lang::setLang();                                //加载语言包 
+		//Lang::setLang();                                //加载语言包 
 		self::load();
 	}
 	/**
@@ -399,6 +399,7 @@ class App{
 			{
 				if(!empty($error) || !empty($info))
 				{
+					header( 'Content-Type:text/html;charset=utf-8' );
 					echo "<div style=\"text-align:center;color:red;font-weight:700;font-size:20px\">";
 					empty($error)?'':printf("错误提示：%s！在%s中第%u行。",$error['message'],$error['file'],$error['line']);
 					empty($info)?'':var_dump($info);
@@ -422,6 +423,7 @@ class App{
 	 */
 	public static function error($errno, $errstr, $errfile, $errline)
 	{
+		header( 'Content-Type:text/html;charset=utf-8' );
 		if( defined('DEBUG') && DEBUG )
 		{
 			self::$data['error'] = '错误级别：'.$errno.'错误的信息：'.$errstr.'<br>发生在 '.$errfile.' 第 '.$errline.' 行！';

@@ -38,8 +38,9 @@ class AuthController extends Controller{
 				));
 				}
 			}else{
+				$list = new ToList();
 				$this->send(array(
-					'error' => (new ToList()) -> tostring($error,',')
+					'error' => $list -> tostring($error,',')
 				));
 			}
 			//
