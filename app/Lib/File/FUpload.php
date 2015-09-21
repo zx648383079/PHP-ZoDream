@@ -1,9 +1,9 @@
 <?php
-namespace App\Lib; 
+namespace App\Lib\File; 
  
-use App\Main;
+use App\App;
    
-class Upload
+class FUpload implements IBase
 {
     private $savepath;          //上传文件保存的路径
     private $allowtype; //设置限制上传文件的类型
@@ -26,11 +26,11 @@ class Upload
      * @param bool $rand 文件命名方式.
      */
     public function __construct($rand=true) {  
-        $config = Main::config("upload");
+        $config = App::config("upload");
         $this->maxsize = $config['maxsize'];
-        $this->allowtype =explode(';',$config['allowtype']);
+        $this->allowtype = explode(';',$config['allowtype']);
         $this->savepath = $config['savepath'];
-        $this->rand=$rand;
+        $this->rand = $rand;
 	}
 	
 

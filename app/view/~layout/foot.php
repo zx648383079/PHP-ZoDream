@@ -5,11 +5,7 @@ use App\App;
 
 <?php 
 	App::jcs(
-		'jquery',
-		'jquery.fabric',
-		'angular.min',
-		'zx',
-		'controller',
+		'dream',
 		App::$extra
 		);
 ?>

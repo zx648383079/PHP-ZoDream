@@ -84,7 +84,11 @@ class App{
 	 */
 	public static function url($file='',$echo = TRUE)
 	{
-		$url = APP_URL.$file;
+		$url = APP_URL.'/'.$file;
+		
+		$url = preg_replace('/([^:]\/)\/+/', '$1', $url);
+		//$url = str_replace( ':/', '://', $url);
+		
 		if($echo)
 		{
 			echo $url;
@@ -158,19 +162,23 @@ class App{
 	*
 	*
 	* @param string $name 要显示的
-	* @param string $text 默认值.
+	* @param string|function $text 默认值.
 	*/
 	public static function ech($name,$text = '')
 	{
 		$result = isset(self::$data[$name])?self::$data[$name]:$text;
-		if(is_array($text))
+		if (is_object($text)) 
 		{
-			return $result;
-		}else{
-			$list = new OArray();
-			echo $list->tostring($result);
+			$text($result);
+		}else
+		{
+			if(is_array($result))
+			{
+				return $result;
+			}else{
+				echo $result;
+			}
 		}
-		
 	}
 
 	/**

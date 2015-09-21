@@ -60,6 +60,9 @@ class DPdo
             //                     array(\PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES {$coding}"));  
             $this->pdo = new \PDO('mysql:host='.$host.';port='.$port.';dbname='.$database, $user, $pwd );
             $this->pdo ->exec('SET NAMES {$coding}');
+            $this->pdo->query ( "SET character_set_client={$coding}" );
+            $this->pdo->query ( "SET character_set_connection={$coding}" );
+            $this->pdo->query ( "SET character_set_results={$coding}" );
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);  
         } catch (\PDOException $ex) {  
             $this->error=$ex->getMessage();
@@ -269,8 +272,20 @@ class DPdo
             $sql = new HSql($this->prefix);
               
             $_stmt = $this->execute($sql->getSQL($param));            //获取SQL语句
-            while (!!$_objs = $_stmt->fetchObject()) {  
-                $result[] = $_objs;  
+            while (!!$_objs = $_stmt->fetchObject()) 
+            {  
+                if($isList)
+                {
+                    $list = array();
+                    foreach ($_objs as $_key => $_value) 
+                    {
+                        $list[$_key] = $_value;
+                    }
+                    $result[] = $list;
+                }else
+                {
+                   $result[] = $_objs;   
+                }
             }
         }
         return $result;
