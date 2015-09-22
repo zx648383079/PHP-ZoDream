@@ -1,28 +1,33 @@
 <?php
 namespace App;	
-	/*****************************************************
-	*全局方法
-	*
-	*
-	*
-	********************************************************/
+/*****************************************************
+*全局方法
+*
+*
+*
+********************************************************/
 	
 use App\Lib\Auth;
 //use App\Lib\Lang;
 use App\Lib\Object\OArray;
 use App\Lib\Helper\HUrl;
+use App\Lib\Web\WRequest;
 
 define('APP_URL', App::config('app.host')); 
 define('APP_API' , isset($_GET['api'])?TRUE:FALSE);    //是否是API模式
 
 class App{
 	
+	public static $request;
 	
 	public static function main()
 	{
 		set_error_handler(array('App\App','error'));         //自定义错误输出
 		register_shutdown_function(array('App\App','out'));   //程序结束时输出
 		//Lang::setLang();                                //加载语言包 
+		
+		self::$request = new WRequest();
+		
 		self::load();
 	}
 	/**
@@ -82,8 +87,14 @@ class App{
 	 *
 	 * @return string
 	 */
-	public static function url($file='',$echo = TRUE)
+	public static function url($file = null,$echo = TRUE)
 	{
+		if($file === null)
+		{
+			$hurl = new HUrl();
+			$file = request_uri();
+		}
+		
 		$url = APP_URL.'/'.$file;
 		
 		$url = preg_replace('/([^:]\/)\/+/', '$1', $url);
@@ -172,12 +183,27 @@ class App{
 			$text($result);
 		}else
 		{
-			if(is_array($result))
-			{
-				return $result;
-			}else{
-				echo $result;
-			}
+			$oarray = new OArray();
+			echo $oarray->tostring($result);
+		}
+	}
+	
+	/**
+	* 判断是否存在并返回
+	*
+	*
+	* @param string $name 要返回的
+	* @param string|function $text 默认值.
+	*/
+	public static function ret($name , $text = '')
+	{
+		$result = isset(self::$data[$name])?self::$data[$name]:$text;
+		if (is_object($text)) 
+		{
+			$text($result);
+		}else
+		{
+			return $result;
 		}
 	}
 

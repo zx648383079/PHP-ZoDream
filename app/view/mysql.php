@@ -13,7 +13,7 @@ App::extend(array(
 	
 <div class="long">
 			<?php
-				$model = App::ech('model',array());
+				$model = App::ret('model');
 				if(!empty($model) && is_array($model))
 				{
 					$str = '<table><tr>';

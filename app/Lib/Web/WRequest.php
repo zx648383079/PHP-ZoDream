@@ -23,7 +23,7 @@ class WRequest implements IBase
 		}
 		$arr = explode(',',$name);
 		
-		return $this->getVal($arr, $gets, $default);
+		return $this->getVal($arr, $this->gets, $default);
 	}
 	
 	public function post($name = null , $default = null)
@@ -34,7 +34,7 @@ class WRequest implements IBase
 		}
 		$arr = explode(',',$name);
 		
-		return $this->getVal($arr, $posts , $default);
+		return $this->getVal($arr, $this->posts , $default);
 	}
 	
 	public function delete()
@@ -47,16 +47,72 @@ class WRequest implements IBase
 		
 	}
 	
-	public function isPost()
-	{
-		return !empty($_POST);
-	}
+	public function getMethod()
+    {
+        if (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) 
+		{
+            return strtoupper($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
+        } else {
+            return isset($_SERVER['REQUEST_METHOD']) ? strtoupper($_SERVER['REQUEST_METHOD']) : 'GET';
+        }
+    }
+	
+	public function isGet()
+    {
+        return $this->getMethod() === 'GET';
+    }
+
+    public function isOptions()
+    {
+        return $this->getMethod() === 'OPTIONS';
+    }
+
+    public function isHead()
+    {
+        return $this->getMethod() === 'HEAD';
+    }
+
+    public function isPost()
+    {
+        return $this->getMethod() === 'POST';
+    }
+
+    public function isDelete()
+    {
+        return $this->getMethod() === 'DELETE';
+    }
+
+    public function isPut()
+    {
+        return $this->getMethod() === 'PUT';
+    }
+
+    public function isPatch()
+    {
+        return $this->getMethod() === 'PATCH';
+    }
+
+    public function isAjax()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+    }
+
+    public function isPjax()
+    {
+        return $this->isAjax() && !empty($_SERVER['HTTP_X_PJAX']);
+    }
+
+    public function isFlash()
+    {
+        return isset($_SERVER['HTTP_USER_AGENT']) &&
+            (stripos($_SERVER['HTTP_USER_AGENT'], 'Shockwave') !== false || stripos($_SERVER['HTTP_USER_AGENT'], 'Flash') !== false);
+    }
 	
 	public function __get($name)
 	{
 		$arr = explode('_',$name);
 		
-		return $this->getVal($arr, array_merge($gets,$posts));
+		return $this->getVal($arr, array_merge($this->gets,$this->posts));
 	}
 	
 	private function getVal($names, $values, $default = null)
@@ -78,7 +134,9 @@ class WRequest implements IBase
 		
 		if(count($arr) == 1)
 		{
-			$arr = $arr[0];
+			foreach ($arr as $value) {
+				$arr = $value;
+			}
 		}
 		
 		return $arr;

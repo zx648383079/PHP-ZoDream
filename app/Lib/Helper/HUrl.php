@@ -146,7 +146,7 @@ class HUrl implements IBase
 	 *
 	 * @return string 真实显示的网址
      */
-	private function request_uri()
+	public function request_uri()
 	{
 		$uri = '';
 		if ( isset($_SERVER['REQUEST_URI'] ) )

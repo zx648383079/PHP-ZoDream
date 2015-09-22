@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\App;
 use App\Lib\Auth;
 use App\Model\RolesModel;
 use App\Model\UserModel;
@@ -36,13 +37,14 @@ class AdminController extends Controller
 	{
 		$roles = new RolesModel();
 		$model = $roles->findList();
-		$users = new UserModel();
-		$user = $users ->findList("id <> {Auth::user()->id}",'id,name');
 		
+		$users = new UserModel();
+		$user = $users->findList("id <> ".Auth::user()->id,'id,name');
 		$this->show('users' ,array(
 			'roles' => $model,
 			'users' => $user,
-			'title' => '用户管理'
+			'title' => '用户管理',
+			'id' => App::$request->get('id')
 			));
 	}
 	

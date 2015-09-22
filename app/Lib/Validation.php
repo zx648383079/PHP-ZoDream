@@ -7,7 +7,7 @@
 */
 namespace App\Lib;
 
-use App\Lib\PdoSql;
+use App\Lib\Db\DPdo;
 	
 class Validation
 {
@@ -132,13 +132,13 @@ class Validation
 	 */
 	public function unique($table , $colum ,$value)
 	{
-		$pdo =new PdoSql();
-		$data = $pdo->query(array(
+		$pdo =new DPdo();
+		$data = $pdo->findByHelper(array(
 			'select' => 'COUNT(*) as num',
 			'from' => $table,
 			'where' => "$colum = '$value'" 
-		),false,true);
-		if(empty($data) || $data->num != '0')
+		),false);
+		if(empty($data) || $data[0]->num != '0')
 		{
 			return false;
 		}else{
