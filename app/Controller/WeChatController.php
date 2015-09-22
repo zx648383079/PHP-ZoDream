@@ -4,11 +4,14 @@ namespace App\Controller;
 use App\Lib\WeChat;
 use App\Model\WechatModel;
 
-class WechatController extends Controller{
-	function index(){
+class WechatController extends Controller
+{
+	function index()
+	{
 		//Wechat::valid();
 		$content = '你好啊';
-		if (isset(Wechat::getMsg()->Content)) {
+		if (isset(Wechat::getMsg()->Content)) 
+		{
 			$content .= Wechat::getMsg()->Content;
 		}
 		

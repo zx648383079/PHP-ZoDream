@@ -2,6 +2,7 @@
   margin: 0px;
   padding: 0px;
 }
+@media (min-width:480px){
 .nav{
   color: #333333;
   font-size: 14px;
@@ -51,21 +52,31 @@
   color: #333;
 }
 
-.right{
+.nav ul li.right{
   float: right;
-  margin: 0 7px;
-  line-height: 40px;
 }
 
 .container{
-  margin: 0px;
-  padding: 0px;
   padding: 0 8px;
 }
 
 .short{
-  float: left;
   width: 38.2%;
+}
+
+.long{
+  width: 61.8%;
+}
+
+}
+.container{
+  margin: 0px;
+  padding: 0px;
+  min-height: 300px;
+}
+
+.short{
+  float: left;
   min-height: 1px;
   box-sizing: border-box;
   padding: 8px;
@@ -73,7 +84,6 @@
 
 .long{
   float: left;
-  width: 61.8%;
   min-height: 1px;
   box-sizing: border-box;
   padding: 8px;
@@ -205,11 +215,11 @@ textarea {
   min-width: 180px;
 }
 
-textarea:hover,input[type="text"]:hover,input[type="password"]:hover{
+textarea:hover,input[type]:hover{
   border-color: #767676;
 }
 
-textarea:focus,input[type="text"]:focus,input[type="password"]:focus{
+textarea:focus,input[type]:focus{
   border-color: #0078d7;
 }
 
@@ -261,7 +271,7 @@ a:active {
   box-sizing: border-box;
 }
 
-input[type="text"],input[type="password"]{
+input[type="text"],input[type="email"],input[type="password"]{
   width: 360px;
   height: 32px;
   font-size: 12px;
@@ -302,7 +312,7 @@ input[type="text"],input[type="password"]{
 
 .card{
   width: 100%;
-  overflow: hidden;
+
   box-sizing: border-box;
   padding: 8px;
   border: 1px solid #0078d7;
@@ -348,6 +358,12 @@ input[type="text"],input[type="password"]{
 }
 
 .card .content{
+  width: 100%;
+
+  overflow-x: hidden;
+}
+
+.card .content ul{
   width: 200%;
   position: relative;
   left: 0;
@@ -361,10 +377,9 @@ input[type="text"],input[type="password"]{
   float: left;
   width: 50%;
   list-style-type: none;
-  
 }
 
-.card .content:hover{
+.card .content ul:hover{
   left: -100%;
 }
 
@@ -427,6 +442,33 @@ input[type="text"],input[type="password"]{
   color: #3c763d;
 }
 
+@-webkit-keyframes rotate{
+from{-webkit-transform:rotate(0deg)}
+to{-webkit-transform:rotate(360deg)}
+}
+@-moz-keyframes rotate{
+from{-moz-transform:rotate(0deg)}
+to{-moz-transform:rotate(360deg)}
+}
+@-ms-keyframes rotate{
+from{-ms-transform:rotate(0deg)}
+to{-ms-transform:rotate(360deg)}
+}
+@-o-keyframes rotate{
+from{-o-transform:rotate(0deg)}
+to{-o-transform:rotate(360deg)}
+}
+
+.rotateAnima{
+  animation: 9.5s linear 0s normal none infinite rotate;
+  /* Firefox: */
+  -moz-animation: 9.5s linear 0s normal none infinite rotate;
+  /* Safari 和 Chrome: */
+  -webkit-animation: 9.5s linear 0s normal none infinite rotate;
+  /* Opera: */
+  -o-animation: 9.5s linear 0s normal none infinite rotate;
+}
+
 .circle{
   width: 80px;
   height: 80px;
@@ -438,4 +480,52 @@ input[type="text"],input[type="password"]{
   min-height: 40px;
   margin-top: 10px;
   text-align: center;
+}
+
+@media (max-width:479px){
+  
+.nav{
+  background-color: #f4f4f4;
+}
+
+.nav .brand{
+  line-height: 40px;
+  text-align: right;
+  margin-right: 8px;
+}
+
+.nav ul{
+  display: none;
+}
+
+.nav ul.open{
+  display: block;
+}
+
+.nav li{
+  line-height: 40px;
+  text-align: center;
+  list-style-type: none;
+  transition: background-color 1s;
+  -webkit-transition: background-color 1s;
+  -o-transition: background-color 1s;
+  -moz-transition: background-color 1s;
+}
+
+.nav li:hover,.nav .active{
+  background-color: #e84;
+}
+
+.short{
+  display: none;
+}
+
+.short.open{
+  display: block;
+  width: 100%;
+}
+
+.long{
+  width: 100%;
+}
 }

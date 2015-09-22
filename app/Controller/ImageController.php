@@ -4,7 +4,8 @@ namespace App\Controller;
 use App\Lib\Verify;
 use App\Lib\QRcodeImg;
 	
-class ImageController extends Controller{
+class ImageController extends Controller
+{
 	
 	function index()
 	{

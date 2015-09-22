@@ -11,27 +11,48 @@ App::extend(array(
 );
 ?>
 	
-
-    	<div class="ms-Grid-col ms-u-md10">
-			<h1 class="ms-font-su ms-fontColor-white ms-bgColor-themeDarker">Breadcrumb</h1>
-			<div class="ms-Table">
-				<div class="ms-Table-row">
-					<span class="ms-Table-cell">File name</span>
-					<span class="ms-Table-cell">Location</span>
-					<span class="ms-Table-cell">Modified</span>
-					<span class="ms-Table-cell">Type</span>
-				</div>
-				<div class="ms-Table-row is-selected">
-					<span class="ms-Table-cell">File name</span>
-					<span class="ms-Table-cell">Location</span>
-					<span class="ms-Table-cell">Modified</span>
-					<span class="ms-Table-cell">Type</span>
-				</div>
-			</div>
-		</div>
-		
-	</div>
+<div class="long">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>OpenId</th>
+        <th>Name</th>
+        <th>Update</th>
+        <th>Create</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      </tr>
+      <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      </tr>
+      <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="3">上一页 下一页</th>
+      </tr>
+    </tfoot>
+  </table>
 </div>
-	
+
+</div>
 	
 <?php App::extend('~layout.foot');?>

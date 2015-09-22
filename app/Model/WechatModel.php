@@ -1,19 +1,19 @@
 <?php 
-	/*********************************
-	用户表的连接
-	*********************************/
-	namespace App\Model;
+/*********************************
+用户表的连接
+*********************************/
+namespace App\Model;
+
+
+class WechatModel extends Model{
+	protected $table = "wechat";
 	
-	
-	class WechatModel extends Model{
-		protected $table = "wechat";
-		
-		protected $fillable = array(
-			'type',
-			'keyword',
-			'content',
-			'user_id',
-			'msg',
-			'cdate'
-		);
-	}
+	protected $fillable = array(
+		'type',
+		'keyword',
+		'content',
+		'user_id',
+		'msg',
+		'cdate'
+	);
+}

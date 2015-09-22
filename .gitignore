@@ -44,3 +44,6 @@ Temporary Items
 
 # Session dir
 tmp/
+
+# vscode
+typings/

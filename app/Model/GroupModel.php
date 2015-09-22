@@ -1,15 +1,15 @@
 <?php 
-	/*********************************
-	用户权限表
-	*********************************/
-	namespace App\Model;
+/*********************************
+用户权限表
+*********************************/
+namespace App\Model;
+
+
+class GroupModel extends Model{
+	protected $table = "groups";
 	
-	
-	class GroupModel extends Model{
-		protected $table = "groups";
-		
-		protected $fillable = array(
-			'id',
-			'name'
-		);
-	}
+	protected $fillable = array(
+		'id',
+		'name'
+	);
+}

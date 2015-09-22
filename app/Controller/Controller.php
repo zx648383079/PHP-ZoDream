@@ -18,10 +18,10 @@ class Controller{
 		App::$data['lang'] = Lang::$language;
 	}
 	/**
-		* 在执行之前做规则验证
-		*
-		* @param string $request 方法名
-		*/
+	* 在执行之前做规则验证
+	*
+	* @param string $request 方法名
+	*/
 	function before($func)
 	{
 		if(isset($this->rules))
@@ -54,12 +54,12 @@ class Controller{
 	}
 
 	/**
-		* 验证数据
-		*
-		* @param $request array 要验证的数据
-		* @param $param array  验证的规则
-		* @return array
-		*/
+	* 验证数据
+	*
+	* @param $request array 要验证的数据
+	* @param $param array  验证的规则
+	* @return array
+	*/
 	function validata($request,$param)
 	{
 		$_vali = new Validation();
@@ -75,11 +75,11 @@ class Controller{
 	
 
 	/**
-		* 传递数据
-		*
-		* @param string|array $key 要传的数组或关键字
-		* @param string $value  要传的值
-		*/
+	* 传递数据
+	*
+	* @param string|array $key 要传的数组或关键字
+	* @param string $value  要传的值
+	*/
 	function send($key , $value = "")
 	{
 		if(empty($value))
@@ -98,11 +98,11 @@ class Controller{
 	
 
 	/**
-		* 加载视图
-		*
-		* @param string $name 视图的文件名
-		* @param array $data 要传的数据
-		*/
+	* 加载视图
+	*
+	* @param string $name 视图的文件名
+	* @param array $data 要传的数据
+	*/
 	function show($name = "index",$data = array())
 	{
 		if(!empty($data))
@@ -134,11 +134,11 @@ class Controller{
 	} 
 
 	/**
-		* 返回JSON数据
-		*
-		* @param $data 要传的值
-		* @param string $type 返回类型
-		*/
+	* 返回JSON数据
+	*
+	* @param $data 要传的值
+	* @param string $type 返回类型
+	*/
 	function ajaxJson($data,$type = 'JSON')
 	{
 		switch (strtoupper($type)){
@@ -165,13 +165,13 @@ class Controller{
 	}
 
 	/**
-		* 数组转XML
-		*
-		* @param array $data 要转的数组
-		* @param string $rootNodeName
-		* @param null $xml
-		* @return mixed
-		*/
+	* 数组转XML
+	*
+	* @param array $data 要转的数组
+	* @param string $rootNodeName
+	* @param null $xml
+	* @return mixed
+	*/
 	function xml_encode($data, $rootNodeName = 'data', $xml=null)
 	{
 		// turn off compatibility mode as simple xml throws a wobbly if you don't.
@@ -218,10 +218,10 @@ class Controller{
 	}
 
 	/**
-		* 显示图片
-		*
-		* @param $img
-		*/
+	* 显示图片
+	*
+	* @param $img
+	*/
 	function showImg($img)
 	{
 		header('Content-type:image/png');

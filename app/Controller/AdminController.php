@@ -5,17 +5,18 @@ use App\Lib\Auth;
 use App\Model\RolesModel;
 use App\Model\UserModel;
 
-class AdminController extends Controller{
+class AdminController extends Controller
+{
 
 	protected $rules = array(
-		'users' => '99',
-		'mysql' => '99',
+		'users' => '3',
+		'mysql' => '3',
 		'*' => '2'
 	);
 
 	/**
-		*后台首页
-		*/
+	*后台首页
+	*/
 	function index(){
 		//Auth::user()?"":redirect("/?c=auth");
 		$this->send('title','后台');
@@ -23,8 +24,8 @@ class AdminController extends Controller{
 	}
 
 	/**
-		*后台微信操作界面
-		*/
+	*后台微信操作界面
+	*/
 	function wechat()
 	{
 		$this->send('title','微信管理');

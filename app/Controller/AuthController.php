@@ -13,8 +13,8 @@ class AuthController extends Controller{
 	);
 
 	/**
-		*登陆界面
-		*/
+	*登陆界面
+	*/
 	function index(){
 		$post = $_POST;
 		if(!empty($post))
@@ -53,8 +53,8 @@ class AuthController extends Controller{
 	}
 
 	/**
-		*扫码登录界面
-		*/
+	*扫码登录界面
+	*/
 	function qrcode()
 	{
 		$this->send(array('title'=>'扫扫二维码','img'=>''));
@@ -62,8 +62,8 @@ class AuthController extends Controller{
 	}
 
 	/**
-		*执行登出操作
-		*/
+	*执行登出操作
+	*/
 	function logout()
 	{
 		App::session('user', '');
@@ -71,8 +71,8 @@ class AuthController extends Controller{
 	}
 
 	/**
-		*注册界面
-		*/
+	*注册界面
+	*/
 	function register()
 	{
 		$post = $_POST;
