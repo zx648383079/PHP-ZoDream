@@ -45,5 +45,8 @@ Temporary Items
 # Session dir
 tmp/
 
+# Config dir
+app/conf/
+
 # vscode
 typings/
