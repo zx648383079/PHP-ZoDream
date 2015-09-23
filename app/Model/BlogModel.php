@@ -1,13 +1,15 @@
 <?php 
 namespace App\Model;
 
-class MessageModel extends Model{
-	protected $table = "message";
+class BlogModel extends Model{
+	protected $table = "blog";
 	
 	protected $fillable = array(
-		'type',
+		'pid',
+		'title',
 		'content',
 		'user_id',
+		'udate',
 		'cdate'
 		);
 	

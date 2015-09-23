@@ -3,7 +3,7 @@ namespace App\Controller;
 
 use App\App;
 use App\Lib\File\FDir;
-use App\Model\QuoteModel;
+use App\Model\BlogModel;
 
 class HomeController extends Controller
 {
@@ -16,7 +16,13 @@ class HomeController extends Controller
 	
 	function blog()
 	{
-		
-		$this->show('blog');
+		$blogs = new BlogModel();
+		$data = $blogs->findList('','id,pid,title,udate');
+		$this->show('blog',
+			array(
+				'data' => $data,
+				'title' => '博客'
+			)
+		);
 	}
 } 

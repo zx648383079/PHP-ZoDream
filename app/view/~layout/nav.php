@@ -10,7 +10,7 @@ use App\Lib\Auth;
    </div>
   <ul>
     <li class="active"><a href="<?php App::url('/'); ?>">主页</a></li>
-    <li><a href="<?php App::url('?v=blog'); ?>">弹幕</a></li>
+    <li><a href="<?php App::url('?v=blog'); ?>">博客</a></li>
     <li><a href="new.html">动态</a></li>
    <?php if(App::role('2')){?>
     <li><a href="<?php App::url('?c=admin'); ?>">后台</a></li>

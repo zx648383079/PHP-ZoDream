@@ -24,6 +24,11 @@ abstract class Model extends DPdo{
 			$param=array_shift($param);
 		}
 		$arr = array_combine($this->fillable,$param);
+		
+		if(empty($arr['udate']))
+		{
+			$arr['udate'] = OTime::Now();
+		}
 		if(!isset($arr['cdate']) || empty($arr['cdate']))
 		{
 			$arr['cdate'] = OTime::Now();
