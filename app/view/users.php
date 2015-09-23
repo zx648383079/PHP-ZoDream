@@ -1,5 +1,6 @@
 <?php 
-use App\App;	
+use App\App;
+use App\Lib\Role\RComma;
 
 App::extend(array(
 	'~layout'=>array(
@@ -17,20 +18,27 @@ App::extend(array(
     <ul class="menu">
       <?php
 	  $id = App::ret('id');
+	  $roles = null;
 	  foreach (App::ret('users') as $value)
 	  {
-			echo '<li class="',( $id == $value['id'])?'active':null,'"><a href="?c=admin&v=users&id='.$value['id'].'">'.$value['name'].'</a></li>';
+		  $active = null;
+		  if( $id == $value['id'])
+		  {
+			  $active = 'active';
+			  $roles = $value['roles'];
+		  }
+			echo '<li class="',$active,'"><a href="?c=admin&v=users&id='.$value['id'].'">'.$value['name'].'</a></li>';
 		} ?>
     </ul>
   </div>
   
   <div class="long">
 	 <h3>权限</h3>
-    <form action="<?php App::url('?c=admin&v=users'); ?>" method="POST">
-		<input type="hidden" name="id" value="<?php App::ech('id'); ?>">
-      <?php foreach (App::ret('roles') as $value) 
+    <form action="<?php App::url('?c=admin&v=users&id='.$value['id']); ?>" method="POST">
+      <?php
+	  foreach (App::ret('roles') as $value) 
 		{
-			echo '<input type="checkbox" value="'.$value['id'].'">'.$value['name'].'<br>';
+			echo '<input type="checkbox" name="role[]" value="'.$value['id'].'" ',RComma::judge($value['id'],$roles)?'checked':'','>'.$value['name'].'<br>';
 		} 
 		?>
       <button>执行</button>

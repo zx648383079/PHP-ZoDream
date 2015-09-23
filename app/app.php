@@ -12,6 +12,7 @@ use App\Lib\Auth;
 use App\Lib\Object\OArray;
 use App\Lib\Helper\HUrl;
 use App\Lib\Web\WRequest;
+use App\Lib\Role\RComma;
 
 define('APP_URL', App::config('app.host')); 
 define('APP_API' , isset($_GET['api'])?TRUE:FALSE);    //是否是API模式
@@ -72,8 +73,7 @@ class App{
 		{
 			return empty($role);
 		}else{
-			$roles = explode(',', Auth::user()->role()->roles );
-			return in_array($role,$roles);
+			return RComma::judge($role,Auth::user()->role()->roles);
 		}
 	}
 	

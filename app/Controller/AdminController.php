@@ -5,6 +5,8 @@ use App\App;
 use App\Lib\Auth;
 use App\Model\RolesModel;
 use App\Model\UserModel;
+use App\Lib\Role\RComma;
+use App\Model\GroupModel;
 
 class AdminController extends Controller
 {
@@ -39,12 +41,35 @@ class AdminController extends Controller
 		$model = $roles->findList();
 		
 		$users = new UserModel();
-		$user = $users->findList("id <> ".Auth::user()->id,'id,name');
+		$id = App::$request->get('id');
+		
+		if( !empty($id) )
+		{
+			if( App::$request->isPost() )
+			{
+				$roles = RComma::compose(App::$request->post('role'));
+				$group = new GroupModel();
+				$group_id = $group->addRoles($roles);
+				$users -> update(
+					array(
+						'`group`' => $group_id
+					),
+					array(
+						'id = '.$id
+					)
+				);
+			}
+			$this->send('id', $id );
+		}
+		
+		
+		$user = $users->findWithRoles("u.id <> ".Auth::user()->id,'u.id AS id,u.name AS name,g.roles AS roles');
+		
+		
 		$this->show('users' ,array(
 			'roles' => $model,
 			'users' => $user,
-			'title' => '用户管理',
-			'id' => App::$request->get('id')
+			'title' => '用户管理'
 			));
 	}
 	

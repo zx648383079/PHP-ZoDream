@@ -9,11 +9,11 @@ interface IBase
 	* @param $role 需要的权限
 	* @param $roles 拥有的权限
 	*/
-	function judge($role , $roles);
+	static function judge($role , $roles);
 	
 	/**
 	* 合成
 	*
 	*/
-	function compose();
+	static function compose();
 }

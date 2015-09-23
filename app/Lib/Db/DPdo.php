@@ -109,9 +109,9 @@ class DPdo
         $_where = 'WHERE '.substr($_where, 0, -4);  
         foreach ($_updateData as $_key=>$_value) {  
             if (is_array($_value)) {  
-                $_setData .= "$_key=$_value[0],";  
+                $_setData .= "$_key = $_value[0],";  
             } else {  
-                $_setData .= "$_key='$_value',";  
+                $_setData .= "$_key = '$_value',";  
             }  
         }  
         $_setData = substr($_setData, 0, -1);  

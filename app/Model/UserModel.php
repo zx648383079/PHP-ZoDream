@@ -47,6 +47,21 @@ class UserModel extends Model{
 		return $result;
 	}
 	
+	public function findWithRoles( $where, $field )
+	{
+		$sql = array(
+			'select' => $field,
+			'from' => "{$this->table} u",
+			'left' => array(
+				'groups g',
+				'u.group = g.id'
+			),
+			'where' => $where
+		);
+		
+		return $this->findByHelper($sql);
+	}
+	
 	public function role()
 	{
 		return $this->hasOne('App\Model\GroupModel','group','id');
