@@ -16,17 +16,16 @@ class AuthController extends Controller{
 	*登陆界面
 	*/
 	function index(){
-		$post = $_POST;
-		if(!empty($post))
+		if( App::$request->isPost() )
 		{
-			$error = $this->validata($post,array(
+			$error = $this->validata(App::$request->post(),array(
 				'email' => 'email|required',
 				'pwd' => 'min:6|required'
 			));
 			if(is_bool($error))
 			{
 				$user = new UserModel();
-				$result = $user->findByUser($post['email'],$post['pwd']);
+				$result = $user->findByUser(App::$request->post('email,pwd'));
 				if(!is_bool($result))
 				{
 					App::session('user', $result );
@@ -48,7 +47,7 @@ class AuthController extends Controller{
 		
 		$this->show('login',array(
 			'title' => '登录',
-			'email' => isset($post['email'])?$post['email']:''
+			'email' => App::$request->post('email')
 		));
 	}
 
@@ -75,10 +74,9 @@ class AuthController extends Controller{
 	*/
 	function register()
 	{
-		$post = $_POST;
-		if(!empty($post))
+		if( App::$request->isPost() )
 		{
-			$error = $this->validata($post, array(
+			$error = $this->validata(App::$request->post(), array(
 				'name' => 'required',
 				'email' =>'unique:users|email|required',
 				'pwd' => 'confirm:cpwd|min:6|required'
@@ -91,17 +89,16 @@ class AuthController extends Controller{
 				));
 			}else{
 				$user = new UserModel();
-				$id = $user -> fillWeb($post['name'], $post['email'], $post['pwd']);
+				$id = $user -> fillWeb(App::$request->post('name,email,pwd'));
 				App::session('user', $id );
 				App::redirect('?c=home');
-				
 			}
 		}
 		
 		$this->show('register',array(
 			'title' => '注册',
-			'name' => isset($post['name'])?$post['name']:'',
-			'email' => isset($post['email'])?$post['email']:''
+			'name' => App::$request->post('name'),
+			'email' => App::$request->post('email')
 		));
 	}
 } 

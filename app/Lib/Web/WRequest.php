@@ -122,13 +122,21 @@ class WRequest implements IBase
 		
 		foreach ($names as $name) 
 		{
+			//使用方法 post:key default
+			
+			$temp = explode(' ' , $name , 2 );
+			$def = ( count($temp) == 1) ? $default : $temp[1];
+			
+			$temp = explode(':',$temp[0],2);
+			$key = ( count($temp) == 1 ) ? $name : $temp[1];
+			
 			if(isset($values[$name]))
 			{
-				$arr[$name] = $values[$name];
+				$arr[$key] = $values[$name];
 			} else
 			{
 				$this->error[] = $name;
-				$arr[$name] = $default;
+				$arr[$key] = $def;
 			}
 		}
 		

@@ -4,6 +4,7 @@
 *********************************/
 namespace App\Model;
 
+use App\Lib\Auth;
 use App\Lib\Db\DPdo;
 use App\Lib\Object\OTime;
 
@@ -24,6 +25,11 @@ abstract class Model extends DPdo{
 			$param=array_shift($param);
 		}
 		$arr = array_combine($this->fillable,$param);
+		
+		if(empty($arr['user_id']))
+		{
+			$arr['user_id'] = Auth::user()->id;
+		}
 		
 		if(empty($arr['udate']))
 		{

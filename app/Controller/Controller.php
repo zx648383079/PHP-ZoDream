@@ -114,7 +114,8 @@ class Controller{
 		{
 			$this->ajaxJson(App::$data);
 		}else{
-				if (extension_loaded('zlib')) { 
+			
+			if (extension_loaded('zlib')) { 
 				if (  !headers_sent() AND isset($_SERVER['HTTP_ACCEPT_ENCODING']) && 
 					strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE) 
 				//页面没有输出且浏览器可以接受GZIP的页面 

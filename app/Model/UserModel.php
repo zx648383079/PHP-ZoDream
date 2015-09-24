@@ -22,14 +22,10 @@ class UserModel extends Model{
 	/******
 	从网页注册
 	*/
-	public function fillWeb($name ,  $email, $pwd)
+	public function fillWeb( $data )
 	{
-		$arr = array();
-		$arr['email'] = $email;
-		$arr['name'] = $name;
-		$arr['pwd'] = $pwd;
-		$arr['udate'] = $arr['cdate'] = OTime::Now();
-		return $this->add($arr);
+		$data['udate'] = $data['cdate'] = OTime::Now();
+		return $this->add($data);
 	}
 	
 	public function findByEmail($email)
@@ -37,9 +33,9 @@ class UserModel extends Model{
 		return $this->findOne("email = '{$email}'");
 	}
 	
-	public function findByUser($email, $pwd)
+	public function findByUser($data)
 	{
-		$result = $this->findOne(array("email = '{$email}'","pwd = '{$pwd}'"));
+		$result = $this->findOne(array("email = '{$data['email']}'","pwd = '{$data['pwd']}'"));
 		if(is_object($result))
 		{
 			$result = $result->id;

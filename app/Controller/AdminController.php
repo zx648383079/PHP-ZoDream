@@ -7,6 +7,7 @@ use App\Model\RolesModel;
 use App\Model\UserModel;
 use App\Lib\Role\RComma;
 use App\Model\GroupModel;
+use App\Model\BlogModel;
 
 class AdminController extends Controller
 {
@@ -23,7 +24,7 @@ class AdminController extends Controller
 	function index(){
 		//Auth::user()?"":redirect("/?c=auth");
 		$this->send('title','后台');
-		$this->show('admin');
+		$this->show('admin.index');
 	}
 
 	/**
@@ -32,7 +33,23 @@ class AdminController extends Controller
 	function wechat()
 	{
 		$this->send('title','微信管理');
-		$this->show('wechat');
+		$this->show('admin.wechat');
+	}
+	
+	function blog()
+	{
+		if(App::$request->isPost())
+		{
+			$error = $this->validata(App::$request->post(),array(
+				'pid' => 'number|required',
+				'title' => 'required'
+			));
+			$blog = new BlogModel();
+			$blog -> fill(App::$request->post('pid 0,title,content'));
+		}
+		
+		$this->send('title','博客管理');
+		$this->show('admin.blog');
 	}
 	
 	function users()
@@ -66,7 +83,7 @@ class AdminController extends Controller
 		$user = $users->findWithRoles("u.id <> ".Auth::user()->id,'u.id AS id,u.name AS name,g.roles AS roles');
 		
 		
-		$this->show('users' ,array(
+		$this->show('admin.users' ,array(
 			'roles' => $model,
 			'users' => $user,
 			'title' => '用户管理'
@@ -87,7 +104,7 @@ class AdminController extends Controller
 			$model = $roles->execute($arr[1])->getList();
 		}
 		
-		$this->show('mysql',array(
+		$this->show('admin.mysql',array(
 			'model'=>$model,
 			'sql'=>$sql
 			));
@@ -95,6 +112,6 @@ class AdminController extends Controller
 	
 	function about()
 	{
-		$this->show('about');
+		$this->show('admin.about');
 	}
 }
