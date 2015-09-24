@@ -67,7 +67,7 @@ class AuthController extends Controller{
 	function logout()
 	{
 		App::session('user', '');
-		App::redirect('/?c=auth');
+		App::redirect('?c=auth');
 	}
 
 	/**

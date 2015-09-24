@@ -7,12 +7,12 @@ App::extend(array('~layout' => array('head','nav')));
 <div class="container">
 	<ul class="listbox">
 		<?php
-		
-		if(empty(App::ret('data')))
+		$data = App::ret('data');
+		if(empty($data))
 		{
 			echo "暂无数据！";
 		}else{
-			foreach (App::ret('data') as $value) {
+			foreach ($data as $value) {
 				echo "<li>{$value['title']}</li>";
 			}
 		}

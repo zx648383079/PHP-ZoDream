@@ -11,7 +11,7 @@ class HSql implements IBase
 	/********
 	SQL中的关键字数组
 	*********/
-	const SQL_KEYS=array(/*'show','alter','drop','create,'*/'select','update','set','delete','insert','from','values','left','right','inner','exec','where','and','or','group','having','order','asc','desc','limit');
+	private $sql_keys=array(/*'show','alter','drop','create,'*/'select','update','set','delete','insert','from','values','left','right','inner','exec','where','and','or','group','having','order','asc','desc','limit');
 	
 	private $prefix=NULL;
 	/**
@@ -39,7 +39,7 @@ class HSql implements IBase
 	{
 		if($sort)
 		{
-			$param=$this->sortarr($param,self::SQL_KEYS);
+			$param=$this->sortarr($param,$this->sql_keys);
 		}
 		
 		return $this->sqlCheck($param);
@@ -153,7 +153,7 @@ class HSql implements IBase
 				//把关键字转换成小写进行检测
 				$low=strtolower($key);
 				$lowkey=str_replace('`','',$low);                   //解决重关键字冲突关键
-				if(in_array($lowkey,self::SQL_KEYS,TRUE))
+				if(in_array($lowkey,$this->sql_keys,TRUE))
 				{
 					$space.=$this->sqlJoin($lowkey,$v);
 				}else{
@@ -174,7 +174,7 @@ class HSql implements IBase
 			}
 			
 		}else{
-			$unsafe=self::SQL_KEYS;
+			$unsafe=$this->sql_keys;
 			array_push($unsafe,';');                        //替换SQL关键字和其他非法字符，
 			$safe=$this->safeCheck($value,'\'',$unsafe,' ');
 			$safe=$this->safeCheck($value,'"',$unsafe,' ');
