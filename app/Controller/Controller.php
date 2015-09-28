@@ -6,7 +6,7 @@
 *******************************************************/
 namespace App\Controller;
 
-use App\App;
+use App;
 use App\Lib\Lang;
 use App\Lib\Validation;
 use App\Lib\Auth;
@@ -14,7 +14,7 @@ use App\Lib\Auth;
 class Controller{
 	function __construct()
 	{
-		App::$data = App::config('app');
+		App::$data = App::config('App');
 		App::$data['lang'] = Lang::$language;
 	}
 	/**

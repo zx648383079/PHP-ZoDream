@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\App;
+use App;
 use App\Lib\Auth;
 use App\Model\RolesModel;
 use App\Model\UserModel;

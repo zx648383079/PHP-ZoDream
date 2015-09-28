@@ -1,8 +1,8 @@
 <?php
 namespace App\Lib\File; 
- 
-use App\App;
-   
+
+use App;
+
 class FUpload implements IBase
 {
     private $savepath;          //上传文件保存的路径

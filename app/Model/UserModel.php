@@ -4,7 +4,6 @@
 *********************************/
 namespace App\Model;
 
-use App\App;
 use App\Lib\Object\OTime;
 
 class UserModel extends Model{

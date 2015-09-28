@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\App;
 use App\Lib\File\FDir;
 use App\Model\BlogModel;
 

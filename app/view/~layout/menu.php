@@ -1,7 +1,4 @@
 <?php 
-
-use App\App;
-
 ?>
 
 <div class="container">

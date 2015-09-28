@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\App;
+use App;
 use App\Model\UserModel;
 use App\Lib\ToList;
 
@@ -74,7 +74,7 @@ class AuthController extends Controller{
 	*/
 	function register()
 	{
-		if( App::$request->isPost() )
+		if(App::$request->isPost() )
 		{
 			$error = $this->validata(App::$request->post(), array(
 				'name' => 'required',

@@ -1,7 +1,7 @@
 <?php
 namespace App\Lib\Db;
 
-use App\App;
+use App;
 use App\Lib\Helper\HSql;
     
 class DPdo

@@ -1,5 +1,4 @@
 <?php 
-use App\App;
 use App\Lib\Role\RComma;
 
 App::extend(array(

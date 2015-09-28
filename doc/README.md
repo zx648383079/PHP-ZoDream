@@ -27,7 +27,7 @@
 
 	define('APP_DIR', dirname(__FILE__));
 	require_once(APP_DIR."/vendor/autoload.php");
-	App\App::main();
+	App::main();
 
 ```
 

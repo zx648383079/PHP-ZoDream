@@ -1,11 +1,10 @@
 <?php 
 namespace App\Lib\Helper;
 
-use App\App;
+use App;
 
 class HUrl implements IBase
 {
-	
 	public static function get()
 	{
 		$key = App::config('app.url');

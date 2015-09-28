@@ -1,12 +1,14 @@
 {
 	"require": {
-		"alchemy/zippy": "0.2.*",
-		"endroid/qrcode": "~1.5"
+		"alchemy/zippy": "0.2.*"
 	},
 	"autoload":{
 		"psr-4":{
 			"App\\":"app/"
-		}
+		},
+		"files":[
+			"app/app.php"
+		]
 	},
 	"authors": [{
             "name": "PHP WeChat",

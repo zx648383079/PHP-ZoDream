@@ -1,9 +1,8 @@
 <?php
 namespace App\Lib;
 
-use App\Main;
 //签名
-define ( 'TOKEN', Main::config('wechat.token'));
+define ( 'TOKEN', App::config('wechat.token'));
 
 /**************************************************
 *微信公众平台操作类

@@ -1,7 +1,4 @@
 <?php
-	
-use App\App;
-
 App::extend('~layout.head');
 ?>
 

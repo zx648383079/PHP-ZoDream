@@ -1,6 +1,4 @@
 <?php
-	
-use App\App;
 ?>
 
 <!DOCTYPE html>
