@@ -21,7 +21,7 @@ class AdminController extends Controller
 	/**
 	*后台首页
 	*/
-	function index(){
+	function indexAction(){
 		//Auth::user()?"":redirect("/?c=auth");
 		$this->send('title','后台');
 		$this->show('admin.index');
@@ -30,13 +30,13 @@ class AdminController extends Controller
 	/**
 	*后台微信操作界面
 	*/
-	function wechat()
+	function wechatAction()
 	{
 		$this->send('title','微信管理');
 		$this->show('admin.wechat');
 	}
 	
-	function blog()
+	function blogAction()
 	{
 		if(App::$request->isPost())
 		{
@@ -52,7 +52,7 @@ class AdminController extends Controller
 		$this->show('admin.blog');
 	}
 	
-	function users()
+	function usersAction()
 	{
 		$roles = new RolesModel();
 		$model = $roles->findList();
@@ -93,7 +93,7 @@ class AdminController extends Controller
 	/******
 	数据库语句执行页面
 	*/
-	function mysql()
+	function mysqlAction()
 	{
 		$sql = isset($_POST['sql'])?$_POST['sql']:'';
 		$arr = explode('@@',$sql,3);
@@ -110,7 +110,7 @@ class AdminController extends Controller
 			));
 	}
 	
-	function about()
+	function aboutAction()
 	{
 		$this->show('admin.about');
 	}

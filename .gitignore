@@ -48,5 +48,8 @@ tmp/
 # Config dir
 app/conf/
 
-# vscode
+# vscode dir
 typings/
+
+# composer dir
+vendor/

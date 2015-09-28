@@ -1,0 +1,20 @@
+.soForm{
+	line-height:200px;
+	text-align:center;
+}
+.soForm2 input{
+	width:60%;
+	margin-left: 10%;
+}
+ul.listbox li{
+	margin-bottom: 8px;
+}
+li.panel .body{
+	min-height: 50px;
+}
+
+@media (min-height:550px){
+.soForm{
+	line-height: 500px;
+}
+}

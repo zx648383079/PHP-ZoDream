@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e350fc200ca39931b3c66dd3059954bb",
+    "hash": "fbf3a3af02cc6d6787d0a14a9fa14a15",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -52,12 +52,63 @@
             "time": "2014-12-10 15:03:17"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "zodream/app",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zx648383079/ZoDream.git",
+                "reference": "b81ce6d9f533dcd9263baf6f8a03869767648b89"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zx648383079/ZoDream/zipball/b81ce6d9f533dcd9263baf6f8a03869767648b89",
+                "reference": "b81ce6d9f533dcd9263baf6f8a03869767648b89",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "App\\": ""
+                },
+                "files": [
+                    "app.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jason Zou",
+                    "email": "jason.zou@nwayschina.com",
+                    "homepage": "http://www.shys.cc",
+                    "role": "Developer"
+                }
+            ],
+            "description": "ZoDream PHP main program",
+            "homepage": "https://github.com/zx648383079/ZoDream",
+            "keywords": [
+                "log",
+                "logging"
+            ],
+            "time": "2015-09-28 04:34:31"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "zodream/app": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.3.0"
+    },
     "platform-dev": []
 }

@@ -1,17 +1,18 @@
 {
 	"require": {
+		"php": ">=5.3.0",
 		"alchemy/zippy": "0.2.*"
+	},
+	"require-dev": {
+		"zodream/app": "dev-master"
 	},
 	"autoload":{
 		"psr-4":{
 			"App\\":"app/"
-		},
-		"files":[
-			"app/app.php"
-		]
+		}
 	},
 	"authors": [{
-            "name": "PHP WeChat",
+            "name": "Jason Zou",
             "email": "jason.zou@nwayschina.com",
             "homepage": "http://nwayschina.com/",
             "role": "Developer"

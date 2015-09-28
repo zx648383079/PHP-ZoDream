@@ -9,23 +9,25 @@ class AuthController extends Controller{
 	
 	protected $rules = array(
 		'logout' => '1',
+		'register' => '!',
 		'*' => '?'
 	);
 
 	/**
 	*登陆界面
 	*/
-	function index(){
+	function indexAction(){
 		if( App::$request->isPost() )
 		{
-			$error = $this->validata(App::$request->post(),array(
+			$post = App::$request->post('email,pwd');
+			$error = $this->validata( $post , array(
 				'email' => 'email|required',
 				'pwd' => 'min:6|required'
 			));
 			if(is_bool($error))
 			{
 				$user = new UserModel();
-				$result = $user->findByUser(App::$request->post('email,pwd'));
+				$result = $user->findByUser( $post );
 				if(!is_bool($result))
 				{
 					App::session('user', $result );
@@ -54,7 +56,7 @@ class AuthController extends Controller{
 	/**
 	*扫码登录界面
 	*/
-	function qrcode()
+	function qrcodeAction()
 	{
 		$this->send(array('title'=>'扫扫二维码','img'=>''));
 		$this->show('qrcode');
@@ -63,7 +65,7 @@ class AuthController extends Controller{
 	/**
 	*执行登出操作
 	*/
-	function logout()
+	function logoutAction()
 	{
 		App::session('user', '');
 		App::redirect('/?c=auth');
@@ -72,11 +74,12 @@ class AuthController extends Controller{
 	/**
 	*注册界面
 	*/
-	function register()
+	function registerAction()
 	{
 		if(App::$request->isPost() )
 		{
-			$error = $this->validata(App::$request->post(), array(
+			$post = App::$request->post('name,email,pwd');
+			$error = $this->validata( $post , array(
 				'name' => 'required',
 				'email' =>'unique:users|email|required',
 				'pwd' => 'confirm:cpwd|min:6|required'
@@ -89,8 +92,8 @@ class AuthController extends Controller{
 				));
 			}else{
 				$user = new UserModel();
-				$id = $user -> fillWeb(App::$request->post('name,email,pwd'));
-				App::session('user', $id );
+				$id = $user -> fillWeb( $post );
+				App::session( 'user', $id );
 				App::redirect('?c=home');
 			}
 		}

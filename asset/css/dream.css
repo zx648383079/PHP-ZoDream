@@ -73,6 +73,8 @@
   margin: 0px;
   padding: 8px 0px;
   min-height: 300px;
+  position: static;
+  float: none;
 }
 
 .short{
@@ -559,6 +561,7 @@ to{
   min-height: 40px;
   margin-top: 10px;
   text-align: center;
+  clear: left;
 }
 
 @media (max-width:479px){
