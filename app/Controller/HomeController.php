@@ -57,6 +57,13 @@ class HomeController extends Controller
 	
 	function editAction()
 	{
-		
+		if( App::$request->isPost() )
+		{
+			
+		}else {
+			$this->show('create',array(
+				'title' => 'Edit Method'
+			));
+		}
 	}
 } 

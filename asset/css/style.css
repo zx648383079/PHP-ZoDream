@@ -2,6 +2,9 @@
 	line-height:200px;
 	text-align:center;
 }
+.soForm input{
+	width:60%;
+}
 .soForm2 input{
 	width:60%;
 	margin-left: 10%;
@@ -11,6 +14,28 @@ ul.listbox li{
 }
 li.panel .body{
 	min-height: 50px;
+}
+
+.img img{
+	width: 200px;
+	height: 200px;
+	float: left;
+	margin: 8px;
+	position: static;
+	z-index: 10;
+	transition: transform 1s;
+	-webkit-transition: transform 1s;
+	-o-transition: transform 1s;
+	-moz-transition: transform 1s;
+}
+
+.img img:hover{
+	transform: scale(1.5,1.5);
+	-ms-transform: scale(1.5,1.5);		/* IE 9 */
+	-webkit-transform: scale(1.5,1.5);	/* Safari and Chrome */
+	-o-transform: scale(1.5,1.5);		/* Opera */
+	-moz-transform: scale(1.5,1.5);		/* Firefox */
+	z-index: 20;
 }
 
 @media (min-height:550px){

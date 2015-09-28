@@ -7,14 +7,14 @@ use App\Model\RolesModel;
 use App\Model\UserModel;
 use App\Lib\Role\RComma;
 use App\Model\GroupModel;
-use App\Model\BlogModel;
+use App\Model\MethodModel;
 
 class AdminController extends Controller
 {
 
 	protected $rules = array(
 		'users' => '3',
-		'mysql' => '3',
+		'mysql' => '!',
 		'*' => '2'
 	);
 
@@ -22,23 +22,14 @@ class AdminController extends Controller
 	*后台首页
 	*/
 	function indexAction(){
-		//Auth::user()?"":redirect("/?c=auth");
 		$this->send('title','后台');
 		$this->show('admin.index');
 	}
-
-	/**
-	*后台微信操作界面
-	*/
-	function wechatAction()
-	{
-		$this->send('title','微信管理');
-		$this->show('admin.wechat');
-	}
 	
-	function blogAction()
+	function methodAction()
 	{
-		if(App::$request->isPost())
+		$id = App::$request->get('id');
+		if(!empty($id))
 		{
 			$error = $this->validata(App::$request->post(),array(
 				'pid' => 'number|required',
@@ -47,9 +38,14 @@ class AdminController extends Controller
 			$blog = new BlogModel();
 			$blog -> fill(App::$request->post('pid 0,title,content'));
 		}
-		
-		$this->send('title','博客管理');
-		$this->show('admin.blog');
+		$model = new MethodModel();
+		$data = $model->findList();
+		$this->show('admin.method',
+			array(
+				'data' => $data,
+				'title' => 'Method 管理'
+			)
+		);
 	}
 	
 	function usersAction()
