@@ -7,10 +7,10 @@ class MethodModel extends Model{
 	protected $fillable = array(
 		'title',
 		'keys',
+		'kind',
 		'content',
 		'user_id',
 		'udate',
 		'cdate'
-		);
-	
+	);
 }

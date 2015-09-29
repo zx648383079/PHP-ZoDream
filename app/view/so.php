@@ -17,22 +17,25 @@ App::extend(array('~layout' => array('head','nav')));
 	</div>
 	<div class="long">
 		<ul class="listbox">
-			<li class="panel">
-				<h2 class="head">
-				<a href="<?php App::url('?v=method'); ?>">关于</a>
-				</h2>
-				<div class="body">
-				就是这样的
-				</div>
-			</li>
-			<li class="panel">
-				<h2 class="head">
-				关于
-				</h2>
-				<div class="body">
-				就是这样的
-				</div>
-			</li>
+			<?php 
+				$data = App::ret('data');
+				if(empty($data))
+				{
+					echo '<li>暂无数据</li>';
+				}
+				else {
+					foreach ($data as $value) {
+						echo "<li class=\"panel\">
+								<h2 class=\"head\">
+								<a href=\"".App::url('?v=method&id='.$value['id'] , FALSE)."\">{$value['title']}</a>
+								</h2>
+								<div class=\"body\">
+								{$value['content']}
+								</div>
+							</li>";
+					}
+				}
+			?>
 		</ul>
 	</div>
 </div>

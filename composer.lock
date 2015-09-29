@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fbf3a3af02cc6d6787d0a14a9fa14a15",
+    "hash": "c9f4730f3e722efadf9605fc92b01dac",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -50,21 +50,19 @@
                 "zip"
             ],
             "time": "2014-12-10 15:03:17"
-        }
-    ],
-    "packages-dev": [
+        },
         {
-            "name": "zodream/app",
+            "name": "zodream/zodream",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zx648383079/ZoDream.git",
-                "reference": "b81ce6d9f533dcd9263baf6f8a03869767648b89"
+                "reference": "a258af7f69aa74c58a4d8dce4d63571949ac1503"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zx648383079/ZoDream/zipball/b81ce6d9f533dcd9263baf6f8a03869767648b89",
-                "reference": "b81ce6d9f533dcd9263baf6f8a03869767648b89",
+                "url": "https://api.github.com/repos/zx648383079/ZoDream/zipball/a258af7f69aa74c58a4d8dce4d63571949ac1503",
+                "reference": "a258af7f69aa74c58a4d8dce4d63571949ac1503",
                 "shasum": ""
             },
             "require": {
@@ -97,13 +95,14 @@
                 "log",
                 "logging"
             ],
-            "time": "2015-09-28 04:34:31"
+            "time": "2015-09-29 02:33:17"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "zodream/app": 20
+        "zodream/zodream": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

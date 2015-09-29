@@ -9,7 +9,7 @@ use App\Lib\Auth;
   <ul>
     <li class="active"><a href="<?php App::url('/'); ?>">主页</a></li>
     <li><a href="<?php App::url('?v=method'); ?>">方法</a></li>
-    <li><a href="">动态</a></li>
+    <li><a href="<?php App::url('?v=create'); ?>">提交</a></li>
    <?php if(App::role('2')){?>
     <li><a href="<?php App::url('?c=admin'); ?>">后台</a></li>
    <?php } ?>

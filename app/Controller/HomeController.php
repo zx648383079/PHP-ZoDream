@@ -46,10 +46,11 @@ class HomeController extends Controller
 	{
 		if( App::$request->isPost() )
 		{
-			$post = App::$request->post('title,keys,content');
+			$post = App::$request->post('title,keys,kind,content');
 			$error = $this->validata( $post , array(
 				'title' => 'max:40|required',
 				'keys' =>'max:40|required',
+				'kind' => 'number|required',
 				'content' => 'required'
 			));
 			
@@ -74,12 +75,33 @@ class HomeController extends Controller
 	
 	function editAction()
 	{
+		$id = App::$request->get('id', 1 );
 		if( App::$request->isPost() )
 		{
+			$post = App::$request->post('title,keys,kind,content');
+			$error = $this->validata( $post , array(
+				'title' => 'max:40|required',
+				'keys' =>'max:40|required',
+				'kind' => 'number|required',
+				'content' => 'required'
+			));
 			
+			if(!is_bool($error))
+			{
+				$this->send(array(
+					'error' => $error,
+					'data' => $post
+				));
+			}else{
+				$model -> update( $post , 'id = '.$id);
+				App::redirect('?v=method&id='.$id);
+			}
 		}else {
+			$model = new MethodModel();
+			$data = $model->findById($id);
 			$this->show('create',array(
-				'title' => 'Edit Method'
+				'title' => 'Create Method',
+				'data' => $data
 			));
 		}
 	}

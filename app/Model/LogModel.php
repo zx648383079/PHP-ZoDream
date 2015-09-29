@@ -12,5 +12,5 @@ class LogModel extends Model{
 		'ip',
 		'url',
 		'cdate'
-		);
+	);
 }

@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/zodream/app/app.php',
+    $vendorDir . '/zodream/zodream/app.php',
 );
