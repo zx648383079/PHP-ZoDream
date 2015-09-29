@@ -24,18 +24,23 @@ li.panel .body{
 	position: static;
 	z-index: 10;
 	transition: transform 1s;
-	-webkit-transition: transform 1s;
-	-o-transition: transform 1s;
-	-moz-transition: transform 1s;
+	-webkit-transition: -webkit-transform 1s;
+	-o-transition: -o-transform 1s;
+	-moz-transition: -moz-transform 1s;
 }
 
 .img img:hover{
+	z-index: 20;
 	transform: scale(1.5,1.5);
 	-ms-transform: scale(1.5,1.5);		/* IE 9 */
 	-webkit-transform: scale(1.5,1.5);	/* Safari and Chrome */
 	-o-transform: scale(1.5,1.5);		/* Opera */
 	-moz-transform: scale(1.5,1.5);		/* Firefox */
-	z-index: 20;
+}
+.method{
+	width: 80%;
+	margin: 0 auto;
+	min-height: 400px;
 }
 
 @media (min-height:550px){

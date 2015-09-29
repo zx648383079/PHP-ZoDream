@@ -13,9 +13,9 @@ jQuery(document).ready(function($){
 	$(".close").click(function() {
 		$('.shade').hide();
 		$('.window').hide();
-	})
+	});
 	$(".create").click(function() {
 		$('.shade').show();
 		$('.window').show();
-	})
-})
+	});
+});

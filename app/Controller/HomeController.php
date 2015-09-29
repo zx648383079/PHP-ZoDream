@@ -18,7 +18,7 @@ class HomeController extends Controller
 		}else{
 			$model = new MethodModel();
 			$data = $model->findList(array(
-				"keys like %{$s}%",
+				"`keys` like %{$s}%",
 				'or' => "title like %{$s}%"
 				));
 			$this->show('so', array(
@@ -46,7 +46,24 @@ class HomeController extends Controller
 	{
 		if( App::$request->isPost() )
 		{
+			$post = App::$request->post('title,keys,content');
+			$error = $this->validata( $post , array(
+				'title' => 'max:40|required',
+				'keys' =>'max:40|required',
+				'content' => 'required'
+			));
 			
+			if(!is_bool($error))
+			{
+				$this->send(array(
+					'error' => $error,
+					'data' => $post
+				));
+			}else{
+				$model = new MethodModel();
+				$id = $model -> fill( $post );
+				App::redirect('?v=method&id='.$id);
+			}
 		}else {
 			$this->show('create',array(
 				'title' => 'Create Method'
