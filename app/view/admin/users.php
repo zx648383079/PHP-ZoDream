@@ -18,7 +18,7 @@ App::extend(array(
       <?php
 	  $id = App::ret('id');
 	  $roles = null;
-	  foreach (App::ret('users') as $value)
+	  foreach (App::ret('users',array()) as $value)
 	  {
 		  $active = null;
 		  if( $id == $value['id'])
@@ -26,16 +26,16 @@ App::extend(array(
 			  $active = 'active';
 			  $roles = $value['roles'];
 		  }
-			echo '<li class="',$active,'"><a href="?c=admin&v=users&id='.$value['id'].'">'.$value['name'].'</a></li>';
-		} ?>
+		  echo '<li class="',$active,'"><a href="?c=admin&v=users&id='.$value['id'].'">'.$value['name'].'</a></li>';
+	  } ?>
     </ul>
   </div>
   
   <div class="long">
 	 <h3>权限</h3>
-    <form action="<?php App::url('?c=admin&v=users&id='.$value['id']); ?>" method="POST">
+    <form action="<?php App::url('?c=admin&v=users&id='.App::ret('id')); ?>" method="POST">
       <?php
-	  foreach (App::ret('roles') as $value) 
+	  foreach (App::ret('roles',array()) as $value) 
 		{
 			echo '<input type="checkbox" name="role[]" value="'.$value['id'].'" ',RComma::judge($value['id'],$roles)?'checked':'','>'.$value['name'].'<br>';
 		} 

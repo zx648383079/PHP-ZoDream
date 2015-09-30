@@ -29,16 +29,11 @@ class AdminController extends Controller
 	function methodAction()
 	{
 		$id = App::$request->get('id');
+		$model = new MethodModel();
 		if(!empty($id))
 		{
-			$error = $this->validata(App::$request->post(),array(
-				'pid' => 'number|required',
-				'title' => 'required'
-			));
-			$blog = new BlogModel();
-			$blog -> fill(App::$request->post('pid 0,title,content'));
+			$model->deleteById($id);
 		}
-		$model = new MethodModel();
 		$data = $model->findList();
 		$this->show('admin.method',
 			array(
@@ -78,7 +73,6 @@ class AdminController extends Controller
 		
 		$user = $users->findWithRoles("u.id <> ".Auth::user()->id,'u.id AS id,u.name AS name,g.roles AS roles');
 		
-		
 		$this->show('admin.users' ,array(
 			'roles' => $model,
 			'users' => $user,
@@ -101,6 +95,7 @@ class AdminController extends Controller
 		}
 		
 		$this->show('admin.mysql',array(
+			'title' => '数据库',
 			'model'=>$model,
 			'sql'=>$sql
 			));
@@ -108,6 +103,6 @@ class AdminController extends Controller
 	
 	function aboutAction()
 	{
-		$this->show('admin.about');
+		$this->show('admin.about',array('title' => '关于'));
 	}
 }

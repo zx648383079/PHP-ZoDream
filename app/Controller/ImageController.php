@@ -26,7 +26,7 @@ class ImageController extends Controller
 	/**
 	 * 生成二维码
 	 *
-	 * @throws \Endroid\QrCode\Exceptions\ImageFunctionUnknownException
+	 * @throws 
      */
 	function qrcodeAction()
 	{

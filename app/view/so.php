@@ -12,7 +12,11 @@ App::extend(array('~layout' => array('head','nav')));
 	<div class="short">
 		<ul class="menu">
 			<li class="active">全部</li>
-			<li>PHP</li>
+			<?php
+				foreach (App::ret('kind',array()) as $value) {
+					echo "<li>{$value['name']}</li>";
+				}
+			?>
 		</ul>
 	</div>
 	<div class="long">

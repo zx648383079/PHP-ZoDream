@@ -9,7 +9,6 @@ jQuery(document).ready(function($){
 			$(".short").removeClass("open");
 		}
 	});
-	
 	$(".close").click(function() {
 		$('.shade').hide();
 		$('.window').hide();

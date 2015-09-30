@@ -43,6 +43,13 @@ li.panel .body{
 	min-height: 400px;
 }
 
+.minText{
+	border: none !important;
+	border-bottom: 1px solid #c8c8c8 !important;
+	width: 10% !important;
+	display: none;
+}
+
 @media (min-height:550px){
 .soForm{
 	line-height: 500px;

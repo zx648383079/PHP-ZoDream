@@ -13,4 +13,9 @@ class MethodModel extends Model{
 		'udate',
 		'cdate'
 	);
+	
+	public function deleteById($id) 
+	{
+		return $this->delete("id = {$id}");
+	}
 }
