@@ -3,7 +3,7 @@ namespace App\Controller;
 
 use App;
 use App\Model\UserModel;
-use App\Lib\ToList;
+use App\Lib\Object\OArray;
 
 class AuthController extends Controller{
 	
@@ -31,6 +31,10 @@ class AuthController extends Controller{
 				if(!is_bool($result))
 				{
 					App::session('user', $result );
+					if(App::$request->post('remember') == 1)
+					{
+						App::cookie('token' , $user->setToken($result), time() + 315360000 );
+					}
 					App::redirect('?c=home');
 					exit;
 				}else{
@@ -39,12 +43,10 @@ class AuthController extends Controller{
 				));
 				}
 			}else{
-				$list = new ToList();
 				$this->send(array(
-					'error' => $list -> tostring($error,',')
+					'error' => OArray::tostring($error,',')
 				));
 			}
-			//
 		}
 		
 		$this->show('login',array(
@@ -67,6 +69,13 @@ class AuthController extends Controller{
 	*/
 	function logoutAction()
 	{
+		if(strlen(App::cookie('token') > 10 ))
+		{
+			App::cookie('token', 'no' , time() - 1 );
+			$id = App::session('user');
+			$user = new UserModel();
+			$user->clearToken($id);
+		}
 		App::session('user', '');
 		App::redirect('/?c=auth');
 	}

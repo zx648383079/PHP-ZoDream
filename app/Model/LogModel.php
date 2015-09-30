@@ -9,6 +9,8 @@ class LogModel extends Model{
 	protected $table = "logs";
 	
 	protected $fillable = array(
+		'name',
+		'data',
 		'ip',
 		'url',
 		'cdate'

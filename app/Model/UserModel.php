@@ -15,6 +15,7 @@ class UserModel extends Model{
 		'email',
 		'name',
 		'pwd',
+		'token',
 		'udate',
 		'cdate'
 	);
@@ -29,7 +30,28 @@ class UserModel extends Model{
 	
 	public function findByEmail($email)
 	{
-		return $this->findOne("email = '{$email}'");
+		return $this->findOne(array("email = '{$email}'"));
+	}
+	
+	public function findByToken($token)
+	{
+		$result = $this->findOne(array("token = '{$token}'"));
+		if(is_object($result))
+		{
+			$result = $result->id;
+		}
+		return $result;
+	}
+	
+	public function setToken($id)
+	{
+		$token = md5(microtime().$id);
+		$this->update(array('token' => $token),array("id = {$id}"));
+		return $token;
+	}
+	public function clearToken($id)
+	{
+		$this->update(array('token' => 'null'),array("id = {$id}"));
 	}
 	
 	public function findByUser($data)
