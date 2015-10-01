@@ -1,6 +1,12 @@
 <?php 
 /*********************************
 用户权限分组表
+create table zx_groups ( 
+	id int(11) not null AUTO_INCREMENT PRIMARY KEY, 
+	name varchar(40), 
+	roles varchar(255), 
+	cdate int(11) 
+)charset = utf8;
 *********************************/
 namespace App\Model;
 
