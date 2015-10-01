@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App;
 use App\Lib\File\FDir;
-use App\Model\BlogModel;
 
 class HomeController extends Controller
 {
@@ -14,15 +13,17 @@ class HomeController extends Controller
 		$this->show('index');
 	}
 	
-	function blogAction()
+	function aboutAction()
 	{
-		$blogs = new BlogModel();
-		$data = $blogs->findList('','id,pid,title,udate');
-		$this->show('blog',
-			array(
-				'data' => $data,
-				'title' => '博客'
-			)
-		);
+		$this->show('about',array(
+			'title' => '关于'
+		));
+	}
+	
+	function downloadAction()
+	{
+		$this->show('download',array(
+			'title' => '下载'
+		));
 	}
 } 

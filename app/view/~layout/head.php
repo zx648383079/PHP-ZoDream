@@ -12,7 +12,7 @@
 
 <title><?php App::ech('title');?></title>
 
-<?php App::jcs(App::$extra,'dream.css');?>
+<?php App::jcs(App::$extra,'dream.css','style.css');?>
 
 </head>
 <body>

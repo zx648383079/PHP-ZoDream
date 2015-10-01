@@ -1,6 +1,6 @@
 <?php
 	
-
+App::$data['title'] = '出错了！';
 App::extend('~layout.head');
 ?>
 

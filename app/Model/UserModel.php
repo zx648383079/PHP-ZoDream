@@ -1,17 +1,23 @@
 <?php 
 /*********************************
 用户表的连接
+create table zx_users ( 
+	id int(11) not null AUTO_INCREMENT PRIMARY KEY, 
+	email varchar(100) not null UNIQUE,
+	name varchar(20) not null UNIQUE,
+	pwd varchar(32),
+	token varchar(32),
+	udate int(11),
+	cdate int(11) 
+)charset = utf8;
 *********************************/
 namespace App\Model;
-
 use App\Lib\Object\OTime;
-
 class UserModel extends Model{
 	protected $table = "users";
 	
 	
 	protected $fillable = array(
-		'openid',
 		'email',
 		'name',
 		'pwd',

@@ -1,10 +1,8 @@
 <?php
 namespace App\Controller;
-
 use App;
 use App\Model\UserModel;
 use App\Lib\Object\OArray;
-
 class AuthController extends Controller{
 	
 	protected $rules = array(
@@ -12,7 +10,6 @@ class AuthController extends Controller{
 		'register' => '!',
 		'*' => '?'
 	);
-
 	/**
 	*登陆界面
 	*/
@@ -54,7 +51,6 @@ class AuthController extends Controller{
 			'email' => App::$request->post('email')
 		));
 	}
-
 	/**
 	*扫码登录界面
 	*/
@@ -63,23 +59,18 @@ class AuthController extends Controller{
 		$this->send(array('title'=>'扫扫二维码','img'=>''));
 		$this->show('qrcode');
 	}
-
 	/**
 	*执行登出操作
 	*/
 	function logoutAction()
 	{
-		if(strlen(App::cookie('token') > 10 ))
-		{
-			App::cookie('token', 'no' , time() - 1 );
-			$id = App::session('user');
-			$user = new UserModel();
-			$user->clearToken($id);
-		}
+		App::cookie('token', null);
+		$id = App::session('user');
+		$user = new UserModel();
+		$user->clearToken($id);
 		App::session('user', '');
 		App::redirect('/?c=auth');
 	}
-
 	/**
 	*注册界面
 	*/
@@ -113,4 +104,4 @@ class AuthController extends Controller{
 			'email' => App::$request->post('email')
 		));
 	}
-} 
+}

@@ -8,9 +8,10 @@ use App\Lib\Auth;
     ZoDream
    </div>
   <ul>
-    <li class="active"><a href="<?php App::url('/'); ?>">主页</a></li>
-    <li><a href="<?php App::url('?v=blog'); ?>">博客</a></li>
-    <li><a href="<?php App::url('?c=new'); ?>">动态</a></li>
+    <li class="active"><a href="<?php App::url('/'); ?>">首页</a></li>
+    <li><a href="<?php App::url('?v=about'); ?>">关于</a></li>
+    <li><a href="<?php App::url('?v=download'); ?>">下载</a></li>
+    <li><a href="<?php App::url('?c=doc'); ?>">文档</a></li>
    <?php if(App::role('2')){?>
     <li><a href="<?php App::url('?c=admin'); ?>">后台</a></li>
    <?php } ?>
