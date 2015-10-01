@@ -46,7 +46,10 @@ Temporary Items
 tmp/
 
 # Config dir
-app/conf/
+app/config/
 
 # vscode
 typings/
+
+# composer
+vendor/

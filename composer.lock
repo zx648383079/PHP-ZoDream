@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cb7003e5f1db679fb938d4abd572e175",
+    "hash": "c9f4730f3e722efadf9605fc92b01dac",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -20,12 +20,10 @@
                 "reference": "16285231eb37587c6c32b86fa483c35853cd7515",
                 "shasum": ""
             },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.2.x-dev"
-                }
+            "suggest": {
+                "ext-zip": "To use the ZipExtensionAdapter"
             },
+            "type": "library",
             "autoload": {
                 "psr-0": {
                     "Alchemy": "src"
@@ -52,36 +50,30 @@
             "time": "2014-12-10 15:03:17"
         },
         {
-            "name": "endroid/qrcode",
-            "version": "1.5.4",
+            "name": "zodream/zodream",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/endroid/QrCode.git",
-                "reference": "89dbd7418715f48056da2948fba00f728b56afc3"
+                "url": "https://github.com/zx648383079/zodream.git",
+                "reference": "5263ae8e1a087a49e1f62c836eb514939d488dd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/QrCode/zipball/89dbd7418715f48056da2948fba00f728b56afc3",
-                "reference": "89dbd7418715f48056da2948fba00f728b56afc3",
+                "url": "https://api.github.com/repos/zx648383079/zodream/zipball/5263ae8e1a087a49e1f62c836eb514939d488dd5",
+                "reference": "5263ae8e1a087a49e1f62c836eb514939d488dd5",
                 "shasum": ""
             },
             "require": {
-                "ext-gd": "*",
                 "php": ">=5.3.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "Endroid\\QrCode\\": [
-                        "src/",
-                        "tests/"
-                    ]
-                }
+                    "App\\": ""
+                },
+                "files": [
+                    "app.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -89,28 +81,31 @@
             ],
             "authors": [
                 {
-                    "name": "Jeroen van den Enden",
-                    "email": "info@endroid.nl",
-                    "homepage": "http://endroid.nl/"
+                    "name": "Jason Zou",
+                    "email": "jason.zou@nwayschina.com",
+                    "homepage": "http://www.shys.cc",
+                    "role": "Developer"
                 }
             ],
-            "description": "Endroid QR Code",
-            "homepage": "https://github.com/endroid/QrCode",
+            "description": "ZoDream PHP main program",
+            "homepage": "https://github.com/zx648383079/ZoDream",
             "keywords": [
-                "code",
-                "endroid",
-                "qr",
-                "qrcode"
+                "log",
+                "logging"
             ],
-            "time": "2015-07-04 19:44:13"
+            "time": "2015-09-30 09:23:12"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "zodream/zodream": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.3.0"
+    },
     "platform-dev": []
 }
