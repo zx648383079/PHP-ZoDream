@@ -1,6 +1,5 @@
 <?php
 	
-use App\App;	
 use App\Lib\Auth;
 ?>
 

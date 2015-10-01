@@ -4,7 +4,6 @@
 *********************************/
 namespace App\Model;
 
-use App\App;
 use App\Lib\Object\OTime;
 
 class UserModel extends Model{
@@ -16,30 +15,48 @@ class UserModel extends Model{
 		'email',
 		'name',
 		'pwd',
+		'token',
 		'udate',
 		'cdate'
 	);
 	/******
 	从网页注册
 	*/
-	public function fillWeb($name ,  $email, $pwd)
+	public function fillWeb( $data )
 	{
-		$arr = array();
-		$arr['email'] = $email;
-		$arr['name'] = $name;
-		$arr['pwd'] = $pwd;
-		$arr['udate'] = $arr['cdate'] = OTime::Now();
-		return $this->add($arr);
+		$data['udate'] = $data['cdate'] = OTime::Now();
+		return $this->add($data);
 	}
 	
 	public function findByEmail($email)
 	{
-		return $this->findOne("email = '{$email}'");
+		return $this->findOne(array("email = '{$email}'"));
 	}
 	
-	public function findByUser($email, $pwd)
+	public function findByToken($token)
 	{
-		$result = $this->findOne(array("email = '{$email}'","pwd = '{$pwd}'"));
+		$result = $this->findOne(array("token = '{$token}'"));
+		if(is_object($result))
+		{
+			$result = $result->id;
+		}
+		return $result;
+	}
+	
+	public function setToken($id)
+	{
+		$token = md5(microtime().$id);
+		$this->update(array('token' => $token),array("id = {$id}"));
+		return $token;
+	}
+	public function clearToken($id)
+	{
+		$this->update(array('token' => 'null'),array("id = {$id}"));
+	}
+	
+	public function findByUser($data)
+	{
+		$result = $this->findOne(array("email = '{$data['email']}'","pwd = '{$data['pwd']}'"));
 		if(is_object($result))
 		{
 			$result = $result->id;

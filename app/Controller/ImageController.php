@@ -7,7 +7,7 @@ use App\Lib\QRcodeImg;
 class ImageController extends Controller
 {
 	
-	function index()
+	function indexAction()
 	{
 		die(_('这里是生成的图片库。'));
 	}
@@ -15,7 +15,7 @@ class ImageController extends Controller
 	/**
 	 *生成验证码
      */
-	function verify()
+	function verifyAction()
 	{
 		$verify = new Verify();
 		$img = $verify->render();
@@ -28,7 +28,7 @@ class ImageController extends Controller
 	 *
 	 * @throws \Endroid\QrCode\Exceptions\ImageFunctionUnknownException
      */
-	function qrcode()
+	function qrcodeAction()
 	{
 		$img = QRcodeImg::show('wojiuzheyan');
 		

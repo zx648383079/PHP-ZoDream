@@ -73,6 +73,8 @@
   margin: 0px;
   padding: 8px 0px;
   min-height: 300px;
+  position: static;
+  float: none;
 }
 
 .short{
@@ -215,11 +217,11 @@ textarea {
   min-width: 180px;
 }
 
-textarea:hover,input[type]:hover{
+textarea:hover,input[type]:hover,select:hover,option:hover{
   border-color: #767676;
 }
 
-textarea:focus,input[type]:focus{
+textarea:focus,input[type]:focus,select:focus,option:focus{
   border-color: #0078d7;
 }
 
@@ -266,12 +268,12 @@ a:active {
 
 .center{
   max-width: 400px;
-  padding: 0 20px 0;
+  padding: 100px 20px;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
-input[type="text"],input[type="email"],input[type="password"]{
+input[type="text"],input[type="email"],input[type="password"],select{
   width: 360px;
   height: 32px;
   font-size: 12px;
@@ -279,6 +281,13 @@ input[type="text"],input[type="email"],input[type="password"]{
   border: 1px solid #c8c8c8;
   padding: 6px 10px 8px 10px;
   box-sizing: border-box;
+}
+
+option{
+  font-size: 20px;
+  color: #333;
+  height: 32px;
+  padding-left: 10px;
 }
 
 .panel{
@@ -505,11 +514,54 @@ to{
   border-radius: 40px;
 }
 
+.shade{
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f4f4f4;
+  opacity: 0.5;
+  display: none;
+}
+
+.window{
+  z-index: 10000;
+  position: fixed;
+  top:100px;
+  width: 61.8%;
+  left: 19.1%;
+  min-height: 400px;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px #666;
+  display: none;
+}
+
+.window .head{
+  border-bottom: 1px solid #333;
+  line-height: 40px;
+  text-align: center;
+}
+
+.window .body{
+  margin: 8px;
+  min-height: 300px;
+  overflow-y: auto;
+}
+
+.window .foot{
+  border-top: 1px solid #333;
+  line-height: 40px;
+  text-align: right;
+}
+
 .footer{
   background-color: #f4f4f4;
   min-height: 40px;
   margin-top: 10px;
   text-align: center;
+  clear: left;
 }
 
 @media (max-width:479px){

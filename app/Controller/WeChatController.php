@@ -6,7 +6,7 @@ use App\Model\WechatModel;
 
 class WechatController extends Controller
 {
-	function index()
+	function indexAction()
 	{
 		//Wechat::valid();
 		$content = '你好啊';

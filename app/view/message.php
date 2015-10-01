@@ -1,5 +1,4 @@
 <?php 
-use App\App;	
 
 App::extend(array(
 	'~layout'=>array(

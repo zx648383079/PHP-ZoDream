@@ -1,20 +1,20 @@
 <?php
 namespace App\Controller;
 
-use App\App;
+use App;
 use App\Lib\File\FDir;
 use App\Model\BlogModel;
 
 class HomeController extends Controller
 {
-	function index()
+	function indexAction()
 	{
 		
 		$this->send('title','主页');
 		$this->show('index');
 	}
 	
-	function blog()
+	function blogAction()
 	{
 		$blogs = new BlogModel();
 		$data = $blogs->findList('','id,pid,title,udate');

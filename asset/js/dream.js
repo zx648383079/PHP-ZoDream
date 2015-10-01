@@ -8,5 +8,13 @@ jQuery(document).ready(function($){
 			$(".nav ul").attr("class","");
 			$(".short").removeClass("open");
 		}
-	})
-})
+	});
+	$(".close").click(function() {
+		$('.shade').hide();
+		$('.window').hide();
+	});
+	$(".create").click(function() {
+		$('.shade').show();
+		$('.window').show();
+	});
+});

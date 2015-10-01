@@ -1,6 +1,6 @@
 <?php 
 
-use App\App;
+use App;
 
 ?>
 

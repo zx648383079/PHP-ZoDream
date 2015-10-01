@@ -1,35 +1,40 @@
 <?php
 namespace App\Controller;
 
-use App\App;
+use App;
 use App\Model\UserModel;
-use App\Lib\ToList;
+use App\Lib\Object\OArray;
 
 class AuthController extends Controller{
 	
 	protected $rules = array(
 		'logout' => '1',
+		'register' => '!',
 		'*' => '?'
 	);
 
 	/**
 	*登陆界面
 	*/
-	function index(){
-		$post = $_POST;
-		if(!empty($post))
+	function indexAction(){
+		if( App::$request->isPost() )
 		{
-			$error = $this->validata($post,array(
+			$post = App::$request->post('email,pwd');
+			$error = $this->validata( $post , array(
 				'email' => 'email|required',
 				'pwd' => 'min:6|required'
 			));
 			if(is_bool($error))
 			{
 				$user = new UserModel();
-				$result = $user->findByUser($post['email'],$post['pwd']);
+				$result = $user->findByUser( $post );
 				if(!is_bool($result))
 				{
 					App::session('user', $result );
+					if(App::$request->post('remember') == 1)
+					{
+						App::cookie('token' , $user->setToken($result), time() + 315360000 );
+					}
 					App::redirect('?c=home');
 					exit;
 				}else{
@@ -38,24 +43,22 @@ class AuthController extends Controller{
 				));
 				}
 			}else{
-				$list = new ToList();
 				$this->send(array(
-					'error' => $list -> tostring($error,',')
+					'error' => OArray::tostring($error,',')
 				));
 			}
-			//
 		}
 		
 		$this->show('login',array(
 			'title' => '登录',
-			'email' => isset($post['email'])?$post['email']:''
+			'email' => App::$request->post('email')
 		));
 	}
 
 	/**
 	*扫码登录界面
 	*/
-	function qrcode()
+	function qrcodeAction()
 	{
 		$this->send(array('title'=>'扫扫二维码','img'=>''));
 		$this->show('qrcode');
@@ -64,21 +67,28 @@ class AuthController extends Controller{
 	/**
 	*执行登出操作
 	*/
-	function logout()
+	function logoutAction()
 	{
+		if(strlen(App::cookie('token') > 10 ))
+		{
+			App::cookie('token', 'no' , time() - 1 );
+			$id = App::session('user');
+			$user = new UserModel();
+			$user->clearToken($id);
+		}
 		App::session('user', '');
-		App::redirect('?c=auth');
+		App::redirect('/?c=auth');
 	}
 
 	/**
 	*注册界面
 	*/
-	function register()
+	function registerAction()
 	{
-		$post = $_POST;
-		if(!empty($post))
+		if(App::$request->isPost() )
 		{
-			$error = $this->validata($post, array(
+			$post = App::$request->post('name,email,pwd');
+			$error = $this->validata( $post , array(
 				'name' => 'required',
 				'email' =>'unique:users|email|required',
 				'pwd' => 'confirm:cpwd|min:6|required'
@@ -91,17 +101,16 @@ class AuthController extends Controller{
 				));
 			}else{
 				$user = new UserModel();
-				$id = $user -> fillWeb($post['name'], $post['email'], $post['pwd']);
-				App::session('user', $id );
+				$id = $user -> fillWeb( $post );
+				App::session( 'user', $id );
 				App::redirect('?c=home');
-				
 			}
 		}
 		
 		$this->show('register',array(
 			'title' => '注册',
-			'name' => isset($post['name'])?$post['name']:'',
-			'email' => isset($post['email'])?$post['email']:''
+			'name' => App::$request->post('name'),
+			'email' => App::$request->post('email')
 		));
 	}
 } 
