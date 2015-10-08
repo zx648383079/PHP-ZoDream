@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
-	
+
+use App;	
 use App\Lib\Verify;
 use App\Lib\QRcodeImg;
 	
@@ -18,9 +19,9 @@ class ImageController extends Controller
 	function verifyAction()
 	{
 		$verify = new Verify();
-		$img = $verify->render();
+		$img = $verify();
 		$this->showImg($img);
-		$_SESSION['verify'] = $verify->code;
+		App::session('verify' , $verify->code );
 	}
 
 	/**
@@ -30,8 +31,7 @@ class ImageController extends Controller
      */
 	function qrcodeAction()
 	{
-		$img = QRcodeImg::show('wojiuzheyan');
-		
+		$img = QRcodeImg::show('wojiuzheyan',APP_DIR.'/asset/img/favicon.png');
 		$this->showImg($img);
 	}
 }
