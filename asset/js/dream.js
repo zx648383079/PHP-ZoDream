@@ -17,4 +17,12 @@ jQuery(document).ready(function($){
 		$('.shade').show();
 		$('.window').show();
 	});
+	$("#kind").change(function() {
+		var val = $(this).children('option:selected').val();
+		if(val == 1000) {
+			$(".minText").show();
+		}else {
+			$(".minText").hide();
+		}
+	});
 });

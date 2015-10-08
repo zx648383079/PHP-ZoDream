@@ -35,9 +35,9 @@ class HomeController extends Controller
 	
 	function methodAction()
 	{
-		$id = App::$request->get('id');
+		$id = App::$request->get('id',1);
 		$model = new MethodModel();
-		$data = $model->findList('id = '.$id);
+		$data = $model->findById($id);
 		$this->show('method',
 			array(
 				'data' => $data,
@@ -48,6 +48,7 @@ class HomeController extends Controller
 	
 	function createAction()
 	{
+		$kind = new KindModel();
 		if( App::$request->isPost() )
 		{
 			$post = App::$request->post('title,keys,kind,content');
@@ -67,9 +68,7 @@ class HomeController extends Controller
 			}else{
 				if( $post['kind'] == 1000 && !empty($name = App::$request->post('other') ))
 				{
-					$model = new KindModel();
-					$post['kind'] = $model -> fill(array('name' => $name ) );
-					
+					$post['kind'] = $kind -> fill(array('name' => $name ) );
 				}
 				
 				if($post['kind'] != 1000)
@@ -80,7 +79,6 @@ class HomeController extends Controller
 				}
 			}
 		}else {
-			$kind = new KindModel();
 			$kinds = $kind->findList('','id,name');
 			$this->show('create',array(
 				'title' => 'Create Method',

@@ -19,7 +19,7 @@ App::extend(array(
 	?>
 		<option value="1000">其它</option>
 	</select>
-	<input type="text" name="other" class="minText"/>
+	<input type="text" name="other" class="minText" placeholder="其他"/>
 	<br>
 	<textarea name="content" placeholder="Method" rows="20" required><?php App::ech('data.content');?></textarea>
 	<p class="fail"><?php App::ech('error'); ?></p>

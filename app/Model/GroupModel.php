@@ -18,7 +18,8 @@ class GroupModel extends Model{
 	protected $fillable = array(
 		'id',
 		'name',
-		'roles'
+		'roles',
+		'cdate'
 	);
 	
 	public function addRoles($roles)

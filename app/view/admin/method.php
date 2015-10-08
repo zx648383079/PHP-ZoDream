@@ -13,11 +13,12 @@ App::extend(array(
 	<button class="create">发表</button>
 	<ul class="listbox">
 		<?php
-		if(empty(App::ret('data')))
+		$data = App::ret('data');
+		if(empty($data))
 		{
 			echo "暂无数据！";
 		}else{
-			foreach (App::ret('data') as $value) {
+			foreach ($data as $value) {
 				echo "<li>{$value['title']}</li>";
 			}
 		}
