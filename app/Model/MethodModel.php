@@ -30,4 +30,29 @@ class MethodModel extends Model{
 	{
 		return $this->delete("id = {$id}");
 	}
+	
+	public function findByKey( $key , $kind = null)
+	{
+		$where = array(
+			"(m.title like '%$key%'",
+			'or' => "m.keys like '%$key%')"
+		);
+		if( !empty($kind) ) 
+		{
+			$where[] = "m.kind = $kind";
+		}
+		
+		$sql = array(
+			'select' => 'm.id as id,m.title as title,m.keys as `keys`,m.content as content,k.name as kind,m.cdate as cdate,m.udate as udate',
+			'from' => "{$this->table} m",
+			'left' => array(
+				'kind k',
+				'm.kind = k.id'
+			),
+			'where' => $where,
+			'order' => 'm.udate desc'
+		);
+		
+		return $this->findByHelper($sql);
+	}
 }

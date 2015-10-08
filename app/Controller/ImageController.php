@@ -19,7 +19,7 @@ class ImageController extends Controller
 	function verifyAction()
 	{
 		$verify = new Verify();
-		$img = $verify();
+		$img = $verify->render();
 		$this->showImg($img);
 		App::session('verify' , $verify->code );
 	}

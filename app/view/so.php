@@ -1,20 +1,21 @@
 <?php 
 App::extend(array('~layout' => array('head','nav')));
+$s = App::ret('s');
 ?>
 
 <div class="soForm2">
 	<form>
-		<input type="text" name="s" value="<?php App::ech('s'); ?>">
+		<input type="text" name="s" value="<?php echo $s; ?>">
 		<button type="submit">搜索</button>
 	</form>
 </div>
 <div class="container">
 	<div class="short">
 		<ul class="menu">
-			<li class="active">全部</li>
+			<li class="active"><a href="<?php App::url("?s=$s");?>">全部</a></li>
 			<?php
 				foreach (App::ret('kind',array()) as $value) {
-					echo "<li>{$value['name']}</li>";
+					echo "<li><a href=\"".App::url("?s=$s&kind={$value['id']}",FALSE)."\">{$value['name']}</a></li>";
 				}
 			?>
 		</ul>

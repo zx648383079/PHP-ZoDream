@@ -20,10 +20,7 @@ class HomeController extends Controller
 			$kind = new KindModel();
 			$kinds = $kind->findList('','id,name');
 			$model = new MethodModel();
-			$data = $model->findList(array(
-				"`keys` like %{$s}%",
-				'or' => "title like %{$s}%"
-				));
+			$data = $model->findByKey( $s, App::$request->get('kind'));
 			$this->show('so', array(
 					's' => $s,
 					'data' => $data,
@@ -90,6 +87,7 @@ class HomeController extends Controller
 	function editAction()
 	{
 		$id = App::$request->get('id', 1 );
+		$model = new MethodModel();
 		if( App::$request->isPost() )
 		{
 			$post = App::$request->post('title,keys,kind,content');
@@ -111,7 +109,6 @@ class HomeController extends Controller
 				App::redirect('?v=method&id='.$id);
 			}
 		}else {
-			$model = new MethodModel();
 			$data = $model->findById($id);
 			$kind = new KindModel();
 			$kinds = $kind->findList('','id,name');
