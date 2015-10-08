@@ -8,7 +8,7 @@ App::extend(array('~layout' => array('head','nav')));
     <h2 class="head">
       <?php 
       $data = App::ret('data');
-      echo $data->title;
+      echo '<span class="no">',$data->id,'</span>',$data->title;
       ?>
     </h2>
     <div class="body">
