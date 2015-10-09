@@ -69,9 +69,9 @@ class AuthController extends Controller{
 	*/
 	function logoutAction()
 	{
-		if(strlen(App::cookie('token') > 10 ))
+		if(strlen(App::cookie('token')) > 10 )
 		{
-			App::cookie('token', 'no' , time() - 1 );
+			App::cookie('token', 'no' , time() - 3600 );
 			$id = App::session('user');
 			$user = new UserModel();
 			$user->clearToken($id);
