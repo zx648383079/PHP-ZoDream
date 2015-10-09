@@ -20,13 +20,10 @@ class HomeController extends Controller
 			$kind = new KindModel();
 			$kinds = $kind->findList('','id,name');
 			$model = new MethodModel();
-			$data = $model->findByKey( $s, App::$request->get('kind'));
-			$this->show('so', array(
-					's' => $s,
-					'data' => $data,
-					'kind' => $kinds
-				)
-			);			
+			$data = $model->findByKey( $s, App::$request->get('kind') , App::$request->get('page' , 0 ),5);
+			$data['s'] = $s;
+			$data['kind'] = $kinds;
+			$this->show('so', $data );			
 		}
 	}
 	

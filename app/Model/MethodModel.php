@@ -31,7 +31,7 @@ class MethodModel extends Model{
 		return $this->delete("id = {$id}");
 	}
 	
-	public function findByKey( $key , $kind = null)
+	public function findByKey( $key , $kind = null , $start = 0 , $max = 20)
 	{
 		$where = array(
 			"(m.title like '%$key%'",
@@ -43,7 +43,7 @@ class MethodModel extends Model{
 		}
 		
 		$sql = array(
-			'select' => 'm.id as id,m.title as title,m.keys as `keys`,m.content as content,k.name as kind,m.cdate as cdate,m.udate as udate',
+			'select' => 'count(*) as total',
 			'from' => "{$this->table} m",
 			'left' => array(
 				'kind k',
@@ -52,7 +52,23 @@ class MethodModel extends Model{
 			'where' => $where,
 			'order' => 'm.udate desc'
 		);
-		
-		return $this->findByHelper($sql);
+		$data = $this->findByHelper($sql);	
+		if(! empty($data))
+		{
+			$data = $data[0];
+			$data['max'] = $max;
+			$data['index'] = $start = $start > $data['total'] ? $data['total'] : $start;
+			$sql['select'] = 'm.id as id,m.title as title,m.keys as `keys`,m.content as content,k.name as kind,m.cdate as cdate,m.udate as udate';	
+			$sql['limit'] = $start.','.$max;
+			$data['data'] = $this->findByHelper($sql);
+		}else{
+			$data = array(
+				'total' => 0,
+				'max' => $max,
+				'index' => 0,
+				'data' => ''
+			);
+		}
+		return $data;
 	}
 }

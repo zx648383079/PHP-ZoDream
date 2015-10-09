@@ -1,4 +1,6 @@
 <?php 
+
+use App\Lib\Html\HPager;
 App::extend(array('~layout' => array('head','nav')));
 $s = App::ret('s');
 ?>
@@ -42,6 +44,7 @@ $s = App::ret('s');
 				}
 			?>
 		</ul>
+		<?php HPager::make( array('index'=> App::ret('index') ,'total'=> App::ret('total') ,'max'=> App::ret('max') )); ?>		
 	</div>
 </div>
 
