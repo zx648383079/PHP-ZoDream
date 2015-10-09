@@ -7,3 +7,8 @@ function expl($name)
 expl('hhh');
 expl('aa/aa');
 expl('bb/nn/cc/dd');
+
+function memo($arr,$arr2)
+{
+	var_dump(array_merge($arr,$arr2));
+}
