@@ -2,9 +2,7 @@
 namespace App\Controller;
 
 use App;
-use App\Lib\File\FDir;
-use App\Model\MethodModel;
-use App\Model\KindModel;
+use App\Model\FinanceModel;
 
 class HomeController extends Controller
 {
@@ -23,7 +21,7 @@ class HomeController extends Controller
 		}else{
 			$kind = new KindModel();
 			$kinds = $kind->findList('','id,name');
-			$model = new MethodModel();
+			$model = new FinanceModel();
 			$data = $model->findByKey( $s, App::$request->get('kind') , App::$request->get('page' , 0 ),5);
 			$data['s'] = $s;
 			$data['kind'] = $kinds;
@@ -34,7 +32,7 @@ class HomeController extends Controller
 	function methodAction()
 	{
 		$id = App::$request->get('id',1);
-		$model = new MethodModel();
+		$model = new FinanceModel();
 		$data = $model->findById($id);
 		$this->show('method',
 			array(
