@@ -8,6 +8,10 @@ use App\Model\KindModel;
 
 class HomeController extends Controller
 {
+	protected $rules = array(
+		'*' => '1'
+	);
+	
 	function indexAction()
 	{
 		$this->send('title','主页');

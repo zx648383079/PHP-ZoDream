@@ -13,14 +13,13 @@ create table zx_method (
 )charset = utf8;
 */
 
-class MethodModel extends Model{
-	protected $table = "method";
+class FinanceModel extends Model{
+	protected $table = "finance";
 	
 	protected $fillable = array(
-		'title',
-		'keys',
 		'kind',
-		'content',
+		'money',
+		'mark',
 		'user_id',
 		'udate',
 		'cdate'
@@ -34,7 +33,7 @@ class MethodModel extends Model{
 	public function findByKey( $key , $kind = null , $start = 0 , $max = 20)
 	{
 		$where = array(
-			"(m.title like '%$key%'",
+			"(title like '%$key%'",
 			'or' => "m.keys like '%$key%')"
 		);
 		if( !empty($kind) ) 

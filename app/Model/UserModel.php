@@ -27,14 +27,6 @@ class UserModel extends Model{
 		'udate',
 		'cdate'
 	);
-	/******
-	从网页注册
-	*/
-	public function fillWeb( $data )
-	{
-		$data['udate'] = $data['cdate'] = OTime::Now();
-		return $this->add($data);
-	}
 	
 	public function findByEmail($email)
 	{

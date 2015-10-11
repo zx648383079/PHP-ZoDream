@@ -9,7 +9,7 @@ class AuthController extends Controller{
 	
 	protected $rules = array(
 		'logout' => '1',
-		'register' => '!',
+		'register' => '?',
 		'*' => '?'
 	);
 
@@ -87,7 +87,7 @@ class AuthController extends Controller{
 	{
 		if(App::$request->isPost() )
 		{
-			$post = App::$request->post('name,email,pwd');
+			$post = App::$request->post('name,email,pwd,cpwd');
 			$error = $this->validata( $post , array(
 				'name' => 'required',
 				'email' =>'unique:users|email|required',
@@ -101,7 +101,7 @@ class AuthController extends Controller{
 				));
 			}else{
 				$user = new UserModel();
-				$id = $user -> fillWeb( $post );
+				$id = $user -> fill( $post );
 				App::session( 'user', $id );
 				App::redirect('?c=home');
 			}
