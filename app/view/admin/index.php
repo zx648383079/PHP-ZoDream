@@ -13,8 +13,6 @@ App::extend(array(
 	<div class="long">
 		
 		
-		
-		
 	</div>
 </div>
 	

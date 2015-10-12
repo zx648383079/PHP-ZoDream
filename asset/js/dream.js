@@ -1,28 +1,24 @@
-jQuery(document).ready(function($){
-	$(".nav .brand").click(function(){
-		if(!$(".nav ul").attr("class"))
+(function() {
+	Z(".nav .brand").addEvent('click',function(){
+		if(!Z(".nav ul").attr("class"))
 		{
-			$(".nav ul").attr("class","open");
-			$(".short").addClass("open");
+			Z().attr("class","open");
+			Z(".short").addClass("open");
 		}else{
-			$(".nav ul").attr("class","");
-			$(".short").removeClass("open");
+			Z().attr("class","");
+			Z(".short").removeClass("open");
 		}
 	});
-	$(".close").click(function() {
-		$('.shade').hide();
-		$('.window').hide();
+	Z(".close").addEvent('click', function() {
+		Z('.shade').hide();
+		Z('.window').hide();
 	});
-	$(".create").click(function() {
-		$('.shade').show();
-		$('.window').show();
+	Z(".add").addEvent('click', function() {
+		console.log(Z('form').getForm());
 	});
-	$("#kind").change(function() {
-		var val = $(this).children('option:selected').val();
-		if(val == 1000) {
-			$(".minText").show();
-		}else {
-			$(".minText").hide();
-		}
+	Z(".create").addEvent('click', function() {
+		Z('.shade').show();
+		Z('.window').show();
+		Z("#datetime").val(Helper.date.getNowFormatDate());
 	});
-});
+})();

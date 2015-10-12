@@ -8,6 +8,7 @@ App::extend(array(
 );
 ?>
 <div class="container">
+<div class="fixed-height">
   <form class="center" action="<?php App::url('?c=auth&v=register'); ?>" method="POST">
 	<input type="text" name="name" value="<?php App::ech('name');?>" placeholder="用户名" required>
 	<input type="email" name="email" value="<?php App::ech('email');?>" placeholder="邮箱" required>
@@ -17,6 +18,7 @@ App::extend(array(
 	<button type="submit">注册</button>
 	<a href="<?php App::url('?c=auth'); ?>">登录</a>
  </form>
+ </div>
 </div>
   
 	

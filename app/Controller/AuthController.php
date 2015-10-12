@@ -34,6 +34,8 @@ class AuthController extends Controller{
 					if(App::$request->post('remember') == 1)
 					{
 						App::cookie('token' , $user->setToken($result), time() + 315360000 );
+					}else {
+						$user->setToken($result, null);
 					}
 					App::redirect('?c=home');
 					exit;
@@ -74,7 +76,7 @@ class AuthController extends Controller{
 			App::cookie('token', 'no' , time() - 3600 );
 			$id = App::session('user');
 			$user = new UserModel();
-			$user->clearToken($id);
+			$user->setToken($id, null);
 		}
 		App::session('user', '');
 		App::redirect('/?c=auth');

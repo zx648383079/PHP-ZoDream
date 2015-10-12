@@ -1,12 +1,11 @@
 <?php 
 namespace App\Model;
 /***
-create table zx_method ( 
+create table zx_finance ( 
 	id int(11) not null AUTO_INCREMENT PRIMARY KEY, 
-	title varchar(255),
-	`keys` varchar(255),
-	kind int(5),
-	content text,
+	kind boolean,
+	money real,
+	mark varchar(255),
 	user_id int(11) not null,
 	udate int(11),
 	cdate int(11) 
@@ -30,7 +29,7 @@ class FinanceModel extends Model{
 		return $this->delete("id = {$id}");
 	}
 	
-	public function findByKey( $key , $kind = null , $start = 0 , $max = 20)
+	public function findByKind( $key , $kind = null , $start = 0 , $max = 20)
 	{
 		$where = array(
 			"(title like '%$key%'",

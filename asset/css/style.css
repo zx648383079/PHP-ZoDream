@@ -61,4 +61,7 @@ li.panel .body{
 .soForm{
 	line-height: 500px;
 }
+.fixed-height{
+	padding: 200px 0;
+}
 }

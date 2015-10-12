@@ -9,8 +9,8 @@ App::extend(array(
 ?>
 
 <div class="container">
- <div class="center">
-  <form action="<?php App::url('?c=auth'); ?>" method="POST">
+ <div class="fixed-height">
+  <form class="center" action="<?php App::url('?c=auth'); ?>" method="POST">
     <input type="email" name="email" placeholder="邮箱" value="<?php App::ech('email'); ?>" required>
     <input type="password" name="pwd" placeholder="密码" required>
 	<input type="checkbox" name="remember" value="1">记住我

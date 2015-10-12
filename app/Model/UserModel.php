@@ -45,13 +45,14 @@ class UserModel extends Model{
 	
 	public function setToken($id)
 	{
-		$token = md5(microtime().$id);
+		if(func_num_args() < 2)
+		{
+			$token = md5(microtime().$id);			
+		}else {
+			$token = func_get_arg(1);
+		}
 		$this->update(array('token' => $token),array("id = {$id}"));
 		return $token;
-	}
-	public function clearToken($id)
-	{
-		$this->update(array('token' => 'null'),array("id = {$id}"));
 	}
 	
 	public function findByUser($data)
