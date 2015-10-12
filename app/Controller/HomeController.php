@@ -47,12 +47,11 @@ class HomeController extends Controller
 		$kind = new KindModel();
 		if( App::$request->isPost() )
 		{
-			$post = App::$request->post('title,keys,kind,content');
+			$post = App::$request->post('kind,money,happen,mark');
 			$error = $this->validata( $post , array(
-				'title' => 'max:40|required',
-				'keys' =>'max:40|required',
-				'kind' => 'number|required',
-				'content' => 'required'
+				'kind' => 'number|required',				
+				'money' => 'max:40|required',
+				'happen' =>'datetime|required',
 			));
 			
 			if(!is_bool($error))

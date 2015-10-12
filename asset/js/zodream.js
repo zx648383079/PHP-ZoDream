@@ -153,6 +153,7 @@ zodream.prototype = {
 				case 'hidden':    
 				case 'password':    
 				case 'text':
+				case 'email':
 				case 'textarea':
 					data += "&" + element.name + "=" + element.value;
 					break; 
@@ -169,6 +170,29 @@ zodream.prototype = {
 		data = data.substr(1);
 		return data;
 	},
+	clearForm: function() {
+		var elements = this.getMore('input,textarea', this.elements[0]);
+		for (var i = 0, len = elements.length; i < len; i++) {
+			var element = elements[i];
+			switch (element.type.toLowerCase()) {    
+				case 'submit':
+				case 'hidden':
+					break;  
+				case 'password':    
+				case 'text':
+				case 'email':
+				case 'textarea':
+					element.value = "";
+					break;
+				case 'checkbox':    
+				case 'radio':
+					element.checked = false;
+					break;
+				default:
+					break;
+			}
+		}
+	},
 	forE: function() {
 		var args = Array.prototype.slice.call(arguments);
 		var func = args.shift();
@@ -179,11 +203,23 @@ zodream.prototype = {
 			};
 		}
 	},
+	addChild: function() {
+		
+	},
+	removeChild: function() {
+		if(arguments[0]) {
+			
+		}else {
+			this.forE(function(e) {
+				e.innerHTML = "";
+			});
+		}
+	},
 	remove: function() {
 		for (var i = 0, len = arguments.length; i < len; i++) {
 			for (var j = 0; j < this.elements.length; j++) {
 				if(this.elements[j] == arguments[i]) {
-					this.elements.splice(j,1);
+					this.elements.splice( j, 1 );
 				}
 			};
 		};
@@ -242,59 +278,60 @@ zodream.prototype = {
 	}
 };
 
-var Helper = {};
-Helper.ajax = {
-	http: null,
-	getHttp: function() {
-		if(window.ActiveXObject) {
-			try {  
-				this.http = new ActiveXObject("Msxml2.XMLHTTP");//IE高版本创建XMLHTTP  
-			}  
-    		catch(E) {
-            	this.http = new ActiveXObject("Microsoft.XMLHTTP");//IE低版本创建XMLHTTP  
-        	}  
-		}else {
-			this.http = new XMLHttpRequest();
-		}
-	},
-	request: function(method, url, msg, async) {
-		this.getHttp();
-		this.http.open( url?"GET":method, url || method, async || true);  
-    	this.http.onreadystatechange = this.response;  
-    	this.http.send( msg );  
-	},
-	response: function() {
-		if (this.http.readyState == 4) {  
-			if (this.http.status == 200) {  
-				//var text = decodeURI( this.http.responseText );
+var Helper = {
+	ajax: {
+		http: null,
+		getHttp: function() {
+			if(window.ActiveXObject) {
+				try {  
+					this.http = new ActiveXObject("Msxml2.XMLHTTP");//IE高版本创建XMLHTTP  
+				}  
+				catch(E) {
+					this.http = new ActiveXObject("Microsoft.XMLHTTP");//IE低版本创建XMLHTTP  
+				}  
+			}else {
+				this.http = new XMLHttpRequest();
 			}
-			this.responseCallback(this.http.responseText, this.http.status, this.http);
+		},
+		request: function(method, url, msg, async) {
+			this.getHttp();
+			this.responseCallback = null;
+			this.http.open( url?"GET":method, url || method, async || true);  
+			this.http.onreadystatechange = this.response;  
+			this.http.send( msg );  
+		},
+		response: function() {
+			if (this.http.readyState == 4) {  
+				if (this.http.status == 200) {  
+					//var text = decodeURI( this.http.responseText );
+				}
+				this.responseCallback(this.http.responseText, this.http.status, this.http);
+			}
+		},
+		responseCallback: null,
+		get: function(url, func) {
+			this.request(url);
+			this.responseCallback = func;
+		},
+		post: function(url, data, func) {
+			this.request("POST", url , data );
+			this.responseCallback = func;
 		}
 	},
-	responseCallback: null,
-	get: function(url, func) {
-		this.request(url);
-		this.responseCallback = func;
-	},
-	post: function(url, data, func) {
-		this.request("POST", url , data );
-		this.responseCallback = func;
-	}
-}
-
-Helper.date = {
-	getNowFormatDate: function() {
-		var date = new Date();
-		return date.getFullYear() + "-" + 
-				this.toFull(date.getMonth() + 1) + "-" + this.toFull(date.getDate())
-				+ " " + this.toFull(date.getHours()) + ":" + this.toFull(date.getMinutes())
-				+ ":" + this.toFull(date.getSeconds());
-	},
-	toFull: function ( num ) {
-		if (num >= 0 && num <= 9) {
-			num = "0" + num;
+	date: {
+		getNowFormatDate: function() {
+			var date = new Date();
+			return date.getFullYear() + "-" + 
+					this.toFull(date.getMonth() + 1) + "-" + this.toFull(date.getDate())
+					+ " " + this.toFull(date.getHours()) + ":" + this.toFull(date.getMinutes())
+					+ ":" + this.toFull(date.getSeconds());
+		},
+		toFull: function ( num ) {
+			if (num >= 0 && num <= 9) {
+				num = "0" + num;
+			}
+			return num;
 		}
-		return num;
 	}
 };
 

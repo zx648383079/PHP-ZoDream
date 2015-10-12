@@ -1,5 +1,5 @@
 (function() {
-	Z(".nav .brand").addEvent('click',function(){
+	Z(".nav .brand").addEvent('click',function() {
 		if(!Z(".nav ul").attr("class"))
 		{
 			Z().attr("class","open");
@@ -15,10 +15,12 @@
 	});
 	Z(".add").addEvent('click', function() {
 		console.log(Z('form').getForm());
+		Z().clearForm();
 	});
 	Z(".create").addEvent('click', function() {
 		Z('.shade').show();
 		Z('.window').show();
 		Z("#datetime").val(Helper.date.getNowFormatDate());
 	});
+	
 })();

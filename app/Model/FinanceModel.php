@@ -6,6 +6,7 @@ create table zx_finance (
 	kind boolean,
 	money real,
 	mark varchar(255),
+	happen datetime,
 	user_id int(11) not null,
 	udate int(11),
 	cdate int(11) 
@@ -19,6 +20,7 @@ class FinanceModel extends Model{
 		'kind',
 		'money',
 		'mark',
+		'happen',
 		'user_id',
 		'udate',
 		'cdate'

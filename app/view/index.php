@@ -10,7 +10,7 @@ App::extend(array(
 
 <div class="container-fixed">
 	<button class="create">发表</button>
-	<table>
+	<table id="listbox">
 		<thead>
 			<tr>
 				<th>ID</th>
@@ -56,7 +56,7 @@ App::extend(array(
 		<form>
 			类型：<input type="radio" name="kind" value="0">支出<input type="radio" name="kind" value="1">收入<br>
 			金额：<input type="text" name="money"><br>
-			时间：<input type="text" id="datetime" name="datetime"><br>
+			时间：<input type="text" id="datetime" name="happen"><br>
 			备注：<textarea name="content" rows="12"></textarea>
 		</form>
 	</div>
