@@ -116,10 +116,10 @@ zodream.prototype = {
 		}
 	},
 	show: function() {
-		this.css("display","block");	
+		this.css("display", "block");	
 	},
 	hide: function() {
-		this.css("display","none");		
+		this.css("display", "none");		
 	},
 	html: function() {
 		if(arguments[0] === undefined) {
@@ -159,7 +159,7 @@ zodream.prototype = {
 					break; 
 				case 'checkbox':    
 				case 'radio':
-					if(element.checked) {
+					if( element.checked ) {
 						data += "&" + element.name + "=" + element.value;
 					}
 					break;
@@ -174,7 +174,7 @@ zodream.prototype = {
 		var elements = this.getMore('input,textarea', this.elements[0]);
 		for (var i = 0, len = elements.length; i < len; i++) {
 			var element = elements[i];
-			switch (element.type.toLowerCase()) {    
+			switch ( element.type.toLowerCase() ) {    
 				case 'submit':
 				case 'hidden':
 					break;  
@@ -196,24 +196,39 @@ zodream.prototype = {
 	forE: function() {
 		var args = Array.prototype.slice.call(arguments);
 		var func = args.shift();
+		var data = Array();
 		if(typeof func === "function") {
 			for (var i = 0, len = this.elements.length; i < len; i++) {
 				args.unshift(this.elements[i], i );
-				func.apply(null, args);
+				data.push(func.apply(null, args));
 			};
 		}
+		return data;
 	},
 	addChild: function() {
-		
+		for (var i = 0,len = arguments.length; i < len; i++) {
+			this.forE(function(e, i , ele) {
+				e.appendChild(ele);
+			}, arguments[i]);
+		}
 	},
 	removeChild: function() {
 		if(arguments[0]) {
-			
+			for (var i = 0,len = arguments.length; i < len; i++) {
+				this.forE(function(e, i , ele) {
+					e.removeChild(ele);
+				}, arguments[i]);
+			}
 		}else {
 			this.forE(function(e) {
 				e.innerHTML = "";
 			});
 		}
+	},
+	removeSelf: function() {
+		this.forE(function(e) {
+			e.parentNode.removeChild(e);
+		});	
 	},
 	remove: function() {
 		for (var i = 0, len = arguments.length; i < len; i++) {
