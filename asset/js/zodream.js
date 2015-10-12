@@ -85,7 +85,7 @@ zodream.prototype = {
 		if(arguments[1] === undefined) {
 			return this.elements[0].getAttribute(name);
 		}else {
-			for (var i = 0, len = this.elements.length; i < len; i++) {
+			this.forE(function(e, i , name, value) {
 				switch (name) {
 					case "class":
 						name += "Name";
@@ -93,14 +93,14 @@ zodream.prototype = {
 					default:
 						break;
 				}
-				this.elements[i][name] = arguments[1];
-			};
+				e[name] = value;
+			}, name , arguments[1]);
 		}
 	},
 	addClass: function(className) {
-		for (var i = 0, len = this.elements.length; i < len; i++) {
-			this.elements[i].class += " " + className;
-		};
+		this.forE(function(e, i , value) {
+			e.className += " " + value;
+		}, className);
 	},
 	removeClass: function(className) {
 		var classNames = this.attr('class');
@@ -110,9 +110,9 @@ zodream.prototype = {
 		if(arguments[1] === undefined) {
 			return this.elements[0].style[name];
 		}else {
-			for (var i = 0, len = this.elements.length; i < len; i++) {
-				this.elements[i].style[name] = arguments[1];
-			};
+			this.forE(function(e, i , name, value) {
+				e.style[name] = value;
+			}, name , arguments[1]);
 		}
 	},
 	show: function() {
@@ -125,9 +125,9 @@ zodream.prototype = {
 		if(arguments[0] === undefined) {
 			return this.elements[0].innerHTML;
 		}else {
-			for (var i = 0, len = this.elements.length; i < len; i++) {
-				this.elements[i].innerHTML = arguments[1];
-			};
+			this.forE(function(e, i , value) {
+				e.innerHTML = value;
+			}, arguments[0]);
 		}
 	},
 	text: function() {
@@ -137,9 +137,9 @@ zodream.prototype = {
 		if(arguments[0] === undefined) {
 			return this.elements[0].value;
 		}else {
-			for (var i = 0, len = this.elements.length; i < len; i++) {
-				this.elements[i].value = arguments[0];
-			};
+			this.forE(function(e, i , value) {
+				e.value = value;
+			}, arguments[0]);
 		}
 	},
 	getForm: function() {
@@ -217,11 +217,11 @@ zodream.prototype = {
 	},
 	remove: function() {
 		for (var i = 0, len = arguments.length; i < len; i++) {
-			for (var j = 0; j < this.elements.length; j++) {
-				if(this.elements[j] == arguments[i]) {
+			this.forE(function(e, j, ele) {
+				if(e == ele) {
 					this.elements.splice( j, 1 );
 				}
-			};
+			}, arguments[i]);
 		};
 	},
 	removeAt: function() {
@@ -242,30 +242,29 @@ zodream.prototype = {
 				fun.apply(this, arguments);  //继承监听函数,并传入参数以初始化;
 			}
 		};
-		for (var i = 0, len = this.elements.length; i < len; i++) {
-			var element = this.elements[i];
-			if(element) {
-				if(element.attachEvent){
-					element.attachEvent('on' + event, func);
-				}else if(element.addEventListener){
-					element.addEventListener(event, func, false);
+		
+		this.forE(function(e, i, event , func) {
+			if(e) {
+				if(e.attachEvent){
+					e.attachEvent('on' + event, func);
+				}else if(e.addEventListener){
+					e.addEventListener(event, func, false);
 				}else{
-					element["on" + event] = func;
+					e["on" + event] = func;
 				}
 			}
-		};
+		}, event , func);
 	},
 	removeEvent: function(event, func) {
-		for (var i = 0, len = this.elements.length; i < len; i++) {
-			var element = this.elements[i];
-			if (element.removeEventListener) {
-				element.removeEventListener(event, func, false);
-			} else if (element.detachEvent) {
-				element.detachEvent("on" + event, func);
+		this.forE(function(e, i, event , func) {
+			if (e.removeEventListener) {
+				e.removeEventListener(event, func, false);
+			} else if (e.detachEvent) {
+				e.detachEvent("on" + event, func);
 			}else {
-				delete element["on" + event];
+				delete e["on" + event];
 			}
-		};
+		}, event , func);
 	},
 	clear: function() {
 		this.parent.remove();

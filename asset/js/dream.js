@@ -20,7 +20,7 @@
 	Z(".create").addEvent('click', function() {
 		Z('.shade').show();
 		Z('.window').show();
-		Z("#datetime").val(Helper.date.getNowFormatDate());
+		Z("#datetime").val( Helper.date.getNowFormatDate() );
 	});
 	
 })();
