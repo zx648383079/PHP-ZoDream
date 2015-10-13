@@ -10,17 +10,17 @@
 		}
 	});
 	Z(".close").addEvent('click', function() {
-		Z('.shade').hide();
-		Z('.window').hide();
+		Z('.shade,.window').hide();
 	});
 	Z(".add").addEvent('click', function() {
 		console.log(Z('form').getForm());
 		Z().clearForm();
 	});
 	Z(".create").addEvent('click', function() {
-		Z('.shade').show();
-		Z('.window').show();
+		Z('.shade,.window').show();
 		Z("#datetime").val( Helper.date.getNowFormatDate() );
 	});
-	
+	Helper.ajax.get(APP_URL + "?v=finance", function(msg){
+		console.log(Helper.parseJSON(msg));
+	});
 })();

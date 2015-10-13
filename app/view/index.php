@@ -48,7 +48,6 @@ App::extend(array(
 		</tfoot>
 	</table>
 </div>
-</div>
 <div class="shade"></div>
 <div class="window">
 	<div class="head">新增纪录</div>
@@ -66,4 +65,6 @@ App::extend(array(
 	</div>
 </div>
 
-<?php App::extend('~layout.foot');?>
+<?php App::extend('~layout.foot',array('before' => function(){
+	echo '<script>var APP_URL= "',APP_URL,'";</script>';
+}));?>

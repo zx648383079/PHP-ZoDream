@@ -29,17 +29,12 @@ class HomeController extends Controller
 		}
 	}
 	
-	function methodAction()
+	function financeAction()
 	{
-		$id = App::$request->get('id',1);
-		$model = new FinanceModel();
-		$data = $model->findById($id);
-		$this->show('method',
-			array(
-				'data' => $data,
-				'title' => 'Method'
-			)
-		);
+		$this->ajaxJson(array(
+			'name' => 'user',
+			'msg' => 'name'
+		));
 	}
 	
 	function createAction()
