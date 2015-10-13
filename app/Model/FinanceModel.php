@@ -1,5 +1,7 @@
 <?php 
 namespace App\Model;
+
+use App\Lib\Auth;
 /***
 create table zx_finance ( 
 	id int(11) not null AUTO_INCREMENT PRIMARY KEY, 
@@ -31,34 +33,28 @@ class FinanceModel extends Model{
 		return $this->delete("id = {$id}");
 	}
 	
-	public function findByKind( $key , $kind = null , $start = 0 , $max = 20)
+	public function findByKind( $kind = null , $start = 0 , $max = 20)
 	{
-		$where = array(
-			"(title like '%$key%'",
-			'or' => "m.keys like '%$key%')"
-		);
-		if( !empty($kind) ) 
-		{
-			$where[] = "m.kind = $kind";
-		}
-		
 		$sql = array(
 			'select' => 'count(*) as total',
-			'from' => "{$this->table} m",
-			'left' => array(
-				'kind k',
-				'm.kind = k.id'
+			'from' => "{$this->table}",
+			'where' => array(
+				'user_id' => Auth::user()->id
 			),
-			'where' => $where,
-			'order' => 'm.udate desc'
+			'order' => 'happen desc,udate desc'
 		);
+		if( $kind !== null) 
+		{
+			$sql['where'][] = "kind = $kind";
+		}
+		
 		$data = $this->findByHelper($sql);	
 		if(! empty($data))
 		{
 			$data = $data[0];
 			$data['max'] = $max;
 			$data['index'] = $start = $start > $data['total'] ? $data['total'] : $start;
-			$sql['select'] = 'm.id as id,m.title as title,m.keys as `keys`,m.content as content,k.name as kind,m.cdate as cdate,m.udate as udate';	
+			$sql['select'] = '*';	
 			$sql['limit'] = $start.','.$max;
 			$data['data'] = $this->findByHelper($sql);
 		}else{

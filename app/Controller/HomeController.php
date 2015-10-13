@@ -7,109 +7,65 @@ use App\Model\FinanceModel;
 class HomeController extends Controller
 {
 	protected $rules = array(
+		'create' => 'p',
 		'*' => '1'
 	);
 	
 	function indexAction()
 	{
-		$this->send('title','主页');
-		
-		$s = App::$request->get('s');
-		if(empty($s))
-		{
-			$this->show('index');			
-		}else{
-			$kind = new KindModel();
-			$kinds = $kind->findList('','id,name');
-			$model = new FinanceModel();
-			$data = $model->findByKey( $s, App::$request->get('kind') , App::$request->get('page' , 0 ),5);
-			$data['s'] = $s;
-			$data['kind'] = $kinds;
-			$this->show('so', $data );			
-		}
+		$model = new FinanceModel();
+		$data = $model->findByKind(App::$request->get('kind') , App::$request->get('page' , 0 ), 5);
+		$data['title'] = '主页';
+		$this->send($data);
+		$this->show('index');
 	}
 	
 	function financeAction()
 	{
+		$model = new FinanceModel();
+		$data = $model->findList('id = '.App::$request->get('id'), 'id,kind,money,happen,mark');
 		$this->ajaxJson(array(
-			'name' => 'user',
-			'msg' => 'name'
+			'data' => $data
 		));
 	}
 	
 	function createAction()
 	{
-		$kind = new KindModel();
-		if( App::$request->isPost() )
+		$post = App::$request->post('id 0,kind,money,happen,mark');
+		$error = $this->validata( $post , array(
+			'id' => 'number',
+			'kind' => 'number|required',				
+			'money' => 'float|required',
+			'happen' =>'datetime|required',
+		));
+		
+		if(!is_bool($error))
 		{
-			$post = App::$request->post('kind,money,happen,mark');
-			$error = $this->validata( $post , array(
-				'kind' => 'number|required',				
-				'money' => 'max:40|required',
-				'happen' =>'datetime|required',
+			$this->ajaxJson(array(
+				'status' => '10',
+				'error' => $error
 			));
+		}else{
+			$model = new FinanceModel();
 			
-			if(!is_bool($error))
+			if( $post['id'] == 0)
 			{
-				$this->send(array(
-					'error' => $error,
-					'data' => $post
-				));
+				$model -> fill( $post );
 			}else{
-				if( $post['kind'] == 1000 && !empty($name = App::$request->post('other') ))
-				{
-					$post['kind'] = $kind -> fill(array('name' => $name ) );
-				}
-				
-				if($post['kind'] != 1000)
-				{
-					$model = new MethodModel();
-					$id = $model -> fill( $post );
-					App::redirect('?v=method&id='.$id);
-				}
+				$model -> updateById ( $post, $post['id']);
 			}
-		}else {
-			$kinds = $kind->findList('','id,name');
-			$this->show('create',array(
-				'title' => 'Create Method',
-				'kind' => $kinds
+			$this->ajaxJson(array(
+				'status' => '0'
 			));
 		}
 	}
 	
-	function editAction()
+	function deleteAction()
 	{
-		$id = App::$request->get('id', 1 );
-		$model = new MethodModel();
-		if( App::$request->isPost() )
-		{
-			$post = App::$request->post('title,keys,kind,content');
-			$error = $this->validata( $post , array(
-				'title' => 'max:40|required',
-				'keys' =>'max:40|required',
-				'kind' => 'number|required',
-				'content' => 'required'
-			));
-			
-			if(!is_bool($error))
-			{
-				$this->send(array(
-					'error' => $error,
-					'data' => $post
-				));
-			}else{
-				$model -> update( $post , 'id = '.$id);
-				App::redirect('?v=method&id='.$id);
-			}
-		}else {
-			$data = $model->findById($id);
-			$kind = new KindModel();
-			$kinds = $kind->findList('','id,name');
-			$this->show('create',array(
-				'title' => 'Create Method',
-				'data' => $data,
-				'kind' => $kinds
-			));
-		}
+		$model = new FinanceModel();
+		$data = $model->deleteById(App::$request->get('id'));
+		$this->ajaxJson(array(
+			'status' => '0'
+		));
 	}
 } 

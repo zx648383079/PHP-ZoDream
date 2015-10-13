@@ -57,6 +57,17 @@ li.panel .body{
 	border-radius: 20px;
 }
 
+#view .mark{
+	display: block;
+	border: 1px solid #333;
+	box-shadow: -1px -1px #333;
+	border-radius: 5px;
+	height: 200px;
+	padding: 8px;
+	overflow: auto;
+	background-color: #f4f4f4;
+}
+
 @media (min-height:550px){
 .soForm{
 	line-height: 500px;

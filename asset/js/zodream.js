@@ -9,7 +9,7 @@ zodream.prototype = {
 	init: function(name) {
 		if(typeof name === "string")
 		{
-			this.elements = this.getMore(name);
+			this.elements = this.getMore( name , arguments[1] || window.document);
 		}else {
 			this.elements = [name];
 		}
@@ -48,7 +48,7 @@ zodream.prototype = {
 				break;
 			case '@':
 				name = name.slice(1);
-				return parent.getElementsByName(name);
+				return window.document.getElementsByName(name);
 				break;
 			case '$':
 				name = name.slice(1);
@@ -84,18 +84,6 @@ zodream.prototype = {
 			}
 		};
 		return classElements;
-	},
-	extend: function() {
-		for (var i = 0,len = arguments.length; i < len; i++) {
-			var arg = arguments[i];
-			if(typeof arg === "object") {
-				for (var key in arg) {
-					if (arg.hasOwnProperty(key)) {
-						this[key] = arg[key];
-					}
-				};
-			}
-		};
 	},
 	attr: function(name) {
 		if(arguments[1] === undefined) {
@@ -160,6 +148,10 @@ zodream.prototype = {
 			elements = this.getMore('input,textarea', this.elements[0]);
 		for (var i = 0, len = elements.length; i < len; i++) {
 			var element = elements[i];
+			if(element.required && element.value == "") {
+				element.style.border = "1px solid red";
+				return false;
+			};
 			switch (element.type.toLowerCase()) {    
 				case 'submit':
 					break;
@@ -167,8 +159,10 @@ zodream.prototype = {
 				case 'password':    
 				case 'text':
 				case 'email':
+					data += "&" + element.name + "=" + Helper.encode(element.value);
+					break; 
 				case 'textarea':
-					data += "&" + element.name + "=" + element.value;
+					data += "&" + element.name + "=" + Helper.encode( Helper.toHtml(element.value) );
 					break; 
 				case 'checkbox':    
 				case 'radio':
@@ -244,11 +238,12 @@ zodream.prototype = {
 	},
 	remove: function() {
 		for (var i = 0, len = arguments.length; i < len; i++) {
-			this.forE(function(e, j, ele) {
-				if(e == ele) {
-					this.elements.splice( j, 1 );
+			for (var j = 0; j < this.elements.length; j++) {
+				if(this.elements[j] == arguments[i])
+				{
+					this.elements.splice( j , 1);
 				}
-			}, arguments[i]);
+			};
 		};
 	},
 	removeAt: function() {
@@ -306,6 +301,15 @@ zodream.prototype = {
 
 var Helper = {
 	ajax: {
+		default: {
+			method: "GET",
+			url: '',
+			data: null,
+			success: null,
+			error: null,
+			async: true
+		},
+		settings: {},
 		http: null,
 		getHttp: function() {
 			if(window.ActiveXObject) {
@@ -319,29 +323,62 @@ var Helper = {
 				this.http = new XMLHttpRequest();
 			}
 		},
-		request: function(method, url, msg, async) {
-			this.getHttp();
-			this.http.open( url?method:"GET", url || method, async || true);  
-			this.http.onreadystatechange = this.response.bind(this);  
-			this.http.send( msg );  
+		request: function() {
+			this.http.open( this.settings.method , this.settings.url, this.settings.async);  
+			this.http.onreadystatechange = this.response.bind(this); 
+			this.http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			this.http.send( this.settings.data );  
 		},
 		response: function() {
 			if (this.http.readyState == 4) { 
 				if (this.http.status == 200) {  
 					//var text = decodeURI( this.http.responseText );
-					this.responseCallback(this.http.responseText , this.http);
+					var data;
+					try {
+						data = Helper.parseJSON(this.http.responseText );
+					} catch (error) {
+						data = this.http.responseText;
+					}
+					this.settings.success( data , this.http );
 				}else {
-					this.responseCallback(this.http.responseText, this.http.status, this.http);
+					this.settings.error(this.http.responseText, this.http.status, this.http);
 				}
 			}
 		},
 		get: function(url, func) {
-			this.responseCallback = func;
-			this.request(url);
+			var data;
+			if(arguments.length > 1)
+			{
+				data = {
+					url: arguments[0],
+					success: arguments[1],
+				};
+			}else {
+				data = arguments[0];
+			}
+			this.load(data);
 		},
-		post: function(url, data, func) {
-			this.responseCallback = func;
-			this.request("POST", url , data );
+		post: function() {
+			var data;
+			if(arguments.length > 1)
+			{
+				data = {
+					method: "POST",
+					url: arguments[0],
+					data: arguments[1],
+					success: arguments[2],
+				};
+			}else {
+				data = arguments[0];
+			}
+			if( data.data === false) return;
+			this.load(data);
+			
+		},
+		load: function( data ) {
+			Helper.extend.call( this.settings , this.default, data);
+			this.getHttp();
+			this.request();
 		}
 	},
 	date: {
@@ -359,8 +396,80 @@ var Helper = {
 			return num;
 		}
 	},
+	extend: function() {
+		for (var i = 0,len = arguments.length; i < len; i++) {
+			var arg = arguments[i];
+			if(typeof arg === "object") {
+				for (var key in arg) {
+					if (arg.hasOwnProperty(key)) {
+						this[key] = arg[key];
+					}
+				};
+			}
+		};
+	},
+	forE: function(func) {
+		var data = Array();
+		if(typeof func === "function") {
+			for (var i = 0, len = this.length; i < len; i++) {
+				var args = Array.prototype.slice.call(arguments, 1);
+				args.unshift( this[i], i );
+				data.push( func.apply( null, args) );
+			};
+		}
+		return data;
+	},
+	clone: function(obj) { 
+        var o;  
+		switch(typeof obj){  
+			case 'undefined': 
+				break;  
+			case 'string'   : 
+				o = obj + '';
+				break;  
+			case 'number'   : 
+				o = obj - 0;
+				break;  
+			case 'boolean'  : 
+				o = obj;
+				break;  
+			case 'object'   :  
+				if(obj === null){  
+					o = null;  
+				}else{  
+					if(obj instanceof Array){  
+						o = [];  
+						for(var i = 0, len = obj.length; i < len; i++){  
+							o.push(this.clone(obj[i]));  
+						}  
+					}else{  
+						o = {};  
+						for(var k in obj){  
+							o[k] = this.clone(obj[k]);  
+						}  
+					}  
+				}  
+				break;  
+			default:          
+				o = obj;
+				break;  
+		}  
+		return o; 
+	},
 	parseJSON: function( data ) {
 		return JSON.parse( data + "" );
+	},
+	refresh: function() {
+		window.location.reload();
+	},
+	htmlTo: function(data) {
+		return data.replace(/(&nbsp;)/g, " ").replace(/\<br\>/g, "\r\n");
+	},
+	toHtml: function(data) {
+		return data.replace(/[ ]/g, "&nbsp;").replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "<br>");
+	},
+	encode: function(data){  
+		return encodeURI(data).replace(/&/g, '%26').replace(/\+/g,'%2B').replace(/\s/g,'%20').replace(/#/g,'%23');  
 	}
 };
 
