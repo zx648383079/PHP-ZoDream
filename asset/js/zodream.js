@@ -85,7 +85,7 @@ zodream.prototype = {
 		};
 		return classElements;
 	},
-	parent: function() {
+	parents: function() {
 		return this.elements[0].parentNode;
 	},
 	children: function() {
