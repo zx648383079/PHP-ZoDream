@@ -7,6 +7,7 @@ use App\Model\RolesModel;
 use App\Model\UserModel;
 use App\Lib\Role\RComma;
 use App\Model\GroupModel;
+use App\Model\SystemModel;
 
 class AdminController extends Controller
 {
@@ -16,14 +17,20 @@ class AdminController extends Controller
 		'mysql' => '3',
 		'*' => '2'
 	);
-
+	
+	function __construct()
+	{
+		parent::__construct();
+		App::$data['nav'] = 4;
+	}
+	
 	/**
 	*后台首页
 	*/
 	function indexAction(){
 		//Auth::user()?"":redirect("/?c=auth");
 		$this->send('title','后台');
-		$this->show('admin');
+		$this->show('admin.index');
 	}
 
 	/**
@@ -32,7 +39,7 @@ class AdminController extends Controller
 	function wechatAction()
 	{
 		$this->send('title','微信管理');
-		$this->show('wechat');
+		$this->show('admin.wechat');
 	}
 	
 	function usersAction()
@@ -66,7 +73,7 @@ class AdminController extends Controller
 		$user = $users->findWithRoles("u.id <> ".Auth::user()->id,'u.id AS id,u.name AS name,g.roles AS roles');
 		
 		
-		$this->show('users' ,array(
+		$this->show('admin.users' ,array(
 			'roles' => $model,
 			'users' => $user,
 			'title' => '用户管理'
@@ -87,14 +94,29 @@ class AdminController extends Controller
 			$model = $roles->execute($arr[1])->getList();
 		}
 		
-		$this->show('mysql',array(
+		$this->show('admin.mysql',array(
 			'model'=>$model,
 			'sql'=>$sql
 			));
 	}
 	
-	function aboutAction()
+	function systemAction()
 	{
-		$this->show('about');
+		$model = new SystemModel();
+		$data = $model->findList(null,'id,page');
+		$this->show('admin.system', array(
+			'title' => '系统管理',
+			'date' => $data
+		));
+	}
+	
+	function documentAction()
+	{
+		$model = new SystemModel();
+		$data = $model->findList(null,'id,page');
+		$this->show('admin.document', array(
+			'title' => '文档管理',
+			'date' => $data
+		));
 	}
 }

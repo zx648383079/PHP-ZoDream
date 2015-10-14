@@ -8,12 +8,12 @@ use App\Lib\Auth;
     ZoDream
    </div>
   <ul>
-    <li class="active"><a href="<?php App::url('/'); ?>">首页</a></li>
-    <li><a href="<?php App::url('?v=about'); ?>">关于</a></li>
-    <li><a href="<?php App::url('?v=download'); ?>">下载</a></li>
-    <li><a href="<?php App::url('?c=doc'); ?>">文档</a></li>
+    <li<?php echo App::ret('nav' , 0) == 0?' class="active"':'' ?>><a href="<?php App::url('/'); ?>">首页</a></li>
+    <li<?php echo App::ret('nav') == 1?' class="active"':'' ?>><a href="<?php App::url('?v=about'); ?>">关于</a></li>
+    <li<?php echo App::ret('nav') == 2?' class="active"':'' ?>><a href="<?php App::url('?v=download'); ?>">下载</a></li>
+    <li<?php echo App::ret('nav') == 3?' class="active"':'' ?>><a href="<?php App::url('?v=document'); ?>">文档</a></li>
    <?php if(App::role('2')){?>
-    <li><a href="<?php App::url('?c=admin'); ?>">后台</a></li>
+    <li<?php echo App::ret('nav') == 4?' class="active"':'' ?>><a href="<?php App::url('?c=admin'); ?>">后台</a></li>
    <?php } ?>
     <li class="right"><a href="
     <?php 

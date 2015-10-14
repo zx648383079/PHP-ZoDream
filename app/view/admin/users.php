@@ -1,6 +1,7 @@
 <?php 
 use App\Lib\Role\RComma;
 
+App::$data['menu'] = 4;
 App::extend(array(
 	'~layout'=>array(
 		'head',

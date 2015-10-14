@@ -4,14 +4,15 @@ App::extend(array('~layout' => array('head','nav')));
 ?>
 
 <div class="container-fixed">
-	<div class="short">
-		
-	</div>
-	<div class="long">
-		<div>
-			这是一个简单的梦
-		</div>
-	</div>
+	<?php 
+	 $data = App::ret('data');
+	 if(is_bool($data))
+	 {
+		 echo 'THIS IS ZODREAM!';
+	 } else {
+		 echo $data.content;
+	 }
+	?>
 </div>
 
 <?php App::extend('~layout.foot');?>

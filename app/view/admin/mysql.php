@@ -1,5 +1,6 @@
 <?php 
 
+App::$data['menu'] = 5;
 App::extend(array(
 	'~layout'=>array(
 		'head',

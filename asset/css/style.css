@@ -50,19 +50,32 @@ li.panel .body{
 	display: none;
 }
 
-.container-fixed{
-	width: 960px;
-	margin: 8px auto;
+.short.fixed{
+	border: 1px solid #666;
+	border-radius: 5px;
+	min-height: 100px;
+	padding: 8px 8px;
 }
-@media (max-width:960px){
-.container-fixed{
-	width: 100%;
-	margin: 8px auto;
-}	
+.short.fixed>ul{
+	margin-top: 8px;
+	overflow: hidden;
+}
+
+.short.fixed li{
+	line-height: 30px;
+	list-style-type: none;
+	padding-left: 8px;
+}
+
+.short.fixed li:hover{
+	background-color: #f4f4f4;
+}
+.short.fixed li ul{
+	margin-left: 20px;
 }
 
 @media (min-height:550px){
-.soForm{
-	line-height: 500px;
+.center form{
+	margin-top: 200px;
 }
 }
