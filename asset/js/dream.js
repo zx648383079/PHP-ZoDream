@@ -1,4 +1,7 @@
 (function() {
+	/**
+	 * 导航栏
+	 */
 	Z(".nav .brand").addEvent('click',function() {	
 		if(!Z(".nav ul").attr("class"))
 		{
@@ -9,6 +12,9 @@
 			Z(".short").removeClass("open");
 		}
 	});
+	/**
+	 * 弹出框及遮罩
+	 */
 	Z(".close").addEvent('click', function() {
 		Z('.shade,#create').hide();
 	});
@@ -22,26 +28,17 @@
 			return;
 		}
 		
-		var uls = Z(zodream.selectElement).getChildren("ul");
-		if(uls.length > 0) {
-			Z(uls[0]).addChild(obj);
-			return;
-		}
-		var span = document.createElement("span");
-		span.innerHTML = "+";
-		span.className = "more";
-		Z(span).addEvent('click', zodream.more);
-		var ul = document.createElement("ul");
-		ul.appendChild(obj);
-		
-		Z(zodream.selectElement).addChild(span);
-		Z(zodream.selectElement).addChild(ul);
+		zodream.addElement(obj, zodream.selectElement);
 		
 		
 	});
 	Z(".create").addEvent('click', function() {
 		Z('.shade,#create').show();
 	});
+	
+	/**
+	 * 自定义全局方法
+	 */
 	zodream.extend({
 		selectElement: null,
 		select: function( element ) {
@@ -68,11 +65,65 @@
 				zodream.select(Z(this).parents());
 				Z(this).html("+");
 			}
-		}
+		},
+		addElement: function( obj , element) {
+			var uls = Z(element).getChildren("ul");
+			if(uls.length > 0) {
+				Z(uls[0]).addChild(obj);
+				return;
+			}
+			var span = document.createElement("span");
+			span.innerHTML = "+";
+			span.className = "more";
+			Z(span).addEvent('click', zodream.more);
+			var ul = document.createElement("ul");
+			ul.appendChild( obj );
+			
+			Z(element).addChild(span);
+			Z(element).addChild(ul);	
+		},
+		dragElement: null,
+		dragstart: function(ev) {
+			zodream.dragElement = ev.target;
+			ev.dataTransfer.setData("Text", "id");
+		},
+		dragover: function(ev) {
+			ev.stopPropagation();
+			ev.preventDefault();
+		},
+		drop: function(ev) {
+			ev.stopPropagation();
+			ev.preventDefault();
+			if(zodream.dragElement) {
+				var parent = Z(zodream.dragElement).parents();
+				zodream.addElement( zodream.dragElement , ev.target);
+				if(Z(parent).getChildren("li").length < 1) {
+					Z(Z(parent).prev()).removeSelf();
+					Z(parent).removeSelf();
+				}
+			}
+			zodream.dragElement = null;
+		},
 	});
+	/**
+	 * 拖拽
+	 */
+	Z(".editbox li").attr( "draggable", "true");
+	Z(".editbox li").addEvent('dragstart', zodream.dragstart );
+	Z(".editbox li").addEvent('dragover', zodream.dragover );
+	Z(".editbox li").addEvent('drop', zodream.drop );
 	
+	/**
+	 * 展开分类
+	 */
 	Z(".editbox li .more").addEvent('click', zodream.more);
+	/**
+	 * 选中分类
+	 */
 	Z(".editbox li").addEvent('click', zodream.selected );
+	/**
+	 * 操作分类
+	 */
 	Z(".editbox .tool a").addEvent('click', function() {
 		Z(".editbox li", true ).forE(function(e , i , ele) {
 			if(Z(e).css("background-color") !== "transparent") {

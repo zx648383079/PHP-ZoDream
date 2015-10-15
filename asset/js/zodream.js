@@ -114,16 +114,19 @@ zodream.fn.prototype = {
 				}
 				e[name] = value;
 			}, name , arguments[1]);
+			return this;
 		}
 	},
 	addClass: function(className) {
 		this.forE(function(e, i , value) {
 			e.className += " " + value;
 		}, className);
+		return this;
 	},
 	removeClass: function(className) {
 		var classNames = this.attr('class');
 		this.attr('class', classNames.replace(className, ""));
+		return this;
 	},
 	css: function(name) {
 		if(arguments[1] === undefined) {
@@ -138,13 +141,16 @@ zodream.fn.prototype = {
 			this.forE(function(e, i , name, value) {
 				e.style[name] = value;
 			}, name , arguments[1]);
+			return this;
 		}
 	},
 	show: function() {
 		this.css("display", "block");
+		return this;
 	},
 	hide: function() {
-		this.css("display", "none");		
+		this.css("display", "none");
+		return this;	
 	},
 	toggle: function() {
 		if(this.css("display") == "none") {
@@ -152,6 +158,7 @@ zodream.fn.prototype = {
 		}else {
 			this.hide();
 		}
+		return this;
 	},
 	html: function() {
 		if(arguments[0] === undefined) {
@@ -160,6 +167,7 @@ zodream.fn.prototype = {
 			this.forE(function(e, i , value) {
 				e.innerHTML = value;
 			}, arguments[0]);
+			return this;
 		}
 	},
 	val: function() {
@@ -169,6 +177,7 @@ zodream.fn.prototype = {
 			this.forE(function(e, i , value) {
 				e.value = value;
 			}, arguments[0]);
+			return this;
 		}
 	},
 	getForm: function() {
@@ -227,6 +236,7 @@ zodream.fn.prototype = {
 					break;
 			}
 		}
+		return this;
 	},
 	forE: function(func) {
 		var data = Array();
@@ -248,9 +258,11 @@ zodream.fn.prototype = {
 		for (var i = 0,len = arguments.length; i < len; i++) {
 			this.elements[0].appendChild(arguments[i]);
 		}
+		return this;
 	},
 	insertBefore: function(element) {
 		this.parents().insertBefore(element , this.elements[0]);
+		return this;
 	},
 	insertAfter: function( element ){
 		var parent = this.parents();
@@ -259,6 +271,7 @@ zodream.fn.prototype = {
 		}else{
 			parent.insertBefore( element, this.next() );
 		}
+		return this;
 	},
 	removeChild: function() {
 		if(arguments[0]) {
@@ -272,11 +285,13 @@ zodream.fn.prototype = {
 				e.innerHTML = "";
 			});
 		}
+		return this;
 	},
 	removeSelf: function() {
 		this.forE(function(e) {
 			e.parentNode.removeChild(e);
 		});	
+		return this;
 	},
 	remove: function() {
 		for (var i = 0, len = arguments.length; i < len; i++) {
@@ -318,6 +333,7 @@ zodream.fn.prototype = {
 				}
 			}
 		}, event , func);
+		return this;
 	},
 	removeEvent: function(event, func) {
 		this.forE(function(e, i, event , func) {
@@ -329,6 +345,7 @@ zodream.fn.prototype = {
 				delete e["on" + event];
 			}
 		}, event , func);
+		return this;
 	},
 	clear: function() {
 		this.parent.remove();
