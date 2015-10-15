@@ -14,33 +14,33 @@ App::extend(array(
 <div class="long">
   <div class="editbox">
     <div class="tool">
-      <a href="">新增</a>
-      <a href="">编辑</a>
-      <a href="">删除</a>
-      <a href="">上移</a>
-      <a href="">下移</a>
+      <a class="create" href="javascript:;">新增</a>
+      <a class="create" href="javascript:;">编辑</a>
+      <a href="javascript:;">删除</a>
+      <a href="javascript:;">上移</a>
+      <a href="javascript:;">下移</a>
     </div>
     <ul>
-      <li>aaa</li>
-      <li>aaa</li>
-      <li>aaa
+      <li>a1</li>
+      <li>a2</li>
+      <li>a3
         <span class="more">+</span>
         <ul>
-          <li>bb</li>
-          <li>bb</li>
-          <li>bb
+          <li>b1</li>
+          <li>b2</li>
+          <li>b3
             <span class="more">+</span>
             <ul>
-              <li>bb</li>
-              <li>bb</li>
-              <li>bb</li>
-              <li>bb</li>
+              <li>c1</li>
+              <li>c2</li>
+              <li>c3</li>
+              <li>c4</li>
             </ul>
           </li>
-          <li>bb</li>
+          <li>b4</li>
         </ul>
       </li>
-      <li>aaa</li>
+      <li>a4</li>
     </ul>
   </div>
   <?php
@@ -55,5 +55,20 @@ App::extend(array(
 </div>
 </div>
 	
+<div class="shade"></div>
+<div id="create" class="window">
+	<div class="head">新增纪录</div>
+	<div class="body">
+		<form>
+			<input type="hidden" name="id" value="0">
+			标题：<input type="text" name="title" required><br>
+			内容：<textarea name="content" rows="12"></textarea>
+		</form>
+	</div>
+	<div class="foot">
+		<button class="add">新增</button>
+		<button class="close">关闭</button>
+	</div>
+</div>
 	
 <?php App::extend('~layout.foot');?>

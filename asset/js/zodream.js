@@ -1,89 +1,65 @@
-var zodream = function(name) {
+"use strict";
+
+var zodream = {};
+
+zodream.ready = function() {
+	if(!zodream.elements) {
+		zodream.elements = {};		
+	};
+	switch (typeof arguments[0]) {
+		case "string":
+			zodream.name = zodream.getName(arguments[0]);
+		case "undefined":
+			if( !zodream.elements[zodream.name] || arguments[1] === true)
+			{
+				zodream.elements[ zodream.name ] = new zodream.fn(arguments[0], zodream);
+			}
+			return zodream.elements[zodream.name];
+			break;
+		case "object":
+		default:
+			return new zodream.fn(arguments[0]);
+			break;
+	};
+};
+
+zodream.extend = function() {
+	for (var i = 0,len = arguments.length; i < len; i++) {
+		var arg = arguments[i];
+		if(typeof arg === "object") {
+			for (var key in arg) {
+				if (arg.hasOwnProperty(key)) {
+					this[key] = arg[key];
+				}
+			};
+		}
+	};
+};
+
+zodream.fn = function(name) {
 	this.elements = [];
 	this.parent = arguments[1] || null;
 	this.init(name);
-	return this;
 };
 
-zodream.prototype = {
+zodream.fn.prototype = {
 	init: function(name) {
-		if(typeof name === "string")
-		{
-			this.elements = this.getMore( name , arguments[1] || window.document);
-		}else {
-			this.elements = [name];
-		}
-	},
-	getMore: function(name) {
-		var names = name.split(","),
-			elements = Array();
-		for (var i = 0, len = names.length; i < len; i++) {
-			Array.prototype.push.apply(elements, this.getNext( names[i], arguments[1] || window.document ) );
-		};
-		return elements;
-	},
-	getNext: function(name) {
-		var names = name.split(" "),
-			element = [arguments[1] || window.document];
-		for (var i = 0, len = names.length; i < len; i++) {
-			var eles = Array();
-			for (var j = 0,leng = element.length; j < leng; j++) {
-				var ele = element[j];
-				Array.prototype.push.apply(eles, this.getChild(names[i], ele) ); 
-			}
-			element = eles;
-		};
-		return element;
-	},
-	getChild: function(name) {
-		var parent = arguments[1] || window.document;
-		switch (name.charAt(0)) {
-			case '.':
-				name = name.slice(1);
-				return this.getChildByClass(name, parent);
+		switch (typeof name) {
+			case "string":
+				this.elements = zodream.getMore( name , arguments[1] || window.document);
 				break;
-			case '#':
-				name = name.slice(1);
-				return [parent.getElementById(name)];
+			case "undefined":
 				break;
-			case '@':
-				name = name.slice(1);
-				return window.document.getElementsByName(name);
-				break;
-			case '$':
-				name = name.slice(1);
-				return this.getChildByIndex( Number(name), parent);
+			case "object":
+				if(name instanceof Array) {
+					this.elements = name;
+				}else {
+					this.elements = [name];					
+				}
 				break;
 			default:
-				return parent.getElementsByTagName(name);
 				break;
-		}
-	},
-	getChildByIndex: function(index) {
-		var parent = arguments[1] || window.document,
-			elements = parent.getElementsByTagName("*");
-		for (var i = 0, len = elements.length; i < len; i++) {
-			if(elements[i].nodeType == 1) {
-				index --;
-				if(index < 0) {
-					return elements[i];
-				}
-			}
-		}
-	},
-	getChildByClass: function(name) {
-		var parent = arguments[1] || window.document,
-			elements = parent.getElementsByTagName("*"),
-			classElements = Array();
-		for (var i = 0, len = elements.length; i < len; i++) {
-			var element = elements[i];
-			if(element.nodeType == 1) {
-				if(element.getAttribute("class") == name) {
-					classElements.push(element);
-				}				
-			}
 		};
-		return classElements;
 	},
 	parents: function() {
 		return this.elements[0].parentNode;
@@ -91,15 +67,38 @@ zodream.prototype = {
 	children: function() {
 		return this.elements[0].childNodes;	
 	},
-	previous: function() {
-		return this.elements[0].previousSbiling;	
+	prev: function() {
+		var obj = this.elements[0].previousSibling;
+		while(obj != null && obj.id == undefined){
+			obj = obj.previousSibling;
+			if(obj == null){
+				break;
+			}
+		}
+		return obj;
 	},
 	next: function() {
-		var next = this.elements[0].nextSbiling;
-		if(next == undefined || next.nodeType != 1) {
-			 next = (this.elements[0]).nextSibling.nextSibling;
+		var obj = this.elements[0].nextSibling;
+		while(obj != null && obj.id == undefined){
+			obj = obj.nextSibling;
+			if(obj == null){
+				break;
+			}
 		}
-		return next;
+		return obj;
+	},
+	getSibling: function() {
+		var a = [];
+		var b = this.elements[0].parentNode.children;
+		for(var i =0 , len = b.length ; i< len; i++) {
+			if( b[i] !== this.elements[0] ) a.push( b[i] );
+		}
+		return a;	
+	},
+	getChildren: function(name) {
+		return this.forE(function(e) {
+			return zodream.getMore(name, e)
+		});
 	},
 	attr: function(name) {
 		if(arguments[1] === undefined) {
@@ -128,6 +127,7 @@ zodream.prototype = {
 	},
 	css: function(name) {
 		if(arguments[1] === undefined) {
+			if(typeof this.elements[0] != "object") return;
 			var value = this.elements[0].style[name]; 
 			if(!value) {
 				var temp = this.elements[0].currentStyle || document.defaultView.getComputedStyle(this.elements[0], null);
@@ -234,16 +234,30 @@ zodream.prototype = {
 			for (var i = 0, len = this.elements.length; i < len; i++) {
 				var args = Array.prototype.slice.call(arguments, 1);
 				args.unshift( this.elements[i], i );
-				data.push( func.apply( null, args) );
+				var returnData = func.apply( null, args);
+				if(returnData instanceof Array) {
+					Array.prototype.push.apply(data , returnData);
+				}else {
+					data.push(returnData);
+				}
 			};
 		}
 		return data;
 	},
 	addChild: function() {
 		for (var i = 0,len = arguments.length; i < len; i++) {
-			this.forE(function(e, i , ele) {
-				e.appendChild(ele);
-			}, arguments[i]);
+			this.elements[0].appendChild(arguments[i]);
+		}
+	},
+	insertBefore: function(element) {
+		this.parents().insertBefore(element , this.elements[0]);
+	},
+	insertAfter: function( element ){
+		var parent = this.parents();
+		if(parent.lastChild == this.elements[0]){
+			parent.appendChild( element );
+		}else{
+			parent.insertBefore( element, this.next() );
 		}
 	},
 	removeChild: function() {
@@ -327,7 +341,85 @@ zodream.prototype = {
 	}
 };
 
-var Helper = {
+zodream.extend({
+	getName: function(tag) {
+		var val="";
+　　　　for(var i = 0; i < tag.length; i++){
+			val += tag.charCodeAt(i).toString(16);
+　　　　}
+　　　　return val;
+	},
+	getMore: function(name) {
+		var names = name.split(","),
+			elements = Array();
+		for (var i = 0, len = names.length; i < len; i++) {
+			Array.prototype.push.apply(elements, this.getNext( names[i], arguments[1] || window.document ) );
+		};
+		return elements;
+	},
+	getNext: function(name) {
+		var names = name.split(" "),
+			element = [arguments[1] || window.document];
+		for (var i = 0, len = names.length; i < len; i++) {
+			var eles = Array();
+			for (var j = 0,leng = element.length; j < leng; j++) {
+				var ele = element[j];
+				Array.prototype.push.apply(eles, this.getChild(names[i], ele) ); 
+			}
+			element = eles;
+		};
+		return element;
+	},
+	getChild: function(name) {
+		var parent = arguments[1] || window.document;
+		switch (name.charAt(0)) {
+			case '.':
+				name = name.slice(1);
+				return this.getChildByClass(name, parent);
+				break;
+			case '#':
+				name = name.slice(1);
+				return [parent.getElementById(name)];
+				break;
+			case '@':
+				name = name.slice(1);
+				return window.document.getElementsByName(name);
+				break;
+			case '$':
+				name = name.slice(1);
+				return this.getChildByIndex( Number(name), parent);
+				break;
+			default:
+				return parent.getElementsByTagName(name);
+				break;
+		}
+	},
+	getChildByIndex: function(index) {
+		var parent = arguments[1] || window.document,
+			elements = parent.getElementsByTagName("*");
+		for (var i = 0, len = elements.length; i < len; i++) {
+			if(elements[i].nodeType == 1) {
+				index --;
+				if(index < 0) {
+					return elements[i];
+				}
+			}
+		}
+	},
+	getChildByClass: function(name) {
+		var parent = arguments[1] || window.document,
+			elements = parent.getElementsByTagName("*"),
+			classElements = Array();
+		for (var i = 0, len = elements.length; i < len; i++) {
+			var element = elements[i];
+			if(element.nodeType == 1) {
+				if(element.getAttribute("class") == name) {
+					classElements.push(element);
+				}				
+			}
+		};
+		return classElements;
+	},
 	ajax: {
 		default: {
 			method: "GET",
@@ -404,7 +496,7 @@ var Helper = {
 			
 		},
 		load: function( data ) {
-			Helper.extend.call( this.settings , this.default, data);
+			zodream.extend.call( this.settings , this.default, data);
 			this.getHttp();
 			this.request();
 		}
@@ -423,18 +515,6 @@ var Helper = {
 			}
 			return num;
 		}
-	},
-	extend: function() {
-		for (var i = 0,len = arguments.length; i < len; i++) {
-			var arg = arguments[i];
-			if(typeof arg === "object") {
-				for (var key in arg) {
-					if (arg.hasOwnProperty(key)) {
-						this[key] = arg[key];
-					}
-				};
-			}
-		};
 	},
 	forE: function(func) {
 		var data = Array();
@@ -499,41 +579,12 @@ var Helper = {
 	encode: function(data){  
 		return encodeURI(data).replace(/&/g, '%26').replace(/\+/g,'%2B').replace(/\s/g,'%20').replace(/#/g,'%23');  
 	}
-};
+});
 
-var Z = function() {
-	this.remove = function() {
-		if(arguments[0])
-		{
-			for (var i = 0,len = arguments.length; i < len; i++) {
-				delete this.elements[arguments[i]];
-			}
-		}else {
-			delete this.elements[this.name];
-		}
-	};
-	this.getName = function(tag) {
-		var val="";
-　　　　for(var i = 0; i < tag.length; i++){
-			val += tag.charCodeAt(i).toString(16);
-　　　　}
-　　　　return val;
-	}
-	if(arguments[0] && typeof arguments[0] == "string") {
-		this.name = this.getName(arguments[0]);
-	}else {
-		return new zodream(arguments[0]);
-	}
-	if(!this.elements) {
-		this.elements = {};		
-	}
-	if( !this.elements[name] )
-	{
-		this.elements[name] = new zodream(arguments[0], this);
-	}
-	return this.elements[name];
-};
+
 
 (function() {
-	window.Z = Z;	
+	window.Z = function() {
+		return zodream.ready.apply(null, arguments);
+	};	
 })();
