@@ -1,11 +1,12 @@
 <?php 
+namespace App\Model;
+
 /*********************************
 访问纪录
 *********************************/
-namespace App\Model;
 
-
-class LogModel extends Model{
+class LogModel extends Model
+{
 	protected $table = "logs";
 	
 	protected $fillable = array(

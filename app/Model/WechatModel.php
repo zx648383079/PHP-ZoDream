@@ -2,7 +2,8 @@
 namespace App\Model;
 
 
-class WechatModel extends Model{
+class WechatModel extends Model
+{
 	protected $table = "wechat";
 	
 	protected $fillable = array(

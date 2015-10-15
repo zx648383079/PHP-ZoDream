@@ -1,4 +1,6 @@
 <?php 
+namespace App\Model;
+
 /*********************************
 用户表的连接
 create table zx_users ( 
@@ -11,9 +13,11 @@ create table zx_users (
 	cdate int(11) 
 )charset = utf8;
 *********************************/
-namespace App\Model;
+
 use App\Lib\Object\OTime;
-class UserModel extends Model{
+
+class UserModel extends Model
+{
 	protected $table = "users";
 	
 	

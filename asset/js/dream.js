@@ -27,7 +27,7 @@
 			.addEvent('drop', zodream.drop );;
 		
 		if( zodream.selectElement === null) {
-			Z(".editbox ul").addChild(obj);
+			Z(".treebox ul").addChild(obj);
 			return;
 		}
 		
@@ -99,12 +99,17 @@
 			ev.stopPropagation();
 			ev.preventDefault();
 			if(zodream.dragElement) {
-				var parent = Z(zodream.dragElement).parents();
-				zodream.addElement( zodream.dragElement , ev.target);
-				if(Z(parent).getChildren("li").length < 1) {
-					Z(Z(parent).prev()).removeSelf();
-					Z(parent).removeSelf();
+				if(ev.target.tagName.toLowerCase() == "ul") {
+					ev.target.appendChild(zodream.dragElement);
+				}else {
+					var parent = Z(zodream.dragElement).parents();
+					zodream.addElement( zodream.dragElement , ev.target);
+					if(Z(parent).getChildren("li").length < 1) {
+						Z(Z(parent).prev()).removeSelf();
+						Z(parent).removeSelf();
+					}
 				}
+				
 			}
 			zodream.dragElement = null;
 		},
@@ -112,24 +117,24 @@
 	/**
 	 * 拖拽
 	 */
-	Z(".editbox li").attr( "draggable", "true");
-	Z(".editbox li").addEvent('dragstart', zodream.dragstart );
-	Z(".editbox li,.editbox ul").addEvent('dragover', zodream.dragover );
-	Z(".editbox li,.editbox ul").addEvent('drop', zodream.drop );
+	Z(".treebox li").attr( "draggable", "true");
+	Z(".treebox li").addEvent('dragstart', zodream.dragstart );
+	Z(".treebox li,.treebox ul").addEvent('dragover', zodream.dragover );
+	Z(".treebox li,.treebox ul").addEvent('drop', zodream.drop );
 	
 	/**
 	 * 展开分类
 	 */
-	Z(".editbox li .more").addEvent('click', zodream.more);
+	Z(".treebox li .more").addEvent('click', zodream.more);
 	/**
 	 * 选中分类
 	 */
-	Z(".editbox li").addEvent('click', zodream.selected );
+	Z(".treebox li").addEvent('click', zodream.selected );
 	/**
 	 * 操作分类
 	 */
-	Z(".editbox .tool a").addEvent('click', function() {
-		Z(".editbox li", true ).forE(function(e , i , ele) {
+	Z(".treebox .tool a").addEvent('click', function() {
+		Z(".treebox li", true ).forE(function(e , i , ele) {
 			if(Z(e).css("background-color") !== "transparent") {
 				switch (Z(ele).html()) {
 					case "删除":

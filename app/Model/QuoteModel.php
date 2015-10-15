@@ -20,7 +20,8 @@ class QuoteModel extends Model
 		'isdelete'
 	);
 	
-	function findAll() {
+	function findAll()
+	{
         $sql = array(
 			'select' => 't.*, a.filename, a2.filename AS filebefore, a3.filename AS fileafter',
 			'from' => 'quote t',

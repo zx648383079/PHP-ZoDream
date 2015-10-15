@@ -12,7 +12,7 @@ App::extend(array(
 ?>
 
 <div class="long">
-  <div class="editbox">
+  <div class="treebox">
     <div class="tool">
       <a class="create" href="javascript:;">新增</a>
       <a class="create" href="javascript:;">编辑</a>

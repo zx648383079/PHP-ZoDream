@@ -2,23 +2,27 @@
 namespace App\Model;
 /*
 系统表
-create table zx_system ( 
+create table zx_document ( 
 	id int(11) not null AUTO_INCREMENT PRIMARY KEY, 
-	page varchar(20) not null UNIQUE,
+	pid int(11),
+	title varchar(50) not null UNIQUE,
 	content text,
+	url varchar(50) not null,
 	user_id int(11),
 	udate int(11),
 	cdate int(11) 
 )charset = utf8;
 */
 
-class SystemModel extends Model
+class DocumentModel extends Model
 {
-	protected $table = "system";
+	protected $table = "document";
 	
 	protected $fillable = array(
-		'page',
+		'pid',
+		'title',
 		'content',
+		'url',
 		'user_id',
 		'udate',
 		'cdate'
@@ -27,5 +31,10 @@ class SystemModel extends Model
 	public function findByPage($page) 
 	{
 		return $this->findOne('page = '.$page);
+	}
+	
+	public function findTitle() 
+	{
+		
 	}
 }

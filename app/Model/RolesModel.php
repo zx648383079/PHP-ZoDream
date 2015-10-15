@@ -5,7 +5,8 @@
 namespace App\Model;
 
 
-class RolesModel extends Model{
+class RolesModel extends Model
+{
 	protected $table = "roles";
 	
 	protected $fillable = array(
