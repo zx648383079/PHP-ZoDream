@@ -65,7 +65,15 @@ zodream.fn.prototype = {
 		return this.elements[0].parentNode;
 	},
 	children: function() {
-		return this.elements[0].childNodes;	
+		var args = Array();
+		var child = this.elements[0].childNodes;	
+		for( var i = 0 , len = child.length ; i < len ; i++){
+			if(child[i].nodeName != "#text" || /\s/.test(child[i].nodeValue))
+			{
+				args.push(child[i]);
+			}
+		}
+		return args;
 	},
 	prev: function() {
 		var obj = this.elements[0].previousSibling;
@@ -187,7 +195,7 @@ zodream.fn.prototype = {
 			var element = elements[i];
 			if(element.required && element.value == "") {
 				element.style.border = "1px solid red";
-				return false;
+				return;
 			};
 			switch (element.type.toLowerCase()) {    
 				case 'submit':
@@ -370,11 +378,11 @@ zodream.extend({
 		var names = name.split(","),
 			elements = Array();
 		for (var i = 0, len = names.length; i < len; i++) {
-			Array.prototype.push.apply(elements, this.getNext( names[i], arguments[1] || window.document ) );
+			Array.prototype.push.apply(elements, this.getNextAll( names[i], arguments[1] || window.document ) );
 		};
 		return elements;
 	},
-	getNext: function(name) {
+	getNextAll: function(name) {
 		var names = name.split(" "),
 			element = [arguments[1] || window.document];
 		for (var i = 0, len = names.length; i < len; i++) {
@@ -386,6 +394,49 @@ zodream.extend({
 			element = eles;
 		};
 		return element;
+	},
+	getNext: function(name) {
+		var names = name.split(">"),
+			element = [arguments[1] || window.document];
+		for (var i = 0, len = names.length; i < len; i++) {
+			var eles = Array();
+			for (var j = 0,leng = element.length; j < leng; j++) {
+				var ele = element[j];
+				Array.prototype.push.apply(eles, this.getElements(ele.childNodes, names[i]) ); 
+			}
+			element = eles;
+		};
+		return element;
+	},
+	getElements: function(elements, tag) {
+		if(typeof tag != "string") {
+			return;
+		}
+		var args = Array();
+		for (var i = 0, len = elements.length; i < len; i++) {
+			var element = array[i];
+			switch (tag.charAt(0)) {
+				case '.':
+					if(element.getAttribute("class").indexOf(tag.slice(1)) >= 0) {
+						args.push(element);
+					}
+					break;
+				case '#':
+					if( element.getAttribute("id") === tag.slice(1)) {
+						args.push(element);
+					}
+					break;
+				case '@':
+					if( element.getAttribute("name") === tag.slice(1)) {
+						args.push(element);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return args;
 	},
 	getChild: function(name) {
 		var parent = arguments[1] || window.document;

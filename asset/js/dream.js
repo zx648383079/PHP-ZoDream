@@ -22,7 +22,10 @@
 		Z('.shade,#create').hide();
 		var obj = document.createElement("li");
 		obj.innerHTML = Z("@title").val();
-		Z(obj).addEvent('click', zodream.selected );
+		Z(obj).addEvent('click', zodream.selected ).attr( "draggable", "true")
+			.addEvent('dragstart', zodream.dragstart ).addEvent('dragover', zodream.dragover )
+			.addEvent('drop', zodream.drop );;
+		
 		if( zodream.selectElement === null) {
 			Z(".editbox ul").addChild(obj);
 			return;
@@ -78,7 +81,7 @@
 			Z(span).addEvent('click', zodream.more);
 			var ul = document.createElement("ul");
 			ul.appendChild( obj );
-			
+			Z(ul).addEvent('dragover', zodream.dragover ).addEvent('drop', zodream.drop );
 			Z(element).addChild(span);
 			Z(element).addChild(ul);	
 		},
@@ -111,8 +114,8 @@
 	 */
 	Z(".editbox li").attr( "draggable", "true");
 	Z(".editbox li").addEvent('dragstart', zodream.dragstart );
-	Z(".editbox li").addEvent('dragover', zodream.dragover );
-	Z(".editbox li").addEvent('drop', zodream.drop );
+	Z(".editbox li,.editbox ul").addEvent('dragover', zodream.dragover );
+	Z(".editbox li,.editbox ul").addEvent('drop', zodream.drop );
 	
 	/**
 	 * 展开分类
