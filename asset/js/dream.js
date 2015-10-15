@@ -90,6 +90,7 @@
 		dragover: function(ev) {
 			ev.stopPropagation();
 			ev.preventDefault();
+			zodream.select(ev.target);
 		},
 		drop: function(ev) {
 			ev.stopPropagation();
