@@ -194,7 +194,7 @@ zodream.fn.prototype = {
 	},
 	getForm: function() {
 		var data = "",
-			elements = this.getMore('input,textarea', this.elements[0]);
+			elements = zodream.getEelementsByTag('input,textarea', this.elements[0]);
 		for (var i = 0, len = elements.length; i < len; i++) {
 			var element = elements[i];
 			if(element.required && element.value == "") {
@@ -208,10 +208,10 @@ zodream.fn.prototype = {
 				case 'password':    
 				case 'text':
 				case 'email':
-					data += "&" + element.name + "=" + Helper.encode(element.value);
+					data += "&" + element.name + "=" + zodream.encode(element.value);
 					break; 
 				case 'textarea':
-					data += "&" + element.name + "=" + Helper.encode( Helper.toHtml(element.value) );
+					data += "&" + element.name + "=" + zodream.encode( zodream.toHtml(element.value) );
 					break; 
 				case 'checkbox':    
 				case 'radio':
@@ -227,13 +227,13 @@ zodream.fn.prototype = {
 		return data;
 	},
 	clearForm: function() {
-		var elements = this.getMore('input,textarea', this.elements[0]);
+		var elements = zodream.getEelementsByTag('input,textarea', this.elements[0]);
 		for (var i = 0, len = elements.length; i < len; i++) {
 			var element = elements[i];
 			switch ( element.type.toLowerCase() ) {    
 				case 'submit':
-				case 'hidden':
 					break;  
+				case 'hidden':
 				case 'password':    
 				case 'text':
 				case 'email':
@@ -516,8 +516,8 @@ zodream.extend({
 			method: "GET",
 			url: '',
 			data: null,
-			success: null,
-			error: null,
+			success: function() {},
+			error: function() {},
 			async: true
 		},
 		settings: {},
@@ -546,19 +546,25 @@ zodream.extend({
 					//var text = decodeURI( this.http.responseText );
 					var data;
 					try {
-						data = Helper.parseJSON(this.http.responseText );
+						data = zodream.parseJSON(this.http.responseText );
 					} catch (error) {
 						data = this.http.responseText;
 					}
-					this.settings.success( data , this.http );
+					if(typeof this.settings.success == "function") {
+						this.settings.success( data , this.http );						
+					}
 				}else {
-					this.settings.error(this.http.responseText, this.http.status, this.http);
+					if(typeof this.settings.error == "function") {
+						this.settings.error(this.http.responseText, this.http.status, this.http);
+					}else if(typeof this.settings.success == "function") {
+						this.settings.success(this.http.responseText, this.http.status, this.http);						
+					}
 				}
 			}
 		},
-		get: function(url, func) {
+		get: function( url, func) {
 			var data;
-			if(arguments.length > 1)
+			if(typeof url == "string")
 			{
 				data = {
 					url: arguments[0],
@@ -571,7 +577,7 @@ zodream.extend({
 		},
 		post: function() {
 			var data;
-			if(arguments.length > 1)
+			if(typeof url == "string")
 			{
 				data = {
 					method: "POST",
@@ -606,6 +612,9 @@ zodream.extend({
 			}
 			return num;
 		}
+	},
+	url: function() {
+		return window.location.href;
 	},
 	forE: function(func) {
 		var data = Array();
