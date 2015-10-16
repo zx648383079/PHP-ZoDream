@@ -8,6 +8,7 @@ use App\Model\UserModel;
 use App\Lib\Role\RComma;
 use App\Model\GroupModel;
 use App\Model\SystemModel;
+use App\Model\DocumentModel;
 
 class AdminController extends Controller
 {
@@ -112,7 +113,14 @@ class AdminController extends Controller
 	
 	function documentAction()
 	{
-		$model = new SystemModel();
+		$model = new DocumentModel();
+		if(App::$request->isPost()) {
+			
+		}
+		if(empty(App::$request->get('id'))){
+			
+		}
+		
 		$data = $model->findList(null,'id,page');
 		$this->show('admin.document', array(
 			'title' => '文档管理',
