@@ -79,7 +79,7 @@ class DocumentModel extends Model
 		$num = $model->num;
 		switch ($data['num']) {
 			case '1':
-				$this->updateOne('num', "pid = {$pid} AND num = ".($num - 1), 1 );
+				$this->updateOne('num', "pid = {$pid} AND num = ".($num - 1));
 				$this->updateOne('num', "id = {$data['id']}", -1);
 				break;
 			case '2':

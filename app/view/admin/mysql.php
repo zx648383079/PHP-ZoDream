@@ -30,11 +30,12 @@ App::extend(array(
 					}
 					$str .= '</table>';
 					echo $str;
-				}else if($model === FALSE)
+				}
+				$error = App::ret('error'); 
+				if($error)
 				{
-					echo '<p class="fail">执行失败！</p>';
-				}else if($model == TRUE)
-				{
+					echo '<p class="fail">执行失败！',$error,'</p>';
+				}else if($model){
 					echo '<p class="success">执行成功！</p>';
 				}
 			?>

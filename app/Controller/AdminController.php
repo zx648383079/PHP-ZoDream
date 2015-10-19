@@ -89,15 +89,18 @@ class AdminController extends Controller
 		$sql = isset($_POST['sql'])?$_POST['sql']:'';
 		$arr = explode('@@',$sql,3);
 		$model = array();
-		if(!empty($arr[1]))
+		$error = null;
+		/*if(!empty($arr[1]))
 		{
 			$roles = new RolesModel();
-			$model = $roles->execute($arr[1])->getList();
-		}
+			$model = $roles->findByHelper($arr[1]);
+			$error = $roles->getError();
+		}*/
 		
 		$this->show('admin.mysql',array(
-			'model'=>$model,
-			'sql'=>$sql
+			'model'=> $model,
+			'sql'=> $sql,
+			'error' => $error
 			));
 	}
 	
@@ -149,7 +152,7 @@ class AdminController extends Controller
 					$model->deleteAllById( App::$request->get('id') );
 					break;
 				default:
-					$data = $model->findById(App::$request->get('id'), 'id,title,content');
+					$data = $model->findById( App::$request->get('id'), 'id,title,content');
 					break;
 			}
 			$this->ajaxJson(array(
