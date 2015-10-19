@@ -23,15 +23,6 @@ App::extend(array(
     </div>
     <?php HTree::make(App::ret('data')); ?>
   </div>
-  <?php
-    $data = App::ret('data');
-    if(!empty($data)) 
-    {
-      foreach ($data as $value) {
-        echo $value['page'];
-      }
-    }
-  ?>
 </div>
 </div>
 	
