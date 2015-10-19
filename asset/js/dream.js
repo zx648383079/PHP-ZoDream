@@ -119,6 +119,7 @@
 					zodream.addElement( zodream.dragElement , ev.target);
 					pid = Z(ev.target).attr("data");
 				}
+				pid = pid || 0;
 				zodream.ajax.get(zodream.url() + "&id=" + id + "&mode=parent&pid=" + pid);
 				
 				if(Z(parent).getChildren("li").length < 1) {
