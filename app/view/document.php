@@ -1,4 +1,5 @@
 <?php 
+use App\Lib\Html\HTree;
 
 App::$data['nav'] = 3;
 App::extend(array(
@@ -12,23 +13,11 @@ App::extend(array(
 	
 
 <div class="container">
-  <div class="short fixed">
-    <input type="text" placeholder="请输入关键字"/>
-	<ul>
-		<li><a href="#">aa</a></li>
-		<li><a href="#">aa</a></li>
-		<li><a href="#">aa</a>
-			<ul>
-				<li><a href="#">aa</a></li>
-				<li><a href="#">aa</a></li>
-				<li><a href="#">aa</a></li>
-				<li><a href="#">aa</a></li>
-				<li><a href="#">aa</a></li>
-			</ul>
-		</li>
-		<li><a href="#">aa</a></li>
-		<li><a href="#">aa</a></li>
-	</ul>
+  <div id="sotext" class="short fixed">
+    <input type="text" name="text" placeholder="请输入关键字"/>
+	<div id="viewtree" class="treebox">
+	<?php HTree::make(App::ret('data')); ?>
+	</div>
   </div>
   <div class="long fixed">
     <div id="document">

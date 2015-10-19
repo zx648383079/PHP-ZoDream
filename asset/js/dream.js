@@ -42,7 +42,9 @@
 	});
 	Z(".create").addEvent('click', function() {
 		Z('.shade,#create').show();
-		Z('@pid').val(Z(zodream.selectElement).attr("data"));
+		if(zodream.selectElement) {
+			Z('@pid').val(Z(zodream.selectElement).attr("data"));			
+		}
 	});
 	
 	/**
@@ -134,10 +136,10 @@
 	/**
 	 * 拖拽
 	 */
-	Z(".treebox li").attr( "draggable", "true");
-	Z(".treebox li").addEvent('dragstart', zodream.dragstart );
-	Z(".treebox li,.treebox ul").addEvent('dragover', zodream.dragover );
-	Z(".treebox li,.treebox ul").addEvent('drop', zodream.drop );
+	Z("#edittree li").attr( "draggable", "true");
+	Z("#edittree li").addEvent('dragstart', zodream.dragstart );
+	Z("#edittree li,#edittree ul").addEvent('dragover', zodream.dragover );
+	Z("#edittree li,#edittree ul").addEvent('drop', zodream.drop );
 	
 	/**
 	 * 展开分类
@@ -146,11 +148,29 @@
 	/**
 	 * 选中分类
 	 */
-	Z(".treebox li").addEvent('click', zodream.selected );
+	Z("#edittree li").addEvent('click', zodream.selected );
+	
+	Z("#viewtree li").addEvent('click', function() {
+		var child = Z(this).getChildren( "ul");
+			if( child.length < 1 || Z(child).css("display") == "none" ) {
+				zodream.select(this);
+				zodream.ajax.get(zodream.url() + "&id=" + Z(zodream.selectElement).attr("data"), function(msg) {
+					if(msg.status == 0) {
+						var title = document.createElement("div");
+						Z(title).html(msg.data.title).addClass("title");
+						var div = document.createElement("div");
+						div.innerHTML = msg.data.content;
+						Z("#document").removeChild();
+						Z("#document").addChild(title, div);
+					}			
+				});
+			};
+		
+	});
 	/**
 	 * 操作分类
 	 */
-	Z(".treebox .tool a").addEvent('click', function() {
+	Z("#edittree .tool a").addEvent('click', function() {
 		Z(".treebox li", true ).forE(function(e , i , ele) {
 			if(Z(e).css("background-color") !== "transparent") {
 				var id = Z(e).attr("data");
@@ -185,7 +205,7 @@
 						zodream.ajax.get(zodream.url() + "&id=" + id, function(msg) {
 							if(msg.status == 0) {
 								Z("@title").val(msg.data.title);
-								Z("@content").val(msg.data.content);
+								Z("@content").val(zodream.htmlTo(msg.data.content));
 								Z('.shade,#create').show();
 							}
 						});
@@ -196,4 +216,36 @@
 			}
 		}, this );
 	});
+	
+	zodream.extend({
+		soStatus: false
+	});
+	
+	Z("#sotext input").addEvent("input", function() {
+		if(!zodream.soStatus) {
+			Z("#viewtree li").forE(function(e) {
+				Z(Z(e).getChildren("ul,span")).removeSelf();
+				Z("#viewtree ul").addChild(e);
+			});
+		}
+		var text = Z(this).val();
+		if(text == '') {
+			Z("#viewtree li").show();
+		}else {
+			var texts = text.split(" ");
+			Z("#viewtree li").forE(function(e) {
+				Z(e).show();
+				if(Z(e).html().indexOf(text) < 0) {
+					Z(e).hide();
+				}
+				for (var i = 0,len = texts.length; i < len; i++) {
+					if( texts[i] !="" && Z(e).html().indexOf(texts[i]) >= 0) {
+						Z("#viewtree ul").addChild(e);
+						Z(e).show();
+					}
+				}
+			});
+		}
+	});
+	
 })();

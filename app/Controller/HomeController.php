@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App;
 use App\Model\SystemModel;
+use App\Model\DocumentModel;
 
 class HomeController extends Controller
 {
@@ -38,8 +39,18 @@ class HomeController extends Controller
 	
 	function documentAction()
 	{
+		$model = new DocumentModel();
+		if(!empty(App::$request->get('id'))){
+			$data = $model->findById(App::$request->get('id'), 'id,title,content');
+			$this->ajaxJson(array(
+				'status' => '0',
+				'data' => $data
+			));
+		}
+		$data = $model->findTitle();
 		$this->show('document', array(
-			'title' => '文档'
+			'title' => '文档',
+			'data' => $data
 		));
 	}
 } 

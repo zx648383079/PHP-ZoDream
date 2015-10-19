@@ -44,6 +44,11 @@ class DocumentModel extends Model
 	
 	public function fillOrUpdate($data) 
 	{
+		if(array_key_exists('content', $data)) 
+		{
+			$data['content'] = addslashes($data['content']);
+		}
+		
 		if(array_key_exists('id', $data) && $data['id'] > 0) 
 		{
 			unset($data['num']);

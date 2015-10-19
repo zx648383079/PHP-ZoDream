@@ -74,6 +74,22 @@ li.panel .body{
 	margin-left: 20px;
 }
 
+#sotext{
+	text-align: center;
+}
+
+#viewtree ul{
+	padding-left: 3px;
+	border: none;
+	margin: 0px;	
+}
+
+#document .title{
+	font-size: 30px;
+	font-weight: 700;
+	text-align: center;
+	border-bottom: 1px solid #c8c8c8;
+}
 
 @media (min-height:550px){
 .center form{

@@ -379,7 +379,10 @@ zodream.extend({
 　　　　return val;
 	},
 	getEelementsByTag: function(name) {
-		var element = arguments[1] || window.document;
+		if(!arguments[1]) {
+			return;
+		}
+		var element = arguments[1];
 		if(name.indexOf(",") > 0) {
 			return zodream._getMore(name, element);
 		}else if( name.indexOf(" ") > 0 ) {
@@ -404,10 +407,16 @@ zodream.extend({
 		return data;
 	},
 	_getNextAll: function(name) {
-		return this._getElements(name, " " , arguments[1] || window.document , this.getEelementsByTag);
+		if(!arguments[1]) {
+			return;
+		}
+		return this._getElements(name, " " , arguments[1], this.getEelementsByTag);
 	},
 	_getNext: function(name) {
-		return this._getElements(name, ">" , arguments[1] || window.document , this.getChildByTag);
+		if(!arguments[1]) {
+			return;
+		}
+		return this._getElements(name, ">" , arguments[1], this.getChildByTag);
 	},
 	_getElements: function(name, separator ,elements, func ) {
 		var names = name.split(separator);
@@ -458,11 +467,14 @@ zodream.extend({
 					break;
 			}
 		}
-		
 		return args;
 	},
 	getChild: function(name) {
-		var parent = arguments[1] || window.document;
+		if(!arguments[1]) {
+			return;
+		}
+		
+		var parent = arguments[1];
 		switch (name.charAt(0)) {
 			case '.':
 				name = name.slice(1);
@@ -575,7 +587,7 @@ zodream.extend({
 			}
 			this.load(data);
 		},
-		post: function() {
+		post: function(url) {
 			var data;
 			if(typeof url == "string")
 			{
@@ -588,7 +600,6 @@ zodream.extend({
 			}else {
 				data = arguments[0];
 			}
-			if( data.data === false) return;
 			this.load(data);
 			
 		},
