@@ -19,28 +19,24 @@
 		Z('.shade,#create').hide();
 	});
 	Z(".add").addEvent('click', function() {
-		zodream.ajax.post(zodream.url(), Z('#create form').getForm(), function(msg){
-			if(msg.status == 0)
-			{
-				Z('.shade,#create').hide();
-				var obj = document.createElement("li");
-				obj.innerHTML = Z("@title").val();
-				Z(obj).addEvent('click', zodream.selected ).attr( "draggable", "true")
-					.addEvent('dragstart', zodream.dragstart ).addEvent('dragover', zodream.dragover )
-					.addEvent('drop', zodream.drop );;
-				
-				if( zodream.selectElement === null) {
-					Z(".treebox ul").addChild(obj);
-					return;
-				}
-				zodream.addElement(obj, zodream.selectElement);
-				Z().clearForm('#create form');
-			}
-		});
+		Z('.shade,#create').hide();
+		var obj = document.createElement("li");
+		obj.innerHTML = Z("@title").val();
+		Z(obj).addEvent('click', zodream.selected ).attr( "draggable", "true")
+			.addEvent('dragstart', zodream.dragstart ).addEvent('dragover', zodream.dragover )
+			.addEvent('drop', zodream.drop );;
+		
+		if( zodream.selectElement === null) {
+			Z(".treebox ul").addChild(obj);
+			return;
+		}
+		
+		zodream.addElement(obj, zodream.selectElement);
+		
+		
 	});
 	Z(".create").addEvent('click', function() {
 		Z('.shade,#create').show();
-		Z('@pid').val(Z(zodream.selectElement).attr("data"));
 	});
 	
 	/**
@@ -51,10 +47,6 @@
 		select: function( element ) {
 			if(this.selectElement) {
 				Z(this.selectElement).css("background-color", "transparent");				
-			}
-			if(this.selectElement === element) {
-				this.selectElement = null;
-				return;
 			}
 			this.selectElement = element;
 			
@@ -107,21 +99,15 @@
 			ev.stopPropagation();
 			ev.preventDefault();
 			if(zodream.dragElement) {
-				var parent = Z(zodream.dragElement).parents();
-				var pid = 0,
-					id = Z(zodream.dragElement).attr("data");
 				if(ev.target.tagName.toLowerCase() == "ul") {
 					ev.target.appendChild(zodream.dragElement);
-					pid = Z(Z(ev.target).parents()).attr("data");
 				}else {
+					var parent = Z(zodream.dragElement).parents();
 					zodream.addElement( zodream.dragElement , ev.target);
-					pid = Z(ev.target).attr("data");
-				}
-				zodream.ajax.get(zodream.url() + "&id=" + id + "&mode=parent&pid=" + pid);
-				
-				if(Z(parent).getChildren("li").length < 1) {
-					Z(Z(parent).prev()).removeSelf();
-					Z(parent).removeSelf();
+					if(Z(parent).getChildren("li").length < 1) {
+						Z(Z(parent).prev()).removeSelf();
+						Z(parent).removeSelf();
+					}
 				}
 				
 			}
@@ -150,7 +136,6 @@
 	Z(".treebox .tool a").addEvent('click', function() {
 		Z(".treebox li", true ).forE(function(e , i , ele) {
 			if(Z(e).css("background-color") !== "transparent") {
-				var id = Z(e).attr("data");
 				switch (Z(ele).html()) {
 					case "删除":
 						if(Z(e).getSibling().length < 1) {
@@ -159,33 +144,18 @@
 						}else {
 							Z(e).removeSelf();							
 						}
-						zodream.ajax.get(zodream.url() + "&id=" + id + "&mode=delete");
 						break;
 					case "上移":
 						var pre = Z(e).prev();
 						if(pre) {
 							Z(pre).insertBefore(e);
-							zodream.ajax.get(zodream.url() + "&id=" + id + "&mode=move&num=1");
 						}
 						break;
 					case "下移":
 						var next = Z(e).next();
 						if(next) {
 							Z(next).insertAfter(e);
-							zodream.ajax.get(zodream.url() + "&id=" + id + "&mode=move&num=2");
 						}
-						break;
-					case "编辑":
-						Z('@id').val(id);
-						Z("#create .head").html("编辑");
-						Z(".add").html("保存");
-						zodream.ajax.get(zodream.url() + "&id=" + id, function(msg) {
-							if(msg.status == 0) {
-								Z("@title").val(msg.data.title);
-								Z("@content").val(msg.data.content);
-								Z('.shade,#create').show();
-							}
-						});
 						break;
 					default:
 						break;

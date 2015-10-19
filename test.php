@@ -11,6 +11,7 @@ expl('bb/nn/cc/dd');
 function memo($arr,$arr2)
 {
 	var_dump(array_merge($arr,$arr2));
+<<<<<<< HEAD
 }
 
 
@@ -28,3 +29,6 @@ echo -1;
 var_dump($_SERVER['argv']);
 var_dump($_SERVER);
 //"SESSIONNAME"
+=======
+}
+>>>>>>> parent of 4276559... 修改多级分类，包括数据库读写
