@@ -24,3 +24,7 @@ unset($data['a']);
 var_dump($data);
 
 echo -1;
+
+var_dump($_SERVER['argv']);
+var_dump($_SERVER);
+//"SESSIONNAME"
