@@ -115,16 +115,52 @@ class AdminController extends Controller
 	{
 		$model = new DocumentModel();
 		if(App::$request->isPost()) {
+			$post = App::$request->post('id 0,pid 0,num 0,title,content');
+			$error = $this->validata( $post , array(
+				'id' => 'number',
+				'pid' => 'number',
+				'num' => 'number',		
+				'title' => 'max:50|required',
+			));
 			
+			if(!is_bool($error))
+			{
+				$this->ajaxJson(array(
+					'status' => '10',
+					'error' => $error
+				));
+			}else{
+				$model->fillOrUpdate($post);
+				$this->ajaxJson(array(
+					'status' => '0'
+				));
+			}
 		}
-		if(empty(App::$request->get('id'))){
-			
+		if(!empty(App::$request->get('id'))){
+			$data = null;
+			switch (App::$request->get('mode')) {
+				case 'move':
+					$model->move(App::$request->get('id,num'));
+					break;
+				case 'parent':
+					$model->moveParent( App::$request->get('id,pid 0') );
+					break;
+				case 'delete':
+					$model->deleteAllById( App::$request->get('id') );
+					break;
+				default:
+					$data = $model->findById(App::$request->get('id'), 'id,title,content');
+					break;
+			}
+			$this->ajaxJson(array(
+				'status' => '0',
+				'data' => $data
+			));
 		}
-		
-		$data = $model->findList(null,'id,page');
+		$data = $model->findTitle();
 		$this->show('admin.document', array(
 			'title' => '文档管理',
-			'date' => $data
+			'data' => $data
 		));
 	}
 }
