@@ -47,4 +47,9 @@ class SystemModel extends Model
 		}
 		return $this->fill($data);
 	}
+	
+	public function deleteById($id) 
+	{
+		return $this->delete('id = '.$id);
+	}
 }
