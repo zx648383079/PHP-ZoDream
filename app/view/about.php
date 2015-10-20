@@ -24,14 +24,12 @@ App::extend(array(
         {
           echo 'THIS IS ZODREAM!';
         } else {
-          echo $data.content;
+          echo $data->content;
         }
         ?>
-      <p>本作目前属于开发阶段，欢迎加入开发及测试！</p>
-      <p>本作属于免费开源程序！使用本作不受任何限制！</p>
     </div>
     <div class="foot">
-      发表于：<?php echo is_bool($data)?'2015-10-14 11:23:50':OTime::to($data.udate); ?>
+      发表于：<?php echo is_bool($data)?'2015-10-14 11:23:50':OTime::to($data->udate); ?>
     </div>
   </div>
 </div>

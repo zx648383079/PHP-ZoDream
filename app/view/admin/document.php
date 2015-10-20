@@ -32,7 +32,7 @@ App::extend(array(
 	<div class="body">
 		<form>
 			<input type="hidden" name="id" value="0">
-      <input type="hidden" name="pid" value="0">
+      		<input type="hidden" name="pid" value="0">
 			标题：<input type="text" name="title" required><br>
 			内容：<textarea name="content" rows="12"></textarea>
 		</form>

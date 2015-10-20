@@ -23,13 +23,9 @@ App::extend(array(
         {
           echo 'THIS IS ZODREAM!';
         } else {
-          echo $data.content;
+          echo $data->content;
         }
        ?>
-      <p>本作下载地址：<a href="https://github.com/zx648383079/zodream" target="_blank">GITHUB</a></p>
-      <p>Composer 方式：
-        <p class="code">php composer.phar require zodream/zodream dev-master</p>
-       </p>
     </div>
     <div class="foot">
       

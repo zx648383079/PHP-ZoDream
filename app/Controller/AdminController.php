@@ -107,10 +107,54 @@ class AdminController extends Controller
 	function systemAction()
 	{
 		$model = new SystemModel();
-		$data = $model->findList(null,'id,page');
+		if(App::$request->isPost()) {
+			$post = App::$request->post('id 0,page,content');
+			$error = $this->validata( $post , array(
+				'id' => 'number',	
+				'page' => 'max:50|required',
+				'content' => 'required'
+			));
+			
+			if(!is_bool($error))
+			{
+				$this->ajaxJson(array(
+					'status' => '10',
+					'error' => $error
+				));
+			}else{
+				$data = $model->fillOrUpdate($post);
+				$this->ajaxJson(array(
+					'status' => '0',
+					'data' => $data
+				));
+			}
+		}
+		
+		if(!empty(App::$request->get('id'))){
+			$data = null;
+			switch (App::$request->get('mode')) {
+				case 'edit':
+					$data = $model->findById(App::$request->get('id'), 'id,page,content');
+					break;
+				case 'show':
+					$model->updateBool('`show`' , 'id = '.App::$request->get('id') );
+					break;
+				case 'delete':
+					$model->deleteById( App::$request->get('id') );
+					break;
+				default:
+					break;
+			}
+			$this->ajaxJson(array(
+				'status' => '0',
+				'data' => $data
+			));
+		}
+		
+		$data = $model->findList(null,'id,page,`show`');
 		$this->show('admin.system', array(
 			'title' => '系统管理',
-			'date' => $data
+			'data' => $data
 		));
 	}
 	

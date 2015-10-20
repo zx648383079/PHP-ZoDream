@@ -66,7 +66,12 @@ zodream.fn.prototype = {
 		};
 	},
 	parents: function() {
-		return this.elements[0].parentNode;
+		var index = arguments[0] || 1,
+			child = this.elements[0];
+		for (var i = 0; i < index; i++) {
+			child = child.parentNode;
+		}
+		return child;
 	},
 	children: function() {
 		var args = Array();

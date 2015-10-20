@@ -10,7 +10,7 @@ App::extend(array('~layout' => array('head','nav')));
 	 {
 		 echo 'THIS IS ZODREAM!';
 	 } else {
-		 echo $data.content;
+		 echo $data->content;
 	 }
 	?>
 </div>

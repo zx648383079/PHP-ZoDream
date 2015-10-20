@@ -20,7 +20,7 @@ class HomeController extends Controller
 	function aboutAction()
 	{
 		$model = new SystemModel();
-		$data = $model->findByPage('home');
+		$data = $model->findByPage('about');
 		$this->show('about', array(
 			'title' => '关于',
 			'data' => $data
@@ -30,7 +30,7 @@ class HomeController extends Controller
 	function downloadAction()
 	{
 		$model = new SystemModel();
-		$data = $model->findByPage('home');
+		$data = $model->findByPage('download');
 		$this->show('download', array(
 			'title' => '下载',
 			'data' => $data
