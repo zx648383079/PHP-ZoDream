@@ -198,7 +198,7 @@ zodream.fn.prototype = {
 		}
 	},
 	getForm: function() {
-		var data = "",
+		var data = new Object,
 			elements = zodream.getEelementsByTag('input,textarea', this.elements[0]);
 		for (var i = 0, len = elements.length; i < len; i++) {
 			var element = elements[i];
@@ -213,22 +213,19 @@ zodream.fn.prototype = {
 				case 'password':    
 				case 'text':
 				case 'email':
-					data += "&" + element.name + "=" + zodream.encode(element.value);
-					break; 
 				case 'textarea':
-					data += "&" + element.name + "=" + zodream.encode( zodream.toHtml(element.value) );
+					data[element.name] = element.value;
 					break; 
 				case 'checkbox':    
 				case 'radio':
 					if( element.checked ) {
-						data += "&" + element.name + "=" + element.value;
+						data[element.name] = element.value;
 					}
 					break;
 				default:
 					break;
 			} 
 		};
-		data = data.substr(1);
 		return data;
 	},
 	clearForm: function() {
@@ -599,7 +596,7 @@ zodream.extend({
 				data = {
 					method: "POST",
 					url: arguments[0],
-					data: arguments[1],
+					data: zodream.toString(arguments[1]),
 					success: arguments[2],
 				};
 			}else {
@@ -680,6 +677,20 @@ zodream.extend({
 		}  
 		return o; 
 	},
+	toString: function(data) {
+		var str = "";
+		if(typeof data == "object") {
+			for (var key in data) {
+				if (data.hasOwnProperty(key)) {
+					str += "&" + key + "=" + zodream.toHtml(data[key]);
+				}
+			}
+		}else {
+			str = data;
+		}
+		
+		return str;
+	},
 	parseJSON: function( data ) {
 		return JSON.parse( data + "" );
 	},
@@ -690,7 +701,7 @@ zodream.extend({
 		return data.replace(/(&nbsp;)/g, " ").replace(/(\<br\>)/g, "\r\n");
 	},
 	toHtml: function(data) {
-		return data.replace(/[ ]/g, "&nbsp;").replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "<br>");
+		return data.replace(/\n|\r|(\r\n)|(\u0085)|(\u2028)|(\u2029)/g, "").replace(/&/g,'%26').replace(/'/g, '%27');
 	},
 	encode: function(data){  
 		return encodeURI(data).replace(/&/g, '%26').replace(/\+/g,'%2B').replace(/\s/g,'%20').replace(/#/g,'%23');  

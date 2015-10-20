@@ -27,4 +27,4 @@ App::extend(array(
 </div>
 	
 	
-<?php App::extend('~layout.foot');?>
+<?php App::extend('~layout.foot', 'document');?>

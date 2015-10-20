@@ -43,4 +43,7 @@ App::extend(array(
 	</div>
 </div>
 	
-<?php App::extend('~layout.foot');?>
+<?php App::extend('~layout.foot',
+array('before' => 'ckeditor/ckeditor',
+	'admin'
+));?>

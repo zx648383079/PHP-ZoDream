@@ -13,7 +13,7 @@ App::extend(array(
 
 <div class="long">
   <button id="addPage">发表</button>
-  <table id="pagelist">
+  <table id="pagelist" class="table">
 	<thead>
 		<tr>
 			<th>ID</th>
@@ -53,4 +53,7 @@ App::extend(array(
 	</div>
 </div>	
 	
-<?php App::extend('~layout.foot');?>
+<?php App::extend('~layout.foot', 
+array('before' => 'ckeditor/ckeditor',
+	'system'
+));?>

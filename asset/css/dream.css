@@ -169,17 +169,17 @@ textarea:-ms-input-placeholder {
   color: #666666;
 }
 
-table{
+.table{
   width: 100%;
   text-align: center;
   background-color: #f4f4f4;
 }
 
-tbody tr:nth-child(2n+1){
+.table tbody tr:nth-child(2n+1){
   background-color: #f4f4e4;
 }
 
-tbody tr:hover{
+.table tbody tr:hover{
   background-color: #e84;
 }
 
