@@ -8,7 +8,7 @@
 		Z('.shade,#create').hide();
 	});
 	Z(".add").addEvent('click', function() {
-		var data = Z('#page form').getForm();
+		var data = Z('#create form').getForm();
 		if(data == undefined) {
 			return;
 		}
