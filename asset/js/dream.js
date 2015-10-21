@@ -53,8 +53,5 @@
 	 * 展开分类
 	 */
 	Z(".treebox li .more").addEvent('click', zodream.more);
-	/**
-	 * 选中分类
-	 */
-	Z(".treebox li").addEvent('click', zodream.selected );
+
 })();

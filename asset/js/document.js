@@ -29,4 +29,22 @@
 			});
 		}
 	});
+	
+	Z("#viewtree li").addEvent('click', function() {
+		var child = Z(this).getChildren( "ul");
+			if( child.length < 1 || Z(child).css("display") == "none" ) {
+				zodream.select(this);
+				zodream.ajax.get(zodream.url() + "&id=" + Z(zodream.selectElement).attr("data"), function(msg) {
+					if(msg.status == 0) {
+						var title = document.createElement("div");
+						Z(title).html(msg.data.title).addClass("title");
+						var div = document.createElement("div");
+						div.innerHTML = msg.data.content;
+						Z("#document").removeChild();
+						Z("#document").addChild(title, div);
+					}			
+				});
+			};
+		
+	});
 })();

@@ -105,23 +105,11 @@
 	Z("#edittree li,#edittree ul").addEvent('dragover', zodream.dragover );
 	Z("#edittree li,#edittree ul").addEvent('drop', zodream.drop );
 	
-	Z("#viewtree li").addEvent('click', function() {
-		var child = Z(this).getChildren( "ul");
-			if( child.length < 1 || Z(child).css("display") == "none" ) {
-				zodream.select(this);
-				zodream.ajax.get(zodream.url() + "&id=" + Z(zodream.selectElement).attr("data"), function(msg) {
-					if(msg.status == 0) {
-						var title = document.createElement("div");
-						Z(title).html(msg.data.title).addClass("title");
-						var div = document.createElement("div");
-						div.innerHTML = msg.data.content;
-						Z("#document").removeChild();
-						Z("#document").addChild(title, div);
-					}			
-				});
-			};
-		
-	});
+		/**
+	 * 选中分类
+	 */
+	Z("#edittree li").addEvent('click', zodream.selected );
+	
 	/**
 	 * 操作分类
 	 */
