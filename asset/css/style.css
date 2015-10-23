@@ -78,6 +78,10 @@ li.panel .body{
 	text-align: center;
 }
 
+#sotext input[type="text"]{
+	width: 90%;
+}
+
 #viewtree ul{
 	padding-left: 3px;
 	border: none;
