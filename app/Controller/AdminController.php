@@ -130,17 +130,18 @@ class AdminController extends Controller
 			}
 		}
 		
-		if(!empty(App::$request->get('id'))){
+		$id = App::$request->get('id');
+		if(!empty($id)){
 			$data = null;
 			switch (App::$request->get('mode')) {
 				case 'edit':
-					$data = $model->findById(App::$request->get('id'), 'id,page,content');
+					$data = $model->findById($id , 'id,page,content');
 					break;
 				case 'show':
-					$model->updateBool('`show`' , 'id = '.App::$request->get('id') );
+					$model->updateBool('`show`' , 'id = '.$id );
 					break;
 				case 'delete':
-					$model->deleteById( App::$request->get('id') );
+					$model->deleteById( $id );
 					break;
 				default:
 					break;
@@ -183,7 +184,8 @@ class AdminController extends Controller
 				));
 			}
 		}
-		if(!empty(App::$request->get('id'))){
+		$id = App::$request->get('id');
+		if(!empty($id )){
 			$data = null;
 			switch (App::$request->get('mode')) {
 				case 'move':
@@ -193,10 +195,10 @@ class AdminController extends Controller
 					$model->moveParent( App::$request->get('id,pid 0') );
 					break;
 				case 'delete':
-					$model->deleteAllById( App::$request->get('id') );
+					$model->deleteAllById( $id );
 					break;
 				default:
-					$data = $model->findById( App::$request->get('id'), 'id,title,content');
+					$data = $model->findById( $id, 'id,title,content');
 					break;
 			}
 			$this->ajaxJson(array(

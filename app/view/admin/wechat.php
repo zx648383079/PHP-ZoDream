@@ -11,7 +11,7 @@ App::extend(array(
 ?>
 	
 <div class="long">
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>ID</th>

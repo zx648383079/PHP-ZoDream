@@ -40,8 +40,9 @@ class HomeController extends Controller
 	function documentAction()
 	{
 		$model = new DocumentModel();
-		if(!empty(App::$request->get('id'))){
-			$data = $model->findById(App::$request->get('id'), 'id,title,content');
+		$id = App::$request->get('id');
+		if(!empty($id)){
+			$data = $model->findById($id , 'id,title,content');
 			$this->ajaxJson(array(
 				'status' => '0',
 				'data' => $data
