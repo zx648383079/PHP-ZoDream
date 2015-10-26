@@ -10,7 +10,7 @@
 		'zodream',
 		'dream',
 		App::$extra
-		);
+	);
 ?>
 </body>
 </html>
