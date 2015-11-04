@@ -15,15 +15,7 @@ use App\Lib\Auth;
    <?php if(App::role('2')){?>
     <li<?php echo App::ret('nav') == 4?' class="active"':'' ?>><a href="<?php App::url('?c=admin'); ?>">后台</a></li>
    <?php } ?>
-    <li class="right"><a href="
-    <?php 
-    if(Auth::guest())
-    {
-        App::url('?c=auth">登录');
-    }else{
-        App::url('?c=auth&v=logout">'.Auth::user()->name.'(登出)');
-    }; 
-    ?></a>
-    </li>
+    <li class="right"><a href="<?php App::url( Auth::guest() ? '?c=auth' : '?c=auth&v=logout');?>">
+    <?php echo Auth::guest() ? '登录' : Auth::user()->name.'(登出)';?> </a></li>
   </ul>
 </nav>

@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Alchemy' => array($vendorDir . '/alchemy/zippy/src'),
+    'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
+    'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
 );
