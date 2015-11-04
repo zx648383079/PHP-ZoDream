@@ -7,8 +7,7 @@
 </div>
 <?php 
 	App::jcs(
-		'zodream',
-		'dream',
+		'jquery-2.1.4.min',
 		App::$extra
 	);
 ?>
