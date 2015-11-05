@@ -53,3 +53,7 @@ typings/
 
 # composer
 vendor/
+
+.settings/
+.project
+.buildpath
