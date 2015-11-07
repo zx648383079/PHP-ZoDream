@@ -12,6 +12,7 @@ class LogModel extends Model
 	protected $fillable = array(
 		'ip',
 		'url',
+		'data',
 		'cdate'
-		);
+	);
 }

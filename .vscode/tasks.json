@@ -1,0 +1,18 @@
+{
+	"version": "0.1.0",
+	"isShellCommand": true,
+	"command": "tsc",
+	"tasks": [
+		{
+			"taskName": "tsc",
+			"showOutput": "silent",
+			"args": ["-p", "."],
+			"problemMatcher": "$tsc"
+		},
+		{
+			"taskName": "less",
+			"command": "lessc",
+			"args": ["asset/css/zodream.less", ">", "asset/css/zodream.css"]
+		}
+	]
+}
