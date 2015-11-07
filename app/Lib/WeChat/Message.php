@@ -1,16 +1,16 @@
 <?php
 namespace App\Lib\WeChat;
-
+/**************************************************
+ * 消息类
+ *
+ *
+ *
+ ****************************************************/
 use App;
+use App\Model\LogModel;
 
 define ('TOKEN', App::config('wechat.token'));
 
-/**************************************************
-* 消息类
-*
-*
-*
-****************************************************/
 class Message {
     public static $message;
     
@@ -37,7 +37,8 @@ class Message {
     		}
     		$poststr = $GLOBALS["HTTP_RAW_POST_DATA"];
     		if (!empty($poststr)) {
-    			self::$message  = simplexml_load_string($poststr, 'SimpleXMLElement', LIBXML_NOCDATA);
+    			LogModel::getInstance()->addWechat($poststr);
+    			self::$message = simplexml_load_string($poststr, 'SimpleXMLElement', LIBXML_NOCDATA);
     		} else {
     			self::$message = null;
     		}	
@@ -45,11 +46,26 @@ class Message {
         return self::$message;
     }
     
+    private static function _xmlToArray($data) {
+    	if (is_object($data) && get_class($data) === 'SimpleXMLElement') {
+    		$data = (array) $data;
+    	} 
+    	if (is_array($data)) {
+    		foreach ($data as $index => $value) {
+    			$data[$index] = self::_xmlToArray($value);
+    		}
+    	}	 
+    	return $data;
+    }
+    
     /**
      * 响应
      * @param array $data
      */
     public static function response($data) {
+    	if (empty(self::$message)) {
+    		self::get();
+    	}
     	echo '<xml><ToUserName><![CDATA[',self::$message->ToUserName,
     		 ']]></ToUserName><FromUserName><![CDATA[',self::$message->FromUserName,
     		 ']]></FromUserName><CreateTime>',time(),'</CreateTime>',self::_xml($data),'</xml>';

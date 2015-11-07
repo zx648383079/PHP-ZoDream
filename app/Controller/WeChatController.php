@@ -9,11 +9,15 @@ class WechatController extends Controller
 	function indexAction()
 	{
 		//Message::valid();
+		Message::text('sdasdas哈');
 		if (isset(Message::get()->MsgType)) 
 		{
 			switch (Message::get()->MsgType) {
 				case 'event':
 					$this->_event();
+					break;
+				case 'text':
+					$this->_text();
 					break;
 				default:
 					;
@@ -29,6 +33,10 @@ class WechatController extends Controller
 		Wechat::textMsg($content);
 		//writeLog($wechat->msg);
 		exit;
+	}
+	
+	private function _text() {
+		
 	}
 	
 	private function _event() {
