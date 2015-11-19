@@ -1,5 +1,5 @@
 <?php
-App::$data['title'] = '出错了！';
+App::$response->set('title', '出错了！');
 App::extend('~layout.head');
 ?>
 

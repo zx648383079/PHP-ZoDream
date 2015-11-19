@@ -11,6 +11,8 @@ class WechatController extends Controller
 	function indexAction()
 	{
 		//Message::valid();
+		Message::text('hhh');
+		die;
 		if (isset(Message::get()->MsgType)) 
 		{
 			$text = '不错！';

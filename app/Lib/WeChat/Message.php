@@ -20,7 +20,7 @@ class Message {
      * 首次验证
      */
     public static function valid() {
-        $echoStr = App::$request->get['echostr'];
+        $echoStr = App::$request->get('echostr');
         if (self::_checkSignature()) {
             echo $echoStr;
         }
@@ -32,10 +32,10 @@ class Message {
     public static function get()
     {
     	if (empty(self::$message)) {
-    		if (!self::_checkSignature()) {
+    		if (!DEBUG && !self::_checkSignature()) {
     			exit();
     		}
-    		$poststr = $GLOBALS["HTTP_RAW_POST_DATA"];
+    		$poststr = file_get_contents('php://input');//$GLOBALS["HTTP_RAW_POST_DATA"];
     		if (!empty($poststr)) {
     			LogModel::getInstance()->addWechat($poststr);
     			self::$message = simplexml_load_string($poststr, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -66,8 +66,8 @@ class Message {
     	if (empty(self::$message)) {
     		self::get();
     	}
-    	echo '<xml><ToUserName><![CDATA[',self::$message->ToUserName,
-    		 ']]></ToUserName><FromUserName><![CDATA[',self::$message->FromUserName,
+    	echo '<xml><ToUserName><![CDATA[',self::$message->FromUserName,
+    		 ']]></ToUserName><FromUserName><![CDATA[',self::$message->ToUserName,
     		 ']]></FromUserName><CreateTime>',time(),'</CreateTime>',self::_xml($data),'</xml>';
     }
     
@@ -88,7 +88,7 @@ class Message {
     		}
     		return $str;
     	}
-    	return is_numeric($val) ? $val : sprintf('<![CDATA[%s]]>', $data);
+    	return is_numeric($data) ? $data : sprintf('<![CDATA[%s]]>', $data);
     }
     
     /**
@@ -224,7 +224,7 @@ class Message {
      * @return boolean
      */
     private static function _checkSignature() {
-        $values = App::$request->get['signature,timestamp,nonce'];
+        $values = App::$request->get('signature,timestamp,nonce');
         $token  = TOKEN;
         $tmpArr = array($token, $values['timestamp'], $values['nonce']);
         sort($tmpArr, SORT_STRING);

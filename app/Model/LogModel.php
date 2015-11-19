@@ -2,6 +2,8 @@
 namespace App\Model;
 
 use App\Lib\Object\OTime;
+use App\Lib\Helper\HUrl;
+use App\Lib\Helper\HIp;
 
 class LogModel extends Model
 {
@@ -25,11 +27,12 @@ class LogModel extends Model
 	}
 	
 	public function addWechat($xml) {
-		if(empty($ml)) {
+		if (empty($xml)) {
 			return;
 		}
 		return $this->add(array(
-			'url'   => App::url(),
+			'ip'    => HIp::getIp(),
+			'url'   => HUrl::to(),
 			'event' => 'wechat',
 			'data'  => $xml,
 			'cdate' => OTime::Now()
