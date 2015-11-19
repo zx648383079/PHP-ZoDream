@@ -1,8 +1,7 @@
 <?php 
 App::extend(array(
 	'~layout'=>array(
-		'head',
-		'nav'
+		'head'
 		)
 	)
 );

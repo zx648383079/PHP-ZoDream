@@ -1,14 +1,9 @@
-<?php 
-?>
-
-
 <div class="footer">
-  <p>@copy</p>
+  <p>Copyright (c)2015-2018 <a href="<?php App::url('/');?>">ZoDream</a></p>
 </div>
 <?php 
 	App::jcs(
-		'jquery-2.1.4.min',
-		App::$extra
+		'zodream'
 	);
 ?>
 </body>

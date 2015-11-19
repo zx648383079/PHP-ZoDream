@@ -1,0 +1,136 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.side-menu {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #000;
+  color: #fff;
+  width: 10em;
+  padding-top: 3em;
+}
+.side-menu ul {
+  line-height: 2em;
+}
+.side-menu ul li {
+  list-style-type: none;
+  text-align: center;
+}
+.side-menu ul li a {
+  text-decoration: none;
+  color: #fff;
+}
+.side-menu ul li:hover {
+  font-weight: 500;
+  background-color: #003000;
+}
+.side-menu ul li.active {
+  background-color: #008000;
+  border-left: 0.2em solid dodgerblue;
+}
+.container {
+  margin: 0 auto;
+  min-height: 30em;
+}
+.container.top {
+  width: 30em;
+  padding-top: 7em;
+}
+.container.top .logo img {
+  height: 10em;
+}
+.container.mini {
+  padding-left: 5em;
+  width: 80%;
+}
+.container.mini .logo img {
+  height: 5em;
+}
+.container .logo {
+  width: 100%;
+  display: block;
+}
+.container .logo img {
+  width: 100%;
+  margin: 0 auto;
+}
+.container form {
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+.container form input,
+.container form button {
+  font-size: 1.5em;
+  padding: 0.25em;
+  border: 1px solid #7cfc00;
+  border-radius: 10%;
+}
+.container form button,
+.container form input[type="submit"] {
+  font-weight: 500;
+}
+.container ul li {
+  margin: 0.25em 0;
+  background-color: #fee;
+  border-radius: 0.2em;
+  list-style-type: none;
+  padding: 0.5em;
+}
+.container ul li .question {
+  font-weight: 700;
+  font-size: 1.25em;
+  text-align: left;
+}
+.container ul li .answer {
+  text-align: right;
+}
+.container ul li:nth-child(2n) {
+  background-color: #eef;
+  color: #008000;
+}
+.container ul li:hover {
+  border-left: 0.5em solid #faa;
+  border-right: 0.5em solid #faa;
+  background-color: #fcc;
+  color: #300;
+}
+.container .pager {
+  margin-top: 1em;
+}
+.container .pager a {
+  text-decoration: none;
+  padding: 0.5em 1em;
+  border-radius: 30%;
+  background-color: #00f;
+  color: #ccc;
+}
+.container .pager a:hover {
+  background-color: #f00;
+  color: #ccc;
+}
+.container .pager a:first-child {
+  float: left;
+}
+.container .pager a:last-child {
+  float: right;
+}
+.footer {
+  clear: both;
+  width: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 500;
+  background-color: #7cfc00;
+  color: #333;
+}
+@media only screen and (max-width: 500px) {
+  .container {
+    width: 100%;
+  }
+}

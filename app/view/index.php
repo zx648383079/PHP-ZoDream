@@ -1,17 +1,15 @@
 <?php 
-App::extend(array('~layout' => array('head','nav')));
+App::extend(array('~layout' => array('head')));
 ?>
 
-<div class="container">
-	<form>
-		<input type="text">
+<div class="container top">
+	<div class="logo">
+		<img src="<?php App::file('asset/img/logo.png');?>" alt="ZoDream">
+	</div>
+	<form action="<?php App::url('/');?>" method="get">
+		<input type="text" name="search">
 		<button type="submit">搜索</button>
 	</form>
-	<div>
-		<div>
-			
-		</div>
-	</div>
 </div>
 
 <?php App::extend('~layout.foot');?>

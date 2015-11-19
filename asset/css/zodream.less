@@ -1,0 +1,144 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+.side-menu{
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000;
+	color: #fff;
+	width: 10em;
+	padding-top: 3em;
+	ul{
+		line-height: 2em;
+		li{
+			list-style-type: none;
+			text-align: center;
+			a{
+				text-decoration: none;
+				color: #fff;
+			}
+			&:hover{
+				font-weight: 500;
+				background-color: #003000;
+			}
+			&.active{
+				background-color: #008000;
+				border-left: 0.2em solid dodgerblue;
+			}
+		}
+	}
+}
+
+.container{
+	margin: 0 auto;
+	&.top{
+		width: 30em;
+		padding-top: 7em;
+		.logo{
+			img{
+				height: 10em;
+			}
+		}
+	}
+	&.mini{
+		padding-left: 5em;
+		width: 80%;
+		.logo{
+			img{
+				height: 5em;
+			}
+		}
+	}
+	min-height: 30em;
+	.logo{
+		width: 100%;
+		display: block;
+		img{
+			width: 100%;
+			margin: 0 auto;
+		}
+	}
+	form{
+		width: 100%;
+		display: block;
+		text-align: center;
+		input,button{
+			font-size: 1.5em;
+			padding: 0.25em;
+			border: 1px solid #7cfc00;
+			border-radius: 10%;
+		}
+		button,input[type="submit"]{
+			font-weight: 500;
+		}
+	}
+	ul{
+		li{
+			margin: 0.25em 0;
+			background-color: #fee;
+			border-radius: 0.2em;
+			list-style-type: none;
+			padding: 0.5em;
+			.question{
+				font-weight: 700;
+				font-size: 1.25em;
+				text-align: left;
+			}
+			.answer{
+				text-align: right;
+			}
+			&:nth-child(2n) {
+				background-color: #eef;
+				color: #008000;
+			}
+			&:hover{
+				border-left: 0.5em solid #faa;
+				border-right: 0.5em solid #faa;;
+				background-color: #fcc;
+				color: #300;
+			}
+		}
+	}
+	.pager{
+		margin-top: 1em;
+		a{
+			text-decoration: none;
+			padding: 0.5em 1em;
+			border-radius: 30%;
+			background-color: #00f;
+			color: #ccc;
+			&:hover{
+				background-color: #f00;
+				color: #ccc;
+			}
+			&:first-child{
+				float: left;
+			}
+			&:last-child{
+				float: right;
+			}
+		}
+	}
+}
+
+.footer{
+	clear: both;
+	width: 100%;
+	padding: 1em;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: 500;
+	background-color: #7cfc00;
+	color: #333;
+}
+
+@media only screen and (max-width:500px) {
+	.container{
+		width: 100%;
+	}
+}

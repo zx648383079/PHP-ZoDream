@@ -1,16 +1,6 @@
 <?php 
 namespace App\Model;
-/*********************************
-*访问纪录
-*create table zx_logs ( 
-	id int(11) not null AUTO_INCREMENT PRIMARY KEY, 
-	ip varchar(100),
-	url varchar(255),
-	event varchar(50) not null UNIQUE,
-	data text,
-	cdate int(11) 
-)charset = utf8;
-*********************************/
+
 use App\Lib\Object\OTime;
 
 class LogModel extends Model
