@@ -10,7 +10,7 @@ App::extend(array('~layout' => array('head', 'menu')));
 		<input type="text" name="search">
 		<button type="submit">搜索</button>
 	</form>
-	<ul>
+	<ul class="list">
 		<li>
 			<div class="question">
 				这是什么？

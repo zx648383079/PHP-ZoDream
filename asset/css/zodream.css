@@ -73,26 +73,26 @@
 .container form input[type="submit"] {
   font-weight: 500;
 }
-.container ul li {
+.container .list li {
   margin: 0.25em 0;
   background-color: #fee;
   border-radius: 0.2em;
   list-style-type: none;
   padding: 0.5em;
 }
-.container ul li .question {
+.container .list li .question {
   font-weight: 700;
   font-size: 1.25em;
   text-align: left;
 }
-.container ul li .answer {
+.container .list li .answer {
   text-align: right;
 }
-.container ul li:nth-child(2n) {
+.container .list li:nth-child(2n) {
   background-color: #eef;
   color: #008000;
 }
-.container ul li:hover {
+.container .list li:hover {
   border-left: 0.5em solid #faa;
   border-right: 0.5em solid #faa;
   background-color: #fcc;
@@ -117,6 +117,43 @@
 }
 .container .pager a:last-child {
   float: right;
+}
+.container .pane li {
+  border-radius: 0.25em;
+  height: 12em;
+  overflow: hidden;
+  margin: 0.1em;
+  padding: 0.25em;
+  border: 0.1em solid #fcc;
+  display: inline-block;
+  width: 10em;
+  text-align: center;
+  transition: height 1s;
+  -moz-transition: height 1s;
+  /* Firefox 4 */
+  -webkit-transition: height 1s;
+  /* Safari 和 Chrome */
+  -o-transition: height 1s;
+  /* Opera */
+}
+.container .pane li a {
+  text-decoration: none;
+  color: #000;
+}
+.container .pane li img {
+  border-radius: 0.25em 0.25em 0 0;
+  width: 90%;
+  height: 10em;
+}
+.container .pane li p {
+  border-top: 0.2em solid #faa;
+  text-align: left;
+  width: 100%;
+  overflow: hidden;
+}
+.container .pane li:hover {
+  background-color: #fee;
+  height: 18em;
 }
 .footer {
   clear: both;

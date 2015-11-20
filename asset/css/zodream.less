@@ -1,3 +1,10 @@
+.transition(@value) {
+	transition: @value;
+	-moz-transition: @value;	/* Firefox 4 */
+	-webkit-transition: @value;	/* Safari 和 Chrome */
+	-o-transition: @value;	/* Opera */
+}
+
 *{
 	margin: 0;
 	padding: 0;
@@ -76,7 +83,7 @@
 			font-weight: 500;
 		}
 	}
-	ul{
+	.list{
 		li{
 			margin: 0.25em 0;
 			background-color: #fee;
@@ -120,6 +127,39 @@
 			}
 			&:last-child{
 				float: right;
+			}
+		}
+	}
+	.pane{
+		li{
+			border-radius: 0.25em;
+			height: 12em;
+			overflow: hidden;
+			margin: 0.1em;
+			padding: 0.25em;
+			border: 0.1em solid #fcc;
+			display: inline-block;
+			width: 10em;
+			text-align: center;
+			.transition(height 1s);
+			a{
+				text-decoration: none;
+				color: #000;
+			}
+			img{
+				border-radius: 0.25em 0.25em 0 0;
+				width: 90%;
+				height: 10em;
+			}
+			p{
+				border-top: 0.2em solid #faa;
+				text-align: left;
+				width: 100%;
+				overflow: hidden;
+			}
+			&:hover{
+				background-color: #fee;
+				height: 18em;
 			}
 		}
 	}
