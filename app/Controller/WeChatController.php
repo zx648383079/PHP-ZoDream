@@ -6,15 +6,12 @@ use App\Model\WechatModel;
 use App\Model\MessageModel;
 use App\Model\AccountModel;
 
-class WechatController extends Controller
-{
-	function indexAction()
-	{
+class WechatController extends Controller {
+	function indexAction() {
 		//Message::valid();
 		Message::text('hhh');
 		die;
-		if (isset(Message::get()->MsgType)) 
-		{
+		if (isset(Message::get()->MsgType)) {
 			$text = '不错！';
 			switch (Message::get()->MsgType) {
 				case 'event':

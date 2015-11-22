@@ -4,8 +4,7 @@ namespace App\Controller;
 use App;
 
 class GameController extends Controller {
-	function indexAction($id = 0)
-	{
+	function indexAction($id = 0) {
 		if ($id > 0) {
 			$this->show('game.view', array(
 					'title' => '首页'

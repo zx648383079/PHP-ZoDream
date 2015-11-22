@@ -3,7 +3,8 @@
 </div>
 <?php 
 	App::jcs(
-		'zodream'
+		'zodream',
+		App::$response->getExtra()
 	);
 ?>
 </body>

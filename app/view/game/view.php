@@ -14,10 +14,11 @@ App::extend(array('~layout' => array('head')));
 
 <?php 
 App::extend(array('~layout' => array('foot')), array(
-	
+	'https://code.createjs.com/createjs-2015.05.21.min',
+	'zodream.game',
 	function() {?>
 <script type="text/javascript">
-zodream.App.main('stage');
+Zodream.App.main('stage');
 </script>		
 <?php }
 ));

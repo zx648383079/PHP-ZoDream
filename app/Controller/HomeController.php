@@ -4,8 +4,7 @@ namespace App\Controller;
 use App;
 
 class HomeController extends Controller {
-	function indexAction()
-	{
+	function indexAction() {
 		$search = App::$request->get('search');
 		if ($search !== null) {
 			$this->_search($search);

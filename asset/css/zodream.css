@@ -31,6 +31,11 @@
   background-color: #008000;
   border-left: 0.2em solid dodgerblue;
 }
+.side-menu ul.bottom {
+  position: absolute;
+  width: 100%;
+  bottom: 2em;
+}
 .container {
   margin: 0 auto;
   min-height: 30em;
