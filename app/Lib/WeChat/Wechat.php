@@ -68,6 +68,10 @@ class Wechat extends OBase {
         sort($signatureArray, SORT_STRING);
         return sha1(implode($signatureArray)) == $values['signature'];
     }
+    
+    public function run() {
+    	Request::switchType();
+    }
 }
 
 

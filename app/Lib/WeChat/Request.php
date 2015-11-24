@@ -78,7 +78,7 @@ class Request {
                         $data = self::eventTemplateSendJobFinish();
                         break;
                     default:
-                        return Msg::returnErrMsg(MsgConstant::ERROR_UNKNOW_TYPE, '收到了未知类型的消息');
+                        return '收到了未知类型的消息';
                         break;
                 }
                 break;

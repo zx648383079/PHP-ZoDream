@@ -11,9 +11,6 @@ class ResponsePassive {
 	 * @param array $data
 	 */
 	public static function response($data) {
-		if (empty(self::$message)) {
-			self::get();
-		}
 		echo '<xml><ToUserName><![CDATA[', Wechat::getInstance()->get('FromUserName'),
 		']]></ToUserName><FromUserName><![CDATA[',Wechat::getInstance()->get('ToUserName'),
 		']]></FromUserName><CreateTime>',time(),'</CreateTime>',self::_xml($data),'</xml>';
