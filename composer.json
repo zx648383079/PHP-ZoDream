@@ -3,7 +3,8 @@
   "version" : "1.0",
   "require" : {
     "php" : ">=5.3.0",
-    "zodream/zodream" : "dev-master"
+    "zodream/zodream" : "dev-master",
+    "phpmailer/phpmailer": "~5.2"
   },
   "autoload" : {
     "psr-4" : {
