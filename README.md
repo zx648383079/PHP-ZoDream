@@ -3,48 +3,13 @@ PHP开发
 
 # 说明
 
-进行MVC分离，目前参考Laravel、ThinkPHP、Yii框架
-
-# 文件目录
-
-PHP-WeChat
-
->app    		php总文件目录
-
->>config		配置文件
-
->>Controller	控制器
-
->>Model			针对具体表的连接
-
->>view			视图文件
-
->asset			资源文件
-
->>css			css样式
-
->>font			字体文件
-
->>img			图片资源
-
->>js			js脚本
-
->>lang			语言包
-
->vendor			Composer生成的主文件
-
->>composer		Composer生成的自动加载文件
-
->doc			文档
+从微信开发开始，经历了半年，又回到了微信开发
 
 
+# 进度
+
+整理微信API
 
 
-已知问题
--------
-
-
-
-
-更新时间：2015/11/4
+更新时间：2015/11/25
 
