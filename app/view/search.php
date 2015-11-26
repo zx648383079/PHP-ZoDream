@@ -7,7 +7,7 @@ App::extend(array('~layout' => array('head', 'menu')));
 		<img src="<?php App::file('asset/img/logo.png');?>" alt="ZoDream">
 	</div>
 	<form action="<?php App::url('/');?>" method="get">
-		<input type="text" name="search">
+		<input type="text" name="search" value="<?php App::ech('search');?>">
 		<button type="submit">搜索</button>
 	</form>
 	<ul class="list">
@@ -45,8 +45,8 @@ App::extend(array('~layout' => array('head', 'menu')));
 		</li>
 	</ul>
 	<div class="pager">
-		<a href="#">上一页</a>
-		<a href="#">下一页</a>
+		<a href="<?php App::url();?>">上一页</a>
+		<a href="<?php App::url();?>">下一页</a>
 	</div>
 </div>
 

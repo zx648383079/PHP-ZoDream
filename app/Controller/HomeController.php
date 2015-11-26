@@ -21,8 +21,9 @@ class HomeController extends Controller {
 			)	
 		);
 		$this->show('search', array(
-			'title' => '搜'.$arg,
-			'data'  => $data
+			'title'  => '搜'.$arg,
+			'data'   => $data,
+			'search' => $arg
 		));
 	}
 } 
