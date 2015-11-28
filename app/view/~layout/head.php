@@ -8,5 +8,3 @@
 <?php App::jcs('zodream.css', App::$response->getExtra());?>
 </head>
 <body>
-
-
