@@ -1,5 +1,4 @@
 
-# BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
@@ -9,4 +8,3 @@ RewriteRule . /index.php [L]
 RewriteCond %{REQUEST_URI} !^.*(.css|.js|.gif|.png|.jpg|.jpeg)$ 
 </IfModule>
 
-# END WordPress

@@ -41,20 +41,3 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# Session dir
-tmp/
-log/
-
-# Config dir
-app/config/
-
-# vscode
-typings/
-
-# composer
-vendor/
-
-.settings/
-.project
-.buildpath
