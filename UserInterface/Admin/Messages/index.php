@@ -2,15 +2,12 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
+$page = $this->get('page');
 ?>
 <div id="page-wrapper">
     <div class="graphs">
@@ -120,7 +117,7 @@ $this->extend(array(
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->get('messages', array()) as $value) {?>
+                        <?php foreach ($page->getPage() as $value) {?>
                             <tr class="unread checked">
                             <td class="hidden-xs">
                                 <input type="checkbox" class="checkbox">
@@ -153,6 +150,7 @@ $this->extend(array(
                         <?php }?>
                     </tbody>
                 </table>
+                <?php $page->pageLink();?>
                </div>
             </div>
             <div class="clearfix"> </div>
@@ -168,13 +166,8 @@ $this->extend(array(
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

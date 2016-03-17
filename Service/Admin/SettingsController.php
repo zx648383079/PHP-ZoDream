@@ -1,7 +1,7 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Form\OptionsForm;
+use Domain\Form\Home\OptionsForm;
 class SettingsController extends Controller {
 	protected $rules = array(
 			'*' => '@'

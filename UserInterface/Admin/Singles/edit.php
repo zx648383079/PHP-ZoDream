@@ -1,14 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
 $post = $this->get('single', array(
 		'name' => 'index',
@@ -55,18 +51,14 @@ $post = $this->get('single', array(
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            ),
-			'@ueditor' => array(
-					'ueditor.config',
-					'ueditor.all.min'
-			),
-			function(){?>
+    'layout' => array(
+        'foot'
+    )), array(
+        '@ueditor' => array(
+            'ueditor.config',
+            'ueditor.all.min'
+        ),
+        function(){?>
 <script type="text/javascript">
 UE.getEditor("editor");
 </script>

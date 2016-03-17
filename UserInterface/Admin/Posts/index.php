@@ -2,14 +2,10 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
 $page = $this->get('page');
 ?>
@@ -130,16 +126,16 @@ $page = $this->get('page');
                                 <?php echo $value['title'];?>
                             </td>
                             <td>
-                                <?php $this->tag($value['kind'], array('', '服务预览', '产品', '博客', '下载'));?>
+                                <?php echo $value['kind'];?>
                             </td>
                             <td>
                                 <?php echo $value['user'];?>
                             </td>
                             <td>
-                                <?php echo TimeExpand::format($value['udate']);?>
+                                <?php echo TimeExpand::format($value['update_at']);?>
                             </td>
                             <td>
-                                <?php echo TimeExpand::format($value['cdate']);?>
+                                <?php echo TimeExpand::format($value['create_at']);?>
                             </td>
                             <td>
                                 <a href="<?php $this->url('posts/view/id/'.$value['id']);?>">查看</a> 
@@ -166,13 +162,8 @@ $page = $this->get('page');
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

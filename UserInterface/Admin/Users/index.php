@@ -2,15 +2,12 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
+$page = $this->get('users');
 ?>
 <div id="page-wrapper">
     <div class="graphs">
@@ -112,12 +109,13 @@ $this->extend(array(
                             <th>ID</th>
                             <th>用户名</th>
                             <th>邮箱</th>
+                            <th>权限</th>
                             <th>注册时间</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->get('users', array()) as $value) {?>
+                        <?php foreach ($page->getPage() as $value) {?>
                             <tr class="unread checked">
                             <td class="hidden-xs">
                                 <input type="checkbox" class="checkbox">
@@ -126,13 +124,16 @@ $this->extend(array(
                                 <?php echo $value['id'];?>
                             </td>
                             <td>
-                                <?php echo $value['username'];?>
+                                <?php echo $value['name'];?>
                             </td>
                             <td>
                                 <?php echo $value['email'];?>
                             </td>
                             <td>
-                                <?php echo TimeExpand::format($value['cdate']);?>
+                                <?php echo $value['role'];?>
+                            </td>
+                            <td>
+                                <?php echo TimeExpand::format($value['create_at']);?>
                             </td>
                             <td>
                                 <a href="<?php $this->url('users/view/id/'.$value['id']);?>">查看</a>
@@ -141,6 +142,7 @@ $this->extend(array(
                         <?php }?>
                     </tbody>
                 </table>
+                <?php $page->pageLink();?>
                </div>
             </div>
             <div class="clearfix"> </div>
@@ -156,13 +158,8 @@ $this->extend(array(
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

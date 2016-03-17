@@ -1,16 +1,17 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Model\MessagesModel;
+use Domain\Model\Home\MessagesModel;
 class MessagesController extends Controller {
 	protected $rules = array(
 			'*' => '@'
 	);
 	
-	function indexAction($page = 0) {
+	function indexAction() {
 		$model = new MessagesModel();
 		$this->show(array(
-				'messages' => $model->findPage($page)
+			'title' => '消息',
+			'page' => $model->findPage()
 		));
 	}
 	

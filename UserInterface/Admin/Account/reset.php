@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head'
-		))
+    'layout' => array(
+        'head'
+    ))
 );
 ?>
 <body id="login">
@@ -25,8 +25,8 @@ $this->extend(array(
   
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		))
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

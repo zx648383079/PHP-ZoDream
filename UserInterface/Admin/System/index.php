@@ -1,14 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
 ?>
 
@@ -20,7 +16,7 @@ $this->extend(array(
              <div class="col-sm-3 widget_1_box">
                 <div class="wid-social sky">
                     <div class="social-icon text-center">
-                        <i class="fa fa-folder icon-xlg"></i>
+                        <i class="glyphicon glyphicon-folder-close"></i>
                     </div>
                     <div class="social-info">
                         <h4 class="counttype text-center"> <?php echo $value['name'];?></h4>
@@ -34,7 +30,7 @@ $this->extend(array(
              <div class="col-sm-3 widget_1_box">
                 <div class="wid-social sky">
                     <div class="social-icon text-center">
-                        <i class="fa fa-file icon-xlg"></i>
+                        <i class="glyphicon glyphicon-file"></i>
                     </div>
                     <div class="social-info">
                         <h4 class="counttype text-center"> <?php echo $value['name'];?></h4>
@@ -56,13 +52,8 @@ $this->extend(array(
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

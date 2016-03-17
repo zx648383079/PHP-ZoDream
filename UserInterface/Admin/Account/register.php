@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head'
-		))
+    'layout' => array(
+        'head'
+    ))
 );
 ?>
 <body id="login">
@@ -12,13 +12,14 @@ $this->extend(array(
   </div>
   <h2 class="form-heading">注册</h2>
   <form class="form-signin app-cam" action="<?php $this->url();?>" method="POST">
-      <input type="text" class="form-control1" name="username" placeholder="用户名" autofocus="">
-      <input type="email" class="form-control1" name="email" placeholder="邮箱" autofocus="">
-      <input type="password" class="form-control1" name="password" placeholder="密码">
-      <input type="password" class="form-control1" name="cpassword" placeholder="确认密码">
+      <input type="text" class="form-control1" name="name" placeholder="用户名" required autofocus="">
+      <input type="email" class="form-control1" name="email" placeholder="邮箱" required autofocus="">
+      <input type="password" class="form-control1" name="password" placeholder="密码" required>
+      <input type="password" class="form-control1" name="cpassword" placeholder="确认密码" required>
       <label class="checkbox-custom check-success">
-          <input type="checkbox" name="agree" value="agree" id="checkbox1"> <label for="checkbox1">我同意遵守<a href="javascript:void(0);" data-toggle="modal" data-target="#service">《服务条款》</a>和<a href="javascript:void(0);" data-toggle="modal" data-target="#policy">《隐私协议》</a></label>
+          <input type="checkbox" required name="agree" value="agree" id="checkbox1"> <label for="checkbox1">我同意遵守<a href="javascript:void(0);" data-toggle="modal" data-target="#service">《服务条款》</a>和<a href="javascript:void(0);" data-toggle="modal" data-target="#policy">《隐私协议》</a></label>
       </label>
+      <p class="text-danger"><?php $this->ech('error');?></p>
       <button class="btn btn-lg btn-success1 btn-block" type="submit">注册</button>
       <div class="registration">
           已经注册
@@ -93,8 +94,8 @@ $this->extend(array(
     </div>
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		))
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

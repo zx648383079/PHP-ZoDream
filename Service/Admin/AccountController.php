@@ -1,7 +1,7 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Form\AccountForm;
+use Domain\Form\Home\UsersForm;
 use Zodream\Domain\Response\Redirect;
 class AccountController extends Controller {
 	protected $rules = array(
@@ -10,31 +10,31 @@ class AccountController extends Controller {
 	);
 	
 	function indexAction() {
-		$form = new AccountForm();
+		$form = new UsersForm();
 		$form->login();
 		$this->show();
 	}
 	
 	function sendAction() {
-		$form = new AccountForm();
+		$form = new UsersForm();
 		$form->sendEmail();
 		$this->show();
 	}
 	
 	function resetAction() {
-		$form = new AccountForm();
-		$form->reset();
+		$form = new UsersForm();
+		$form->resetByEmail();
 		$this->show();
 	}
 	
 	function registerAction() {
-		$form = new AccountForm();
+		$form = new UsersForm();
 		$form->register();
 		$this->show();
 	}
 	
 	function logoutAction() {
-		$form = new AccountForm();
+		$form = new UsersForm();
 		$form->clearAccount();
 		Redirect::to('account');
 	}

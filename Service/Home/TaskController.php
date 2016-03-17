@@ -2,8 +2,8 @@
 namespace Service\Home;
 
 
-use Domain\Form\TasksForm;
-use Domain\Model\TasksModel;
+use Domain\Form\Home\TasksForm;
+use Domain\Model\Home\TasksModel;
 
 class TaskController extends Controller {
 	function indexAction() {
@@ -12,7 +12,7 @@ class TaskController extends Controller {
 		$form->set();
 		$this->show('task', array(
 				'title' => '任务计划',
-				'page' => $model->findPageWithFront()
+				'page' => array()//$model->findPageWithFront()
 		));
 	}
 }

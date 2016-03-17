@@ -1,8 +1,8 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\OptionsModel;
-use Domain\Model\PostsModel;
+use Domain\Model\Home\OptionsModel;
+use Domain\Model\Home\PostsModel;
 class HomeController extends Controller {
 	function indexAction() {
 		$model = new OptionsModel();
@@ -10,10 +10,6 @@ class HomeController extends Controller {
 		$this->show('index', array(
 				'title' => '首页',
 				'data' => $model->findPage('index'),
-				'product' => $posts->findNewProduct(),
-				'service' => $posts->findNewService(),
-				'blog' => $posts->findBlog(),
-				'download' => $posts->findDownload()
 		));
 	}
 }

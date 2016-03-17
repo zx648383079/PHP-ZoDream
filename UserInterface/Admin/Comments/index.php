@@ -2,14 +2,10 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
 $page = $this->get('page');
 ?>
@@ -162,13 +158,8 @@ $page = $this->get('page');
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

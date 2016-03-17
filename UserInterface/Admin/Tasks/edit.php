@@ -4,11 +4,7 @@ $this->extend(array(
 	'layout' => array(
 		'head',
 		'navbar'
-	)), array(
-		'@admin/css' => array(
-			'custom.css'
-		)
-	)
+	))
 );
 $task = $this->get('task', array(
 	'name' => null,
@@ -80,10 +76,6 @@ $this->extend(array(
 	'layout' => array(
 		'foot'
 	)), array(
-		'@admin/js' => array(
-			'metisMenu.min',
-			'custom'
-		),
 		'@ueditor' => array(
 			'ueditor.config',
 			'ueditor.all.min'

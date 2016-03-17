@@ -8,6 +8,7 @@
 <link rel="icon" href="<?php $this->asset('images/favicon.png');?>">
 <?php $this->jcs(array(
     'bootstrap.min.css',
-     'style.css'
+     'style.css',
+    'custom.css'
 ));?>
 </head>

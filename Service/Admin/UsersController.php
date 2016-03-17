@@ -1,22 +1,26 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Form\UsersForm;
-use Domain\Model\UsersModel;
+use Domain\Form\Home\UsersForm;
+use Domain\Model\Home\UsersModel;
+use Zodream\Domain\Authentication\Auth;
+
 class UsersController extends Controller {
 	protected $rules = array(
 			'*' => '@'
 	);
 	
-	function indexAction($page = 0) {
+	function indexAction() {
 		$model = new UsersModel();
-		$this->send('users', $model->findPage($page));
-		$this->show();
+		$this->show(array(
+			'title' => '用户管理',
+			'users' => $model->findPage()
+		));
 	}
 	
 	function resetAction() {
 		$form = new UsersForm();
-		$form->set();
+		$form->reset();
 		$this->show();
 	}
 	
@@ -27,6 +31,9 @@ class UsersController extends Controller {
 	}
 	
 	function infoAction() {
-		$this->show();
+		$this->show(array(
+			'title' => '用户信息查看',
+			'user' => Auth::user()
+		));
 	}
 }

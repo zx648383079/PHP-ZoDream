@@ -1,9 +1,9 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Model\OptionsModel;
+use Domain\Model\Home\OptionsModel;
 use Zodream\Domain\Response\Redirect;
-use Domain\Form\OptionsForm;
+use Domain\Form\Home\OptionsForm;
 class SinglesController extends Controller {
 	protected $rules = array(
 			'*' => '@'

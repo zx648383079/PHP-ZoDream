@@ -7,45 +7,36 @@
 <meta name="Keywords" content="<?php $this->ech('keywords');?>" />
 <meta name="Description" content="<?php $this->ech('description');?>" />
 <meta name="author" content="<?php $this->ech('author');?>" />
-	<link rel="icon" href="<?php $this->asset('images/favicon.png');?>">
+<link rel="icon" href="<?php $this->asset('images/favicon.png');?>">
 <?php $this->jcs(array(
-	'bootstrap.min.css',
-	'style.css'
+	'fabric.min.css',
+	'fabric.components.min.css',
+	'zodream.css'
 ));?>
 </head>
 <body>
 <!-- header -->
-	<div class="container">
-		<div class="header">
-			<div class="logo">
-				<a href="<?php $this->url('/');?>"><img src="<?php $this->asset('home/images/logo.png');?>" class="img-responsive" alt="ZoDream" /></a>
+<div class="ms-NavBar">
+	<div class="ms-NavBar-openMenu js-openMenu">
+		<i class="ms-Icon ms-Icon--menu"></i>
+	</div>
+	<div class="ms-Overlay"></div>
+	<ul class="ms-NavBar-items">
+		<li class="ms-NavBar-item ms-NavBar-item--search ms-u-hiddenSm">
+			<div class="ms-TextField">
+				<input type="text" class="ms-TextField-field" title="搜索">
 			</div>
-			<div class="header-left">
-				<div class="head-nav">
-						<span class="menu"> </span>
-					<ul class="cl-effect-1">
-						<li><a href="<?php $this->url('/');?>">首页</a></li>
-						<li<?php $this->cas($this->hasUrl('about'), ' class="active"');?>><a href="<?php $this->url('about');?>">关于</a></li>
-						<li<?php $this->cas($this->hasUrl('services'));?>><a href="<?php $this->url('services');?>">服务</a></li>
-						<li<?php $this->cas($this->hasUrl('product'));?>><a href="<?php $this->url('product');?>">产品</a></li>
-						<li<?php $this->cas($this->hasUrl('blog'));?>><a href="<?php $this->url('blog');?>">博客</a></li>
-						<li<?php $this->cas($this->hasUrl('task'));?>><a href="<?php $this->url('task');?>">任务</a></li>
-						<li<?php $this->cas($this->hasUrl('download'));?>><a href="<?php $this->url('download');?>">下载</a></li>
-						<li<?php $this->cas($this->hasUrl('contact'));?>><a href="<?php $this->url('contact');?>">联系</a></li>
-							<div class="clearfix"></div>
-					</ul>
-				</div>
-				<div class="search2">
-					<form action="http://www.baidu.com/baidu" target="_blank">
-						<input name="ie" type="hidden" value="utf-8">
-						<input name="tn" type="hidden" value="SE_zzsearchcode_shhzc78w">
-						<input type="text"  name="word" size="30" baiduSug="1">
-						<input type="submit" value="">
-					</form>
-				</div>
-					<div class="clearfix"> </div>
-			</div>
-				<div class="clearfix"> </div>
-		</div>
-	
+		</li>
+		<li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php $this->url('/');?>">首页</a></li>
+
+		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('product'), ' is-selected');?>"><a class="ms-NavBar-link" href="<?php $this->url('product');?>">产品</a></li>
+		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('blog'));?>"><a class="ms-NavBar-link" href="<?php $this->url('blog');?>">博客</a></li>
+		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('blog'));?>"><a class="ms-NavBar-link" href="<?php $this->url('task');?>">任务</a></li>
+
+		<li class="ms-NavBar-item ms-NavBar-item--right<?php $this->cas($this->hasUrl('blog'));?>">
+			<i class="ms-Icon ms-Icon--creditCardOutline"></i>
+			<a class="ms-NavBar-link" href="<?php $this->url('about');?>">关于</a>
+		</li>
+	</ul>
+</div>
 <!-- header -->	

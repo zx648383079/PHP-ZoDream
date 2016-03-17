@@ -5,11 +5,7 @@ $this->extend(array(
 	'layout' => array(
 		'head',
 		'navbar'
-	)), array(
-		'@admin/css' => array(
-			'custom.css'
-		)
-	)
+	))
 );
 $page = $this->get('page');
 ?>
@@ -172,11 +168,6 @@ $page = $this->get('page');
 $this->extend(array(
 	'layout' => array(
 		'foot'
-	)), array(
-		'@admin/js' => array(
-			'metisMenu.min',
-			'custom'
-		)
-	)
+	))
 );
 ?>

@@ -1,14 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
 ?>
 
@@ -22,28 +18,28 @@ $this->extend(array(
                         <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">原密码</label>
                             <div class="col-sm-8">
-                                <input type="password" name="title" class="form-control1" id="focusedinput" placeholder="原密码">
+                                <input type="password" name="oldpassword" class="form-control1" id="focusedinput" required placeholder="原密码">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">新密码</label>
                             <div class="col-sm-8">
-                                <input type="password" name="tagline" class="form-control1" id="focusedinput" placeholder="新密码">
+                                <input type="password" name="newpassword" required class="form-control1" id="focusedinput" placeholder="新密码">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">确认密码</label>
                             <div class="col-sm-8">
-                                <input type="password" name="keywords" class="form-control1" id="focusedinput" placeholder="确认密码">
+                                <input type="password" name="cpassword" required class="form-control1" id="focusedinput" placeholder="确认密码">
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-push-4">
+                            <div class="col-sm-push-2 col-sm-3">
                                 <button type="submit" class="btn-success btn">保存</button>
                             </div>
                         </div>
-            </form>
-        </div>
+                </form>
+            </div>
         </div>
   </div>
   <div class="copy_layout">
@@ -57,13 +53,8 @@ $this->extend(array(
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

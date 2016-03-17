@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head'
-		))
+	'layout' => array(
+		'head'
+	))
 );
 ?>
 
@@ -19,6 +19,7 @@ $this->extend(array(
 		<label class="checkbox-custom check-success">
           <input type="checkbox" name="remember" value="yes" id="checkbox1"> <label for="checkbox1">记住我！</label>
       	</label>
+		  <p class="text-danger"><?php $this->ech('error');?></p>
 		<div class="submit"><input type="submit" onclick="myFunction()" value="登录"></div>
 		<ul class="new">
 			<li class="new_left"><p><a href="<?php $this->url('account/send');?>">忘记密码 ?</a></p></li>
@@ -29,8 +30,8 @@ $this->extend(array(
   </div>
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		))
+	'layout' => array(
+		'foot'
+	))
 );
 ?>

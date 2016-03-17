@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head'
-		))
+	'layout' => array(
+		'head'
+	))
 );
 ?>
 
@@ -28,8 +28,8 @@ $this->extend(array(
   </div>
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		))
+	'layout' => array(
+		'foot'
+	))
 );
 ?>

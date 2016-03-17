@@ -1,8 +1,8 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Form\TasksForm;
-use Domain\Model\TasksModel;
+use Domain\Form\Home\TasksForm;
+use Domain\Model\Home\TasksModel;
 
 class TasksController extends Controller {
 	protected $rules = array(

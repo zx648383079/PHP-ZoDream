@@ -1,8 +1,8 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Model\PostsModel;
-use Domain\Form\PostsForm;
+use Domain\Model\Home\PostsModel;
+use Domain\Form\Home\PostsForm;
 class PostsController extends Controller {
 	protected $rules = array(
 			'*' => '@'
@@ -10,8 +10,10 @@ class PostsController extends Controller {
 	
 	function indexAction() {
 		$model = new PostsModel();
-		$this->send('page', $model->findPage());
-		$this->show();
+		$this->show(array(
+			'title' => '所有发布',
+			'page' => $model->findPage()
+		));
 	}
 	
 	function addAction() {

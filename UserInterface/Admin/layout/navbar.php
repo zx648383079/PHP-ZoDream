@@ -17,7 +17,7 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
             <!-- /.navbar-header -->
             <ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
-	        		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-comments-o"></i><span class="badge"><?php $this->ech('noread');?></span></a>
+	        		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-comment"></i><span class="badge"><?php $this->ech('noread');?></span></a>
 	        		<ul class="dropdown-menu">
 						<li class="dropdown-menu-header">
 							<strong>消息</strong>
@@ -43,7 +43,7 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 	        		</ul>
 	      		</li>
 			    <li class="dropdown">
-	        		<a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="<?php $this->asset('admin/images/1.png');?>"><span class="badge">9</span></a>
+	        		<a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="<?php $this->asset('images/1.png');?>"><span class="badge">9</span></a>
 	        		<ul class="dropdown-menu">
 						<li class="dropdown-menu-header text-center">
 							<strong>账户</strong>
@@ -72,10 +72,10 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="<?php $this->url('/');?>"><i class="fa fa-dashboard fa-fw nav_icon"></i>面板</a>
+                            <a href="<?php $this->url('/');?>"><i class="glyphicon glyphicon-dashboard"></i>面板</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-edit nav_icon"></i>发布<span class="fa arrow"></span></a>
+                            <a href="#"><i class="glyphicon glyphicon-edit"></i>发布<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php $this->url('posts');?>">所有发布</a>
@@ -86,7 +86,7 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-plug nav_icon"></i>插件<span class="fa arrow"></span></a>
+                            <a href="#"><i class=" glyphicon glyphicon-gift"></i>插件<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php $this->url('plugins');?>">已下载插件</a>
@@ -98,7 +98,7 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-envelope nav_icon"></i>消息<span class="fa arrow"></span></a>
+                            <a href="#"><i class=" glyphicon glyphicon-envelope"></i>消息<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php $this->url('messages');?>">网页消息</a>
@@ -110,7 +110,7 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-tasks nav_icon"></i>任务<span class="fa arrow"></span></a>
+                            <a href="#"><i class=" glyphicon glyphicon-tasks"></i>任务<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php $this->url('tasks');?>">所有任务</a>
@@ -122,7 +122,7 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <!-- /.nav-second-level -->
                         </li>
                          <li>
-                            <a href="#"><i class="fa fa-user nav_icon"></i>用户管理<span class="fa arrow"></span></a>
+                            <a href="#"><i class="glyphicon glyphicon-user"></i>用户管理<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php $this->url('users');?>">所有用户</a>
@@ -140,16 +140,16 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="<?php $this->url('system');?>"><i class="fa fa-table nav_icon"></i>文件系统</a>
+                            <a href="<?php $this->url('system');?>"><i class="glyphicon glyphicon-hdd"></i>文件系统</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw nav_icon"></i>设置<span class="fa arrow"></span></a>
+                            <a href="#"><i class="glyphicon glyphicon-wrench"></i>设置<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php $this->url('settings');?>">基本设置</a>
                                 </li>
                                 <li>
-                                    <a href="#">单页更改<span class="fa arrow"></span></a>
+                                    <a href="#">单页更改<span class="glyphicon glyphicon-menu-down"></span></a>
                                     <ul class="nav nav-third-level">
 		                                <li>
 		                                    <a href="<?php $this->url('singles');?>">单页列表</a>

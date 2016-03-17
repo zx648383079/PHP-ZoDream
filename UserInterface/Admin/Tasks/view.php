@@ -6,9 +6,6 @@ $this->extend(array(
 		'head',
 		'navbar'
 	)), array(
-		'@admin/css' => array(
-			'custom.css'
-		),
 		'@ueditor/third-party/SyntaxHighlighter/shCoreDefault.css'
 	)
 );
@@ -60,10 +57,6 @@ $this->extend(array(
 	'layout' => array(
 		'foot'
 	)), array(
-		'@admin/js' => array(
-			'metisMenu.min',
-			'custom'
-		),
 		'@ueditor/third-party/SyntaxHighlighter/shCore',
 		function () {?>
 			<<script type="text/javascript">

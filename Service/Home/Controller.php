@@ -2,7 +2,7 @@
 namespace Service\Home;
 
 use Zodream\Domain\Routing\Controller as BaseController;
-use Domain\Model\OptionsModel;
+use Domain\Model\Home\OptionsModel;
 abstract class Controller extends BaseController {
 	public function prepare() {
 		$model = new OptionsModel();

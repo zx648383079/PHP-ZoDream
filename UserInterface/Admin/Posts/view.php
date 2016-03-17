@@ -2,15 +2,12 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            ),
-			'@ueditor/third-party/SyntaxHighlighter/shCoreDefault.css'
-        )
+	'layout' => array(
+		'head',
+		'navbar'
+	)), array(
+		'@ueditor/third-party/SyntaxHighlighter/shCoreDefault.css'
+	)
 );
 $data = $this->get('post');
 ?>
@@ -53,15 +50,11 @@ $data = $this->get('post');
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            ),
-			'@ueditor/third-party/SyntaxHighlighter/shCore',
-			function () {?>
+	'layout' => array(
+		'foot'
+	)), array(
+		'@ueditor/third-party/SyntaxHighlighter/shCore',
+		function () {?>
 <<script type="text/javascript">
 $(function(){
 	SyntaxHighlighter.all();

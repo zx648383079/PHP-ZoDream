@@ -1,8 +1,7 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Model\CommentsModel;
-use Domain\Form\Comments;
+use Domain\Model\Home\CommentsModel;
 class CommentsController extends Controller {
 	protected $rules = array(
 			'*' => '@'
@@ -10,8 +9,10 @@ class CommentsController extends Controller {
 	
 	function indexAction() {
 		$model = new CommentsModel();
-		$this->send('page', $model->findPage());
-		$this->show();
+		$this->show(array(
+			'title' => '所有评论',
+			'page' => $model->findPage()
+		));
 	}
 	
 	function addAction() {

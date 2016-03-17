@@ -2,46 +2,38 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+	'layout' => array(
+		'head',
+		'navbar'
+	))
 );
-$data = $this->get('post');
+$data = $this->get('user');
 ?>
 <div id="page-wrapper">
   <div class="graphs">
     <div class="xs">
-    <h3><?php echo $data['title'];?></h3>
+    <h3><?php echo $data['name'];?></h3>
 	<div class="tab-content">
 		<div class="row">
 			<div class="col-sm-2">ID：</div>
 			<div class="col-sm-10">
 				<?php echo $data['id'];?>
 			</div>
-			<div class="col-sm-2">标题：</div>
+			<div class="col-sm-2">用户名：</div>
 			<div class="col-sm-10">
-				<?php echo $data['title'];?>
+				<?php echo $data['name'];?>
 			</div>
-			<div class="col-sm-2">类型：</div>
+			<div class="col-sm-2">邮箱：</div>
 			<div class="col-sm-10">
-				<?php echo $data['kind'];?>
-			</div>		
-			<div  class="col-sm-2">图片：</div>
-			<div class="col-sm-10">
-				<img src="<?php $this->asset($data['image']);?>" alt="">
+				<?php echo $data['email'];?>
 			</div>
-			<div class="col-sm-2">内容：</div>
+			<div class="col-sm-2">权限：</div>
 			<div class="col-sm-10">
-				<?php echo $data['content'];?>
+				<?php echo $data['role'];?>
 			</div>
-			<div class="col-sm-2">提交时间：</div>
+			<div class="col-sm-2">注册时间：</div>
 			<div class="col-sm-10">
-				<?php echo TimeExpand::format($data['cdate']);?>
+				<?php echo TimeExpand::format($data['create_at']);?>
 			</div>
 		</div>
          <div class="clearfix"> </div>
@@ -56,13 +48,8 @@ $data = $this->get('post');
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            )
-        )
+	'layout' => array(
+		'foot'
+	))
 );
 ?>

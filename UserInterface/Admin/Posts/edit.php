@@ -1,19 +1,19 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'custom.css'
-            )
-        )
+    'layout' => array(
+        'head',
+        'navbar'
+    ))
 );
 $post = $this->get('post', array(
-		'title' => null,
-		'kind' => null,
-		'content' => null
+    'title' => null,
+    'image' => null,
+    'keyword' => null,
+    'description' => null,
+    'class_id' => null,
+    'kind' => null,
+    'content' => null
 ));
 ?>
 
@@ -31,21 +31,47 @@ $post = $this->get('post', array(
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="focusedinput" class="col-sm-2 control-label">类型</label>
-                            <div class="col-sm-8">
-                                <select class="form-control1" name="kind" required>
-                                	<option value="1"<?php if (1 == $post['kind']) {?> selected<?php }?>>服务预览</option>
-					                <option value="2"<?php if (2 == $post['kind']) {?> selected<?php }?>>产品</option>
-					                <option value="3"<?php if (null == $post['kind'] || 3 == $post['kind']) {?> selected<?php }?>>博客</option>
-					                <option value="4"<?php if (4 == $post['kind']) {?> selected<?php }?>>下载</option>
-					              </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">内容</label>
                             <div class="col-sm-8">
                                 <textarea id="editor" name="content" class="" placeholder="关键字"><?php echo $post['content'];?></textarea>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">图片</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="image" value="<?php echo $post['image'];?>" class="form-control1" id="focusedinput" placeholder="图片">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">关键字</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="keyword" value="<?php echo $post['keyword'];?>" class="form-control1" id="focusedinput" placeholder="关键字">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">说明</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="description" value="<?php echo $post['description'];?>" class="form-control1" id="focusedinput" placeholder="说明">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">类型</label>
+                            <div class="col-sm-8">
+                                <select class="form-control1" name="kind" required>
+                                    <option value="产品"<?php if ('产品' == $post['kind']) {?> selected<?php }?>>产品</option>
+                                    <option value="博客"<?php if (null == $post['kind'] || '博客' == $post['kind']) {?> selected<?php }?>>博客</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">分类</label>
+                            <div class="col-sm-6">
+                                <select class="form-control1" name="class_id" required>
+                                    <option value="1"<?php if (1 == $post['kind']) {?> selected<?php }?>>未分类</option>
+                                    <option value="2"<?php if (null == $post['kind'] || 2 == $post['kind']) {?> selected<?php }?>>博客</option>
+                                </select>
+                            </div>
+                            <a class="col-sm-2 btn btn-default" href="javascript:;">新增</a>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-push-2 col-sm-3">
@@ -67,18 +93,14 @@ $post = $this->get('post', array(
 
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom'
-            ),
-			'@ueditor' => array(
-					'ueditor.config',
-					'ueditor.all.min'
-			),
-			function(){?>
+    'layout' => array(
+        'foot'
+    )), array(
+        '@ueditor' => array(
+            'ueditor.config',
+            'ueditor.all.min'
+        ),
+        function(){?>
 <script type="text/javascript">
 UE.getEditor("editor");
 </script>

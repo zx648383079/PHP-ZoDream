@@ -2,17 +2,14 @@
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head',
-                'navbar'
-		)), array(
-            '@admin/css' => array(
-                'lines.css',
-                'custom.css',
-                'jqvmap.css',
-                'clndr.css'
-            )
-        )
+	'layout' => array(
+		'head',
+		'navbar'
+	)), array(
+		'lines.css',
+		'jqvmap.css',
+		'clndr.css'
+	)
 );
 ?>
         <div id="page-wrapper">
@@ -65,7 +62,7 @@ $this->extend(array(
 		        <div class="scrollbar" id="style-2">
                    <div class="activity-row">
 	                 <div class="col-xs-1"><i class="fa fa-thumbs-up text-info icon_13"> </i>  </div>
-	                 <div class="col-xs-3 activity-img"><img src='images/5.png' class="img-responsive" alt=""/></div>
+	                 <div class="col-xs-3 activity-img"><img src='<?php $this->asset('images/1.png');?>' class="img-responsive" alt=""/></div>
 	                 <div class="col-xs-8 activity-desc">
 	                 	<h5><a href="#">Lorem Ipsum</a> liked <a href="#">random</a></h5>
 	                    <p>Lorem Ipsum is simply dummy</p>
@@ -75,7 +72,7 @@ $this->extend(array(
                     </div>
 	  			    <div class="activity-row">
 	                 <div class="col-xs-1"><i class="fa fa-comment text-info"></i> </div>
-	                 <div class="col-xs-3 activity-img"><img src='images/3.png' class="img-responsive" alt=""/></div>
+	                 <div class="col-xs-3 activity-img"><img src='<?php $this->asset('images/1.png');?>' class="img-responsive" alt=""/></div>
 	                 <div class="col-xs-8 activity-desc">
 	                 	<h5><a href="#">simply random</a> liked <a href="#">passages</a></h5>
 	                    <p>Lorem Ipsum is simply dummy</p>
@@ -85,7 +82,7 @@ $this->extend(array(
                     </div>
                     <div class="activity-row">
 	                 <div class="col-xs-1"><i class="fa fa-check text-info icon_11"></i></div>
-	                 <div class="col-xs-3 activity-img"><img src='images/1.png' class="img-responsive" alt=""/></div>
+	                 <div class="col-xs-3 activity-img"><img src='<?php $this->asset('images/1.png');?>' class="img-responsive" alt=""/></div>
 	                 <div class="col-xs-8 activity-desc">
 	                 	<h5><a href="#">standard chunk</a> liked <a href="#">model</a></h5>
 	                    <p>Lorem Ipsum is simply dummy</p>
@@ -95,7 +92,7 @@ $this->extend(array(
                     </div>
                     <div class="activity-row1">
 	                 <div class="col-xs-1"><i class="fa fa-user text-info icon_12"></i></div>
-	                 <div class="col-xs-3 activity-img"><img src='images/4.png' class="img-responsive" alt=""/></div>
+	                 <div class="col-xs-3 activity-img"><img src='<?php $this->asset('images/1.png');?>' class="img-responsive" alt=""/></div>
 	                 <div class="col-xs-8 activity-desc">
 	                 	<h5><a href="#">perspiciatis</a> liked <a href="#">donating</a></h5>
 	                    <p>Lorem Ipsum is simply dummy</p>
@@ -276,23 +273,19 @@ $this->extend(array(
    </div>
 <?php 
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		)), array(
-            '@admin/js' => array(
-                'metisMenu.min',
-                'custom',
-                'd3.v3',
-                'rickshaw',
-                'jquery.vmap',
-                'jquery.vmap.sampledata',
-                'jquery.vmap.world',
-                'underscore-min',
-                'moment-2.2.1',
-                'clndr',
-                'site'
-            ),
-            function() {?>
+	'layout' => array(
+			'foot'
+	)), array(
+		'd3.v3',
+		'rickshaw',
+		'jquery.vmap',
+		'jquery.vmap.sampledata',
+		'jquery.vmap.world',
+		'underscore-min',
+		'moment-2.2.1',
+		'clndr',
+		'site',
+		function() {?>
 <script>
 
 var seriesData = [ [], [], [], [], [] ];

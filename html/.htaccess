@@ -1,10 +1,17 @@
-
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f                             
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]                             
-RewriteCond %{REQUEST_URI} !^.*(.css|.js|.gif|.png|.jpg|.jpeg)$ 
+RewriteCond %{REQUEST_URI} !^.*(.css|.js|.gif|.png|.jpg|.jpeg)$
+
+# ∑¿÷πµ¡¡¥
+#RewriteCond %{HTTP_REFERER} !^http://zodream.cn/.*$ [NC]
+#RewriteCond %{HTTP_REFERER} !^http://.com$ [NC]
+#RewriteCond %{HTTP_REFERER} !^http://www.aabbcc.com/.*$ [NC]
+#RewriteCond %{HTTP_REFERER} !^http://www.aabbcc$ [NC]
+#RewriteRule .*.(jpg|jpeg|gif|png|bmp|rar|zip|exe)$ http://www.aabbcc.com/err.html [R,NC]
+
 </IfModule>
 
