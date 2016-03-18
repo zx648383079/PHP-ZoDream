@@ -1,6 +1,7 @@
 <?php
 namespace Service\Admin;
 
+use Domain\Model\Home\ClassesModel;
 use Domain\Model\Home\PostsModel;
 use Domain\Form\Home\PostsForm;
 class PostsController extends Controller {
@@ -19,14 +20,22 @@ class PostsController extends Controller {
 	function addAction() {
 		$form = new PostsForm();
 		$form->set();
-		$this->show('Posts/edit');
+		$model = new ClassesModel();
+		$this->show('Posts/edit', array(
+			'title' => '新增发布',
+			'classes' => $model->findByKind()
+		));
 	}
 	
 	function editAction($id) {
 		$form = new PostsForm();
 		$form->set($id);
 		$form->get($id);
-		$this->show();
+		$model = new ClassesModel();
+		$this->show(array(
+			'title' => '修改',
+			'classes' => $model->findByKind()
+		));
 	}
 	
 	function deleteAction($id) {
@@ -39,7 +48,9 @@ class PostsController extends Controller {
 	
 	function viewAction($id = 0) {
 		$model = new PostsModel();
-		$this->send('post', $model->findById($id));
-		$this->show();
+		$this->show(array(
+			'title' => '查看',
+			'post' => $model->findById($id)
+		));
 	}
 }

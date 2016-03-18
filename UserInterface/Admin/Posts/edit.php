@@ -11,7 +11,7 @@ $post = $this->get('post', array(
     'image' => null,
     'keyword' => null,
     'description' => null,
-    'class_id' => null,
+    'class_id' => 1,
     'kind' => null,
     'content' => null
 ));
@@ -58,20 +58,20 @@ $post = $this->get('post', array(
                             <label for="focusedinput" class="col-sm-2 control-label">类型</label>
                             <div class="col-sm-8">
                                 <select class="form-control1" name="kind" required>
-                                    <option value="产品"<?php if ('产品' == $post['kind']) {?> selected<?php }?>>产品</option>
-                                    <option value="博客"<?php if (null == $post['kind'] || '博客' == $post['kind']) {?> selected<?php }?>>博客</option>
+                                    <option value="product"<?php if ('product' == $post['kind']) {?> selected<?php }?>>产品</option>
+                                    <option value="blog"<?php if (null == $post['kind'] || 'blog' == $post['kind']) {?> selected<?php }?>>博客</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">分类</label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <select class="form-control1" name="class_id" required>
-                                    <option value="1"<?php if (1 == $post['kind']) {?> selected<?php }?>>未分类</option>
-                                    <option value="2"<?php if (null == $post['kind'] || 2 == $post['kind']) {?> selected<?php }?>>博客</option>
+                                    <?php foreach($this->get('classes', array()) as $value) {?>
+                                        <option value="<?php echo $value['id'];?>"<?php if ($value['id'] == $post['class_id']) {?> selected<?php }?>><?php echo $value['name'];?></option>
+                                    <?php }?>
                                 </select>
                             </div>
-                            <a class="col-sm-2 btn btn-default" href="javascript:;">新增</a>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-push-2 col-sm-3">

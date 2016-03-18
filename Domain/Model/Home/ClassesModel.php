@@ -18,4 +18,10 @@ class ClassesModel extends Model {
 				'order' => ' desc' 
 		));
 	}
+
+	public function findByKind($kind = 'blog') {
+		return $this->find(array(
+			'where' => "kind = '{$kind}'"
+		), 'id,name');
+	}
 }
