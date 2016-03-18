@@ -75,15 +75,26 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <a href="<?php $this->url('/');?>"><i class="glyphicon glyphicon-dashboard"></i>面板</a>
                         </li>
                         <li>
-                            <a href="#"><i class="glyphicon glyphicon-edit"></i>发布<span class="glyphicon glyphicon-menu-down"></span></a>
+                            <a href="#"><i class="glyphicon glyphicon-edit"></i>博客<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="<?php $this->url('posts');?>">所有发布</a>
+                                    <a href="<?php $this->url('blogs');?>">所有博客</a>
+                                    <a href="<?php $this->url('category');?>">编辑分类</a>
                                     <a href="<?php $this->url('comments');?>">所有评论</a>
-                                    <a href="<?php $this->url('posts/add');?>">新建发布</a>
+                                    <a href="<?php $this->url('blogs/add');?>">新建博客</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="glyphicon glyphicon-inbox"></i>产品<span class="glyphicon glyphicon-menu-down"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php $this->url('posts');?>">所有产品</a>
+                                    <a href="<?php $this->url('comments');?>">编辑分类</a>
+                                    <a href="<?php $this->url('comments');?>">所有评论</a>
+                                    <a href="<?php $this->url('posts/add');?>">新增产品</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="#"><i class=" glyphicon glyphicon-gift"></i>插件<span class="glyphicon glyphicon-menu-down"></span></a>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh-CN">
+<html lang="ch-ZHS">
 <head>
 <title><?php $this->ech('title', 'ZoDream');?>-<?php $this->ech('tagline', 'ZoDream');?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,9 +31,9 @@
 
 		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('product'), ' is-selected');?>"><a class="ms-NavBar-link" href="<?php $this->url('product');?>">产品</a></li>
 		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('blog'));?>"><a class="ms-NavBar-link" href="<?php $this->url('blog');?>">博客</a></li>
-		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('blog'));?>"><a class="ms-NavBar-link" href="<?php $this->url('task');?>">任务</a></li>
+		<li class="ms-NavBar-item<?php $this->cas($this->hasUrl('task'));?>"><a class="ms-NavBar-link" href="<?php $this->url('task');?>">任务</a></li>
 
-		<li class="ms-NavBar-item ms-NavBar-item--right<?php $this->cas($this->hasUrl('blog'));?>">
+		<li class="ms-NavBar-item ms-NavBar-item--right<?php $this->cas($this->hasUrl('about'));?>">
 			<i class="ms-Icon ms-Icon--creditCardOutline"></i>
 			<a class="ms-NavBar-link" href="<?php $this->url('about');?>">关于</a>
 		</li>

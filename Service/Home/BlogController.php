@@ -1,15 +1,18 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\Home\PostsModel;
+use Domain\Model\Home\BlogsModel;
+
 class BlogController extends Controller {
 	function indexAction() {
-		$model = new PostsModel();
+		$model = new BlogsModel();
 		$this->show('blog', array(
-				'title' => '我们的博客',
-				'page' => array()//$model->findPage(3)
+				'title' => '博客',
+				'page' => $model->findPage()
 		));
 	}
     
-    
+    function viewAction($id = 0) {
+		$this->show('single');
+	}
 }

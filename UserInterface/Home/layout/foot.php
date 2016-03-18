@@ -6,8 +6,13 @@
 $this->jcs(array(
 	'jquery-2.2.1.min',
 	'jquery.fabric.min',
+    'Jquery.NavBar',
 	'zodream'
 	));
 ?>
+<script type="text/javascript">
+$('.ms-NavBar').NavBar();    
+</script>
+
     </body>
 </html>

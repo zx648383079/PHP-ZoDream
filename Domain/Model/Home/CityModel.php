@@ -5,7 +5,7 @@ use Zodream\Domain\Model;
 class CityModel extends Model {
 	protected $table = 'city';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'parent_id',
 		'name',
 		'level'

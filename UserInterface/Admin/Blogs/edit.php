@@ -6,13 +6,12 @@ $this->extend(array(
         'navbar'
     ))
 );
-$post = $this->get('post', array(
+$post = $this->get('data', array(
     'title' => null,
     'image' => null,
     'keyword' => null,
     'description' => null,
-    'class_id' => 1,
-    'kind' => null,
+    'category_id' => 1,
     'content' => null
 ));
 ?>
@@ -55,20 +54,11 @@ $post = $this->get('post', array(
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="focusedinput" class="col-sm-2 control-label">类型</label>
-                            <div class="col-sm-8">
-                                <select class="form-control1" name="kind" required>
-                                    <option value="product"<?php if ('product' == $post['kind']) {?> selected<?php }?>>产品</option>
-                                    <option value="blog"<?php if (null == $post['kind'] || 'blog' == $post['kind']) {?> selected<?php }?>>博客</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">分类</label>
                             <div class="col-sm-8">
-                                <select class="form-control1" name="class_id" required>
-                                    <?php foreach($this->get('classes', array()) as $value) {?>
-                                        <option value="<?php echo $value['id'];?>"<?php if ($value['id'] == $post['class_id']) {?> selected<?php }?>><?php echo $value['name'];?></option>
+                                <select class="form-control1" name="category_id" required>
+                                    <?php foreach($this->get('category', array()) as $value) {?>
+                                        <option value="<?php echo $value['id'];?>"<?php if ($value['id'] == $post['category_id']) {?> selected<?php }?>><?php echo $value['name'];?></option>
                                     <?php }?>
                                 </select>
                             </div>

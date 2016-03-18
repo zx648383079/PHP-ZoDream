@@ -6,7 +6,7 @@ use Zodream\Domain\Model;
 class MessagesModel extends Model {
 	protected $table = 'messages';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'name',
 		'email',
 		'title',

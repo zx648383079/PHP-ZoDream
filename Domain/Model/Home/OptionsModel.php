@@ -5,7 +5,7 @@ use Zodream\Domain\Model;
 class OptionsModel extends Model {
 	protected $table = 'options';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'name',
 		'value'
 	);

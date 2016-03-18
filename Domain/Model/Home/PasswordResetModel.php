@@ -5,7 +5,7 @@ use Zodream\Domain\Model;
 class PasswordResetModel extends Model {
 	protected $table = 'password_reset';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'token',
 		'email',
 		'create_at'

@@ -5,7 +5,7 @@ use Zodream\Domain\Model;
 class MobileModel extends Model {
 	protected $table = 'mobile';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'id',
 		'number',
 		'city',

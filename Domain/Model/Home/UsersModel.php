@@ -7,7 +7,7 @@ use Zodream\Domain\Html\Page;
 class UsersModel extends Model {
 	protected $table = 'users';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'name',
 		'email',
 		'password',

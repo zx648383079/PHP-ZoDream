@@ -3,10 +3,10 @@ namespace Domain\Form\Home;
 
 use Zodream\Domain\Form;
 use Zodream\Infrastructure\Request;
-use Domain\Model\Home\Password_resetModel;
-class Password_resetForm extends Form {
+use Domain\Model\Home\PasswordResetModel;
+class PasswordResetForm extends Form {
 	public function get($id) {
-		$model = new Password_resetModel();
+		$model = new PasswordResetModel();
 		$this->send('data', $model->findById($id));
 	}
 	
@@ -21,9 +21,15 @@ class Password_resetForm extends Form {
 			'create_at' => 'required'
 		))) {
 			$this->send($data);
+			$this->send('error', '验证失败！')
 			return;
 		}
-		$model = new Password_resetModel();
-		$model->add($data);
+		$model = new PasswordResetModel();
+		$result = $model->add($data);
+		if (empty($result)) {
+			$this->send($data);
+			$this->send('error', '服务器出错了！')
+			return;
+		}
 	}
 }

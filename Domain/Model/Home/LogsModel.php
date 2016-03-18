@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Request;
 class LogsModel extends Model {
 	protected $table = 'logs';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'action',
 		'data',
 		'url',

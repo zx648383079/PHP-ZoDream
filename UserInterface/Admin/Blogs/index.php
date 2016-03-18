@@ -66,8 +66,6 @@ $page = $this->get('page');
 			        <div class="clearfix"> </div>
 			    </div>
 			    <div class="float-right">
-			        
-			              
                             <span class="text-muted m-r-sm">Showing 20 of 346 </span>
                             <div class="btn-group m-r-sm mail-hidden-options" style="display: inline-block;">
                                 <div class="btn-group">
@@ -126,7 +124,7 @@ $page = $this->get('page');
                                 <?php echo $value['title'];?>
                             </td>
                             <td>
-                                <?php echo $value['kind'];?>
+                                <?php echo $value['category'];?>
                             </td>
                             <td>
                                 <?php echo $value['user'];?>
@@ -138,9 +136,9 @@ $page = $this->get('page');
                                 <?php echo TimeExpand::format($value['create_at']);?>
                             </td>
                             <td>
-                                <a href="<?php $this->url('posts/view/id/'.$value['id']);?>">查看</a> 
-                                <a href="<?php $this->url('posts/edit/id/'.$value['id']);?>">编辑</a> 
-                                <a href="<?php $this->url('posts/delete/id/'.$value['id']);?>">删除</a>
+                                <a href="<?php $this->url('blogs/view/id/'.$value['id']);?>">查看</a>
+                                <a href="<?php $this->url('blogs/edit/id/'.$value['id']);?>">编辑</a>
+                                <a href="<?php $this->url('blogs/delete/id/'.$value['id']);?>">删除</a>
                             </td>
                         </tr>
                         <?php }?>

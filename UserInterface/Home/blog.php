@@ -9,8 +9,8 @@ $this->extend(array(
 );
 //$page = $this->get('page');
 ?>
-
-<div class="ms-Grid">
+<div class="zd-container">
+<div class="ms-Grid off">
 	<div class="ms-Grid-row">
 		<div class="ms-Grid-col ms-u-md2">
 			<ul class="ms-List">
@@ -38,7 +38,7 @@ $this->extend(array(
 		</div>
 	</div>
 </div>
-
+</div>
 <?php
 $this->extend(array(
 	'layout' => array(

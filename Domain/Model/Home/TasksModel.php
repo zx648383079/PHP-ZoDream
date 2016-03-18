@@ -6,7 +6,7 @@ use Zodream\Domain\Model;
 class TasksModel extends Model {
 	protected $table = 'tasks';
 	
-	protected $fillable = array(
+	protected $fillAble = array(
 		'name',
 		'content',
 		'status',
