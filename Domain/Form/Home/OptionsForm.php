@@ -24,8 +24,7 @@ class OptionsForm extends Form {
 			'description' => 'ZoDream',
 			'author' => 'ZoDream',
 			'index' => '',
-			'about' => '',
-			'contact' => ''
+			'about' => ''
 		);
 		$model = new OptionsModel();
 		foreach ($data as $key => $value) {

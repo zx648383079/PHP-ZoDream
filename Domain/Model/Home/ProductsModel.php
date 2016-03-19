@@ -21,14 +21,44 @@ class ProductsModel extends Model {
 		'update_at',
 		'create_at'
 	);
-	
+
 	public function findPage() {
 		$page = new Page($this->count());
-		$page->setPage($this->find(array(
-				'order' => 'create_at desc',
+		$page->setPage($this->findByHelper(
+			array(
+				'select' => 'p.id as id,p.title as title,p.keyword as keyword,p.description as description,c.name as category,u.name as user,p.update_at as update_at,p.create_at as create_at',
+				'from' => 'products p',
+				'left' => array(
+					'product_classes c',
+					'c.id = p.class_id'
+				),
+				'left`' => array(
+					'users u',
+					'u.id = p.user_id'
+				),
+				'order' => 'p.create_at desc',
 				'limit' => $page->getLimit()
-			), 'id,title,keyword,description'
+			)
 		));
 		return $page;
+	}
+
+	public function findView($id) {
+		return $this->findByHelper(
+			array(
+				'select' => 'p.id as id,p.title as title,p.image as image,p.keyword as keyword,p.description as description,p.content as content,c.name as category,u.name as user,p.update_at as update_at,p.create_at as create_at',
+				'from' => 'products p',
+				'left' => array(
+					'product_classes c',
+					'c.id = p.class_id'
+				),
+				'left`' => array(
+					'users u',
+					'u.id = p.user_id'
+				),
+				'where' => 'p.id = '.$id,
+				'limit' => 1
+			)
+		)[0];
 	}
 }

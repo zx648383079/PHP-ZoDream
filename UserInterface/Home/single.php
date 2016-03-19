@@ -6,15 +6,16 @@ $this->extend(array(
         'head'
     ))
 );
+$date = $this->get('data');
 ?>
 
 <div class="zd-container">
 <div class="ms-Grid off">
 	<div class="ms-Grid-row">
 		<div class="ms-Grid-col ms-u-md12">
-            <h1 class="text-center">hhhhhhhhh</h1>
-            <div>hhh</div>
-            <div>hhh</div>
+            <h1 class="text-center"><?php echo $date['title'];?></h1>
+            <div><?php echo $date['user'];?></div>
+            <div><?php echo $date['content'];?></div>
 		</div>
 	</div>
     <div class="ms-Grid-row">
@@ -39,6 +40,8 @@ $this->extend(array(
         
         <div class="ms-Grid-col ms-u-mdPush2 ms-u-md8">
             <form method="post" action="<?php $this->url();?>">
+                <input type="hidden" name="parent_id" value="0">
+                <input type="hidden" name="blog_id" value="<?php echo $date['id'];?>">
                 <div class="ms-TextField">
                     <input type="text" name="name" class="ms-TextField-field" placeholder="姓名" value="<?php $this->ech('name');?>">
                 </div>

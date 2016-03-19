@@ -9,7 +9,7 @@ $this->extend(array(
 		'@ueditor/third-party/SyntaxHighlighter/shCoreDefault.css'
 	)
 );
-$data = $this->get('post');
+$data = $this->get('blog');
 ?>
 <div id="page-wrapper">
   <div class="graphs">
@@ -25,9 +25,9 @@ $data = $this->get('post');
 			<div class="col-sm-10">
 				<?php echo $data['title'];?>
 			</div>
-			<div class="col-sm-2">类型：</div>
+			<div class="col-sm-2">图片：</div>
 			<div class="col-sm-10">
-				<?php $this->tag($data['kind'], array('', '服务预览', '产品', '博客', '下载'));?>
+				<img src="<?php echo $data['image'];?>">
 			</div>
 			<div class="col-sm-2">内容：</div>
 			<div class="col-sm-10">
@@ -35,7 +35,7 @@ $data = $this->get('post');
 			</div>
 			<div class="col-sm-2">提交时间：</div>
 			<div class="col-sm-10">
-				<?php echo TimeExpand::format($data['cdate']);?>
+				<?php echo TimeExpand::format($data['create_at']);?>
 			</div>
 		</div>
          <div class="clearfix"> </div>

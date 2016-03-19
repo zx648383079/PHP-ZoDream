@@ -6,7 +6,7 @@ class ProductController extends Controller {
 	function indexAction() {
 		$model = new ProductsModel();
 		$this->show('products', array(
-				'title' => '我们的产品',
+				'title' => '开源项目',
 				'page' => $model->findPage()
 		));
 	}

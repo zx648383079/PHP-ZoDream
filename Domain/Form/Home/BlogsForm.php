@@ -12,29 +12,19 @@ class BlogsForm extends Form {
 		$this->send('data', $model->findById($id));
 	}
 	
-	public function set($id = null) {
-		if (!Request::getInstance()->isPost()) {
-			return ;
-		}
-		$data = Request::getInstance()->post('title,image,keyword,description,content,class_id');
+	public function fill() {
+		$data = Request::getInstance()->post('title,image,keyword,description,content,category_id');
 		if (!$this->validate($data, array(
 			'title' => 'required',
 			'content' => 'required',
-			'class_id' => 'required'
+			'category_id' => 'required'
 		))) {
 			$this->send($data);
 			$this->send('error', '验证失败！');
 			return;
 		}
 		$model = new BlogsModel();
-		if (empty($id)) {
-			$data['user_id'] = Auth::user()['id'];
-			$data['create_at'] = time();
-			$result = $model->add($data);
-		} else {
-			$data['update_at'] = time();
-			$result = $model->updateById($id, $data);
-		}
+		$result = $model->fill($data);
 		if (empty($result)) {
 			$this->send($data);
 			$this->send('error', '服务器出错了！');

@@ -89,10 +89,10 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
                             <a href="#"><i class="glyphicon glyphicon-inbox"></i>产品<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="<?php $this->url('posts');?>">所有产品</a>
-                                    <a href="<?php $this->url('comments');?>">编辑分类</a>
+                                    <a href="<?php $this->url('products');?>">所有产品</a>
+                                    <a href="<?php $this->url('classes');?>">编辑分类</a>
                                     <a href="<?php $this->url('comments');?>">所有评论</a>
-                                    <a href="<?php $this->url('posts/add');?>">新增产品</a>
+                                    <a href="<?php $this->url('products/add');?>">新增产品</a>
                                 </li>
                             </ul>
                         </li>

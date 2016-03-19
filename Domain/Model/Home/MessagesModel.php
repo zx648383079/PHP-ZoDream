@@ -2,7 +2,7 @@
 namespace Domain\Model\Home;
 
 use Zodream\Domain\Html\Page;
-use Zodream\Domain\Model;
+use Domain\Model\Model;
 class MessagesModel extends Model {
 	protected $table = 'messages';
 	

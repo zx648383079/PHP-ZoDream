@@ -9,7 +9,7 @@ $this->extend(array(
 
 <body id="login">
   <div class="login-logo">
-    <a href="<?php $this->url('/');?>"><img src="<?php $this->asset('admin/images/logo.png');?>" alt=""/></a>
+    <a href="<?php $this->url('/');?>"><img src="<?php $this->asset('images/logo.png');?>" alt=""/></a>
   </div>
   <h2 class="form-heading">登录</h2>
   <div class="app-cam">

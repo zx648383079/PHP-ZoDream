@@ -3,28 +3,32 @@ namespace Service\Admin;
 
 
 use Domain\Form\Home\BlogsForm;
+use Domain\Form\Home\ProductsForm;
 use Domain\Model\Home\BlogCategoryModel;
 use Domain\Model\Home\BlogsModel;
-class BlogsController extends Controller {
+use Domain\Model\Home\ProductClassesModel;
+use Domain\Model\Home\ProductsModel;
+
+class ProductsController extends Controller {
 	protected $rules = array(
 			'*' => '@'
 	);
 	
 	function indexAction() {
-		$model = new BlogsModel();
+		$model = new ProductsModel();
 		$this->show(array(
-			'title' => '所有博客',
+			'title' => '所有项目',
 			'page' => $model->findPage()
 		));
 	}
 	
 	function addAction() {
-		$form = new BlogsForm();
+		$form = new ProductsForm();
 		$form->runAction('fill');
-		$model = new BlogCategoryModel();
-		$this->show('Blogs/edit', array(
+		$model = new ProductClassesModel();
+		$this->show('Products/edit', array(
 			'title' => '新增发布',
-			'category' => $model->find()
+			'classes' => $model->find()
 		));
 	}
 	
@@ -32,27 +36,27 @@ class BlogsController extends Controller {
 		$form = new BlogsForm();
 		$form->runAction('fill');
 		$form->get($id);
-		$model = new BlogCategoryModel();
+		$model = new ProductClassesModel();
 		$this->show(array(
 			'title' => '修改',
-			'category' => $model->find(),
+			'classes' => $model->find(),
 			'id' => $id
 		));
 	}
 	
 	function deleteAction($id) {
-		$model = new BlogsModel();
-		$data  = $model->deleteById($id);
+		//$model = new BlogsModel();
+		//$data  = $model->deleteById($id);
 		$this->ajaxJson(array(
 				'status' => $data
 		));
 	}
 	
 	function viewAction($id = 0) {
-		$model = new BlogsModel();
+		$model = new ProductsModel();
 		$this->show(array(
 			'title' => '查看',
-			'blog' => $model->findView($id)
+			'product' => $model->findView($id)
 		));
 	}
 }

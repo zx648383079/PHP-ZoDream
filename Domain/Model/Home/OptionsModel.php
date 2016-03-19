@@ -14,8 +14,7 @@ class OptionsModel extends Model {
 		return $this->find(array(
 			'where' => array(
 				'name = \'index\'',
-				array('name = \'about\'', 'or'),
-				array('name = \'contact\'', 'or')
+				array('name = \'about\'', 'or')
 			)
 		));
 	}
@@ -32,8 +31,7 @@ class OptionsModel extends Model {
 		$data = $this->find(array(
 			'where' => array(
 				'name != \'index\'',
-				array('name != \'about\'', 'or'),
-				array('name != \'contact\'', 'or')
+				array('name != \'about\'', 'or')
 			)
 		));
 		$results = array();

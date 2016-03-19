@@ -2,7 +2,7 @@
 namespace Domain\Model\Home;
 
 
-use Zodream\Domain\Model;
+use Domain\Model\Model;
 use Zodream\Domain\Html\Page;
 class BlogsModel extends Model {
 	protected $table = 'blogs';
@@ -27,7 +27,7 @@ class BlogsModel extends Model {
 		$page = new Page($this->count());
 		$page->setPage($this->findByHelper(
 			array(
-				'select' => 'b.id as id,b.title as title,c.name as category,u.name as user,b.update_at as update_at,b.create_at as create_at',
+				'select' => 'b.id as id,b.title as title,b.keyword as keyword,b.description as description,c.name as category,u.name as user,b.update_at as update_at,b.create_at as create_at',
 				'from' => 'blogs b',
 				'left' => array(
 					'blog_category c',
@@ -49,7 +49,6 @@ class BlogsModel extends Model {
 			array(
 				'select' => 'b.id as id,b.title as title,b.image as image,b.keyword as keyword,b.description as description,b.content as content,c.name as category,u.name as user,b.update_at as update_at,b.create_at as create_at',
 				'from' => 'blogs b',
-				'where' => 'b.id = '.$id,
 				'left' => array(
 					'blog_category c',
 					'c.id = b.category_id'
@@ -58,8 +57,9 @@ class BlogsModel extends Model {
 					'users u',
 					'u.id = b.user_id'
 				),
+				'where' => 'b.id = '.$id,
 				'limit' => 1
 			)
-		);
+		)[0];
 	}
 }

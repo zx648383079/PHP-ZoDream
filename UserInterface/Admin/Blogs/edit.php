@@ -23,6 +23,7 @@ $post = $this->get('data', array(
             <div class="tab-content">
                 <div class="tab-pane active" id="horizontal-form">
                     <form class="form-horizontal" action="<?php $this->url();?>" method="POST">
+                        <input type="hidden" name="id" value="<?php $this->ech('id');?>">
                         <div class="form-group">
                             <label for="focusedinput" class="col-sm-2 control-label">标题</label>
                             <div class="col-sm-8">
