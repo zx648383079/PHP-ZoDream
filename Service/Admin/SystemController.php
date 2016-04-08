@@ -9,7 +9,7 @@ class SystemController extends Controller {
 	);
 	
 	function indexAction() {
-		$dir = Request::getInstance()->get('dir', '/');
+		$dir = Request::get('dir', '/');
 		$this->send(array(
 				'title' => '文件系统',
 				'forword' => str_replace('\\', '/', dirname($dir))
@@ -19,7 +19,7 @@ class SystemController extends Controller {
 	
 	function openAction() {
 		$this->send(array(
-				'file' => Request::getInstance()->get('file')
+				'file' => Request::get('file')
 		));
 		$this->show();
 	}

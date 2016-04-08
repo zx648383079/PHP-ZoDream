@@ -23,4 +23,23 @@ class HtmlExpand {
 		$content = preg_replace('/(\<.+?\>)|(\&nbsp;)+/', '', $content);
 		return StringExpand::csubstr($content, 0, $length);
 	}
+
+	public static function getMenu(array $data) {
+		$class = null;
+		foreach ($data as $value) {
+			if ($value['class'] != $class) {
+				if (!is_null($class)) {
+					echo '</ul></li>';
+				}
+				$class = $value['class'];
+				echo '<li>',$class,'<ul>';
+			}
+			if ($value['class'] === $class) {
+				echo '<li data="',$value['url'],'">',$value['name'],'</li>';
+			}
+		}
+		if (!empty($data)) {
+			echo '</ul></li>';
+		}
+	}
 }

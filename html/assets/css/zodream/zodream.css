@@ -1,0 +1,91 @@
+*,
+body {
+    margin: 0;
+    padding: 0;
+}
+.text-center {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="checkbox"],
+textarea,
+button,
+select,
+.btn {
+    font-size: 20px;
+    border: 1px solid deepskyblue;
+    padding: 3px;
+    margin: 2px 0;
+}
+
+button,
+.btn {
+    padding-left: 0 5px;
+    background-color: #fff;
+}
+
+.table {
+    
+}
+
+.table .row {
+    font-size: 20px;
+    border-bottom: 1px solid mediumspringgreen;
+}
+
+.table .row div {
+    line-height: 40px;
+    display: inline-block;
+}
+
+.table .row>div:first-child {
+    font-weight: 700;
+    width: 60px;
+}
+
+.table .column div {
+    width: 100px;
+}
+
+.table .column div:hover {
+    background-color: rgba(233, 233, 233, 0.4);
+}
+
+.main {
+    width: 70%;
+    margin: 200px auto;
+}
+
+.main .search {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.dialog {
+    background-color: rgba(200, 200, 200, 0.5);
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1000;
+    display: none;
+}
+
+.dialog>div {
+    background-color: #fff;
+    width: 400px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}

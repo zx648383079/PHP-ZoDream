@@ -24,7 +24,7 @@
 	<ul class="ms-NavBar-items">
 		<li class="ms-NavBar-item ms-NavBar-item--search ms-u-hiddenSm">
 			<div class="ms-TextField">
-				<input type="text" class="ms-TextField-field" title="搜索">
+				<input type="text" name="search" class="ms-TextField-field" title="搜索">
 			</div>
 		</li>
 		<li class="ms-NavBar-item"><a class="ms-NavBar-link" href="<?php $this->url('/');?>">首页</a></li>

@@ -33,7 +33,7 @@ class ProductsController extends Controller {
 	}
 	
 	function editAction($id) {
-		$form = new BlogsForm();
+		$form = new ProductsForm();
 		$form->runAction('fill');
 		$form->get($id);
 		$model = new ProductClassesModel();

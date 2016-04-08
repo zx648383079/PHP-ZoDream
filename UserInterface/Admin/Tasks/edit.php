@@ -31,11 +31,9 @@ $task = $this->get('task', array(
 								<div class="col-sm-8">
 									<select class="form-control1" name="status" required>
 										<?php $this->swi($task['status'], ' selected');?>
-										<option value="0"<?php $this->cas(0);?>>无</option>
-										<option value="1"<?php $this->cas(1);?>>待审核</option>
-										<option value="2"<?php $this->cas(2);?>>进行中</option>
-										<option value="3"<?php $this->cas(3);?>>维护中</option>
-										<option value="4"<?php $this->cas(4);?>>完成</option>
+										<option value="审核"<?php $this->cas('审核');?>>审核</option>
+										<option value="成功"<?php $this->cas('成功');?>>成功</option>
+										<option value="失败"<?php $this->cas('失败');?>>失败</option>
 									</select>
 								</div>
 							</div>

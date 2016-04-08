@@ -12,11 +12,8 @@ class TasksForm extends Form {
 		$this->send('task', $model->findById($id));
 	}
 
-	public function set($id = null) {
-		if (!Request::getInstance()->isPost()) {
-			return ;
-		}
-		$data = Request::getInstance()->post('name,content,status 0,progress 0');
+	public function add() {
+		$data = Request::post('id,name,content,status 审核,progress 0');
 		if (!$this->validate($data, array(
 			'name' => 'required',
 			'content' => 'required',
@@ -26,14 +23,7 @@ class TasksForm extends Form {
 			return;
 		}
 		$model = new TasksModel();
-		if (is_null($id)) {
-			$data['user_id'] = Auth::user()['id'];
-			$data['udate'] = $data['cdate'] = time();
-			$id = $model->add($data);
-		} else {
-			$data['udate'] = time();
-			$model->updateById($id, $data);
-		}
+		$id = $model->fill($data);
 		if ('Admin' == APP_MODULE) {
 			Redirect::to('tasks/view/id/' . $id);
 		} else {

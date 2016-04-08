@@ -1,6 +1,7 @@
 <?php
 namespace Domain\Model;
 use Zodream\Domain\Authentication\Auth;
+use Zodream\Infrastructure\Request;
 
 /**
  * Created by PhpStorm.
@@ -10,15 +11,19 @@ use Zodream\Domain\Authentication\Auth;
  */
 abstract class Model extends \Zodream\Domain\Model {
     public function fill() {
+        if (func_num_args() === 0) {
+            return false;
+        }
         $args = func_get_arg(0);
+        $args['update_at'] = time();
         if (isset($args['id']) && !empty($args['id'])) {
-            $args['update_at'] = time();
-            return parent::fill($args, $args['id']);
+            return parent::fill($args, intval($args['id']));
         }
         if (!Auth::guest()) {
             $args['user_id'] = Auth::user()['id'];
         }
-        $args['create_at'] = time();
+        $args['ip'] = Request::ip();
+        $args['create_at'] = $args['update_at'];
         return parent::fill($args);
     }
 }

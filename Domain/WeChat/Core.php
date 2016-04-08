@@ -81,10 +81,10 @@ abstract class Core {
     }
 
     protected function checkSignature($str = '') {
-        $signature = Request::getInstance()->get('signature');
-        $signature = Request::getInstance()->get('msg_signature', $signature); //如果存在加密验证则用加密验证段
-        $timestamp = Request::getInstance()->get('timestamp');
-        $nonce = Request::getInstance()->get('nonce');
+        $signature = Request::get('signature');
+        $signature = Request::get('msg_signature', $signature); //如果存在加密验证则用加密验证段
+        $timestamp = Request::get('timestamp');
+        $nonce = Request::get('nonce');
 
         $token = $this->token;
         $tmpArr = array($token, $timestamp, $nonce, $str);
@@ -96,10 +96,10 @@ abstract class Core {
 
     public function valid($return = false) {
         $encryptStr="";
-        if (Request::getInstance()->isPost()) {
-            $postStr = Request::getInstance()->input();
+        if (Request::isPost()) {
+            $postStr = Request::input();
             $array = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $this->encryptType = Request::getInstance()->get('encrypt_type');
+            $this->encryptType = Request::get('encrypt_type');
             if ($this->encryptType == 'aes') { //aes加密
                 $this->log($postStr);
                 $encryptStr = $array['Encrypt'];
@@ -118,7 +118,7 @@ abstract class Core {
             } else {
                 $this->postXml = $postStr;
             }
-        } elseif (null != ($echoStr = Request::getInstance()->get('echostr'))) {
+        } elseif (null != ($echoStr = Request::get('echostr'))) {
             if ($return) {
                 if ($this->checkSignature())
                     return $echoStr;
@@ -338,7 +338,7 @@ abstract class Core {
             return $this;
         }
         if (empty($this->postXml)) {
-            $this->postXml = Request::getInstance()->input();
+            $this->postXml = Request::input();
         }
         //兼顾使用明文又不想调用valid()方法的情况
         $this->log($this->postXml);

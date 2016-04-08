@@ -5,7 +5,7 @@ $this->extend(array(
 		'head'
 	))
 );
-//$page = $this->get('page');
+$page = $this->get('page');
 ?>
 <div class="zd-container">
 <div class="ms-Grid off">
@@ -19,12 +19,14 @@ $this->extend(array(
                     <span class="ms-Table-cell">负责人</span>
                     <span class="ms-Table-cell">更新时间</span>
                 </div>
-                <div class="ms-Table-row">
-                    <span class="ms-Table-cell">File name</span>
-                    <span class="ms-Table-cell">Location</span>
-                    <span class="ms-Table-cell">Modified</span>
-                    <span class="ms-Table-cell">Type</span>
-                </div>
+                <?php foreach ($page->getPage() as $value) {?>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell"><?php echo $value['name'];?></span>
+                        <span class="ms-Table-cell"><?php echo $value['progress'];?></span>
+                        <span class="ms-Table-cell"><?php echo $value['user'];?></span>
+                        <span class="ms-Table-cell"><?php echo $value['update_at'];?></span>
+                    </div>
+                <?php }?>
             </div>
         </div>
 	</div>

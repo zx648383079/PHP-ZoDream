@@ -6,7 +6,7 @@ use Zodream\Infrastructure\Request;
 use Domain\Model\Home\MessagesModel;
 class MessagesForm extends Form {
 	public function add() {
-		$data = Request::getInstance()->post('name,email,title,content');
+		$data = Request::post('name,email,title,content');
 		if (!$this->validate($data, array(
 			'name' => 'required',
 			'email' => 'required',

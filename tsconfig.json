@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "module": "amd",
+        "target": "es5",
+        "sourceRoot": "/html/assets/js/zodream/"
+    }
+}

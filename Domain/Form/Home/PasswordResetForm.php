@@ -11,24 +11,24 @@ class PasswordResetForm extends Form {
 	}
 	
 	public function set() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('token,email,create_at');
+		$data = Request::post('token,email,create_at');
 		if (!$this->validate($data, array(
 			'token' => 'required',
 			'email' => 'required',
 			'create_at' => 'required'
 		))) {
 			$this->send($data);
-			$this->send('error', '验证失败！')
+			$this->send('error', '验证失败！');
 			return;
 		}
 		$model = new PasswordResetModel();
 		$result = $model->add($data);
 		if (empty($result)) {
 			$this->send($data);
-			$this->send('error', '服务器出错了！')
+			$this->send('error', '服务器出错了！');
 			return;
 		}
 	}

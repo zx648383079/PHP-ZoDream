@@ -84,7 +84,7 @@ class HomeController extends Controller {
 		
 		/* 抓取远程图片 */
 		$list = array();
-		$source = Request::getInstance()->post($fieldName, Request::getInstance()->get($fieldName));
+		$source = Request::post($fieldName, Request::get($fieldName));
 		foreach ($source as $imgUrl) {
 			$item = new Uploader($imgUrl, $config, 'remote');
 			$info = $item->getFileInfo();

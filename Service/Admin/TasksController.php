@@ -17,13 +17,13 @@ class TasksController extends Controller {
 	
 	function addAction() {
 		$form = new TasksForm();
-		$form->set();
+		$form->runAction('add');
 		$this->show('Tasks/edit');
 	}
 
 	function editAction($id) {
 		$form = new TasksForm();
-		$form->set($id);
+		$form->runAction('add');
 		$form->get($id);
 		$this->show();
 	}

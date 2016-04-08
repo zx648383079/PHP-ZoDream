@@ -55,10 +55,6 @@
         var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
         map.addControl(ctrl_sca);
     }
-
-    //标注点数组
-    var markerArr = [{title:"临时地址",content:"我的备注",point:"121.435836|31.186444",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
-    ];
     //创建marker
     function addMarker(){
         for(var i=0;i<markerArr.length;i++){

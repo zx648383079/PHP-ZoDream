@@ -10,22 +10,17 @@ class ProductClassesForm extends Form {
 		$this->send('data', $model->findById($id));
 	}
 	
-	public function set() {
-		if (!Request::getInstance()->isPost()) {
-			return ;
-		}
-		$data = Request::getInstance()->post('name,description,status');
+	public function add() {
+		$data = Request::post('name,description');
 		if (!$this->validate($data, array(
-			'name' => 'required',
-			'description' => 'required',
-			'status' => 'required'
+			'name' => 'required'
 		))) {
 			$this->send($data);
 			$this->send('error', '验证失败！');
 			return;
 		}
 		$model = new ProductClassesModel();
-		$result = $model->add($data);
+		$result = $model->fill($data);
 		if (empty($result)) {
 			$this->send($data);
 			$this->send('error', '服务器出错了！');

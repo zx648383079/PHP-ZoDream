@@ -12,10 +12,10 @@ class BlogCategoryForm extends Form {
 	}
 	
 	public function set() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('name,description');
+		$data = Request::post('name,description');
 		if (!$this->validate($data, array(
 			'name' => 'required'
 		))) {

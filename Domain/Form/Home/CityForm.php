@@ -11,10 +11,10 @@ class CityForm extends Form {
 	}
 	
 	public function set() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('parent_id,name,level');
+		$data = Request::post('parent_id,name,level');
 		if (!$this->validate($data, array(
 			'parent_id' => 'required',
 			'name' => 'required',

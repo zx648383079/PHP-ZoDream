@@ -11,7 +11,7 @@ class MobileController extends Controller {
 	);
 	
 	function indexAction() {
-		$number = Request::getInstance()->get('phone');
+		$number = Request::get('phone');
 		if (preg_match('/^(1[34578]\d{5})\d{4}$/', $number, $match)) {
 			$model = new MobileModel();
 			$data = $model->findNumber($match[1]);

@@ -54,3 +54,9 @@ vendor/
 log/
 temp/
 composer.lock
+
+# vs
+.vs/
+*.phpproj
+*.phpproj.user
+*.sln

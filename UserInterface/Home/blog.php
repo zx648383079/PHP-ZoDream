@@ -14,9 +14,9 @@ $page = $this->get('page');
 	<div class="ms-Grid-row">
 		<div class="ms-Grid-col ms-u-md2">
 			<ul class="ms-List">
-				<li class="ms-ListItem"><a class="ms-Link">全部</a></li>
+				<li class="ms-ListItem"><a class="ms-Link" href="<?php $this->url('blog');?>">全部</a></li>
 				<?php foreach ($this->get('category', array()) as $item) {?>
-					<li class="ms-ListItem"><a class="ms-Link"><?php echo $item['name'];?></a></li>
+					<li class="ms-ListItem"><a class="ms-Link" href="<?php $this->url(null, array('category' => $item['id']));?>"><?php echo $item['name'];?></a></li>
 				<?php }?>
 			</ul>
 		</div>
@@ -44,7 +44,9 @@ $page = $this->get('page');
 				<?php }?>
 			</ul>
 		</div>
-		<div class="ms-Grid-col ms-u-md10">
+	</div>
+	<div class="ms-Grid-row">
+		<div class="ms-Grid-col ms-u-mdPush2 ms-u-md10">
 			<?php $page->pageLink();?>
 		</div>
 	</div>

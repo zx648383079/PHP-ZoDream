@@ -1,0 +1,17 @@
+.login {
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 200px;
+}
+
+.login input[type="text"],
+.login input[type="password"],
+.login input[type="email"],
+.login button {
+    width: 300px;
+    box-sizing: content-box;
+}
+
+a {
+    font-weight: 700;
+}

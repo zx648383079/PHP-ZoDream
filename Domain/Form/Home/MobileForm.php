@@ -11,10 +11,10 @@ class MobileForm extends Form {
 	}
 	
 	public function set() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('id,number,city,type,city_code,postcode');
+		$data = Request::post('id,number,city,type,city_code,postcode');
 		if (!$this->validate($data, array(
 			'id' => 'required',
 			'number' => 'required',

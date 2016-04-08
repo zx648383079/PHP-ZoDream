@@ -27,7 +27,7 @@ $data = $this->get('task');
 						</div>
 						<div class="col-sm-2">状态：</div>
 						<div class="col-sm-10">
-							<?php $this->tag($data['status'], array('无', '待审核', '进行中', '维护中', '完成'));?>
+							<?php echo $data['status'];?>
 						</div>
 						<div class="col-sm-2">进度：</div>
 						<div class="col-sm-10">
@@ -39,7 +39,7 @@ $data = $this->get('task');
 						</div>
 						<div class="col-sm-2">提交时间：</div>
 						<div class="col-sm-10">
-							<?php echo TimeExpand::format($data['cdate']);?>
+							<?php echo TimeExpand::format($data['create_at']);?>
 						</div>
 					</div>
 					<div class="clearfix"> </div>

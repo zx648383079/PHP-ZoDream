@@ -1,7 +1,9 @@
 <?php
 namespace Domain\Model\Home;
 
-use Zodream\Domain\Model;
+use Domain\Model\Model;
+use Zodream\Domain\Html\Page;
+
 class ProductClassesModel extends Model {
 	protected $table = 'product_classes';
 	
@@ -14,7 +16,6 @@ class ProductClassesModel extends Model {
 	public function findPage() {
 		$page = new Page($this->count());
 		$page->setPage($this->find(array(
-				'order' => 'create_at desc',
 				'limit' => $page->getLimit()
 			)
 		));

@@ -13,7 +13,7 @@ class BlogsForm extends Form {
 	}
 	
 	public function fill() {
-		$data = Request::getInstance()->post('title,image,keyword,description,content,category_id');
+		$data = Request::post('title,image,keyword,description,content,category_id');
 		if (!$this->validate($data, array(
 			'title' => 'required',
 			'content' => 'required',

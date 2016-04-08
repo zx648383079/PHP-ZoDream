@@ -1,7 +1,8 @@
 <?php
 namespace Domain\Model\Home;
 
-use Zodream\Domain\Model;
+use Zodream\Domain\Html\Page;
+use Domain\Model\Model;
 class BlogCommentsModel extends Model {
 	protected $table = 'blog_comments';
 	
@@ -16,13 +17,21 @@ class BlogCommentsModel extends Model {
 		'create_at'
 	);
 	
-	public function findPage() {
-		$page = new Page($this->count());
-		$page->setPage($this->find(array(
-				'order' => 'create_at desc',
-				'limit' => $page->getLimit()
+	public function findPage($id, $page) {
+		$where = 'blog_id = '.$id;
+		$count = $this->count($where);
+		if ($page < 1) {
+			$page = 1;
+		}
+		$start = $page * 10 - 10;
+		return array(
+			'more' => $count - $start > 10,
+			'data' => $this->find(array(
+					'where' => $where,
+					'order' => 'create_at desc',
+					'limit' => $start.',10'
+				), 'id,name,content,parent_id,create_at'
 			)
-		));
-		return $page;
+		);
 	}
 }

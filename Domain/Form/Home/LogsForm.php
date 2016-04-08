@@ -11,10 +11,10 @@ class LogsForm extends Form {
 	}
 	
 	public function set() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('action,data,url,ip,create_at');
+		$data = Request::post('action,data,url,ip,create_at');
 		if (!$this->validate($data, array(
 			'action' => 'required',
 			'data' => 'required',

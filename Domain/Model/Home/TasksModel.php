@@ -2,7 +2,7 @@
 namespace Domain\Model\Home;
 
 use Zodream\Domain\Html\Page;
-use Zodream\Domain\Model;
+use Domain\Model\Model;
 class TasksModel extends Model {
 	protected $table = 'tasks';
 	
@@ -19,7 +19,7 @@ class TasksModel extends Model {
 	public function findPage($pageSize = 10) {
 		$page = new Page($this->count());
 		$sql = array(
-			'select' => 't.id as id,t.name as name,t.status as status,t.progress as progress,u.username as user,t.udate as udate,t.create_at as create_at',
+			'select' => 't.id as id,t.name as name,t.status as status,t.progress as progress,u.name as user,t.update_at as update_at,t.create_at as create_at',
 			'from' => 'tasks t',
 			'left' => array(
 				'users u',
@@ -35,13 +35,13 @@ class TasksModel extends Model {
 	public function findPageWithFront($pageSize = 10) {
 		$page = new Page($this->count());
 		$sql = array(
-			'select' => 't.id as id,t.name as name,t.status as status,t.progress as progress,u.username as user,t.udate as udate,t.create_at as create_at',
+			'select' => 't.id as id,t.name as name,t.status as status,t.progress as progress,u.name as user,t.update_at as update_at,t.create_at as create_at',
 			'from' => 'tasks t',
 			'left' => array(
 				'users u',
 				't.user_id = u.id'
 			),
-			'where' => 't.status > 0',
+			'where' => "t.status != '审核'",
 			'order' => 't.progress desc',
 			'limit' => $page->getLimit($pageSize)
 		);

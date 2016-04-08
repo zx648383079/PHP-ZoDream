@@ -37,11 +37,11 @@ class OptionsForm extends Form {
 	}
 
 	public function set() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			$this->get();
 			return ;
 		}
-		$data = Request::getInstance()->post('title,tagline,keywords,description,author');
+		$data = Request::post('title,tagline,keywords,description,author');
 		$this->send('options', $data);
 		$model = new OptionsModel();
 		foreach ($data as $key => $value) {
@@ -52,10 +52,10 @@ class OptionsForm extends Form {
 	}
 
 	public function addIndex() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$value = Request::getInstance()->post('value');
+		$value = Request::post('value');
 		$model = new OptionsModel();
 		$id = $model->add(array(
 			'name' => 'index',
@@ -66,11 +66,11 @@ class OptionsForm extends Form {
 
 	public function setPage($id) {
 		$model = new OptionsModel();
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			$this->send('single', $model->findById($id));
 			return ;
 		}
-		$value = Request::getInstance()->post('value');
+		$value = Request::post('value');
 		$model->updateById($id, array(
 			'value' => $value
 		));

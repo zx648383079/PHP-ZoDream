@@ -21,14 +21,14 @@ class Environment {
 	 * 获取服务器
 	 */
 	public static function getServer() {
-		return Request::getInstance()->server('SERVER_SOFTWARE');
+		return Request::server('SERVER_SOFTWARE');
 	}
 	
 	/**
 	 * 获取域名
 	 */
 	public static function getName() {
-		return Request::getInstance()->server('SERVER_NAME');
+		return Request::server('SERVER_NAME');
 	}
 	
 	/**
@@ -147,7 +147,7 @@ class Environment {
 	 * @param array $files
 	 * @return array
 	 */
-	public static function getfiles($path, $allowFiles, &$files = array())
+	public static function getFiles($path, $allowFiles, &$files = array())
 	{
 	    if (!is_dir($path)) return null;
 	    if(substr($path, strlen($path) - 1) != '/') $path .= '/';
@@ -156,7 +156,7 @@ class Environment {
 	        if ($file != '.' && $file != '..') {
 	            $path2 = $path . $file;
 	            if (is_dir($path2)) {
-	                self::getfiles($path2, $allowFiles, $files);
+	                self::getFiles($path2, $allowFiles, $files);
 	            } else {
 	                if (preg_match("/\.(".$allowFiles.")$/i", $file)) {
 	                    $files[] = array(

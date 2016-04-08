@@ -13,7 +13,7 @@ abstract class Controller extends BaseController {
 	protected $configs = array();
 	
 	protected function ajax($data) {
-		$callback = Request::getInstance()->get('callback');
+		$callback = Request::get('callback');
 		if (is_null($callback)) {
 			$this->ajaxReturn($data, 'JSON');
 		}
@@ -45,8 +45,8 @@ abstract class Controller extends BaseController {
 		$allowFiles = substr(str_replace('.', '|', join('', $allowFiles)), 1);
 		
 		/* 获取参数 */
-		$size = Request::getInstance()->get('size', $listSize);
-		$start = Request::getInstance()->get('start', 0);
+		$size = Request::get('size', $listSize);
+		$start = Request::get('start', 0);
 		$end = $start + $size;
 		
 		/* 获取文件列表 */
@@ -79,7 +79,7 @@ abstract class Controller extends BaseController {
 	}
 	
 	public function indexAction() {
-		$action = strtolower(Request::getInstance()->get('action'));
+		$action = strtolower(Request::get('action'));
 		if (is_null($action) || !$this->canRunAction($action)) {
 			$this->ajax(array(
 	            'state'=> '请求地址出错'

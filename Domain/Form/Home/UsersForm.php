@@ -18,11 +18,11 @@ use Zodream\Infrastructure\Template;
 
 class UsersForm extends Form {
 	public function login() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 
 			return ;
 		}
-		$data = Request::getInstance()->post('email,password');
+		$data = Request::post('email,password');
 		Log::save($data, 'login');
 		if (!$this->validate($data, array(
 			'email'    => 'required|email',
@@ -42,7 +42,7 @@ class UsersForm extends Form {
 			$this->send('error', '密码错误！');
 			return;
 		}
-		if (Request::getInstance()->post('remember') != null) {
+		if (Request::post('remember') != null) {
 			$token = StringExpand::random(10);
 			$model->updateById($result['id'], array('remember_token' => $token));
 			Cookie::set('token', $token, 3600 * 24 * 30);
@@ -71,10 +71,10 @@ class UsersForm extends Form {
 	}
 
 	public function register() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('name,email,password,cpassword,agree');
+		$data = Request::post('name,email,password,cpassword,agree');
 		if (!$this->validate($data, array(
 			'name'     => 'required|string:2-20',
 			'email'    => 'required|email',
@@ -100,10 +100,10 @@ class UsersForm extends Form {
 	}
 
 	public function sendEmail() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$email = Request::getInstance()->post('email');
+		$email = Request::post('email');
 		$user = new UsersModel();
 		$data = $user->findByEmail($email);
 		if (empty($data)) {
@@ -143,10 +143,10 @@ class UsersForm extends Form {
 	}
 
 	public function reset() {
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('oldpassword,newpassword,cpassword');
+		$data = Request::post('oldpassword,newpassword,cpassword');
 		if (!$this->validate($data, array(
 			'oldpassword'     => 'required|string:3-30',
 			'newpassword' => 'required|confirm:cpassword|string:3-30'
@@ -172,7 +172,7 @@ class UsersForm extends Form {
 	}
 
 	public function resetByEmail() {
-		$token = Request::getInstance()->get('token');
+		$token = Request::get('token');
 		if (empty($token)) {
 			Redirect::to('account');
 		}
@@ -181,10 +181,10 @@ class UsersForm extends Form {
 		if (empty($result)) {
 			Redirect::to('account');
 		}
-		if (!Request::getInstance()->isPost()) {
+		if (!Request::isPost()) {
 			return ;
 		}
-		$data = Request::getInstance()->post('password,cpassword');
+		$data = Request::post('password,cpassword');
 		if (!$this->validate($data, array(
 			'password'     => 'required|confirm:cpassword|string:3-30'
 		))) {
