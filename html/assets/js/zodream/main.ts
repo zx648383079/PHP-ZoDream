@@ -18,7 +18,7 @@ require(["jquery", "empire/fun"], function() {
     });
     
     $(".secondMenu li").click(function() {
-        zodream.main.navigate($(this).attr("data"));
+        zodream.main.navigate($(this).attr("data"), $(this).attr("target"));
     });
     $("#leftMenu").on("click", "li", function() {
         let data = $(this).attr("data");

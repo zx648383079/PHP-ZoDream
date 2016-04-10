@@ -10,6 +10,7 @@ class AdminController extends Controller {
 	);
 	function indexAction() {
 		$this->show(array(
+			'name' => Auth::user()['name']
 		));
 	}
 

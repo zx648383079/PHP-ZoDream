@@ -42,4 +42,18 @@ class HtmlExpand {
 			echo '</ul></li>';
 		}
 	}
+
+	public static function getTree(array $args, $tag) {
+		$results = array();
+		$result = array();
+		foreach ($args as $arg) {
+			if (empty($result) || $arg[$tag] != $result[0][$tag]) {
+				$results[] = $result;
+				$result = array($arg, array());
+			}
+			$result[1][] = $arg;
+		}
+		unset($results[0]);
+		return $results;
+	}
 }

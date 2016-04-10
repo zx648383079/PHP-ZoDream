@@ -19,6 +19,9 @@ $this->extend(array(
         <li title="扩展菜单项" data="extend">扩展</li>
         <li title="常用操作" data="">常用</li>
     </ul>
+    <ul class="right">
+        <li><?php $this->ech('name');?>[<a href="<?php $this->url('admin/account/logout');?>">退出</a>]</li>
+    </ul>
 </nav>
 <nav class="secondMenu">
     <ul>
@@ -33,7 +36,7 @@ $this->extend(array(
         <li>数据统计</li>
         <li>排行统计</li>
         <li data="admin/main">后台首页</li>
-        <li>网站首页</li>
+        <li data="../" target="self">网站首页</li>
         <li data="admin/map">后台地图</li>
         <li>版本更新</li>
     </ul>

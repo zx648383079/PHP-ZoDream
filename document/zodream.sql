@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `zodream_cms`.`zd_navigation` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
-  `catagory_id` INT(10) NOT NULL,
+  `category_id` INT(10) NOT NULL,
   `position` INT(10) NULL DEFAULT 0,
   `user_id` INT(10) NOT NULL,
   PRIMARY KEY (`id`),

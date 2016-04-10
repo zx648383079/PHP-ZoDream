@@ -16,8 +16,30 @@ namespace zodream {
             })
         }
         
-        static navigate(url: string) {
-            $("#main").attr("src", url);
+        static navigate(url: string, target: string) {
+            switch (target) {
+                case "self":
+                    window.location.href = url;
+                    break;
+                default:
+                    $("#main").attr("src", url);
+                    break;
+            }
+        }
+        
+        static search() {
+            var word = $("#p").val();
+            var url: string;
+            switch ($("#s").val()) {
+                case "bing":
+                    url = "https://www.bing.com/search?q=" + word;
+                    break;
+                case "baidu":
+                default:
+                        url = "http://www.baidu.com/baidu?tn=SE_zzsearchcode_shhzc78w&word=" + word;
+                    break;
+            }
+            window.open(url, "_blank");
         }
     }
     

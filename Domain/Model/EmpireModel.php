@@ -41,8 +41,9 @@ class EmpireModel extends Model {
      * @return Page
      */
     public function getPage($sql = null, $field = '*') {
+        $sql = $this->getBySort($sql);
         $page = new Page($this->getCount($sql, '*'));
-        $page->setPage($this->find($sql.' LIMIT '.$page->getLimit(), $field));
+        $page->setPage($this->find($sql .' LIMIT '.$page->getLimit(), $field));
         return $page;
     }
 

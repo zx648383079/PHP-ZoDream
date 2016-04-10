@@ -109,7 +109,9 @@ class UserController extends Controller {
 	}
 
 	function loginlogAction() {
-		$page = EmpireModel::query('login_log')->getPage();
+		$page = EmpireModel::query('login_log')->getPage(array(
+			'order' => 'create_at desc'
+		));
 		$this->show(array(
 			'page' => $page
 		));

@@ -1,5 +1,16 @@
 <div>栏目管理</div>
 <ul>
+    <li>导航管理
+        <ul>
+            <li data="navigation/category">分类</li>
+            <li data="navigation">网址</li>
+        </ul>
+    </li>
+    <li>随想管理
+        <ul>
+            <li data="talk">随想</li>
+        </ul>
+    </li>
     <li>信息相关管理
         <ul>
             <li>管理信息</li>

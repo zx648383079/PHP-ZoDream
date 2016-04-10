@@ -1,35 +1,40 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Domain\Authentication\Auth;
 $this->extend(array(
     'layout' => array(
         'head'
     ))
 );
+$data = $this->get('data', array());
 ?>
 
 <div class="main">
     <div class="search">
-        <form>
-            <select>
-                <option value="">百度</option>
-                <option value="">必应</option>
-            </select>
-            <input type="text" name="" value="" placeholder="搜索">
-            <button type="submit">搜索</button>
-        </form>
+        <select id="s">
+            <option value="baidu">百度</option>
+            <option value="bing">必应</option>
+        </select>
+        <input type="text" id="p" placeholder="搜索">
+        <button id="search">搜索</button>
     </div>
     
     <div class="table">
-        <div class="row">
+        <?php foreach ($data as $value) {?>
+         <div class="row">
             <div>
-                分类
+                <?php echo $value[0]['category'];?>
             </div>
             <div class="column">
+                <?php foreach ($value[1] as $item) {?>
                 <div>
-                    <a href="http://www.baidu.com" target="_blank">百度</a>
+                    <a href="<?php echo $item['url'];?>" target="_blank"><?php echo $item['name'];?></a>
                 </div>
+                <?php }?>
             </div>
         </div>
+        <?php }?>
+        <?php if (!Auth::guest()) {?>
         <div class="row">
             <div>
                 增加
@@ -45,24 +50,27 @@ $this->extend(array(
         </div>
         <div id="category" class="dialog">
             <div>
-                <form>
-                    <input type="text" name="category" value="" placeholder="分类">
+                <form method="POST">
+                    <input type="text" name="name" placeholder="分类">
                     <button type="submit">增加</button>
                 </form>
             </div>
         </div>
         <div id="web" class="dialog">
             <div>
-                <form>
+                <form method="POST">
                     名称：<input type="text" name="name" value="" placeholder="名称"> </br>
                     网址：<input type="text" name="url" value="" placeholder="网址"> </br>
-                    分类：<select>
-                        <option value="">未分类</option>
+                    分类：<select name="category_id">
+                        <?php foreach($this->get('category', array()) as $item) {?>
+                        <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
+                        <?php }?>
                     </select>
                     <button type="submit">增加</button>
                 </form>
             </div>
         </div>
+        <?php }?>
     </div>
 </div>
 

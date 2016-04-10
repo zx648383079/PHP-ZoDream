@@ -1,12 +1,8 @@
-new Vue({
-    el: "#login",
-    data: {
-        email: null,
-        password: null
-    },
-    methods: {
-        sumit: function () {
-        }
-    }
+;
+define(["jquery"], function () {
+    var verify = $("#verify").attr("src");
+    $("#verify").click(function () {
+        $(this).attr("src", verify + "?" + Math.random());
+    });
 });
 //# sourceMappingURL=login.js.map

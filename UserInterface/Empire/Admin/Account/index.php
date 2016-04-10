@@ -7,6 +7,7 @@ $this->extend(array(
         'zodream/login.css'
     )
 );
+$code = $this->get('code');
 ?>
 
 <div class="login">
@@ -14,6 +15,10 @@ $this->extend(array(
     <form method="POST">
         <input type="email" name="email" value="" required placeholder="邮箱"> </br>
         <input type="password" name="password" value="" required placeholder="密码"> </br>
+        <?php if (!is_null($code)) {?>
+        <input type="text" name="code" required placeholder="验证码">
+        <img id="verify" src="<?php $this->url('verify');?>" title="验证码"> </br>
+        <?php }?>
         <input type="checkbox" name="remember" value="1">记住我</br>
         <button type="submit">登录</button>
     </form>
@@ -25,9 +30,9 @@ $this->extend(array(
 		'foot'
 	)), array(
         function() {?>
-            <script>
-                require(['../vue/vue.min', 'empire/login']);
-            </script>
+<script>
+    require(['empire/login']);
+</script>
        <?php }
     )
 );

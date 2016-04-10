@@ -7,6 +7,7 @@ use Service\Empire\Controller;
 use Zodream\Domain\Authentication\Auth;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Cookie;
+use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Session;
 
@@ -19,15 +20,30 @@ class AccountController extends Controller {
 	}
 
 	function indexAction() {
+		$time = TimeExpand::getBeginAndEndTime(TimeExpand::TODAY);
+		$num = EmpireModel::query('login_log')->count(array(
+			'ip' => Request::ip(),
+			'status = 0',
+			'create_at' => array(
+				'between', $time[0], $time[1]
+			)
+		));
+		if ($num > 2) {
+			$this->send('code', intval($num / 3));
+		}
 		$this->show(array(
 		));
 	}
 
 	function indexPost() {
+		$code = Session::getValue('code');
+		if (!empty($code) && $code !== Request::post('code')) {
+			return;
+		}
 		$result = EmpireForm::start()->login();
 		EmpireModel::query()->addLoginLog(Request::post('email'), $result);
 		if ($result) {
-			Redirect::to('/');
+			Redirect::to(-1);
 		}
 	}
 

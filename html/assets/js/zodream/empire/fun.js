@@ -10,8 +10,29 @@ var zodream;
                 }
             });
         };
-        main.navigate = function (url) {
-            $("#main").attr("src", url);
+        main.navigate = function (url, target) {
+            switch (target) {
+                case "self":
+                    window.location.href = url;
+                    break;
+                default:
+                    $("#main").attr("src", url);
+                    break;
+            }
+        };
+        main.search = function () {
+            var word = $("#p").val();
+            var url;
+            switch ($("#s").val()) {
+                case "bing":
+                    url = "https://www.bing.com/search?q=" + word;
+                    break;
+                case "baidu":
+                default:
+                    url = "http://www.baidu.com/baidu?tn=SE_zzsearchcode_shhzc78w&word=" + word;
+                    break;
+            }
+            window.open(url, "_blank");
         };
         return main;
     }());
