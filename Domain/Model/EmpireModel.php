@@ -135,11 +135,22 @@ class EmpireModel extends Model {
         ));
     }
 
+    /**
+     * @var EmpireModel
+     */
+    private static $instance;
+
+    /**
+     * @param null|string $table
+     * @return EmpireModel
+     */
     public static function query($table = null) {
-        $instance = new static();
-        if (!empty($table)) {
-            $instance->setTable($table);
+        if (!self::$instance instanceof Model) {
+            self::$instance = new static();
         }
-        return $instance;
+        if (!empty($table)) {
+            self::$instance->setTable($table);
+        }
+        return self::$instance;
     }
 }

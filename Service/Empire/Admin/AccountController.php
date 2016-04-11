@@ -24,12 +24,14 @@ class AccountController extends Controller {
 		$num = EmpireModel::query('login_log')->count(array(
 			'ip' => Request::ip(),
 			'status = 0',
-			'create_at' => array(
-				'between', $time[0], $time[1]
+			 array(
+				 'create_at', 'between', $time[0], $time[1]
 			)
 		));
 		if ($num > 2) {
-			$this->send('code', intval($num / 3));
+			$num = intval($num / 3);
+			$this->send('code', $num);
+			Session::setValue('level', $num);
 		}
 		$this->show(array(
 		));
@@ -37,13 +39,13 @@ class AccountController extends Controller {
 
 	function indexPost() {
 		$code = Session::getValue('code');
-		if (!empty($code) && $code !== Request::post('code')) {
+		if (!empty($code) && strtolower($code) !== strtolower(Request::post('code'))) {
 			return;
 		}
 		$result = EmpireForm::start()->login();
 		EmpireModel::query()->addLoginLog(Request::post('email'), $result);
 		if ($result) {
-			Redirect::to(-1);
+			Redirect::to('admin/admin');
 		}
 	}
 
