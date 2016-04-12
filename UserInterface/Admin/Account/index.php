@@ -3,35 +3,38 @@ defined('APP_DIR') or exit();
 $this->extend(array(
 	'layout' => array(
 		'head'
-	))
+	)), array(
+        'zodream/login.css'
+    )
 );
+$code = $this->get('code');
 ?>
 
-<body id="login">
-  <div class="login-logo">
-    <a href="<?php $this->url('/');?>"><img src="<?php $this->asset('images/logo.png');?>" alt=""/></a>
-  </div>
-  <h2 class="form-heading">登录</h2>
-  <div class="app-cam">
-	  <form action="<?php $this->url();?>" method="POST">
-		<input type="email" class="text" name="email" value="<?php $this->ech('email');?>" placeholder="邮箱" required>
-		<input type="password" name="password" placeholder="密码" required>
-		<label class="checkbox-custom check-success">
-          <input type="checkbox" name="remember" value="yes" id="checkbox1"> <label for="checkbox1">记住我！</label>
-      	</label>
-		  <p class="text-danger"><?php $this->ech('error');?></p>
-		<div class="submit"><input type="submit" onclick="myFunction()" value="登录"></div>
-		<ul class="new">
-			<li class="new_left"><p><a href="<?php $this->url('account/send');?>">忘记密码 ?</a></p></li>
-			<li class="new_right"><p class="sign">新的 ?<a href="<?php $this->url('account/register');?>"> 注册</a></p></li>
-			<div class="clearfix"></div>
-		</ul>
-	</form>
-  </div>
-<?php 
+<div class="login">
+    <h2 class="text-center">后台登录</h2>
+    <form method="POST">
+        <input type="email" name="email" value="" required placeholder="邮箱"> </br>
+        <input type="password" name="password" value="" required placeholder="密码"> </br>
+        <?php if (!is_null($code)) {?>
+        <input type="text" name="code" class="code" required placeholder="验证码">
+        <img id="verify" src="<?php $this->url('verify');?>" title="验证码"> </br>
+        <?php }?>
+        <input type="checkbox" name="remember" value="1">记住我</br>
+        <button type="submit">登录</button>
+        <p>没有账号？先 <a href="<?php $this->url('account/register');?>">注册</a></p>
+    </form>
+</div>
+
+<?php
 $this->extend(array(
 	'layout' => array(
 		'foot'
-	))
+	)), array(
+        function() {?>
+<script>
+    require(['empire/login']);
+</script>
+       <?php }
+    )
 );
 ?>

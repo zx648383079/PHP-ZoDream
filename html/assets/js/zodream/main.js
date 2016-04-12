@@ -7,23 +7,4 @@ require.config({
         empire: "zodream/empire",
     }
 });
-require(["jquery", "empire/fun"], function () {
-    $(".topMenu li").click(function () {
-        zodream.main.getMenu($(this).attr("data"));
-        $(".topMenu li").removeClass("active");
-        $(this).addClass("active");
-    });
-    $(".secondMenu li").click(function () {
-        zodream.main.navigate($(this).attr("data"), $(this).attr("target"));
-    });
-    $("#leftMenu").on("click", "li", function () {
-        var data = $(this).attr("data");
-        if (data) {
-            zodream.main.navigate(data);
-        }
-    });
-    $("#selectAll").click(function () {
-        $("form :checkbox").attr("checked", this.checked);
-    });
-});
 //# sourceMappingURL=main.js.map

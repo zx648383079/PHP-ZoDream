@@ -1,14 +1,15 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="ch-ZHS">
 <head>
-<title><?php $this->ech('title', 'ZoDream');?></title>
+<title><?php $this->ech('title', 'ZoDream');?>-<?php $this->ech('tagline', 'ZoDream');?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="<?php $this->ech('keywords');?>" />
+<meta name="Keywords" content="<?php $this->ech('keywords');?>" />
+<meta name="Description" content="<?php $this->ech('description');?>" />
+<meta name="author" content="<?php $this->ech('author');?>" />
 <link rel="icon" href="<?php $this->asset('images/favicon.png');?>">
 <?php $this->jcs(array(
-    'bootstrap.min.css',
-     'style.css',
-    'custom.css'
+    'zodream/zodream.css'
 ));?>
 </head>
+<body>

@@ -1,0 +1,12 @@
+body {
+    background-color: lightsteelblue;
+}
+.main {
+    width: 700px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+}
+p {
+    margin:1em 0;
+}

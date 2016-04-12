@@ -61,5 +61,5 @@ composer.lock
 *.phpproj.user
 *.sln
 
-tyings/
+typings/
 .vscode/

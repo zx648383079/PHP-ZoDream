@@ -1,33 +1,7 @@
 
-<div class="footer">
-	<a class="ms-Link" href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
-</div>
+<script data-main="<?php $this->asset('js/zodream/main');?>" src="<?php $this->asset('js/require/require.min.js');?>"></script>
 <?php
-$this->jcs(array(
-    'before' => array(
-        'system/system.min',
-        'jquery/jquery-2.2.2.min',
-        'jquery/jquery.fabric.min'
-     ),
-    function() {?>
-<script type="text/javascript">
-System.config({
-    baseURL: '/assets/js/',
-    paths: {
-      'jquery/*': 'jquery/*.js',
-      'zodream/*': 'zodream/*.js',
-      'angular2/*': 'angular2/*.min.js',
-      '*': '*.js'
-    },
-    map:{
-        Vue: "vue/vue"
-    }
-});
-System.import('jquery/Jquery.NavBar');
-$('.ms-NavBar').NavBar();
-</script>
-  <?php }
-));
+$this->jcs();
 ?>
     </body>
 </html>

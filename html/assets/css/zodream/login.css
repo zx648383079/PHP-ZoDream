@@ -15,3 +15,7 @@
 a {
     font-weight: 700;
 }
+
+.login input[type="text"].code {
+   width: 150px;
+}

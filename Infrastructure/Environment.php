@@ -91,10 +91,13 @@ class Environment {
 	
 	/**
 	 * 判断读的功能
-	 * @param string $file
+	 * @param string $dir
 	 * @return boolean
 	 */
 	public static function getReadAble($dir) {
+		if (!is_dir($dir)) {
+			return false;
+		}
 		return is_readable($dir);
 	}
 	/**
@@ -103,13 +106,16 @@ class Environment {
 	 * @return boolean
 	 */
 	public static function getWriteAble($dir) {
-		$testFile = '_zodream.txt';
+		if (!is_dir($dir)) {
+			return false;
+		}
+		$testFile = '/_zodream.txt';
 		$fp = @fopen($dir.$testFile, 'w');
 		if (!$fp) {
 			return true;
 		}
 		fclose($fp);
-		$rs = @unlink($dir.'/'.$testFile);
+		$rs = @unlink($dir.$testFile);
 		return boolval($rs);
 	}
 	
@@ -140,15 +146,15 @@ class Environment {
 				'files' => $files
 		);
 	}
-	
+
 	/**
 	 * 遍历获取目录下的指定类型的文件
 	 * @param $path
+	 * @param string $allowFiles
 	 * @param array $files
 	 * @return array
 	 */
-	public static function getFiles($path, $allowFiles, &$files = array())
-	{
+	public static function getFiles($path, $allowFiles, &$files = array()) {
 	    if (!is_dir($path)) return null;
 	    if(substr($path, strlen($path) - 1) != '/') $path .= '/';
 	    $handle = opendir($path);

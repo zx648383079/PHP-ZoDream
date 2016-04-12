@@ -4,7 +4,7 @@ var zodream;
         function main() {
         }
         main.getMenu = function (name) {
-            $.get("menu/" + name, function (data, status) {
+            $.get("admin.php/menu/" + name, function (data, status) {
                 if (status == "success") {
                     $("#leftMenu").html(data);
                 }

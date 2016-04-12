@@ -43,16 +43,28 @@ class HtmlExpand {
 		}
 	}
 
+	/**
+	 * 根据相同分组
+	 * @param array $args
+	 * @param string|object $tag 如果为匿名函数, 传入两个数组, 相等返回true 否则false
+	 * @return array
+	 */
 	public static function getTree(array $args, $tag) {
+		if (is_string($tag)) {
+			$tag = function(array $arg, array $composer) use ($tag) {
+				return $arg[$tag] === $composer[$tag];
+			};
+		}
 		$results = array();
 		$result = array();
 		foreach ($args as $arg) {
-			if (empty($result) || $arg[$tag] != $result[0][$tag]) {
+			if (empty($result) || !$tag($arg, $result[0])) {
 				$results[] = $result;
 				$result = array($arg, array());
 			}
 			$result[1][] = $arg;
 		}
+		$results[] = $result;
 		unset($results[0]);
 		return $results;
 	}

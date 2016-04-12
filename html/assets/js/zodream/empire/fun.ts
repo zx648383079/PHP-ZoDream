@@ -9,14 +9,14 @@ namespace zodream {
         }
         
         static getMenu(name: string) {
-            $.get("menu/" + name, function(data, status) {
+            $.get("admin.php/menu/" + name, function(data, status) {
                 if (status == "success") {
                     $("#leftMenu").html(data);
                 }
             })
         }
         
-        static navigate(url: string, target: string) {
+        static navigate(url: string, target?: string) {
             switch (target) {
                 case "self":
                     window.location.href = url;

@@ -30,6 +30,10 @@ select,
     margin: 2px 0;
 }
 
+input[type="number"] {
+    width: 60px;
+}
+
 button,
 .btn {
     padding-left: 0 5px;

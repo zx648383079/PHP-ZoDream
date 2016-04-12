@@ -4,8 +4,7 @@
   "require" : {
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",
-    "phpmailer/phpmailer": "~5.2",
-    "illuminate/database": "*"
+    "phpmailer/phpmailer": "~5.2"
   },
   "autoload" : {
     "psr-4" : {
