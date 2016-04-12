@@ -4,7 +4,7 @@ namespace Service\Home;
 class ForumController extends Controller {
 	function indexAction() {
 		$this->show(array(
-			'title' => '随想'
+			'title' => '论坛'
 		));
 	}
 }

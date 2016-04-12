@@ -7,8 +7,8 @@ $this->extend(array(
 );
 $page = $this->get('page');
 ?>
-<a class="btn" href="<?php $this->url('user/addUser');?>">增加用户</a>
-<a class="btn" href="<?php $this->url('user/role');?>">管理角色</a>
+<a class="btn" href="<?php $this->url('post/add');?>">新增</a>
+<a class="btn" href="<?php $this->url('post/term');?>">管理分类</a>
 <form method="GET">
     搜索： <input type="text" name="name" value="" placeholder="用户名" required>
     <button type="submit">搜索</button>

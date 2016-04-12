@@ -20,6 +20,22 @@ $data = $this->get('data', array());
     </div>
     
     <div class="table">
+        <div class="row">
+            <div>
+                站内
+            </div>
+            <div class="column">
+                <div>
+                    <a href="<?php $this->url('blog');?>">博客</a>
+                </div>
+                 <div>
+                    <a href="<?php $this->url('forum');?>">论坛</a>
+                </div>
+                 <div>
+                    <a href="<?php $this->url('talk');?>">日志</a>
+                </div>
+            </div>
+        </div>
         <?php foreach ($data as $value) {?>
          <div class="row">
             <div>

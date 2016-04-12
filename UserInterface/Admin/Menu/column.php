@@ -18,6 +18,13 @@
             <li data="forum/post">帖子</li>
         </ul>
     </li>
+    <li>博客管理
+        <ul>
+            <li data="post">页面</li>
+            <li data="post/term">分类</li>
+            <li data="post/comment">评论</li>
+        </ul>
+    </li>
     <li>信息相关管理
         <ul>
             <li>管理信息</li>

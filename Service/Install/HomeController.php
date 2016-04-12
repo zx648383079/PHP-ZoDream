@@ -44,6 +44,7 @@ class HomeController extends Controller {
         $handle = opendir(APP_DIR. '/Service');
         $generate = new Generate();
         $generate->makeConfig(array(), 'config');
+        $generate->createDatabase(Request::post('db.database'));
         $data = Config::getValue();
         $data['db'] = array_merge($data['db'], Request::post('db'));
         while (false !== ($file = readdir($handle))) {
