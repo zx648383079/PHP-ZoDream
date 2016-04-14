@@ -37,12 +37,5 @@ var zodream;
         return main;
     }());
     zodream.main = main;
-    var mainStatic = (function () {
-        function mainStatic() {
-            return new main();
-        }
-        return mainStatic;
-    }());
-    zodream.mainStatic = mainStatic;
 })(zodream || (zodream = {}));
-//# sourceMappingURL=fun.js.map
+//# sourceMappingURL=zodream.js.map

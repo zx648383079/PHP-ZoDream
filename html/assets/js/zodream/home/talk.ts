@@ -7,6 +7,6 @@
 	}); 
 	$(".talk .year>h2>a").click(function (e) {
 	    e.preventDefault();
-	    $(this).parents(".year").toggleClass("close");
+	    $(this).parents(".year").toggleClass("closed");
 	});
 });

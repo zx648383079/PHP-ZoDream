@@ -240,14 +240,14 @@ hr {
 	line-height: 32px;
 	color: #63d029;
 }
-.content .wrapper:first-child .talk .year.close h2 i{
+.content .wrapper:first-child .talk .year.closed h2 i{
 	transform:rotate(-90deg);
 	-webkit-transform:rotate(-90deg);
 	-moz-transform:rotate(-90deg);
 	-ms-transform:rotate(-90deg);
 	-o-transform:rotate(-90deg)
 }
-.content .wrapper:first-child .talk .year.close .list{
+.content .wrapper:first-child .talk .year.closed .list{
 	opacity:0;
 	height:0!important;
 }

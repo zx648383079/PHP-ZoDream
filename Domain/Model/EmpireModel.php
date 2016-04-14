@@ -43,10 +43,10 @@ class EmpireModel extends Model {
     public function getPage($sql = null, $field = '*', $countSql = null) {
         $sql = $this->getBySort($sql);
         $page = new Page($this->getCount(
-            empty($countSql) ? $sql : $this->getBySort($countSql), 
+            is_null($countSql) ? $sql : $this->getBySort($countSql), 
             '*'
         ));
-        $page->setPage($this->find($sql .' LIMIT '.$page->getLimit(), $field));
+        $page->setPage($this->find($sql .' LIMIT '.$page->getLimit(), $this->getField($field)));
         return $page;
     }
 
@@ -142,6 +142,38 @@ class EmpireModel extends Model {
             'mode' => $mode,
             'create_at' => time()
         ));
+    }
+
+    public function getNextAndBefore($id) {
+        $this->setTable('post');
+        $id = intval($id);
+        $before = $this->find(array(
+            'where' => array(
+                'id < '.$id,
+                'status' => array(
+                    'in',
+                    array(
+                        'publish',
+                        'password'
+                    )
+                )
+            ),
+            'order' => 'id desc',
+            'limit' => 1
+        ), 'id,title');
+        return array(
+            count($before) == 1 ? $before[0] : null,
+            $this->findOne(array(
+                'id > '.$id,
+                'status' => array(
+                    'in',
+                    array(
+                        'publish',
+                        'password'
+                    )
+                )
+            ), 'id,title')
+        );
     }
 
     /**

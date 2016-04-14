@@ -1,0 +1,25 @@
+#editor {
+    height: 400px;
+}
+
+.left {
+    width: 70%;
+    float: left;
+}
+
+.left input,
+.left textarea {
+    width: 90%;
+}
+
+.right {
+    margin: 20px;
+    width: 25%;
+    box-sizing: border-box;
+    float: left;
+    text-align: right;
+}
+
+.right select {
+    width: 60%;
+}

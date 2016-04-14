@@ -42,13 +42,4 @@ namespace zodream {
             window.open(url, "_blank");
         }
     }
-    
-    /**
-     * mainStatic
-     */
-    export class mainStatic {
-        constructor() {
-            return new main();
-        }
-    }
 }

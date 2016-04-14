@@ -1,5 +1,5 @@
 ;
-define(["jquery", "fun"], function () {
+define(["admin/zodream"], function () {
     $("#search").click(function () {
         zodream.main.search();
     });

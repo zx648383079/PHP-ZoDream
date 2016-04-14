@@ -2,7 +2,8 @@
 defined('APP_DIR') or exit();
 $this->extend(array(
     'layout' => array(
-        'head'
+        'head',
+        'navbar'
     )), array(
         'zodream/talk.css'
     )
@@ -42,9 +43,9 @@ $this->extend(array(
 		'foot'
 	)), array(
         function() {?>
-            <script>
-                require(['empire/talk']);
-            </script>
+<script>
+    require(['home/talk']);
+</script>
        <?php }
     )
 );

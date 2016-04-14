@@ -8,7 +8,7 @@ $this->extend(array(
 $page = $this->get('page');
 ?>
 <form method="GET">
-    搜索： <input type="text" name="name" value="" placeholder="用户名" required>
+    搜索： <input type="text" name="search" value="" placeholder="评论" required>
     <button type="submit">搜索</button>
 </form>
 <table>

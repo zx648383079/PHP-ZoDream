@@ -28,7 +28,7 @@ $this->extend(array(
 	)), array(
         function() {?>
             <script>
-                require(['../vue/vue.min', 'empire/login']);
+                require(['admin/login']);
             </script>
        <?php }
     )

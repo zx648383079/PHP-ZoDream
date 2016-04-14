@@ -32,7 +32,7 @@ $this->extend(array(
 	)), array(
         function() {?>
 <script>
-    require(['empire/login']);
+    require(['admin/login']);
 </script>
        <?php }
     )

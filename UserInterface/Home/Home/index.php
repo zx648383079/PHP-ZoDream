@@ -96,9 +96,9 @@ $this->extend(array(
 		'foot'
 	)), array(
         function() {?>
-            <script>
-                require(['empire/home']);
-            </script>
+<script>
+require(['home/home']);
+</script>
        <?php }
     )
 );
