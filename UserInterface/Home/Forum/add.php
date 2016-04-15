@@ -1,47 +1,30 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Authentication\Auth;
 $this->extend(array(
 	'layout' => array(
 		'head',
         'navbar'
 	))
 );
+$sub = $this->get('sub', array());
 $page = $this->get('page');
-$data = $this->get('data');
 ?>
 <div class="container">
-    
-    <div class="row">
-        <?php echo $data['title'];?>
-    </div>
-    
-    <?php foreach ($page->getPage() as $item) {?>
-    <div class="row">
-        <div class="col-md-3">
-            <?php echo $item['user_name'];?>
-        </div>
-        <div class="col-md-9">
-            <?php echo $item['content'];?>
-            <p>
-                <span><?php $this->ago($item['create_at']);?></span>
-                <?php if ($item['first'] == 1) {?>
-                点赞
-                <?php }?>
-            </p>
-        </div>
-    </div>
-    <?php }?>
-    <div class="row">
-        <?php $page->pageLink();?>
-    </div>
-    
-    <?php if (!Auth::guest()) {?>
     <div class="panel panel-default">
+          <div class="panel-heading">
+                <h3 class="panel-title">发表帖子</h3>
+          </div>
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="forum_id" value="<?php echo $data['forum_id'];?>">
-                    <input type="hidden" name="thread_id" value="<?php echo $data['id'];?>">
+                    <input type="hidden" name="forum_id" value="<?php $this->ech('id');?>">
+                    
+                    <div class="form-group">
+                        <label for="input_title" class="col-sm-2 control-label">标题:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="title" id="input_title" class="form-control" value="" required="required" >
+                        </div>
+                    </div>
+                    
                     
                     <div class="form-group">
                         <label for="textarea_content" class="col-sm-2 control-label">内容:</label>
@@ -58,7 +41,6 @@ $data = $this->get('data');
                 </form>
           </div>
     </div>
-    <?php }?>
 </div>
 <?php
 $this->extend(array(

@@ -24,7 +24,7 @@ $page = $this->get('page');
         <?php foreach ($page->getPage() as $value) {?>
             <tr>
                 <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['title'];?></td>
+                <td><?php echo $value['content'];?></td>
                 <td><?php $this->tag($value['first'], array('否', '是'));?></td>
                 <td><?php echo $value['user_name'];?></td>
                 <td><?php echo $value['ip'];?></td>

@@ -1,7 +1,5 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\ObjectExpand\TimeExpand;
-use Infrastructure\HtmlExpand;
 $this->extend(array(
 	'layout' => array(
 		'head',
@@ -14,13 +12,14 @@ $data = $this->get('data', array());
     <?php foreach ($data as $value) { 
         if (0 < $value['parent']) break;
         ?>
-        <div>
-            <div><?php echo $value['name'];?></div>
+        <div class="group">
+            <div class="heading"><?php echo $value['name'];?></div>
+            
             <?php foreach ($data as $item) { 
                 if (0 >= $item['parent'] || $item['parent'] != $value['id']) continue;
                 ?>
-                <div>
-                    <div><?php echo $item['name'];?></div>
+                <div class="col-md-3">
+                    <h3><a href="<?php $this->url('forum/thread/id/'.$item['id']);?>"><?php echo $item['name'];?></a></h3>
                 </div>
             <?php }?>
         </div>

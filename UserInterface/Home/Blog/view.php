@@ -1,6 +1,6 @@
 <?php
-use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 defined('APP_DIR') or exit();
+use Zodream\Domain\Authentication\Auth;
 $this->extend(array(
     'layout' => array(
         'head',
@@ -9,6 +9,7 @@ $this->extend(array(
 );
 $data = $this->get('data');
 $links = $this->get('links');
+$comment = $this->get('comment', array());
 ?>
 
 <div class="container">
@@ -50,10 +51,29 @@ $links = $this->get('links');
     
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">所有评论</h3>
+            <h3 class="panel-title">所有评论（<?php echo $data['comment_count'];?>）</h3>
         </div>
         <div class="panel-body">
-            
+            <?php if (!empty($comment)) {
+                foreach ($comment as $item) {?>
+                <div>
+                    <?php if (empty($item['url'])) {
+                        echo $item['name'];
+                    } else {?>
+                    <a href="<?php echo $item['url'];?>"><?php echo $item['name'];?></a>
+                    <?php }?>
+                    
+                    <a href="#">回复</a>
+                    
+                    <?php $this->time($item['create_at']);?>
+                    <div>
+                        <?php echo $item['content'];?>
+                    </div>
+                </div>
+            <?php }
+            } else {?>
+                <p>暂无评论，快来抢沙发~~~~</p>
+            <?php }?>
         </div>
     </div>
     
@@ -63,21 +83,32 @@ $links = $this->get('links');
                 <h3 class="panel-title">发表评论</h3>
           </div>
           <div class="panel-body">
-                <form action="" method="POST" class="form-horizontal" role="form">
+                <form method="POST" class="form-horizontal" role="form">
+                        <input type="hidden" name="parent" value="0">
+                        <input type="hidden" name="post_id" value="<?php echo $data['id'];?>">
+                        <?php if (Auth::guest()) {?>
                         <div class="form-group">
                             <label for="input_name" class="col-sm-2 control-label">姓名:</label>
                             <div class="col-sm-10">
-                                <input type="text" name="name" id="input_name" class="form-control" value="" required="required" >
+                                <input type="text" name="name" id="input_name" class="form-control" value="<?php $this->ech('name');?>" required="required" >
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label for="input_email" class="col-sm-2 control-label">邮箱:</label>
                             <div class="col-sm-10">
-                                <input type="email" name="email" id="input_email" class="form-control" value="" required="required" >
+                                <input type="email" name="email" id="input_email" class="form-control" value="<?php $this->ech('email');?>" required="required" >
                             </div>
                         </div>
                         
+                        <div class="form-group">
+                            <label for="input_url" class="col-sm-2 control-label">网址:</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="url" id="input_url" class="form-control" value="">
+                            </div>
+                        </div>
+                        
+                        <?php }?>
                         
                         <div class="form-group">
                             <label for="textarea_content" class="col-sm-2 control-label">内容:</label>

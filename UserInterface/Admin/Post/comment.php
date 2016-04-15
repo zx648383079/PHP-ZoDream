@@ -15,9 +15,10 @@ $page = $this->get('page');
     <thead>
     <tr>
         <th>ID</th>
+        <th>评论</th>
         <th>用户名</th>
         <th>邮箱</th>
-        <th>登录次数</th>
+        <th>是否已注册</th>
         <th>最后登录IP</th>
         <th>最后登陆时间</th>
         <th>操作</th>
@@ -27,12 +28,12 @@ $page = $this->get('page');
         <?php foreach ($page->getPage() as $value) {?>
             <tr>
                 <td><?php echo $value['id'];?></td>
+                <td><?php echo $value['content'];?></td>
                 <td><?php echo $value['name'];?></td>
                 <td><?php echo $value['email'];?></td>
-                <td><?php echo $value['login_num'];?></td>
-                <td><?php echo $value['update_ip'];?></td>
-                <td><?php $this->time($value['update_at']);?></td>
-                <td>[<a href="<?php $this->url('user/addUser/id/'.$value['id']);?>">编辑</a>][删除]</td>
+                <td><?php echo $value['user_id'] > 0 ? '已注册' : '游客';?></td>
+                <td><?php $this->time($value['create_at']);?></td>
+                <td>[删除]</td>
             </tr>
         <?php }?>
     </tbody>

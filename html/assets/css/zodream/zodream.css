@@ -37,11 +37,6 @@ input[type="number"] {
 button,
 .btn {
     padding-left: 0 5px;
-    background-color: #fff;
-}
-
-.table {
-    
 }
 
 .table .row {
@@ -296,3 +291,21 @@ table th[class*="col-"] {
     margin: 0 auto;
     padding: 50px 20px;
 }
+
+.group {
+  border: 1px solid deepskyblue;
+  width: 100%;
+}
+
+.group::after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+
+.group .heading {
+  background-color: lightgreen;
+  width: 100%;
+  padding: 5px;
+}
+
