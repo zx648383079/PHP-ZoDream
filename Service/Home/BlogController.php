@@ -7,7 +7,7 @@ use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
 
 class BlogController extends Controller {
-	function indexAction($search = null, $termid = null) {
+	function indexAction($search = null, $termid = null, $user = null) {
 		$term = EmpireModel::query('term')->find();
 		$where = array();
 		if (!empty($search)) {
@@ -18,6 +18,9 @@ class BlogController extends Controller {
 		}
 		if (!empty($termid)) {
 			$where[] = 'tp.term_id = '.intval($termid);
+		}
+		if (!empty($user)) {
+			$where[] = 'p.user_id = '.intval($user);
 		}
 		$data = EmpireModel::query('post p')->getPage(array(
 			'left' => array(
@@ -34,9 +37,12 @@ class BlogController extends Controller {
 			'id' => 'p.id',
 			'title' => 'p.title',
 			'user' => 'u.name',
+			'user_id' => 'p.user_id',
 			'term' => 't.name',
 			'comment_count' => 'p.comment_count',
 			'create_at' => 'p.create_at',
+			'excerpt' => 'p.excerpt',
+			'comment_count' => 'p.comment_count'
 		),
 		array(
 			'where' => $where,

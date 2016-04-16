@@ -2,3 +2,33 @@
     font-size: 30px;
     text-align: center;
 }
+
+.list-item {
+    border-bottom: 1px dotted #ccc;
+    margin: 5px;
+}
+
+.comment-item {
+    border: 1px dotted #ccc;
+    padding: 1em;
+}
+
+.post {
+    border: 1px solid #ccc;
+    min-height: 100px;
+}
+
+.post-head {
+    background-color: #ccc;
+}
+
+.title {
+    font-size: 30px;
+    background-color: lightseagreen;
+    padding: 5px 10px;
+}
+
+.table .thread {
+    width: 70%;
+    font-size: 20px;
+}

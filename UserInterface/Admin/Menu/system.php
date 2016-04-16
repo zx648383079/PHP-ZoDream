@@ -52,10 +52,10 @@
     </li>
     <li>备份与恢复数据
         <ul>
-            <li>备份数据</li>
-            <li>恢复数据</li>
-            <li>管理备份目录</li>
-            <li>执行SQL语句</li>
+            <li data="model/backup">备份数据</li>
+            <li data="model/recover">恢复数据</li>
+            <li data="model">管理备份目录</li>
+            <li data="model/execute">执行SQL语句</li>
         </ul>
     </li>
 </ul>

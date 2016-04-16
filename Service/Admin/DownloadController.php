@@ -2,16 +2,26 @@
 namespace Service\Admin;
 
 use Domain\Model\EmpireModel;
+use Zodream\Domain\Response\Download;
+use Zodream\Infrastructure\Request;
 
 class DownloadController extends Controller {
+	protected function rules() {
+		return array(
+			'*' => '*'
+		);
+	}
+
 	/**
 	 * 管理地址前缀
 	 */
 	function indexAction() {
-		$data = EmpireModel::query('enewsdownurlqz')->select('order by urlid desc', 'urlid,urlname,url,downtype');
-		$this->show(array(
-			'data' => $data
-		));
+		$file = Request::get('file');
+		if (empty($file)) {
+			$this->show();
+		}
+		EmpireModel::query()->addLog($file, 'download');
+		Download::make(APP_DIR . '/'. ltrim($file, '/'));
 	}
 
 	function recordAction() {

@@ -5,30 +5,37 @@ $this->extend(array(
 	'layout' => array(
 		'head',
         'navbar'
-	))
+	)), array (
+        'zodream/blog.css'
+    )
 );
 $page = $this->get('page');
 $data = $this->get('data');
 ?>
 <div class="container">
     
-    <div class="row">
-        <?php echo $data['title'];?>
+    <div class="row title">
+        主题：<?php echo $data['title'];?> <a href="#post" class="btn btn-primary">回帖</a>
     </div>
     
     <?php foreach ($page->getPage() as $item) {?>
-    <div class="row">
+    <div class="row post">
         <div class="col-md-3">
             <?php echo $item['user_name'];?>
         </div>
         <div class="col-md-9">
-            <?php echo $item['content'];?>
-            <p>
-                <span><?php $this->ago($item['create_at']);?></span>
-                <?php if ($item['first'] == 1) {?>
-                点赞
-                <?php }?>
-            </p>
+            <div class="post-head">
+                <?php $this->ago($item['create_at']);?>
+            </div>
+            <div>
+                <?php echo $item['content'];?>
+                <p>
+                
+                    <?php if ($item['first'] == 1) {?>
+                    点赞
+                    <?php }?>
+                </p>
+            </div>
         </div>
     </div>
     <?php }?>
@@ -37,7 +44,7 @@ $data = $this->get('data');
     </div>
     
     <?php if (!Auth::guest()) {?>
-    <div class="panel panel-default">
+    <div id="post" class="panel panel-default">
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
                     <input type="hidden" name="forum_id" value="<?php echo $data['forum_id'];?>">

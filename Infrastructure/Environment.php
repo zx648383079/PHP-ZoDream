@@ -154,24 +154,30 @@ class Environment {
 	 * @param array $files
 	 * @return array
 	 */
-	public static function getFiles($path, $allowFiles, &$files = array()) {
-	    if (!is_dir($path)) return null;
-	    if(substr($path, strlen($path) - 1) != '/') $path .= '/';
+	public static function getFiles($path, $allowFiles = '.*', &$files = array()) {
+	    if (!is_dir($path)) {
+			return null;
+		}
+	    if(substr($path, strlen($path) - 1) != '/') {
+			$path .= '/';
+		}
+
 	    $handle = opendir($path);
 	    while (false !== ($file = readdir($handle))) {
-	        if ($file != '.' && $file != '..') {
-	            $path2 = $path . $file;
-	            if (is_dir($path2)) {
-	                self::getFiles($path2, $allowFiles, $files);
-	            } else {
-	                if (preg_match("/\.(".$allowFiles.")$/i", $file)) {
-	                    $files[] = array(
-	                        'url'=> substr($path2, strlen(APP_DIR)),
-	                        'mtime'=> filemtime($path2)
-	                    );
-	                }
-	            }
+	        if ($file == '.' || $file == '..') {
+	            continue;
 	        }
+			$path2 = $path . $file;
+			if (is_dir($path2)) {
+				self::getFiles($path2, $allowFiles, $files);
+			} else {
+				if (preg_match('/\.('.$allowFiles.')$/i', $file)) {
+					$files[] = array(
+						'url'=> substr($path2, strlen(APP_DIR)),
+						'mtime'=> filemtime($path2)
+					);
+				}
+			}
 	    }
 	    return $files;
 	}

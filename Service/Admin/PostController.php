@@ -5,6 +5,7 @@ namespace Service\Admin;
  * 博客
  */
 use Domain\Model\EmpireModel;
+use Infrastructure\HtmlExpand;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\ObjectExpand\PinYin;
 use Zodream\Infrastructure\Request\Post;
@@ -66,6 +67,7 @@ class PostController extends Controller {
 		if ($post->get('status') !== 'password') {
 			$post->set('password', null);
 		}
+		$post->set('excerpt', HtmlExpand::shortString($post->get('content')));
 		$id = EmpireModel::query('post')->save(array(
 			'id' => '',
 			'title' => 'required|string:1-100',
@@ -73,7 +75,9 @@ class PostController extends Controller {
 			'status' => 'required|enum:publish,password,private,draft',
 			'password' => '',
 			'create_at' => '',
-			'user_id' => ''
+			'user_id' => '',
+			'excerpt' => '',
+			'update_at' => ''
 		), $post->get());
 		if (empty($id)) {
 			return;

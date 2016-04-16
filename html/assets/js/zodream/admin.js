@@ -16,7 +16,7 @@ require.config({
         }
     }
 });
-require(["jquery", "admin/zodream"], function () {
+require(["jquery", "bootstrap", "admin/zodream"], function () {
     $(".topMenu li").click(function () {
         var data = $(this).attr("data");
         if (undefined == data) {

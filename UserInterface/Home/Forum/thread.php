@@ -5,7 +5,9 @@ $this->extend(array(
 	'layout' => array(
 		'head',
         'navbar'
-	))
+	)), array(
+        'zodream/blog.css'
+    )
 );
 $sub = $this->get('sub', array());
 $page = $this->get('page');
@@ -32,27 +34,46 @@ $page = $this->get('page');
     
     
     <div class="row">
-        <ul>
-            <?php foreach ($page->getPage() as $item) {?>
-                <li>
-                <span>
-                    <a href="<?php $this->url('forum/post/id/'.$item['id']);?>">
-                        <?php echo $item['title'];?>
-                    </a>
-                </span>
-                    <span><?php echo $item['user_name'];?></span>
-                    <span><?php $this->ago($item['create_at']);?></span>
-                    
-                    <span><?php echo $item['replies'];?></span>
-                    <span><?php echo $item['views'];?></span>
-                    
-                    <span><?php $this->ago($item['update_at']);?></span>
-                </li>
-            <?php }?>
-        </ul>
-        <div>
-            <?php $page->pageLink();?>
-        </div>
+        
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>主题</th>
+                    <th>作者</th>
+                    <th>回复/查看</th>
+                    <th>最后发表</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($page->getPage() as $item) {?>
+                    <tr>
+                        <td class="thread">
+                            <a href="<?php $this->url('forum/post/id/'.$item['id']);?>">
+                                <?php echo $item['title'];?>
+                            </a>
+                        </td>
+                        <td>
+                            <?php echo $item['user_name'];?></br>
+                            <?php $this->ago($item['create_at']);?>
+                        </td>
+                        <td>
+                            <?php echo $item['replies'];?> </br>
+                            <?php echo $item['views'];?>
+                        </td>
+                        <td>
+                            <?php $this->ago($item['update_at']);?>
+                        </td>
+                    </tr>
+                <?php }?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5">
+                        <?php $page->pageLink();?>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
     
     <?php if (!Auth::guest()) {?>

@@ -35,6 +35,7 @@ class AccountController extends Controller {
 			Session::setValue('level', $num);
 		}
 		$this->show(array(
+			'title' => '后台登录'
 		));
 	}
 
@@ -51,7 +52,9 @@ class AccountController extends Controller {
 	}
 
 	function registerAction() {
-		$this->show();
+		$this->show(array(
+			'title' => '后台注册'
+		));
 	}
 
 	function registerPost() {

@@ -9,6 +9,7 @@
 <meta name="author" content="<?php $this->ech('author');?>" />
 <link rel="icon" href="<?php $this->asset('images/favicon.png');?>">
 <?php $this->jcs(array(
+    'bootstrap/bootstrap.min.css',
     'zodream/zodream.css'
 ));?>
 </head>

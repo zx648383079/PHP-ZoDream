@@ -21,17 +21,24 @@ $page = $this->get('page');
             </ul>
         </div>
         <div class="col-md-9">
-            <ul class="list-group">
+            <ul class="list">
                 <?php foreach ($page->getPage() as $item) {?>
-                    <li class="list-group-item">
-                    <h4 class="list-group-item-heading">
-                        <a href="<?php $this->url('blog/view/id/'.$item['id']);?>">
-                            <?php echo $item['title'];?>
-                        </a>
-                    </h4>
-                        <span><?php echo $item['term'];?></span>
-                        <span><?php echo $item['user'];?></span>
-                        <span><?php $this->ago($item['create_at']);?></span>
+                    <li class="list-item">
+                        <h4 class="list-item-head">
+                            <a href="<?php $this->url('blog/view/id/'.$item['id']);?>">
+                                <?php echo $item['title'];?>
+                            </a>
+                        </h4>
+                        <div class="list-item-content">
+                            <?php echo $item['excerpt'];?>
+                        </div>
+                        <div class="list-item-foot">
+                            <a href="<?php $this->url('blog/user/'.$item['user_id']);?>"><?php echo $item['user'];?></a>
+                             发表于 
+                            <?php $this->ago($item['create_at']);?>   
+                            分类：<?php echo $item['term'];?>
+                             评论（<?php echo $item['comment_count'];?>）
+                        </div>
                     </li>
                 <?php }?>
             </ul>

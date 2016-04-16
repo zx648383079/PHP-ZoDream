@@ -5,7 +5,9 @@ $this->extend(array(
     'layout' => array(
         'head',
         'navbar'
-    ))
+    )), array(
+        'zodream/blog.css'
+    )
 );
 $data = $this->get('data');
 $links = $this->get('links');
@@ -55,17 +57,17 @@ $comment = $this->get('comment', array());
         </div>
         <div class="panel-body">
             <?php if (!empty($comment)) {
-                foreach ($comment as $item) {?>
-                <div>
+                foreach ($comment as $key => $item) {?>
+                <div class="comment-item">
+                    <?php echo $key + 1;?>楼 
+                    <?php $this->time($item['create_at']);?>
+                    
                     <?php if (empty($item['url'])) {
                         echo $item['name'];
                     } else {?>
                     <a href="<?php echo $item['url'];?>"><?php echo $item['name'];?></a>
                     <?php }?>
-                    
                     <a href="#">回复</a>
-                    
-                    <?php $this->time($item['create_at']);?>
                     <div>
                         <?php echo $item['content'];?>
                     </div>

@@ -43,6 +43,12 @@ class MenuController extends Controller {
 		));
 	}
 
+	function wechatAction() {
+		$this->show(array(
+
+		));
+	}
+
 	function extendAction() {
 		$data = EmpireModel::query()->getMenu(3);
 		$this->show(array(
