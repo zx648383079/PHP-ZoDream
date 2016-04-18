@@ -7,6 +7,10 @@ body {
     text-align: center;
 }
 
+.navbar-form {
+  margin-bottom: 0;  
+}
+
 a {
     text-decoration: none;
 }

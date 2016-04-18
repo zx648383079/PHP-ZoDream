@@ -29,12 +29,11 @@ $data = $this->get('data');
             </div>
             <div>
                 <?php echo $item['content'];?>
-                <p>
                 
-                    <?php if ($item['first'] == 1) {?>
-                    点赞
-                    <?php }?>
-                </p>
+                
+                <?php if ($item['first'] == 1) {?>
+                <div class="zan"><span class="glyphicon glyphicon-thumbs-up"></span></div>
+                <?php }?>
             </div>
         </div>
     </div>

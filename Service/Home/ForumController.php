@@ -16,6 +16,42 @@ class ForumController extends Controller {
 		);
 	}
 
+	public function prepare() {
+		parent::prepare();
+		$search = Request::get('search');
+		if (empty($search)) {
+			return;
+		}
+		$searches = explode(' ', $search);
+		$where = array();
+		foreach ($searches as $item) {
+			$where[] = "t.title like '%{$item}%'";
+		}
+		$page = EmpireModel::query('thread t')->getPage(array(
+			'left' => array(
+				'user u',
+				't.update_user = u.id'
+			),
+			'where' => $where,
+			'order' => 'create_at desc'
+		), array(
+			'id' => 't.id',
+			'update_at' => 't.update_at',
+			'update_user' => 'u.name',
+			'title' => 't.title',
+			'user_name' => 't.user_name',
+			'create_at' => 't.create_at',
+			'replies' => 't.replies',
+			'views' => 't.views'
+		), array(
+			'where' => $where
+		));
+		$this->show('forum.search', array(
+			'page' => $page,
+			'title' => '搜 '.$search
+		));
+	}
+
 	function indexAction() {
 		$data = EmpireModel::query('forum')->find(array(
 			'where' => array(

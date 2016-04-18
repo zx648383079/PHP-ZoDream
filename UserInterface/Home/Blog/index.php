@@ -12,7 +12,7 @@ $page = $this->get('page');
 ?>
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <ul class="term">
                 <li><a href="<?php $this->url('blog');?>">全部</a></li>
                 <?php foreach ($this->get('term', array()) as $item) {?>
@@ -20,7 +20,7 @@ $page = $this->get('page');
                 <?php }?>
             </ul>
         </div>
-        <div class="col-md-9">
+        <div id="list" class="col-md-10">
             <ul class="list">
                 <?php foreach ($page->getPage() as $item) {?>
                     <li class="list-item">

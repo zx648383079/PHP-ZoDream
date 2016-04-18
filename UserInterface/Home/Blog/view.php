@@ -16,7 +16,7 @@ $comment = $this->get('comment', array());
 
 <div class="container">
     
-    <div class="row">
+    <div id="title" class="row">
         <h1 class="text-center"><?php echo $data['title'];?></h1>
     </div>
     
@@ -25,7 +25,7 @@ $comment = $this->get('comment', array());
         发表时间：<?php $this->time($data['create_at']);?>
     </div>
     
-    <div class="row">
+    <div id="content" class="row">
         <?php echo htmlspecialchars_decode($data['content']);?>
     </div>
     
@@ -51,7 +51,7 @@ $comment = $this->get('comment', array());
     
     
     
-    <div class="panel panel-default">
+    <div id="comment" class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">所有评论（<?php echo $data['comment_count'];?>）</h3>
         </div>
