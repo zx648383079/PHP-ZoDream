@@ -1,3 +1,3 @@
-;define(['ueditor'], function(UE: any) {
+;define(['jquery', 'ueditor'], function(UE: any) {
     UE.getEditor("editor");
 });

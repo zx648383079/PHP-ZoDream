@@ -7,6 +7,7 @@
             <li>扩展变量</li>
             <li>安全参数配置</li>
             <li>网站防火墙</li>
+            <li data="link">友情链接</li>
         </ul>
     </li>
     <li>数据更新

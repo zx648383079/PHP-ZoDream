@@ -1,5 +1,5 @@
 /// <reference path="../../../../../typings/jquery/jquery.d.ts" />
-;define(["admin/zodream"], function() {
+;define(["jquery", "admin/zodream"], function() {
     $("#search").click(function() {
        zodream.main.search();
     });

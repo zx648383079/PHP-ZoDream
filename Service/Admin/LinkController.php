@@ -5,6 +5,8 @@ namespace Service\Admin;
  * 友情链接
  */
 use Domain\Model\EmpireModel;
+use Zodream\Domain\Filter\DataFilter;
+use Zodream\Domain\Response\Redirect;
 
 class LinkController extends Controller {
 	/**
@@ -17,8 +19,15 @@ class LinkController extends Controller {
 		));
 	}
 
-	function indexPost() {
-		EmpireModel::query('friendlink')->save(array(
+	function addAction($id = null) {
+		if (!empty($id)) {
+			$this->send('data', EmpireModel::query('friendlink')->findById($id));
+		}
+		$this->show();
+	}
+
+	function addPost() {
+		$row = EmpireModel::query('friendlink')->save(array(
 			'id' => '',
 			'name' => 'required|string:1-100',
 			'url' => 'required|url',
@@ -26,5 +35,13 @@ class LinkController extends Controller {
 			'position' => 'int',
 			'logo' => ''
 		));
+		if (!empty($row)) {
+			Redirect::to('link');
+		}
+		$this->send('message', DataFilter::getError());
+	}
+
+	function deleteAction($id) {
+		$this->delete('friendlink', $id);
 	}
 }

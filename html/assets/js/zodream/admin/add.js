@@ -1,5 +1,5 @@
 ;
-define(['ueditor'], function (UE) {
+define(['jquery', 'ueditor'], function (UE) {
     UE.getEditor("editor");
 });
 //# sourceMappingURL=add.js.map
