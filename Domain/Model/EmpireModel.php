@@ -8,7 +8,6 @@ namespace Domain\Model;
  */
 use Zodream\Domain\Authentication\Auth;
 use Zodream\Domain\Filter\DataFilter;
-use Zodream\Domain\Html\Page;
 use Zodream\Domain\Routing\UrlGenerator;
 use Zodream\Infrastructure\Request;
 
@@ -31,33 +30,6 @@ class EmpireModel extends Model {
             return false;
         }
         return $this->fill($data);
-    }
-
-    /**
-     * 获取简单的分页
-     * @param string|array $sql from后的 语句
-     * @param string $field
-     * @param string|array $countSql count的 sql语句， 为空则使用$sql
-     * @return Page
-     */
-    public function getPage($sql = null, $field = '*', $countSql = null) {
-        $sql = $this->getBySort($sql);
-        $page = new Page($this->getCount(
-            is_null($countSql) ? $sql : $this->getBySort($countSql), 
-            '*'
-        ));
-        $page->setPage($this->find($sql .' LIMIT '.$page->getLimit(), $this->getField($field)));
-        return $page;
-    }
-
-    /**
-     * 获取总数
-     * @param string $sql
-     * @param string $field
-     * @return string
-     */
-    public function getCount($sql, $field = '*') {
-        return $this->scalar($sql.' LIMIT 1', "COUNT({$field}) AS count");
     }
 
     public function getMenu($type) {

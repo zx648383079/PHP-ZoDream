@@ -1,24 +1,22 @@
 <?php
 namespace Domain\Model;
-use Zodream\Domain\Authentication\Auth;
-use Zodream\Infrastructure\Request;
-
 /**
  * Created by PhpStorm.
  * User: zx648
  * Date: 2016/3/18
  * Time: 21:41
  */
+use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Html\Page;
+use Zodream\Infrastructure\Request;
+
 abstract class Model extends \Zodream\Domain\Model {
     /**
      * 自动完成更新或插入 并添加更新时间、用户id、ip、插入时间
      * @return bool|int
      */
     public function fill() {
-        if (func_num_args() === 0) {
-            return false;
-        }
-        $args = func_get_arg(0);
+        $args = func_num_args() > 0 ? func_get_arg(0) : Request::post();
         $args['update_at'] = time();
         if (isset($args['id']) && !empty($args['id'])) {
             return parent::fill($args, intval($args['id']));
@@ -29,5 +27,32 @@ abstract class Model extends \Zodream\Domain\Model {
         $args['ip'] = Request::ip();
         $args['create_at'] = $args['update_at'];
         return parent::fill($args);
+    }
+
+    /**
+     * 获取简单的分页
+     * @param string|array $sql from后的 语句
+     * @param string $field
+     * @param string|array $countSql count的 sql语句， 为空则使用$sql
+     * @return Page
+     */
+    public function getPage($sql = null, $field = '*', $countSql = null) {
+        $sql = $this->getBySort($sql);
+        $page = new Page($this->getCount(
+            is_null($countSql) ? $sql : $this->getBySort($countSql),
+            '*'
+        ));
+        $page->setPage($this->find($sql .' LIMIT '.$page->getLimit(), $this->getField($field)));
+        return $page;
+    }
+
+    /**
+     * 获取总数
+     * @param string $sql
+     * @param string $field
+     * @return string
+     */
+    public function getCount($sql, $field = '*') {
+        return $this->scalar($sql.' LIMIT 1', "COUNT({$field}) AS count");
     }
 }

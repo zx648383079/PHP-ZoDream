@@ -32,7 +32,7 @@ class BlogController extends Controller {
 				'tp.term_id = t.id'
 			),
 			'where' => $where,
-			'order' => 'create_at'
+			'order' => 'create_at desc'
 		), array(
 			'id' => 'p.id',
 			'title' => 'p.title',

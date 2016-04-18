@@ -4,7 +4,7 @@ namespace Infrastructure;
 class Uploader {
     private $fileField; //文件域名
     private $file; //文件上传对象
-    private $base64; //文件上传对象
+    private $type; //文件上传对象
     private $config; //配置信息
     private $oriName; //原始文件名
     private $fileName; //新文件名
@@ -41,7 +41,7 @@ class Uploader {
      * 构造函数
      * @param string $fileField 表单名称
      * @param array $config 配置项
-     * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
+     * @param string $type 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
     public function __construct($fileField, $config, $type = 'upload') {
         $this->fileField = $fileField;
@@ -80,39 +80,16 @@ class Uploader {
         }
         $this->oriName = $file['name'];
         $this->fileSize = $file['size'];
-        $this->fileType = $this->getFileExt();
-        $this->fullName = $this->getFullName();
-        $this->filePath = $this->getFilePath();
-        $this->fileName = $this->getFileName();
-        $dirname = dirname($this->filePath);
-
-        //检查文件大小是否超出限制
-        if (!$this->checkSize()) {
-            $this->stateInfo = $this->getStateInfo('ERROR_SIZE_EXCEED');
-            return;
-        }
-
-        //检查是否不允许的文件格式
-        if (!$this->checkType()) {
-            $this->stateInfo = $this->getStateInfo('ERROR_TYPE_NOT_ALLOWED');
-            return;
-        }
-
-        //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
-            $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
-            return;
-        } else if (!is_writeable($dirname)) {
-            $this->stateInfo = $this->getStateInfo('ERROR_DIR_NOT_WRITEABLE');
+        if (!$this->moveFile()) {
             return;
         }
 
         //移动文件
         if (!(move_uploaded_file($file['tmp_name'], $this->filePath) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo('ERROR_FILE_MOVE');
-        } else { //移动成功
-            $this->stateInfo = $this->stateMap[0];
+            return;
         }
+        $this->stateInfo = $this->stateMap[0];
     }
 
     /**
@@ -122,37 +99,8 @@ class Uploader {
     private function upBase64() {
         $base64Data = $_POST[$this->fileField];
         $img = base64_decode($base64Data);
-
         $this->oriName = $this->config['oriName'];
-        $this->fileSize = strlen($img);
-        $this->fileType = $this->getFileExt();
-        $this->fullName = $this->getFullName();
-        $this->filePath = $this->getFilePath();
-        $this->fileName = $this->getFileName();
-        $dirname = dirname($this->filePath);
-
-        //检查文件大小是否超出限制
-        if (!$this->checkSize()) {
-            $this->stateInfo = $this->getStateInfo('ERROR_SIZE_EXCEED');
-            return;
-        }
-
-        //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
-            $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
-            return;
-        } else if (!is_writeable($dirname)) {
-            $this->stateInfo = $this->getStateInfo('ERROR_DIR_NOT_WRITEABLE');
-            return;
-        }
-
-        //移动文件
-        if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
-            $this->stateInfo = $this->getStateInfo('ERROR_WRITE_CONTENT');
-        } else { //移动成功
-            $this->stateInfo = $this->stateMap[0];
-        }
-
+        $this->moveImage($img);
     }
 
     /**
@@ -215,35 +163,56 @@ class Uploader {
         preg_match('/[\/]([^\/]*)[\.]?[^\.\/]*$/', $imgUrl, $m);
 
         $this->oriName = $m ? $m[1]:'';
-        $this->fileSize = strlen($img);
+        $this->moveImage($img);
+    }
+
+    /**
+     * 移动图片
+     * @param string $content
+     */
+    private function moveImage($content) {
+        $this->fileSize = strlen($content);
+        if (!$this->moveFile()) {
+            return;
+        }
+        //移动文件
+        if (!(file_put_contents($this->filePath, $content) && file_exists($this->filePath))) { //移动失败
+            $this->stateInfo = $this->getStateInfo('ERROR_WRITE_CONTENT');
+            return;
+        }
+        $this->stateInfo = $this->stateMap[0];
+    }
+
+    /**
+     * 判断是否允许移动文件
+     * @return bool
+     */
+    private function moveFile() {
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
         $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
-        $dirname = dirname($this->filePath);
-
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
             $this->stateInfo = $this->getStateInfo('ERROR_SIZE_EXCEED');
-            return;
+            return false;
+        }
+        if (!$this->checkType()) {
+            $this->stateInfo = $this->getStateInfo('ERROR_TYPE_NOT_ALLOWED');
+            return false;
         }
 
+        $dirName = dirname($this->filePath);
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
+        if (!file_exists($dirName) && !mkdir($dirName, 0777, true)) {
             $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
-            return;
-        } else if (!is_writeable($dirname)) {
+            return false;
+        }
+        if (!is_writeable($dirName)) {
             $this->stateInfo = $this->getStateInfo('ERROR_DIR_NOT_WRITEABLE');
-            return;
+            return false;
         }
-
-        //移动文件
-        if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
-            $this->stateInfo = $this->getStateInfo('ERROR_WRITE_CONTENT');
-        } else { //移动成功
-            $this->stateInfo = $this->stateMap[0];
-        }
-
+        return true;
     }
 
     /**
@@ -287,7 +256,7 @@ class Uploader {
         $format = str_replace('{filename}', $oriName, $format);
 
         //替换随机字符串
-        $randNum = rand(1, 10000000000) . rand(1, 10000000000);
+        $randNum = rand(1, 1000000000) .''. rand(1, 1000000000); //如果是32位PHP ，PHP_INT_MAX 有限制报错 int 变为 float
         if (preg_match('/\{rand\:([\d]*)\}/i', $format, $matches)) {
             $format = preg_replace('/\{rand\:[\d]*\}/i', substr($randNum, 0, $matches[1]), $format);
         }
@@ -309,13 +278,7 @@ class Uploader {
      * @return string
      */
     private function getFilePath() {
-        $fullname = $this->fullName;
-
-        if (substr($fullname, 0, 1) != '/') {
-            $fullname = '/' . $fullname;
-        }
-
-        return APP_DIR . $fullname;
+        return APP_DIR . '/html/'. ltrim($this->fullName, '/');
     }
 
     /**
@@ -331,7 +294,7 @@ class Uploader {
      * @return bool
      */
     private function  checkSize() {
-        return $this->fileSize <= ($this->config['maxSize']);
+        return $this->fileSize <= $this->config['maxSize'];
     }
 
     /**

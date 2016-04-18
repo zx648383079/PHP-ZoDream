@@ -20,8 +20,8 @@ class HtmlExpand {
 	}
 	
 	public static function shortString($content, $length = 100) {
-		$content = preg_replace('/(\<.+?\>)|(\&nbsp;)+/', '', $content);
-		return StringExpand::csubstr($content, 0, $length);
+		$content = preg_replace('/(\<.+?\>)|(\&nbsp;)+/', '', htmlspecialchars_decode($content));
+		return StringExpand::subString($content, 0, $length);
 	}
 
 	public static function getMenu(array $data) {

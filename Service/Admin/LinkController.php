@@ -2,7 +2,7 @@
 namespace Service\Admin;
 
 /**
- * 链接
+ * 友情链接
  */
 use Domain\Model\EmpireModel;
 

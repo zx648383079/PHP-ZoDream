@@ -70,17 +70,21 @@ class ModelController extends Controller {
 		foreach ($post->get('db') as $item) {
 			fwrite($file, "--创建数据库开始\r\nCREATE SCHEMA IF NOT EXISTS `{$item}` DEFAULT CHARACTER SET utf8 ;\r\n
 USE `{$item}` ;\r\n");
-			foreach ($model->getTableStatus($item) as $value) {
+			foreach ($model->getTableByDatabase($item) as $value) {
+				$table = $value;//$value['Name'];
+				if ($post->has('drop')) {
+					fwrite($file, "DROP TABLE IF EXISTS `{$table}`;\r\n");
+				}
 				fwrite($file,
-					$model->getCreateTable($value));
-				$count = $model->setTable($value['Name'])->count();
+					$model->getCreateTableSql($value));
+				$count = $model->setTable($table)->count();
 				for ($i = 0; $i < $count; $i += 20) {
 					fwrite($file, $model->getInsert($model->find(array(
 						'limit' => array(
 							$i,
 							$i + 20
 						)
-					)), $value['Name']));
+					)), $table));
 				}
 				fwrite($file, "\r\n\r\n");
 			}

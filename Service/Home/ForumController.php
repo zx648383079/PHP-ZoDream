@@ -46,11 +46,28 @@ class ForumController extends Controller {
 				'parent = '. $id
 			)
 		));
-		$page = EmpireModel::query('thread')->getPage(array(
+		$page = EmpireModel::query('thread t')->getPage(array(
+			'left' => array(
+				'user u',
+				't.update_user = u.id'
+			),
 			'where' => array(
 				'forum_id = '.$id
 			),
 			'order' => 'create_at desc'
+		), array(
+			'id' => 't.id',
+			'update_at' => 't.update_at',
+			'update_user' => 'u.name',
+			'title' => 't.title',
+			'user_name' => 't.user_name',
+			'create_at' => 't.create_at',
+			'replies' => 't.replies',
+			'views' => 't.views'
+		), array(
+			'where' => array(
+				'forum_id = '.$id
+			)
 		));
 		$this->show(array(
 			'sub' => $sub,
@@ -59,8 +76,18 @@ class ForumController extends Controller {
 		));
 	}
 
-	function addAction() {
-		$this->show();
+	function addAction($id) {
+		$this->show(array(
+			'id' => $id
+		));
+	}
+
+	/**
+	 * @param Post $post
+	 */
+	function addPost($post) {
+		$this->threadPost($post);
+		Redirect::to('forum/thread/id/'.$post->get('forum_id'), 2, '发表成功！');
 	}
 
 	/**

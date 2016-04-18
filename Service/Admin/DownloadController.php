@@ -3,6 +3,7 @@ namespace Service\Admin;
 
 use Domain\Model\EmpireModel;
 use Zodream\Domain\Response\Download;
+use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Request;
 
 class DownloadController extends Controller {
@@ -20,7 +21,7 @@ class DownloadController extends Controller {
 		if (empty($file)) {
 			$this->show();
 		}
-		EmpireModel::query()->addLog($file, 'download');
+		Log::save($file, 'download');
 		Download::make(APP_DIR . '/'. ltrim($file, '/'));
 	}
 

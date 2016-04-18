@@ -30,7 +30,7 @@ class PostController extends Controller {
 				'tp.term_id = t.id'
 			),
 			'where' => $where,
-			'order' => 'create_at'
+			'order' => 'create_at desc'
 		), array(
 			'id' => 'p.id',
 			'title' => 'p.title',
@@ -91,6 +91,13 @@ class PostController extends Controller {
 			':term' => intval($post->get('term_id'))
 		));
 		Redirect::to('post');
+	}
+
+	function deleteAction($id) {
+		EmpireModel::query('term_post')->deleteValues(array(
+			'post_id' => $id
+		));
+		$this->delete('post', $id);
 	}
 
 	function termAction() {
