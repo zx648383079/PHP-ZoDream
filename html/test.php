@@ -1,5 +1,11 @@
 <?php
-require_once(dirname(__DIR__).'/vendor/autoload.php');
-echo \Zodream\Infrastructure\ObjectExpand\PinYin::encode('振', 'all');
+function &aa() {
+    static $a = 0;
+    $a ++;
+    return $a;
+}
 
-var_dump(1<<8);
+$b = &aa();
+$c = aa();
+var_dump($b);
+var_dump($c);
