@@ -57,7 +57,7 @@ $this->extend(array(
         <li>数据统计</li>
         <li>排行统计</li>
         <li data="admin.php/main">后台首页</li>
-        <li data="<?php $this->url('index.php');?>" target="self">网站首页</li>
+        <li data="<?php $this->url('index.php');?>" target="blank">网站首页</li>
         <li data="map">后台地图</li>
         <li>版本更新</li>
     </ul>

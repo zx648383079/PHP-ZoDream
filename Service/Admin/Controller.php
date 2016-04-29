@@ -5,7 +5,7 @@ use Domain\Model\EmpireModel;
 use Zodream\Domain\Model;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Routing\Controller as BaseController;
-use Zodream\Domain\Routing\UrlGenerator;
+use Zodream\Domain\Routing\Url;
 use Zodream\Infrastructure\Log;
 
 abstract class Controller extends BaseController {
@@ -17,7 +17,7 @@ abstract class Controller extends BaseController {
 
 
 	public function prepare() {
-		if (UrlGenerator::hasUri('account')) {
+		if (Url::hasUri('account')) {
 			return;
 		}
 		/*$model = new MessagesModel();

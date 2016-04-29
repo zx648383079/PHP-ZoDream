@@ -13,7 +13,7 @@ $page = $this->get('page');
     搜索： <input type="text" name="name" value="" placeholder="用户名" required>
     <button type="submit">搜索</button>
 </form>
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>

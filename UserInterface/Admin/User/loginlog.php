@@ -27,7 +27,7 @@ $page = $this->get('page');
     </select>
     <button type="submit">搜索</button>
 </form>
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>

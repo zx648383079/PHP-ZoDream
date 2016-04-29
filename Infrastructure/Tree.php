@@ -16,7 +16,7 @@ class Tree {
     protected $db;
 
     public function __construct() {
-        $db = EmpireModel::query('tree');
+        $this->db = EmpireModel::query('tree');
     }
 
     public function getNode($id, $withChildren = false, $withPath = false, $allChildren = false) {

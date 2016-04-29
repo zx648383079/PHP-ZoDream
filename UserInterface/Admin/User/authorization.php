@@ -7,6 +7,8 @@ $this->extend(array(
 );
 ?>
 
+
+
 <div>
     增加权限 <br>
     <form method="POST">
@@ -15,7 +17,7 @@ $this->extend(array(
         <button type="reset">重置</button>
     </form>
 </div>
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>

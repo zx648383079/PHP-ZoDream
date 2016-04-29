@@ -8,7 +8,7 @@ namespace Domain\Model;
  */
 use Zodream\Domain\Authentication\Auth;
 use Zodream\Domain\Filter\DataFilter;
-use Zodream\Domain\Routing\UrlGenerator;
+use Zodream\Domain\Routing\Url;
 use Zodream\Infrastructure\Request;
 
 class EmpireModel extends Model {
@@ -91,7 +91,7 @@ class EmpireModel extends Model {
         return $this->add(array(
             'event' => $action,
             'data' => is_string($data) ? $data : json_encode($data),
-            'url' => UrlGenerator::to(),
+            'url' => Url::to(),
             'ip' => Request::ip(),
             'create_at' => time(),
             'user' => Auth::guest() ? null : Auth::user()['name']

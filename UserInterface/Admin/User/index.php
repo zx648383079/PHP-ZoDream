@@ -7,51 +7,57 @@ $this->extend(array(
 );
 ?>
 
-<div>
-    修改资料
+
+<div class="panel panel-default">
+      <div class="panel-heading">
+            <h3 class="panel-title">修改资料</h3>
+      </div>
+      <div class="panel-body">
+            
+            <form action="" method="POST" class="form-horizontal" role="form">
+                    
+                    <div class="form-group">
+                        <label for="textarea_name" class="col-sm-2">用户名：</label>
+                        <div class="col-sm-10">
+                            <?php $this->ech('name');?>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="input_password" class="col-sm-2 control-label">原密码：</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="oldpassword" required placeholder="原密码" id="input_password" class="form-control" >
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="input_newpassword" class="col-sm-2 control-label">新密码: </label>
+                        <div class="col-sm-10">
+                            <input type="password" name="password" placeholder="新密码" id="input_newpassword" class="form-control" required="required">
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="input_repassword" class="col-sm-2 control-label">重复新密码： </label>
+                        <div class="col-sm-10">
+                            <input type="password" name="repassword" placeholder="重复新密码" id="input_repassword" class="form-control" required="required">
+                        </div>
+                    </div>
+                    
+            
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+            </form>
+            
+      </div>
 </div>
-<form method="POST">
-    <div class="table">
-        <div class="row">
-            <div>
-                用户名：
-            </div>
-            <div>
-                <?php $this->ech('name');?>
-            </div>
-        </div>
-        <div class="row">
-            <div>
-                原密码：
-            </div>
-            <div>
-                <input type="password" name="oldpassword" required placeholder="原密码">
-            </div>
-        </div>
-        <div class="row">
-            <div>
-               新密码: 
-            </div>
-            <div>
-                <input type="password" name="password" placeholder="新密码">
-            </div>
-        </div>
-        <div class="row">
-            <div>
-               重复新密码： 
-            </div>
-            <div>
-                <input type="password" name="repassword" required placeholder="重复新密码">
-            </div>
-        </div>
-        <div>
-            <button type="submit">提交</button>
-            <button type="reset">重置</button>
-        </div>
-    </div>
-</form>
-<p>说明：密码设置6位以上，且密码不能包含：$ 
-        &amp; * # &lt; &gt; ' &quot; / \ % ; 空格</p>
+
 
 <?php
 $this->extend(array(

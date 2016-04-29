@@ -70,6 +70,8 @@ class Enterprise extends Core {
      * @param string $appid
      * @param string $appsecret
      * @param string $token 手动指定access_token，非必要情况不建议用
+     *
+     * @return bool|mixed
      */
     public function checkAuth($appid='',$appsecret='',$token=''){
         if (!$appid || !$appsecret) {
@@ -107,17 +109,19 @@ class Enterprise extends Core {
 
     /**
      * 获取JSAPI授权TICKET
-     * @param string $appid 用于多个appid时使用,可空
-     * @param string $jsapi_ticket 手动指定jsapi_ticket，非必要情况不建议用
+     * @param string $appId 用于多个appid时使用,可空
+     * @param string $jsApiTicket 手动指定jsapi_ticket，非必要情况不建议用
+     *
+     * @return bool|mixed
      */
-    public function getJsTicket($appid='',$jsapi_ticket=''){
+    public function getJsTicket($appId='', $jsApiTicket=''){
         if (!$this->accessToken && !$this->checkAuth()) return false;
-        if (!$appid) $appid = $this->appId;
-        if ($jsapi_ticket) { //手动指定token，优先使用
-            $this->jsApiTicket = $jsapi_ticket;
+        if (!$appId) $appId = $this->appId;
+        if ($jsApiTicket) { //手动指定token，优先使用
+            $this->jsApiTicket = $jsApiTicket;
             return $this->jsApiTicket;
         }
-        $authname = 'qywechat_jsapi_ticket'.$appid;
+        $authname = 'qywechat_jsapi_ticket'.$appId;
         if ($rs = $this->getCache($authname))  {
             $this->jsApiTicket = $rs;
             return $rs;
@@ -140,50 +144,49 @@ class Enterprise extends Core {
     }
 
 
-
     /**
      * 创建菜单
      * @param array $data 菜单数组数据
      * example:
-     * 	array (
-     * 	    'button' => array (
-     * 	      0 => array (
-     * 	        'name' => '扫码',
-     * 	        'sub_button' => array (
-     * 	            0 => array (
-     * 	              'type' => 'scancode_waitmsg',
-     * 	              'name' => '扫码带提示',
-     * 	              'key' => 'rselfmenu_0_0',
-     * 	            ),
-     * 	            1 => array (
-     * 	              'type' => 'scancode_push',
-     * 	              'name' => '扫码推事件',
-     * 	              'key' => 'rselfmenu_0_1',
-     * 	            ),
-     * 	        ),
-     * 	      ),
-     * 	      1 => array (
-     * 	        'name' => '发图',
-     * 	        'sub_button' => array (
-     * 	            0 => array (
-     * 	              'type' => 'pic_sysphoto',
-     * 	              'name' => '系统拍照发图',
-     * 	              'key' => 'rselfmenu_1_0',
-     * 	            ),
-     * 	            1 => array (
-     * 	              'type' => 'pic_photo_or_album',
-     * 	              'name' => '拍照或者相册发图',
-     * 	              'key' => 'rselfmenu_1_1',
-     * 	            )
-     * 	        ),
-     * 	      ),
-     * 	      2 => array (
-     * 	        'type' => 'location_select',
-     * 	        'name' => '发送位置',
-     * 	        'key' => 'rselfmenu_2_0'
-     * 	      ),
-     * 	    ),
-     * 	)
+     *    array (
+     *        'button' => array (
+     *          0 => array (
+     *            'name' => '扫码',
+     *            'sub_button' => array (
+     *                0 => array (
+     *                  'type' => 'scancode_waitmsg',
+     *                  'name' => '扫码带提示',
+     *                  'key' => 'rselfmenu_0_0',
+     *                ),
+     *                1 => array (
+     *                  'type' => 'scancode_push',
+     *                  'name' => '扫码推事件',
+     *                  'key' => 'rselfmenu_0_1',
+     *                ),
+     *            ),
+     *          ),
+     *          1 => array (
+     *            'name' => '发图',
+     *            'sub_button' => array (
+     *                0 => array (
+     *                  'type' => 'pic_sysphoto',
+     *                  'name' => '系统拍照发图',
+     *                  'key' => 'rselfmenu_1_0',
+     *                ),
+     *                1 => array (
+     *                  'type' => 'pic_photo_or_album',
+     *                  'name' => '拍照或者相册发图',
+     *                  'key' => 'rselfmenu_1_1',
+     *                )
+     *            ),
+     *          ),
+     *          2 => array (
+     *            'type' => 'location_select',
+     *            'name' => '发送位置',
+     *            'key' => 'rselfmenu_2_0'
+     *          ),
+     *        ),
+     *    )
      * type可以选择为以下几种，会收到相应类型的事件推送。请注意，3到8的所有事件，仅支持微信iPhone5.4.1以上版本，
      * 和Android5.4以上版本的微信用户，旧版本微信用户点击后将没有回应，开发者也不能正常接收到事件推送。
      * 1、click：点击推事件
@@ -194,6 +197,7 @@ class Enterprise extends Core {
      * 6、pic_photo_or_album：弹出拍照或者相册发图
      * 7、pic_weixin：弹出微信相册发图器
      * 8、location_select：弹出地理位置选择器
+     * @return bool
      */
     public function createMenu($data, $agentid=''){
         if ($agentid=='') {
@@ -239,14 +243,15 @@ class Enterprise extends Core {
 
     /**
      * 删除菜单
-     * @return boolean
+     * @param string $agentId
+     * @return bool
      */
-    public function deleteMenu($agentid = ''){
-        if ($agentid == '') {
-            $agentid = $this->agentId;
+    public function deleteMenu($agentId = ''){
+        if ($agentId == '') {
+            $agentId = $this->agentId;
         }
         if (!$this->accessToken && !$this->checkAuth()) return false;
-        $result = $this->httpGet(self::API_URL_PREFIX.self::MENU_DELETE_URL.'access_token='.$this->accessToken.'&agentid='.$agentid);
+        $result = $this->httpGet(self::API_URL_PREFIX.self::MENU_DELETE_URL.'access_token='.$this->accessToken.'&agentid='.$agentId);
         if ($result) {
             $json = json_decode($result,true);
             if (!$json || !empty($json['errcode'])) {
@@ -517,16 +522,17 @@ class Enterprise extends Core {
 
     /**
      * 批量删除成员
-     * @param array $userid  员工UserID数组。对应管理端的帐号
+     * @param $userids
+     * @return array|bool 成功返回结果
+     * {
+     * "errcode": 0,        //返回码
+     * "errmsg": "deleted"  //对返回码的文本描述内容
+     * }
+     * @internal param array $userid 员工UserID数组。对应管理端的帐号
      * {
      *     'userid1',
      *     'userid2',
      *     'userid3',
-     * }
-     * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "deleted"  //对返回码的文本描述内容
      * }
      */
     public function deleteUsers($userids){
@@ -629,12 +635,12 @@ class Enterprise extends Core {
      * 根据code获取成员信息
      * 通过Oauth2.0或者设置了二次验证时获取的code，用于换取成员的UserId和DeviceId
      *
-     * @param string $code        Oauth2.0或者二次验证时返回的code值
-     * @param string $agentid     跳转链接时所在的企业应用ID，未填则默认为当前配置的应用id
-     * @return boolean|array 成功返回数组
+     * @param string $code Oauth2.0或者二次验证时返回的code值
+     * @param int|string $agentid 跳转链接时所在的企业应用ID，未填则默认为当前配置的应用id
+     * @return array|bool 成功返回数组
      * array(
-     *     'UserId' => 'USERID',       //员工UserID
-     *     'DeviceId' => 'DEVICEID'    //手机设备号(由微信在安装时随机生成)
+     * 'UserId' => 'USERID',       //员工UserID
+     * 'DeviceId' => 'DEVICEID'    //手机设备号(由微信在安装时随机生成)
      * )
      */
     public function getUserId($code,$agentid=0){

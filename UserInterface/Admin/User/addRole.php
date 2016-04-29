@@ -8,39 +8,47 @@ $this->extend(array(
 $roles = $this->get('roles', array());
 ?>
 
-<div>
-    修改角色
-</div>
-<form method="POST">
-    <div class="table">
-        <div class="row">
-            <div>
-                权限名称：
-            </div>
-            <div>
-                <input type="hidden" name="id" value="<?php $this->ech('id');?>">
+<div class="panel panel-default">
+      <div class="panel-heading">
+            <h3 class="panel-title">修改角色</h3>
+      </div>
+      <div class="panel-body">
+            
+            <form action="" method="POST" class="form-horizontal" role="form">
+                    
+                    <div class="form-group">
+                        <label for="textarea_name" class="col-sm-2">权限名称：</label>
+                        <div class="col-sm-10">
+                            <input type="hidden" name="id" value="<?php $this->ech('id');?>">
                 <input type="text" name="name" value="<?php $this->ech('name');?>" placeholder="权限名称">
-            </div>
-        </div>
-        <div class="row">
-            <div>
-                权限：
-            </div>
-            <div class="column">
-                <?php foreach ($this->get('data', array()) as $value) {?>
-                    <div>
-                        <input type="checkbox" name="auth[]" value="<?php echo $value['id'];?>" <?php echo in_array($value['id'], $roles) ? 'checked' : '' ;?>><?php echo $value['name'];?>
+                        </div>
                     </div>
-                <?php }?>
-            </div>
-        </div>
-        <div>
-            <button type="submit">提交</button>
-            <button type="reset">重置</button>
-            <input id="selectAll" type="checkbox">全选
-        </div>
-    </div>
-</form>
+                    
+                    
+                    <div class="form-group">
+                        <label for="input_password" class="col-sm-2 control-label">权限：</label>
+                        <div class="col-sm-10">
+                            <?php foreach ($this->get('data', array()) as $value) {?>
+                                <div>
+                                    <input type="checkbox" name="auth[]" value="<?php echo $value['id'];?>" <?php echo in_array($value['id'], $roles) ? 'checked' : '' ;?>><?php echo $value['name'];?>
+                                </div>
+                            <?php }?>
+                        </div>
+                    </div>
+                    
+            
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                            <button type="reset" class="btn btn-danger">重置</button>
+                            <input id="selectAll" type="checkbox">全选
+                        </div>
+                    </div>
+            </form>
+            
+      </div>
+</div>
+
 
 <?php
 $this->extend(array(

@@ -14,6 +14,7 @@ $data = $this->get('data', array());
         <select id="s">
             <option value="baidu">百度</option>
             <option value="bing">必应</option>
+            <option value="github">Github</option>
         </select>
         <input type="text" id="p" placeholder="搜索">
         <button id="search">搜索</button>

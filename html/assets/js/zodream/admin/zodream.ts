@@ -18,6 +18,9 @@ namespace zodream {
         
         static navigate(url: string, target?: string) {
             switch (target) {
+                case "blank":
+                    window.open(url, "_blank");
+                    break;
                 case "self":
                     window.location.href = url;
                     break;
@@ -28,11 +31,14 @@ namespace zodream {
         }
         
         static search() {
-            var word = $("#p").val();
-            var url: string;
+            let word = $("#p").val();
+            let url: string;
             switch ($("#s").val()) {
                 case "bing":
                     url = "https://www.bing.com/search?q=" + word;
+                    break;
+                case "github":
+                    url = "https://github.com/search?utf8=%E2%9C%93&q=" + word;
                     break;
                 case "baidu":
                 default:

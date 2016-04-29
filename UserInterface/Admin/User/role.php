@@ -7,7 +7,7 @@ $this->extend(array(
 );
 ?>
 <a class="btn" href="<?php $this->url('user/addRole');?>">增加角色</a>
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>

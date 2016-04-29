@@ -95,7 +95,7 @@ abstract class Core {
     }
 
     public function valid($return = false) {
-        $encryptStr="";
+        $encryptStr = '';
         if (Request::isPost()) {
             $postStr = Request::input();
             $array = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -191,6 +191,8 @@ abstract class Core {
     /**
      * 微信api不支持中文转义的json结构
      * @param array $arr
+     *
+     * @return string
      */
     public static function jsonEncode($arr) {
         $parts = array ();
@@ -256,6 +258,8 @@ abstract class Core {
     /**
      * GET 请求
      * @param string $url
+     *
+     * @return bool
      */
     protected function httpGet($url){
         $oCurl = curl_init();
@@ -317,6 +321,8 @@ abstract class Core {
      * 设置发送消息
      * @param array $msg 消息数组
      * @param bool $append 是否在原消息数组追加
+     *
+     * @return array|string
      */
     public function message($msg = '', $append = false){
         if (is_null($msg)) {
@@ -488,13 +494,12 @@ abstract class Core {
      * 获取自定义菜单的扫码推事件信息
      *
      * 事件类型为以下两种时则调用此方法有效
-     * Event	 事件类型，scancode_push
-     * Event	 事件类型，scancode_waitmsg
-     *
-     * @return: array | false
+     * Event     事件类型，scancode_push
+     * Event     事件类型，scancode_waitmsg
+     * @return array|bool : array|false
      * array (
-     *     'ScanType'=>'qrcode',
-     *     'ScanResult'=>'123123'
+     * 'ScanType'=>'qrcode',
+     * 'ScanResult'=>'123123'
      * )
      */
     public function getRevScanInfo(){
@@ -514,26 +519,23 @@ abstract class Core {
     }
 
 
-
     /**
      * 获取自定义菜单的图片发送事件信息
      *
      * 事件类型为以下三种时则调用此方法有效
-     * Event	 事件类型，pic_sysphoto        弹出系统拍照发图的事件推送
-     * Event	 事件类型，pic_photo_or_album  弹出拍照或者相册发图的事件推送
-     * Event	 事件类型，pic_weixin          弹出微信相册发图器的事件推送
-     *
-     * @return: array | false
+     * Event     事件类型，pic_sysphoto        弹出系统拍照发图的事件推送
+     * Event     事件类型，pic_photo_or_album  弹出拍照或者相册发图的事件推送
+     * Event     事件类型，pic_weixin          弹出微信相册发图器的事件推送
+     * @return array|bool : array | false
      * array (
-     *   'Count' => '2',
-     *   'PicList' =>array (
-     *         'item' =>array (
-     *             0 =>array ('PicMd5Sum' => 'aaae42617cf2a14342d96005af53624c'),
-     *             1 =>array ('PicMd5Sum' => '149bd39e296860a2adc2f1bb81616ff8'),
-     *         ),
-     *   ),
+     * 'Count' => '2',
+     * 'PicList' =>array (
+     * 'item' =>array (
+     * 0 =>array ('PicMd5Sum' => 'aaae42617cf2a14342d96005af53624c'),
+     * 1 =>array ('PicMd5Sum' => '149bd39e296860a2adc2f1bb81616ff8'),
+     * ),
+     * ),
      * )
-     *
      */
     public function getRevSendPicsInfo(){
         if (isset($this->receive['SendPicsInfo'])){
@@ -563,17 +565,15 @@ abstract class Core {
      * 获取自定义菜单的地理位置选择器事件推送
      *
      * 事件类型为以下时则可以调用此方法有效
-     * Event	 事件类型，location_select        弹出系统拍照发图的事件推送
-     *
-     * @return: array | false
+     * Event     事件类型，location_select        弹出系统拍照发图的事件推送
+     * @return array|bool : array | false
      * array (
-     *   'Location_X' => '33.731655000061',
-     *   'Location_Y' => '113.29955200008047',
-     *   'Scale' => '16',
-     *   'Label' => '某某市某某区某某路',
-     *   'Poiname' => '',
+     * 'Location_X' => '33.731655000061',
+     * 'Location_Y' => '113.29955200008047',
+     * 'Scale' => '16',
+     * 'Label' => '某某市某某区某某路',
+     * 'Poiname' => '',
      * )
-     *
      */
     public function getRevSendGeoInfo(){
         if (isset($this->receive['SendLocationInfo'])){
@@ -628,6 +628,8 @@ abstract class Core {
      * 设置回复消息
      * Example: $obj->text('hello')->reply();
      * @param string $text
+     *
+     * @return $this
      */
     public function text($text = '') {
         $msg = array(
@@ -645,6 +647,8 @@ abstract class Core {
      * 设置回复消息
      * Example: $obj->image('media_id')->reply();
      * @param string $mediaid
+     *
+     * @return $this
      */
     public function image($mediaid='') {
         $msg = array(
@@ -662,6 +666,8 @@ abstract class Core {
      * 设置回复消息
      * Example: $obj->voice('media_id')->reply();
      * @param string $mediaid
+     *
+     * @return $this
      */
     public function voice($mediaid='') {
         $msg = array(
@@ -679,6 +685,8 @@ abstract class Core {
      * 设置回复消息
      * Example: $obj->video('media_id','title','description')->reply();
      * @param string $mediaid
+     *
+     * @return $this
      */
     public function video($mediaid='',$title='',$description='') {
         $msg = array(
@@ -701,16 +709,17 @@ abstract class Core {
      * @param array $newsData
      * 数组结构:
      *  array(
-     *  	"0"=>array(
-     *  		'Title'=>'msg title',
-     *  		'Description'=>'summary text',
-     *  		'PicUrl'=>'http://www.domain.com/1.jpg',
-     *  		'Url'=>'http://www.domain.com/1.html'
-     *  	),
-     *  	"1"=>....
+     *    "0"=>array(
+     *        'Title'=>'msg title',
+     *        'Description'=>'summary text',
+     *        'PicUrl'=>'http://www.domain.com/1.jpg',
+     *        'Url'=>'http://www.domain.com/1.html'
+     *    ),
+     *    "1"=>....
      *  )
+     * @return $this
      */
-    public function news($newsData=array()) {
+    public function news($newsData = array()) {
         $count = count($newsData);
         $msg = array(
             'ToUserName' => $this->getRevFrom(),
@@ -719,7 +728,6 @@ abstract class Core {
             'CreateTime'=>time(),
             'ArticleCount'=>$count,
             'Articles'=>$newsData,
-
         );
         $this->Message($msg);
         return $this;
@@ -729,21 +737,21 @@ abstract class Core {
      *
      * 回复微信服务器, 此函数支持链式操作
      * Example: $this->text('msg tips')->reply();
-     * @param string $msg 要发送的信息, 默认取$this->msg
+     * @param array|string $msg 要发送的信息, 默认取$this->msg
      * @param bool $return 是否返回信息而不抛出到浏览器 默认:否
+     * @return bool|string
      */
-    public function reply($msg=array(),$return = false)
-    {
+    public function reply($msg = array(), $return = false) {
         if (empty($msg)) {
             if (empty($this->msg))   //防止不先设置回复内容，直接调用reply方法导致异常
                 return false;
             $msg = $this->msg;
         }
-        $xmldata=  $this->xmlEncode($msg);
-        $this->log($xmldata);
+        $xmlData=  $this->xmlEncode($msg);
+        $this->log($xmlData);
         if ($this->encryptType == 'aes') { //如果来源消息为加密方式
             $pc = new Prpcrypt($this->encodingAesKey);
-            $array = $pc->encrypt($xmldata, $this->appId);
+            $array = $pc->encrypt($xmlData, $this->appId);
             $ret = $array[0];
             if ($ret != 0) {
                 $this->log('encrypt err!');
@@ -756,12 +764,12 @@ abstract class Core {
             sort($tmpArr, SORT_STRING);
             $signature = implode($tmpArr);
             $signature = sha1($signature);
-            $xmldata = $this->generate($encrypt, $signature, $timestamp, $nonce);
-            $this->log($xmldata);
+            $xmlData = $this->generate($encrypt, $signature, $timestamp, $nonce);
+            $this->log($xmlData);
         }
         if (!$return)
-            echo $xmldata;
-        return $xmldata;
+            echo $xmlData;
+        return $xmlData;
     }
 
     protected function generate($encrypt, $signature, $timestamp, $nonce) {
@@ -782,7 +790,7 @@ abstract class Core {
      * @param int $expired
      * @return boolean
      */
-    protected function setCache($cachename,$value,$expired){
+    protected function setCache($cachename, $value, $expired){
         return false;
     }
 
@@ -807,6 +815,8 @@ abstract class Core {
     /**
      * 删除验证数据
      * @param string $appid
+     *
+     * @return bool
      */
     public function resetAuth($appid=''){
         if (!$appid) $appid = $this->appId;
@@ -819,6 +829,8 @@ abstract class Core {
     /**
      * 删除JSAPI授权TICKET
      * @param string $appid 用于多个appid时使用
+     *
+     * @return bool
      */
     public function resetJsTicket($appid=''){
         if (!$appid) $appid = $this->appId;
@@ -829,35 +841,47 @@ abstract class Core {
     }
 
 
-    abstract public function getJsTicket($appid = '', $jsapi_ticket = '');
+    abstract public function getJsTicket($appId = '', $jsApiTicket = '');
 
     /**
      * 获取JsApi使用签名
      * @param string $url 网页的URL，自动处理#及其后面部分
-     * @param string $timestamp 当前时间戳 (为空则自动生成)
-     * @param string $noncestr 随机串 (为空则自动生成)
-     * @param string $appid 用于多个appid时使用,可空
+     * @param int|string $timestamp 当前时间戳 (为空则自动生成)
+     * @param string $nonCeStr 随机串 (为空则自动生成)
+     * @param string $appId 用于多个appid时使用,可空
      * @return array|bool 返回签名字串
      */
-    public function getJsSign($url, $timestamp=0, $noncestr='', $appid=''){
-        if (!$this->jsApiTicket && !$this->getJsTicket($appid) || !$url) return false;
-        if (!$timestamp)
+    public function getJsSign($url, $timestamp = 0, $nonCeStr = '', $appId = ''){
+        if (!$this->jsApiTicket && !$this->getJsTicket($appId) || !$url) {
+            return false;
+        }
+        if (!$timestamp) {
             $timestamp = time();
-        if (!$noncestr)
-            $noncestr = $this->generateNonceStr();
+        }
+        if (!$nonCeStr) {
+            $nonCeStr = $this->generateNonceStr();
+        }
         $ret = strpos($url,'#');
-        if ($ret)
-            $url = substr($url,0,$ret);
+        if ($ret) {
+            $url = substr($url, 0, $ret);
+        }
         $url = trim($url);
-        if (empty($url))
+        if (empty($url)) {
             return false;
-        $arrdata = array("timestamp" => $timestamp, "noncestr" => $noncestr, "url" => $url, "jsapi_ticket" => $this->jsApiTicket);
-        $sign = $this->getSignature($arrdata);
-        if (!$sign)
+        }
+        $arrData = array(
+            'timestamp' => $timestamp, 
+            'noncestr' => $nonCeStr, 
+            'url' => $url, 
+            'jsapi_ticket' => $this->jsApiTicket
+        );
+        $sign = $this->getSignature($arrData);
+        if (!$sign) {
             return false;
+        }
         $signPackage = array(
             "appId"     => $this->appId,
-            "nonceStr"  => $noncestr,
+            "nonceStr"  => $nonCeStr,
             "timestamp" => $timestamp,
             "url"       => $url,
             "signature" => $sign
@@ -867,36 +891,34 @@ abstract class Core {
 
     /**
      * 获取签名
-     * @param array $arrdata 签名数组
+     * @param array $arrData 签名数组
      * @param string $method 签名方法
      * @return boolean|string 签名值
      */
-    public function getSignature($arrdata,$method="sha1") {
+    public function getSignature($arrData, $method = 'sha1') {
         if (!function_exists($method)) return false;
-        ksort($arrdata);
-        $paramstring = "";
-        foreach($arrdata as $key => $value)
-        {
-            if(strlen($paramstring) == 0)
-                $paramstring .= $key . "=" . $value;
+        ksort($arrData);
+        $paramString = '';
+        foreach ($arrData as $key => $value) {
+            if(strlen($paramString) == 0)
+                $paramString .= $key . '=' . $value;
             else
-                $paramstring .= "&" . $key . "=" . $value;
+                $paramString .= '&' . $key . '=' . $value;
         }
-        $Sign = $method($paramstring);
+        $Sign = $method($paramString);
         return $Sign;
     }
 
     /**
      * 生成随机字串
-     * @param number $length 长度，默认为16，最长为32字节
+     * @param int|number $length 长度，默认为16，最长为32字节
      * @return string
      */
-    public function generateNonceStr($length=16){
+    public function generateNonceStr($length = 16){
         // 密码字符集，可任意添加你需要的字符
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        $str = "";
-        for($i = 0; $i < $length; $i++)
-        {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $str = '';
+        for($i = 0; $i < $length; $i++) {
             $str .= $chars[mt_rand(0, strlen($chars) - 1)];
         }
         return $str;
@@ -911,21 +933,22 @@ abstract class Core {
      * @param string $type 类型：图片:image 语音:voice 视频:video 缩略图:thumb
      * @return boolean|array
      */
-    public function uploadMedia($data, $type){
-        if (!$this->accessToken && !$this->checkAuth()) return false;
+    public function uploadMedia($data, $type) {
+        if (!$this->accessToken && !$this->checkAuth()) {
+            return false;
+        }
         //原先的上传多媒体文件接口使用 self::UPLOAD_MEDIA_URL 前缀
         $result = $this->httpPost(self::API_URL_PREFIX.self::MEDIA_UPLOAD_URL.'access_token='.$this->accessToken.'&type='.$type,$data,true);
-        if ($result)
-        {
-            $json = json_decode($result,true);
-            if (!$json || !empty($json['errcode'])) {
-                $this->errCode = $json['errcode'];
-                $this->errMsg = $json['errmsg'];
-                return false;
-            }
-            return $json;
+        if (empty($result)) {
+            return false;
         }
-        return false;
+        $json = json_decode($result, true);
+        if (!$json || !empty($json['errcode'])) {
+            $this->errCode = $json['errcode'];
+            $this->errMsg = $json['errmsg'];
+            return false;
+        }
+        return $json;
     }
 
     /**
@@ -934,25 +957,27 @@ abstract class Core {
      * @param boolean $is_video 是否为视频文件，默认为否
      * @return boolean|array data
      */
-    public function getMedia($media_id,$is_video=false){
-        if (!$this->accessToken && !$this->checkAuth()) return false;
+    public function getMedia($media_id, $is_video = false) {
+        if (!$this->accessToken && !$this->checkAuth()) {
+            return false;
+        }
         //原先的上传多媒体文件接口使用 self::UPLOAD_MEDIA_URL 前缀
         //如果要获取的素材是视频文件时，不能使用https协议，必须更换成http协议
         $url_prefix = $is_video?str_replace('https','http',self::API_URL_PREFIX):self::API_URL_PREFIX;
         $result = $this->httpGet($url_prefix.self::MEDIA_GET_URL.'access_token='.$this->accessToken.'&media_id='.$media_id);
-        if ($result)
-        {
-            if (is_string($result)) {
-                $json = json_decode($result,true);
-                if (isset($json['errcode'])) {
-                    $this->errCode = $json['errcode'];
-                    $this->errMsg = $json['errmsg'];
-                    return false;
-                }
-            }
+        if (empty($result)) {
+            return false;
+        }
+        if (!is_string($result)) {
             return $result;
         }
-        return false;
+        $json = json_decode($result,true);
+        if (isset($json['errcode'])) {
+            $this->errCode = $json['errcode'];
+            $this->errMsg = $json['errmsg'];
+            return false;
+        }
+        return $result;
     }
 
     /**
@@ -960,19 +985,20 @@ abstract class Core {
      * @return array('127.0.0.1','127.0.0.1')
      */
     public function getServerIp(){
-        if (!$this->accessToken && !$this->checkAuth()) return false;
-        $result = $this->httpGet(self::API_URL_PREFIX.self::CALLBACKSERVER_GET_URL.'access_token='.$this->accessToken);
-        if ($result)
-        {
-            $json = json_decode($result,true);
-            if (!$json || isset($json['errcode'])) {
-                $this->errCode = $json['errcode'];
-                $this->errMsg = $json['errmsg'];
-                return false;
-            }
-            return $json['ip_list'];
+        if (!$this->accessToken && !$this->checkAuth()) {
+            return false;
         }
-        return false;
+        $result = $this->httpGet(self::API_URL_PREFIX.self::CALLBACKSERVER_GET_URL.'access_token='.$this->accessToken);
+        if (empty($result)) {
+            return false;
+        }
+        $json = json_decode($result,true);
+        if (!$json || isset($json['errcode'])) {
+            $this->errCode = $json['errcode'];
+            $this->errMsg = $json['errmsg'];
+            return false;
+        }
+        return $json['ip_list'];
     }
 
     /**
@@ -997,20 +1023,21 @@ abstract class Core {
      *    "extattr": {"attrs":[{"name":"爱好","value":"旅游"},{"name":"卡号","value":"1234567234"}]}
      * }
      */
-    public function getUserInfo($openid){
-        if (!$this->accessToken && !$this->checkAuth()) return false;
-        $result = $this->httpGet(self::API_URL_PREFIX.self::USER_INFO_URL.'access_token='.$this->accessToken.'&openid='.$openid);
-        if ($result)
-        {
-            $json = json_decode($result,true);
-            if (isset($json['errcode'])) {
-                $this->errCode = $json['errcode'];
-                $this->errMsg = $json['errmsg'];
-                return false;
-            }
-            return $json;
+    public function getUserInfo($openid) {
+        if (!$this->accessToken && !$this->checkAuth()) {
+            return false;
         }
-        return false;
+        $result = $this->httpGet(self::API_URL_PREFIX.self::USER_INFO_URL.'access_token='.$this->accessToken.'&openid='.$openid);
+        if (empty($result)) {
+            return false;
+        }
+        $json = json_decode($result, true);
+        if (isset($json['errcode'])) {
+            $this->errCode = $json['errcode'];
+            $this->errMsg = $json['errmsg'];
+            return false;
+        }
+        return $json;
     }
 
     abstract public function checkAuth();
@@ -1026,9 +1053,10 @@ abstract class Core {
      * oauth 授权跳转接口
      * @param string $callback 回调URI
      * @param string $state 重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值
+     * @param string $scope
      * @return string
      */
-    public function getOauthRedirect($callback,$state='',$scope='snsapi_userinfo'){
+    public function getOauthRedirect($callback, $state = '', $scope = 'snsapi_userinfo'){
         return self::OAUTH_PREFIX.self::OAUTH_AUTHORIZE_URL.'appid='.$this->appId.'&redirect_uri='.urlencode($callback).'&response_type=code&scope='.$scope.'&state='.$state.'#wechat_redirect';
     }
 }

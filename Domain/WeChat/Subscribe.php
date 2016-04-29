@@ -347,11 +347,12 @@ class Subscribe extends Core {
      * 设置回复音乐
      * @param string $title
      * @param string $desc
-     * @param string $musicurl
-     * @param string $hgmusicurl
-     * @param string $thumbmediaid 音乐图片缩略图的媒体id，非必须
+     * @param string $musicUrl
+     * @param string $hgMusicUrl
+     * @param string $thumbMediaId 音乐图片缩略图的媒体id，非必须
+     * @return $this
      */
-    public function music($title,$desc,$musicurl,$hgmusicurl='',$thumbmediaid='') {
+    public function music($title, $desc, $musicUrl, $hgMusicUrl = '',$thumbMediaId = '') {
         $FuncFlag = $this->funcFlag ? 1 : 0;
         $msg = array(
             'ToUserName' => $this->getRevFrom(),
@@ -361,13 +362,13 @@ class Subscribe extends Core {
             'Music'=>array(
                 'Title'=>$title,
                 'Description'=>$desc,
-                'MusicUrl'=>$musicurl,
-                'HQMusicUrl'=>$hgmusicurl
+                'MusicUrl'=>$musicUrl,
+                'HQMusicUrl'=>$hgMusicUrl
             ),
             'FuncFlag'=>$FuncFlag
         );
-        if ($thumbmediaid) {
-            $msg['Music']['ThumbMediaId'] = $thumbmediaid;
+        if ($thumbMediaId) {
+            $msg['Music']['ThumbMediaId'] = $thumbMediaId;
         }
         $this->Message($msg);
         return $this;
@@ -375,27 +376,28 @@ class Subscribe extends Core {
 
     /**
      * 获取access_token
-     * @param string $appid 如在类初始化时已提供，则可为空
-     * @param string $appsecret 如在类初始化时已提供，则可为空
+     * @param string $appId 如在类初始化时已提供，则可为空
+     * @param string $appSecret 如在类初始化时已提供，则可为空
      * @param string $token 手动指定access_token，非必要情况不建议用
+     * @return bool|mixed
      */
-    public function checkAuth($appid='',$appsecret='',$token=''){
-        if (!$appid || !$appsecret) {
-            $appid = $this->appId;
-            $appsecret = $this->appSecret;
+    public function checkAuth($appId='', $appSecret='', $token=''){
+        if (!$appId || !$appSecret) {
+            $appId = $this->appId;
+            $appSecret = $this->appSecret;
         }
         if ($token) { //手动指定token，优先使用
             $this->accessToken=$token;
             return $this->accessToken;
         }
 
-        $authname = 'wechat_access_token'.$appid;
-        if ($rs = $this->getCache($authname))  {
+        $authName = 'wechat_access_token'.$appId;
+        if ($rs = $this->getCache($authName))  {
             $this->accessToken = $rs;
             return $rs;
         }
 
-        $result = $this->httpGet(self::API_URL_PREFIX.self::AUTH_URL.'appid='.$appid.'&secret='.$appsecret);
+        $result = $this->httpGet(self::API_URL_PREFIX.self::AUTH_URL.'appid='.$appId.'&secret='.$appSecret);
         if ($result)
         {
             $json = json_decode($result,true);
@@ -406,30 +408,29 @@ class Subscribe extends Core {
             }
             $this->accessToken = $json['access_token'];
             $expire = $json['expires_in'] ? intval($json['expires_in'])-100 : 3600;
-            $this->setCache($authname,$this->accessToken,$expire);
+            $this->setCache($authName,$this->accessToken,$expire);
             return $this->accessToken;
         }
         return false;
     }
 
 
-
-
-
     /**
      * 获取JSAPI授权TICKET
-     * @param string $appid 用于多个appid时使用,可空
-     * @param string $jsapi_ticket 手动指定jsapi_ticket，非必要情况不建议用
+     * @param string $appId 用于多个appid时使用,可空
+     * @param string $jsApiTicket 手动指定jsapi_ticket，非必要情况不建议用
+     *
+     * @return bool|mixed
      */
-    public function getJsTicket($appid='',$jsapi_ticket=''){
+    public function getJsTicket($appId = '', $jsApiTicket = ''){
         if (!$this->accessToken && !$this->checkAuth()) return false;
-        if (!$appid) $appid = $this->appId;
-        if ($jsapi_ticket) { //手动指定token，优先使用
-            $this->jsApiTicket = $jsapi_ticket;
+        if (!$appId) $appId = $this->appId;
+        if ($jsApiTicket) { //手动指定token，优先使用
+            $this->jsApiTicket = $jsApiTicket;
             return $this->jsApiTicket;
         }
-        $authname = 'wechat_jsapi_ticket'.$appid;
-        if ($rs = $this->getCache($authname))  {
+        $authName = 'wechat_jsapi_ticket'.$appId;
+        if ($rs = $this->getCache($authName))  {
             $this->jsApiTicket = $rs;
             return $rs;
         }
@@ -444,28 +445,29 @@ class Subscribe extends Core {
             }
             $this->jsApiTicket = $json['ticket'];
             $expire = $json['expires_in'] ? intval($json['expires_in'])-100 : 3600;
-            $this->setCache($authname,$this->jsApiTicket,$expire);
+            $this->setCache($authName,$this->jsApiTicket,$expire);
             return $this->jsApiTicket;
         }
         return false;
     }
 
 
-
     /**
      * 获取微信卡券api_ticket
-     * @param string $appid 用于多个appid时使用,可空
+     * @param string $appId 用于多个appid时使用,可空
      * @param string $api_ticket 手动指定api_ticket，非必要情况不建议用
+     *
+     * @return bool|mixed
      */
-    public function getJsCardTicket($appid='',$api_ticket=''){
+    public function getJsCardTicket($appId = '', $api_ticket = ''){
         if (!$this->accessToken && !$this->checkAuth()) return false;
-        if (!$appid) $appid = $this->appId;
+        if (!$appId) $appId = $this->appId;
         if ($api_ticket) { //手动指定token，优先使用
             $this->apiTicket = $api_ticket;
             return $this->apiTicket;
         }
-        $authname = 'wechat_api_ticket_wxcard'.$appid;
-        if ($rs = $this->getCache($authname))  {
+        $authName = 'wechat_api_ticket_wxcard'.$appId;
+        if ($rs = $this->getCache($authName))  {
             $this->apiTicket = $rs;
             return $rs;
         }
@@ -480,7 +482,7 @@ class Subscribe extends Core {
             }
             $this->apiTicket = $json['ticket'];
             $expire = $json['expires_in'] ? intval($json['expires_in'])-100 : 3600;
-            $this->setCache($authname,$this->apiTicket,$expire);
+            $this->setCache($authName,$this->apiTicket,$expire);
             return $this->apiTicket;
         }
         return false;
@@ -488,14 +490,14 @@ class Subscribe extends Core {
 
     /**
      * 获取微信卡券签名
-     * @param array $arrdata 签名数组
+     * @param array $arrData 签名数组
      * @param string $method 签名方法
      * @return boolean|string 签名值
      */
-    public function getTicketSignature($arrdata,$method="sha1") {
+    public function getTicketSignature($arrData, $method = 'sha1') {
         if (!function_exists($method)) return false;
         $newArray = array();
-        foreach($arrdata as $key => $value)
+        foreach($arrData as $key => $value)
         {
             array_push($newArray,(string)$value);
         }
@@ -504,52 +506,49 @@ class Subscribe extends Core {
     }
 
 
-
-
-
     /**
      * 创建菜单(认证后的订阅号可用)
      * @param array $data 菜单数组数据
      * example:
-     * 	array (
-     * 	    'button' => array (
-     * 	      0 => array (
-     * 	        'name' => '扫码',
-     * 	        'sub_button' => array (
-     * 	            0 => array (
-     * 	              'type' => 'scancode_waitmsg',
-     * 	              'name' => '扫码带提示',
-     * 	              'key' => 'rselfmenu_0_0',
-     * 	            ),
-     * 	            1 => array (
-     * 	              'type' => 'scancode_push',
-     * 	              'name' => '扫码推事件',
-     * 	              'key' => 'rselfmenu_0_1',
-     * 	            ),
-     * 	        ),
-     * 	      ),
-     * 	      1 => array (
-     * 	        'name' => '发图',
-     * 	        'sub_button' => array (
-     * 	            0 => array (
-     * 	              'type' => 'pic_sysphoto',
-     * 	              'name' => '系统拍照发图',
-     * 	              'key' => 'rselfmenu_1_0',
-     * 	            ),
-     * 	            1 => array (
-     * 	              'type' => 'pic_photo_or_album',
-     * 	              'name' => '拍照或者相册发图',
-     * 	              'key' => 'rselfmenu_1_1',
-     * 	            )
-     * 	        ),
-     * 	      ),
-     * 	      2 => array (
-     * 	        'type' => 'location_select',
-     * 	        'name' => '发送位置',
-     * 	        'key' => 'rselfmenu_2_0'
-     * 	      ),
-     * 	    ),
-     * 	)
+     *    array (
+     *        'button' => array (
+     *          0 => array (
+     *            'name' => '扫码',
+     *            'sub_button' => array (
+     *                0 => array (
+     *                  'type' => 'scancode_waitmsg',
+     *                  'name' => '扫码带提示',
+     *                  'key' => 'rselfmenu_0_0',
+     *                ),
+     *                1 => array (
+     *                  'type' => 'scancode_push',
+     *                  'name' => '扫码推事件',
+     *                  'key' => 'rselfmenu_0_1',
+     *                ),
+     *            ),
+     *          ),
+     *          1 => array (
+     *            'name' => '发图',
+     *            'sub_button' => array (
+     *                0 => array (
+     *                  'type' => 'pic_sysphoto',
+     *                  'name' => '系统拍照发图',
+     *                  'key' => 'rselfmenu_1_0',
+     *                ),
+     *                1 => array (
+     *                  'type' => 'pic_photo_or_album',
+     *                  'name' => '拍照或者相册发图',
+     *                  'key' => 'rselfmenu_1_1',
+     *                )
+     *            ),
+     *          ),
+     *          2 => array (
+     *            'type' => 'location_select',
+     *            'name' => '发送位置',
+     *            'key' => 'rselfmenu_2_0'
+     *          ),
+     *        ),
+     *    )
      * type可以选择为以下几种，其中5-8除了收到菜单事件以外，还会单独收到对应类型的信息。
      * 1、click：点击推事件
      * 2、view：跳转URL
@@ -559,6 +558,7 @@ class Subscribe extends Core {
      * 6、pic_photo_or_album：弹出拍照或者相册发图
      * 7、pic_weixin：弹出微信相册发图器
      * 8、location_select：弹出地理位置选择器
+     * @return bool
      */
     public function createMenu($data){
         if (!$this->accessToken && !$this->checkAuth()) return false;
@@ -1462,11 +1462,11 @@ class Subscribe extends Core {
 
     /**
      * 模板消息 设置所属行业
-     * @param int $id1  公众号模板消息所属行业编号，参看官方开发文档 行业代码
-     * @param int $id2  同$id1。但如果只有一个行业，此参数可省略
-     * @return boolean|array
+     * @param int $id1 公众号模板消息所属行业编号，参看官方开发文档 行业代码
+     * @param int|string $id2 同$id1。但如果只有一个行业，此参数可省略
+     * @return array|bool
      */
-    public function setTMIndustry($id1,$id2=''){
+    public function setTMIndustry($id1, $id2 = ''){
         if ($id1) $data['industry_id1'] = $id1;
         if ($id2) $data['industry_id2'] = $id2;
         if (!$this->accessToken && !$this->checkAuth()) return false;
@@ -1574,6 +1574,8 @@ class Subscribe extends Core {
      * 转发多客服消息
      * Example: $obj->transfer_customer_service($customer_account)->reply();
      * @param string $customer_account 转发到指定客服帐号：test1@test
+     *
+     * @return $this
      */
     public function transfer_customer_service($customer_account = '')
     {
@@ -1737,20 +1739,21 @@ class Subscribe extends Core {
 
     /**
      * 获取指定客服的会话列表
-     * @param string $openid           //用户openid
-     * @return boolean | array            //成功返回json数组
+     * @param $kf_account
+     * @return array|bool //成功返回json数组
      *  array(
-     *     'sessionlist' => array (
-     *         array (
-     *             'openid'=>'OPENID',             //客户 openid
-     *             'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
-     *         ),
-     *         array (
-     *             'openid'=>'OPENID',             //客户 openid
-     *             'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
-     *         ),
-     *     )
-     *  )
+     * 'sessionlist' => array (
+     * array (
+     * 'openid'=>'OPENID',             //客户 openid
+     * 'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
+     * ),
+     * array (
+     * 'openid'=>'OPENID',             //客户 openid
+     * 'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
+     * ),
+     * )
+     * )
+     * @internal param string $openid //用户openid
      */
     public function getKFSessionlist($kf_account){
         if (!$this->accessToken && !$this->checkAuth()) return false;
@@ -1770,23 +1773,23 @@ class Subscribe extends Core {
 
     /**
      * 获取未接入会话列表
-     * @param string $openid           //用户openid
-     * @return boolean | array            //成功返回json数组
+     * @return array|bool //成功返回json数组
      *  array (
-     *     'count' => 150 ,                            //未接入会话数量
-     *     'waitcaselist' => array (
-     *         array (
-     *             'openid'=>'OPENID',             //客户 openid
-     *             'kf_account ' =>'',                   //指定接待的客服，为空则未指定
-     *             'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
-     *         ),
-     *         array (
-     *             'openid'=>'OPENID',             //客户 openid
-     *             'kf_account ' =>'',                   //指定接待的客服，为空则未指定
-     *             'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
-     *         )
-     *     )
-     *  )
+     * 'count' => 150 ,                            //未接入会话数量
+     * 'waitcaselist' => array (
+     * array (
+     * 'openid'=>'OPENID',             //客户 openid
+     * 'kf_account ' =>'',                   //指定接待的客服，为空则未指定
+     * 'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
+     * ),
+     * array (
+     * 'openid'=>'OPENID',             //客户 openid
+     * 'kf_account ' =>'',                   //指定接待的客服，为空则未指定
+     * 'createtime'=>123456789,  //会话创建时间，UNIX 时间戳
+     * )
+     * )
+     * )
+     * @internal param string $openid //用户openid
      */
     public function getKFSessionWait(){
         if (!$this->accessToken && !$this->checkAuth()) return false;
@@ -1929,14 +1932,14 @@ class Subscribe extends Core {
 
     /**
      * 语义理解接口
-     * @param String $uid      用户唯一id（非开发者id），用户区分公众号下的不同用户（建议填入用户openid）
-     * @param String $query    输入文本串
+     * @param String $uid 用户唯一id（非开发者id），用户区分公众号下的不同用户（建议填入用户openid）
+     * @param String $query 输入文本串
      * @param String $category 需要使用的服务类型，多个用“，”隔开，不能为空
-     * @param Float $latitude  纬度坐标，与经度同时传入；与城市二选一传入
-     * @param Float $longitude 经度坐标，与纬度同时传入；与城市二选一传入
-     * @param String $city     城市名称，与经纬度二选一传入
-     * @param String $region   区域名称，在城市存在的情况下可省略；与经纬度二选一传入
-     * @return boolean|array
+     * @param Float|int $latitude 纬度坐标，与经度同时传入；与城市二选一传入
+     * @param Float|int $longitude 经度坐标，与纬度同时传入；与城市二选一传入
+     * @param String $city 城市名称，与经纬度二选一传入
+     * @param String $region 区域名称，在城市存在的情况下可省略；与经纬度二选一传入
+     * @return array|bool
      */
     public function querySemantic($uid, $query, $category, $latitude = 0, $longitude = 0, $city = "", $region = ""){
         if (!$this->accessToken && !$this->checkAuth()) return false;
@@ -2129,13 +2132,13 @@ class Subscribe extends Core {
      * 生成卡券二维码
      * 成功则直接返回ticket值，可以用 getQRUrl($ticket) 换取二维码url
      *
-     * @param string $cardid 卡券ID 必须
+     * @param $card_id 卡券ID 必须
      * @param string $code 指定卡券 code 码，只能被领一次。use_custom_code 字段为 true 的卡券必须填写，非自定义 code 不必填写。
      * @param string $openid 指定领取者的 openid，只有该用户能领取。bind_openid 字段为 true 的卡券必须填写，非自定义 openid 不必填写。
      * @param int $expire_seconds 指定二维码的有效时间，范围是 60 ~ 1800 秒。不填默认为永久有效。
      * @param boolean $is_unique_code 指定下发二维码，生成的二维码随机分配一个 code，领取后不可再次扫描。填写 true 或 false。默认 false。
      * @param string $balance 红包余额，以分为单位。红包类型必填（LUCKY_MONEY），其他卡券类型不填。
-     * @return boolean|string
+     * @return bool|string
      */
     public function createCardQrcode($card_id,$code='',$openid='',$expire_seconds=0,$is_unique_code=false,$balance='') {
         $card = array(
@@ -2462,9 +2465,9 @@ class Subscribe extends Core {
 
     /**
      * 设置卡券测试白名单
-     * @param string $openid    测试的 openid 列表
-     * @param string $user      测试的微信号列表
-     * @return boolean
+     * @param array|string $openid 测试的 openid 列表
+     * @param array|string $user 测试的微信号列表
+     * @return bool
      */
     public function setCardTestWhiteList($openid=array(),$user=array()) {
         $data = array();

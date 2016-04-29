@@ -28,11 +28,7 @@ $this->extend(array(
                             <tr>
                                 <td><?php echo $value['id'];?></td>
                                 <td><?php echo $value['name'];?></td>
-                                <td><?php echo $value['email'];?></td>
-                                <td><?php echo $value['login_num'];?></td>
-                                <td><?php echo $value['update_ip'];?></td>
-                                <td><?php $this->time($value['update_at']);?></td>
-                                <td>[<a href="<?php $this->url('user/addUser/id/'.$value['id']);?>">编辑</a>][删除]</td>
+                                <td>[<a href="<?php $this->url('wechat/add/id/'.$value['id']);?>">编辑</a>][删除]</td>
                             </tr>
                         <?php }?>
                     </tbody>

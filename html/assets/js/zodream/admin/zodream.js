@@ -12,6 +12,9 @@ var zodream;
         };
         main.navigate = function (url, target) {
             switch (target) {
+                case "blank":
+                    window.open(url, "_blank");
+                    break;
                 case "self":
                     window.location.href = url;
                     break;
@@ -26,6 +29,9 @@ var zodream;
             switch ($("#s").val()) {
                 case "bing":
                     url = "https://www.bing.com/search?q=" + word;
+                    break;
+                case "github":
+                    url = "https://github.com/search?utf8=%E2%9C%93&q=" + word;
                     break;
                 case "baidu":
                 default:
