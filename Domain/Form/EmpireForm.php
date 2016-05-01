@@ -58,6 +58,20 @@ class EmpireForm extends Form {
             'update_at' => $user['update_at'],
             'token' => $user['token']
         ));
+        $user['roles'] = EmpireModel::query('role_user r')->find(array(
+            'right' => array(
+                'authorization_role ar',
+                'r.role_id = ar.role_id'
+            ),
+            'left' => array(
+                'authorization a',
+                'a.id = ar.authorization_id'
+            ),
+            'where' => 'r.user_id = '.$user['id']
+        ), array(
+            'id' => 'a.id',
+            'name' => 'a.name'
+        ));
         Session::getInstance()->set('user', $user);
         return true;
     }

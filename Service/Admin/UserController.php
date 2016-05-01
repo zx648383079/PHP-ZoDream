@@ -13,9 +13,13 @@ use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Request;
 
 class UserController extends Controller {
-	protected $rules = array(
-		'*' => '@'
-	);
+	protected function rules() {
+		return array(
+			'loginLog' => '@',
+			'index' => '@',
+			'*' => 'admin'
+		);
+	}
 	/*
 	 * 增加信息
 	 */
@@ -121,8 +125,9 @@ class UserController extends Controller {
 		));
 	}
 
-	function loginlogAction() {
+	function loginLogAction() {
 		$page = EmpireModel::query('login_log')->getPage(array(
+			'where' => array('user' => Auth::user()['email']),
 			'order' => 'create_at desc'
 		));
 		$this->show(array(

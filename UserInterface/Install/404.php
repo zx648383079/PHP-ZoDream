@@ -17,8 +17,13 @@ $this->extend(array(
 </div>
 <?php
 $this->extend(array(
-		'layout' => array(
-				'foot'
-		))
+	'layout' => array(
+			'foot'
+	))
 );
 ?>
+
+
+
+
+

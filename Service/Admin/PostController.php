@@ -51,7 +51,9 @@ class PostController extends Controller {
 	function addAction($id = null) {
 		$term = EmpireModel::query('term')->find();
 		if (!empty($id)) {
-			$this->send('data', EmpireModel::query('post')->findById($id));
+			$data = EmpireModel::query('post')->findById($id);
+			$data['term_id'] = EmpireModel::query('term_post')->findOne('post_id = '.$id)['term_id'];
+			$this->send('data', $data);
 		}
 		$this->show(array(
 			'term' => $term,
@@ -127,5 +129,9 @@ class PostController extends Controller {
 		$this->show(array(
 			'page' => $data
 		));
+	}
+	
+	function deleteCommentAction($id) {
+		$this->delete('comment', $id);
 	}
 }

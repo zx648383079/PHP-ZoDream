@@ -26,7 +26,7 @@ $data = $this->get('data', array());
     </form>
 </div>
 
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>
@@ -69,7 +69,7 @@ $data = $this->get('data', array());
                         <input type="number" name="position" value="<?php echo $value['position'];?>">
                     </td>
                     <td>
-                        <button type="submit">修改</button>
+                        <button type="submit" class="btn btn-primary">修改</button>
                         <a href="#" class="btn">删除</a>
                     </td>
                 </form>

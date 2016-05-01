@@ -61,6 +61,7 @@ $page = $this->get('page');
                             <?php echo $item['views'];?>
                         </td>
                         <td>
+                            <?php echo $item['update_user'];?></br>
                             <?php $this->ago($item['update_at']);?>
                         </td>
                     </tr>

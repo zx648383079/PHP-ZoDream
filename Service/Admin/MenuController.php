@@ -7,6 +7,11 @@ namespace Service\Admin;
 use Domain\Model\EmpireModel;
 
 class MenuController extends Controller {
+	protected function rules() {
+		return array(
+			'*' => '@'
+		);
+	}
 	/*
 	 * 信息管理
 	 */
@@ -23,6 +28,12 @@ class MenuController extends Controller {
 	}
 
 	function shopAction() {
+		$this->show(array(
+
+		));
+	}
+
+	function contentAction() {
 		$this->show(array(
 
 		));

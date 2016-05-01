@@ -36,7 +36,7 @@ $role = $this->get('role');
                     <div class="form-group">
                         <label for="input_newpassword" class="col-sm-2 control-label">密码： </label>
                         <div class="col-sm-10">
-                            <input type="password" name="password" placeholder="密码" id="input_newpassword" class="form-control" required="required">
+                            <input type="password" name="password" placeholder="密码" id="input_newpassword" class="form-control">
                         </div>
                     </div>
                     
@@ -44,7 +44,7 @@ $role = $this->get('role');
                     <div class="form-group">
                         <label for="input_repassword" class="col-sm-2 control-label">确认密码： </label>
                         <div class="col-sm-10">
-                            <input type="password" name="repassword" placeholder="确认密码" id="input_repassword" class="form-control" required="required">
+                            <input type="password" name="repassword" placeholder="确认密码" id="input_repassword" class="form-control">
                         </div>
                     </div>
                     
@@ -55,9 +55,9 @@ $role = $this->get('role');
                             <select name="role" id="input_role" class="form-control">
                                 <option disabled <?php echo empty($role)? 'selected' : '';?>>请选择角色</option>
                                 <?php 
-                                $this->swi(' selected');
+                                $this->swi($role, ' selected');
                                 foreach ($this->get('data', array()) as $value) {?>
-                                    <option value="<?php echo $value['id'];?>" <?php $this->cas($value['id'] == $role);?>><?php echo $value['name'];?></option>
+                                    <option value="<?php echo $value['id'];?>" <?php $this->cas($value['id']);?>><?php echo $value['name'];?></option>
                                 <?php }?>
                             </select>
                         </div>

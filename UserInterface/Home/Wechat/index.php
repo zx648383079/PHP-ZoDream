@@ -14,6 +14,7 @@ $this->extend(array(
         </div>
     </div>
 </div>
+
 <?php
 $this->extend(array(
 	'layout' => array(

@@ -17,6 +17,9 @@ abstract class Model extends \Zodream\Domain\Model {
      */
     public function fill() {
         $args = func_num_args() > 0 ? func_get_arg(0) : Request::post();
+        if ($args instanceof Request\BaseRequest) {
+            $args = $args->get();
+        }
         $args['update_at'] = time();
         if (isset($args['id']) && !empty($args['id'])) {
             return parent::fill($args, intval($args['id']));

@@ -24,6 +24,10 @@ $page = $this->get('page');
             <ul class="list">
                 <?php foreach ($page->getPage() as $item) {?>
                     <li class="list-item">
+                        <div class="recommend" data="<?php echo $item['id'];?>">
+                            <span><?php echo $item['recommend']?></span>
+                            <span>推荐</span>
+                        </div>
                         <h4 class="list-item-head">
                             <a href="<?php $this->url('blog/view/id/'.$item['id']);?>">
                                 <?php echo $item['title'];?>
@@ -53,6 +57,12 @@ $page = $this->get('page');
 $this->extend(array(
 	'layout' => array(
 		'foot'
-	))
+	)), array(
+        function() {?>
+<script type="text/javascript">
+require(['home/blog']);
+</script>       
+     <?php }
+    )
 );
 ?>

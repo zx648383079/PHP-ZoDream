@@ -11,7 +11,7 @@ $page = $this->get('page');
     搜索： <input type="text" name="search" value="" placeholder="评论" required>
     <button type="submit">搜索</button>
 </form>
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>
@@ -19,8 +19,7 @@ $page = $this->get('page');
         <th>用户名</th>
         <th>邮箱</th>
         <th>是否已注册</th>
-        <th>最后登录IP</th>
-        <th>最后登陆时间</th>
+        <th>评论时间</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -33,7 +32,7 @@ $page = $this->get('page');
                 <td><?php echo $value['email'];?></td>
                 <td><?php echo $value['user_id'] > 0 ? '已注册' : '游客';?></td>
                 <td><?php $this->time($value['create_at']);?></td>
-                <td>[删除]</td>
+                <td>[<a href="<?php $this->url('post/deleteComment/id/'.$value['id']);?>">删除</a>]</td>
             </tr>
         <?php }?>
     </tbody>

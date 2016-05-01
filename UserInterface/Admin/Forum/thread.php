@@ -8,7 +8,7 @@ $this->extend(array(
 $page = $this->get('page');
 ?>
 
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>

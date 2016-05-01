@@ -42,6 +42,7 @@ class BlogController extends Controller {
 			'comment_count' => 'p.comment_count',
 			'create_at' => 'p.create_at',
 			'excerpt' => 'p.excerpt',
+			'recommend' => 'p.recommend',
 			'comment_count' => 'p.comment_count'
 		),
 		array(
@@ -77,10 +78,12 @@ class BlogController extends Controller {
 			'content' => 'p.content',
 			'term' => 't.name',
 			'user' => 'u.name',
+			'user_id' => 'p.user_id',
 			'comment_status' => 'p.comment_status',
 			'comment_count' => 'p.comment_count',
 			'update_at' => 'p.update_at',
 			'create_at' => 'p.create_at',
+			'recommend' => 'p.recommend',
 		));
 		$comment = EmpireModel::query('comment')->find(array(
 			'where' => array(
@@ -93,6 +96,13 @@ class BlogController extends Controller {
 			'data' => $data,
 			'links' => EmpireModel::query()->getNextAndBefore($id),
 			'comment' => $comment
+		));
+	}
+
+	public function recommendAction($id) {
+		$result = EmpireModel::query('post')->updateOne('recommend', 'id = '. intval($id));
+		$this->ajaxReturn(array(
+			'status' => empty($result) ? 'error' : 'success'
 		));
 	}
 

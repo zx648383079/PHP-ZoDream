@@ -3,6 +3,7 @@ namespace Service\Home;
 
 use Domain\Model\EmpireModel;
 use Domain\Model\WeChat\WeChatModel;
+use Domain\WeChat\Subscribe;
 use Infrastructure\HtmlExpand;
 
 class WechatController extends Controller {
@@ -19,6 +20,6 @@ class WechatController extends Controller {
 				'title' => '微信'
 			));
 		}
-		
+		Subscribe::WeChat()->valid();
 	}
 }

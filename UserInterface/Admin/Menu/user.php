@@ -6,7 +6,7 @@
             <li data="user/role">管理角色</li>
             <li data="user/authorization">管理权限</li>
             <li data="user/user">管理用户</li>
-            <li data="user/loginlog">管理登陆日志</li>
+            <li data="user/loginLog">管理登陆日志</li>
             <li data="user/log">管理操作日志</li>
         </ul>
     </li>

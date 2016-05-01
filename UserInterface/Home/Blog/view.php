@@ -1,5 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
+/** @var $this \Zodream\Domain\Response\View */
 use Zodream\Domain\Authentication\Auth;
 $this->extend(array(
     'layout' => array(
@@ -23,10 +24,21 @@ $comment = $this->get('comment', array());
     <div class="row">
         作者： <?php echo $data['user'];?>
         发表时间：<?php $this->time($data['create_at']);?>
+        <?php if (!Auth::guest() && Auth::user()['id'] == $data['user_id']) {?>
+        <a href="<?php $this->url('admin.php/post/add/id/'.$data['id']);?>">编辑</a>
+        <?php }?>
     </div>
     
     <div id="content" class="row">
         <?php echo htmlspecialchars_decode($data['content']);?>
+    </div>
+    
+    
+    <div id="plugin" class="row">
+        <div class="recommend" data="<?php echo $data['id'];?>">
+            <span><?php echo $data['recommend']?></span>
+            <span>推荐</span>
+        </div>
     </div>
     
     
@@ -137,7 +149,7 @@ $this->extend(array(
     )), array(
         function() {?>
 <script type="text/javascript">
-
+require(['home/blog']);
 </script>       
      <?php }
     )

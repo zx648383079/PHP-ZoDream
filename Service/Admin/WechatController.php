@@ -77,8 +77,9 @@ class WechatController extends Controller {
 	 * @param Post $post
 	 */
 	function addReplyPost($post) {
+		$post['wechat_id'] = Session::getValue('wechat.id');
 		$model = new ReplyModel();
-		$result = $model->fill($post->get());
+		$result = $model->fill($post);
 		if (!empty($result)) {
 			Redirect::to('wechat/reply');
 		}

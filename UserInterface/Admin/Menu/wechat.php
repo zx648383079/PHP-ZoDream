@@ -1,15 +1,10 @@
 <div>微信管理</div>
 <ul>
     <li data="wechat">账号管理</li>
+    <?php if (!empty(\Zodream\Infrastructure\Session::getValue('wechat'))) {?>
     <li>功能
         <ul>
-            <li>自动回复
-                <ul>
-                    <li>被添加自动回复</li>
-                    <li>消息自动回复</li>
-                    <li>关键词自动回复</li>
-                </ul>
-            </li>
+            <li data="wechat/reply">自动回复</li>
             <li>群发功能</li>
             <li>自定义菜单</li>
             <li>投票管理</li>
@@ -30,4 +25,5 @@
         </ul>
     </li>
     <li>微信商城</li>
+    <?php }?>
 </ul>

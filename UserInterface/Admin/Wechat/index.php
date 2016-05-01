@@ -28,7 +28,10 @@ $this->extend(array(
                             <tr>
                                 <td><?php echo $value['id'];?></td>
                                 <td><?php echo $value['name'];?></td>
-                                <td>[<a href="<?php $this->url('wechat/add/id/'.$value['id']);?>">编辑</a>][删除]</td>
+                                <td>
+                                    [<a href="<?php $this->url('wechat/change/id/'.$value['id']);?>">管理</a>]
+                                    [<a href="<?php $this->url('wechat/add/id/'.$value['id']);?>">编辑</a>]
+                                    [删除]</td>
                             </tr>
                         <?php }?>
                     </tbody>

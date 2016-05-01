@@ -8,6 +8,29 @@
     margin: 5px;
 }
 
+.recommend {
+    float: left;
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 50px;
+    padding-top: 5px;
+    border: 1px solid #456887;
+    border-radius: 20px;
+    margin: 5px;
+    text-align: center;
+}
+
+.recommend span:last-child {
+    font-size: 12px;
+    display: block;
+    width: 100%;
+    border-radius: 0 0 20px 20px;
+}
+
+.recommend span:last-child:hover {
+    background-color: #39a;
+}
+
 .comment-item {
     border: 1px dotted #ccc;
     padding: 1em;
@@ -39,6 +62,11 @@
     padding: 1em;
     border-radius: 1em;
     min-height: 200px;
+}
+
+#plugin {
+    text-align: center;
+    height: 70px;
 }
 
 #title {

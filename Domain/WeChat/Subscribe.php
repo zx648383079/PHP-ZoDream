@@ -157,14 +157,14 @@ class Subscribe extends Core {
      * 获取接收消息链接
      */
     public function getRevLink(){
-        if (isset($this->receive['Url'])){
+        if (isset($this->receive['Url'])) {
             return array(
-                'url'=>$this->receive['Url'],
-                'title'=>$this->receive['Title'],
-                'description'=>$this->receive['Description']
+                'url' => $this->receive['Url'],
+                'title' => $this->receive['Title'],
+                'description' => $this->receive['Description']
             );
-        } else
-            return false;
+        } 
+        return false;
     }
 
 
@@ -174,8 +174,8 @@ class Subscribe extends Core {
     public function getRevTicket(){
         if (isset($this->receive['Ticket'])){
             return $this->receive['Ticket'];
-        } else
-            return false;
+        }
+        return false;
     }
 
     /**
@@ -197,8 +197,8 @@ class Subscribe extends Core {
     public function getRevTplMsgID(){
         if (isset($this->receive['MsgID'])){
             return $this->receive['MsgID'];
-        } else
-            return false;
+        }
+        return false;
     }
 
     /**
@@ -207,8 +207,8 @@ class Subscribe extends Core {
     public function getRevStatus(){
         if (isset($this->receive['Status'])){
             return $this->receive['Status'];
-        } else
-            return false;
+        }
+        return false;
     }
 
     /**
@@ -232,9 +232,8 @@ class Subscribe extends Core {
             $array['ErrorCount'] = $this->receive['ErrorCount'];
         if (isset($array) && count($array) > 0) {
             return $array;
-        } else {
-            return false;
         }
+        false;
     }
 
     /**
@@ -245,8 +244,8 @@ class Subscribe extends Core {
     public function getRevKFCreate(){
         if (isset($this->receive['KfAccount'])){
             return $this->receive['KfAccount'];
-        } else
-            return false;
+        }
+        return false;
     }
 
     /**
@@ -1162,6 +1161,7 @@ class Subscribe extends Core {
     /**
      * 批量获取关注用户列表
      * @param string $next_openid
+     * @return bool
      */
     public function getUserList($next_openid = ''){
         if (!$this->accessToken && !$this->checkAuth()) return false;

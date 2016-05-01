@@ -6,9 +6,13 @@ namespace Service\Admin;
 use Zodream\Domain\Authentication\Auth;
 
 class HomeController extends Controller {
-	protected $rules = array(
-		'*' => '@'
-	);
+
+	protected function rules() {
+		return array(
+			'*' => '@'
+		);
+	}
+
 	function indexAction() {
 		$this->show(array(
 			'name' => Auth::user()['name']

@@ -270,7 +270,8 @@ table th[class*="col-"] {
 
 .main {
     width: 70%;
-    margin: 200px auto;
+    margin: 0 auto;
+    margin-top: 160px;
 }
 
 .main .search {
@@ -313,3 +314,10 @@ table th[class*="col-"] {
   padding: 5px;
 }
 
+.footer {
+  min-height: 70px;
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid #c4e3f3;
+  text-align: center;
+}

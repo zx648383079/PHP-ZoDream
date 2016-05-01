@@ -27,7 +27,7 @@ $this->extend(array(
             <li title="栏目管理" data="column"><a href="javascript:0;">栏目</a></li>
             <li title="微信管理" data="wechat"><a href="javascript:0;">微信</a></li>
             <li title="用户和会员" data="user"><a href="javascript:0;">用户</a></li>
-            <li title="插件管理" data="tool"><a href="javascript:0;">插件</a></li>
+            <li title="模型管理" data="content"><a href="javascript:0;">模型</a></li>
             <li title="商城系统管理" data="shop"><a href="javascript:0;">商城</a></li>
             <li title="其他管理" data="other"><a href="javascript:0;">其他</a></li>
             <li title="扩展菜单项" data="extend"><a href="javascript:0;">扩展</a></li>
