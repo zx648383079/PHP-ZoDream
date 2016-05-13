@@ -4,6 +4,7 @@ namespace Service\Home;
 use Zodream\Domain\Filter\Filters\PhoneFilter;
 use Zodream\Domain\SMS\Ihuyi;
 use Zodream\Infrastructure\Log;
+use Zodream\Infrastructure\Mailer;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Request;
 
@@ -30,7 +31,7 @@ class AdminController extends Controller {
         }
         $code = StringExpand::randomNumber(6);
         $sms = new Ihuyi();
-        $result = $sms->send($mobile, $code);
+        $result = $sms->sendCode($mobile, $code);
         if ($result === false) {
             $this->ajaxReturn(array(
                 'status' => 'failure',
@@ -41,5 +42,15 @@ class AdminController extends Controller {
             'status' => 'success',
             'code' => $code
         ));
+    }
+
+    function emailAction() {
+        $mailer = new Mailer();
+        $result = $mailer->addAddress('zx648383079@126.com', 'zx')
+            ->isHtml()
+            ->send('这还是测试', '<b>不催啊速大幅答复度s但是</b>');
+        if ($result === false) {
+            var_dump($mailer->getError());
+        }
     }
 }
