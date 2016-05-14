@@ -96,11 +96,7 @@ $this->extend(array(
 	'layout' => array(
 		'foot'
 	)), array(
-        function() {?>
-<script>
-require(['home/home']);
-</script>
-       <?php }
+        '!js require([\'home/home\']);'
     )
 );
 ?>

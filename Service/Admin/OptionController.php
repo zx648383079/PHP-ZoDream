@@ -9,7 +9,7 @@ use Zodream\Infrastructure\Request\Post;
 
 class OptionController extends Controller {
 	function indexAction() {
-		$data = EmpireModel::query('option')->find();
+		$data = EmpireModel::query('option')->findAll();
 		$this->show(array(
 			'data' => $data
 		));

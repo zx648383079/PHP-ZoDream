@@ -8,7 +8,7 @@ use Domain\Model\EmpireModel;
 
 class ForumController extends Controller {
 	function indexAction() {
-		$data = EmpireModel::query('forum')->find(array(
+		$data = EmpireModel::query('forum')->findAll(array(
 			'order' => 'parent, type'
 		));
 		$this->show(array(
@@ -27,7 +27,7 @@ class ForumController extends Controller {
 	}
 
 	function addModeratorAction() {
-		$data = EmpireModel::query('moderator')->find(array(
+		$data = EmpireModel::query('moderator')->findAll(array(
 			'order' => 'position'
 		));
 		$this->show(array(

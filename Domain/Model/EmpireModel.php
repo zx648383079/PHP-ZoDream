@@ -33,7 +33,7 @@ class EmpireModel extends Model {
     }
 
     public function getMenu($type) {
-        return $this->setTable('enewsmenuclass c')->find(array(
+        return $this->setTable('enewsmenuclass c')->findAll(array(
             'right' => array(
                 'enewsmenu m',
                 'm.classid = c.classid'
@@ -70,7 +70,7 @@ class EmpireModel extends Model {
      */
     public function getAuthByRole($id) {
         $this->setTable('authorization_role');
-        $data = $this->find(array(
+        $data = $this->findAll(array(
             'where' => 'role_id = '.intval($id)
         ), 'authorization_id');
         $result = array();
@@ -119,7 +119,7 @@ class EmpireModel extends Model {
     public function getNextAndBefore($id) {
         $this->setTable('post');
         $id = intval($id);
-        $before = $this->find(array(
+        $before = $this->findAll(array(
             'where' => array(
                 'id < '.$id,
                 'status' => array(

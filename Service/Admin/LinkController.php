@@ -13,7 +13,7 @@ class LinkController extends Controller {
 	 * 友情链接
 	 */
 	function indexAction() {
-		$data = EmpireModel::query('friendlink')->find();
+		$data = EmpireModel::query('friendlink')->findAll();
 		$this->show(array(
 			'data' => $data
 		));

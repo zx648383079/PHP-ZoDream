@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Traits\AjaxTrait;
 abstract class Controller extends BaseController {
 	use AjaxTrait;
 	public function prepare() {
-		$data = EmpireModel::query('option')->find(array(
+		$data = EmpireModel::query('option')->findAll(array(
 			'where' => array(
 				'autoload' => 'yes'
 			)

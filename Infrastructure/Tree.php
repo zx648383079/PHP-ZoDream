@@ -37,14 +37,14 @@ class Tree {
     }
 
     public function getChildren($id) {
-        return $this->db->find(array(
+        return $this->db->findAll(array(
             'where' => 'parent_id = '.intval($id),
             'order' => 'position'
         ));
     }
 
     public function getAllChildren($left, $right) {
-        return $this->db->find(array(
+        return $this->db->findAll(array(
             'where' => array(
                 '`left` > '.intval($left),
                 '`right` < '.intval($right)
@@ -54,7 +54,7 @@ class Tree {
     }
 
     public function getPath($left, $right) {
-        return $this->db->find(array(
+        return $this->db->findAll(array(
             'where' => array(
                 '`left` < '.intval($left),
                 '`right` > '.intval($right)

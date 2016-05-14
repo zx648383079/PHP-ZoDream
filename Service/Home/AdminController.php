@@ -3,15 +3,18 @@ namespace Service\Home;
 
 use Zodream\Domain\Filter\Filters\PhoneFilter;
 use Zodream\Domain\SMS\Ihuyi;
+use Zodream\Infrastructure\Database\Query;
 use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Mailer;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Request;
 
-class AdminController extends Controller {
+class AdminController extends \Zodream\Domain\Routing\Controller {
     function indexAction() {
-        $this->show(array(
-        ));
+        $query = new Query();
+        $query->where(['a' => 'b'])
+            ->andWhere('a = b')->offset(1)->from('a')->count('a')->andHaving('a = b');
+        var_dump($query->getSql());
     }
 
     /**

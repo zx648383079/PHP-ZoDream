@@ -14,7 +14,7 @@ class WechatController extends Controller {
 	function indexAction() {
 		$model = new WeChatModel();
 		$this->show(array(
-			'data' => $model->find()
+			'data' => $model->findAll()
 		));
 	}
 

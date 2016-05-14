@@ -40,12 +40,12 @@ abstract class Model extends \Zodream\Domain\Model {
      * @return Page
      */
     public function getPage($sql = null, $field = '*', $countSql = null) {
-        $sql = $this->getBySort($sql);
+        $sql = $this->getQuery($sql);
         $page = new Page($this->getCount(
-            is_null($countSql) ? $sql : $this->getBySort($countSql),
+            is_null($countSql) ? $sql : $this->getQuery($countSql),
             '*'
         ));
-        $page->setPage($this->find($sql .' LIMIT '.$page->getLimit(), $this->getField($field)));
+        $page->setPage($this->findAll($sql .' LIMIT '.$page->getLimit(), $this->getField($field)));
         return $page;
     }
 

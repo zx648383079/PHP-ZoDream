@@ -53,7 +53,7 @@ class ForumController extends Controller {
 	}
 
 	function indexAction() {
-		$data = EmpireModel::query('forum')->find(array(
+		$data = EmpireModel::query('forum')->findAll(array(
 			'where' => array(
 				'type' => array(
 					'in', 
@@ -76,7 +76,7 @@ class ForumController extends Controller {
 		if ($id < 1) {
 			Redirect::to('forum');
 		}
-		$sub = EmpireModel::query('forum')->find(array(
+		$sub = EmpireModel::query('forum')->findAll(array(
 			'where' => array(
 				'type' => 'sub',
 				'parent = '. $id

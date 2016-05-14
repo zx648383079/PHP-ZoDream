@@ -12,7 +12,7 @@ use Zodream\Infrastructure\Request;
 class ContentController extends Controller {
 	function indexAction() {
 		$model = new ModelModel();
-		$data = $model->find();
+		$data = $model->findAll();
 		$this->show(array(
 			'title' => '模型列表',
 			'data' => $data
@@ -39,7 +39,7 @@ class ContentController extends Controller {
 
 	function fieldAction($modelid) {
 		$model = new ModelFieldModel();
-		$data = $model->find(array(
+		$data = $model->findAll(array(
 			'where' => 'model_id = '.intval($modelid)
 		));
 		$this->show(array(

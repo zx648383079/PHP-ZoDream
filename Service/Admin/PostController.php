@@ -49,7 +49,7 @@ class PostController extends Controller {
 	}
 
 	function addAction($id = null) {
-		$term = EmpireModel::query('term')->find();
+		$term = EmpireModel::query('term')->findAll();
 		if (!empty($id)) {
 			$data = EmpireModel::query('post')->findById($id);
 			$data['term_id'] = EmpireModel::query('term_post')->findOne('post_id = '.$id)['term_id'];
@@ -103,7 +103,7 @@ class PostController extends Controller {
 	}
 
 	function termAction() {
-		$data = EmpireModel::query('term')->find();
+		$data = EmpireModel::query('term')->findAll();
 		$this->show(array(
 			'data' => $data
 		));

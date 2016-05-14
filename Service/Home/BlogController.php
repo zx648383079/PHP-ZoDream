@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Request\Post;
 
 class BlogController extends Controller {
 	function indexAction($search = null, $termid = null, $user = null) {
-		$term = EmpireModel::query('term')->find();
+		$term = EmpireModel::query('term')->findAll();
 		$where = array();
 		if (!empty($search)) {
 			$args = explode(' ', $search);
@@ -85,7 +85,7 @@ class BlogController extends Controller {
 			'create_at' => 'p.create_at',
 			'recommend' => 'p.recommend',
 		));
-		$comment = EmpireModel::query('comment')->find(array(
+		$comment = EmpireModel::query('comment')->findAll(array(
 			'where' => array(
 				'post_id = '.$id
 			),

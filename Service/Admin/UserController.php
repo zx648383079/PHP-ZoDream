@@ -55,7 +55,7 @@ class UserController extends Controller {
 	}
 
 	function addUserAction($id = null) {
-		$data = EmpireModel::query('role')->find();
+		$data = EmpireModel::query('role')->findAll();
 		if (!empty($id)) {
 			$result = EmpireModel::query('user')->findById($id, 'id,name,email');
 			if (!empty($result)) {
@@ -97,7 +97,7 @@ class UserController extends Controller {
 	}
 
 	function addRoleAction($id = null) {
-		$data = EmpireModel::query('authorization')->find();
+		$data = EmpireModel::query('authorization')->findAll();
 		if (!empty($id)) {
 			$result = EmpireModel::query('role')->findById($id, 'name');
 			if (!empty($result)) {

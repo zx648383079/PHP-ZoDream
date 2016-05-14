@@ -6,7 +6,7 @@ use Infrastructure\HtmlExpand;
 
 class TalkController extends Controller {
 	function indexAction() {
-		$data = EmpireModel::query('talk')->find(array(
+		$data = EmpireModel::query('talk')->findAll(array(
 			'order' => 'create_at desc'
 		));
 		$this->show(array(

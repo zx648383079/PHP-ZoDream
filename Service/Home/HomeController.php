@@ -8,14 +8,14 @@ use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {
     function indexAction() {
-        $data = EmpireModel::query('navigation n')->find(array(
+        $data = EmpireModel::query('navigation n')->findAll(array(
             'left' => array(
                 'navigation_category c',
                 'c.id = n.category_id'
             ),
             'order' => 'c.name,c.position,n.position'
         ), 'n.name as name,n.url as url,c.name as category');
-        $category = EmpireModel::query('navigation_category')->find(array(
+        $category = EmpireModel::query('navigation_category')->findAll(array(
             'order' => 'position'
         ), 'id,name');
         $this->show(array(

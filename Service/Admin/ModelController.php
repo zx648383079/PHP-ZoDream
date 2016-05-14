@@ -79,7 +79,7 @@ USE `{$item}` ;\r\n");
 					$model->getCreateTableSql($value));
 				$count = $model->setTable($table)->count();
 				for ($i = 0; $i < $count; $i += 20) {
-					fwrite($file, $model->getInsert($model->find(array(
+					fwrite($file, $model->getInsert($model->findAll(array(
 						'limit' => array(
 							$i,
 							$i + 20

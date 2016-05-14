@@ -1,3 +1,4 @@
 <?php
-$a = 1;
-var_dump(boolval($a));
+$a = 'aaa
+';
+var_dump(strpos($a, "\r"));

@@ -9,7 +9,7 @@ use Domain\Model\EmpireModel;
 class NavigationController extends Controller {
 	function indexAction() {
 		$page = EmpireModel::query('navigation')->getPage('order by category_id,position');
-		$data = EmpireModel::query('navigation_category')->find(array(
+		$data = EmpireModel::query('navigation_category')->findAll(array(
 			'order' => 'position'
 		), 'id,name');
 		$this->show(array(
@@ -30,7 +30,7 @@ class NavigationController extends Controller {
 	}
 
 	function categoryAction() {
-		$data = EmpireModel::query('navigation_category')->find(array(
+		$data = EmpireModel::query('navigation_category')->findAll(array(
 			'order' => 'position'
 		));
 		$this->show(array(
