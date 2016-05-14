@@ -5,6 +5,7 @@ namespace Service\Admin;
  * 设置
  */
 use Domain\Model\EmpireModel;
+use Zodream\Infrastructure\Database\Command;
 use Zodream\Infrastructure\Request\Post;
 
 class OptionController extends Controller {
@@ -22,7 +23,7 @@ class OptionController extends Controller {
 		if (!$post->has('name') || !$post->has('value')) {
 			return;
 		}
-		EmpireModel::query('option')->insertOrUpdate(
+		Command::getInstance()->setTable('option')->insertOrUpdate(
 			'name, value, autoload',
 			':name, :value, :autoload',
 			'value = :value, autoload = :autoload',

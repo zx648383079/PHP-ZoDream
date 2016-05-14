@@ -176,7 +176,7 @@ class Tree {
         $data = $this->getNode($id, true, true);
         $dif = $data['right'] - $data['left'] + 1;
 
-        $this->db->deleteValues(array(
+        $this->db->delete(array(
             '`left` >= '.$data['left'],
             '`right` <= '.$data['right']
         ));

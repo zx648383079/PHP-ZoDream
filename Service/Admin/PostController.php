@@ -7,6 +7,7 @@ namespace Service\Admin;
 use Domain\Model\EmpireModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Response\Redirect;
+use Zodream\Infrastructure\Database\Command;
 use Zodream\Infrastructure\ObjectExpand\PinYin;
 use Zodream\Infrastructure\Request\Post;
 
@@ -87,7 +88,7 @@ class PostController extends Controller {
 		if (!empty($post->get('id'))) {
 			$id = intval($post->get('id'));
 		}
-		EmpireModel::query('term_post')->insertOrUpdate(
+		Command::getInstance()->setTable('term_post')->insertOrUpdate(
 			'post_id, term_id', ':post, :term', 'term_id = :term', array(
 			':post' => $id,
 			':term' => intval($post->get('term_id'))
@@ -96,7 +97,7 @@ class PostController extends Controller {
 	}
 
 	function deleteAction($id) {
-		EmpireModel::query('term_post')->deleteValues(array(
+		EmpireModel::query('term_post')->delete(array(
 			'post_id' => $id
 		));
 		$this->delete('post', $id);
