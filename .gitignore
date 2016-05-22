@@ -63,3 +63,5 @@ composer.lock
 
 typings/
 .vscode/
+
+*.sql

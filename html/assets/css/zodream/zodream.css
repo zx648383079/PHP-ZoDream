@@ -321,3 +321,18 @@ table th[class*="col-"] {
   border-top: 1px solid #c4e3f3;
   text-align: center;
 }
+
+.lab {
+    margin-top: 20px;
+}
+
+.lab>.col-md-3 {
+    border: 1px solid #00b294;
+    text-align: center;
+    border-radius: 10px;
+    min-height: 100px;
+}
+
+.lab>.col-md-3:hover {
+    background-color: #e7e7e7;
+}

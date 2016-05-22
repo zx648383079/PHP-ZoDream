@@ -17,9 +17,6 @@ abstract class Controller extends BaseController {
 
 
 	public function prepare() {
-		if (Url::hasUri('account')) {
-			return;
-		}
 		/*$model = new MessagesModel();
 		$tasks = new TasksModel();
 		$this->send(array(

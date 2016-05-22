@@ -99,6 +99,25 @@ class EmpireModel extends Model {
     }
 
     /**
+     * 判断是否存在记录
+     * @param $action
+     * @param string|integer $data 如果为null则不判断数据
+     * @return bool
+     */
+    public function hasLog($action, $data = null) {
+        $this->setTable('log');
+        $sql = "ip = '".Request::ip()."'";
+        if (!Auth::guest()) {
+            $sql = "({$sql} or user = '".Auth::user()['name']."')";
+        }
+        $sql .= " AND event = '{$action}'";
+        if (!is_null($data)) {
+            $sql .= " AND data = '".(is_string($data) ? $data : json_encode($data))."'";
+        }
+        return empty($this->findOne($sql));
+    }
+
+    /**
      * 纪录登录记录
      * @param string $user 登录邮箱
      * @param bool $status 成功或失败

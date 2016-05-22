@@ -100,9 +100,23 @@ class BlogController extends Controller {
 	}
 
 	public function recommendAction($id) {
+		$id = intval($id);
+		if (!EmpireModel::query()->hasLog('recommendBlog', $id)) {
+			$this->ajaxReturn(array(
+				'status' => 'failure',
+				'error' => '您已经推荐过了！'
+			));
+		}
 		$result = EmpireModel::query('post')->updateOne('recommend', 'id = '. intval($id));
+		if (empty($result)) {
+			$this->ajaxReturn(array(
+				'status' => 'failure',
+				'error' => '推荐失败，请重试！'
+			));
+		}
+		EmpireModel::query()->addLog($id, 'recommendBlog');
 		$this->ajaxReturn(array(
-			'status' => empty($result) ? 'error' : 'success'
+			'status' => 'success'
 		));
 	}
 

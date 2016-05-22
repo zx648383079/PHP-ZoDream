@@ -76,7 +76,9 @@ class UserController extends Controller {
 	}
 
 	function authorizationAction() {
-		$data = EmpireModel::query('authorization')->select('order by id desc');
+		$data = EmpireModel::query('authorization')->findAll(array(
+			'order' => 'id desc'
+		));
 		$this->show(array(
 			'data' => $data
 		));
@@ -90,7 +92,9 @@ class UserController extends Controller {
 	}
 
 	function roleAction() {
-		$data = EmpireModel::query('role')->select('order by id desc');
+		$data = EmpireModel::query('role')->findAll(array(
+			'order' => 'id desc'
+		));
 		$this->show(array(
 			'data' => $data
 		));

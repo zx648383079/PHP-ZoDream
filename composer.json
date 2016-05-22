@@ -4,7 +4,9 @@
   "require" : {
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",
-    "phpmailer/phpmailer": "~5.2"
+    "phpmailer/phpmailer": "~5.2",
+    "mobiledetect/mobiledetectlib": "^2.8",
+    "lixuancn/lanewechat": "^1.5"
   },
   "autoload" : {
     "psr-4" : {

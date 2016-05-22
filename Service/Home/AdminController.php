@@ -2,7 +2,7 @@
 namespace Service\Home;
 
 use Zodream\Domain\Filter\Filters\PhoneFilter;
-use Zodream\Domain\SMS\Ihuyi;
+use Zodream\Domain\SMS\IHuYi;
 use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Mailer;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
@@ -29,7 +29,7 @@ class AdminController extends Controller {
             ));
         }
         $code = StringExpand::randomNumber(6);
-        $sms = new Ihuyi();
+        $sms = new IHuYi();
         $result = $sms->sendCode($mobile, $code);
         if ($result === false) {
             $this->ajaxReturn(array(

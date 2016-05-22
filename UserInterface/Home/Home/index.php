@@ -30,7 +30,7 @@ $data = $this->get('data', array());
                     <a href="<?php $this->url('blog');?>">博客</a>
                 </div>
                  <div>
-                    <a href="<?php $this->url('forum');?>">论坛</a>
+                    <a href="<?php $this->url('laboratory');?>">实验室</a>
                 </div>
                  <div>
                     <a href="<?php $this->url('talk');?>">日志</a>
