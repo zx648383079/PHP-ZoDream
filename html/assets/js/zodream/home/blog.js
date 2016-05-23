@@ -13,5 +13,12 @@ define(["jquery"], function () {
             alert(data.error);
         });
     });
+    $("#comment .reply").click(function () {
+        var content = $("#textarea_content"), name = $(this).attr("data"), value = content.val();
+        if (value.indexOf("@" + name) < 0) {
+            content.val("@" + name + " " + value);
+        }
+        content.scroll().focus();
+    });
 });
 //# sourceMappingURL=blog.js.map

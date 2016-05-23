@@ -88,6 +88,12 @@ define(["jquery", "bui"], function () {
                             { id: 'loginLog', text: '管理登陆日志', href: 'admin.php/user/loginLog' },
                             { id: 'log', text: '管理操作日志', href: 'admin.php/user/log' }
                         ]
+                    }, {
+                        text: '私信管理',
+                        items: [
+                            { id: 'message', text: '所有私信', href: 'admin.php/message' },
+                            { id: 'all', text: '群发消息', href: 'admin.php/message/all' }
+                        ]
                     }]
             }, {
                 id: 'model',

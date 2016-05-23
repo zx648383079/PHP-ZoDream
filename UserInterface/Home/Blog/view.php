@@ -79,9 +79,12 @@ $comment = $this->get('comment', array());
                     <?php if (empty($item['url'])) {
                         echo $item['name'];
                     } else {?>
-                    <a href="<?php echo $item['url'];?>"><?php echo $item['name'];?></a>
+                    <a href="<?php echo $item['url'];?>" target="_blank"><?php echo $item['name'];?></a>
                     <?php }?>
-                    <a href="#">回复</a>
+                    <a class="reply" data="<?php echo $item['name'];?>" href="javascript:;">回复</a>
+                    <?php if (!Auth::guest() && !empty($comment['user_id'])) {?>
+                    <a href="<?php $this->url(['admin.php/message/send', 'id' => $comment['user_id']]);?>">私信</a>
+                    <?php }?>
                     <div>
                         <?php echo $item['content'];?>
                     </div>
