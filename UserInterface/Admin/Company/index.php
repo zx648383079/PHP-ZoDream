@@ -12,7 +12,7 @@ $page = $this->get('page');
 ?>
 <div class="row">
     <div class="col-md-3 col-md-offset-2">
-        <a href="<?php $this->url('waste/add');?>" class="btn btn-primary">新增</a>
+        <a href="<?php $this->url('company/add');?>" class="btn btn-primary">新增</a>
     </div>
 </div>
 <table class="table table-hover">
@@ -26,19 +26,19 @@ $page = $this->get('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
-            <tr>
-                <td><?=$value['id']?></td>
-                <td><?=$value['name']?></td>
-                <td><?=$value['charge']?></td>
-                <td><?php $this->time($value['update_at']);?></td>
-                <td>
-                    <?=Html::a('查看', ['waste/view', 'id' => $value['id']])?>
-                    <?=Html::a('编辑', ['waste/edit', 'id' => $value['id']])?>
-                    <?=Html::a('删除', ['waste/delete', 'id' => $value['id']])?>
-                </td>
-            </tr>
-        <?php }?>
+    <?php foreach ($page->getPage() as $value) {?>
+        <tr>
+            <td><?=$value['id']?></td>
+            <td><?=$value['name']?></td>
+            <td><?=$value['charge']?></td>
+            <td><?php $this->time($value['update_at']);?></td>
+            <td>
+                <?=Html::a('查看', ['company/view', 'id' => $value['id']])?>
+                <?=Html::a('编辑', ['company/edit', 'id' => $value['id']])?>
+                <?=Html::a('删除', ['company/delete', 'id' => $value['id']])?>
+            </td>
+        </tr>
+    <?php }?>
     </tbody>
     <tfoot>
         <tr>

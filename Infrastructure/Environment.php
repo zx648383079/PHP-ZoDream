@@ -125,18 +125,18 @@ class Environment {
 		$dirList = @scandir(APP_DIR.$dir);
 		foreach($dirList as $file) {
 			if ( $file != '..' && $file != '.' ) {
-				$fullfile = rtrim($dir, '/').'/'.$file;
-				if (is_dir(APP_DIR. $fullfile)) {
+				$fullFile = rtrim($dir, '/').'/'.$file;
+				if (is_dir(APP_DIR. $fullFile)) {
 					$dirs[] = array(
 							'name' => $file,
 							'kind' => 'dir',
-							'full' => $fullfile
+							'full' => $fullFile
 					);
 				} else {
 					$files[] = array(
 							'name' => $file,
 							'kind' => 'file',
-							'full' => $fullfile
+							'full' => $fullFile
 					);
 				}
 			}
