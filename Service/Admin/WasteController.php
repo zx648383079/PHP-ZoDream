@@ -55,5 +55,43 @@ class WasteController extends Controller {
 			'data' => $data
 		));
 	}
+
+	function companyAction($id) {
+		$data = EmpireModel::query('waste')->findOne($id);
+		$links = EmpireModel::query('waste_company')->findAll(['waste_id' => $id]);
+		foreach ($links as &$item) {
+			$item = $item['company_id'];
+		}
+		$company = EmpireModel::query('company')->findAll(null, 'id,name');
+		$this->show(array(
+			'title' => '绑定 '.$data['code'],
+			'data' => $data,
+			'company' => $company,
+			'links' => $links
+		));
+	}
+
+	/**
+	 * @param Post $post
+	 */
+	function companyPost($post) {
+		$waste = intval($post->get('waste'));
+		if ($waste < 1) {
+			$this->send('error', '添加失败！');
+			return;
+		}
+		$company = $post->get('company');
+		$data = array();
+		foreach ($company as $item) {
+			$data[] = [$waste, intval($item)];
+		}
+		$result = EmpireModel::query('waste_company')->delete(['waste_id' => $waste]);
+		if (empty($result)) {
+			$this->send('error', '添加失败！');
+			return;
+		}
+		EmpireModel::query('waste_company')->addValues(['waste_id', 'company_id'], $data);
+		Redirect::to(['waste']);
+	}
 	
 }

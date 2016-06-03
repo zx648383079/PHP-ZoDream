@@ -1,5 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 /** @var $this \Zodream\Domain\Response\View */
 $this->extend(array(
 	'layout' => array(
@@ -23,7 +24,7 @@ $this->extend(array(
 			<tr>
 				<td><?=$item[0]['code']?></td>
 				<td><?=$item[0]['name']?></td>
-				<td><?=$item[0]['update_at']?></td>
+				<td><?=TimeExpand::format($item[0]['update_at'])?></td>
 				<td>
 					<?php foreach ($item[1] as $value) {?>
 						<p><?=$value['company']?></p>

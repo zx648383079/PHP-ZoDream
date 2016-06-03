@@ -33,7 +33,8 @@ class WasteController extends Controller {
 			'name' => 'w.name',
 			'content' => 'w.content',
 			'company' => 'c.name',
-			'phone' => 'c.phone'
+			'phone' => 'c.phone',
+			'update_at' => 'w.update_at'
 		));
 		$this->show(array(
 			'title' => '废料科普',

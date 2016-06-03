@@ -33,6 +33,7 @@ $page = $this->get('page');
                 <td><?=$value['name']?></td>
                 <td><?php $this->time($value['update_at']);?></td>
                 <td>
+                    <?=Html::a('关联', ['waste/company', 'id' => $value['id']])?>
                     <?=Html::a('查看', ['waste/view', 'id' => $value['id']])?>
                     <?=Html::a('编辑', ['waste/add', 'id' => $value['id']])?>
                     <?=Html::a('删除', ['waste/delete', 'id' => $value['id']])?>
