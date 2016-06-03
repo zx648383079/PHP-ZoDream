@@ -4,7 +4,7 @@ namespace Service\Home;
 use Zodream\Domain\Filter\Filters\PhoneFilter;
 use Zodream\Domain\SMS\IHuYi;
 use Zodream\Infrastructure\Log;
-use Zodream\Infrastructure\Mailer;
+use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Request;
 

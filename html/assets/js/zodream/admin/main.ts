@@ -60,6 +60,12 @@
                 items:[
                   {id:'talk',text:'随想',href:'admin.php/talk'}
                 ]
+              },{
+                text:'废料科普管理',
+                items:[
+                  {id:'waste',text:'废料分类',href:'admin.php/waste'},
+                  {id:'company',text:'公司',href:'admin.php/waste/company'}
+                ]
               }]
           },{
             id:'plugin',

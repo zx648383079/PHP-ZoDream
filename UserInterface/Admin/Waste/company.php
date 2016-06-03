@@ -19,8 +19,8 @@ $page = $this->get('page');
     <thead>
     <tr>
         <th>ID</th>
-        <th>编号</th>
         <th>名称</th>
+        <th>负责人</th>
         <th>更新时间</th>
         <th>操作</th>
     </tr>
@@ -29,8 +29,8 @@ $page = $this->get('page');
         <?php foreach ($page->getPage() as $value) {?>
             <tr>
                 <td><?=$value['id']?></td>
-                <td><?=$value['code']?></td>
                 <td><?=$value['name']?></td>
+                <td><?=$value['charge']?></td>
                 <td><?php $this->time($value['update_at']);?></td>
                 <td>
                     <?=Html::a('查看', ['waste/view', 'id' => $value['id']])?>

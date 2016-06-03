@@ -24,6 +24,11 @@ $this->extend(array(
                 <a href="<?php $this->url('chat');?>">聊天室</a>
             </div>
         </div>
+        <div class="col-md-3">
+            <div>
+                <a href="<?php $this->url('waste');?>">废料科普</a>
+            </div>
+        </div>
     </div>
 </div>
 

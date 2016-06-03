@@ -6,20 +6,38 @@ use Domain\Model\WeChat\WeChatModel;
 use Domain\WeChat\Subscribe;
 use Infrastructure\HtmlExpand;
 
-class WechatController extends Controller {
-	function indexAction($tag = null) {
-		if (empty($tag)) {
-			$this->show(array(
-				'title' => '微信'
-			));
+class WasteController extends Controller {
+	function indexAction($search = null) {
+		$where = null;
+		if (!empty($search)) {
+			$args = explode(' ', $search);
+			foreach ($args as $item) {
+				$where[] = "w.code like '%{$item}%'";
+				$where[] = "w.name like '%{$item}%'";
+			}
 		}
-		$wechat = new WeChatModel();
-		$data = $wechat->findOne('tag = '.$tag);
-		if (empty($data)) {
-			$this->show(array(
-				'title' => '微信'
-			));
-		}
-		Subscribe::WeChat()->valid();
+		$data = EmpireModel::query('waste w')->findAll(array(
+			'right' => array(
+				'waste_company wc',
+				'wc.waste_id = w.id'
+			),
+			'left' => array(
+				'company c',
+				'c.id = wc.company_id'
+			),
+			'where' => $where,
+			'order' => 'w.id asc'
+		), array(
+			'id' => 'w.id',
+			'code' => 'w.code',
+			'name' => 'w.name',
+			'content' => 'w.content',
+			'company' => 'c.name',
+			'phone' => 'c.phone'
+		));
+		$this->show(array(
+			'title' => '废料科普',
+			'data' => HtmlExpand::getTree($data, 'id')
+		));
 	}
 }
