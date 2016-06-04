@@ -11,7 +11,7 @@ use Zodream\Infrastructure\Log;
 abstract class Controller extends BaseController {
 	protected function rules() {
 		return array(
-			'*' => '?'
+			'*' => '@'
 		);
 	}
 }

@@ -9,6 +9,12 @@ use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Session;
 
 class VerifyController extends Controller {
+	protected function rules() {
+		return array(
+			'*' => '*'
+		);
+	}
+	
 	function indexAction() {
 		$level = intval(Request::get('level'));
 		if (empty($level)) {
