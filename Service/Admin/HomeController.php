@@ -19,12 +19,6 @@ class HomeController extends Controller {
 		));
 	}
 
-	function mapAction() {
-		$this->show(array(
-
-		));
-	}
-
 	function mainAction() {
 		$user = Auth::user();
 		$this->show(array(

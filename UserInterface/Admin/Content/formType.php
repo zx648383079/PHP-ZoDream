@@ -1,4 +1,5 @@
 <?php
+/** @var $this \Zodream\Domain\Response\View */
 $type = $this->get('type');
 if ($type == 'input') {
 ?>

@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Authentication\Auth;
+/** @var $this \Zodream\Domain\Response\View */
 $this->extend(array(
     'layout' => array(
         'head'

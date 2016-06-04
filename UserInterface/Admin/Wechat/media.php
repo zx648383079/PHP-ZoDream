@@ -1,11 +1,13 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\Response\View */
+/** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
     'layout' => array(
         'head'
     ))
 );
+$page = $this->get('page');
 ?>
 
 
@@ -13,29 +15,37 @@ $this->extend(array(
     
     <div class="panel panel-default">
           <div class="panel-heading">
-                <h3 class="panel-title">公众号管理 <a href="wechat/add" class="btn btn-default">添加</a></h3>
+                <h3 class="panel-title">素材管理</h3>
           </div>
           <div class="panel-body">
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>名称</th>
+                            <th>内容</th>
+                            <th>类型</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->get('data', array()) as $value) {?>
+                        <?php foreach ($page->getPage() as $value) {?>
                             <tr>
-                                <td><?php echo $value['id'];?></td>
-                                <td><?php echo $value['name'];?></td>
+                                <td><?=$value['id'];?></td>
+                                <td><?=$value['type']?></td>
+                                <td><?=$value['content']?></td>
                                 <td>
-                                    [<a href="<?php $this->url('wechat/change/id/'.$value['id']);?>">管理</a>]
-                                    [<a href="<?php $this->url('wechat/add/id/'.$value['id']);?>">编辑</a>]
-                                    [删除]</td>
+                                    <a href="<?php $this->url([null, 'id' => $value['id']])?>">删除</a>
+                                </td>
                             </tr>
                         <?php }?>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="2">
+                            <?php $page->pageLink();?>
+                        </th>
+                    </tr>
+                    </tfoot>
                 </table>
           </div>
     </div>

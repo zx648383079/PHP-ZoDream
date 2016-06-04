@@ -1,3 +1,6 @@
+<?php
+/** @var $this \Zodream\Domain\Response\View */
+?>
 <!DOCTYPE HTML>
 <html lang="ch-ZHS">
 <head>

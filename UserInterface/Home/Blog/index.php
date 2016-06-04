@@ -1,5 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
+/** @var $this \Zodream\Domain\Response\View */
+/** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
 	'layout' => array(
 		'head',
