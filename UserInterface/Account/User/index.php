@@ -20,7 +20,7 @@ $this->extend(array(
             <img src="">
         </div>
         <div class="col-md-9">
-            <p><?=Auth::user()['name']?></p>
+            <p><?=Auth::user()['name']?> <button class="btn btn-primary">签到</button></p>
             <p><?=Html::a('查看个人信息', 'user/info')?></p>
             <p>个性签名</p>
         </div>
@@ -56,12 +56,6 @@ $this->extend(array(
 $this->extend(array(
     'layout' => array(
         'foot'
-    )), array(
-        function() {?>
-            <script type="text/javascript">
-                require(['home/blog']);
-            </script>
-        <?php }
-    )
+    ))
 );
 ?>

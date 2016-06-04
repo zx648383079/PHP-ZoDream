@@ -18,8 +18,8 @@ use Zodream\Infrastructure\Html;
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="<?php $this->url('/');?>">首页</a></li>
-            <li<?php $this->cas($this->hasUrl('blog'), ' class="active"');?>><a href="<?php $this->url('blog');?>">博客</a></li>
+            <li<?php $this->cas($this->hasUrl('blog'), ' class="active"');?>><a href="<?php $this->url('/');?>">动态</a></li>
+            <li<?php $this->cas($this->hasUrl('blog'));?>><a href="<?php $this->url('blog');?>">博客</a></li>
             <li<?php $this->cas($this->hasUrl('laboratory'));?>><a href="<?php $this->url('laboratory');?>">实验室</a></li>
             <li<?php $this->cas($this->hasUrl('talk'));?>><a href="<?php $this->url('talk');?>">日志</a></li>
         </ul>
@@ -33,9 +33,9 @@ use Zodream\Infrastructure\Html;
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?=Auth::user()['name']?><span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">消息</a></li>
-                    <li><a href="#">个人中心</a></li>
-                    <li><a href="#">安全中心</a></li>
+                    <li><?=Html::a('消息', ['message'])?></li>
+                    <li><?=Html::a('个人中心', ['user/info'])?></li>
+                    <li><?=Html::a('安全中心', ['user/security'])?></li>
                     <li role="separator" class="divider"></li>
                     <li><?=Html::a('登出', ['logout'])?></li>
                 </ul>

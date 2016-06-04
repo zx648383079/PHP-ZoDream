@@ -1,2 +1,2 @@
 <?php
-var_dump(trim('\\vvv', '/\\'));
+var_dump(time(), strtotime('-'));

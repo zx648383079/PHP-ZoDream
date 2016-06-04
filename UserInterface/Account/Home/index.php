@@ -1,5 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\Response\View */
 $this->extend(array(
 	'layout' => array(
@@ -22,7 +23,7 @@ $code = $this->get('code');
         <?php }?>
         <input type="checkbox" name="remember" value="1">记住我</br>
         <button type="submit">登录</button>
-        <p>没有账号？先 <a href="<?php $this->url('account/register');?>">注册</a></p>
+        <p><?=Html::a('忘记密码?', 'find')?> 或 没有账号？先 <a href="<?php $this->url('account/register');?>">注册</a>  </p>
     </form>
 </div>
 
@@ -31,11 +32,7 @@ $this->extend(array(
 	'layout' => array(
 		'foot'
 	)), array(
-        function() {?>
-<script>
-    require(['admin/login']);
-</script>
-       <?php }
+        '!js require(["admin/login"]);'
     )
 );
 ?>

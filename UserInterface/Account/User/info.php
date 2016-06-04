@@ -59,12 +59,6 @@ HTML;
 $this->extend(array(
     'layout' => array(
         'foot'
-    )), array(
-        function() {?>
-            <script type="text/javascript">
-                require(['home/blog']);
-            </script>
-        <?php }
-    )
+    ))
 );
 ?>
