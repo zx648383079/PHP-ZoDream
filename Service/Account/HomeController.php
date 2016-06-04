@@ -92,7 +92,7 @@ class HomeController extends Controller {
 		}
 		$user = EmpireModel::query('user')->findOne(['email' => $email]);
 		if (empty($user)) {
-			$this->send('message', '您输入的邮箱有误或未注册！');
+			$this->send('message', '您输入的邮箱未注册！');
 			return;
 		}
 		$time = time();
