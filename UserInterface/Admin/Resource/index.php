@@ -8,7 +8,6 @@ $this->extend(array(
         ))
 );
 $file = $this->get('file');
-echo $file;
 $data = $this->get('data', array());
 ?>
 
@@ -39,7 +38,10 @@ $data = $this->get('data', array());
         <tr>
             <td><?=Html::a($item['name'], ['#', 'file' => $item['full']]);?></td>
             <td>文件</td>
-            <td>下载 编辑 重命名 删除</td>
+            <td>
+                <?=Html::a('下载', ['download', 'file' => $item['full']])?>
+                <?=Html::a('编辑', ['resource/add', 'file' => $item['full']])?>
+                 重命名 删除</td>
         </tr>
     <?php }?>
     </tbody>

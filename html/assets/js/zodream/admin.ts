@@ -7,6 +7,8 @@ require.config({
         bootstrap: "bootstrap/bootstrap.min",
         admin: "zodream/admin",
         ueditor: '../ueditor/ueditor.all.min',
+        codemirror: 'codemirror/codemirror',
+        code: 'codemirror',
         bui: "bui/bui"
     },
     shim: {

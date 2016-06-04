@@ -24,7 +24,8 @@ define(["jquery", "bui"], function () {
                     }, {
                         text: '文件结构',
                         items: [
-                            { id: 'resource', text: '资源文件结构', href: 'admin.php/resource' }
+                            { id: 'resource', text: '资源文件结构', href: 'admin.php/resource' },
+                            { id: 'add', text: '新增文件', href: 'admin.php/resource/add' }
                         ]
                     }]
             }, {
@@ -68,18 +69,13 @@ define(["jquery", "bui"], function () {
                         items: [
                             { id: 'wechat', text: '账号管理', href: 'admin.php/wechat' },
                             { id: 'reply', text: '自动回复', href: 'admin.php/wechat/reply' },
-                            { id: 'a', text: '群发功能', href: 'admin.php/wechat' },
-                            { id: 'b', text: '自定义菜单', href: 'admin.php/wechat/reply' },
+                            { id: 'send', text: '群发功能', href: 'admin.php/wechat/send' },
+                            { id: 'menu', text: '自定义菜单', href: 'admin.php/wechat/menu' },
                             { id: 'c', text: '投票管理', href: 'admin.php/wechat' },
-                            { id: 'd', text: '消息管理', href: 'admin.php/wechat/reply' },
-                            { id: 'e', text: '用户管理', href: 'admin.php/wechat/reply' },
-                            { id: 'f', text: '素材管理', href: 'admin.php/wechat' },
-                            { id: 'g', text: '微信商城', href: 'admin.php/wechat/reply' },
-                        ]
-                    }, {
-                        text: '更多示例',
-                        items: [
-                            { id: 'tab', text: '使用tab过滤', href: 'search/tab.html' }
+                            { id: 'message', text: '消息管理', href: 'admin.php/wechat/message' },
+                            { id: 'fan', text: '用户管理', href: 'admin.php/wechat/fan' },
+                            { id: 'media', text: '素材管理', href: 'admin.php/wechat/media' },
+                            { id: 'shop', text: '微信商城', href: 'admin.php/wechat/shop' },
                         ]
                     }]
             }, {
@@ -99,6 +95,11 @@ define(["jquery", "bui"], function () {
                         items: [
                             { id: 'message', text: '所有私信', href: 'admin.php/message' },
                             { id: 'all', text: '群发消息', href: 'admin.php/message/all' }
+                        ]
+                    }, {
+                        text: '邮箱管理',
+                        items: [
+                            { id: 'mail', text: '群发邮件', href: 'admin.php/mail' }
                         ]
                     }]
             }, {
