@@ -34,10 +34,10 @@ use Zodream\Infrastructure\Html;
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?=Auth::user()['name']?><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><?=Html::a('消息', ['message'])?></li>
-                    <li><?=Html::a('个人中心', ['user/info'])?></li>
-                    <li><?=Html::a('安全中心', ['user/security'])?></li>
+                    <li><?=Html::a('个人中心', ['info'])?></li>
+                    <li><?=Html::a('安全中心', ['security'])?></li>
                     <li role="separator" class="divider"></li>
-                    <li><?=Html::a('登出', ['logout'])?></li>
+                    <li><?=Html::a('登出', ['auth/logout'])?></li>
                 </ul>
             </li>
         </ul>

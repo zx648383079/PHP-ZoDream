@@ -20,13 +20,13 @@ $this->extend(array(
         <div class="col-md-3">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <?=Html::a('个人信息', 'user/info')?>
+                    <?=Html::a('个人信息', 'info')?>
                 </li>
                 <li class="list-group-item">
-                    <?=Html::a('安全中心', ['user/security'])?>
+                    <?=Html::a('安全中心', ['security'])?>
                 </li>
                 <li class="list-group-item">
-                    <?=Html::a('隐私设置', ['user/setting'])?>
+                    <?=Html::a('隐私设置', ['setting'])?>
                 </li>
             </ul>
         </div>

@@ -12,9 +12,10 @@ $css = <<<CSS
   background-image: url("{$send['avatar']}");
 }
 CSS;
+$time = time();
 $js = <<<JS
 var USER = "{$user['id']}",
-    time = "{time()}";
+    time = "{$time}";
 JS;
 
 $this->extend(array(
@@ -32,7 +33,12 @@ $data = $this->get('data', array());
 <div class="container">
     <div class="row">
         <ul class="chat">
-            <li></li>
+            <?php for ($i = count($data) - 1; $i >= 0; $i --):?>
+                <li class="<?=$data[$i]['send_id'] == $send['id'] ? 'right' : 'left'?>">
+                    <p><?=$data[$i]['content']?></p>
+                    <p><?php $this->time($data[$i]['create_at'])?></p>
+                </li>
+            <?php endfor;?>
         </ul>
     </div>
     <div class="row">

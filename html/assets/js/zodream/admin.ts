@@ -8,6 +8,7 @@ require.config({
         admin: "zodream/admin",
         ueditor: '../ueditor/ueditor.all.min',
         codemirror: 'codemirror/codemirror',
+        completer: 'jquery/completer.min',
         code: 'codemirror',
         bui: "bui/bui"
     },

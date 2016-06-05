@@ -23,7 +23,7 @@ $this->extend(array(
         </div>
 
         <div class="dl-log">欢迎您，<span class="dl-log-user"><?php $this->ech('name');?></span>
-            <a href="<?php $this->url('account.php/logout');?>" title="退出系统" class="dl-log-quit">[退出]</a>
+            <a href="<?php $this->url('account.php/auth/logout');?>" title="退出系统" class="dl-log-quit">[退出]</a>
         </div>
     </div>
     <div class="content">

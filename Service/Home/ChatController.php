@@ -4,6 +4,7 @@ namespace Service\Home;
 use Domain\Model\EmpireModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Authentication\Auth;
+use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Request;
 
 class ChatController extends Controller {
@@ -17,10 +18,12 @@ class ChatController extends Controller {
 		$user = EmpireModel::query('user')->findById($id);
 		$data = EmpireModel::query('chat')->findAll(array(
 			'where' => array(
-				'user_id' => Auth::user()['id'],
-				'send_id' => $id
+				'(user_id = '. Auth::user()['id'],
+				'send_id = '.$id.')',
+				['(send_id = '.Auth::user()['id'], 'or'],
+				'user_id = '.$id.')'
 			),
-			'order' => 'create_at asc',
+			'order' => 'create_at desc',
 			'limit' => 10
 		));
 		$this->show(array(
@@ -35,9 +38,15 @@ class ChatController extends Controller {
 		$data['send_id'] = Auth::user()['id'];
 		$data['create_at'] = time();
 		$row = EmpireModel::query('chat')->add($data);
+		if (empty($row)) {
+			$this->ajaxReturn(array(
+					'status' => 'failure',
+					'error' => '服务器错误！'//EmpireModel::query()->getError()
+			));
+		}
 		$this->ajaxReturn(array(
-			'status' => empty($row) ? 'failure' : 'success',
-			'time' => $data['create_at']
+			'status' => 'success',
+			'time' => TimeExpand::format($data['create_at'])
 		));
 	}
 

@@ -171,11 +171,26 @@ class ForumController extends Controller {
 			EmpireModel::query('thread')->updateOne('views', 'id = '.$id);
 		}
 		$data = EmpireModel::query('thread')->findById($id);
-		$page = EmpireModel::query('thread_post')->getPage(array(
+		$page = EmpireModel::query('thread_post p')->getPage(array(
+			'left' => [
+				'user u',
+				'p.user_id = u.id'
+			],
+			'where' => array(
+				'p.thread_id = '.$id
+			),
+			'order' => 'p.first desc,p.create_at asc'
+		), array(
+			'user' => 'p.user_id',
+			'`name`' => 'u.name',
+			'avatar' => 'u.avatar',
+			'content' => 'p.content',
+			'create_at' => 'p.create_at',
+			'first' => 'p.first'
+		), array(
 			'where' => array(
 				'thread_id = '.$id
-			),
-			'order' => 'first desc,create_at'
+			)
 		));
 		$this->show(array(
 			'title' => $data['title'],

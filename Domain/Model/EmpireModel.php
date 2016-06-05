@@ -186,4 +186,21 @@ class EmpireModel extends Model {
         }
         return self::$instance;
     }
+
+    public static function message($user, $title, $content, $type = 0) {
+        $id = static::query('bulletin')->add([
+            'title' => $title,
+            'content' => $content,
+            'type' => $type,
+            'create_at' => time()
+        ]);
+        if (empty($id)) {
+            return false;
+        }
+        $data = [];
+        foreach ((array)$user as $item) {
+            $data[] = [$id, $item];
+        }
+        return static::query('bulletin_user')->addValues(['bulletin_id', 'user_id'], $data);
+    }
 }

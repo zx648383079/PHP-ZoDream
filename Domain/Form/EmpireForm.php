@@ -31,11 +31,17 @@ class EmpireForm extends Form {
             'email'    => 'required|email',
             'password' => 'required|string:3-30'
         ))) {
+            $this->send('message', '验证失败！');
             return false;
         }
         $model =  EmpireModel::query('user');
-        $user = $model->findOne("email = '{$data['email']}'");
+        $user = $model->findOne(['email' => $data['email']]);
+        if (empty($user)) {
+            $this->send('message', '邮箱未注册！');
+            return false;
+        }
         if (!Hash::verify($data['password'], $user['password'])) {
+            $this->send('message', '密码错误！');
             return false;
         }
         $user['previous_ip'] = $user['update_ip'];
@@ -93,6 +99,7 @@ class EmpireForm extends Form {
         unset($data['repassword'], $data['agree']);
         $data['password'] = Hash::make(($data['password']));
         $data['create_at'] = time();
+        $data['avatar'] = '/assets/images/avatar/'.random_int(0, 48).'.png';
         $data['create_ip'] = Request::ip();
         return !empty(EmpireModel::query('user')->add($data));
     }

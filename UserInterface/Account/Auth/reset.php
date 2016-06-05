@@ -15,10 +15,10 @@ $this->extend(array(
     <form method="POST">
         <input type="hidden" name="email" value="<?=$this->get('email')?>">
         <input type="hidden" name="token" value="<?=$this->get('token')?>">
-        <input type="password" name="password" value="" required placeholder="密码"> </br>
-        <input type="password" name="repassword" value="" required placeholder="重复密码"> </br>
+        <input type="password" class="form-control" name="password" value="" required placeholder="密码"> </br>
+        <input type="password" class="form-control" name="repassword" value="" required placeholder="重复密码"> </br>
         <p class="text-danger"><?=$this->get('message')?></p>
-        <button type="submit">重置</button>
+        <button class="btn btn-primary" type="submit">重置</button>
     </form>
 </div>
 

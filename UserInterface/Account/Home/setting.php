@@ -15,28 +15,18 @@ $this->extend(array(
 ?>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <img src="">
-        </div>
-        <div class="col-md-9">
-            <p><?=Auth::user()['name']?> <button class="btn btn-primary">签到</button></p>
-            <p><?=Html::a('查看个人信息', 'user/info')?></p>
-            <p>个性签名</p>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-3">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <?=Html::a('动态', 'message/index')?>
+                    <?=Html::a('个人信息', 'info')?>
                 </li>
                 <li class="list-group-item">
-                    <?=Html::a('博客', ['message/index'])?>
+                    <?=Html::a('安全中心', ['security'])?>
                 </li>
                 <li class="list-group-item">
-                    <?=Html::a('论坛', ['message/index'])?>
+                    <?=Html::a('隐私设置', ['setting'])?>
                 </li>
             </ul>
         </div>

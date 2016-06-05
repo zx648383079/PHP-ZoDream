@@ -1,38 +1,61 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
+use Zodream\Domain\Authentication\Auth;
 /** @var $this \Zodream\Domain\Response\View */
+/** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
-	'layout' => array(
-		'head'
-	)), array(
-        'zodream/login.css'
+    'layout' => array(
+        'head',
+        'navbar'
+    )), array(
+        'zodream/account.css'
     )
 );
-$code = $this->get('code');
 ?>
 
-<div class="login">
-    <h2 class="text-center">后台登录</h2>
-    <form method="POST">
-        <input type="email" name="email" value="" required placeholder="邮箱"> </br>
-        <input type="password" name="password" value="" required placeholder="密码"> </br>
-        <?php if (!is_null($code)) {?>
-        <input type="text" name="code" class="code" required placeholder="验证码">
-        <img id="verify" src="<?php $this->url('verify');?>" title="验证码"> </br>
-        <?php }?>
-        <input type="checkbox" name="remember" value="1">记住我</br>
-        <button type="submit">登录</button>
-        <p><?=Html::a('忘记密码?', 'find')?> 或 没有账号？先 <a href="<?php $this->url('account/register');?>">注册</a>  </p>
-    </form>
+<div class="container">
+    <div class="row" id="info">
+        <div class="col-md-3">
+            <img src="<?=Auth::user()['avatar']?>">
+        </div>
+        <div class="col-md-9">
+            <p><?=Auth::user()['name']?> <button class="btn btn-primary">签到</button></p>
+            <p><?=Html::a('查看个人信息', 'info')?></p>
+            <p>个性签名</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <?=Html::a('动态', '#')?>
+                </li>
+                <li class="list-group-item">
+                    <?=Html::a('博客', ['#'])?>
+                </li>
+                <li class="list-group-item">
+                    <?=Html::a('论坛', ['#'])?>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <ul class="list-group">
+                <li class="list-group-item">Cras justo odio</li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <?php
 $this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        '!js require(["admin/login"]);'
-    )
+    'layout' => array(
+        'foot'
+    ))
 );
 ?>

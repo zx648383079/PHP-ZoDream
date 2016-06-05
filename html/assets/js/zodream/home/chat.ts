@@ -8,8 +8,9 @@
         }
         $.post("/chat/send", {
             user: USER,
+            content: content
         }, function (data) {
-            if (data.success != "success") {
+            if (data.status != "success") {
                 alert(data.error);
                 return;
             }
@@ -22,7 +23,7 @@
 
     var get = setInterval(function () {
         $.getJSON("/chat/get?user=" + USER +"&time=" + time, function (data) {
-            if (data.success != "success") {
+            if (data.status != "success") {
                 alert("服务器出错");
                 return;
             }

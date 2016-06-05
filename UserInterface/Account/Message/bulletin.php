@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Html\Bootstrap\AccordionWidget;
 /** @var $this \Zodream\Domain\Response\View */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
@@ -15,29 +15,31 @@ $this->extend(array(
 ?>
 
 <div class="container">
-
     <div class="row">
         <div class="col-md-3">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <?=Html::a('个人信息', 'user/info')?>
+                    <span class="badge">14</span>
+                    <?=Html::a('私信', 'message/index')?>
                 </li>
                 <li class="list-group-item">
-                    <?=Html::a('安全中心', ['user/security'])?>
+                    <span class="badge">1</span>
+                    <?=Html::a('系统消息', ['message/bulletin'])?>
                 </li>
                 <li class="list-group-item">
-                    <?=Html::a('隐私设置', ['user/setting'])?>
+                    <span class="badge">1</span>
+                    <?=Html::a('通知', ['message/bulletin', 'type' => '1'])?>
                 </li>
             </ul>
         </div>
         <div class="col-md-9">
-            <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
+            <?=AccordionWidget::show([
+                'data' => $this->get('data'),
+                'item' => [
+                    'title',
+                    'content'
+                ]
+            ])?>
         </div>
     </div>
 </div>
