@@ -57,9 +57,6 @@ class AuthController extends Controller {
 			return;
 		}
 		$url = Request::get('ReturnUrl', 'index.php');
-		if (strpos($url, 'account.php')) {
-			$url = 'index.php';
-		}
 		Redirect::to($url);
 	}
 

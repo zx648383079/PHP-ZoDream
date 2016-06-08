@@ -10,6 +10,7 @@ use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request;
 
 class ForumController extends Controller {
+	
 	protected function rules() {
 		return array(
 			'add' => '@'

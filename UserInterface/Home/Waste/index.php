@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\ObjectExpand\TimeExpand;
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\Response\View */
 $this->extend(array(
 	'layout' => array(
@@ -22,12 +22,12 @@ $this->extend(array(
 		<tbody>
 		<?php foreach ($this->get('data', array()) as $item) {?>
 			<tr>
-				<td><?=$item[0]['code']?></td>
+				<td><?=Html::a($item[0]['code'], ['waste/view', 'id' => $item[0]['id']])?></td>
 				<td><?=$item[0]['name']?></td>
-				<td><?=TimeExpand::format($item[0]['update_at'])?></td>
+				<td><?php $this->time($item[0]['update_at'])?></td>
 				<td>
 					<?php foreach ($item[1] as $value) {?>
-						<p><?=$value['company']?></p>
+						<p><?=Html::a($value['company'], ['waste/company', 'id' => $value['company_id']])?></p>
 					<?php }?>
 				</td>
 			</tr>

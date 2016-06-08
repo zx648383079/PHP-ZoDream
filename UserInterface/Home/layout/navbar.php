@@ -1,4 +1,8 @@
 <?php
+use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Html;
+use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Routing\Url;
 /** @var $this \Zodream\Domain\Response\View */
 ?>
 <nav class="navbar navbar-default" role="navigation">
@@ -23,9 +27,27 @@
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <input type="text" name="search" class="form-control" placeholder="搜索">
+                <input type="text" name="search" class="form-control" value="<?=Request::get('search')?>" placeholder="搜索">
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
+
+        <ul class="nav navbar-nav navbar-right">
+            <?php if (Auth::guest()) :?>
+                <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => Url::to()])?></li>
+                <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
+            <?php else:?>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?=Auth::user()['name']?><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><?=Html::a('消息', ['account.php/message'])?></li>
+                    <li><?=Html::a('个人中心', ['account.php/info'])?></li>
+                    <li><?=Html::a('安全中心', ['account.php/security'])?></li>
+                    <li role="separator" class="divider"></li>
+                    <li><?=Html::a('登出', ['account.php/auth/logout'])?></li>
+                </ul>
+            </li>
+           <?php endif;?>
+        </ul>
     </div><!-- /.navbar-collapse -->
 </nav>

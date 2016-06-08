@@ -29,6 +29,12 @@ $this->extend(array(
                 <a href="<?php $this->url('waste');?>">废料科普</a>
             </div>
         </div>
+
+        <div class="col-md-3">
+            <div>
+                <a href="<?php $this->url('question');?>">问答</a>
+            </div>
+        </div>
     </div>
 </div>
 

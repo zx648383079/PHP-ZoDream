@@ -371,3 +371,8 @@ table th[class*="col-"] {
   background-color: #eee;
   border-left: 1px solid #39f;
 }
+
+.waste-item {
+    text-align: center;
+    border: 1px dotted #cccc77;
+}

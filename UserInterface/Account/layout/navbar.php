@@ -12,12 +12,13 @@ use Zodream\Infrastructure\Html;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php $this->url('/');?>">ZoDream</a>
+        <a class="navbar-brand" href="<?php $this->url('index.php');?>">ZoDream</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
+            <li><a href="<?php $this->url('index.php');?>">首页</a></li>
             <li><a href="<?php $this->url('/');?>">个人中心</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
