@@ -40,10 +40,26 @@ class QuestionController extends Controller {
 		));
 	}
 
-	function addAction($id) {
-		$this->show(array(
-			'id' => $id
-		));
+	function addAction() {
+		$this->show([
+			'title' => '我要提问'
+		]);
+	}
+
+	/**
+	 * @param Request\Post $post
+	 */
+	function addPost($post) {
+		$row = EmpireModel::query('question')->save([
+			'title' => 'required|string:1-200',
+			'content' => '',
+			'user_id' => '',
+			'create_at' => ''
+		], $post->get());
+		if (empty($row)) {
+			$this->send($post->get());
+		}
+		Redirect::to(['question']);
 	}
 
 

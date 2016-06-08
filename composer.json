@@ -5,8 +5,7 @@
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",
     "phpmailer/phpmailer": "~5.2",
-    "mobiledetect/mobiledetectlib": "^2.8",
-    "lixuancn/lanewechat": "^1.5"
+    "mobiledetect/mobiledetectlib": "^2.8"
   },
   "autoload" : {
     "psr-4" : {
