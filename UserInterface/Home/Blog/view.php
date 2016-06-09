@@ -83,7 +83,7 @@ $comment = $this->get('comment', array());
                     <?php else:?>
                         <?=$item['name']?>
                     <?php endif;?>
-                    <a class="reply" data="<?=$item['name'];?>" href="javascript:;">回复</a>
+                    <a class="reply" data="<?=$item['name'];?>" href="javascript:;" data="<?=$item['id']?>">回复</a>
                     <?php if (!Auth::guest() && !empty($item['user_id']) && $item['user_id'] != Auth::user()['id']) :?>
                         <?=Html::a('私信', ['account.php/message/send', 'id' => $item['user_id']])?>
                     <?php endif;?>

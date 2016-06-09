@@ -24,6 +24,7 @@ use Zodream\Domain\Routing\Url;
             <li<?php $this->cas($this->hasUrl('blog'), ' class="active"');?>><a href="<?php $this->url('blog');?>">博客</a></li>
             <li<?php $this->cas($this->hasUrl('laboratory'));?>><a href="<?php $this->url('laboratory');?>">实验室</a></li>
             <li<?php $this->cas($this->hasUrl('talk'));?>><a href="<?php $this->url('talk');?>">日志</a></li>
+            <li<?php $this->cas($this->hasUrl('about'));?>><a href="<?php $this->url('about');?>">关于</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">

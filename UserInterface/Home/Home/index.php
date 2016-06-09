@@ -1,103 +1,154 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Authentication\Auth;
 /** @var $this \Zodream\Domain\Response\View */
 $this->extend(array(
     'layout' => array(
-        'head'
-    ))
+        'head',
+        'navbar'
+    )), array(
+        'flexslider.css',
+        'zodream/home.css'
+    )
 );
-$data = $this->get('data', array());
 ?>
 
-<div class="main">
-    <div class="search">
-        <select id="s">
-            <option value="baidu">百度</option>
-            <option value="bing">必应</option>
-            <option value="github">Github</option>
-        </select>
-        <input type="text" id="p" placeholder="搜索">
-        <button id="search">搜索</button>
+    <div class="banner">
+        <div class="container-fluid">
+            <section class="slider">
+                <div class="flexslider">
+                    <ul class="slides">
+                        <?php foreach ($this->get('data', array()) as $item):?>
+                        <li>
+                            <div class="banner-top">
+                                <h2><?=$item['title']?></h2>
+                                <p><?=\Infrastructure\HtmlExpand::shortString($item['content'], 300)?></p>
+                                <div class="bnr-btn">
+                                    <a href="<?php $this->url(['blog/view', 'id' => $item['id']])?>" class="hvr-shutter-out-horizontal">阅读更多</a>
+                                </div>
+                            </div>
+                        </li>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+            </section>
+        </div>
     </div>
-    
-    <div class="table">
+
+    <div class="container-fluid provide">
         <div class="row">
-            <div>
-                站内
+            <div class="col-md-3 provide-1">
+                <h3>ZoDream</h3>
+                <p>PHP 框架，起源于 “做梦” ,汲取其他开源代码！服务大众，永久开源！</p>
             </div>
-            <div class="column">
-                <div>
-                    <a href="<?php $this->url('blog');?>">博客</a>
-                </div>
-                 <div>
-                    <a href="<?php $this->url('laboratory');?>">实验室</a>
-                </div>
-                 <div>
-                    <a href="<?php $this->url('talk');?>">日志</a>
-                </div>
+
+            <div class="col-md-3 provide-2">
+                <h3>WPF ZoDream</h3>
+                <p>为框架的工具集，使用 C# 编写，主要使用 WPF、UWP 开发，主要使用 MVVMLIGHT 作为框架，所有软件永久开源。</p>
             </div>
+
+            <div class="col-md-3 provide-3">
+                <h3>GO ZoDream</h3>
+                <p>目前有基于 beego 的网页 及 pholcus 的爬虫规则 </p>
+            </div>
+
+            <div class="col-md-3 provide-4">
+                <h3>HTML ZoDream</h3>
+                <p>包括部分界面，JS框架, TS 代码， HTML5 游戏</p>
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <?php foreach ($data as $value) {?>
-         <div class="row">
-            <div>
-                <?php echo $value[0]['category'];?>
-            </div>
-            <div class="column">
-                <?php foreach ($value[1] as $item) {?>
-                <div>
-                    <a href="<?php echo $item['url'];?>" target="_blank"><?php echo $item['name'];?></a>
-                </div>
-                <?php }?>
-            </div>
-        </div>
-        <?php }?>
-        <?php if (!Auth::guest()) {?>
+    </div>
+
+    <div class="container blog">
         <div class="row">
-            <div>
-                增加
+            <div class="col-md-6">
+                <h3>博客</h3>
+                <p>包括学习经验，及相关教程。</p>
+                <a href="<?php $this->url(['blog'])?>" class="btn-show">查看</a>
             </div>
-            <div class="column">
-                <div>
-                    <a id="addCategory" href="javascript:0;">分类</a>
-                </div>
-                <div>
-                    <a id="addWeb" href="javascript:0;">网址</a>
-                </div>
-            </div>
-        </div>
-        <div id="category" class="dialog">
-            <div>
-                <form method="POST">
-                    <input type="text" name="name" placeholder="分类">
-                    <button type="submit">增加</button>
-                </form>
+            <div class="col-md-6">
+                <h3>文档</h3>
+                <p>完善中。。。</p>
+                <a href="<?php $this->url(['document'])?>" class="btn-show">阅读</a>
             </div>
         </div>
-        <div id="web" class="dialog">
-            <div>
-                <form method="POST">
-                    名称：<input type="text" name="name" value="" placeholder="名称"> </br>
-                    网址：<input type="text" name="url" value="" placeholder="网址"> </br>
-                    分类：<select name="category_id">
-                        <?php foreach($this->get('category', array()) as $item) {?>
-                        <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
-                        <?php }?>
-                    </select>
-                    <button type="submit">增加</button>
-                </form>
+    </div>
+
+<div class="task">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 provide-1">
+                <span class="glyphicon glyphicon-music"></span>
+                <h3>休闲</h3>
+                <p>必要的休息只为更好的工作。娱乐环节待开发。。。</p>
             </div>
+
+            <div class="col-md-3 provide-2">
+                <span class="glyphicon glyphicon-bell"></span>
+                <h3>规律</h3>
+                <p>万物皆有规律，有规律的生活有助于工作。</p>
+            </div>
+
+            <div class="col-md-3 provide-3">
+                <span class="glyphicon glyphicon-user"></span>
+                <h3>人</h3>
+                <p>以人为本！</p>
+            </div>
+
+            <div class="col-md-3 provide-4">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+                <h3>鼓励</h3>
+                <p>有效鼓励是必要的！</p>
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <?php }?>
     </div>
 </div>
 
+<div class="container pics">
+    <ul>
+        <li>
+            <a href="#">
+                <div class="txt">
+                    <p class="p1">作者 ： 默默的墨墨</p>
+                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <div class="txt">
+                    <p class="p1">作者 ： 默默的墨墨</p>
+                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <div class="txt">
+                    <p class="p1">作者 ： 默默的墨墨</p>
+                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <div class="txt">
+                    <p class="p1">作者 ： 默默的墨墨</p>
+                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
 <?php
 $this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        '!js require([\'home/home\']);'
+    'layout' => array(
+        'foot'
+    )), array(
+        '!js require(["home/home"]);'
     )
 );
 ?>

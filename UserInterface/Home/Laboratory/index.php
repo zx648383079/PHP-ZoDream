@@ -16,6 +16,11 @@ $this->extend(array(
     <div class="row lab">
         <div class="col-md-3">
             <div>
+                <a href="<?php $this->url('navigation');?>">导航</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div>
                 <a href="<?php $this->url('forum');?>">论坛</a>
             </div>
         </div>
@@ -33,6 +38,12 @@ $this->extend(array(
         <div class="col-md-3">
             <div>
                 <a href="<?php $this->url('question');?>">问答</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div>
+                <a href="<?php $this->url('company');?>">公司供求</a>
             </div>
         </div>
     </div>
