@@ -376,3 +376,43 @@ table th[class*="col-"] {
     text-align: center;
     border: 1px dotted #cccc77;
 }
+
+.fixed-slide {
+  position:fixed;
+  width:54px;
+  height:275px;
+  right:0;
+  top:214px;
+  z-index:100;
+}
+
+.fixed-slide li {
+  width:54px;
+  height:54px;
+  float:left;
+  position:relative;
+  border-bottom:1px solid #444;
+}
+
+.fixed-slide li:last-child {
+  border: none;
+}
+
+.fixed-slide li .box {
+  position:absolute;
+  width:54px;
+  height:54px;
+  top:0;
+  right:0;
+  transition:all 0.3s;
+  background:#000;
+  opacity:0.8;
+  filter:Alpha(opacity=80);
+  color:#fff;
+  font:14px/54px "微软雅黑";
+  overflow:hidden;
+}
+
+.fixed-slide li img {
+  float: left;
+}

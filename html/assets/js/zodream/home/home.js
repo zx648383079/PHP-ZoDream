@@ -1,24 +1,15 @@
 ;
-define(["jquery", "admin/zodream"], function () {
-    $("#search").click(function () {
-        zodream.main.search();
-    });
-    $("#p").keyup(function (event) {
-        if (event.keyCode == 13) {
-            zodream.main.search();
+define(["jquery", "flexslider"], function () {
+    $('.flexslider').flexslider({
+        animation: "slide",
+        start: function (slider) {
+            $('body').removeClass('loading');
         }
     });
-    $("#addCategory").click(function () {
-        $("#category").show();
-    });
-    $("#addWeb").click(function () {
-        $("#web").show();
-    });
-    $(".dialog").click(function (event) {
-        if ($(event.target).is('.dialog-close') || $(event.target).is('.dialog')) {
-            event.preventDefault();
-            $(this).hide();
-        }
+    var width = $(".pics").width() - 300;
+    $(".pics ul li").last().css("width", width);
+    $(".pics ul li").hover(function () {
+        $(this).stop(true).animate({ width: width + "px" }, 500).siblings().stop(true).animate({ width: "100px" }, 500);
     });
 });
 //# sourceMappingURL=home.js.map
