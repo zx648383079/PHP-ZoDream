@@ -9,7 +9,9 @@ use Zodream\Domain\Authentication\Auth;
 use Zodream\Domain\Filter\DataFilter;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Routing\Url;
+use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
 use Zodream\Infrastructure\Cookie;
+use Zodream\Infrastructure\Error;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Infrastructure\ObjectExpand\Hash;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
@@ -17,11 +19,15 @@ use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Session;
 use Zodream\Infrastructure\Template;
+use Zodream\Infrastructure\Traits\AjaxTrait;
 
 class AuthController extends Controller {
+	use AjaxTrait;
+
 	protected function rules() {
 		return array(
 			'logout' => '@',
+			'check' => '*',
 			'*' => '?'
 		);
 	}
@@ -182,5 +188,46 @@ class AuthController extends Controller {
 		Session::getInstance()->clear();
 		Cookie::delete('token');
 		Redirect::to('/');
+	}
+
+	/**
+	 * @param string $type
+	 * @return BaseOAuth
+	 */
+	protected function getOAuth($type = 'qq') {
+		static $maps = [
+			'qq' => 'QQ',
+			'alipay' => 'ALiPay',
+			'baidu' => 'BaiDu',
+			'taobao' => 'TaoBao',
+			'weibo' => 'WeiBo',
+			'wechat' => 'WeChat'
+		];
+		$type = strtolower($type);
+		if (!array_key_exists($type, $maps)) {
+			Error::out($type.' 的第三方登录组件不存在！', __FILE__, __LINE__);
+		}
+		$class = 'Zodream\\Domain\\ThirdParty\\OAuth\\'.$maps[$type];
+		return new $class;
+	}
+
+	function oauthAction($type = 'qq') {
+		$oauth = $this->getOAuth($type);
+		$oauth->login();
+	}
+
+	/**
+	 * 验证第三方是否登录
+	 */
+	function checkAction() {
+		if (Auth::guest()) {
+			$this->ajaxReturn([
+				'status' => 'failure',
+			]);
+		}
+		$this->ajaxReturn([
+			'status' => 'success',
+			'url' => '/'
+		]);
 	}
 }

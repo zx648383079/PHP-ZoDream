@@ -63,15 +63,15 @@
     },
 
     initTooltip: function () {
-      this.$avatarView.tooltip({
-        placement: 'bottom'
-      });
+      //this.$avatarView.tooltip({
+       // placement: 'bottom'
+      //});
     },
 
     initModal: function () {
-      this.$avatarModal.modal({
-        show: false
-      });
+      //this.$avatarModal.modal({
+        //show: false
+      //});
     },
 
     initPreview: function () {

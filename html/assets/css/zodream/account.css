@@ -1,9 +1,20 @@
-#info {
-    height: 200px
+#choose ul li {
+    display: inline-block;
+    margin: 2px;
 }
 
-#info img {
-    height: 150px;
-    width: 150px;
-    float: right;
+#choose ul li:hover img,
+#choose ul li.active img {
+    border: 5px solid cadetblue;
+    border-radius: 10px;
+}
+
+#choose>div {
+    height: 300px;
+    overflow-y: auto;
+}
+
+#choose ul li img {
+    width: 75px;
+    height: 75px;
 }

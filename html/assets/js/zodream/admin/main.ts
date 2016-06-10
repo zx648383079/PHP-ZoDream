@@ -25,7 +25,8 @@
               text:'系统设置',
               items:[
                 {id:'option',text:'系统参数设置',href:'admin.php/option'},
-                {id:'link',text:'友情链接',href:'admin.php/link'}  
+                {id:'link',text:'友情链接',href:'admin.php/link'},
+                {id:'feedback',text:'反馈',href:'admin.php/feedback'}
               ]
             },{
               text:'文件结构',
