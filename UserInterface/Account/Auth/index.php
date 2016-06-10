@@ -26,6 +26,14 @@ $code = $this->get('code');
         <button class="btn btn-primary" type="submit">登录</button>
         <p><?=Html::a('忘记密码?', 'auth/find')?> 或 没有账号？先 <a href="<?php $this->url('auth/register');?>">注册</a>  </p>
     </form>
+    <div class="row oauth">
+        <span>其他方式登录：</span>
+        <a href="javascript:;" class="qq" title="QQ"></a>
+        <a href="javascript:;" class="weibo" title="微博"></a>
+        <a href="javascript:;" class="baidu" title="百度"></a>
+        <a href="javascript:;" class="weixin" title="微信"></a>
+        <a href="javascript:;" class="github" title="Github"></a>
+    </div>
 </div>
 
 <?php

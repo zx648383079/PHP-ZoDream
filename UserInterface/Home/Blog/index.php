@@ -55,16 +55,6 @@ $page = $this->get('page');
     </div>
 
 </div>
-
-    <div class="fixed-slide">
-        <ul>
-            <li><a href="#" target="_blank"><div class="box"><img src="<?php $this->asset('images/icon/icon01.png');?>">客服中心</div></a></li>
-            <li><a href="#" target="_blank"><div class="box"><img src="<?php $this->asset('images/icon/icon02.png');?>">客户案例</div></a></li>
-            <li><a href="#" target="_blank"><div class="box"><img src="<?php $this->asset('images/icon/icon04.png');?>">QQ客服</div></a></li>
-            <li><a href="#" target="_blank"><div class="box"><img src="<?php $this->asset('images/icon/icon03.png');?>">新浪微博</div></a></li>
-            <li><a href="javascript:;" class="toTop"><div class="box"><img src="<?php $this->asset('images/icon/icon05.png');?>">返回顶部</div></a></li>
-        </ul>
-    </div>
 <?php
 $this->extend(array(
 	'layout' => array(

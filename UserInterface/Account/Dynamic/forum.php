@@ -34,7 +34,7 @@ $page = $this->get('page');
             <ul class="list-group">
                 <?php foreach ($page->getPage() as $item) :?>
                 <li class="list-group-item">
-                    <?=$item['title']?>
+                    <?=Html::a($item['title'], ['index.php/blog/view', 'id' => $item['id']])?>
                     <?php $this->ago($item['create_at']);?>
                 </li>
                 <?php endforeach;?>

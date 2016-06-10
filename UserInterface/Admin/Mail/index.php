@@ -20,7 +20,7 @@ $this->extend(array(
             <?=FormWidget::begin()
                 ->textArea('email', ['label' => '邮箱', 'required' => true])
                 ->text('title', ['label' => '标题', 'required' => true])
-                ->checkbox('html', ['label' => '是否为HTML'])
+                ->checkbox('html', ['label' => '是否为HTML', 'text' => '是'])
                 ->textArea('content', ['label' => '内容', 'required' => true])
                 ->button()
                 ->end();
