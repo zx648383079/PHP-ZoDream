@@ -1,9 +1,11 @@
 <?php
 defined('APP_DIR') or exit();
 $this->extend(array(
-		'layout' => array(
-				'head'
-		)), array(), false
+	'layout' => array(
+		'head'
+	)), array(
+		'zodream/error.css'
+	), false
 );
 ?>
 <div class="ms-Grid">

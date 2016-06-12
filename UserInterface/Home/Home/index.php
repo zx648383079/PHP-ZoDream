@@ -110,32 +110,32 @@ $this->extend(array(
         <li>
             <a href="#">
                 <div class="txt">
-                    <p class="p1">作者 ： 默默的墨墨</p>
-                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                    <p class="p1"></p>
+                    <p class="p2">坚持</p>
                 </div>
             </a>
         </li>
         <li>
             <a href="#">
                 <div class="txt">
-                    <p class="p1">作者 ： 默默的墨墨</p>
-                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                    <p class="p1"></p>
+                    <p class="p2">坚持</p>
                 </div>
             </a>
         </li>
         <li>
             <a href="#">
                 <div class="txt">
-                    <p class="p1">作者 ： 默默的墨墨</p>
-                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                    <p class="p1"></p>
+                    <p class="p2">坚持</p>
                 </div>
             </a>
         </li>
         <li>
             <a href="#">
                 <div class="txt">
-                    <p class="p1">作者 ： 默默的墨墨</p>
-                    <p class="p2">我的个人拉萨之旅｜｜故事之城</p>
+                    <p class="p1"></p>
+                    <p class="p2">坚持</p>
                 </div>
             </a>
         </li>
