@@ -15,7 +15,7 @@ $this->extend(array(
           </div>
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    
+                    <?php $this->extend('Wechat/editor');?>
                     
                     
                         

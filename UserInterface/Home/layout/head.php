@@ -6,6 +6,7 @@
 <head>
 <title><?php $this->ech('title', 'ZoDream');?>-<?php $this->ech('tagline', 'ZoDream');?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="qc:admins" content="604324756425156367" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="Keywords" content="<?php $this->ech('keywords');?>" />
 <meta name="Description" content="<?php $this->ech('description');?>" />
