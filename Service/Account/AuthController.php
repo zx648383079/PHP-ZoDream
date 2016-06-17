@@ -10,6 +10,7 @@ use Zodream\Domain\Filter\DataFilter;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Routing\Url;
 use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
+use Zodream\Domain\ThirdParty\OAuth\QQ;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Error;
 use Zodream\Infrastructure\Mailer\Mailer;
@@ -201,7 +202,8 @@ class AuthController extends Controller {
 			'baidu' => 'BaiDu',
 			'taobao' => 'TaoBao',
 			'weibo' => 'WeiBo',
-			'wechat' => 'WeChat'
+			'wechat' => 'WeChat',
+			'github' => 'GitHub'
 		];
 		$type = strtolower($type);
 		if (!array_key_exists($type, $maps)) {
@@ -214,6 +216,10 @@ class AuthController extends Controller {
 	function oauthAction($type = 'qq') {
 		$oauth = $this->getOAuth($type);
 		$oauth->login();
+	}
+
+	function qqAction() {
+		$oauth = new QQ();
 	}
 
 	/**
