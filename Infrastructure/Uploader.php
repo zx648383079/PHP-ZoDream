@@ -71,7 +71,7 @@ class Uploader {
         if ($this->file['error']) {
             $this->stateInfo = $this->getStateInfo($file['error']);
             return;
-        } else if (!file_exists($file['tmp_name'])) {
+        } else if (!is_file($file['tmp_name'])) {
             $this->stateInfo = $this->getStateInfo('ERROR_TMP_FILE_NOT_FOUND');
             return;
         } else if (!is_uploaded_file($file['tmp_name'])) {
@@ -85,7 +85,8 @@ class Uploader {
         }
 
         //移动文件
-        if (!(move_uploaded_file($file['tmp_name'], $this->filePath) && file_exists($this->filePath))) { //移动失败
+        if (!(move_uploaded_file($file['tmp_name'], $this->filePath) && 
+            is_file($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo('ERROR_FILE_MOVE');
             return;
         }
@@ -176,7 +177,8 @@ class Uploader {
             return;
         }
         //移动文件
-        if (!(file_put_contents($this->filePath, $content) && file_exists($this->filePath))) { //移动失败
+        if (!(file_put_contents($this->filePath, $content) && 
+            is_file($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo('ERROR_WRITE_CONTENT');
             return;
         }
@@ -204,7 +206,7 @@ class Uploader {
 
         $dirName = dirname($this->filePath);
         //创建目录失败
-        if (!file_exists($dirName) && !mkdir($dirName, 0777, true)) {
+        if (!is_file($dirName) && !mkdir($dirName, 0777, true)) {
             $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
             return false;
         }
