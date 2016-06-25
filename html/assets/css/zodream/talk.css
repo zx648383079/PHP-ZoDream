@@ -90,6 +90,13 @@ a:hover {
 .clearfix:after {
 	clear:both;
 }
+
+.footer {
+	background-color: #3a3c48;
+	margin: 0;
+	border: none;
+}
+
 .content {
 	position:relative;
 	width:1000px;

@@ -2,6 +2,7 @@
 namespace Service\Home;
 
 use Domain\Model\EmpireModel;
+use Zodream\Domain\Authentication\Auth;
 use Zodream\Domain\Response\ResponseResult;
 use Zodream\Domain\Routing\Controller as BaseController;
 use Zodream\Domain\Routing\Router;
@@ -28,14 +29,18 @@ abstract class Controller extends BaseController {
 	 * @param $id
 	 */
 	public function runCache($id = null) {
+		$update = Request::get('cache', false);
+		if (!Auth::guest() && empty($update)) {
+			return;
+		}
 		if (empty($id)) {
 			$id = serialize(Router::getClassAndAction());
 		}
 		$id = md5($id);
-		$update = Request::get('cache', false);
 		if (empty($update) && ($cache = Factory::cache()->get($id))) {
 			return ResponseResult::make($cache);
 		}
+		$this->send('updateCache', true);
 		EventManger::getInstance()->add('showView', function ($content) use ($id) {
 			Factory::cache()->set($id, $content, 12 * 3600);
 		});
