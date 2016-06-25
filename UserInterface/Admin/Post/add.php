@@ -46,11 +46,7 @@ $this->extend(array(
     'layout' => array(
         'foot'
     )), array(
-        function(){?>
-<script type="text/javascript">
-require(['admin/add']);
-</script>
-			<?php }
-        )
+        '!js require(["admin/add"]);'
+    )
 );
 ?>

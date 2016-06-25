@@ -54,6 +54,7 @@ class ForumController extends Controller {
 	}
 
 	function indexAction() {
+		$this->runCache('forum.index');
 		$data = EmpireModel::query('forum')->findAll(array(
 			'where' => array(
 				'type' => array(

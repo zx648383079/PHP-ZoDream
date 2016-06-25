@@ -5,10 +5,13 @@ use Domain\Model\EmpireModel;
 use Zodream\Domain\Model;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Routing\Controller as BaseController;
-use Zodream\Domain\Routing\Url;
 use Zodream\Infrastructure\Log;
+use Zodream\Infrastructure\Traits\AjaxTrait;
 
 abstract class Controller extends BaseController {
+	
+	use AjaxTrait;
+	
 	protected function rules() {
 		return array(
 			'*' => 'admin'

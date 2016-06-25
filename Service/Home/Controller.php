@@ -4,6 +4,7 @@ namespace Service\Home;
 use Domain\Model\EmpireModel;
 use Zodream\Domain\Response\ResponseResult;
 use Zodream\Domain\Routing\Controller as BaseController;
+use Zodream\Domain\Routing\Router;
 use Zodream\Infrastructure\EventManager\EventManger;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Request;
@@ -26,7 +27,10 @@ abstract class Controller extends BaseController {
 	 * 执行缓存
 	 * @param $id
 	 */
-	public function runCache($id) {
+	public function runCache($id = null) {
+		if (empty($id)) {
+			$id = serialize(Router::getClassAndAction());
+		}
 		$id = md5($id);
 		$update = Request::get('cache', false);
 		if (empty($update) && ($cache = Factory::cache()->get($id))) {

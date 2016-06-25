@@ -8,6 +8,7 @@ use Infrastructure\HtmlExpand;
 
 class WasteController extends Controller {
 	function indexAction($search = null) {
+		$this->runCache('waste.index'.$search);
 		$where = null;
 		if (!empty($search)) {
 			$args = explode(' ', $search);

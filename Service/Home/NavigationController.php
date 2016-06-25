@@ -8,6 +8,7 @@ use Zodream\Infrastructure\Request;
 
 class NavigationController extends Controller {
     function indexAction() {
+        $this->runCache('navigation.index');
         $data = EmpireModel::query('navigation n')->findAll(array(
             'left' => array(
                 'navigation_category c',
