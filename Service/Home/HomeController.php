@@ -9,6 +9,7 @@ use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {
     function indexAction() {
+        $this->runCache('home.index');
         $data = EmpireModel::query('post')->findAll([
             'limit' => 4,
             'order' => 'recommend desc'
@@ -20,6 +21,7 @@ class HomeController extends Controller {
     }
 
     function aboutAction() {
+        $this->runCache('home.about');
         $this->show(array(
             'title' => '关于',
         ));

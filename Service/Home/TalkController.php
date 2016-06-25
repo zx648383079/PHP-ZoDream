@@ -6,6 +6,7 @@ use Infrastructure\HtmlExpand;
 
 class TalkController extends Controller {
 	function indexAction() {
+		$this->runCache('talk.index');
 		$data = EmpireModel::query('talk')->findAll(array(
 			'order' => 'create_at desc'
 		));
