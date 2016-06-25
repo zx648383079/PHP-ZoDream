@@ -53,6 +53,7 @@ vendor/
 
 log/
 temp/
+cache/
 composer.lock
 
 # vs

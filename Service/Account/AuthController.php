@@ -13,12 +13,12 @@ use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
 use Zodream\Domain\ThirdParty\OAuth\QQ;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Error;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Infrastructure\ObjectExpand\Hash;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Session;
 use Zodream\Infrastructure\Template;
 use Zodream\Infrastructure\Traits\AjaxTrait;
 
@@ -45,7 +45,7 @@ class AuthController extends Controller {
 		if ($num > 2) {
 			$num = intval($num / 3);
 			$this->send('code', $num);
-			Session::setValue('level', $num);
+			Factory::session()->set('level', $num);
 		}
 		$this->show(array(
 			'title' => '后台登录'
@@ -53,7 +53,7 @@ class AuthController extends Controller {
 	}
 
 	function indexPost() {
-		$code = Session::getValue('code');
+		$code = Factory::session()->get('code');
 		if (!empty($code) && strtolower($code) !== strtolower(Request::post('code'))) {
 			$this->send('message', '验证码错误！');
 			return;
@@ -186,7 +186,7 @@ class AuthController extends Controller {
 		EmpireModel::query('user')->updateById(Auth::user()['id'], array(
 			'token' => null
 		));
-		Session::getInstance()->clear();
+		Factory::session()->clear();
 		Cookie::delete('token');
 		Redirect::to('/');
 	}

@@ -32,21 +32,6 @@ class EmpireModel extends Model {
         return $this->fill($data);
     }
 
-    public function getMenu($type) {
-        return $this->setTable('enewsmenuclass c')->findAll(array(
-            'right' => array(
-                'enewsmenu m',
-                'm.classid = c.classid'
-            ),
-            'where' => array(
-                'c.classtype='.intval($type),
-                "(groupids='' or groupids like '%1%')"
-            ),
-            //'group' => 'c.classname',
-            'order' => 'c.classname,m.myorder,m.menuid'
-        ), 'c.classname as class,m.menuid as id,m.menuname as name,m.menuurl as url,m.addhash as hash');
-    }
-
     public function getRoles($id) {
         return $this->findByHelper(array(
             'select' => 'a.id as id,a.name as name',

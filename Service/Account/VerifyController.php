@@ -5,8 +5,8 @@ namespace Service\Account;
  */
 use Zodream\Domain\Image\VerifyCode;
 use Zodream\Domain\Response\Image;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Session;
 
 class VerifyController extends Controller {
 	protected function rules() {
@@ -18,10 +18,10 @@ class VerifyController extends Controller {
 	function indexAction() {
 		$level = intval(Request::get('level'));
 		if (empty($level)) {
-			$level = Session::getValue('level');
+			$level = Factory::session()->get('level');
 		}
 		$verify = new VerifyCode();
-		Session::getValue('code', $verify->getCode());
+		Factory::session()->get('code', $verify->getCode());
 		Image::show($verify->generate($level - 1));
 	}
 }

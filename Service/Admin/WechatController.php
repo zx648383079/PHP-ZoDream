@@ -12,8 +12,8 @@ use Domain\Model\WeChat\ReplyModel;
 use Domain\Model\WeChat\WeChatModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Response\Redirect;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Request\Post;
-use Zodream\Infrastructure\Session;
 
 class WechatController extends Controller {
 	function indexAction() {
@@ -63,7 +63,7 @@ class WechatController extends Controller {
 
 	function changeAction($id) {
 		$model = new WeChatModel();
-		Session::setValue('wechat', $model->findById($id));
+		Factory::session()->set('wechat', $model->findById($id));
 		Redirect::to('wechat', '2', '切换成功！');
 	}
 
@@ -82,7 +82,7 @@ class WechatController extends Controller {
 	 * @param Post $post
 	 */
 	function addReplyPost($post) {
-		$post['wechat_id'] = Session::getValue('wechat.id');
+		$post['wechat_id'] = Factory::session()->get('wechat.id');
 		$model = new ReplyModel();
 		$result = $model->fill($post);
 		if (!empty($result)) {

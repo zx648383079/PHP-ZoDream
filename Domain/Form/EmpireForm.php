@@ -10,6 +10,7 @@ use Domain\Model\EmpireModel;
 use Zodream\Domain\Authentication\Auth;
 use Zodream\Domain\Form;
 use Zodream\Infrastructure\Cookie;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\ObjectExpand\Hash;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Request;
@@ -78,7 +79,7 @@ class EmpireForm extends Form {
             'id' => 'a.id',
             'name' => 'a.name'
         ));
-        Session::getInstance()->set('user', $user);
+        Factory::session()->set('user', $user);
         return true;
     }
 
@@ -140,11 +141,11 @@ class EmpireForm extends Form {
         } else {
             EmpireModel::query('authorization_role')->delete('role_id = '.$id);
         }
-        $sql = '';
+        $sql = [];
         foreach ($auth as $item) {
-            $sql .= '('.$id.','.intval($item).'),';
+            $sql[] = [$id, intval($item)];
         }
-        EmpireModel::query('authorization_role')->insert('role_id,authorization_id', substr($sql, 1, -2));
+        EmpireModel::query('authorization_role')->addValues(['role_id', 'authorization_id'], $sql);
         return true;
     }
 
