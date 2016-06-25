@@ -4,6 +4,7 @@ namespace Service\Home;
 use Domain\Model\EmpireModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Authentication\Auth;
+use Zodream\Infrastructure\Config;
 use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {

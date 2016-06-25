@@ -1,0 +1,272 @@
+<?php
+namespace Domain\Model\Home;
+/**
+ * 访客记录
+CREATE TABLE IF NOT EXISTS `zd_visit_log` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`ip` VARCHAR(20) NOT NULL COMMENT 'IP地址',
+`browser` VARCHAR(45) NULL COMMENT '浏览器',
+`browser_version` VARCHAR(45) NULL COMMENT '浏览器版本',
+`os` VARCHAR(45) NULL COMMENT '操作系统',
+`os_version` VARCHAR(45) NULL COMMENT '操作系统版本',
+`session` VARCHAR(45) NULL COMMENT '会话标识',
+`url` TEXT NULL COMMENT '请求网址',
+`referer` VARCHAR(200) NULL COMMENT '来路',
+`agent` VARCHAR(255) NULL COMMENT '代理',
+`create_at` DATETIME NULL COMMENT '发生时间',
+PRIMARY KEY (`id`))
+ENGINE = InnoDB DEFAULT CHARSET=UTF8;
+ */
+use Domain\Model\Model;
+use Zodream\Domain\Routing\Url;
+use Zodream\Infrastructure\Factory;
+use Zodream\Infrastructure\ObjectExpand\TimeExpand;
+use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Traits\SingletonPattern;
+
+class VisitLogModel extends Model {
+
+	use SingletonPattern;
+
+	protected $table = 'visit_log';
+	
+	protected $fillAble = array(
+		'ip',
+		'browser',
+		'browser_version',
+		'os',
+		'os_version',
+		'session',
+		'url',
+		'referer',
+		'agent',
+		'create_at'
+	);
+
+	public static function addLog() {
+		$os = Request::os();
+		$browser = Request::browser();
+		return static::getInstance()->add([
+			'ip' => Request::ip(),
+			'browser' => $browser[0],
+			'browser_version' => $browser[1],
+			'os' => $os[0],
+			'os_version' => $os[1],
+			'referer' => Url::referrer(),
+			'url' => Url::to(),
+			'session' => Factory::session()->id(),
+			'agent' => Request::server('HTTP_USER_AGENT', '-'),
+			'create_at' => TimeExpand::format()
+		]);
+	}
+
+	/**
+	 * 获取每天的状态
+	 * @param array|string $where
+	 * @return array
+	 */
+	public static function getDayStatus($where = null) {
+		return self::getStatus($where, 'DAYOFMONTH');
+	}
+
+	/**
+	 * 获取每小时的状态
+	 * @param array|string $where
+	 * @return array
+	 */
+	public static function getHourStatus($where = null) {
+		return self::getStatus($where, 'HOUR');
+	}
+
+	/**
+	 * 获取IP最后访问时间
+	 * @param string|array $where
+	 * @return array
+	 */
+	public static function getLast($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 15
+		], 'ip, MAX(create_at) as create_at, referer');
+	}
+
+	/**
+	 * 获取所有的月份
+	 * @param string|array $where
+	 * @return array
+	 */
+	public static function geAllMonth($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => '1,2,3',
+			'order' => '1,2,3',
+			'limit' => 30
+		], 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp');
+	}
+
+	/**
+	 * 获取前三十名访问的网址
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function geTopUrl($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 30
+		], 'url, COUNT(*) as count');
+	}
+
+	/**
+	 * 获取前三十名访问者的IP
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function geTopIp($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 30
+		], 'ip, COUNT(*) as count');
+	}
+
+	/**
+	 * 获取前三十名访问者浏览器
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function geTopBrowser($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 30
+		], 'browser, COUNT(*) as count');
+	}
+
+	/**
+	 * 获取前三十名访问者系统
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function geTopOs($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 30
+		], 'os, COUNT(*) as count');
+	}
+
+	/**
+	 * 获取前三十名访问者国家
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function geTopCountry($where = null) {
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 30
+		], 'RIGHT(ip,INSTR(REVERSE(ip),\".\")-1) as country, COUNT(*) as count');
+	}
+
+	/**
+	 * 获取前三十名搜索引擎来源
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function geTopSearch($where = null) {
+		if (empty($where)) {
+			$where = [];
+		}
+		if (!is_array($where)) {
+			$where = (array)$where;
+		}
+		$where[] = "(INSTR(referer,'?q=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
+		return static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 30
+		], 'referer,COUNT(*) as count');
+	}
+
+	/**
+	 * 获取前三十名外链
+	 * @param array|string $where
+	 * @return mixed
+	 */
+	public static function getTopReferer($where = null) {
+		if (empty($where)) {
+			$where = [];
+		}
+		if (!is_array($where)) {
+			$where = (array)$where;
+		}
+		$allUrls = static::getInstance()->findAll([
+			'where' => $where
+		], 'url');
+		$where[] = 'referer NOT LIKE "%'.Url::getHost().'%"';
+		$args = static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => '2 DESC',
+			'limit' => 20
+		], 'referer,COUNT(*) as count');
+		$urls = static::getInstance()->findAll([
+			'where' => $where
+		], 'url');
+		return [
+			$args,
+			$urls,
+			$allUrls
+		];
+	}
+
+	/**
+	 * @param $where
+	 * @param string $type
+	 * @return array
+	 */
+	public static function getStatus($where = null, $type = 'DAYOFMONTH') {
+		$args = static::getInstance()->findAll([
+			'where' => $where,
+			'group' => 1,
+			'order' => 1
+		], $type.'(create_at) as d, COUNT(*) as c');
+		$max = 0;
+		$days = [];
+		foreach ($args as $item) {
+			$days[$item['d']] = $item['c'];
+			$max = max($max, $item['c']);
+		}
+
+		$ips = static::getInstance()->findAll([
+			'where' => $where,
+			'group' => '1,2',
+			'order' => 1
+		], $type.'(create_at) as d, ip');
+
+		$daysCount = [];
+		$length = $type == 'DAYOFMONTH' ? 31 : 24;
+		for ($i = 0; $i < $length; $i++) {
+			$daysCount[$i] = 0;
+		}
+		foreach ($ips as $item) {
+			$daysCount[$item['d']]++;
+		}
+		return [
+			$days,
+			$daysCount,
+			$max,
+			$args,
+			$ips
+		];
+	}
+}
