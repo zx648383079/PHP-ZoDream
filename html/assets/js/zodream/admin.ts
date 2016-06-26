@@ -3,7 +3,7 @@
 require.config({
     baseUrl: "/assets/js/",
     paths: {
-        jquery: "jquery/jquery-2.2.4.min",
+        jquery: "jquery/jquery-3.0.0.min",
         bootstrap: "bootstrap/bootstrap.min",
         admin: "zodream/admin",
         ueditor: '../ueditor/ueditor.all.min',
@@ -12,7 +12,8 @@ require.config({
         logo: 'jquery/sitelogo',
         completer: 'jquery/completer.min',
         code: 'codemirror',
-        bui: "bui/bui"
+        bui: "bui/bui",
+        chart: "chart/Chart.min"
     },
     shim: {
         ueditor: {

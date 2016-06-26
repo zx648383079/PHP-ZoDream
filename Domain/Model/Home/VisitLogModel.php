@@ -66,7 +66,7 @@ class VisitLogModel extends Model {
 	 * @return array
 	 */
 	public static function getDayStatus($where = null) {
-		return self::getStatus($where, 'DAYOFMONTH');
+		return self::getStatus($where, 'DAYOFMONTH', 31);
 	}
 
 	/**
@@ -75,11 +75,23 @@ class VisitLogModel extends Model {
 	 * @return array
 	 */
 	public static function getHourStatus($where = null) {
-		return self::getStatus($where, 'HOUR');
+		return self::getStatus($where, 'HOUR', 24);
+	}
+
+	public static function getWeekStatus($where = null) {
+		return self::getStatus($where, 'DAYOFWEEK', 7);
+	}
+
+	public static function getMonthStatus($where = null) {
+		return self::getStatus($where, 'MONTH', 12);
+	}
+
+	public static function getYearStatus($where = null) {
+		return self::getStatus($where, 'YEAR');
 	}
 
 	/**
-	 * 获取IP最后访问时间
+	 * 获取IP最后访问时间及来路
 	 * @param string|array $where
 	 * @return array
 	 */
@@ -232,19 +244,52 @@ class VisitLogModel extends Model {
 	/**
 	 * @param $where
 	 * @param string $type
+	 * @param null $length
 	 * @return array
 	 */
-	public static function getStatus($where = null, $type = 'DAYOFMONTH') {
+	public static function getStatus($where = null, $type = 'DAYOFMONTH', $length = null) {
+		$flowCount = [];
+		$i = 0;
+		if (empty($length)) {
+			$i = 2015;
+			$length = date('Y') + 1;
+		} else if ($length != 24) {
+			$i = 1;
+			$length ++;
+		}
+		for (; $i < $length; $i++) {
+			$flowCount[$i] = [
+				0, // PV总计
+				0,  // UV
+				0   //IP
+			];
+		}
 		$args = static::getInstance()->findAll([
 			'where' => $where,
 			'group' => 1,
 			'order' => 1
 		], $type.'(create_at) as d, COUNT(*) as c');
 		$max = 0;
-		$days = [];
 		foreach ($args as $item) {
-			$days[$item['d']] = $item['c'];
-			$max = max($max, $item['c']);
+			if (!array_key_exists($item['d'], $flowCount)) {
+				continue;
+			}
+			$flowCount[$item['d']][0] = intval($item['c']);
+			if ($item['c'] > $max) {
+				$max = $item['c'];
+			}
+		}
+
+		$uvs = $ips = static::getInstance()->findAll([
+			'where' => $where,
+			'group' => '1,2',
+			'order' => 1
+		], $type.'(create_at) as d, session');
+		foreach ($uvs as $item) {
+			if (!array_key_exists($item['d'], $flowCount)) {
+				continue;
+			}
+			$flowCount[$item['d']][1] ++;
 		}
 
 		$ips = static::getInstance()->findAll([
@@ -252,18 +297,14 @@ class VisitLogModel extends Model {
 			'group' => '1,2',
 			'order' => 1
 		], $type.'(create_at) as d, ip');
-
-		$daysCount = [];
-		$length = $type == 'DAYOFMONTH' ? 31 : 24;
-		for ($i = 0; $i < $length; $i++) {
-			$daysCount[$i] = 0;
-		}
 		foreach ($ips as $item) {
-			$daysCount[$item['d']]++;
+			if (!array_key_exists($item['d'], $flowCount)) {
+				continue;
+			}
+			$flowCount[$item['d']][2] ++;
 		}
 		return [
-			$days,
-			$daysCount,
+			$flowCount,
 			$max,
 			$args,
 			$ips

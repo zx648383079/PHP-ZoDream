@@ -1,5 +1,2 @@
 <?php
-$ss = ['ggggggg' => 12, 1 => 'ggggg', 'hhh'];
-list($e, $a) = array_values($ss);
-var_dump($a);
-var_dump($e);
+var_dump(date('Y-m-d', mktime(23, 59, 59, 12, 31, date('Y'))));

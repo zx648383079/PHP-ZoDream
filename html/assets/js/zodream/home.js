@@ -1,7 +1,7 @@
 require.config({
     baseUrl: "/assets/js/",
     paths: {
-        jquery: "jquery/jquery-2.2.4.min",
+        jquery: "jquery/jquery-3.0.0.min",
         bootstrap: "bootstrap/bootstrap.min",
         knockout: "knockout/knockout-3.4.0",
         flexslider: "jquery/jquery.flexslider",
