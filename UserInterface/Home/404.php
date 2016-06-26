@@ -1,5 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
+/** @var $this \Zodream\Domain\Response\View */
 $this->extend(array(
 	'layout' => array(
 		'head'
@@ -10,10 +11,12 @@ $this->extend(array(
 ?>
 
 <div class="container">
-	<div class="center">
-		<h1><?php $this->ech('status', 404);?></h1>
-		<p><?php $this->ech('message', '页面已丢失！');?></p>
-		<a href="<?php $this->url('/');?>">返回首页</a>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4">
+			<img src="<?=$this->asset('images/404.png')?>">
+			<p><?php $this->ech('message', ':(很抱歉，您访问的页面不存在！');?></p>
+			<p class="text-center home"><a href="<?php $this->url('/');?>">返回首页</a></p>
+		</div>
 	</div>
 </div>
 

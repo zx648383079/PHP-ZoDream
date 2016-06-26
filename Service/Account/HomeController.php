@@ -60,6 +60,18 @@ class HomeController extends Controller {
 		$this->show();
 	}
 
+	/**
+	 * @param Post $post
+	 */
+	function securityPost($post) {
+		$type = $post->get('type');
+		switch (intval($type)) {
+			case 5:
+				
+				break;
+		}
+	}
+
 	function settingAction() {
 		$this->show();
 	}

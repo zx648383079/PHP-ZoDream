@@ -1,4 +1,41 @@
+body {
+    background: url(../../images/error_bg.jpg);
+}
+
+*,
+a{
+    color: #fff;
+}
+
+.container {
+    margin-top: 8%;
+}
+
+.container p{
+    text-align: center;
+    font-size: 20px;
+}
+
+.home {
+    font-size: 20px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    background-color: #fff;
+    width: 150px;
+    margin: 30px auto;
+}
+
+.home a {
+    color: #00b294;
+    text-decoration: none;
+}
+
 .center {
     width: 400px;
     margin: 70px auto 0;
+}
+
+.footer {
+    border: none;
+    margin-top: 50px;
 }

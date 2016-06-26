@@ -5,7 +5,8 @@
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",
     "phpmailer/phpmailer": "~5.2",
-    "mobiledetect/mobiledetectlib": "^2.8"
+    "mobiledetect/mobiledetectlib": "^2.8",
+    "phpoffice/phpexcel": "^1.8"
   },
   "autoload" : {
     "psr-4" : {
