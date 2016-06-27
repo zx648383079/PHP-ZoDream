@@ -20,15 +20,21 @@ abstract class Model extends \Zodream\Domain\Model {
         if ($args instanceof Request\BaseRequest) {
             $args = $args->get();
         }
-        $args['update_at'] = time();
+        if (!array_key_exists('update_at', $args)) {
+            $args['update_at'] = time();
+        }
         if (isset($args['id']) && !empty($args['id'])) {
             return parent::fill($args, intval($args['id']));
         }
-        if (!Auth::guest()) {
+        if (!array_key_exists('user_id', $args) && !Auth::guest()) {
             $args['user_id'] = Auth::user()['id'];
         }
-        $args['ip'] = Request::ip();
-        $args['create_at'] = $args['update_at'];
+        if (!array_key_exists('ip', $args)) {
+            $args['ip'] = Request::ip();
+        }
+        if (!array_key_exists('create_at', $args)) {
+            $args['create_at'] = $args['update_at'];
+        }
         return parent::fill($args);
     }
 
