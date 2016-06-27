@@ -12,7 +12,7 @@ use Zodream\Domain\Routing\Url;
 use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
 use Zodream\Domain\ThirdParty\OAuth\QQ;
 use Zodream\Infrastructure\Cookie;
-use Zodream\Infrastructure\Error;
+use Zodream\Infrastructure\Error\Error;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Infrastructure\ObjectExpand\Hash;

@@ -118,4 +118,11 @@ class FlowController extends Controller {
 		]);
 	}
 
+	function osAction() {
+		$this->ajaxReturn([
+			'status' => 'success',
+			'data' => VisitLogModel::geTopOs()
+		]);
+	}
+
 }

@@ -193,20 +193,54 @@ class VisitLogModel extends Model {
 	 * @param array|string $where
 	 * @return mixed
 	 */
-	public static function geTopSearch($where = null) {
+	public static function getTopSearch($where = null) {
 		if (empty($where)) {
 			$where = [];
 		}
 		if (!is_array($where)) {
 			$where = (array)$where;
 		}
-		$where[] = "(INSTR(referer,'?q=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
-		return static::getInstance()->findAll([
+		$where[] = "(INSTR(referer,'?q=') OR INSTR(referer, '?wd=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
+		$data = static::getInstance()->findAll([
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
 		], 'referer,COUNT(*) as count');
+		$args = [];
+		$urls = [];
+		foreach ($data as $item) {
+			if(preg_match('#//([\w\.]+?)/.*?\?[a-z]+=([^&]+)#i', $item['referer'], $match)) {
+				if (!array_key_exists($match[1], $urls)) {
+					$urls[$match[1]] = 0;
+				}
+				$count = intval($item['count']);
+				$urls[$match[1]] += $count;
+				$tags = explode(' ', urldecode($match[2]));
+				if (!array_key_exists($match[2], $args)) {
+					$args[$match[2]] = 0;
+				}
+				$args[$match[2]] += $count;
+				if (count($tags) == 1) {
+					continue;
+				}
+				foreach ($tags as $tag) {
+					if (empty($tag)) {
+						continue;
+					}
+					if (!array_key_exists($tag, $args)) {
+						$args[$tag] = 0;
+					}
+					$args[$tag] += $count;
+				}
+			}
+		}
+		arsort($args);
+		arsort($urls);
+		return [
+			$args,
+			$urls
+		];
 	}
 
 	/**

@@ -6,6 +6,7 @@ $this->extend(array(
         'head'
     ))
 );
+$search = $this->get('search');
 ?>
 
 <div class="container">
@@ -75,6 +76,33 @@ $this->extend(array(
     <div class="row">
         <div class="col-md-12">
             <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group">
+                <li class="list-group-item active">
+                    搜索引擎外链
+                </li>
+                <?php foreach ($search[1] as $key => $item):?>
+                <li class="list-group-item">
+                    <span class="badge"><?=$item?></span>
+                    <?=$key?>
+                </li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+        <div class="col-md-3">
+            <h3>搜索关键字</h3>
+            <div class="tag-box">
+                <?php foreach ($search[0] as $key => $item):?>
+                    <a style="font-size: <?=$item + 5?>px;"><?=$key?></a>
+                <?php endforeach;?>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <canvas id="os"></canvas>
         </div>
     </div>
 </div>

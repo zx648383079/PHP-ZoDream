@@ -1,9 +1,9 @@
 /// <reference path="../../../../../typings/jquery/jquery.d.ts" />
 ;define(["jquery", "chart"], function($: JQuery, Chart: any ) {
-    var randomColorFactor = function() {
+    var randomColorFactor = function(): number {
         return Math.round(Math.random() * 255);
     };
-    var randomColor = function(opacity:any) {
+    var randomColor = function(opacity:any): string {
         return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
     };
     var ctx = $("#chart");
@@ -77,4 +77,28 @@
     $("#status").change(function() {
         getStatus($('option:selected', '#status').index());
     });
+    var osConfig = {
+        type: 'pie',
+        data: {
+            datasets: {
+                data: new Array
+            },
+            labels: new Array
+        }
+    };
+    var os = new Chart($("#os"), osConfig);
+    var getOs = function () {
+        $.getJSON("/admin.php/flow/os", function(data) {
+            if (data.status != "success") {
+                return;
+            }
+            $(data.data).each(function(i:number, item: any) {
+                var color = randomColor(.5);
+                osConfig.data.datasets.data.push({value: item.count, color: color});
+                osConfig.data.labels.push(item.os);
+            });
+            os.update();
+        });
+    };
+    getOs();
 });

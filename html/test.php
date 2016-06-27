@@ -1,2 +1,7 @@
 <?php
-var_dump(date('Y-m-d', mktime(23, 59, 59, 12, 31, date('Y'))));
+$a = [
+    'a' => 1,
+    'b' => 2
+];
+arsort($a);
+var_dump($a);

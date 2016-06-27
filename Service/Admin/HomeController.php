@@ -3,6 +3,7 @@ namespace Service\Admin;
 /**
  * 后台首页
  */
+use Domain\Model\Home\VisitLogModel;
 use Zodream\Domain\Authentication\Auth;
 
 class HomeController extends Controller {
@@ -21,11 +22,13 @@ class HomeController extends Controller {
 
 	function mainAction() {
 		$user = Auth::user();
+		$search = VisitLogModel::getTopSearch();
 		$this->show(array(
 			'name' => $user['name'],
 			'num' => $user['login_num'],
 			'ip' => $user['previous_ip'],
-			'date' => $user['previous_at']
+			'date' => $user['previous_at'],
+			'search' => $search
 		));
 	}
 }

@@ -7,7 +7,7 @@ namespace Domain\WeChat;
  * Time: 10:37
  */
 use Zodream\Infrastructure\Config;
-use Zodream\Infrastructure\Error;
+use Zodream\Infrastructure\Error\Error;
 use Zodream\Infrastructure\Request;
 abstract class Core {
     /**

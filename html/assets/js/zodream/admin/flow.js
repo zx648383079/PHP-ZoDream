@@ -77,5 +77,29 @@ define(["jquery", "chart"], function ($, Chart) {
     $("#status").change(function () {
         getStatus($('option:selected', '#status').index());
     });
+    var osConfig = {
+        type: 'pie',
+        data: {
+            datasets: {
+                data: new Array
+            },
+            labels: new Array
+        }
+    };
+    var os = new Chart($("#os"), osConfig);
+    var getOs = function () {
+        $.getJSON("/admin.php/flow/os", function (data) {
+            if (data.status != "success") {
+                return;
+            }
+            $(data.data).each(function (i, item) {
+                var color = randomColor(.5);
+                osConfig.data.datasets.data.push({ value: item.count, color: color });
+                osConfig.data.labels.push(item.os);
+            });
+            os.update();
+        });
+    };
+    getOs();
 });
 //# sourceMappingURL=flow.js.map
