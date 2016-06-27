@@ -3,8 +3,8 @@
     var randomColorFactor = function(): number {
         return Math.round(Math.random() * 255);
     };
-    var randomColor = function(opacity:any): string {
-        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+    var randomColor = function(opacity:any = ".3"): string {
+        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + opacity + ')';
     };
     var ctx = $("#chart");
     var config = {

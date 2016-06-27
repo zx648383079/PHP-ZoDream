@@ -4,7 +4,8 @@ define(["jquery", "chart"], function ($, Chart) {
         return Math.round(Math.random() * 255);
     };
     var randomColor = function (opacity) {
-        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+        if (opacity === void 0) { opacity = ".3"; }
+        return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + opacity + ')';
     };
     var ctx = $("#chart");
     var config = {
