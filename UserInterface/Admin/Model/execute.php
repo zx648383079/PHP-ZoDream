@@ -6,7 +6,7 @@ $this->extend(array(
             'head'
         ))
 );
-$data = $this->get("data");
+$data = $this->gain("data");
 ?>
 
 
@@ -24,7 +24,7 @@ $data = $this->get("data");
                 <button type="submit" class="btn btn-primary">执行</button>
             </div>
         </form>
-        <p class="text-danger"><?php $this->ech('message');?></p>
+        <p class="text-danger"><?php $this->out('message');?></p>
         <?php 
         if (!empty($data)) {
             if (is_array($data)) {

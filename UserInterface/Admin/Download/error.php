@@ -7,7 +7,7 @@ $this->extend(array(
             'head'
         ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <button>管理错误报告分类</button>
 限制显示： 

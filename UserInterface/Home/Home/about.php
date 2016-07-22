@@ -35,7 +35,7 @@ $this->extend(array(
                         <input type="text" name="name" placeholder="称呼" required="">
                         <input type="text" name="email" placeholder="邮箱" required="">
                         <input type="text" name="phone" placeholder="联系方式">
-                        <p class="text-danger"><?php $this->ech('message');?></p>
+                        <p class="text-danger"><?php $this->out('message');?></p>
                     </div>
                     <div class="col-md-6">
                         <textarea name="content" placeholder="建议内容"></textarea>

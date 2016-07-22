@@ -7,7 +7,7 @@ $this->extend(array(
         'head'
     ))
 );
-$data = $this->get('data', array());
+$data = $this->gain('data', array());
 ?>
 
 <div class="main">
@@ -80,7 +80,7 @@ $data = $this->get('data', array());
                     名称：<input type="text" name="name" value="" placeholder="名称"> </br>
                     网址：<input type="text" name="url" value="" placeholder="网址"> </br>
                     分类：<select name="category_id">
-                        <?php foreach($this->get('category', array()) as $item) {?>
+                        <?php foreach($this->gain('category', array()) as $item) {?>
                         <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
                         <?php }?>
                     </select>

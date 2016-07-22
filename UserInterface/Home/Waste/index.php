@@ -20,7 +20,7 @@ $this->extend(array(
 		</tr>
 		</thead>
 		<tbody>
-		<?php foreach ($this->get('data', array()) as $item) {?>
+		<?php foreach ($this->gain('data', array()) as $item) {?>
 			<tr>
 				<td><?=Html::a($item[0]['code'], ['waste/view', 'id' => $item[0]['id']])?></td>
 				<td><?=$item[0]['name']?></td>

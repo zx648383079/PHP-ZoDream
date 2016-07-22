@@ -7,7 +7,7 @@ $this->extend(array(
         'navbar'
 	))
 );
-$data = $this->get('data', array());
+$data = $this->gain('data', array());
 ?>
 <div class="container">
     <?php foreach ($data as $value) { 

@@ -1,7 +1,7 @@
 <?php
 use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Html;
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Routing\Url;
 /** @var $this \Zodream\Domain\Response\View */
 ?>
@@ -34,7 +34,7 @@ use Zodream\Domain\Routing\Url;
         </form>
 
         <ul class="nav navbar-nav navbar-right">
-            <?php if (Auth::guest() || !empty($this->get('updateCache'))) :?>
+            <?php if (Auth::guest() || !empty($this->gain('updateCache'))) :?>
                 <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => Url::to()])?></li>
                 <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
             <?php else:?>

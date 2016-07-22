@@ -290,12 +290,12 @@ class Uploader {
     private function checkType() {
         return in_array($this->getFileExt(), $this->config['allowFiles']);
     }
-
+    
     /**
      * 文件大小检测
      * @return bool
      */
-    private function  checkSize() {
+    public function checkSize() {
         return $this->fileSize <= $this->config['maxSize'];
     }
 

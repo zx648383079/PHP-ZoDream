@@ -3,7 +3,7 @@
 require.config({
     baseUrl: "/assets/js/",
     paths: {
-        jquery: "jquery/jquery-3.0.0.min",
+        jquery: "jquery/jquery-3.1.0.min",
         bootstrap: "bootstrap/bootstrap.min",
         admin: "zodream/admin",
         ueditor: '../ueditor/ueditor.all.min',

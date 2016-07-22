@@ -14,7 +14,7 @@ $this->extend(array(
                 <div class="form-group">
                     <legend>私信</legend>
                 </div>
-                <input type="hidden" name="user_id" value="<?php $this->ech('user.id');?>">
+                <input type="hidden" name="user_id" value="<?php $this->out('user.id');?>">
                 <div class="form-group">
                     <div class="col-sm-12">
                         <textarea name="content" id="textarea_content" class="form-control" rows="3" required="required"></textarea>
@@ -32,7 +32,7 @@ $this->extend(array(
 
     <div class="row">
         <div class="list-group">
-            <?php foreach ($this->get('data', array()) as $item) {?>
+            <?php foreach ($this->gain('data', array()) as $item) {?>
                 <a href="<?php $this->url(['message/send', 'id' => $item['send_id']])?>" class="list-group-item active">
                     <span class="badge"><?php $this->time($item['create_at']);?></span>
                     <p class="list-group-item-text"><?php echo $item['content']?></p>

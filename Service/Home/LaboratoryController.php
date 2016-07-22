@@ -8,8 +8,7 @@ namespace Service\Home;
  */
 class LaboratoryController extends Controller {
     public function indexAction() {
-        $this->runCache('laboratory.index');
-        $this->show(array(
+        return $this->show(array(
             'title' => '实验室'
         ));
     }

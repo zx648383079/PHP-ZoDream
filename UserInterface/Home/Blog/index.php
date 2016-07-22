@@ -10,14 +10,14 @@ $this->extend(array(
         'zodream/blog.css'
     )
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
             <ul class="term list-group">
                 <li class="list-group-item"><a href="<?php $this->url('blog');?>">全部</a></li>
-                <?php foreach ($this->get('term', array()) as $item) {?>
+                <?php foreach ($this->gain('term', array()) as $item) {?>
                     <li class="list-group-item"><a href="<?php $this->url(null, array('termid' => $item['id']));?>"><?php echo $item['name'];?></a></li>
                 <?php }?>
             </ul>

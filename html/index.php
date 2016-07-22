@@ -16,4 +16,4 @@ require_once(APP_DIR.'/vendor/autoload.php');
 if (!\Zodream\Infrastructure\Config::exist()) {
     \Zodream\Domain\Response\Redirect::to('install.php');
 }
-Zodream\Service\Application::main();
+Zodream\Service\Application::main()->send();

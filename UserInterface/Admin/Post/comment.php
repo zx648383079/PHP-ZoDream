@@ -7,7 +7,7 @@ $this->extend(array(
         'head'
     ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <form method="GET">
     搜索： <input type="text" name="search" value="" placeholder="评论" required>

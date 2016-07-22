@@ -28,7 +28,7 @@ $this->extend(array(
                 </div>
             </div>
             
-            <p class="text-danger"><?php $this->ech('message');?></p>
+            <p class="text-danger"><?php $this->out('message');?></p>
         </form>
     </div>
 </div>

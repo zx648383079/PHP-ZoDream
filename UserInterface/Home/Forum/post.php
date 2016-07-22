@@ -11,8 +11,8 @@ $this->extend(array(
         'zodream/blog.css'
     )
 );
-$page = $this->get('page');
-$data = $this->get('data');
+$page = $this->gain('page');
+$data = $this->gain('data');
 ?>
 <div class="container">
     

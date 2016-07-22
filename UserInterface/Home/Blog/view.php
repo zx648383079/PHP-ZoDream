@@ -12,9 +12,9 @@ $this->extend(array(
         'zodream/blog.css'
     )
 );
-$data = $this->get('data');
-$links = $this->get('links');
-$comment = $this->get('comment', array());
+$data = $this->gain('data');
+$links = $this->gain('links');
+$comment = $this->gain('comment', array());
 ?>
 
 <div class="container">
@@ -111,14 +111,14 @@ $comment = $this->get('comment', array());
                         <div class="form-group">
                             <label for="input_name" class="col-sm-2 control-label">姓名:</label>
                             <div class="col-sm-10">
-                                <input type="text" name="name" id="input_name" class="form-control" value="<?php $this->ech('name');?>" required="required" >
+                                <input type="text" name="name" id="input_name" class="form-control" value="<?php $this->out('name');?>" required="required" >
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label for="input_email" class="col-sm-2 control-label">邮箱:</label>
                             <div class="col-sm-10">
-                                <input type="email" name="email" id="input_email" class="form-control" value="<?php $this->ech('email');?>" required="required" >
+                                <input type="email" name="email" id="input_email" class="form-control" value="<?php $this->out('email');?>" required="required" >
                             </div>
                         </div>
                         

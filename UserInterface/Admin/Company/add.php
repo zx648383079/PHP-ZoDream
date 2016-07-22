@@ -17,7 +17,7 @@ $this->extend(array(
             <h3 class="panel-title">增加公司</h3>
       </div>
       <div class="panel-body">
-            <?=FormWidget::begin($this->get('data'))
+            <?=FormWidget::begin($this->gain('data'))
              ->hidden('id')
             ->text('name', ['label' => '公司名', 'required' => true])
             ->textArea('description', ['label' => '介绍'])
@@ -26,7 +26,7 @@ $this->extend(array(
             ->button()
             ->end();
             ?>
-          <p><?php $this->ech('error');?></p>
+          <p><?php $this->out('error');?></p>
       </div>
 </div>
 

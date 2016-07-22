@@ -26,7 +26,7 @@ $this->extend(array(
                 ->end();
             ?>
             <p class="text-danger">
-                成功：<?php $this->ech('success', 0);?>个；失败：<?php $this->ech('failure', 0);?>个；错误信息：<?php $this->ech('message');?>
+                成功：<?php $this->out('success', 0);?>个；失败：<?php $this->out('failure', 0);?>个；错误信息：<?php $this->out('message');?>
             </p>
         </div>
     </div>

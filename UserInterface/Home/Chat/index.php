@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Authentication\Auth;
 /** @var $this \Zodream\Domain\Response\View */
-$user = $this->get('user');
+$user = $this->gain('user');
 $send = Auth::user();
 $css = <<<CSS
 .chat li.left:before {
@@ -28,7 +28,7 @@ $this->extend(array(
         '!js '.$js
     )
 );
-$data = $this->get('data', array());
+$data = $this->gain('data', array());
 ?>
 <div class="container">
     <div class="row">

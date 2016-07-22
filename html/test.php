@@ -1,7 +1,13 @@
 <?php
-$a = [
-    'a' => 1,
-    'b' => 2
-];
-arsort($a);
-var_dump($a);
+
+class a {
+    protected $a = 1;
+
+    public function c() {
+        return 1;
+    }
+}
+
+var_dump(is_callable('a@c'));
+
+

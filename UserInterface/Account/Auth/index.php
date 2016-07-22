@@ -9,7 +9,7 @@ $this->extend(array(
         'zodream/login.css'
     )
 );
-$code = $this->get('code');
+$code = $this->gain('code');
 ?>
 
 <div class="login">
@@ -22,7 +22,7 @@ $code = $this->get('code');
         <img id="verify" src="<?php $this->url('verify');?>" title="验证码"> </br>
         <?php }?>
         <input type="checkbox" name="remember" value="1">记住我</br>
-        <p class="text-danger"><?=$this->get('message')?></p>
+        <p class="text-danger"><?=$this->gain('message')?></p>
         <button class="btn btn-primary" type="submit">登录</button>
         <p><?=Html::a('忘记密码?', 'auth/find')?> 或 没有账号？先 <a href="<?php $this->url('auth/register');?>">注册</a>  </p>
     </form>

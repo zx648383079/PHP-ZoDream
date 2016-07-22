@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Home;
+namespace Domain\Model;
 /**
  * 访客记录
 CREATE TABLE IF NOT EXISTS `zd_visit_log` (
@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS `zd_visit_log` (
 PRIMARY KEY (`id`))
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;
  */
-use Domain\Model\Model;
 use Zodream\Domain\Routing\Url;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
@@ -28,7 +27,7 @@ class VisitLogModel extends Model {
 
 	use SingletonPattern;
 
-	protected $table = 'visit_log';
+	public static $table = 'visit_log';
 	
 	protected $fillAble = array(
 		'ip',
@@ -96,12 +95,13 @@ class VisitLogModel extends Model {
 	 * @return array
 	 */
 	public static function getLast($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'ip, MAX(create_at) as create_at, referer',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 15
-		], 'ip, MAX(create_at) as create_at, referer');
+		])->all();
 	}
 
 	/**
@@ -110,12 +110,13 @@ class VisitLogModel extends Model {
 	 * @return array
 	 */
 	public static function geAllMonth($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp',
 			'where' => $where,
 			'group' => '1,2,3',
 			'order' => '1,2,3',
 			'limit' => 30
-		], 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp');
+		])->all();
 	}
 
 	/**
@@ -124,12 +125,13 @@ class VisitLogModel extends Model {
 	 * @return mixed
 	 */
 	public static function geTopUrl($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'url, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
-		], 'url, COUNT(*) as count');
+		])->all();
 	}
 
 	/**
@@ -138,12 +140,13 @@ class VisitLogModel extends Model {
 	 * @return mixed
 	 */
 	public static function geTopIp($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'ip, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
-		], 'ip, COUNT(*) as count');
+		])->all();
 	}
 
 	/**
@@ -152,12 +155,13 @@ class VisitLogModel extends Model {
 	 * @return mixed
 	 */
 	public static function geTopBrowser($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'browser, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
-		], 'browser, COUNT(*) as count');
+		])->all();
 	}
 
 	/**
@@ -166,12 +170,13 @@ class VisitLogModel extends Model {
 	 * @return mixed
 	 */
 	public static function geTopOs($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'os, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
-		], 'os, COUNT(*) as count');
+		])->all();
 	}
 
 	/**
@@ -180,12 +185,13 @@ class VisitLogModel extends Model {
 	 * @return mixed
 	 */
 	public static function geTopCountry($where = null) {
-		return static::getInstance()->findAll([
+		return static::find()->load([
+			'select' => 'RIGHT(ip,INSTR(REVERSE(ip),\".\")-1) as country, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
-		], 'RIGHT(ip,INSTR(REVERSE(ip),\".\")-1) as country, COUNT(*) as count');
+		])->all();
 	}
 
 	/**
@@ -201,12 +207,13 @@ class VisitLogModel extends Model {
 			$where = (array)$where;
 		}
 		$where[] = "(INSTR(referer,'?q=') OR INSTR(referer, '?wd=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
-		$data = static::getInstance()->findAll([
+		$data = static::find()->load([
+			'select' => 'referer,COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 30
-		], 'referer,COUNT(*) as count');
+		])->all();
 		$args = [];
 		$urls = [];
 		foreach ($data as $item) {
@@ -259,15 +266,17 @@ class VisitLogModel extends Model {
 			'where' => $where
 		], 'url');
 		$where[] = 'referer NOT LIKE "%'.Url::getHost().'%"';
-		$args = static::getInstance()->findAll([
+		$args = static::find()->load([
+			'select' => 'referer,COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 20
-		], 'referer,COUNT(*) as count');
-		$urls = static::getInstance()->findAll([
+		])->all();
+		$urls = static::find()->load([
+			'select' => 'url',
 			'where' => $where
-		], 'url');
+		])->all();
 		return [
 			$args,
 			$urls,
@@ -298,11 +307,11 @@ class VisitLogModel extends Model {
 				0   //IP
 			];
 		}
-		$args = static::getInstance()->findAll([
+		$args = static::find()->load([
 			'where' => $where,
 			'group' => 1,
 			'order' => 1
-		], $type.'(create_at) as d, COUNT(*) as c');
+		])->select($type.'(create_at) as d, COUNT(*) as c')->all();
 		$max = 0;
 		foreach ($args as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
@@ -314,11 +323,11 @@ class VisitLogModel extends Model {
 			}
 		}
 
-		$uvs = $ips = static::getInstance()->findAll([
+		$uvs = $ips = static::find()->load([
 			'where' => $where,
 			'group' => '1,2',
 			'order' => 1
-		], $type.'(create_at) as d, session');
+		])->select($type.'(create_at) as d, session')->all();
 		foreach ($uvs as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
 				continue;
@@ -326,11 +335,11 @@ class VisitLogModel extends Model {
 			$flowCount[$item['d']][1] ++;
 		}
 
-		$ips = static::getInstance()->findAll([
+		$ips = static::find()->load([
 			'where' => $where,
 			'group' => '1,2',
 			'order' => 1
-		], $type.'(create_at) as d, ip');
+		])->select($type.'(create_at) as d, ip')->all();
 		foreach ($ips as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
 				continue;

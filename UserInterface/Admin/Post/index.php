@@ -7,7 +7,7 @@ $this->extend(array(
         'head'
     ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <a class="btn" href="<?php $this->url('post/add');?>">新增</a>
 <a class="btn" href="<?php $this->url('post/term');?>">管理分类</a>

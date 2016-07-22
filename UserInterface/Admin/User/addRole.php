@@ -6,7 +6,7 @@ $this->extend(array(
             'head'
         ))
 );
-$roles = $this->get('roles', array());
+$roles = $this->gain('roles', array());
 ?>
 
 <div class="panel panel-default">
@@ -20,8 +20,8 @@ $roles = $this->get('roles', array());
                     <div class="form-group">
                         <label for="textarea_name" class="col-sm-2">权限名称：</label>
                         <div class="col-sm-10">
-                            <input type="hidden" name="id" value="<?php $this->ech('id');?>">
-                <input type="text" name="name" value="<?php $this->ech('name');?>" placeholder="权限名称">
+                            <input type="hidden" name="id" value="<?php $this->out('id');?>">
+                <input type="text" name="name" value="<?php $this->out('name');?>" placeholder="权限名称">
                         </div>
                     </div>
                     
@@ -29,7 +29,7 @@ $roles = $this->get('roles', array());
                     <div class="form-group">
                         <label for="input_password" class="col-sm-2 control-label">权限：</label>
                         <div class="col-sm-10">
-                            <?php foreach ($this->get('data', array()) as $value) {?>
+                            <?php foreach ($this->gain('data', array()) as $value) {?>
                                 <div>
                                     <input type="checkbox" name="auth[]" value="<?php echo $value['id'];?>" <?php echo in_array($value['id'], $roles) ? 'checked' : '' ;?>><?php echo $value['name'];?>
                                 </div>

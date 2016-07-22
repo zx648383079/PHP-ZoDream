@@ -8,7 +8,7 @@ $this->extend(array(
         'zodream/add.css'
     )
 );
-$post = $this->get('data', array(
+$post = $this->gain('data', array(
     'title' => null,
     'term_id' => 1,
     'content' => null
@@ -18,13 +18,13 @@ $post = $this->get('data', array(
 <div>
     <form method="POST">
         <div class="left">
-            <input type="hidden" name="id" value="<?php $this->ech('id');?>">
+            <input type="hidden" name="id" value="<?php $this->out('id');?>">
         标题：<input type="text" name="title" value="<?php echo $post['title'];?>" placeholder="标题"></br>
         内容：<textarea id="editor" name="content" placeholder="内容"><?php echo $post['content'];?></textarea>
         </div>
         <div class="right">
             分   类： <select name="term_id" required>
-                <?php foreach($this->get('term', array()) as $value) {?>
+                <?php foreach($this->gain('term', array()) as $value) {?>
                     <option value="<?php echo $value['id'];?>"<?php if ($value['id'] == $post['term_id']) {?> selected<?php }?>><?php echo $value['name'];?></option>
                 <?php }?>
             </select></br>

@@ -10,7 +10,7 @@ $this->extend(array(
         'navbar'
     ))
 );
-$data = $this->get('data');
+$data = $this->gain('data');
 ?>
 
 <div class="row">
@@ -47,7 +47,7 @@ $data = $this->get('data');
             <h3 class="panel-title">公司评价：</h3>
         </div>
         <div class="panel-body">
-            <?php foreach ($this->get('models', array()) as $item):?>
+            <?php foreach ($this->gain('models', array()) as $item):?>
                 <div class="col-md-2 waste-item">
                     <h4><?=$item['title']?></h4>
                     <?=$item['name']?> <?php $this->ago($item['create_at'])?> <span><?=$item['star']?></span>

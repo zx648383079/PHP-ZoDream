@@ -9,7 +9,7 @@ $this->extend(array(
         'navbar'
 	))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <div class="container">
     <table class="table table-hover">

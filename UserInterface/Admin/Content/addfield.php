@@ -15,8 +15,8 @@ $this->extend(array(
       </div>
       <div class="panel-body">
             <form method="post">
-                <input name="model_id" type="hidden" value="<?php $this->ech('data.model_id');?>" />
-                <input name="id" type="hidden" value="<?php $this->ech('data.id');?>" />
+                <input name="model_id" type="hidden" value="<?php $this->out('data.model_id');?>" />
+                <input name="id" type="hidden" value="<?php $this->out('data.id');?>" />
                 <table width="100%" class="table table-striped">
                 <tr>
                     <th width="200">模型名称： </th>

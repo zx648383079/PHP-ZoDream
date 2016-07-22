@@ -17,7 +17,7 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->get('data', array()) as $value) {?>
+        <?php foreach ($this->gain('data', array()) as $value) {?>
             <tr>
                 <td><?php echo $value['id'];?></td>
                 <td><?php echo $value['name'];?></td>

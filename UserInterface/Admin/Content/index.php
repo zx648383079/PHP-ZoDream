@@ -12,7 +12,7 @@ $this->extend(array(
 echo PanelWidget::show(array(
     'head' => '模型管理 '. Html::a('添加', 'content/add', array('class' => 'btn btn-primary')),
     'body' => TableWidget::show(array(
-        'data' => $this->get('data'),
+        'data' => $this->gain('data'),
         'columns' => array(
             'id' => 'ID',
             'type' => array(

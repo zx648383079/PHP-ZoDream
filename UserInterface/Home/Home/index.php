@@ -17,7 +17,7 @@ $this->extend(array(
             <section class="slider">
                 <div class="flexslider">
                     <ul class="slides">
-                        <?php foreach ($this->get('data', array()) as $item):?>
+                        <?php foreach ($this->gain('data', array()) as $item):?>
                         <li>
                             <div class="banner-top">
                                 <h2><?=$item['title']?></h2>

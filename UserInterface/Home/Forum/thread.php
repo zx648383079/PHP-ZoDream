@@ -11,8 +11,8 @@ $this->extend(array(
         'zodream/blog.css'
     )
 );
-$sub = $this->get('sub', array());
-$page = $this->get('page');
+$sub = $this->gain('sub', array());
+$page = $this->gain('page');
 ?>
 <div class="container">
     <?php if (!empty($sub)) {?>
@@ -86,7 +86,7 @@ $page = $this->get('page');
           </div>
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="forum_id" value="<?php $this->ech('id');?>">
+                    <input type="hidden" name="forum_id" value="<?php $this->out('id');?>">
                     
                     <div class="form-group">
                         <label for="input_title" class="col-sm-2 control-label">标题:</label>

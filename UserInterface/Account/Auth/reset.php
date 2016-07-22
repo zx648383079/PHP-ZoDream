@@ -13,11 +13,11 @@ $this->extend(array(
 <div class="login">
     <h2 class="text-center">重置密码</h2>
     <form method="POST">
-        <input type="hidden" name="email" value="<?=$this->get('email')?>">
-        <input type="hidden" name="token" value="<?=$this->get('token')?>">
+        <input type="hidden" name="email" value="<?=$this->gain('email')?>">
+        <input type="hidden" name="token" value="<?=$this->gain('token')?>">
         <input type="password" class="form-control" name="password" value="" required placeholder="密码"> </br>
         <input type="password" class="form-control" name="repassword" value="" required placeholder="重复密码"> </br>
-        <p class="text-danger"><?=$this->get('message')?></p>
+        <p class="text-danger"><?=$this->gain('message')?></p>
         <button class="btn btn-primary" type="submit">重置</button>
     </form>
 </div>

@@ -7,7 +7,7 @@ $this->extend(array(
             'head'
         ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <button>管理操作日志</button>
 <form>

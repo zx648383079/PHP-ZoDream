@@ -34,7 +34,7 @@ $this->extend(array(
         </div>
         <div class="col-md-9">
             <?=AccordionWidget::show([
-                'data' => $this->get('data'),
+                'data' => $this->gain('data'),
                 'item' => [
                     'title',
                     'content'

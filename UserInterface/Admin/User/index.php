@@ -20,7 +20,7 @@ $this->extend(array(
                     <div class="form-group">
                         <label for="textarea_name" class="col-sm-2">用户名：</label>
                         <div class="col-sm-10">
-                            <?php $this->ech('name');?>
+                            <?php $this->out('name');?>
                         </div>
                     </div>
                     

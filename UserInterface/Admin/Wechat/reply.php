@@ -14,7 +14,7 @@ echo \Zodream\Domain\Html\Bootstrap\PanelWidget::show(array(
         'href' => Url::to('wechat/addReply')
     )),
     'body' => \Zodream\Domain\Html\Bootstrap\TableWidget::show(array(
-        'page' => $this->get('page'),
+        'page' => $this->gain('page'),
         'columns' => array(
             'id' => 'ID',
             'type' => array(

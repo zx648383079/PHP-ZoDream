@@ -25,7 +25,7 @@ $this->extend(array(
                       </tr>
                   </thead>
                   <tbody>
-                      <?php foreach ($this->get('data', array()) as $item) {?>
+                      <?php foreach ($this->gain('data', array()) as $item) {?>
                         <tr>
                             <td><a href="<?php $this->url('download?file='.$item['url']);?>"><?php echo $item['url'];?></a></td>
                             <td><?php $this->ago($item['mtime']);?></td>

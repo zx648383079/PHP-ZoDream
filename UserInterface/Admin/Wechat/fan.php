@@ -8,7 +8,7 @@ $this->extend(array(
         'head'
     ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 
 
@@ -17,7 +17,7 @@ $page = $this->get('page');
         <div class="col-md-3">
             <ul>
                 <li><?=Html::a('所有')?></li>
-                <?php foreach ($this->get('group', array()) as $item):?>
+                <?php foreach ($this->gain('group', array()) as $item):?>
                 <li><?=Html::a($item['name'], [null, 'group' => $item['id']])?></li>
                 <?php endforeach;?>
                 <li><?=Html::a('未分类', [null, 'group' => -1])?></li>

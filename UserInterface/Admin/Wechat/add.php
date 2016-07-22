@@ -19,7 +19,7 @@ $this->extend(array(
                         <label for="input_name" class="col-sm-2 control-label">*公众号名称:</label>
                         <div class="col-sm-10">
                             <input type="text" name="name" id="input_name"
-                                   class="form-control" value="<?php $this->ech('data.name');?>" required="required">
+                                   class="form-control" value="<?php $this->out('data.name');?>" required="required">
                         </div>
                     </div>
                     
@@ -28,7 +28,7 @@ $this->extend(array(
                         <div class="col-sm-10">
                             <input type="text" name="original_id"
                                    id="input_original_id" class="form-control"
-                                   value="<?php $this->ech('data.original_id');?>" required="required">
+                                   value="<?php $this->out('data.original_id');?>" required="required">
                         </div>
                     </div>
                     
@@ -38,7 +38,7 @@ $this->extend(array(
                             <input type="text"
                                    name="account" id="input_account"
                                    class="form-control"
-                                   value="<?php $this->ech('data.account');?>" required="required">
+                                   value="<?php $this->out('data.account');?>" required="required">
                         </div>
                     </div>
                     
@@ -48,7 +48,7 @@ $this->extend(array(
                         <div class="col-sm-10">
                             <input type="text" name="token" id="input_token"
                                    class="form-control"
-                                   value="<?php $this->ech('data.token');?>" required="required">
+                                   value="<?php $this->out('data.token');?>" required="required">
                         </div>
                     </div>
                     
@@ -58,7 +58,7 @@ $this->extend(array(
                         <div class="col-sm-10">
                             <input type="text" name="aes_key"
                                    id="input_aes_key" class="form-control"
-                                   value="<?php $this->ech('data.aes_key');?>">
+                                   value="<?php $this->out('data.aes_key');?>">
                         </div>
                     </div>
                     
@@ -69,7 +69,7 @@ $this->extend(array(
                         <div class="col-sm-10">
                             <input type="text" name="app_id"
                                    id="input_app_id" class="form-control"
-                                   value="<?php $this->ech('data.app_id');?>">
+                                   value="<?php $this->out('data.app_id');?>">
                         </div>
                     </div>
                     
@@ -80,7 +80,7 @@ $this->extend(array(
                             <input type="text" name="app_secret"
                                    id="input_app_secret"
                                    class="form-control"
-                                   value="<?php $this->ech('data.app_secret');?>">
+                                   value="<?php $this->out('data.app_secret');?>">
                         </div>
                     </div>
                     
@@ -90,7 +90,7 @@ $this->extend(array(
                         <label for="input_type" class="col-sm-2 control-label">微信号类型:</label>
                         <div class="col-sm-10">
                             <select name="type" id="input_type" class="form-control" >
-                                <?php $this->swi($this->get('data.type'));?>
+                                <?php $this->swi($this->gain('data.type'));?>
                                 <option value="0" <?php $this->cas(0)?>>订阅号</option>
                                 <option value="1" <?php $this->cas(1)?>>服务号</option>
                                 <option value="2" <?php $this->cas(2)?>>企业号</option>

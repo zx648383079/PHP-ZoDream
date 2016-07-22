@@ -2,9 +2,6 @@
 namespace Service\Home;
 
 use Domain\Model\EmpireModel;
-use Infrastructure\HtmlExpand;
-use Zodream\Domain\Authentication\Auth;
-use Zodream\Infrastructure\Config;
 use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {
@@ -14,15 +11,17 @@ class HomeController extends Controller {
             'limit' => 4,
             'order' => 'recommend desc'
         ]);
-        $this->show(array(
+        return $this->show('index', array(
             'title' => '首页',
             'data' => $data
         ));
     }
 
     function aboutAction() {
-        $this->runCache('home.about');
-        $this->show(array(
+        if ($this->runCache('home.about')) {
+            
+        }
+        return $this->show('about', array(
             'title' => '关于',
         ));
     }

@@ -17,7 +17,7 @@ $this->extend(array(
             <h3 class="panel-title">增加规格</h3>
       </div>
       <div class="panel-body">
-            <?=FormWidget::begin($this->get('data'))
+            <?=FormWidget::begin($this->gain('data'))
              ->hidden('id')
             ->text('code', ['label' => '编号', 'required' => true])
             ->text('name', ['label' => '名称', 'required' => true])
@@ -27,7 +27,7 @@ $this->extend(array(
             ->button()
             ->end();
             ?>
-          <p><?php $this->ech('error');?></p>
+          <p><?php $this->out('error');?></p>
       </div>
 </div>
 

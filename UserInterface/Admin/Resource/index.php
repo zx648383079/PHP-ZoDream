@@ -7,8 +7,8 @@ $this->extend(array(
             'head'
         ))
 );
-$file = $this->get('file');
-$data = $this->get('data', array());
+$file = $this->gain('file');
+$data = $this->gain('data', array());
 ?>
 
 <table class="table table-hover">

@@ -26,7 +26,7 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->get('data', array()) as $value) {?>
+        <?php foreach ($this->gain('data', array()) as $value) {?>
             <tr>
                 <form method="POST">
                     <td><?php echo $value['id'];?></td>

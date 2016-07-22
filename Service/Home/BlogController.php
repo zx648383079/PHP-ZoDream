@@ -48,7 +48,7 @@ class BlogController extends Controller {
 		array(
 			'where' => $where,
 		));
-		$this->show(array(
+		return $this->show(array(
 			'title' => '博客',
 			'page' => $data,
 			'term' => $term
@@ -91,7 +91,7 @@ class BlogController extends Controller {
 			),
 			'order' => 'create_at'
 		));
-		$this->show(array(
+		return $this->show(array(
 			'title' => $data['title'],
 			'data' => $data,
 			'links' => EmpireModel::query()->getNextAndBefore($id),

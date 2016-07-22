@@ -10,9 +10,9 @@ $this->extend(array(
     ))
 );
 echo PanelWidget::show(array(
-    'head' => '字段管理 '. Html::a('添加', 'content/addField/modelid/'.$this->get('model'), array('class' => 'btn btn-primary')),
+    'head' => '字段管理 '. Html::a('添加', 'content/addField/modelid/'.$this->gain('model'), array('class' => 'btn btn-primary')),
     'body' => TableWidget::show(array(
-        'data' => $this->get('data'),
+        'data' => $this->gain('data'),
         'columns' => array(
             'position' => '排序',
             'field' => '名称',

@@ -27,7 +27,7 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->get('data', array()) as $item) {?>
+        <?php foreach ($this->gain('data', array()) as $item) {?>
             <tr>
                 <form method="POST">
                     <td>

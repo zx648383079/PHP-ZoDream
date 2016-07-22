@@ -8,7 +8,7 @@ $this->extend(array(
             'head'
         ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <div class="row">
     <div class="col-md-3 col-md-offset-2">

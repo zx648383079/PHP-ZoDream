@@ -6,7 +6,7 @@ $this->extend(array(
         'head'
     ))
 );
-$data = $this->get('data', array());
+$data = $this->gain('data', array());
 ?>
 
 

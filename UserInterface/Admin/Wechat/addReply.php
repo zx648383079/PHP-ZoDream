@@ -7,7 +7,7 @@ $this->extend(array(
         ))
 );
 echo \Zodream\Infrastructure\Html::tag('div', 
-    \Zodream\Domain\Html\Bootstrap\FormWidget::begin($this->get('data'))
+    \Zodream\Domain\Html\Bootstrap\FormWidget::begin($this->gain('data'))
         ->hidden('id')
         ->select('type', array(
             'follow' => '关注回复',

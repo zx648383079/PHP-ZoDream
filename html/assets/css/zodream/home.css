@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: "微软雅黑", "宋体";
 }
 
 a,
@@ -275,13 +276,11 @@ a:hover {
 .txt{
     width:100px; 
     height:429px;
-    background:#000;
     filter:alpha(opacity=50);
-    background:rgba(0,0,0,.5);
+    background: #00E0F2;
 }
 .txt p{
-    color:#fff;
-    font-family:"微软雅黑";
+    color:#767676;
     float:left;
     position:relative;
 }
@@ -291,8 +290,9 @@ a:hover {
     margin:25px 25px 0 20px;
 }
 .txt .p2{
-    font-size:14px;
-    width:14px;
+    font-weight: 600;
+    font-size: 20px;
+    width:20px;
     margin-top:25px;
 }
 

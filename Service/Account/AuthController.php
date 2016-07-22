@@ -47,7 +47,7 @@ class AuthController extends Controller {
 			$this->send('code', $num);
 			Factory::session()->set('level', $num);
 		}
-		$this->show(array(
+		return $this->show(array(
 			'title' => '后台登录'
 		));
 	}

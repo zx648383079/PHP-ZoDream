@@ -7,8 +7,8 @@ $this->extend(array(
             'head'
         ))
 );
-$page = $this->get('page');
-$category = $this->get('category', array());
+$page = $this->gain('page');
+$category = $this->gain('category', array());
 ?>
 <div>
     

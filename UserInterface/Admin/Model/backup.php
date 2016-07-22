@@ -18,7 +18,7 @@ $this->extend(array(
             <div class="form-group">
                 <label for="input_db" class="col-sm-2 control-label">数据库:</label>
                 <div class="col-sm-10">
-                    <?php foreach($this->get('data', array()) as $item){?>
+                    <?php foreach($this->gain('data', array()) as $item){?>
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" name="db[]" value="<?php echo $item;?>">
@@ -42,7 +42,7 @@ $this->extend(array(
                 </div>
             </div>
             
-            <p class="text-danger"><?php $this->ech('message');?></p>
+            <p class="text-danger"><?php $this->out('message');?></p>
         </form>
     </div>
 </div>

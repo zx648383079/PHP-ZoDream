@@ -1,6 +1,6 @@
 <?php
 /** @var $this \Zodream\Domain\Response\View */
-$type = $this->get('type');
+$type = $this->gain('type');
 if ($type == 'input') {
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">

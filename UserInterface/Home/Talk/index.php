@@ -9,7 +9,7 @@ $this->extend(array(
         'zodream/talk.css'
     )
 );
-$data = $this->get('data', array());
+$data = $this->gain('data', array());
 ?>
 
 <div class="content">
@@ -18,7 +18,7 @@ $data = $this->get('data', array());
     <hr class="line-left">
     <hr class="line-right">
     <div class="talk">
-      <h1 class="title"><?php $this->ech('title');?></h1>
+      <h1 class="title"><?php $this->out('title');?></h1>
       <?php foreach ($data as $value) {?>
          <div class="year">
             <h2><a href="javascript:0;"><?php echo date('Y年', $value[0]['create_at']);?><i></i></a></h2>

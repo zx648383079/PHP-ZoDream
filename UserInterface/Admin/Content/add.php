@@ -11,7 +11,7 @@ $this->extend(array(
 
 echo PanelWidget::show(array(
     'head' => '添加模型',
-    'body' => FormWidget::begin($this->get('data'))
+    'body' => FormWidget::begin($this->gain('data'))
         ->hidden('id')
         ->select('type', array(
             '内容模型',

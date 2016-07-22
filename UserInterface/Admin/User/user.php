@@ -7,7 +7,7 @@ $this->extend(array(
         'head'
     ))
 );
-$page = $this->get('page');
+$page = $this->gain('page');
 ?>
 <a class="btn" href="<?php $this->url('user/addUser');?>">增加用户</a>
 <a class="btn" href="<?php $this->url('user/role');?>">管理角色</a>
