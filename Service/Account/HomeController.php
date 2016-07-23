@@ -1,13 +1,14 @@
 <?php
 namespace Service\Account;
 
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+use Domain\Model\Blog\CommentModel;
+use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Request\Post;
 
 class HomeController extends Controller {
 	function indexAction() {
-		$page = EmpireModel::query('comment c')->getPage([
+		$page = CommentModel::find()->alias('c')
+			->load([
 			'left' => [
 				'post p',
 				'p.id = c.post_id'
@@ -17,21 +18,21 @@ class HomeController extends Controller {
 				'c.user_id != '.Auth::user()['id']
 			],
 			'order' => 'c.create_at desc'
-		], [
-			'content' => 'c.content',
-			'title' => 'p.title',
-			'user_id' => 'c.user_id',
-			'user_name' => 'c.user_name',
-			'create_at' => 'c.create_at'
-		]);
-		$this->show([
+		])->select([
+				'content' => 'c.content',
+				'title' => 'p.title',
+				'user_id' => 'c.user_id',
+				'user_name' => 'c.user_name',
+				'create_at' => 'c.create_at'
+			])->page();
+		return $this->show([
 			'title' => '最新动态',
 			'page' => $page
 		]);
 	}
 
 	function infoAction() {
-		$this->show();
+		return $this->show();
 	}
 
 	/**

@@ -1,14 +1,15 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+use Domain\Model\Blog\PostModel;
+use Domain\Model\Blog\TermModel;
+use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
 
 class BlogController extends Controller {
 	function indexAction($search = null, $termid = null, $user = null) {
-		$term = EmpireModel::query('term')->findAll();
+		$term = TermModel::findAll();
 		$where = array();
 		if (!empty($search)) {
 			$args = explode(' ', $search);
@@ -22,7 +23,8 @@ class BlogController extends Controller {
 		if (!empty($user)) {
 			$where[] = 'p.user_id = '.intval($user);
 		}
-		$data = EmpireModel::query('post p')->getPage(array(
+		$page = new Page(PostModel::find()->where($where));
+		$page->setPage(PostModel::find()->alias('p')->load(array(
 			'left' => array(
 				'user u',
 				'p.user_id = u.id',
@@ -33,7 +35,7 @@ class BlogController extends Controller {
 			),
 			'where' => $where,
 			'order' => 'create_at desc'
-		), array(
+		))->select([
 			'id' => 'p.id',
 			'title' => 'p.title',
 			'user' => 'u.name',
@@ -44,23 +46,21 @@ class BlogController extends Controller {
 			'excerpt' => 'p.excerpt',
 			'recommend' => 'p.recommend',
 			'comment_count' => 'p.comment_count'
-		),
-		array(
-			'where' => $where,
-		));
+		])->limit($page->getLimit())->all());
 		return $this->show(array(
 			'title' => '博客',
-			'page' => $data,
-			'term' => $term
+			'page' => $page,
+			'term' => $term,
+			'termId' => $termid
 		));
 	}
 
 	function viewAction($id = null) {
 		$id = intval($id);
 		if ($id < 1) {
-			Redirect::to('blog');
+			return $this->redirect('blog');
 		}
-		$data = EmpireModel::query('post p')->findOne(array(
+		$data = PostModel::find()->alias('p')->load(array(
 			'left' => array(
 				'user u',
 				'p.user_id = u.id',
@@ -72,7 +72,7 @@ class BlogController extends Controller {
 			'where' => array(
 				'p.id = '.intval($id)
 			)
-		), array(
+		))->select(array(
 			'id' => 'p.id',
 			'title' => 'p.title',
 			'content' => 'p.content',
@@ -84,18 +84,11 @@ class BlogController extends Controller {
 			'update_at' => 'p.update_at',
 			'create_at' => 'p.create_at',
 			'recommend' => 'p.recommend',
-		));
-		$comment = EmpireModel::query('comment')->findAll(array(
-			'where' => array(
-				'post_id = '.$id
-			),
-			'order' => 'create_at'
-		));
+		))->one();
 		return $this->show(array(
 			'title' => $data['title'],
 			'data' => $data,
-			'links' => EmpireModel::query()->getNextAndBefore($id),
-			'comment' => $comment
+			'links' => (new PostModel())->getNextAndBefore($id)
 		));
 	}
 

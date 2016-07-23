@@ -3,15 +3,14 @@ namespace Service\Account;
 /**
  * 登陆相关
  */
-use Domain\Form\EmpireForm;
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+use Domain\Model\LoginLogModel;
+use Domain\Model\UserModel;
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Filter\DataFilter;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Routing\Url;
 use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
 use Zodream\Domain\ThirdParty\OAuth\QQ;
-use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Error\Error;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Mailer\Mailer;
@@ -20,10 +19,8 @@ use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Template;
-use Zodream\Infrastructure\Traits\AjaxTrait;
 
 class AuthController extends Controller {
-	use AjaxTrait;
 
 	protected function rules() {
 		return array(
@@ -34,8 +31,12 @@ class AuthController extends Controller {
 	}
 
 	function indexAction() {
+		$user = new UserModel();
+		if ($user->load() && $user->signIn()) {
+			return $this->redirect(Request::get('ReturnUrl', 'index.php'));
+		}
 		$time = TimeExpand::getBeginAndEndTime(TimeExpand::TODAY);
-		$num = EmpireModel::query('login_log')->count(array(
+		$num = LoginLogModel::count(array(
 			'ip' => Request::ip(),
 			'status = 0',
 			 array(
@@ -48,7 +49,7 @@ class AuthController extends Controller {
 			Factory::session()->set('level', $num);
 		}
 		return $this->show(array(
-			'title' => '后台登录'
+			'title' => '用户登录'
 		));
 	}
 
@@ -63,12 +64,11 @@ class AuthController extends Controller {
 		if (!$result) {
 			return;
 		}
-		$url = Request::get('ReturnUrl', 'index.php');
-		Redirect::to($url);
+		
 	}
 
 	function registerAction() {
-		$this->show(array(
+		return $this->show(array(
 			'title' => '后台注册'
 		));
 	}
@@ -80,7 +80,7 @@ class AuthController extends Controller {
 	}
 
 	function findAction() {
-		$this->show([
+		return $this->show([
 			'title' => '找回密码'
 		]);
 	}
@@ -183,12 +183,8 @@ class AuthController extends Controller {
 	}
 
 	function logoutAction() {
-		EmpireModel::query('user')->updateById(Auth::user()['id'], array(
-			'token' => null
-		));
-		Factory::session()->clear();
-		Cookie::delete('token');
-		Redirect::to('/');
+		Auth::user()->logout();
+		return $this->redirect('/');
 	}
 
 	/**

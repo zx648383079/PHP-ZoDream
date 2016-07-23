@@ -1,13 +1,13 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\EmpireModel;
+use Domain\Model\Blog\PostModel;
+use Domain\Model\FeedbackModel;
 use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {
     function indexAction() {
-        $this->runCache('home.index');
-        $data = EmpireModel::query('post')->findAll([
+        $data = PostModel::findAll([
             'limit' => 4,
             'order' => 'recommend desc'
         ]);
@@ -18,11 +18,13 @@ class HomeController extends Controller {
     }
 
     function aboutAction() {
-        if ($this->runCache('home.about')) {
-            
+        $model = new FeedbackModel();
+        if ($model->load() && $model->save()) {
+            $model->clear();
         }
         return $this->show('about', array(
             'title' => '关于',
+            'model' => $model
         ));
     }
 

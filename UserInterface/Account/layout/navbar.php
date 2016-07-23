@@ -1,7 +1,7 @@
 <?php
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Html;
-/** @var $this \Zodream\Domain\Response\View */
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 ?>
 <nav class="navbar navbar-default" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->

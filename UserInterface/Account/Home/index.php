@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
-use Zodream\Domain\Authentication\Auth;
-/** @var $this \Zodream\Domain\Response\View */
+use Zodream\Domain\Access\Auth;
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
     'layout' => array(

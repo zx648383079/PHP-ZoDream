@@ -80,9 +80,12 @@ class PostModel extends Model {
 		);
 	}
 
-	public function getNextAndBefore() {
+	public function getNextAndBefore($id = null) {
+		if (empty($id)) {
+			$id = $this->id;
+		}
 		$before = $this->find()->where(array(
-			'id < '.$this->id,
+			'id < '.$id,
 			'status' => array(
 				'in',
 				array(
@@ -93,7 +96,7 @@ class PostModel extends Model {
 		return array(
 			count($before) == 1 ? $before[0] : null,
 			$this->find()->where(array(
-				'id > '.$this->id,
+				'id > '.$id,
 				'status' => array(
 					'in',
 					array(

@@ -175,7 +175,7 @@ class UserModel extends BaseModel {
 			return false;
 		}
 		if (!$user->validatePassword($this->password)) {
-			$this->send('password', '密码错误！');
+			$this->setError('password', '密码错误！');
 			return false;
 		}
 		$user->previous_ip = $user->update_ip;
@@ -206,6 +206,10 @@ class UserModel extends BaseModel {
 			'name' => 'a.name'
 		));*/
 		return $this->login($user);
+	}
+	
+	public function signInOAuth() {
+		
 	}
 	
 	public function signUp() {

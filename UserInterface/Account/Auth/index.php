@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
-/** @var $this \Zodream\Domain\Response\View */
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 $this->extend(array(
 	'layout' => array(
 		'head'
@@ -13,7 +13,7 @@ $code = $this->gain('code');
 ?>
 
 <div class="login">
-    <h2 class="text-center">后台登录</h2>
+    <h2 class="text-center">用户登录</h2>
     <form method="POST">
         <input type="email" id="email" name="email" value="" class="form-control" required placeholder="邮箱">
         <input type="password" name="password" class="form-control" value="" required placeholder="密码">
