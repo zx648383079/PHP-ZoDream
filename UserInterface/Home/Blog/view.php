@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\Response\View */
-use Zodream\Domain\Authentication\Auth;
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\ShareWidget;
 use Zodream\Infrastructure\Html;
 $this->extend(array(

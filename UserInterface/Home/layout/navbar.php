@@ -3,7 +3,7 @@ use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Html;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Routing\Url;
-/** @var $this \Zodream\Domain\Response\View */
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 ?>
 <nav class="navbar navbar-default" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -39,7 +39,8 @@ use Zodream\Domain\Routing\Url;
                 <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
             <?php else:?>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?=Auth::user()['name']?><span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <?=Auth::user()['name']?><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><?=Html::a('消息', ['account.php/message'])?></li>
                     <li><?=Html::a('个人中心', ['account.php/info'])?></li>

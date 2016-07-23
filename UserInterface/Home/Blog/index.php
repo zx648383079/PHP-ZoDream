@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\Response\View */
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
 	'layout' => array(
@@ -11,14 +11,15 @@ $this->extend(array(
     )
 );
 $page = $this->gain('page');
+$termId = $this->gain('termId');
 ?>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
             <ul class="term list-group">
-                <li class="list-group-item"><a href="<?php $this->url('blog');?>">全部</a></li>
+                <li class="list-group-item <?=empty($termId) ? 'active' : null?>"><a href="<?php $this->url('blog');?>">全部</a></li>
                 <?php foreach ($this->gain('term', array()) as $item) {?>
-                    <li class="list-group-item"><a href="<?php $this->url(null, array('termid' => $item['id']));?>"><?php echo $item['name'];?></a></li>
+                    <li class="list-group-item <?=$item['id'] == $termId ? 'active' : null?>"><a href="<?php $this->url(null, array('termid' => $item['id']));?>"><?=$item['name'];?></a></li>
                 <?php }?>
             </ul>
         </div>

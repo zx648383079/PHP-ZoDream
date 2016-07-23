@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\Response\View */
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 $this->extend(array(
     'layout' => array(
         'head',
@@ -14,7 +14,6 @@ $data = $this->gain('data', array());
 
 <div class="content">
   <div class="wrapper">
-    <div class="light"><i></i></div>
     <hr class="line-left">
     <hr class="line-right">
     <div class="talk">

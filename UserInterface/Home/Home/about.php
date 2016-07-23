@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\Response\View */
+/** @var $this \Zodream\Domain\View\Engine\DreamEngine*/
+/** @var $model \Domain\Model\FeedbackModel */
 $this->extend(array(
     'layout' => array(
         'head',
@@ -9,6 +10,7 @@ $this->extend(array(
         'zodream/home.css'
     )
 );
+$model = $this->gain('model');
 ?>
 
     <div class="about">
@@ -32,13 +34,13 @@ $this->extend(array(
             <div class="row">
                 <form method="post">
                     <div class="col-md-6">
-                        <input type="text" name="name" placeholder="称呼" required="">
-                        <input type="text" name="email" placeholder="邮箱" required="">
-                        <input type="text" name="phone" placeholder="联系方式">
-                        <p class="text-danger"><?php $this->out('message');?></p>
+                        <input type="text" name="name" value="<?=$model->name?>" placeholder="称呼" required="">
+                        <input type="email" name="email" value="<?=$model->email?>" placeholder="邮箱" required="">
+                        <input type="text" name="phone" value="<?=$model->phone?>" placeholder="联系方式">
+                        <p class="text-danger"><?=empty($model->getError()) ? null: '输入有误！'?></p>
                     </div>
                     <div class="col-md-6">
-                        <textarea name="content" placeholder="建议内容"></textarea>
+                        <textarea name="content" placeholder="建议内容"><?=$model->content?></textarea>
                         <button type="submit" class="btn-show">发送</button>
                     </div>
                 </form>
