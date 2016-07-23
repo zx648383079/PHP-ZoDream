@@ -58,7 +58,7 @@ class HomeController extends Controller {
 	}
 
 	function securityAction() {
-		$this->show();
+		return $this->show();
 	}
 
 	/**
@@ -74,7 +74,7 @@ class HomeController extends Controller {
 	}
 
 	function settingAction() {
-		$this->show();
+		return $this->show();
 	}
 
 }

@@ -1,8 +1,8 @@
 <?php
 namespace Service\Admin;
 
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Response\Download;
+
+use Zodream\Domain\Response\FileResponse;
 use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Request;
 
@@ -22,28 +22,14 @@ class DownloadController extends Controller {
 			$this->show();
 		}
 		Log::save($file, 'download');
-		Download::make(APP_DIR . '/'. ltrim($file, '/'));
+		return new FileResponse(APP_DIR . '/'. ltrim($file, '/'));
 	}
 
 	function recordAction() {
-		$this->show();
-	}
-
-	function errorAction() {
-		$page = EmpireModel::query('enewsdownerror')->getPage('order by errorid desc');
-		$this->show(array(
-			'page' => $page
-		));
+		return $this->show();
 	}
 
 	function levelAction() {
-		$this->show();
-	}
-
-	function playerAction() {
-		$data = EmpireModel::query('enewsplayer')->select('order by id', 'id,player,filename,bz');
-		$this->show(array(
-			'data' => $data
-		));
+		return $this->show();
 	}
 }

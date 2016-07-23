@@ -1,15 +1,16 @@
 <?php
 namespace Service\Admin;
+use Domain\Model\Home\TalkModel;
 
 /**
  * 随想
  */
-use Domain\Model\EmpireModel;
+
 
 class TalkController extends Controller {
 	function indexAction() {
-		$page = EmpireModel::query('talk')->getPage('order by create_at desc');
-		$this->show(array(
+		$page = TalkModel::find()->order('create_at desc')->page();
+		return $this->show(array(
 			'page' => $page
 		));
 	}

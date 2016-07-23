@@ -140,7 +140,7 @@ class AuthController extends Controller {
 		if (empty($model)) {
 			Redirect::to('/', 2, '验证信息错误');
 		}
-		$this->show([
+		return $this->show([
 			'title' => '重置密码',
 			'token' => $token,
 			'email' => $email
@@ -211,7 +211,7 @@ class AuthController extends Controller {
 
 	function oauthAction($type = 'qq') {
 		$oauth = $this->getOAuth($type);
-		$oauth->login();
+		return $oauth->login();
 	}
 
 	function qqAction() {

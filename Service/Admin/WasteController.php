@@ -3,7 +3,7 @@ namespace Service\Admin;
 /**
  * 废料科普
  */
-use Domain\Model\EmpireModel;
+
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
 

@@ -4,12 +4,12 @@ namespace Service\Admin;
 /**
  * 随想
  */
-use Domain\Model\EmpireModel;
+use Domain\Model\FeedbackModel;
 
 class FeedbackController extends Controller {
 	function indexAction() {
-		$page = EmpireModel::query('feedback')->getPage('order by create_at desc');
-		$this->show(array(
+		$page = FeedbackModel::find()->order('create_at desc')->page();
+		return $this->show(array(
 			'page' => $page
 		));
 	}

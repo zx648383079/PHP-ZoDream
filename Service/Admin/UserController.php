@@ -5,9 +5,9 @@ namespace Service\Admin;
  * 用户信息
  */
 use Domain\Form\EmpireForm;
-use Domain\Model\EmpireModel;
 
-use Zodream\Domain\Authentication\Auth;
+
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Request;

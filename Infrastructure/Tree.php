@@ -6,7 +6,7 @@ namespace Infrastructure;
  * Date: 2016/4/3
  * Time: 15:02
  */
-use Domain\Model\EmpireModel;
+
 
 class Tree {
 

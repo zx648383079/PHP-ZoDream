@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Factory;
 
 class CacheController extends Controller {
 	function indexAction() {
-		$this->show([
+		return $this->show([
 			'title' => '更新缓存',
 			'data' => [
 				[
@@ -44,14 +44,14 @@ class CacheController extends Controller {
 	}
 
 	function clearAction() {
-		$this->show([
+		return $this->show([
 			'title' => '清除缓存'
 		]);
 	}
 	
 	function clearPost() {
 		Factory::cache()->delete();
-		$this->ajaxReturn([
+		return $this->ajax([
 			'status' => 'success'
 		]);
 	}

@@ -4,7 +4,7 @@ namespace Service\Account;
  * 验证码
  */
 use Zodream\Domain\Image\VerifyCode;
-use Zodream\Domain\Response\Image;
+use Zodream\Domain\Response\ImageResponse;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Request;
 
@@ -22,6 +22,6 @@ class VerifyController extends Controller {
 		}
 		$verify = new VerifyCode();
 		Factory::session()->get('code', $verify->getCode());
-		Image::show($verify->generate($level - 1));
+		return new ImageResponse($verify->generate($level - 1));
 	}
 }

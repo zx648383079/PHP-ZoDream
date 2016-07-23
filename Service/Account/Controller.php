@@ -1,7 +1,7 @@
 <?php
 namespace Service\Account;
 
-use Domain\Model\EmpireModel;
+
 use Zodream\Domain\Model;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Routing\Controller as BaseController;

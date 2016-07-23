@@ -4,8 +4,8 @@ namespace Service\Home;
 /**
  * 问答版块
  */
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Html;
 use Zodream\Infrastructure\Request;

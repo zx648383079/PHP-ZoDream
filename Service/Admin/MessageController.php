@@ -4,8 +4,8 @@ namespace Service\Admin;
 /**
  * 私信
  */
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+
+use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Request\Post;
 
 class MessageController extends Controller {

@@ -4,7 +4,8 @@ namespace Service\Admin;
 /**
  * 友情链接
  */
-use Domain\Model\EmpireModel;
+
+use Domain\Model\Home\FriendLinkModel;
 use Zodream\Domain\Filter\DataFilter;
 use Zodream\Domain\Response\Redirect;
 
@@ -13,8 +14,8 @@ class LinkController extends Controller {
 	 * 友情链接
 	 */
 	function indexAction() {
-		$data = EmpireModel::query('friendlink')->findAll();
-		$this->show(array(
+		$data = FriendLinkModel::findAll();
+		return $this->show(array(
 			'data' => $data
 		));
 	}
@@ -23,7 +24,7 @@ class LinkController extends Controller {
 		if (!empty($id)) {
 			$this->send('data', EmpireModel::query('friendlink')->findById($id));
 		}
-		$this->show();
+		return $this->show();
 	}
 
 	function addPost() {

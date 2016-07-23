@@ -1,7 +1,7 @@
 <?php
 namespace Domain\Model;
 
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Access\Auth;
 use \Zodream\Domain\Model\UserModel as BaseModel;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Database\Query;

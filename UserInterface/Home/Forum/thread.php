@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Access\Auth;
 /** @var $this \Zodream\Domain\View\Engine\DreamEngine */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(

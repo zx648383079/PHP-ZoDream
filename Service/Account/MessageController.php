@@ -1,8 +1,8 @@
 <?php
 namespace Service\Account;
 
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+
+use Zodream\Domain\Access\Auth;
 
 class MessageController extends Controller {
 

@@ -1,18 +1,20 @@
 <?php
 namespace Service\Admin;
+use Domain\Model\Navigation\NavigationCategoryModel;
+use Domain\Model\Navigation\NavigationModel;
 
 /**
  * 首页导航
  */
-use Domain\Model\EmpireModel;
+
 
 class NavigationController extends Controller {
 	function indexAction() {
-		$page = EmpireModel::query('navigation')->getPage('order by category_id,position');
-		$data = EmpireModel::query('navigation_category')->findAll(array(
+		$page = NavigationModel::find()->order('category_id,position')->page();
+		$data = NavigationCategoryModel::findAll(array(
 			'order' => 'position'
 		), 'id,name');
-		$this->show(array(
+		return $this->show(array(
 			'page' => $page,
 			'category' => $data
 		));
@@ -30,10 +32,10 @@ class NavigationController extends Controller {
 	}
 
 	function categoryAction() {
-		$data = EmpireModel::query('navigation_category')->findAll(array(
+		$data = NavigationCategoryModel::findAll(array(
 			'order' => 'position'
 		));
-		$this->show(array(
+		return $this->show(array(
 			'data' => $data
 		));
 	}

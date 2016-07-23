@@ -9,13 +9,13 @@ use Zodream\Infrastructure\Request\Post;
 class ModelController extends Controller {
 	function indexAction() {
 		$data = Environment::getFiles(APP_DIR.'/document/');
-		$this->show(array(
+		return $this->show(array(
 			'data' => $data
 		));
 	}
 
 	function recoverAction() {
-		$this->show();
+		return $this->show();
 	}
 
 	/**
@@ -48,7 +48,7 @@ class ModelController extends Controller {
 	function backupAction() {
 		$model = new GenerateModel();
 		$data = $model->getDatabase();
-		$this->show(array(
+		return $this->show(array(
 			'data' => $data
 		));
 	}
@@ -96,7 +96,7 @@ USE `{$item}` ;\r\n");
 	}
 
 	function executeAction() {
-		$this->show();
+		return $this->show();
 	}
 
 	/**

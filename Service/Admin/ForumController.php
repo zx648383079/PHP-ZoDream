@@ -4,7 +4,7 @@ namespace Service\Admin;
 /**
  * 论坛管理
  */
-use Domain\Model\EmpireModel;
+
 
 class ForumController extends Controller {
 	function indexAction() {

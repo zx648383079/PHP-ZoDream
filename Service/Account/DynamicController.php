@@ -4,8 +4,8 @@ namespace Service\Account;
 /**
  * 动态
  */
-use Domain\Model\EmpireModel;
-use Zodream\Domain\Authentication\Auth;
+
+use Zodream\Domain\Access\Auth;
 
 class DynamicController extends Controller {
 	function indexAction() {

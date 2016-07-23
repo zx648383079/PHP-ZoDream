@@ -9,7 +9,7 @@ use Zodream\Infrastructure\Request\Post;
 
 class MailController extends Controller {
 	function indexAction() {
-		$this->show(array(
+		return $this->show(array(
 			'title' => '邮件群发'
 		));
 	}

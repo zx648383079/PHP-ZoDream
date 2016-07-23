@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\Bootstrap\FormWidget;
 use Zodream\Domain\Routing\Url;
 /** @var $this \Zodream\Domain\View\Engine\DreamEngine */

@@ -6,7 +6,7 @@ namespace Domain\Model;
  * Date: 2016/3/18
  * Time: 21:41
  */
-use Zodream\Domain\Authentication\Auth;
+use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\Page;
 use Zodream\Infrastructure\Request;
 

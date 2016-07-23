@@ -7,16 +7,27 @@ $this->extend(array(
         ))
 );
 ?>
-<div>
-    
+<div class="row">
     <form method="POST">
-        分类： <input type="text" name="name" placeholder="分类" required>
-        顺序： <input type="number" name="position" value="0">
-        <button type="submit">增加</button>
+        <h4 class="col-xs-1 text-center">
+            分类：
+        </h4>
+         <div class="col-xs-6">
+             <input type="text" class="form-control" name="name" placeholder="分类" required>
+         </div>
+        <h4 class="col-xs-1 text-center">
+            顺序：
+        </h4>
+        <div class="col-xs-2">
+            <input type="number" class="form-control" name="position" value="0">
+        </div>
+        <div class="col-xs-1">
+            <button type="submit" class="btn btn-primary">增加</button>
+        </div>
     </form>
 </div>
 
-<table>
+<table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>
@@ -26,24 +37,24 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->gain('data', array()) as $value) {?>
+        <?php foreach ($this->gain('data', array()) as $value) :?>
             <tr>
                 <form method="POST">
-                    <td><?php echo $value['id'];?></td>
+                    <td><?=$value['id']?></td>
                     <td>
-                        <input type="hidden" name="id" value="<?php echo $value['id'];?>">
-                        <input type="text" name="name" value="<?php echo $value['name'];?>" placeholder="分类" required>
+                        <input type="hidden" name="id" value="<?=$value['id']?>">
+                        <input type="text" class="form-control" name="name" value="<?=$value['name']?>" placeholder="分类" required>
                     </td>
                     <td>
-                        <input type="number" name="position" value="<?php echo $value['position'];?>">
+                        <input type="number" class="form-control" name="position" value="<?=$value['position']?>">
                     </td>
                     <td>
-                        <button type="submit">修改</button>
-                        <a href="#" class="btn">删除</a>
+                        <button type="submit" class="btn btn-primary">修改</button>
+                        <a href="#" class="btn btn-danger">删除</a>
                     </td>
                 </form>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
 </table>
 
