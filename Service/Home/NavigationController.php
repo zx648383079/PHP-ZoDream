@@ -2,24 +2,25 @@
 namespace Service\Home;
 
 
+use Domain\Model\Navigation\NavigationCategoryModel;
+use Domain\Model\Navigation\NavigationModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Request;
 
 class NavigationController extends Controller {
     function indexAction() {
-        $this->runCache('navigation.index');
-        $data = EmpireModel::query('navigation n')->findAll(array(
+        $data = NavigationModel::find()->alias('n')->load(array(
             'left' => array(
                 'navigation_category c',
                 'c.id = n.category_id'
             ),
             'order' => 'c.name,c.position,n.position'
-        ), 'n.name as name,n.url as url,c.name as category');
-        $category = EmpireModel::query('navigation_category')->findAll(array(
+        ))->select('n.name as name,n.url as url,c.name as category')->all();
+        $category = NavigationCategoryModel::findAll(array(
             'order' => 'position'
         ), 'id,name');
-        $this->show(array(
+        return $this->show(array(
             'data' => HtmlExpand::getTree($data, 'category'),
             'category' => $category
         ));

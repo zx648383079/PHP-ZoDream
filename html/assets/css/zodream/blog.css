@@ -1,17 +1,52 @@
+
+.container {
+    margin: 30px auto;
+}
+
 .term {
     font-size: 30px;
     text-align: center;
 }
 
+.term .list-group-item:hover {
+    border-left: 5px solid #05a6b1;
+    border-right: 5px solid #05a6b1;
+}
+
 .list-item {
     border-bottom: 1px dotted #ccc;
-    margin: 5px;
+    margin: 0 5px;
+    padding: 20px 5px;
+}
+
+.list-item:hover {
+    background: rgba(200, 200, 200, .5);
+    border-left: 5px solid #05a6b1;
+}
+
+.list-item:hover .recommend {
+    background: #05a6b1;
+    color: #fff;
+    border: none;
 }
 
 .list-group-item.active a,
 .list-group-item.active:focus a,
 .list-group-item.active:hover a {
     color: #fff;
+}
+
+.list-item-foot {
+    margin: 10px;
+}
+
+.list-item-foot span {
+    border-radius: 4px;
+    background: #05a6b1;
+    color: #fff;
+    margin-right: 3px;
+    padding: 2px;
+    text-align: center;
 }
 
 .recommend {

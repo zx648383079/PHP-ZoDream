@@ -25,6 +25,33 @@ define(["require", "exports"], function (require, exports) {
             var regex = new RegExp(pattern);
             return regex.test(arg);
         };
+        Validate.passwordStrong = function (password) {
+            if (password.length <= 4)
+                return 0;
+            var modes = 0;
+            for (var i = 0; i < password.length; i++) {
+                modes |= this.charMode(password.charCodeAt(i));
+            }
+            return this.bitTotal(modes);
+        };
+        Validate.charMode = function (iN) {
+            if (iN >= 48 && iN <= 57)
+                return 1;
+            if (iN >= 65 && iN <= 90)
+                return 2;
+            if (iN >= 97 && iN <= 122)
+                return 4;
+            return 8;
+        };
+        Validate.bitTotal = function (num) {
+            var modes = 0;
+            for (var i = 0; i < 4; i++) {
+                if (num & 1)
+                    modes++;
+                num >>>= 1;
+            }
+            return modes;
+        };
         return Validate;
     }());
     exports.Validate = Validate;

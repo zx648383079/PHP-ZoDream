@@ -27,4 +27,39 @@ export class Validate {
         let regex = new RegExp(pattern);
         return regex.test(arg);
     }
+
+    public static passwordStrong(password: string): number {
+        if (password.length <= 4)
+                return 0; //密码太短  
+        let modes = 0;
+        for (let i = 0; i < password.length; i++) {
+            //测试每一个字符的类别并统计一共有多少种模式.  
+            modes |= this.charMode(password.charCodeAt(i));
+        }
+        return this.bitTotal(modes);
+    }
+
+    /*
+    *       判断字符类型
+    */
+    public static charMode(iN: number):number {
+        if (iN >= 48 && iN <= 57) //数字  
+            return 1;
+        if (iN >= 65 && iN <= 90) //大写字母  
+            return 2;
+        if (iN >= 97 && iN <= 122) //小写  
+            return 4;
+        return 8; //特殊字符  
+    }
+    /*
+        统计字符类型
+    */
+    public static bitTotal(num: number): number {
+        let modes: number = 0;
+        for (let i = 0; i < 4; i++) {
+            if (num & 1) modes++;
+            num >>>= 1;
+        }
+        return modes;
+    }
 }

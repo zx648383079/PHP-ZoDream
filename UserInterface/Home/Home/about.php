@@ -41,7 +41,7 @@ $model = $this->gain('model');
                     </div>
                     <div class="col-md-6">
                         <textarea name="content" placeholder="建议内容"><?=$model->content?></textarea>
-                        <button type="submit" class="btn-show">发送</button>
+                        <button type="submit" class="btn btn-show">发送</button>
                     </div>
                 </form>
                 <div class="clearfix"> </div>

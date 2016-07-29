@@ -5,8 +5,10 @@ namespace Service\Home;
  * 问答版块
  */
 
+use Domain\Model\Question\QuestionAnswerModel;
+use Domain\Model\Question\QuestionModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Response\Redirect;
+use Zodream\Domain\Html\Page;
 use Zodream\Infrastructure\Html;
 use Zodream\Infrastructure\Request;
 
@@ -19,13 +21,14 @@ class QuestionController extends Controller {
 	}
 
 	function indexAction() {
-		$page = EmpireModel::query('question q')->getPage(array(
+		$page = new Page(QuestionModel::find());
+		$page->setPage(QuestionModel::find()->load(array(
 			'left' => [
 				'user u',
 				'u.id = q.user_id'
 			],
 			'order' => 'status asc,create_at desc'
-		), [
+		))->select([
 			'id' => 'q.id',
 			'user' => 'u.name',
 			'user_id' => 'q.user_id',
@@ -33,8 +36,8 @@ class QuestionController extends Controller {
 			'count' => 'q.count',
 			'create_at' => 'q.create_at',
 			'status' => 'q.status'
-		], []);
-		$this->show(array(
+		]));
+		return $this->show(array(
 			'title' => '问答',
 			'page' => $page
 		));
@@ -46,25 +49,9 @@ class QuestionController extends Controller {
 		]);
 	}
 
-	/**
-	 * @param Request\Post $post
-	 */
-	function addPost($post) {
-		$row = EmpireModel::query('question')->save([
-			'title' => 'required|string:1-200',
-			'content' => '',
-			'user_id' => '',
-			'create_at' => ''
-		], $post->get());
-		if (empty($row)) {
-			$this->send($post->get());
-		}
-		Redirect::to(['question']);
-	}
-
 
 	function viewAction($id) {
-		$data = EmpireModel::query('question q')->find()
+		$data = QuestionModel::find()->alias('q')
 			->left('user u', 'q.user_id = u.id')->where(['q.id' => $id])->select([
 				'id' => 'q.id',
 				'user' => 'u.name',
@@ -74,7 +61,9 @@ class QuestionController extends Controller {
 				'create_at' => 'q.create_at',
 				'status' => 'q.status'
 			])->one();
-		$page = EmpireModel::query('question_answer qa')->getPage(array(
+		$page = new Page(QuestionAnswerModel::find()->where(['question_id' => $id]));
+		$page->setPage(QuestionAnswerModel::find()->alias('qa')
+			->load(array(
 			'left' => [
 				'user u',
 				'qa.user_id = u.id'
@@ -83,19 +72,15 @@ class QuestionController extends Controller {
 				'qa.question_id' => $id
 			),
 			'order' => 'qa.status desc,qa.create_at asc'
-		), array(
-			'user_id' => 'qa.user_id',
-			'user' => 'u.name',
-			'content' => 'qa.content',
-			'create_at' => 'qa.create_at',
-			'status' => 'qa.status',
-			'parent_id' => 'qa.parent_id'
-		), array(
-			'where' => array(
-				'question_id' => $id
-			)
-		));
-		$this->show(array(
+		))->select(array(
+				'user_id' => 'qa.user_id',
+				'user' => 'u.name',
+				'content' => 'qa.content',
+				'create_at' => 'qa.create_at',
+				'status' => 'qa.status',
+				'parent_id' => 'qa.parent_id'
+			)));
+		return $this->show(array(
 			'title' => $data['title'],
 			'page' => $page,
 			'data' => $data

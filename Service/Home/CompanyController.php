@@ -2,9 +2,8 @@
 namespace Service\Home;
 
 
-use Domain\Model\WeChat\WeChatModel;
-use Domain\WeChat\Subscribe;
-use Infrastructure\HtmlExpand;
+use Domain\Model\Company\CompanyCommentModel;
+use Domain\Model\Company\CompanyModel;
 
 class CompanyController extends Controller {
 	function indexAction($search = null) {
@@ -17,22 +16,22 @@ class CompanyController extends Controller {
 				$where[] = ["demand like '%{$item}%'", 'or'];
 			}
 		}
-		$page = EmpireModel::query('company')->getPage();
-		$this->show(array(
+		$page = CompanyModel::find()->where($where)->page();
+		return $this->show(array(
 			'title' => '公司供求',
 			'page' => $page
 		));
 	}
 	
 	function viewAction($id) {
-		$data = EmpireModel::query('company')->findOne($id);
-		$models = EmpireModel::query('company_comment')->findAll([
+		$data = CompanyModel::findOne($id);
+		$models = CompanyCommentModel::findAll([
 			'where' => [
 				'company_id' => $id
 			],
 			'order' => 'create_at desc'
 		]);
-		$this->show(array(
+		return $this->show(array(
 			'title' => '查看 '.$data['name'],
 			'data' => $data,
 			'models' => $models

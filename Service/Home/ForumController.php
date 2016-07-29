@@ -5,7 +5,11 @@ namespace Service\Home;
  * 论坛版块
  */
 
+use Domain\Model\Forum\ForumModel;
+use Domain\Model\Forum\ThreadModel;
+use Domain\Model\Forum\ThreadPostModel;
 use Zodream\Domain\Access\Auth;
+use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request;
 
@@ -26,16 +30,17 @@ class ForumController extends Controller {
 		$searches = explode(' ', $search);
 		$where = array();
 		foreach ($searches as $item) {
-			$where[] = "t.title like '%{$item}%'";
+			$where[] = "title like '%{$item}%'";
 		}
-		$page = EmpireModel::query('thread t')->getPage(array(
+		$page = new Page(ThreadModel::find()->where($where));
+		$page->setPage(ThreadModel::find()->alias('t')->load(array(
 			'left' => array(
 				'user u',
 				't.update_user = u.id'
 			),
 			'where' => $where,
 			'order' => 'create_at desc'
-		), array(
+		))->select(array(
 			'id' => 't.id',
 			'update_at' => 't.update_at',
 			'update_user' => 'u.name',
@@ -44,9 +49,7 @@ class ForumController extends Controller {
 			'create_at' => 't.create_at',
 			'replies' => 't.replies',
 			'views' => 't.views'
-		), array(
-			'where' => $where
-		));
+		)));
 		$this->show('forum.search', array(
 			'page' => $page,
 			'title' => '搜 '.$search
@@ -54,8 +57,7 @@ class ForumController extends Controller {
 	}
 
 	function indexAction() {
-		$this->runCache('forum.index');
-		$data = EmpireModel::query('forum')->findAll(array(
+		$data = ForumModel::findAll(array(
 			'where' => array(
 				'type' => array(
 					'in', 
@@ -67,7 +69,7 @@ class ForumController extends Controller {
 			),
 			'order' => 'parent'
 		));
-		$this->show(array(
+		return $this->show(array(
 			'title' => '论坛',
 			'data' => $data
 		));
@@ -76,38 +78,35 @@ class ForumController extends Controller {
 	function threadAction($id = null) {
 		$id = intval($id);
 		if ($id < 1) {
-			Redirect::to('forum');
+			return $this->redirect('forum');
 		}
-		$sub = EmpireModel::query('forum')->findAll(array(
+		$sub = ForumModel::findAll(array(
 			'where' => array(
 				'type' => 'sub',
 				'parent = '. $id
 			)
 		));
-		$page = EmpireModel::query('thread t')->getPage(array(
+		$page = new Page(ThreadModel::find()->where('forum_id = '.$id));
+		$page->setPage(ThreadModel::find()->load(array(
 			'left' => array(
 				'user u',
 				't.update_user = u.id'
 			),
 			'where' => array(
-				'forum_id = '.$id
+				't.forum_id = '.$id
 			),
-			'order' => 'create_at desc'
-		), array(
-			'id' => 't.id',
-			'update_at' => 't.update_at',
-			'update_user' => 'u.name',
-			'title' => 't.title',
-			'user_name' => 't.user_name',
-			'create_at' => 't.create_at',
-			'replies' => 't.replies',
-			'views' => 't.views'
-		), array(
-			'where' => array(
-				'forum_id = '.$id
-			)
-		));
-		$this->show(array(
+			'order' => 'create_at desc',
+				'select' => array(
+				'id' => 't.id',
+				'update_at' => 't.update_at',
+				'update_user' => 'u.name',
+				'title' => 't.title',
+				'user_name' => 't.user_name',
+				'create_at' => 't.create_at',
+				'replies' => 't.replies',
+				'views' => 't.views'
+			))));
+		return $this->show(array(
 			'sub' => $sub,
 			'page' => $page,
 			'id' => $id
@@ -115,7 +114,7 @@ class ForumController extends Controller {
 	}
 
 	function addAction($id) {
-		$this->show(array(
+		return $this->show(array(
 			'id' => $id
 		));
 	}
@@ -167,13 +166,13 @@ class ForumController extends Controller {
 	function postAction($id = null) {
 		$id = intval($id);
 		if ($id < 1) {
-			Redirect::to('forum');
+			return $this->redirect('forum');
 		}
-		if (Request::isGet()) {
-			EmpireModel::query('thread')->updateOne('views', 'id = '.$id);
-		}
-		$data = EmpireModel::query('thread')->findById($id);
-		$page = EmpireModel::query('thread_post p')->getPage(array(
+		$model = ThreadModel::findOne($id);
+		$model->views ++;
+		$model->update();
+		$page = new Page(ThreadPostModel::find()->where('thread_id = '.$id));
+		$page->setPage(ThreadPostModel::find()->alias('p')->load(array(
 			'left' => [
 				'user u',
 				'p.user_id = u.id'
@@ -182,22 +181,18 @@ class ForumController extends Controller {
 				'p.thread_id = '.$id
 			),
 			'order' => 'p.first desc,p.create_at asc'
-		), array(
+		))->select(array(
 			'user' => 'p.user_id',
 			'`name`' => 'u.name',
 			'avatar' => 'u.avatar',
 			'content' => 'p.content',
 			'create_at' => 'p.create_at',
 			'first' => 'p.first'
-		), array(
-			'where' => array(
-				'thread_id = '.$id
-			)
-		));
+		)));
 		$this->show(array(
-			'title' => $data['title'],
+			'title' => $model->title,
 			'page' => $page,
-			'data' => $data
+			'data' => $model
 		));
 	}
 

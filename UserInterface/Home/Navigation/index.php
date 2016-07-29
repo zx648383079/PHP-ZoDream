@@ -12,13 +12,21 @@ $data = $this->gain('data', array());
 
 <div class="main">
     <div class="search">
-        <select id="s">
-            <option value="baidu">百度</option>
-            <option value="bing">必应</option>
-            <option value="github">Github</option>
-        </select>
-        <input type="text" id="p" placeholder="搜索">
-        <button id="search">搜索</button>
+        <div class="row">
+            <div class="col-md-2">
+                <select id="s" class="form-control">
+                    <option value="baidu">百度</option>
+                    <option value="bing">必应</option>
+                    <option value="github">Github</option>
+                </select>
+            </div>
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="p" placeholder="搜索">
+            </div>
+            <div class="col-md-2">
+                <button id="search" class="btn btn-primary">搜索</button>
+            </div>
+        </div>
     </div>
     
     <div class="table">

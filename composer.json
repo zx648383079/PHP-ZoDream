@@ -1,6 +1,7 @@
 {
   "name" : "ZoDream",
-  "version" : "2.1",
+  "description": "ZoDream PPHP Framework",
+  "version" : "2.3",
   "require" : {
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",

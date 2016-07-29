@@ -119,6 +119,8 @@
 
 .contact button {
     width: 100px;
+    border: 1px solid #05a6b3;
+    border-radius: 0;
 }
 
 .about-top {
@@ -194,16 +196,6 @@
     font-size: 20px;
     width:20px;
     margin-top:25px;
-}
-
-.footer {
-    padding: 3em 0px;
-    background: #222;
-    margin: 0;
-}
-
-.footer a {
-    color: #fff;
 }
 
 @media(max-width:1366px){

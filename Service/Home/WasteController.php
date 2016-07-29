@@ -2,13 +2,13 @@
 namespace Service\Home;
 
 
-use Domain\Model\WeChat\WeChatModel;
-use Domain\WeChat\Subscribe;
+use Domain\Model\Company\CompanyModel;
+use Domain\Model\Waste\WasteCompanyModel;
+use Domain\Model\Waste\WasteModel;
 use Infrastructure\HtmlExpand;
 
 class WasteController extends Controller {
 	function indexAction($search = null) {
-		$this->runCache('waste.index'.$search);
 		$where = null;
 		if (!empty($search)) {
 			$args = explode(' ', $search);
@@ -17,7 +17,7 @@ class WasteController extends Controller {
 				$where[] = ["w.name like '%{$item}%'", 'or'];
 			}
 		}
-		$data = EmpireModel::query('waste w')->findAll(array(
+		$data = WasteModel::find()->alias('w')->load(array(
 			'right' => array(
 				'waste_company wc',
 				'wc.waste_id = w.id'
@@ -28,7 +28,7 @@ class WasteController extends Controller {
 			),
 			'where' => $where,
 			'order' => 'w.id asc'
-		), array(
+		))->select(array(
 			'id' => 'w.id',
 			'code' => 'w.code',
 			'name' => 'w.name',
@@ -37,8 +37,8 @@ class WasteController extends Controller {
 			'company' => 'c.name',
 			'phone' => 'c.phone',
 			'update_at' => 'w.update_at'
-		));
-		$this->show(array(
+		))->all();
+		return $this->show(array(
 			'title' => '废料科普',
 			'data' => HtmlExpand::getTree($data, 'id')
 		));
@@ -46,8 +46,8 @@ class WasteController extends Controller {
 	
 	function companyAction($id) {
 		$id = intval($id);
-		$data = EmpireModel::query('company')->findOne($id);
-		$models = EmpireModel::query('waste_company wc')->findAll([
+		$data = CompanyModel::findOne($id);
+		$models = WasteCompanyModel::find()->alias('wc')->load([
 			'left' => [
 				'waste w',
 				'wc.waste_id = w.id'
@@ -55,12 +55,12 @@ class WasteController extends Controller {
 			'where' => [
 				'wc.company_id' => $id
 			]
-		], [
+		])->select([
 			'id' => 'w.id',
 			'code' => 'w.code',
 			'name' => 'w.name'
-		]);
-		$this->show(array(
+		])->all();
+		return $this->show(array(
 			'title' => '查看 '.$data['name'],
 			'data' => $data,
 			'models' => $models 
@@ -69,8 +69,8 @@ class WasteController extends Controller {
 	
 	function viewAction($id) {
 		$id = intval($id);
-		$data = EmpireModel::query('waste')->findOne($id);
-		$models = EmpireModel::query('waste_company wc')->findAll([
+		$data = WasteModel::findOne($id);
+		$models = WasteCompanyModel::find()->alias('wc')->load([
 			'left' => [
 				'company c',
 				'wc.company_id = c.id'
@@ -78,12 +78,12 @@ class WasteController extends Controller {
 			'where' => [
 				'wc.waste_id' => $id
 			]
-		], [
+		])->select([
 			'id' => 'c.id',
 			'name' => 'c.name',
 			'phone' => 'c.phone'
-		]);
-		$this->show(array(
+		])->all();
+		return $this->show(array(
 			'title' => '查看 '.$data['code'],
 			'data' => $data,
 			'models' => $models

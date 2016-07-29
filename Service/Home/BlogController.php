@@ -3,6 +3,7 @@ namespace Service\Home;
 
 use Domain\Model\Blog\PostModel;
 use Domain\Model\Blog\TermModel;
+use Domain\Model\LogModel;
 use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
@@ -94,21 +95,21 @@ class BlogController extends Controller {
 
 	public function recommendAction($id) {
 		$id = intval($id);
-		if (!EmpireModel::query()->hasLog('recommendBlog', $id)) {
-			$this->ajaxReturn(array(
+		if (!LogModel::hasLog('recommendBlog', $id)) {
+			return $this->ajax(array(
 				'status' => 'failure',
 				'error' => '您已经推荐过了！'
 			));
 		}
-		$result = EmpireModel::query('post')->updateOne('recommend', 'id = '. intval($id));
+		$result = (new PostModel())->updateOne('recommend', 'id = '. intval($id));
 		if (empty($result)) {
-			$this->ajaxReturn(array(
+			return $this->ajax(array(
 				'status' => 'failure',
 				'error' => '推荐失败，请重试！'
 			));
 		}
-		EmpireModel::query()->addLog($id, 'recommendBlog');
-		$this->ajaxReturn(array(
+		LogModel::addLog($id, 'recommendBlog');
+		return $this->ajax(array(
 			'status' => 'success'
 		));
 	}

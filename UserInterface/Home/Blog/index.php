@@ -18,14 +18,14 @@ $termId = $this->gain('termId');
         <div class="col-md-2">
             <ul class="term list-group">
                 <li class="list-group-item <?=empty($termId) ? 'active' : null?>"><a href="<?php $this->url('blog');?>">全部</a></li>
-                <?php foreach ($this->gain('term', array()) as $item) {?>
+                <?php foreach ($this->gain('term', array()) as $item) :?>
                     <li class="list-group-item <?=$item['id'] == $termId ? 'active' : null?>"><a href="<?php $this->url(null, array('termid' => $item['id']));?>"><?=$item['name'];?></a></li>
-                <?php }?>
+                <?php endforeach;?>
             </ul>
         </div>
         <div id="list" class="col-md-10">
             <ul class="list">
-                <?php foreach ($page->getPage() as $item) {?>
+                <?php foreach ($page->getPage() as $item) :?>
                     <li class="list-item">
                         <div class="recommend" data="<?=$item['id'];?>">
                             <span><?=$item['recommend']?></span>
@@ -42,12 +42,21 @@ $termId = $this->gain('termId');
                         <div class="list-item-foot">
                             <a href="<?php $this->url('blog/user/'.$item['user_id']);?>"><?=$item['user'];?></a>
                              发表于 
-                            <?php $this->ago($item['create_at']);?>   
-                            分类：<?=$item['term'];?>
-                             评论（<?=$item['comment_count'];?>）
+                            <span>
+                                <?php $this->ago($item['create_at']);?>
+                            </span>
+                            分类：
+                            <span>
+                                <?=$item['term'];?>
+                            </span>
+                            评论（
+                             <span>
+                                 <?=$item['comment_count'];?>
+                             </span>
+                            ）
                         </div>
                     </li>
-                <?php }?>
+                <?php endforeach;?>
             </ul>
             <div>
                 <?php $page->pageLink();?>

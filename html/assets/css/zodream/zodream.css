@@ -10,10 +10,6 @@ a:hover {
     text-decoration: none;
 }
 
-.navbar .navbar-form {
-    display: none;
-}
-
 .navbar {
     background: rgb(5, 166, 179);
     margin: 0;
@@ -22,7 +18,11 @@ a:hover {
 .navbar-default .navbar-nav>.active>a,
 .navbar-default .navbar-nav>.active>a:focus,
 .navbar-default .navbar-nav>.active>a:hover,
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+.navbar-default .navbar-nav>.open>a, 
+.navbar-default .navbar-nav>.open>a:focus, 
+.navbar-default .navbar-nav>.open>a:hover,
+.list-group-item.active, 
+.list-group-item.active:focus, .list-group-item.active:hover {
     background: #0bc2d1;
     color: #fff;
 }
@@ -497,4 +497,14 @@ table th[class*="col-"] {
 
 .fixed-slide li img {
   float: left;
+}
+
+.footer {
+    padding: 3em 0px;
+    background: #222;
+    margin: 0;
+}
+
+.footer a {
+    color: #fff;
 }
