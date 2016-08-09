@@ -7,7 +7,6 @@ namespace Domain\Model;
  * Time: 21:41
  */
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Html\Page;
 use Zodream\Infrastructure\Request;
 
 abstract class Model extends \Zodream\Domain\Model\Model {

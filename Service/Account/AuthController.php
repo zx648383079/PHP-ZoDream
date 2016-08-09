@@ -8,7 +8,7 @@ use Domain\Model\UserModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Filter\DataFilter;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Domain\Routing\Url;
+use Zodream\Infrastructure\Url\Url;
 use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
 use Zodream\Domain\ThirdParty\OAuth\QQ;
 use Zodream\Infrastructure\Error\Error;

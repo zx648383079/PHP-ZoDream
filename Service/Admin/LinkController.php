@@ -21,28 +21,17 @@ class LinkController extends Controller {
 	}
 
 	function addAction($id = null) {
-		if (!empty($id)) {
-			$this->send('data', EmpireModel::query('friendlink')->findById($id));
+		$model = empty($id) ? new FriendLinkModel() : FriendLinkModel::findOne($id);
+		if ($model->load() && $model->save()) {
+			return $this->redirect('link');
 		}
-		return $this->show();
-	}
-
-	function addPost() {
-		$row = EmpireModel::query('friendlink')->save(array(
-			'id' => '',
-			'name' => 'required|string:1-100',
-			'url' => 'required|url',
-			'description' => '',
-			'position' => 'int',
-			'logo' => ''
-		));
-		if (!empty($row)) {
-			Redirect::to('link');
-		}
-		$this->send('message', DataFilter::getError());
+		return $this->show([
+			'data' => $model
+		]);
 	}
 
 	function deleteAction($id) {
-		$this->delete('friendlink', $id);
+		FriendLinkModel::findOne($id)->delete();
+		return $this->redirect(['link']);
 	}
 }

@@ -5,7 +5,11 @@ namespace Service\Admin;
  * 博客
  */
 
+use Domain\Model\Blog\CommentModel;
+use Domain\Model\Blog\PostModel;
+use Domain\Model\Blog\TermModel;
 use Infrastructure\HtmlExpand;
+use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Database\Command;
 use Zodream\Infrastructure\ObjectExpand\PinYin;
@@ -21,31 +25,31 @@ class PostController extends Controller {
 				$where[] = "p.title like '%{$item}%'";
 			}
 		}
-		$data = EmpireModel::query('post p')->getPage(array(
-			'left' => array(
-				'user u',
-				'p.user_id = u.id',
-				'term_post tp',
-				'p.id = tp.post_id',
-				'term t',
-				'tp.term_id = t.id'
-			),
-			'where' => $where,
-			'order' => 'create_at desc'
-		), array(
-			'id' => 'p.id',
-			'title' => 'p.title',
-			'user' => 'u.name',
-			'term' => 't.name',
-			'comment_count' => 'p.comment_count',
-			'create_at' => 'p.create_at',
-		),
-		array(
-			'where' => $where,
-		));
-
-		$this->show(array(
-			'page' => $data
+		$page = new Page(PostModel::find()->where($where));
+		$page->setPage(PostModel::find()
+			->alias('p')
+			->load(array(
+				'left' => array(
+					'user u',
+					'p.user_id = u.id',
+					'term_post tp',
+					'p.id = tp.post_id',
+					'term t',
+					'tp.term_id = t.id'
+				),
+				'where' => $where,
+				'order' => 'create_at desc',
+				'select' => array(
+					'id' => 'p.id',
+					'title' => 'p.title',
+					'user' => 'u.name',
+					'term' => 't.name',
+					'comment_count' => 'p.comment_count',
+					'create_at' => 'p.create_at',
+				)
+			)));
+		return $this->show(array(
+			'page' => $page
 		));
 	}
 
@@ -104,8 +108,8 @@ class PostController extends Controller {
 	}
 
 	function termAction() {
-		$data = EmpireModel::query('term')->findAll();
-		$this->show(array(
+		$data = TermModel::findAll();
+		return $this->show(array(
 			'data' => $data
 		));
 	}
@@ -126,13 +130,14 @@ class PostController extends Controller {
 	}
 
 	function commentAction() {
-		$data = EmpireModel::query('comment')->getPage();
-		$this->show(array(
+		$data = CommentModel::find()->Page();
+		return $this->show(array(
 			'page' => $data
 		));
 	}
 	
 	function deleteCommentAction($id) {
-		$this->delete('comment', $id);
+		CommentModel::findOne($id)->delete();
+		return $this->redirect(['post/comment']);
 	}
 }

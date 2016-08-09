@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Routing\Url;
+use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Html;
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+/** @var $this \Zodream\Domain\View\View */
 $this->extend(array(
     'layout' => array(
         'head'

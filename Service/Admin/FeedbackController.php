@@ -15,18 +15,16 @@ class FeedbackController extends Controller {
 	}
 	
 	function viewAction($id) {
-		$data = EmpireModel::query('feedback')->findById($id);
-		if ($data['read'] == 0) {
-			EmpireModel::query('feedback')->updateById($id, ['read' => 1]);
-			$data['read'] = 1;
-		}
-		$this->show([
+		$model = FeedbackModel::findOne($id);
+		$model->read = true;
+		return $this->show([
 			'title' => '查看反馈',
-			'data' => $data
+			'data' => $model
 		]);
 	}
 	
 	function deleteAction($id) {
-		$this->delete('feedback', $id);
+		FeedbackModel::findOne($id)->delete();
+		return $this->redirect(['feedback']);
 	}
 }

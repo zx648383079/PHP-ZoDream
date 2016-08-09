@@ -5,10 +5,14 @@ namespace Service\Admin;
  */
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
+use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Request\Post;
 
 class MailController extends Controller {
 	function indexAction() {
+		if (Request::isPost()) {
+			$this->indexPost(Request::post(true));
+		}
 		return $this->show(array(
 			'title' => '邮件群发'
 		));

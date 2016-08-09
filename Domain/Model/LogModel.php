@@ -1,7 +1,7 @@
 <?php
 namespace Domain\Model;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Routing\Url;
+use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Request;
 
 /**

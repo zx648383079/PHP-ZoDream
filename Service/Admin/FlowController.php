@@ -4,12 +4,12 @@ namespace Service\Admin;
 /**
  * 流量统计
  */
-use Domain\Model\Home\VisitLogModel;
+use Domain\Model\VisitLogModel;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 
 class FlowController extends Controller {
 	function indexAction() {
-		$this->show(array(
+		return $this->show(array(
 
 		));
 	}
@@ -110,7 +110,7 @@ class FlowController extends Controller {
 				break;
 		}
 		list($count, $max) = $args;
-		$this->ajaxReturn([
+		return $this->ajax([
 			'status' => 'success',
 			'data' => $count,
 			'max' => $max,
@@ -119,7 +119,7 @@ class FlowController extends Controller {
 	}
 
 	function osAction() {
-		$this->ajaxReturn([
+		return $this->ajax([
 			'status' => 'success',
 			'data' => VisitLogModel::geTopOs()
 		]);

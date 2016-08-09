@@ -4,56 +4,40 @@ namespace Service\Admin;
  * 废料科普
  */
 
+use Domain\Model\Company\CompanyModel;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
 
 class CompanyController extends Controller {
 	function indexAction() {
-		$page = EmpireModel::query('company')->getPage(null, 'id,name,charge,update_at');
-		$this->show(array(
+		$page = CompanyModel::find()->select('id,name,charge,update_at')->all();
+		return $this->show(array(
 			'title' => '公司管理',
 			'page' => $page
 		));
 	}
 
 	function addAction($id = null) {
-		if (!empty($id)) {
-			$this->send('data', EmpireModel::query('company')->findOne($id));
+		$model = empty($id) ? new CompanyModel() : CompanyModel::findOne($id);
+		if ($model->load() && $model->save()) {
+			return $this->redirect('company');
 		}
-		$this->show(array(
-			'title' => '新增公司'
+		return $this->show(array(
+			'title' => '新增公司',
+			'data' => $model
 		));
 	}
 
-	/**
-	 * @param Post $post
-	 */
-	function addPost($post) {
-		$result = EmpireModel::query('company')->save(array(
-			'id' => 'int',
-			'name' => 'required|string:3-50',
-			'description' => '',
-			'charge' => 'required|string3-100',
-			'phone' => 'required|string3-100',
-			'create_at' => '',
-			'update_at' => ''
-		), $post->get());
-		if (empty($result)) {
-			$this->send('error', '验证失败！');
-			return;
-		}
-		Redirect::to(['company']);
-	}
-
 	function deleteAction($id) {
-		$this->delete('company', $id);
+		CompanyModel::findOne($id)->delete();
+		return $this->redirect('company');
 	}
 
 	function viewAction($id) {
-		$data = EmpireModel::query('company')->findOne($id);
-		$this->show(array(
-			'title' => '查看 '.$data['name'],
-			'data' => $data
+		$model = CompanyModel::findOne($id);
+		return $this->show(array(
+			'title' => '查看 '.$model->name,
+			'data' => $model
 		));
 	}
 }

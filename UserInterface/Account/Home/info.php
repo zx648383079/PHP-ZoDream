@@ -3,8 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\Bootstrap\FormWidget;
-use Zodream\Domain\Routing\Url;
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+use Zodream\Infrastructure\Url\Url;
+/** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
     'layout' => array(

@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+/** @var $this \Zodream\Domain\View\View */
 $type = $this->gain('type');
 if ($type == 'input') {
 ?>

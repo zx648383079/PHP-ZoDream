@@ -17,46 +17,74 @@ CREATE TABLE IF NOT EXISTS `zd_visit_log` (
 PRIMARY KEY (`id`))
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;
  */
-use Zodream\Domain\Routing\Url;
+use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Traits\SingletonPattern;
-
+/**
+ * Class VisitLogModel
+ * @property integer $id
+ * @property string $ip
+ * @property string $browser
+ * @property string $browser_version
+ * @property string $os
+ * @property string $os_version
+ * @property string $session
+ * @property string $url
+ * @property string $referer
+ * @property string $agent
+ * @property string $create_at
+ */
 class VisitLogModel extends Model {
 
-	use SingletonPattern;
-
 	public static $table = 'visit_log';
-	
-	protected $fillAble = array(
-		'ip',
-		'browser',
-		'browser_version',
-		'os',
-		'os_version',
-		'session',
-		'url',
-		'referer',
-		'agent',
-		'create_at'
-	);
+
+	protected function rules() {
+		return array (
+			'ip' => 'required|string:3-20',
+			'browser' => 'string:3-45',
+			'browser_version' => 'string:3-45',
+			'os' => 'string:3-45',
+			'os_version' => 'string:3-45',
+			'session' => 'string:3-45',
+			'url' => '',
+			'referer' => 'string:3-200',
+			'agent' => 'string:3-255',
+			'create_at' => '',
+		);
+	}
+
+	protected function labels() {
+		return array (
+			'id' => 'Id',
+			'ip' => 'Ip',
+			'browser' => 'Browser',
+			'browser_version' => 'Browser Version',
+			'os' => 'Os',
+			'os_version' => 'Os Version',
+			'session' => 'Session',
+			'url' => 'Url',
+			'referer' => 'Referer',
+			'agent' => 'Agent',
+			'create_at' => 'Create At',
+		);
+	}
 
 	public static function addLog() {
 		$os = Request::os();
 		$browser = Request::browser();
-		return static::getInstance()->add([
-			'ip' => Request::ip(),
-			'browser' => $browser[0],
-			'browser_version' => $browser[1],
-			'os' => $os[0],
-			'os_version' => $os[1],
-			'referer' => Url::referrer(),
-			'url' => Url::to(),
-			'session' => Factory::session()->id(),
-			'agent' => Request::server('HTTP_USER_AGENT', '-'),
-			'create_at' => TimeExpand::format()
-		]);
+		$model = new static;
+		$model->ip = Request::ip();
+		$model->browser = $browser[0];
+		$model->browser_version = $browser[1];
+		$model->os = $os[0];
+		$model->os_version = $os[1];
+		$model->referer = Url::referrer();
+		$model->url = Url::to();
+		$model->session = Factory::session()->id();
+		$model->agent = Request::server('HTTP_USER_AGENT', '-');
+		$model->create_at = TimeExpand::format();
+		return $model->save();
 	}
 
 	/**
@@ -262,9 +290,7 @@ class VisitLogModel extends Model {
 		if (!is_array($where)) {
 			$where = (array)$where;
 		}
-		$allUrls = static::getInstance()->findAll([
-			'where' => $where
-		], 'url');
+		$allUrls = static::find()->where($where)->select('url')->all();
 		$where[] = 'referer NOT LIKE "%'.Url::getHost().'%"';
 		$args = static::find()->load([
 			'select' => 'referer,COUNT(*) as count',

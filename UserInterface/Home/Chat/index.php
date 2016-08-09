@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+/** @var $this \Zodream\Domain\View\View */
 $user = $this->gain('user');
 $send = Auth::user();
 $css = <<<CSS

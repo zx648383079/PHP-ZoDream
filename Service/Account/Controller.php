@@ -4,8 +4,8 @@ namespace Service\Account;
 
 use Zodream\Domain\Model;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Domain\Routing\Controller as BaseController;
-use Zodream\Domain\Routing\Url;
+use Zodream\Domain\Controller\Controller as BaseController;
+use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Log;
 
 abstract class Controller extends BaseController {

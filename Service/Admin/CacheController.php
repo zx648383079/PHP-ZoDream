@@ -3,7 +3,7 @@ namespace Service\Admin;
 /**
  * 缓存
  */
-use Zodream\Domain\Routing\Url;
+use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Factory;
 
 class CacheController extends Controller {

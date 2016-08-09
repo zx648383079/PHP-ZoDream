@@ -2,12 +2,15 @@
 namespace Service\Account;
 
 
+use Domain\Model\Message\BulletinUserModel;
+use Domain\Model\Message\MessageModel;
 use Zodream\Domain\Access\Auth;
+use Zodream\Domain\Model\UserModel;
 
 class MessageController extends Controller {
 
 	function indexAction() {
-		$data = EmpireModel::query('message m')->findAll(array(
+		$data = MessageModel::find()->alias('m')->load(array(
 			'left' => array(
 				'user u',
 				'm.send_id = u.id'
@@ -22,20 +25,22 @@ class MessageController extends Controller {
 			),
 			'group' => 'm.send_id',
 			'order' => 'm.read desc, m.create_at desc'
-		), 'm.id as id, u.name as name, m.send_id as send_id, m.user_id as user_id, m.content as content, m.create_at as create_at');
-		$this->show(array(
+		))
+			->select('m.id as id, u.name as name, m.send_id as send_id, m.user_id as user_id, m.content as content, m.create_at as create_at')
+		->all();
+		return $this->show(array(
 			'title' => '私信',
 			'data' => $data
 		));
 	}
 
 	function sendAction($id) {
-		EmpireModel::query('message')->update(array(
+		(new MessageModel())->update(array(
 			'send_id' => $id,
 			'user_id' => Auth::user()['id']
-		), 'read = 1');
+		), ['read' => true]);
 
-		$data = EmpireModel::query('message')->findAll(array(
+		$data = MessageModel::find()->alias('m')->load(array(
 			'where' => array(
 				'send_id' => $id,
 				'(',
@@ -48,9 +53,9 @@ class MessageController extends Controller {
 				')'
 			),
 			'order' => 'create_at desc'
-		));
-		$user = EmpireModel::query('user')->findById($id);
-		$this->show(array(
+		))->all();
+		$user = UserModel::findOne($id);
+		return $this->show(array(
 			'title' => '与 '.$user['name'].' 的私信',
 			'data' => $data,
 			'user' => $user
@@ -74,8 +79,7 @@ class MessageController extends Controller {
 	}
 	
 	function bulletinAction() {
-		$data = EmpireModel::query('bulletin_user u')
-			->findAll([
+		$data = BulletinUserModel::find()->alias('u')->load([
 				'left' => [
 					'bulletin b',
 					'b.id = u.bulletin'
@@ -84,14 +88,14 @@ class MessageController extends Controller {
 					'user_id' => Auth::user()['id']
 				],
 				'order' => 'u.read asc'
-			], [
+			])->select([
 				'id' => 'b.id',
 				'title' => 'b.title',
 				'content' => 'b.content',
 				'type' => 'b.type',
 				'read' => 'u.read'
-			]);
-		$this->show([
+			])->all();
+		return $this->show([
 			'title' => '消息管理',
 			'data' => $data
 		]);

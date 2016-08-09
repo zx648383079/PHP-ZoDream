@@ -7,6 +7,8 @@ namespace Service\Admin;
 use Domain\Form\EmpireForm;
 
 
+use Domain\Model\LoginLogModel;
+use Domain\Model\LogModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Log;
@@ -24,7 +26,7 @@ class UserController extends Controller {
 	 * 增加信息
 	 */
 	function indexAction() {
-		$this->show(array(
+		return $this->show(array(
 			'name' => Auth::user()['name']
 		));
 	}
@@ -123,18 +125,17 @@ class UserController extends Controller {
 	}
 
 	function logAction() {
-		$page = EmpireModel::query('log')->getPage();
-		$this->show(array(
+		$page = LogModel::find()->page();
+		return $this->show(array(
 			'page' => $page
 		));
 	}
 
 	function loginLogAction() {
-		$page = EmpireModel::query('login_log')->getPage(array(
-			'where' => array('user' => Auth::user()['email']),
-			'order' => 'create_at desc'
-		));
-		$this->show(array(
+		$page = LoginLogModel::find()
+			->where(array('user' => Auth::user()['email']))
+			->order('create_at desc')->page();
+		return $this->show(array(
 			'page' => $page
 		));
 	}

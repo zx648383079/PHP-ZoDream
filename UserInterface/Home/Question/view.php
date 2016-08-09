@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Html;
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+/** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->extend(array(
 	'layout' => array(

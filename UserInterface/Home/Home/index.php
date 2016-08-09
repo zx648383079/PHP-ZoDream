@@ -1,29 +1,26 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'flexslider.css',
-        'zodream/home.css'
-    )
-);
+use Zodream\Infrastructure\Url\Url;
+/** @var $this \Zodream\Domain\View\View */
+$this->registerCssFile('/assets/css/flexslider.css');
+$this->registerCssFile('/assets/css/zodream/home.css');
+$this->registerJs('require(["home/home"]);')
 ?>
+<?=$this->extend('layout/head')?>
+<?=$this->extend('layout/navbar')?>
 
     <div class="banner">
         <div class="container-fluid">
             <section class="slider">
                 <div class="flexslider">
                     <ul class="slides">
-                        <?php foreach ($this->gain('data', array()) as $item):?>
+                        <?php foreach ($data as $item):?>
                         <li>
                             <div class="banner-top">
                                 <h2><?=$item['title']?></h2>
                                 <p><?=\Infrastructure\HtmlExpand::shortString($item['content'], 300)?></p>
                                 <div class="bnr-btn">
-                                    <a href="<?php $this->url(['blog/view', 'id' => $item['id']])?>" class="hvr-shutter-out-horizontal">阅读更多</a>
+                                    <a href="<?=Url::to(['blog/view', 'id' => $item['id']])?>" class="hvr-shutter-out-horizontal">阅读更多</a>
                                 </div>
                             </div>
                         </li>
@@ -64,12 +61,12 @@ $this->extend(array(
             <div class="col-md-6">
                 <h3>博客</h3>
                 <p>包括学习经验，及相关教程。</p>
-                <a href="<?php $this->url(['blog'])?>" class="btn-show">查看</a>
+                <a href="<?=Url::to(['blog'])?>" class="btn-show">查看</a>
             </div>
             <div class="col-md-6">
                 <h3>文档</h3>
                 <p>完善中。。。</p>
-                <a href="<?php $this->url(['document'])?>" class="btn-show">阅读</a>
+                <a href="<?=Url::to(['document'])?>" class="btn-show">阅读</a>
             </div>
         </div>
     </div>
@@ -144,20 +141,12 @@ $this->extend(array(
 <!--
     <div class="fixed-slide">
         <ul>
-            <li><a href="#"><div class="box"><img src="<?php $this->asset('images/icon/icon01.png');?>">客服中心</div></a></li>
-            <li><a href="#"><div class="box"><img src="<?php $this->asset('images/icon/icon02.png');?>">客户案例</div></a></li>
-            <li><a href="#"><div class="box"><img src="<?php $this->asset('images/icon/icon04.png');?>">QQ客服</div></a></li>
-            <li><a href="#"><div class="box"><img src="<?php $this->asset('images/icon/icon03.png');?>">新浪微博</div></a></li>
-            <li><a href="javascript:;" class="toTop"><div class="box"><img src="<?php $this->asset('images/icon/icon05.png');?>">返回顶部</div></a></li>
+            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon01.png');?>">客服中心</div></a></li>
+            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon02.png');?>">客户案例</div></a></li>
+            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon04.png');?>">QQ客服</div></a></li>
+            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon03.png');?>">新浪微博</div></a></li>
+            <li><a href="javascript:;" class="toTop"><div class="box"><img src="<?php //$this->asset('images/icon/icon05.png');?>">返回顶部</div></a></li>
         </ul>
     </div>
 -->
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        '!js require(["home/home"]);'
-    )
-);
-?>
+<?=$this->extend('layout/foot')?>

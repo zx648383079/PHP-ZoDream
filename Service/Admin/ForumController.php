@@ -1,5 +1,8 @@
 <?php
 namespace Service\Admin;
+use Domain\Model\Forum\ForumModel;
+use Domain\Model\Forum\ThreadModel;
+use Domain\Model\Forum\ThreadPostModel;
 
 /**
  * 论坛管理
@@ -8,10 +11,10 @@ namespace Service\Admin;
 
 class ForumController extends Controller {
 	function indexAction() {
-		$data = EmpireModel::query('forum')->findAll(array(
+		$data = ForumModel::findAll(array(
 			'order' => 'parent, type'
 		));
-		$this->show(array(
+		return $this->show(array(
 			'data' => $data
 		));
 	}
@@ -36,19 +39,15 @@ class ForumController extends Controller {
 	}
 
 	function threadAction() {
-		$data = EmpireModel::query('thread')->getPage(array(
-			'order' => 'create_at'
-		));
-		$this->show(array(
+		$data = ThreadModel::find()->order('create_at')->page();
+		return $this->show(array(
 			'page' => $data
 		));
 	}
 
 	function postAction() {
-		$data = EmpireModel::query('thread_post')->getPage(array(
-			'order' => 'create_at'
-		));
-		$this->show(array(
+		$data = ThreadPostModel::find()->order('create_at')->page();
+		return $this->show(array(
 			'page' => $data
 		));
 	}

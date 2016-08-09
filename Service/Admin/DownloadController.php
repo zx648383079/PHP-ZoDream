@@ -17,7 +17,7 @@ class DownloadController extends Controller {
 	 * 管理地址前缀
 	 */
 	function indexAction() {
-		$file = Request::get('file');
+		$file = Request::get('file').str_replace('../');
 		if (empty($file)) {
 			$this->show();
 		}

@@ -2,8 +2,8 @@
 use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Html;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Routing\Url;
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine */
+use Zodream\Infrastructure\Url\Url;
+/** @var $this \Zodream\Domain\View\View */
 ?>
 <nav class="navbar navbar-default" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -14,17 +14,17 @@ use Zodream\Domain\Routing\Url;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php $this->url('/');?>">ZoDream</a>
+        <a class="navbar-brand" href="<?=Url::to('/');?>">ZoDream</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="<?php $this->url('/');?>">首页</a></li>
-            <li<?php $this->cas($this->hasUrl('blog'), ' class="active"');?>><a href="<?php $this->url('blog');?>">博客</a></li>
-            <li<?php $this->cas($this->hasUrl('laboratory'));?>><a href="<?php $this->url('laboratory');?>">实验室</a></li>
-            <li<?php $this->cas($this->hasUrl('talk'));?>><a href="<?php $this->url('talk');?>">日志</a></li>
-            <li<?php $this->cas($this->hasUrl('about'));?>><a href="<?php $this->url('about');?>">关于</a></li>
+            <li><a href="<?=Url::to('/');?>">首页</a></li>
+            <li<?php $this->cas(Url::hasUri('blog'), ' class="active"');?>><a href="<?=Url::to('blog');?>">博客</a></li>
+            <li<?php $this->cas(Url::hasUri('laboratory'));?>><a href="<?=Url::to('laboratory');?>">实验室</a></li>
+            <li<?php $this->cas(Url::hasUri('talk'));?>><a href="<?=Url::to('talk');?>">日志</a></li>
+            <li<?php $this->cas(Url::hasUri('about'));?>><a href="<?=Url::to('about');?>">关于</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
@@ -34,7 +34,7 @@ use Zodream\Domain\Routing\Url;
         </form>
 
         <ul class="nav navbar-nav navbar-right">
-            <?php if (Auth::guest() || !empty($this->gain('updateCache'))) :?>
+            <?php if (Auth::guest() || !isset($updateCache)) :?>
                 <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => Url::to()])?></li>
                 <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
             <?php else:?>

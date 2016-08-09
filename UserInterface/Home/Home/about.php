@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\View\Engine\DreamEngine*/
+/** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\FeedbackModel */
 $this->extend(array(
     'layout' => array(

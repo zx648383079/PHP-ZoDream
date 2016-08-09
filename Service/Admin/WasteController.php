@@ -4,53 +4,38 @@ namespace Service\Admin;
  * 废料科普
  */
 
+use Domain\Model\Waste\WasteModel;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
 
 class WasteController extends Controller {
 	function indexAction() {
-		$page = EmpireModel::query('waste')->getPage(null, 'id,code,name,update_at');
-		$this->show(array(
+		$page = WasteModel::find()->select('id,code,name,update_at')->page();
+		return $this->show(array(
 			'title' => '废料科普管理',
 			'page' => $page
 		));
 	}
 
 	function addAction($id = null) {
-		if (!empty($id)) {
-			$this->send('data', EmpireModel::query('waste')->findOne($id));
+		$model = empty($id) ? new WasteModel() : WasteModel::findOne($id);
+		if ($model->load() && $model->save()) {
+			return $this->redirect('waste');
 		}
-		$this->show(array(
-			'title' => '新增标准'
+		return $this->show(array(
+			'title' => '新增标准',
+			'data' => $model
 		));
 	}
 
-	/**
-	 * @param Post $post
-	 */
-	function addPost($post) {
-		$result = EmpireModel::query('waste')->save(array(
-			'id' => 'int',
-			'code' => 'required|string:3-20',
-			'name' => 'required|string:3-50',
-			'content' => 'required',
-			'create_at' => '',
-			'update_at' => ''
-		), $post->get());
-		if (empty($result)) {
-			$this->send('error', '验证失败！');
-			return;
-		}
-		Redirect::to(['waste']);
-	}
-
 	function deleteAction($id) {
-		$this->delete('waste', $id);
+		WasteModel::findOne($id)->delete();
+		return $this->redirect('waste');
 	}
 
 	function viewAction($id) {
-		$data = EmpireModel::query('waste')->findOne($id);
-		$this->show(array(
+		$data = WasteModel::findOne($id);
+		return $this->show(array(
 			'title' => '查看 '.$data['code'],
 			'data' => $data
 		));

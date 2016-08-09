@@ -10,6 +10,7 @@ use Domain\Model\WeChat\MenuModel;
 use Domain\Model\WeChat\MessageModel;
 use Domain\Model\WeChat\ReplyModel;
 use Domain\Model\WeChat\WeChatModel;
+use Domain\Model\WeChat\WechatReplyModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Factory;
@@ -17,54 +18,41 @@ use Zodream\Infrastructure\Request\Post;
 
 class WechatController extends Controller {
 	function indexAction() {
-		$model = new WeChatModel();
-		$this->show(array(
-			'data' => $model->findAll()
+		return $this->show(array(
+			'data' => WeChatModel::findAll()
 		));
 	}
 
 	function addAction($id = null) {
-		if (!empty($id)) {
-			$model = new WeChatModel();
-			$this->send(array(
-				'id' => $id,
-				'data' => $model->findById($id)
-			));
+		$model = empty($id) ? new WeChatModel() : WeChatModel::findOne($id);
+		if ($model->load() && $model->save()) {
+			return $this->redirect(['wechat']);
 		}
-		$this->show();
-	}
-
-	/**
-	 * @param Post $post
-	 */
-	function addPost($post) {
-		$model = new WeChatModel();
-		$result = $model->fill($post->get());
-		if (!empty($result)) {
-			Redirect::to('wechat');
-		}
+		return $this->show([
+			'model' => $model
+		]);
 	}
 
 	function replyAction() {
-		$model = new ReplyModel();
-		$this->show(array(
-			'page' => $model->getPage(null, array(
+
+		return $this->show(array(
+			'page' => WechatReplyModel::find()->select(array(
 				'id',
 				'type',
 				'name',
 				'update_at'
-			))
+			))->page()
 		));
 	}
 
 	function deleteAction($id) {
-		$this->delete('wechat', $id);
+		WeChatModel::findOne($id)->delete();
+		return $this->redirect(['wechat']);
 	}
 
 	function changeAction($id) {
-		$model = new WeChatModel();
-		Factory::session()->set('wechat', $model->findById($id));
-		Redirect::to('wechat', '2', '切换成功！');
+		Factory::session()->set('wechat', WeChatModel::findOne($id));
+		return $this->redirect('wechat', 2, '切换成功！');
 	}
 
 	function addReplyAction($id = null) {

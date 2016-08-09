@@ -9,6 +9,9 @@ use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Request\Post;
 
 class BlogController extends Controller {
+
+	protected $canCache = false;
+
 	function indexAction($search = null, $termid = null, $user = null) {
 		$term = TermModel::findAll();
 		$where = array();
@@ -95,13 +98,14 @@ class BlogController extends Controller {
 
 	public function recommendAction($id) {
 		$id = intval($id);
-		if (!LogModel::hasLog('recommendBlog', $id)) {
+		if (LogModel::hasLog('recommendBlog', $id)) {
 			return $this->ajax(array(
 				'status' => 'failure',
 				'error' => '您已经推荐过了！'
 			));
 		}
-		$result = (new PostModel())->updateOne('recommend', 'id = '. intval($id));
+		$result = (new PostModel())
+			->updateOne('recommend', 'id = '. intval($id));
 		if (empty($result)) {
 			return $this->ajax(array(
 				'status' => 'failure',

@@ -1,7 +1,7 @@
 <?php
 namespace Service\Install;
 
-use Zodream\Domain\Routing\Controller as BaseController;
+use Zodream\Domain\Controller\Controller as BaseController;
 use Domain\Model\Home\OptionsModel;
 use Zodream\Infrastructure\Traits\AjaxTrait;
 

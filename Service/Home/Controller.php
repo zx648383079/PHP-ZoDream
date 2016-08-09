@@ -2,7 +2,7 @@
 namespace Service\Home;
 
 use Domain\Model\OptionModel;
-use Zodream\Domain\Routing\Controller as BaseController;
+use Zodream\Domain\Controller\Controller as BaseController;
 use Zodream\Domain\Routing\Router;
 use Zodream\Infrastructure\Request;
 use Zodream\Infrastructure\Traits\AjaxTrait;
