@@ -4,13 +4,11 @@ use Zodream\Domain\Html\Bootstrap\DetailWidget;
 use Zodream\Domain\Html\Bootstrap\BreadcrumbWidget;
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    ))
-);
-$data = $this->gain('data');
+$this->title = $title;
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="row">
@@ -44,7 +42,7 @@ $data = $this->gain('data');
             <h3 class="panel-title">主要处理的废料：</h3>
         </div>
         <div class="panel-body">
-            <?php foreach ($this->gain('models', array()) as $item):?>
+            <?php foreach ($models as $item):?>
             <div class="col-md-2 waste-item">
                 <h4><?=Html::a($item['code'], ['waste/view', 'id' => $item['id']])?></h4>
                 <p><?=$item['name']?></p>
@@ -54,10 +52,4 @@ $data = $this->gain('data');
     </div>
 
 
-<?php 
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>

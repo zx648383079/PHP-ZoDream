@@ -1,35 +1,32 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array(
-        'zodream/blog.css'
-    )
-);
-$sub = $this->gain('sub', array());
-$page = $this->gain('page');
+$this->title = '帖子';
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
-    <?php if (!empty($sub)) {?>
+    <?php if (!empty($sub)) :?>
     <div>
         <div>子版块</div>
-        <?php foreach ($sub as $item) { ?>
+        <?php foreach ($sub as $item) : ?>
             <div>
-                <div><?php echo $item['name'];?></div>
+                <div><?=$item['name'];?></div>
             </div>
-        <?php }?>
+        <?php endforeach;?>
     </div>
-    <?php }?>
+    <?php endif;?>
    
    
    <div class="row">
        <div class="col-md-2">
-           <a href="<?php $this->url('forum/add');?>" class="btn btn-primary">发帖</a>
+           <a href="<?=Url::to('forum/add')?>" class="btn btn-primary">发帖</a>
        </div>
        
    </div>
@@ -47,27 +44,27 @@ $page = $this->gain('page');
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($page->getPage() as $item) {?>
+                <?php foreach ($page->getPage() as $item) :?>
                     <tr>
                         <td class="thread">
-                            <a href="<?php $this->url('forum/post/id/'.$item['id']);?>">
-                                <?php echo $item['title'];?>
+                            <a href="<?=Url::to(['forum/post', 'id' => $item['id']])?>">
+                                <?=$item['title'];?>
                             </a>
                         </td>
                         <td>
-                            <?php echo $item['user_name'];?></br>
-                            <?php $this->ago($item['create_at']);?>
+                            <?=$item['user_name'];?></br>
+                            <?=$this->ago($item['create_at']);?>
                         </td>
                         <td>
-                            <?php echo $item['replies'];?> </br>
-                            <?php echo $item['views'];?>
+                            <?=$item['replies'];?> </br>
+                            <?=$item['views'];?>
                         </td>
                         <td>
-                            <?php echo $item['update_user'];?></br>
-                            <?php $this->ago($item['update_at']);?>
+                            <?=$item['update_user'];?></br>
+                            <?=$this->ago($item['update_at']);?>
                         </td>
                     </tr>
-                <?php }?>
+                <?php endforeach;?>
             </tbody>
             <tfoot>
                 <tr>
@@ -79,14 +76,14 @@ $page = $this->gain('page');
         </table>
     </div>
     
-    <?php if (!Auth::guest()) {?>
+    <?php if (!Auth::guest()) :?>
     <div class="panel panel-default">
           <div class="panel-heading">
                 <h3 class="panel-title">快速发帖</h3>
           </div>
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="forum_id" value="<?php $this->out('id');?>">
+                    <input type="hidden" name="forum_id" value="<?=$id?>">
                     
                     <div class="form-group">
                         <label for="input_title" class="col-sm-2 control-label">标题:</label>
@@ -111,12 +108,8 @@ $page = $this->gain('page');
                 </form>
           </div>
     </div>
-    <?php }?>
+    <?php endif;?>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+
+
+<?php $this->extend('layout/foot')?>

@@ -1,23 +1,20 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Access\Auth;
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array(
-        'zodream/blog.css'
-    )
-);
-$page = $this->gain('page');
+$this->title = $title;
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     
    <div class="row">
        <div class="col-md-2">
-           <a href="<?php $this->url('question/add');?>" class="btn btn-primary">提问</a>
+           <a href="<?=Url::to('question/add');?>" class="btn btn-primary">提问</a>
        </div>
        
    </div>
@@ -36,10 +33,10 @@ $page = $this->gain('page');
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($page->getPage() as $item) {?>
+                <?php foreach ($page->getPage() as $item) :?>
                     <tr>
                         <td class="thread">
-                            <a href="<?php $this->url('question/view/id/'.$item['id']);?>">
+                            <a href="<?=Url::to(['question/view','id' => $item['id']]);?>">
                                 <?=$item['title'];?>
                             </a>
                         </td>
@@ -53,10 +50,10 @@ $page = $this->gain('page');
                             <?=$item['count'];?>
                         </td>
                         <td>
-                            <?php $this->ago($item['create_at']);?>
+                            <?=$this->ago($item['create_at']);?>
                         </td>
                     </tr>
-                <?php }?>
+                <?php endforeach;?>
             </tbody>
             <tfoot>
                 <tr>
@@ -68,10 +65,4 @@ $page = $this->gain('page');
         </table>
     </div>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+<?php $this->extend('layout/foot')?>

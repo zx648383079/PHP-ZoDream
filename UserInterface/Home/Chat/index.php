@@ -2,7 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
 /** @var $this \Zodream\Domain\View\View */
-$user = $this->gain('user');
+
+$this->title = $title;
 $send = Auth::user();
 $css = <<<CSS
 .chat li.left:before {
@@ -16,19 +17,17 @@ $time = time();
 $js = <<<JS
 var USER = "{$user['id']}",
     time = "{$time}";
+require(["home/chat"]);
 JS;
 
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array(
-        'zodream/chat.css',
-        '!css '.$css,
-        '!js '.$js
-    )
-);
-$data = $this->gain('data', array());
+$this->registerCssFile('zodream/chat.css');
+$this->registerCss($css);
+$this->registerJs($js);
+
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     <div class="row">
@@ -36,7 +35,7 @@ $data = $this->gain('data', array());
             <?php for ($i = count($data) - 1; $i >= 0; $i --):?>
                 <li class="<?=$data[$i]['send_id'] == $send['id'] ? 'right' : 'left'?>">
                     <p><?=$data[$i]['content']?></p>
-                    <p><?php $this->time($data[$i]['create_at'])?></p>
+                    <p><?=$this->time($data[$i]['create_at'])?></p>
                 </li>
             <?php endfor;?>
         </ul>
@@ -49,12 +48,5 @@ $data = $this->gain('data', array());
         
     </div>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        '!js require(["home/chat"]);'
-    )
-);
-?>
+
+<?php $this->extend('layout/foot')?>

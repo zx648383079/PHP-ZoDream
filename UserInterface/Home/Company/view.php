@@ -4,13 +4,11 @@ use Zodream\Domain\Html\Bootstrap\DetailWidget;
 use Zodream\Domain\Html\Bootstrap\BreadcrumbWidget;
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    ))
-);
-$data = $this->gain('data');
+$this->title = $title;
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="row">
@@ -57,10 +55,4 @@ $data = $this->gain('data');
         </div>
     </div>
 
-<?php 
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>

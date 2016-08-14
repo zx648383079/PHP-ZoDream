@@ -2,12 +2,11 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	))
-);
+$this->title = $title;
+$this->extend([
+	'layout/head',
+	'layout/navbar'
+]);
 ?>
 <div class="container">
     <table class="table table-hover">
@@ -20,26 +19,22 @@ $this->extend(array(
 		</tr>
 		</thead>
 		<tbody>
-		<?php foreach ($this->gain('data', array()) as $item) {?>
+		<?php foreach ($data as $item) :?>
 			<tr>
 				<td><?=Html::a($item[0]['code'], ['waste/view', 'id' => $item[0]['id']])?></td>
 				<td><?=$item[0]['name']?></td>
-				<td><?php $this->time($item[0]['update_at'])?></td>
+				<td><?=$this->time($item[0]['update_at'])?></td>
 				<td>
-					<?php foreach ($item[1] as $value) {?>
+					<?php foreach ($item[1] as $value) :?>
 						<p><?=Html::a($value['company'], ['waste/company', 'id' => $value['company_id']])?></p>
-					<?php }?>
+					<?php endforeach;?>
 				</td>
 			</tr>
-		<?php }?>
+		<?php endforeach;?>
 		</tbody>
 	</table>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-    )
-);
-?>
+
+
+
+<?php $this->extend('layout/foot')?>

@@ -3,16 +3,12 @@ defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array (
-        'zodream/blog.css'
-    )
-);
-$page = $this->gain('page');
-$data = $this->gain('data');
+$this->title = $title;
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     
@@ -20,7 +16,7 @@ $data = $this->gain('data');
         主题：<?=$data['title'];?> <a href="#post" class="btn btn-primary">回帖</a>
     </div>
     
-    <?php foreach ($page->getPage() as $item) {?>
+    <?php foreach ($page->getPage() as $item) :?>
     <div class="row post">
         <div class="col-md-3 post-item">
             <img src="<?=$item['avatar'];?>" alt="<?=$item['name'];?>">
@@ -30,7 +26,7 @@ $data = $this->gain('data');
         </div>
         <div class="col-md-9">
             <div class="post-head">
-                <?php $this->ago($item['create_at']);?>
+                <?=$this->ago($item['create_at']);?>
                 <?php if ($item['first'] != 1) :?>
                     <?=Html::a('回复')?>
                 <?php endif;?>
@@ -45,17 +41,17 @@ $data = $this->gain('data');
             </div>
         </div>
     </div>
-    <?php }?>
+    <?php endforeach;?>
     <div class="row">
         <?php $page->pageLink();?>
     </div>
     
-    <?php if (!Auth::guest()) {?>
+    <?php if (!Auth::guest()) :?>
     <div id="post" class="panel panel-default">
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="forum_id" value="<?php echo $data['forum_id'];?>">
-                    <input type="hidden" name="thread_id" value="<?php echo $data['id'];?>">
+                    <input type="hidden" name="forum_id" value="<?=$data['forum_id'];?>">
+                    <input type="hidden" name="thread_id" value="<?=$data['id'];?>">
                     
                     <div class="form-group">
                         <label for="textarea_content" class="col-sm-2 control-label">内容:</label>
@@ -72,12 +68,8 @@ $data = $this->gain('data');
                 </form>
           </div>
     </div>
-    <?php }?>
+    <?php endif;?>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+
+
+<?php $this->extend('layout/foot')?>

@@ -2,15 +2,13 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\FeedbackModel */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'zodream/home.css'
-    )
-);
-$model = $this->gain('model');
+
+$this->title = $title;
+$this->registerCssFile('zodream/home.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
     <div class="about">
@@ -50,10 +48,4 @@ $model = $this->gain('model');
     </div>
 
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>

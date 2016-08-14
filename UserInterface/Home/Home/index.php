@@ -1,13 +1,18 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Url\Url;
+use Zodream\Infrastructure\ObjectExpand\HtmlExpand;
 /** @var $this \Zodream\Domain\View\View */
+
+$this->title = $title;
 $this->registerCssFile('/assets/css/flexslider.css');
 $this->registerCssFile('/assets/css/zodream/home.css');
-$this->registerJs('require(["home/home"]);')
+$this->registerJs('require(["home/home"]);');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
-<?=$this->extend('layout/head')?>
-<?=$this->extend('layout/navbar')?>
 
     <div class="banner">
         <div class="container-fluid">
@@ -18,7 +23,7 @@ $this->registerJs('require(["home/home"]);')
                         <li>
                             <div class="banner-top">
                                 <h2><?=$item['title']?></h2>
-                                <p><?=\Infrastructure\HtmlExpand::shortString($item['content'], 300)?></p>
+                                <p><?=HtmlExpand::shortString($item['content'], 300)?></p>
                                 <div class="bnr-btn">
                                     <a href="<?=Url::to(['blog/view', 'id' => $item['id']])?>" class="hvr-shutter-out-horizontal">阅读更多</a>
                                 </div>
@@ -149,4 +154,4 @@ $this->registerJs('require(["home/home"]);')
         </ul>
     </div>
 -->
-<?=$this->extend('layout/foot')?>
+<?php $this->extend('layout/foot')?>

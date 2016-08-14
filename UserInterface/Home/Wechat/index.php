@@ -16,10 +16,4 @@ $this->extend(array(
     </div>
 </div>
 
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+<?php $this->extend('layout/foot')?>

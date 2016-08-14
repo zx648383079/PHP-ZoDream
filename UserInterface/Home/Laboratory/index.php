@@ -1,12 +1,13 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    ))
-);
+
+$this->title = $title;
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="container">
@@ -16,43 +17,37 @@ $this->extend(array(
     <div class="row lab">
         <div class="col-md-3">
             <div>
-                <a href="<?php $this->url('navigation');?>">导航</a>
+                <a href="<?=Url::to('navigation');?>">导航</a>
             </div>
         </div>
         <div class="col-md-3">
             <div>
-                <a href="<?php $this->url('forum');?>">论坛</a>
+                <a href="<?=Url::to('forum');?>">论坛</a>
             </div>
         </div>
         <div class="col-md-3">
             <div>
-                <a href="<?php $this->url('chat');?>">聊天室</a>
+                <a href="<?=Url::to('chat');?>">聊天室</a>
             </div>
         </div>
         <div class="col-md-3">
             <div>
-                <a href="<?php $this->url('waste');?>">废料科普</a>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div>
-                <a href="<?php $this->url('question');?>">问答</a>
+                <a href="<?=Url::to('waste');?>">废料科普</a>
             </div>
         </div>
 
         <div class="col-md-3">
             <div>
-                <a href="<?php $this->url('company');?>">公司供求</a>
+                <a href="<?=Url::to('question');?>">问答</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div>
+                <a href="<?=Url::to('company');?>">公司供求</a>
             </div>
         </div>
     </div>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>

@@ -2,14 +2,11 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	))
-);
-$sub = $this->gain('sub', array());
-$page = $this->gain('page');
+$this->title = $title;
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     <div class="panel panel-default">
@@ -18,7 +15,7 @@ $page = $this->gain('page');
           </div>
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="forum_id" value="<?php $this->out('id');?>">
+                    <input type="hidden" name="forum_id" value="<?=$id?>">
                     
                     <div class="form-group">
                         <label for="input_title" class="col-sm-2 control-label">标题:</label>
@@ -44,10 +41,6 @@ $page = $this->gain('page');
           </div>
     </div>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+
+
+<?php $this->extend('layout/foot')?>

@@ -4,16 +4,12 @@ use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array (
-        'zodream/blog.css'
-    )
-);
-$page = $this->gain('page');
-$data = $this->gain('data');
+$this->title = $title;
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     
@@ -34,11 +30,11 @@ $data = $this->gain('data');
         <?php $page->pageLink();?>
     </div>
     
-    <?php if (!Auth::guest() && $data['status'] < 3) {?>
+    <?php if (!Auth::guest() && $data['status'] < 3) :?>
     <div id="post" class="panel panel-default">
           <div class="panel-body">
                 <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="question_id" value="<?php echo $data['id'];?>">
+                    <input type="hidden" name="question_id" value="<?=$data['id'];?>">
                     <input type="hidden" name="parent_id" value="0">
                     <div class="form-group">
                         <label for="textarea_content" class="col-sm-2 control-label">内容:</label>
@@ -55,12 +51,6 @@ $data = $this->gain('data');
                 </form>
           </div>
     </div>
-    <?php }?>
+    <?php endif;?>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+<?php $this->extend('layout/foot')?>

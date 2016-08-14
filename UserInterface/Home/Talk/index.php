@@ -1,15 +1,14 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'zodream/talk.css'
-    )
-);
-$data = $this->gain('data', array());
+
+$this->title = $title;
+$this->registerJs('require(["home/talk"]);');
+$this->registerCssFile('zodream/talk.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="content">
@@ -17,36 +16,24 @@ $data = $this->gain('data', array());
     <hr class="line-left">
     <hr class="line-right">
     <div class="talk">
-      <h1 class="title"><?php $this->out('title');?></h1>
-      <?php foreach ($data as $value) {?>
+      <h1 class="title"><?=$title?></h1>
+      <?php foreach ($data as $value) :?>
          <div class="year">
-            <h2><a href="javascript:0;"><?php echo date('Y年', $value[0]['create_at']);?><i></i></a></h2>
+            <h2><a href="javascript:0;"><?=date('Y年', $value[0]['create_at']);?><i></i></a></h2>
             <div class="list">
                 <ul>
-                    <?php foreach ($value[1] as $item) {?>
+                    <?php foreach ($value[1] as $item) :?>
                     <li class="cls">
-                        <div class="date"><?php echo date('m月d日', $item['create_at']);?></div>
-                        <div class="intro"><?php echo $item['content'];?></div>
+                        <div class="date"><?=date('m月d日', $item['create_at']);?></div>
+                        <div class="intro"><?=$item['content'];?></div>
                     </li>
-                    <?php }?>
+                    <?php endforeach;?>
                 </ul>
             </div>
        </div>
-    <?php }?>
+    <?php endforeach;?>
     </div>
   </div>
 </div>
 
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        function() {?>
-<script>
-    require(['home/talk']);
-</script>
-       <?php }
-    )
-);
-?>
+<?php $this->extend('layout/foot')?>

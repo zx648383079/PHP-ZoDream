@@ -1,25 +1,26 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array(
-        'zodream/blog.css'
-    )
-);
-$page = $this->gain('page');
-$termId = $this->gain('termId');
+
+$this->title = $title;
+$this->registerJs('require(["home/blog"]);');
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
             <ul class="term list-group">
-                <li class="list-group-item <?=empty($termId) ? 'active' : null?>"><a href="<?php $this->url('blog');?>">全部</a></li>
-                <?php foreach ($this->gain('term', array()) as $item) :?>
-                    <li class="list-group-item <?=$item['id'] == $termId ? 'active' : null?>"><a href="<?php $this->url(null, array('termid' => $item['id']));?>"><?=$item['name'];?></a></li>
+                <li class="list-group-item <?=empty($termId) ? 'active' : null?>">
+                    <a href="<?=Url::to('blog');?>">全部</a></li>
+                <?php foreach ($term as $item) :?>
+                    <li class="list-group-item <?=$item['id'] == $termId ? 'active' : null?>">
+                        <a href="<?=Url::to(['termid' => $item['id']]);?>"><?=$item['name'];?></a></li>
                 <?php endforeach;?>
             </ul>
         </div>
@@ -32,7 +33,7 @@ $termId = $this->gain('termId');
                             <span>推荐</span>
                         </div>
                         <h4 class="list-item-head">
-                            <a href="<?php $this->url('blog/view/id/'.$item['id']);?>">
+                            <a href="<?=Url::to(['blog/view', 'id' => $item['id']]);?>">
                                 <?=$item['title'];?>
                             </a>
                         </h4>
@@ -40,10 +41,11 @@ $termId = $this->gain('termId');
                             <?=$item['excerpt'];?>
                         </div>
                         <div class="list-item-foot">
-                            <a href="<?php $this->url('blog/user/'.$item['user_id']);?>"><?=$item['user'];?></a>
+                            <a href="<?=Url::to(['blog', 'user' => $item['user_id']]);?>">
+                                <?=$item['user'];?></a>
                              发表于 
                             <span>
-                                <?php $this->ago($item['create_at']);?>
+                                <?=$this->ago($item['create_at']);?>
                             </span>
                             分类：
                             <span>
@@ -65,12 +67,5 @@ $termId = $this->gain('termId');
     </div>
 
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        '!js require(["home/blog"]);'
-    )
-);
-?>
+
+<?php $this->extend('layout/foot')?>

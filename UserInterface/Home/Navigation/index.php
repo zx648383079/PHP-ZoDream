@@ -1,13 +1,14 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$data = $this->gain('data', array());
+$this->title = '导航';
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
+$this->registerJs('require(["home/navigation"]);');
 ?>
 
 <div class="main">
@@ -36,31 +37,31 @@ $data = $this->gain('data', array());
             </div>
             <div class="column">
                 <div>
-                    <a href="<?php $this->url('blog');?>">博客</a>
+                    <a href="<?=Url::to('blog');?>">博客</a>
                 </div>
                  <div>
-                    <a href="<?php $this->url('laboratory');?>">实验室</a>
+                    <a href="<?=Url::to('laboratory');?>">实验室</a>
                 </div>
                  <div>
-                    <a href="<?php $this->url('talk');?>">日志</a>
+                    <a href="<?=Url::to('talk');?>">日志</a>
                 </div>
             </div>
         </div>
-        <?php foreach ($data as $value) {?>
+        <?php foreach ($data as $value) :?>
          <div class="row">
             <div>
-                <?php echo $value[0]['category'];?>
+                <?=$value[0]['category'];?>
             </div>
             <div class="column">
-                <?php foreach ($value[1] as $item) {?>
+                <?php foreach ($value[1] as $item) :?>
                 <div>
-                    <a href="<?php echo $item['url'];?>" target="_blank"><?php echo $item['name'];?></a>
+                    <a href="<?=$item['url'];?>" target="_blank"><?=$item['name'];?></a>
                 </div>
-                <?php }?>
+                <?php endforeach;?>
             </div>
         </div>
-        <?php }?>
-        <?php if (!Auth::guest()) {?>
+        <?php endforeach;?>
+        <?php if (!Auth::guest()) :?>
         <div class="row">
             <div>
                 增加
@@ -88,24 +89,17 @@ $data = $this->gain('data', array());
                     名称：<input type="text" name="name" value="" placeholder="名称"> </br>
                     网址：<input type="text" name="url" value="" placeholder="网址"> </br>
                     分类：<select name="category_id">
-                        <?php foreach($this->gain('category', array()) as $item) {?>
-                        <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
-                        <?php }?>
+                        <?php foreach($category as $item) :?>
+                        <option value="<?=$item['id'];?>"><?=$item['name'];?></option>
+                        <?php endforeach;?>
                     </select>
                     <button type="submit">增加</button>
                 </form>
             </div>
         </div>
-        <?php }?>
+        <?php endif;?>
     </div>
 </div>
 
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        '!js require(["home/navigation"]);'
-    )
-);
-?>
+
+<?php $this->extend('layout/foot')?>

@@ -2,12 +2,11 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	))
-);
+$this->title = $title;
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     <div class="panel panel-default">
@@ -41,10 +40,4 @@ $this->extend(array(
           </div>
     </div>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+<?php $this->extend('layout/foot')?>

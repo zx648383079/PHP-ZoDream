@@ -1,21 +1,19 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-	'layout' => array(
-		'head',
-        'navbar'
-	)), array(
-        'zodream/blog.css'
-    )
-);
-$page = $this->gain('page');
+$this->title = $title;
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 <div class="container">
     
     <div class="row">
-        <?php if (!empty($page->getPage())) {?>
+        <?php if (!empty($page->getPage())) :?>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -26,27 +24,27 @@ $page = $this->gain('page');
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($page->getPage() as $item) {?>
+                <?php foreach ($page->getPage() as $item) :?>
                     <tr>
                         <td class="thread">
-                            <a href="<?php $this->url('forum/post/id/'.$item['id']);?>">
-                                <?php echo $item['title'];?>
+                            <a href="<?=Url::to(['forum/post', 'id' => $item['id']]);?>">
+                                <?=$item['title'];?>
                             </a>
                         </td>
                         <td>
-                            <?php echo $item['user_name'];?></br>
-                            <?php $this->ago($item['create_at']);?>
+                            <?=$item['user_name'];?></br>
+                            <?=$this->ago($item['create_at']);?>
                         </td>
                         <td>
-                            <?php echo $item['replies'];?> </br>
-                            <?php echo $item['views'];?>
+                            <?=$item['replies'];?> </br>
+                            <?=$item['views'];?>
                         </td>
                         <td>
-                            <?php echo $item['update_user'];?></br>
-                            <?php $this->ago($item['update_at']);?>
+                            <?= $item['update_user'];?></br>
+                            <?=$this->ago($item['update_at']);?>
                         </td>
                     </tr>
-                <?php }?>
+                <?php endforeach;?>
             </tbody>
             <tfoot>
                 <tr>
@@ -56,15 +54,11 @@ $page = $this->gain('page');
                 </tr>
             </tfoot>
         </table>
-        <?php } else {?>
+        <?php else:?>
         <h3 class="text-center text-danger">查询无结果！</h3>
-        <?php }?>
+        <?php endif;?>
     </div>
 </div>
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+
+
+<?php $this->extend('layout/foot')?>
