@@ -1,10 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+/** @var $this \Zodream\Domain\View\View */
+$this->extend('layout/head');
 ?>
 
 <div class="main">
@@ -47,10 +44,4 @@ $this->extend(array(
 </form>
 </div>
 
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	))
-);
-?>
+<?php $this->extend('layout/foot');?>

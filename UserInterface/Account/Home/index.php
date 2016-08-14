@@ -4,15 +4,11 @@ use Zodream\Infrastructure\Html;
 use Zodream\Domain\Access\Auth;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'zodream/account.css'
-    )
-);
-$page = $this->gain('page');
+$this->registerCssFile('zodream/account.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="container">
@@ -47,7 +43,7 @@ $page = $this->gain('page');
                     <li class="list-group-item">
                         <?=$item['user_name']?> 回复了我的主题 《<?=$item['title']?>》
                         <?=$item['content']?>
-                        <?php $this->ago($item['create_at']);?>
+                        <?=$this->ago($item['create_at']);?>
                     </li>
                 <?php endforeach;?>
             </ul>
@@ -57,10 +53,4 @@ $page = $this->gain('page');
     </div>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>

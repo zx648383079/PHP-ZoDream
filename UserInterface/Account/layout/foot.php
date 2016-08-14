@@ -1,9 +1,10 @@
 <?php
 /** @var $this \Zodream\Domain\View\View */
 ?>
-<script data-main="<?php $this->asset('js/zodream/admin');?>" src="<?php $this->asset('js/require/require.min.js');?>"></script>
-<?php
-$this->jcs();
-?>
+        <div class="footer">
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
+        </div>
+        <script data-main="/assets/js/zodream/admin" src="/assets/js/require/require.min.js"></script>
+        <?=$this->foot()?>
     </body>
 </html>

@@ -2,13 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-	'layout' => array(
-		'head'
-	)), array(
-        'zodream/login.css'
-    )
-);
+$this->registerCssFile('zodream/login.css');
+$this->registerJs('require(["admin/login"]);');
+$this->extend('layout/head');
 ?>
 
 <div class="login">
@@ -60,12 +56,4 @@ $this->extend(array(
         </div>
     </div>
 
-<?php
-$this->extend(array(
-	'layout' => array(
-		'foot'
-	)), array(
-        '!js require(["admin/login"]);'
-    )
-);
-?>
+<?php $this->extend('layout/foot')?>

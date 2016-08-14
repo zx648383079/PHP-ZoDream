@@ -3,15 +3,11 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'zodream/account.css'
-    )
-);
-$page = $this->gain('page');
+$this->registerCssFile('zodream/account.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="container">
@@ -35,7 +31,7 @@ $page = $this->gain('page');
                 <?php foreach ($page->getPage() as $item) :?>
                 <li class="list-group-item">
                     <?=Html::a($item['title'], ['index.php/blog/view', 'id' => $item['id']])?>
-                    <?php $this->ago($item['create_at']);?>
+                    <?=$this->ago($item['create_at']);?>
                 </li>
                 <?php endforeach;?>
             </ul>
@@ -45,10 +41,4 @@ $page = $this->gain('page');
     </div>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>

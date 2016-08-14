@@ -6,16 +6,15 @@ use Zodream\Domain\Html\Bootstrap\FormWidget;
 use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'cropper.min.css',
-        'sitelogo.css',
-        'zodream/account.css'
-    )
-);
+
+$this->registerJs('require(["admin/account"]);');
+$this->registerCssFile('cropper.min.css');
+$this->registerCssFile('sitelogo.css');
+$this->registerCssFile('zodream/account.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="container">
@@ -123,12 +122,7 @@ HTML;
     </div>
 
     <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        '!js require(["admin/account"]);'
-    )
-);
-?>
+
+
+
+<?php $this->extend('layout/foot')?>

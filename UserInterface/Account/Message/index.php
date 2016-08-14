@@ -2,16 +2,15 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 use Zodream\Domain\Html\Bootstrap\AccordionWidget;
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head',
-        'navbar'
-    )), array(
-        'zodream/blog.css'
-    )
-);
+
+$this->registerCssFile('zodream/blog.css');
+$this->extend([
+    'layout/head',
+    'layout/navbar'
+]);
 ?>
 
 <div class="container">
@@ -34,22 +33,16 @@ $this->extend(array(
         </div>
         <div class="col-md-9">
             <div class="list-group">
-                <?php foreach ($this->gain('data', array()) as $item) {?>
-                    <a href="<?php $this->url(['message/send', 'id' => $item['send_id']])?>" class="list-group-item active">
-                        <span class="badge"><?php $this->ago($item['create_at']);?></span>
-                        <h4 class="list-group-item-heading"><?php echo $item['name'];?></h4>
-                        <p class="list-group-item-text"><?php echo $item['content']?></p>
+                <?php foreach ($data as $item) :?>
+                    <a href="<?Url::to(['message/send', 'id' => $item['send_id']])?>" class="list-group-item active">
+                        <span class="badge"><?=$this->ago($item['create_at']);?></span>
+                        <h4 class="list-group-item-heading"><?=$item['name'];?></h4>
+                        <p class="list-group-item-text"><?=$item['content']?></p>
                     </a>
-                <?php }?>
+                <?php endforeach;?>
             </div>
         </div>
     </div>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?php $this->extend('layout/foot')?>
