@@ -206,7 +206,7 @@ class Uploader {
 
         $dirName = dirname($this->filePath);
         //创建目录失败
-        if (!is_file($dirName) && !mkdir($dirName, 0777, true)) {
+        if (!is_dir($dirName) && !mkdir($dirName, 0777, true)) {
             $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
             return false;
         }
