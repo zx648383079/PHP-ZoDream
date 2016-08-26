@@ -3,18 +3,14 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+$this->extend('layout/head');
 echo \Zodream\Domain\Html\Bootstrap\PanelWidget::show(array(
     'head' => Html::tag('a', '增加', array(
         'class' => 'btn btn-primary',
         'href' => Url::to('wechat/addReply')
     )),
     'body' => \Zodream\Domain\Html\Bootstrap\TableWidget::show(array(
-        'page' => $this->gain('page'),
+        'page' => $page,
         'columns' => array(
             'id' => 'ID',
             'type' => array(
@@ -45,10 +41,4 @@ echo \Zodream\Domain\Html\Bootstrap\PanelWidget::show(array(
 ?>
 
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

@@ -3,16 +3,13 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 <div class="row">
     <div class="col-md-3 col-md-offset-2">
-        <a href="<?php $this->url('waste/add');?>" class="btn btn-primary">新增</a>
+        <?=Html::a('新增', 'waste/add', [
+            'class' => 'btn btn-primary'
+        ])?>
     </div>
 </div>
 <table class="table table-hover">
@@ -26,7 +23,7 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
                 <td><?=$value['id']?></td>
                 <td><?=$value['code']?></td>
@@ -39,7 +36,7 @@ $page = $this->gain('page');
                     <?=Html::a('删除', ['waste/delete', 'id' => $value['id']])?>
                 </td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
         <tr>
@@ -50,10 +47,4 @@ $page = $this->gain('page');
     </tfoot>
 </table>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

@@ -1,12 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$search = $this->gain('search');
+$this->registerJs('require(["admin/flow"]);');
+$this->extend('layout/head');
 ?>
 
 <div class="container">
@@ -14,8 +10,8 @@ $search = $this->gain('search');
     <div class="panel">
         <h3 class="head">我的状态</h3>
         <div>
-            登录者:  <?php $this->out('name');?>   ,所属用户组:  超级管理员
-            这是您第 <?php $this->out('num');?> 次登录，上次登录时间： <?php $this->time($this->gain('date'));?> ，登录IP： <?php $this->out('ip');?>
+            登录者:  <?=$name?>   ,所属用户组:  超级管理员
+            这是您第 <?=$num?> 次登录，上次登录时间： <?=$this->time($date);?> ，登录IP： <?=$ip?>
         </div>
     </div>
 
@@ -107,12 +103,4 @@ $search = $this->gain('search');
     </div>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )),[
-        '!js require(["admin/flow"]);'
-    ]
-);
-?>
+<?=$this->extend('layout/foot')?>

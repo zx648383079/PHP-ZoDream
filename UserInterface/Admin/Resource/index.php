@@ -2,13 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$file = $this->gain('file');
-$data = $this->gain('data', array());
+$this->extend('layout/head');
 ?>
 
 <table class="table table-hover">
@@ -27,14 +21,14 @@ $data = $this->gain('data', array());
         <td></td>
     </tr>
     <?php endif;?>
-    <?php foreach ($data['dirs'] as $item) {?>
+    <?php foreach ($data['dirs'] as $item) :?>
         <tr>
             <td><?=Html::a($item['name'], [null, 'file' => $item['full']]);?></td>
             <td>文件夹</td>
             <td>下载 重命名 删除</td>
         </tr>
-    <?php }?>
-    <?php foreach ($data['files'] as $item) {?>
+    <?php endforeach;?>
+    <?php foreach ($data['files'] as $item) :?>
         <tr>
             <td><?=Html::a($item['name'], ['#', 'file' => $item['full']]);?></td>
             <td>文件</td>
@@ -43,14 +37,8 @@ $data = $this->gain('data', array());
                 <?=Html::a('编辑', ['resource/add', 'file' => $item['full']])?>
                  重命名 删除</td>
         </tr>
-    <?php }?>
+    <?php endforeach;?>
     </tbody>
 </table>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

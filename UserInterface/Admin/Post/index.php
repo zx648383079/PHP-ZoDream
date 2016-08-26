@@ -1,16 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
-<a class="btn" href="<?php $this->url('post/add');?>">新增</a>
-<a class="btn" href="<?php $this->url('post/term');?>">管理分类</a>
+<?=Html::a('新增', 'post/add', ['class' => 'btn'])?>
+<?=Html::a('管理分类', 'post/term', ['class' => 'btn'])?>
 <form method="GET">
     搜索： <input type="text" name="search" value="" placeholder="标题" required>
     <button type="submit">搜索</button>
@@ -29,23 +25,23 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
                 <td>
-                    <input type="checkbox" name="id[]" value="<?php echo $value['id'];?>">
+                    <input type="checkbox" name="id[]" value="<?=$value['id'];?>">
                 </td>
-                <td><?php echo $value['title'];?></td>
-                <td><?php echo $value['user'];?></td>
-                <td><?php echo $value['term'];?></td>
+                <td><?=$value['title'];?></td>
+                <td><?=$value['user'];?></td>
+                <td><?=$value['term'];?></td>
                 <td><?php //echo $value['tag'];?></td>
-                <td><?php echo $value['comment_count'];?></td>
-                <td><?php $this->time($value['create_at']);?></td>
+                <td><?=$value['comment_count'];?></td>
+                <td><?=$this->time($value['create_at']);?></td>
                 <td>
-                    [<a href="<?php $this->url('post/add/id/'.$value['id']);?>">编辑</a>]
-                    [<a href="<?php $this->url('post/delete/id/'.$value['id']);?>">删除</a>]
+                    [<?=Html::a('编辑', ['post/add', 'id' => $value['id']])?>]
+                    [<?=Html::a('删除', ['post/delete', 'id' => $value['id']])?>]
                 </td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
     <tr>
@@ -55,10 +51,5 @@ $page = $this->gain('page');
     </tr>
     </tfoot>
 </table>
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

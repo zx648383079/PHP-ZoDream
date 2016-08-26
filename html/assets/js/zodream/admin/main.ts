@@ -2,16 +2,16 @@
 /// <reference path="../../../../../typings/jquery/jquery.d.ts" />
 ;define(["jquery", "bui"], function() {
     BUI.config({
-    alias : {
-      'common' : 'assets/js/bui/common',
-      'module' : 'assets/js/bui/module'
-    }/*,
-    map : [ //调试环境下使用'*.js'，如果发布上线前，使用*-min.js去掉下面的map
-      [/common\/(.*)-min.js/,'common/$1.js'],
-      [/module\/(.*)-min.js/,'module/$1.js']
-    ]*/
-    
-  });
+      alias : {
+        'common' : 'assets/js/bui/common',
+        'module' : 'assets/js/bui/module'
+      }/*,
+      map : [ //调试环境下使用'*.js'，如果发布上线前，使用*-min.js去掉下面的map
+        [/common\/(.*)-min.js/,'common/$1.js'],
+        [/module\/(.*)-min.js/,'module/$1.js']
+      ]*/
+      
+    });
     BUI.use('common/main',function(){
       var config = [{
           id:'menu', 
@@ -75,7 +75,7 @@
             id:'plugin',
             menu:[{
                 text:'微信管理',
-                items:[
+                items: [
                   {id:'wechat',text:'账号管理',href:'admin.php/wechat'},
                   {id:'reply',text:'自动回复',href:'admin.php/wechat/reply'},
                   {id:'send',text:'群发功能',href:'admin.php/wechat/send'},

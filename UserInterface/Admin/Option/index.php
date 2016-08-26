@@ -1,11 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 <div class="row">
     <form method="POST">
@@ -38,17 +34,17 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->gain('data', array()) as $value) {?>
+        <?php foreach ($data as $value) :?>
             <tr>
                 <form method="POST">
                     <td>
-                        <input type="text" class="form-control" name="name" value="<?php echo $value['name'];?>" placeholder="名称" required>
+                        <input type="text" class="form-control" name="name" value="<?=$value['name'];?>" placeholder="名称" required>
                     </td>
                     <td>
-                        <textarea name="value" class="form-control" rows="1" cols="30"><?php echo $value['value'];?></textarea>
+                        <textarea name="value" class="form-control" rows="1" cols="30"><?=$value['value'];?></textarea>
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="autoload" placeholder="自动加载" value="<?php echo $value['autoload'];?>">
+                        <input type="text" class="form-control" name="autoload" placeholder="自动加载" value="<?=$value['autoload'];?>">
                     </td>
                     <td>
                         <button type="submit" class="btn btn-primary">修改</button>
@@ -56,14 +52,8 @@ $this->extend(array(
                     </td>
                 </form>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
 </table>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

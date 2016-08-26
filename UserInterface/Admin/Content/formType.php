@@ -1,7 +1,6 @@
 <?php
 /** @var $this \Zodream\Domain\View\View */
-$type = $this->gain('type');
-if ($type == 'input') {
+if ($type == 'input') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
 	<tbody>
@@ -16,8 +15,8 @@ if ($type == 'input') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'wurl') {
+endif;
+if ($type == 'wurl') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
 	<tbody>
@@ -32,8 +31,8 @@ if ($type == 'wurl') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'password') {
+endif;
+if ($type == 'password') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
 	<tbody>
@@ -48,8 +47,8 @@ if ($type == 'password') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'textarea') {
+endif;
+if ($type == 'textarea') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
 	<tbody>
@@ -72,8 +71,8 @@ if ($type == 'textarea') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'editor') {
+endif;
+if ($type == 'editor') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
     <tbody>
@@ -102,8 +101,8 @@ if ($type == 'editor') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'select' || $type == 'radio') {
+endif;
+if ($type == 'select' || $type == 'radio') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
 	<tbody>
@@ -120,8 +119,8 @@ if ($type == 'select' || $type == 'radio') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'checkbox') {
+endif;
+if ($type == 'checkbox') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
 	<tbody>
@@ -140,8 +139,8 @@ if ($type == 'checkbox') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'image') {
+endif;
+if ($type == 'image') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
     <tbody>
@@ -166,8 +165,8 @@ if ($type == 'image') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'file' || $type == 'files') {
+endif;
+if ($type == 'file' || $type == 'files') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
     <tbody>
@@ -186,8 +185,8 @@ if ($type == 'file' || $type == 'files') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'date') {
+endif;
+if ($type == 'date') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">
     <tbody>
@@ -206,8 +205,8 @@ if ($type == 'date') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'map') {
+endif;
+if ($type == 'map') :
 ?>
 	<table width="98%" cellspacing="1" cellpadding="2">
     <tbody>
@@ -218,8 +217,8 @@ if ($type == 'map') {
     </tbody>
 	</table>
 <?php 
-}
-if ($type == 'fields') {
+endif;
+if ($type == 'fields') :
 ?>
 	<table width="98%" cellspacing="1" cellpadding="2">
     <tbody>
@@ -230,8 +229,8 @@ if ($type == 'fields') {
     </tr>
 	<tr>
       <td>格式 ：</td>
-      <td><font color="gray">	{字段名称}[介绍]，例如：{shi}室，{ting}厅，{wei}卫</font><br><div class="onShow">注意：被组合的字段必须是单行、多行、密码文本、下拉选择框、单选按钮、复选框</div></td>
+      <td><font color="gray">	:字段名称}[介绍]，例如：:shi}室，:ting}厅，:wei}卫</font><br><div class="onShow">注意：被组合的字段必须是单行、多行、密码文本、下拉选择框、单选按钮、复选框</div></td>
     </tr>
     </tbody>
 	</table>
-<?php }?>
+<?php endif;?>

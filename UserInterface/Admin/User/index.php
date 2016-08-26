@@ -1,11 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 
 
@@ -20,7 +16,7 @@ $this->extend(array(
                     <div class="form-group">
                         <label for="textarea_name" class="col-sm-2">用户名：</label>
                         <div class="col-sm-10">
-                            <?php $this->out('name');?>
+                            <?=$name?>
                         </div>
                     </div>
                     
@@ -60,10 +56,5 @@ $this->extend(array(
 </div>
 
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

@@ -1,12 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 
 <table class="table table-hover">
@@ -22,17 +17,17 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
-                <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['content'];?></td>
-                <td><?php $this->tag($value['first'], array('否', '是'));?></td>
-                <td><?php echo $value['user_name'];?></td>
-                <td><?php echo $value['ip'];?></td>
-                <td><?php $this->time($value['create_at']);?></td>
+                <td><?=$value['id']?></td>
+                <td><?=$value['content']?></td>
+                <td><?=$this->tag($value['first'], array('否', '是'));?></td>
+                <td><?=$value['user_name']?></td>
+                <td><?=$value['ip']?></td>
+                <td><?=$this->time($value['create_at'])?></td>
                 <td>[删除]</td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
     <tr>
@@ -42,10 +37,4 @@ $page = $this->gain('page');
     </tr>
     </tfoot>
 </table>
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

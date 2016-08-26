@@ -4,16 +4,13 @@
 <!DOCTYPE HTML>
 <html lang="ch-ZHS">
 <head>
-<title><?php $this->out('title', 'ZoDream');?>-<?php $this->out('tagline', 'ZoDream');?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="<?php $this->out('keywords');?>" />
-<meta name="Description" content="<?php $this->out('description');?>" />
-<meta name="author" content="<?php $this->out('author');?>" />
-<link rel="icon" href="<?php $this->asset('images/favicon.png');?>">
-<?php $this->jcs(array(
-    'bootstrap/bootstrap.min.css',
-    'zodream/zodream.css'
-));?>
+    <title><?=$this->title?>-ZoDream</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="qc:admins" content="604324756425156367" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/assets/images/favicon.png">
+    <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/zodream/zodream.css" rel="stylesheet">
+    <?=$this->head()?>
 </head>
 <body>

@@ -1,12 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$role = $this->gain('role');
+/** @var $model \Domain\Model\UserModel */
+$this->extend('layout/head');
 ?>
 
 <div class="panel panel-default">
@@ -20,8 +16,8 @@ $role = $this->gain('role');
                     <div class="form-group">
                         <label for="textarea_name" class="col-sm-2 control-label">用户名：</label>
                         <div class="col-sm-10">
-                            <input type="hidden" name="id" value="<?php $this->out('id');?>">
-                             <input type="text" name="name" class="form-control" value="<?php $this->out('name');?>" placeholder="用户名">
+                            <input type="hidden" name="id" value="<?=$model->id?>">
+                             <input type="text" name="name" class="form-control" value="<?=$model->name?>" placeholder="用户名">
                         </div>
                     </div>
                     
@@ -29,7 +25,7 @@ $role = $this->gain('role');
                     <div class="form-group">
                         <label for="input_password" class="col-sm-2 control-label">邮箱：</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" name="email" value="<?php $this->out('email');?>" placeholder="邮箱">
+                            <input type="email" class="form-control" name="email" value="<?=$model->email?>" placeholder="邮箱">
                         </div>
                     </div>
                     
@@ -54,12 +50,12 @@ $role = $this->gain('role');
                         <label for="input_role" class="col-sm-2 control-label">角色：</label>
                         <div class="col-sm-10">
                             <select name="role" id="input_role" class="form-control">
-                                <option disabled <?php echo empty($role)? 'selected' : '';?>>请选择角色</option>
+                                <option disabled <?=empty($role)? 'selected' : '';?>>请选择角色</option>
                                 <?php 
                                 $this->swi($role, ' selected');
-                                foreach ($this->gain('data', array()) as $value) {?>
-                                    <option value="<?php echo $value['id'];?>" <?php $this->cas($value['id']);?>><?php echo $value['name'];?></option>
-                                <?php }?>
+                                foreach ($data as $value) :?>
+                                    <option value="<?=$value['id'];?>" <?php $this->cas($value['id']);?>><?= $value['name'];?></option>
+                                <?php endforeach;?>
                             </select>
                         </div>
                     </div>
@@ -76,10 +72,5 @@ $role = $this->gain('role');
       </div>
 </div>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

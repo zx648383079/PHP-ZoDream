@@ -3,15 +3,11 @@ defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\PanelWidget;
 use Zodream\Domain\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+$this->extend('layout/head');
 
 echo PanelWidget::show(array(
     'head' => '添加模型',
-    'body' => FormWidget::begin($this->gain('data'))
+    'body' => FormWidget::begin($data)
         ->hidden('id')
         ->select('type', array(
             '内容模型',
@@ -31,10 +27,4 @@ echo PanelWidget::show(array(
 
 
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

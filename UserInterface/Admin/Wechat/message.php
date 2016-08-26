@@ -1,13 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 
 
@@ -27,15 +23,15 @@ $page = $this->gain('page');
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($page->getPage() as $value) {?>
+                        <?php foreach ($page->getPage() as $value) :?>
                             <tr>
                                 <td><?=$value['id'];?></td>
                                 <td><?=$value['content']?></td>
                                 <td>
-                                    <a href="<?php $this->url([null, 'id' => $value['id']])?>">删除</a>
+                                    <?=Html::a('删除',[null, 'id' => $value['id']])?>
                                 </td>
                             </tr>
-                        <?php }?>
+                        <?php endforeach;?>
                     </tbody>
                     <tfoot>
                     <tr>
@@ -50,11 +46,4 @@ $page = $this->gain('page');
     
 </div>
 
-
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

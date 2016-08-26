@@ -2,12 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 <div class="row">
     <form method="POST">
@@ -58,8 +53,4 @@ $page = $this->gain('page');
         <?php $page->pageLink();?>
     </div>
 
-<?php
-$this->extend(array(
-    'layout' => array('foot'
-    ))
-);
+<?=$this->extend('layout/foot')?>

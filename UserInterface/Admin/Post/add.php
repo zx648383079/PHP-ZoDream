@@ -1,32 +1,24 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    )), array(
-        'zodream/add.css'
-    )
-);
-$post = $this->gain('data', array(
-    'title' => null,
-    'term_id' => 1,
-    'content' => null
-));
+/** @var $model \Domain\Model\Blog\PostModel */
+$this->registerCssFile('zodream/add.css');
+$this->registerJs('require(["admin/add"]);');
+$this->extend('layout/head');
 ?>
 <h3>新建</h3>
 <div>
     <form method="POST">
         <div class="left">
-            <input type="hidden" name="id" value="<?php $this->out('id');?>">
-        标题：<input type="text" name="title" value="<?php echo $post['title'];?>" placeholder="标题"></br>
-        内容：<textarea id="editor" name="content" placeholder="内容"><?php echo $post['content'];?></textarea>
+            <input type="hidden" name="id" value="<?=$model->id?>">
+        标题：<input type="text" name="title" value="<?=$model->title?>" placeholder="标题"></br>
+        内容：<textarea id="editor" name="content" placeholder="内容"><?=$model->content?></textarea>
         </div>
         <div class="right">
             分   类： <select name="term_id" required>
-                <?php foreach($this->gain('term', array()) as $value) {?>
-                    <option value="<?php echo $value['id'];?>"<?php if ($value['id'] == $post['term_id']) {?> selected<?php }?>><?php echo $value['name'];?></option>
-                <?php }?>
+                <?php foreach($term as $value) :?>
+                    <option value="<?=$value['id'];?>"<?php if ($value['id'] == $model['term_id']) :?> selected<?php endif;?>><?=$value['name'];?></option>
+                <?php endforeach;?>
             </select></br>
           公开度： <select name="status">
               <option value="publish">公开</option>
@@ -41,12 +33,4 @@ $post = $this->gain('data', array(
 </div>
 
 
-<?php 
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        '!js require(["admin/add"]);'
-    )
-);
-?>
+<?=$this->extend('layout/foot')?>

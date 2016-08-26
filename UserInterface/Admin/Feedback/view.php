@@ -2,12 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\DetailWidget;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$data = $this->gain('data');
+
+$this->extend('layout/head');
 ?>
 
 
@@ -33,10 +29,4 @@ $data = $this->gain('data');
 </div>
 
 
-<?php 
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

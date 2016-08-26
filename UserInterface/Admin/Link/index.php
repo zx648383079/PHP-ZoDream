@@ -1,17 +1,16 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+$this->extend('layout/head');
 ?>
 
 
 <div class="panel panel-default">
     <!-- Default panel contents -->
-    <div class="panel-heading">友情链接 <a href="<?php $this->url('link/add');?>" class="btn btn-primary">新增</a>  </div>
+    <div class="panel-heading">友情链接
+        <?=Html::a('新增', 'link/add', ['class' => 'btn btn-primary'])?>
+    </div>
         <div class="panel-body">
         </div>
 
@@ -26,26 +25,19 @@ $this->extend(array(
             </tr>
             </thead>
             <tbody>
-                <?php foreach ($this->gain('data', array()) as $value) {?>
+                <?php foreach ($data as $value) :?>
                     <tr>
-                        <td><?php echo $value['id'];?></td>
-                        <td><?php echo $value['name'];?></td>
-                        <td><?php echo $value['url'];?></td>
+                        <td><?=$value['id']?></td>
+                        <td><?=$value['name']?></td>
+                        <td><?= $value['url']?></td>
                         <td>
-                            <a href="<?php $this->url('link/add/id/'.$value['id']);?>" class="btn btn-primary">编辑</a>   
-                            
-                            <a href="<?php $this->url('link/delete/id/'.$value['id']);?>" class="btn btn-danger">删除</a>
+                            <?=Html::a('新增', ['link/add', 'id' => $value['id']], ['class' => 'btn btn-primary'])?>
+                            <?=Html::a('删除', ['link/delete', 'id' => $value['id']], ['class' => 'btn btn-danger'])?>
                         </td>
                     </tr>
-                <?php }?>
+                <?php endforeach;?>
             </tbody>
         </table>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

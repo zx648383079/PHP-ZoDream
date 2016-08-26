@@ -1,13 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 <form method="GET">
     搜索： <input type="text" name="search" value="" placeholder="评论" required>
@@ -26,17 +22,17 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
-                <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['content'];?></td>
-                <td><?php echo $value['name'];?></td>
-                <td><?php echo $value['email'];?></td>
-                <td><?php echo $value['user_id'] > 0 ? '已注册' : '游客';?></td>
-                <td><?php $this->time($value['create_at']);?></td>
-                <td>[<a href="<?php $this->url('post/deleteComment/id/'.$value['id']);?>">删除</a>]</td>
+                <td><?=$value['id'];?></td>
+                <td><?=$value['content'];?></td>
+                <td><?=$value['name'];?></td>
+                <td><?=$value['email'];?></td>
+                <td><?=$value['user_id'] > 0 ? '已注册' : '游客';?></td>
+                <td><?=$this->time($value['create_at']);?></td>
+                <td>[<?=Html::a('删除', ['post/deleteComment', 'id' => $value['id']])?>]</td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
     <tr>
@@ -46,10 +42,4 @@ $page = $this->gain('page');
     </tr>
     </tfoot>
 </table>
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

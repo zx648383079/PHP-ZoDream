@@ -1,11 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 
 
@@ -18,14 +14,14 @@ $this->extend(array(
             <div class="form-group">
                 <label for="input_db" class="col-sm-2 control-label">数据库:</label>
                 <div class="col-sm-10">
-                    <?php foreach($this->gain('data', array()) as $item){?>
+                    <?php foreach($data as $item):?>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="db[]" value="<?php echo $item;?>">
-                            <?php echo $item;?>
+                            <input type="checkbox" name="db[]" value="<?=$item;?>">
+                            <?=$item;?>
                         </label>
                     </div>  
-                    <?php }?>
+                    <?php endforeach;?>
                 </div>
             </div>
             
@@ -41,16 +37,8 @@ $this->extend(array(
                     <button type="submit" class="btn btn-primary">备份</button>
                 </div>
             </div>
-            
-            <p class="text-danger"><?php $this->out('message');?></p>
         </form>
     </div>
 </div>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

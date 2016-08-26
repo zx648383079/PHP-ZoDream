@@ -1,12 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$data = $this->gain('data', array());
+$this->extend('layout/head');
 ?>
 <div>
     <form method="POST">
@@ -18,9 +13,9 @@ $data = $this->gain('data', array());
         </select>
         上级： <select name="parent">
             <option value="0">无</option>
-            <?php foreach($data as $item) {?>
-            <option value="<?php echo $item['id']?>"><?php echo $item['name'];?></option>
-            <?php }?>
+            <?php foreach($data as $item) :?>
+            <option value="<?=$item['id']?>"><?=$item['name'];?></option>
+            <?php endforeach;?>
         </select>
         顺序： <input type="number" name="position" value="0">
         <button type="submit">增加</button>
@@ -39,13 +34,13 @@ $data = $this->gain('data', array());
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($data as $value) {?>
+        <?php foreach ($data as $value) :?>
             <tr>
                 <form method="POST">
-                    <td><?php echo $value['id'];?></td>
+                    <td><?=$value['id'];?></td>
                     <td>
-                        <input type="hidden" name="id" value="<?php echo $value['id'];?>">
-                        <input type="text" name="name" value="<?php echo $value['name'];?>" placeholder="分类" required>
+                        <input type="hidden" name="id" value="<?=$value['id'];?>">
+                        <input type="text" name="name" value="<?=$value['name'];?>" placeholder="分类" required>
                     </td>
                     <td>
                         <select name="type">
@@ -59,15 +54,15 @@ $data = $this->gain('data', array());
                         <select name="parent">
                             <?php $this->swi($value['parent'], 'selected');?>
                             <option value="0" <?php $this->cas(0);?>>无</option>
-                            <?php foreach($data as $item) {
+                            <?php foreach($data as $item) :
                                 if ($item['id'] == $value['id']) continue;
                             ?>
-                            <option value="<?php echo $item['id'];?>" <?php $this->cas($item['id']);?>><?php echo $item['name'];?></option>
-                            <?php }?>
+                            <option value="<?=$item['id'];?>" <?php $this->cas($item['id']);?>><?=$item['name'];?></option>
+                            <?php endforeach;?>
                         </select>
                     </td>
                     <td>
-                        <input type="number" name="position" value="<?php echo $value['position'];?>">
+                        <input type="number" name="position" value="<?=$value['position'];?>">
                     </td>
                     <td>
                         <button type="submit" class="btn btn-primary">修改</button>
@@ -75,14 +70,8 @@ $data = $this->gain('data', array());
                     </td>
                 </form>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
 </table>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

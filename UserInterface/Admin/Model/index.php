@@ -1,11 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 
 
@@ -25,12 +22,12 @@ $this->extend(array(
                       </tr>
                   </thead>
                   <tbody>
-                      <?php foreach ($this->gain('data', array()) as $item) {?>
+                      <?php foreach ($data as $item) :?>
                         <tr>
-                            <td><a href="<?php $this->url('download?file='.$item['url']);?>"><?php echo $item['url'];?></a></td>
-                            <td><?php $this->ago($item['mtime']);?></td>
+                            <td><a href="<?=Url::to(['download', 'file' =>$item['url']]);?>"><?=$item['url'];?></a></td>
+                            <td><?=$this->ago($item['mtime']);?></td>
                         </tr>
-                        <?php }?>
+                        <?php endforeach;?>
                   </tbody>
               </table>
           </div>
@@ -39,10 +36,4 @@ $this->extend(array(
 </div>
 
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

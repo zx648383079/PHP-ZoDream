@@ -1,13 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 echo \Zodream\Infrastructure\Html::tag('div', 
-    \Zodream\Domain\Html\Bootstrap\FormWidget::begin($this->gain('data'))
+    \Zodream\Domain\Html\Bootstrap\FormWidget::begin($data)
         ->hidden('id')
         ->select('type', array(
             'follow' => '关注回复',
@@ -39,11 +35,4 @@ echo \Zodream\Infrastructure\Html::tag('div',
     ));
 ?>
 
-
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

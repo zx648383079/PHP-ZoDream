@@ -4,15 +4,12 @@ use Zodream\Domain\Html\Bootstrap\PanelWidget;
 use Zodream\Infrastructure\Html;
 use Zodream\Domain\Html\Bootstrap\TableWidget;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+
+$this->extend('layout/head');
 echo PanelWidget::show(array(
     'head' => '模型管理 '. Html::a('添加', 'content/add', array('class' => 'btn btn-primary')),
     'body' => TableWidget::show(array(
-        'data' => $this->gain('data'),
+        'data' => $data,
         'columns' => array(
             'id' => 'ID',
             'type' => array(
@@ -28,9 +25,9 @@ echo PanelWidget::show(array(
                 'key' => 'id',
                 'label' => '操作',
                 'format' => function($id) {
-                    return Html::a('字段管理', 'content/field/modelid/'.$id).
-                    Html::a('修改', 'content/add/id/'.$id).
-                    Html::a('删除', 'content/delete/id/'.$id);
+                    return Html::a('字段管理', ['content/field', 'modelid' => $id]).
+                    Html::a('修改', ['content/add', 'id' => $id]).
+                    Html::a('删除', ['content/delete', 'id' => $id]);
                 }
             )
         )
@@ -43,10 +40,4 @@ echo PanelWidget::show(array(
 
 
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

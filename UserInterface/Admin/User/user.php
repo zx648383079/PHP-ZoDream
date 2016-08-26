@@ -1,16 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
-<a class="btn" href="<?php $this->url('user/addUser');?>">增加用户</a>
-<a class="btn" href="<?php $this->url('user/role');?>">管理角色</a>
+<?=Html::a('增加用户', 'user/addUser', ['class' => 'btn'])?>
+<?=Html::a('管理角色', 'user/role', ['class' => 'btn'])?>
 <form method="GET">
     搜索： <input type="text" name="name" value="" placeholder="用户名" required>
     <button type="submit">搜索</button>
@@ -28,17 +24,20 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
-                <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['name'];?></td>
-                <td><?php echo $value['email'];?></td>
-                <td><?php echo $value['login_num'];?></td>
-                <td><?php echo $value['update_ip'];?></td>
-                <td><?php $this->time($value['update_at']);?></td>
-                <td>[<a href="<?php $this->url('user/addUser/id/'.$value['id']);?>">编辑</a>][删除]</td>
+                <td><?=$value['id']?></td>
+                <td><?=$value['name']?></td>
+                <td><?=$value['email']?></td>
+                <td><?=$value['login_num']?></td>
+                <td><?=$value['update_ip']?></td>
+                <td><?=$this->time($value['update_at'])?></td>
+                <td>
+                    [<?=Html::a('编辑', ['user/addUser', 'id' => $value['id']])?>]
+                    [删除
+                </td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
     <tr>
@@ -48,10 +47,5 @@ $page = $this->gain('page');
     </tr>
     </tfoot>
 </table>
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

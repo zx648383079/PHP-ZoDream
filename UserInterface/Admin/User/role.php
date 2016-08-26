@@ -1,13 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
-<a class="btn" href="<?php $this->url('user/addRole');?>">增加角色</a>
+<?=Html::a('增加角色', 'user/addRole', ['class' => 'btn'])?>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -17,19 +14,14 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->gain('data', array()) as $value) {?>
+        <?php foreach ($data as $value) :?>
             <tr>
-                <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['name'];?></td>
-                <td>[<a href="<?php $this->url('user/addRole/id/'.$value['id']);?>">编辑</a>][删除]</td>
+                <td><?=$value['id']?></td>
+                <td><?=$value['name']?></td>
+                <td>[<?=Html::a('编辑', ['user/addRole', 'id' => $value['id']])?>][删除]</td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
 </table>
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

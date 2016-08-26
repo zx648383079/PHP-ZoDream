@@ -1,12 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$roles = $this->gain('roles', array());
+$this->extend('layout/head');
 ?>
 
 <div>
@@ -19,8 +14,8 @@ $roles = $this->gain('roles', array());
                 权限名称：
             </div>
             <div>
-                <input type="hidden" name="id" value="<?php $this->out('id');?>">
-                <input type="text" name="name" value="<?php $this->out('name');?>" placeholder="权限名称">
+                <input type="hidden" name="id" value="<?=$id?>">
+                <input type="text" name="name" value="<?=$name?>" placeholder="权限名称">
             </div>
         </div>
         <div class="row">
@@ -28,11 +23,11 @@ $roles = $this->gain('roles', array());
                 权限：
             </div>
             <div class="column">
-                <?php foreach ($this->gain('data', array()) as $value) {?>
+                <?php foreach ($data as $value) :?>
                     <div>
-                        <input type="checkbox" name="auth[]" value="<?php echo $value['id'];?>" <?php echo in_array($value['id'], $roles) ? 'checked' : '' ;?>><?php echo $value['name'];?>
+                        <input type="checkbox" name="auth[]" value="<?$value['id'];?>" <?=in_array($value['id'], $roles) ? 'checked' : '' ;?>><?$value['name'];?>
                     </div>
-                <?php }?>
+                <?php endforeach;?>
             </div>
         </div>
         <div>
@@ -43,10 +38,4 @@ $roles = $this->gain('roles', array());
     </div>
 </form>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

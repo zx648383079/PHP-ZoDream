@@ -2,13 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    )), array(
-        'zodream/add.css'
-    )
-);
+$this->registerJs('require([\'admin/add\']);');
+$this->registerCssFile('zodream/add.css');
+
+$this->extend('layout/head');
 ?>
 
 
@@ -27,21 +24,8 @@ $this->extend(array(
             ->button()
             ->end();
             ?>
-          <p><?php $this->out('error');?></p>
       </div>
 </div>
 
 
-<?php 
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        function(){?>
-<script type="text/javascript">
-require(['admin/add']);
-</script>
-			<?php }
-        )
-);
-?>
+<?=$this->extend('layout/foot')?>

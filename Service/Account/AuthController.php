@@ -53,19 +53,6 @@ class AuthController extends Controller {
 		));
 	}
 
-	function indexPost() {
-		$code = Factory::session()->get('code');
-		if (!empty($code) && strtolower($code) !== strtolower(Request::post('code'))) {
-			$this->send('message', '验证码错误！');
-			return;
-		}
-		$result = EmpireForm::start()->login();
-		EmpireModel::query()->addLoginLog(Request::post('email'), $result);
-		if (!$result) {
-			return;
-		}
-		
-	}
 
 	function registerAction() {
 		return $this->show(array(
@@ -216,20 +203,5 @@ class AuthController extends Controller {
 
 	function qqAction() {
 		$oauth = new QQ();
-	}
-
-	/**
-	 * 验证第三方是否登录
-	 */
-	function checkAction() {
-		if (Auth::guest()) {
-			$this->ajaxReturn([
-				'status' => 'failure',
-			]);
-		}
-		$this->ajaxReturn([
-			'status' => 'success',
-			'url' => '/'
-		]);
 	}
 }

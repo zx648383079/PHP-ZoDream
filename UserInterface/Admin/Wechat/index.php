@@ -1,11 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+/** @var $models \Domain\Model\WeChat\WechatModel[] */
+$this->title = '微信公众号管理平台';
+$this->extend('layout/head');
 ?>
 
 
@@ -13,7 +12,8 @@ $this->extend(array(
     
     <div class="panel panel-default">
           <div class="panel-heading">
-                <h3 class="panel-title">公众号管理 <a href="wechat/add" class="btn btn-default">添加</a></h3>
+                <h3 class="panel-title">公众号管理
+                    <a href="<?=Url::to('wechat/add')?>" class="btn btn-default">添加</a></h3>
           </div>
           <div class="panel-body">
                 <table class="table table-hover">
@@ -25,16 +25,16 @@ $this->extend(array(
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->gain('data', array()) as $value) {?>
+                        <?php foreach ($models as $item) :?>
                             <tr>
-                                <td><?php echo $value['id'];?></td>
-                                <td><?php echo $value['name'];?></td>
+                                <td><?=$item['id'];?></td>
+                                <td><?=$item['name'];?></td>
                                 <td>
-                                    [<a href="<?php $this->url('wechat/change/id/'.$value['id']);?>">管理</a>]
-                                    [<a href="<?php $this->url('wechat/add/id/'.$value['id']);?>">编辑</a>]
-                                    [删除]</td>
+                                    [<a href="<?=Url::to('wechat/change/id/'.$item['id']);?>">管理</a>]
+                                    [<a href="<?=Url::to('wechat/add/id/'.$item['id']);?>">编辑</a>]
+                                    [<a href="<?=Url::to(['wechat/delete', 'id' => $item['id']])?>" data-confirm="确认删除？">删除</a>]</td>
                             </tr>
-                        <?php }?>
+                        <?php endforeach;?>
                     </tbody>
                 </table>
           </div>
@@ -43,10 +43,4 @@ $this->extend(array(
 </div>
 
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

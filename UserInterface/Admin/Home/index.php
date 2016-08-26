@@ -1,29 +1,25 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    )), array(
-        'bui' => array(
-            'bui-min.css',
-            'main-min.css'
-        ),
-        'zodream/main.css'
-    )
-);
+$this->title = '后台管理';
+$this->registerCssFile('bui/bui-min.css');
+$this->registerCssFile('bui/main-min.css');
+$this->registerCssFile('zodream/main.css');
+$this->registerJs('require(["admin/main"]);');
+$this->extend('layout/head');
 ?>
 
     <div class="header">
 
         <div class="dl-title">
-            <a href="<?php $this->url('/');?>" title="ZoDream">
+            <a href="<?=Url::to('/')?>" title="ZoDream">
                 <span class="lp-title-port">ZoDream</span><span class="dl-title-text">后台管理系统</span>
             </a>
         </div>
 
-        <div class="dl-log">欢迎您，<span class="dl-log-user"><?php $this->out('name');?></span>
-            <a href="<?php $this->url('account.php/auth/logout');?>" title="退出系统" class="dl-log-quit">[退出]</a>
+        <div class="dl-log">欢迎您，<span class="dl-log-user"><?=$name?></span>
+            <a href="<?=Url::to('account.php/auth/logout');?>" title="退出系统" class="dl-log-quit">[退出]</a>
         </div>
     </div>
     <div class="content">
@@ -48,12 +44,5 @@ $this->extend(array(
 
         </ul>
     </div>
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        '!js require(["admin/main"]);'
-    )
-);
-?>
+
+<?=$this->extend('layout/foot')?>

@@ -2,12 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 <button>管理操作日志</button>
 <form>
@@ -42,18 +37,18 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
-                <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['event'];?></td>
-                <td><?php echo $value['data'];?></td>
-                <td><?php echo $value['url'];?></td>
-                <td><?php echo $value['ip'];?></td>
-                <td><?php echo $value['user'];?></td>
-                <td><?php $this->time($value['create_at']);?></td>
+                <td><?=$value['id'];?></td>
+                <td><?=$value['event'];?></td>
+                <td><?=$value['data'];?></td>
+                <td><?=$value['url'];?></td>
+                <td><?=$value['ip'];?></td>
+                <td><?=$value['user'];?></td>
+                <td><?=$this->time($value['create_at']);?></td>
                 <td>[删除 <input type="checkbox">]</td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
     <tr>
@@ -75,10 +70,5 @@ $page = $this->gain('page');
    <button type="submit">提交</button>
 </form>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

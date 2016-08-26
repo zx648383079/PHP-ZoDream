@@ -19,7 +19,7 @@ use Zodream\Infrastructure\Request\Post;
 class WechatController extends Controller {
 	function indexAction() {
 		return $this->show(array(
-			'data' => WeChatModel::findAll()
+			'models' => WeChatModel::findAll()
 		));
 	}
 

@@ -1,11 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 
 <div class="container">
@@ -14,7 +11,7 @@ $this->extend(array(
                 <div class="form-group">
                     <legend>私信</legend>
                 </div>
-                <input type="hidden" name="user_id" value="<?php $this->out('user.id');?>">
+                <input type="hidden" name="user_id" value="<?=$user['id']?>">
                 <div class="form-group">
                     <div class="col-sm-12">
                         <textarea name="content" id="textarea_content" class="form-control" rows="3" required="required"></textarea>
@@ -32,20 +29,14 @@ $this->extend(array(
 
     <div class="row">
         <div class="list-group">
-            <?php foreach ($this->gain('data', array()) as $item) {?>
-                <a href="<?php $this->url(['message/send', 'id' => $item['send_id']])?>" class="list-group-item active">
-                    <span class="badge"><?php $this->time($item['create_at']);?></span>
-                    <p class="list-group-item-text"><?php echo $item['content']?></p>
+            <?php foreach ($data as $item) :?>
+                <a href="<?=Url::to(['message/send', 'id' => $item['send_id']])?>" class="list-group-item active">
+                    <span class="badge"><?=$this->time($item['create_at']);?></span>
+                    <p class="list-group-item-text"><?=$item['content']?></p>
                 </a>
-            <?php }?>
+            <?php endforeach;?>
         </div>
     </div>
 </div>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

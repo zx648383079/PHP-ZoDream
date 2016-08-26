@@ -1,11 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+
+$this->extend('layout/head');
 ?>
 <div>
     增加下载地址前缀:
@@ -32,13 +29,13 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->gain('data', array()) as $value) {?>
+        <?php foreach ($data as $value) :?>
             <tr>
                 <td>
                     名称: 
-                    <input name="urlname" type="text" value="<?php echo $value['urlname'];?>">
+                    <input name="urlname" type="text" value="<?=$value['urlname'];?>">
                     地址: 
-                    <input name="url" type="text" value="<?php echo $value['url'];?>">
+                    <input name="url" type="text" value="<?=$value['url'];?>">
                     <select name="downtype">
                     <option value="0">HEADER</option>
                     <option value="1">META</option>
@@ -47,7 +44,7 @@ $this->extend(array(
                     </td>
                 <td>[修改][删除]</td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
 </table>
 <div>  
@@ -56,10 +53,6 @@ $this->extend(array(
     META：直接转自，如果是FTP地址推荐选择这个。
     READ：使用PHP程序读取，防盗链较强，但较占资源，服务器本地小文件可选择。
 </div>
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+
+<?=$this->extend('layout/foot')?>

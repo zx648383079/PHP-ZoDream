@@ -1,11 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 
 
@@ -28,15 +24,9 @@ $this->extend(array(
                 </div>
             </div>
             
-            <p class="text-danger"><?php $this->out('message');?></p>
+            <p class="text-danger"><?$message?></p>
         </form>
     </div>
 </div>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

@@ -1,11 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->registerJs('require([\'admin/field\']);');
+$this->extend('layout/head');
 ?>
 
 
@@ -15,8 +12,8 @@ $this->extend(array(
       </div>
       <div class="panel-body">
             <form method="post">
-                <input name="model_id" type="hidden" value="<?php $this->out('data.model_id');?>" />
-                <input name="id" type="hidden" value="<?php $this->out('data.id');?>" />
+                <input name="model_id" type="hidden" value="<?=$data['model_id']?>" />
+                <input name="id" type="hidden" value="<?=$data['id']?>" />
                 <table width="100%" class="table table-striped">
                 <tr>
                     <th width="200">模型名称： </th>
@@ -151,16 +148,4 @@ $this->extend(array(
 
 
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        function() {?>
-<script type="text/javascript">
-require(['admin/field']);
-</script>       
-     <?php }
-    )
-);
-?>
+<?=$this->extend('layout/foot')?>

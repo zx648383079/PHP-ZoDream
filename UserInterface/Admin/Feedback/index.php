@@ -3,12 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 
 <table class="table table-hover">
@@ -48,10 +43,4 @@ $page = $this->gain('page');
     </tfoot>
 </table>
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+<?=$this->extend('layout/foot')?>

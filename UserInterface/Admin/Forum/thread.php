@@ -2,12 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
-$page = $this->gain('page');
+$this->extend('layout/head');
 ?>
 
 <table class="table table-hover">
@@ -21,15 +16,15 @@ $page = $this->gain('page');
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($page->getPage() as $value) {?>
+        <?php foreach ($page->getPage() as $value) :?>
             <tr>
-                <td><?php echo $value['id'];?></td>
-                <td><?php echo $value['title'];?></td>
-                <td><?php echo $value['user_name'];?></td>
-                <td><?php $this->time($value['create_at']);?></td>
+                <td><?=$value['id']?></td>
+                <td><?=$value['title']?></td>
+                <td><?=$value['user_name']?></td>
+                <td><?=$this->time($value['create_at'])?></td>
                 <td>[删除]</td>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
     <tfoot>
     <tr>
@@ -39,10 +34,5 @@ $page = $this->gain('page');
     </tr>
     </tfoot>
 </table>
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

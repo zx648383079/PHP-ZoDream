@@ -1,11 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    ))
-);
+/** @var $model \Domain\Model\Home\FriendLinkModel  */
+$this->extend('layout/head');
 ?>
 
 
@@ -15,7 +12,7 @@ $this->extend(array(
       </div>
       <div class="panel-body">
             <form method="POST" class="form-horizontal" role="form">
-                    <input type="hidden" name="id" value="<?php $this->out('data.id');?>">
+                    <input type="hidden" name="id" value="<?=$model->id?>">
                     <div class="form-group">
                         <label for="input_name" class="col-sm-2 control-label">名称：</label>
                         <div class="col-sm-10">
@@ -27,7 +24,7 @@ $this->extend(array(
                     <div class="form-group">
                         <label for="input_url" class="col-sm-2 control-label">网址：</label>
                         <div class="col-sm-10">
-                            <input type="text" name="url" id="input_url" class="form-control" value="<?php $this->out('data.url');?>" required placeholder="网址">
+                            <input type="text" name="url" id="input_url" class="form-control" value="<?=$model->url?>" required placeholder="网址">
                         </div>
                     </div>
                     
@@ -35,7 +32,7 @@ $this->extend(array(
                     <div class="form-group">
                         <label for="textarea_description" class="col-sm-2 control-label">说明：</label>
                         <div class="col-sm-10">
-                            <textarea name="description" id="textarea_description" class="form-control" rows="3"><?php $this->out('data.description');?></textarea>
+                            <textarea name="description" id="textarea_description" class="form-control" rows="3"><?=$model->description?></textarea>
                         </div>
                     </div>
                     
@@ -43,7 +40,7 @@ $this->extend(array(
                     <div class="form-group">
                         <label for="input_logo" class="col-sm-2 control-label">Logo：</label>
                         <div class="col-sm-10">
-                            <input type="text" name="logo" id="input_logo" class="form-control" value="<?php $this->out('data.logo');?>" placeholder="LOGO">
+                            <input type="text" name="logo" id="input_logo" class="form-control" value="<?=$model->logo?>" placeholder="LOGO">
                         </div>
                     </div>
                     
@@ -51,7 +48,7 @@ $this->extend(array(
                     <div class="form-group">
                         <label for="input_position" class="col-sm-2 control-label">顺序：</label>
                         <div class="col-sm-10">
-                            <input type="number" name="position" id="input_position" class="form-control" value="<?php $this->out('data.position', 0);?>" >
+                            <input type="number" name="position" id="input_position" class="form-control" value="<?=$model->position?>" >
                         </div>
                     </div>
                     
@@ -60,21 +57,10 @@ $this->extend(array(
                             <button type="submit" class="btn btn-primary">保存</button>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <div class="col-sm-10 col-sm-offset-2">
-                            <p class="text-danger"><?php $this->out('message');?></p>
-                        </div>
-                    </div>
+
             </form>
             
       </div>
 </div>
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

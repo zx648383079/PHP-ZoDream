@@ -2,13 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    )), array(
-        'zodream/add.css'
-    )
-);
+$this->registerCssFile('zodream/add.css');
+$this->extend('layout/head');
 ?>
 
 
@@ -25,17 +20,8 @@ $this->extend(array(
                 ->button()
                 ->end();
             ?>
-            <p class="text-danger">
-                成功：<?php $this->out('success', 0);?>个；失败：<?php $this->out('failure', 0);?>个；错误信息：<?php $this->out('message');?>
-            </p>
         </div>
     </div>
 
 
-<?php
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    ))
-);
-?>
+<?=$this->extend('layout/foot')?>

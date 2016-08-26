@@ -1,11 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-        'layout' => array(
-            'head'
-        ))
-);
+$this->extend('layout/head');
 ?>
 
 
@@ -27,15 +23,15 @@ $this->extend(array(
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->gain('data', array()) as $item) {?>
+        <?php foreach ($data as $item) :?>
             <tr>
                 <form method="POST">
                     <td>
-                        <?php echo $item['id'];?>
+                        <?=$item['id'];?>
                     </td>
                     <td>
-                        <input type="hidden" name="id" value="<?php echo $item['id'];?>">
-                        <input type="text" name="name" value="<?php echo $item['name'];?>">
+                        <input type="hidden" name="id" value="<?=$item['id']?>">
+                        <input type="text" name="name" value="<?=$item['name']?>">
                     </td>
                     <td>
                         <button type="submit">修改</button>
@@ -43,15 +39,10 @@ $this->extend(array(
                     </td>
                 </form>
             </tr>
-        <?php }?>
+        <?php endforeach;?>
     </tbody>
 </table>
 
 
-<?php
-$this->extend(array(
-        'layout' => array(
-            'foot'
-        ))
-);
-?>
+
+<?=$this->extend('layout/foot')?>

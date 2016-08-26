@@ -2,13 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend(array(
-    'layout' => array(
-        'head'
-    )), array(
-        'zodream/add.css'
-    )
-);
+
+$this->registerCssFile('zodream/add.css');
+$this->registerJs('require(["admin/add"]);');
+$this->extend('layout/head');
 ?>
 
 
@@ -17,7 +14,7 @@ $this->extend(array(
             <h3 class="panel-title">增加公司</h3>
       </div>
       <div class="panel-body">
-            <?=FormWidget::begin($this->gain('data'))
+            <?=FormWidget::begin($data)
              ->hidden('id')
             ->text('name', ['label' => '公司名', 'required' => true])
             ->textArea('description', ['label' => '介绍'])
@@ -26,21 +23,7 @@ $this->extend(array(
             ->button()
             ->end();
             ?>
-          <p><?php $this->out('error');?></p>
       </div>
 </div>
 
-
-<?php 
-$this->extend(array(
-    'layout' => array(
-        'foot'
-    )), array(
-        function(){?>
-<script type="text/javascript">
-require(['admin/add']);
-</script>
-			<?php }
-        )
-);
-?>
+<?=$this->extend('layout/foot')?>

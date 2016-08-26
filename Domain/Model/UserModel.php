@@ -6,7 +6,7 @@ use \Zodream\Domain\Model\UserModel as BaseModel;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Database\Query;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\ObjectExpand\Hash;
+use Zodream\Infrastructure\Security\Hash;
 use Zodream\Infrastructure\Request;
 
 /**
