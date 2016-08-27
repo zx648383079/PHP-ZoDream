@@ -1,5 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Html;
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/head');
 ?>
@@ -48,7 +49,7 @@ $this->extend('layout/head');
                     </td>
                     <td>
                         <button type="submit" class="btn btn-primary">修改</button>
-                        <a href="#" class="btn btn-danger">删除</a>
+                        <?=Html::a('删除', ['option/delete', 'name' => $value['name']], ['class' => 'btn btn-danger'])?>
                     </td>
                 </form>
             </tr>

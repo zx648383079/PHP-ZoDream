@@ -47,10 +47,10 @@ class DynamicController extends Controller {
 	}
 
 	function forumAction() {
-		$page =ThreadModel::find()->load([
+		$page = ThreadModel::find()->load([
 			'where' => ['user_id' => Auth::user()['id']],
 			'order' => 'create_at desc'
-		])->parse();
+		])->page();
 		return $this->show([
 			'title' => '论坛动态',
 			'page' => $page

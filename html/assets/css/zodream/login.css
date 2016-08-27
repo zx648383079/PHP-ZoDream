@@ -21,6 +21,10 @@ a {
    display: inline;;
 }
 
+.oauth {
+    margin-bottom: 100px;
+}
+
 .oauth a {
     display: inline-block;
     width: 32px;

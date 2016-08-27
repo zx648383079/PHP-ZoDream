@@ -3,6 +3,7 @@ namespace Service\Admin;
 
 
 use Zodream\Domain\Response\FileResponse;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Request;
 
@@ -17,19 +18,12 @@ class DownloadController extends Controller {
 	 * 管理地址前缀
 	 */
 	function indexAction() {
-		$file = Request::get('file').str_replace('../');
+		$file = Request::get('file');
 		if (empty($file)) {
-			$this->show();
+			return $this->show();
 		}
+        $file = Factory::root()->childFile($file);
 		Log::save($file, 'download');
-		return new FileResponse(APP_DIR . '/'. ltrim($file, '/'));
-	}
-
-	function recordAction() {
-		return $this->show();
-	}
-
-	function levelAction() {
-		return $this->show();
+		return new FileResponse($file);
 	}
 }

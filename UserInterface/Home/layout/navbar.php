@@ -34,7 +34,7 @@ use Zodream\Infrastructure\Url\Url;
         </form>
 
         <ul class="nav navbar-nav navbar-right">
-            <?php if (Auth::guest() || !isset($updateCache)) :?>
+            <?php if (Auth::guest()) :?>
                 <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => Url::to()])?></li>
                 <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
             <?php else:?>

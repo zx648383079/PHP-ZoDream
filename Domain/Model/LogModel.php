@@ -64,14 +64,16 @@ class LogModel extends Model {
 	 * @return bool|static
 	 */
 	public static function hasLog($action, $data = null) {
-		$sql = "ip = '".Request::ip()."'";
+	    $where = [
+	        'ip' => Request::ip()
+        ];
 		if (!Auth::guest()) {
-			$sql = "({$sql} or user = '".Auth::user()['name']."')";
+		    $where['user'] = [Auth::user()['name'], 'or'];
 		}
-		$sql .= " AND event = '{$action}'";
+		$where['event'] = $action;
 		if (!is_null($data)) {
-			$sql .= " AND data = '".(is_string($data) ? $data : json_encode($data))."'";
+		    $where['data'] = is_string($data) ? $data : json_encode($data);
 		}
-		return static::findOne($sql);
+		return static::findOne($where);
 	}
 }

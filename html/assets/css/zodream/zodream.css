@@ -502,7 +502,7 @@ table th[class*="col-"] {
 .footer {
     padding: 3em 0px;
     background: #222;
-    margin: 0;
+    margin: 50px 0 0;
 }
 
 .footer a {

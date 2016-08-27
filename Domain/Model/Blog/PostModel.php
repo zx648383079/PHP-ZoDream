@@ -94,7 +94,7 @@ class PostModel extends Model {
 				)
 			)))->order('id desc')->select('id,title')->one();
 		return array(
-			count($before) == 1 ? $before[0] : null,
+			$before,
 			$this->find()->where(array(
 				'id > '.$id,
 				'status' => array(

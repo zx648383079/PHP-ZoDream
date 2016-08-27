@@ -8,7 +8,9 @@ use Domain\Model\FeedbackModel;
 
 class FeedbackController extends Controller {
 	function indexAction() {
-		$page = FeedbackModel::find()->order('create_at desc')->page();
+		$page = FeedbackModel::find()
+            ->order('create_at desc')
+            ->page();
 		return $this->show(array(
 			'page' => $page
 		));
@@ -19,7 +21,7 @@ class FeedbackController extends Controller {
 		$model->read = true;
 		return $this->show([
 			'title' => '查看反馈',
-			'data' => $model
+			'model' => $model
 		]);
 	}
 	

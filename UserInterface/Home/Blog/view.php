@@ -46,7 +46,7 @@ $this->extend([
     <div class="row">
         <div class="col-sm-6">
             <?php if (!empty($links[0])) :?>
-            <a href="<?=$links[0]['id'];?>">
+            <a href="<?=Url::to(['blog/view', 'id' => $links[0]['id']])?>">
                 <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
                 上一篇：<?=$links[0]['title'];?>
             </a>
@@ -54,7 +54,7 @@ $this->extend([
         </div>
         <div class="col-sm-6 text-right">
             <?php if (!empty($links[1])) :?>
-                <a href="<?=$links[1]['id'];?>">
+                <a href="<?=Url::to(['blog/view', 'id' => $links[1]['id']])?>">
                     下一篇：<?=$links[1]['title'];?>
                     <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
                 </a>
