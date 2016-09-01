@@ -63,7 +63,7 @@ class WechatController extends Controller {
 				'data' => $model->findById($id)
 			));
 		}
-		$this->show();
+		return $this->show();
 	}
 
 	/**
@@ -79,12 +79,12 @@ class WechatController extends Controller {
 	}
 	
 	function sendAction() {
-		$this->show(['title' => '群发消息']);
+		return $this->show(['title' => '群发消息']);
 	}
 
 	function messageAction() {
 		$model = new MessageModel();
-		$this->show(array(
+		return $this->show(array(
 			'page' => $model->getPage()
 		));
 	}
@@ -99,7 +99,7 @@ class WechatController extends Controller {
 		if ($group > 0) {
 			$where = ['group_id' => $group];
 		}
-		$this->show(array(
+		return $this->show(array(
 			'page' => $model->getPage(['where' => $where]),
 			'group' => $groups->findAll()
 		));
@@ -107,7 +107,7 @@ class WechatController extends Controller {
 
 	function menuAction() {
 		$model = new MenuModel();
-		$this->show(array(
+		return $this->show(array(
 			'title' => '自定义菜单管理',
 			'data' => HtmlExpand::getTree($model->findAll([
 				'order' => [
@@ -120,7 +120,7 @@ class WechatController extends Controller {
 	
 	function mediaAction() {
 		$model = new MaterialModel();
-		$this->show([
+		return $this->show([
 			'title' => '素材管理',
 			'page' => $model->getPage()
 		]);

@@ -10,7 +10,7 @@ use Zodream\Infrastructure\Request\Post;
 
 class CompanyController extends Controller {
 	function indexAction() {
-		$page = CompanyModel::find()->select('id,name,charge,update_at')->all();
+		$page = CompanyModel::find()->select('id,name,charge,update_at')->page();
 		return $this->show(array(
 			'title' => '公司管理',
 			'page' => $page

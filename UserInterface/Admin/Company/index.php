@@ -8,7 +8,7 @@ $this->extend('layout/head');
 ?>
 <div class="row">
     <div class="col-md-3 col-md-offset-2">
-        <a href="<?php $this->url('company/add');?>" class="btn btn-primary">新增</a>
+        <?=Html::a('新增', 'company/add', ['class' => 'btn btn-primary'])?>
     </div>
 </div>
 <table class="table table-hover">
@@ -22,7 +22,7 @@ $this->extend('layout/head');
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($page->getPage() as $value) {?>
+    <?php foreach ($page->getPage() as $value) :?>
         <tr>
             <td><?=$value['id']?></td>
             <td><?=$value['name']?></td>
@@ -34,7 +34,7 @@ $this->extend('layout/head');
                 <?=Html::a('删除', ['company/delete', 'id' => $value['id']])?>
             </td>
         </tr>
-    <?php }?>
+    <?php endforeach;?>
     </tbody>
     <tfoot>
         <tr>

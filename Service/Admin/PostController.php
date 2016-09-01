@@ -13,7 +13,6 @@ use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Database\Command;
 use Zodream\Infrastructure\ObjectExpand\PinYin;
-use Zodream\Infrastructure\Request\Post;
 
 class PostController extends Controller {
 
@@ -54,15 +53,15 @@ class PostController extends Controller {
 	}
 
 	function addAction($id = null) {
-		$term = EmpireModel::query('term')->findAll();
-		if (!empty($id)) {
-			$data = EmpireModel::query('post')->findById($id);
-			$data['term_id'] = EmpireModel::query('term_post')->findOne('post_id = '.$id)['term_id'];
-			$this->send('data', $data);
-		}
-		$this->show(array(
+        if (empty($id)) {
+            $model = new PostModel();
+        } else {
+            $model = PostModel::findOne($id);
+        }
+        $term = TermModel::findAll();
+		return $this->show(array(
 			'term' => $term,
-			'id' => $id
+			'model' => $model
 		));
 	}
 

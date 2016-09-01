@@ -6,8 +6,6 @@ use Domain\Model\Navigation\NavigationModel;
 /**
  * 首页导航
  */
-
-
 class NavigationController extends Controller {
 	function indexAction() {
 		$page = NavigationModel::find()->order('category_id,position')->page();
