@@ -1,10 +1,7 @@
 <?php
 namespace Service\Admin;
 
-
-use Zodream\Domain\Response\FileResponse;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Log;
 use Zodream\Infrastructure\Request;
 
 class DownloadController extends Controller {
@@ -23,7 +20,7 @@ class DownloadController extends Controller {
 			return $this->show();
 		}
         $file = Factory::root()->childFile($file);
-		Log::save($file, 'download');
-		return new FileResponse($file);
+		Factory::log()->info('download', ['file' => $file]);
+		return Factory::response()->sendFile($file);
 	}
 }

@@ -1,44 +1,46 @@
 <?php
 namespace Service\Ueditor;
 
-use Zodream\Domain\Response\ResponseResult;
 use Zodream\Infrastructure\Config;
 use Zodream\Infrastructure\Request;
 use Infrastructure\Uploader;
+use Zodream\Infrastructure\Response;
+
 class HomeController extends Controller {
 
 	protected $configs = array();
 
-	protected function ajax($data) {
+	protected function ajaxReturn($data) {
 		$callback = Request::get('callback');
 		if (is_null($callback)) {
-			$this->ajaxReturn($data, 'JSON');
+			return $this->ajax($data, 'JSON');
 		}
 		if (preg_match('/^[\w_]+$/', $callback)) {
-			$this->ajaxReturn($data, 'JSONP');
+			return $this->ajax($data, 'JSONP');
 		}
-		$this->ajaxReturn(array(
+		return $this->ajax(array(
 			'state'=> 'callback参数不合法'
 		));
 	}
 
-	/**
-	 * 得到上传文件所对应的各个参数,数组结构
-	 * array(
-	 *     'state' => '',          //上传状态，上传成功时必须返回'SUCCESS'
-	 *     'url' => '',            //返回的地址
-	 *     'title' => '',          //新文件名
-	 *     'original' => '',       //原始文件名
-	 *     'type' => ''            //文件类型
-	 *     'size' => '',           //文件大小
-	 * )
-	 * @param $fieldName
-	 * @param $config
-	 * @param string $base64
-	 */
+    /**
+     * 得到上传文件所对应的各个参数,数组结构
+     * array(
+     *     'state' => '',          //上传状态，上传成功时必须返回'SUCCESS'
+     *     'url' => '',            //返回的地址
+     *     'title' => '',          //新文件名
+     *     'original' => '',       //原始文件名
+     *     'type' => ''            //文件类型
+     *     'size' => '',           //文件大小
+     * )
+     * @param $fieldName
+     * @param $config
+     * @param string $base64
+     * @return Response
+     */
 	protected function upload($fieldName, $config, $base64 = 'upload') {
 		$upload = new Uploader($fieldName, $config, $base64);
-		$this->ajax($upload->getFileInfo());
+		return $this->ajaxReturn($upload->getFileInfo());
 	}
 
 	protected function fileList($allowFiles, $listSize, $path) {
@@ -53,12 +55,12 @@ class HomeController extends Controller {
 		$path = APP_DIR . (substr($path, 0, 1) == '/' ? '':'/') . $path;
 		$files = Environment::getfiles($path, $allowFiles);
 		if (!count($files)) {
-			return json_encode(array(
-				'state' => 'no match file',
-				'list' => array(),
-				'start' => $start,
-				'total' => count($files)
-			));
+			return $this->ajaxReturn(array(
+                'state' => 'no match file',
+                'list' => array(),
+                'start' => $start,
+                'total' => count($files)
+            ));
 		}
 
 		/* 获取指定范围的列表 */
@@ -73,7 +75,7 @@ class HomeController extends Controller {
 		//for ($i = $end, $list = array(); $i < $len && $i < $end; $i++){
 		//    $list[] = $files[$i];
 		//}
-		$this->ajax(array(
+		return $this->ajaxReturn(array(
 			'state' => 'SUCCESS',
 			'list' => $list,
 			'start' => $start,
@@ -84,16 +86,16 @@ class HomeController extends Controller {
 	public function indexAction() {
 		$action = strtolower(Request::get('action'));
 		if (is_null($action) || !$this->canRunAction($action)) {
-			$this->ajax(array(
+			return $this->ajaxReturn(array(
 				'state'=> '请求地址出错'
 			));
 		}
 		$this->configs = Config::getValue('ueditor');
-		$this->runAction($action);
+		return $this->runAction($action);
 	}
 	
 	function configAction() {
-		ResponseResult::make(json_encode($this->configs));
+		return $this->ajaxReturn($this->configs);
 	}
 	
 	/**
@@ -111,7 +113,7 @@ class HomeController extends Controller {
 	 * 上传涂鸦
 	 */
 	function uploadscrawlAction() {
-        $this->upload($this->configs['scrawlFieldName'], array(
+        return $this->upload($this->configs['scrawlFieldName'], array(
             'pathFormat' => $this->configs['scrawlPathFormat'],
             'maxSize' => $this->configs['scrawlMaxSize'],
             'allowFiles' => $this->configs['scrawlAllowFiles'],
@@ -123,7 +125,7 @@ class HomeController extends Controller {
 	 * 上传视频
 	 */
 	function uploadvideoAction() {
-		$this->upload($this->configs['videoFieldName'], array(
+		return $this->upload($this->configs['videoFieldName'], array(
             'pathFormat' => $this->configs['videoPathFormat'],
             'maxSize' => $this->configs['videoMaxSize'],
             'allowFiles' => $this->configs['videoAllowFiles']
@@ -134,7 +136,7 @@ class HomeController extends Controller {
 	 * 上传文件
 	 */
 	function uploadfileAction() {
-		$this->upload($this->configs['fileFieldName'], array(
+		return $this->upload($this->configs['fileFieldName'], array(
             'pathFormat' => $this->configs['filePathFormat'],
             'maxSize' => $this->configs['fileMaxSize'],
             'allowFiles' => $this->configs['fileAllowFiles']
@@ -145,14 +147,14 @@ class HomeController extends Controller {
 	 * 列出文件
 	 */
 	function listfileAction() {
-		$this->fileList($this->configs['fileManagerAllowFiles'], $this->configs['fileManagerListSize'], $this->configs['fileManagerListPath']);
+		return $this->fileList($this->configs['fileManagerAllowFiles'], $this->configs['fileManagerListSize'], $this->configs['fileManagerListPath']);
 	}
 	
 	/**
 	 * 列出图片
 	 */
 	function listimageAction() {
-		$this->fileList($this->configs['imageManagerAllowFiles'], $this->configs['imageManagerListSize'], $this->configs['imageManagerListPath']);
+		return $this->fileList($this->configs['imageManagerAllowFiles'], $this->configs['imageManagerListSize'], $this->configs['imageManagerListPath']);
 	}
 	
 	/**
@@ -185,7 +187,7 @@ class HomeController extends Controller {
 		}
 		
 		/* 返回抓取数据 */
-		$this->ajax(array(
+		return $this->ajaxReturn(array(
 				'state'=> count($list) ? 'SUCCESS':'ERROR',
 				'list'=> $list
 		));

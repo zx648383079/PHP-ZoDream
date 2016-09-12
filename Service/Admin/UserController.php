@@ -4,14 +4,11 @@ namespace Service\Admin;
 /**
  * 用户信息
  */
-use Domain\Form\EmpireForm;
-
 
 use Domain\Model\LoginLogModel;
 use Domain\Model\LogModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Log;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Request;
 
 class UserController extends Controller {
@@ -29,14 +26,6 @@ class UserController extends Controller {
 		return $this->show(array(
 			'name' => Auth::user()['name']
 		));
-	}
-
-	function indexPost() {
-		$result = EmpireForm::start()->resetPassword();
-		Log::save($result, 'resetPassword');
-		if ($result) {
-			Redirect::to('account/logout', 2, '修改成功！请重新登陆!');
-		}
 	}
 
 	function userAction() {
