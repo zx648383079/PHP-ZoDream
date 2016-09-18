@@ -21,10 +21,10 @@ use Zodream\Infrastructure\Url\Url;
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
             <li><a href="<?=Url::to('/');?>">首页</a></li>
-            <li<?php $this->cas(Url::hasUri('blog'), ' class="active"');?>><a href="<?=Url::to('blog');?>">博客</a></li>
-            <li<?php $this->cas(Url::hasUri('laboratory'));?>><a href="<?=Url::to('laboratory');?>">实验室</a></li>
-            <li<?php $this->cas(Url::hasUri('talk'));?>><a href="<?=Url::to('talk');?>">日志</a></li>
-            <li<?php $this->cas(Url::hasUri('about'));?>><a href="<?=Url::to('about');?>">关于</a></li>
+            <li<?=$this->cas(Url::hasUri('blog'), ' class="active"');?>><a href="<?=Url::to('/blog');?>">博客</a></li>
+            <li<?=$this->cas(Url::hasUri('laboratory'));?>><a href="<?=Url::to('/laboratory');?>">实验室</a></li>
+            <li<?=$this->cas(Url::hasUri('talk'));?>><a href="<?=Url::to('/talk');?>">日志</a></li>
+            <li<?=$this->cas(Url::hasUri('about'));?>><a href="<?=Url::to('/about');?>">关于</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">

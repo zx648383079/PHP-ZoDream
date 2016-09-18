@@ -4,6 +4,7 @@ namespace Service\Home;
 use Domain\Model\Blog\PostModel;
 use Domain\Model\FeedbackModel;
 use Zodream\Domain\Access\Auth;
+use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {
