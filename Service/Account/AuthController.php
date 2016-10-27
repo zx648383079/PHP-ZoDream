@@ -200,8 +200,4 @@ class AuthController extends Controller {
 		$oauth = $this->getOAuth($type);
 		return $oauth->login();
 	}
-
-	function qqAction() {
-		$oauth = new QQ();
-	}
 }
