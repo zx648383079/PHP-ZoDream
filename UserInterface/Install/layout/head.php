@@ -1,11 +1,17 @@
-<!DOCTYPE HTML>
-<html lang="ch-ZHS">
+<?php
+/** @var $this Zodream\Domain\View\View */
+?>
+<!DOCTYPE html>
+<html>
 <head>
-    <title><?=$title?>-<?=$tagline?></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><?=$this->get('title', '安装')?>-ZoDream 安装</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="/assets/css/zodream/zodream.css" rel="stylesheet">
-    <link href="/assets/css/zodream/install.css" rel="stylesheet">
+    <script type="text/javascript" src="/assets/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/fabric.min.css">
+    <link rel="stylesheet" href="/assets/css/fabric.components.min.css">
+    <link rel="stylesheet" href="/assets/css/install.css">
     <?=$this->head()?>
 </head>
 <body>

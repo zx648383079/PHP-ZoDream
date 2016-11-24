@@ -6,7 +6,7 @@ $this->extend('layout/head');
 ?>
 
 <div class="main">
-<table>
+<table class="ms-Table">
     <thead>
         <tr>
             <th>参数</th>
@@ -83,7 +83,7 @@ $this->extend('layout/head');
     </tbody>
 </table>
 
-<a class="btn" href="<?=Url::to('database');?>">下一步</a>
+<a class="ms-Button ms-Button--primary" href="<?=Url::to('database');?>">下一步</a>
 </div>
 
 <?php $this->extend('layout/foot');?>

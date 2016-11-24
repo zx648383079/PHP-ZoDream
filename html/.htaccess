@@ -6,12 +6,9 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]                             
 RewriteCond %{REQUEST_URI} !^.*(.css|.js|.ts|.gif|.png|.jpg|.jpeg)$
 
-# ∑¿÷πµ¡¡¥
+
 #RewriteCond %{HTTP_REFERER} !^http://zodream.cn/.*$ [NC]
-#RewriteCond %{HTTP_REFERER} !^http://.com$ [NC]
-#RewriteCond %{HTTP_REFERER} !^http://www.aabbcc.com/.*$ [NC]
-#RewriteCond %{HTTP_REFERER} !^http://www.aabbcc$ [NC]
-#RewriteRule .*.(jpg|jpeg|gif|png|bmp|rar|zip|exe)$ http://www.aabbcc.com/err.html [R,NC]
+#RewriteRule .*.(jpg|jpeg|gif|png|bmp|rar|zip|exe)$ http://www.zodream.cn/404.html [R,NC]
 
 </IfModule>
 

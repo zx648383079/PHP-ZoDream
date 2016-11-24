@@ -6,6 +6,6 @@
         "sourceMap": true,
         "module": "amd",
         "target": "es5",
-        "sourceRoot": "/html/assets/js/zodream/"
+        "sourceRoot": "/html/assets/js"
     }
 }

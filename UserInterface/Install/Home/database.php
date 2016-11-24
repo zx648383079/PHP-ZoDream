@@ -1,46 +1,64 @@
 <?php
 defined('APP_DIR') or exit();
+use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/head');
+$js = <<<JS
+$("form").Validform({
+	showAllError:true,
+	label: ".ms-Label",
+	tiptype: function(msg, o, cssctl){
+		$(".ms-MessageBar--error").show().html(msg);
+	},
+	ajaxPost:true,
+	callback:function(data){
+		if (data.status) {
+			window.location.href = data.url;
+		}
+	}
+});
+JS;
+$this->registerJs($js);
 ?>
 
 <div class="main">
 <h1>设置您的数据库连接</h1>
-<form method="post">
+<form method="post" action="<?=Url::to(['import'])?>">
 	<p>请在下方填写您的数据库连接信息。如果您不确定，请联系您的服务提供商。</p>
-	<table>
-		<tr>
-			<th>数据库名</th>
-			<td><input name="db[database]" type="text" size="25" required value="zodream" /></td>
-			<td>安装到哪个数据库？</td>
-		</tr>
+	<table class="ms-Table">
 		<tr>
 			<th>用户名</th>
-			<td><input name="db[user]" type="text" size="25" value="root" required placeholder="用户名" /></td>
+			<td><input name="db[user]" type="text" class="ms-TextField-field" size="25" value="root" datatype="*" required placeholder="用户名" /></td>
 			<td>您的MySQL用户名</td>
 		</tr>
 		<tr>
 			<th>密码</th>
-			<td><input name="db[password]" type="text" size="25" placeholder="密码" autocomplete="off" /></td>
+			<td><input name="db[password]" type="password" class="ms-TextField-field" size="25" placeholder="密码" datatype="*" autocomplete="off" /></td>
 			<td>&hellip;及其密码</td>
 		</tr>
 		<tr>
 			<th>数据库主机</th>
-			<td><input name="db[host]" type="text" size="25" value="localhost" /></td>
+			<td><input name="db[host]" type="text" class="ms-TextField-field" size="25" value="localhost" datatype="*"/></td>
 			<td>如果<code>localhost</code>不能用，您通常可以从网站服务提供商处得到正确的信息。</td>
 		</tr>
         <tr>
 			<th>数据库端口</th>
-			<td><input name="db[port]" type="text" size="25" value="3306" /></td>
+			<td><input name="db[port]" type="text" class="ms-TextField-field" size="25" value="3306" datatype="*"/></td>
 			<td>默认是3306</td>
 		</tr>
 		<tr>
 			<th>表前缀</th>
-			<td><input name="db[prefix]" type="text" value="zd_" size="25" /></td>
+			<td><input name="db[prefix]" type="text" class="ms-TextField-field" value="zd_" size="25"/></td>
 			<td>如果您希望在同一个数据库安装多个zodream，请修改前缀。</td>
 		</tr>
+		<tr>
+			<th>数据库名</th>
+			<td><input name="db[database]" type="text" class="ms-TextField-field" size="25" required value="zodream" datatype="*"/></td>
+			<td>安装到哪个数据库？</td>
+		</tr>
 	</table>
-	<button type="submit">提交</button>
+	<p class="ms-MessageBar ms-MessageBar--error" style="display: none"></p>
+	<button class="ms-Button ms-Button--primary" type="submit">提交</button>
 </form>
 </div>
 
