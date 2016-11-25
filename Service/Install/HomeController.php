@@ -59,7 +59,7 @@ class HomeController extends Controller {
         Config::setValue('db', $data['db']);
         $generate->makeConfig(array(), 'config');
         $generate->createDatabase(Request::post('db.database'));
-
+        unset($data['view']);
         while (false !== ($file = readdir($handle))) {
             if ('.' == $file || '..' == $file ||
                 'Bootstrap.php' == $file ||

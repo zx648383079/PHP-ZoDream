@@ -5,9 +5,6 @@ use Zodream\Infrastructure\ObjectExpand\HtmlExpand;
 /** @var $this \Zodream\Domain\View\View */
 
 $this->title = $title;
-$this->registerCssFile('/assets/css/flexslider.css');
-$this->registerCssFile('/assets/css/zodream/home.css');
-$this->registerJs('require(["home/home"]);');
 $this->extend([
     'layout/head',
     'layout/navbar'
@@ -19,7 +16,7 @@ $this->extend([
             <section class="slider">
                 <div class="flexslider">
                     <ul class="slides">
-                        <?php foreach ($data as $item):?>
+                        <?php foreach ($banners as $item):?>
                         <li>
                             <div class="banner-top">
                                 <h2><?=$item['title']?></h2>
@@ -75,83 +72,44 @@ $this->extend([
             </div>
         </div>
     </div>
-
-<div class="task">
+    
     <div class="container">
         <div class="row">
-            <div class="col-md-3 provide-1">
-                <span class="glyphicon glyphicon-music"></span>
-                <h3>休闲</h3>
-                <p>必要的休息只为更好的工作。娱乐环节待开发。。。</p>
+            <div class="col-sm-8">
+                <div class="panel panel-default">
+                      <div class="panel-heading">
+                            <h3 class="panel-title">热门动态</h3>
+                      </div>
+                      <div class="panel-body">
+                            <div class="list-group">
+                                <?php foreach ($hots as $item):?>
+                                <a href="<?=Url::to(['blog/view', 'id' => $item['id']])?>" class="list-group-item">
+                                    <h4 class="list-group-item-heading"><?=$item['title']?></h4>
+                                    <p class="list-group-item-text"><?=$item['description']?></p>
+                                </a>
+                                <?php endforeach;?>
+                            </div>
+                      </div>
+                </div>
             </div>
-
-            <div class="col-md-3 provide-2">
-                <span class="glyphicon glyphicon-bell"></span>
-                <h3>规律</h3>
-                <p>万物皆有规律，有规律的生活有助于工作。</p>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                      <div class="panel-heading">
+                            <h3 class="panel-title">最新动态</h3>
+                      </div>
+                      <div class="panel-body">
+                            <ul class="list-group">
+                                <?php foreach ($news as $item):?>
+                                    <li class="list-group-item">
+                                        <a href="<?=Url::to(['blog/view', 'id' => $item['id']])?>">
+                                            <?=$item['title']?></a>
+                                    </li>
+                                <?php endforeach;?>
+                            </ul>
+                      </div>
+                </div>
             </div>
-
-            <div class="col-md-3 provide-3">
-                <span class="glyphicon glyphicon-user"></span>
-                <h3>人</h3>
-                <p>以人为本！</p>
-            </div>
-
-            <div class="col-md-3 provide-4">
-                <span class="glyphicon glyphicon-thumbs-up"></span>
-                <h3>鼓励</h3>
-                <p>有效鼓励是必要的！</p>
-            </div>
-            <div class="clearfix"></div>
         </div>
     </div>
-</div>
-
-<div class="container pics">
-    <ul>
-        <li>
-            <a href="#">
-                <div class="txt">
-                    <p class="p1"></p>
-                    <p class="p2">坚持</p>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <div class="txt">
-                    <p class="p1"></p>
-                    <p class="p2">坚持</p>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <div class="txt">
-                    <p class="p1"></p>
-                    <p class="p2">坚持</p>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <div class="txt">
-                    <p class="p1"></p>
-                    <p class="p2">坚持</p>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
-<!--
-    <div class="fixed-slide">
-        <ul>
-            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon01.png');?>">客服中心</div></a></li>
-            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon02.png');?>">客户案例</div></a></li>
-            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon04.png');?>">QQ客服</div></a></li>
-            <li><a href="#"><div class="box"><img src="<?php //$this->asset('images/icon/icon03.png');?>">新浪微博</div></a></li>
-            <li><a href="javascript:;" class="toTop"><div class="box"><img src="<?php //$this->asset('images/icon/icon05.png');?>">返回顶部</div></a></li>
-        </ul>
-    </div>
--->
+    
 <?php $this->extend('layout/foot')?>

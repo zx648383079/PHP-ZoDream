@@ -7,8 +7,6 @@ use Zodream\Infrastructure\Html;
 use Zodream\Infrastructure\Url\Url;
 
 $this->title = $title;
-$this->registerCssFile('zodream/blog.css');
-$this->registerJs('require(["home/blog"]);');
 $this->extend([
     'layout/head',
     'layout/navbar'

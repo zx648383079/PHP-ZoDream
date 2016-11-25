@@ -23,6 +23,7 @@ use Zodream\Infrastructure\Url\Url;
             <li><a href="<?=Url::to('/');?>">首页</a></li>
             <li<?=$this->cas(Url::hasUri('blog'), ' class="active"');?>><a href="<?=Url::to('/blog');?>">博客</a></li>
             <li<?=$this->cas(Url::hasUri('laboratory'));?>><a href="<?=Url::to('/laboratory');?>">实验室</a></li>
+            <li<?=$this->cas(Url::hasUri('document'));?>><a href="<?=Url::to('/document');?>">文档</a></li>
             <li<?=$this->cas(Url::hasUri('talk'));?>><a href="<?=Url::to('/talk');?>">日志</a></li>
             <li<?=$this->cas(Url::hasUri('about'));?>><a href="<?=Url::to('/about');?>">关于</a></li>
         </ul>

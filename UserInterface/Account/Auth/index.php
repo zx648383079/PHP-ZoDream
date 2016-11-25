@@ -3,8 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 use Zodream\Infrastructure\Url\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->registerCssFile('zodream/login.css');
-$this->registerJs('require(["admin/login"]);');
 $this->extend('layout/head');
 ?>
 
@@ -18,7 +16,7 @@ $this->extend('layout/head');
         <img id="verify" src="<?=Url::to('verify');?>" title="验证码"> </br>
         <?php endif;?>
         <input type="checkbox" name="remember" value="1">记住我</br>
-        <p class="text-danger"><?=isset($message)?$message:null?></p>
+        <p class="text-danger"><?=$this->message?></p>
         <button class="btn btn-primary" type="submit">登录</button>
         <p><?=Html::a('忘记密码?', 'auth/find')?> 或 没有账号？先
             <a href="<?=Url::to('auth/register');?>">注册</a>  </p>

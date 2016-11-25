@@ -11,8 +11,8 @@
     <meta name="Description" content="" />
     <meta name="author" content="ZoDream" />
     <link rel="icon" href="/assets/images/favicon.png">
-    <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/zodream/zodream.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/zodream.css" rel="stylesheet">
     <?=$this->head()?>
 </head>
 <body>

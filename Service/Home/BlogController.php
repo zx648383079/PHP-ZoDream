@@ -47,7 +47,7 @@ class BlogController extends Controller {
 			'term' => 't.name',
 			'comment_count' => 'p.comment_count',
 			'create_at' => 'p.create_at',
-			'excerpt' => 'p.excerpt',
+			'description' => 'p.description',
 			'recommend' => 'p.recommend',
 			'comment_count' => 'p.comment_count'
 		])->limit($page->getLimit())->all());

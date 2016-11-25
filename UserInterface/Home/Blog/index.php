@@ -5,8 +5,6 @@ use Zodream\Infrastructure\Url\Url;
 /** @var $page \Zodream\Domain\Html\Page */
 
 $this->title = $title;
-$this->registerJs('require(["home/blog"]);');
-$this->registerCssFile('zodream/blog.css');
 $this->extend([
     'layout/head',
     'layout/navbar'
@@ -38,7 +36,7 @@ $this->extend([
                             </a>
                         </h4>
                         <div class="list-item-content">
-                            <?=$item['excerpt'];?>
+                            <?=$item['description'];?>
                         </div>
                         <div class="list-item-foot">
                             <a href="<?=Url::to(['blog', 'user' => $item['user_id']]);?>">

@@ -10,7 +10,7 @@ use Domain\Model\Model;
 * @property integer $user_id
 * @property integer $update_at
 * @property integer $create_at
-* @property string $excerpt
+* @property string $description
 * @property string $status
 * @property string $comment_status
 * @property string $ping_status
@@ -36,7 +36,7 @@ class PostModel extends Model {
 		  'user_id' => 'required|int',
 		  'update_at' => '|int',
 		  'create_at' => '|int',
-		  'excerpt' => '',
+		  'description' => 'string:0-255',
 		  'status' => '|string:3-20',
 		  'comment_status' => '|string:3-20',
 		  'ping_status' => '|string:3-20',
@@ -62,7 +62,7 @@ class PostModel extends Model {
 		  'user_id' => 'User Id',
 		  'update_at' => 'Update At',
 		  'create_at' => 'Create At',
-		  'excerpt' => 'Excerpt',
+		  'description' => '节选',
 		  'status' => 'Status',
 		  'comment_status' => 'Comment Status',
 		  'ping_status' => 'Ping Status',

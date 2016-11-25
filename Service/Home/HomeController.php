@@ -9,13 +9,20 @@ use Zodream\Infrastructure\Request;
 
 class HomeController extends Controller {
     function indexAction() {
-        $data = PostModel::findAll([
+
+        $hots = PostModel::findAll([
             'limit' => 4,
-            'order' => 'recommend desc'
-        ]);
+            'order' => 'comment_count desc'
+        ], 'id, title, description, create_at, comment_count');
+        $news = PostModel::findAll([
+            'limit' => 6,
+            'order' => 'create_at desc'
+        ], 'id, title, create_at');
         return $this->show('index', array(
             'title' => '首页',
-            'data' => $data
+            'hots' => $hots,
+            'news' => $news,
+            'banners' => []
         ));
     }
 
