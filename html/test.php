@@ -2,10 +2,7 @@
 //define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
-var_dump(json_encode(array(
-    'gg' => false,
-    'aa' => true
-)));
+
 /*$_POST = array (
     'discount' => '0.00',
     'payment_type' => '1',
