@@ -15,8 +15,15 @@ use Domain\Model\Model;
  * @property integer $id
  * @property string $name
  */
-class PaymentModel extends Model {
+class DeliveryModel extends Model {
     public static function tableName() {
-        return 'pay_log';
+        return 'delivery';
+    }
+
+    /**
+     * @return float
+     */
+    public function getFee() {
+        return 0;
     }
 }

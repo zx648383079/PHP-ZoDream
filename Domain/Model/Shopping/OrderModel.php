@@ -18,8 +18,9 @@ use Domain\Model\Model;
  * @property integer $pay_status
  * @property integer $shipping_status
  * @property float $goods_amount
- * @property float pay_id
+ * @property integer pay_id
  * @property float $pay_fee
+ * @property integer $delivery_id
  * @property float $shipping_fee
  * @property float $amount
  * @property integer $user_id
@@ -47,5 +48,34 @@ class OrderModel extends Model {
             $total += $item->getTotal();
         }
         return $total;
+    }
+
+    public function getPayment() {
+        return PaymentModel::findOne($this->pay_id);
+    }
+
+    public function getDelivery() {
+        return DeliveryModel::findOne($this->delivery_id);
+    }
+
+    public function createOrder() {
+        $carts = CartModel::getAllGoods();
+        $total = 0;
+        foreach ($carts as $item) {
+            $total += $item->getTotal();
+        }
+        $this->goods_amount = $total;
+        $this->shipping_fee = $this->getDelivery()->getFee();
+        $this->pay_fee = $this->getPayment()->getFee();
+        $this->create_at = time();
+        $this->save();
+        foreach ($carts as $item) {
+            OrderGoodsModel::addCartGoods($this->id, $item);
+        }
+        return true;
+    }
+
+    public function pay() {
+        $this->getPayment()->pay($this);
     }
 }
