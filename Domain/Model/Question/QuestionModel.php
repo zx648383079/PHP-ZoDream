@@ -40,4 +40,20 @@ class QuestionModel extends Model {
 		  'create_at' => 'Create At',
 		);
 	}
+
+    /**
+     * @param string $content
+     * @param int $parentId
+     * @return QuestionAnswerModel
+     */
+	public function addAnswer($content, $parentId = 0) {
+        $model = new QuestionAnswerModel();
+        $model->content = $content;
+        $model->parent_id = $parentId;
+        $model->question_id = $this->id;
+        $model->save();
+        return $model;
+    }
+
+
 }
