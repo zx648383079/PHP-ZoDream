@@ -9,9 +9,11 @@ use Zodream\Infrastructure\Database\Command;
 * @property string $autoload
 */
 class OptionModel extends Model {
-	public static $table = 'option';
+	public static function tableName() {
+        return 'option';
+    }
 
-	protected $primaryKey = array (
+    protected $primaryKey = array (
 		'name',
 	);
 

@@ -7,7 +7,8 @@ namespace Domain\Model;
  * Time: 21:41
  */
 use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Http\Requests\BaseRequest;
 
 abstract class Model extends \Zodream\Domain\Model\Model {
 
@@ -17,7 +18,7 @@ abstract class Model extends \Zodream\Domain\Model\Model {
      */
     public function fill() {
         $args = func_num_args() > 0 ? func_get_arg(0) : Request::post();
-        if ($args instanceof Request\BaseRequest) {
+        if ($args instanceof BaseRequest) {
             $args = $args->get();
         }
         if (!array_key_exists('update_at', $args)) {

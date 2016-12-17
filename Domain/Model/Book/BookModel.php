@@ -19,7 +19,9 @@ use Domain\Model\Model;
  * @property integer $user_id 作者
  */
 class BookModel extends Model {
-    public static $table = 'book';
+    public static function tableName() {
+        return 'book';
+    }
 
     public function getChapters() {
         return $this->hasMany(BookChapterModel::$table, 'book_id');

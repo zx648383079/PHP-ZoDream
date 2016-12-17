@@ -15,9 +15,11 @@ use Zodream\Infrastructure\Request;
 * @property integer $create_at
 */
 class LogModel extends Model {
-	public static $table = 'log';
+	public static function tableName() {
+        return 'log';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 			'ip' => 'required|string:3-20',
             'url' => '|string:3-255',

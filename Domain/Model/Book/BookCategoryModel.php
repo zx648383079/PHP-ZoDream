@@ -1,12 +1,6 @@
 <?php
 namespace Domain\Model\Book;
 
-/**
- * Created by PhpStorm.
- * User: zx648
- * Date: 2016/10/15
- * Time: 21:00
- */
 use Domain\Model\Model;
 
 /**
@@ -16,5 +10,9 @@ use Domain\Model\Model;
  * @property string $name
  */
 class BookCategoryModel extends Model {
-    public static $table = 'book_category';
+    public static function tableName() {
+        return 'book_category';
+    }
+
+
 }

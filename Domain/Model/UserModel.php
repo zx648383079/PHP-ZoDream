@@ -27,9 +27,11 @@ use Zodream\Infrastructure\Request;
 * @property integer $create_at
 */
 class UserModel extends BaseModel {
-	public static $table = 'user';
+	public static function tableName() {
+        return 'user';
+    }
 
-	protected $primaryKey = array (
+    protected $primaryKey = array (
 	  	'id',
 		'name',
 	  	'email',

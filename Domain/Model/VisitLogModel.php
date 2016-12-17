@@ -37,9 +37,11 @@ use Zodream\Infrastructure\Request;
  */
 class VisitLogModel extends Model {
 
-	public static $table = 'visit_log';
+	public static function tableName() {
+        return 'visit_log';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 			'ip' => 'required|string:3-20',
 			'browser' => 'string:3-45',

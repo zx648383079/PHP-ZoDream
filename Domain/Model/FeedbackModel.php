@@ -16,9 +16,11 @@ use Zodream\Infrastructure\Request;
 * @property integer $create_at
 */
 class FeedbackModel extends Model {
-	public static $table = 'feedback';
+	public static function tableName() {
+        return 'feedback';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'name' => 'required|string:3-45',
 		  'email' => '|string:3-100',

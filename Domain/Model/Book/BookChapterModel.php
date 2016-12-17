@@ -20,5 +20,7 @@ use Domain\Model\Model;
  *
  */
 class BookChapterModel extends Model {
-    public static $table = 'book';
+    public static function tableName() {
+        return 'book_chapter';
+    }
 }

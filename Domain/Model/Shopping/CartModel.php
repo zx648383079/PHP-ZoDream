@@ -27,6 +27,9 @@ class CartModel extends Model {
     }
 
     public static function addGoods(GoodsModel $goods, $number) {
+        if ($goods->number < $number) {
+            return false;
+        }
         $model = static::findOne([
             'user_id' => Factory::user()->getId(),
             'goods_id' => $goods->id
