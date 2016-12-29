@@ -2,7 +2,21 @@
 //define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
-
+echo \Zodream\Infrastructure\ObjectExpand\XmlExpand::encode(array(
+    'a' => 'b',
+    'b' => array(
+        'b' => 'v',
+        'a' => 'c'
+    ),
+    'c' => array(
+        array(
+            'a' => 'v'
+        ),
+        array(
+            'c' => 'c'
+        )
+    )
+));
 /*$_POST = array (
     'discount' => '0.00',
     'payment_type' => '1',
