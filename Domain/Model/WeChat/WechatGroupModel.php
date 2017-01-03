@@ -14,9 +14,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class WechatGroupModel extends Model {
-	public static $table = 'wechat_group';
+	public static function tableName() {
+        return 'wechat_group';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'parent' => 'int',

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\Home\FriendLinkModel  */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 
@@ -63,4 +63,4 @@ $this->extend('layout/head');
       </div>
 </div>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

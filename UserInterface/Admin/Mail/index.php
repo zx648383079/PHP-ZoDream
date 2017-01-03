@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
 $this->registerCssFile('zodream/add.css');
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 
@@ -24,4 +24,4 @@ $this->extend('layout/head');
     </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

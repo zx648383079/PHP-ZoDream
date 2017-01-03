@@ -1,8 +1,8 @@
 <?php
 namespace Service\Ueditor;
 
-use Zodream\Domain\Controller\BaseController;
-use Zodream\Infrastructure\Traits\AjaxTrait;
+use Zodream\Service\Controller\Controller as BaseController;
+
 abstract class Controller extends BaseController {
 	
 	protected function rules() {

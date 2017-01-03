@@ -1,12 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
 
 $this->title = $title;
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 ?>
@@ -66,4 +66,4 @@ $this->extend([
 
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

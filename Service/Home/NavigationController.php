@@ -6,7 +6,7 @@ use Domain\Model\Navigation\NavigationCategoryModel;
 use Domain\Model\Navigation\NavigationModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 class NavigationController extends Controller {
     function indexAction() {

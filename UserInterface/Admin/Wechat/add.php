@@ -2,7 +2,7 @@
 /** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\WeChat\WechatModel */
 defined('APP_DIR') or exit();
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="container">
@@ -109,4 +109,4 @@ $this->extend('layout/head');
 </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

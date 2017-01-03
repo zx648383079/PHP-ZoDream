@@ -17,9 +17,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class ThreadModel extends Model {
-	public static $table = 'thread';
+	public static function tableName() {
+        return 'thread';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'forum_id' => 'required|int',
 		  'title' => 'required|string:3-100',

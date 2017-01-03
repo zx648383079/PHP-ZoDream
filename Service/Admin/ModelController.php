@@ -5,7 +5,7 @@ namespace Service\Admin;
  */
 use Infrastructure\Environment;
 use Zodream\Domain\Generate\GenerateModel;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 class ModelController extends Controller {
 	function indexAction() {
 		$data = Environment::getFiles(APP_DIR.'/document/');

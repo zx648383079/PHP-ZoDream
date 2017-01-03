@@ -10,7 +10,7 @@ class HomeController extends Controller {
 
 	protected function rules() {
 		return array(
-			'*' => '@'
+			'*' => '*'
 		);
 	}
 

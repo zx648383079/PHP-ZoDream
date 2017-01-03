@@ -6,7 +6,7 @@ namespace Service\Admin;
 
 use Domain\Model\Waste\WasteModel;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class WasteController extends Controller {
 	function indexAction() {

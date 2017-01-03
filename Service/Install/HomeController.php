@@ -1,26 +1,20 @@
 <?php
 namespace Service\Install;
 
+
 use Infrastructure\Environment;
-use Zodream\Domain\Generate\Generate;
-use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Config;
 use Zodream\Infrastructure\Database\Schema\Schema;
-use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Config;
 
 class HomeController extends Controller {
 
-	function indexAction() {
-        if (is_file('install.off')) {
-            return $this->showContent('《网站管理系统》安装程序已锁定。如果要重新安装，请删除<b>../install.off</b>文件！');
-        }
+	public function indexAction() {
 		return $this->show([
 		    'title' => '开始'
         ]);
 	}
 
-    function environmentAction() {
+    public function environmentAction() {
         return $this->show(array(
             'name' => Environment::getName(),
             'os' => Environment::getOS(),
@@ -38,20 +32,19 @@ class HomeController extends Controller {
         ));
     }
 
-	function databaseAction() {
+    public function databaseAction() {
 		return $this->show();
 	}
 
-	function dbsAction() {
+    public function dbsAction() {
         Config::setValue('db', Request::post('host,port,database information_schema,user,password'));
-        $schema = new Schema();
         return $this->ajax([
             'status' => 1,
-            'data' => $schema->getAllDatabase()
+            'data' => Schema::getAllDatabase()
         ]);
     }
 
-    function importAction() {
+    public function importAction() {
         $handle = opendir(APP_DIR. '/Service');
         $generate = new Generate();
         $data = Config::getValue();
@@ -77,7 +70,7 @@ class HomeController extends Controller {
         ]);
     }
 
-    function completeAction() {
+    public function completeAction() {
         file_put_contents('install.off', '');
         return $this->show();
     }
@@ -85,8 +78,8 @@ class HomeController extends Controller {
 	/**
 	 * 采集测试
 	 */
-	function spiderAction() {
+    public function spiderAction() {
 		$content = file_get_contents('http://zodream.cn');
-		return $this->show('@<title>TEST</title><br>测试结果：<b>'.(empty($content) ?  '不':'').'支持采集</b>');
+		return $this->showContent('<title>TEST</title><br>测试结果：<b>'.(empty($content) ?  '不':'').'支持采集</b>');
 	}
 }

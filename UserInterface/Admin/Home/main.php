@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 $this->registerJs('require(["admin/flow"]);');
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="container">
@@ -103,4 +103,4 @@ $this->extend('layout/head');
     </div>
 </div>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

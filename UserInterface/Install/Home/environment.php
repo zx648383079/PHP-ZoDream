@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="main">
@@ -83,7 +83,7 @@ $this->extend('layout/head');
     </tbody>
 </table>
 
-<a class="ms-Button ms-Button--primary" href="<?=Url::to('database');?>">下一步</a>
+<a class="ms-Button ms-Button--primary" href="<?=Url::to(['database']);?>">下一步</a>
 </div>
 
-<?php $this->extend('layout/foot');?>
+<?php $this->extend('layout/footer');?>

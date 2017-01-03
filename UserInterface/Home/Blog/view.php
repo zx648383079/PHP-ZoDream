@@ -3,12 +3,12 @@ defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\ShareWidget;
-use Zodream\Infrastructure\Html;
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Infrastructure\Support\Html;
+use Zodream\Service\Routing\Url;
 
 $this->title = $title;
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 ?>
@@ -146,4 +146,4 @@ $this->extend([
     
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

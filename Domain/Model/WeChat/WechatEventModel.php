@@ -12,9 +12,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class WechatEventModel extends Model {
-	public static $table = 'wechat_event';
+	public static function tableName() {
+        return 'wechat_event';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'key' => 'string:3-128',

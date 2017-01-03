@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 $this->registerCssFile('zodream/error.css');
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="container">
@@ -15,4 +15,4 @@ $this->extend('layout/head');
 	</div>
 </div>
 
-<?php $this->extend('layout/foot');?>
+<?php $this->extend('layout/footer');?>

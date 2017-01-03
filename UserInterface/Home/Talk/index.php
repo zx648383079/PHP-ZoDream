@@ -6,7 +6,7 @@ $this->title = $title;
 $this->registerJs('require(["home/talk"]);');
 $this->registerCssFile('zodream/talk.css');
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 ?>
@@ -36,4 +36,4 @@ $this->extend([
   </div>
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

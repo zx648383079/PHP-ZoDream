@@ -34,6 +34,21 @@ use Domain\Model\Model;
  */
 class OrderModel extends Model {
 
+    const ORDER_UNCONFIRMED = 0;
+    const ORDER_CONFIRMED = 1;
+    const ORDER_CANCELED = 2;
+    const ORDER_INVALID = 3;
+    const ORDER_RETURNED = 4;
+
+    const SHIPPING_UNSHIPPED = 0; //未发货
+    const SHIPPING_SHIPPED = 1;  //已发货
+    const SHIPPING_RECEIVED = 2; //已签收
+    const SHIPPING_PREPARING = 3; //备货中
+
+    const PAY_UNPAYED = 0;   //未支付
+    const PAY_PAYING = 1;    //支付中
+    const PAY_PAYED = 2;     //支付完成
+
     public static function tableName() {
         return 'order';
     }

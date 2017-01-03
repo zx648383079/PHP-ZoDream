@@ -5,8 +5,8 @@ namespace Service\Admin;
  */
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
-use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class MailController extends Controller {
 	function indexAction() {

@@ -6,8 +6,8 @@ namespace Service\Admin;
 use Infrastructure\Environment;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class ResourceController extends Controller {
 	function indexAction($file = null) {

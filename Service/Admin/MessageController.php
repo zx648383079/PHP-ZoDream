@@ -8,7 +8,7 @@ namespace Service\Admin;
 use Domain\Model\Message\MessageModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Model\UserModel;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class MessageController extends Controller {
 	function indexAction() {

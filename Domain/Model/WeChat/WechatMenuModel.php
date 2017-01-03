@@ -15,9 +15,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class WechatMenuModel extends Model {
-	public static $table = 'wechat_menu';
+	public static function tableName() {
+        return 'wechat_menu';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'parent' => 'int',

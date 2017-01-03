@@ -17,9 +17,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class CompanyCommentModel extends Model {
-	public static $table = 'company_comment';
+	public static function tableName() {
+        return 'company_comment';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'title' => 'required|string:3-100',
 		  'content' => 'required',

@@ -20,7 +20,7 @@ ENGINE = InnoDB DEFAULT CHARSET=UTF8;
 use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 /**
  * Class VisitLogModel
  * @property integer $id

@@ -5,7 +5,7 @@ use Zodream\Domain\Html\Bootstrap\FormWidget;
 $this->registerJs('require([\'admin/add\']);');
 $this->registerCssFile('zodream/add.css');
 
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 
@@ -28,4 +28,4 @@ $this->extend('layout/head');
 </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

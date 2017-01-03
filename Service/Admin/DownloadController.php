@@ -2,7 +2,7 @@
 namespace Service\Admin;
 
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 class DownloadController extends Controller {
 	protected function rules() {

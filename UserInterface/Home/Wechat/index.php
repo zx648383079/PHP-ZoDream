@@ -16,4 +16,4 @@ $this->extend(array(
     </div>
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

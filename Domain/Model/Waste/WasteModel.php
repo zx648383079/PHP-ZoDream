@@ -15,9 +15,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class WasteModel extends Model {
-	public static $table = 'waste';
+	public static function tableName() {
+        return 'waste';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'code' => 'required|string:3-100',
 		  'name' => 'required|string:3-200',

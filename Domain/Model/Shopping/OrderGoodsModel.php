@@ -12,16 +12,11 @@ use Domain\Model\Model;
 /**
  * Class OrderGoodsModel
  * @package Domain\Model\Shopping
- * @property integer $id
  * @property integer $order_id
  * @property integer $goods_id
- * @property string $name
- * @property string $thumb
- * @property integer $number
- * @property float $price
  * @property integer $user_id
  */
-class OrderGoodsModel extends Model {
+class OrderGoodsModel extends BaseGoodsModel {
     public static function tableName() {
         return 'order_goods';
     }

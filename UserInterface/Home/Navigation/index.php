@@ -1,11 +1,11 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
 $this->title = '导航';
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 $this->registerJs('require(["home/navigation"]);');
@@ -102,4 +102,4 @@ $this->registerJs('require(["home/navigation"]);');
 </div>
 
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

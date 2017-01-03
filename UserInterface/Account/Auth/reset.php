@@ -4,7 +4,7 @@ defined('APP_DIR') or exit();
 
 $this->registerCssFile('zodream/login.css');
 $this->registerJs('require(["admin/login"]);');
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="login">
@@ -19,4 +19,4 @@ $this->extend('layout/head');
     </form>
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

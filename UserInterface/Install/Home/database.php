@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 $js = <<<JS
 $("form").Validform({
 	showAllError:true,
@@ -62,4 +62,4 @@ $this->registerJs($js);
 </form>
 </div>
 
-<?php $this->extend('layout/foot');?>
+<?php $this->extend('layout/footer');?>

@@ -18,9 +18,11 @@ use Domain\Model\Model;
 * @property integer $status
 */
 class WechatModel extends Model {
-	public static $table = 'wechat';
+	public static function tableName() {
+        return 'wechat';
+    }
 
-	protected $primaryKey = array (
+    protected $primaryKey = array (
 	  'id',
 	  'tag',
 	);

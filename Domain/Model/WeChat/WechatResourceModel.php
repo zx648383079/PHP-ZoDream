@@ -13,9 +13,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class WechatResourceModel extends Model {
-	public static $table = 'wechat_resource';
+	public static function tableName() {
+        return 'wechat_resource';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'id' => 'required|int',
 		  'wechat_id' => 'int',

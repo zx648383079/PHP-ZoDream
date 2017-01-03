@@ -1,10 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
 $this->registerCssFile('codemirror/codemirror.css');
 $this->registerJs('require(["admin/editor"]);');
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="container">
@@ -21,4 +21,4 @@ $this->extend('layout/head');
     </div>
 </div>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

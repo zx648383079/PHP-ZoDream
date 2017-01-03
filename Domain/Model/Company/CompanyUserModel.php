@@ -9,10 +9,9 @@ use Domain\Model\Model;
 * @property string $post
 */
 class CompanyUserModel extends Model {
-	public static $table = 'company_user';
-
-	protected $primaryKey = array (
-	);
+	public static function tableName() {
+        return 'company_user';
+    }
 
 	protected function rules() {
 		return array (

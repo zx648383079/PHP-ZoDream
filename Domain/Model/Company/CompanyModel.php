@@ -19,9 +19,11 @@ use Domain\Model\Model;
 * @property integer $update_at
 */
 class CompanyModel extends Model {
-	public static $table = 'company';
+	public static function tableName() {
+        return 'company';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'name' => 'string:3-200',
 		  'description' => 'string:3-255',

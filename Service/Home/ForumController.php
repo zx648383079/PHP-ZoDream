@@ -11,7 +11,7 @@ use Domain\Model\Forum\ThreadPostModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 class ForumController extends Controller {
 	

@@ -8,9 +8,9 @@ use Domain\Model\Model;
 * @property integer $company_id
 */
 class WasteCompanyModel extends Model {
-	public static $table = 'waste_company';
-
-	protected $primaryKey = array ();
+	public static function tableName() {
+        return 'waste_company';
+    }
 
 	protected function rules() {
 		return array (

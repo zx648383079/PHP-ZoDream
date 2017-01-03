@@ -9,7 +9,7 @@ use Domain\Model\LoginLogModel;
 use Domain\Model\LogModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 class UserController extends Controller {
 	protected function rules() {

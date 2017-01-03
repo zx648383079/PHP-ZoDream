@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 <button>管理登陆日志</button>
 <form>
@@ -70,4 +70,4 @@ $this->extend('layout/head');
 </form>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

@@ -14,9 +14,11 @@ use Domain\Model\Model;
 * @property string $msg_id
 */
 class WechatMessageModel extends Model {
-	public static $table = 'wechat_message';
+	public static function tableName() {
+        return 'wechat_message';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'fan_id' => 'int',

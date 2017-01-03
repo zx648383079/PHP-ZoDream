@@ -9,8 +9,8 @@ use Domain\Model\Question\QuestionAnswerModel;
 use Domain\Model\Question\QuestionModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Domain\Html\Page;
-use Zodream\Infrastructure\Html;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Support\Html;
+use Zodream\Infrastructure\Http\Request;
 
 class QuestionController extends Controller {
 	

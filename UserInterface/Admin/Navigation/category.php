@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 <div class="row">
     <form method="POST">
@@ -56,4 +56,4 @@ $this->extend('layout/head');
 </table>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

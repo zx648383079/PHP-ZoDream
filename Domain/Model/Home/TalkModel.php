@@ -10,10 +10,12 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class TalkModel extends Model {
-	public static $table = 'talk';
-	
+	public static function tableName() {
+        return 'talk';
+    }
 
-	protected function rules() {
+
+    protected function rules() {
 		return array (
 		  'content' => 'required|string:3-255',
 		  'user_id' => 'required|int',

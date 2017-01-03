@@ -9,6 +9,17 @@ namespace Domain\Model\Shopping;
  */
 use Domain\Model\Model;
 
+/**
+ * Class PayLogModel
+ * @package Domain\Model\Shopping
+ * @property integer $id
+ * @property integer $payment_id
+ * @property integer $order_id
+ * @property float $amount
+ * @property integer $user_id
+ * @property integer $update_at
+ * @property integer $create_at
+ */
 class PayLogModel extends Model {
     public static function tableName() {
         return 'pay_log';

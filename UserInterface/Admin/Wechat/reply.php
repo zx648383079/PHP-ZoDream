@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Url\Url;
-use Zodream\Infrastructure\Html;
+use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 echo \Zodream\Domain\Html\Bootstrap\PanelWidget::show(array(
     'head' => Html::tag('a', '增加', array(
         'class' => 'btn btn-primary',
@@ -41,4 +41,4 @@ echo \Zodream\Domain\Html\Bootstrap\PanelWidget::show(array(
 ?>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

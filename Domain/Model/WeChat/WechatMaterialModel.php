@@ -26,9 +26,11 @@ use Domain\Model\Model;
 * @property integer $update_at
 */
 class WechatMaterialModel extends Model {
-	public static $table = 'wechat_material';
+	public static function tableName() {
+        return 'wechat_material';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'media_id' => 'string:3-30',

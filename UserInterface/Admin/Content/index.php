@@ -1,11 +1,11 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Html\Bootstrap\PanelWidget;
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 use Zodream\Domain\Html\Bootstrap\TableWidget;
 /** @var $this \Zodream\Domain\View\View */
 
-$this->extend('layout/head');
+$this->extend('layout/header');
 echo PanelWidget::show(array(
     'head' => '模型管理 '. Html::a('添加', 'content/add', array('class' => 'btn btn-primary')),
     'body' => TableWidget::show(array(
@@ -40,4 +40,4 @@ echo PanelWidget::show(array(
 
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

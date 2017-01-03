@@ -15,9 +15,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class ThreadPostModel extends Model {
-	public static $table = 'thread_post';
+	public static function tableName() {
+        return 'thread_post';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'forum_id' => 'required|int',
 		  'thread_id' => 'required|int',

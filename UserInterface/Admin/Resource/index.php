@@ -1,13 +1,13 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Disk\Directory;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $file \Zodream\Infrastructure\Disk\Directory */
 $children = $file->children();
 $parent = $file->parent()->getRelative(Factory::root());
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <table class="table table-hover">
@@ -47,4 +47,4 @@ $this->extend('layout/head');
     </tbody>
 </table>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

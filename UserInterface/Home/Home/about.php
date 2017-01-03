@@ -6,7 +6,7 @@ defined('APP_DIR') or exit();
 $this->title = $title;
 $this->registerCssFile('zodream/home.css');
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 ?>
@@ -48,4 +48,4 @@ $this->extend([
     </div>
 
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

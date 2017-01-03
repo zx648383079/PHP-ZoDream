@@ -16,9 +16,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class WechatReplyModel extends Model {
-	public static $table = 'wechat_reply';
-	
-	protected function rules() {
+	public static function tableName() {
+        return 'wechat_reply';
+    }
+
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'type' => '',

@@ -1,12 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 use Zodream\Domain\Access\Auth;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
 $this->registerCssFile('zodream/account.css');
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 ?>
@@ -53,4 +53,4 @@ $this->extend([
     </div>
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

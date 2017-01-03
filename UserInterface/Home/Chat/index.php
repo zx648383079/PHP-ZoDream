@@ -25,7 +25,7 @@ $this->registerCss($css);
 $this->registerJs($js);
 
 $this->extend([
-    'layout/head',
+    'layout/header',
     'layout/navbar'
 ]);
 ?>
@@ -49,4 +49,4 @@ $this->extend([
     </div>
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

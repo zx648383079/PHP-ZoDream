@@ -1,7 +1,7 @@
 <?php
 namespace Domain\Model;
 use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 /**
 * Class FeedbackModel

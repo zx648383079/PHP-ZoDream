@@ -10,9 +10,11 @@ use Domain\Model\Model;
 * @property integer $user_id
 */
 class NavigationCategoryModel extends Model {
-	public static $table = 'navigation_category';
+	public static function tableName() {
+        return 'navigation_category';
+    }
 
-	protected $primaryKey = array (
+    protected $primaryKey = array (
 	  'id',
 	  'name',
 	);

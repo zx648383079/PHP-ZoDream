@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <table class="table table-hover">
@@ -37,4 +37,4 @@ $this->extend('layout/head');
     </tr>
     </tfoot>
 </table>
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

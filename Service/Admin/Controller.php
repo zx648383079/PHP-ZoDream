@@ -2,17 +2,13 @@
 namespace Service\Admin;
 
 
-use Zodream\Domain\Model;
-use Zodream\Domain\Response\Redirect;
-use Zodream\Domain\Controller\Controller as BaseController;
-use Zodream\Infrastructure\Log;
-use Zodream\Infrastructure\Traits\AjaxTrait;
+use Zodream\Service\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 	
 	protected function rules() {
 		return array(
-			'*' => 'admin'
+			'*' => '*'
 		);
 	}
 

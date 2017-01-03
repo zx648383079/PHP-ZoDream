@@ -11,6 +11,6 @@
     <link rel="icon" href="/assets/images/favicon.png">
     <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/zodream/zodream.css" rel="stylesheet">
-    <?=$this->head()?>
+    <?=$this->header()?>
 </head>
 <body>

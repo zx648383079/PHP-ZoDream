@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\UserModel */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="panel panel-default">
@@ -73,4 +73,4 @@ $this->extend('layout/head');
 </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

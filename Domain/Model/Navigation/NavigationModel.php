@@ -12,9 +12,11 @@ use Domain\Model\Model;
 * @property integer $user_id
 */
 class NavigationModel extends Model {
-	public static $table = 'navigation';
+	public static function tableName() {
+        return 'navigation';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'name' => 'required|string:3-100',
 		  'url' => 'required|string:3-255',

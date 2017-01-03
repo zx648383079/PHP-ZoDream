@@ -1,6 +1,6 @@
 <?php
 namespace Domain\Model;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 /**
 * Class LoginLogModel

@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="main">
@@ -20,7 +20,7 @@ $this->extend('layout/head');
 <strong>如果自动创建未能成功，不用担心，您要做的只是将数据库信息填入配置文件。您也可以在文本编辑器中打开<code>config.php</code>，填入您的信息，并将其另存为<code>config.php</code>。</strong>
 	需要更多帮助？<a href="http://zodream.cn">看这里</a>。</p>
 <p>绝大多数时候，您的网站服务提供商会给您这些信息。如果您没有这些信息，在继续之前您将需要联系他们。如果您准备好了…</p>
-<a class="ms-Button ms-Button--primary" href="<?=Url::to('environment');?>">开始安装</a>
+<a class="ms-Button ms-Button--primary" href="<?=Url::to(['environment']);?>">开始安装</a>
 </div>
 
-<?php $this->extend('layout/foot');?>
+<?php $this->extend('layout/footer');?>

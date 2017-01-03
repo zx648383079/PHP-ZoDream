@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <table class="table table-hover">
@@ -43,4 +43,4 @@ $this->extend('layout/head');
     </tfoot>
 </table>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

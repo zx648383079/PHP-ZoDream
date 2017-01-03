@@ -13,8 +13,9 @@ use Domain\Model\Model;
  * Class GoodsModel
  * @package Domain\Model\Shopping
  * @property integer $id
- * @property string $title
  * @property string $content
+ * @property integer $star
+ * @property integer $user_id
  * @property integer $goods_id
  * @property integer $create_at
  *

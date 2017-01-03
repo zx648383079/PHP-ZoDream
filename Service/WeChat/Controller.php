@@ -1,9 +1,8 @@
 <?php
 namespace Service\WeChat;
 
-use Zodream\Domain\Controller\Controller as BaseController;
-use Zodream\Infrastructure\Traits\AjaxTrait;
+use Zodream\Service\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
-    use AjaxTrait;
+
 }

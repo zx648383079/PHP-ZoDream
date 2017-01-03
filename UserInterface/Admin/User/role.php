@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 <?=Html::a('增加角色', 'user/addRole', ['class' => 'btn'])?>
 <table class="table table-hover">
@@ -24,4 +24,4 @@ $this->extend('layout/head');
     </tbody>
 </table>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

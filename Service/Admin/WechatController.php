@@ -14,7 +14,7 @@ use Domain\Model\WeChat\WechatReplyModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class WechatController extends Controller {
 	function indexAction() {

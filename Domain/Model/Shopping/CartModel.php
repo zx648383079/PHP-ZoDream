@@ -7,44 +7,17 @@ namespace Domain\Model\Shopping;
  * Date: 2016/12/15
  * Time: 19:07
  */
-use Domain\Model\Model;
 use Zodream\Service\Factory;
 
 /**
  * Class CartModel
  * @package Domain\Model\Shopping
- * @property integer $id
  * @property integer $goods_id
- * @property string $name
- * @property string $thumb
- * @property integer $number
- * @property float $price
  * @property integer $user_id
  */
-class CartModel extends Model {
+class CartModel extends BaseGoodsModel {
     public static function tableName() {
         return 'cart';
-    }
-
-    public static function addGoods(GoodsModel $goods, $number) {
-        if ($goods->number < $number) {
-            return false;
-        }
-        $model = static::findOne([
-            'user_id' => Factory::user()->getId(),
-            'goods_id' => $goods->id
-        ]);
-        if (empty($model)) {
-            $model = new static();
-            $model->goods_id = $goods->id;
-            $model->name = $goods->name;
-            $model->thumb = $goods->thumb;
-            $model->price = $goods->price;
-            $model->user_id = Factory::user()->getId();
-        }
-        $model->number += $number;
-        $model->save();
-        return $model;
     }
 
     public function getTotal() {

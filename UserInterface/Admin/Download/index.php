@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 <div>
     增加下载地址前缀:
@@ -55,4 +55,4 @@ $this->extend('layout/head');
 </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

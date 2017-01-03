@@ -4,7 +4,7 @@ use Zodream\Domain\Html\Bootstrap\DetailWidget;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\FeedbackModel */
 $this->title = $model->name;
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 
@@ -30,4 +30,4 @@ $this->extend('layout/head');
 </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

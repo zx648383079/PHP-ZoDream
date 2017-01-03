@@ -13,9 +13,11 @@ use Domain\Model\Model;
 * @property integer $type
 */
 class FriendLinkModel extends Model {
-	public static $table = 'friendlink';
+	public static function tableName() {
+        return 'friend_link';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'position' => 'int',
 		  'name' => 'string:3-100',

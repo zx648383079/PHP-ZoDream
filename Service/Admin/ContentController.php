@@ -3,7 +3,7 @@ namespace Service\Admin;
 use Domain\Model\Content\ModelFieldModel;
 use Domain\Model\Content\ModelModel;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 /**
  * 动态表单生成

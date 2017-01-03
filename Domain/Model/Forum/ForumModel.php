@@ -15,10 +15,12 @@ use Domain\Model\Model;
 * @property integer $posts
 */
 class ForumModel extends Model {
-	public static $table = 'forum';
-	
+	public static function tableName() {
+        return 'forum';
+    }
 
-	protected function rules() {
+
+    protected function rules() {
 		return array (
 		  'parent' => 'int',
 		  'type' => '',

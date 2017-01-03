@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Infrastructure\Support\Html;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="login">
@@ -31,4 +31,4 @@ $this->extend('layout/head');
     </div>
 </div>
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

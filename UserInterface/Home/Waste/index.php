@@ -1,10 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
 $this->title = $title;
 $this->extend([
-	'layout/head',
+	'layout/header',
 	'layout/navbar'
 ]);
 ?>
@@ -37,4 +37,4 @@ $this->extend([
 
 
 
-<?php $this->extend('layout/foot')?>
+<?php $this->extend('layout/footer')?>

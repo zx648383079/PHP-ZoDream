@@ -14,9 +14,11 @@ use Domain\Model\Model;
 * @property integer $create_at
 */
 class QuestionAnswerModel extends Model {
-	public static $table = 'question_answer';
+	public static function tableName() {
+        return 'question_answer';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'question_id' => 'int',
 		  'content' => '',

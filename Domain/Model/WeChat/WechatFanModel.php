@@ -25,9 +25,11 @@ use Domain\Model\Model;
 * @property integer $deleted_at
 */
 class WechatFanModel extends Model {
-	public static $table = 'wechat_fan';
+	public static function tableName() {
+        return 'wechat_fan';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'wechat_id' => 'int',
 		  'group_id' => 'int',

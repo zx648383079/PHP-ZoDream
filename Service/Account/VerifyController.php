@@ -6,7 +6,7 @@ namespace Service\Account;
 use Zodream\Domain\Image\VerifyCode;
 use Zodream\Domain\Response\ImageResponse;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 class VerifyController extends Controller {
 	protected function rules() {

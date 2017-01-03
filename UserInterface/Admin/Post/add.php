@@ -4,7 +4,7 @@ defined('APP_DIR') or exit();
 /** @var $model \Domain\Model\Blog\PostModel */
 $this->registerCssFile('zodream/add.css');
 $this->registerJs('require(["admin/add"]);');
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 <h3>新建</h3>
 <div>
@@ -33,4 +33,4 @@ $this->extend('layout/head');
 </div>
 
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

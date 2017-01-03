@@ -10,9 +10,11 @@ use Domain\Model\Model;
 * @property integer $group
 */
 class TermModel extends Model {
-	public static $table = 'term';
+	public static function tableName() {
+        return 'term';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'name' => 'required|string:3-200',
 		  'slug' => 'string:3-200',

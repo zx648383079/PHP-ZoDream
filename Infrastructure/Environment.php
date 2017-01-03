@@ -1,7 +1,7 @@
 <?php
 namespace Infrastructure;
 
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 class Environment {
 	/**
 	 * 获取操作系统版本

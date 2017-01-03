@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 
 <div class="main">
@@ -11,4 +11,4 @@ $this->extend('layout/head');
 <a class="ms-Button ms-Button--primary" href="<?=Url::to('/index.php');?>">进入首页</a>
 </div>
 
-<?php $this->extend('layout/foot');?>
+<?php $this->extend('layout/footer');?>

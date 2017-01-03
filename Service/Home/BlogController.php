@@ -6,7 +6,7 @@ use Domain\Model\Blog\TermModel;
 use Domain\Model\LogModel;
 use Zodream\Domain\Html\Page;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class BlogController extends Controller {
 

@@ -27,9 +27,11 @@ use Domain\Model\Model;
 * @property integer $recommend
 */
 class PostModel extends Model {
-	public static $table = 'post';
+	public static function tableName() {
+        return 'post';
+    }
 
-	protected function rules() {
+    protected function rules() {
 		return array (
 		  'title' => 'required|string:3-255',
 		  'content' => 'required',

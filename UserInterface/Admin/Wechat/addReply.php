@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-$this->extend('layout/head');
-echo \Zodream\Infrastructure\Html::tag('div', 
+$this->extend('layout/header');
+echo \Zodream\Infrastructure\Support\Html::tag('div', 
     \Zodream\Domain\Html\Bootstrap\FormWidget::begin($data)
         ->hidden('id')
         ->select('type', array(
@@ -35,4 +35,4 @@ echo \Zodream\Infrastructure\Html::tag('div',
     ));
 ?>
 
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>

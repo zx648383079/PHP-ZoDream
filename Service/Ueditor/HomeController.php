@@ -2,7 +2,7 @@
 namespace Service\Ueditor;
 
 use Zodream\Infrastructure\Config;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 use Infrastructure\Uploader;
 use Zodream\Infrastructure\Response;
 

@@ -7,7 +7,7 @@ namespace Service\Admin;
 
 use Domain\Model\OptionModel;
 use Zodream\Infrastructure\Database\Command;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class OptionController extends Controller {
 	function indexAction() {

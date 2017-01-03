@@ -6,7 +6,7 @@ namespace Service\Admin;
 
 use Domain\Model\Company\CompanyModel;
 use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Request\Post;
+use Zodream\Infrastructure\Http\Request\Post;
 
 class CompanyController extends Controller {
 	function indexAction() {

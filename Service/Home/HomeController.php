@@ -5,7 +5,7 @@ use Domain\Model\Blog\PostModel;
 use Domain\Model\FeedbackModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Requestquest;
 
 class HomeController extends Controller {
     function indexAction() {

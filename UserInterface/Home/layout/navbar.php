@@ -1,8 +1,8 @@
 <?php
-use Zodream\Infrastructure\Request;
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Support\Html;
 use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Url\Url;
+use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
 ?>
 <nav class="navbar navbar-default" role="navigation">

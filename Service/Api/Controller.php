@@ -6,7 +6,7 @@ use Zodream\Domain\Model;
 use Zodream\Domain\Response\AjaxResponse;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Domain\Controller\Controller as BaseController;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Log;
 

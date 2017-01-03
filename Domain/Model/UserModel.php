@@ -7,7 +7,7 @@ use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Database\Query;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Security\Hash;
-use Zodream\Infrastructure\Request;
+use Zodream\Infrastructure\Http\Request;
 
 /**
 * Class UserModel

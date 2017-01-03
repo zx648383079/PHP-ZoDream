@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Html;
+use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $page \Zodream\Domain\Html\Page */
-$this->extend('layout/head');
+$this->extend('layout/header');
 ?>
 <form method="GET">
     搜索： <input type="text" name="search" value="" placeholder="评论" required>
@@ -42,4 +42,4 @@ $this->extend('layout/head');
     </tr>
     </tfoot>
 </table>
-<?=$this->extend('layout/foot')?>
+<?=$this->extend('layout/footer')?>
