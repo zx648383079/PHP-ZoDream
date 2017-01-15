@@ -1,8 +1,8 @@
 <?php
 namespace Domain\Model\Chat;
 
-use Domain\Model\Message\MessageModel;
 use Domain\Model\Model;
+use Zodream\Service\Factory;
 
 /**
  * Class FriendModel
@@ -19,12 +19,21 @@ class FriendModel extends Model {
     }
 
     public function getMessages() {
-        return MessageModel::findAll([
+        return FriendMessageModel::findAll([
            'user_id' => $this->user_id,
            'receive_id' => [
                $this->user_id,
                'or'
            ]
         ]);
+    }
+
+    public function sendMessage() {
+        $message = new FriendMessageModel();
+        $message->user_id = Factory::user()->getId();
+        $message->receive_id = $this->user_id;
+        $message->type = FriendMessageModel::TYPE_TEXT;
+        $message->create_at = time();
+        return $message;
     }
 }

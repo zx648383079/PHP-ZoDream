@@ -9,8 +9,9 @@ namespace Domain\Model;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Http\Requests\BaseRequest;
+use Zodream\Domain\Model\Model as BaseModel;
 
-abstract class Model extends \Zodream\Domain\Model\Model {
+abstract class Model extends BaseModel {
 
     /**
      * 自动完成更新或插入 并添加更新时间、用户id、ip、插入时间
