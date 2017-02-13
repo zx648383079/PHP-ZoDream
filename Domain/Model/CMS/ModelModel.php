@@ -25,7 +25,13 @@ class ModelModel extends BaseModel {
      * @return ModelFieldModel[]
      */
     public function getFields() {
-        return $this->hasMany(ModelFieldModel::class, 'model_id');
+        $data = array();
+        $args = $this->hasMany(ModelFieldModel::class, 'model_id');
+        foreach ($args as $item){
+            /** @var $item ModelFieldModel */
+            $data[$item->field] = $item;
+        }
+        return $data;
     }
 
     public function getContentExtendTable() {

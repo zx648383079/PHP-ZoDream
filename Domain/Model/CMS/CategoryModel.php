@@ -33,6 +33,9 @@ class CategoryModel extends BaseModel {
         return 'category';
     }
 
+    /**
+     * @return ModelModel
+     */
     public function getModel() {
         return $this->hasOne(ModelModel::class, 'id', 'model_id');
     }

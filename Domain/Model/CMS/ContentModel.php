@@ -28,4 +28,39 @@ class ContentModel extends BaseModel {
     public static function search($words) {
         return static::findPage();
     }
+
+    /**
+     * @return CategoryModel
+     */
+    public function getCategory() {
+        return $this->hasOne(CategoryModel::class, 'id', 'category_id');
+    }
+
+    public function save() {
+        $data = array();
+        foreach ($this->getCategory()
+                     ->getModel()->getFields() as $field) {
+            $value = $this->get($field->field);
+            if ($field->valid($value)) {
+                $data[$field->field] = $value;
+                continue;
+            }
+            $this->setError($field->field, $field->error_message);
+        }
+        $isNew = $this->isNewRecord;
+        $result = parent::save();
+        if (empty($result)) {
+            return $result;
+        }
+        $record = $this->getCategory()
+            ->getModel()
+            ->getContentExtendTable()
+            ->record();
+        $record->set($data);
+        if ($isNew) {
+            return $record->insert();
+        }
+        return $record->where(['id' => $this->id])
+            ->update();
+    }
 }

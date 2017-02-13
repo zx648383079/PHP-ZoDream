@@ -12,6 +12,9 @@ namespace Domain\Model\CMS;
  * @property integer $length
  * @property integer $form_type
  * @property integer $position
+ * @property string $match
+ * @property string $tip_message
+ * @property string $error_message
  * @property string $category_template
  * @property string $list_template
  * @property string $show_template
@@ -49,5 +52,9 @@ class ModelFieldModel extends BaseModel {
         $table = $this->getModel()->getContentExtendTable();
         $table->set($this->field);
         return $table->dropColumn();
+    }
+
+    public function valid($value) {
+        return true;
     }
 }
