@@ -1,19 +1,17 @@
 <?php
 namespace Service\Home;
 
+
+use Domain\Model\Blog\CategoryModel;
 use Domain\Model\Blog\PostModel;
-use Domain\Model\Blog\TermModel;
-use Domain\Model\LogModel;
 use Zodream\Domain\Html\Page;
-use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Http\Request\Post;
 
 class BlogController extends Controller {
 
 	protected $canCache = false;
 
-	function indexAction($search = null, $termid = null, $user = null) {
-		$term = TermModel::findAll();
+	function indexAction($search = null, $category = null, $user = null) {
+		$categories = CategoryModel::findAll();
 		$where = array();
 		if (!empty($search)) {
 			$args = explode(' ', $search);
@@ -21,8 +19,8 @@ class BlogController extends Controller {
 				$where[] = "p.title like '%{$item}%'";
 			}
 		}
-		if (!empty($termid)) {
-			$where[] = 'tp.term_id = '.intval($termid);
+		if (!empty($category)) {
+			$where[] = 'tp.category_id = '.intval($category);
 		}
 		if (!empty($user)) {
 			$where[] = 'p.user_id = '.intval($user);
@@ -54,8 +52,8 @@ class BlogController extends Controller {
 		return $this->show(array(
 			'title' => '博客',
 			'page' => $page,
-			'term' => $term,
-			'termId' => $termid
+			'categories' => $categories,
+			'category' => $category
 		));
 	}
 

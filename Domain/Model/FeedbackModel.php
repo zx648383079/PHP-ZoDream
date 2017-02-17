@@ -1,5 +1,6 @@
 <?php
 namespace Domain\Model;
+
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
 

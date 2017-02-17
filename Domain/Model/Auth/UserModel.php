@@ -5,6 +5,7 @@ use Zodream\Domain\Access\Auth;
 use \Zodream\Domain\Model\UserModel as BaseModel;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Factory;
+use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Security\Hash;
 use Zodream\Infrastructure\Http\Request;
 

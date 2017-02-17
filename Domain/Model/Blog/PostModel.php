@@ -28,7 +28,7 @@ use Domain\Model\Model;
 */
 class PostModel extends Model {
 	public static function tableName() {
-        return 'post';
+        return 'posts';
     }
 
     protected function rules() {

@@ -11,11 +11,19 @@ class UserController extends Controller {
         ];
     }
 
-    public function checkAction($user = null) {
-        if (empty($user) || !DataFilter::validate($user, 'email')) {
+    public function checkAction($email = null) {
+        if (empty($email) || !DataFilter::validate($email, 'email')) {
             return $this->failure('4', '邮箱不合法');
         }
-        $count = UserModel::count(['email' => $user]);
+        $count = UserModel::count(['email' => $email]);
         return $this->success(boolval($count));
+    }
+
+    public function loginAction() {
+        return $this->success([
+            'username' => 'admin',
+            'token' => '11111',
+            'avatar' => 'Nasta'
+        ]);
     }
 }

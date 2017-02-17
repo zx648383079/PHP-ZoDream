@@ -1,17 +1,10 @@
 <?php
 namespace Service\Api;
 
+use Zodream\Infrastructure\Http\Response;
+use Zodream\Service\Controller\RestController;
 
-use Zodream\Domain\Model;
-use Zodream\Domain\Response\AjaxResponse;
-use Zodream\Domain\Response\Redirect;
-use Zodream\Domain\Controller\Controller as BaseController;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Url\Url;
-use Zodream\Infrastructure\Log;
-
-abstract class Controller extends BaseController {
-    protected $type;
+abstract class Controller extends RestController {
 
 	protected function rules() {
 		return array(
@@ -19,15 +12,10 @@ abstract class Controller extends BaseController {
 		);
 	}
 
-	public function prepare() {
-        parent::prepare();
-        $this->type = Request::get('format', AjaxResponse::JSON);
-    }
-
     /**
      * RETURN SUCCESS JSON
      * @param mixed $data
-     * @return \Zodream\Domain\Response\AjaxResponse
+     * @return Response
      */
 	public function success($data) {
         return $this->ajax([
@@ -41,7 +29,7 @@ abstract class Controller extends BaseController {
      * RETURN FAILURE JSON
      * @param int $code
      * @param string $message
-     * @return \Zodream\Domain\Response\AjaxResponse
+     * @return Response
      */
     public function failure($code = 1, $message = null) {
         return $this->ajax([

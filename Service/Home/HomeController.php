@@ -3,13 +3,9 @@ namespace Service\Home;
 
 use Domain\Model\Blog\PostModel;
 use Domain\Model\FeedbackModel;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Http\Requestquest;
 
 class HomeController extends Controller {
-    function indexAction() {
-
+    public function indexAction() {
         $hots = PostModel::findAll([
             'limit' => 4,
             'order' => 'comment_count desc'
@@ -26,35 +22,24 @@ class HomeController extends Controller {
         ));
     }
 
-    function aboutAction() {
-        $model = new FeedbackModel();
-        if ($model->load() && $model->save()) {
-            $model->clear();
-        }
+    public function aboutAction() {
         return $this->show('about', array(
-            'title' => '关于',
-            'model' => $model
+            'title' => '关于'
         ));
     }
 
-    /**
-     * @param Request\Post $post
-     * 
-     */
-    function aboutPost($post) {
-        $result = EmpireModel::query('feedback')->save([
-            'name' => 'required|string:1-45',
-            'email' => 'required|email',
-            'phone' => 'phone',
-            'content' => 'required',
-            'ip' => '',
-            'user_id' => '',
-            'create_at' => ''
-        ], $post->get());
-        if (empty($result)) {
-            $this->send('message', '验证失败，请重试');
-            return;
+    public function feedbackAction() {
+        $model = new FeedbackModel();
+        if ($model->load() && $model->save()) {
+            return $this->ajax([
+                'code' => 0,
+                'msg' => '感谢您的反馈！'
+            ]);
         }
-        $this->send('message', '提交成功！');
+        return $this->ajax([
+            'code' => 1,
+            'msg' => '验证失败，请重试',
+            'errors' => $model->getError()
+        ]);
     }
 }

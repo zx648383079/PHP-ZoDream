@@ -3,22 +3,11 @@ namespace Service\Account;
 /**
  * 登陆相关
  */
-use Domain\Model\LoginLogModel;
-use Domain\Model\UserModel;
-use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Filter\DataFilter;
-use Zodream\Domain\Response\Redirect;
-use Zodream\Infrastructure\Url\Url;
-use Zodream\Domain\ThirdParty\OAuth\BaseOAuth;
-use Zodream\Domain\ThirdParty\OAuth\QQ;
-use Zodream\Infrastructure\Error\Error;
-use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\Mailer\Mailer;
-use Zodream\Infrastructure\ObjectExpand\Hash;
-use Zodream\Infrastructure\ObjectExpand\StringExpand;
-use Zodream\Infrastructure\ObjectExpand\TimeExpand;
+use Domain\Model\Auth\LoginLogModel;
+use Domain\Model\Auth\UserModel;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Template;
+use Zodream\Infrastructure\ObjectExpand\TimeExpand;
+use Zodream\Service\Factory;
 
 class AuthController extends Controller {
 
@@ -30,11 +19,11 @@ class AuthController extends Controller {
 		);
 	}
 
-	function indexAction() {
-		$user = new UserModel();
-		if ($user->load() && $user->signIn()) {
-			return $this->redirect(Request::get('ReturnUrl', 'index.php'));
-		}
+	public function indexAction() {
+        $user = new UserModel();
+        if ($user->load() && $user->signIn()) {
+            return $this->redirect(Request::get('ReturnUrl', 'index.php'));
+        }
 		$time = TimeExpand::getBeginAndEndTime(TimeExpand::TODAY);
 		$num = LoginLogModel::count(array(
 			'ip' => Request::ip(),
@@ -53,20 +42,43 @@ class AuthController extends Controller {
 		));
 	}
 
+	public function checkAction() {
+	    list($name, $value) = Request::post('name,value');
+	    if (!in_array($name, ['username', 'email'])) {
+	        return $this->ajax([
+	            'code' => 1,
+                'msg' => '查询失败！'
+            ]);
+        }
+        $count = UserModel::find()->where([$name => $value])->count('id')->scalar();
+        return $this->ajax([
+            'code' => 0,
+            'data' => $count > 0
+        ]);
+    }
 
-	function registerAction() {
+    public function loginAction() {
+        $user = new UserModel();
+        if ($user->load() && $user->signIn()) {
+            return $this->ajax([
+                'code' => 0
+            ]);
+        }
+        return $this->ajax([
+            'code' => 1,
+            'msg' => '登录失败！',
+            'errors' => $user->getError()
+        ]);
+    }
+
+
+	public function registerAction() {
 		return $this->show(array(
 			'title' => '后台注册'
 		));
 	}
 
-	function registerPost() {
-		if (EmpireForm::start()->register()) {
-			Redirect::to('/');
-		}
-	}
-
-	function findAction() {
+	public function findAction() {
 		return $this->show([
 			'title' => '找回密码'
 		]);
@@ -75,7 +87,7 @@ class AuthController extends Controller {
 	/**
 	 * @param Post $post
 	 */
-	function findPost($post) {
+	public function findPost($post) {
 		$email = $post->get('email');
 		$result = DataFilter::validate($email, 'email');
 		if (!$result) {
@@ -190,7 +202,7 @@ class AuthController extends Controller {
 		];
 		$type = strtolower($type);
 		if (!array_key_exists($type, $maps)) {
-			Error::out($type.' 的第三方登录组件不存在！', __FILE__, __LINE__);
+			throw new \InvalidArgumentException($type.' 的第三方登录组件不存在！');
 		}
 		$class = 'Zodream\\Domain\\ThirdParty\\OAuth\\'.$maps[$type];
 		return new $class;
