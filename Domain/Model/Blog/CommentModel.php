@@ -17,6 +17,8 @@ use Domain\Model\Model;
  * @property integer $parent_id
  * @property integer $user_id
  * @property integer $post_id
+ * @property integer $agree
+ * @property integer $disagree
  */
 class CommentModel extends Model {
 	public static function tableName() {
@@ -53,5 +55,17 @@ class CommentModel extends Model {
             }
         }
         return $data;
+    }
+
+    public static function getHots() {
+	    return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
+            ->order('c.agree desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
+            ->limit(5)->asArray()->all();
+    }
+
+    public static function getNew() {
+        return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
+            ->order('c.create_at desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
+            ->limit(5)->asArray()->all();
     }
 }

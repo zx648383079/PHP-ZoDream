@@ -7,6 +7,7 @@ namespace Domain\Model\Shopping;
  * Date: 2016/12/15
  * Time: 19:07
  */
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 
 /**
@@ -14,6 +15,7 @@ use Zodream\Service\Factory;
  * @package Domain\Model\Shopping
  * @property integer $goods_id
  * @property integer $user_id
+ * @property integer $session_id
  */
 class CartModel extends BaseGoodsModel {
     public static function tableName() {
@@ -51,6 +53,23 @@ class CartModel extends BaseGoodsModel {
         if ($this->number <= 0) {
             return $this->delete();
         }
+
         return parent::save();
+    }
+
+    /**
+     * 获取session_ip
+     * @return string
+     */
+    public static function getSessionIp() {
+        $ip = Request::ip();
+        $session_ip = Request::cookie('session_id_ip');
+        if (!empty($session_ip)) {
+            return $session_ip;
+        }
+        $session_ip = $ip . "_" . Factory::session()->id();
+        $time = time() + (3600 * 24 * 365);
+        Factory::response()->header->setCookie('session_id_ip', $session_ip, $time, "/");
+        return $session_ip;
     }
 }

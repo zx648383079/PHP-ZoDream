@@ -3,6 +3,10 @@
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
 
+function aa () {
+    \Zodream\Infrastructure\Base\Config::a('ff','g');
+}
+ aa();
 /*$_POST = array (
     'discount' => '0.00',
     'payment_type' => '1',
