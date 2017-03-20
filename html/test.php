@@ -3,10 +3,26 @@
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
 
-function aa () {
-    \Zodream\Infrastructure\Base\Config::a('ff','g');
+class My extends Thread{
+    function run(){
+        for($i=1;$i<10;$i++){
+            echo Thread::getCurrentThreadId() .  "\n";
+            sleep(2);     // <------
+        }
+    }
 }
- aa();
+
+for($i=0;$i<2;$i++){
+    $pool[] = new My();
+}
+
+foreach($pool as $worker){
+    $worker->start();
+}
+foreach($pool as $worker){
+    $worker->join();
+}
+
 /*$_POST = array (
     'discount' => '0.00',
     'payment_type' => '1',

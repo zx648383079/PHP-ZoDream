@@ -28,6 +28,7 @@ use Domain\Model\Model;
  * @property string $tel
  * @property string $address
  * @property string $remark
+ * @property integer $type
  * @property integer $pay_at
  * @property integer $shipping_at
  * @property integer $create_at
@@ -48,6 +49,10 @@ class OrderModel extends Model {
     const PAY_UNPAYED = 0;   //未支付
     const PAY_PAYING = 1;    //支付中
     const PAY_PAYED = 2;     //支付完成
+
+    const TYPE_NONE = 0; //普通订单
+    const TYPE_AUCTION = 1; //拍卖订单
+    const TYPE_PRESELL = 2; //预售订单
 
     public static function tableName() {
         return 'order';

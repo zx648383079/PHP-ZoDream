@@ -12,9 +12,16 @@ use Zodream\Domain\Html\Page;
 /**
  * Class GoodsModel
  * @package Domain\Model\Shopping
+ * @property integer $category_id
+ * @property integer $brand_id
  * @property string $image
  * @property string $description
  * @property string $content
+ * @property integer $is_show
+ * @property integer $is_delete
+ * @property integer $is_best
+ * @property integer $is_hot
+ * @property integer $is_new
  * @property integer $create_at
  * @property integer $update_at
  */

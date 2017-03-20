@@ -7,7 +7,6 @@ use Domain\Model\Model;
  * Class BaseGoodsModel
  * @package Domain\Model\Shopping
  * @property integer $id
- * @property integer $category_id
  * @property string $name
  * @property string $thumb
  * @property integer $number
