@@ -22,6 +22,6 @@ use Domain\Model\Model;
  */
 class PresellModel extends Model {
     public static function tableName() {
-        return 'auction';
+        return 'presell';
     }
 }
