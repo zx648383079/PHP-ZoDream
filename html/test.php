@@ -2,7 +2,11 @@
 //define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
+use Zodream\Domain\ThirdParty\WeChat\Message;
+use Zodream\Domain\ThirdParty\WeChat\EventEnum;
 
+
+/*
 class My extends Thread{
     function run(){
         for($i=1;$i<10;$i++){

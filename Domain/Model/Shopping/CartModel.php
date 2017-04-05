@@ -16,6 +16,8 @@ use Zodream\Service\Factory;
  * @property integer $goods_id
  * @property integer $user_id
  * @property integer $session_id
+ * @property integer $activity_id //活动ID
+ * @property string $activity_type //活动类型
  */
 class CartModel extends BaseGoodsModel {
     public static function tableName() {

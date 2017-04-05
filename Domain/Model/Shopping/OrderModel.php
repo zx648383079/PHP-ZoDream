@@ -18,7 +18,7 @@ use Domain\Model\Model;
  * @property integer $pay_status
  * @property integer $shipping_status
  * @property float $goods_amount
- * @property integer pay_id
+ * @property integer $pay_id
  * @property float $pay_fee
  * @property integer $delivery_id
  * @property float $shipping_fee

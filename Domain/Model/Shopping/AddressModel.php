@@ -16,7 +16,7 @@ use Domain\Model\Model;
  * @property string $street
  * @property string $address
  * @property string $consignee
- * @property string $telphone
+ * @property string $telephone
  * @property integer $is_default
  */
 class AddressModel extends Model {
