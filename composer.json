@@ -1,7 +1,7 @@
 {
   "name" : "ZoDream",
   "description": "ZoDream PPHP Framework",
-  "version" : "2.3",
+  "version" : "2.5",
   "require" : {
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",
@@ -12,6 +12,7 @@
     "psr-4" : {
       "Service\\": "Service/",
       "Domain\\": "Domain/",
+      "Module\\": "Module/",
       "Infrastructure\\": "Infrastructure/"
     }
   },

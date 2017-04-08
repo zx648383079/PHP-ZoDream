@@ -1,10 +1,19 @@
 <?php
-//define('DEBUG', true);
+define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
 use Zodream\Domain\ThirdParty\WeChat\Message;
 use Zodream\Domain\ThirdParty\WeChat\EventEnum;
+use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
+use Zodream\Infrastructure\Support\Curl;
+use Zodream\Domain\ThirdParty\WeChat\Aes;
 
+/*(new Curl('http://e.hiwein.com/wechat/authorize.php'))
+    ->post('<xml>
+    <AppId><![CDATA[wx2bccf74c98ce5ec9]]></AppId>
+    <Encrypt><![CDATA[LNK3QDOKvNVMcfRCFeM3tKC2m4IeYE9oq8zgr2FQoZ3irK2Pd0ipGi3dQ7xv95UuvqXz498iPKeku3RAWIyU8UzCG6LxjpVqHj+t+QOtmkNMil+PrG1f7Ls047v9HlP/Xuk4EbawG4J2GW/sAqkpLHa5detJCz6YsOBA1MP8Y1LSsxO8ZgzWpj8lsx1lwb6K++PmHSs+iaUej3Qcky8bt9XMa0FmXpgtYCWI16Y60YUM521QnHOJ9IUL3p/3Wv5P/SH9hTAe/i7unZI93rBcwxB9SP6I6uPGuVRBiVaD81ZZPNc4oHZJMZvAYLAgY0FpDm0AU1dhTD5A2+fqybBxh5pdtihx9Q1GsYbxU1f3FYnF0nL8uQ4EwWbo/xt+bDmFg7r/zL1ToBoIFQnjxVA6XxcaKjwJyZo6rmaFfne9c04uqLSLVP/a06k/PvyzFVqh4ZiQImyGVOtfv/xUrrM9EQ==]]></Encrypt>
+</xml>');
+*/
 
 /*
 class My extends Thread{

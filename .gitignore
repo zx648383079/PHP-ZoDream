@@ -68,3 +68,4 @@ typings/
 *.sql
 
 node_modules/
+/html/json
