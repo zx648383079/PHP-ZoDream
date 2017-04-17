@@ -68,4 +68,12 @@ class AuctionModel extends Model {
         return new DutchAuction($this);
     }
 
+    /**
+     * @param $data
+     * @return AuctionInterface
+     */
+    public function auction($data) {
+        return $this->getMode()->setData($data);
+    }
+
 }

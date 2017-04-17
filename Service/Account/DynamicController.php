@@ -5,7 +5,7 @@ namespace Service\Account;
  * 动态
  */
 
-use Domain\Model\Blog\PostModel;
+use Domain\Model\Blog\BlogModel;
 use Domain\Model\Forum\ThreadModel;
 use Domain\Model\Forum\ThreadPostModel;
 use Zodream\Domain\Access\Auth;
@@ -36,7 +36,7 @@ class DynamicController extends Controller {
 	}
 
 	function blogAction() {
-		$page = PostModel::find()->load([
+		$page = BlogModel::find()->load([
 			'where' => ['user_id' => Auth::user()['id']],
 			'order' => 'create_at desc'
 		])->page();

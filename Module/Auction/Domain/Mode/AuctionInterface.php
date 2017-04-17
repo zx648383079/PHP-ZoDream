@@ -6,6 +6,12 @@ namespace Module\Auction\Domain\Mode;
  */
 interface AuctionInterface {
 
+    /**
+     * @param $data
+     * @return static
+     */
+    public function setData($data);
+
     public function hasError();
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Page;
+namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
 

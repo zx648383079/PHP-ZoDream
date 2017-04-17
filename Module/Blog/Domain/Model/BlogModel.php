@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Blog;
+namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
 /**
@@ -26,9 +26,9 @@ use Domain\Model\Model;
 * @property integer $comment_count
 * @property integer $recommend
 */
-class PostModel extends Model {
+class BlogModel extends Model {
 	public static function tableName() {
-        return 'posts';
+        return 'blog';
     }
 
     protected function rules() {

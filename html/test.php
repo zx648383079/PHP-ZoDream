@@ -7,10 +7,41 @@ use Zodream\Domain\ThirdParty\WeChat\EventEnum;
 use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
 use Zodream\Infrastructure\Support\Curl;
 use Zodream\Domain\ThirdParty\WeChat\Aes;
+/*
+(new Curl('http://www.koudaiwanzi.com/public/v2/order.notify.wxpay.web'))
+    ->post('<xml>     <ToUserName><![CDATA[gh_73a7f407161d]]></ToUserName>     <Encrypt><![CDATA[WI9c9IYwfKurjZu11EK8YS2Byazdg6ytW+PDvpmXeL1NciSVF6J3PTXEtbxcQlsenQcAii3R+oYLY6ixQ/VzGALq/tLwoLQS6BHy/jhjNTx7NwkjaqV6s/A2aOZeTtPrTyT7He0CvI5fpi/d7uqWWqf45qPPuvNZ7UWISnC1OxJ5Xe7DDYyWi5GZJIHs7n4z7LDMffwpiYhYUyIDxm1fJ+CzbWmuVhCT2WvZX6VUNbrgvj2lyOKhWYbNO4HeNN8BF7J+NkT6qNWIJvaz5NYu3IQsQjLlPdNRFFFH99Arc86t/3uSzpUWpFtc3Rp+plF3CCX2fSUco4p5gmpDMFlBtKUGU05NP4FQiGST9PVS06zS4Mr6IBqxlFjcQrZhNjy3tUQYD9kPvDZzFaeD6W+aUIH6GpJbyH22uwwoHw3yV5b9AXvo2/CJpPU8YKz2WOniLmbLMTdzIi4HofYysF8+BOSEQPaMHw5mby5ehGDf5PnGqgi6yi71aqCLvWMbf0QnvH1ZWtUTqV2SseYpveVPKGKwM0bFrMzJm4BtA0F1maigunogj9bTgCGxQTjIaB7QVuCxETOwo0hEV7DHRMYjxw==]]></Encrypt> </xml>');
+//(new Curl('http://e.hiwein.com/wechat/wx704ceb300fe52cca/message.php'))
+//    ->post('<xml>     <ToUserName><![CDATA[gh_73a7f407161d]]></ToUserName>     <Encrypt><![CDATA[WI9c9IYwfKurjZu11EK8YS2Byazdg6ytW+PDvpmXeL1NciSVF6J3PTXEtbxcQlsenQcAii3R+oYLY6ixQ/VzGALq/tLwoLQS6BHy/jhjNTx7NwkjaqV6s/A2aOZeTtPrTyT7He0CvI5fpi/d7uqWWqf45qPPuvNZ7UWISnC1OxJ5Xe7DDYyWi5GZJIHs7n4z7LDMffwpiYhYUyIDxm1fJ+CzbWmuVhCT2WvZX6VUNbrgvj2lyOKhWYbNO4HeNN8BF7J+NkT6qNWIJvaz5NYu3IQsQjLlPdNRFFFH99Arc86t/3uSzpUWpFtc3Rp+plF3CCX2fSUco4p5gmpDMFlBtKUGU05NP4FQiGST9PVS06zS4Mr6IBqxlFjcQrZhNjy3tUQYD9kPvDZzFaeD6W+aUIH6GpJbyH22uwwoHw3yV5b9AXvo2/CJpPU8YKz2WOniLmbLMTdzIi4HofYysF8+BOSEQPaMHw5mby5ehGDf5PnGqgi6yi71aqCLvWMbf0QnvH1ZWtUTqV2SseYpveVPKGKwM0bFrMzJm4BtA0F1maigunogj9bTgCGxQTjIaB7QVuCxETOwo0hEV7DHRMYjxw==]]></Encrypt> </xml>');
+//$aes = new Aes('12345');
+/*
+function pkcs7Pad($text, $blockSize = 32) {
+    $padSize = $blockSize - (strlen($text) % $blockSize);
+    return $text . str_repeat(chr($padSize), $padSize);
+}
 
-(new Curl('http://yuanxian.netdns.com.cn/?app=market&act=get_list'))
-    ->post('start=2017-4-12&end=&prov=%E5%8C%97%E4%BA%AC&city=&keyword=dfasfasf');
+function md($data, $key) {
 
+    $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
+    $iv = substr($key, 0, 16);
+    //使用自定义的填充方式对明文进行补位填充
+    mcrypt_generic_init($module, $key, $iv);
+    $data = pkcs7Pad($data);
+    //加密
+    $data = mcrypt_generic($module, $data);
+    mcrypt_generic_deinit($module);
+    mcrypt_module_close($module);
+    return $data;
+}
+
+function op($data, $key) {
+    $data = pkcs7Pad($data);
+    $iv = substr($key, 0, 16);
+    return openssl_encrypt($data, 'AES-256-CBC' ,$key, OPENSSL_RAW_DATA, $iv);
+}
+
+$key = base64_decode('oScGU3fj8m/tDCyvsbEhwI91M1FcwvQqWuFpPoDHlFk=');
+$data = '12312312412421412412412443543534534534';
+echo $a1 = base64_encode(md($data, $key)), '<br>', base64_encode(op($data, $key));
 /*
 class My extends Thread{
     function run(){

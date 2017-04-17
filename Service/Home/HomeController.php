@@ -1,16 +1,16 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\Blog\PostModel;
+use Domain\Model\Blog\BlogModel;
 use Domain\Model\FeedbackModel;
 
 class HomeController extends Controller {
     public function indexAction() {
-        $hots = PostModel::findAll([
+        $hots = BlogModel::findAll([
             'limit' => 4,
             'order' => 'comment_count desc'
         ], 'id, title, description, create_at, comment_count');
-        $news = PostModel::findAll([
+        $news = BlogModel::findAll([
             'limit' => 6,
             'order' => 'create_at desc'
         ], 'id, title, create_at');

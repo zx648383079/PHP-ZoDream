@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-/** @var $model \Domain\Model\Blog\PostModel */
+/** @var $model \Domain\Model\Blog\BlogModel */
 $this->registerCssFile('zodream/add.css');
 $this->registerJs('require(["admin/add"]);');
 $this->extend('layout/header');

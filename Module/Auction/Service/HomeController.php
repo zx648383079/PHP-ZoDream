@@ -15,7 +15,11 @@ class HomeController extends ModuleController {
     }
 
     public function auctionAction() {
-
+        $log = new AuctionLogModel();
+        if ($log->load() && $log->auction()->auction()) {
+            return $this->ajaxSuccess();
+        }
+        return $this->ajaxFailure($log->getFirstError() ?: '竞拍失败！');
     }
 
     public function logAction($id) {
@@ -25,6 +29,6 @@ class HomeController extends ModuleController {
             ->where(['a.auction_id' => $id])
             ->order('a.create_at desc')
             ->page();
-        return $this->ajaxSuccess($data->toJson());
+        return $this->ajaxSuccess($data->toArray());
     }
 }

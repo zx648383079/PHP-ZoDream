@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Blog;
+namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
 /**

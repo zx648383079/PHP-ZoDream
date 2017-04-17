@@ -6,7 +6,7 @@ namespace Service\Admin;
  */
 
 use Domain\Model\Blog\CommentModel;
-use Domain\Model\Blog\PostModel;
+use Domain\Model\Blog\BlogModel;
 use Domain\Model\Blog\TermModel;
 use Infrastructure\HtmlExpand;
 use Zodream\Domain\Html\Page;
@@ -24,8 +24,8 @@ class PostController extends Controller {
 				$where[] = "p.title like '%{$item}%'";
 			}
 		}
-		$page = new Page(PostModel::find()->where($where));
-		$page->setPage(PostModel::find()
+		$page = new Page(BlogModel::find()->where($where));
+		$page->setPage(BlogModel::find()
 			->alias('p')
 			->load(array(
 				'left' => array(
@@ -54,9 +54,9 @@ class PostController extends Controller {
 
 	function addAction($id = null) {
         if (empty($id)) {
-            $model = new PostModel();
+            $model = new BlogModel();
         } else {
-            $model = PostModel::findOne($id);
+            $model = BlogModel::findOne($id);
         }
         $term = TermModel::findAll();
 		return $this->show(array(

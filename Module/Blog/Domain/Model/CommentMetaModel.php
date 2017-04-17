@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Blog;
+namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
 /**
@@ -9,9 +9,9 @@ use Domain\Model\Model;
  * @property string $value
  * @property integer $comment_id
  */
-class PostMetaModel extends Model {
+class CommentMetaModel extends Model {
 	public static function tableName() {
-        return 'postmeta';
+        return 'comment_meta';
     }
 
 }

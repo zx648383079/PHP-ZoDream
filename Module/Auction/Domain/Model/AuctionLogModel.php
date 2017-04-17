@@ -3,6 +3,7 @@ namespace Module\Auction\Domain\Model;
 
 
 use Domain\Model\Model;
+use Module\Auction\Domain\Mode\AuctionInterface;
 
 /**
  * 拍卖
@@ -23,5 +24,19 @@ class AuctionLogModel extends Model {
 
     public static function tableName() {
         return 'auction_log';
+    }
+
+    /**
+     * @return AuctionModel
+     */
+    public function getAuction() {
+        return AuctionModel::findOne($this->auction_id);
+    }
+
+    /**
+     * @return AuctionInterface
+     */
+    public function auction() {
+        return $this->getAuction()->auction($this);
     }
 }
