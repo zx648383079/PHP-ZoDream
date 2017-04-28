@@ -7,6 +7,36 @@ use Zodream\Domain\ThirdParty\WeChat\EventEnum;
 use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
 use Zodream\Infrastructure\Support\Curl;
 use Zodream\Domain\ThirdParty\WeChat\Aes;
+use Zodream\Domain\ThirdParty\Pay\WeChat;
+
+preg_match('/\w+$/i', '康誉', $match);
+var_dump($match);
+
+/*
+
+$curl = (new Curl(
+    'http://124.118.47.110:8099/member/valid'
+));
+$curl->post('{"BRANCHID":"ecshop#2","CARDID":"ecs_12123","PWD":"1221","NONCESTR":"WCSFXVwrfZBj3NW5","SIGN":"BRANCHIDCARDIDNONCESTRPWD"}');
+
+die(var_dump($curl));
+/*
+$wechat = new WeChat([
+    'key' => 'qwertyuiop1234567890asdfghjklzxc'
+]);
+$data = $wechat->declareOrder([
+    'appid' => 'wx2e41b6e46fd6dc6b',
+    'mch_id' => '1336039401',
+    'out_trade_no' => '2017041906395',
+    'transaction_id' => '4009732001201704197547362835',
+    'customs' => 'GUANGZHOU_ZS',
+    'mch_customs_no' => '1105942027'
+]);
+die(var_dump($data));
+
+/*(new Curl('http://e.hiwein.com/wechat/wx704ceb300fe52cca/message.php?encrypt_type=aes'))
+    ->post('<xml>     <ToUserName><![CDATA[gh_73a7f407161d]]></ToUserName>     <Encrypt><![CDATA[GyDyJv5W2DeH4c0o1z5foL9wFT8rxXtV7BjZ4yK19lITOSz74/s+stNlIbGbYPbtFNGgZre2RvaCNofJQmaFPVXM6yhrTAtT8fwewc3n8ITc5yNx8/oxjuzSixKuC2NIQUg6Kaj7F3A9Tm622rZeKM/R6Zc47oU1wDYQa/w0c4is1TCdNnIKcvLLPZBDYmdn/YZBYZzA0H9K43pJa4Qo1G0kThakUktPcgpMeX6ifE6W+g5CqMnqx/w0hh3vqBLuSoQYndEucT6y+fGFU1JI64dz3oMYjyktUJsybYgtv/vnAggA2FjNtm3rnASUsN5o6NuWwC5fK1dwj6SYfjH+T1CPCegZFqVcEojTAqgT2phYsxplsxtMdij5echF8Q+d+zHF7H47QPWMIMa3cjm9PNFCJIT7rdDkJ7AGwI8DiykP8PokoPbQZVJtYEjPXK/jqwVpVJWt8ykNDhYgBi+uZvvD8d7oauU4j+8m50Ke5G6f7VXjFqhymtl4e35oXXW1HDzzp2nlA7+xn/AhkpkPjDO0rzAlTmikma1rdqWdTOqjMQ1caaQX9ehTx13X4Kb84ft8M8Ji8zbb/uOMpoobrg==]]></Encrypt> </xml>');
+
 /*
 (new Curl('http://www.koudaiwanzi.com/public/v2/order.notify.wxpay.web'))
     ->post('<xml>     <ToUserName><![CDATA[gh_73a7f407161d]]></ToUserName>     <Encrypt><![CDATA[WI9c9IYwfKurjZu11EK8YS2Byazdg6ytW+PDvpmXeL1NciSVF6J3PTXEtbxcQlsenQcAii3R+oYLY6ixQ/VzGALq/tLwoLQS6BHy/jhjNTx7NwkjaqV6s/A2aOZeTtPrTyT7He0CvI5fpi/d7uqWWqf45qPPuvNZ7UWISnC1OxJ5Xe7DDYyWi5GZJIHs7n4z7LDMffwpiYhYUyIDxm1fJ+CzbWmuVhCT2WvZX6VUNbrgvj2lyOKhWYbNO4HeNN8BF7J+NkT6qNWIJvaz5NYu3IQsQjLlPdNRFFFH99Arc86t/3uSzpUWpFtc3Rp+plF3CCX2fSUco4p5gmpDMFlBtKUGU05NP4FQiGST9PVS06zS4Mr6IBqxlFjcQrZhNjy3tUQYD9kPvDZzFaeD6W+aUIH6GpJbyH22uwwoHw3yV5b9AXvo2/CJpPU8YKz2WOniLmbLMTdzIi4HofYysF8+BOSEQPaMHw5mby5ehGDf5PnGqgi6yi71aqCLvWMbf0QnvH1ZWtUTqV2SseYpveVPKGKwM0bFrMzJm4BtA0F1maigunogj9bTgCGxQTjIaB7QVuCxETOwo0hEV7DHRMYjxw==]]></Encrypt> </xml>');
