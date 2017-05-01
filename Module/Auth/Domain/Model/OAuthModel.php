@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Auth;
+namespace Module\Auth\Domain\Model;
 
 use Domain\Model\Model;
 

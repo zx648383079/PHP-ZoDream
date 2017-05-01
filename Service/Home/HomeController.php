@@ -6,18 +6,8 @@ use Domain\Model\FeedbackModel;
 
 class HomeController extends Controller {
     public function indexAction() {
-        $hots = BlogModel::findAll([
-            'limit' => 4,
-            'order' => 'comment_count desc'
-        ], 'id, title, description, create_at, comment_count');
-        $news = BlogModel::findAll([
-            'limit' => 6,
-            'order' => 'create_at desc'
-        ], 'id, title, create_at');
         return $this->show('index', array(
             'title' => '首页',
-            'hots' => $hots,
-            'news' => $news,
             'banners' => []
         ));
     }

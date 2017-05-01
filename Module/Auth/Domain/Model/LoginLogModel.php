@@ -1,7 +1,8 @@
 <?php
-namespace Domain\Model\Auth;
+namespace Module\Auth\Domain\Model;
 
 use Zodream\Infrastructure\Http\Request;
+use Domain\Model\Model;
 
 /**
  * Class LoginLogModel

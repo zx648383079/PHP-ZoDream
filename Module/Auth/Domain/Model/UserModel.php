@@ -1,14 +1,13 @@
 <?php
-namespace Domain\Model\Auth;
+namespace Module\Auth\Domain\Model;
 
 use Zodream\Domain\Access\Auth;
-use \Zodream\Domain\Model\UserModel as BaseModel;
+use Zodream\Domain\Model\UserModel as BaseModel;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Security\Hash;
 use Zodream\Infrastructure\Http\Request;
-
 /**
  * Class UserModel
  * @package Domain\Model\Auth
@@ -214,6 +213,31 @@ class UserModel extends BaseModel {
 	public function signInOAuth() {
 		
 	}
+
+	public function signInHeader() {
+        list($this->email, $this->password) = $this->getBasicAuthCredentials();
+        return $this->signIn();
+    }
+
+    protected function getBasicAuthCredentials() {
+        $header = Request::header('Authorization');
+        if (empty($header)) {
+            return [null, null];
+        }
+        if (is_array($header)) {
+            $header = current($header);
+        }
+        if (strpos($header, 'Basic ') !== 0) {
+            return [null, null];
+        }
+        if (!($decoded = base64_decode(substr($header, 6)))) {
+            return [null, null];
+        }
+        if (strpos($decoded, ':') === false) {
+            return [null, null]; // HTTP Basic header without colon isn't valid
+        }
+        return explode(':', $decoded, 2);
+    }
 	
 	public function signUp() {
 		if (!$this->validate($this->signUpRules())) {
