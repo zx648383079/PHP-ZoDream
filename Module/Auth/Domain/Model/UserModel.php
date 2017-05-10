@@ -245,7 +245,7 @@ class UserModel extends BaseModel {
 		}
 		$this->setPassword($this->password);
 		$this->create_at = time();
-		$this->avatar = '/assets/images/avatar/'.random_int(0, 48).'.png';
+		$this->avatar = '/assets/images/avatar/'.StringExpand::randomInt(0, 48).'.png';
 		$this->create_ip = Request::ip();
 		if (!$this->save()) {
 			return false;
