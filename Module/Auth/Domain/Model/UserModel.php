@@ -15,7 +15,7 @@ use Zodream\Infrastructure\Http\Request;
  * @property string $name
  * @property string $email
  * @property string $password
- * @property string $sex
+ * @property integer $sex
  * @property string $avatar
  * @property string $token
  * @property integer $login_num
@@ -52,18 +52,18 @@ class UserModel extends BaseModel {
 	protected function rules() {
 		return array (
 			'name' => 'required|string:3-30',
-			'email' => '|string:3-100',
-			'password' => '|string:3-64',
-			'sex' => 'enum:男,女',
-			'avatar' => '|string:3-200',
-			'token' => '|string:3-60',
-			'login_num' => '|int',
-			'update_ip' => '|string:3-20',
-			'update_at' => '|int',
-			'previous_ip' => '|string:3-20',
-			'previous_at' => '|int',
-			'create_ip' => '|string:3-20',
-			'create_at' => '|int',
+			'email' => 'string:3-100',
+			'password' => 'string:3-64',
+			'sex' => 'int',
+			'avatar' => 'string:3-200',
+			'token' => 'string:3-60',
+			'login_num' => 'int',
+			'update_ip' => 'string:3-20',
+			'update_at' => 'int',
+			'previous_ip' => 'string:3-20',
+			'previous_at' => 'int',
+			'create_ip' => 'string:3-20',
+			'create_at' => 'int',
 		);
 	}
 	
@@ -81,7 +81,7 @@ class UserModel extends BaseModel {
 			'email' => 'required|email',
 			'password' => 'required|string:3-30',
 			'rePassword' => 'validateRePassword',
-			'agree' => ['required', 'message' => '必须同意相关协议！']
+			'agree' => ['validateAgree', 'message' => '必须同意相关协议！']
 		];
 	}
 
@@ -119,6 +119,10 @@ class UserModel extends BaseModel {
 	public function validatePassword($password) {
 		return Hash::verify($password, $this->password);
 	}
+
+	public function validateAgree() {
+	    return !empty($this->agree);
+    }
 
 	public static function findIdentity($id) {
 		return static::findOne(['id' => $id]);
@@ -247,6 +251,7 @@ class UserModel extends BaseModel {
 		$this->create_at = time();
 		$this->avatar = '/assets/images/avatar/'.StringExpand::randomInt(0, 48).'.png';
 		$this->create_ip = Request::ip();
+		$this->sex = 1;
 		if (!$this->save()) {
 			return false;
 		}
