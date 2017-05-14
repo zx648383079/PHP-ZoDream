@@ -9,8 +9,14 @@ use Zodream\Infrastructure\Support\Curl;
 use Zodream\Domain\ThirdParty\WeChat\Aes;
 use Zodream\Domain\ThirdParty\Pay\WeChat;
 
-preg_match('/\w+$/i', '康誉', $match);
-var_dump($match);
+\Zodream\Module\Gzo\Domain\Database\Database::map(function ($item) {
+    $item->map(function ($i) {
+        $i->map(function ($j) {
+            die(var_dump($j));
+        });
+    });
+});
+
 
 /*
 

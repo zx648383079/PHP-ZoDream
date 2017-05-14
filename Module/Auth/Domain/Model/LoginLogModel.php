@@ -48,12 +48,12 @@ class LoginLogModel extends Model {
 	 * @return int
 	 */
 	public static function addLoginLog($user, $status = false, $mode = 1) {
-		return (new static)->add(array(
+		return static::record()->set(array(
 			'ip' => Request::ip(),
 			'user' => $user,
 			'status' => $status,
 			'mode' => $mode,
 			'create_at' => time()
-		));
+		))->insert();
 	}
 }

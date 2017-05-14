@@ -18,12 +18,7 @@ use Zodream\Infrastructure\Http\Request;
  * @property integer $sex
  * @property string $avatar
  * @property string $token
- * @property integer $login_num
- * @property string $update_ip
- * @property integer $update_at
- * @property string $previous_ip
- * @property integer $previous_at
- * @property string $create_ip
+ * @property integer $delete_at
  * @property integer $create_at
  */
 class UserModel extends BaseModel {
@@ -49,7 +44,13 @@ class UserModel extends BaseModel {
 	
 	public $oldPassword = false;
 
-	protected function rules() {
+	public function init() {
+	    $this->on(static::AFTER_LOGIN, function() {
+	        LoginLogModel::addLoginLog($this->name, true);
+        });
+    }
+
+    protected function rules() {
 		return array (
 			'name' => 'required|string:3-30',
 			'email' => 'string:3-100',
@@ -57,12 +58,7 @@ class UserModel extends BaseModel {
 			'sex' => 'int',
 			'avatar' => 'string:3-200',
 			'token' => 'string:3-60',
-			'login_num' => 'int',
-			'update_ip' => 'string:3-20',
-			'update_at' => 'int',
-			'previous_ip' => 'string:3-20',
-			'previous_at' => 'int',
-			'create_ip' => 'string:3-20',
+			'delete_at' => 'int',
 			'create_at' => 'int',
 		);
 	}
@@ -103,11 +99,7 @@ class UserModel extends BaseModel {
 		  'avatar' => 'Avatar',
 		  'token' => 'Token',
 		  'login_num' => 'Login Num',
-		  'update_ip' => 'Update Ip',
-		  'update_at' => 'Update At',
-		  'previous_ip' => 'Previous Ip',
-		  'previous_at' => 'Previous At',
-		  'create_ip' => 'Create Ip',
+		  'delete_at' => 'Previous At',
 		  'create_at' => 'Create At',
 		);
 	}
@@ -184,11 +176,10 @@ class UserModel extends BaseModel {
 			$this->setError('password', '密码错误！');
 			return false;
 		}
-		$user->previous_ip = $user->update_ip;
-		$user->previous_at = $user->update_at;
-		$user->login_num = intval($user->login_num) + 1;
-		$user->update_ip = Request::ip();
-		$user->update_at = time();
+		if (!$user->delete_at > 0) {
+            $this->setError('delete_at', '此用户已被禁止登录！');
+            return false;
+        }
 		if (!empty($this->rememberMe)) {
 			$token = StringExpand::random(10);
 			$user->token = $token;
@@ -247,10 +238,14 @@ class UserModel extends BaseModel {
 		if (!$this->validate($this->signUpRules())) {
 			return false;
 		}
+        $user = $this->findByEmail($this->email);
+        if (!empty($user)) {
+            $this->setError('email', '邮箱已注册！');
+            return false;
+        }
 		$this->setPassword($this->password);
 		$this->create_at = time();
 		$this->avatar = '/assets/images/avatar/'.StringExpand::randomInt(0, 48).'.png';
-		$this->create_ip = Request::ip();
 		$this->sex = 1;
 		if (!$this->save()) {
 			return false;
