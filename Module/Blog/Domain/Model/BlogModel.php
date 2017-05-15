@@ -140,10 +140,14 @@ class BlogModel extends Model {
                     'password'
                 )
             )
-        ))->order('recommend desc')->select('id, title, description, create_at')->limit(5)->all();
+        ))->order('recommend desc')
+            ->select('id, title, description, create_at')
+            ->limit(5)->all();
     }
 
     public function getHotComment() {
-	    return CommentModel::find()->where(['post_id' => $this->id])->order('create_at desc')->limit(5)->all();
+	    return CommentModel::find()
+            ->where(['post_id' => $this->id])
+            ->order('create_at desc')->limit(5)->all();
     }
 }

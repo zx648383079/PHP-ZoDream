@@ -5,14 +5,17 @@ use Module\ModuleController;
 
 class HomeController extends ModuleController {
 
-    public function indexAction($keywords = null,
-                                $category = null,
-                                $sort = 'create_at',
-                                $order = 'desc',
-                                $page = 1,
-                                $size = 20) {
+    public function indexAction(
+        $keywords = null,
+        $category = null,
+        $sort = 'create_at',
+        $order = 'desc',
+        $page = 1,
+        $size = 20) {
 
-        return $this->show();
+        return $this->show([
+
+        ]);
     }
 
     public function detailAction($id) {
