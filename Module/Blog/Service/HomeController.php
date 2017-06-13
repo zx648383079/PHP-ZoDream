@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service;
 
+use Module\Blog\Domain\Model\BlogModel;
 use Module\ModuleController;
 
 class HomeController extends ModuleController {
@@ -12,10 +13,7 @@ class HomeController extends ModuleController {
         $order = 'desc',
         $page = 1,
         $size = 20) {
-
-        return $this->show([
-
-        ]);
+        return $this->show();
     }
 
     public function detailAction($id) {

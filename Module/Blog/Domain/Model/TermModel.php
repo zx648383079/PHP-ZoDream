@@ -6,8 +6,9 @@ use Domain\Model\Model;
  * Class TermModel
  * @property integer $id
  * @property string $name
- * @property string $slug
- * @property integer $group
+ * @property string $keywords
+ * @property string $description
+ * @property integer $create_at
  */
 class TermModel extends Model {
 	public static function tableName() {
@@ -17,8 +18,9 @@ class TermModel extends Model {
 	protected function rules() {
 		return [
             'name' => 'required|string:3-200',
-            'slug' => 'string:3-200',
-            'group' => 'int',
+            'keywords' => 'string:3-200',
+            'description' => 'string:3-200',
+            'create_at' => 'int',
         ];
 	}
 
@@ -26,8 +28,9 @@ class TermModel extends Model {
 		return [
             'id' => 'Id',
             'name' => 'Name',
-            'slug' => 'Slug',
-            'group' => 'Group',
+            'description' => 'description',
+            'keywords' => 'keywords',
+            'create_at' => 'create_at'
         ];
 	}
 

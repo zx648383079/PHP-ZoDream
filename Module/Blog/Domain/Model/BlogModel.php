@@ -7,22 +7,15 @@ use Domain\Model\Model;
 * @property integer $id
 * @property string $title
 * @property string $content
+ * @property integer $term_id
 * @property integer $user_id
 * @property integer $update_at
 * @property integer $create_at
 * @property string $description
 * @property string $status
 * @property string $comment_status
-* @property string $ping_status
-* @property string $password
-* @property string $name
-* @property string $to_ping
-* @property string $pinged
-* @property integer $parent
-* @property string $guid
 * @property integer $position
 * @property string $type
-* @property string $mime_type
 * @property integer $comment_count
 * @property integer $recommend
 */
@@ -33,26 +26,18 @@ class BlogModel extends Model {
 
     protected function rules() {
 		return array (
-		  'title' => 'required|string:3-255',
-		  'content' => 'required',
-		  'user_id' => 'required|int',
-		  'update_at' => '|int',
-		  'create_at' => '|int',
-		  'description' => 'string:0-255',
-		  'status' => '|string:3-20',
-		  'comment_status' => '|string:3-20',
-		  'ping_status' => '|string:3-20',
-		  'password' => '|string:3-20',
-		  'name' => '|string:3-200',
-		  'to_ping' => '',
-		  'pinged' => '',
-		  'parent' => '|int',
-		  'guid' => '|string:3-255',
-		  'position' => '|int',
-		  'type' => '|string:3-20',
-		  'mime_type' => '|string:3-20',
-		  'comment_count' => '|int',
-		  'recommend' => '|int',
+            'title' => 'required|string:3-255',
+            'content' => 'required',
+            'user_id' => 'required|int',
+            'term_id' => 'required|int',
+            'update_at' => '|int',
+            'create_at' => '|int',
+            'description' => 'string:0-255',
+            'status' => '|string:3-20',
+            'comment_status' => '|string:3-20',
+            'position' => '|int',
+            'comment_count' => '|int',
+            'recommend' => '|int',
 		);
 	}
 
