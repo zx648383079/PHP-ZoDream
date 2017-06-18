@@ -40,35 +40,26 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
             <a class="active" href="index.html">最新</a>
             <a href="index.html">最热</a>
         </div>
+        <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
-            <dt><a href="view.html">ggggggggggggggggg</a> <span class="book-time">2017-2-13</span></dt>
+            <dt><a href="<?=$this->url('blog/home/detail', ['id' => $item['id']])?>"><?=$item['title']?></a>
+                <span class="book-time"><?=$item['create_at']?></span></dt>
             <dd>
-                <p>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</p>
-                <span class="author"><i class="fa fa-edit"></i><b>admin</b></span>
-                <span class="category"><i class="fa fa-bookmark"></i><b>fff</b></span>
-                <span class="comment"><i class="fa fa-comments"></i><b>5</b></span>
-                <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
+                <p><?=$item['description']?></p>
+                <span class="author"><i class="fa fa-edit"></i><b><?=$item['user_name']?></b></span>
+                <span class="category"><i class="fa fa-bookmark"></i><b><?=$item['term_name']?></b></span>
+                <span class="comment"><i class="fa fa-comments"></i><b><?=$item['comment_count']?></b></span>
+                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$item['recommend']?></b></span>
             </dd>
         </dl>
-        <dl class="book-item">
-            <dt><a href="view.html">aaa</a> <span class="book-time">5天前</span></dt>
-            <dd>
-                <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-                <span class="author"><i class="fa fa-edit"></i><b>admin</b></span>
-                <span class="category"><i class="fa fa-bookmark"></i><b>fff</b></span>
-                <span class="comment"><i class="fa fa-comments"></i><b>5</b></span>
-                <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
-            </dd>
-        </dl>
+        <?php endforeach;?>
     </div>
     <div class="book-footer">
-        <ul class="book-pager">
-            <li><a href="index.html">1</a></li>
-            <li class="active">2</li>
-            <li><a href="index.html">3</a></li>
-        </ul>
+        <?=$blog_list->getLink([
+            'template' => '<ul class="book-pager">{list}</ul>',
+            'active' => '<li class="active">{text}</li>',
+            'common' => '<li><a href="{url}">{text}</a></li>'
+        ])?>
         <div class="book-clear">
 
         </div>

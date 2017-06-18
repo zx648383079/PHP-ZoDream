@@ -21,25 +21,28 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
 ?>
     <div class="book-title">
         <ul class="book-nav">
-            <li class="book-back"><a href="index.html">返回</a></li>
-            <li><a href="">上一篇</a></li>
-            <li class="active">ggggg</li>
-            <li><a href="">下一篇</a></li>
+            <li class="book-back"><a href="<?=$this->url('blog')?>">返回</a></li>
+            <?php if ($blog->previous):?>
+            <li><a href="<?=$blog->previous->url?>"><?=$blog->previous->title?></a></li>
+            <?php endif;?>
+            <li class="active"><?=$blog->title?></li>
+            <?php if ($blog->next):?>
+            <li><a href="<?=$blog->next->url?>"><?=$blog->next->title?></a></li>
+            <?php endif;?>
         </ul>
     </div>
     <div class="book-body">
         <div class="info">
-            <span class="author"><i class="fa fa-edit"></i><b>admin</b></span>
-            <span class="category"><i class="fa fa-bookmark"></i><b>fff</b></span>
-            <span class="time"><i class="fa fa-calendar-check-o"></i><b>2017-2-12</b></span>
+            <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user_name?></b></span>
+            <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term_name?></b></span>
+            <span class="time"><i class="fa fa-calendar-check-o"></i><b><?=$blog->create_at?></b></span>
         </div>
         <div class="content">
-            hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+            <?=$blog->content?>
         </div>
         <div class="tools">
-            <span class="comment"><i class="fa fa-comments"></i><b>5</b></span>
-            <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-            <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
+            <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
+            <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$blog->recommend?></b></span>
         </div>
     </div>
     <div class="book-footer comment">

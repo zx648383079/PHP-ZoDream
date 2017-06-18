@@ -2,6 +2,8 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Service\Routing\Url;
+
 /**
 * Class PostModel
 * @property integer $id
@@ -67,7 +69,11 @@ class BlogModel extends Model {
 		);
 	}
 
-	public function getPrevious() {
+	public function getUrlAttribute() {
+	    return Url::to('blog/detail', ['id' => $this->id]);
+    }
+
+	public function getPreviousAttribute() {
 	    return $this->find()->where(array(
             'id < '.$this->id,
             'status' => array(
@@ -79,7 +85,7 @@ class BlogModel extends Model {
             )))->order('id desc')->select('id, title, description, create_at')->one();
     }
 
-    public function getNext() {
+    public function getNextAttribute() {
 	    return $this->find()->where(array(
             'id > '.$this->id,
             'status' => array(
