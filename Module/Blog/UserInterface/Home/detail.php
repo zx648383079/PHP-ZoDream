@@ -195,31 +195,22 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
     </div>
     <div class="book-chapter">
         <ul>
-            <li class="active">111111</li>
-            <li>111111</li>
+            <?php foreach ($cat_list as $item): ?>
+                <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+            <?php endforeach; ?>
         </ul>
     </div>
     <div class="book-dynamic">
-        <dl>
-            <dt><a>admin</a> 发布了 《<a>gggggg...</a>》</dt>
-            <dd>
-                <p>dddddddddddd</p>
-                <span class="book-time">刚刚</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt><a>admin</a> 评论了 《<a>aaaaa</a>》</dt>
-            <dd>
-                <p>dddddddddddd</p>
-                <span class="book-time">5秒前</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt><a>admin</a> 赞了 《<a>aaaaa</a>》</dt>
-            <dd>
-                <span class="book-time">2017-2-13</span>
-            </dd>
-        </dl>
+        <?php foreach ($log_list as $log): ?>
+            <dl>
+                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('blog/home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+                <dd>
+                    <p><?=$log['content']?></p>
+                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
+                </dd>
+            </dl>
+        <?php endforeach;?>
     </div>
 
 <?php

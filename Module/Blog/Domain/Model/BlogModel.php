@@ -74,7 +74,7 @@ class BlogModel extends Model {
     }
 
 	public function getPreviousAttribute() {
-	    return $this->find()->where(array(
+	    return static::where(array(
             'id < '.$this->id,
             'status' => array(
                 'in',
@@ -86,7 +86,7 @@ class BlogModel extends Model {
     }
 
     public function getNextAttribute() {
-	    return $this->find()->where(array(
+	    return static::where(array(
             'id > '.$this->id,
             'status' => array(
                 'in',
@@ -99,7 +99,7 @@ class BlogModel extends Model {
     }
 
 	public static function getNew() {
-	    return static::find()->where(array(
+	    return static::where(array(
             'status' => array(
                 'in',
                 array(
@@ -111,7 +111,7 @@ class BlogModel extends Model {
     }
 
     public static function getHot() {
-        return static::find()->where(array(
+        return static::where(array(
             'status' => array(
                 'in',
                 array(
@@ -123,7 +123,7 @@ class BlogModel extends Model {
     }
 
     public static function getBest() {
-        return static::find()->where(array(
+        return static::where(array(
             'status' => array(
                 'in',
                 array(

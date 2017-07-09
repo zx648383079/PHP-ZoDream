@@ -20,8 +20,12 @@ class AuthController extends Controller {
 	}
 
 	public function indexAction() {
-
+        return $this->show();
 	}
+
+	public function loginAction() {
+
+    }
 
 
 

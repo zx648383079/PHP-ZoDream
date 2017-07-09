@@ -66,31 +66,22 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
     </div>
     <div class="book-chapter">
         <ul>
-            <li class="active"><i class="fa fa-bookmark"></i><a href="index.html">111111</a></li>
-            <li><i class="fa fa-bookmark"></i><a href="index.html">111111</a></li>
+            <?php foreach ($cat_list as $item): ?>
+            <li <?=$category == $item->id ? 'class="active"' : '' ?>>
+                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+            <?php endforeach; ?>
         </ul>
     </div>
     <div class="book-dynamic">
+        <?php foreach ($log_list as $log): ?>
         <dl>
-            <dt><a>admin</a> 发布了 《<a href="view.html">gggggg...</a>》</dt>
+            <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('blog/home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
             <dd>
-                <p>dddddddddddd</p>
-                <span class="book-time">刚刚</span>
+                <p><?=$log['content']?></p>
+                <span class="book-time"><?=$this->ago($log['create_at'])?></span>
             </dd>
         </dl>
-        <dl>
-            <dt><a>admin</a> 评论了 《<a href="view.html">aaaaa</a>》</dt>
-            <dd>
-                <p>dddddddddddd</p>
-                <span class="book-time">5秒前</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt><a>admin</a> 赞了 《<a href="view.html">aaaaa</a>》</dt>
-            <dd>
-                <span class="book-time">2017-2-13</span>
-            </dd>
-        </dl>
+    <?php endforeach;?>
     </div>
 <?php
 $this->extend('layout/footer');

@@ -8,15 +8,15 @@ use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
 use Zodream\Infrastructure\Support\Curl;
 use Zodream\Domain\ThirdParty\WeChat\Aes;
 use Zodream\Domain\ThirdParty\Pay\WeChat;
-
-\Zodream\Module\Gzo\Domain\Database\Database::map(function ($item) {
-    $item->map(function ($i) {
-        $i->map(function ($j) {
-            die(var_dump($j));
-        });
-    });
-});
-
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+    header('WWW-Authenticate: Basic realm="My Realm"');
+    header('HTTP/1.0 401 Unauthorized');
+    echo 'Text to send if user hits Cancel button';
+    exit;
+} else {
+    echo "<p>Hello {$_SERVER['PHP_AUTH_USER']}.</p>";
+    echo "<p>You entered {$_SERVER['PHP_AUTH_PW']} as your password.</p>";
+}
 
 /*
 

@@ -1,5 +1,6 @@
 <?php
 namespace Domain\Model;
+
 use Zodream\Infrastructure\Database\Command;
 
 /**
@@ -39,7 +40,7 @@ class OptionModel extends Model {
 	 * @return array
 	 */
 	public static function findOption($where = array()) {
-		$data = static::find()->where($where)->all();
+		$data = static::where($where)->all();
 		$result = [];
 		foreach ($data as $item) {
 			$result[$item['name']] = $item['value'];
