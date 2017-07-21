@@ -1,0 +1,179 @@
+/*!
+ * jquery.datetimer - https://github.com/zx648383079/ZoDream.UI
+ * Version - 1.0
+ * Licensed under the MIT license - http://opensource.org/licenses/MIT
+ *
+ * Copyright (c) 2017 ZoDream
+ */
+@import "prefix";
+@import "scrollbar";
+.datetimer {
+    width: 350px;
+    position: absolute;
+    display: none;
+    z-index: 999;
+    user-select: none;
+    background: #fff;
+    @include prefix-content(user-select, none);
+    .header {
+        position: relative;
+        text-align: center;
+        line-height: 40px;
+        background: #006cff;
+        color: #fff;
+        font-size: 20px;
+        span {
+            width: 60%;
+            display: inline-block;
+        }
+        .previousMonth,
+        .nextYear {
+            margin-left: 10px;
+        }
+    }
+    li {
+        list-style: none;
+    }
+    .body {
+        height: 350px;
+        position: relative;
+        .month-grid, 
+        .year-grid, 
+        .day-grid {
+            background: #fff;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        ol, ul {
+            padding: 0;
+            margin: 0;
+        }
+        .month-grid {
+            ol {
+                background: #eee;
+            }
+            li {
+                display: inline-block;
+                width: 50px;
+                line-height: 50px;
+                text-align: center;
+                box-sizing: border-box;
+            }
+            ul {
+                li {
+                    cursor: pointer;
+                    &.active {
+                        background: #006cff;
+                        color: #fff;
+                    }
+                    &.disable {
+                        color: #ccc;
+                    }
+                }
+            }
+        }
+        .list-group {
+            width: 80px;
+            display: inline-block;
+            ul {
+                height: 300px;
+                li {
+                    line-height: 30px;
+                    &.active {
+                        background: #006cff;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .day-grid {
+            display: none;
+            .list-group {
+                width: 60px;
+                &:first-child {
+                    margin-left: 80px;
+                }
+            }
+        }
+        .year-grid {
+            display: none;
+            .list-group {
+                &:first-child {
+                    margin-left: 90px;
+                }
+            }
+        }
+        .year-grid,
+        .day-grid {
+            .fa-close {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+        }
+    }
+    .footer {
+        background: #eee;
+        position: relative;
+        height: 30px;
+        input {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            box-sizing: border-box;
+            background: transparent;
+        }
+        button {
+            position: absolute;
+            right: 0;
+            width: 100px;
+            background: green;
+            color: #fff;
+            height: 30px;
+            border: none;
+        }
+    }
+}
+
+.list-group {
+    .title,
+    ul {
+        width: 100%;
+        text-align: center;
+    }
+    ul {
+        overflow-y: auto;
+        border: 1px solid #eee;
+        @include scrollbar();
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .datetimer {
+        position: fixed;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        .body {
+            height: 315px;
+            width: 315px;
+            margin: 0 auto;
+            .month-grid {
+                li {
+                    width: 45px;
+                    line-height: 45px;
+                }
+            }
+            .list-group {
+                ul {
+                    height: 290px;
+                }
+            }
+        }
+    }
+}

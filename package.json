@@ -1,0 +1,36 @@
+{
+  "name": "php-zodream",
+  "version": "1.0.0",
+  "description": "zodream.cn",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zx648383079/PHP-ZoDream.git"
+  },
+  "keywords": [
+    "zodream"
+  ],
+  "author": "zodream",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zx648383079/PHP-ZoDream/issues"
+  },
+  "homepage": "https://github.com/zx648383079/PHP-ZoDream#readme",
+  "dependencies": {
+    "@types/jquery": "^3.2.9",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.7.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-tslint": "^8.1.1",
+    "gulp-typescript": "^3.2.1",
+    "gulp-uglify": "^3.0.0",
+    "tslint": "^5.5.0",
+    "typescript": "^2.4.2"
+  }
+}

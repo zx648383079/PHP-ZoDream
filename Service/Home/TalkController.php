@@ -6,7 +6,7 @@ use Infrastructure\HtmlExpand;
 
 class TalkController extends Controller {
 	function indexAction() {
-		$data = TalkModel::find()->order('create_at desc')->all();
+		$data = TalkModel::order('create_at desc')->all();
 		return $this->show(array(
 			'title' => '随想',
 			'data' => HtmlExpand::getTree($data, function($arg, $composer) {
