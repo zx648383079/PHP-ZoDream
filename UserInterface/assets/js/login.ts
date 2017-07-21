@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	if (!$(window.parent.document.body).hasClass('login')) {
+	if (!$(window.parent.document.body).hasClass('login-page')) {
 		window.parent.location.href = window.location.href;
 		return;
 	}

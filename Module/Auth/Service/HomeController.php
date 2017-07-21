@@ -17,13 +17,13 @@ class HomeController extends ModuleController {
             return $this->redirect(Request::get('ReturnUrl', 'index.php'));
         }
         $time = TimeExpand::getBeginAndEndTime(TimeExpand::TODAY);
-        $num = LoginLogModel::count(array(
+        $num = LoginLogModel::where(array(
             'ip' => Request::ip(),
             'status = 0',
             array(
                 'create_at', 'between', $time[0], $time[1]
             )
-        ));
+        ))->count();
         if ($num > 2) {
             $num = intval($num / 3);
             $this->send('code', $num);

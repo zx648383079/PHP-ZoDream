@@ -1,106 +1,32 @@
 <?php
 use Zodream\Domain\View\View;
 /** @var $this View */
-$js = <<<JS
-$(".book-nav").click(function() {
-    $(this).toggleClass("hover");
-});
-$(".book-search").focus(function() {
-    $(this).addClass("focus");
-}).blur(function() {
-    $(this).removeClass("focus");
-});
-$(".book-search .fa-search").click(function() {
-    $(this).parent().addClass("focus");
-});
-JS;
-
-$this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
+$this->extend('layout/header');
 ?>
+    <section class="container">
+        <div class="login">
+            <form class="form-ico login-form" action="<?= $this->url('/auth/home/login') ?>" method="POST">
+                <div class="input-group error">
+                    <input type="text" placeholder="请输入账号" required>
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="请输入密码" required>
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                </div>
 
-    <div class="book-title">
-        <ul class="book-nav">
-            <li>首页</li>
-            <li class="active">博客</li>
-            <li>关于</li>
-            <li class="book-search">
-                <input type="text">
-                <i class="fa fa-search"></i>
-                <ul class="search-tip">
-                    <li>12323123123</li>
-                    <li>12323123123</li>
-                    <li>12323123123</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="book-body">
-        <div class="book-sort">
-            <a href="index.html">推荐</a>
-            <a class="active" href="index.html">最新</a>
-            <a href="index.html">最热</a>
-        </div>
-        <dl class="book-item">
-            <dt><a href="view.html">ggggggggggggggggg</a> <span class="book-time">2017-2-13</span></dt>
-            <dd>
-                <p>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</p>
-                <span class="author"><i class="fa fa-edit"></i><b>admin</b></span>
-                <span class="category"><i class="fa fa-bookmark"></i><b>fff</b></span>
-                <span class="comment"><i class="fa fa-comments"></i><b>5</b></span>
-                <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
-            </dd>
-        </dl>
-        <dl class="book-item">
-            <dt><a href="view.html">aaa</a> <span class="book-time">5天前</span></dt>
-            <dd>
-                <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-                <span class="author"><i class="fa fa-edit"></i><b>admin</b></span>
-                <span class="category"><i class="fa fa-bookmark"></i><b>fff</b></span>
-                <span class="comment"><i class="fa fa-comments"></i><b>5</b></span>
-                <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
-            </dd>
-        </dl>
-    </div>
-    <div class="book-footer">
-        <ul class="book-pager">
-            <li><a href="index.html">1</a></li>
-            <li class="active">2</li>
-            <li><a href="index.html">3</a></li>
-        </ul>
-        <div class="book-clear">
+                <div class="input-group">
+                    <div class="checkbox">
+                        <input type="checkbox" id="checkboxInput"/>
+                        <label for="checkboxInput"></label>
+                    </div>
+                    记住我
+                </div>
 
+                <button type="submit" class="btn">登录</button>
+            </form>
         </div>
-    </div>
-    <div class="book-chapter">
-        <ul>
-            <li class="active"><i class="fa fa-bookmark"></i><a href="index.html">111111</a></li>
-            <li><i class="fa fa-bookmark"></i><a href="index.html">111111</a></li>
-        </ul>
-    </div>
-    <div class="book-dynamic">
-        <dl>
-            <dt><a>admin</a> 发布了 《<a href="view.html">gggggg...</a>》</dt>
-            <dd>
-                <p>dddddddddddd</p>
-                <span class="book-time">刚刚</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt><a>admin</a> 评论了 《<a href="view.html">aaaaa</a>》</dt>
-            <dd>
-                <p>dddddddddddd</p>
-                <span class="book-time">5秒前</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt><a>admin</a> 赞了 《<a href="view.html">aaaaa</a>》</dt>
-            <dd>
-                <span class="book-time">2017-2-13</span>
-            </dd>
-        </dl>
-    </div>
+    </section>
 <?php
 $this->extend('layout/footer');
 ?>
