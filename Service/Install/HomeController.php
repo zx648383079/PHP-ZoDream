@@ -38,7 +38,7 @@ class HomeController extends Controller {
 
     public function dbsAction() {
         Config::setValue('db', Request::post('host,port,database information_schema,user,password'));
-        return $this->ajax([
+        return $this->json([
             'status' => 1,
             'data' => Schema::getAllDatabase()
         ]);
@@ -64,7 +64,7 @@ class HomeController extends Controller {
         }
         Config::getInstance()->reset();
         $generate->importSql(APP_DIR.'/document/zodream.sql');
-        return $this->ajax([
+        return $this->json([
             'status' => 1,
             'url' => (string)Url::to(['complete'])
         ]);

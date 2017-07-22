@@ -1,6 +1,7 @@
 <?php
 /** @var $this \Zodream\Domain\View\View */
 $this->registerCssFile('@font-awesome.min.css')
+    ->registerCssFile('@dialog.css')
     ->registerCssFile('@zodream.css')
     ->registerCssFile('@account.css');
 ?>

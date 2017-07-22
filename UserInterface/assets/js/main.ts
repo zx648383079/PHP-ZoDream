@@ -1,8 +1,8 @@
 let parseAjax = function(data) {
-    if (data.code == 0 && !data.msg) {
-        data.msg = '执行成功！';
+    if (data.code == 200 && !data.message) {
+        data.message = '执行成功！';
     }
-    Dialog.tip(data.msg);
+    Dialog.tip(data.message);
     if (data.data) {
         setTimeout(function() {
             if (data.data.url) {

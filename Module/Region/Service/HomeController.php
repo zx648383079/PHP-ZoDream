@@ -13,21 +13,21 @@ class HomeController extends ModuleController {
     public function saveAction() {
         $model = new RegionModel();
         if ($model->load() && $model->save()) {
-            return $this->ajaxSuccess($model);
+            return $this->jsonSuccess($model);
         }
-        return $this->ajaxFailure($model->getFirstError());
+        return $this->jsonFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         RegionModel::findOne($id)->delete();
-        return $this->ajaxSuccess();
+        return $this->jsonSuccess();
     }
 
     public function childAction($id) {
-        return $this->ajaxSuccess(RegionModel::findAll(['parent_id' =>$id]));
+        return $this->jsonSuccess(RegionModel::findAll(['parent_id' =>$id]));
     }
 
     public function allAction() {
-        return $this->ajaxSuccess(RegionModel::tree());
+        return $this->jsonSuccess(RegionModel::tree());
     }
 }

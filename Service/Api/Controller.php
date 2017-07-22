@@ -18,7 +18,7 @@ abstract class Controller extends RestController {
      * @return Response
      */
 	public function success($data) {
-        return $this->ajax([
+        return $this->json([
             'status' => 'success',
             'code' => 0,
             'data' => $data
@@ -32,7 +32,7 @@ abstract class Controller extends RestController {
      * @return Response
      */
     public function failure($code = 1, $message = null) {
-        return $this->ajax([
+        return $this->json([
             'status' => 'failure',
             'code' => $code,
             'message' => $message

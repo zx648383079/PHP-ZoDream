@@ -51,7 +51,7 @@ class CacheController extends Controller {
 	
 	function clearPost() {
 		Factory::cache()->delete();
-		return $this->ajax([
+		return $this->json([
 			'status' => 'success'
 		]);
 	}

@@ -20,8 +20,8 @@ class RegisterController extends ModuleController {
     public function postAction() {
         $model = new UserModel();
         if ($model->load() && $model->signUp()) {
-            return $this->ajaxSuccess($model);
+            return $this->jsonSuccess($model);
         }
-        return $this->ajaxFailure($model->getError());
+        return $this->jsonFailure($model->getError());
     }
 }

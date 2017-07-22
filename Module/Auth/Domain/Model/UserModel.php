@@ -116,18 +116,35 @@ class UserModel extends BaseModel {
 	    return !empty($this->agree);
     }
 
+    /**
+     * @param $id
+     * @return UserModel|boolean
+     */
 	public static function findIdentity($id) {
-		return static::findOne(['id' => $id]);
+		return static::find($id);
 	}
 
+    /**
+     * @param $name
+     * @return UserModel|boolean
+     */
 	public static function findByName($name) {
-		return static::findOne(['name' => $name]);
+		return static::find(['name' => $name]);
 	}
 
+    /**
+     * @param $email
+     * @return UserModel|boolean
+     */
 	public static function findByEmail($email) {
-		return static::findOne(['email' => $email]);
+		return static::find(['email' => $email]);
 	}
 
+    /**
+     * @param $openId
+     * @param string $type
+     * @return UserModel|boolean
+     */
 	public static function findByOpenId($openId, $type = 'qq') {
 		$user_id = (new Query())
 			->from('user_oauth')
@@ -137,7 +154,7 @@ class UserModel extends BaseModel {
 		if ($user_id === false) {
 			return false;
 		}
-		return static::findOne($user_id);
+		return static::findIdentity($user_id);
 	}
 
 	public function validateCode() {
@@ -176,7 +193,7 @@ class UserModel extends BaseModel {
 			$this->setError('password', '密码错误！');
 			return false;
 		}
-		if (!$user->delete_at > 0) {
+		if ($user->delete_at > 0) {
             $this->setError('delete_at', '此用户已被禁止登录！');
             return false;
         }
@@ -202,13 +219,16 @@ class UserModel extends BaseModel {
 			'id' => 'a.id',
 			'name' => 'a.name'
 		));*/
-		return $this->login($user);
+		return $user->login();
 	}
-	
+
 	public function signInOAuth() {
 		
 	}
 
+    /**
+     * @return UserModel|boolean
+     */
 	public function signInHeader() {
         list($this->email, $this->password) = $this->getBasicAuthCredentials();
         return $this->signIn();
@@ -250,7 +270,7 @@ class UserModel extends BaseModel {
 		if (!$this->save()) {
 			return false;
 		}
-		return $this->login($this);
+		return $this->login();
 	}
 
 	public function resetPassword() {

@@ -41,12 +41,12 @@ class ChatController extends Controller {
 		$model->send_id = Auth::user()['id'];
 		$model->create_at = time();
 		if (!$model->save()) {
-			return $this->ajax(array(
+			return $this->json(array(
 				'status' => 'failure',
 				'error' => '服务器错误！'//EmpireModel::query()->getError()
 			));
 		}
-		return $this->ajax(array(
+		return $this->json(array(
 			'status' => 'success',
 			'time' => TimeExpand::format($data['create_at'])
 		));
@@ -61,7 +61,7 @@ class ChatController extends Controller {
 			),
 			'order' => 'create_at asc'
 		), 'content,create_at');
-		return $this->ajax(array(
+		return $this->json(array(
 			'status' => 'success',
 			'data' => $data,
 			'time' => time()

@@ -110,7 +110,7 @@ class FlowController extends Controller {
 				break;
 		}
 		list($count, $max) = $args;
-		return $this->ajax([
+		return $this->json([
 			'status' => 'success',
 			'data' => $count,
 			'max' => $max,
@@ -119,7 +119,7 @@ class FlowController extends Controller {
 	}
 
 	function osAction() {
-		return $this->ajax([
+		return $this->json([
 			'status' => 'success',
 			'data' => VisitLogModel::geTopOs()
 		]);

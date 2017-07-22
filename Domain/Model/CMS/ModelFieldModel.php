@@ -40,8 +40,8 @@ class ModelFieldModel extends BaseModel {
         return $table->alert();
     }
 
-    public function update($where = null, $args = null) {
-        parent::update($where, $args);
+    public function update() {
+        parent::update();
         $table = $this->getModel()->getContentExtendTable();
         $table->set($this->field)->setOldField($this->_oldData['field'])->comment($this->name);
         return $table->alert();

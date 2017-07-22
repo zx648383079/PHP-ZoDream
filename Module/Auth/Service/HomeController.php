@@ -8,13 +8,14 @@ use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Service\Factory;
+use Zodream\Service\Routing\Url;
 
 class HomeController extends ModuleController {
 
     public function indexAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            return $this->redirect(Request::get('ReturnUrl', 'index.php'));
+            return $this->redirect(Request::get('redirect_uri', '/'));
         }
         $time = TimeExpand::getBeginAndEndTime(TimeExpand::TODAY);
         $num = LoginLogModel::where(array(
@@ -29,38 +30,29 @@ class HomeController extends ModuleController {
             $this->send('code', $num);
             Factory::session()->set('level', $num);
         }
-        return $this->show(array(
-            'title' => '用户登录'
-        ));
+        $redirect_uri = Request::get('redirect_uri');
+        $title = '用户登录';
+        return $this->show(compact('redirect_uri', 'title'));
     }
 
     public function checkAction() {
         list($name, $value) = Request::post('name,value');
         if (!in_array($name, ['username', 'email'])) {
-            return $this->ajax([
-                'code' => 1,
-                'msg' => '查询失败！'
-            ]);
+            return $this->jsonFailure('查询失败！');
         }
         $count = UserModel::find()->where([$name => $value])->count('id')->scalar();
-        return $this->ajax([
-            'code' => 0,
-            'data' => $count > 0
-        ]);
+        return $this->jsonSuccess($count > 0);
     }
 
-    public function loginAction() {
+    public function loginActionJson() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            return $this->ajax([
-                'code' => 0
-            ]);
+            $redirect_uri = Request::get('redirect_uri');
+            return $this->jsonSuccess([
+                'url' => (string)Url::to(empty($redirect_uri) ? '/' : $redirect_uri)
+            ], '登录成功！');
         }
-        return $this->ajax([
-            'code' => 1,
-            'msg' => '登录失败！',
-            'errors' => $user->getError()
-        ]);
+        return $this->jsonFailure($user->getFirstError());
     }
 
 

@@ -13,12 +13,12 @@ class HomeController extends Controller {
 	protected function ajaxReturn($data) {
 		$callback = Request::get('callback');
 		if (is_null($callback)) {
-			return $this->ajax($data, 'JSON');
+			return $this->json($data, 'JSON');
 		}
 		if (preg_match('/^[\w_]+$/', $callback)) {
-			return $this->ajax($data, 'JSONP');
+			return $this->json($data, 'JSONP');
 		}
-		return $this->ajax(array(
+		return $this->json(array(
 			'state'=> 'callback参数不合法'
 		));
 	}
@@ -40,7 +40,7 @@ class HomeController extends Controller {
      */
 	protected function upload($fieldName, $config, $base64 = 'upload') {
 		$upload = new Uploader($fieldName, $config, $base64);
-		return $this->ajaxReturn($upload->getFileInfo());
+		return $this->jsonReturn($upload->getFileInfo());
 	}
 
 	protected function fileList($allowFiles, $listSize, $path) {
@@ -55,7 +55,7 @@ class HomeController extends Controller {
 		$path = APP_DIR . (substr($path, 0, 1) == '/' ? '':'/') . $path;
 		$files = Environment::getfiles($path, $allowFiles);
 		if (!count($files)) {
-			return $this->ajaxReturn(array(
+			return $this->jsonReturn(array(
                 'state' => 'no match file',
                 'list' => array(),
                 'start' => $start,
@@ -75,7 +75,7 @@ class HomeController extends Controller {
 		//for ($i = $end, $list = array(); $i < $len && $i < $end; $i++){
 		//    $list[] = $files[$i];
 		//}
-		return $this->ajaxReturn(array(
+		return $this->jsonReturn(array(
 			'state' => 'SUCCESS',
 			'list' => $list,
 			'start' => $start,
@@ -86,7 +86,7 @@ class HomeController extends Controller {
 	public function indexAction() {
 		$action = strtolower(Request::get('action'));
 		if (is_null($action) || !$this->canRunAction($action)) {
-			return $this->ajaxReturn(array(
+			return $this->jsonReturn(array(
 				'state'=> '请求地址出错'
 			));
 		}
@@ -95,7 +95,7 @@ class HomeController extends Controller {
 	}
 	
 	function configAction() {
-		return $this->ajaxReturn($this->configs);
+		return $this->jsonReturn($this->configs);
 	}
 	
 	/**
@@ -187,7 +187,7 @@ class HomeController extends Controller {
 		}
 		
 		/* 返回抓取数据 */
-		return $this->ajaxReturn(array(
+		return $this->jsonReturn(array(
 				'state'=> count($list) ? 'SUCCESS':'ERROR',
 				'list'=> $list
 		));
