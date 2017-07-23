@@ -16,7 +16,7 @@ class HomeController extends Controller {
 
 	function indexAction() {
 		return $this->show(array(
-			'name' => Auth::user()['name']
+			'name' => Auth::user()->name
 		));
 	}
 

@@ -12,6 +12,12 @@ use Zodream\Service\Routing\Url;
 
 class HomeController extends ModuleController {
 
+    protected function rules() {
+        return [
+            '*' => '?'
+        ];
+    }
+
     public function indexAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
@@ -47,19 +53,12 @@ class HomeController extends ModuleController {
     public function loginActionJson() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            $redirect_uri = Request::get('redirect_uri');
+            $redirect_uri = Request::request('redirect_uri');
             return $this->jsonSuccess([
                 'url' => (string)Url::to(empty($redirect_uri) ? '/' : $redirect_uri)
             ], '登录成功！');
         }
         return $this->jsonFailure($user->getFirstError());
-    }
-
-
-    public function registerAction() {
-        return $this->show(array(
-            'title' => '后台注册'
-        ));
     }
 
     /**

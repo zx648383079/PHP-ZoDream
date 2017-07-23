@@ -3,11 +3,25 @@ defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/header');
 ?>
+<div class="page-header">
+    <ul class="path">
+        <li>
+            <a>首页</a>
+        </li>
+        <li class="active">
+            列表
+        </li>
+    </ul>
+    <div class="title">
+        列表
+    </div>
+</div>
+
 <div>
-    <form method="POST">
+    <form method="POST" class="form-horizontal ajax-form" action="<?=$this->url(['blog/update_term'])?>">
         分类： <input type="text" name="name" placeholder="分类" required>
-        别名： <input type="text" name="slug" placeholder="别名" required>
-        <button type="submit">增加</button>
+        关键字： <input type="text" name="keywords">
+        <button type="submit" class="btn">增加</button>
     </form>
 </div>
 
@@ -16,24 +30,24 @@ $this->extend('layout/header');
     <tr>
         <th>ID</th>
         <th>分类</th>
-        <th>别名</th>
+        <th>关键字</th>
         <th>操作</th>
     </tr>
     </thead>
-    <tbody>
-        <?php foreach ($data as $value) :?>
+    <tbody class="page-body">
+        <?php foreach ($term_list as $value) :?>
             <tr>
-                <form method="POST">
+                <form method="POST" class="ajax-form" action="<?=$this->url(['blog/update_term'])?>">
                     <td><?=$value['id'];?></td>
                     <td>
                         <input type="hidden" name="id" value="<?= $value['id'];?>">
                         <input type="text" name="name" value="<?=$value['name'];?>" placeholder="分类" required>
                     </td>
                     <td>
-                        <input type="text" name="slug" placeholder="别名" value="<?=$value['slug'];?>" required>
+                        <input type="text" name="keywords" placeholder="关键字" value="<?=$value['keywords'];?>">
                     </td>
                     <td>
-                        <button type="submit">修改</button>
+                        <button type="submit" class="btn">修改</button>
                         <a href="#" class="btn">删除</a>
                     </td>
                 </form>
@@ -41,5 +55,5 @@ $this->extend('layout/header');
         <?php endforeach;?>
     </tbody>
 </table>
-
-<?=$this->extend('layout/footer')?>
+</div>
+<?php $this->extend('layout/footer'); ?>

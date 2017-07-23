@@ -237,8 +237,7 @@ class VisitLogModel extends Model {
 			$where = (array)$where;
 		}
 		$where[] = "(INSTR(referer,'?q=') OR INSTR(referer, '?wd=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
-		$data = static::find()->load([
-			'select' => 'referer,COUNT(*) as count',
+		$data = static::select('referer,COUNT(*) as count')->load([
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
@@ -292,17 +291,15 @@ class VisitLogModel extends Model {
 		if (!is_array($where)) {
 			$where = (array)$where;
 		}
-		$allUrls = static::find()->where($where)->select('url')->all();
+		$allUrls = static::where($where)->select('url')->all();
 		$where[] = 'referer NOT LIKE "%'.Url::getHost().'%"';
-		$args = static::find()->load([
-			'select' => 'referer,COUNT(*) as count',
+		$args = static::select('referer,COUNT(*) as count')->load([
 			'where' => $where,
 			'group' => 1,
 			'order' => '2 DESC',
 			'limit' => 20
 		])->all();
-		$urls = static::find()->load([
-			'select' => 'url',
+		$urls = static::where('url')->load([
 			'where' => $where
 		])->all();
 		return [
@@ -335,11 +332,11 @@ class VisitLogModel extends Model {
 				0   //IP
 			];
 		}
-		$args = static::find()->load([
+		$args = static::select($type.'(create_at) as d, COUNT(*) as c')->load([
 			'where' => $where,
 			'group' => 1,
 			'order' => 1
-		])->select($type.'(create_at) as d, COUNT(*) as c')->all();
+		])->all();
 		$max = 0;
 		foreach ($args as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
@@ -351,11 +348,11 @@ class VisitLogModel extends Model {
 			}
 		}
 
-		$uvs = $ips = static::find()->load([
+		$uvs = $ips = static::select($type.'(create_at) as d, session')->load([
 			'where' => $where,
 			'group' => '1,2',
 			'order' => 1
-		])->select($type.'(create_at) as d, session')->all();
+		])->all();
 		foreach ($uvs as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
 				continue;
@@ -363,11 +360,11 @@ class VisitLogModel extends Model {
 			$flowCount[$item['d']][1] ++;
 		}
 
-		$ips = static::find()->load([
+		$ips = static::select($type.'(create_at) as d, ip')->load([
 			'where' => $where,
 			'group' => '1,2',
 			'order' => 1
-		])->select($type.'(create_at) as d, ip')->all();
+		])->all();
 		foreach ($ips as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
 				continue;

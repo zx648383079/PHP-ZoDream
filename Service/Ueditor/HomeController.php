@@ -1,16 +1,16 @@
 <?php
 namespace Service\Ueditor;
 
-use Zodream\Infrastructure\Config;
+use Zodream\Infrastructure\Http\Response;
+use Zodream\Service\Config;
 use Zodream\Infrastructure\Http\Request;
 use Infrastructure\Uploader;
-use Zodream\Infrastructure\Response;
 
 class HomeController extends Controller {
 
 	protected $configs = array();
 
-	protected function ajaxReturn($data) {
+	protected function jsonReturn($data) {
 		$callback = Request::get('callback');
 		if (is_null($callback)) {
 			return $this->json($data, 'JSON');
@@ -85,13 +85,13 @@ class HomeController extends Controller {
 
 	public function indexAction() {
 		$action = strtolower(Request::get('action'));
-		if (is_null($action) || !$this->canRunAction($action)) {
+		if (is_null($action) || !$this->hasMethod($action)) {
 			return $this->jsonReturn(array(
 				'state'=> '请求地址出错'
 			));
 		}
-		$this->configs = Config::getValue('ueditor');
-		return $this->runAction($action);
+		$this->configs = Config::ueditor();
+		return $this->runMethod($action);
 	}
 	
 	function configAction() {

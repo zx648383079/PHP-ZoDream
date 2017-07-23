@@ -209,6 +209,12 @@ $(document).ready(function() {
         numEle.val(num);
         numEle.trigger('change');
     });
+    $(".ajax-form").submit(function() {
+        $.post($(this).attr('action'), $(this).serialize(), function(data) {
+            parseAjax(data);
+        }, 'json');
+        return false;
+    });
     var autoRedirct = function() {
         let ele = $(".autoRedirct");
         if (ele.length < 1) {

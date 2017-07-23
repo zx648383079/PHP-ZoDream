@@ -14,7 +14,9 @@ class RegisterController extends ModuleController {
     }
 
     public function indexAction() {
-        return $this->show();
+        return $this->show(array(
+            'title' => '后台注册'
+        ));
     }
 
     public function postAction() {
