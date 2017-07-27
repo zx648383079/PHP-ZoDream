@@ -1,5 +1,6 @@
 <?php
 namespace Module\Address\Domain\Model;
+
 use Domain\Model\Model;
 /**
  * Class AddressModel
