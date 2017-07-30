@@ -1,5 +1,5 @@
 <?php
-namespace Module\Wechat\Domain\Model;
+namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
 

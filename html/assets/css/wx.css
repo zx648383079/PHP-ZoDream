@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0; }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; }
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.wx-page {
+  width: 960px;
+  margin: 0 auto; }
+  .wx-page .page-left {
+    width: 200px; }
+    .wx-page .page-left > ul > li > a {
+      line-height: 50px;
+      font-size: 20px; }
+      .wx-page .page-left > ul > li > a .fa {
+        top: 16px; }
+  .wx-page .page-content {
+    position: relative; }
+  .wx-page .phone-box {
+    position: absolute;
+    left: 50px; }
+    .wx-page .phone-box .marvel-device .screen {
+      background: #fff; }
+      .wx-page .phone-box .marvel-device .screen .bottom-menu {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        height: 50px;
+        background: #ccc; }
+        .wx-page .phone-box .marvel-device .screen .bottom-menu .fa {
+          position: absolute;
+          left: 7px;
+          font-size: 32px;
+          top: 10px; }
+        .wx-page .phone-box .marvel-device .screen .bottom-menu .menu-content {
+          padding-left: 48px;
+          display: table;
+          width: 100%; }
+          .wx-page .phone-box .marvel-device .screen .bottom-menu .menu-content > ul {
+            display: table-row; }
+            .wx-page .phone-box .marvel-device .screen .bottom-menu .menu-content > ul li {
+              line-height: 50px;
+              list-style: none; }
+              .wx-page .phone-box .marvel-device .screen .bottom-menu .menu-content > ul li ul {
+                position: absolute;
+                bottom: 62px;
+                width: 100%;
+                background: #ccc; }
+            .wx-page .phone-box .marvel-device .screen .bottom-menu .menu-content > ul > li {
+              border-left: 1px solid #999;
+              display: table-cell;
+              position: relative; }
+
+.footer {
+  text-align: center;
+  margin: 50px 0 30px; }
+
+/*# sourceMappingURL=wx.css.map */

@@ -1,5 +1,5 @@
 <?php
-namespace Module\Wechat\Service;
+namespace Module\WeChat\Service;
 
 use Module\ModuleController;
 use Zodream\Domain\ThirdParty\WeChat\Platform\Manage;

@@ -59,6 +59,11 @@
                     display: block;
                 }
             }
+            &.expand {
+                ul {
+                    display: block;
+                }
+            }
             &:hover {
                 >a {
                     background: $primary;

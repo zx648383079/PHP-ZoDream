@@ -8,15 +8,128 @@ use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
 use Zodream\Infrastructure\Support\Curl;
 use Zodream\Domain\ThirdParty\WeChat\Aes;
 use Zodream\Domain\ThirdParty\Pay\WeChat;
-if (!isset($_SERVER['PHP_AUTH_USER'])) {
-    header('WWW-Authenticate: Basic realm="My Realm"');
-    header('HTTP/1.0 401 Unauthorized');
-    echo 'Text to send if user hits Cancel button';
-    exit;
-} else {
-    echo "<p>Hello {$_SERVER['PHP_AUTH_USER']}.</p>";
-    echo "<p>You entered {$_SERVER['PHP_AUTH_PW']} as your password.</p>";
-}
+use Zodream\Service\Config;
+use Zodream\Infrastructure\Mailer\Mailer;
+use Zodream\Infrastructure\Disk\File;
+use Zodream\Infrastructure\Disk\Stream;
+use Zodream\Infrastructure\Database\Query\Record;
+use Zodream\Infrastructure\Database\Command;
+use Zodream\Infrastructure\Database\Query\Query;
+use Zodream\Infrastructure\Database\Schema\Table;
+
+
+/*
+
+Config::getInstance()
+    ->set('db', [
+        'database' => 'sqlcogi',
+        'user' => 'root',
+        'password' => 'root',
+        'prefix' => '',
+    ]);
+
+
+
+
+//Record::moveTo((new Query())
+//    ->from('brandactivity'), [
+//    'fn_1_index' => [
+//        'uid' => 1,
+//        'mid' => '!news',
+//        'catid' => '28',
+//        'status' => 9,
+//        'inputtime' => time()
+//    ],
+//    'fn_1_news' => [
+//        'id' => 'fn_1_index_id',
+//        'catid' => 28,
+//        'title' => 'Title',
+//        'thumb' => '',
+//        'keywords' => '',
+//        'description' => 'Summary',
+//        'uid' => 1,
+//        'author' => '!admin',
+//        'status' => 9,
+//        'url' => function($item) {
+//            return '/index.php?c=show&id='.$item['fn_1_index_id'];
+//        },
+//        'tableid' => 0,
+//        'inputtime' => time(),
+//        'updatetime' => time(),
+//        'displayorder' => 0,
+//    ],
+//    'fn_1_news_data_0' => [
+//        'id' => 'fn_1_index_id',
+//        'uid' => 1,
+//        'catid' => 28,
+//        'content' => 'Content',
+//    ]
+////    ->from('product'), [
+////    'fn_1_index' => [
+////        'uid' => 1,
+////        'mid' => '!goods',
+////        'catid' => '45',
+////        'status' => 9,
+////        'inputtime' => time()
+////    ],
+////    'fn_1_goods' => [
+////        'id' => 'fn_1_index_id',
+////        'catid' => 45,
+////        'title' => 'Title',
+////        'keywords' => 'Keywords',
+////        'thumb' => 0,
+////        'description' => 'Introduction',
+////        'url' => '',
+////        'uid' => 1,
+////        'status' => 9,
+////        'tableid' => 0,
+////        'author' => '!admin',
+////        'inputtime' => time(),
+////        'updatetime' => time(),
+////        'zuoyong' => 'Slogan',
+////        'img' => 0,
+////        'h_img' => 0
+////    ],
+////    'fn_1_goods_data_0' => [
+////        'id' => 'fn_1_index_id',
+////        'uid' => 1,
+////        'catid' => 45,
+////        'price' => 'Price',
+////        'rongliang' => 'Net',
+////        'content' => 'HowToUse',
+////        'fname' => 'TitleEn'
+////    ],
+//]);
+
+
+
+//
+//function saveSql($sql) {
+//    if (strpos($sql, 'INSERT INTO BannerShow (') !== 0
+//        && strpos($sql, 'INSERT INTO BrandActivity (') !== 0) {
+//        echo '跳过<br>';
+//        return;
+//    }
+//    Command::getInstance()->execute($sql);
+//}
+//
+//$file = new Stream('E:\Desktop\script.sql');
+//$file->open('r');
+//$sql = '';
+//while (!$file->isEnd()) {
+//    $line = trim($file->readLine());
+//    if (empty($line)) {
+//        continue;
+//    }
+//    if (strpos($line, 'INSERT INTO') === 0) {
+//        //$file2->writeLine($sql.';');
+//        saveSql($sql);
+//        $sql = '';
+//    }
+//    $sql .= $line.PHP_EOL;
+//}
+//$file->close();
+//echo '完成';
 
 /*
 

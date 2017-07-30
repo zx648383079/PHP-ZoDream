@@ -1,5 +1,5 @@
 <?php
-namespace Module\Wechat;
+namespace Module\WeChat;
 
 use Zodream\Service\Controller\Module as BaseModule;
 

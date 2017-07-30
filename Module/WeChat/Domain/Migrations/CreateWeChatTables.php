@@ -1,14 +1,14 @@
 <?php
-namespace Module\Wechat\Domain\Migrations;
+namespace Module\WeChat\Domain\Migrations;
 
-use Module\Wechat\Domain\Model\FansModel;
-use Module\Wechat\Domain\Model\MediaModel;
-use Module\Wechat\Domain\Model\MessageHistoryModel;
-use Module\Wechat\Domain\Model\ModuleModel;
-use Module\Wechat\Domain\Model\MpUserModel;
-use Module\Wechat\Domain\Model\ReplyRuleKeywordModel;
-use Module\Wechat\Domain\Model\ReplyRuleModel;
-use Module\Wechat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Model\FansModel;
+use Module\WeChat\Domain\Model\MediaModel;
+use Module\WeChat\Domain\Model\MessageHistoryModel;
+use Module\WeChat\Domain\Model\ModuleModel;
+use Module\WeChat\Domain\Model\MpUserModel;
+use Module\WeChat\Domain\Model\ReplyRuleKeywordModel;
+use Module\WeChat\Domain\Model\ReplyRuleModel;
+use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Infrastructure\Database\Migrations\Migration;
 use Zodream\Infrastructure\Database\Schema\Schema;
 use Zodream\Infrastructure\Database\Schema\Table;

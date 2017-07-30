@@ -932,6 +932,8 @@ i.checkbox {
           background: #ff77ff; }
         .navbar ul li.active ul {
           display: block; }
+      .navbar ul li.expand ul {
+        display: block; }
       .navbar ul li:hover > a {
         background: #ff77ff; }
   .navbar > ul.nav-bottom {
