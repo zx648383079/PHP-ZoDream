@@ -6,10 +6,8 @@ namespace Service\Admin;
  */
 
 use Domain\Model\OptionModel;
-use Zodream\Infrastructure\Database\Command;
-use Zodream\Infrastructure\Http\Request\Post;
 
-class OptionController extends Controller {
+class SettingController extends Controller {
 	function indexAction() {
 	    $model = new OptionModel();
 	    if ($model->load() && $model->save()) {
@@ -22,8 +20,8 @@ class OptionController extends Controller {
 	}
 
 	function deleteAction($name) {
-	    $model = new OptionModel();
-        $model->delete(['name' => ':name'], [':name' => $name]);
+	    OptionModel::where(['name' => ':name'], [':name' => $name])
+        ->delete();
         return $this->redirect('option');
     }
 }

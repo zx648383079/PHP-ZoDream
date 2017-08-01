@@ -1,10 +1,11 @@
 <?php
 /** @var $this \Zodream\Domain\View\View */
-$this->registerJsFile('@jquery.min.js');
+$this->registerJsFile('@jquery.min.js')
+    ->registerJsFile('@doc.min.js');
 ?>
-<div class="footer">
+<footer class="page-footer">
     湘ICP备 00000000000
-</div>
+</footer>
 </div>
 <?=$this->footer()?>
 </body>
