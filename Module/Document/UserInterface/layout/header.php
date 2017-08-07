@@ -1,7 +1,8 @@
 <?php
 /** @var $this \Zodream\Domain\View\View */
 $this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@blog.min.css');
+    ->registerCssFile('@zodream.css')
+    ->registerCssFile('@doc.css');
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -12,4 +13,6 @@ $this->registerCssFile('@font-awesome.min.css')
     <?=$this->header()?>
 </head>
 <body>
-<div class="book-skin">
+<header>
+    zodream
+</header>

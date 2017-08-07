@@ -11,7 +11,7 @@ use Zodream\Infrastructure\Database\Command;
 */
 class OptionModel extends Model {
 	public static function tableName() {
-        return 'option';
+        return 'options';
     }
 
     protected $primaryKey = array (
