@@ -2,6 +2,12 @@
   "name" : "ZoDream",
   "description": "ZoDream PPHP Framework",
   "version" : "2.5",
+  "repositories": [
+      {
+          "type": "vcs",
+          "url":  "https://github.com/zodream/fork-helper"
+      }
+  ],
   "require" : {
     "php" : ">=5.4.0",
     "zodream/zodream" : "dev-master",
