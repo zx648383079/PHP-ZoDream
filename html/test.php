@@ -17,7 +17,6 @@ use Zodream\Infrastructure\Database\Command;
 use Zodream\Infrastructure\Database\Query\Query;
 use Zodream\Infrastructure\Database\Schema\Table;
 
-
 /*
 
 Config::getInstance()
