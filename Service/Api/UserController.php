@@ -2,7 +2,7 @@
 namespace Service\Api;
 
 use Zodream\Domain\Filter\DataFilter;
-use Zodream\Domain\Model\UserModel;
+use Zodream\Database\Model\UserModel;
 
 class UserController extends Controller {
     public function rules() {

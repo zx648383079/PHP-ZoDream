@@ -2,7 +2,7 @@
 namespace Module\Auth\Domain\Model;
 
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Model\UserModel as BaseModel;
+use Zodream\Database\Model\UserModel as BaseModel;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\ObjectExpand\StringExpand;

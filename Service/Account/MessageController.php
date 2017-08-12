@@ -5,7 +5,7 @@ namespace Service\Account;
 use Domain\Model\Message\BulletinUserModel;
 use Domain\Model\Message\MessageModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Model\UserModel;
+use Zodream\Database\Model\UserModel;
 
 class MessageController extends Controller {
 

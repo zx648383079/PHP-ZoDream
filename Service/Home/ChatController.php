@@ -4,7 +4,7 @@ namespace Service\Home;
 
 use Domain\Model\Message\ChatModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Model\UserModel;
+use Zodream\Database\Model\UserModel;
 use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Infrastructure\Http\Request;
 

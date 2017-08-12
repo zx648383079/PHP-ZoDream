@@ -7,7 +7,7 @@ namespace Service\Admin;
 
 use Domain\Model\Message\MessageModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Model\UserModel;
+use Zodream\Database\Model\UserModel;
 use Zodream\Infrastructure\Http\Request\Post;
 
 class MessageController extends Controller {

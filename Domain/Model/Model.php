@@ -9,7 +9,7 @@ namespace Domain\Model;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Http\Input\BaseInput;
-use Zodream\Domain\Model\Model as BaseModel;
+use Zodream\Database\Model\Model as BaseModel;
 
 abstract class Model extends BaseModel {
 

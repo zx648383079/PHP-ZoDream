@@ -17,6 +17,8 @@
     "zodream/http" : "dev-master",
     "zodream/thirdparty" : "dev-master",
     "zodream/wechat" : "dev-master",
+    "zodream/database" : "dev-master",
+    "zodream/oauth" : "dev-master",
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpexcel": "^1.8"
   },
