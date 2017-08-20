@@ -9,9 +9,9 @@ use Module\WeChat\Domain\Model\MpUserModel;
 use Module\WeChat\Domain\Model\ReplyRuleKeywordModel;
 use Module\WeChat\Domain\Model\ReplyRuleModel;
 use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\Infrastructure\Database\Migrations\Migration;
-use Zodream\Infrastructure\Database\Schema\Schema;
-use Zodream\Infrastructure\Database\Schema\Table;
+use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Schema\Schema;
+use Zodream\Database\Schema\Table;
 
 class CreateWeChatTables extends Migration {
     /**
