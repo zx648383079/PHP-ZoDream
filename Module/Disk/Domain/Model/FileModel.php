@@ -1,7 +1,8 @@
 <?php
-namespace Domain\Model\Disk;
+namespace Module\Disk\Domain\Model;
 
-use Domain\Model\Model;
+
+use Zodream\Database\Model\Model;
 
 /**
  * Class FileModel 文件数据

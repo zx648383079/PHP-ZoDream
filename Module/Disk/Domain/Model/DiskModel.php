@@ -1,8 +1,7 @@
 <?php
-namespace Domain\Model\Disk;
+namespace Module\Disk\Domain\Model;
 
-
-use Domain\Model\Model;
+use Zodream\Database\Model\Model;
 
 /**
  * Class DiskModel 网盘目录数据
@@ -15,13 +14,34 @@ use Domain\Model\Model;
  * @property integer $left_id 左值
  * @property integer $right_id 右值
  * @property integer $parent_id 上级
- * @property integer $delete_at
- * @property integer $update_at
- * @property integer $create_at
+ * @property integer $deleted_at
+ * @property integer $updated_at
+ * @property integer $created_at
  */
 class DiskModel extends Model {
+
     public static function tableName() {
         return 'disk';
+    }
+
+    public function scopeOfType($query, $type) {
+        switch ($type) {
+            case 1:
+                return $query->andWhere(['extension', 'in', ['png', 'jpg', 'jpeg']]);
+            case 2:
+                return $query->andWhere(['in', 'extension', ['doc', 'docs', 'txt']]);
+            case 3:
+                return $query->andWhere(['in', 'extension', ['avi', 'mp4', 'rmvb']]);
+            case 4:
+                return $query->andWhere(['in', 'extension', ['torrent']]);
+            case 5:
+                return $query->andWhere(['in', 'extension', ['mp3', 'wav', 'ape', 'flac']]);
+            case 6:
+                return $query->andWhere(['is_dir' => 0])
+                    ->andWhere(['not in', 'extension', ['mp4', 'mp4', 'jpeg']]);
+            default:
+                return $query;
+        }
     }
 
     public function moveTo(DiskModel $disk) {

@@ -1,7 +1,7 @@
 <?php
-namespace Domain\Model\Disk;
+namespace Module\Disk\Domain\Model;
 
-use Domain\Model\Model;
+use Zodream\Database\Model\Model;
 
 /**
  * Class ShareUserModel
@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property integer $user_id
  */
 class ShareUserModel extends Model {
+
     public static function tableName() {
         return 'share_user';
     }
