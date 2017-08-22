@@ -6,6 +6,7 @@ use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
+use Zodream\Database\Command;
 use Zodream\Disk\FileSystem;
 use Zodream\Domain\Access\Auth;
 use Zodream\Helpers\Str;
@@ -61,21 +62,21 @@ class DiskController extends Controller {
             return $this->jsonFailure('请不要进行危险操作！');
         }
         $model = new ShareModel();
-        $model->title = Str::substr($disk->name, 0, 36).(count($data['id']) > 1 ? '等'.count($data['id']).'个文件' : null);
+        $model->name = Str::substr($disk->name, 0, 36).(count($data['id']) > 1 ? '等'.count($data['id']).'个文件' : null);
         $model->mode = $data['mode'];
         $model->user_id = $user;
         if ($data['mode'] == 'protected') {
             $data['password'] = $model->password = Str::random(6);
         }
         $model->created_at = time();
-        if (!empty($data['end_at'])) {
-            $model->end_at = strtotime($data['end_at']);
+        if (!empty($data['death_at'])) {
+            $model->death_at = strtotime($data['death_at']);
         }
         if (!$model->save()) {
             return $this->jsonFailure('分享失败');
         }
         $data['url'] = Url::to(['/share', 'id' => $model->id], true);
-        $transaction = Yii::$app->db->beginTransaction();
+        $transaction = Command::getInstance()->beginTransaction();
         try {
             $disks = [];
             foreach ((array)$data['id'] as $item) {
@@ -168,7 +169,7 @@ class DiskController extends Controller {
             return $this->jsonFailure('FILE ERROR!');
         }
         $data['location'] = md5($data['name'].time()).FileSystem::getExtension($data['name'], true);
-        if (!$file->move(Factory::root()->file($this->config['disk'].$data['location']))) {
+        if (!$file->move(Factory::root()->file($this->configs['disk'].$data['location']))) {
             return $this->jsonFailure('MOVE FILE ERROR!');
         }
         $model = new DiskModel();

@@ -10,7 +10,6 @@ use Zodream\Database\Model\Model;
  * @property integer $user_id
  * @property integer $file_id 默认为文件名
  * @property string $name 文件名
- * @property string $extension 文件拓展名
  * @property integer $left_id 左值
  * @property integer $right_id 右值
  * @property integer $parent_id 上级
@@ -20,25 +19,53 @@ use Zodream\Database\Model\Model;
  */
 class DiskModel extends Model {
 
+    const TYPE_IMAGE = 1;
+    const TYPE_DOCUMENT = 2;
+    const TYPE_VIDEO = 3;
+    const TYPE_BT = 4;
+    const TYPE_MUSIC = 5;
+    const TYPE_ZIP = 6;
+
+    public static $extensionMaps = [
+        self::TYPE_IMAGE => [
+            'png', 'jpg', 'jpeg'
+        ],
+        self::TYPE_DOCUMENT => [
+            'doc', 'docs', 'txt'
+        ],
+        self::TYPE_VIDEO => [
+            'avi', 'mp4', 'rmvb'
+        ],
+        self::TYPE_BT => [
+            'torrent'
+        ],
+        self::TYPE_MUSIC => [
+            'mp3', 'wav', 'ape', 'flac'
+        ],
+        self::TYPE_ZIP => [
+            'rar', 'zip', '7z'
+        ]
+    ];
+
+
     public static function tableName() {
         return 'disk';
     }
 
     public function scopeOfType($query, $type) {
         switch ($type) {
-            case 1:
-                return $query->andWhere(['extension', 'in', ['png', 'jpg', 'jpeg']]);
-            case 2:
-                return $query->andWhere(['in', 'extension', ['doc', 'docs', 'txt']]);
-            case 3:
-                return $query->andWhere(['in', 'extension', ['avi', 'mp4', 'rmvb']]);
-            case 4:
-                return $query->andWhere(['in', 'extension', ['torrent']]);
-            case 5:
-                return $query->andWhere(['in', 'extension', ['mp3', 'wav', 'ape', 'flac']]);
-            case 6:
-                return $query->andWhere(['is_dir' => 0])
-                    ->andWhere(['not in', 'extension', ['mp4', 'mp4', 'jpeg']]);
+            case self::TYPE_IMAGE:
+                return $query->andWhere(['extension', 'in', self::$extensionMaps[self::TYPE_IMAGE]]);
+            case self::TYPE_DOCUMENT:
+                return $query->andWhere(['extension', 'in', self::$extensionMaps[self::TYPE_DOCUMENT]]);
+            case self::TYPE_VIDEO:
+                return $query->andWhere(['extension', 'in', self::$extensionMaps[self::TYPE_VIDEO]]);
+            case self::TYPE_MUSIC:
+                return $query->andWhere(['extension', 'in', self::$extensionMaps[self::TYPE_MUSIC]]);
+            case self::TYPE_BT:
+                return $query->andWhere(['extension', 'in', self::$extensionMaps[self::TYPE_BT]]);
+            case self::TYPE_ZIP:
+                return $query->andWhere(['extension', 'in', self::$extensionMaps[self::TYPE_ZIP]]);
             default:
                 return $query;
         }

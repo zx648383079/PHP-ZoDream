@@ -7,7 +7,6 @@ use Zodream\Database\Model\Model;
  * Class ShareModel
  * @package Domain\Model\Disk
  * @property integer $id
- * @property integer $disk_id
  * @property string $name
  * @property integer $mode 分享模式
  * @property string $password
@@ -15,7 +14,7 @@ use Zodream\Database\Model\Model;
  * @property integer $death_at 过期时间
  * @property integer $view_count 查看人数
  * @property integer $down_count 下载人数
- * @property integer $create_at
+ * @property integer $created_at
  */
 class ShareModel extends Model {
 
