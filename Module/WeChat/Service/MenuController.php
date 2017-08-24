@@ -3,6 +3,7 @@ namespace Module\WeChat\Service;
 
 use Module\ModuleController;
 use Zodream\ThirdParty\WeChat\Menu;
+use Zodream\ThirdParty\WeChat\MenuItem;
 
 class MenuController extends ModuleController {
 
@@ -62,6 +63,14 @@ class MenuController extends ModuleController {
 
     public function indexAction() {
         $menus = (new Menu())->getMenu();
+        (new Menu())->create(
+            MenuItem::menu(MenuItem::name('网址')->setUrl('http://zodream.cn'))
+                ->setMenu(
+                    MenuItem::menu(MenuItem::name('点击')->setKey(1))
+                    ->setMenu(MenuItem::name('点击')->setKey(1))
+                )
+                ->setMenu(MenuItem::name('查看')->setMediaId('132123123'))
+        );
         return $this->show(compact('menus'));
     }
 }

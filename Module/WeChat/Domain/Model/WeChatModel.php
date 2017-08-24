@@ -122,8 +122,7 @@ class WeChatModel extends Model {
      */
     public function getApiUrl($scheme = true) {
         return Url::to([
-            '/wechat/message',
-            'id' => $this->id
+            '/wx/message/'.$this->id,
         ], $scheme);
     }
 }
