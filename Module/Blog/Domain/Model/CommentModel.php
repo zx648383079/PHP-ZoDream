@@ -21,6 +21,7 @@ use Domain\Model\Model;
  * @property integer $disagree
  */
 class CommentModel extends Model {
+
 	public static function tableName() {
         return 'comment';
     }
