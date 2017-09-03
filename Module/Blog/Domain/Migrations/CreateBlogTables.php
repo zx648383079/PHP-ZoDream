@@ -23,6 +23,7 @@ class CreateDiskTables extends Migration {
             $table->set('content')->text();
             $table->set('user_id')->int(10);
             $table->set('term_id')->int(10);
+            $table->set('recommend')->int(10)->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -46,15 +47,15 @@ class CreateDiskTables extends Migration {
             $table->set('agree')->int(10)->defaultVal(0);
             $table->set('disagree')->int(10)->defaultVal(0);
             $table->set('approved')->bool()->defaultVal(2);
-            $table->timestamps();
+            $this->set('created_at')->int(10)->unsigned()->defaultVal(0)->null();
         });
         Schema::createTable(BlogLogModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
-            $table->set('blog_id')->int(10)->notNull();
+            $table->set('type')->tinyint(3)->defaultVal(0);
+            $table->set('id_value')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
-            $table->set('content')->int(10)->notNull();
-            $table->timestamps();
+            $this->set('created_at')->int(10)->unsigned()->defaultVal(0)->null();
         });
     }
 

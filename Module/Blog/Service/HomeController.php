@@ -43,11 +43,19 @@ class HomeController extends ModuleController {
         $log_list = BlogLogModel::alias('l')
             ->left('blog b', 'b.id = l.blog_id')
             ->left('user u', 'u.id = l.user_id')
-            ->where(['l.bog_id' => $id])
+            ->where(['l.blog_id' => $id])
             ->order('l.create_at desc')
             ->select('l.*', 'b.title', 'u.name')
             ->limit(5)
             ->all();
         return $this->show(compact('blog', 'log_list', 'cat_list'));
+    }
+
+    public function recommendAction($id) {
+        $id = intval($id);
+        $model = BlogModel::find($id);
+        $model->recommend ++;
+        $model->save();
+        return $this->jsonSuccess($model);
     }
 }

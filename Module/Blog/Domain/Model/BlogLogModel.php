@@ -5,13 +5,14 @@ use Domain\Model\Model;
 /**
  * Class BlogLogModel
  * @property integer $id
- * @property integer $blog_id
+ * @property integer $type
+ * @property integer $id_value
  * @property integer $user_id
  * @property string $action
- * @property string $content
- * @property integer $create_at
+ * @property integer $created_at
  */
 class BlogLogModel extends Model {
+
 	public static function tableName() {
         return 'blog_log';
     }
@@ -21,8 +22,7 @@ class BlogLogModel extends Model {
             'blog_id' => 'required|int',
             'user_id' => 'required|int',
             'action' => 'string:3-30',
-            'content' => 'string:3-45',
-            'create_at' => 'int',
+            'created_at' => 'int',
         ];
 	}
 
@@ -32,8 +32,7 @@ class BlogLogModel extends Model {
             'blog_id' => 'Blog Id',
             'user_id' => 'User Id',
             'action' => 'Action',
-            'content' => 'Content',
-            'create_at' => 'Create At',
+            'created_at' => 'Create At',
         ];
 	}
 
