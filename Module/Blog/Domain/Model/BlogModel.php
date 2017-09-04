@@ -141,4 +141,20 @@ class BlogModel extends Model {
             ->where(['post_id' => $this->id])
             ->order('create_at desc')->limit(5)->all();
     }
+
+    public static function canComment($id) {
+        return static::where([
+                'comment_status' => 0,
+                'id' => $id,
+            ])->count() > 0;
+    }
+
+    public static function canRecommend($id) {
+        return BlogLogModel::where([
+                'user_id' => Auth::id(),
+                'type' => BlogLogModel::TYPE_BLOG,
+                'id_value' => $id,
+                'action' => BlogLogModel::ACTION_RECOMMEND
+            ])->count() < 1;
+    }
 }

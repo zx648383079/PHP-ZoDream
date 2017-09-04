@@ -3,6 +3,7 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\ModuleController;
 
@@ -53,9 +54,12 @@ class HomeController extends ModuleController {
 
     public function recommendAction($id) {
         $id = intval($id);
+        if (!BlogModel::canRecommend($id)) {
+            return $this->jsonFailure('一个用户只能操作一次！');
+        }
         $model = BlogModel::find($id);
         $model->recommend ++;
         $model->save();
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess($model->recommend);
     }
 }

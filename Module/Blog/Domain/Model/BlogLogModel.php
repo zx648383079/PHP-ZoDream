@@ -13,6 +13,14 @@ use Domain\Model\Model;
  */
 class BlogLogModel extends Model {
 
+    const TYPE_BLOG = 0;
+    const TYPE_COMMENT = 1;
+
+    const ACTION_RECOMMEND = 0;
+    const ACTION_AGREE = 1;
+    const ACTION_DISAGREE = 2;
+
+
 	public static function tableName() {
         return 'blog_log';
     }

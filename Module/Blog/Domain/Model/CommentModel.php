@@ -2,6 +2,8 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Domain\Access\Auth;
+
 /**
  * Class CommentModel
  * @property integer $id
@@ -68,5 +70,14 @@ class CommentModel extends Model {
         return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
             ->order('c.create_at desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
             ->limit(5)->asArray()->all();
+    }
+
+    public static function canAgree($id) {
+	    return BlogLogModel::where([
+	        'user_id' => Auth::id(),
+            'type' => BlogLogModel::TYPE_COMMENT,
+            'id_value' => $id,
+            'action' => ['in', [BlogLogModel::ACTION_AGREE, BlogLogModel::ACTION_DISAGREE]]
+        ])->count() < 1;
     }
 }

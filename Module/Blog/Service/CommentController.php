@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service;
 
+use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
@@ -26,6 +27,9 @@ class CommentController extends ModuleController {
 
     public function saveAction() {
         $data = Request::request('name,email,url,content,parent_id,blog_id');
+        if (!BlogModel::canComment($data['blog_id'])) {
+            return $this->jsonFailure('不允许评论！');
+        }
         if (!Auth::guest()) {
             $data['user_id'] = Auth::id();
             $data['name'] = Auth::user()->name;
@@ -36,18 +40,24 @@ class CommentController extends ModuleController {
 
     public function disagreeAction($id) {
         $id = intval($id);
+        if (!CommentModel::canAgree($id)) {
+            return $this->jsonFailure('一个用户只能操作一次！');
+        }
         $model = CommentModel::find($id);
         $model->disagree ++;
         $model->save();
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess($model->disagree);
     }
 
     public function agreeAction($id) {
         $id = intval($id);
+        if (!CommentModel::canAgree($id)) {
+            return $this->jsonFailure('一个用户只能操作一次！');
+        }
         $model = CommentModel::find($id);
         $model->agree ++;
         $model->save();
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess($model->agree);
     }
 
     public function reportAction($id) {
