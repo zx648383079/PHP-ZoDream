@@ -22,14 +22,7 @@ class HomeController extends ModuleController {
             ->select('b.id, b.title, b.description, b.create_at, b.comment_count, b.recommend, b.user_id, b.term_id, t.name as term_name, u.name as user_name')
             ->page();
         $cat_list = TermModel::all();
-        $log_list = BlogLogModel::alias('l')
-            ->left('blog b', 'b.id = l.blog_id')
-            ->left('user u', 'u.id = l.user_id')
-            ->order('l.create_at desc')
-            ->select('l.*', 'b.title', 'u.name')
-            ->limit(5)
-            ->all();
-        return $this->show(compact('blog_list', 'cat_list', 'category', 'log_list'));
+        return $this->show(compact('blog_list', 'cat_list', 'category'));
     }
 
     public function detailAction($id) {

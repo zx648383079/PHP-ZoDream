@@ -9,7 +9,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
-class CreateDiskTables extends Migration {
+class CreateBlogTables extends Migration {
     /**
      * Run the migrations.
      *

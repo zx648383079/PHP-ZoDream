@@ -36,9 +36,13 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
     </div>
     <div class="book-body">
         <div class="book-sort">
-            <a href="index.html">推荐</a>
-            <a class="active" href="index.html">最新</a>
-            <a href="index.html">最热</a>
+            <?php foreach (['recommend' => '推荐', 'new' => '最新', 'hot' => '最热'] as $key => $item):?>
+                <?php if ($key == $sort):?>
+                    <a class="active" href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
+                <?php else:?>
+                    <a href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
+                <?php endif;?>
+            <?php endforeach;?>
         </div>
         <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
