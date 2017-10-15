@@ -8,7 +8,7 @@ use Domain\Model\Model;
  * @property string $name
  * @property string $keywords
  * @property string $description
- * @property integer $create_at
+ * @property integer $created_at
  */
 class TermModel extends Model {
 	public static function tableName() {
@@ -20,7 +20,7 @@ class TermModel extends Model {
             'name' => 'required|string:3-200',
             'keywords' => 'string:3-200',
             'description' => 'string:3-200',
-            'create_at' => 'int',
+            'created_at' => 'int',
         ];
 	}
 
@@ -30,7 +30,7 @@ class TermModel extends Model {
             'name' => 'Name',
             'description' => 'description',
             'keywords' => 'keywords',
-            'create_at' => 'create_at'
+            'created_at' => 'created_at'
         ];
 	}
 

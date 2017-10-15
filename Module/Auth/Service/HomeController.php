@@ -5,8 +5,8 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
+use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\ObjectExpand\TimeExpand;
 use Zodream\Service\Factory;
 use Zodream\Service\Routing\Url;
 
@@ -23,14 +23,10 @@ class HomeController extends ModuleController {
         if ($user->load() && $user->signIn()) {
             return $this->redirect(Request::get('redirect_uri', '/'));
         }
-        $time = TimeExpand::getBeginAndEndTime(TimeExpand::TODAY);
-        $num = LoginLogModel::where(array(
-            'ip' => Request::ip(),
-            'status = 0',
-            array(
-                'create_at', 'between', $time[0], $time[1]
-            )
-        ))->count();
+        $time = Time::getBeginAndEndTime(Time::TODAY);
+        $num = LoginLogModel::where('ip', Request::ip())
+            ->where('status', 0)
+            ->whereBetween('created_at', $time)->count();
         if ($num > 2) {
             $num = intval($num / 3);
             $this->send('code', $num);

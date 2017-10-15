@@ -9,20 +9,28 @@ use Module\ModuleController;
 
 class HomeController extends ModuleController {
 
-    public function indexAction(
-        $keywords = null,
-        $category = null,
-        $sort = 'create_at',
-        $order = 'desc',
-        $page = 1,
-        $size = 20) {
+    public function indexAction($sort = null, $category = null) {
         $blog_list  = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
             ->left('user u', 'u.id = b.user_id')
-            ->select('b.id, b.title, b.description, b.create_at, b.comment_count, b.recommend, b.user_id, b.term_id, t.name as term_name, u.name as user_name')
+            ->select('b.id, b.title, b.description, b.created_at, b.comment_count, b.recommend, b.user_id, b.term_id, t.name as term_name, u.name as user_name')
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('b.term_id', intval($category));
+            })
+            ->when(!empty($sort), function ($query) use ($sort) {
+                if ($sort == 'new') {
+                    return $query->orderBy('b.created_at', 'desc');
+                }
+                if ($sort == 'recommend') {
+                    return $query->orderBy('b.recommend', 'desc');
+                }
+                if ($sort == 'hot') {
+                    return $query->orderBy('b.comment_count', 'desc');
+                }
+            })
             ->page();
         $cat_list = TermModel::all();
-        return $this->show(compact('blog_list', 'cat_list', 'category'));
+        return $this->show(compact('blog_list', 'cat_list', 'sort', 'category'));
     }
 
     public function detailAction($id) {
@@ -30,14 +38,14 @@ class HomeController extends ModuleController {
         $blog = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
             ->left('user u', 'u.id = b.user_id')
-            ->where(['b.id' => intval($id)])
+            ->where('b.id', $id)
             ->select('b.*', 't.name as term_name, u.name as user_name')
             ->one();
-        $cat_list = TermModel::where(['user_id' => $blog['user_id']])->all();
+        $cat_list = TermModel::all();
         $log_list = BlogLogModel::alias('l')
             ->left('blog b', 'b.id = l.blog_id')
             ->left('user u', 'u.id = l.user_id')
-            ->where(['l.blog_id' => $id])
+            ->where('l.blog_id', $id)
             ->order('l.create_at desc')
             ->select('l.*', 'b.title', 'u.name')
             ->limit(5)

@@ -2,7 +2,7 @@
 defined('APP_DIR') || die();
 use Zodream\Service\Routing\Url;
 use Zodream\Service\Config;
-use Zodream\Infrastructure\ObjectExpand\JsonExpand;
+use Zodream\Helpers\Json;
 /** @var $this \Zodream\Domain\View\View */
 $this->title = '后台管理系统';
 ?>
@@ -50,7 +50,7 @@ $this->title = '后台管理系统';
         <script src="/assets/js/admin.min.js"></script>
         <script>
             $(document).ready(function() {
-                window.navbar = $(".navbar").navbar(<?=JsonExpand::encode(Config::menu())?>);
+                window.navbar = $(".navbar").navbar(<?=Json::encode(Config::menu())?>);
                 $(".navbar .navicon").click(function() {
                     $(".navbar").toggleClass("min");
                 });

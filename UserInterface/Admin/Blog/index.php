@@ -9,7 +9,7 @@ $("#page-list").page({
     deleteUrl: '/admin.php/blog/delete',
     updateUrl: '',
     createRow: function(data) {
-        return '<tr data-id="'+data.id+'"><td><i class="checkbox"></i></td><td data-name="title">'+data.title+'</td><td>'+data.term+'</td><td>'+data.create_at+'</td><td><a class="btn" href="/admin.php/blog/detail?id='+data.id+'">编辑</a><a class="btn delete">删除</a></td></tr>';
+        return '<tr data-id="'+data.id+'"><td><i class="checkbox"></i></td><td data-name="title">'+data.title+'</td><td>'+data.term+'</td><td>'+data.created_at+'</td><td><a class="btn" href="/admin.php/blog/detail?id='+data.id+'">编辑</a><a class="btn delete">删除</a></td></tr>';
     }
 });
 JS;

@@ -12,7 +12,7 @@ use Domain\Model\Model;
  * @property string $user
  * @property integer $status
  * @property string $mode
- * @property integer $create_at
+ * @property integer $created_at
  */
 class LoginLogModel extends Model {
 	public static function tableName() {
@@ -25,7 +25,7 @@ class LoginLogModel extends Model {
 		  'user' => 'required|string:3-45',
 		  'status' => 'required|int:0-1',
 		  'mode' => '|string:3-45',
-		  'create_at' => 'required|int',
+		  'created_at' => 'required|int',
 		);
 	}
 
@@ -36,7 +36,7 @@ class LoginLogModel extends Model {
 		  'user' => 'User',
 		  'status' => 'Status',
 		  'mode' => 'Mode',
-		  'create_at' => 'Create At',
+		  'created_at' => 'Create At',
 		);
 	}
 
@@ -53,7 +53,7 @@ class LoginLogModel extends Model {
 			'user' => $user,
 			'status' => $status,
 			'mode' => $mode,
-			'create_at' => time()
+			'created_at' => time()
 		))->insert();
 	}
 }

@@ -3,9 +3,9 @@ namespace Module\Auth\Domain\Model;
 
 use Zodream\Domain\Access\Auth;
 use Zodream\Database\Model\UserModel as BaseModel;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\ObjectExpand\StringExpand;
 use Zodream\Infrastructure\Security\Hash;
 use Zodream\Infrastructure\Http\Request;
 /**
@@ -18,8 +18,8 @@ use Zodream\Infrastructure\Http\Request;
  * @property integer $sex
  * @property string $avatar
  * @property string $token
- * @property integer $delete_at
- * @property integer $create_at
+ * @property integer $deleted_at
+ * @property integer $created_at
  */
 class UserModel extends BaseModel {
 	public static function tableName() {
@@ -58,8 +58,8 @@ class UserModel extends BaseModel {
 			'sex' => 'int',
 			'avatar' => 'string:3-200',
 			'token' => 'string:3-60',
-			'delete_at' => 'int',
-			'create_at' => 'int',
+			'deleted_at' => 'int',
+			'created_at' => 'int',
 		);
 	}
 	
@@ -99,8 +99,8 @@ class UserModel extends BaseModel {
 		  'avatar' => 'Avatar',
 		  'token' => 'Token',
 		  'login_num' => 'Login Num',
-		  'delete_at' => 'Previous At',
-		  'create_at' => 'Create At',
+		  'deleted_at' => 'Previous At',
+		  'created_at' => 'Create At',
 		);
 	}
 
@@ -193,12 +193,12 @@ class UserModel extends BaseModel {
 			$this->setError('password', '密码错误！');
 			return false;
 		}
-		if ($user->delete_at > 0) {
-            $this->setError('delete_at', '此用户已被禁止登录！');
+		if ($user->deleted_at > 0) {
+            $this->setError('deleted_at', '此用户已被禁止登录！');
             return false;
         }
 		if (!empty($this->rememberMe)) {
-			$token = StringExpand::random(10);
+			$token = Str::random(10);
 			$user->token = $token;
 			Cookie::set('token', $token, 3600 * 24 * 30);
 		}
@@ -264,7 +264,7 @@ class UserModel extends BaseModel {
             return false;
         }
 		$this->setPassword($this->password);
-		$this->create_at = time();
+		$this->created_at = time();
 		$this->avatar = '/assets/images/avatar/'.StringExpand::randomInt(0, 48).'.png';
 		$this->sex = 1;
 		if (!$this->save()) {

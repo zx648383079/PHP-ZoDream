@@ -11,8 +11,8 @@ use Zodream\Service\Routing\Url;
 * @property string $content
  * @property integer $term_id
 * @property integer $user_id
-* @property integer $update_at
-* @property integer $create_at
+* @property integer $updated_at
+* @property integer $created_at
 * @property string $description
 * @property string $status
 * @property string $comment_status
@@ -32,8 +32,8 @@ class BlogModel extends Model {
             'content' => 'required',
             'user_id' => 'required|int',
             'term_id' => 'required|int',
-            'update_at' => '|int',
-            'create_at' => '|int',
+            'updated_at' => '|int',
+            'created_at' => '|int',
             'description' => 'string:0-255',
             'status' => '|string:3-20',
             'comment_status' => '|string:3-20',
@@ -49,8 +49,8 @@ class BlogModel extends Model {
 		  'title' => 'Title',
 		  'content' => 'Content',
 		  'user_id' => 'User Id',
-		  'update_at' => 'Update At',
-		  'create_at' => 'Create At',
+		  'updated_at' => 'Update At',
+		  'created_at' => 'Create At',
 		  'description' => '节选',
 		  'status' => 'Status',
 		  'comment_status' => 'Comment Status',

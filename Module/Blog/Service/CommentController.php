@@ -13,11 +13,20 @@ class CommentController extends ModuleController {
         return [
             'index' => '*',
             'save' => '*',
+            'more' => '*',
             '*' => '@',
         ];
     }
 
-    public function indexAction($blog_id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+    public function indexAction($blog_id) {
+        $hot_comments = CommentModel::where([
+            'blog_id' => intval($blog_id),
+            'parent_id' => 0,
+        ])->where('agree', '>', 0)->order('agree desc')->limit(4)->all();
+        return $this->show(compact('hot_comments', 'blog_id'));
+    }
+
+    public function moreAction($blog_id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
         $comment_list = CommentModel::where([
             'blog_id' => intval($blog_id),
             'parent_id' => intval($parent_id)
@@ -62,5 +71,9 @@ class CommentController extends ModuleController {
 
     public function reportAction($id) {
 
+    }
+
+    public function logAction() {
+        CommentModel::alias('c');
     }
 }

@@ -47,7 +47,7 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
         <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
             <dt><a href="<?=$this->url('blog/home/detail', ['id' => $item['id']])?>"><?=$item['title']?></a>
-                <span class="book-time"><?=$item['create_at']?></span></dt>
+                <span class="book-time"><?=$item['created_at']?></span></dt>
             <dd>
                 <p><?=$item['description']?></p>
                 <span class="author"><i class="fa fa-edit"></i><b><?=$item['user_name']?></b></span>

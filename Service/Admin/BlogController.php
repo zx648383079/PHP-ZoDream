@@ -27,24 +27,18 @@ class BlogController extends Controller {
         }
         $page = new Page(BlogModel::where($where));
         $page->setPage(BlogModel::alias('b')
-            ->load(array(
-                'left' => array(
-                    'user u',
-                    'b.user_id = u.id',
-                    'term t',
-                    'b.term_id = t.id'
-                ),
-                'where' => $where,
-                'order' => 'b.create_at desc',
-                'select' => array(
-                    'id' => 'b.id',
-                    'title' => 'b.title',
-                    'user' => 'u.name',
-                    'term' => 't.name',
-                    'comment_count' => 'b.comment_count',
-                    'create_at' => 'b.create_at',
-                )
-            ))->asArray());
+            ->left('user u', 'b.user_id', 'u.id')
+            ->left('term t', 'b.term_id', 't.id')
+            ->order('b.created_at desc')
+            ->where($where)
+            ->select([
+                'id' => 'b.id',
+                'title' => 'b.title',
+                'user' => 'u.name',
+                'term' => 't.name',
+                'comment_count' => 'b.comment_count',
+                'created_at' => 'b.created_at',
+            ])->asArray());
         return $this->jsonSuccess($page);
     }
 
