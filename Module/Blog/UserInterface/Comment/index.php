@@ -89,7 +89,7 @@ use Zodream\Domain\Access\Auth;
             </div>
         </div>
         <?php endif; ?>
-        <textarea placeholder="请输入评论内容"></textarea>
+        <textarea name="content" placeholder="请输入评论内容"></textarea>
         <button class="btn-submit">评论</button>
         <button type="button" class="btn-cancel">取消</button>
     </form>

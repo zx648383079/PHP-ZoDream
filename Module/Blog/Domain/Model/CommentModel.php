@@ -12,7 +12,7 @@ use Zodream\Domain\Access\Auth;
  * @property string $email 评论者邮箱
  * @property string $url 评论者网址
  * @property string $ip 评论者IP
- * @property integer $create_at 评论时间
+ * @property integer $created_at 评论时间
  * @property integer $approved 评论是否被批准
  * @property integer $agent 评论者的USER AGENT
  * @property integer $type 评论类型(pingback/普通)

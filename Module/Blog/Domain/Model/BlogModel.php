@@ -70,76 +70,52 @@ class BlogModel extends Model {
 	}
 
 	public function getUrlAttribute() {
-	    return Url::to('blog/detail', ['id' => $this->id]);
+	    return Url::to('blog/home/detail', ['id' => $this->id]);
     }
 
 	public function getPreviousAttribute() {
-	    return static::where(array(
-            'id < '.$this->id,
-            'status' => array(
-                'in',
-                array(
-                    'publish',
-                    'password'
-                )
-            )))->order('id desc')->select('id, title, description, create_at')->one();
+	    return static::where('id', '<', $this->id)
+            ->whereIn('status', array(
+                'publish',
+                'password'
+            ))->order('id desc')->select('id, title, description, created_at')->one();
     }
 
     public function getNextAttribute() {
-	    return static::where(array(
-            'id > '.$this->id,
-            'status' => array(
-                'in',
-                array(
-                    'publish',
-                    'password'
-                )
-            )
-        ))->order('id asc')->select('id, title, description, create_at')->one();
+	    return static::where('id', '>', $this->id)
+            ->whereIn('status', array(
+                'publish',
+                'password'
+            ))->order('id asc')->select('id, title, description, created_at')->one();
     }
 
 	public static function getNew() {
-	    return static::where(array(
-            'status' => array(
-                'in',
-                array(
-                    'publish',
-                    'password'
-                )
-            )
-        ))->order('create_at desc')->select('id, title, description, create_at')->limit(5)->all();
+	    return static::whereIn('status', array(
+            'publish',
+            'password'
+        ))->order('create_at desc')->select('id, title, description, created_at')->limit(5)->all();
     }
 
     public static function getHot() {
-        return static::where(array(
-            'status' => array(
-                'in',
-                array(
-                    'publish',
-                    'password'
-                )
-            )
-        ))->order('comment_count desc')->select('id, title, description, create_at')->limit(5)->all();
+        return static::whereIn('status', array(
+            'publish',
+            'password'
+        ))->order('comment_count desc')->select('id, title, description, created_at')->limit(5)->all();
     }
 
     public static function getBest() {
-        return static::where(array(
-            'status' => array(
-                'in',
-                array(
-                    'publish',
-                    'password'
-                )
-            )
+        return static::whereIn('status', array(
+            'publish',
+            'password'
         ))->order('recommend desc')
-            ->select('id, title, description, create_at')
+            ->select('id, title, description, created_at')
             ->limit(5)->all();
     }
 
     public function getHotComment() {
 	    return CommentModel::find()
             ->where(['post_id' => $this->id])
-            ->order('create_at desc')->limit(5)->all();
+            ->order('created_at desc')->limit(5)->all();
     }
 
     public static function canComment($id) {
