@@ -2,6 +2,8 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Service\Routing\Url;
+
 /**
  * Class TermModel
  * @property integer $id
@@ -33,5 +35,9 @@ class TermModel extends Model {
             'created_at' => 'created_at'
         ];
 	}
+
+    public function getUrlAttribute() {
+        return Url::to('blog/home', ['category' => $this->id]);
+    }
 
 }

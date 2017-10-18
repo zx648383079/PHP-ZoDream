@@ -1,6 +1,7 @@
 <?php
 use Zodream\Domain\View\View;
 /** @var $this View */
+$this->title = '我的博客';
 $js = <<<JS
 $(".book-nav").click(function() {
     $(this).toggleClass("hover");

@@ -9,6 +9,13 @@ use Module\ModuleController;
 
 class HomeController extends ModuleController {
 
+    protected function rules() {
+        return [
+            'recommend' => '@',
+            '*' => '*'
+        ];
+    }
+
     public function indexAction($sort = null, $category = null) {
         $blog_list  = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
@@ -30,7 +37,8 @@ class HomeController extends ModuleController {
             })
             ->page();
         $cat_list = TermModel::all();
-        return $this->show(compact('blog_list', 'cat_list', 'sort', 'category'));
+        $log_list = [];
+        return $this->show(compact('blog_list', 'cat_list', 'sort', 'category', 'log_list'));
     }
 
     public function detailAction($id) {

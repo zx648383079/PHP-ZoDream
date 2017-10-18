@@ -1,10 +1,22 @@
 <?php
 use Zodream\Domain\View\View;
 /** @var $this View */
+$this->title = $blog->title;
 $url = (string)$this->url(['blog/comment', 'blog_id' => $blog->id]);
+$recommendUrl = (string)$this->url(['blog/home/recommend', 'id' => $blog->id]);
 $js = <<<JS
     $.get('{$url}', function(html) {
       $(".book-footer").html(html);
+    });
+    $(".recommend-blog").click(function() {
+      var that = $(this).find('b');
+      $.getJSON('{$recommendUrl}', function(data) {
+        if (data.code == 200) {
+            that.text(data.data);
+            return;
+        }
+        Dialog.tip(data.message);
+      })
     });
 JS;
 
@@ -33,7 +45,7 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
         </div>
         <div class="tools">
             <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
-            <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$blog->recommend?></b></span>
+            <span class="agree recommend-blog"><i class="fa fa-thumbs-o-up"></i><b><?=$blog->recommend?></b></span>
         </div>
     </div>
     <div class="book-footer comment">
