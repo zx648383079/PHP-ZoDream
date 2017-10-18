@@ -21,7 +21,9 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
 
     <div class="book-title">
         <ul class="book-nav">
-            <li>首页</li>
+            <li>
+                <a href="<?=$this->url('/')?>">首页</a>
+            </li>
             <li class="active">博客</li>
             <li>关于</li>
             <li class="book-search">

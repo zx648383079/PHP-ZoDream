@@ -8,7 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?=$this->title?>-<?=$this->tagline?></title>
-    <meta property="qc:admins" content="604324756425156367" />
     <meta name="Keywords" content="<?=$this->keywords?>" />
     <meta name="Description" content="<?=$this->description?>" />
     <meta name="author" content="<?=$this->author?>" />

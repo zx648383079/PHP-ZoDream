@@ -1,0 +1,78 @@
+.metro-grid {
+    width: 250px;
+    margin: 300px auto 500px;
+    .item {
+        display: inline-block;
+        position: relative;
+        .font-gird {
+            width: 250px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all 1s;
+            p {
+                text-align: center;
+                line-height: 50px;
+                font-size: 30px;
+                display: none;
+            }
+            img {
+                width: 250px;
+            }
+        }
+        .back-grid {
+            width: 250px;
+            height: 300px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            transition: all 1s;
+            h3 {
+
+            }
+            .item-content {
+                word-break: break-all;
+            }
+        }
+        &:hover {
+            .font-gird {
+                p {
+                    display: block;
+                }
+            }
+            .back-grid {
+                display: block;
+            }
+        }
+        &.hover-middle {
+            &:hover {
+                .font-gird {
+                    left: -125px;
+                }
+                .back-grid {
+                    left: 125px;
+                }
+            }
+        }
+        &.hover-left {
+            &:hover {
+                .font-gird {
+                    left: -250px;
+                }
+                .back-grid {
+                }
+            }
+        }
+        &.hover-right {
+            &:hover {
+                .font-gird {
+                    
+                }
+                .back-grid {
+                    left: -250px;
+                }
+            }
+        }
+    }
+}

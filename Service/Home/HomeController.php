@@ -7,8 +7,7 @@ use Domain\Model\FeedbackModel;
 class HomeController extends Controller {
     public function indexAction() {
         return $this->show('index', array(
-            'title' => '首页',
-            'banners' => []
+            'title' => '首页'
         ));
     }
 

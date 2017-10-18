@@ -25,9 +25,11 @@ footer {
 
 .left-catelog {
   width: 208px;
-  position: relative;
   vertical-align: baseline;
-  padding: 20px 12px 60px 36px; }
+  padding: 20px 12px 60px 36px;
+  top: auto;
+  position: relative;
+  overflow-y: visible; }
 
 .right-content {
   width: calc(100% - 208px);
