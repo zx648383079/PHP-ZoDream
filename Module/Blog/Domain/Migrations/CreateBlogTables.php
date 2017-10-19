@@ -19,7 +19,9 @@ class CreateBlogTables extends Migration {
         Schema::createTable(BlogModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
             $table->set('title')->varchar(200)->notNull();
-            $table->set('description')->varchar(200);
+            $table->set('description')->varchar();
+            $table->set('keywords')->varchar();
+            $table->set('thumb')->varchar();
             $table->set('content')->text();
             $table->set('user_id')->int(10);
             $table->set('term_id')->int(10);
@@ -32,8 +34,9 @@ class CreateBlogTables extends Migration {
             $table->set('id')->pk();
             $table->set('name')->varchar(40)->notNull();
             $table->set('parent_id')->int(10)->defaultVal(0);
-            $table->set('keywords')->varchar(200);
-            $table->set('description')->varchar(200)->notNull();
+            $table->set('keywords')->varchar();
+            $table->set('description')->varchar();
+            $table->set('thumb')->varchar();
         });
         Schema::createTable(CommentModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
@@ -48,7 +51,7 @@ class CreateBlogTables extends Migration {
             $table->set('agree')->int(10)->defaultVal(0);
             $table->set('disagree')->int(10)->defaultVal(0);
             $table->set('approved')->bool()->defaultVal(2);
-            $this->set('created_at')->int(10)->unsigned()->defaultVal(0)->null();
+            $table->timestamp('created_at');
         });
         Schema::createTable(BlogLogModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
@@ -56,7 +59,7 @@ class CreateBlogTables extends Migration {
             $table->set('id_value')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
-            $this->set('created_at')->int(10)->unsigned()->defaultVal(0)->null();
+            $table->timestamp('created_at');
         });
     }
 

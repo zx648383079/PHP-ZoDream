@@ -145,7 +145,7 @@ class CreateWeChatTables extends Migration {
             $table->set('union_id')->varchar(30)->notNull()->comment('微信ID');
             $table->set('remark')->varchar()->notNull()->comment('备注');
             $table->set('group_id')->smallInt(5)->notNull();
-            $table->set('updated_at')->int(10)->unsigned()->defaultVal(0)->null();
+            $table->timestamp('updated_at');
         });
     }
     /**
@@ -162,7 +162,7 @@ class CreateWeChatTables extends Migration {
             $table->set('module')->varchar(20)->notNull()->comment('处理模块');
             $table->set('message')->text()->notNull()->comment('消息体内容');
             $table->set('type')->varchar(10)->notNull()->comment('发送类型');
-            $table->set('created_at')->int(10)->unsigned()->defaultVal(0)->null();
+            $table->timestamp('created_at');
         });
     }
     /**
