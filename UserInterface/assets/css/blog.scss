@@ -1,9 +1,16 @@
 $defaultColor: #f9cfa6;
+$hoverColor: #d39357;
 $activeColor: #af5d0d;
 @mixin active() {
     background: $activeColor;
     color: #fff;
 }
+
+@mixin hover() {
+    background: $hoverColor;
+    color: #fff;
+}
+
 
 * {
     padding: 0;
@@ -32,6 +39,9 @@ $activeColor: #af5d0d;
                 &.book-back {
                     position: absolute;
                     left: 0;
+                }
+                &.book-navicon {
+                    display: none;
                 }
                 &.book-search {
                     position: absolute;
@@ -78,6 +88,9 @@ $activeColor: #af5d0d;
             &.hover {
                 >li {
                     display: inline-block;
+                    &.book-navicon {
+                        display: none;
+                    }
                 }
             }
         }
@@ -144,6 +157,11 @@ $activeColor: #af5d0d;
                 }
             }
             &:hover {
+                dd {
+                    display: block;
+                }
+            }
+            &:nth-child(2) {
                 dd {
                     display: block;
                 }
@@ -422,4 +440,166 @@ $activeColor: #af5d0d;
     margin-top: 50px;
     padding: 20px;
     text-align: center;
+}
+
+@media screen and (max-width: 1200px) {
+    .book-skin {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    .book-skin {
+        .book-title {
+            .book-nav {
+                >li {
+                    &.book-back {
+                    }
+                    &.book-navicon {
+                        display: inline-block;
+                        position: absolute;
+                        left: 0;
+                        font-size: 30px;
+                        padding: 0 10px;
+                    }
+                    &.book-search {
+                        position: relative;
+                        left: 0;
+                        line-height: 30px;
+                        .fa {
+                            left: 5px;
+                            top: 5px;
+                        }
+                        input {
+                            width: 100%;
+                            box-sizing: border-box;
+                            display: block;
+                            line-height: 30px;
+                        }
+                        .search-tip {
+                            position: static;
+                        }
+                    }
+                }
+                &.hover,
+                &:hover {
+                    >li {
+                        display: none;
+                        &.active,
+                        &.book-navicon {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+        .book-body {
+            margin-right: 0;
+            .content {
+                word-wrap: break-word;
+                word-break: normal;
+                width: 100%;
+                display: block;
+                position: relative;
+                * {
+                    word-break:normal; width:auto; white-space:pre-wrap;word-wrap : break-word ;;
+                }
+            }
+        }
+        .book-chapter {
+            position: static;
+            margin-bottom: 30px;
+            width: 100%;
+            display: none;
+            li {
+                width: 100%;
+                &.active {
+                    width: 100%;
+                    @include active();
+                    &:hover {
+                        width: 100%;
+                    }
+                    a {
+                        color: #fff;
+                    }
+                }
+                &:hover {
+                    width: 100%;
+                    @include hover();
+                }
+            }
+        }
+        .book-dynamic {
+            display: none;
+        }
+        .book-footer {
+            .book-comments {
+                .comment-item {
+                    .actions {
+                        position: static;
+                        text-align: right;
+                        width: 100%;
+                    }
+                }
+            }
+            &.comment {
+                margin-right: 0;
+            }
+            
+        }
+        &.book-collapsed {
+            .book-title {
+                .book-nav {
+                    >li {
+                        &.book-back {
+                        }
+                        &.book-navicon {
+                            .fa {
+                                &:before {
+                                    content: "\f00d";
+                                }
+                            }
+                        }
+                        &.book-search {
+                            display: block;
+                            input {
+                                display: block;
+                            }
+                            .search-tip {
+                                position: static;
+                                display: block;
+                            }
+                        }
+                    }
+                    &.hover,
+                    &:hover {
+                        >li {
+                            display: inline-block;
+                            &.book-search {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+                &.book-mobile-inline {
+                    .book-nav {
+                        >li {
+                            display: block;
+                            line-height: 30px;
+                            &.book-back {
+                                position: static;
+                                font-size: 20px;
+                                font-weight: 700;
+                                text-align: right;
+                                padding-right: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+            .book-chapter {
+                display: block;
+            }
+        }
+    }
 }

@@ -18,12 +18,18 @@ $js = <<<JS
         Dialog.tip(data.message);
       })
     });
+    $(".book-navicon").click(function() {
+        $('.book-skin').toggleClass("book-collapsed");
+    });
 JS;
 
 $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
 ?>
-    <div class="book-title">
+    <div class="book-title book-mobile-inline">
         <ul class="book-nav">
+            <li class="book-navicon">
+                <i class="fa fa-navicon"></i>
+            </li>
             <li class="book-back"><a href="<?=$this->url('blog')?>">返回</a></li>
             <?php if ($blog->previous):?>
             <li><a href="<?=$blog->previous->url?>"><?=$blog->previous->title?></a></li>
@@ -32,6 +38,14 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
             <?php if ($blog->next):?>
             <li><a href="<?=$blog->next->url?>"><?=$blog->next->title?></a></li>
             <?php endif;?>
+        </ul>
+    </div>
+    <div class="book-chapter">
+        <ul>
+            <?php foreach ($cat_list as $item): ?>
+                <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+            <?php endforeach; ?>
         </ul>
     </div>
     <div class="book-body">
@@ -50,14 +64,6 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
     </div>
     <div class="book-footer comment">
         
-    </div>
-    <div class="book-chapter">
-        <ul>
-            <?php foreach ($cat_list as $item): ?>
-                <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
-            <?php endforeach; ?>
-        </ul>
     </div>
     <div class="book-dynamic">
         <?php foreach ($log_list as $log): ?>

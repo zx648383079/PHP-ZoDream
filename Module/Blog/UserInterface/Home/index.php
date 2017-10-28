@@ -2,6 +2,7 @@
 use Zodream\Domain\View\View;
 /** @var $this View */
 $this->title = '我的博客';
+$url = $this->url('blog/home/suggest');
 $js = <<<JS
 $(".book-nav").click(function() {
     $(this).toggleClass("hover");
@@ -12,8 +13,37 @@ $(".book-search").focus(function() {
     $(this).removeClass("focus");
 });
 $(".book-search .fa-search").click(function() {
-    $(this).parent().addClass("focus");
+    var form = $(".book-search");
+    if (form.hasClass('focus')) {
+        $(".book-search form").submit();
+        return;
+    }
+    form.addClass("focus");
 });
+$(".book-navicon").click(function() {
+    $('.book-skin').toggleClass("book-collapsed");
+});
+$(".book-search [name=keywords]").keypress(function() {
+    var keywords = $(this).val();
+    if (!keywords) {
+        return;
+    }
+    $.getJSON('{$url}?keywords=' + keywords, function(data) {
+      if (data.code != 200) {
+          return;
+      }
+      var html = '';
+      $.each(data.data, function(i, item) {
+        html += '<li>'+item+'</li>'
+      });
+      $(".book-search .search-tip").html(html);
+    });
+});
+$(".book-search .search-tip").on('click', 'li', function() {
+  $(".book-search [name=keywords]").val($(this).text());
+  $(".book-search form").submit();
+});
+
 JS;
 
 $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
@@ -21,20 +51,31 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
 
     <div class="book-title">
         <ul class="book-nav">
+            <li class="book-navicon">
+                <i class="fa fa-navicon"></i>
+            </li>
             <li>
                 <a href="<?=$this->url('/')?>">首页</a>
             </li>
-            <li class="active">博客</li>
+            <li class="active">
+                <a href="<?=$this->url('/blog')?>">博客</a></li>
             <li>关于</li>
             <li class="book-search">
-                <input type="text">
-                <i class="fa fa-search"></i>
-                <ul class="search-tip">
-                    <li>12323123123</li>
-                    <li>12323123123</li>
-                    <li>12323123123</li>
-                </ul>
+                <form>
+                    <input type="text" name="keywords" value="<?=$keywords?>">
+                    <i class="fa fa-search"></i>
+                    <ul class="search-tip">
+                    </ul>
+                </form>
             </li>
+        </ul>
+    </div>
+    <div class="book-chapter">
+        <ul>
+            <?php foreach ($cat_list as $item): ?>
+            <li <?=$category == $item->id ? 'class="active"' : '' ?>>
+                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+            <?php endforeach; ?>
         </ul>
     </div>
     <div class="book-body">
@@ -50,7 +91,7 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
         <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
             <dt><a href="<?=$this->url('blog/home/detail', ['id' => $item['id']])?>"><?=$item['title']?></a>
-                <span class="book-time"><?=$item['created_at']?></span></dt>
+                <span class="book-time"><?=$item->created_at?></span></dt>
             <dd>
                 <p><?=$item['description']?></p>
                 <span class="author"><i class="fa fa-edit"></i><b><?=$item['user_name']?></b></span>
@@ -71,14 +112,7 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
 
         </div>
     </div>
-    <div class="book-chapter">
-        <ul>
-            <?php foreach ($cat_list as $item): ?>
-            <li <?=$category == $item->id ? 'class="active"' : '' ?>>
-                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
+
     <div class="book-dynamic">
         <?php foreach ($log_list as $log): ?>
         <dl>

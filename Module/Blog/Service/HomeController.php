@@ -16,7 +16,7 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction($sort = null, $category = null) {
+    public function indexAction($sort = null, $category = null, $keywords = null) {
         $blog_list  = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
             ->left('user u', 'u.id = b.user_id')
@@ -34,11 +34,13 @@ class HomeController extends ModuleController {
                 if ($sort == 'hot') {
                     return $query->orderBy('b.comment_count', 'desc');
                 }
+            })->when(!empty($keywords), function ($query) {
+                BlogModel::search($query, ['b.title']);
             })
             ->page();
         $cat_list = TermModel::all();
         $log_list = [];
-        return $this->show(compact('blog_list', 'cat_list', 'sort', 'category', 'log_list'));
+        return $this->show(compact('blog_list', 'cat_list', 'sort', 'category', 'keywords', 'log_list'));
     }
 
     public function detailAction($id) {
@@ -70,5 +72,12 @@ class HomeController extends ModuleController {
         $model->recommend ++;
         $model->save();
         return $this->jsonSuccess($model->recommend);
+    }
+
+    public function suggestAction($keywords) {
+        $data = BlogModel::when(!empty($keywords), function ($query) {
+           BlogModel::search($query, 'title');
+        })->limit(4)->pluck('title', 'id');
+        return $this->jsonSuccess($data);
     }
 }
