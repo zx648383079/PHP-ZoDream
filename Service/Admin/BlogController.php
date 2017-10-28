@@ -38,7 +38,7 @@ class BlogController extends Controller {
                 'term' => 't.name',
                 'comment_count' => 'b.comment_count',
                 'created_at' => 'b.created_at',
-            ])->asArray());
+            ]));
         return $this->jsonSuccess($page);
     }
 

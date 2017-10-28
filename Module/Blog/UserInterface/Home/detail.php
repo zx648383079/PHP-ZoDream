@@ -5,6 +5,7 @@ $this->title = $blog->title;
 $url = (string)$this->url(['blog/comment', 'blog_id' => $blog->id]);
 $recommendUrl = (string)$this->url(['blog/home/recommend', 'id' => $blog->id]);
 $js = <<<JS
+    SyntaxHighlighter.all();
     $.get('{$url}', function(html) {
       $(".book-footer").html(html);
     });
@@ -23,7 +24,10 @@ $js = <<<JS
     });
 JS;
 
-$this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
+$this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');
+$this->extend('layout/header')
+    ->registerJs($js, View::JQUERY_READY)
+    ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
 ?>
     <div class="book-title book-mobile-inline">
         <ul class="book-nav">

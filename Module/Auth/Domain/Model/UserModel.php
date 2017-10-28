@@ -203,6 +203,7 @@ class UserModel extends BaseModel {
 			Cookie::set('token', $token, 3600 * 24 * 30);
 		}
 		if (!$user->save()) {
+		    $this->setError($user->getError());
 			return false;
 		}
 		/*$user->roles = EmpireModel::query('role_user r')->findAll(array(

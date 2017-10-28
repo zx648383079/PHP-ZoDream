@@ -1,7 +1,6 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\Blog\BlogModel;
 use Domain\Model\FeedbackModel;
 
 class HomeController extends Controller {
