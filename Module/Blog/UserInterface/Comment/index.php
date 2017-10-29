@@ -131,6 +131,16 @@ $(document).ready(function () {
         $(".book-comment-form .title").text("发表评论");
         $(".book-comment-form .btn-submit").text("评论");
     });
+    $("#comment-form").submit(function () {
+        $.post($(this).attr('action'), $(this).serialize(), function (data) {
+            if (data.code == 200) {
+                window.location.reload();
+                return;
+            }
+            alert(data.message);
+        }, 'json');
+        return false;
+    });
     var page = 1;
     getMoreComments(page);
 });

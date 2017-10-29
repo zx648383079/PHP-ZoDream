@@ -27,7 +27,8 @@ class CommentController extends ModuleController {
     }
 
     public function moreAction($blog_id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
-        $comment_list = CommentModel::where([
+        $comment_list = CommentModel::with('replies')
+            ->where([
             'blog_id' => intval($blog_id),
             'parent_id' => intval($parent_id)
         ])->order($sort, $order)->page();
@@ -43,6 +44,7 @@ class CommentController extends ModuleController {
             $data['user_id'] = Auth::id();
             $data['name'] = Auth::user()->name;
         }
+        $data['parent_id'] = intval($data['parent_id']);
         $model = CommentModel::create($data);
         return $this->jsonSuccess($model);
     }

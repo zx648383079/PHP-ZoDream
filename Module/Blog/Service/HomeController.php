@@ -16,7 +16,7 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction($sort = null, $category = null, $keywords = null) {
+    public function indexAction($sort = 'new', $category = null, $keywords = null) {
         $blog_list  = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
             ->left('user u', 'u.id = b.user_id')

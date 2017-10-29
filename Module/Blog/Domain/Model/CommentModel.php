@@ -28,6 +28,51 @@ class CommentModel extends Model {
         return 'comment';
     }
 
+    protected function rules() {
+        return [
+            'content' => 'required',
+            'name' => 'string:3-45',
+            'email' => 'string:3-100',
+            'url' => 'string:3-200',
+            'ip' => 'string:3-20',
+            'created_at' => 'int',
+            'karma' => 'int',
+            'approved' => 'string:3-20',
+            'agent' => 'string:3-255',
+            'type' => 'string:3-20',
+            'parent_id' => 'int',
+            'user_id' => 'int',
+            'blog_id' => 'int',
+            'agree' => 'int',
+            'disagree' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'content' => 'Content',
+            'name' => 'Name',
+            'email' => 'Email',
+            'url' => 'Url',
+            'ip' => 'Ip',
+            'created_at' => 'Created At',
+            'karma' => 'Karma',
+            'approved' => 'Approved',
+            'agent' => 'Agent',
+            'type' => 'Type',
+            'parent_id' => 'Parent Id',
+            'user_id' => 'User Id',
+            'blog_id' => 'Blog Id',
+            'agree' => 'Agree',
+            'disagree' => 'Disagree',
+        ];
+    }
+
+    public function replies() {
+	    return $this->hasMany(static::class, 'parent_id');
+    }
+
     public static function getChildren($postId, $parentId = 0) {
 	    $data = static::find()->alias('c')->left('user u', ['u.id' => 'c.user_id'])
             ->where(['c.post_id' => $postId, 'c.parent_id' => $parentId])
