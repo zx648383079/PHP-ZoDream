@@ -2,10 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Html\Bootstrap\FormWidget;
+use Zodream\Html\Bootstrap\FormWidget;
 use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-/** @var $page \Zodream\Domain\Html\Page */
+/** @var $page \Zodream\Html\Page */
 
 $this->registerJs('require(["admin/account"]);');
 $this->registerCssFile('cropper.min.css');

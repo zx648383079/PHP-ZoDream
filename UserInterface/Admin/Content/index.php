@@ -1,8 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Html\Bootstrap\PanelWidget;
+use Zodream\Html\Bootstrap\PanelWidget;
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Domain\Html\Bootstrap\TableWidget;
+use Zodream\Html\Bootstrap\TableWidget;
 /** @var $this \Zodream\Domain\View\View */
 
 $this->extend('layout/header');

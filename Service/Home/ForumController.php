@@ -9,7 +9,7 @@ use Domain\Model\Forum\ForumModel;
 use Domain\Model\Forum\ThreadModel;
 use Domain\Model\Forum\ThreadPostModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Html\Page;
+use Zodream\Html\Page;
 use Zodream\Domain\Response\Redirect;
 use Zodream\Infrastructure\Http\Request;
 

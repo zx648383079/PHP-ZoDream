@@ -1,15 +1,63 @@
 {
   "name" : "ZoDream",
   "description": "ZoDream PPHP Framework",
-  "version" : "2.5",
+  "version" : "3.0",
   "repositories": [
       {
           "type": "vcs",
           "url":  "https://github.com/zodream/fork-helper"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/zodream"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/disk"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/gzo"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/helpers"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/http"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/thirdparty"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/wechat"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/database"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/oauth"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/route"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/html"
+      },
+      {
+        "type": "vcs",
+        "url":  "https://github.com/zodream/template"
       }
   ],
   "require" : {
-    "php" : ">=5.4.0",
+    "php" : ">=5.6.0",
     "zodream/zodream" : "dev-master",
     "zodream/disk" : "dev-master",
     "zodream/gzo" : "dev-master",
@@ -19,6 +67,9 @@
     "zodream/wechat" : "dev-master",
     "zodream/database" : "dev-master",
     "zodream/oauth" : "dev-master",
+    "zodream/html" : "dev-master",
+    "zodream/route" : "dev-master",
+    "zodream/template" : "dev-master",
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpexcel": "^1.8",
     "tracy/tracy": "^2.4"

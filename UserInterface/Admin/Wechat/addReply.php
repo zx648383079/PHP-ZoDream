@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/header');
 echo \Zodream\Infrastructure\Support\Html::tag('div', 
-    \Zodream\Domain\Html\Bootstrap\FormWidget::begin($data)
+    \Zodream\Html\Bootstrap\FormWidget::begin($data)
         ->hidden('id')
         ->select('type', array(
             'follow' => '关注回复',

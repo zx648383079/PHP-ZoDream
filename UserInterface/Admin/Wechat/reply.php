@@ -4,12 +4,12 @@ use Zodream\Service\Routing\Url;
 use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/header');
-echo \Zodream\Domain\Html\Bootstrap\PanelWidget::show(array(
+echo \Zodream\Html\Bootstrap\PanelWidget::show(array(
     'head' => Html::tag('a', '增加', array(
         'class' => 'btn btn-primary',
         'href' => Url::to('wechat/addReply')
     )),
-    'body' => \Zodream\Domain\Html\Bootstrap\TableWidget::show(array(
+    'body' => \Zodream\Html\Bootstrap\TableWidget::show(array(
         'page' => $page,
         'columns' => array(
             'id' => 'ID',

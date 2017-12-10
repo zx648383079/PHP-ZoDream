@@ -1,9 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
-use Zodream\Domain\Html\Bootstrap\TableWidget;
+use Zodream\Html\Bootstrap\TableWidget;
 /** @var $this \Zodream\Domain\View\View */
-/** @var $page \Zodream\Domain\Html\Page */
+/** @var $page \Zodream\Html\Page */
 $this->title = '';
 $this->extend('layout/header');
 ?>

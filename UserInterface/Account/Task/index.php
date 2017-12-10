@@ -1,10 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Domain\Html\Bootstrap\AccordionWidget;
+use Zodream\Html\Bootstrap\AccordionWidget;
 use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Domain\View\View */
-/** @var $page \Zodream\Domain\Html\Page */
+/** @var $page \Zodream\Html\Page */
 $this->extend([
     'layout/header',
     'layout/navbar'

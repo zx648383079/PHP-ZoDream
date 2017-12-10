@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
-/** @var $page \Zodream\Domain\Html\Page */
+/** @var $page \Zodream\Html\Page */
 $this->title = $title;
 $this->registerCssFile('zodream/blog.css');
 $this->extend([

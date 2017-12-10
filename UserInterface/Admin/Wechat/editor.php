@@ -1,5 +1,5 @@
 <?php
-use Zodream\Domain\Html\Bootstrap\TabWidget;
+use Zodream\Html\Bootstrap\TabWidget;
 echo TabWidget::show([
     'items' => [
         [

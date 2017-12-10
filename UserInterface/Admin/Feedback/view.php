@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Html\Bootstrap\DetailWidget;
+use Zodream\Html\Bootstrap\DetailWidget;
 /** @var $this \Zodream\Domain\View\View */
 /** @var $model \Domain\Model\FeedbackModel */
 $this->title = $model->name;

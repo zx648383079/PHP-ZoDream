@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Html\Bootstrap\FormWidget;
+use Zodream\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
 $this->registerJs('require([\'admin/add\']);');
 $this->registerCssFile('zodream/add.css');

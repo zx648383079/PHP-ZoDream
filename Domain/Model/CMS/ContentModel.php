@@ -1,7 +1,7 @@
 <?php
 namespace Domain\Model\CMS;
 
-use Zodream\Domain\Html\Page;
+use Zodream\Html\Page;
 /**
  * Class ContentModel
  * @package Domain\Model\CMS

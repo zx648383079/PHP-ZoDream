@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
-/** @var $page \Zodream\Domain\Html\Page */
+/** @var $page \Zodream\Html\Page */
 $this->title = $title;
 $this->extend([
     'layout/header',

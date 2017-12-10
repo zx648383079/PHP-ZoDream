@@ -8,7 +8,7 @@ namespace Service\Home;
 use Domain\Model\Question\QuestionAnswerModel;
 use Domain\Model\Question\QuestionModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Html\Page;
+use Zodream\Html\Page;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Infrastructure\Http\Request;
 

@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Html\Bootstrap\PanelWidget;
-use Zodream\Domain\Html\Bootstrap\FormWidget;
+use Zodream\Html\Bootstrap\PanelWidget;
+use Zodream\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/header');
 

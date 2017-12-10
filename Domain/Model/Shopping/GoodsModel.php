@@ -7,7 +7,7 @@ namespace Domain\Model\Shopping;
  * Date: 2016/12/15
  * Time: 19:07
  */
-use Zodream\Domain\Html\Page;
+use Zodream\Html\Page;
 
 /**
  * Class GoodsModel

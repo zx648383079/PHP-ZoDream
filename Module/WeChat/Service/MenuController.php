@@ -62,15 +62,55 @@ class MenuController extends ModuleController {
     ];
 
     public function indexAction() {
-        $menus = (new Menu())->getMenu();
+        //$menus = (new Menu())->getMenu();
+        $menus = json_decode('[
+            {
+                "type": "click", 
+                "name": "今日歌曲", 
+                "key": "V1001_TODAY_MUSIC", 
+                "sub_button": [ ]
+            }, 
+            {
+                "type": "click", 
+                "name": "歌手简介", 
+                "key": "V1001_TODAY_SINGER", 
+                "sub_button": [ ]
+            }, 
+            {
+                "name": "菜单", 
+                "sub_button": [
+                    {
+                        "type": "view", 
+                        "name": "搜索", 
+                        "url": "http://www.soso.com/", 
+                        "sub_button": [ ]
+                    }, 
+                    {
+                        "type": "view", 
+                        "name": "视频", 
+                        "url": "http://v.qq.com/", 
+                        "sub_button": [ ]
+                    }, 
+                    {
+                        "type": "click", 
+                        "name": "赞一下我们", 
+                        "key": "V1001_GOOD", 
+                        "sub_button": [ ]
+                    }
+                ]
+            }
+        ]');
+        return $this->show(compact('menus'));
+    }
+
+    public function updateAction() {
         (new Menu())->create(
             MenuItem::menu(MenuItem::name('网址')->setUrl('http://zodream.cn'))
                 ->setMenu(
                     MenuItem::menu(MenuItem::name('点击')->setKey(1))
-                    ->setMenu(MenuItem::name('点击')->setKey(1))
+                        ->setMenu(MenuItem::name('点击')->setKey(1))
                 )
                 ->setMenu(MenuItem::name('查看')->setMediaId('132123123'))
         );
-        return $this->show(compact('menus'));
     }
 }

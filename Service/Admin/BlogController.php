@@ -7,7 +7,7 @@ namespace Service\Admin;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Html\Page;
+use Zodream\Html\Page;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
@@ -31,6 +31,7 @@ class BlogController extends Controller {
             ->left('term t', 'b.term_id', 't.id')
             ->order('b.created_at desc')
             ->where($where)
+            ->where('b.user_id', Auth::id())
             ->select([
                 'id' => 'b.id',
                 'title' => 'b.title',

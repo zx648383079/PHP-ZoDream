@@ -2,21 +2,28 @@
 define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
-use Zodream\Domain\ThirdParty\WeChat\Message;
-use Zodream\Domain\ThirdParty\WeChat\EventEnum;
-use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
-use Zodream\Infrastructure\Support\Curl;
-use Zodream\Domain\ThirdParty\WeChat\Aes;
-use Zodream\Domain\ThirdParty\Pay\WeChat;
-use Zodream\Service\Config;
-use Zodream\Infrastructure\Mailer\Mailer;
-use Zodream\Infrastructure\Disk\File;
-use Zodream\Infrastructure\Disk\Stream;
-use Zodream\Infrastructure\Database\Query\Record;
-use Zodream\Infrastructure\Database\Command;
-use Zodream\Infrastructure\Database\Query\Query;
-use Zodream\Infrastructure\Database\Schema\Table;
+use Zodream\Http\Curl;
+use Zodream\Service\Routing\Url;
+use Zodream\Module\Gzo\Domain\Opcode\Line;
+use Zodream\Service\Factory;
+use Zodream\Module\Gzo\Domain\Opcode\DecryptDirectory;
+use Zodream\Infrastructure\Security\Des;
 
+
+//Factory::config()->set([
+//    'php_path' => 'D:\phpStudy\php\php-5.6.27-nts\php.exe', // php 执行路径
+//    'temp_dir' => 'F:\Desktop\ecm\temp'                     // 缓存文件夹
+//]);
+//
+//(new DecryptDirectory('F:\Desktop\ecm\src', 'F:\Desktop\ecm\dist'))->decode();
+
+
+
+/*
+
+
+$wechat = new \Zodream\ThirdParty\Pay\WeChat();
+$wechat->callback();
 /*
 
 Config::getInstance()

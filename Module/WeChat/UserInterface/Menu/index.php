@@ -20,7 +20,7 @@ $this->extend('layout/header');
                 <div class="menu-content">
                     <ul>
                         <li>
-                            <span>嘻嘻</span>
+                            <span>111</span>
                             <ul>
                                 <li class="add-menu">+</li>
                                 <li>12312</li>

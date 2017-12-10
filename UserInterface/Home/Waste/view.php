@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Domain\Html\Bootstrap\DetailWidget;
-use Zodream\Domain\Html\Bootstrap\BreadcrumbWidget;
+use Zodream\Html\Bootstrap\DetailWidget;
+use Zodream\Html\Bootstrap\BreadcrumbWidget;
 use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
 $this->title = $title;

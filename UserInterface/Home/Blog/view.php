@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Domain\View\View */
 use Zodream\Domain\Access\Auth;
-use Zodream\Domain\Html\ShareWidget;
+use Zodream\Html\ShareWidget;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Service\Routing\Url;
 

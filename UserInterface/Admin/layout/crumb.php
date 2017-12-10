@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') || die();
 /** @var $this \Zodream\Domain\View\View */
-use Zodream\Domain\Html\Bootstrap\BreadcrumbWidget;
+use Zodream\Html\Bootstrap\BreadcrumbWidget;
 $title = explode('-', $this->title);
 ?>
 <!-- Content Header (Page header) -->

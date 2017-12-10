@@ -3,7 +3,7 @@ use Domain\Model\Advertisement\AdModel;
 use Zodream\Service\Routing\Url;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Domain\Html\Tree;
+use Zodream\Html\Tree;
 /** @var $this Zodream\Domain\View\View */
 ?>
 <!DOCTYPE html>

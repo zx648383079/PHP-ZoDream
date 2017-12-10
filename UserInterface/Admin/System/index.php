@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') || die();
-use Zodream\Domain\Html\Bootstrap\TabWidget;
+use Zodream\Html\Bootstrap\TabWidget;
 /** @var $this \Zodream\Domain\View\View */
 $this->extend('layout/header');
 $this->extend('layout/crumb', [

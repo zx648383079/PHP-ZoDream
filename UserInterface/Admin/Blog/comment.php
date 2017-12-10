@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Domain\View\View */
-/** @var $page \Zodream\Domain\Html\Page */
+/** @var $page \Zodream\Html\Page */
 $this->extend('layout/header');
 ?>
 <form method="GET">
