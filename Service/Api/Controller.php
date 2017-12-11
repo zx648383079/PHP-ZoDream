@@ -2,7 +2,7 @@
 namespace Service\Api;
 
 use Zodream\Infrastructure\Http\Response;
-use Zodream\Service\Controller\RestController;
+use Zodream\Route\Controller\RestController;
 
 abstract class Controller extends RestController {
 

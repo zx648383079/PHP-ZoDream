@@ -6,54 +6,6 @@
       {
           "type": "vcs",
           "url":  "https://github.com/zodream/fork-helper"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/zodream"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/disk"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/gzo"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/helpers"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/http"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/thirdparty"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/wechat"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/database"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/oauth"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/route"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/html"
-      },
-      {
-        "type": "vcs",
-        "url":  "https://github.com/zodream/template"
       }
   ],
   "require" : {
@@ -69,17 +21,17 @@
     "zodream/oauth" : "dev-master",
     "zodream/html" : "dev-master",
     "zodream/route" : "dev-master",
-    "zodream/template" : "dev-master",
+
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpexcel": "^1.8",
-    "tracy/tracy": "^2.4"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "6.*",
     "monolog/monolog": "~1.22",
     "phpmailer/phpmailer": "~5.2",
     "psr/log": "~1.0",
     "shark/simple_html_dom": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.*",
+    "tracy/tracy": "^2.4"
   },
   "autoload" : {
     "psr-4" : {

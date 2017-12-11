@@ -4,7 +4,7 @@ namespace Module\Disk\Service;
 use Module\Disk\Domain\Model\DiskModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Controller\ModuleController;
+use Zodream\Route\Controller\ModuleController;
 
 /**
  * Created by PhpStorm.

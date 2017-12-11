@@ -2,7 +2,7 @@
 namespace Module\WeChat;
 
 use Module\WeChat\Domain\Migrations\CreateWeChatTables;
-use Zodream\Service\Controller\Module as BaseModule;
+use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {
 

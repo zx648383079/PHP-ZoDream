@@ -3,7 +3,7 @@ namespace Service\Admin;
 
 
 use Zodream\Infrastructure\Interfaces\ArrayAble;
-use Zodream\Service\Controller\Controller as BaseController;
+use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 	

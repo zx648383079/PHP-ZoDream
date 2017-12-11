@@ -1,7 +1,7 @@
 <?php
 namespace Service\WeChat;
 
-use Zodream\Service\Controller\Controller as BaseController;
+use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 

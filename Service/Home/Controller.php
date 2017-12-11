@@ -2,7 +2,7 @@
 namespace Service\Home;
 
 use Domain\Model\OptionModel;
-use Zodream\Service\Controller\Controller as BaseController;
+use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 	public function prepare() {
