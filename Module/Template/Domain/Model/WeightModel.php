@@ -4,8 +4,8 @@ namespace Module\Template\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class WeightModel
- * @package Domain\Model\Page
+ * 安装的部件列表
+ * @package Module\Template
  * @property integer $id
  * @property string $name
  * @property string $description
