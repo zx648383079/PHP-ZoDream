@@ -35,6 +35,7 @@ class CreateTemplateTables extends Migration {
             $table->set('title')->varchar(200);
             $table->set('content')->text();
             $table->set('settings')->text();
+            $table->set('is_share')->bool()->defaultVal(0);
             $table->timestamps();
         });
         Schema::createTable(WeightModel::tableName(), function(Table $table) {

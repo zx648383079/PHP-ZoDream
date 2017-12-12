@@ -6,20 +6,9 @@ use Module\ModuleController;
 class HomeController extends ModuleController {
 
     public function indexAction() {
-
+        return $this->show();
     }
 
-    public function addAction($id, $number) {
-
-    }
-
-    public function updateAction($id, $number) {
-
-    }
-
-    public function deleteAction($id) {
-
-    }
 
 
 }
