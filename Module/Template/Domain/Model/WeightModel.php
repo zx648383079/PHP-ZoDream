@@ -58,7 +58,7 @@ class WeightModel extends Model {
             if (!($file instanceof Directory)) {
                 return;
             }
-            $data = json_decode($file->childFile('config.json')->read());
+            $data = json_decode($file->childFile('weight.json')->read());
             if (static::isInstalled($data['name'])) {
                 return;
             }
