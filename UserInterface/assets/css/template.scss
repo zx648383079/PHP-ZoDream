@@ -1,0 +1,33 @@
+.template-edit-page {
+    .template-page-header {
+        
+        .action_list {
+            text-align: right;
+            background: #fcc;
+        }
+    }
+    .template-page-body {
+        position: relative;
+        .template-weight-left {
+            height: 400px;
+            width: 300px;
+        }
+        .template-weight-box {
+            margin-left: 300px;
+        }
+        .template-weight-property {
+
+        }
+    }
+
+
+
+
+
+    &.view-mode {
+        .template-weight-left,
+        .template-weight-property {
+            display: none;
+        }
+    }
+}

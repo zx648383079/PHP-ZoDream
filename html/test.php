@@ -8,6 +8,13 @@ use Zodream\Module\Gzo\Domain\Opcode\Line;
 use Zodream\Service\Factory;
 use Zodream\Module\Gzo\Domain\Opcode\DecryptDirectory;
 use Zodream\Infrastructure\Security\Des;
+use Zodream\Infrastructure\Http\Request;
+use Zodream\Domain\Template\Template;
+
+$template = new Template();
+echo $template->parse('
+{> a=b}
+');
 
 
 //Factory::config()->set([

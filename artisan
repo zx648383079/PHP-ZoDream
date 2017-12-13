@@ -1,4 +1,5 @@
 <?php
+use Zodream\Service\Console;
+
 require_once __DIR__.'/Service/Bootstrap.php';
-define('APP_MODULE', 'Artisan');                            //定义组件名
-\Zodream\Service\Console::main()->send();
+Console::main()->send();
