@@ -4,9 +4,11 @@ namespace Module\Template\Domain\Model;
 use Domain\Model\Model;
 use phpDocumentor\Reflection\Types\Self_;
 use Zodream\Disk\Directory;
+use Zodream\Disk\File;
 use Zodream\Disk\FileException;
 use Zodream\Disk\FileObject;
 use Zodream\Helpers\Str;
+use Zodream\Service\Factory;
 
 /**
  * 安装的部件列表
@@ -17,6 +19,7 @@ use Zodream\Helpers\Str;
  * @property string $thumb
  * @property integer $type
  * @property string $path
+ * @property integer $editable
  */
 class WeightModel extends Model {
 
@@ -25,6 +28,29 @@ class WeightModel extends Model {
 
     public static function tableName() {
         return 'weight';
+    }
+
+
+    protected function rules() {
+        return [
+            'name' => 'required|string:3-30',
+            'description' => 'string:3-200',
+            'thumb' => 'string:3-100',
+            'type' => 'int:0-3',
+            'editable' => 'int:0-1',
+            'path' => 'string:3-200',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'name' => 'Name',
+            'description' => 'Description',
+            'thumb' => 'Thumb',
+            'type' => 'Type',
+            'editable' => 'Editable',
+            'path' => 'Path',
+        ];
     }
 
     public function getPostConfigs() {
@@ -54,17 +80,27 @@ class WeightModel extends Model {
 
     public static function findWeights() {
         $directory = new Directory(dirname(dirname(__DIR__)) . '/UserInterface/weights');
-        $directory->map(function (FileObject $file) {
+        return static::getWeights($directory);
+    }
+
+    protected static function getWeights(Directory $dir) {
+        if ($dir->hasFile('weight.json')) {
+            return [static::getWeightInfo($dir)];
+        }
+        $weights = [];
+        $dir->map(function (FileObject $file) use (&$weights) {
             if (!($file instanceof Directory)) {
                 return;
             }
-            $data = json_decode($file->childFile('weight.json')->read());
-            if (static::isInstalled($data['name'])) {
-                return;
-            }
-            $data['thumb'] = $file->getAbsolute($data['thumb']);
-            static::create($data);
+            $weights = array_merge($weights, static::getWeights($file));
         });
+        return $weights;
+    }
+
+    protected static function getWeightInfo(Directory $directory) {
+        $data = json_decode($directory->childFile('weight.json')->read(), true);
+        $data['path'] = $directory;
+        return $data;
     }
 
     /**
@@ -82,15 +118,21 @@ class WeightModel extends Model {
      * @param $path
      * @param $thumb
      * @param null $description
+     * @param bool $editable  是否允许编辑
      * @param int $type
      * @return static
      */
     public static function install($name,
-                            $path,
-                            $thumb,
-                            $description = null,
-                            $type = self::TYPE_BASIC) {
+                                   $path = null,
+                                   $thumb = null,
+                                   $description = null,
+                                   $editable = true,
+                                   $type = self::TYPE_BASIC) {
+        if (is_array($name)) {
+            extract($name);
+        }
+        $path = (string)$path;
         return static::create(compact('name', 'path',
-            'description', 'type', 'thumb'));
+            'description', 'type', 'thumb', 'editable'));
     }
 }

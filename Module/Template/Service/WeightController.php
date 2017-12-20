@@ -24,4 +24,19 @@ class WeightController extends Controller {
         PageWeightModel::where('id', $id)->delete();
         return $this->jsonSuccess();
     }
+
+    public function thumbAction($id) {
+        WeightModel::find($id);
+    }
+
+    public function installAction() {
+        $data = WeightModel::findWeights();
+        foreach ($data as $item) {
+            if (WeightModel::isInstalled($item['name'])) {
+                continue;
+            }
+            WeightModel::install($item);
+        }
+        return $this->jsonSuccess();
+    }
 }

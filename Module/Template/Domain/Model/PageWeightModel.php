@@ -25,6 +25,37 @@ class PageWeightModel extends Model {
         return 'page_weight';
     }
 
+    protected function rules() {
+        return [
+            'name' => 'required|string:3-100',
+            'weight_name' => 'string:3-30',
+            'parent_id' => 'int',
+            'position' => 'int',
+            'title' => 'string:3-200',
+            'content' => '',
+            'settings' => '',
+            'is_share' => 'int:0-1',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'weight_name' => 'Weight Name',
+            'parent_id' => 'Parent Id',
+            'position' => 'Position',
+            'title' => 'Title',
+            'content' => 'Content',
+            'settings' => 'Settings',
+            'is_share' => 'Is Share',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
     public function weight() {
         return $this->hasOne(WeightModel::class, 'name', 'weight_name');
     }

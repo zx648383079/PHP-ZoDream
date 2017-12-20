@@ -1,0 +1,12 @@
+{
+  "name": "column-2",
+  "thumb": "./thumb.png",
+  "keywords": "二栏式",
+  "description": "二栏式",
+  "author": "zz",
+  "since": "2017-12-12",
+  "version": "v1.0",
+  "copyright": "@zz",
+  "email": "123@12.com",
+  "editable": false
+}

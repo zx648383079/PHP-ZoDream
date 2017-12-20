@@ -16,7 +16,7 @@ class CreateTemplateTables extends Migration {
      */
     public function up() {
         Schema::createTable(PageModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('title')->varchar(200)->notNull()->defaultVal('New Page');
             $table->set('keywords')->varchar(255);
@@ -27,7 +27,7 @@ class CreateTemplateTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(PageWeightModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai(1000);  // 预留id给页面预留不同入口
             $table->set('name')->varchar(100)->notNull();
             $table->set('weight_name')->varchar(30);
             $table->set('parent_id')->int(10);
@@ -39,11 +39,12 @@ class CreateTemplateTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(WeightModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
             $table->set('description')->varchar(200);
             $table->set('thumb')->varchar(100);
             $table->set('type')->tinyint(3);
+            $table->set('editable')->bool()->defaultVal(1);
             $table->set('path')->varchar(200);
         });
     }

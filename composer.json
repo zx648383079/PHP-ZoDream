@@ -21,6 +21,7 @@
     "zodream/oauth" : "dev-master",
     "zodream/html" : "dev-master",
     "zodream/route" : "dev-master",
+    "zodream/template" : "dev-master",
 
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpexcel": "^1.8",
