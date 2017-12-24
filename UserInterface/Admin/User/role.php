@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->extend('layout/header');
 ?>
 <?=Html::a('增加角色', 'user/addRole', ['class' => 'btn'])?>

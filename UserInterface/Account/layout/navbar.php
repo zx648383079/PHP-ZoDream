@@ -2,7 +2,7 @@
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Service\Routing\Url;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 ?>
 <nav class="navbar navbar-default" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->

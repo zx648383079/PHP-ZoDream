@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Html\Bootstrap\AccordionWidget;
 use Zodream\Service\Routing\Url;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */
 $this->extend([
     'layout/header',

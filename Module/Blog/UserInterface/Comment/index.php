@@ -1,5 +1,5 @@
 <?php
-use Zodream\Domain\View\View;
+use Zodream\Template\View;
 use Zodream\Domain\Access\Auth;
 /** @var $this View */
 ?>

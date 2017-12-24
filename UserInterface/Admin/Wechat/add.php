@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $model \Domain\Model\WeChat\WechatModel */
 defined('APP_DIR') or exit();
 $this->extend('layout/header');

@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->registerCssFile('@font-awesome.min.css')
     ->registerCssFile('@devices.min.css')
     ->registerCssFile('@zodream.css')

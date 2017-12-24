@@ -3,7 +3,7 @@ defined('APP_DIR') || die();
 use Zodream\Service\Routing\Url;
 use Zodream\Service\Config;
 use Zodream\Helpers\Json;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->title = '后台管理系统';
 ?>
 <!DOCTYPE html>

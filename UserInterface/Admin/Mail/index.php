@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Html\Bootstrap\FormWidget;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->registerCssFile('zodream/add.css');
 $this->extend('layout/header');
 ?>

@@ -1,5 +1,5 @@
 <?php
-use Zodream\Domain\View\View;
+use Zodream\Template\View;
 /** @var $this View */
 $this->title = '我的博客';
 $url = $this->url('blog/home/suggest');

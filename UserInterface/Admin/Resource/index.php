@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Disk\Directory;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $file \Zodream\Infrastructure\Disk\Directory */
 $children = $file->children();
 $parent = $file->parent()->getRelative(Factory::root());

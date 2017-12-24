@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Domain\Model\Advertisement\AdModel;
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->extend('layout/header');
 ?>
 <!-- 首页轮播图 --->

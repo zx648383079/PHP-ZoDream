@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Html;
 use Zodream\Html\Bootstrap\TableWidget;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */
 $this->title = '';
 $this->extend('layout/header');

@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Html\Bootstrap\DetailWidget;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $model \Domain\Model\FeedbackModel */
 $this->title = $model->name;
 $this->extend('layout/header');

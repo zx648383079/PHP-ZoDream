@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Html\Bootstrap\DetailWidget;
 use Zodream\Html\Bootstrap\BreadcrumbWidget;
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->title = $title;
 $this->extend([
     'layout/header',

@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') || die();
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->title = '仪表板';
 $this->extend('layout/header');
 $this->extend('layout/crumb', [

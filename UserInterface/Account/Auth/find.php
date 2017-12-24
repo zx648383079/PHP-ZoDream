@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 
 $this->registerCssFile('zodream/login.css');
 $this->registerJs('require(["admin/login"]);');

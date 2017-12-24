@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->registerCssFile('codemirror/codemirror.css');
 $this->registerJs('require(["admin/editor"]);');
 $this->extend('layout/header');

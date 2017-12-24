@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 
 $this->title = $title;
 $send = Auth::user();

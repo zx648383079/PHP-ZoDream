@@ -1,6 +1,6 @@
 <?php
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">

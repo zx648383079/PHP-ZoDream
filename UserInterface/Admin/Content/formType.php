@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 if ($type == 'input') :
 ?>
     <table width="98%" cellspacing="1" cellpadding="2">

@@ -4,7 +4,7 @@ use Zodream\Service\Routing\Url;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Html\Tree;
-/** @var $this Zodream\Domain\View\View */
+/** @var $this Zodream\Template\View */
 ?>
 <!DOCTYPE html>
 <html>

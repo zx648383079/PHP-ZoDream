@@ -1,5 +1,5 @@
 <?php
-use Zodream\Domain\View\View;
+use Zodream\Template\View;
 /** @var $this View */
 $this->title = $blog->title;
 $url = (string)$this->url(['blog/comment', 'blog_id' => $blog->id]);

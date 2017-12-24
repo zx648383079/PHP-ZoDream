@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Service\Routing\Url;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $models \Domain\Model\WeChat\WechatModel[] */
 $this->title = '微信公众号管理平台';
 $this->extend('layout/header');

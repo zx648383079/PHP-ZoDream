@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 ?>
 <!DOCTYPE HTML>
 <html lang="ch-ZHS">

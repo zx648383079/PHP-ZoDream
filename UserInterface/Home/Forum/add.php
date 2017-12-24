@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */
 $this->title = $title;
 $this->extend([

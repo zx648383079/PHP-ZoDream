@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') || die();
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 use Zodream\Html\Bootstrap\BreadcrumbWidget;
 $title = explode('-', $this->title);
 ?>

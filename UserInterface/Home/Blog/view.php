@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 use Zodream\Domain\Access\Auth;
 use Zodream\Html\ShareWidget;
 use Zodream\Infrastructure\Support\Html;

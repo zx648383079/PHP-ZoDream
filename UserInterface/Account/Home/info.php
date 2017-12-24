@@ -4,7 +4,7 @@ use Zodream\Infrastructure\Support\Html;
 use Zodream\Domain\Access\Auth;
 use Zodream\Html\Bootstrap\FormWidget;
 use Zodream\Service\Routing\Url;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */
 
 $this->registerJs('require(["admin/account"]);');

@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Domain\View\View;
+use Zodream\Template\View;
 /** @var $this View */
 $js = <<<JS
     var ue = UE.getEditor('container');

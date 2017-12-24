@@ -5,6 +5,7 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
+use Zodream\Domain\Access\JWTAuth;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
@@ -14,7 +15,7 @@ class HomeController extends ModuleController {
 
     protected function rules() {
         return [
-            '*' => '?'
+            '*' => '*'
         ];
     }
 
@@ -46,12 +47,13 @@ class HomeController extends ModuleController {
         return $this->jsonSuccess($count > 0);
     }
 
-    public function loginActionJson() {
+    public function loginAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
             $redirect_uri = Request::request('redirect_uri');
             return $this->jsonSuccess([
-                'url' => (string)Url::to(empty($redirect_uri) ? '/' : $redirect_uri)
+                'url' => (string)Url::to(empty($redirect_uri) ? '/' : $redirect_uri),
+                'token' => JWTAuth::getToken($user)
             ], '登录成功！');
         }
         return $this->jsonFailure($user->getFirstError());

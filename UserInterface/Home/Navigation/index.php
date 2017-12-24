@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Domain\Access\Auth;
 use Zodream\Service\Routing\Url;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->title = '导航';
 $this->extend([
     'layout/header',

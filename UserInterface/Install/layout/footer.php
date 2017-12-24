@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 ?>
 <script type="text/javascript" src="/assets/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>

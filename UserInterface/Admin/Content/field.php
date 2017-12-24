@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Html\Bootstrap\PanelWidget;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Html\Bootstrap\TableWidget;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 
 $this->extend('layout/header');
 echo PanelWidget::show(array(

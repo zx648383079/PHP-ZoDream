@@ -1,6 +1,6 @@
 <?php
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 ?>
 <div class="footer">
     湘ICP备 00000000000

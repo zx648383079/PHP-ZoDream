@@ -1,5 +1,5 @@
 <?php
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->registerJsFile('@jquery.min.js')
     ->registerJsFile('@jquery.validate.min.js')
     ->registerJsFile('@jquery.form.min.js')

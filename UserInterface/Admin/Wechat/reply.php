@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Service\Routing\Url;
 use Zodream\Infrastructure\Support\Html;
-/** @var $this \Zodream\Domain\View\View */
+/** @var $this \Zodream\Template\View */
 $this->extend('layout/header');
 echo \Zodream\Html\Bootstrap\PanelWidget::show(array(
     'head' => Html::tag('a', '增加', array(
