@@ -266,7 +266,7 @@ class UserModel extends BaseModel {
         }
 		$this->setPassword($this->password);
 		$this->created_at = time();
-		$this->avatar = '/assets/images/avatar/'.StringExpand::randomInt(0, 48).'.png';
+		$this->avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
 		$this->sex = 1;
 		if (!$this->save()) {
 			return false;
