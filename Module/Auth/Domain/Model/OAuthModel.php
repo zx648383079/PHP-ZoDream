@@ -8,10 +8,10 @@ use Domain\Model\Model;
  * @package Domain\Model\Auth
  * @property integer $id
  * @property integer $user_id
- * @property integer $type
- * @property string $openid
+ * @property string $vendor
+ * @property string $identity
  * @property string $data
- * @property integer $create_at
+ * @property integer $created_at
  */
 class OAuthModel extends Model {
     public static function tableName() {
@@ -19,7 +19,7 @@ class OAuthModel extends Model {
     }
 
     /**
-     * @return UserModel
+     * @return \Zodream\Database\Model\Relations\Relation
      */
     public function getUser() {
         return $this->hasOne(UserModel::class, 'id', 'user_id');

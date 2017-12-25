@@ -15,6 +15,7 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class LoginLogModel extends Model {
+
 	public static function tableName() {
         return 'login_log';
     }

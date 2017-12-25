@@ -149,7 +149,7 @@ class UserModel extends BaseModel {
 		$user_id = (new Query())
 			->from('user_oauth')
 			->select('user_id')
-			->where(['openid' => $openId, 'type' => $type])
+			->where(['identity' => $openId, 'vendor' => $type])
 			->scalar();
 		if ($user_id === false) {
 			return false;
