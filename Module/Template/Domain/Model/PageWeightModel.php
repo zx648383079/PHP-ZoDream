@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Http\Request;
  * Class PageWeightModel
  * @package Module\Template
  * @property integer $id
- * @property integer $page_id
+ * @property string $name
  * @property string $weight_name 部件名
  * @property integer $parent_id
  * @property integer $position
