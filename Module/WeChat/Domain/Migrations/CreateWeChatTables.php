@@ -3,6 +3,7 @@ namespace Module\WeChat\Domain\Migrations;
 
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MediaModel;
+use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
 use Module\WeChat\Domain\Model\ModuleModel;
 use Module\WeChat\Domain\Model\MpUserModel;
@@ -21,12 +22,28 @@ class CreateWeChatTables extends Migration {
      */
     public function up() {
         $this->initWechatTable();
-        $this->initModuleTable();
-        $this->initReplyRuleTable();
         $this->initFansTable();
         $this->initUserTable();
         $this->initMessageHistoryTable();
         $this->initMediaTable();
+
+        Schema::createTable(ReplyRuleModel::tableName(), function(Table $table) {
+            $table->set('id')->pk();
+            $table->set('event')->varchar(20)->notNull()->comment('时间');
+            $table->set('keywords')->varchar(60)->notNull()->comment('关键词');
+            $table->set('content')->text()->notNull()->comment('微信返回数据');
+            $table->set('type')->varchar(10)->notNull()->comment('素材类型');
+            $table->timestamps();
+        });
+
+        Schema::createTable(MenuModel::tableName(), function(Table $table) {
+            $table->set('id')->pk();
+            $table->set('name')->varchar(100)->notNull()->comment('素材ID');
+            $table->set('type')->varchar(100)->notNull()->comment('文件名');
+            $table->set('content')->text()->notNull()->comment('微信返回数据');
+            $table->set('type')->varchar(10)->notNull()->comment('素材类型');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -37,11 +54,11 @@ class CreateWeChatTables extends Migration {
     public function down() {
         Schema::dropTable(WeChatModel::tableName());
         Schema::dropTable(ReplyRuleModel::tableName());
-        Schema::dropTable(ReplyRuleKeywordModel::tableName());
         Schema::dropTable(FansModel::tableName());
         Schema::dropTable(MpUserModel::tableName());
         Schema::dropTable(MessageHistoryModel::tableName());
         Schema::dropTable(MediaModel::tableName());
+        Schema::dropTable(MenuModel::tableName());
     }
 
     /**
@@ -69,52 +86,7 @@ class CreateWeChatTables extends Migration {
             $table->timestamps();
         });
     }
-    /**
-     * 扩展模块表
-     */
-    public function initModuleTable() {
-        Schema::createTable(ModuleModel::tableName(), function(Table $table) {
-            $table->set('id')->varchar(20)->notNull()->comment('模块ID');
-            $table->set('name')->varchar(50)->notNull()->comment('模块名称');
-            $table->set('type')->varchar(20)->notNull()->comment('模块类型');
-            $table->set('category')->varchar(20)->notNull()->comment('模块类型');
-            $table->set('version')->varchar(10)->notNull()->comment('模块版本');
-            $table->set('ability')->varchar(100)->notNull()->comment('模块功能简述');
-            $table->set('description')->text()->notNull()->comment('模块详细描述');
-            $table->set('author')->varchar(50)->notNull()->comment('模块作者');
-            $table->set('site')->varchar()->notNull()->comment('模块详情地址');
-            $table->set('admin')->bool()->notNull()->comment('是否有后台界面');
-            $table->set('migration')->bool()->notNull()->comment('是否有迁移数据');
-            $table->set('reply_rule')->bool()->notNull()->comment('是否启用回复规则');
-            $table->timestamps();
-        });
-    }
-    /**
-     * 回复规则表
-     */
-    public function initReplyRuleTable() {
-        Schema::createTable(ReplyRuleModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
-            $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
-            $table->set('name')->varchar(40)->notNull()->comment('规则名称');
-            $table->set('mid')->varchar(20)->notNull()->comment('处理的插件模块');
-            $table->set('processor')->varchar(40)->notNull()->comment('处理类');
-            $table->set('status')->bool()->defaultVal(0)->notNull()->comment('状态');
-            $table->set('priority')->int(3)->unsigned()->defaultVal(0)->notNull()->comment('优先级');
-            $table->timestamps();
-        });
-        // 回复规则关键字表
-        Schema::createTable(ReplyRuleKeywordModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
-            $table->set('rid')->int(10)->unsigned()->notNull()->comment('所属规则ID');
-            $table->set('keyword')->varchar()->notNull()->comment('微规则关键字');
-            $table->set('type')->varchar(20)->notNull()->comment('关键字类型');
-            $table->set('priority')->tinyint(3)->unsigned()->notNull()->comment('优先级');
-            $table->set('start_at')->int(10)->unsigned()->defaultVal(0)->notNull()->comment('开始时间');
-            $table->set('end_at')->int(10)->unsigned()->defaultVal(0)->notNull()->comment('结束时间');
-            $table->timestamps();
-        });
-    }
+
     /**
      * 粉丝表
      */
@@ -171,11 +143,12 @@ class CreateWeChatTables extends Migration {
     public function initMediaTable() {
         Schema::createTable(MediaModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
-            $table->set('mediaId')->varchar(100)->notNull()->comment('素材ID');
-            $table->set('filename')->varchar(100)->notNull()->comment('文件名');
-            $table->set('result')->text()->notNull()->comment('微信返回数据');
             $table->set('type')->varchar(10)->notNull()->comment('素材类型');
-            $table->set('material')->varchar(20)->notNull()->comment('素材类别');
+            $table->set('title')->varchar(200)->comment('素材标题');
+            $table->set('content')->text()->comment('素材内容');
+            $table->set('parent_id')->int()->comment('图文父id');
+            $table->set('mediaId')->varchar(100)->notNull()->comment('素材ID');
+            $table->set('result')->text()->notNull()->comment('微信返回数据');
             $table->timestamps();
         });
     }

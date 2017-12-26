@@ -6,7 +6,7 @@ use Domain\Model\Model;
 /**
  * Class MenuModel
  * @package Module\WeChat\Domain\Model
- * @property
+ * @property integer $id
  */
 class MenuModel extends Model {
 
