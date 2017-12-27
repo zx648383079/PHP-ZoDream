@@ -9,12 +9,12 @@ use Domain\Model\Model;
  * 从公众号中拉取的数据可以保存在此表
  * @package callmez\wechat\models
  */
-class MpUserModel extends Model {
+class UserModel extends Model {
     /**
      * @inheritdoc
      */
     public static function tableName() {
-        return 'wechat_mp_user';
+        return 'wechat_user';
     }
 
     /**

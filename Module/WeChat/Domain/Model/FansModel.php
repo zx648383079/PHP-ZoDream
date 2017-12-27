@@ -73,7 +73,7 @@ class FansModel extends Model {
      * 关联的用户信息
      */
     public function getUser() {
-        return $this->hasOne(MpUserModel::className(), ['id' => 'id']);
+        return $this->hasOne(UserModel::className(), ['id' => 'id']);
     }
 
     /**
@@ -113,7 +113,7 @@ class FansModel extends Model {
         $user = $this->user;
         if (!$user || $force) {
             $wechat = $this->wechat;
-            $user = new MpUserModel();
+            $user = new UserModel();
             $this->populateRelation('user', $user);
             $data = $wechat->getSdk()->getUserInfo($this->open_id);
             if ($data) {
