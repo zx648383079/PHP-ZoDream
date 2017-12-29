@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Chat;
+namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
 
@@ -10,11 +10,12 @@ use Domain\Model\Model;
  * @property integer $user_id
  * @property string $content
  * @property integer $receive_id 接收者id
- * @property integer $bonus_id11
+ * @property integer $bonus_id
  * @property integer $type     消息类型
  * @property integer $status
- * @property integer $update_at
- * @property integer $create_at
+ * @property integer $deleted_at
+ * @property integer $updated_at
+ * @property integer $created_at
  */
 class FriendMessageModel extends Model {
     const TYPE_TEXT = 0;

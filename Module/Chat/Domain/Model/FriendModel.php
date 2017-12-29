@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Chat;
+namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Service\Factory;
@@ -11,7 +11,7 @@ use Zodream\Service\Factory;
  * @property integer $group_id
  * @property integer $user_id
  * @property integer $name
- * @property integer $create_at
+ * @property integer $created_at
  */
 class FriendModel extends Model {
     public static function tableName() {

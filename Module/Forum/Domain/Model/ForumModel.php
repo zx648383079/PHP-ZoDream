@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Forum;
+namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
 /**

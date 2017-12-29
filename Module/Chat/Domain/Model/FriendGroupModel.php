@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Chat;
+namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
 
@@ -9,7 +9,7 @@ use Domain\Model\Model;
  * @property integer $id
  * @property string $name
  * @property integer $user_id
- * @property integer $create_at
+ * @property integer $created_at
  */
 class FriendGroupModel extends Model {
     public static function tableName() {

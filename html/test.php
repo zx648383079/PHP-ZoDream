@@ -10,6 +10,15 @@ use Zodream\Module\Gzo\Domain\Opcode\DecryptDirectory;
 use Zodream\Infrastructure\Security\Des;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Domain\Template\Template;
+use Zodream\ThirdParty\WeChat\MenuItem;
+
+$menus = MenuItem::menu(MenuItem::name('我的')->url('http://www.sderdos.cn/user.php'))
+    ->menu(MenuItem::name('签到')
+        ->menu(MenuItem::name('我的')->url('http://www.sderdos.cn/user.php'))
+        ->menu(MenuItem::name('我的')->url('http://www.sderdos.cn/user.php')))
+    ->menu(MenuItem::name('大衣美学节')->url('http://mp.weixin.qq.com/s/WvwnW9LPRSzbzMbSBMFeQw'));
+
+die(var_dump($menus, $menus->toArray()));
 
 $template = new Template();
 echo $template->parse('

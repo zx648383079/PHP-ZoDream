@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\CMS;
+namespace Module\CMS\Domain\Model;
 
 use Zodream\Html\Page;
 /**

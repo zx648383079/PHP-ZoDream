@@ -1,12 +1,12 @@
 <?php
-namespace Module\Cart;
+namespace Module\Book;
 
-use Module\Chat\Domain\Migrations\CreateChatTables;
+use Module\Book\Domain\Migrations\CreateBookTables;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {
 
     public function getMigration() {
-        return new CreateChatTables();
+        return new CreateBookTables();
     }
 }

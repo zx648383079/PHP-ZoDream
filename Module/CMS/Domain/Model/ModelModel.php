@@ -1,7 +1,7 @@
 <?php
-namespace Domain\Model\CMS;
+namespace Module\CMS\Domain\Model;
 
-use Zodream\Infrastructure\Database\Schema\Table;
+use Zodream\Database\Schema\Table;
 /**
  * Class ContentModel
  * @package Domain\Model\CMS

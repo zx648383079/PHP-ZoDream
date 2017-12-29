@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Book;
+namespace Module\Book\Domain\Model;
 
 use Domain\Model\Model;
 
