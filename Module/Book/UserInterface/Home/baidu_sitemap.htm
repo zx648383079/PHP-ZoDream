@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/"> 
+	<url> 
+	<loc>{dede:global.cfg_wapurl/}/</loc> 
+	<mobile:mobile type="mobile"/>
+	<priority>1.0</priority>
+	</url> 
+	<url> 
+	<loc>{dede:global.cfg_basehost/}/</loc>
+	<priority>1.0</priority>
+	</url>
+	{dede:php}
+	global $dsql,$cfg_wapurl,$cfg_basehost;
+	$query = "Select id,typedir,typename From `#@__arctype` where reid=0 And channeltype=1 And ishidden=0 And id not in(375,376,6981) And ispart<>2 order by sortrank";
+	$dsql->SetQuery($query);
+	$dsql->Execute();
+	$a=0;
+	while($row=$dsql->GetArray()){
+		$reid[$a]=$row['id'];
+		$retypename[$a]=$row['typename'];
+		$retypedir[$a]=$row['typedir'];
+		$a++;
+	}
+	for($m=0;$m<$a;$m++)
+	{
+		echo "<url> 
+	<loc>".$cfg_wapurl."/wap.php?action=list&amp;id=".$reid[$m]."</loc> 
+	<mobile:mobile type=\"mobile\"/>
+	<priority>0.9</priority>
+	</url> 
+	<url> 
+	<loc>".$cfg_basehost.$retypedir[$m]."/</loc>
+	<priority>0.9</priority>
+	</url>
+	";
+		$query = "Select id,typedir,typename From `#@__arctype` where reid=".$reid[$m]." order by id";
+		$dsql->SetQuery($query);
+		$dsql->Execute();
+		while($row=$dsql->GetArray())
+		{
+			echo "<url> 
+	<loc>".$cfg_wapurl."/wap.php?action=list&amp;id=".$row['id']."</loc> 
+	<mobile:mobile type=\"mobile\"/>
+	<priority>0.9</priority>
+	</url> 
+	<url> 
+	<loc>".$cfg_basehost.$row['typedir']."/</loc>
+	<priority>0.9</priority>
+	</url>
+	";
+		}
+	}
+	$query = "Select a.id,b.typedir FROM `#@__archives` a left join `#@__arctype` b on (b.id=a.typeid) order by id desc limit 5000";
+	$dsql->SetQuery($query);
+	$dsql->Execute();
+	while($row=$dsql->GetArray())
+	{
+		echo "<url> 
+	<loc>".$cfg_wapurl."/wap.php?action=article&amp;id=".$row['id']."</loc> 
+	<mobile:mobile type=\"mobile\"/>
+	<priority>0.8</priority>
+	</url> 
+	<url> 
+	<loc>".$cfg_basehost.$row['typedir']."/".$row['id'].".html</loc>
+	<priority>0.8</priority>
+	</url>
+	";
+	}
+	{/dede:php}
+</urlset>

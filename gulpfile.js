@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     tsProject = ts.createProject('tsconfig.json'),
     jsRoot = 'UserInterface/assets/js/',
     jsDist = 'html/assets/js',
-    cssRoot = 'UserInterface/assets/css/',
+    cssRoot = 'Module/Book/UserInterface/assets/scss/',//'UserInterface/assets/css/',
     cssDist = 'html/assets/css';
  
 gulp.task('sass', function () {
@@ -29,7 +29,6 @@ gulp.task('css', function () {
         .pipe(rename({suffix:'.min'}))
         .pipe(gulp.dest(cssDist));
 });
-
 
 gulp.task('tslint', () =>
     gulp.src(jsRoot + '*.ts')

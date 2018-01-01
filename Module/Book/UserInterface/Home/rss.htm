@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="gb2312" ?>
+ <rss version="2.0">
+ <channel>
+ <title>RSS_{dede:global.cfg_webname/}</title>
+ <link>{dede:global.cfg_basehost/}</link>
+ <description>{dede:global.cfg_description/}</description>
+ {dede:arclist row='60' col='1' titlelen='100' orderby='pubdate'}
+ <item>
+ <title><![CDATA[[field:title function='html2text(@me)'/]]]></title>
+ <link>[field:arcurl/]</link>
+ <description><![CDATA[[field:description function='html2text(@me)'/] ...
+ ]]></description>
+ <pubDate>[field:pubdate function='strftime("%a, %d %b %Y %H:%M:%S",@me)'/]</pubDate>
+ </item>
+ {/dede:arclist}
+ </channel>
+ </rss>
