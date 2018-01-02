@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     tsProject = ts.createProject('tsconfig.json'),
     jsRoot = 'UserInterface/assets/js/',
     jsDist = 'html/assets/js',
-    cssRoot = 'Module/Book/UserInterface/assets/scss/',//'UserInterface/assets/css/',
+    //cssRoot = 'Module/Book/UserInterface/assets/scss/',
+    cssRoot = 'UserInterface/assets/css/',
     cssDist = 'html/assets/css';
  
 gulp.task('sass', function () {
@@ -18,8 +19,8 @@ gulp.task('sass', function () {
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(sourcemaps.write('./'))
-        .pipe(minCss())
-        .pipe(rename({suffix:'.min'}))
+        // .pipe(minCss())
+        // .pipe(rename({suffix:'.min'}))
         .pipe(gulp.dest(cssDist));
 });
 

@@ -22,6 +22,8 @@
       .book-skin .book-title .book-nav > li.book-back {
         position: absolute;
         left: 0; }
+      .book-skin .book-title .book-nav > li.book-navicon {
+        display: none; }
       .book-skin .book-title .book-nav > li.book-search {
         position: absolute;
         right: 0; }
@@ -57,6 +59,8 @@
           display: inline-block; }
     .book-skin .book-title .book-nav:hover > li, .book-skin .book-title .book-nav.hover > li {
       display: inline-block; }
+      .book-skin .book-title .book-nav:hover > li.book-navicon, .book-skin .book-title .book-nav.hover > li.book-navicon {
+        display: none; }
   .book-skin .book-body {
     margin-right: 200px;
     background: #f9cfa6;
@@ -213,13 +217,13 @@
     display: inline-block; }
   .book-skin .book-chapter {
     position: absolute;
-    width: 230px;
+    width: 200px;
     right: 0;
     top: 130px; }
     .book-skin .book-chapter li {
       background: #f9cfa6;
       list-style: none;
-      width: 180px;
+      width: 150px;
       line-height: 30px;
       border-bottom: 1px solid #af5d0d;
       padding-left: 20px;
@@ -229,16 +233,16 @@
       .book-skin .book-chapter li.active {
         background: #af5d0d;
         color: #fff;
-        width: 230px; }
+        width: 200px; }
         .book-skin .book-chapter li.active:hover {
-          width: 230px; }
+          width: 200px; }
         .book-skin .book-chapter li.active a {
           color: #fff; }
       .book-skin .book-chapter li:hover {
         width: 175px; }
   .book-skin .book-dynamic {
     position: absolute;
-    width: 230px;
+    width: 200px;
     right: 0;
     top: 400px; }
     .book-skin .book-dynamic dl {
@@ -317,8 +321,94 @@
   .book-skin {
     width: 100%; } }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 769px) {
+  .book-skin .book-title .book-nav > li.book-navicon {
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    font-size: 30px;
+    padding: 0 10px; }
+  .book-skin .book-title .book-nav > li.book-search {
+    position: relative;
+    left: 0;
+    line-height: 30px; }
+    .book-skin .book-title .book-nav > li.book-search .fa {
+      left: 5px;
+      top: 5px; }
+    .book-skin .book-title .book-nav > li.book-search input {
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+      line-height: 30px; }
+    .book-skin .book-title .book-nav > li.book-search .search-tip {
+      position: static; }
+  .book-skin .book-title .book-nav.hover > li, .book-skin .book-title .book-nav:hover > li {
+    display: none; }
+    .book-skin .book-title .book-nav.hover > li.active, .book-skin .book-title .book-nav.hover > li.book-navicon, .book-skin .book-title .book-nav:hover > li.active, .book-skin .book-title .book-nav:hover > li.book-navicon {
+      display: inline-block; }
   .book-skin .book-body {
-    margin-right: 0; } }
+    margin-right: 0; }
+    .book-skin .book-body .content {
+      word-wrap: break-word;
+      word-break: normal;
+      width: 100%;
+      display: block;
+      position: relative; }
+      .book-skin .book-body .content * {
+        word-break: normal;
+        width: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word; }
+  .book-skin .book-chapter {
+    position: static;
+    margin-bottom: 30px;
+    width: 100%;
+    display: none; }
+    .book-skin .book-chapter li {
+      width: 100%; }
+      .book-skin .book-chapter li.active {
+        width: 100%;
+        background: #af5d0d;
+        color: #fff; }
+        .book-skin .book-chapter li.active:hover {
+          width: 100%; }
+        .book-skin .book-chapter li.active a {
+          color: #fff; }
+      .book-skin .book-chapter li:hover {
+        width: 100%;
+        background: #d39357;
+        color: #fff; }
+  .book-skin .book-dynamic {
+    display: none; }
+  .book-skin .book-footer .book-comments .comment-item .actions {
+    position: static;
+    text-align: right;
+    width: 100%; }
+  .book-skin .book-footer.comment {
+    margin-right: 0; }
+  .book-skin.book-collapsed .book-title .book-nav > li.book-navicon .fa:before {
+    content: "\f00d"; }
+  .book-skin.book-collapsed .book-title .book-nav > li.book-search {
+    display: block; }
+    .book-skin.book-collapsed .book-title .book-nav > li.book-search input {
+      display: block; }
+    .book-skin.book-collapsed .book-title .book-nav > li.book-search .search-tip {
+      position: static;
+      display: block; }
+  .book-skin.book-collapsed .book-title .book-nav.hover > li, .book-skin.book-collapsed .book-title .book-nav:hover > li {
+    display: inline-block; }
+    .book-skin.book-collapsed .book-title .book-nav.hover > li.book-search, .book-skin.book-collapsed .book-title .book-nav:hover > li.book-search {
+      display: block; }
+  .book-skin.book-collapsed .book-title.book-mobile-inline .book-nav > li {
+    display: block;
+    line-height: 30px; }
+    .book-skin.book-collapsed .book-title.book-mobile-inline .book-nav > li.book-back {
+      position: static;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: right;
+      padding-right: 20px; }
+  .book-skin.book-collapsed .book-chapter {
+    display: block; } }
 
 /*# sourceMappingURL=blog.css.map */

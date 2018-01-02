@@ -22,6 +22,8 @@ class CreateBookTables extends Migration {
             $table->set('cat_id')->tinyint(3)->notNull()->defaultVal(0)->comment('分类');
             $table->set('size')->int()->notNull()->defaultVal(0)->comment('总字数');
             $table->set('click_count')->int()->notNull()->defaultVal(0)->comment('点击数');
+            $table->set('recommend_count')->int()->notNull()
+                ->defaultVal(0)->comment('点击数');
             $table->timestamp('over_at')->comment('完本日期');
             $table->softDeletes();
             $table->timestamps();
