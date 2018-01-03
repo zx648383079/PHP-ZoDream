@@ -145,7 +145,30 @@ i {
     .input-group {
         display: block;
         border-bottom: 1px solid #777;
-        height: $lineHeight;
+        min-height: $lineHeight;
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="url"], 
+        select,
+        textarea {
+            border: none;
+            background: transparent;
+            height: $lineHeight;
+            box-sizing: border-box;
+        }
+    }
+    .btn {
+        line-height: $lineHeight;
+        margin-top: 8px;
+    }
+}
+
+.form-default {
+    .input-group {
+        display: block;
+        border-bottom: 1px solid #777;
         input[type="text"],
         input[type="email"],
         input[type="tel"],
@@ -154,7 +177,15 @@ i {
         select {
             border: none;
             background: transparent;
+            box-sizing: border-box;
             height: $lineHeight;
+            display: block;
+        }
+        textarea {
+            width: 100%;
+            display: block;
+            border: none;
+            background: transparent;
             box-sizing: border-box;
         }
     }

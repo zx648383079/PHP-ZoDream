@@ -8,6 +8,27 @@
         }
     }
 }
+
+.table-hover {
+    tbody {
+        tr {
+            &:hover {
+                background-color: rgba(0, 0, 0, .075);
+            }
+        }
+    }
+}
+
+.table-striped {
+    tbody {
+        tr {
+            &:nth-of-type(odd) {
+                background-color: rgba(0, 0, 0, .05);
+            }
+        }
+    }
+}
+
 table {
     width: 100%;
     td, 
