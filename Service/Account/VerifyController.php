@@ -3,7 +3,7 @@ namespace Service\Account;
 /**
  * 验证码
  */
-use Zodream\Domain\Image\VerifyCode;
+use Zodream\Image\VerifyCode;
 use Zodream\Domain\Response\ImageResponse;
 use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Http\Request;

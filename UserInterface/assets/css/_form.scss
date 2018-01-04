@@ -129,6 +129,7 @@ i {
         input[type="tel"],
         input[type="password"],
         input[type="url"], 
+        input[type="number"],
         select {
             border: none;
             background: transparent;
@@ -151,6 +152,7 @@ i {
         input[type="tel"],
         input[type="password"],
         input[type="url"], 
+        input[type="number"], 
         select,
         textarea {
             border: none;
@@ -218,6 +220,7 @@ i {
             input[type="tel"],
             input[type="password"],
             input[type="url"],
+            input[type="number"], 
             select {
                 height: $lineHeight;
                 min-width: 100px;
