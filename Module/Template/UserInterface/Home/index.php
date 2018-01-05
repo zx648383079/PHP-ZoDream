@@ -1,3 +1,14 @@
+<?php
+
+use Zodream\Template\View;
+
+/** @var $this View */
+$this->registerCssFile('@font-awesome.min.css')
+    ->registerCssFile('@zodream.min.css')
+    ->registerCssFile('@template.min.css')
+    ->registerJsFile('@jquery.min.js')
+    ->registerJsFile('@template.js');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,9 +16,7 @@
     <title>模板编辑</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
-    <link href="assets/css/zodream.min.css" rel="stylesheet">
-    <link href="assets/css/template.min.css" rel="stylesheet">
+    <?=$this->header()?>
 </head>
 
 <body class="template-edit-page">
@@ -197,7 +206,6 @@
         </div>
     </div>
 
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/template.min.js"></script>
+    <?=$this->footer()?>
 </body>
 </html>
