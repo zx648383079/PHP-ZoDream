@@ -8,10 +8,10 @@ var gulp = require('gulp'),
     ts = require("gulp-typescript"),
     tslint = require("gulp-tslint"),
     tsProject = ts.createProject('tsconfig.json'),
-    jsRoot = 'UserInterface/assets/js/',
+    moduleRoot = 'Module/Template/';
+    jsRoot = moduleRoot + 'UserInterface/assets/ts/',
     jsDist = 'html/assets/js',
-    //cssRoot = 'Module/Book/UserInterface/assets/scss/',
-    cssRoot = 'UserInterface/assets/css/',
+    cssRoot = moduleRoot + 'UserInterface/assets/scss/',
     cssDist = 'html/assets/css';
  
 gulp.task('sass', function () {

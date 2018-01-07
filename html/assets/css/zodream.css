@@ -699,6 +699,12 @@
     .table .table-row .table-cell {
       display: table-cell; }
 
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.075); }
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05); }
+
 table {
   width: 100%; }
   table td,
@@ -826,6 +832,7 @@ i.checkbox {
     .form-horizontal .input-group input[type="tel"],
     .form-horizontal .input-group input[type="password"],
     .form-horizontal .input-group input[type="url"],
+    .form-horizontal .input-group input[type="number"],
     .form-horizontal .input-group select {
       border: none;
       background: transparent;
@@ -837,19 +844,46 @@ i.checkbox {
 .form-inline .input-group {
   display: block;
   border-bottom: 1px solid #777;
-  height: 30px; }
+  min-height: 30px; }
   .form-inline .input-group input[type="text"],
   .form-inline .input-group input[type="email"],
   .form-inline .input-group input[type="tel"],
   .form-inline .input-group input[type="password"],
   .form-inline .input-group input[type="url"],
-  .form-inline .input-group select {
+  .form-inline .input-group input[type="number"],
+  .form-inline .input-group select,
+  .form-inline .input-group textarea {
     border: none;
     background: transparent;
     height: 30px;
     box-sizing: border-box; }
 
 .form-inline .btn {
+  line-height: 30px;
+  margin-top: 8px; }
+
+.form-default .input-group {
+  display: block;
+  border-bottom: 1px solid #777; }
+  .form-default .input-group input[type="text"],
+  .form-default .input-group input[type="email"],
+  .form-default .input-group input[type="tel"],
+  .form-default .input-group input[type="password"],
+  .form-default .input-group input[type="url"],
+  .form-default .input-group select {
+    border: none;
+    background: transparent;
+    box-sizing: border-box;
+    height: 30px;
+    display: block; }
+  .form-default .input-group textarea {
+    width: 100%;
+    display: block;
+    border: none;
+    background: transparent;
+    box-sizing: border-box; }
+
+.form-default .btn {
   line-height: 30px;
   margin-top: 8px; }
 
@@ -873,6 +907,7 @@ i.checkbox {
   .form-table .input-group > div input[type="tel"],
   .form-table .input-group > div input[type="password"],
   .form-table .input-group > div input[type="url"],
+  .form-table .input-group > div input[type="number"],
   .form-table .input-group > div select {
     height: 30px;
     min-width: 100px; }

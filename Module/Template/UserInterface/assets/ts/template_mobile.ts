@@ -1,4 +1,3 @@
-/// <reference path="../../typings/jquery/jquery.d.ts" />
 $(document).ready(function () {
     $("#weight .grid").draggable({
         connectToSortable: ".row",
@@ -8,7 +7,8 @@ $(document).ready(function () {
         start: function() {
             $("#mainGrid").addClass("hover");
         },
-        stop: function() {
+        stop: function(event, target) {
+            target.helper.width('auto');
             $("#mainGrid").removeClass("hover");
         }
     });
@@ -49,9 +49,7 @@ $(document).ready(function () {
     $(".mobile-size li").click(function() {
         $(".mobile-size").parent().removeClass("open");
         let size = $(this).attr("data-size").split("*");
-        let width = size[0] ? size[0] + 'px' : "100%";
-        let height = size[1] ? size[1] + 'px' : "100%";
-        $("#mainMobile").css({width: width, height: height});
+        $("#mainMobile").removeClass().addClass('mobile-' + size[0]);
     });
     $(".navbar>li>div").click(function() {
         $(this).parent().toggleClass("open");
@@ -60,13 +58,8 @@ $(document).ready(function () {
         $(this).addClass("active").siblings().removeClass("active");
     });
 
-
     $(".mobile-rotate").click(function() {
-        let mobile = $("#mainMobile");
-        let width = mobile.height();
-        let height = mobile.width();
-        let padding = mobile.css("padding").replace(/(\d+\s?(px|rem|em)?)(.+)/, "$3 $1");
-        mobile.css({width: width, height: height, padding: padding});
+        $("#mainMobile").toggleClass('rotate');
     });
     $(".expand>.head").click(function() {
         $(this).parent().toggleClass("open");

@@ -4,7 +4,7 @@ use Zodream\Template\View;
 
 /** @var $this View */
 $this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@template_mobile.min.css')
+    ->registerCssFile('@template_mobile.css')
     ->registerJsFile('@jquery.min.js')
     ->registerJsFile('@jquery-ui.min.js')
     ->registerJsFile('@jquery.htmlClean.min.js')
@@ -99,7 +99,7 @@ $this->registerCssFile('@font-awesome.min.css')
             </div>
         </div>
     </div>
-    <div id="mainMobile" style="width: 320px; height: 568px;">
+    <div id="mainMobile" class="mobile-320">
         <div id="mainGrid">
             <div class="row">
 
