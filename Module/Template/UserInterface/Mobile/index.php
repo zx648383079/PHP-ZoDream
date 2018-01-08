@@ -1,8 +1,10 @@
 <?php
 
 use Zodream\Template\View;
+use Module\Template\Domain\Page;
 
 /** @var $this View */
+/** @var $page Page */
 $this->registerCssFile('@font-awesome.min.css')
     ->registerCssFile('@template_mobile.css')
     ->registerJsFile('@jquery.min.js')
@@ -60,12 +62,13 @@ $this->registerCssFile('@font-awesome.min.css')
                             <span class="fa fa-chevron-down"></span>
                         </div>
                         <div class="body list-view">
+                            <?php foreach ($weight_list as $item):?>
                             <div class="item grid">
                                 <div class="preview ">
                                     <div class="thumb">
                                         <span class="fa fa-user"></span>
                                     </div>
-                                    <p class="title">说明</p>
+                                    <p class="title"><?=$item->name?></p>
                                 </div>
                                 <div class="action">
                                     <a class="edit">编辑</a>
@@ -79,20 +82,7 @@ $this->registerCssFile('@font-awesome.min.css')
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="expand">
-                        <div class="head">
-                            布局
-                            <span class="fa fa-chevron-down"></span>
-                        </div>
-                        <div class="body list-view">
-                            <div class="item grid">
-                                <div class="thumb">
-                                    <span class="fa fa-user"></span>
-                                </div>
-                                <p class="title">说明</p>
-                            </div>
+                            <?php endforeach;?>
                         </div>
                     </li>
                 </ul>
@@ -101,9 +91,7 @@ $this->registerCssFile('@font-awesome.min.css')
     </div>
     <div id="mainMobile" class="mobile-320">
         <div id="mainGrid">
-            <div class="row">
-
-            </div>
+            <?=$page->template()?>
         </div>
     </div>
     <div id="property" class="right fixed">

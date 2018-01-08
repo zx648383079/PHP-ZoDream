@@ -17,8 +17,10 @@ class Page {
      */
     protected $page;
 
-    public function __construct(PageModel $pageModel) {
-        $this->page = $pageModel;
+    public function __construct($page) {
+        $this->page = $page instanceof PageModel
+            ? $page :
+            PageModel::where('name', $page)->one();
     }
 
     /**
@@ -47,6 +49,10 @@ class Page {
     }
 
     public function render() {
+
+    }
+
+    public function template() {
 
     }
 

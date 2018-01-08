@@ -26,6 +26,10 @@ class WeightModel extends Model {
     const TYPE_BASIC = 0;
     const TYPE_ADVANCE = 1;
 
+    const ADAPT_ALL = 0; // 自适应
+    const ADAPT_PC = 1;  // 适应PC
+    const ADAPT_MOBILE = 2; // 适应手机
+
     public static function tableName() {
         return 'weight';
     }
