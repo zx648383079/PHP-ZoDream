@@ -72,6 +72,10 @@ class BlogModel extends Model {
 		);
 	}
 
+	public function term() {
+	    return $this->hasOne(TermModel::class, 'id', 'term_id');
+    }
+
 	public function getUrlAttribute() {
 	    return Url::to('blog/home/detail', ['id' => $this->id]);
     }
