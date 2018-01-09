@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Service\BaseWeight;
 use phpDocumentor\Reflection\Types\Self_;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
@@ -62,10 +63,10 @@ class WeightModel extends Model {
     }
 
     /**
-     * @return mixed
+     * @return BaseWeight
      * @throws FileException
      */
-    public function getInstance() {
+    public function getWeightInstance() {
         $path = $this->path;
         if (empty($path)) {
             throw new FileException($path);

@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{=$this->title}</title>
+    <meta name="keywords" content="{=$this->keywords}">
+    <meta name="description" content="{=$this->description}">
+    {link href="@style.css"}
+    {header:}
 </head>
 <body>
     <div class="row">
-        {}
+        {weight:1}
     </div>
+    {script src="@jquery.js"}
+    {footer:}
 </body>
 </html>

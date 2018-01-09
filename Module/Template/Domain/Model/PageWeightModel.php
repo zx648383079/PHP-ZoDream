@@ -18,6 +18,8 @@ use Zodream\Infrastructure\Http\Request;
  * @property boolean $is_share 是否通用
  * @property integer $created_at
  * @property integer $updated_at
+ *
+ * @property WeightModel $weight
  */
 class PageWeightModel extends Model {
 
@@ -58,6 +60,10 @@ class PageWeightModel extends Model {
 
     public function weight() {
         return $this->hasOne(WeightModel::class, 'name', 'weight_name');
+    }
+
+    public function hasExtInfo($ext) {
+        return false;
     }
 
     public static function saveFromPost() {
