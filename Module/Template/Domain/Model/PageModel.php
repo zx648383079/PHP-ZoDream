@@ -53,6 +53,6 @@ class PageModel extends Model {
     }
 
     public function weights() {
-        return $this->hasMany(PageWeightModel::class, 'page_id', 'id');
+        return $this->hasMany(PageWeightModel::class, 'name', 'name');
     }
 }

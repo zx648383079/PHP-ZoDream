@@ -137,6 +137,7 @@ class WeightModel extends Model {
             extract($name);
         }
         $path = (string)$path;
+        $editable = intval($editable);
         return static::create(compact('name', 'path',
             'description', 'type', 'thumb', 'editable'));
     }

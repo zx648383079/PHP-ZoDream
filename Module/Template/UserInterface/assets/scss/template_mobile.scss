@@ -109,15 +109,15 @@ $sizes: (
       .row {
         min-height: auto;
       }
-      .grid {
+      .weight-grid {
         .action {
           display: none;
         }
       }
     }
-    .row {
+    .weight-row {
       min-height: 100px;
-      .grid {
+      .weight-grid {
         width: 100%;
         background: #fff;
         box-sizing: border-box;
@@ -187,7 +187,7 @@ $sizes: (
 }
 
 #weight {
-  .grid {
+  .weight-grid {
     cursor: pointer;
     display: inline-block;
     text-align: center;

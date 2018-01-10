@@ -3,6 +3,11 @@
 use Zodream\Template\View;
 use Module\Template\Domain\Page;
 
+$js = <<<JS
+var PAGE_ID = '{$page->getPage('id')}';
+JS;
+
+
 /** @var $this View */
 /** @var $page Page */
 $this->registerCssFile('@font-awesome.min.css')
@@ -10,7 +15,8 @@ $this->registerCssFile('@font-awesome.min.css')
     ->registerJsFile('@jquery.min.js')
     ->registerJsFile('@jquery-ui.min.js')
     ->registerJsFile('@jquery.htmlClean.min.js')
-    ->registerJsFile('@template_mobile.min.js');
+    ->registerJsFile('@template_mobile.min.js')
+    ->registerJs($js);
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -63,7 +69,7 @@ $this->registerCssFile('@font-awesome.min.css')
                         </div>
                         <div class="body list-view">
                             <?php foreach ($weight_list as $item):?>
-                            <div class="item grid">
+                            <div class="item weight-grid" data-type="weight" data-weight="<?=$item->id?>">
                                 <div class="preview ">
                                     <div class="thumb">
                                         <span class="fa fa-user"></span>

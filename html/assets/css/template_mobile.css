@@ -56,17 +56,17 @@
     background: #fff; }
     #mainMobile #mainGrid.preview .row {
       min-height: auto; }
-    #mainMobile #mainGrid.preview .grid .action {
+    #mainMobile #mainGrid.preview .weight-grid .action {
       display: none; }
-    #mainMobile #mainGrid .row {
+    #mainMobile #mainGrid .weight-row {
       min-height: 100px; }
-      #mainMobile #mainGrid .row .grid {
+      #mainMobile #mainGrid .weight-row .weight-grid {
         width: 100%;
         background: #fff;
         box-sizing: border-box; }
-        #mainMobile #mainGrid .row .grid .preview {
+        #mainMobile #mainGrid .weight-row .weight-grid .preview {
           display: none; }
-        #mainMobile #mainGrid .row .grid .action {
+        #mainMobile #mainGrid .weight-row .weight-grid .action {
           position: absolute;
           right: 0;
           font-size: 0.7rem;
@@ -75,13 +75,13 @@
           background: #6a4;
           padding: 2px;
           display: none; }
-          #mainMobile #mainGrid .row .grid .action a {
+          #mainMobile #mainGrid .weight-row .weight-grid .action a {
             cursor: pointer; }
-          #mainMobile #mainGrid .row .grid .action .del {
+          #mainMobile #mainGrid .weight-row .weight-grid .action .del {
             color: #f00; }
-        #mainMobile #mainGrid .row .grid:hover {
+        #mainMobile #mainGrid .weight-row .weight-grid:hover {
           border: 1px solid #7e8; }
-          #mainMobile #mainGrid .row .grid:hover .action {
+          #mainMobile #mainGrid .weight-row .weight-grid:hover .action {
             display: block; }
     #mainMobile #mainGrid::-webkit-scrollbar {
       width: 8px;
@@ -177,22 +177,22 @@
   width: 15rem;
   bottom: 0; }
 
-#weight .grid {
+#weight .weight-grid {
   cursor: pointer;
   display: inline-block;
   text-align: center;
   margin: 1px 3px; }
-  #weight .grid:hover {
+  #weight .weight-grid:hover {
     border: 1px solid #6a4;
     color: #7e8; }
-  #weight .grid .preview .thumb {
+  #weight .weight-grid .preview .thumb {
     width: 3rem;
     height: 3rem;
     line-height: 3rem; }
-    #weight .grid .preview .thumb .fa {
+    #weight .weight-grid .preview .thumb .fa {
       font-size: 3rem; }
-  #weight .grid .action,
-  #weight .grid .view {
+  #weight .weight-grid .action,
+  #weight .weight-grid .view {
     display: none; }
 
 #property {

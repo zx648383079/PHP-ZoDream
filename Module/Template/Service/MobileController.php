@@ -9,7 +9,7 @@ class MobileController extends ModuleController {
 
     public function indexAction() {
         $weight_list = WeightModel::whereIn('adapt_to', [0, 2])->all();
-        $page = new Page('index');
+        $page = new Page('index', true);
         return $this->show(compact('weight_list', 'page'));
     }
 

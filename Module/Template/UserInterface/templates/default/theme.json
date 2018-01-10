@@ -8,5 +8,18 @@
   "version": "v1.0",
   "copyright": "@zz",
   "email": "123@12.com",
-  "url": "http://"
+  "url": "http://",
+  "themes": [
+    {
+      "name": "default",
+      "path": "./default",
+      "thumb": "screenshot.png",
+      "style": [
+        "./style.css"
+      ],
+      "script": [
+        "./main.js"
+      ]
+    }
+  ]
 }

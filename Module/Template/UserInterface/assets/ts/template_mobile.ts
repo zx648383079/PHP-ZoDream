@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $("#weight .grid").draggable({
-        connectToSortable: ".row",
+    $("#weight .weight-grid").draggable({
+        connectToSortable: ".weight-row",
         helper: "clone",
         opacity: .3,
         revert: "invalid",
@@ -8,12 +8,20 @@ $(document).ready(function () {
             $("#mainGrid").addClass("hover");
         },
         stop: function(event, target) {
-            target.helper.width('auto');
             $("#mainGrid").removeClass("hover");
+            let ele = target.helper;
+            ele.width('auto');
+            $.post('/template/weight/create', {
+                page: PAGE_ID,
+                weight: ele.attr('data-weight'),
+                parent_id: ele.parents('.weight-row').attr('data-id')
+            }, function(data) {
+
+            }, 'json');
         }
     });
-    $("#mainGrid .row").sortable({
-        connectWith: ".row"
+    $("#mainGrid .weight-row").sortable({
+        connectWith: ".weight-row"
     });
     $(".panel .fa-close").click(function() {
         $(this).parent().parent().addClass("min");
@@ -67,7 +75,12 @@ $(document).ready(function () {
 
     /** action */
     $("#mainGrid").on("click", ".del", function() {
-        $(this).parent().parent().remove();
+        let ele = $(this).parent().parent();
+        $.post('/template/weight/destroy?id=' + ele.attr('data-id'), {}, function(data) {
+            if (data.code == 200) {
+                ele.remove();
+            }
+        });
     });
 
     let currentElement;

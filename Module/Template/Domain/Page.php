@@ -4,6 +4,7 @@ namespace Module\Template\Domain;
 
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
+use Zodream\Disk\Directory;
 use Zodream\Infrastructure\Traits\Attributes;
 use Zodream\Service\Factory;
 use Zodream\Template\Engine\ParserCompiler;
@@ -28,10 +29,39 @@ class Page {
      */
     protected $factory;
 
-    public function __construct($page) {
+    /**
+     * @var Directory
+     */
+    protected $directory;
+
+    /**
+     * 是否是编辑模式
+     * @var bool
+     */
+    protected $isEditMode = false;
+
+    public function __construct($page, $isEditMode = false) {
         $this->page = $page instanceof PageModel
             ? $page :
             PageModel::where('name', $page)->one();
+        $this->directory = Factory::root()
+            ->directory('Module/Template/UserInterface/templates/default');
+        $this->setIsEditMode($isEditMode);
+        $this->loadWeights();
+    }
+
+    /**
+     *
+     * @param bool $isEditMode
+     * @return Page
+     */
+    public function setIsEditMode($isEditMode) {
+        $this->isEditMode = $isEditMode;
+        return $this;
+    }
+
+    public function isEditMode() {
+        return $this->isEditMode;
     }
 
     /**
@@ -39,6 +69,18 @@ class Page {
      */
     public function setWeights($weights) {
         $this->weights = $weights;
+    }
+
+    /**
+     * 获取页面数据
+     * @param null $key
+     * @return PageModel
+     */
+    public function getPage($key = null) {
+        if (empty($key)) {
+            return $this->page;
+        }
+        return $this->page->{$key};
     }
 
     public function getFactory() {
@@ -49,7 +91,7 @@ class Page {
                     'suffix' => '.html'
                 ])
                 ->set('page', $this)
-                ->setDirectory('Module/Template/UserInterface/templates/default')
+                ->setDirectory($this->directory)
                 ->getEngine()->registerFunc('weight', '<?=$page->weight(%s)?>');
         }
         return $this->factory;
@@ -93,13 +135,40 @@ class Page {
         foreach ($this->getWeightList($parent_id, $ext) as $weight) {
             $args[] = $this->renderWeight($weight);
         }
-        return implode(PHP_EOL, $args);
+        // 修正当前的文件夹
+        $this->getFactory()->setDirectory($this->directory);
+        $html = implode(PHP_EOL, $args);
+        if ($this->isEditMode) {
+            return <<<HTML
+<div class="weight-row" data-id="{$parent_id}" data-ext="{$ext}">
+{$html}
+</div>
+HTML;
+        }
+        return $html;
     }
 
     public function renderWeight(PageWeightModel $model) {
-        return $model->weight->getWeightInstance()
+        $html = $model->weight
+            ->getWeightInstance()
             ->setPage($this)
+            ->setDirectory($model->weight->path)
             ->render($model);
+        if ($this->isEditMode) {
+            return <<<HTML
+<div class="item weight-grid" data-type="weight" data-id="{$model->id}">
+    <div class="action">
+        <a class="edit">编辑</a>
+        <a class="drag">拖拽</a>
+        <a class="del">删除</a>
+    </div>
+    <div class="view">
+        {$html}
+    </div>
+</div>
+HTML;
+        }
+        return $html;
     }
 
     public function render() {
@@ -116,5 +185,4 @@ class Page {
     public function __toString() {
         return $this->render();
     }
-
 }
