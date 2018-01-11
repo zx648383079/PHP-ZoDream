@@ -1,0 +1,124 @@
+.loc i.dashboard {
+  width: 18px;
+  height: 20px;
+  background-position: 0 -120px;
+}
+
+.divid {
+  width: 25%;
+  height: auto;
+  float: left;
+  overflow: hidden;
+
+  h3 {
+    background: #def6ff;
+  }
+
+  .module {
+    height: 245px;
+    background: url(../images/loading-1.gif) no-repeat center;
+  }
+
+  .actives {
+    background: none;
+  }
+}
+
+table.stbl {
+  width: 100%;
+  border: none;
+  background: #fff;
+
+  th, td {
+    padding: 10px 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #def6ff;
+  }
+
+  th {
+    color: #3399cc;
+    text-align: left;
+    font-weight: normal;
+  }
+
+  td {
+    color: #999;
+    text-align: right;
+
+    b {
+      color: #cc3366;
+      margin-right: 5px;
+    }
+  }
+}
+
+.actives {
+  overflow-y: auto;
+
+  table.stbl {
+    tr.thd th {
+      padding: 6px 10px;
+      color: #aaa;
+      background: #f8f8f8;
+      border-bottom-color: #eee;
+
+      &.ta-r {
+        text-align: right;
+      }
+    }
+
+    th font {
+      color: #888;
+      margin-left: 5px;
+      font-weight: normal;
+
+      &.caaa {
+        color: #aaa;
+      }
+    }
+  }
+}
+
+.couid {
+  width: 50%;
+  height: auto;
+  overflow: hidden;
+}
+
+table.dataform {
+  th {
+    color: #444;
+    font-weight: normal;
+  }
+
+  &.declare {
+    th {
+      color: #999;
+    }
+
+    td {
+      color: #999;
+
+      a {
+        color: #999;
+
+        &:hover {
+          text-decoration: underline;
+          color: #333;
+        }
+      }
+    }
+  }
+}
+
+.notice {
+  display: none;
+  margin-bottom: 5px;
+
+  .item {
+    padding: 10px 15px;
+    color: #D56A00;
+    border: 1px solid #ffcc00;
+    background: #FFFFDD;
+  }
+}
