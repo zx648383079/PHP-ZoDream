@@ -28,8 +28,8 @@ class CreateTemplateTables extends Migration {
         });
         Schema::createTable(PageWeightModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai(1000);  // 预留id给页面预留不同入口
-            $table->set('name')->varchar(100)->notNull();
-            $table->set('weight_name')->varchar(30);
+            $table->set('page_id')->int()->notNull();
+            $table->set('weight_id')->int()->notNull();
             $table->set('parent_id')->int(10);
             $table->set('position')->int(5);
             $table->set('title')->varchar(200);

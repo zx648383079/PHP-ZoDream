@@ -8,8 +8,8 @@ use Zodream\Infrastructure\Http\Request;
  * Class PageWeightModel
  * @package Module\Template
  * @property integer $id
- * @property string $name
- * @property string $weight_name 部件名
+ * @property integer $page_id
+ * @property integer $weight_id 部件名
  * @property integer $parent_id
  * @property integer $position
  * @property string $title
@@ -29,8 +29,8 @@ class PageWeightModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-100',
-            'weight_name' => 'string:3-30',
+            'page_id' => 'required|int',
+            'weight_id' => 'required|int',
             'parent_id' => 'int',
             'position' => 'int',
             'title' => 'string:3-200',
@@ -59,7 +59,7 @@ class PageWeightModel extends Model {
     }
 
     public function weight() {
-        return $this->hasOne(WeightModel::class, 'name', 'weight_name');
+        return $this->hasOne(WeightModel::class, 'id', 'weight_id');
     }
 
     public function hasExtInfo($ext) {
@@ -67,9 +67,8 @@ class PageWeightModel extends Model {
     }
 
     public static function saveFromPost() {
-        $weight = WeightModel::find(['name', Request::request('weight_name')]);
-        $maps = ['id',
-            'page_id', 'weight_name', 'parent_id',
+        $weight = WeightModel::find(intval(Request::request('weight_id')));
+        $maps = ['id', 'page_id', 'weight_id', 'parent_id',
             'position', 'title', 'content', 'is_share', 'settings'];
         $data = $weight->getPostConfigs();
         $args = [];
@@ -80,10 +79,11 @@ class PageWeightModel extends Model {
                 $args['settings'][] = $value;
             }
         }
-        $args['weight_name'] = $weight->name;
+        $args['weight_id'] = $weight->id;
         $model = static::findOrNew($args['id']);
         $model->set($args);
         $model->save();
+        die(var_dump($model->getError()));
         return $model;
     }
 }

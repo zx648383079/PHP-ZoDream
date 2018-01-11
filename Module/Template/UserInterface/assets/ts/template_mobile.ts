@@ -9,14 +9,21 @@ $(document).ready(function () {
         },
         stop: function(event, target) {
             $("#mainGrid").removeClass("hover");
-            let ele = target.helper;
+            let ele = target.helper,
+                row = ele.parents('.weight-row');
+            if (!row || row.length < 1) {
+                // 没用拖放成功！
+                return;
+            }
             ele.width('auto');
             $.post('/template/weight/create', {
                 page: PAGE_ID,
                 weight: ele.attr('data-weight'),
-                parent_id: ele.parents('.weight-row').attr('data-id')
+                parent_id: row.attr('data-id')
             }, function(data) {
-
+                if (data.code == 200) {
+                    ele.attr('data-id', data.data.id);
+                }
             }, 'json');
         }
     });
@@ -24,11 +31,11 @@ $(document).ready(function () {
         connectWith: ".weight-row"
     });
     $(".panel .fa-close").click(function() {
-        $(this).parent().parent().addClass("min");
+        $(this).parents('.panel').parent().addClass("min");
     });
 
     $(".panel>.head>.title").click(function() {
-        let panel = $(this).parent().parent();
+        let panel = $(this).parents('.panel').parent();
         if (panel.hasClass("min")) {
             panel.removeClass("min");
         }
@@ -84,13 +91,22 @@ $(document).ready(function () {
     });
 
     let currentElement;
-    $("#mainGrid").on("click", ".edit", function() {
-        currentElement = $(this).parent().parent();
-        editProperty();
+    $("#mainGrid").on("click", ".edit", function(e) {
+        e.stopPropagation();
+        currentElement = $(this).parents('.weight-grid');
+        $("#mainGrid .weight-grid").removeClass('weight-edit-mode');
+        currentElement.addClass('weight-edit-mode');
+        editProperty(currentElement);
     });
 
-    let editProperty = function () {
+    let editProperty = function (element) {
+            let id = element.attr('data-id');
+            $.getJSON('/template/weight/config?id=' + id, function(data) {
+                if (data.code != 200) {
+                    return;
+                }
 
+            });
         },
         saveProperty = function () {
 

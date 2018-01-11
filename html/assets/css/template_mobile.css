@@ -62,6 +62,7 @@
       min-height: 100px; }
       #mainMobile #mainGrid .weight-row .weight-grid {
         width: 100%;
+        min-height: 50px;
         background: #fff;
         box-sizing: border-box; }
         #mainMobile #mainGrid .weight-row .weight-grid .preview {
@@ -79,9 +80,9 @@
             cursor: pointer; }
           #mainMobile #mainGrid .weight-row .weight-grid .action .del {
             color: #f00; }
-        #mainMobile #mainGrid .weight-row .weight-grid:hover {
+        #mainMobile #mainGrid .weight-row .weight-grid:hover, #mainMobile #mainGrid .weight-row .weight-grid.weight-edit-mode {
           border: 1px solid #7e8; }
-          #mainMobile #mainGrid .weight-row .weight-grid:hover .action {
+          #mainMobile #mainGrid .weight-row .weight-grid:hover .action, #mainMobile #mainGrid .weight-row .weight-grid.weight-edit-mode .action {
             display: block; }
     #mainMobile #mainGrid::-webkit-scrollbar {
       width: 8px;
@@ -127,13 +128,13 @@
       padding: 5px 40px; }
   #mainMobile.mobile-375 {
     width: 385px;
-    height: 747px;
+    height: 892px;
     padding: 40px 5px;
     background: #47f;
     border-radius: 20px; }
     #mainMobile.mobile-375.rotate {
       height: 385px;
-      width: 747px;
+      width: 892px;
       padding: 5px 40px; }
   #mainMobile.mobile-412 {
     width: 422px;

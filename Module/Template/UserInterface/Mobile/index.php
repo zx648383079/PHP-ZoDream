@@ -38,7 +38,7 @@ $this->registerCssFile('@font-awesome.min.css')
                 <li data-size="320*568"><i class="fa fa-mobile"></i>iPhone 5</li>
                 <li data-size="360*640"><i class="fa fa-mobile"></i>Galaxy S5</li>
                 <li data-size="370*640"><i class="fa fa-mobile"></i>Lumia 650</li>
-                <li data-size="375*667"><i class="fa fa-mobile"></i>iPhone 6</li>
+                <li data-size="375*812"><i class="fa fa-mobile"></i>iPhone X</li>
                 <li data-size="412*732"><i class="fa fa-mobile"></i>Nexus 5X</li>
                 <li data-size="414*736"><i class="fa fa-mobile"></i>iPhone 6 Plus</li>
                 <li data-size="768*1024"><i class="fa fa-tablet"></i>iPad</li>
@@ -70,14 +70,16 @@ $this->registerCssFile('@font-awesome.min.css')
                         <div class="body list-view">
                             <?php foreach ($weight_list as $item):?>
                             <div class="item weight-grid" data-type="weight" data-weight="<?=$item->id?>">
-                                <div class="preview ">
+                                <div class="preview">
                                     <div class="thumb">
                                         <span class="fa fa-user"></span>
                                     </div>
                                     <p class="title"><?=$item->name?></p>
                                 </div>
                                 <div class="action">
+                                    <?php if ($item->editable):?>
                                     <a class="edit">编辑</a>
+                                    <?php endif;?>
                                     <a class="drag">拖拽</a>
                                     <a class="del">删除</a>
                                 </div>

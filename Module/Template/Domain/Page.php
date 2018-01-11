@@ -155,10 +155,11 @@ HTML;
             ->setDirectory($model->weight->path)
             ->render($model);
         if ($this->isEditMode) {
+            $editHtml = $model->weight->editable ? '<a class="edit">编辑</a>' : '';
             return <<<HTML
 <div class="item weight-grid" data-type="weight" data-id="{$model->id}">
     <div class="action">
-        <a class="edit">编辑</a>
+        {$editHtml}
         <a class="drag">拖拽</a>
         <a class="del">删除</a>
     </div>

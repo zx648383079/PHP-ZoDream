@@ -3,6 +3,7 @@ namespace Module\Template\Service;
 
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\WeightModel;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\Controller;
 
 class WeightController extends Controller {
@@ -13,6 +14,17 @@ class WeightController extends Controller {
 
     public function configAction($id) {
         return $this->jsonSuccess(PageWeightModel::find($id));
+    }
+
+    public function createAction() {
+        $page = intval(Request::post('page'));
+        $weight = intval(Request::post('weight'));
+        $parent_id = intval(Request::post('parent_id'));
+        return $this->jsonSuccess(PageWeightModel::create([
+            'page_id' => $page,
+            'weight_id' => $weight,
+            'parent_id' => $parent_id
+        ]));
     }
 
     public function saveAction() {

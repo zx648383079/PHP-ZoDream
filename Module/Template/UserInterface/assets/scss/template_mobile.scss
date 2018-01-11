@@ -5,7 +5,7 @@ $sizes: (
   320: 568,
   360: 640,
   370: 640,
-  375: 667,
+  375: 812,
   412: 732,
   414: 736,
   768: 1024
@@ -119,6 +119,7 @@ $sizes: (
       min-height: 100px;
       .weight-grid {
         width: 100%;
+        min-height: 50px;
         background: #fff;
         box-sizing: border-box;
         .preview {
@@ -140,7 +141,8 @@ $sizes: (
             color: #f00;
           }
         }
-        &:hover {
+        &:hover,
+        &.weight-edit-mode {
           border: 1px solid #7e8;
           .action {
             display: block;
