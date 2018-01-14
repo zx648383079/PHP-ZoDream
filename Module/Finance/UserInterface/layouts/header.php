@@ -8,7 +8,7 @@ $this->registerCssFile('@font-awesome.min.css')
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <title><?=$this->title?>-ZoDream Generator</title>
+    <title><?=$this->title?>-ZoDream Finance</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?=$this->header()?>
@@ -16,7 +16,7 @@ $this->registerCssFile('@font-awesome.min.css')
 <body>
 <header>
     <div class="container">
-        ZoDream Generator
+        ZoDream Finance
     </div>
 </header>
 <div class="container">

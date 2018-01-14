@@ -1,5 +1,5 @@
 <?php
-namespace Module\Finance;
+namespace Module\Finance\Service;
 
 use Module\ModuleController;
 

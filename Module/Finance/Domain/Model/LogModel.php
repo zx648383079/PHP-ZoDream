@@ -5,7 +5,7 @@ use Domain\Model\Model;
 
 class LogModel extends Model {
     public static function tableName() {
-        return 'log';
+        return 'money_log';
     }
 
     public function get_month_balance_payments($conditions=array(),$limit=''){

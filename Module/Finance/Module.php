@@ -1,7 +1,7 @@
 <?php
 namespace Module\Finance;
 
-use Module\Disk\Domain\Migrations\CreateFinanceTables;
+use Module\Finance\Domain\Migrations\CreateFinanceTables;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {

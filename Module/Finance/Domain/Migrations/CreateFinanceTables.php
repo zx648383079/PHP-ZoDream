@@ -1,10 +1,10 @@
 <?php
-namespace Module\Disk\Domain\Migrations;
+namespace Module\Finance\Domain\Migrations;
 
-use Module\Finance\Domain\Model\BankModel;
+use Module\Finance\Domain\Model\MoneyAccountModel;
 use Module\Finance\Domain\Model\BudgetModel;
 use Module\Finance\Domain\Model\LogModel;
-use Module\Finance\Domain\Model\MoneyFormModel;
+use Module\Finance\Domain\Model\BankModel;
 use Module\Finance\Domain\Model\MoneyModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -17,7 +17,7 @@ class CreateFinanceTables extends Migration {
      * @return void
      */
     public function up() {
-        Schema::createTable(BankModel::tableName(), function(Table $table) {
+        Schema::createTable(MoneyAccountModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
             $table->set('name')->varchar(35)->notNull()->comment('配置项目');
             $table->set('alias')->varchar(50)->notNull()->comment('别名');
@@ -27,7 +27,7 @@ class CreateFinanceTables extends Migration {
             $table->set('start_at')->dateTime()->comment('起息日期');
             $table->set('end_at')->dateTime()->comment('到期日期');
             $table->set('earnings_number')->decimal(10, 2)->comment('到期收益');
-            $table->set('money_form_id')->int()->comment('资金形态');
+            $table->set('bank_id')->int()->comment('资金形态');
             $table->set('status')->bool()->defaultVal('1')->comment('0 已结束  1 进行中');
             $table->softDeletes()->comment('1 正常 0 删除');
             $table->set('color')->bool()->defaultVal(1)->comment('1 红色（赚） 0 绿（亏）');
@@ -44,7 +44,7 @@ class CreateFinanceTables extends Migration {
             $table->set('withdrawal_pass')->varchar(100)->comment('取款密码');
             $table->timestamps();
         });
-        Schema::createTable(MoneyFormModel::tableName(), function(Table $table) {
+        Schema::createTable(BankModel::tableName(), function(Table $table) {
             $table->set('id')->pk();
             $table->set('name')->varchar(50)->notNull()->comment('资金形态名称');
             $table->set('status')->bool()->defaultVal('1')->comment('1 正常 0 删除');
@@ -73,9 +73,9 @@ class CreateFinanceTables extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropTable(BankModel::tableName());
+        Schema::dropTable(MoneyAccountModel::tableName());
         Schema::dropTable(MoneyModel::tableName());
-        Schema::dropTable(MoneyFormModel::tableName());
+        Schema::dropTable(BankModel::tableName());
         Schema::dropTable(LogModel::tableName());
         Schema::dropTable(BudgetModel::tableName());
     }
