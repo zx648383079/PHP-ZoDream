@@ -17,7 +17,7 @@ class CreateBlogTables extends Migration {
      */
     public function up() {
         Schema::createTable(BlogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('title')->varchar(200)->notNull();
             $table->set('description')->varchar();
             $table->set('keywords')->varchar();
@@ -31,7 +31,7 @@ class CreateBlogTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(TermModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull();
             $table->set('parent_id')->int(10)->defaultVal(0);
             $table->set('keywords')->varchar();
@@ -39,7 +39,7 @@ class CreateBlogTables extends Migration {
             $table->set('thumb')->varchar();
         });
         Schema::createTable(CommentModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('content')->varchar()->notNull();
             $table->set('name')->varchar(30);
             $table->set('email')->varchar(50);
@@ -54,7 +54,7 @@ class CreateBlogTables extends Migration {
             $table->timestamp('created_at');
         });
         Schema::createTable(BlogLogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('type')->tinyint(3)->defaultVal(0);
             $table->set('id_value')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();

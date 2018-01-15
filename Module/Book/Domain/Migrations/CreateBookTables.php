@@ -38,7 +38,7 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(BookChapterBodyModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('content')->longtext()->comment('内容');
         });
         Schema::createTable(BookCategoryModel::tableName(), function(Table $table) {

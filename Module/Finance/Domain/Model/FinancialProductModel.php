@@ -1,16 +1,15 @@
 <?php
 namespace Module\Finance\Domain\Model;
 
+
 use Domain\Model\Model;
 
 /**
- * Class BankModel
- * @package Module\Finance\Domain\Model
+ * 理财产品
  */
-class BankModel extends Model {
+class FinancialProductModel extends Model {
+
     public static function tableName() {
-        return 'bank';
+        return 'financial_product';
     }
-
-
 }

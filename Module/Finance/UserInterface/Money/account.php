@@ -2,76 +2,54 @@
 use Zodream\Template\View;
 /** @var $this View */
 
-$this->title = '资本配置';
+$this->title = '资金账户列表';
 
 $this->extend('layouts/header');
 ?>
+    <div class="search">
+        <a class="btn btn-success pull-right" href="<?=$this->url('./money/create_account')?>">新增产品</a>
+    </div>
 
-<div class="search">
-    <form class="form-horizontal" role="form">
-        <div class="input-group">
-            <label class="sr-only" for="exampleInputEmail2">配置项目</label>
-            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="配置项目">
-        </div>
-        <div class="input-group">
-            <input class="form-control" type="email" placeholder="Enter email">
-        </div>
-        <div class="input-group">
-            <label class="sr-only" for="exampleInputPassword2">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
-        </div>
-        <button type="submit" class="btn btn-default">搜索</button>
-    </form>
-</div>
-
-    <table>
+    <hr/>
+    <table class="table  table-bordered well">
         <thead>
         <tr>
-        <th>ID</th>
-        <th>配置项目</th>
-        <th>资金</th>
-        <th>形态</th>
-<!--        <th>占比</th>-->
-        <th>(预估)收益率</th>
-        <th>状态</th>
-        <th>起息日期</th>
-        <th>到期日期</th>
-        <th>操作</th>
-    </tr>
+            <th>ID</th>
+            <th>账户</th>
+            <th>可用资金</th>
+            <th>冻结资金</th>
+            <th>状态</th>
+            <th>说明</th>
+            <th>操作</th>
+        </tr>
         </thead>
         <tbody>
-            <?php foreach ($account_list as $item):?>
+        <?php foreach($account_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
                 <td><?=$item->name?></td>
-                <td><?=$item->number?></td>
-                <td><?=$item->bank->name?></td>
-<!--                <td>--><!--%</td>-->
-                <td><?=$item->earnings?></td>
-                <td>
-                    <?php if ($item->status == 1):?>
-                    <button type="button" class="btn btn-success btn-xs">进行中</button>
-                    <?php else:?>
-                    <button type="button" class="btn btn-danger btn-xs">已结束</button>                    
-                    <?php endif;?>
-                </td>
-                <td><?=$item->start_at?></td>
-                <td><?=$item->end_at?></td>
+                <td><?=$item->money?></td>
+                <td><?=$item->frozen_money?></td>
+                <td><button type="button" class="btn <?=$item->status ==1 ? 'btn-success' : 'btn-danger' ?> btn-xs">
+                        <?=$item->status == 1 ? '启用' : '禁用' ?>
+                    </button></td>
+                <td><?=$item->remark?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_ account', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-success btn-xs" href="javascript:void(0);" onclick="confirm_earnings(12)">确认收益</a>
-                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_account', ['id' => $item->id])?>">删除</a>
-                     </div>
+
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_product', ['id' => $item->id])?>">编辑</a>
+                        <?php if($item->status == 0):?>
+                            <a class="btn btn-success btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">启用</a>
+                        <?php else: ?>
+                            <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">禁用</a>
+                        <?php endif?>
+                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_product', ['id' => $item->id])?>">删除</a>
+                    </div>
                 </td>
             </tr>
-            <?php endforeach;?>
+        <?php endforeach; ?>
         </tbody>
     </table>
-
-    <hr/>
-
-    <a class="btn btn-success" href="<?=$this->url('./money/add_account')?>">新增项目</a>
 
 <?php
 $this->extend('layouts/footer');

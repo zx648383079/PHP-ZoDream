@@ -136,30 +136,20 @@ $this->extend('layouts/header')
 ?>
 
     <div>
-        <form action="" method="post" class="form_inline" role="form">
-            <div class="form-group main-header">
-                <div class="input-group">
-                    <div class="input-group-addon">预算(元)</div>
-                    <input name="budget" type="text" class="form-control" style="width:100px;" value="1000" />
-                </div>
+        <form action="<?=$this->url('./budget/save')?>" method="post" class="form-horizontal" role="form">
+            <div class="input-group">
+                <label>名称</label>
+                <input name="name" type="text" class="form-control" size="16" value="" placeholder="请输入名称" />
             </div>
-            <div class="form-group main-header">
-                <div class="input-group">
-                    <div class="input-group-addon">已花费(元)</div>
-                    <input name="spent" type="text" class="form-control" readonly style="width:100px;" value="500" />
-                </div>
+            <div class="input-group">
+                <label>预算(元)</label>
+                <input name="budget" type="text" class="form-control" value="1000" />
             </div>
-            <div class="form-group main-header">
-                <div class="input-group">
-                    <div class="input-group-addon">剩余(元)</div>
-                    <input name="spent" type="text" class="form-control" readonly style="width:100px;" value="500" />
-                </div>
+            <div class="input-group">
+                <label>已花费(元)</label>
+                <input name="spent" type="text" class="form-control" value="0" />
             </div>
-            <div class="form-group main-header">
-                <div class="input-group">
-                    <button type="button" class="btn btn-success">确认提交</button>
-                </div>
-            </div>
+            <button type="button" class="btn btn-success">确认提交</button>
         </form>
     </div>
     <div>

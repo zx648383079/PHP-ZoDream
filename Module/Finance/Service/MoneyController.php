@@ -1,8 +1,9 @@
 <?php
 namespace Module\Finance\Service;
 
+use Module\Finance\Domain\Model\FinancialProductModel;
+use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
-use Module\Finance\Domain\Model\BankModel;
 use Module\ModuleController;
 use Zodream\Service\Routing\Url;
 
@@ -14,7 +15,7 @@ class MoneyController extends ModuleController {
     }
 
     public function accountAction() {
-        $account_list = MoneyAccountModel::with('bank')->all();
+        $account_list = MoneyAccountModel::all();
         return $this->show(compact('account_list'));
     }
 
@@ -38,25 +39,42 @@ class MoneyController extends ModuleController {
         return $this->jsonFailure($model->getFirstError());
     }
 
-    public function bankAction() {
-        $bank_list = BankModel::all();
-        return $this->show(compact('bank_list'));
+    public function projectAction() {
+        $model_list = FinancialProjectModel::with('product')->all();
+        return $this->show(compact('model_list'));
     }
 
-    public function addBankAction() {
-        return $this->editBankAction(0);
+    public function addProjectAction() {
+        return $this->editAccountAction(0);
     }
 
-    public function editBankAction($id) {
-        $model = BankModel::findOrNew($id);
-        return $this->show('create_bank', compact('model'));
+    public function editProjectAction($id) {
+        $model = FinancialProjectModel::findOrNew($id);
+        $product_list = FinancialProductModel::all();
+        return $this->show('create_account', compact('model', 'product_list'));
     }
 
-    public function saveBankAction() {
-        $model = new BankModel();
+    public function saveProjectAction() {
+        $model = new FinancialProjectModel();
         if ($model->load() && $model->save()) {
             return $this->jsonSuccess([
-                'url' => (string)Url::to('./money/bank')
+                'url' => Url::to('./money/project')
+            ]);
+        }
+        return $this->jsonFailure($model->getFirstError());
+    }
+
+
+    public function productAction() {
+        $model_list = FinancialProductModel::all();
+        return $this->show(compact('model_list'));
+    }
+
+    public function saveProductAction() {
+        $model = new FinancialProductModel();
+        if ($model->load() && $model->save()) {
+            return $this->jsonSuccess([
+                'url' => Url::to('./money/product')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

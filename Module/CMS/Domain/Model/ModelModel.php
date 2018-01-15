@@ -40,7 +40,7 @@ class ModelModel extends BaseModel {
 
     public function createTable() {
         $table = $this->getContentExtendTable();
-        $table->set('id')->int(10)->pk();
+        $table->set('id')->int(10)->pk()->ai();
         $table->set('content')->mediumtext();
         return $table->create();
     }

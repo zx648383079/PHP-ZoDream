@@ -2,12 +2,12 @@
 use Zodream\Template\View;
 /** @var $this View */
 
-$this->title = '资金形态';
+$this->title = '理财产品列表';
 
 $this->extend('layouts/header');
 ?>
-    <div class="row search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_bank')?>">新增形态</a>
+    <div class="search">
+        <a class="btn btn-success pull-right" href="<?=$this->url('./money/create_product')?>">新增产品</a>
     </div>
     
     <hr/>
@@ -22,7 +22,7 @@ $this->extend('layouts/header');
         </tr>
         </thead>
         <tbody>
-        <?php foreach($bank_list as $item){?>
+        <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
                 <td><?=$item->name?></td>
@@ -33,17 +33,17 @@ $this->extend('layouts/header');
                 <td>
                     <div class="btn-group  btn-group-xs">
                    
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_ bank', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_product', ['id' => $item->id])?>">编辑</a>
                         <?php if($item->status == 0):?>
-                            <a class="btn btn-success btn-xs" data-type="post" href="<?=$this->url('./money/del_bank', ['id' => $item->id])?>">启用</a>
+                            <a class="btn btn-success btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">启用</a>
                         <?php else: ?>
-                            <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/del_bank', ['id' => $item->id])?>">禁用</a>
+                            <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">禁用</a>
                         <?php endif?>
-                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_bank', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_product', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>
-        <?php } ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
 

@@ -2,20 +2,20 @@
 use Zodream\Template\View;
 /** @var $this View */
 
-$this->title = '新增形态';
+$this->title = '新增理财产品';
 
 $this->extend('layouts/header');
 ?>
 
     <h1>新增形态</h1>
-    <form data-type="ajax" action="<?=$this->url('./money/save_bank')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./money/save_product')?>" method="post" class="form-table" role="form">
     <div class="input-group">
         <label>形态名称</label>
         <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="">
     </div>
     <div class="input-group">
         <label>说明</label>
-        <input name="info" type="text" class="form-control" placeholder="备注信息" value="">
+        <input name="remark" type="text" class="form-control" placeholder="备注信息" value="">
     </div>
     <div class="input-group">
         <label>
