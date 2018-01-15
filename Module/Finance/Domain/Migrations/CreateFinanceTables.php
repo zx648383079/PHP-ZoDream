@@ -66,6 +66,7 @@ class CreateFinanceTables extends Migration {
             $table->set('channel_id')->int()->defaultVal(0)->comment('支出时填写消费渠道');
             $table->set('project_id')->int()->defaultVal(0)->comment('收入时填写理财项目');
             $table->set('remark')->text()->comment('备注');
+            $table->set('happened_at')->dateTime()->notNull()->comment('发生时间');
             $table->timestamps();
         });
         Schema::createTable(ConsumptionChannelModel::tableName(), function(Table $table) {

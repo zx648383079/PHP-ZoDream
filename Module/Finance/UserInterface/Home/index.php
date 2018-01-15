@@ -131,7 +131,7 @@ $js = <<<JS
 JS;
 
 $this->extend('layouts/header')
-    ->registerJsFile('@echarts.js')
+    ->registerJsFile('@echarts.min.js')
     ->registerJs($js);
 ?>
 

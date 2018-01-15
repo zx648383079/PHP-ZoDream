@@ -8,8 +8,20 @@ use Zodream\Service\Routing\Url;
 
 class IncomeController extends ModuleController {
 
-    public function indexAction() {
-        return $this->show();
+    public function indexAction($month = null) {
+        if (empty($month)) {
+            $month = date('Y-m');
+        }
+        $time = strtotime($month);
+        $start_at = date('Y-m-01 00:00:00', $time);
+        $end_at = date('Y-m-31 00:00:00', $time);
+        $income_list = LogModel::where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at)->where('type', LogModel::TYPE_INCOME)->orderBy('id desc')->all();
+        $expenditure_list = LogModel::where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('id desc')->all();
+        $log_list = LogModel::where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at)->orderBy('id desc')->all();
+        $day_length = date('t', $time);
+        $income_days = LogModel::getMonthLogs($income_list, $day_length);
+        $expenditure_days = LogModel::getMonthLogs($expenditure_list, $day_length);
+        return $this->show(compact('month', 'income_days', 'income_list', 'expenditure_list', 'expenditure_days', 'log_list', 'day_length'));
     }
 
     public function logAction() {
