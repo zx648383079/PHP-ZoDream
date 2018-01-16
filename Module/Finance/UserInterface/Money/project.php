@@ -71,7 +71,7 @@ $this->extend('layouts/header');
 
     <hr/>
 
-    <a class="btn btn-success" href="<?=$this->url('./money/add_account')?>">新增项目</a>
+    <a class="btn btn-success" href="<?=$this->url('./money/add_project')?>">新增项目</a>
 
 <?php
 $this->extend('layouts/footer');

@@ -3,13 +3,26 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '个人财务管理';
+
+$now_total = $now_income + $now_expenditure;
+$y_total = $y_income + $y_expenditure;
+
+$tags = [];
+$data = [];
+foreach ($account_list as $item) {
+    $name = "'{$item->name}'";
+    $tags[] = $name;
+    $data[] = sprintf('{value: %s, name: %s}', $item->total, $name);
+}
+$data = implode(',', $data);
+$tags = implode(',', $tags);
+
 $js = <<<JS
    //资产分布
-    var myChart = echarts.init(document.getElementById('main'));
+    var myChart = echarts.init(document.getElementById('now-box'));
     var option = {
         title : {
-            text: '资产分布',
-            subtext: '以录入系统数据为准',
+            text: '本月收支情况',
             x:'center'
         },
         tooltip : {
@@ -19,20 +32,95 @@ $js = <<<JS
         legend: {
             orient: 'vertical',
             left: 'left',
-            data: []
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
+            data: ['收入', '支出']
         },
         series : [
             {
-                name: '资金分布',
+                name: '本月收支',
                 type: 'pie',
                 radius : '55%',
                 center: ['50%', '60%'],
-                data: {},
+                data:[
+                    {value:{$now_income}, name:'收入'},
+                    {value:{$now_expenditure}, name:'支出'},
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    
+    var myChart = echarts.init(document.getElementById('y-box'));
+    var option = {
+        title : {
+            text: '上月收支情况',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['收入', '支出']
+        },
+        series : [
+            {
+                name: '本月收支',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {value:{$y_income}, name:'收入'},
+                    {value:{$y_expenditure}, name:'支出'},
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    
+    var myChart = echarts.init(document.getElementById('main'));
+    var option = {
+        title : {
+            text: '资产分布情况',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: [{$tags}]
+        },
+        series : [
+            {
+                name: '资产分布',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {$data}
+                ],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -136,35 +224,23 @@ $this->extend('layouts/header')
 ?>
 
     <div>
-        <form action="<?=$this->url('./budget/save')?>" method="post" class="form-horizontal" role="form">
-            <div class="input-group">
-                <label>名称</label>
-                <input name="name" type="text" class="form-control" size="16" value="" placeholder="请输入名称" />
-            </div>
-            <div class="input-group">
-                <label>预算(元)</label>
-                <input name="budget" type="text" class="form-control" value="1000" />
-            </div>
-            <div class="input-group">
-                <label>已花费(元)</label>
-                <input name="spent" type="text" class="form-control" value="0" />
-            </div>
-            <button type="button" class="btn btn-success">确认提交</button>
-        </form>
-    </div>
-    <div>
         <div class="dashboard-panel panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">本月收支状况</h3 >
             </div>
             <div class="panel-body">
-                <p>本月总收支：10000元-收入占50%，支出占50%</p>
+                <p>本月总收支：<?=$now_total?>元
+                    <?php if ($now_total > 0) :?>
+                    -收入占<?=intval($now_income * 100 / $now_total)?>%，支出占<?=intval($now_expenditure * 100 / $now_total)?>%</p>
+                    <?php endif;?>
             </div>
-            <div class="panel-body">大饼图</div>
             <div class="panel-body">
-                <p>收入记录：30条。收入总额：10000元</p>
-                <p>支出记录：30条。支出总额：10000元</p>
-                <p>余额;10000元</p>
+                <div id="now-box" style="width: 600px;height:400px;"></div>
+            </div>
+            <div class="panel-body">
+                <p>收入记录：<?=$now_income_count?>条。收入总额：<?=$now_income?>元</p>
+                <p>支出记录：<?=$now_expenditure_count?>条。支出总额：<?=$now_expenditure?>元</p>
+                <p>余额; 10000元</p>
             </div>
         </div>
         <div class="dashboard-panel panel panel-primary">
@@ -172,12 +248,17 @@ $this->extend('layouts/header')
                 <h3 class="panel-title">上月收支状况</h3 >
             </div>
             <div class="panel-body">
-                <p>上月总收支：10000元-收入占50%，支出占50%</p>
+                <p>上月总收支：<?=$now_total?>元
+                    <?php if ($now_total > 0) :?>
+                    -收入占<?=intval($y_income * 100 / $y_total)?>%，支出占<?=intval($y_expenditure * 100 / $y_total)?>%</p>
+                    <?php endif;?>
             </div>
-            <div class="panel-body">大饼图</div>
             <div class="panel-body">
-                <p>收入记录：30条。收入总额：10000元</p>
-                <p>支出记录：30条。支出总额：10000元</p>
+                <div id="y-box" style="width: 600px;height:400px;"></div>
+            </div>
+            <div class="panel-body">
+                <p>收入记录：<?=$y_income_count?>条。收入总额：<?=$y_income?>元</p>
+                <p>支出记录：<?=$y_expenditure_count?>条。支出总额：<?=$y_expenditure?>元</p>
                 <p>余额;10000元</p>
             </div>
         </div>

@@ -7,7 +7,7 @@ $this->title = '资金账户列表';
 $this->extend('layouts/header');
 ?>
     <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./money/create_account')?>">新增产品</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_account')?>">新增产品</a>
     </div>
 
     <hr/>
@@ -37,13 +37,13 @@ $this->extend('layouts/header');
                 <td>
                     <div class="btn-group  btn-group-xs">
 
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_product', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_account', ['id' => $item->id])?>">编辑</a>
                         <?php if($item->status == 0):?>
-                            <a class="btn btn-success btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">启用</a>
+                            <a class="btn btn-success btn-xs" data-type="post" href="<?=$this->url('./money/change_account', ['id' => $item->id])?>">启用</a>
                         <?php else: ?>
-                            <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">禁用</a>
+                            <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/change_account', ['id' => $item->id])?>">禁用</a>
                         <?php endif?>
-                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_product', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_account', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

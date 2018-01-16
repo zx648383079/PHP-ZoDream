@@ -7,28 +7,9 @@ $this->title = '月流水';
 $this->extend('layouts/header');
 ?>
 
-    <div>
-        <h2>收支录入</h2>
-        <form data-type="ajax" action="<?=$this->url('./income/save_log')?>" method="post" class="form-horizontal" role="form">
-            <div class="input-group">
-                <label>金额(元)</label>
-                <input name="number" type="text" class="form-control" size="16" value="" placeholder="请输入金额" />
-            </div>
-            <div class="input-group">
-                <label>备注</label>
-                <input name="remark" type="text" class="form-control" value="" placeholder="请输入备注" />
-            </div>
-            <div class="input-group">
-                <label for="">时间</label>
-                <input name="created_at" type="text" class="form-control" value="" placeholder="请选择时间" />
-            </div>
-            <div class="input-group">
-                <input type="radio" name="type" value="1" />收入
-                <input type="radio" name="type" checked value="0" />支出
-            </div>
-            <button type="submit" class="btn btn-success">确认提交</button>
-        </form>
-    </div>
+    <a class="btn btn-success" href="<?=$this->url('./income/add_log')?>">新增项目</a>
+    <hr/>
+
     <div>
         <h2>月流水</h2>
         <select class="form-control" id="type" name="type1" style="width:100px;float: right;">

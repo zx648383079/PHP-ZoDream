@@ -4,23 +4,34 @@ use Zodream\Template\View;
 
 $this->title = '配置项目';
 
-$this->extend('layouts/header');
+$js = <<<JS
+    var start_at = $('[name=start_at]').datetimer();
+    $('[name=end_at]').datetimer({
+        min: start_at
+    });
+JS;
+
+
+$this->registerCssFile('@datetimer.css')
+    ->extend('layouts/header')
+    ->registerJsFile('@jquery.datetimer.min.js')
+    ->registerJs($js, View::JQUERY_READY);
 ?>
 
     <h1>新增配置项目</h1>
-    <form data-type="ajax" action="<?=$this->url('./money/save_account')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./money/save_project')?>" method="post" class="form-table" role="form">
         <div class="input-group">
             <label>配置名称</label>
-            <input name="asset_name" type="text" class="form-control"  placeholder="输入配置名称" value="">
+            <input name="name" type="text" class="form-control"  placeholder="输入配置名称" value="">
         </div>
         <div class="input-group">
             <label>资金</label>
-            <input name="number" type="text" class="form-control" placeholder="输入配置数目" value="">
+            <input name="money" type="text" class="form-control" placeholder="输入配置数目" value="">
         </div>
         <div class="input-group">
-            <label>资金形态</label>
-            <select class="form-control" name="money_form_id">
-                <?php foreach($form_list as $item):?>
+            <label>理财产品</label>
+            <select class="form-control" name="product_id">
+                <?php foreach($product_list as $item):?>
                     <option value="<?=$item->id;?>"><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
@@ -52,6 +63,7 @@ $this->extend('layouts/header');
         <!--  </div>-->
         <button type="submit" class="btn btn-success">确认新增</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+        <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
 
 <?php

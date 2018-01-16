@@ -25,8 +25,7 @@ class MoneyController extends ModuleController {
 
     public function editAccountAction($id) {
         $model = MoneyAccountModel::findOrNew($id);
-        $form_list = BankModel::all();
-        return $this->show('create_account', compact('model', 'form_list'));
+        return $this->show('create_account', compact('model'));
     }
 
     public function saveAccountAction() {
@@ -45,20 +44,20 @@ class MoneyController extends ModuleController {
     }
 
     public function addProjectAction() {
-        return $this->editAccountAction(0);
+        return $this->editProjectAction(0);
     }
 
     public function editProjectAction($id) {
         $model = FinancialProjectModel::findOrNew($id);
         $product_list = FinancialProductModel::all();
-        return $this->show('create_account', compact('model', 'product_list'));
+        return $this->show('create_project', compact('model', 'product_list'));
     }
 
     public function saveProjectAction() {
         $model = new FinancialProjectModel();
         if ($model->load() && $model->save()) {
             return $this->jsonSuccess([
-                'url' => Url::to('./money/project')
+                'url' => (string)Url::to('./money/project')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -70,11 +69,20 @@ class MoneyController extends ModuleController {
         return $this->show(compact('model_list'));
     }
 
+    public function addProductAction() {
+        return $this->editProductAction(0);
+    }
+
+    public function editProductAction($id) {
+        $model = FinancialProductModel::findOrNew($id);
+        return $this->show('create_product', compact('model'));
+    }
+
     public function saveProductAction() {
         $model = new FinancialProductModel();
         if ($model->load() && $model->save()) {
             return $this->jsonSuccess([
-                'url' => Url::to('./money/product')
+                'url' => (string)Url::to('./money/product')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

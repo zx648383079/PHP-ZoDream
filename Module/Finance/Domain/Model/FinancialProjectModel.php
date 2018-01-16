@@ -16,7 +16,7 @@ use Domain\Model\Model;
  * @property string $start_at
  * @property string $end_at
  * @property float $earnings_number
- * @property integer $bank_id
+ * @property integer $product_id
  * @property integer $status
  * @property integer $deleted_at
  * @property integer $color
@@ -27,13 +27,12 @@ use Domain\Model\Model;
 class FinancialProjectModel extends Model {
 
     public static function tableName() {
-        return 'financial_management';
+        return 'financial_project';
     }
 
 
     protected function rules() {
         return [
-            'id' => 'required|int',
             'name' => 'required|string:3-35',
             'alias' => 'required|string:3-50',
             'number' => 'required',
@@ -42,7 +41,7 @@ class FinancialProjectModel extends Model {
             'start_at' => '',
             'end_at' => '',
             'earnings_number' => '',
-            'bank_id' => 'int',
+            'product_id' => 'int',
             'status' => 'int:0-1',
             'deleted_at' => 'int',
             'color' => 'int:0-1',

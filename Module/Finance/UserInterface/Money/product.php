@@ -7,7 +7,7 @@ $this->title = '理财产品列表';
 $this->extend('layouts/header');
 ?>
     <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./money/create_product')?>">新增产品</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_product')?>">新增产品</a>
     </div>
     
     <hr/>

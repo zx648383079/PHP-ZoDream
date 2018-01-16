@@ -2,7 +2,9 @@
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\ConsumptionChannelModel;
+use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
+use Module\Finance\Domain\Model\MoneyAccountModel;
 use Module\ModuleController;
 use Zodream\Service\Routing\Url;
 
@@ -13,11 +15,9 @@ class IncomeController extends ModuleController {
             $month = date('Y-m');
         }
         $time = strtotime($month);
-        $start_at = date('Y-m-01 00:00:00', $time);
-        $end_at = date('Y-m-31 00:00:00', $time);
-        $income_list = LogModel::where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at)->where('type', LogModel::TYPE_INCOME)->orderBy('id desc')->all();
-        $expenditure_list = LogModel::where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('id desc')->all();
-        $log_list = LogModel::where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at)->orderBy('id desc')->all();
+        $income_list = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('id desc')->all();
+        $expenditure_list = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('id desc')->all();
+        $log_list = LogModel::month($time)->orderBy('id desc')->all();
         $day_length = date('t', $time);
         $income_days = LogModel::getMonthLogs($income_list, $day_length);
         $expenditure_days = LogModel::getMonthLogs($expenditure_list, $day_length);
@@ -35,14 +35,17 @@ class IncomeController extends ModuleController {
 
     public function editLogAction($id) {
         $model = LogModel::findOrNew($id);
-        return $this->show('create_log', compact('model'));
+        $channel_list = ConsumptionChannelModel::all();
+        $account_list = MoneyAccountModel::all();
+        $project_list = FinancialProjectModel::all();
+        return $this->show('create_log', compact('model', 'channel_list', 'account_list', 'project_list'));
     }
 
     public function saveLogAction() {
         $model = new LogModel();
         if ($model->load() && $model->save()) {
             return $this->jsonSuccess([
-                'url' => Url::to('./income/log')
+                'url' => (string)Url::to('./income/log')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -51,7 +54,7 @@ class IncomeController extends ModuleController {
     public function deleteLogAction($id) {
         LogModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => Url::to('./income/log')
+            'url' => (string)Url::to('./income/log')
         ]);
     }
 
@@ -64,7 +67,7 @@ class IncomeController extends ModuleController {
         $model = new ConsumptionChannelModel();
         if ($model->load() && $model->save()) {
             return $this->jsonSuccess([
-                'url' => Url::to('./income/channel')
+                'url' => (string)Url::to('./income/channel')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

@@ -6,13 +6,23 @@ $(document).ready(function() {
     });
     $("form[data-type=ajax]").submit(function() {
         let $this = $(this);
-        $.getJSON($this.attr('action'), $this.serialize(), function(data) {
-            if (data.code == 200) {
-                Dialog.tip(data.messages || '操作执行完成！');
+        $.post($this.attr('action'), $this.serialize(), function(data) {
+            if (data.code != 200) {
+                Dialog.tip(data.errors || '操作执行失败！');
                 return;
             }
-            Dialog.tip(data.errors || '操作执行失败！');
-        });
+            Dialog.tip(data.messages || '操作执行完成！');
+            if (data.data && data.data.refresh) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            }
+            if (data.data && data.data.url) {
+                setTimeout(() => {
+                    window.location.href = data.data.url;
+                }, 500);
+            }
+        }, 'json');
         return false;
     });
     $(".page-tip .toggle").click(function() {
