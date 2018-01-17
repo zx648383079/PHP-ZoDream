@@ -13,7 +13,7 @@ class BudgetController extends ModuleController {
 
     public function saveAction() {
         $model = new BudgetModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => Url::to('./budget')
             ]);

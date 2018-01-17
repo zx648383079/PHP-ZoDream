@@ -30,7 +30,7 @@ class MoneyController extends ModuleController {
 
     public function saveAccountAction() {
         $model = new MoneyAccountModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => (string)Url::to('./money/account')
             ]);
@@ -55,7 +55,7 @@ class MoneyController extends ModuleController {
 
     public function saveProjectAction() {
         $model = new FinancialProjectModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => (string)Url::to('./money/project')
             ]);
@@ -80,7 +80,7 @@ class MoneyController extends ModuleController {
 
     public function saveProductAction() {
         $model = new FinancialProductModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => (string)Url::to('./money/product')
             ]);

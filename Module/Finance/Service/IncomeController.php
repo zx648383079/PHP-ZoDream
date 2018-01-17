@@ -43,7 +43,7 @@ class IncomeController extends ModuleController {
 
     public function saveLogAction() {
         $model = new LogModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => (string)Url::to('./income/log')
             ]);
@@ -65,7 +65,7 @@ class IncomeController extends ModuleController {
 
     public function saveChannelAction() {
         $model = new ConsumptionChannelModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => (string)Url::to('./income/channel')
             ]);
