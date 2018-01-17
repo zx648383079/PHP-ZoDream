@@ -38,4 +38,8 @@ class FinancialProductModel extends Model {
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function getMoneyAttribute() {
+        return $this->money = floatval(FinancialProjectModel::where('product_id', $this->id)->sum('money'));
+    }
 }

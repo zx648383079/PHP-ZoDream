@@ -25,7 +25,7 @@ class LogModel extends Model {
      */
     const TYPE_EXPENDITURE = 0;
     /**
-     * 收益
+     * 收入
      */
     const TYPE_INCOME = 1;
 
@@ -66,6 +66,10 @@ class LogModel extends Model {
 
     public function getDayAttribute() {
         return date('d', strtotime($this->happened_at));
+    }
+
+    public function getHappenedAtAttribute() {
+        return $this->formatTimeAttribute('happened_at');
     }
 
     public function scopeMonth($query, $time) {

@@ -35,7 +35,7 @@ class CreateFinanceTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(35)->notNull()->comment('配置项目');
             $table->set('alias')->varchar(50)->notNull()->comment('别名');
-            $table->set('number')->decimal(10, 2)->notNull()->defaultVal(0)->comment('金额');
+            $table->set('money')->decimal(10, 2)->notNull()->defaultVal(0)->comment('金额');
             $table->set('accounted_for')->decimal(10, 4)->comment('占比');
             $table->set('earnings')->decimal(10, 4)->comment('收益率/预估收益率');
             $table->set('start_at')->dateTime()->comment('起息日期');

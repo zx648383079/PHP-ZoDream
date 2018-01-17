@@ -24,12 +24,14 @@ class IncomeController extends ModuleController {
         return $this->show(compact('month', 'income_days', 'income_list', 'expenditure_list', 'expenditure_days', 'log_list', 'day_length'));
     }
 
-    public function logAction() {
-        $log_list = LogModel::page();
+    public function logAction($type = null) {
+        $log_list = LogModel::when(is_numeric($type), function ($query) use ($type) {
+            $query->where('type', intval($type));
+        })->page();
         return $this->show(compact('log_list'));
     }
 
-    public function createLogAction() {
+    public function addLogAction() {
         return $this->editLogAction(0);
     }
 

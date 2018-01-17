@@ -3,6 +3,7 @@
 $this->registerCssFile('@font-awesome.min.css')
     ->registerCssFile('@zodream.css')
     ->registerCssFile('@dialog.css')
+    ->registerCssFile('@datetimer.css')
     ->registerCssFile('@finance.css');
 ?>
 <!DOCTYPE html>

@@ -10,7 +10,7 @@ use Domain\Model\Model;
  * @property integer $id
  * @property string $name
  * @property string $alias
- * @property float $number
+ * @property float $money
  * @property float $accounted_for
  * @property float $earnings
  * @property string $start_at
@@ -35,7 +35,7 @@ class FinancialProjectModel extends Model {
         return [
             'name' => 'required|string:3-35',
             'alias' => 'required|string:3-50',
-            'number' => 'required',
+            'money' => 'required',
             'accounted_for' => '',
             'earnings' => '',
             'start_at' => '',
@@ -56,7 +56,7 @@ class FinancialProjectModel extends Model {
             'id' => 'ID',
             'name' => '配置项目',
             'alias' => 'Alias',
-            'number' => '资金',
+            'money' => '资金',
             'accounted_for' => 'Accounted For',
             'earnings' => '(预估)收益率',
             'start_at' => '起息日期',
@@ -73,7 +73,7 @@ class FinancialProjectModel extends Model {
     }
 
 
-    public function bank() {
-        return $this->hasOne(BankModel::class, 'id', 'bank_id');
+    public function product() {
+        return $this->hasOne(FinancialProductModel::class, 'id', 'product_id');
     }
 }

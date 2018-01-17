@@ -3,8 +3,14 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '月流水';
+$js = <<<JS
+$("#type-box").change(function() {
+  $('#type-form').submit();
+});
+JS;
 
-$this->extend('layouts/header');
+$this->extend('layouts/header')
+->registerJs($js, View::JQUERY_READY);
 ?>
 
     <a class="btn btn-success" href="<?=$this->url('./income/add_log')?>">新增项目</a>
@@ -12,11 +18,13 @@ $this->extend('layouts/header');
 
     <div>
         <h2>月流水</h2>
-        <select class="form-control" id="type" name="type1" style="width:100px;float: right;">
-            <option value="">全部</option>
-            <option value="1">收入</option>
-            <option value="0">支出</option>
-        </select>
+        <form id="type-form">
+            <select class="form-control" id="type-box" name="type" style="width:100px;float: right;">
+                <option value="">全部</option>
+                <option value="1">收入</option>
+                <option value="0">支出</option>
+            </select>
+        </form>
         <div class="col-xs-12">
             <table class="table table-hover">
                 <thead>
@@ -32,10 +40,10 @@ $this->extend('layouts/header');
                     <tr class="<?=$item->type !=1 ? 'danger' : ''?>">
                         <td><?=$item->created_at?></td>
                         <td>
-                            <?php if ($item->type !=1):?>
+                            <?php if ($item->type != 1):?>
                             <button type='button' class='btn btn-danger btn-xs'>支出</button>
                             <?php endif;?>
-                            <?=$item->number;?>
+                            <?=$item->money;?>
                         </td>
                         <td>
                             <?=$item->remark;?></td>

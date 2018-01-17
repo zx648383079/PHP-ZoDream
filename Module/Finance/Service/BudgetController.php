@@ -3,6 +3,7 @@ namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
 use Module\ModuleController;
+use Zodream\Service\Routing\Url;
 
 class BudgetController extends ModuleController {
 
@@ -13,9 +14,9 @@ class BudgetController extends ModuleController {
 
     public function saveAction() {
         $model = new BudgetModel();
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => Url::to('./budget')
+                'url' => (string)Url::to('./budget')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

@@ -11,7 +11,13 @@ class MoneyController extends ModuleController {
 
     public function indexAction() {
         $account_list = MoneyAccountModel::all();
-        return $this->show(compact('account_list'));
+        $total = 0;
+        foreach ($account_list as $item) {
+            $total += $item->total;
+        }
+        $product_list = FinancialProductModel::all();
+        $project_list = FinancialProjectModel::select('name', 'money')->all();
+        return $this->show(compact('account_list', 'total', 'product_list', 'project_list'));
     }
 
     public function accountAction() {
@@ -61,6 +67,11 @@ class MoneyController extends ModuleController {
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
+    }
+
+    public function confirmEarningsAction($id) {
+        $model = FinancialProjectModel::find($id);
+        return $this->show('confirm_project', compact('model'));
     }
 
 

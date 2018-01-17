@@ -4,6 +4,16 @@ use Zodream\Template\View;
 
 $this->title = '总资金';
 
+$tags = [];
+$data = [];
+foreach ($project_list as $item) {
+    $name = "'{$item->name}'";
+    $tags[] = $name;
+    $data[] = sprintf('{value: %s, name: %s}', $item->money, $name);
+}
+$data = implode(',', $data);
+$tags = implode(',', $tags);
+
 $js = <<<JS
    var myChart = echarts.init(document.getElementById('main'));
     var option = {
@@ -19,7 +29,7 @@ $js = <<<JS
         legend: {
             orient: 'vertical',
             left: 'left',
-            data: []
+            data: [{$tags}]
         },
         toolbox: {
             feature: {
@@ -32,7 +42,9 @@ $js = <<<JS
                 type: 'pie',
                 radius : '55%',
                 center: ['50%', '60%'],
-                data: {},
+                data: [
+                    {$data}
+                ],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -61,19 +73,19 @@ $this->extend('layouts/header')
                 <tr>
                     <th>总资金</th>
                     <th>账户</th>
-                    <th>资金</th>
-                    <th>收益率</th>
+                    <th>可用资金</th>
+                    <th>冻结资金</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach($account_list as $key => $item): ?>
                     <tr>
                         <?php if($key < 1):?>
-                            <td rowspan="<?=count($account_list)?>" align="center"><?=$count['count']?></td>
+                            <td rowspan="<?=count($account_list)?>" align="center"><?=$total?></td>
                         <?php endif?>
                         <td><?=$item->name?></td>
-                        <td><?=$item->number?></td>
-                        <td><?=$item->earnings * 100?>%</td>
+                        <td><?=$item->money?></td>
+                        <td><?=$item->frozen_money?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -81,18 +93,18 @@ $this->extend('layouts/header')
         </div>
     </div>
     <div style="margin: 0 0 20px 2px;">
-        <h3>总金额：<?=$count['count'];?>元</h3>
-        <?php foreach($money_form_count as $value){?>
+        <h3>理财产品</h3>
+        <?php foreach($product_list as $item):?>
             <div class="col-lg-6">
-                <h4><?=$value['money_form_name'];?></h4>
-                <p><?=$value['money_form_count'];?>元</p>
+                <h4><?=$item->name?></h4>
+                <p><?=$item->money?>元</p>
             </div>
-        <?php }?>
+        <?php endforeach;?>
     </div>
     <div>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">总金额</h3 >
+                <h3 class="panel-title">理财项目分布</h3 >
             </div>
             <div class="panel-body">
                 <div id="main" style="width: 600px;height:400px;"></div>
