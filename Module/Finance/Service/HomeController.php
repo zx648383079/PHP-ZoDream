@@ -1,6 +1,7 @@
 <?php
 namespace Module\Finance\Service;
 
+use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Module\ModuleController;
@@ -22,8 +23,10 @@ class HomeController extends ModuleController {
         $y_expenditure_count = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->count();
         $account_list = MoneyAccountModel::all();
 
+        $project_list = FinancialProjectModel::all();
+
         return $this->show(compact('now_income', 'now_income_count', 'now_expenditure',
             'now_expenditure_count', 'y_income', 'y_income_count',
-            'y_expenditure', 'y_expenditure_count', 'account_list'));
+            'y_expenditure', 'y_expenditure_count', 'account_list', 'project_list'));
     }
 }

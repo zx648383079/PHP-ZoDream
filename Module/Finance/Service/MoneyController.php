@@ -3,8 +3,10 @@ namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\FinancialProductModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
+use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Module\ModuleController;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
 class MoneyController extends ModuleController {
@@ -56,7 +58,8 @@ class MoneyController extends ModuleController {
     public function editProjectAction($id) {
         $model = FinancialProjectModel::findOrNew($id);
         $product_list = FinancialProductModel::all();
-        return $this->show('create_project', compact('model', 'product_list'));
+        $account_list = MoneyAccountModel::all();
+        return $this->show('create_project', compact('model', 'product_list', 'account_list'));
     }
 
     public function saveProjectAction() {
@@ -74,6 +77,22 @@ class MoneyController extends ModuleController {
         return $this->show('confirm_project', compact('model'));
     }
 
+    public function saveEarningsAction() {
+        $project = FinancialProjectModel::find(Request::post('id'));
+        $model = new LogModel();
+        $model->money = floatval(Request::post('money'));
+        $model->account_id = $project->account_id;
+        $model->project_id = $project->id;
+        $model->type = LogModel::TYPE_INCOME;
+        $model->happened_at = date('Y-m-d H:i:s');
+        $model->remark = sprintf('理财项目 %s 收益', $project->name);
+        if ($model->save()) {
+            return $this->jsonSuccess([
+                'url' => (string)Url::to('./money/project')
+            ]);
+        }
+        return $this->jsonFailure($model->getFirstError());
+    }
 
     public function productAction() {
         $model_list = FinancialProductModel::all();

@@ -10,8 +10,8 @@ $js = <<<JS
       Dialog.box({
           title: '确定收益',
           url: '{$url}?id='+id
-      }).done(function() {
-        console.log(arguments);
+      }).on('done', function() {
+        ajaxForm(this.find('form'));
       });
     }
 JS;

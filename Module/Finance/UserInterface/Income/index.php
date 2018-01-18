@@ -194,7 +194,9 @@ $js = <<<JS
         myChart.setOption(option);
 JS;
 
-$this->extend('layouts/header')->registerJsFile('@echarts.min.js')->registerJs($js);
+$this->extend('layouts/header')
+    ->registerJsFile('@echarts.min.js')
+    ->registerJs($js);
 ?>
 
     <div>

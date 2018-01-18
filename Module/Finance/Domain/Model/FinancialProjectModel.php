@@ -2,6 +2,7 @@
 namespace Module\Finance\Domain\Model;
 
 
+use Carbon\Carbon;
 use Domain\Model\Model;
 
 /**
@@ -11,7 +12,7 @@ use Domain\Model\Model;
  * @property string $name
  * @property string $alias
  * @property float $money
- * @property float $accounted_for
+ * @property float $account_id
  * @property float $earnings
  * @property string $start_at
  * @property string $end_at
@@ -36,7 +37,7 @@ class FinancialProjectModel extends Model {
             'name' => 'required|string:3-35',
             'alias' => 'required|string:3-50',
             'money' => 'required',
-            'accounted_for' => '',
+            'account_id' => 'int',
             'earnings' => '',
             'start_at' => '',
             'end_at' => '',
@@ -57,7 +58,7 @@ class FinancialProjectModel extends Model {
             'name' => '配置项目',
             'alias' => 'Alias',
             'money' => '资金',
-            'accounted_for' => 'Accounted For',
+            'account_id' => 'Account',
             'earnings' => '(预估)收益率',
             'start_at' => '起息日期',
             'end_at' => '到期日期',
@@ -75,5 +76,18 @@ class FinancialProjectModel extends Model {
 
     public function product() {
         return $this->hasOne(FinancialProductModel::class, 'id', 'product_id');
+    }
+
+    public function getWeekIncome() {
+        $data = [0, 0, 0, 0, 0, 0, 0];
+        $log_list = LogModel::week(time())->where('project_id', $this->id)->all();
+        foreach ($log_list as $item) {
+            $day = date('w', strtotime($item->happened_at));
+            if ($day < 1) {
+                $day = 7;
+            }
+            $data[$day - 1] += $item->money;
+        }
+        return $data;
     }
 }

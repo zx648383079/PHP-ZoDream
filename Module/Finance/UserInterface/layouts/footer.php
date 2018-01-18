@@ -5,7 +5,7 @@ $this->registerJsFile('@jquery.min.js')
     ->registerJsFile('@jquery.datetimer.min.js')
     ->registerJsFile('@finance.min.js');
 ?>
-        </div>
+
     </div>
 </div>
 <?=$this->footer()?>

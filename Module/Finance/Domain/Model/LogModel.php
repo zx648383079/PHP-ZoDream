@@ -1,6 +1,7 @@
 <?php
 namespace Module\Finance\Domain\Model;
 
+use Carbon\Carbon;
 use Domain\Model\Model;
 
 /**
@@ -74,6 +75,11 @@ class LogModel extends Model {
 
     public function scopeMonth($query, $time) {
         return $this->scopeTime($query, date('Y-m-01 00:00:00', $time), date('Y-m-31 00:00:00', $time));
+    }
+
+    public function scopeWeek($query, $now) {
+        $time = ('1' == date('w', $now)) ? strtotime('Monday', $now) : strtotime('last Monday', $now);
+        return $this->scopeTime($query, date('Y-m-d 00:00:00', $time), date('Y-m-d 23:59:59', strtotime('Sunday', $now)));
     }
 
     public function scopeTime($query, $start_at, $end_at) {

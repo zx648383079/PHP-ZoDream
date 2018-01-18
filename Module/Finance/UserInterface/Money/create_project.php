@@ -31,6 +31,14 @@ $this->extend('layouts/header')
             <input name="money" type="text" class="form-control" placeholder="输入配置数目" required value="<?=$model->money?>">
         </div>
         <div class="input-group">
+            <label>资金账户</label>
+            <select class="form-control" name="account_id">
+                <?php foreach($account_list as $item):?>
+                    <option value="<?=$item->id;?>" <?=$model->id == $model->account_id ? 'selected' : ''?>><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="input-group">
             <label>理财产品</label>
             <select class="form-control" name="product_id">
                 <?php foreach($product_list as $item):?>
