@@ -3,8 +3,22 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '生活预算';
+$url = $this->url('./budget/save');
+$js = <<<JS
+function changeMoney(id) {
+  Dialog.form({
+  money: '花费'
+  }).on('done', function() {
+      ajaxForm('{$url}', {
+          id: id,
+          spent: this.data.money
+      });
+      this.close();
+  });
+}
+JS;
 
-$this->extend('layouts/header');
+$this->extend('layouts/header')->registerJs($js);
 ?>
 
     <div>
@@ -52,6 +66,7 @@ $this->extend('layouts/header');
                             <?=$item->remain;?>
                         </td>
                         <td>
+                            <a class="btn btn-primary" href="javascript:changeMoney(<?=$item->id?>);">消费</a>
                             <a class="btn btn-danger" data-type="post" href="<?=$this->url('./budget/delete', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>

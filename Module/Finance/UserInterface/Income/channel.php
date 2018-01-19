@@ -32,7 +32,7 @@ $this->extend('layouts/header');
                     <tr>
                         <td><?=$item->name?></td>
                         <td>
-                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./income/delete_chanel', ['id' => $item->id])?>">删除</a>
+                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./income/delete_channel', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>
                 <?php endforeach?>

@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property string $name
  * @property float $money
  * @property float $frozen_money
+ * @property boolean $status
  * @property string $remark
  * @property integer $deleted_at
  * @property integer $created_at
@@ -26,6 +27,7 @@ class MoneyAccountModel extends Model {
         return [
             'name' => 'required|string:3-35',
             'money' => 'required',
+            'status' => 'int:0-1',
             'frozen_money' => 'required',
             'remark' => '',
             'deleted_at' => 'int',
@@ -39,6 +41,7 @@ class MoneyAccountModel extends Model {
             'id' => 'Id',
             'name' => 'Name',
             'money' => 'Money',
+            'status' => 'Status',
             'frozen_money' => 'Frozen Money',
             'remark' => 'Remark',
             'deleted_at' => 'Deleted At',

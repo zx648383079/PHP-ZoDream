@@ -46,6 +46,22 @@ class MoneyController extends ModuleController {
         return $this->jsonFailure($model->getFirstError());
     }
 
+    public function changeAccountAction($id) {
+        MoneyAccountModel::record()->where('id', $id)->updateBool('status');
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./money/account')
+        ]);
+    }
+
+    public function deleteAccountAction($id) {
+        MoneyAccountModel::where('id', $id)->update([
+            'deleted_at' => time()
+        ]);
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./money/account')
+        ]);
+    }
+
     public function projectAction() {
         $model_list = FinancialProjectModel::with('product')->all();
         return $this->show(compact('model_list'));
@@ -70,6 +86,13 @@ class MoneyController extends ModuleController {
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
+    }
+
+    public function deleteProjectAction($id) {
+        FinancialProjectModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./money/project')
+        ]);
     }
 
     public function confirmEarningsAction($id) {
@@ -118,4 +141,17 @@ class MoneyController extends ModuleController {
         return $this->jsonFailure($model->getFirstError());
     }
 
+    public function deleteProductAction($id) {
+        FinancialProductModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./money/product')
+        ]);
+    }
+
+    public function changeProductAction($id) {
+        FinancialProductModel::record()->where('id', $id)->updateBool('status');
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./money/product')
+        ]);
+    }
 }

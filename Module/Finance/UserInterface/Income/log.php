@@ -48,7 +48,7 @@ $this->extend('layouts/header')
                         <td>
                             <?=$item->remark;?></td>
                         <td>
-                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./income/del_log', ['id' => $item->id])?>">删除</a>
+                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./income/delete_log', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>
                 <?php endforeach?>

@@ -1,5 +1,5 @@
-function ajaxForm($this) {
-    $.post($this.attr('action'), $this.serialize(), function(data) {
+function ajaxForm(url, data) {
+    $.post(url, data, function(data) {
         if (data.code != 200) {
             Dialog.tip(data.errors || '操作执行失败！');
             return;
@@ -26,8 +26,13 @@ $(document).ready(function() {
     });
     $("form[data-type=ajax]").submit(function() {
         let $this = $(this);
-        ajaxForm($this);
+        ajaxForm($this.attr('action'), $this.serialize());
         return false;
+    });
+    $("a[data-type=post]").click(function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        ajaxForm($this.attr('href'), {});
     });
     $(".page-tip .toggle").click(function() {
         $(this).parents('.page-tip').toggleClass('min');

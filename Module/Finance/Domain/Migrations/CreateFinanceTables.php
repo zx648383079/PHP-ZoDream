@@ -26,6 +26,7 @@ class CreateFinanceTables extends Migration {
                 ->defaultVal(0)->comment('可用金额');
             $table->set('frozen_money')->decimal(10, 2)->notNull()
                 ->defaultVal(0)->comment('冻结金额');
+            $table->set('status')->bool()->defaultVal('1')->comment('1 正常 0 删除');
             $table->set('remark')->text()->comment('备注');
             $table->softDeletes();
             $table->timestamps();

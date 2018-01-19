@@ -39,7 +39,7 @@ $this->extend('layouts/header');
                         <?php else: ?>
                             <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/change_product', ['id' => $item->id])?>">禁用</a>
                         <?php endif?>
-                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/del_product', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/delete_product', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

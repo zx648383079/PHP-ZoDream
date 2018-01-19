@@ -21,4 +21,11 @@ class BudgetController extends ModuleController {
         }
         return $this->jsonFailure($model->getFirstError());
     }
+
+    public function deleteAction($id) {
+        BudgetModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./budget')
+        ]);
+    }
 }

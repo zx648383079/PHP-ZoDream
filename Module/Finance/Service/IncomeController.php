@@ -74,4 +74,11 @@ class IncomeController extends ModuleController {
         }
         return $this->jsonFailure($model->getFirstError());
     }
+
+    public function deleteChannelAction($id) {
+        ConsumptionChannelModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./income/channel')
+        ]);
+    }
 }
