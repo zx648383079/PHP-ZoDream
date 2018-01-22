@@ -2,7 +2,7 @@
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '我的博客';
-$url = $this->url('blog/home/suggest');
+$url = $this->url('./home/suggest');
 $js = <<<JS
 $(".book-nav").click(function() {
     $(this).toggleClass("hover");
@@ -90,7 +90,7 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
         </div>
         <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
-            <dt><a href="<?=$this->url('blog/home/detail', ['id' => $item['id']])?>"><?=$item['title']?></a>
+            <dt><a href="<?=$this->url('./home/detail', ['id' => $item['id']])?>"><?=$item['title']?></a>
                 <span class="book-time"><?=$item->created_at?></span></dt>
             <dd>
                 <p><?=$item['description']?></p>
@@ -116,7 +116,7 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
     <div class="book-dynamic">
         <?php foreach ($log_list as $log): ?>
         <dl>
-            <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('blog/home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+            <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
             <dd>
                 <p><?=$log['content']?></p>
                 <span class="book-time"><?=$this->ago($log['create_at'])?></span>

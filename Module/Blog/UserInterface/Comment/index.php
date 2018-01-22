@@ -9,17 +9,19 @@ use Zodream\Domain\Access\Auth;
         热门评论
     </div>
     <?php foreach ($hot_comments as $item) :?>
-    <div class="comment-item">
+    <div class="comment-item" data-id="<?=$item->id?>">
         <div class="info">
             <span class="user"><?=$item['name']?></span>
             <span class="time"><?=$item['created_at']?></span>
-            <span class="floor">4楼</span>
+            <span class="floor"><?=$item->position?>楼</span>
         </div>
         <div class="content">
             <p><?=$item['content']?></p>
-            <span class="expand">展开（8）</span>
+            <?php if ($item->reply_count > 0):?>
+            <span class="expand">展开（<?=$item->reply_count?>）</span>
+            <?php endif;?>
             <span>&nbsp;</span>
-            <span class="comment"><i class="fa fa-comment"></i></span>
+            <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
             <span class="report">举报</span>
         </div>
         <div class="actions">
@@ -27,40 +29,7 @@ use Zodream\Domain\Access\Auth;
             <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b><?=$item['disagree']?></b></span>
         </div>
         <div class="comments">
-            <div class="comment-item">
-                <div class="info">
-                    <span class="user">admin</span>
-                    <span class="time">2017-2-15</span>
-                    <span class="floor">1#</span>
-                </div>
-                <div class="content">
-                    <p>1222222222222222222222</p>
-                    <span>&nbsp;</span>
-                    <span class="comment"><i class="fa fa-comment"></i></span>
-                    <span class="report">举报</span>
-                </div>
-                <div class="actions">
-                    <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
-                    <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-                </div>
-            </div>
-            <div class="comment-item">
-                <div class="info">
-                    <span class="user">admin</span>
-                    <span class="time">2017-2-15</span>
-                    <span class="floor">1#</span>
-                </div>
-                <div class="content">
-                    <p>1222222222222222222222</p>
-                    <span>&nbsp;</span>
-                    <span class="comment"><i class="fa fa-comment"></i></span>
-                    <span class="report">举报</span>
-                </div>
-                <div class="actions">
-                    <span class="agree"><i class="fa fa-thumbs-o-up"></i><b>5</b></span>
-                    <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b>5</b></span>
-                </div>
-            </div>
+
         </div>
     </div>
     <?php endforeach;?>
@@ -70,7 +39,7 @@ use Zodream\Domain\Access\Auth;
     <div class="title">
         发表评论
     </div>
-    <form id="comment-form" method="post" action="<?=$this->url('blog/comment/save')?>">
+    <form id="comment-form" method="post" action="<?=$this->url('./comment/save')?>">
         <input type="hidden" name="blog_id" value="<?=$blog_id?>">
         <input type="hidden" name="parent_id">
         <?php if (Auth::guest()):?>
@@ -109,7 +78,7 @@ use Zodream\Domain\Access\Auth;
 
 <script>
 function getMoreComments(page) {
-    $.get('<?=$this->url(['blog/comment/more', 'blog_id' => $blog_id])?>&page=' + page, function (html) {
+    $.get('<?=$this->url(['./comment/more', 'blog_id' => $blog_id])?>&page=' + page, function (html) {
         if (page < 2) {
             $("#comment-box").html(html);
         } else {
@@ -121,15 +90,17 @@ $(document).ready(function () {
     $(".comment-item .expand").click(function() {
         $(this).parent().parent().toggleClass("active");
     });
-    $(".comment-item .comment").click(function() {
+    $(".book-comments").on('click', '*[data-type=reply]', function() {
         $(this).parent().append($(".book-comment-form"));
         $(".book-comment-form .title").text("回复评论");
         $(".book-comment-form .btn-submit").text("回复");
+        $(".book-comment-form input[name=parent_id]").val($(this).parents('.comment-item').attr('data-id'));
     });
     $(".book-comment-form .btn-cancel").click(function() {
         $(".hot-comments").after($(".book-comment-form"));
         $(".book-comment-form .title").text("发表评论");
         $(".book-comment-form .btn-submit").text("评论");
+        $(".book-comment-form input[name=parent_id]").val(0);
     });
     $("#comment-form").submit(function () {
         $.post($(this).attr('action'), $(this).serialize(), function (data) {

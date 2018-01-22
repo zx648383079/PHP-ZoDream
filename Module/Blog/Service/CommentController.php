@@ -3,6 +3,7 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
+use Module\Book\Domain\Model\BookModel;
 use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
@@ -32,6 +33,9 @@ class CommentController extends ModuleController {
             'blog_id' => intval($blog_id),
             'parent_id' => intval($parent_id)
         ])->order($sort, $order)->page();
+        if ($parent_id > 0) {
+            return $this->show('rely', compact('comment_list', 'parent_id'));
+        }
         return $this->show(compact('comment_list'));
     }
 
@@ -45,7 +49,11 @@ class CommentController extends ModuleController {
             $data['name'] = Auth::user()->name;
         }
         $data['parent_id'] = intval($data['parent_id']);
+
+        $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->order('position desc')->one();
+        $data['position'] = empty($last) ? 1 : ($last->position + 1);
         $model = CommentModel::create($data);
+        BookModel::record()->where('id', $data['blog_id'])->updateOne('comment_count');
         return $this->jsonSuccess($model);
     }
 

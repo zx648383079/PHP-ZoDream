@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Service;
 
+use Carbon\Carbon;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
@@ -23,10 +24,10 @@ class HomeController extends ModuleController {
         if ($user->load() && $user->signIn()) {
             return $this->redirect(Request::get('redirect_uri', '/'));
         }
-        $time = Time::getBeginAndEndTime(Time::TODAY);
+        $time = Carbon::today()->startOfDay()->timestamp;
         $num = LoginLogModel::where('ip', Request::ip())
             ->where('status', 0)
-            ->whereBetween('created_at', $time)->count();
+            ->where('created_at', '>=', $time)->count();
         if ($num > 2) {
             $num = intval($num / 3);
             $this->send('code', $num);
@@ -42,7 +43,7 @@ class HomeController extends ModuleController {
         if (!in_array($name, ['username', 'email'])) {
             return $this->jsonFailure('查询失败！');
         }
-        $count = UserModel::find()->where([$name => $value])->count('id')->scalar();
+        $count = UserModel::where([$name => $value])->count('id')->scalar();
         return $this->jsonSuccess($count > 0);
     }
 

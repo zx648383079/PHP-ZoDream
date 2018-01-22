@@ -2,8 +2,8 @@
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = $blog->title;
-$url = (string)$this->url(['blog/comment', 'blog_id' => $blog->id]);
-$recommendUrl = (string)$this->url(['blog/home/recommend', 'id' => $blog->id]);
+$url = (string)$this->url(['./comment', 'blog_id' => $blog->id]);
+$recommendUrl = (string)$this->url(['./home/recommend', 'id' => $blog->id]);
 $js = <<<JS
     SyntaxHighlighter.all();
     $.get('{$url}', function(html) {
@@ -72,7 +72,7 @@ $this->extend('layout/header')
     <div class="book-dynamic">
         <?php foreach ($log_list as $log): ?>
             <dl>
-                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('blog/home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
                 <dd>
                     <p><?=$log['content']?></p>
                     <span class="book-time"><?=$this->ago($log['create_at'])?></span>

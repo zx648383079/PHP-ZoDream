@@ -1,7 +1,7 @@
 <?php
 /** @var $this \Zodream\Template\View */
 $this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@blog.min.css');
+    ->registerCssFile('@blog.css');
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">

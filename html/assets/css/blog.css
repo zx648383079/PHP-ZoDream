@@ -158,6 +158,8 @@
     background: #f9cfa6;
     padding: 15px;
     position: relative; }
+  .book-skin .book-footer .book-comments .reply-hide {
+    display: none; }
   .book-skin .book-footer .book-comments .title {
     font-size: 20px;
     border-left: 5px solid #af5d0d;

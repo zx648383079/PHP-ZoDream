@@ -45,6 +45,7 @@ class CommentModel extends Model {
             'blog_id' => 'int',
             'agree' => 'int',
             'disagree' => 'int',
+            'position' => 'int'
         ];
     }
 
@@ -71,6 +72,10 @@ class CommentModel extends Model {
 
     public function replies() {
 	    return $this->hasMany(static::class, 'parent_id');
+    }
+
+    public function getReplyCount() {
+	    return $this->reply_count = static::where('parent_id', $this->id)->count();
     }
 
     public static function getChildren($postId, $parentId = 0) {
