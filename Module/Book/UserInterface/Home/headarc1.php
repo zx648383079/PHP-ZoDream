@@ -17,12 +17,12 @@
       </div>
       <div class="right_con">
         <ul>
-            <li><a href="<?=$this->url('book')?>" title="返回首页">返回首页</a></li>
+            <li><a href="<?=$this->url('./')?>" title="返回首页">返回首页</a></li>
             <?php foreach ($cat_list as $key => $item):?>
                 <li><em class="ver">|</em><a href="<?=$item->url?>" title="<?=$item->real_name?>小说"><?=$item->real_name?></a></li>
             <?php endforeach;?>
-            <li><em class="ver">|</em><a href="<?=$this->url('book/home/top')?>" title="小说排行榜小说">小说排行榜</a></li>
-            <li><em class="ver">|</em><a href="<?=$this->url('book/home/list')?>" title="小说书库小说">小说书库</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./home/top')?>" title="小说排行榜小说">小说排行榜</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./home/list')?>" title="小说书库小说">小说书库</a></li>
         </ul>
       </div>
     </div>

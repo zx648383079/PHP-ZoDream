@@ -32,10 +32,18 @@ class BookCategoryModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('book/home/category', ['id' => $this->id]);
+        return Url::to('./home/category', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('book/wap/category', ['id' => $this->id]);
+        return Url::to('./wap/category', ['id' => $this->id]);
+    }
+
+    public function getRecommendBookAttribute() {
+        return $this->recommend_book = BookModel::where('cat_id', $this->id)->limit(4)->all();
+    }
+
+    public function getBestRecommendBookAttribute() {
+        return $this->best_recommend_book = BookModel::where('cat_id', $this->id)->limit(5)->all();
     }
 }

@@ -17,18 +17,17 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <?php $this->extend('./head') ?>
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：
-    <a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a> >
-    <a href="<?=$cat->url?>"><?=$cat->real_name?>小说</a>
-</div>
+<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a>
+    > <a href="<?=$cat->url?>"><?=$cat->real_name?>小说下载</a> >  
+    <a href="<?=$book->download_url?>" title="<?=$book->name?>txt下载"><?=$book->name?>txt下载</a></div>
 <div class="clear"></div>
 <div class="Layout no_h">
   <div class="Con jj">
     <div class="Left">
       <div class="p_box">
-                <div class="pic"><a href="<?=$book->url?>" title="<?=$book->name?>小说"><img class="lazy" src="<?=$book->cover?>" alt="<?=$book->name?>小说" /></a></div>
+          <div class="pic"><a href="<?=$book->url?>" title="<?=$book->name?>小说"><img class="lazy" src="<?=$book->cover?>" alt="<?=$book->name?>小说" /></a></div>
         <div class="rmxx_box">
-          <h2>其他热门小说</h2>
+          <h2>其他热门小说下载</h2>
           <div class="a_box HOT_BOX">
               <?php foreach ($hot_book as $item) : ?>
                   <li><a href="<?=$item->url?>"><?=$item->name?></a></li>
@@ -39,34 +38,39 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
       </div>
       <div class="j_box">
         <div class="title">
-          <h2><?=$book->name?></h2>
+          <h2><?=$book->name?>txt下载</h2>
         </div>
-        <div class="info">
-          <ul>
-            <li><span>作者：</span><?=$book->author->name?></li>
-            <li class="lb"><span>类型：</span>
-                <a href="<?=$cat->url?>"><?=$cat->real_name?></a>
-            </li>
-            <li><span>总点击：</span><font id="cms_clicks"><?=$book->click_count?></font></li>
-            <li><span>月点击：</span><font id="cms_mclicks"><?=$book->month_click?></font></li>
-            <li class="zdj"><span>周点击：</span><font id="cms_wclicks"><?=$book->week_click?></font></li>
-            <li><span>总字数：</span><font id="cms_ready_1"><?=$book->size?></font></li>
-            <li><span>创作日期：</span><font id="cms_favorites"><?=$book->created_at?></font></li>
-            <li class="wj"><span>状态：</span><?=$book->status?></li>
-          </ul>
-          <div class="praisesBTN"><a href="javascript:;" title="推荐本书！"><font id="cms_praises"><?=$book->recommend_count?></font> 推荐本书！</a></div>
-        </div>
+          <div class="info">
+              <ul>
+                  <li><span>作者：</span><?=$book->author->name?></li>
+                  <li class="lb"><span>类型：</span>
+                      <a href="<?=$cat->url?>"><?=$cat->real_name?></a>
+                  </li>
+                  <li><span>总点击：</span><font id="cms_clicks"><?=$book->click_count?></font></li>
+                  <li><span>月点击：</span><font id="cms_mclicks"><?=$book->month_click?></font></li>
+                  <li class="zdj"><span>周点击：</span><font id="cms_wclicks"><?=$book->week_click?></font></li>
+                  <li><span>总字数：</span><font id="cms_ready_1"><?=$book->size?></font></li>
+                  <li><span>创作日期：</span><font id="cms_favorites"><?=$book->created_at?></font></li>
+                  <li class="wj"><span>状态：</span><?=$book->status?></li>
+              </ul>
+              <div class="praisesBTN"><a href="javascript:;" title="推荐本书！"><font id="cms_praises"><?=$book->recommend_count?></font> 推荐本书！</a></div>
+          </div>
         <div class="words">
-            最新章节：<a href="<?=$book->last_chapter->url?>"><?=$book->last_chapter->title?></a>
-			 <p>简介：<br/><?=$book->description?></p>
+            最新章节：<a href="<?=$book->last_chapter->url?>"><?=$book->last_chapter->title?></a>（<?=$book->last_chapter->created_at?>）
+			 <p><?=$book->author->name?>的<a href="<?=$book->category->url?>" target='_blank' title="<?=$book->category->real_name?>小说" >
+                     <?=$book->category->real_name?>小说</a>作品《<a href="<?=$book->url?>" title="<?=$book->name?>"><?=$book->name?></a>》最新章节已经更新，作者<?=$book->author->name?>在这本作品上倾注了非常多的精力和时间，本站提供
+                 <a href="<?=$book->url?>" title="<?=$book->name?>txt下载"><?=$book->name?>txt下载</a>，如果您喜欢这本作品，可以在这里免费下载。<br/>声明：<br/>1、请勿用于商业用途，否则后果非常严重，本站无力承担。<br/>
+						2、下载后请尽快删除，好公民应该支持正版阅读。</p>
         </div>
         <div class="read_btn">
-          <div class="btn" style="width:328px"><a href="javascript:;" class="sc" title="收藏本书" style="margin-right:2px">加入收藏夹</a>
-              <a href="<?=$item->download_url?>" class="txt" title="<?=$book->name?>txt下载" target="_blank"><?=$book->name?>txt下载</a></div>
+          <div class="btn" style="width:108px"><a href="<?=$book->url?>" class="yd" title="在线阅读" style="margin-right:2px">在线阅读</a></div>
+		  <div class="down">
+		  txt文件：<a href="" title="<?=$book->name?>txt电子书" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'txt', '<?=$book->name?>','','']);">
+                  点击下载( MB)</a> | zip压缩包：<a href="" title="<?=$book->name?>txt电子书zip压缩包" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'zip', '<?=$book->name?>','','']);">
+                  点击下载( MB)</a>
+		  </div>
         </div>
-        <div class="vote"><?=$book->author->name?>的<a href="<?=$cat->url?>"><?=$cat->real_name?></a>作品<?=$book->name?>
-            最新章节已经更新，本站提供<a href="<?=$book->url?>" title="<?=$book->name?>最新章节"><?=$book->name?>最新章节</a>全文免费在线阅读，
-            <a href="<?=$book->url?>" title="<?=$book->name?>小说"><?=$book->name?>小说</a>全集txt电子书免费下载。如果您发现本站的连载有误，欢迎提交指正！
+        <div class="vote">说明：zip压缩包解压后可得到txt文件，txt文件比较大，请不要用记事本直接打开，除非你的电脑配置够好，否者会卡机或者假死。推荐用专业的文档编辑工具打开（如：Notepad++等），会省很多事。
         </div>
       </div>
     </div>
@@ -76,7 +80,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
         <div class="box BOX1" style="display:block;">
           <ul>
               <?php foreach ($like_book as $key => $item):?>
-              <?php if ($key < 1):?>
+                  <?php if ($key < 1):?>
                       <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a><span>
                               <a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></span></li>
                       <li class="first_con"><div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
@@ -84,16 +88,15 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <div class="info"><p><a href="<?=$item->url?>" target="_blank">简介： <?=$item->description?></a></p>
                           </div>
                       </li>
-              <?php else: ?>
+                  <?php else: ?>
                       <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                           <span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></span></li>
-                <?php endif;?>
+                  <?php endif;?>
               <?php endforeach;?>
           </ul>
         </div>
         <div class="box BOX2" style="display:none;">
-          <ul>
-              <?php foreach ($author_book as $key => $item):?>
+          <ul><?php foreach ($author_book as $key => $item):?>
                   <?php if ($key < 1):?>
                       <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a><span>
                               <a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->name?></a></span></li>
@@ -106,7 +109,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                       <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                           <span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->name?></a></span></li>
                   <?php endif;?>
-              <?php endforeach;?>
+              <?php endforeach;?>	  
         </ul>
         </div>
       </div>
@@ -114,24 +117,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
   </div>
 </div>
 <div class="clear"></div>
-<a id="comment_done"></a>
 <div class="Layout no_h">
-  <div class="Con jj_pl">
-    <div class="Head">
-        <h2><?=$book->name?>最新章节列表</h2>
-      </div>
-      <div class="list_box">
-		<ul>
-            <?php foreach ($chapter_list as $item) : ?>
-                <li><a href="<?=$item->url?>"><?=$item->title?></a></li>
-            <?php endforeach;?>
-	  </ul>
-	</div>
-</div>
 <div align="left">
 <br/><h3>阅读提示：</h3><br/>
-1、小说《<?=$book->name?>》所描述的内容只是作者【<?=$book->author->name?>】的个人写作观点，不保证其中情节的真实性，请勿模仿！<br/>
-2、《<?=$book->name?>》版权归原作者【<?=$book->author->name?>】所有，本书仅代表作者本人的文学作品观点，仅供娱乐请莫当真。
+1、小说《<a href="<?=$book->url?>" title="<?=$book->name?>"><?=$book->name?></a>》所描述的内容只是作者【<?=$book->author->name?>】的个人写作观点，不保证其中情节的真实性，请勿模仿！<br/>
+2、《<a href="<?=$book->url?>" title="<?=$book->name?>"><?=$book->name?></a>》版权归原作者【<?=$book->author->name?>】所有，本书仅代表作者本人的文学作品观点，仅供娱乐请莫当真。
 </div>
 </div>
 
@@ -140,6 +130,5 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <!--footer开始-->
 <?php $this->extend('./footer2')?>
 <?=$this->footer()?>
-<!--footer结束-->
 </body>
 </html>

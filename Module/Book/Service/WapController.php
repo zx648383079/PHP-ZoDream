@@ -99,6 +99,13 @@ class WapController extends ModuleController {
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book'));
     }
 
+    public function authorAction($id) {
+        $author = BookAuthorModel::find($id);
+        $book_list = BookModel::where('author_id',  $id)->all();
+        $this->getShare();
+        return $this->show(compact('author', 'hot_book', 'book_list', 'month_click', 'hot_author'));
+    }
+
     public function detailAction($id) {
         $chapter = BookChapterModel::find($id);
         $book = BookModel::find($chapter->book_id);

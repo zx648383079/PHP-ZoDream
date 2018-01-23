@@ -27,10 +27,10 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
     <?php $this->extend('./head') ?>
 	<div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('book/wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
         <?php endforeach;?>
 	</div>
-    <form name="From" action="<?=$this->url('book/wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
         <table>
             <tr>
                 <td>
@@ -59,7 +59,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
                                 </p>
                             <?php endif;?>
                             <p class="info">作者：
-                                <a href="<?=$item->wap_url?>" class="author"><?=$item->author?></a>
+                                <a href="<?=$item->wap_url?>" class="author"><?=$item->author->name?></a>
                                 <span class="words">字数：<?=$item->size?></span>
                             </p>
                         </li>

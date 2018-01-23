@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Service;
 
+use Module\Book\Domain\Model\BookAuthorModel;
 use Module\ModuleController;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterModel;
@@ -11,8 +12,14 @@ class HomeController extends ModuleController {
     public function indexAction() {
         $recommend_book = BookModel::limit(4)->all();
         $hot_book = BookModel::order('click_count', 'desc')->limit(10)->all();
-        $new_book = BookModel::order('created_at', 'desc')->limit(7)->all();
-        $over_book = BookModel::where('over_at > 0')->limit(7)->all();
+
+        $new_recommend_book = BookModel::where('size', '<', 50000)->order('created_at', 'desc')->order('recommend_count', 'desc')->limit(12)->all();
+        $week_click_book = BookModel::order('click_count', 'desc')->limit(5)->all();
+        $week_recommend_book = BookModel::order('recommend_count', 'desc')->limit(5)->all();
+        $best_recommend_book = BookModel::order('recommend_count', 'desc')->limit(12)->all();
+
+        $month_click_book = BookModel::order('click_count', 'desc')->limit(5)->all();
+        $month_recommend_book = BookModel::order('recommend_count', 'desc')->limit(5)->all();
 
         $click_bang = BookModel::order('click_count', 'desc')->limit(15)->all();
         $recommend_bang = BookModel::order('click_count', 'desc')->limit(15)->all();
@@ -23,7 +30,11 @@ class HomeController extends ModuleController {
         $new_book = BookModel::where('size < 50000')->order('created_at', 'desc')->order('click_count', 'desc')->limit(10)->all();
         $over_book = BookModel::where('over_at > 0')->order('click_count', 'desc')->limit(10)->all();
         $hot_author = [];
-        return $this->show(compact('recommend_book', 'hot_book', 'book_list', 'new_book', 'over_book', 'click_bang', 'recommend_bang', 'size_bang', 'hot_author'));
+        $book = BookModel::one();
+        return $this->show(compact('recommend_book', 'book',
+            'hot_book', 'book_list', 'new_book', 'over_book', 'click_bang', 'recommend_bang',
+            'size_bang', 'hot_author',
+            'new_recommend_book', 'week_click_book', 'week_recommend_book', 'best_recommend_book', 'month_click_book', 'month_recommend_book'));
     }
 
     public function searchAction($keywords) {
@@ -116,7 +127,27 @@ class HomeController extends ModuleController {
         $chapter_list = BookChapterModel::where('book_id', $id)->order('created_at', 'asc')->all();
         $hot_book = BookModel::where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
         $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();
-        $author_book = BookModel::where('author', $book->author)->order('created_at', 'desc')->all();
+        $author_book = BookModel::where('author_id', $book->author_id)->order('created_at', 'desc')->all();
+        $this->getShare();
+        return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
+    }
+
+    public function authorAction($id) {
+        $author = BookAuthorModel::find($id);
+        $hot_book = BookModel::where('author_id',  $id)->order('click_count', 'desc')->limit(15)->all();
+        $book_list = BookModel::where('author_id',  $id)->all();
+        $month_click = BookModel::where('author_id',  $id)->order('click_count', 'desc')->limit(5)->all();
+        $hot_author = BookAuthorModel::limit(10)->all();
+        $this->getShare();
+        return $this->show(compact('author', 'hot_book', 'book_list', 'month_click', 'hot_author'));
+    }
+
+    public function download($id) {
+        $book = BookModel::find($id);
+        $cat = BookCategoryModel::find($book->cat_id);
+        $hot_book = BookModel::where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
+        $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();
+        $author_book = BookModel::where('author_id', $book->author_id)->order('created_at', 'desc')->all();
         $this->getShare();
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
     }

@@ -31,10 +31,10 @@ class BookChapterModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('book/home/detail', ['id' => $this->id]);
+        return Url::to('./home/detail', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('book/wap/detail', ['id' => $this->id]);
+        return Url::to('./wap/detail', ['id' => $this->id]);
     }
 }

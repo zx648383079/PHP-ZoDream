@@ -27,7 +27,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
             &lt;
         </a>
         <span class="title"><?=$chapter->title; ?></span>
-        <a href="<?=$this->url('book/wap')?>" class="home">
+        <a href="<?=$this->url('./wap')?>" class="home">
             首页
         </a>
     </header>

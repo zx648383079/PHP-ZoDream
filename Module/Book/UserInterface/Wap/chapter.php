@@ -6,21 +6,19 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 <html lang="zh-cn">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>
-		<?php echo "{$typename}"; ?>最新章节_
-		<?php echo "{$zuozhe}"; ?>新书作品_
-		<?php echo $cfg_webname; ?>
-	</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        <?=$this->title?>
+    </title>
     <meta name="keywords" content="<?=$this->keywords?>">
     <meta name="description" content="<?=$this->description?>">
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Expires" content="-1" />
-	<meta name="format-detection" content="telephone=no" />
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <?= $this->header() ?>
 </head>
 
@@ -28,10 +26,10 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
     <?php $this->extend('./head') ?>
     <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('book/wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
         <?php endforeach;?>
     </div>
-    <form name="From" action="<?=$this->url('book/wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
         <table>
             <tr>
                 <td>
@@ -67,7 +65,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 					</h1>
 					<p class="info">
 						作者：
-                        <?=$book->author?>
+                        <?=$book->author->name?>
 						<br /> 类型：
                         <?= $cat->real_name ?>
 						<br /> 字数：
@@ -89,7 +87,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 						</td>
 						<td width="5">&nbsp;</td>
 						<td width="50%">
-							<a class="collect" href="/download/download.php?filetype=txt&filename=<?php echo $id.$wxuid; ?>">
+							<a class="collect" href="<?=$book->download_url?>">
                                 <?=$book->name?>txt下载</a>
 						</td>
 					</tr>

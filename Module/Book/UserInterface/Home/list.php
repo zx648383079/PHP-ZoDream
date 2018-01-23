@@ -20,8 +20,8 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <div class="clear"></div>
 <!--body开始-->
 <div class="Layout local">当前位置：
-    <a href="<?=$this->url('book')?>" title="">新书在线-世间唯有读书高</a>&nbsp;>&nbsp;
-    <a href="<?=$this->url('book/home/list')?>">小说书库</a></div>
+    <a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a>&nbsp;>&nbsp;
+    <a href="<?=$this->url('./home/list')?>">小说书库</a></div>
 <div class="clear"></div>
 <div class="Layout m_list list">
   <div class="Head">
@@ -31,9 +31,9 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
           style="color:#F00;font-weight: 800; text-decoration:underline" title="只看完本小说">只看完本&nbsp;>></a></div>
       <ul>
 		<li>（共<b><?=$book_list->getTotal()?></b>部）</li>&nbsp;
-		<li><a href="<?=$this->url('book/home/list')?>" style="color:#AA0; text-decoration:underline;font-weight: 800" title="查看全部小说">查看全部小说</a></li>&nbsp;>&nbsp;
+		<li><a href="<?=$this->url('./home/list')?>" style="color:#AA0; text-decoration:underline;font-weight: 800" title="查看全部小说">查看全部小说</a></li>&nbsp;>&nbsp;
           <?php foreach ($cat_list as $item):?>
-              <a href="<?=$this->url(null, ['cat_id' => $item->id])?>" <?= $cat_id == $item->id ?  'class="current"' : ''?>"><?=$item->name?></a>
+              <a href="<?=$this->url(null, ['cat_id' => $item->id])?>" <?= $cat_id == $item->id ?  'class="current"' : ''?>><?=$item->name?></a>
               <em class="ver">| </em>
           <?php endforeach;?>
       </ul>
@@ -48,10 +48,10 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
               <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
               <div class="title">
                   <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
-                  <div class="n">[<a href="#" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>
+                  <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>
               </div>
               <div class="words">0</div>
-              <div class="author"><a href="#" title="<?=$item->author?>作品" target="_blank"><?=$item->author?></a></div>
+              <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
               <div class="abover"><span><?=$item->status?></span></div>
           </li>
           <?php endforeach;?>
@@ -104,7 +104,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
                                 <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
                         <div class="a_l">
-                            <div><span>作者:</span><a href="#" title="<?=$item->author?>小说作品" target="_blank"><?=$item->author?></a></div>
+                            <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
                             <div><span>点/推:</span><?=$item->click_count?>/<?=$item->recommend_count?></div>
                             <div><?=$item->description?></div>
@@ -131,7 +131,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
                                 <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
                         <div class="a_l">
-                            <div><span>作者:</span><a href="#" title="<?=$item->author?>小说作品" target="_blank"><?=$item->author?></a></div>
+                            <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
                             <div><span>点/推:</span><?=$item->click_count?>/<?=$item->recommend_count?></div>
                             <div><?=$item->description?></div>

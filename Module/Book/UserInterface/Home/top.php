@@ -45,11 +45,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
-                              <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                              <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                           </dd>
                       </dl>
                   </li>
@@ -65,11 +65,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
-                              <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                              <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                           </dd>
                       </dl>
                   </li>
@@ -85,11 +85,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
-                              <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                              <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                           </dd>
                       </dl>
                   </li>
@@ -115,11 +115,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
-                              <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                              <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                           </dd>
                       </dl>
                   </li>
@@ -135,11 +135,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
-                              <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                              <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                           </dd>
                       </dl>
                   </li>
@@ -155,7 +155,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
@@ -183,11 +183,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                           <dd>
                               <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                               <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                              <p>作者：<span><a href="#" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                               <p>字数：<?=$item->size?></p>
                               <p>总点击：<?=$item->click_count?></p>
                               <p>总推荐：<?=$item->recommend_count?></p>
-                              <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                              <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                           </dd>
                       </dl>
                   </li>
@@ -214,11 +214,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                               <dd>
                                   <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                                   <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                                  <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                                  <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                                   <p>字数：<?=$item->size?></p>
                                   <p>总点击：<?=$item->click_count?></p>
                                   <p>总推荐：<?=$item->recommend_count?></p>
-                                  <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                                  <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                               </dd>
                           </dl>
                       </li>
@@ -233,11 +233,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                               <dd>
                                   <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                                   <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                                  <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                                  <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                                   <p>字数：<?=$item->size?></p>
                                   <p>总点击：<?=$item->click_count?></p>
                                   <p>总推荐：<?=$item->recommend_count?></p>
-                                  <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                                  <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                               </dd>
                           </dl>
                       </li>
@@ -253,11 +253,11 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                               <dd>
                                   <div class="img"><a target="_blank" href="<?=$item->url?>"><img src="<?=$item->cover?>"></a></div>
                                   <strong>类型：[<a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->real_name?>小说"><?=$item->category->real_name?></a>]</strong>
-                                  <p>作者：<span><a href="#" target="_blank" title="<?=$item->author?>作品"><?=$item->author?></a></span></p>
+                                  <p>作者：<span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></span></p>
                                   <p>字数：<?=$item->size?></p>
                                   <p>总点击：<?=$item->click_count?></p>
                                   <p>总推荐：<?=$item->recommend_count?></p>
-                                  <p class="sc">[<a target="_blank" href="#" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
+                                  <p class="sc">[<a target="_blank" href="<?=$item->download_url?>" title="<?=$item->name?>txt下载"><?=$item->name?>txt下载</a>]</p>
                               </dd>
                           </dl>
                       </li>
@@ -304,7 +304,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
                                 <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
                         <div class="a_l">
-                            <div><span>作者:</span><a href="#" title="<?=$item->author?>小说作品" target="_blank"><?=$item->author?></a></div>
+                            <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
                             <div><span>点/推:</span><?=$item->click_count?>/<?=$item->recommend_count?></div>
                             <div><?=$item->description?></div>
@@ -330,7 +330,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
                                 <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
                         <div class="a_l">
-                            <div><span>作者:</span><a href="#" title="<?=$item->author?>小说作品" target="_blank"><?=$item->author?></a></div>
+                            <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
                             <div><span>点/推:</span><?=$item->click_count?>/<?=$item->recommend_count?></div>
                             <div><?=$item->description?></div>

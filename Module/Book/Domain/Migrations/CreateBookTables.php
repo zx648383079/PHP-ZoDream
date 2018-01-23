@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Migrations;
 
+use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
@@ -13,11 +14,12 @@ class CreateBookTables extends Migration {
 
     public function up() {
         Schema::createTable(BookModel::tableName(), function(Table $table) {
+            $table->setComment('小说');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->unique()->notNull()->comment('书名');
             $table->set('cover')->varchar(200)->notNull()->comment('封面');
             $table->set('description')->varchar(200)->notNull()->comment('简介');
-            $table->set('author')->varchar(20)->notNull()->comment('作者');
+            $table->set('author_id')->int()->notNull()->comment('作者');
             $table->set('user_id')->int()->notNull()->defaultVal(0);
             $table->set('cat_id')->tinyint(3)->notNull()->defaultVal(0)->comment('分类');
             $table->set('size')->int()->notNull()->defaultVal(0)->comment('总字数');
@@ -29,6 +31,7 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(BookChapterModel::tableName(), function(Table $table) {
+            $table->setComment('小说章节');
             $table->set('id')->pk()->ai();
             $table->set('book_id')->int()->notNull()->defaultVal(0);
             $table->set('title')->varchar(200)->notNull()->comment('标题');
@@ -38,13 +41,22 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(BookChapterBodyModel::tableName(), function(Table $table) {
+            $table->setComment('小说章节内容');
             $table->set('id')->pk()->ai();
             $table->set('content')->longtext()->comment('内容');
         });
         Schema::createTable(BookCategoryModel::tableName(), function(Table $table) {
+            $table->setComment('小说分类');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->unique()->notNull()->comment('分类名');
             $table->timestamp('created_at');
+        });
+        Schema::createTable(BookAuthorModel::tableName(), function(Table $table) {
+            $table->setComment('小说作者');
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(100)->unique()->notNull()->comment('作者名');
+            $table->set('avatar')->varchar(200)->comment('作者头像');
+            $table->timestamps();
         });
     }
 
@@ -53,6 +65,7 @@ class CreateBookTables extends Migration {
         Schema::dropTable(BookCategoryModel::tableName());
         Schema::dropTable(BookChapterBodyModel::tableName());
         Schema::dropTable(BookChapterModel::tableName());
+        Schema::dropTable(BookAuthorModel::tableName());
     }
 
     public function seed() {

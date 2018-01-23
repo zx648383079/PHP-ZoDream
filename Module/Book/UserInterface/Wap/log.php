@@ -24,10 +24,10 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
     <?php $this->extend('./head') ?>
     <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('book/wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
         <?php endforeach;?>
     </div>
-    <form name="From" action="<?=$this->url('book/wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
         <table>
             <tr>
                 <td>
@@ -52,7 +52,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
                                     <a class="name" href="<?=$item->wap_url?>"><?=$item->name?></a>
                                     <span style="float:right;font-size:0.8125em;color: #999;"><?=$item->status?></span>
                                     <p class="update">上次看到：<a href="<?=$item->last_log->wap_url?>"><?=$item->last_log->title?></a></p>
-                                    <p class="info">作者：<?=$item->author?>  <span class="words">字数：<?=$item->size?></span></p>
+                                    <p class="info">作者：<?=$item->author->name?>  <span class="words">字数：<?=$item->size?></span></p>
                                 </div>
                             </li>
                     <?php endforeach;?>

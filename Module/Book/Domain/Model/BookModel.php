@@ -17,7 +17,7 @@ use Zodream\Service\Routing\Url;
  * @property string $cover 封面
  * @property string $description 简介
  * @property integer $words_count 字数
- * @property integer $user_id 作者
+ * @property integer $author_id 作者
  */
 class BookModel extends Model {
     public static function tableName() {
@@ -32,6 +32,10 @@ class BookModel extends Model {
         return $this->hasOne(BookCategoryModel::className(), 'id', 'cat_id');
     }
 
+    public function author() {
+        return $this->hasOne(BookAuthorModel::className(), 'id', 'author_id');
+    }
+
     public function getCoverAttribute() {
         $cover = $this->getAttributeValue('cover');
         if (!empty($cover)) {
@@ -41,11 +45,15 @@ class BookModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('book/home/chapter', ['id' => $this->id]);
+        return Url::to('./home/chapter', ['id' => $this->id]);
+    }
+
+    public function getDownloadUrlAttribute() {
+        return Url::to('./home/download', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('book/wap/chapter', ['id' => $this->id]);
+        return Url::to('./wap/chapter', ['id' => $this->id]);
     }
 
     public function getStatusAttribute() {

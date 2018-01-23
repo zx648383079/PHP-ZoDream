@@ -20,8 +20,8 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <div class="clear"></div>
 <!--body开始-->
 <div class="Layout local">当前位置：
-    <a href="<?=$this->url('book')?>" title="">新书在线-世间唯有读书高</a>&nbsp;>&nbsp;
-    <a href="<?=$this->url('book/home/list')?>">搜索</a></div>
+    <a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a>&nbsp;>&nbsp;
+    <a href="<?=$this->url('./home/list')?>">搜索</a></div>
 <div class="clear"></div>
 <div class="Layout m_list list">
     <div class="Con">
@@ -32,10 +32,10 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                         <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
                         <div class="title">
                             <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
-                            <div class="n">[<a href="#" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>
+                            <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>
                         </div>
                         <div class="words">0</div>
-                        <div class="author"><a href="#" title="<?=$item->author?>作品" target="_blank"><?=$item->author?></a></div>
+                        <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
                         <div class="abover"><span><?=$item->status?></span></div>
                     </li>
                 <?php endforeach;?>
