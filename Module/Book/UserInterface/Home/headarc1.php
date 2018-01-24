@@ -9,7 +9,7 @@
     <div class="mainbox">
       <div class="left_con"> 
         <ul>
-          <li>新书在线-世间唯有读书高</li>
+          <li><?=$site_name?></li>
           <li><em class="ver">|</em><a href="http://test.sogua2008.com/wap.php" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" target="_blank">手机版</a></li>
             <li><em class="ver">|</em><a href="/over.html" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li>
             <li><em class="ver">|</em><a href="/txt.html" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>

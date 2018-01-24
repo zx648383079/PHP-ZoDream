@@ -9,9 +9,11 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>您的阅读足迹</title>
-	<meta name="keywords" content="您的阅读足迹" />
-	<meta name="description" content="您的阅读足迹" />
+    <title>
+        <?=$this->title?>
+    </title>
+    <meta name="keywords" content="<?=$this->keywords?>">
+    <meta name="description" content="<?=$this->description?>">
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="-1" />

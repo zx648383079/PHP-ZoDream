@@ -116,8 +116,8 @@ class WapController extends ModuleController {
 
     protected function getShare() {
         $cat_list = BookCategoryModel::all();
-
-        $this->send(compact('cat_list'));
+        $site_name = 'ZoDream 读书';
+        $this->send(compact('cat_list', 'site_name'));
     }
 
 

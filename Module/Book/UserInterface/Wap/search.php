@@ -10,8 +10,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>
-		<?= $keywords ?>小说txt下载_
-		<?= $keywords ?>小说全文免费在线阅读_
+        <?=$this->title?>
 	</title>
     <meta name="keywords" content="<?=$this->keywords?>">
     <meta name="description" content="<?=$this->description?>">

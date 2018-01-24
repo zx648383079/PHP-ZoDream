@@ -14,24 +14,22 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
     <?= $this->header() ?>
 </head>
 <body class="bodyph">
-<!--header开始-->
-<?php $this->extend('./head', ['nav_index' => 99]) ?>
+<?php $this->extend('./head') ?>
+
 <!--header结束-->
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：
-    <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>&nbsp;>&nbsp;
-    <a href="<?=$this->url('./home/list')?>">小说书库</a></div>
+<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>
+    > <a href="<?=$this->url('./home/download')?>">小说下载</a> ></div>
 <div class="clear"></div>
 <div class="Layout m_list list">
   <div class="Head">
-    <h2>小说列表</h2><span class="j"></span>
+    <h2>小说下载列表</h2><span class="j"></span>
     <div class="morelist">
-      <div class="more"><a href="<?=$this->url(null, ['status' => 2])?>"
-          style="color:#F00;font-weight: 800; text-decoration:underline" title="只看完本小说">只看完本&nbsp;>></a></div>
+      <div class="more"><a href="<?=$this->url('./home/list', ['status' => 2])?>" style="color:#F00;font-weight: 800; text-decoration:underline" title="完本小说下载">完本小说下载&nbsp;>></a></div>
       <ul>
 		<li>（共<b><?=$book_list->getTotal()?></b>部）</li>&nbsp;
-		<li><a href="<?=$this->url('./home/list')?>" style="color:#AA0; text-decoration:underline;font-weight: 800" title="查看全部小说">查看全部小说</a></li>&nbsp;>&nbsp;
+		<li><a href="<?=$this->url('./home/download')?>" style="color:#AA0; text-decoration:underline;font-weight: 800" title="全部小说下载">全部小说下载</a></li>&nbsp;>&nbsp;
           <?php foreach ($cat_list as $item):?>
               <a href="<?=$this->url(null, ['cat_id' => $item->id])?>" <?= $cat_id == $item->id ?  'class="current"' : ''?>><?=$item->name?></a>
               <em class="ver">| </em>
@@ -44,28 +42,28 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
       <div class="m_head"> <span class="c">类型</span> <span class="t">书名/章节</span> <span class="w">字数</span> <span class="a">作者</span><span class="z">状态</span></div>
       <ul class="ul_m_list">
           <?php foreach ($book_list as $key => $item):?>
-          <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
-              <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
-              <div class="title">
-                  <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
-                  <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>]
-                      <?php if (!$item->over_at && $item->last_chapter):?>
-                          <a href="<?=$item->last_chapter->url?>" target="_blank"><?=$item->last_chapter->name?></a>
-                      <?php endif;?>
+              <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
+                  <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
+                  <div class="title">
+                      <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
+                      <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>]
+                          <?php if (!$item->over_at && $item->last_chapter):?>
+                              <a href="<?=$item->last_chapter->url?>" target="_blank"><?=$item->last_chapter->name?></a>
+                          <?php endif;?>
+                      </div>
                   </div>
-              </div>
-              <div class="words">0</div>
-              <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
-              <div class="abover"><span><?=$item->status?></span></div>
-          </li>
+                  <div class="words">0</div>
+                  <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
+                  <div class="abover"><span><?=$item->status?></span></div>
+              </li>
           <?php endforeach;?>
       </ul>
-      <div class="bot_more">
-        <div class="page_info">每页显示<b>&nbsp;<?=$book_list->getPageCount()?>&nbsp;</b>部，共<b><?=$book_list->getTotal()?></b>部</div>
-        <div class="page_num">
-            <?=$book_list->getLink()?>
+        <div class="bot_more">
+            <div class="page_info">每页显示<b>&nbsp;<?=$book_list->getPageCount()?>&nbsp;</b>部，共<b><?=$book_list->getTotal()?></b>部</div>
+            <div class="page_num">
+                <?=$book_list->getLink()?>
+            </div>
         </div>
-      </div>
     </div>
     <div class="Right">
 		<div class="r_box cn">
@@ -92,7 +90,6 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
                             <span><?=$item->book_count?>/</span></li>
                     <?php endif;?>
                 <?php endforeach;?>
-		
 			</ul>
 		</div><div class="r_box cmztj cn">
         <div class="head"><h2>热门新书推荐</h2></div>
@@ -123,7 +120,6 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
           <h2>热门完本推荐</h2>
         </div>
         <ul>
-
             <?php foreach ($over_book as $key => $item):?>
                 <?php if ($key < 1):?>
                     <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
@@ -152,9 +148,6 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 </div>
 <!--body结束-->
 <div class="clear"></div>
-<!--footer开始-->
-
 <?php $this->extend('./footer2')?>
 <?=$this->footer()?>
-<!--footer结束-->
 </body></html>

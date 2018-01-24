@@ -20,7 +20,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <div class="clear"></div>
 <!--body开始-->
 <div class="Layout local">当前位置：
-    <a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a>&nbsp;>&nbsp;
+    <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>&nbsp;>&nbsp;
     <a href="<?=$this->url('./home/list')?>">搜索</a></div>
 <div class="clear"></div>
 <div class="Layout m_list list">

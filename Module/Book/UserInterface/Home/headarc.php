@@ -9,24 +9,20 @@
     <div class="mainbox">
       <div class="left_con"> 
         <ul>
-          <li>{dede:global.cgf_top_left/}</li>
-          <li><em class="ver">|</em><a href="{dede:global.cfg_wapurl/}" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" target="_blank">手机版</a></li><li><em class="ver">|</em><a href="/over.html" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li><li><em class="ver">|</em><a href="/txt.html" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>
+            <li><a href="<?=$this->url('./')?>" title=""><?=$site_name?></a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./wap')?>" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" target="_blank">手机版</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./')?>" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./')?>" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>
         </ul>
       </div>
       <div class="right_con">
         <ul>
-          <li><a href="/" title="返回首页">返回首页</a></li>
-		{dede:php}
-			global $dsql;
-			$s="";
-			$query = "SELECT * FROM dede_arctype WHERE reid=0 and id<>45 order by sortrank";
-			$dsql->SetQuery($query);
-			$dsql->Execute();
-			while($row=$dsql->GetArray()){
-				$s.='<li><em class="ver">|</em><a href="'.$row['typedir'].'.html" title="'.str_replace("·","",$row['typename']).'小说">'.str_replace("·","",$row['typename']).'</a></li>';
-			}
-			echo $s;
-		{/dede:php}
+            <li><a href="<?=$this->url('./')?>" title="返回首页">返回首页</a></li>
+            <?php foreach ($cat_list as $key => $item):?>
+                <li><em class="ver">|</em><a href="<?=$item->url?>" title="<?=$item->real_name?>小说"><?=$item->real_name?></a></li>
+            <?php endforeach;?>
+            <li><em class="ver">|</em><a href="<?=$this->url('./home/top')?>" title="小说排行榜小说">小说排行榜</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./home/list')?>" title="小说书库小说">小说书库</a></li>
         </ul>
       </div>
     </div>

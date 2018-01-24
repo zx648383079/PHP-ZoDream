@@ -3,16 +3,16 @@
     <div class="mainbox">
       <div class="left_con">
         <ul>
-          <li><a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a></li>
+          <li><a href="<?=$this->url('./')?>" title=""><?=$site_name?></a></li>
           <li><em class="ver">|</em><a href="<?=$this->url('./wap')?>" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" target="_blank">手机版</a></li>
-            <li><em class="ver">|</em><a href="<?=$this->url('./')?>" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li>
-            <li><em class="ver">|</em><a href="<?=$this->url('./')?>" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./home/list', ['status' => 2])?>" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./home/download')?>" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>
         </ul>
       </div>
       <div class="right_con">
         <ul class="UL">
             <li>本站所有小说，均为<font class="red"> 全文免费在线阅读 </font>！</li>
-          <li><em class="ver">|</em><a href="javascript:" title="加入收藏夹" onclick="addBookmark('新书在线-世间唯有读书高','<?=$this->url('./')?>')">收藏本站</a></li>
+          <li><em class="ver">|</em><a href="javascript:" title="加入收藏夹" onclick="addBookmark('<?=$site_name?>','<?=$this->url('./')?>')">收藏本站</a></li>
         </ul>
         <ul class="fUL">
           <li><a href="<?=$this->url('./')?>" title="返回首页">返回首页</a></li>

@@ -26,7 +26,8 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
     <?php $this->extend('./head') ?>
     <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> <?= $item->id == $cat->id ? 'active' : ''  ?>" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> <?= $item->id == $cat->id ? 'active' : ''  ?>" href="<?=$this->url('./wap/category', ['id' => $item->id])?>">
+                <?=$item->name?></a>
         <?php endforeach;?>
     </div>
     <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">

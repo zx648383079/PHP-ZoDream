@@ -111,7 +111,7 @@ class HomeController extends ModuleController {
         ];
         $new_book = BookModel::where('size < 50000')->order('created_at', 'desc')->order('click_count', 'desc')->limit(10)->all();
         $over_book = BookModel::where('over_at > 0')->order('click_count', 'desc')->limit(10)->all();
-        $hot_author = [];
+        $hot_author = BookAuthorModel::limit(10)->all();
         return $this->show(compact('book_list', 'cat_id', 'sort', 'status', 'sort_list', 'new_book', 'over_book', 'hot_author'));
     }
 
@@ -142,7 +142,10 @@ class HomeController extends ModuleController {
         return $this->show(compact('author', 'hot_book', 'book_list', 'month_click', 'hot_author'));
     }
 
-    public function download($id) {
+    public function downloadAction($id = null) {
+        if (empty($id)) {
+            return $this->runMethod('download_list');
+        }
         $book = BookModel::find($id);
         $cat = BookCategoryModel::find($book->cat_id);
         $hot_book = BookModel::where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
@@ -150,6 +153,21 @@ class HomeController extends ModuleController {
         $author_book = BookModel::where('author_id', $book->author_id)->order('created_at', 'desc')->all();
         $this->getShare();
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
+    }
+
+    public function downloadListAction($cat_id = 0, $status = 0) {
+        $this->getShare();
+        $book_list = BookModel::when($status == 1, function ($query) {
+            $query->where('over_at', 0);
+        })->when($status == 2, function ($query) {
+            $query->where('over_at > 0');
+        })->when($cat_id > 0, function ($query) use ($cat_id) {
+            $query->where('cat_id', $cat_id);
+        })->page();
+        $new_book = BookModel::where('size < 50000')->order('created_at', 'desc')->order('click_count', 'desc')->limit(10)->all();
+        $over_book = BookModel::where('over_at > 0')->order('click_count', 'desc')->limit(10)->all();
+        $hot_author = BookAuthorModel::limit(10)->all();
+        return $this->show(compact('book_list', 'cat_id', 'sort', 'status', 'sort_list', 'new_book', 'over_book', 'hot_author'));
     }
 
     public function detailAction($id) {
@@ -163,7 +181,7 @@ class HomeController extends ModuleController {
 
     protected function getShare() {
         $cat_list = BookCategoryModel::all();
-
-        $this->send(compact('cat_list'));
+        $site_name = 'ZoDream 读书';
+        $this->send(compact('cat_list', 'site_name'));
     }
 }

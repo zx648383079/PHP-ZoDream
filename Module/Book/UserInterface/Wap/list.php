@@ -9,11 +9,9 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>好看的
-		<?php echo $toptypename; ?>小说大全_好看的
-		<?php echo $toptypename; ?>小说推荐_
-		<?php echo $cfg_webname; ?>
-	</title>
+    <title>
+        <?=$this->title?>
+    </title>
     <meta name="keywords" content="<?=$this->keywords?>">
     <meta name="description" content="<?=$this->description?>">
 	<meta http-equiv="Cache-Control" content="no-cache" />

@@ -45,7 +45,7 @@ $this->registerCssFile('@wap.min.css')->registerJsFile('@jquery.min.js');
 	<div class="container">
 		<div class="mod mod-back breadcrumb">
 			<div class="bd">
-				<a href="/" class="home"></a>
+				<a href="<?=$this->url('./')?>" class="home"></a>
 				<span class="divide"></span>
 				<a href="<?=$cat->wap_url?>">
 					<?= $cat->real_name ?>小说</a>

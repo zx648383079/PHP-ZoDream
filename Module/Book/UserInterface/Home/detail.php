@@ -19,7 +19,7 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <?php $this->extend('./headarc1') ?>
 <!--header结束-->
 <div class="clear"></div>
-<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title="">新书在线-世间唯有读书高</a> >
+<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a> >
     <a href="<?=$cat->url?>"><?=$cat->real_name?>小说</a> >
     <a href="<?=$book->url?>"><?=$book->name?> 最新章节</a></div>
 <div class="clear"></div>
