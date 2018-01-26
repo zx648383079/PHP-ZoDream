@@ -1,13 +1,9 @@
 <?php
 /** @var $this \Zodream\Template\View */
 $this->registerJsFile('@jquery.min.js')
-->registerJsFile('@wx.min.js');
+->registerJsFile('@wechat.min.js');
 ?>
-        </div>
     </div>
-</div>
-<div class="footer">
-    湘ICP备 00000000000
 </div>
 <?=$this->footer()?>
 </body>

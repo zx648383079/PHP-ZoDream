@@ -63,7 +63,7 @@ class MenuController extends ModuleController {
     ];
 
     public function indexAction() {
-        return $this->jsonSuccess(MenuModel::all());
+        return $this->show();
     }
 
     public function updateAction() {
