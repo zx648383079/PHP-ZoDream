@@ -7,7 +7,19 @@ use Domain\Model\Model;
 /**
  * 微信公众号用户资料表
  * 从公众号中拉取的数据可以保存在此表
- * @package callmez\wechat\models
+ * @property integer $id
+ * @property string $nickname
+ * @property integer $sex
+ * @property string $city
+ * @property string $country
+ * @property string $province
+ * @property string $language
+ * @property string $avatar
+ * @property integer $subscribe_time
+ * @property string $union_id
+ * @property string $remark
+ * @property integer $group_id
+ * @property integer $updated_at
  */
 class UserModel extends Model {
     /**
@@ -17,17 +29,20 @@ class UserModel extends Model {
         return 'wechat_user';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules() {
+    protected function rules() {
         return [
-            [['id'], 'required'],
-            [['id', 'sex', 'subscribe_time', 'group_id'], 'integer'],
-            [['nickname'], 'string', 'max' => 20],
-            [['city', 'country', 'province', 'language'], 'string', 'max' => 40],
-            [['avatar', 'remark'], 'string', 'max' => 255],
-            [['union_id'], 'string', 'max' => 30]
+            'nickname' => 'required|string:3-20',
+            'sex' => 'required|int:0-1',
+            'city' => 'required|string:3-40',
+            'country' => 'required|string:3-40',
+            'province' => 'required|string:3-40',
+            'language' => 'required|string:3-40',
+            'avatar' => 'required|string:3-255',
+            'subscribe_time' => 'int',
+            'union_id' => 'required|string:3-30',
+            'remark' => 'required|string:3-255',
+            'group_id' => 'required|string:3-5',
+            'updated_at' => 'int',
         ];
     }
 

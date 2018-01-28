@@ -74,7 +74,7 @@ $this->extend('layouts/header')
                     <div class="btn-group  btn-group-xs">
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_project', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-success btn-xs" href="javascript:void(0);" onclick="confirm_earnings(<?=$item->id?>)">确认收益</a>
-                        <a class="btn btn-danger" data-type="post" href="<?=$this->url('./money/delete_project', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./money/delete_project', ['id' => $item->id])?>">删除</a>
                      </div>
                 </td>
             </tr>

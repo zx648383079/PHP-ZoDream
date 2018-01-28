@@ -6,7 +6,7 @@ use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
 use Module\WeChat\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\ReplyRuleModel;
+use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -25,7 +25,7 @@ class CreateWeChatTables extends Migration {
         $this->initMessageHistoryTable();
         $this->initMediaTable();
 
-        Schema::createTable(ReplyRuleModel::tableName(), function(Table $table) {
+        Schema::createTable(ReplyModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
             $table->set('event')->varchar(20)->notNull()->comment('时间');
@@ -54,7 +54,7 @@ class CreateWeChatTables extends Migration {
      */
     public function down() {
         Schema::dropTable(WeChatModel::tableName());
-        Schema::dropTable(ReplyRuleModel::tableName());
+        Schema::dropTable(ReplyModel::tableName());
         Schema::dropTable(FansModel::tableName());
         Schema::dropTable(UserModel::tableName());
         Schema::dropTable(MessageHistoryModel::tableName());

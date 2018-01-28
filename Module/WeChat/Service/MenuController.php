@@ -3,6 +3,7 @@ namespace Module\WeChat\Service;
 
 use Module\ModuleController;
 use Module\WeChat\Domain\Model\MenuModel;
+use function Sodium\compare;
 use Zodream\ThirdParty\WeChat\Menu;
 use Zodream\ThirdParty\WeChat\MenuItem;
 
@@ -63,15 +64,33 @@ class MenuController extends ModuleController {
     ];
 
     public function indexAction() {
-        return $this->show();
+        $menu_list = MenuModel::where('parent_id', 0)->all();
+        return $this->show(compact('menu_list'));
     }
 
-    public function updateAction() {
+    public function addAction() {
+        return $this->runMethod('edit', ['id' => null]);
+    }
+
+    public function editAction($id) {
+        $model = MenuModel::findOrNew($id);
+        $menu_list = MenuModel::where('parent_id', 0)->all();
+        return $this->show(compact('model', 'menu_list'));
+    }
+
+    public function saveAction() {
         $model = new MenuModel();
         $model->wid = '1';
-        if ($model->load() && $model->save()) {
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess($model);
         }
         return $this->jsonFailure($model->getFirstError());
+    }
+
+    public function deleteAction($id) {
+        MenuModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
     }
 }

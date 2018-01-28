@@ -6,7 +6,15 @@ use Domain\Model\Model;
 
 /**
  * 微信请求消息历史记录
- * @package callmez\wechat\models
+ * @property integer $id
+ * @property integer $wid
+ * @property integer $rid
+ * @property integer $kid
+ * @property string $from
+ * @property string $to
+ * @property string $message
+ * @property string $type
+ * @property integer $created_at
  */
 class MessageHistoryModel extends Model {
     /**
@@ -28,22 +36,19 @@ class MessageHistoryModel extends Model {
         return 'wechat_message_history';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules() {
+    protected function rules() {
         return [
-            [['wid', 'from', 'to', 'message', 'type'], 'required'],
-            [['wid', 'rid', 'kid'], 'integer'],
-            [['from', 'to'], 'string', 'max' => 50],
-            [['module'], 'string', 'max' => 20],
-            [['type'], 'string', 'max' => 10],
-
-            [['module'], 'default', 'value' => function() {
-                //return Yii::$app->controller->module->id;
-            }]
+            'wid' => 'required|int',
+            'rid' => 'required|int',
+            'kid' => 'required|int',
+            'from' => 'required|string:3-50',
+            'to' => 'required|string:3-50',
+            'message' => 'required',
+            'type' => 'required|string:3-10',
+            'created_at' => 'int',
         ];
     }
+
 
     /**
      * @inheritdoc
@@ -56,7 +61,6 @@ class MessageHistoryModel extends Model {
             'kid' => '所属关键字ID',
             'from' => '请求用户ID',
             'to' => '相应用户ID',
-            'module' => '处理模块',
             'message' => '消息体内容',
             'type' => '发送类型',
             'created_at' => '创建时间',

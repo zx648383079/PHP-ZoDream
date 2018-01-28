@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property string $name
  * @property string $type
  * @property string $content
+ * @property string $pages
  * @property integer $parent_id
  * @property integer $created_at
  * @property integer $updated_at
@@ -27,6 +28,7 @@ class MenuModel extends Model {
             'name' => 'required|string:3-100',
             'type' => 'required|string:3-100',
             'content' => 'required',
+            'pages' => 'required',
             'parent_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -40,6 +42,7 @@ class MenuModel extends Model {
             'name' => 'Name',
             'type' => 'Type',
             'content' => 'Content',
+            'pages' => 'Pages',
             'parent_id' => 'Parent Id',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

@@ -3,40 +3,43 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->extend('layout/header');
 ?>
-
+<div class="page-tip">
+    <p class="blue">操作提示</p>
+    <ul>
+        <li>第一级只能添加3个菜单，第二级只能添加五个</li>
+    </ul>
+    <span class="toggle"></span>
+</div>
 <div class="wx-page">
-    <div class="phone-box">
-        <div class="marvel-device iphone6 black">
-            <div class="top-bar"></div>
-            <div class="sleep"></div>
-            <div class="volume"></div>
-            <div class="camera"></div>
-            <div class="sensor"></div>
-            <div class="speaker"></div>
-            <div class="screen">
-                
-                <div class="bottom-menu">
-                    <i class="fa fa-keyboard-o"></i>
-                    <div class="menu-content">
-                        <ul>
-                            <li>
-                                <span>111</span>
-                                <ul>
-                                    <li class="add-menu">+</li>
-                                    <li>12312</li>
-                                </ul>
-                            </li>
-                            <li class="add-menu"><span>+</span></li>
-                            <li class="add-menu"><span>+</span></li>
-                        </ul>
+
+<div class="tree">
+    <?php foreach($menu_list as $menu):?>
+    <div class="tree-item">
+        <span><?=$menu->name?></span>
+        <div class="tree-action">
+            <a href="<?=$this->url('./menu/edit', ['id' => $menu->id])?>">编辑</a>
+            <a data-type="del" href="<?=$this->url('./menu/delete', ['id' => $menu->id])?>">删除</a>
+        </div>
+        <div class="tree-children">
+                <?php foreach($menu->children as $item):?>
+                <div class="tree-item">
+                    <span><?=$item->name?></span>
+                    <div class="tree-action">
+                        <a href="<?=$this->url('./menu/edit', ['id' => $item->id])?>">编辑</a>
+                        <a data-type="del" href="<?=$this->url('./menu/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </div>
-            </div>
-            <div class="home"></div>
-            <div class="bottom-bar"></div>
+                <?php endforeach;?>
+                <div class="tree-add">
+                    <a href="<?=$this->url('./menu/add')?>">添加</a>
+                </div>
         </div>
     </div>
-
+    <?php endforeach;?>
+    <div class="tree-add">
+        <a href="<?=$this->url('./menu/add')?>">添加</a>
+    </div>
+</div>
     
 </div>
 

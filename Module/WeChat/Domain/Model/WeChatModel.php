@@ -7,7 +7,25 @@ use Zodream\Service\Routing\Url;
 
 /**
  * 公众号数据
- * @package callmez\wechat\models
+ * @property integer $id
+ * @property string $name
+ * @property string $token
+ * @property string $access_token
+ * @property string $account
+ * @property string $original
+ * @property integer $type
+ * @property string $appid
+ * @property string $secret
+ * @property string $aes_key
+ * @property string $avatar
+ * @property string $qrcode
+ * @property string $address
+ * @property string $description
+ * @property string $username
+ * @property integer $status
+ * @property string $password
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class WeChatModel extends Model {
     /**
@@ -60,23 +78,26 @@ class WeChatModel extends Model {
         return 'wechat';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules() {
+    protected function rules() {
         return [
-            [['name', 'account', 'original', 'type', 'token', 'appid', 'secret', 'aes_key', 'avatar', 'qrcode'], 'required', 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['type', 'status'], 'integer', 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['name', 'original', 'username'], 'string', 'max' => 40, 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['token', 'password'], 'string', 'max' => 32, 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['address', 'description', 'avatar', 'qrcode'], 'string', 'max' => 255, 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['account'], 'string', 'max' => 30, 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['key', 'secret'], 'string', 'max' => 50, 'except' => ['avatarUpload', 'qrcodeUpload']],
-            [['encoding_aes_key'], 'string', 'max' => 43, 'except' => ['avatarUpload', 'qrcodeUpload']],
-
-            [['avatar'], 'file', 'extensions' => 'gif, jpg', 'on' => 'avatarUpload'],
-            [['qrcode'], 'file', 'extensions' => 'gif, jpg', 'on' => 'qrcodeUpload']
-
+            'name' => 'required|string:3-40',
+            'token' => 'required|string:3-32',
+            'access_token' => 'required|string:3-255',
+            'account' => 'required|string:3-30',
+            'original' => 'required|string:3-40',
+            'type' => 'required|int:0-1',
+            'appid' => 'required|string:3-50',
+            'secret' => 'required|string:3-50',
+            'aes_key' => 'required|string:3-43',
+            'avatar' => 'required|string:3-255',
+            'qrcode' => 'required|string:3-255',
+            'address' => 'required|string:3-255',
+            'description' => 'required|string:3-255',
+            'username' => 'required|string:3-40',
+            'status' => 'required|int:0-1',
+            'password' => 'required|string:3-32',
+            'created_at' => 'int',
+            'updated_at' => 'int',
         ];
     }
 

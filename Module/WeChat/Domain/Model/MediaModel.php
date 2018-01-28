@@ -6,7 +6,16 @@ use Domain\Model\Model;
 
 /**
  * 素材存储表
- * @package callmez\wechat\models
+ * @property integer $id
+ * @property integer $wid
+ * @property string $type
+ * @property string $title
+ * @property string $content
+ * @property integer $parent_id
+ * @property string $media_id
+ * @property string $result
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class MediaModel extends Model {
     /**
@@ -75,31 +84,32 @@ class MediaModel extends Model {
         return 'wechat_media';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules() {
+    protected function rules() {
         return [
-            [['filename', 'result'], 'required'],
-            [['mediaId', 'filename'], 'string', 'max' => 100],
-            [['type'], 'string', 'max' => 10],
-            [['material'], 'string', 'max' => 20]
+            'wid' => 'required|int',
+            'type' => 'required|string:3-10',
+            'title' => 'string:3-200',
+            'content' => '',
+            'parent_id' => 'int',
+            'media_id' => 'required|string:3-100',
+            'result' => 'required',
+            'created_at' => 'int',
+            'updated_at' => 'int',
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function labels() {
+    protected function labels() {
         return [
-            'id' => 'ID',
-            'mediaId' => '媒体ID',
-            'filename' => '文件名',
-            'result' => '响应内容',
-            'type' => '媒体类型',
-            'material' => '素材类别',
-            'created_at' => '创建时间',
-            'updated_at' => '修改时间',
+            'id' => 'Id',
+            'wid' => 'Wid',
+            'type' => 'Type',
+            'title' => 'Title',
+            'content' => 'Content',
+            'parent_id' => 'Parent Id',
+            'media_id' => 'Media Id',
+            'result' => 'Result',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 }

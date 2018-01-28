@@ -43,12 +43,12 @@ $this->extend('layouts/header')
                             <?php if ($item->type != 1):?>
                             <button type='button' class='btn btn-danger btn-xs'>支出</button>
                             <?php endif;?>
-                            <?=$item->money;?>
+                            <?=$item->money?>
                         </td>
                         <td>
-                            <?=$item->remark;?></td>
+                            <?=$item->remark?></td>
                         <td>
-                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./income/delete_log', ['id' => $item->id])?>">删除</a>
+                            <a class="btn btn-danger" data-type="del" href="<?=$this->url('./income/delete_log', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>
                 <?php endforeach?>

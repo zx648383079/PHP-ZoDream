@@ -5,8 +5,7 @@ use Domain\Model\Model;
 
 
 /**
- * This is the model class for table "wechat_fans".
- *
+ * Class FansModel
  * @property integer $id
  * @property integer $wid
  * @property string $openid
@@ -36,21 +35,17 @@ class FansModel extends Model {
         return 'wechat_fans';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules() {
+    protected function rules() {
         return [
-            [['wid', 'openid'], 'required'],
-            [['wid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['open_id'], 'string', 'max' => 50]
+            'wid' => 'required|int',
+            'openid' => 'required|string:3-50',
+            'status' => 'required|int:0-1',
+            'created_at' => 'int',
+            'updated_at' => 'int',
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function labels() {
+    protected function labels() {
         return [
             'id' => 'ID',
             'wid' => '所属微信公众号ID',
