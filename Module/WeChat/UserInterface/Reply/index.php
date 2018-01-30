@@ -11,7 +11,7 @@ $this->extend('layout/header');
     </ul>
     <span class="toggle"></span>
 </div>
-<div>
+<div class="page-action">
     <a href="<?=$this->url('./reply/add')?>">添加</a>
 </div>
 <div>

@@ -60,15 +60,15 @@ class FansModel extends Model {
      * 关联公众号
      *
      */
-    public function getWeChat() {
-        return $this->hasOne(WeChatModel::className(), ['id' => 'wid']);
+    public function weChat() {
+        return $this->hasOne(WeChatModel::class, 'id', 'wid');
     }
 
     /**
      * 关联的用户信息
      */
-    public function getUser() {
-        return $this->hasOne(UserModel::className(), ['id' => 'id']);
+    public function user() {
+        return $this->hasOne(UserModel::class, 'id', 'id');
     }
 
     /**

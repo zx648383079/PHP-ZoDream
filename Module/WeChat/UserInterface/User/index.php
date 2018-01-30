@@ -11,9 +11,6 @@ $this->extend('layout/header');
     </ul>
     <span class="toggle"></span>
 </div>
-<div class="page-action">
-    <a href="<?=$this->url('./manage/create')?>">添加</a>
-</div>
 <table>
     <thead>
         <tr>
@@ -34,12 +31,18 @@ $this->extend('layout/header');
                 <td><?=$item->appid?></td>
                 <td><?=$item->description?></td>
                 <td>
-                    <a href="<?$this->url('./manage/edit', ['id' => $item->id])?>">编辑</a>
                     <a data-type="del" href="<?$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <?=$model_list->getLink()?>
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
 <?php $this->extend('layout/footer');?>

@@ -2,11 +2,12 @@
 namespace Module\WeChat\Service;
 
 use Module\ModuleController;
-use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Model\FansModel;
 
-class ManageController extends ModuleController {
+class UserController extends ModuleController {
+
     public function indexAction() {
-        $model_list = WeChatModel::all();
+        $model_list = FansModel::with('user')->page();
         return $this->show(compact('model_list'));
     }
 }

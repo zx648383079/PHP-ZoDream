@@ -7,7 +7,7 @@ $this->extend('layout/header');
 <div class="page-tip">
     <p class="blue">操作提示</p>
     <ul>
-        <li>关注公众号时自动回复</li>
+        <li>编辑菜单</li>
     </ul>
     <span class="toggle"></span>
 </div>
