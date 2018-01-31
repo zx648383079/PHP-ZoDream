@@ -5,8 +5,10 @@ use Module\ModuleController;
 use Module\WeChat\Domain\Model\ReplyModel;
 
 class ReplyController extends ModuleController {
-    public function indexAction() {
-        $reply_list = ReplyModel::page();
+    public function indexAction($event = null) {
+        $reply_list = ReplyModel::when(!empty($event), function ($query) use ($event) {
+            $query->where('event', $event);
+        })->page();
         return $this->show(compact('reply_list'));
     }
 

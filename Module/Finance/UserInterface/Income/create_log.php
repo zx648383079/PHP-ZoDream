@@ -32,7 +32,7 @@ $this->extend('layouts/header')
             <label>资金账户</label>
             <select class="form-control" name="account_id">
                 <?php foreach($account_list as $item):?>
-                    <option value="<?=$item->id;?>" <?=$model->id == $model->account_id ? 'selected' : ''?>><?=$item->name?></option>
+                    <option value="<?=$item->id?>" <?=$item->id == $model->account_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>
@@ -40,7 +40,7 @@ $this->extend('layouts/header')
             <label>理财项目</label>
             <select class="form-control" name="project_id">
                 <?php foreach($project_list as $item):?>
-                    <option value="<?=$item->id;?>" <?=$model->id == $model->project ? 'selected' : ''?>><?=$item->name?></option>
+                    <option value="<?=$item->id?>" <?=$item->id == $model->project ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>
@@ -48,7 +48,7 @@ $this->extend('layouts/header')
             <label>消费渠道</label>
             <select class="form-control" name="channel_id">
                 <?php foreach($channel_list as $item):?>
-                    <option value="<?=$item->id;?>" <?=$model->id == $model->channel_id ? 'selected' : ''?>><?=$item->name?></option>
+                    <option value="<?=$item->id?>" <?=$item->id == $model->channel_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>

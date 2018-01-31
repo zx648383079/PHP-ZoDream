@@ -1,7 +1,8 @@
 <?php
 /** @var $this \Zodream\Template\View */
 $this->registerJsFile('@jquery.min.js')
-    ->registerJsFile('@zodream.min.js')
+    ->registerJsFile('@main.min.js')
+    ->registerJsFile('@jquery.dialog.min.js')
     ->registerJsFile('@wechat.min.js');
 ?>
     </div>

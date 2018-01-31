@@ -126,24 +126,21 @@ class WeChatModel extends Model {
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
 
-            'apiUrl' => 'API地址'
+            'api_url' => 'API地址'
         ];
     }
 
     public function attributeHints() {
         return [
-            'apiUrl' => '请复制该内容填写到微信后台->开发者中心->服务器配置并确定Token和EncodingAesKey和微信后台的设置保持一致.'
+            'api_url' => '请复制该内容填写到微信后台->开发者中心->服务器配置并确定Token和EncodingAesKey和微信后台的设置保持一致.'
         ];
     }
 
     /**
      * 返回公众号微信接口链接
-     * @param boolean|string $scheme the URI scheme to use in the generated URL:
      * @return string
      */
-    public function getApiUrl($scheme = true) {
-        return Url::to([
-            '/wx/message/'.$this->id,
-        ], $scheme);
+    public function getApiUrlAttribute() {
+        return Url::to('./message/id/'.$this->id);
     }
 }
