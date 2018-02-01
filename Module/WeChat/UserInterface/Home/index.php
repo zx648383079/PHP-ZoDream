@@ -1,13 +1,11 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 
 <div>
 
 </div>
 
-<?php
-$this->extend('layout/footer');
-?>
+<?php $this->extend('layouts/footer');?>

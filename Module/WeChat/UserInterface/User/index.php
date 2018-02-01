@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
 $this->title = 'ZoDream';
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -45,4 +45,4 @@ $this->extend('layout/header');
     </tfoot>
 </table>
 
-<?php $this->extend('layout/footer');?>
+<?php $this->extend('layouts/footer');?>

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Module\WeChat\Domain\Model\WeChatModel;
 /** @var $this \Zodream\Template\View */
 $this->title = 'ZoDream';
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 
 <div class="page-tip">
@@ -86,4 +86,4 @@ $this->extend('layout/header');
 </div>
 
 
-<?php $this->extend('layout/footer');?>
+<?php $this->extend('layouts/footer');?>

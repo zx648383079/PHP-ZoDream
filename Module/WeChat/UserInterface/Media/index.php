@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 
 <div class="page-tip">
@@ -42,4 +42,4 @@ $this->extend('layout/header');
     </tbody>
 </table>
 
-<?php $this->extend('layout/footer'); ?>
+<?php $this->extend('layouts/footer'); ?>

@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 
 <div class="page-tip">
@@ -27,12 +27,10 @@ $this->extend('layout/header');
             <label for="keywords">关键字</label>
             <input type="text" id="keywords" name="keywords" placeholder="关键字" required value="<?=$model->keywords?>" size="100">
         </div>
-        <?php $this->extend('layout/editor'); ?>
+        <?php $this->extend('layouts/editor'); ?>
         <button class="btn btn-primary">保存</button>
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
 </div>
 
-<?php
-$this->extend('layout/footer');
-?>
+<?php $this->extend('layouts/footer');?>

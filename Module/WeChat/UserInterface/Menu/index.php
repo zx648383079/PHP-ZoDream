@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -44,5 +44,5 @@ $this->extend('layout/header');
 </div>
 
 <?php
-$this->extend('layout/footer');
+$this->extend('layouts/footer');
 ?>
