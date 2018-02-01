@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property integer $wid
  * @property string $event
  * @property string $keywords
+ * @property integer $match
  * @property string $content
  * @property string $type
  * @property integer $created_at
@@ -44,6 +45,7 @@ class ReplyModel extends Model {
             'event' => 'required|string:3-20',
             'keywords' => 'required|string:3-60',
             'content' => 'required',
+            'match' => 'int',
             'type' => 'required|string:3-10',
             'created_at' => 'int',
             'updated_at' => 'int',

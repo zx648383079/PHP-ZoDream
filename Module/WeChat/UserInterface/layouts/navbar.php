@@ -2,8 +2,8 @@
     <li><a href="<?=$this->url('./manage')?>"><i class="fa fa-home"></i><span>首页</span></a></li>
     <li class="expand"><a href="javascript:;"><i class="fa fa-briefcase"></i><span>消息管理</span></a>
         <ul>
-            <li><a href="<?=$this->url('./reply')?>"><i class="fa fa-list"></i><span>关注回复</span></a></li>
-            <li><a href="<?=$this->url('./reply')?>"><i class="fa fa-list"></i><span>自动回复</span></a></li>
+            <li><a href="<?=$this->url('./reply', ['event' => 'subscribe'])?>"><i class="fa fa-list"></i><span>关注回复</span></a></li>
+            <li><a href="<?=$this->url('./reply', ['event' => 'default'])?>"><i class="fa fa-list"></i><span>自动回复</span></a></li>
             <li><a href="<?=$this->url('./reply')?>"><i class="fa fa-edit"></i><span>关键字回复</span></a></li>
         </ul>
     </li>

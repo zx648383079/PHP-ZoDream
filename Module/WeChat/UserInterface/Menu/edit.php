@@ -23,7 +23,7 @@ $this->extend('layouts/header');
             <select name="parent_id" id="parent_id" required>
                 <option value="0">顶级菜单</option>
                 <?php foreach($menu_list as $item):?>
-                <option value="<?=$item->id?>" <?=$item->id == $model->parent_id ? 'selected' : ''?>><?=$item->name?></option>
+                    <option value="<?=$item->id?>" <?=$item->id == $model->parent_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>
