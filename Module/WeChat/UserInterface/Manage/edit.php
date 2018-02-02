@@ -25,10 +25,6 @@ $this->extend('layouts/header');
             <input type="text" id="token" name="token" placeholder="请输入微信服务Token(令牌)" required value="<?=$model->token?>" size="100">
         </div>
         <div class="input-group">
-            <label for="access_token">AccessToken(访问令牌)</label>
-            <input type="text" id="access_token" name="access_token" placeholder="请输入AccessToken(访问令牌)" required value="<?=$model->access_token?>" size="100">
-        </div>
-        <div class="input-group">
             <label for="account">微信号</label>
             <input type="text" id="account" name="account" placeholder="请输入微信号" required value="<?=$model->account?>" size="100">
         </div>
@@ -45,24 +41,32 @@ $this->extend('layouts/header');
             </select>
         </div>
         <div class="input-group">
-            <label for="appid">AppID(应用ID)</label>
+            <label for="appid">AppID</label>
             <input type="text" id="appid" name="appid" placeholder="请输入AppID(应用ID)" required value="<?=$model->appid?>" size="100">
         </div>
         <div class="input-group">
-            <label for="secret">AppSecret(应用密钥)</label>
+            <label for="secret">AppSecret</label>
             <input type="text" id="secret" name="secret" placeholder="请输入AppSecret(应用密钥)" required value="<?=$model->secret?>" size="100">
         </div>
         <div class="input-group">
-            <label for="aes_key">消息加密秘钥EncodingAesKey</label>
+            <label for="aes_key">消息加密秘钥</label>
             <input type="text" id="aes_key" name="aes_key" placeholder="请输入消息加密秘钥EncodingAesKey" required value="<?=$model->aes_key?>" size="100">
         </div>
         <div class="input-group">
-            <label for="avatar">头像地址</label>
-            <input type="text" id="avatar" name="avatar" placeholder="请输入头像地址" required value="<?=$model->avatar?>" size="100">
+            <label for="avatar">头像</label>
+            <div class="file-input">
+                <input type="text" id="avatar" name="avatar" placeholder="请输入头像地址" required value="<?=$model->avatar?>" size="70">
+                <button type="button">上传</button>
+                <button type="button">预览</button>
+            </div>
         </div>
         <div class="input-group">
-            <label for="qrcode">二维码地址</label>
-            <input type="text" id="qrcode" name="qrcode" placeholder="请输入二维码地址" required value="<?=$model->qrcode?>" size="100">
+            <label for="qrcode">二维码</label>
+            <div class="file-input">
+                <input type="text" id="qrcode" name="qrcode" placeholder="请输入二维码地址" required value="<?=$model->qrcode?>" size="70">
+                <button type="button">上传</button>
+                <button type="button">预览</button>
+            </div>
         </div>
         <div class="input-group">
             <label for="address">所在地址</label>
@@ -73,11 +77,11 @@ $this->extend('layouts/header');
             <input type="text" id="description" name="description" placeholder="请输入公众号简介" required value="<?=$model->description?>" size="100">
         </div>
         <div class="input-group">
-            <label for="username">微信官网登录名(邮箱)</label>
+            <label for="username">账户</label>
             <input type="text" id="username" name="username" placeholder="请输入微信官网登录名(邮箱)" required value="<?=$model->username?>" size="100">
         </div>
         <div class="input-group">
-            <label for="password">微信官网登录密码</label>
+            <label for="password">密码</label>
             <input type="text" id="password" name="password" placeholder="请输入微信官网登录密码" required value="<?=$model->password?>" size="100">
         </div>
         <button class="btn btn-primary">保存</button>

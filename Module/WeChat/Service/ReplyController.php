@@ -1,11 +1,10 @@
 <?php
 namespace Module\WeChat\Service;
 
-use Module\ModuleController;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Zodream\ThirdParty\WeChat\EventEnum;
 
-class ReplyController extends ModuleController {
+class ReplyController extends Controller {
 
     protected  $event_list = [
         'default' => '默认回复',
@@ -13,8 +12,15 @@ class ReplyController extends ModuleController {
         EventEnum::Subscribe => '关注'
     ];
 
+    protected function rules() {
+        return [
+            '*' => 'w'
+        ];
+    }
+
     public function indexAction($event = null) {
-        $reply_list = ReplyModel::when(!empty($event), function ($query) use ($event) {
+        $reply_list = ReplyModel::where('wid', $this->weChatId())
+            ->when(!empty($event), function ($query) use ($event) {
             $query->where('event', $event);
         })->page();
         $event_list = $this->event_list;
@@ -33,7 +39,7 @@ class ReplyController extends ModuleController {
 
     public function saveAction() {
         $model = new ReplyModel();
-        $model->wid = '1';
+        $model->wid = $this->weChatId();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess($model);
         }

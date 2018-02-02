@@ -71,7 +71,7 @@ class CreateWeChatTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull()->comment('公众号名称');
             $table->set('token')->varchar(32)->notNull()->comment('微信服务访问验证token');
-            $table->set('access_token')->varchar()->notNull()->comment('访问微信服务验证token');
+            $table->set('access_token')->varchar()->comment('访问微信服务验证token');
             $table->set('account')->varchar(30)->notNull()->comment('微信号');
             $table->set('original')->varchar(40)->notNull()->comment('原始ID');
             $table->set('type')->bool()->unsigned()->notNull()->comment('公众号类型');
@@ -83,7 +83,7 @@ class CreateWeChatTables extends Migration {
             $table->set('address')->varchar()->notNull()->comment('所在地址');
             $table->set('description')->varchar()->notNull()->comment('公众号简介');
             $table->set('username')->varchar(40)->notNull()->comment('微信官网登录名');
-            $table->set('status')->bool()->notNull()->comment('状态');
+            $table->set('status')->bool()->notNull()->defaultVal(0)->comment('状态');
             $table->set('password')->varchar(32)->notNull()->comment('微信官网登录密码');
             $table->timestamps();
         });

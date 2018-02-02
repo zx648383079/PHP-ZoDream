@@ -121,4 +121,24 @@ footer {
   width: 100%;
   height: 100px; }
 
+.form-inline .input-group select {
+  min-width: 120px; }
+
+.form-inline .input-group .file-input {
+  display: inline-block; }
+  .form-inline .input-group .file-input button {
+    background: #97CCFE;
+    min-width: 70px;
+    padding: 0 30px;
+    border: none;
+    display: inline-block;
+    height: 30px; }
+
+table .active {
+  background: #f00;
+  color: #fff;
+  padding: 0 10px;
+  display: inline-block;
+  line-height: 30px; }
+
 /*# sourceMappingURL=wechat.css.map */

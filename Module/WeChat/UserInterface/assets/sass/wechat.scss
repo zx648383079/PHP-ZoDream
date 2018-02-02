@@ -155,3 +155,32 @@ footer {
         height: 100px;
     }
 }
+
+.form-inline {
+    .input-group {
+        select {
+            min-width: 120px;
+        }
+        .file-input {
+            display: inline-block;
+            button {
+                background: #97CCFE;
+                min-width: 70px;
+                padding: 0 30px;
+                border: none;
+                display: inline-block;
+                height: 30px;
+            }
+        }
+    }
+}
+
+table {
+    .active {
+        background: #f00;
+        color: #fff;
+        padding: 0 10px;
+        display: inline-block;
+        line-height: 30px;
+    }
+}

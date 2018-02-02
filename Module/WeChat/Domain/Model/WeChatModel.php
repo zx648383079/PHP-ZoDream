@@ -80,22 +80,22 @@ class WeChatModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-40',
-            'token' => 'required|string:3-32',
-            'access_token' => 'required|string:3-255',
-            'account' => 'required|string:3-30',
-            'original' => 'required|string:3-40',
-            'type' => 'required|int:0-1',
-            'appid' => 'required|string:3-50',
-            'secret' => 'required|string:3-50',
-            'aes_key' => 'required|string:3-43',
-            'avatar' => 'required|string:3-255',
-            'qrcode' => 'required|string:3-255',
-            'address' => 'required|string:3-255',
-            'description' => 'required|string:3-255',
-            'username' => 'required|string:3-40',
-            'status' => 'required|int:0-1',
-            'password' => 'required|string:3-32',
+            'name' => 'required|string:-40',
+            'token' => 'required|string:-32',
+            'access_token' => 'string:-255',
+            'account' => 'required|string:-30',
+            'original' => 'required|string:-40',
+            'type' => 'required',
+            'appid' => 'required|string:-50',
+            'secret' => 'required|string:-50',
+            'aes_key' => 'required|string:-43',
+            'avatar' => 'required|string:-255',
+            'qrcode' => 'required|string:-255',
+            'address' => 'required|string:-255',
+            'description' => 'required|string:-255',
+            'username' => 'required|string:-40',
+            'status' => 'int:0-1',
+            'password' => 'required|string:-32',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -143,4 +143,13 @@ class WeChatModel extends Model {
     public function getApiUrlAttribute() {
         return Url::to('./message/id/'.$this->id);
     }
+
+    public function getTypeLabelAttribute() {
+        return self::$types[$this->type];
+    }
+
+    public function getStatusLabelAttribute() {
+        return self::$statuses[$this->status];
+    }
+
 }

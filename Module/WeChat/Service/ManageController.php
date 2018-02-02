@@ -1,13 +1,14 @@
 <?php
 namespace Module\WeChat\Service;
 
-use Module\ModuleController;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\Service\Routing\Url;
 
-class ManageController extends ModuleController {
+class ManageController extends Controller {
     public function indexAction() {
         $model_list = WeChatModel::all();
-        return $this->show(compact('model_list'));
+        $current_id = $this->weChatId();
+        return $this->show(compact('model_list', 'current_id'));
     }
 
     public function createAction() {
@@ -22,8 +23,11 @@ class ManageController extends ModuleController {
     public function saveAction() {
         $model = new WeChatModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess($model);
+            return $this->jsonSuccess([
+                'url' => (string)Url::to('./manage')
+            ]);
         }
+
         return $this->jsonFailure($model->getFirstError());
     }
 
@@ -32,5 +36,14 @@ class ManageController extends ModuleController {
         return $this->jsonSuccess([
             'refresh' => true
         ]);
+    }
+
+    public function changeAction($id) {
+        $model = WeChatModel::find($id);
+        if (empty($model)) {
+            return $this->redirect('./manage');
+        }
+        $this->weChatId($id);
+        return $this->redirect('./manage');
     }
 }

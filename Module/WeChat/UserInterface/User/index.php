@@ -31,7 +31,7 @@ $this->extend('layouts/header');
                 <td><?=$item->appid?></td>
                 <td><?=$item->description?></td>
                 <td>
-                    <a data-type="del" href="<?$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
+                    <a data-type="del" href="<?=$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

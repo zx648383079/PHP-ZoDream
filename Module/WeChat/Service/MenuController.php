@@ -63,6 +63,12 @@ class MenuController extends ModuleController {
         ]
     ];
 
+    protected function rules() {
+        return [
+            '*' => 'w'
+        ];
+    }
+
     public function indexAction() {
         $menu_list = MenuModel::where('parent_id', 0)->all();
         return $this->show(compact('menu_list'));
