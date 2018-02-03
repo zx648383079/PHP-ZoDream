@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Service\Routing\Url;
 /** @var $this \Zodream\Template\View */
-$this->extend('layout/header');
+$this->extend('layouts/header');
 $js = <<<JS
 $("form").Validform({
 	showAllError:true,
@@ -58,8 +58,8 @@ $this->registerJs($js);
 		</tr>
 	</table>
 	<p class="ms-MessageBar ms-MessageBar--error" style="display: none"></p>
-	<button class="ms-Button ms-Button--primary" type="submit">提交</button>
+	<button class="btn btn-primary" type="submit">提交</button>
 </form>
 </div>
 
-<?php $this->extend('layout/footer');?>
+<?php $this->extend('layouts/footer');?>

@@ -2,9 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
 
-$this->extend([
-    'layout/header',
-]);
+$this->extend('layouts/header');
 ?>
 
 <div class="metro-grid">
@@ -25,4 +23,4 @@ $this->extend([
     </div>
 </div>
 
-<?php $this->extend('layout/footer')?>
+<?php $this->extend('layouts/footer')?>

@@ -25,7 +25,7 @@ $js = <<<JS
 JS;
 
 $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');
-$this->extend('layout/header')
+$this->extend('layouts/header')
     ->registerJs($js, View::JQUERY_READY)
     ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
 ?>
@@ -81,6 +81,4 @@ $this->extend('layout/header')
         <?php endforeach;?>
     </div>
 
-<?php
-$this->extend('layout/footer');
-?>
+    <?php $this->extend('layouts/footer');?>

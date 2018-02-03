@@ -46,7 +46,7 @@ $(".book-search .search-tip").on('click', 'li', function() {
 
 JS;
 
-$this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
+$this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
 ?>
 
     <div class="book-title">
@@ -124,6 +124,5 @@ $this->extend('layout/header')->registerJs($js, View::JQUERY_READY);
         </dl>
     <?php endforeach;?>
     </div>
-<?php
-$this->extend('layout/footer');
-?>
+    
+<?php $this->extend('layouts/footer');?>
