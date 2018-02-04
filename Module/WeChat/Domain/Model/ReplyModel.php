@@ -2,6 +2,7 @@
 namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Request;
 
 
 /**
@@ -43,7 +44,7 @@ class ReplyModel extends Model {
         return [
             'wid' => 'required|int',
             'event' => 'required|string:3-20',
-            'keywords' => 'required|string:3-60',
+            'keywords' => 'string:3-60',
             'content' => 'required',
             'match' => 'int',
             'type' => 'required|string:3-10',
@@ -62,17 +63,16 @@ class ReplyModel extends Model {
             'priority' => '优先级',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
-
             'keywords' => '触发关键字'
         ];
     }
 
-    /**
-     * 回复的关键字
-     * @return static
-     */
-    public function getKeywords() {
-        return $this->hasMany(ReplyRuleKeyword::className(), ['rid' => 'id'])
-            ->inverseOf('rule');
+    public function loadEditor() {
+        $data = Request::post('editor');
+        $this->type = intval($data['type']);
+        if ($this->type == 0) {
+            $this->content = $data['text'];
+            return;
+        }
     }
 }

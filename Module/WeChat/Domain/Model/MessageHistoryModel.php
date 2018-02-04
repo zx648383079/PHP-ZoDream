@@ -66,13 +66,4 @@ class MessageHistoryModel extends Model {
             'created_at' => '创建时间',
         ];
     }
-
-    /**
-     * 快速添加记录
-     * @param array $data
-     * @return bool|object 错误将返回model类
-     */
-    public static function add(array $data) {
-        return static::create($data);
-    }
 }

@@ -11,8 +11,12 @@ class MessageController extends ModuleController {
 
     public function indexAction($id) {
         $model = WeChatModel::find($id);
-
-        $message = new Message();
+        $message = new Message([
+            'aes_key' => $model->aes_key,
+            'appid' => $model->appid,
+            'token' => $model->token,
+            'secret' => $model->secret
+        ]);
         return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe],
             function(Message $message, MessageResponse $response) {
             $response->setText('谢谢关注！');

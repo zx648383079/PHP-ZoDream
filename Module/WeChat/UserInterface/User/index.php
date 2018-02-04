@@ -7,7 +7,7 @@ $this->extend('layouts/header');
 <div class="page-tip">
     <p class="blue">操作提示</p>
     <ul>
-        <li>关注公众号时自动回复</li>
+        <li>关注用户管理</li>
     </ul>
     <span class="toggle"></span>
 </div>
@@ -15,10 +15,9 @@ $this->extend('layouts/header');
     <thead>
         <tr>
             <th>ID</th>
-            <th>名称</th>
-            <th>类型</th>
-            <th>APPID</th>
-            <th>说明</th>
+            <th>微信ID</th>
+            <th>昵称</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -26,12 +25,11 @@ $this->extend('layouts/header');
         <?php foreach($model_list as $item):?>
            <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
-                <td><?=$item->type?></td>
-                <td><?=$item->appid?></td>
-                <td><?=$item->description?></td>
+                <td><?=$item->openid?></td>
+                <td><?=$item->user->nickname?></td>
+                <td><?=$item->status_label?></td>
                 <td>
-                    <a data-type="del" href="<?=$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
+                    <a data-type="del" href="<?=$this->url('./user/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

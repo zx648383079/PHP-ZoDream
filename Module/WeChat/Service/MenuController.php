@@ -1,13 +1,10 @@
 <?php
 namespace Module\WeChat\Service;
 
-use Module\ModuleController;
 use Module\WeChat\Domain\Model\MenuModel;
-use function Sodium\compare;
-use Zodream\ThirdParty\WeChat\Menu;
-use Zodream\ThirdParty\WeChat\MenuItem;
+use Zodream\Service\Routing\Url;
 
-class MenuController extends ModuleController {
+class MenuController extends Controller {
 
     /**
      * 菜单类型
@@ -74,27 +71,39 @@ class MenuController extends ModuleController {
         return $this->show(compact('menu_list'));
     }
 
-    public function addAction() {
-        return $this->runMethod('edit', ['id' => null]);
+    public function addAction($parent_id = 0) {
+        return $this->runMethod('edit', ['id' => null, 'parent_id' => $parent_id]);
     }
 
-    public function editAction($id) {
+    public function editAction($id, $parent_id = 0) {
         $model = MenuModel::findOrNew($id);
+        if ($model->parent_id < $parent_id) {
+            $model->parent_id = $parent_id;
+        }
         $menu_list = MenuModel::where('parent_id', 0)->all();
         return $this->show(compact('model', 'menu_list'));
     }
 
     public function saveAction() {
         $model = new MenuModel();
-        $model->wid = '1';
+        $model->wid = $this->weChatId();
+        $model->loadEditor();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess($model);
+            return $this->jsonSuccess([
+                'url' => (string)Url::to('./menu')
+            ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonFailure($model->getError());
     }
 
     public function deleteAction($id) {
         MenuModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function applyAction() {
         return $this->jsonSuccess([
             'refresh' => true
         ]);

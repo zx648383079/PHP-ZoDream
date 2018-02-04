@@ -2,6 +2,7 @@
 namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Request;
 
 /**
  * Class MenuModel
@@ -26,9 +27,9 @@ class MenuModel extends Model {
         return [
             'wid' => 'required|int',
             'name' => 'required|string:3-100',
-            'type' => 'required|string:3-100',
-            'content' => 'required',
-            'pages' => 'required',
+            'type' => 'string:3-100',
+            'content' => '',
+            'pages' => '',
             'parent_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -47,5 +48,22 @@ class MenuModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function loadEditor() {
+        $data = Request::post('editor');
+        $this->type = intval($data['type']);
+        if ($this->type == 0) {
+            $this->content = $data['text'];
+            return;
+        }
+        if ($this->type == 0) {
+            $this->content = $data['text'];
+            return;
+        }
+    }
+
+    public function children() {
+        return $this->hasMany(static::class, 'parent_id', 'id');
     }
 }

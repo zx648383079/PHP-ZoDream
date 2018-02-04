@@ -71,6 +71,10 @@ class FansModel extends Model {
         return $this->hasOne(UserModel::class, 'id', 'id');
     }
 
+    public function getStatusLabelAttribute() {
+        return self::$statuses[$this->status];
+    }
+
     /**
      * 通过唯一的openid查询粉丝
      * @param $open_id

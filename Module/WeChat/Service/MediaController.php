@@ -1,10 +1,15 @@
 <?php
 namespace Module\WeChat\Service;
 
-use Module\ModuleController;
 use Module\WeChat\Domain\Model\MediaModel;
 
-class MediaController extends ModuleController {
+class MediaController extends Controller {
+
+    protected function rules() {
+        return [
+            '*' => 'w'
+        ];
+    }
 
     public function indexAction($type = null) {
         $model_list = MediaModel::when(!empty($type), function ($query) use ($type) {

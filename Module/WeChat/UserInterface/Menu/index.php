@@ -10,36 +10,39 @@ $this->extend('layouts/header');
     </ul>
     <span class="toggle"></span>
 </div>
+<div class="page-action">
+    <a href="<?=$this->url('./menu/apply')?>">应用</a>
+</div>
 <div class="wx-page">
 
-<div class="tree">
-    <?php foreach($menu_list as $menu):?>
-    <div class="tree-item">
-        <span><?=$menu->name?></span>
-        <div class="tree-action">
-            <a href="<?=$this->url('./menu/edit', ['id' => $menu->id])?>">编辑</a>
-            <a data-type="del" href="<?=$this->url('./menu/delete', ['id' => $menu->id])?>">删除</a>
-        </div>
-        <div class="tree-children">
-                <?php foreach($menu->children as $item):?>
-                <div class="tree-item">
-                    <span><?=$item->name?></span>
-                    <div class="tree-action">
-                        <a href="<?=$this->url('./menu/edit', ['id' => $item->id])?>">编辑</a>
-                        <a data-type="del" href="<?=$this->url('./menu/delete', ['id' => $item->id])?>">删除</a>
+    <div class="tree">
+        <?php foreach($menu_list as $menu):?>
+        <div class="tree-item">
+            <span><?=$menu->name?></span>
+            <div class="tree-action">
+                <a href="<?=$this->url('./menu/edit', ['id' => $menu->id])?>">编辑</a>
+                <a data-type="del" href="<?=$this->url('./menu/delete', ['id' => $menu->id])?>">删除</a>
+            </div>
+            <div class="tree-children">
+                    <?php foreach($menu->children as $item):?>
+                    <div class="tree-item">
+                        <span><?=$item->name?></span>
+                        <div class="tree-action">
+                            <a href="<?=$this->url('./menu/edit', ['id' => $item->id])?>">编辑</a>
+                            <a data-type="del" href="<?=$this->url('./menu/delete', ['id' => $item->id])?>">删除</a>
+                        </div>
                     </div>
-                </div>
-                <?php endforeach;?>
-                <div class="tree-add">
-                    <a href="<?=$this->url('./menu/add')?>">添加</a>
-                </div>
+                    <?php endforeach;?>
+                    <div class="tree-add">
+                        <a href="<?=$this->url('./menu/add', ['parent_id' => $menu->id])?>">添加</a>
+                    </div>
+            </div>
+        </div>
+        <?php endforeach;?>
+        <div class="tree-add">
+            <a href="<?=$this->url('./menu/add')?>">添加</a>
         </div>
     </div>
-    <?php endforeach;?>
-    <div class="tree-add">
-        <a href="<?=$this->url('./menu/add')?>">添加</a>
-    </div>
-</div>
     
 </div>
 
