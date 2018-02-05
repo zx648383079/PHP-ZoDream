@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
 /**
-* Class PostModel
+* Class BlogModel
 * @property integer $id
 * @property string $title
 * @property string $content
