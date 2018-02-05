@@ -8,7 +8,7 @@ use Domain\Model\Model;
  * @property integer $type
  * @property integer $id_value
  * @property integer $user_id
- * @property string $action
+ * @property integer $action
  * @property integer $created_at
  */
 class BlogLogModel extends Model {
@@ -25,23 +25,26 @@ class BlogLogModel extends Model {
         return 'blog_log';
     }
 
-	protected function rules() {
-		return [
-            'blog_id' => 'required|int',
+
+    protected function rules() {
+        return [
+            'type' => 'int:0-3',
+            'id_value' => 'required|int',
             'user_id' => 'required|int',
-            'action' => 'string:3-30',
+            'action' => 'required|int',
             'created_at' => 'int',
         ];
-	}
+    }
 
-	protected function labels() {
-		return [
+    protected function labels() {
+        return [
             'id' => 'Id',
-            'blog_id' => 'Blog Id',
+            'type' => 'Type',
+            'id_value' => 'Id Value',
             'user_id' => 'User Id',
             'action' => 'Action',
-            'created_at' => 'Create At',
+            'created_at' => 'Created At',
         ];
-	}
+    }
 
 }

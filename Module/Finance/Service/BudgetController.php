@@ -7,6 +7,12 @@ use Zodream\Service\Routing\Url;
 
 class BudgetController extends ModuleController {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $model_list = BudgetModel::page();
         return $this->show(compact('model_list'));

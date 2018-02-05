@@ -26,6 +26,7 @@ class CreateBlogTables extends Migration {
             $table->set('user_id')->int(10);
             $table->set('term_id')->int(10);
             $table->set('recommend')->int(10)->defaultVal(0);
+            $table->set('comment_count')->int(10)->defaultVal(0);
             $table->set('comment_status')->tinyint(1)->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();

@@ -11,6 +11,12 @@ use Zodream\Service\Routing\Url;
 
 class MoneyController extends ModuleController {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $account_list = MoneyAccountModel::all();
         $total = 0;

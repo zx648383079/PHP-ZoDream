@@ -10,6 +10,12 @@ use Zodream\Service\Routing\Url;
 
 class IncomeController extends ModuleController {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction($month = null) {
         if (empty($month)) {
             $month = date('Y-m');

@@ -8,6 +8,12 @@ use Module\ModuleController;
 
 class HomeController extends ModuleController {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $time = strtotime(date('Y-m'));
         $now_income = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->sum('money');

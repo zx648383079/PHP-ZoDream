@@ -53,10 +53,11 @@ class HomeController extends ModuleController {
             ->one();
         $cat_list = TermModel::all();
         $log_list = BlogLogModel::alias('l')
-            ->left('blog b', 'b.id = l.blog_id')
+            ->left('blog b', 'b.id = l.id_value')
             ->left('user u', 'u.id = l.user_id')
-            ->where('l.blog_id', $id)
-            ->order('l.create_at desc')
+            ->where('l.id_value', $id)
+            ->where('l.type', BlogLogModel::TYPE_BLOG)
+            ->order('l.created_at desc')
             ->select('l.*', 'b.title', 'u.name')
             ->limit(5)
             ->all();

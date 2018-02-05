@@ -5,6 +5,13 @@ use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Service\Routing\Url;
 
 class ManageController extends Controller {
+
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $model_list = WeChatModel::all();
         $current_id = $this->weChatId();
