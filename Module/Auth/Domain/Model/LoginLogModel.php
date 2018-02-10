@@ -22,10 +22,10 @@ class LoginLogModel extends Model {
 
     protected function rules() {
 		return array (
-		  'ip' => 'required|string:3-20',
-		  'user' => 'required|string:3-45',
-		  'status' => 'required|int:0-1',
-		  'mode' => '|string:3-45',
+		  'ip' => 'required|string:0,120',
+		  'user' => 'required|string:0,45',
+		  'status' => 'required|bool',
+		  'mode' => 'string:0,45',
 		  'created_at' => 'required|int',
 		);
 	}

@@ -52,12 +52,12 @@ class UserModel extends BaseModel {
 
     protected function rules() {
 		return array (
-			'name' => 'required|string:3-30',
-			'email' => 'string:3-100',
-			'password' => 'string:3-64',
+			'name' => 'required|string:0,30',
+			'email' => 'string:0,100',
+			'password' => 'string:0,64',
 			'sex' => 'int',
-			'avatar' => 'string:3-200',
-			'token' => 'string:3-60',
+			'avatar' => 'string:0,200',
+			'token' => 'string:0,60',
 			'deleted_at' => 'int',
 			'created_at' => 'int',
 		);
@@ -66,16 +66,16 @@ class UserModel extends BaseModel {
 	public function signInRules() {
 		return [
 			'email' => 'required|email',
-			'password' => 'required|string:3-30',
+			'password' => 'required|string:0,30',
 			'code' => 'validateCode'
 		];
 	}
 	
 	public function signUpRules() {
 		return [
-			'name' => 'required|string:2-20',
+			'name' => 'required|string:0,20',
 			'email' => 'required|email',
-			'password' => 'required|string:3-30',
+			'password' => 'required|string:0,30',
 			'rePassword' => 'validateRePassword',
 			'agree' => ['validateAgree', 'message' => '必须同意相关协议！']
 		];
@@ -83,8 +83,8 @@ class UserModel extends BaseModel {
 
 	public function resetRules() {
 		return [
-			'oldPassword'     => 'required|string:3-30',
-			'password' => 'required|string:3-30',
+			'oldPassword'     => 'required|string:0,30',
+			'password' => 'required|string:0,30',
 			'rePassword' => 'validateRePassword',
 		];
 	}
