@@ -10,6 +10,9 @@ class Module extends BaseModule {
     public function boot() {
         Factory::view()->setConfigs([
             'suffix' => '.html'
-        ])->setEngine(ParserCompiler::class);
+        ])->setEngine(ParserCompiler::class)
+            ->getEngine()->registerFunc('ads', function () {
+                return '';
+            });
     }
 }
