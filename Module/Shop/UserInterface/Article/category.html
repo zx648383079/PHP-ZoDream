@@ -28,16 +28,17 @@
           <h1>{$cat.name}</h1>
           <div class="module cut"> 
               {if:$article_list}
-              {for:$article_list,$item}
               <ul>
-                <li>
-                  <span class="fr">
-                    {$item.created_at}
-                  </span>
-                  <a href="{url:./article?id=:$item.id}" title="{$item.title}">{$item.title}</a>
-                </li>
+                  {for:$article_list,$item}
+                  <li>
+                    <span class="fr">
+                      {$item.created_at}
+                    </span>
+                    <a href="{url:./article?id=:$item.id}" title="{$item.title}">{$item.title}</a>
+                  </li>
+                {/for}
               </ul>
-              {/for}
+              
               {else}
               <p class="caaa aln-c mt10 pad10">暂无数据...</p>
               {/if} 
