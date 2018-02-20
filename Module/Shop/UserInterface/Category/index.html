@@ -43,39 +43,42 @@
       <!-- 左侧结束 -->
       <!-- 右侧开始 -->
       <div class="w880">
-        <{if !empty($bargain)}>
+        {if:$bargain_goods}
         <!-- 特价促销开始 -->
         <div class="recommend mb10 cut">
-          <{foreach $bargain as $v}>
+          {for:$bargain_goods,$item}
           <dl>
-            <dt class="fl"><a href="{url:./goods?id=:$item.id}"><img width="100" height="100" alt="{$item.name}" src="{$item.thumb}" /></a></dt>
-            <dd>
-              <a title="{$item.name}" href="{url:./goods?id=:$item.id}">{$item.name}</a>
-              <{if $v.original_price > 0}>
-              <p class="ori mt10"><i>¥</i> <{$v.original_price}></p>
-              <{/if}>
-              <p class="mt2"><i>¥</i> {$item.price}</p>
-            </dd>
-          </dl>
-          <{/foreach}>
+              <dt class="fl"><a href="{url:./goods?id=:$item.id}"><img width="100" height="100" alt="{$item.name}" src="{$item.thumb}" /></a></dt>
+              <dd>
+                <a title="{$item.name}" href="{url:./goods?id=:$item.id}">{$item.name}</a>
+                {if:$item.market_price > 0}
+                <p class="ori mt10"><i>¥</i> <{$item.market_price}></p>
+                {/if}
+                <p class="mt2"><i>¥</i> {$item.price}</p>
+              </dd>
+            </dl>
+          {/for}
         </div>
-        <!-- 特价促销结束 -->
-        <{/if}>
+        {/if}
         <!-- 过滤筛选开始 -->
         <div class="filter cut">
-          <{if !empty($filters.brand)}>
+          {if:$brand_list}
           <div class="ftitem cut">
-            <h4 class="fl">品牌：</h4>
-            <div class="ftopt">
-              <div class="fl"><{if $u.brand == 0}><a class="cur">不限</a><{else}><a href="<{url c='category' a='index' id=$u.cate att=$u.att minpri=$u.minpri maxpri=$u.maxpri sort=$u.sort}>">不限</a><{/if}></div>
-              <dl>
-                <{foreach $filters.brand as $v}>
-                <{if $u.brand == $v.brand_id}><dd><a class="cur" title="<{$v.brand_name}>"><{$v.brand_name}></a></dd><{else}><dd><a title="<{$v.brand_name}>" href="<{url c='category' a='index' id=$u.cate brand=$v.brand_id att=$u.att minpri=$u.minpri maxpri=$u.maxpri sort=$u.sort}>"><{$v.brand_name}></a></dd><{/if}>
-                <{/foreach}>
-              </dl>
+              <h4 class="fl">品牌：</h4>
+              <div class="ftopt">
+                <div class="fl">
+                  
+                  <{if $u.brand == 0}><a class="cur">不限</a><{else}><a href="<{url c='category' a='index' id=$u.cate att=$u.att minpri=$u.minpri maxpri=$u.maxpri sort=$u.sort}>">
+                    不限</a>
+                    <{/if}></div>
+                <dl>
+                  <{foreach $filters.brand as $v}>
+                  <{if $u.brand == $v.brand_id}><dd><a class="cur" title="<{$v.brand_name}>"><{$v.brand_name}></a></dd><{else}><dd><a title="<{$v.brand_name}>" href="<{url c='category' a='index' id=$u.cate brand=$v.brand_id att=$u.att minpri=$u.minpri maxpri=$u.maxpri sort=$u.sort}>"><{$v.brand_name}></a></dd><{/if}>
+                  <{/foreach}>
+                </dl>
+              </div>
             </div>
-          </div>
-          <{/if}>
+          {/if}
           <{if !empty($filters.attr)}>
           <{foreach $filters.attr as $v}>
           <div class="ftitem cut">
