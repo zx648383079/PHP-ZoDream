@@ -16,9 +16,7 @@ class HomeController extends Controller {
         return $this->show();
     }
 
-    protected function getUrl($path, $args = []) {
-        return (string)Url::to('./admin/'.$path, $args);
-    }
+
 
     protected function getMenus() {
         return [
