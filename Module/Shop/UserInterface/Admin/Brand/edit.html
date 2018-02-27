@@ -1,0 +1,38 @@
+{this.title=ZoDream}
+{extend:admin/layouts/header}
+<div class="content">
+  <div class="loc"><h2><i class="icon"></i>添加新品牌</h2></div>
+  <form method="post" enctype="multipart/form-data" action="{url:./admin/brand/save}">
+    <div class="box">
+      <div class="module">
+        <table class="dataform">
+          <tr>
+            <th width="110">品牌名称</th>
+            <td><input class="w200 txt" name="brand_name" id="brand_name" type="text" /></td>
+          </tr>
+          <tr>
+            <th>品牌LOGO</th>
+            <td>
+              <dl class="upsw pad5">
+                <dt class="pad5"><a class="cur ml5 mr5">上传文件</a><a class="ml10">输入URL</a></dt>
+                <dd class="mt5 pad5">
+                  <div><input name="logo_file" type="file" /><p class="caaa mt10">仅允许上传 "png"、"jpg"、"jpeg"、"gif" 类型的图片</p></div>
+                  <div class="hide"><input name="logo_src" class="w500 txt" type="text" /></div>
+                </dd>
+              </dl>
+            </td>
+          </tr>
+          <tr>
+            <th>排序</th>
+            <td><input value="99" class="w50 txt" name="seq" id="seq" type="text" /></td>
+          </tr>
+        </table>
+      </div>
+      <div class="submitbtn">
+        <button type="button" class="ubtn btn" onclick="submitForm()">保存并提交</button>
+        <button type="reset" class="fbtn btn">重置表单</button>
+      </div>
+    </div>
+  </form>
+</div>
+{extend:admin/layouts/footer}

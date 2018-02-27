@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Admin;
 
 use Module\ModuleController;
+use Zodream\Service\Routing\Url;
 
 class Controller extends ModuleController {
 
