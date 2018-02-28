@@ -26,6 +26,7 @@
     "zodream/template" : "dev-master",
     "zodream/image" : "dev-master",
     "zodream/validate": "dev-master",
+    "zodream/spider": "dev-master",
 
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpexcel": "^1.8",
