@@ -28,11 +28,9 @@ class ArticleController extends Controller {
     public function saveCategoryAction() {
         $model = new ArticleCategoryModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('category')
-            ]);
+            return $this->redirectWithMessage($this->getUrl('category'), '保存成功！');
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->redirectWithMessage($this->getUrl('category'), $model->getFirstError());
     }
 
     public function deleteLogAction($id) {

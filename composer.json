@@ -29,11 +29,10 @@
     "zodream/spider": "dev-master",
 
     "mobiledetect/mobiledetectlib": "^2.8",
-    "phpoffice/phpexcel": "^1.8",
+    "phpoffice/phpspreadsheet": "^1.0",
     "monolog/monolog": "~1.22",
     "phpmailer/phpmailer": "~5.2",
     "psr/log": "~1.0",
-    "shark/simple_html_dom": "dev-master",
     "nesbot/carbon": "^1.22"
   },
   "require-dev": {

@@ -8,6 +8,15 @@ use Zodream\Spider\Support\Uri;
 
 abstract class BaseSpider {
 
+    public function invoke(Uri $uri) {
+        if ($this->isContentPage($uri)) {
+
+        }
+        if ($this->isCatalogPage($uri)) {
+
+        }
+    }
+
     /**
      * @param Uri $uri
      * @return boolean
