@@ -46,15 +46,15 @@ class LoginLogModel extends Model {
 	 * @param string $user 登录邮箱
 	 * @param bool $status 成功或失败
 	 * @param int $mode 页面登录或其他
-	 * @return int
-	 */
+	 * @return LoginLogModel
+     */
 	public static function addLoginLog($user, $status = false, $mode = 1) {
-		return static::record()->set(array(
-			'ip' => Request::ip(),
-			'user' => $user,
-			'status' => $status,
-			'mode' => $mode,
-			'created_at' => time()
-		))->insert();
+		return static::create([
+            'ip' => Request::ip(),
+            'user' => $user,
+            'status' => $status,
+            'mode' => $mode,
+            'created_at' => time()
+        ]);
 	}
 }

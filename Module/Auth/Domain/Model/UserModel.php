@@ -5,9 +5,10 @@ use Zodream\Domain\Access\Auth;
 use Zodream\Database\Model\UserModel as BaseModel;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
-use Zodream\Infrastructure\Factory;
 use Zodream\Infrastructure\Security\Hash;
 use Zodream\Infrastructure\Http\Request;
+use Zodream\Service\Factory;
+
 /**
  * Class UserModel
  * @package Domain\Model\Auth
@@ -22,6 +23,10 @@ use Zodream\Infrastructure\Http\Request;
  * @property integer $created_at
  */
 class UserModel extends BaseModel {
+
+    const SEX_MALE = 1; // 性别男
+    const SEX_FEMALE = 2; //性别女
+
 	public static function tableName() {
         return 'user';
     }
@@ -119,6 +124,7 @@ class UserModel extends BaseModel {
     /**
      * @param $id
      * @return UserModel|boolean
+     * @throws \Exception
      */
 	public static function findIdentity($id) {
 		return static::find($id);
@@ -127,6 +133,7 @@ class UserModel extends BaseModel {
     /**
      * @param $name
      * @return UserModel|boolean
+     * @throws \Exception
      */
 	public static function findByName($name) {
 		return static::find(['name' => $name]);
@@ -135,26 +142,10 @@ class UserModel extends BaseModel {
     /**
      * @param $email
      * @return UserModel|boolean
+     * @throws \Exception
      */
 	public static function findByEmail($email) {
 		return static::find(['email' => $email]);
-	}
-
-    /**
-     * @param $openId
-     * @param string $type
-     * @return UserModel|boolean
-     */
-	public static function findByOpenId($openId, $type = 'qq') {
-		$user_id = (new Query())
-			->from('user_oauth')
-			->select('user_id')
-			->where(['identity' => $openId, 'vendor' => $type])
-			->scalar();
-		if ($user_id === false) {
-			return false;
-		}
-		return static::findIdentity($user_id);
 	}
 
 	public function validateCode() {
@@ -223,10 +214,6 @@ class UserModel extends BaseModel {
 		return $user->login();
 	}
 
-	public function signInOAuth() {
-		
-	}
-
     /**
      * @return UserModel|boolean
      */
@@ -267,7 +254,7 @@ class UserModel extends BaseModel {
 		$this->setPassword($this->password);
 		$this->created_at = time();
 		$this->avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
-		$this->sex = 1;
+		$this->sex = self::SEX_FEMALE;
 		if (!$this->save()) {
 			return false;
 		}

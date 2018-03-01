@@ -6,7 +6,6 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
-use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 use Zodream\Service\Routing\Url;
@@ -56,33 +55,6 @@ class HomeController extends ModuleController {
             ], '登录成功！');
         }
         return $this->jsonFailure($user->getFirstError());
-    }
-
-    /**
-     * @param string $type
-     * @return BaseOAuth
-     */
-    protected function getOAuth($type = 'qq') {
-        static $maps = [
-            'qq' => 'QQ',
-            'alipay' => 'ALiPay',
-            'baidu' => 'BaiDu',
-            'taobao' => 'TaoBao',
-            'weibo' => 'WeiBo',
-            'wechat' => 'WeChat',
-            'github' => 'GitHub'
-        ];
-        $type = strtolower($type);
-        if (!array_key_exists($type, $maps)) {
-            throw new \InvalidArgumentException($type.' 的第三方登录组件不存在！');
-        }
-        $class = 'Zodream\\Domain\\ThirdParty\\OAuth\\'.$maps[$type];
-        return new $class;
-    }
-
-    public function oauthAction($type = 'qq') {
-        $oauth = $this->getOAuth($type);
-        return $oauth->login();
     }
 
     public function logoutAction() {
