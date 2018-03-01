@@ -3,18 +3,31 @@ namespace Module\Book\Domain\Spiders;
 
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
+use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 
 abstract class BaseSpider {
 
-    public function invoke(Uri $uri) {
+    public function invoke(Uri $uri, callable $next = null) {
         if ($this->isContentPage($uri)) {
-
+            $chapter = $this->getChapter(Spider::url($uri));
+            $chapter->save();
+            return $chapter;
         }
-        if ($this->isCatalogPage($uri)) {
-
+        if (!$this->isCatalogPage($uri)) {
+            return null;
         }
+        $html = Spider::url($uri);
+        $book = $this->getBook($html);
+        $book->save();
+        $chapters = $this->getCatalog($html, $uri);
+        foreach ($chapters as $url) {
+            $chapter = call_user_func($next, $url);
+            $chapter->book_id = $book->id;
+            $chapter->save();
+        }
+        return;
     }
 
     /**
@@ -36,14 +49,15 @@ abstract class BaseSpider {
     abstract public function getBook(Html $html);
 
     /**
-     * @param $html
-     * @return BookChapterModel[]
+     * @param Html $html
+     * @param Uri $baseUri
+     * @return Uri[]
      */
-    abstract public function getCatalog(Html $html);
+    abstract public function getCatalog(Html $html, Uri $baseUri);
 
     /**
      * @param $html
-     * @return string
+     * @return BookChapterModel
      */
-    abstract public function getContent(Html $html);
+    abstract public function getChapter(Html $html);
 }
