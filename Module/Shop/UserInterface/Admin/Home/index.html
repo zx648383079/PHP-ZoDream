@@ -12,11 +12,11 @@
        {js src=@jquery.min.js}
        {js src=@jquery.dialog.min.js}
        {js src=@shop_panel.min.js}
-       <script type="text/javascript">
-        function jump(uri){
-          parent.$('#main').attr('src', uri);
-        }
-        </script>       
+       {>js}
+       function jump(uri) {
+        parent.$('#main').attr('src', uri);
+      }
+       {/>}     
        {header:}
    </head>
    <body>

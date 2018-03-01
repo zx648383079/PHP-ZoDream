@@ -8,7 +8,7 @@
         <table class="dataform">
           <tr>
             <th width="110">分类名称</th>
-            <td><input class="w200 txt" name="cate_name" id="cate_name" type="text" /></td>
+            <td><input class="w200 txt" name="name" id="cate_name" type="text" value="{$model.name}"/></td>
           </tr>
           <tr>
             <th>上级分类</th>
@@ -16,7 +16,11 @@
               <select id="parent_id" name="parent_id" class="slt">
                 <option value="0">-- 无上级分类 --</option>
                 {for:$cat_list,$item}
+                {if:$item.id == $model.id}
+                <option value="{$item.id}" selected>{$item.name}</option>
+                {else}
                 <option value="{$item.id}">{$item.name}</option>
+                {/if}
                 {/for}
               </select>
             </td>
@@ -31,15 +35,16 @@
           </tr>
           <tr>
             <th>排序</th>
-            <td><input value="99" class="w50 txt" name="seq" id="seq" type="text" /></td>
+            <td><input value="{$model.position,99}" class="w50 txt" name="position" id="seq" type="text" /></td>
           </tr>
         </table>
       </div>
       <div class="submitbtn">
-        <button type="button" class="ubtn btn" onclick="submitForm()">保存并提交</button>
+        <button class="ubtn btn">保存并提交</button>
         <button type="reset" class="fbtn btn">重置表单</button>
       </div>
     </div>
+    <input type="hidden" name="id" value="{$model.id}">
   </form>
 </div>
 {extend:admin/layouts/footer}

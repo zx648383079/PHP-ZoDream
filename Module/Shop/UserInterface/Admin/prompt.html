@@ -1,28 +1,30 @@
 {extend:admin/layouts/header}
-<script type="text/javascript">
+{>js:$time=$time;$url=$url}
 var countdown = {$time};
 var timer;
 $(function(){
   $('#countdown').text(countdown);
   timer = window.setInterval(redirect, 1000); 
-})  
+});
 
 function redirect(){
-  if(countdown <= 1) {window.clearInterval(timer);}
+  if(countdown <= 1) {
+    window.clearInterval(timer);
+  }
   countdown --;
   $('#countdown').text(countdown);
-  if (countdown == 0){
+  if (countdown == 0) {
     window.location.href = '{$url}';
   }
-}
-</script>
+};
+{/>}
 <div class="content">
   <div class="loc">
     <h2><i class="icon"></i>系统提示</h2>
   </div>
   <div class="box">
     <div class="prompt">
-      <h3 class="{$type}">
+      <h3 class="success">
         {if:is_array($message)}
         {for:$message,$item}
         {$item}<br />

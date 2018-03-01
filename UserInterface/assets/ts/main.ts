@@ -11,8 +11,12 @@ let postJson = function(url: string, data: any, callback?: (data: any)=>any) {
     }
     $.post(url, data, callback, 'json');
 };
-function ajaxForm(url, data) {
+function ajaxForm(url, data, callback?: (data: any)=>any) {
     postJson(url, data, function(data) {
+        if (callback) {
+            callback(data);
+            return;
+        }
         parseAjax(data);
     });
 }

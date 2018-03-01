@@ -11,6 +11,6 @@ class Controller extends ModuleController {
     }
 
     public function redirectWithMessage($url, $message, $time = 4, $status = 404) {
-        return $this->show('admin/prompt', compact('url', 'message', 'time'));
+        return $this->show('/admin/prompt', compact('url', 'message', 'time'));
     }
 }

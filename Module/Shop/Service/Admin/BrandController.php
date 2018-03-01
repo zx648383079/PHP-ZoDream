@@ -23,11 +23,9 @@ class BrandController extends Controller {
     public function saveAction() {
         $model = new BrandModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('brand')
-            ]);
+            return $this->redirectWithMessage($this->getUrl('brand'), '保存成功！');
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->redirectWithMessage($this->getUrl('brand'), $model->getFirstError());
     }
 
     public function deleteAction($id) {
