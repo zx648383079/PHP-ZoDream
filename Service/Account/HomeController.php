@@ -31,50 +31,5 @@ class HomeController extends Controller {
 		]);
 	}
 
-	function infoAction() {
-		return $this->show();
-	}
-
-	/**
-	 * @param Post $post
-	 */
-	function infoPost($post) {
-		$post->set('id', Auth::user()['id']);
-		$row = EmpireModel::query('user')->save([
-			'name' => 'required|string:4-40',
-			'email' => 'required|email',
-			'sex' => 'required|enum:男,女',
-			'avatar' => 'required'
-		], $post->get());
-		if (empty($row)) {
-			return;
-		}
-		Auth::user()->set($post->get());
-		Auth::user()->save();
-	}
-
-	function avatarAction() {
-
-	}
-
-	function securityAction() {
-		return $this->show();
-	}
-
-	/**
-	 * @param Post $post
-	 */
-	function securityPost($post) {
-		$type = $post->get('type');
-		switch (intval($type)) {
-			case 5:
-				
-				break;
-		}
-	}
-
-	function settingAction() {
-		return $this->show();
-	}
 
 }
