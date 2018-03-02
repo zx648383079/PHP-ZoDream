@@ -1,0 +1,1 @@
+{"version":3,"file":"app.css","sources":["app.scss"],"sourcesContent":["// css 样式\r\n* {\r\n    margin: 0;\r\n    padding: 0;\r\n}"],"names":[],"mappings":"AACA,AAAA,CAAC,CAAC;EACE,MAAM,EAAE,CAAC;EACT,OAAO,EAAE,CAAC,GACb"}

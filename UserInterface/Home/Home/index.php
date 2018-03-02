@@ -1,26 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Template\View */
-
+use Zodream\Template\View;
+/** @var $this View */
+$this->title = 'ZoDream';
 $this->extend('layouts/header');
 ?>
-
-<div class="metro-grid">
-    <div class="item hover-middle">
-        <a href="<?=$this->url('blog')?>">
-            <div class="font-gird">
-                <img src="/assets/images/blog.png" alt="">
-                <p>博客</p>
-            </div>
-            <div class="back-grid">
-                <h3>简介</h3>
-                <div class="item-content">
-                    本博客只为记录学习及工作。<br/>
-                    具体功能正在开发中。。。
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
-
-<?php $this->extend('layouts/footer')?>
+<h1>欢迎使用 ZoDream！</h1>
+<h3>
+    <a href="https://zodream.cn/document" target="_blank">查看文档</a>
+</h3>
+<?php $this->extend('layouts/footer');?>

@@ -20,9 +20,9 @@ class OptionModel extends Model {
 
 	protected function rules() {
 		return array (
-		  'name' => 'required|string:3-255',
+		  'name' => 'required|string:3,255',
 		  'value' => '',
-		  'autoload' => '|string:3-20',
+		  'autoload' => 'string:3,20',
 		);
 	}
 

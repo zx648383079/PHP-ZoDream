@@ -1,5 +1,6 @@
 <?php
 namespace Domain\Model;
+
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Http\Request;
@@ -21,10 +22,10 @@ class LogModel extends Model {
 
     protected function rules() {
 		return array (
-			'ip' => 'required|string:3-20',
-            'url' => '|string:3-255',
-			'user' => 'required|string:3-30',
-			'event' => 'required|string:3-20',
+			'ip' => 'required|string:3,20',
+            'url' => 'string:3,255',
+			'user' => 'required|string:3,30',
+			'event' => 'required|string:3,20',
 			'data' => '',
 			'create_at' => 'required|int',
 		);

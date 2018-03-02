@@ -4,36 +4,21 @@
   "version" : "3.0",
   "homepage": "https://zodream.cn",
   "license": "MIT",
-  "repositories": [
-      {
-          "type": "vcs",
-          "url":  "https://github.com/zodream/fork-helper"
-      }
-  ],
   "require" : {
     "php" : ">=5.6.0",
-    "zodream/zodream" : "dev-master",
-    "zodream/disk" : "dev-master",
-    "zodream/gzo" : "dev-master",
-    "zodream/helpers" : "dev-master",
-    "zodream/http" : "dev-master",
-    "zodream/thirdparty" : "dev-master",
-    "zodream/wechat" : "dev-master",
-    "zodream/database" : "dev-master",
-    "zodream/oauth" : "dev-master",
-    "zodream/html" : "dev-master",
-    "zodream/route" : "dev-master",
-    "zodream/template" : "dev-master",
-    "zodream/image" : "dev-master",
-    "zodream/validate": "dev-master",
-    "zodream/spider": "dev-master",
-
-    "mobiledetect/mobiledetectlib": "^2.8",
-    "phpoffice/phpspreadsheet": "^1.0",
+    "zodream/zodream" : "~3.1",
+    "zodream/disk" : "~1.1",
+    "zodream/gzo" : "~1.1",
+    "zodream/helpers" : "~1.1",
+    "zodream/http" : "~2.1",
+    "zodream/database" : "~1.1",
+    "zodream/html" : "~1.1",
+    "zodream/route" : "~1.1",
+    "zodream/template" : "~1.1",
+    "zodream/image" : "~1.1",
+    "zodream/validate": "~1.1",
     "monolog/monolog": "~1.22",
-    "phpmailer/phpmailer": "~5.2",
-    "psr/log": "~1.0",
-    "nesbot/carbon": "^1.22"
+    "psr/log": "~1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "6.*",
