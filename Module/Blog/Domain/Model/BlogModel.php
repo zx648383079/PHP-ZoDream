@@ -31,15 +31,15 @@ class BlogModel extends Model {
 
     protected function rules() {
         return [
-            'title' => 'required|string:3-200',
-            'description' => 'string:3-255',
-            'keywords' => 'string:3-255',
-            'thumb' => 'string:3-255',
+            'title' => 'required|string:3,200',
+            'description' => 'string:3,255',
+            'keywords' => 'string:3,255',
+            'thumb' => 'string:3,255',
             'content' => '',
             'user_id' => 'int',
             'term_id' => 'int',
             'recommend' => 'int',
-            'comment_status' => 'int:0-1',
+            'comment_status' => 'int:0,1',
             'comment_count' => 'int',
             'deleted_at' => 'int',
             'created_at' => 'int',

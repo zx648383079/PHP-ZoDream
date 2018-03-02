@@ -21,9 +21,9 @@ class TermModel extends Model {
 
 	protected function rules() {
         return [
-            'name' => 'required|string:3-200',
-            'keywords' => 'string:3-200',
-            'description' => 'string:3-200',
+            'name' => 'required|string:1,200',
+            'keywords' => 'string:0,200',
+            'description' => 'string:0,200',
             'user_id' => 'int',
             'parent_id' => 'int',
             'thumb' => ''
@@ -43,6 +43,10 @@ class TermModel extends Model {
 
     public function getUrlAttribute() {
         return Url::to('./home', ['category' => $this->id]);
+    }
+
+    public function blog() {
+	    return $this->hasMany(BlogModel::class, 'term_id', 'id');
     }
 
 }
