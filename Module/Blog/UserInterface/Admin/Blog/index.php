@@ -33,8 +33,21 @@ $this->extend('Admin/layouts/header');
             <tr>
                 <td><?=$item->id?></td>
                 <td><?=$item->title?></td>
-                <td><?=$item->term->name?></td>
-                <td></td>
+                <td>
+                    <?php if ($item->term):?>
+                        <a href="<?=$this->url('./admin/blog', ['term_id' => $item->term_id])?>">
+                            <?=$item->term->name?>
+                        </a>
+                    <?php else:?>
+                    [未分类]
+                    <?php endif;?>
+                </td>
+                <td>
+                    推荐：<?=$item->recommend?>/
+                    评论：<a href="<?=$this->url('./admin/comment', ['blog_id' => $item->id])?>">
+                        <?=$item->comment_count?>
+                    </a>
+                </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./home/detail', ['id' => $item->id])?>">查看</a>

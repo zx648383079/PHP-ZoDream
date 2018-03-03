@@ -70,6 +70,10 @@ class BlogModel extends Model {
 	    return $this->hasOne(TermModel::class, 'id', 'term_id');
     }
 
+    public function comment() {
+	    return $this->hasMany(CommentModel::class, 'blog_id', 'id');
+    }
+
 	public function getUrlAttribute() {
 	    return Url::to('./home/detail', ['id' => $this->id]);
     }

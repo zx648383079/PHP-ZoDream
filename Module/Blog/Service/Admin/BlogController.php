@@ -6,10 +6,12 @@ use Module\Blog\Domain\Model\TermModel;
 
 class BlogController extends Controller {
 
-    public function indexAction($keywords = null) {
+    public function indexAction($keywords = null, $term_id = null) {
         $blog_list = BlogModel::with('term')->when(!empty($keywords), function ($query) {
             BlogModel::search($query, 'title');
-        })->order('id', 'desc')->select('id', 'title')->page();
+        })->when(!empty($term_id), function ($query) use ($term_id) {
+            $query->where('term_id', intval($term_id));
+        })->order('id', 'desc')->select('id', 'title', 'term_id', 'comment_count', 'recommend')->page();
         return $this->show(compact('blog_list'));
     }
 

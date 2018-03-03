@@ -24,6 +24,7 @@ $this->extend('Admin/layouts/header');
             <th>昵称</th>
             <th>邮箱</th>
             <th>内容</th>
+            <th>文章</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -36,8 +37,17 @@ $this->extend('Admin/layouts/header');
                         <?=$item->name?>
                     </a>
                 </td>
-                <td><?=$item->email?></td>
+                <td>
+                    <a href="<?=$this->url('./admin/comment', ['email' => $item->email])?>">
+                        <?=$item->email?>
+                    </a>
+                </td>
                 <td><?=$item->content?></td>
+                <td>
+                    <a href="<?=$this->url('./admin/comment', ['blog_id' => $item->blog_id])?>">
+                        <?=$item->blog->title?>
+                    </a>
+                </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/comment/delete', ['id' => $item->id])?>">删除</a>
