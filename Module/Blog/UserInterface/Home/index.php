@@ -98,6 +98,7 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
                 <span class="category"><i class="fa fa-bookmark"></i><b><?=$item['term_name']?></b></span>
                 <span class="comment"><i class="fa fa-comments"></i><b><?=$item['comment_count']?></b></span>
                 <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$item['recommend']?></b></span>
+                <span class="click"><i class="fa fa-eye"></i><b><?=$item['click_count']?></b></span>
             </dd>
         </dl>
         <?php endforeach;?>

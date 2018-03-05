@@ -1,5 +1,6 @@
 <?php
 use Zodream\Template\View;
+use Zodream\Helpers\Str;
 /** @var $this View */
 $this->title = $blog->title;
 $url = (string)$this->url(['./comment', 'blog_id' => $blog->id]);
@@ -63,6 +64,7 @@ $this->extend('layouts/header')
         </div>
         <div class="tools">
             <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
+            <span class="click"><i class="fa fa-eye"></i><b><?=$blog->click_count?></b></span>
             <span class="agree recommend-blog"><i class="fa fa-thumbs-o-up"></i><b><?=$blog->recommend?></b></span>
         </div>
     </div>

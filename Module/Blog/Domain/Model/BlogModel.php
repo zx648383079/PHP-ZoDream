@@ -20,6 +20,7 @@ use Zodream\Service\Routing\Url;
  * @property integer $recommend
  * @property integer $comment_status
  * @property integer $comment_count
+ * @property integer $click_count
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -41,6 +42,7 @@ class BlogModel extends Model {
             'recommend' => 'int',
             'comment_status' => 'int:0,1',
             'comment_count' => 'int',
+            'click_count' => 'int',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

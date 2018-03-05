@@ -3,7 +3,6 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
-use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\ModuleController;
 
@@ -20,7 +19,7 @@ class HomeController extends ModuleController {
         $blog_list  = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
             ->left('user u', 'u.id = b.user_id')
-            ->select('b.id, b.title, b.description, b.created_at, b.comment_count, b.recommend, b.user_id, b.term_id, t.name as term_name, u.name as user_name')
+            ->select('b.id, b.title, b.description, b.created_at, b.comment_count, b.click_count, b.recommend, b.user_id, b.term_id, t.name as term_name, u.name as user_name')
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('b.term_id', intval($category));
             })
@@ -45,6 +44,7 @@ class HomeController extends ModuleController {
 
     public function detailAction($id) {
         $id = intval($id);
+        BlogModel::record()->where('id', $id)->updateOne('click_count');
         $blog = BlogModel::alias('b')
             ->left('term t', 'b.term_id = t.id')
             ->left('user u', 'u.id = b.user_id')
