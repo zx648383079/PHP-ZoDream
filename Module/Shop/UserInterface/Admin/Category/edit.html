@@ -1,0 +1,50 @@
+{this.title=ZoDream}
+{extend:admin/layouts/header}
+<div class="content">
+  <div class="loc"><h2><i class="icon"></i>添加新商品分类</h2></div>
+  <form method="post" action="{url:./admin/category/save}">
+    <div class="box">
+      <div class="module">
+        <table class="dataform">
+          <tr>
+            <th width="110">分类名称</th>
+            <td><input class="w200 txt" name="name" id="cate_name" type="text" value="{$model.name}"/></td>
+          </tr>
+          <tr>
+            <th>上级分类</th>
+            <td>
+              <select id="parent_id" name="parent_id" class="slt">
+                <option value="0">-- 无上级分类 --</option>
+                {for:$cat_list,$item}
+                {if:$item.id == $model.id}
+                <option value="{$item.id}" selected>{$item.name}</option>
+                {else}
+                <option value="{$item.id}">{$item.name}</option>
+                {/if}
+                {/for}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>Meta 关键词</th>
+            <td><textarea name="meta_keywords" id="meta_keywords" class="txtarea" cols="68" rows="5"></textarea></td>
+          </tr>
+          <tr>
+            <th>Meta 描述</th>
+            <td><textarea name="meta_description" id="meta_description" class="txtarea" cols="68" rows="5"></textarea></td>
+          </tr>
+          <tr>
+            <th>排序</th>
+            <td><input value="{$model.position,99}" class="w50 txt" name="position" id="seq" type="text" /></td>
+          </tr>
+        </table>
+      </div>
+      <div class="submitbtn">
+        <button class="ubtn btn">保存并提交</button>
+        <button type="reset" class="fbtn btn">重置表单</button>
+      </div>
+    </div>
+    <input type="hidden" name="id" value="{$model.id}">
+  </form>
+</div>
+{extend:admin/layouts/footer}

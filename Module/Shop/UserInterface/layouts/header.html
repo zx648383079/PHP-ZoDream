@@ -1,0 +1,96 @@
+{css href=@shop.css}
+<!DOCTYPE html>
+<html lang="{$language,zh-CN}">
+   <head>
+        <base href="{url:./}">
+       <meta name="viewport" content="width=device-width, initial-scale=1"/>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+       <meta name="Description" content="{this.description}" />
+       <meta name="keywords" content="{this.keywords}" />
+       <title>{this.title}</title>
+       {header:}
+   </head>
+   <body>
+    <!-- 顶部导航 -->
+    <div class="topper">
+        <div class="w1100 x-auto">
+            <div class="topper-userbar fl" id="top-userbar"></div>
+            <div class="topper-links fr">
+                {for:$nav.top,$item}
+                <a href="{$item.link}" {if:$item.target} target="{$item.target}" {/if}>{$item.name}</a><span class="sep">|</span>
+                {/for}
+            </div>
+        </div>
+        </div>
+        {if:Auth::guest()}
+        <font class="c666 mr20">嗨！欢迎来到 {$site_name}</font>
+        <a href="{url:./login}">登陆</a>
+        <span class="sep">|</span>
+        <a href="{url:./register}" class="red">免费注册</a>
+        {else}
+        <a class="m"><i class="icon"></i>{$user.name}</span><b class="icon"></b></a>
+        <font class="c999 ml10">欢迎您回来!</font>
+        <div class="m hide">
+        <div class="avatar fl">
+            {if:$user.avatar}
+            <a href="{url:./user/profile}"><img width="60" height="60" src="{$user.avatar}" /></a>
+            {else}
+            <a href="{url:./user}">
+                <img width="60" height="60" src="/assets/image/noavatar_m.gif" />
+            </a>
+            {/if}
+        </div>
+        <ul>
+            <li><a href="{url:./user}">进入用户中心</a></li>
+            <li><a href="{url:./user/profile}">编辑资料</a></li>
+            <li><a href="{url:./logout}">退出</a></li>
+        </ul>
+        </div>
+        {/if}
+    <!-- 顶部导航结束 -->
+    <div class="header">
+            <div class="w1100">
+              <div class="module cut">
+                <div class="logo fl"><a href="{url:./}"><img alt="{$site_name}" src="/assets/images/logo.gif" border="0" /></a></div>
+                <!-- 头部搜索开始 -->
+                <div class="top-search fl">
+                  <form method="get" action="{url:./search}">
+                    <div class="sf cut"><input class="fl" name="kw" type="text" value="" placeholder="双11提前购，畅想全年最低价" /><button class="fr" type="submit">搜 索</button></div>
+                  </form>
+                  {if:$hot_searches}
+                  <div class="hw mt8">热门搜索：
+                        {for:$hot_searches,$item}
+                        <a href="{url:./search?keywords=:$item}">{$item}</a>
+                        {/for}
+                    </div>
+                  {/if}
+                </div>
+                <!-- 头部搜索结束 -->
+                <!-- 头部购物车开始 -->
+                <div class="top-cart fr">
+                  <div class="radius4 mt10"><i class="icon"></i><a href="{url:./cart}" id="cartbar"><font>我的购物车</font>(<b>0</b>)</a></div>
+                </div>
+                <!-- 头部购物车结束 -->
+              </div>
+              <div class="module mt20">
+                <!-- 导航开始 -->
+                <div class="nav">
+                  <div class="cateth w210 fl" id="cateth">
+                    <h2>全部商品分类<i class="icon"></i></h2>
+                    <div class="catebar w210 hide">
+                        {extend:./catebar}
+                    </div>
+                  </div>
+                  <div class="cross cut">
+                    <ul>
+                      <li><a href="{url:./}">首页</a></li>
+                      {for:$nav.middle,$item}
+                        <li><a href="{$item.link}" {if:$item.target} target="{$item.target}" {/if}>{$item.name}</a></li>
+                        {/for}
+                    </ul>
+                  </div>
+                </div>
+                <!-- 导航结束 -->
+              </div>
+            </div>
+          </div>

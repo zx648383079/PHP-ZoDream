@@ -1,0 +1,40 @@
+{this.title=授权登录列表}
+{extend:admin/layouts/header}
+<div class="content">
+  <div class="loc"><h2><i class="icon"></i>授权登录列表</h2></div>
+  <div class="box">
+    {if:!empty($model_list)}
+    <div class="module">
+      <table class="datalist">
+        <tr>
+          <th width="200" class="ta-l">名称</th>
+          <th class="ta-l">说明</th>
+          <th width="100">启用</th>
+        </tr>
+        {for:$model_list,$item}
+        <tr>
+          <td class="ta-l"><p class="pad5"><a class="blue" href="{url:./admin/auth/edit?party=:$item.party}">{$item.name}</a></p></td>
+          <td class="ta-l">
+            {if:!empty($item.instruction)}
+            <p class="c666" style="line-height:180%">{$item.instruction}</p>
+            {else}
+            <font class="caaa">未设置</font>
+            {/if}
+          </td>
+          <td>
+            {if:$item.enable == 1}
+            <i class="icon yes"></i>
+            {else}
+            <i class="icon no"></i>
+            {/if}
+          </td>
+        </tr>
+        {/foreach}
+      </table>
+    </div>
+    {else}
+    <div class="nors mt5">未找到相关数据记录...</div>
+    {/if}
+  </div>
+</div>
+{extend:admin/layouts/footer}

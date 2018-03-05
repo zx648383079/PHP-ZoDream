@@ -1,0 +1,41 @@
+{this.title=ZoDream}
+{extend:layouts/header}
+<div class="loc w1100">
+    <div>
+      <a href="{url:./}">网站首页</a>
+      <b>&gt;</b>
+      <a href="{url:./article/category?id=:$cat.id}">{$cat.name}</a>
+      <b>&gt;</b>
+      <font>{$article.title}</font>
+    </div>
+  </div>
+  <!-- 主体开始 -->
+  <div class="container w1100 mt10">
+    <div class="module cut">
+      <!-- 左侧开始 -->
+      <div class="w210 fl cut">
+        <div class="cli mb10">
+          <h2>资讯分类</h2>
+          <ul>
+              {for:$cat_list,$item}
+              <li>
+                <a href="{url:./article?id=:$item.id}">{$item.name}</a>
+              </li>
+              {/for}
+          </ul>
+        </div>
+      </div>
+      <!-- 左侧结束 -->
+      <div class="w880">
+        <div class="article">
+          <h1 class="aln-c c666">{$article.title}</h1>
+          <div class="aln-c mt8 caaa">日期：{$article.created_at}</div>
+          <div class="content mt30 cut">{$article.content}</div>
+        </div>
+      </div>
+    </div>
+    <div class="cl"></div>
+  </div>
+  <!-- 主体结束 -->
+  <div class="cl"></div>
+{extend:layouts/footer}

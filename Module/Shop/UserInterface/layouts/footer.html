@@ -1,0 +1,60 @@
+<div class="helpper cut">
+        <div class="guarantee radius4 cut">
+          <dl>
+            <dt><i class="g-1 icon"></i></dt>
+            <dt class="mt5">放心购物</dt>
+            <dd class="mt5">正品保障，付款安全</dd>
+          </dl>
+          <span class="sep"></span>
+          <dl>
+            <dt><i class="g-2 icon"></i></dt>
+            <dt class="mt5">闪电发货</dt>
+            <dd class="mt5">当日处理，极速配货</dd>
+          </dl>
+          <span class="sep"></span>
+          <dl>
+            <dt><i class="g-3 icon"></i></dt>
+            <dt class="mt5">退换承诺</dt>
+            <dd class="mt5">7日以内，尊享退换</dd>
+          </dl>
+          <span class="sep"></span>
+          <dl>
+            <dt><i class="g-4 icon"></i></dt>
+            <dt class="mt5">售后无忧</dt>
+            <dd class="mt5">贴心服务，快速响应</dd>
+          </dl>
+          <span class="sep"></span>
+          <dl>
+            <dt><i class="g-5 icon"></i></dt>
+            <dt class="mt5">畅想低价</dt>
+            <dd class="mt5">每日促销，折扣不停</dd>
+          </dl>
+        </div>
+        <div class="cl"></div>
+        <div class="helpli cut">
+            {for:$helper_list,$item}
+            <dl>
+                <dt>{$item.name}</dt>
+                {for:$item.children,$child}
+                <dd><a title="{$child.title}" href="{url:./article?id=:$child.id}">{$child.title}</a></dd>
+                {/for}
+            </dl>
+            {/for}
+          <div class="qrcode fr"><i class="fl"></i><div class="qrtxt"><h4>官方微信公众号</h4><p class="c999 mt5">扫描二维码，随手关注最新动态</p></div></div>
+        </div>
+      </div>
+      <div class="footer mt20">
+            <div class="links radius4 mt20">
+              <a href="{url:./}">首 页</a>|
+              <a href="{url:./mobile}">触屏版</a>
+              {for:$nav.middle,$item}
+                |<a href="{$item.link}" {if:$item.target} target="{$item.target}" {/if}>{$item.name}</a>
+                {/for}
+            </div>
+            
+          </div>
+{js src=@jquery.min.js}
+{js src=@shop.min.js}
+    {footer:}
+   </body>
+</html>
