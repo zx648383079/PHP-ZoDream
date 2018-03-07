@@ -1,7 +1,8 @@
 <?php
 namespace Domain\Model;
+use Zodream\Database\Command;
+use Zodream\Database\DB;
 
-use Zodream\Infrastructure\Database\Command;
 
 /**
 * Class OptionModel
@@ -20,9 +21,9 @@ class OptionModel extends Model {
 
 	protected function rules() {
 		return array (
-		  'name' => 'required|string:3-255',
+		  'name' => 'required|string:1,255',
 		  'value' => '',
-		  'autoload' => '|string:3-20',
+		  'autoload' => 'string:0,20',
 		);
 	}
 
@@ -52,7 +53,7 @@ class OptionModel extends Model {
         if (!$this->validate()) {
             return false;
         }
-        return Command::getInstance()->setTable(static::$table)->insertOrUpdate(
+        return Command::getInstance()->setTable(static::tableName())->insertOrUpdate(
             'name, value, autoload',
             ':name, :value, :autoload',
             'value = :value, autoload = :autoload',

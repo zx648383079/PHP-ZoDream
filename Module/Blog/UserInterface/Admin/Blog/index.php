@@ -4,7 +4,7 @@ use Zodream\Template\View;
 
 $this->title = '文章列表';
 
-$this->extend('Admin/layouts/header');
+$this->extend('layouts/header');
 ?>
 
     <div class="search">
@@ -50,7 +50,7 @@ $this->extend('Admin/layouts/header');
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./home/detail', ['id' => $item->id])?>">查看</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./home/detail', ['id' => $item->id])?>" target="_blank">查看</a>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/blog/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/blog/delete', ['id' => $item->id])?>">删除</a>
                     </div>
@@ -64,5 +64,5 @@ $this->extend('Admin/layouts/header');
     </div>
 
 <?php
-$this->extend('Admin/layouts/footer');
+$this->extend('layouts/footer');
 ?>

@@ -6,6 +6,7 @@ $this->title = $blog->title;
 $url = (string)$this->url(['./comment', 'blog_id' => $blog->id]);
 $recommendUrl = (string)$this->url(['./home/recommend', 'id' => $blog->id]);
 $js = <<<JS
+    uParse('#content',{rootPath:'/assets/ueditor'});
     SyntaxHighlighter.all();
     $.get('{$url}', function(html) {
       $(".book-footer").html(html);
@@ -28,6 +29,7 @@ JS;
 $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');
 $this->extend('layouts/header')
     ->registerJs($js, View::JQUERY_READY)
+    ->registerJsFile('ueditor/ueditor.parse.min.js')
     ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
 ?>
     <div class="book-title book-mobile-inline">
@@ -59,7 +61,7 @@ $this->extend('layouts/header')
             <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term_name?></b></span>
             <span class="time"><i class="fa fa-calendar-check-o"></i><b><?=$blog->created_at?></b></span>
         </div>
-        <div class="content">
+        <div id="content" class="content">
             <?=$blog->content?>
         </div>
         <div class="tools">

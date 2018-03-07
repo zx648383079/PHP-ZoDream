@@ -1,8 +1,9 @@
 <?php
 namespace Domain\Model;
+
 use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Url\Url;
 use Zodream\Infrastructure\Http\Request;
+use Zodream\Service\Routing\Url;
 
 /**
 * Class LogModel

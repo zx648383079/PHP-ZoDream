@@ -19,3 +19,5 @@ $(document).ready(function() {
         $(this).parents('.page-tip').toggleClass('min');
     });
 });
+
+

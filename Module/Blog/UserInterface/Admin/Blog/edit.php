@@ -8,7 +8,7 @@ $js = <<<JS
     var ue = UE.getEditor('container');
 JS;
 
-$this->extend('Admin/layouts/header')
+$this->extend('layouts/header')
     ->registerJsFile('/assets/ueditor/ueditor.config.js')
     ->registerJsFile('/assets/ueditor/ueditor.all.js')
     ->registerJs($js);
@@ -29,7 +29,7 @@ $this->extend('Admin/layouts/header')
                 <div class="zd-tab-item active">
                     <div class="input-group">
                         <label>标题</label>
-                        <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->name?>">
+                        <input name="title" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->title?>">
                     </div>
                     <div class="input-group">
                         <label>分类</label>
@@ -69,5 +69,5 @@ $this->extend('Admin/layouts/header')
 
 
 <?php
-$this->extend('Admin/layouts/footer');
+$this->extend('layouts/footer');
 ?>

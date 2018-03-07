@@ -17,10 +17,11 @@ CREATE TABLE IF NOT EXISTS `zd_visit_log` (
 PRIMARY KEY (`id`))
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;
  */
-use Zodream\Infrastructure\Url\Url;
-use Zodream\Infrastructure\Factory;
-use Zodream\Infrastructure\ObjectExpand\TimeExpand;
+use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
+use Zodream\Service\Factory;
+use Zodream\Service\Routing\Url;
+
 /**
  * Class VisitLogModel
  * @property integer $id
@@ -85,7 +86,7 @@ class VisitLogModel extends Model {
 		$model->url = Url::to();
 		$model->session = Factory::session()->id();
 		$model->agent = Request::server('HTTP_USER_AGENT', '-');
-		$model->create_at = TimeExpand::format();
+		$model->create_at = Time::format();
 		return $model->save();
 	}
 
