@@ -4,9 +4,9 @@ namespace Module\WeChat\Domain\Model;
 use Domain\Model\Model;
 use Zodream\Service\Routing\Url;
 
-
 /**
  * 公众号数据
+ * Class WeChatModel
  * @property integer $id
  * @property string $name
  * @property string $token
@@ -22,8 +22,8 @@ use Zodream\Service\Routing\Url;
  * @property string $address
  * @property string $description
  * @property string $username
- * @property integer $status
  * @property string $password
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -80,22 +80,22 @@ class WeChatModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:-40',
-            'token' => 'required|string:-32',
-            'access_token' => 'string:-255',
-            'account' => 'required|string:-30',
-            'original' => 'required|string:-40',
-            'type' => 'required',
-            'appid' => 'required|string:-50',
-            'secret' => 'required|string:-50',
-            'aes_key' => 'required|string:-43',
-            'avatar' => 'required|string:-255',
-            'qrcode' => 'required|string:-255',
-            'address' => 'required|string:-255',
-            'description' => 'required|string:-255',
-            'username' => 'required|string:-40',
-            'status' => 'int:0-1',
-            'password' => 'required|string:-32',
+            'name' => 'required|string:0,40',
+            'token' => 'required|string:0,32',
+            'access_token' => 'string:0,255',
+            'account' => 'required|string:0,30',
+            'original' => 'required|string:0,40',
+            'type' => 'required|int:0,9',
+            'appid' => 'required|string:0,50',
+            'secret' => 'required|string:0,50',
+            'aes_key' => 'string:0,43',
+            'avatar' => 'string:0,255',
+            'qrcode' => 'string:0,255',
+            'address' => 'string:0,255',
+            'description' => 'string:0,255',
+            'username' => 'string:0,40',
+            'password' => 'string:0,32',
+            'status' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

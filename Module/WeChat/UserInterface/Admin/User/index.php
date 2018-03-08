@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
 $this->title = 'ZoDream';
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -29,7 +29,7 @@ $this->extend('layouts/header');
                 <td><?=$item->user->nickname?></td>
                 <td><?=$item->status_label?></td>
                 <td>
-                    <a data-type="del" href="<?=$this->url('./user/delete', ['id' => $item->id])?>">删除</a>
+                    <a data-type="del" href="<?=$this->url('./admin/user/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>
@@ -43,4 +43,4 @@ $this->extend('layouts/header');
     </tfoot>
 </table>
 
-<?php $this->extend('layouts/footer');?>
+<?php $this->extend('../layouts/footer');?>

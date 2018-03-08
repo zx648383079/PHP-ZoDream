@@ -87,11 +87,11 @@ class MediaModel extends Model {
     protected function rules() {
         return [
             'wid' => 'required|int',
-            'type' => 'required|string:3-10',
-            'title' => 'string:3-200',
+            'type' => 'required|string:0,10',
+            'title' => 'string:0,200',
             'content' => '',
             'parent_id' => 'int',
-            'media_id' => 'required|string:3-100',
+            'media_id' => 'required|string:0,100',
             'result' => 'required',
             'created_at' => 'int',
             'updated_at' => 'int',

@@ -43,11 +43,11 @@ class ReplyModel extends Model {
     protected function rules() {
         return [
             'wid' => 'required|int',
-            'event' => 'required|string:3-20',
-            'keywords' => 'string:3-60',
+            'event' => 'required|string:0,20',
+            'keywords' => 'required|string:0,60',
+            'match' => 'required|int:0,9',
             'content' => 'required',
-            'match' => 'int',
-            'type' => 'required|string:3-10',
+            'type' => 'required|string:0,10',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

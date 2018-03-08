@@ -31,17 +31,17 @@ class UserModel extends Model {
 
     protected function rules() {
         return [
-            'nickname' => 'required|string:3-20',
-            'sex' => 'required|int:0-1',
-            'city' => 'required|string:3-40',
-            'country' => 'required|string:3-40',
-            'province' => 'required|string:3-40',
-            'language' => 'required|string:3-40',
-            'avatar' => 'required|string:3-255',
+            'nickname' => 'required|string:0,20',
+            'sex' => 'required|int:0,9',
+            'city' => 'required|string:0,40',
+            'country' => 'required|string:0,40',
+            'province' => 'required|string:0,40',
+            'language' => 'required|string:0,40',
+            'avatar' => 'required|string:0,255',
             'subscribe_time' => 'int',
-            'union_id' => 'required|string:3-30',
-            'remark' => 'required|string:3-255',
-            'group_id' => 'required|string:3-5',
+            'union_id' => 'required|string:0,30',
+            'remark' => 'required|string:0,255',
+            'group_id' => 'required|string:0,5',
             'updated_at' => 'int',
         ];
     }

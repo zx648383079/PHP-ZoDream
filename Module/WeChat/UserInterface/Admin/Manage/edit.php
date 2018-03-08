@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Module\WeChat\Domain\Model\WeChatModel;
 /** @var $this \Zodream\Template\View */
 $this->title = 'ZoDream';
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 
 <div class="page-tip">
@@ -15,7 +15,7 @@ $this->extend('layouts/header');
 </div>
 
 <div>
-    <form class="form-inline" data-type="ajax" action="<?=$this->url('./manage/save')?>" method="post">
+    <form class="form-inline" data-type="ajax" action="<?=$this->url('./admin/manage/save')?>" method="post">
         <div class="input-group">
             <label for="name">公众号名称</label>
             <input type="text" id="name" name="name" placeholder="请输入公众号名称" required value="<?=$model->name?>" size="100">
@@ -90,4 +90,4 @@ $this->extend('layouts/header');
 </div>
 
 
-<?php $this->extend('layouts/footer');?>
+<?php $this->extend('../layouts/footer');?>

@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 
 <div class="page-tip">
@@ -13,7 +13,7 @@ $this->extend('layouts/header');
 </div>
 
 <div>
-    <form class="form-inline" data-type="ajax" action="<?=$this->url('./menu/save')?>" method="post">
+    <form class="form-inline" data-type="ajax" action="<?=$this->url('./admin/menu/save')?>" method="post">
         <div class="input-group">
             <label for="name">菜单名</label>
             <input type="text" id="name" name="name" placeholder="菜单名" required value="<?=$model->name?>" size="100">
@@ -33,4 +33,4 @@ $this->extend('layouts/header');
     </form>
 </div>
 
-<?php $this->extend('layouts/footer');?>
+<?php $this->extend('../layouts/footer');?>

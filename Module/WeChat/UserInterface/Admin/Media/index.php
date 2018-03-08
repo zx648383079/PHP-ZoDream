@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 
 <div class="page-tip">
@@ -12,7 +12,7 @@ $this->extend('layouts/header');
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./manage/create')?>">添加</a>
+    <a href="<?=$this->url('./admin/manage/create')?>">添加</a>
 </div>
 <table>
     <thead>
@@ -34,12 +34,12 @@ $this->extend('layouts/header');
                 <td><?=$item->appid?></td>
                 <td><?=$item->description?></td>
                 <td>
-                    <a href="<?=$this->url('./manage/edit', ['id' => $item->id])?>">编辑</a>
-                    <a data-type="del" href="<?=$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
+                    <a href="<?=$this->url('./admin/manage/edit', ['id' => $item->id])?>">编辑</a>
+                    <a data-type="del" href="<?=$this->url('./admin/manage/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>
     </tbody>
 </table>
 
-<?php $this->extend('layouts/footer'); ?>
+<?php $this->extend('../layouts/footer'); ?>

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
 $this->title = 'ZoDream';
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -12,7 +12,7 @@ $this->extend('layouts/header');
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./manage/create')?>">添加</a>
+    <a href="<?=$this->url('./admin/manage/create')?>">添加</a>
 </div>
 <table>
     <thead>
@@ -37,16 +37,16 @@ $this->extend('layouts/header');
                 <td><?=$item->status_label?></td>
                 <td>
                     <?php if($item->id != $current_id):?>
-                        <a href="<?=$this->url('./manage/change', ['id' => $item->id])?>">管理</a>
+                        <a href="<?=$this->url('./admin/manage/change', ['id' => $item->id])?>">管理</a>
                     <?php else:?>
                         <a class="active" href="javascript:;">管理中</a>
                     <?php endif;?>
-                    <a href="<?=$this->url('./manage/edit', ['id' => $item->id])?>">编辑</a>
-                    <a data-type="del" href="<?=$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
+                    <a href="<?=$this->url('./admin/manage/edit', ['id' => $item->id])?>">编辑</a>
+                    <a data-type="del" href="<?=$this->url('./admin/manage/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>
     </tbody>
 </table>
 
-<?php $this->extend('layouts/footer');?>
+<?php $this->extend('../layouts/footer');?>

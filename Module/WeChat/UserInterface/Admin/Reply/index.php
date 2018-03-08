@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 
 <div class="page-tip">
@@ -12,7 +12,7 @@ $this->extend('layouts/header');
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./reply/add')?>">添加</a>
+    <a href="<?=$this->url('./admin/reply/add')?>">添加</a>
 </div>
 <div>
     <table class="table table-hover">
@@ -34,8 +34,8 @@ $this->extend('layouts/header');
                 <td>
                     <?=$item->keywords?></td>
                 <td>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./reply/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./reply/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/reply/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/reply/delete', ['id' => $item->id])?>">删除</a>
                 </td>
             </tr>
         <?php endforeach?>
@@ -46,4 +46,4 @@ $this->extend('layouts/header');
     </table>
 </div>
 
-<?php $this->extend('layouts/footer');?>
+<?php $this->extend('../layouts/footer');?>

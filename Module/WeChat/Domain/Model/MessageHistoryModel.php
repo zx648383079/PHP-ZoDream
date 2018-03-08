@@ -41,10 +41,10 @@ class MessageHistoryModel extends Model {
             'wid' => 'required|int',
             'rid' => 'required|int',
             'kid' => 'required|int',
-            'from' => 'required|string:3-50',
-            'to' => 'required|string:3-50',
+            'from' => 'required|string:0,50',
+            'to' => 'required|string:0,50',
             'message' => 'required',
-            'type' => 'required|string:3-10',
+            'type' => 'required|string:0,10',
             'created_at' => 'int',
         ];
     }

@@ -26,10 +26,10 @@ class MenuModel extends Model {
     protected function rules() {
         return [
             'wid' => 'required|int',
-            'name' => 'required|string:3-100',
-            'type' => 'string:3-100',
-            'content' => '',
-            'pages' => '',
+            'name' => 'required|string:0,100',
+            'type' => 'required|string:0,100',
+            'content' => 'required',
+            'pages' => 'required',
             'parent_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

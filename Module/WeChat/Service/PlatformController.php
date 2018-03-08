@@ -2,8 +2,8 @@
 namespace Module\WeChat\Service;
 
 use Module\ModuleController;
-use Zodream\Domain\ThirdParty\WeChat\Platform\Manage;
-use Zodream\Domain\ThirdParty\WeChat\Platform\Notify;
+use Zodream\ThirdParty\WeChat\Platform\Manage;
+use Zodream\ThirdParty\WeChat\Platform\Notify;
 
 /**
  * 公众号第三方平台
@@ -16,9 +16,9 @@ class PlatformController extends ModuleController {
     public function indexAction() {
         $notify = new Notify();
         return $notify->on(Notify::TYPE_Authorized, function (Notify $notify) {
-            updateWeChat($notify);
+
         })->on(Notify::TYPE_UpdateAuthorized, function (Notify $notify) {
-            updateWeChat($notify);
+
         })->run();
     }
 

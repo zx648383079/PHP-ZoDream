@@ -38,8 +38,8 @@ class FansModel extends Model {
     protected function rules() {
         return [
             'wid' => 'required|int',
-            'openid' => 'required|string:3-50',
-            'status' => 'required|int:0-1',
+            'openid' => 'required|string:0,50',
+            'status' => 'required|int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

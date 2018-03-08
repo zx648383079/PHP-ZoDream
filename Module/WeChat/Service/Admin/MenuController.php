@@ -1,5 +1,5 @@
 <?php
-namespace Module\WeChat\Service;
+namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\MenuModel;
 use Zodream\Service\Routing\Url;

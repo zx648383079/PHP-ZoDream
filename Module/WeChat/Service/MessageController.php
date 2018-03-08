@@ -1,13 +1,12 @@
 <?php
 namespace Module\WeChat\Service;
 
-use Module\ModuleController;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 
-class MessageController extends ModuleController {
+class MessageController extends Controller {
 
     public function indexAction($id) {
         $model = WeChatModel::find($id);
@@ -19,8 +18,8 @@ class MessageController extends ModuleController {
         ]);
         return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe],
             function(Message $message, MessageResponse $response) {
-            $response->setText('谢谢关注！');
-        })->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
+                $response->setText('谢谢关注！');
+            })->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
             $response->setText(sprintf('您的消息是: %s', $message->content));
         })->on(EventEnum::UnSubscribe, function(Message $message, MessageResponse $response) {
             $response->setText('取消关注');

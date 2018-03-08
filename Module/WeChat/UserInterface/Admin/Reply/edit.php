@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 $js = <<<JS
 $('#event').change(function() {
     $(".message-box").toggle($(this).val() == 'message');
@@ -21,7 +21,7 @@ $this->registerJs($js, View::JQUERY_READY);
 </div>
 
 <div>
-    <form class="form-inline" data-type="ajax" action="<?=$this->url('./reply/save')?>" method="post">
+    <form class="form-inline" data-type="ajax" action="<?=$this->url('./admin/reply/save')?>" method="post">
         <div class="input-group">
             <label for="event">事件</label>
             <select name="event" id="event" required>
@@ -59,4 +59,4 @@ $this->registerJs($js, View::JQUERY_READY);
     </form>
 </div>
 
-<?php $this->extend('layouts/footer');?>
+<?php $this->extend('../layouts/footer');?>
