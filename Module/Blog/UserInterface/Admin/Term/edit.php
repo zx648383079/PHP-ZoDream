@@ -4,7 +4,7 @@ use Zodream\Template\View;
 
 $this->title = $model->id > 0 ? '编辑' : '新增'. '分类';
 
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 
     <h1><?=$this->title?></h1>
@@ -30,5 +30,5 @@ $this->extend('layouts/header');
 
 
 <?php
-$this->extend('layouts/footer');
+$this->extend('../layouts/footer');
 ?>

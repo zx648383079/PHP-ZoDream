@@ -4,7 +4,7 @@ use Zodream\Template\View;
 
 $this->title = '评论列表';
 
-$this->extend('layouts/header');
+$this->extend('../layouts/header');
 ?>
 
     <div class="search">
@@ -62,5 +62,5 @@ $this->extend('layouts/header');
     </div>
 
 <?php
-$this->extend('layouts/footer');
+$this->extend('../layouts/footer');
 ?>

@@ -8,7 +8,7 @@ $js = <<<JS
     var ue = UE.getEditor('container');
 JS;
 
-$this->extend('layouts/header')
+$this->extend('../layouts/header')
     ->registerJsFile('/assets/ueditor/ueditor.config.js')
     ->registerJsFile('/assets/ueditor/ueditor.all.js')
     ->registerJs($js);
@@ -69,5 +69,5 @@ $this->extend('layouts/header')
 
 
 <?php
-$this->extend('layouts/footer');
+$this->extend('../layouts/footer');
 ?>
