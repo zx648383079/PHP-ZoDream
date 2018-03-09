@@ -1,6 +1,8 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = '资源管理';
 $this->extend('../layouts/header');
 ?>
 

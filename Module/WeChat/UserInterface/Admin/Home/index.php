@@ -1,6 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = '微信公众号管理平台';
 $this->extend('../layouts/header');
 ?>
 

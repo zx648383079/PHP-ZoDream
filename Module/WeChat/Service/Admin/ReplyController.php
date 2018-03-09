@@ -7,7 +7,7 @@ use Zodream\ThirdParty\WeChat\EventEnum;
 
 class ReplyController extends Controller {
 
-    protected  $event_list = [
+    protected $event_list = [
         'default' => '默认回复',
         EventEnum::Message => '消息',
         EventEnum::Subscribe => '关注',
@@ -42,10 +42,13 @@ class ReplyController extends Controller {
     public function saveAction() {
         $model = new ReplyModel();
         $model->wid = $this->weChatId();
-        $model->loadEditor();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        $model->load();
+        if ($model->event != EventEnum::Message) {
+            $model->keywords = null;
+        }
+        if ($model->setEditor()->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)Url::to('./reply')
+                'url' => $this->getUrl('reply')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

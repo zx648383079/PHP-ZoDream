@@ -1,10 +1,6 @@
 <?php
 namespace Module\WeChat\Domain\Model;
 
-use Domain\Model\Model;
-use Zodream\Infrastructure\Http\Request;
-
-
 /**
  * 微信公众号用户资料表
  * 从公众号中拉取的数据可以保存在此表
@@ -13,12 +9,11 @@ use Zodream\Infrastructure\Http\Request;
  * @property string $event
  * @property string $keywords
  * @property integer $match
- * @property string $content
- * @property string $type
  * @property integer $created_at
  * @property integer $updated_at
  */
-class ReplyModel extends Model {
+class ReplyModel extends EditorModel {
+
     /**
      * 激活状态
      */
@@ -44,7 +39,7 @@ class ReplyModel extends Model {
         return [
             'wid' => 'required|int',
             'event' => 'required|string:0,20',
-            'keywords' => 'required|string:0,60',
+            'keywords' => 'string:0,60',
             'match' => 'required|int:0,9',
             'content' => 'required',
             'type' => 'required|string:0,10',
@@ -67,12 +62,4 @@ class ReplyModel extends Model {
         ];
     }
 
-    public function loadEditor() {
-        $data = Request::post('editor');
-        $this->type = intval($data['type']);
-        if ($this->type == 0) {
-            $this->content = $data['text'];
-            return;
-        }
-    }
 }

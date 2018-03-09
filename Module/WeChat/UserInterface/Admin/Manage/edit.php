@@ -1,8 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 use Module\WeChat\Domain\Model\WeChatModel;
-/** @var $this \Zodream\Template\View */
-$this->title = 'ZoDream';
+use Zodream\Template\View;
+/** @var $this View */
+$this->title = '编辑微信公众号';
 $this->extend('../layouts/header');
 ?>
 

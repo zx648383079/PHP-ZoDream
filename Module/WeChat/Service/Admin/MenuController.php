@@ -87,10 +87,9 @@ class MenuController extends Controller {
     public function saveAction() {
         $model = new MenuModel();
         $model->wid = $this->weChatId();
-        $model->loadEditor();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load() && $model->setEditor()->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)Url::to('./menu')
+                'url' => $this->getUrl('menu')
             ]);
         }
         return $this->jsonFailure($model->getError());

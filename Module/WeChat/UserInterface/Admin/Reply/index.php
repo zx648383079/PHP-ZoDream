@@ -1,6 +1,8 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = '消息管理';
 $this->extend('../layouts/header');
 ?>
 
@@ -29,7 +31,7 @@ $this->extend('../layouts/header');
             <tr>
                 <td><?=$item->id?></td>
                 <td>
-                    <?=$item->event?>
+                    <?=$event_list[$item->event]?>
                 </td>
                 <td>
                     <?=$item->keywords?></td>

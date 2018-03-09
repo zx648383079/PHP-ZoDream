@@ -1,3 +1,9 @@
+<?php
+use Zodream\Template\View;
+use Module\WeChat\Domain\Model\EditorModel;
+/** @var View $this */
+/** @var EditorModel $model */
+?>
 <div class="zd-tab wx-editor">
     <div class="zd-tab-head">
         <div class="zd-tab-item active">
@@ -27,7 +33,7 @@
     </div>
     <div class="zd-tab-body">
         <div class="zd-tab-item active">
-            <textarea name="editor[text]"></textarea>
+            <textarea name="editor[text]"><?=$model->getEditor('text')?></textarea>
         </div>
         <div class="zd-tab-item media-box">
             <div class="row">
@@ -64,34 +70,34 @@
         <div class="zd-tab-item form-inline">
             <div class="input-group">
                 <label for="template_id">模板ID</label>
-                <input type="text" id="template_id" name="editor[template_id]" placeholder="示例：模板ID" size="100">
+                <input type="text" id="template_id" name="editor[template_id]" value="<?=$model->getEditor('template_id')?>" placeholder="示例：模板ID" size="100">
             </div>
-            <textarea name="editor[template_data]" placeholder="模板参数：key=value 换行"></textarea>
+            <textarea name="editor[template_data]" placeholder="模板参数：key=value 换行">value="<?=$model->getEditor('template_data')?>"</textarea>
         </div>
         <div class="zd-tab-item form-inline">
             <div class="input-group">
                 <label for="editor_event">参数</label>
-                <input type="text" id="editor_url" name="editor[event]" placeholder="示例：参数" size="100">
+                <input type="text" id="editor_url" name="editor[event]" value="<?=$model->getEditor('event')?>" placeholder="示例：参数" size="100">
             </div>
         </div>
         <div class="zd-tab-item form-inline">
             <div class="input-group">
                 <label for="editor_url">网址</label>
-                <input type="text" id="editor_url" name="editor[url]" placeholder="示例：网址" size="100">
+                <input type="text" id="editor_url" name="editor[url]" value="<?=$model->getEditor('url')?>" placeholder="示例：网址" size="100">
             </div>
         </div>
         <div class="zd-tab-item form-inline">
             <div class="input-group">
                 <label for="module1">APPID</label>
-                <input type="text" id="module1" name="editor[min_appid]" placeholder="小程序APPID" size="100">
+                <input type="text" id="module1" name="editor[min_appid]" value="<?=$model->getEditor('min_appid')?>" placeholder="小程序APPID" size="100">
             </div>
             <div class="input-group">
                 <label for="module1">路径</label>
-                <input type="text" id="module1" name="editor[min_path]" placeholder="小程序页面路径" size="100">
+                <input type="text" id="module1" name="editor[min_path]" value="<?=$model->getEditor('min_path')?>" placeholder="小程序页面路径" size="100">
             </div>
             <div class="input-group">
                 <label for="module1">替代网址</label>
-                <input type="text" id="module1" name="editor[min_url]" placeholder="老版微信不支持小程序时替代网址" size="100">
+                <input type="text" id="module1" name="editor[min_url]" value="<?=$model->getEditor('min_url')?>" placeholder="老版微信不支持小程序时替代网址" size="100">
             </div>
         </div>
     </div>

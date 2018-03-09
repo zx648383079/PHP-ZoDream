@@ -1,15 +1,16 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('../layouts/header');
+$this->title = '编辑消息';
 $js = <<<JS
 $('#event').change(function() {
     $(".message-box").toggle($(this).val() == 'message');
     $(".click-box").toggle($(this).val() == 'CLICK');
 });
 JS;
-
-$this->registerJs($js, View::JQUERY_READY);
+$this->extend('../layouts/header')
+    ->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="page-tip">
@@ -53,7 +54,7 @@ $this->registerJs($js, View::JQUERY_READY);
                 <input type="text" id="event_name" name="event_name" placeholder="事件名" value="<?=$model->keywords?>" size="100">
             </div>
         </div>
-        <?php $this->extend('layouts/editor'); ?>
+        <?php $this->extend('../layouts/editor'); ?>
         <button class="btn btn-primary">保存</button>
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>

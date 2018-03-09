@@ -1,7 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Template\View */
-$this->title = 'ZoDream';
+use Zodream\Template\View;
+/** @var $this View */
+$this->title = '用户管理';
 $this->extend('../layouts/header');
 ?>
 <div class="page-tip">

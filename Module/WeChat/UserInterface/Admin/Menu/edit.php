@@ -1,6 +1,8 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = '编辑菜单';
 $this->extend('../layouts/header');
 ?>
 
@@ -27,7 +29,7 @@ $this->extend('../layouts/header');
                 <?php endforeach;?>
             </select>
         </div>
-        <?php $this->extend('layouts/editor'); ?>
+        <?php $this->extend('../layouts/editor'); ?>
         <button class="btn btn-primary">保存</button>
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>

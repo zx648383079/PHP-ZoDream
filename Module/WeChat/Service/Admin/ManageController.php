@@ -31,7 +31,7 @@ class ManageController extends Controller {
         $model = new WeChatModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)Url::to('./manage')
+                'url' => $this->getUrl('manage')
             ]);
         }
 
@@ -48,9 +48,9 @@ class ManageController extends Controller {
     public function changeAction($id) {
         $model = WeChatModel::find($id);
         if (empty($model)) {
-            return $this->redirect('./manage');
+            return $this->redirect($this->getUrl('manage'));
         }
         $this->weChatId($id);
-        return $this->redirect('./manage');
+        return $this->redirect($this->getUrl('manage'));
     }
 }

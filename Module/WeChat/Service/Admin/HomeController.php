@@ -1,9 +1,8 @@
 <?php
 namespace Module\WeChat\Service\Admin;
 
-use Module\ModuleController;
 
-class HomeController extends ModuleController {
+class HomeController extends Controller {
     public function indexAction() {
         return $this->show();
     }
