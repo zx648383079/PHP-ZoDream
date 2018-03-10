@@ -14,16 +14,16 @@ $this->extend('../layouts/header');
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./admin/manage/create')?>">添加</a>
+    <?php if(!$type || $type == 'news'):?>
+        <a href="<?=$this->url('./admin/media/create')?>">添加图文</a>
+    <?php endif;?>
 </div>
 <table>
     <thead>
         <tr>
             <th>ID</th>
-            <th>名称</th>
+            <th>标题</th>
             <th>类型</th>
-            <th>APPID</th>
-            <th>说明</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -31,13 +31,11 @@ $this->extend('../layouts/header');
         <?php foreach($model_list as $item):?>
            <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
+                <td><?=$item->title?></td>
                 <td><?=$item->type?></td>
-                <td><?=$item->appid?></td>
-                <td><?=$item->description?></td>
                 <td>
-                    <a href="<?=$this->url('./admin/manage/edit', ['id' => $item->id])?>">编辑</a>
-                    <a data-type="del" href="<?=$this->url('./admin/manage/delete', ['id' => $item->id])?>">删除</a>
+                    <a href="<?=$this->url('./admin/media/edit', ['id' => $item->id])?>">编辑</a>
+                    <a data-type="del" href="<?=$this->url('./admin/media/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

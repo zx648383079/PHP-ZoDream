@@ -235,3 +235,41 @@ table {
         }
     }
 }
+
+.editor-box {
+    .editor-template-box {
+        width: 575px;
+        float: left;
+        height: 800px;
+        position: relative;
+        .template-menu {
+            width: 80px;
+            li {
+                text-align: center;
+                line-height: 30px;
+                list-style: none;
+                &.active {
+                    background: #333;
+                    color: #fff;
+                }
+            }
+        }
+        .template-box {
+            overflow: hidden;
+            height: 800px;
+            width: 490px;
+            position: absolute;
+            top: 0;
+            left: 80px;
+            .templdate-list {
+
+            }
+        }
+    }
+    .editor {
+        width: 500px;
+        height: 808px;
+        float: left;
+    }
+    
+}

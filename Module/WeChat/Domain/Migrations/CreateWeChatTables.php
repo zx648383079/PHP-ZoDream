@@ -5,6 +5,7 @@ use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
+use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -26,6 +27,7 @@ class CreateWeChatTables extends Migration {
         $this->initMediaTable();
 
         Schema::createTable(ReplyModel::tableName(), function(Table $table) {
+            $table->setComment('微信回复');
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
             $table->set('event')->varchar(20)->notNull()->comment('时间');
@@ -37,6 +39,7 @@ class CreateWeChatTables extends Migration {
         });
 
         Schema::createTable(MenuModel::tableName(), function(Table $table) {
+            $table->setComment('微信菜单');
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
             $table->set('name')->varchar(100)->notNull()->comment('素材ID');
@@ -44,6 +47,16 @@ class CreateWeChatTables extends Migration {
             $table->set('content')->text()->notNull()->comment('微信返回数据');
             $table->set('pages')->text()->notNull()->comment('小程序路径');
             $table->set('parent_id')->int()->defaultVal(0);
+            $table->timestamps();
+        });
+
+        Schema::createTable(TemplateModel::tableName(), function(Table $table) {
+            $table->setComment('微信图文模板');
+            $table->set('id')->pk()->ai();
+            $table->set('type')->tinyint(3)->notNull()->comment('类型：素材、节日、行业');
+            $table->set('cat_id')->int(10)->notNull()->comment('具体分类id');
+            $table->set('name')->varchar(100)->notNull()->comment('素材ID');
+            $table->set('content')->text()->notNull()->comment('微信返回数据');
             $table->timestamps();
         });
     }

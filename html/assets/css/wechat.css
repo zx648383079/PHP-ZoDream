@@ -170,4 +170,30 @@ table .active {
     .wx-editor .media-box .media-list li.active, .wx-editor .media-box .media-list li:hover {
       border: #97CCFE solid 1px; }
 
+.editor-box .editor-template-box {
+  width: 575px;
+  float: left;
+  height: 800px; }
+  .editor-box .editor-template-box .template-menu {
+    width: 80px; }
+    .editor-box .editor-template-box .template-menu li {
+      text-align: center;
+      line-height: 30px;
+      list-style: none; }
+      .editor-box .editor-template-box .template-menu li.active {
+        background: #333;
+        color: #fff; }
+  .editor-box .editor-template-box .template-box {
+    overflow: hidden;
+    height: 800px;
+    width: 490px;
+    position: absolute;
+    top: 0;
+    left: 80px; }
+
+.editor-box .editor {
+  width: 500px;
+  height: 808px;
+  float: left; }
+
 /*# sourceMappingURL=wechat.css.map */

@@ -15,6 +15,15 @@ class MediaController extends Controller {
         $model_list = MediaModel::when(!empty($type), function ($query) use ($type) {
             $query->where('type', $type);
         })->page();
-        return $this->show(compact('model_list'));
+        return $this->show(compact('model_list', 'type'));
+    }
+
+    public function createAction() {
+        return $this->runMethod('edit', ['id' => null]);
+    }
+
+    public function editAction($id) {
+        $model = MediaModel::findOrNew($id);
+        return $this->show(compact('model'));
     }
 }

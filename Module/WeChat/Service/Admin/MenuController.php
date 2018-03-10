@@ -2,7 +2,8 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\MenuModel;
-use Zodream\Service\Routing\Url;
+use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\ThirdParty\WeChat\Menu;
 
 class MenuController extends Controller {
 
@@ -102,7 +103,21 @@ class MenuController extends Controller {
         ]);
     }
 
+    /**
+     * 应用
+     * @return \Zodream\Infrastructure\Http\Response
+     */
     public function applyAction() {
+        $menu_list = MenuModel::with('children')->where('wid', $this->weChatId())->all();
+        try {
+            WeChatModel::find($this->weChatId())
+                ->sdk(Menu::class)
+                ->create(array_map(function (MenuModel $menu) {
+                    return $menu->toMenu();
+                }, $menu_list));
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
         return $this->jsonSuccess([
             'refresh' => true
         ]);

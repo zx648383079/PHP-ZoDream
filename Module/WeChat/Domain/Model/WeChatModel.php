@@ -3,6 +3,7 @@ namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Service\Routing\Url;
+use Zodream\ThirdParty\WeChat\BaseWeChat;
 
 /**
  * 公众号数据
@@ -150,6 +151,31 @@ class WeChatModel extends Model {
 
     public function getStatusLabelAttribute() {
         return self::$statuses[$this->status];
+    }
+
+    public function parseConfigs() {
+        return [
+            'appid' => $this->appid,
+            'secret' => $this->secret,
+            'aes_key' => $this->aes_key,
+            'token' => $this->token
+        ];
+    }
+
+    /**
+     * 注入sdk
+     * @param $instance
+     * @return BaseWeChat
+     * @throws \Exception
+     */
+    public function sdk($instance) {
+        if ($instance instanceof BaseWeChat) {
+            return $instance->set($this->parseConfigs());
+        }
+        if (is_string($instance) && class_exists($instance)) {
+            return new $instance($this->parseConfigs());
+        }
+        throw new \Exception('sdk is error');
     }
 
 }

@@ -1,6 +1,9 @@
 <?php
 namespace Module\WeChat\Domain\Model;
 
+use Zodream\Service\Routing\Url;
+use Zodream\ThirdParty\WeChat\MenuItem;
+
 
 /**
  * Class MenuModel
@@ -48,5 +51,24 @@ class MenuModel extends EditorModel {
 
     public function children() {
         return $this->hasMany(static::class, 'parent_id', 'id');
+    }
+
+    /**
+     *
+     */
+    public function toMenu() {
+        $menu = MenuItem::name($this->name);
+        if (!empty($this->children)) {
+            return $menu->setMenu(array_map(function (MenuModel $model) {
+                return $model->toMenu();
+            }, $this->children));
+        }
+        if ($this->type == self::TYPE_URL) {
+            return $menu->setUrl($this->content);
+        }
+        if ($this->type == self::TYPE_MINI) {
+            return $menu->setMini($this->content, $this->pages, Url::to('./'));
+        }
+        return $menu->setKey('menu_'.$this->id);
     }
 }
