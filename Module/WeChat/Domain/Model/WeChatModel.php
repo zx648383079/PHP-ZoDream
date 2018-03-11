@@ -4,6 +4,7 @@ namespace Module\WeChat\Domain\Model;
 use Domain\Model\Model;
 use Zodream\Service\Routing\Url;
 use Zodream\ThirdParty\WeChat\BaseWeChat;
+use Zodream\ThirdParty\WeChat\Message;
 
 /**
  * 公众号数据
@@ -165,7 +166,7 @@ class WeChatModel extends Model {
     /**
      * 注入sdk
      * @param $instance
-     * @return BaseWeChat
+     * @return BaseWeChat|Message
      * @throws \Exception
      */
     public function sdk($instance) {

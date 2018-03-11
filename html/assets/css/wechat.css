@@ -173,7 +173,8 @@ table .active {
 .editor-box .editor-template-box {
   width: 575px;
   float: left;
-  height: 800px; }
+  height: 800px;
+  position: relative; }
   .editor-box .editor-template-box .template-menu {
     width: 80px; }
     .editor-box .editor-template-box .template-menu li {
@@ -184,12 +185,14 @@ table .active {
         background: #333;
         color: #fff; }
   .editor-box .editor-template-box .template-box {
-    overflow: hidden;
+    overflow-x: hidden;
     height: 800px;
     width: 490px;
     position: absolute;
     top: 0;
-    left: 80px; }
+    left: 80px;
+    border: 8px solid #D8D8D8;
+    overflow-y: auto; }
 
 .editor-box .editor {
   width: 500px;

@@ -33,9 +33,13 @@ $this->extend('../layouts/header')
                     <li>节日模板</li>
                 </ul>
                 <div class="template-box">
-                    <div class="templdate-list">
-
-                    </div>
+                    <ul class="templdate-list">
+                        <?php foreach($template_list as $item):?>
+                           <li>
+                                <?=$item->content?>
+                           </li>
+                        <?php endforeach;?>
+                    </ul>
                 </div>
             </div>
             <div class="editor">

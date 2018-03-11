@@ -2,6 +2,7 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\MediaModel;
+use Module\WeChat\Domain\Model\TemplateModel;
 
 class MediaController extends Controller {
 
@@ -24,6 +25,7 @@ class MediaController extends Controller {
 
     public function editAction($id) {
         $model = MediaModel::findOrNew($id);
-        return $this->show(compact('model'));
+        $template_list = TemplateModel::all();
+        return $this->show(compact('model', 'template_list'));
     }
 }

@@ -255,12 +255,14 @@ table {
             }
         }
         .template-box {
-            overflow: hidden;
+            overflow-x: hidden;
             height: 800px;
             width: 490px;
             position: absolute;
             top: 0;
             left: 80px;
+            border: 8px solid #D8D8D8;
+            overflow-y: auto;
             .templdate-list {
 
             }
