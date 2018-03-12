@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->registerCssFile('@font-awesome.min.css')
     ->registerCssFile('@dialog.css')
     ->registerCssFile('@zodream.css')
-    ->registerCssFile('@wechat.css');
+    ->registerCssFile('@book_admin.css');
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -18,7 +18,7 @@ $this->registerCssFile('@font-awesome.min.css')
 <body>
 <header>
     <div class="container">
-        ZoDream WeChat
+        ZoDream Book
     </div>
 </header>
 <div class="container">

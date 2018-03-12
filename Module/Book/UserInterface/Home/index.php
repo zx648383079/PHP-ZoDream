@@ -1,23 +1,11 @@
 <?php
-/** @var $this \Zodream\Template\View */
-$this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+$this->title = 'ZoDream';
+$this->body_class = 'body';
+$this->extend('layouts/header');
 ?>
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?=$this->title?></title>
-    <meta name="keywords" content="<?=$this->keywords?>">
-    <meta name="description" content="<?=$this->description?>">
-    <?= $this->header() ?>
-</head>
-<body class="body">
-<!--header开始-->
-<?php $this->extend('./head') ?>
-<!--header结束-->
-
 <div class="clear"></div>
 <!--body开始-->
 <div class="Layout">
@@ -456,7 +444,4 @@ $this->registerCssFile('@pc.min.css')->registerJsFile('@jquery.min.js');
 <div class="clear"></div>
 <!--footer开始-->
 
-<?php $this->extend('./footer3')?>
-<?=$this->footer()?>
-</body>
-</html>
+<?php $this->extend('layouts/footer');?>

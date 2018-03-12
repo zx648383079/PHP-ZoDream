@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->registerJsFile('@jquery.min.js')
     ->registerJsFile('@main.min.js')
     ->registerJsFile('@jquery.dialog.min.js')
-    ->registerJsFile('@wechat.min.js');
+    ->registerJsFile('@book_admin.min.js');
 ?>
     </div>
 </div>
