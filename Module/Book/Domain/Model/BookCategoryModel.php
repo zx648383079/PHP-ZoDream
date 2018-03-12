@@ -9,10 +9,26 @@ use Zodream\Service\Routing\Url;
  * @package Domain\Model\Book
  * @property integer $id
  * @property string $name
+ * @property integer $created_at
  */
 class BookCategoryModel extends Model {
     public static function tableName() {
         return 'book_category';
+    }
+
+    protected function rules() {
+        return [
+            'name' => 'required|string:0,100',
+            'created_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'created_at' => 'Created At',
+        ];
     }
 
     public function getRealNameAttribute() {

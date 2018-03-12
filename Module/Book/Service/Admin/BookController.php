@@ -50,11 +50,12 @@ class BookController extends Controller {
     }
 
     public function chapterAction($book, $keywords = null) {
-        $model_list = BookChapterModel::where('book_id', $book)
+        $book = BookModel::find($book);
+        $model_list = BookChapterModel::where('book_id', $book->id)
             ->when(!empty($keywords), function ($query) {
                 BookModel::search($query, 'name');
             })->order('id', 'desc')->page();
-        return $this->show(compact('model_list'));
+        return $this->show(compact('model_list',  'book'));
     }
 
     public function createChapterAction($book) {
@@ -70,7 +71,7 @@ class BookController extends Controller {
     }
 
     public function saveChapterAction() {
-        $model = new BookModel();
+        $model = new BookChapterModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('book/chapter', ['book' => $model->book_id])

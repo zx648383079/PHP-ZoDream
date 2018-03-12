@@ -2,11 +2,11 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '作者';
 $this->extend('../layouts/header');
 ?>
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/term/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/author/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>

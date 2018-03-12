@@ -29,7 +29,7 @@ $this->extend('../layouts/header')
                 <div class="zd-tab-item active">
                     <div class="input-group">
                         <label>标题</label>
-                        <input name="title" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->title?>">
+                        <input name="title" type="text" class="form-control"  placeholder="输入标题" value="<?=$model->title?>">
                     </div>
                     <div class="input-group">
                         <label>分类</label>

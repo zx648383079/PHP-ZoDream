@@ -14,10 +14,24 @@ use Domain\Model\Model;
  * @package Domain\Model\Book
  * @property integer $id
  * @property string $content
- *
  */
 class BookChapterBodyModel extends Model {
     public static function tableName() {
         return 'book_chapter_body';
     }
+
+    protected function rules() {
+        return [
+            'content' => '',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'content' => 'Content',
+        ];
+    }
+
+
 }

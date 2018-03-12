@@ -14,7 +14,7 @@ $this->extend('../layouts/header')
 ?>
 
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/blog/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/book/save_chapter')?>" method="post" class="form-table" role="form">
         <div class="zd-tab">
             <div class="zd-tab-head">
                 <div class="zd-tab-item active">
@@ -27,17 +27,8 @@ $this->extend('../layouts/header')
             <div class="zd-tab-body">
                 <div class="zd-tab-item active">
                     <div class="input-group">
-                        <label>标题</label>
-                        <input name="title" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->title?>">
-                    </div>
-                    <div class="input-group">
-                        <label>分类</label>
-                        <select name="term_id" required>
-                            <option value="">请选择</option>
-                            <?php foreach($term_list as $item):?>
-                            <option value="<?=$item->id?>" <?=$item->id == $model->term_id ? 'selected' : ''?>><?=$item->name?></option>
-                            <?php endforeach;?>
-                        </select>
+                        <label>章节名</label>
+                        <input name="title" type="text" class="form-control"  placeholder="输入章节名" value="<?=$model->title?>">
                     </div>
                     <div class="input-group">
                         <label>关键词</label>
@@ -55,7 +46,7 @@ $this->extend('../layouts/header')
                 </div>
                 <div class="zd-tab-item">
                     <script id="container" style="height: 400px" name="content" type="text/plain" required>
-                        <?=$model->content?>
+                        <?=$model->body->content?>
                     </script>
                 </div>
             </div>
@@ -64,6 +55,7 @@ $this->extend('../layouts/header')
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
         <input type="hidden" name="id" value="<?=$model->id?>">
+        <input type="hidden" name="book_id" value="<?=$model->book_id?>">
     </form>
 
 <?php $this->extend('../layouts/footer');?>

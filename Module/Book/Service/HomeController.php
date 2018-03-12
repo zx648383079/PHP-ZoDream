@@ -20,7 +20,6 @@ class HomeController extends Controller {
         $click_bang = BookModel::order('click_count', 'desc')->limit(15)->all();
         $recommend_bang = BookModel::order('click_count', 'desc')->limit(15)->all();
         $size_bang = BookModel::order('size', 'desc')->limit(15)->all();
-        $this->getShare();
 
         $book_list = BookModel::order('updated_at', 'desc')->limit(20)->all();
         $new_book = BookModel::where('size < 50000')->order('created_at', 'desc')->order('click_count', 'desc')->limit(10)->all();

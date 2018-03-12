@@ -8,7 +8,7 @@ $this->extend('../layouts/header');
 ?>
 
     <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_product')?>">新增分类</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/term/create')?>">新增分类</a>
     </div>
 
     <table class="table  table-bordered well">

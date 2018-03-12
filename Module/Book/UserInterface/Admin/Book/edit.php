@@ -2,15 +2,37 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '小说';
 $this->extend('../layouts/header');
 ?>
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/term/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/book/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>
-            <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->name?>">
+            <input name="name" type="text" class="form-control"  placeholder="输入小说名称" value="<?=$model->name?>">
+        </div>
+        <div class="input-group">
+            <label>分类</label>
+            <select name="cat_id" required>
+                <option value="">请选择</option>
+                <?php foreach($cat_list as $item):?>
+                <option value="<?=$item->id?>" <?=$item->id == $model->cat_id ? 'selected' : ''?>><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>作者</label>
+            <select name="author_id" required>
+                <option value="">请选择</option>
+                <?php foreach($author_list as $item):?>
+                <option value="<?=$item->id?>" <?=$item->id == $model->author_id ? 'selected' : ''?>><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>封面</label>
+            <input name="cover" type="text" class="form-control"  placeholder="输入小说封面" value="<?=$model->cover?>">
         </div>
         <div class="input-group">
             <label>关键词</label>
