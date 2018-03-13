@@ -29,10 +29,12 @@ class BiQuGe extends BaseSpider {
      * @return BookModel
      */
     public function getBook(Html $html) {
+        $author = $html->find('#info p', 0)->text;
+        $author = explode('：', $author, 2);
         return new BookModel([
-            'name' => $html->find('#info h1')->text,
-            'cover' => $html->find('#fmimg img')->src,
-            'description' => $html->find('#intro')->text
+            'name' => $html->find('#info h1', 0)->text,
+            'cover' => $html->find('#fmimg img', 0)->src,
+            'description' => $html->find('#intro', 0)->text
         ]);
     }
 
@@ -43,7 +45,7 @@ class BiQuGe extends BaseSpider {
      */
     public function getCatalog(Html $html, Uri $baseUri) {
         $uris = [];
-        $html->matches('#<a[^<>]+href="/book/(\d+)/(\d+).html"#i',
+        $html->find('#list', 0)->matches('#<a[^<>]+href="/book/(\d+)/(\d+).html"#i',
             function ($match) use (&$uris, $baseUri) {
             if (strpos($match[0], $baseUri->getPath()) === false) {
                 return;
@@ -65,8 +67,8 @@ class BiQuGe extends BaseSpider {
      */
     public function getChapter(Html $html) {
         return new BookChapterModel([
-            'title' => $html->find('.bookname h1').text,
-            'content' => $html->find('#content').html
+            'title' => $html->find('.bookname h1', 0)->text,
+            'content' => $html->find('#content', 0)->html
         ]);
     }
 }
