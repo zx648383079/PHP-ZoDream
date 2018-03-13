@@ -91,15 +91,19 @@ class BookModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./home/chapter', ['id' => $this->id]);
+        return Url::to('./book', ['id' => $this->id]);
     }
 
     public function getDownloadUrlAttribute() {
-        return Url::to('./home/download', ['id' => $this->id]);
+        return Url::to('./book/download', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('./wap/chapter', ['id' => $this->id]);
+        return Url::to('./mobile/book', ['id' => $this->id]);
+    }
+
+    public function getFirstChapterAttribute() {
+        return BookChapterModel::where('book_id', $this->id)->order('id', 'asc')->one();
     }
 
     public function getStatusAttribute() {

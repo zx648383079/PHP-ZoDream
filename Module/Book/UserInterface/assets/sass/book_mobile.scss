@@ -3108,11 +3108,25 @@ input {
     height: 38px;
     line-height: 38px;
     margin-bottom: 0px;
-    .home {
-      float: right;
+    position: relative;
+    box-sizing: border-box;
+    .home,
+    .back {
+      position: absolute;
+      top: 0;
+      width: 40px;
     }
     .back {
-      float: left;
+      left: 0;
+    }
+    .home {
+      right: 0;
+    }
+    .title {
+      margin: 0 30px;
+      overflow: hidden;
+      display: block;
+      height: 40px;
     }
   }
   .toolbar {
@@ -3286,6 +3300,36 @@ input {
     .page-control {
       border-color: #666;
       background: #333;
+    }
+  }
+  &.min-mode {
+    .page-title,
+    .toolbar,
+    .tuijian {
+      display: none;
+    }
+    &.expanded {
+      .page-title,
+      .toolbar,
+      .page-control {
+        display: block;
+        position: fixed;
+        width: 100%;
+        left: 0;
+        background: #f5f5f5;
+      }
+      .page-title {
+        top: 0;
+      }
+      .toolbar {
+        bottom: 48px;
+      }
+      .page-control {
+        bottom: 0;
+      }
+      .container {
+        padding: 50px 0 100px;
+      }
     }
   }
 }

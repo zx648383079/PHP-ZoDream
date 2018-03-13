@@ -7,10 +7,10 @@ $this->extend('../layouts/header');
 ?>
 <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./mobile/category', ['id' => $item->id])?>"><?=$item->name?></a>
         <?php endforeach;?>
 	</div>
-    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./mobile/search')?>" class="search-form">
         <table>
             <tr>
                 <td>

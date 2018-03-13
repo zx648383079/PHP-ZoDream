@@ -39,10 +39,10 @@ class BookAuthorModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./home/author', ['id' => $this->id]);
+        return Url::to('./author', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('./wap/author', ['id' => $this->id]);
+        return Url::to('./mobile/author', ['id' => $this->id]);
     }
 }

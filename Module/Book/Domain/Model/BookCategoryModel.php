@@ -48,11 +48,11 @@ class BookCategoryModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./home/category', ['id' => $this->id]);
+        return Url::to('./category', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('./wap/category', ['id' => $this->id]);
+        return Url::to('./mobile/category', ['id' => $this->id]);
     }
 
     public function getRecommendBookAttribute() {

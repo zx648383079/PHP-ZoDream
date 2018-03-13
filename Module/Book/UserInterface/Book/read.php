@@ -33,9 +33,22 @@ $this->extend('layouts/header2');
 	<div align="center" style="font-size:13px"><strong><a href="<?=$book->url?>" title="<?=$book->name?>最新章节"><?=$book->name?>最新章节</a>
             <?=$this->url()?>，欢迎<a href="javascript:" title="收藏<?=$book->name?>">收藏</a>！</strong></div>
     <div class="btn_box">
-      <div class="u"> <span class="pre"><b>（快捷键：←）&#160;</b><a href="<?=$chapter->prev->url?>" id="keyleft" title="上一章">上一章</a></span> <span class="bookhome">
-              <a id="keyenter" href="<?=$book->url?>" title="回目录">回目录</a></span> <span class="next">
-              <a href="<?=$chapter->next->url?>" id="keyright" title="下一章">下一章</a><b>&#160;（快捷键：→）</b></span> </div>
+      <div class="u"> 
+        <span class="pre">
+        <?php if($chapter->previous):?>
+        <b>（快捷键：←）&#160;</b>
+            <a href="<?=$chapter->previous->url?>" id="keyleft" title="上一章">上一章</a>
+        <?php endif;?>
+        </span>
+        <span class="bookhome">
+              <a id="keyenter" href="<?=$book->url?>" title="回目录">回目录</a></span> 
+        <span class="next">
+        <?php if($chapter->next):?>
+        
+              <a href="<?=$chapter->next->url?>" id="keyright" title="下一章">下一章</a><b>&#160;（快捷键：→）</b>
+        <?php endif;?>
+        </span> 
+    </div>
       <div class="d"> <a href="<?=$this->url('./')?>" title="返回首页">返回首页</a>&#160;&#166;&#160;<a href="<?=$book->url?>" title="返回目录">返回目录</a>&#160;&#166;&#160;
           <a href="" title="加入书签">加入书签</a>
       </div>

@@ -22,7 +22,7 @@ $this->extend('layouts/header', ['nav_index' => 99]);
 		<li>（共<b><?=$book_list->getTotal()?></b>部）</li>&nbsp;
 		<li><a href="<?=$this->url('./home/list')?>" style="color:#AA0; text-decoration:underline;font-weight: 800" title="查看全部小说">查看全部小说</a></li>&nbsp;>&nbsp;
           <?php foreach ($cat_list as $item):?>
-              <a href="<?=$this->url(null, ['cat_id' => $item->id])?>" <?= $cat_id == $item->id ?  'class="current"' : ''?>><?=$item->name?></a>
+              <a href="<?=$this->url(null, ['cat_id' => $item->id])?>" <?= $cat_id == $item->id ?  'class="current"' : ''?>><?=$item->real_name?></a>
               <em class="ver">| </em>
           <?php endforeach;?>
       </ul>
@@ -34,7 +34,7 @@ $this->extend('layouts/header', ['nav_index' => 99]);
       <ul class="ul_m_list">
           <?php foreach ($book_list as $key => $item):?>
           <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
-              <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
+              <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->real_name?></a>]</div>
               <div class="title">
                   <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
                   <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>]
@@ -73,7 +73,10 @@ $this->extend('layouts/header', ['nav_index' => 99]);
                                 <div><span>总点击:</span><?=$item->click_count?></div>
                                 <div><span>作家推荐:</span>0</div>
                                 <div><span>作品推荐:</span><?=$item->recommend_count?></div>
+                                <?php if($item->new_book):?>
                                 <div><span>新书:</span><a href="<?=$item->new_book->url?>" title="<?=$item->new_book->name?>" target="_blank"><?=$item->new_book->name?></a></div>
+                                <?php endif;?>
+                                
                             </div>
                         </li>
                     <?php else: ?>

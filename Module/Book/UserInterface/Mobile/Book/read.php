@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = $chapter->title;
 $js = <<<JS
 $(".toolbar .lightoff").click(function () { 
     $(".chapter").removeClass('best-eye').toggleClass('night');
@@ -55,7 +55,7 @@ $this->extend('../layouts/header2');
             &lt;
         </a>
         <span class="title"><?=$chapter->title; ?></span>
-        <a href="<?=$this->url('./wap')?>" class="home">
+        <a href="<?=$this->url('./mobile')?>" class="home">
             首页
         </a>
     </header>
@@ -66,9 +66,9 @@ $this->extend('../layouts/header2');
     </div>
     <div class="page-control">
         <div class="bd">
-            <a href="<?=$chapter->prev->url?>" class="prev"><span>&lt;</span>上一章</a>
+            <a href="<?=$chapter->previous->wap_url?>" class="prev"><span>&lt;</span>上一章</a>
             <a href="<?=$book->wap_url?>" class="catalog">目录</a>
-            <a href="<?=$chapter->next->url?>" class="next">下一章<span>&gt;</span></a>
+            <a href="<?=$chapter->next->wap_url?>" class="next">下一章<span>&gt;</span></a>
         </div>
     </div>
 	<div class="container">
@@ -95,9 +95,9 @@ $this->extend('../layouts/header2');
 	</div>
     <div class="page-control">
         <div class="bd">
-            <a href="<?=$chapter->prev->url?>" class="prev"><span>&lt;</span>上一章</a>
+            <a href="<?=$chapter->prev->wap_url?>" class="prev"><span>&lt;</span>上一章</a>
             <a href="<?=$book->wap_url?>" class="catalog">目录</a>
-            <a href="<?=$chapter->next->url?>" class="next">下一章<span>&gt;</span></a>
+            <a href="<?=$chapter->next->wap_url?>" class="next">下一章<span>&gt;</span></a>
         </div>
     </div>
 <?php $this->extend('../layouts/footer2');?>

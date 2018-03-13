@@ -8,11 +8,11 @@ $this->extend('../layouts/header');
 ?>
 <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> <?= $item->id == $cat->id ? 'active' : ''  ?>" href="<?=$this->url('./wap/category', ['id' => $item->id])?>">
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> <?= $item->id == $cat->id ? 'active' : ''  ?>" href="<?=$this->url('./mobile/category', ['id' => $item->id])?>">
                 <?=$item->name?></a>
         <?php endforeach;?>
     </div>
-    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./mobile/search')?>" class="search-form">
         <table>
             <tr>
                 <td>
@@ -67,7 +67,7 @@ $this->extend('../layouts/header');
                             <li><a href="<?=$item->wap_url?>"><span>[<?=$item->category->name?>]</span><?=$item->name?></a><span style="float: right;">[<?=$item->author->name?>]</span></li>
                         <?php endif;?>
                     <?php endforeach;?>
-                    <li><span style="float: right;font-size:12px;">[<a href="<?=$this->url('./wap/list', ['cat_id' => $cat->id, 'sort' => 'click_count'])?>">更多热门玄幻奇幻小说···</a>]</span></li>
+                    <li><span style="float: right;font-size:12px;">[<a href="<?=$this->url('./mobile/search/list', ['cat_id' => $cat->id, 'sort' => 'click_count'])?>">更多热门玄幻奇幻小说···</a>]</span></li>
 				</ul>
 			</div>
 		</div>
@@ -79,7 +79,7 @@ $this->extend('../layouts/header');
 				<h4 style="float: left;">最新
                     <?=$cat->real_name ?>小说推荐</h4>
 				<span style="float: right;font-size: 12px;">[
-					<a href='<?=$this->url('./wap/list', ['cat_id' => $cat->id, 'sort' => 'created_at'])?>'>更多···</a>]</span>
+					<a href='<?=$this->url('./mobile/search/list', ['cat_id' => $cat->id, 'sort' => 'created_at'])?>'>更多···</a>]</span>
 			</div>
 			<div class="bd">
 				<ul class="list">
@@ -101,7 +101,7 @@ $this->extend('../layouts/header');
 				<h4 style="float: left;">完本
                     <?=$cat->real_name ?>小说推荐</h4>
 				<span style="float: right;font-size: 12px;">[
-					<a href='<?=$this->url('./wap/list', ['cat_id' => $cat->id, 'status' => 2])?>'>更多···</a>]</span>
+					<a href='<?=$this->url('./mobile/search/list', ['cat_id' => $cat->id, 'status' => 2])?>'>更多···</a>]</span>
 			</div>
 			<div class="bd">
 				<ul class="list">
@@ -167,7 +167,7 @@ $this->extend('../layouts/header');
                             <div class="abover"><span><?=$item->status?></span></div>
                         </li>
                     <?php endforeach;?>
-                    <li class="column-2 "><span style="float: right;font-size:12px;">[<a href="<?=$this->url('./wap/list')?>">更多小说更新列表···</a>]</span></li>
+                    <li class="column-2 "><span style="float: right;font-size:12px;">[<a href="<?=$this->url('./mobile/search/list')?>">更多小说更新列表···</a>]</span></li>
                 </ul>
 			</div>
 		</div>

@@ -9,6 +9,7 @@ class Controller extends ModuleController {
     public function prepare() {
         $cat_list = BookCategoryModel::all();
         $site_name = 'ZoDream 读书';
-        $this->send(compact('cat_list', 'site_name'));
+        $hot_keywords = [];
+        $this->send(compact('cat_list', 'site_name', 'hot_keywords'));
     }
 }

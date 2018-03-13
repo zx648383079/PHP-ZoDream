@@ -2511,11 +2511,23 @@ input.btn {
     text-align: center;
     height: 38px;
     line-height: 38px;
-    margin-bottom: 0px; }
-    .chapter .page-title .home {
-      float: right; }
+    margin-bottom: 0px;
+    position: relative;
+    box-sizing: border-box; }
+    .chapter .page-title .home,
     .chapter .page-title .back {
-      float: left; }
+      position: absolute;
+      top: 0;
+      width: 40px; }
+    .chapter .page-title .back {
+      left: 0; }
+    .chapter .page-title .home {
+      right: 0; }
+    .chapter .page-title .title {
+      margin: 0 30px;
+      overflow: hidden;
+      display: block;
+      height: 40px; }
   .chapter .toolbar {
     text-align: center;
     padding: 5px; }
@@ -2637,6 +2649,26 @@ input.btn {
     .chapter.best-eye .page-control {
       border-color: #666;
       background: #333; }
+  .chapter.min-mode .page-title,
+  .chapter.min-mode .toolbar,
+  .chapter.min-mode .tuijian {
+    display: none; }
+  .chapter.min-mode.expanded .page-title,
+  .chapter.min-mode.expanded .toolbar,
+  .chapter.min-mode.expanded .page-control {
+    display: block;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    background: #f5f5f5; }
+  .chapter.min-mode.expanded .page-title {
+    top: 0; }
+  .chapter.min-mode.expanded .toolbar {
+    bottom: 48px; }
+  .chapter.min-mode.expanded .page-control {
+    bottom: 0; }
+  .chapter.min-mode.expanded .container {
+    padding: 50px 0 100px; }
 
 .chapter-recommend {
   background: #ece4da url(../images/chapter-last-recommend-bg-repeat-x.png) repeat-x; }

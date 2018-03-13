@@ -8,10 +8,10 @@ $this->extend('../layouts/header');
 ?>
 <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./mobile/category', ['id' => $item->id])?>"><?=$item->name?></a>
         <?php endforeach;?>
     </div>
-    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./mobile/search')?>" class="search-form">
         <table>
             <tr>
                 <td>
@@ -29,7 +29,7 @@ $this->extend('../layouts/header');
 			<div class="bd">
 				<a href="/" class="home"></a>
 				<span class="divide"></span>
-				<a href="<?=$this->url('./wap/top')?>">热门小说排行榜</a>
+				<a href="<?=$this->url('./mobile/search/top')?>">热门小说排行榜</a>
 			</div>
 		</div>
 		<div class="slide-ad">

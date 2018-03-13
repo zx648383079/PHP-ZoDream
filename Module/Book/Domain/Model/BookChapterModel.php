@@ -61,11 +61,22 @@ class BookChapterModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./home/detail', ['id' => $this->id]);
+        return Url::to('./book/read', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('./wap/detail', ['id' => $this->id]);
+        return Url::to('./mobile/book/read', ['id' => $this->id]);
+    }
+
+    public function getPreviousAttribute() {
+        return static::where('id', '<', $this->id)->where('book_id', $this->book_id)
+            ->order('id desc')->select('id, title')->one();
+    }
+
+    public function getNextAttribute() {
+        return static::where('id', '>', $this->id)
+            ->where('book_id', $this->book_id)->order('id asc')
+            ->select('id, title')->one();
     }
 
     public function save() {

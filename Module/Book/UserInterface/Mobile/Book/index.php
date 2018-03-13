@@ -8,10 +8,10 @@ $this->extend('../layouts/header');
 ?>
 <div class="channel">
         <?php foreach ($cat_list as $key => $item):?>
-            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./wap/category', ['id' => $item->id])?>"><?=$item->name?></a>
+            <a class="<?= $key % 3 == 1 ? 'xuanyi' : ''  ?> active" href="<?=$this->url('./mobile/category', ['id' => $item->id])?>"><?=$item->name?></a>
         <?php endforeach;?>
     </div>
-    <form name="From" action="<?=$this->url('./wap/search')?>" class="search-form">
+    <form name="From" action="<?=$this->url('./mobile/search')?>" class="search-form">
         <table>
             <tr>
                 <td>
@@ -65,7 +65,7 @@ $this->extend('../layouts/header');
 				<table>
 					<tr>
 						<td width="50%">
-							<a class="read start" href="/wap.php?action=article&id=0&tid=<?php echo $id.$wxuid; ?>">从头开始阅读</a>
+							<a class="read start" href="<?=$book->first_chapter->url?>">从头开始阅读</a>
 						</td>
 						<td width="5">&nbsp;</td>
 						<td width="50%">

@@ -19,7 +19,7 @@ class CreateBookTables extends Migration {
             $table->set('name')->varchar(100)->unique()->notNull()->comment('书名');
             $table->set('cover')->varchar(200)->notNull()->comment('封面');
             $table->set('description')->varchar(200)->notNull()->comment('简介');
-            $table->set('author_id')->int()->notNull()->comment('作者');
+            $table->set('author_id')->int()->notNull()->defaultVal(0)->comment('作者');
             $table->set('user_id')->int()->notNull()->defaultVal(0);
             $table->set('cat_id')->tinyint(3)->notNull()->defaultVal(0)->comment('分类');
             $table->set('size')->int()->notNull()->defaultVal(0)->comment('总字数');

@@ -89,7 +89,7 @@ $this->extend('layouts/header');
     <h2>新书推荐榜</h2>
     <span class="j"></span>
 	<div class="morelist">
-      <div class="more"><a href="<?=$this->url('./home/list')?>" title="查看所有新书" target="_blank">更多新书&#160;>></a></div>
+      <div class="more"><a href="<?=$this->url('./search/list')?>" title="查看所有新书" target="_blank">更多新书&#160;>></a></div>
     </div>
   </div>
   <div class="Con">
@@ -170,7 +170,7 @@ $this->extend('layouts/header');
     <h2>精品推荐</h2>
     <span>Boutique Recommend</span> <span class="j"></span>
     <div class="morelist">
-      <div class="more"><a href="<?=$this->url('./home/list')?>" title="更多精品小说" target="_blank">更多精品小说&#160;>></a></div>
+      <div class="more"><a href="<?=$this->url('./search/list')?>" title="更多精品小说" target="_blank">更多精品小说&#160;>></a></div>
     </div>
   </div>
   <div class="Con jp">
@@ -290,7 +290,7 @@ $this->extend('layouts/header');
     <h2>排行榜</h2>
     <span>Ranking</span> <span class="j"></span>
     <div class="morelist">
-      <div class="more"><a href="<?=$this->url('./home/top')?>" title="更多排行榜" target="_blank">更多排行榜&#160;>></a></div>
+      <div class="more"><a href="<?=$this->url('./search/top')?>" title="更多排行榜" target="_blank">更多排行榜&#160;>></a></div>
     </div>
   </div>
   <div class="Con ph">

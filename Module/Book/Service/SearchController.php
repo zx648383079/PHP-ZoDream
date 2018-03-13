@@ -30,7 +30,7 @@ class SearchController extends Controller {
     }
 
     public function listAction($cat_id = 0, $sort = 'updated_at', $status = 0) {
-        $book_list = BookModel::when($status == 1, function ($query) {
+        $book_list = BookModel::with('category', 'author')->when($status == 1, function ($query) {
             $query->where('over_at', 0);
         })->when($status == 2, function ($query) {
             $query->where('over_at > 0');

@@ -143,7 +143,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
     <h2>更新列表</h2>
     <span>New List</span> <span class="j"></span>
 	<div class="morelist">
-      <div class="more"><a href="{dede:field name='typedir'/}/shuku.html" style="font-weight: 800; text-decoration:underline" title="查看更多<?=$cat->real_name?>小说">更多<?=$cat->real_name?>小说&nbsp;&gt;&gt;</a></div>
+      <div class="more"><a href="<?=$this->url('./search/list', ['cat_id' => $cat->id])?>" style="font-weight: 800; text-decoration:underline" title="查看更多<?=$cat->real_name?>小说">更多<?=$cat->real_name?>小说&nbsp;&gt;&gt;</a></div>
     </div>
   </div>
   <div class="Con">
@@ -168,7 +168,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                   </div><div class="time"><?=$item->updated_at?></div></li>
           <?php endforeach;?>
          </ul>
-		 <div class="bot_more"><a href="{dede:field name='typedir'/}/shuku.html" title="查看更多<?=$cat->real_name?>小说">更多<?=$cat->real_name?>小说&nbsp;&gt;&gt;</a></div>
+		 <div class="bot_more"><a href="<?=$this->url('./search/list', ['cat_id' => $cat->id])?>" title="查看更多<?=$cat->real_name?>小说">更多<?=$cat->real_name?>小说&nbsp;&gt;&gt;</a></div>
     </div>
     <div class="Right">
 		<div class="r_box cn">

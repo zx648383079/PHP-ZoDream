@@ -52,7 +52,7 @@ $this->extend('layouts/header');
         </div>
         <div class="read_btn">
           <div class="btn" style="width:328px"><a href="javascript:;" class="sc" title="收藏本书" style="margin-right:2px">加入收藏夹</a>
-              <a href="<?=$item->download_url?>" class="txt" title="<?=$book->name?>txt下载" target="_blank"><?=$book->name?>txt下载</a></div>
+              <a href="<?=$book->download_url?>" class="txt" title="<?=$book->name?>txt下载" target="_blank"><?=$book->name?>txt下载</a></div>
         </div>
         <div class="vote"><?=$book->author->name?>的<a href="<?=$cat->url?>"><?=$cat->real_name?></a>作品<?=$book->name?>
             最新章节已经更新，本站提供<a href="<?=$book->url?>" title="<?=$book->name?>最新章节"><?=$book->name?>最新章节</a>全文免费在线阅读，
