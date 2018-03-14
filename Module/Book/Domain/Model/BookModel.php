@@ -38,7 +38,7 @@ class BookModel extends Model {
             'name' => 'required|string:0,100',
             'cover' => 'required|string:0,200',
             'description' => 'required|string:0,200',
-            'author_id' => 'required|int',
+            'author_id' => 'int',
             'user_id' => 'int',
             'cat_id' => 'int:0,999',
             'size' => 'int',

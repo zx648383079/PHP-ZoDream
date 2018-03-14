@@ -28,8 +28,8 @@ $this->extend('../layouts/header');
 		<div class="mod block book-all-list">
 			<div class="bd">
 				<ul>
-					<?php if (!empty($book_list)): ?>
-                    <?php foreach ($book_list as $item):?>
+					<?php if (!empty($chapter_list->isEmpty())): ?>
+                    <?php foreach ($chapter_list as $item):?>
                             <li class="column-2 ">
                                 <div class="right">
                                     <a class="name" href="<?=$item->wap_url?>"><?=$item->name?></a>

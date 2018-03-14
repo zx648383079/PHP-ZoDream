@@ -3,27 +3,12 @@ define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
 use Zodream\Http\Curl;
-use Zodream\Service\Routing\Url;
-use Zodream\Module\Gzo\Domain\Opcode\Line;
-use Zodream\Service\Factory;
-use Zodream\Module\Gzo\Domain\Opcode\DecryptDirectory;
-use Zodream\Infrastructure\Security\Des;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Domain\Template\Template;
-use Zodream\ThirdParty\WeChat\MenuItem;
+use Zodream\Spider\Spider;
+use Zodream\Spider\Support\Uri;
 
-$menus = MenuItem::menu(MenuItem::name('我的')->url('http://www.sderdos.cn/user.php'))
-    ->menu(MenuItem::name('签到')
-        ->menu(MenuItem::name('我的')->url('http://www.sderdos.cn/user.php'))
-        ->menu(MenuItem::name('我的')->url('http://www.sderdos.cn/user.php')))
-    ->menu(MenuItem::name('大衣美学节')->url('http://mp.weixin.qq.com/s/WvwnW9LPRSzbzMbSBMFeQw'));
+$spider = new \Module\Book\Domain\Spiders\BiQuGe();
 
-die(var_dump($menus, $menus->toArray()));
-
-$template = new Template();
-echo $template->parse('
-{> a=b}
-');
+$spider->invoke(new Uri('https://www.qu.la/book/68815/'), [$spider, 'invoke']);
 
 
 //Factory::config()->set([

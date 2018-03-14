@@ -5,6 +5,7 @@ use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
+use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -56,6 +57,14 @@ class CreateBookTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->unique()->notNull()->comment('作者名');
             $table->set('avatar')->varchar(200)->comment('作者头像');
+            $table->timestamps();
+        });
+        Schema::createTable(BookHistoryModel::tableName(), function(Table $table) {
+            $table->setComment('小说阅读历史');
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('book_id')->int()->notNull();
+            $table->set('chapter_id')->int()->notNull();
             $table->timestamps();
         });
     }

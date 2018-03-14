@@ -46,6 +46,10 @@ $('.toolbar .fontsize').click(function (e) {
     }
     return;
 });
+$(document).click(function (e) { 
+    console.log(e.pageX, e.pageY, $(window).scollTop());
+
+});
 JS;
 $this->registerJs($js, View::JQUERY_READY);
 $this->extend('../layouts/header2');

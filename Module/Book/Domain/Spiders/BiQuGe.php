@@ -34,7 +34,7 @@ class BiQuGe extends BaseSpider {
         return new BookModel([
             'name' => $html->find('#info h1', 0)->text,
             'cover' => $html->find('#fmimg img', 0)->src,
-            'description' => $html->find('#intro', 0)->text
+            'description' => $html->find('#intro', 0)->text,
         ]);
     }
 
@@ -52,7 +52,8 @@ class BiQuGe extends BaseSpider {
             }
             $uris[] = $match[2];
         });
-        $uris = sort(array_unique($uris));
+        $uris = array_unique($uris);
+        sort($uris);
         foreach ($uris as &$uri) {
             $chapterUri = clone $baseUri;
             $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$uri.'.html');
