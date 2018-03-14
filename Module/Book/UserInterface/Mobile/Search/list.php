@@ -25,7 +25,7 @@ $this->extend('../layouts/header');
     </form>
 	<div class="container">
 		<h1 class="page-title">好看的
-			<?php echo $toptypename; ?>小说大全</h1>
+			<?=$cat->real_name?>小说大全</h1>
 		<div class="mod block book-all-list">
 			<div class="hd">
 				<div class="filter even">

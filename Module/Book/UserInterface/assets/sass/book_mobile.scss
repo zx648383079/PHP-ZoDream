@@ -1657,50 +1657,6 @@ html.ie6 .button-b {
   z-index: 5;
 }
 
-.pagination {
-  padding: 15px 30px;
-  color: #666;
-  text-align: center;
-  a,
-  span {
-    display: inline-block;
-    padding: 0 5px;
-    height: 20px;
-    line-height: 20px;
-    margin: 0 2px;
-    text-align: center;
-    font-family: Arial;
-    font-size: 12px;
-    color: #979797;
-    border-radius: 2px;
-    background-color: #F1F1F1;
-    vertical-align: middle;
-  }
-  a:hover,
-  span:hover {
-    background-color: #e7e7e7;
-  }
-  a.current,
-  span.current {
-    color: #fff;
-    background-color: #666;
-  }
-  .next,
-  .prev {
-    color: #999;
-    width: auto;
-  }
-  .counts {
-    vertical-align: middle;
-    color: #999;
-    font-size: 12px;
-    width: auto;
-    background: 0 0;
-    span {
-      background: 0 0;
-    }
-  }
-}
 
 .ui-tags {
   width: 81%;
@@ -4017,14 +3973,28 @@ html.ie6 .chapter-recommend .bd .unfinished i {
   }
 }
 
-.pagelistbox {
+.pagination {
   display: block;
   height: 28px;
   margin: 10px auto;
-  a,
-  strong {
+  li {
+    display: inline-block;
     padding: 2px 0;
     width: 24px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    color: #666;
+    margin-right: 2px;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#fefefe));
+    background: -webkit-linear-gradient(top, #fff, #fefefe);
+    background: -moz-linear-gradient(top, #fff, #fefefe);
+    background: -o-linear-gradient(top, #fff, #fefefe);
+    border: 1px solid #c0c0c0;
+    font-size: 14px;
+    &.active {
+      background: #c0c0c0;
+    }
   }
 }
 
@@ -4045,32 +4015,6 @@ html.ie6 .chapter-recommend .bd .unfinished i {
   background: -o-linear-gradient(top, #fff, #fefefe);
   border: 1px solid #c0c0c0;
   font-size: 14px;
-}
-
-.pagelistbox {
-  a,
-  strong {
-    display: block;
-    height: 22px;
-    line-height: 22px;
-    float: left;
-    text-align: center;
-    color: #666;
-    margin-right: 2px;
-    background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#fefefe));
-    background: -webkit-linear-gradient(top, #fff, #fefefe);
-    background: -moz-linear-gradient(top, #fff, #fefefe);
-    background: -o-linear-gradient(top, #fff, #fefefe);
-    border: 1px solid #c0c0c0;
-    font-size: 14px;
-  }
-  .indexPage,
-  .prePage,
-  .nextPage,
-  .endPage {
-    padding: 2px 0;
-    width: 38px;
-  }
 }
 
 .tuijian {

@@ -54,7 +54,7 @@ class BookHistoryModel extends Model {
     public static function getHistory() {
         if (Auth::guest()) {
             return BookChapterModel::with('book')
-                ->where('id', static::getHistoryId())->page();
+                ->whereIn('id', static::getHistoryId())->page();
         }
         $page = static::where('user_id', Auth::id())->orderBy('updated_at', 'desc')
             ->select('chapter_id')

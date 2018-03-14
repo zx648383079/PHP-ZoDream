@@ -28,14 +28,14 @@ $this->extend('../layouts/header');
 		<div class="mod block book-all-list">
 			<div class="bd">
 				<ul>
-					<?php if (!empty($chapter_list->isEmpty())): ?>
+					<?php if (!$chapter_list->isEmpty()): ?>
                     <?php foreach ($chapter_list as $item):?>
                             <li class="column-2 ">
                                 <div class="right">
-                                    <a class="name" href="<?=$item->wap_url?>"><?=$item->name?></a>
-                                    <span style="float:right;font-size:0.8125em;color: #999;"><?=$item->status?></span>
-                                    <p class="update">上次看到：<a href="<?=$item->last_log->wap_url?>"><?=$item->last_log->title?></a></p>
-                                    <p class="info">作者：<?=$item->author->name?>  <span class="words">字数：<?=$item->size?></span></p>
+                                    <a class="name" href="<?=$item->book->wap_url?>"><?=$item->book->name?></a>
+                                    <span style="float:right;font-size:0.8125em;color: #999;"><?=$item->book->status?></span>
+                                    <p class="update">上次看到：<a href="<?=$item->wap_url?>"><?=$item->title?></a></p>
+                                    <p class="info">作者：<?=$item->book->author->name?>  <span class="words">字数：<?=$item->book->size?></span></p>
                                 </div>
                             </li>
                     <?php endforeach;?>

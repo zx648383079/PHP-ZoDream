@@ -32,7 +32,7 @@ $this->extend('layouts/header');
       <ul class="ul_m_list">
           <?php foreach ($book_list as $key => $item):?>
               <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
-                  <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
+                  <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->real_name?></a>]</div>
                   <div class="title">
                       <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
                       <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>]

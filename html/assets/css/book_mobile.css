@@ -1322,44 +1322,6 @@ html.ie6 .button-b {
   top: 0;
   z-index: 5; }
 
-.pagination {
-  padding: 15px 30px;
-  color: #666;
-  text-align: center; }
-  .pagination a,
-  .pagination span {
-    display: inline-block;
-    padding: 0 5px;
-    height: 20px;
-    line-height: 20px;
-    margin: 0 2px;
-    text-align: center;
-    font-family: Arial;
-    font-size: 12px;
-    color: #979797;
-    border-radius: 2px;
-    background-color: #F1F1F1;
-    vertical-align: middle; }
-  .pagination a:hover,
-  .pagination span:hover {
-    background-color: #e7e7e7; }
-  .pagination a.current,
-  .pagination span.current {
-    color: #fff;
-    background-color: #666; }
-  .pagination .next,
-  .pagination .prev {
-    color: #999;
-    width: auto; }
-  .pagination .counts {
-    vertical-align: middle;
-    color: #999;
-    font-size: 12px;
-    width: auto;
-    background: 0 0; }
-    .pagination .counts span {
-      background: 0 0; }
-
 .ui-tags {
   width: 81%; }
 
@@ -3210,14 +3172,27 @@ html.ie6 .chapter-recommend .bd .unfinished i {
   font-size: .75em;
   color: #999; }
 
-.pagelistbox {
+.pagination {
   display: block;
   height: 28px;
   margin: 10px auto; }
-  .pagelistbox a,
-  .pagelistbox strong {
+  .pagination li {
+    display: inline-block;
     padding: 2px 0;
-    width: 24px; }
+    width: 24px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    color: #666;
+    margin-right: 2px;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#fefefe));
+    background: -webkit-linear-gradient(top, #fff, #fefefe);
+    background: -moz-linear-gradient(top, #fff, #fefefe);
+    background: -o-linear-gradient(top, #fff, #fefefe);
+    border: 1px solid #c0c0c0;
+    font-size: 14px; }
+    .pagination li.active {
+      background: #c0c0c0; }
 
 .indexPage,
 .prePage,
@@ -3236,29 +3211,6 @@ html.ie6 .chapter-recommend .bd .unfinished i {
   background: -o-linear-gradient(top, #fff, #fefefe);
   border: 1px solid #c0c0c0;
   font-size: 14px; }
-
-.pagelistbox a,
-.pagelistbox strong {
-  display: block;
-  height: 22px;
-  line-height: 22px;
-  float: left;
-  text-align: center;
-  color: #666;
-  margin-right: 2px;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#fefefe));
-  background: -webkit-linear-gradient(top, #fff, #fefefe);
-  background: -moz-linear-gradient(top, #fff, #fefefe);
-  background: -o-linear-gradient(top, #fff, #fefefe);
-  border: 1px solid #c0c0c0;
-  font-size: 14px; }
-
-.pagelistbox .indexPage,
-.pagelistbox .prePage,
-.pagelistbox .nextPage,
-.pagelistbox .endPage {
-  padding: 2px 0;
-  width: 38px; }
 
 .tuijian {
   margin: 10px; }

@@ -60,6 +60,10 @@ class BookChapterModel extends Model {
         return $this->hasOne(BookChapterBodyModel::class, 'id', 'id');
     }
 
+    public function book() {
+        return $this->hasOne(BookModel::class, 'id', 'book_id');
+    }
+
     public function getUrlAttribute() {
         return Url::to('./book/read', ['id' => $this->id]);
     }

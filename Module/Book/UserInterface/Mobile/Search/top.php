@@ -69,7 +69,7 @@ $this->extend('../layouts/header');
         <?php foreach ($cat_list as $index => $cat): ?>
             <div class="mod block rank-switch top<?=$index?>">
                 <div class="hd tab-switch">
-                    <span index="0" class="item active" style="width:50%"><?=$icat->real_name?>小说排行榜</span>
+                    <span index="0" class="item active" style="width:50%"><?=$cat->real_name?>小说排行榜</span>
                     <span index="1" class="item " style="width:50%"><?=$cat->real_name?>小说月榜</span>
                 </div>
                 <div class="bd">

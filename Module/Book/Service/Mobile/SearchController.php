@@ -2,6 +2,7 @@
 namespace Module\Book\Service\Mobile;
 
 use Module\Book\Domain\Model\BookAuthorModel;
+use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Service\Controller;
 
@@ -46,7 +47,8 @@ class SearchController extends Controller {
             'created_at' => '新书',
             'size' => '字数'
         ];
-        return $this->show(compact('book_list', 'cat_id', 'sort', 'status', 'sort_list'));
+        $cat = BookCategoryModel::findOrNew($cat_id);
+        return $this->show(compact('book_list', 'cat_id', 'sort', 'status', 'sort_list', 'cat'));
     }
 
     public function downloadAction($cat_id = 0, $status = 0) {
