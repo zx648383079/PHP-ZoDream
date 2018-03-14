@@ -14,4 +14,4 @@ $this->registerCssFile('@book_mobile.css');
        <title><?=$this->title?></title>
        <?=$this->header();?>
    </head>
-   <body class="chapter min-mode expanded" ondragstart="return false" oncopy="return false;" oncut="return false;" oncontextmenu="return false">
+   <body class="chapter min-mode" ondragstart="return false" oncopy="return false;" oncut="return false;" oncontextmenu="return false">

@@ -4,11 +4,12 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = $chapter->title;
 $js = <<<JS
+var box = $(".chapter");
 $(".toolbar .lightoff").click(function () { 
-    $(".chapter").removeClass('best-eye').toggleClass('night');
+    box.removeClass('best-eye').toggleClass('night');
 });
 $(".toolbar .huyanon").click(function () { 
-    $(".chapter").removeClass('night').toggleClass('best-eye');
+    box.removeClass('night').toggleClass('best-eye');
 });
 var sizes = [
     'font-s',
@@ -46,9 +47,28 @@ $('.toolbar .fontsize').click(function (e) {
     }
     return;
 });
-$(document).click(function (e) { 
-    console.log(e.pageX, e.pageY, $(window).scollTop());
-
+$(document).click(function (e) {
+    if (!box.hasClass('min-mode')) {
+        return;
+    }
+    var width = $(window).width(),
+        height = $(window).height(),
+        top = $(window).scrollTop(),
+        x = e.pageX,
+        y = e.pageY - top;
+    if (x > width / 3 && x < width * 2 / 3 && y > height / 3 && y < height * 2 / 3) {
+        box.toggleClass('expanded');
+        return;
+    }
+    if (box.hasClass('expanded')) {
+        box.removeClass('expanded');
+        return;
+    }
+    if (x < width / 2) {
+        $(window).scrollTop(top - height + 30);
+        return;
+    }
+    $(window).scrollTop(top + height - 30);
 });
 JS;
 $this->registerJs($js, View::JQUERY_READY);
@@ -70,9 +90,14 @@ $this->extend('../layouts/header2');
     </div>
     <div class="page-control">
         <div class="bd">
+            <?php if($chapter->previous):?>
             <a href="<?=$chapter->previous->wap_url?>" class="prev"><span>&lt;</span>上一章</a>
+            <?php endif;?>
             <a href="<?=$book->wap_url?>" class="catalog">目录</a>
+            <?php if($chapter->next):?>
             <a href="<?=$chapter->next->wap_url?>" class="next">下一章<span>&gt;</span></a>
+            <?php endif;?>
+            
         </div>
     </div>
 	<div class="container">
@@ -99,9 +124,13 @@ $this->extend('../layouts/header2');
 	</div>
     <div class="page-control">
         <div class="bd">
-            <a href="<?=$chapter->prev->wap_url?>" class="prev"><span>&lt;</span>上一章</a>
+            <?php if($chapter->previous):?>
+            <a href="<?=$chapter->previous->wap_url?>" class="prev"><span>&lt;</span>上一章</a>
+            <?php endif;?>
             <a href="<?=$book->wap_url?>" class="catalog">目录</a>
+            <?php if($chapter->next):?>
             <a href="<?=$chapter->next->wap_url?>" class="next">下一章<span>&gt;</span></a>
+            <?php endif;?>
         </div>
     </div>
 <?php $this->extend('../layouts/footer2');?>
