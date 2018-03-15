@@ -6,6 +6,11 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '文章';
 
 $js = <<<JS
     var ue = UE.getEditor('container');
+    $(function () {
+        $("select[name=type]").change(function () { 
+            $("#source-box").toggle($(this).val() == 1);
+        });
+    });
 JS;
 
 $this->extend('../layouts/header')
@@ -39,6 +44,18 @@ $this->extend('../layouts/header')
                             <option value="<?=$item->id?>" <?=$item->id == $model->term_id ? 'selected' : ''?>><?=$item->name?></option>
                             <?php endforeach;?>
                         </select>
+                    </div>
+                    <div class="input-group">
+                        <label>类型</label>
+                        <select name="type" required>
+                            <?php foreach(['原创', '转载'] as $key => $item):?>
+                            <option value="<?=$key?>" <?=$key == $model->type ? 'selected' : ''?>><?=$item?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                    <div id="source-box" class="input-group" <?=$model->type != 1 ? 'style="display:none"' : ''?>>
+                        <label>原网址</label>
+                        <input name="source_url" type="text" class="form-control"  placeholder="输入原网址" value="<?=$model->source_url?>">
                     </div>
                     <div class="input-group">
                         <label>关键词</label>

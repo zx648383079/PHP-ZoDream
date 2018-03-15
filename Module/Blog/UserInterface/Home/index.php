@@ -90,15 +90,15 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
         </div>
         <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
-            <dt><a href="<?=$this->url('./home/detail', ['id' => $item['id']])?>"><?=$item['title']?></a>
+            <dt><a href="<?=$item->url?>"><?=$item->title?></a>
                 <span class="book-time"><?=$item->created_at?></span></dt>
             <dd>
-                <p><?=$item['description']?></p>
-                <span class="author"><i class="fa fa-edit"></i><b><?=$item['user_name']?></b></span>
-                <span class="category"><i class="fa fa-bookmark"></i><b><?=$item['term_name']?></b></span>
-                <span class="comment"><i class="fa fa-comments"></i><b><?=$item['comment_count']?></b></span>
-                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$item['recommend']?></b></span>
-                <span class="click"><i class="fa fa-eye"></i><b><?=$item['click_count']?></b></span>
+                <p><?=$item->description?></p>
+                <span class="author"><i class="fa fa-edit"></i><b><?=$item->user->name?></b></span>
+                <span class="category"><i class="fa fa-bookmark"></i><b><?=$item->term->name?></b></span>
+                <span class="comment"><i class="fa fa-comments"></i><b><?=$item->comment_count?></b></span>
+                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$item->recommend?></b></span>
+                <span class="click"><i class="fa fa-eye"></i><b><?=$item->click_count?></b></span>
             </dd>
         </dl>
         <?php endforeach;?>
@@ -115,6 +115,17 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
     </div>
 
     <div class="book-dynamic">
+        <h4>最新文章</h4>
+        <ul>
+            <?php foreach ($new_list as $item): ?>
+                <li>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->title?></a></li>
+            <?php endforeach;?>
+        </ul>
+    </div>
+
+    <div class="book-dynamic">
+        <h4>最新留言</h4>
         <?php foreach ($log_list as $log): ?>
         <dl>
             <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
@@ -123,7 +134,33 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
                 <span class="book-time"><?=$this->ago($log['create_at'])?></span>
             </dd>
         </dl>
-    <?php endforeach;?>
+        <?php endforeach;?>
+    </div>
+
+    <div class="book-dynamic">
+        <h4>随机文章</h4>
+        <?php foreach ($log_list as $log): ?>
+            <dl>
+                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+                <dd>
+                    <p><?=$log['content']?></p>
+                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
+                </dd>
+            </dl>
+        <?php endforeach;?>
+    </div>
+
+    <div class="book-dynamic">
+        <h4>友情链接</h4>
+        <?php foreach ($log_list as $log): ?>
+            <dl>
+                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+                <dd>
+                    <p><?=$log['content']?></p>
+                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
+                </dd>
+            </dl>
+        <?php endforeach;?>
     </div>
     
 <?php $this->extend('layouts/footer');?>

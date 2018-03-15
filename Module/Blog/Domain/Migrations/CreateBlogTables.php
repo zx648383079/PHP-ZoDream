@@ -25,10 +25,12 @@ class CreateBlogTables extends Migration {
             $table->set('content')->text();
             $table->set('user_id')->int(10);
             $table->set('term_id')->int(10);
+            $table->set('type')->bool()->defaultVal(0)->comment('原创或转载');
+            $table->set('source_url')->varchar(100)->comment('原文链接');
             $table->set('recommend')->int(10)->defaultVal(0);
             $table->set('comment_count')->int(10)->defaultVal(0);
-            $table->set('comment_count')->int(10)->defaultVal(0);
-            $table->set('click_status')->tinyint(1)->defaultVal(0);
+            $table->set('click_count')->int(10)->defaultVal(0);
+            $table->set('comment_status')->tinyint(1)->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();
         });

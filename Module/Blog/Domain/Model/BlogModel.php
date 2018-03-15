@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserModel;
 use Zodream\Database\Query\Query;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
@@ -17,10 +18,12 @@ use Zodream\Service\Routing\Url;
  * @property string $content
  * @property integer $user_id
  * @property integer $term_id
+ * @property integer $type
+ * @property string $source_url
  * @property integer $recommend
- * @property integer $comment_status
  * @property integer $comment_count
  * @property integer $click_count
+ * @property integer $comment_status
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -32,17 +35,19 @@ class BlogModel extends Model {
 
     protected function rules() {
         return [
-            'title' => 'required|string:3,200',
-            'description' => 'string:3,255',
-            'keywords' => 'string:3,255',
-            'thumb' => 'string:3,255',
+            'title' => 'required|string:0,200',
+            'description' => 'string:0,255',
+            'keywords' => 'string:0,255',
+            'thumb' => 'string:0,255',
             'content' => '',
             'user_id' => 'int',
             'term_id' => 'int',
+            'type' => 'int:0,9',
+            'source_url' => 'string:0,100',
             'recommend' => 'int',
-            'comment_status' => 'int:0,1',
             'comment_count' => 'int',
             'click_count' => 'int',
+            'comment_status' => 'int:0,9',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -59,9 +64,12 @@ class BlogModel extends Model {
             'content' => 'Content',
             'user_id' => 'User Id',
             'term_id' => 'Term Id',
+            'type' => 'Type',
+            'source_url' => 'Source Url',
             'recommend' => 'Recommend',
-            'comment_status' => 'Comment Status',
             'comment_count' => 'Comment Count',
+            'click_count' => 'Click Count',
+            'comment_status' => 'Comment Status',
             'deleted_at' => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -72,12 +80,16 @@ class BlogModel extends Model {
 	    return $this->hasOne(TermModel::class, 'id', 'term_id');
     }
 
+    public function user() {
+        return $this->hasOne(UserModel::class, 'id', 'user_id');
+    }
+
     public function comment() {
 	    return $this->hasMany(CommentModel::class, 'blog_id', 'id');
     }
 
 	public function getUrlAttribute() {
-	    return Url::to('./home/detail', ['id' => $this->id]);
+	    return Url::to('./detail', ['id' => $this->id]);
     }
 
 	public function getPreviousAttribute() {

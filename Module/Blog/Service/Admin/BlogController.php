@@ -3,6 +3,7 @@ namespace Module\Blog\Service\Admin;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
+use Zodream\Domain\Access\Auth;
 
 class BlogController extends Controller {
 
@@ -27,6 +28,7 @@ class BlogController extends Controller {
 
     public function saveAction() {
         $model = new BlogModel();
+        $model->user_id = Auth::id();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('blog')

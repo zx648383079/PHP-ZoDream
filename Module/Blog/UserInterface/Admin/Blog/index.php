@@ -32,7 +32,9 @@ $this->extend('../layouts/header');
         <?php foreach($blog_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->title?></td>
+                <td>
+                [<?=$item->type == 1 ? '转载' : '原创'?>]
+                <?=$item->title?></td>
                 <td>
                     <?php if ($item->term):?>
                         <a href="<?=$this->url('./admin/blog', ['term_id' => $item->term_id])?>">
@@ -50,7 +52,7 @@ $this->extend('../layouts/header');
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./home/detail', ['id' => $item->id])?>" target="_blank">查看</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./detail', ['id' => $item->id])?>" target="_blank">查看</a>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/blog/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/blog/delete', ['id' => $item->id])?>">删除</a>
                     </div>

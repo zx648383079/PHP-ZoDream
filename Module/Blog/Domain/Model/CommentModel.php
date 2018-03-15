@@ -27,7 +27,7 @@ use Zodream\Domain\Access\Auth;
 class CommentModel extends Model {
 
 	public static function tableName() {
-        return 'comment';
+        return 'blog_comment';
     }
 
     protected function rules() {

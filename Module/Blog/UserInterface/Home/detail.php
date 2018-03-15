@@ -4,7 +4,7 @@ use Zodream\Helpers\Str;
 /** @var $this View */
 $this->title = $blog->title;
 $url = (string)$this->url(['./comment', 'blog_id' => $blog->id]);
-$recommendUrl = (string)$this->url(['./home/recommend', 'id' => $blog->id]);
+$recommendUrl = (string)$this->url(['./recommend', 'id' => $blog->id]);
 $js = <<<JS
     uParse('#content',{rootPath:'/assets/ueditor'});
     SyntaxHighlighter.all();
@@ -57,9 +57,16 @@ $this->extend('layouts/header')
     </div>
     <div class="book-body">
         <div class="info">
-            <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user_name?></b></span>
-            <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term_name?></b></span>
+            <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></span>
+            <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></span>
             <span class="time"><i class="fa fa-calendar-check-o"></i><b><?=$blog->created_at?></b></span>
+            <?php if($blog->type == 1):?>
+            <span class="type">
+                <a href="<?=$blog->source_url?>">
+                    <i class="fa fa-link"></i><b>转载</b>
+                </a>
+            </span>
+            <?php endif;?>
         </div>
         <div id="content" class="content">
             <?=$blog->content?>
@@ -76,7 +83,7 @@ $this->extend('layouts/header')
     <div class="book-dynamic">
         <?php foreach ($log_list as $log): ?>
             <dl>
-                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
                 <dd>
                     <p><?=$log['content']?></p>
                     <span class="book-time"><?=$this->ago($log['create_at'])?></span>

@@ -16,41 +16,41 @@ class HomeController extends ModuleController {
     }
 
     public function indexAction($sort = 'new', $category = null, $keywords = null) {
-        $blog_list  = BlogModel::alias('b')
-            ->left('term t', 'b.term_id = t.id')
-            ->left('user u', 'u.id = b.user_id')
-            ->select('b.id, b.title, b.description, b.created_at, b.comment_count, b.click_count, b.recommend, b.user_id, b.term_id, t.name as term_name, u.name as user_name')
+        $blog_list  = BlogModel::with('term', 'user')
+            ->select('id', 'title', 'description',
+                'created_at', 'comment_count',
+                'click_count', 'recommend', 'user_id', 'term_id')
             ->when($category > 0, function ($query) use ($category) {
-                $query->where('b.term_id', intval($category));
+                $query->where('term_id', intval($category));
             })
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
-                    return $query->orderBy('b.created_at', 'desc');
+                    return $query->orderBy('created_at', 'desc');
                 }
                 if ($sort == 'recommend') {
-                    return $query->orderBy('b.recommend', 'desc');
+                    return $query->orderBy('recommend', 'desc');
                 }
                 if ($sort == 'hot') {
-                    return $query->orderBy('b.comment_count', 'desc');
+                    return $query->orderBy('comment_count', 'desc');
                 }
             })->when(!empty($keywords), function ($query) {
-                BlogModel::search($query, ['b.title']);
+                BlogModel::search($query, ['title']);
             })
             ->page();
         $cat_list = TermModel::all();
         $log_list = [];
-        return $this->show(compact('blog_list', 'cat_list', 'sort', 'category', 'keywords', 'log_list'));
+        $new_list = BlogModel::order('created_at', 'desc')
+            ->select('id', 'title')
+            ->limit(4)->all();
+        return $this->show(compact('blog_list',
+            'cat_list', 'sort', 'category', 'keywords',
+            'log_list', 'new_list'));
     }
 
     public function detailAction($id) {
         $id = intval($id);
         BlogModel::record()->where('id', $id)->updateOne('click_count');
-        $blog = BlogModel::alias('b')
-            ->left('term t', 'b.term_id = t.id')
-            ->left('user u', 'u.id = b.user_id')
-            ->where('b.id', $id)
-            ->select('b.*', 't.name as term_name, u.name as user_name')
-            ->one();
+        $blog = BlogModel::find($id);
         $cat_list = TermModel::all();
         $log_list = BlogLogModel::alias('l')
             ->left('blog b', 'b.id = l.id_value')

@@ -16,7 +16,7 @@ use Zodream\Service\Routing\Url;
  */
 class TermModel extends Model {
 	public static function tableName() {
-        return 'term';
+        return 'blog_term';
     }
 
 	protected function rules() {
@@ -42,7 +42,7 @@ class TermModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./home', ['category' => $this->id]);
+        return Url::to('./', ['category' => $this->id]);
     }
 
     public function blog() {
