@@ -33,7 +33,8 @@
     "monolog/monolog": "~1.22",
     "phpmailer/phpmailer": "~5.2",
     "psr/log": "~1.0",
-    "nesbot/carbon": "^1.22"
+    "nesbot/carbon": "^1.22",
+    "mtdowling/cron-expression": "~1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "6.*",
