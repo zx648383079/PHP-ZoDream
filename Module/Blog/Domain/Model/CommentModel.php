@@ -33,15 +33,15 @@ class CommentModel extends Model {
     protected function rules() {
         return [
             'content' => 'required',
-            'name' => 'string:3-45',
-            'email' => 'string:3-100',
-            'url' => 'string:3-200',
-            'ip' => 'string:3-20',
+            'name' => 'string:0,45',
+            'email' => 'string:0,100',
+            'url' => 'string:0,200',
+            'ip' => 'string:0,20',
             'created_at' => 'int',
             'karma' => 'int',
-            'approved' => 'string:3-20',
-            'agent' => 'string:3-255',
-            'type' => 'string:3-20',
+            'approved' => 'string:0,20',
+            'agent' => 'string:0,255',
+            'type' => 'string:0,20',
             'parent_id' => 'int',
             'user_id' => 'int',
             'blog_id' => 'int',
@@ -75,6 +75,10 @@ class CommentModel extends Model {
 
     public function replies() {
 	    return $this->hasMany(static::class, 'parent_id');
+    }
+
+    public function blog() {
+	    return $this->hasOne(BlogModel::class, 'id', 'blog_id');
     }
 
     public function getReplyCount() {

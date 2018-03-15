@@ -3,7 +3,6 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
-use Module\Book\Domain\Model\BookModel;
 use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
@@ -53,7 +52,10 @@ class CommentController extends ModuleController {
         $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->order('position desc')->one();
         $data['position'] = empty($last) ? 1 : ($last->position + 1);
         $model = CommentModel::create($data);
-        BookModel::record()->where('id', $data['blog_id'])->updateOne('comment_count');
+        if (empty($model)) {
+            return $this->jsonFailure('评论失败！');
+        }
+        BlogModel::record()->where('id', $data['blog_id'])->updateOne('comment_count');
         return $this->jsonSuccess($model);
     }
 

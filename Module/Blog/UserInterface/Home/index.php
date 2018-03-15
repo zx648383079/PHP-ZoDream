@@ -70,14 +70,40 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
             </li>
         </ul>
     </div>
-    <div class="book-chapter">
-        <ul>
-            <?php foreach ($cat_list as $item): ?>
-            <li <?=$category == $item->id ? 'class="active"' : '' ?>>
-                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
-            <?php endforeach; ?>
-        </ul>
+
+        <div class="book-sidebar">
+        <div class="book-chapter">
+            <ul>
+                <?php foreach ($cat_list as $item): ?>
+                <li <?=$category == $item->id ? 'class="active"' : '' ?>>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="book-new">
+            <h3>最新文章</h3>
+            <ul>
+                <?php foreach ($new_list as $item): ?>
+                    <li>
+                        <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->title?></a></li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+
+        <div class="book-dynamic">
+            <h3>最新留言</h3>
+            <?php foreach ($comment_list as $item): ?>
+            <dl>
+                <dt><a href="<?=$item->blog->url?>#comments"><?=$item->user_name?></a> 评论了 《<a href="<?=$item->blog->url?>"><?=$item->blog->title?></a>》</dt>
+                <dd>
+                    <p><?=$item->content?></p>
+                    <span class="book-time"><?=$item->created_at?></span>
+                </dd>
+            </dl>
+            <?php endforeach;?>
+        </div>
     </div>
+    
     <div class="book-body">
         <div class="book-sort">
             <?php foreach (['recommend' => '推荐', 'new' => '最新', 'hot' => '最热'] as $key => $item):?>
@@ -114,53 +140,8 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
         </div>
     </div>
 
-    <div class="book-dynamic">
-        <h4>最新文章</h4>
-        <ul>
-            <?php foreach ($new_list as $item): ?>
-                <li>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->title?></a></li>
-            <?php endforeach;?>
-        </ul>
-    </div>
 
-    <div class="book-dynamic">
-        <h4>最新留言</h4>
-        <?php foreach ($log_list as $log): ?>
-        <dl>
-            <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
-            <dd>
-                <p><?=$log['content']?></p>
-                <span class="book-time"><?=$this->ago($log['create_at'])?></span>
-            </dd>
-        </dl>
-        <?php endforeach;?>
-    </div>
 
-    <div class="book-dynamic">
-        <h4>随机文章</h4>
-        <?php foreach ($log_list as $log): ?>
-            <dl>
-                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
-                <dd>
-                    <p><?=$log['content']?></p>
-                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
-                </dd>
-            </dl>
-        <?php endforeach;?>
-    </div>
 
-    <div class="book-dynamic">
-        <h4>友情链接</h4>
-        <?php foreach ($log_list as $log): ?>
-            <dl>
-                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./home/detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
-                <dd>
-                    <p><?=$log['content']?></p>
-                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
-                </dd>
-            </dl>
-        <?php endforeach;?>
-    </div>
     
 <?php $this->extend('layouts/footer');?>

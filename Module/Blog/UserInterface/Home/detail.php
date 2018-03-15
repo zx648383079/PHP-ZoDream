@@ -47,14 +47,30 @@ $this->extend('layouts/header')
             <?php endif;?>
         </ul>
     </div>
-    <div class="book-chapter">
-        <ul>
-            <?php foreach ($cat_list as $item): ?>
-                <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
-            <?php endforeach; ?>
-        </ul>
+
+        <div class="book-sidebar">
+        <div class="book-chapter">
+            <ul>
+                <?php foreach ($cat_list as $item): ?>
+                    <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
+                        <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="book-dynamic">
+            <?php foreach ($log_list as $log): ?>
+                <dl>
+                    <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
+                    <dd>
+                        <p><?=$log['content']?></p>
+                        <span class="book-time"><?=$this->ago($log['create_at'])?></span>
+                    </dd>
+                </dl>
+            <?php endforeach;?>
+        </div>
     </div>
+
+
     <div class="book-body">
         <div class="info">
             <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></span>
@@ -77,19 +93,10 @@ $this->extend('layouts/header')
             <span class="agree recommend-blog"><i class="fa fa-thumbs-o-up"></i><b><?=$blog->recommend?></b></span>
         </div>
     </div>
-    <div class="book-footer comment">
+    <div id="comments" class="book-footer comment">
         
     </div>
-    <div class="book-dynamic">
-        <?php foreach ($log_list as $log): ?>
-            <dl>
-                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
-                <dd>
-                    <p><?=$log['content']?></p>
-                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
-                </dd>
-            </dl>
-        <?php endforeach;?>
-    </div>
+
+
 
     <?php $this->extend('layouts/footer');?>

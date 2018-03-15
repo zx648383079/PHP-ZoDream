@@ -11,11 +11,11 @@ $activeColor: #af5d0d;
   color: #fff;
 }
 
-
 * {
   padding: 0;
   margin: 0;
 }
+
 .book-skin {
   position: relative;
   width: 1200px;
@@ -75,7 +75,7 @@ $activeColor: #af5d0d;
               }
             }
           }
-          input:focus + .search-tip,
+          input:focus+.search-tip,
           &.focus .search-tip {
             display: block;
           }
@@ -173,7 +173,6 @@ $activeColor: #af5d0d;
       span {
         margin-right: 20px;
       }
-
     }
     .content {
       margin-bottom: 40px;
@@ -186,9 +185,7 @@ $activeColor: #af5d0d;
       right: 15px;
       left: 15px;
       font-size: 20px;
-      span {
-
-      }
+      span {}
       .agree,
       .disagree {
         float: right;
@@ -317,69 +314,81 @@ $activeColor: #af5d0d;
       }
     }
   }
-  .book-chapter {
+  .book-sidebar {
     position: absolute;
     width: 200px;
     right: 0;
     top: 130px;
-    li {
-      background: $defaultColor;
-      list-style: none;
-      width: 150px;
-      line-height: 30px;
-      border-bottom: 1px solid $activeColor;
-      padding-left: 20px;
-      box-sizing: border-box;
-      .fa {
-        margin-right: 5px;
-      }
-      &.active {
-        @include active();
-        width: 200px;
-        &:hover {
+    .book-chapter,
+    .book-new {
+      li {
+        background: $defaultColor;
+        list-style: none;
+        width: 150px;
+        line-height: 30px;
+        border-bottom: 1px solid $activeColor;
+        padding-left: 20px;
+        box-sizing: border-box;
+        .fa {
+          margin-right: 5px;
+        }
+        &.active {
+          @include active();
           width: 200px;
+          &:hover {
+            width: 200px;
+          }
+          a {
+            color: #fff;
+          }
         }
-        a {
-          color: #fff;
+        &:hover {
+          width: 175px;
         }
-      }
-      &:hover {
-        width: 175px;
       }
     }
-  }
-  .book-dynamic {
-    position: absolute;
-    width: 200px;
-    right: 0;
-    top: 400px;
-    dl {
-      background: $defaultColor;
-      border-bottom: 1px solid $activeColor;
-      dt {
-        line-height: 30px;
-        font-size: 12px;
-        a {
-          font-size: 16px;
-          font-weight: 600;
-        }
+    .book-new {
+      margin-top: 50px;
+      h3 {
+        padding-left: 10px;
       }
-      dd {
-        display: none;
-        .book-time {
-          text-align: right;
-          display: block;
-        }
-        p {
-          margin: 5px 0;
-        }
+      li {
+        width: 100%;
       }
-      &:hover {
+    }
+    .book-dynamic {
+      margin-top: 50px;
+      h3 {
+        padding-left: 10px;
+      }
+      dl {
+        background: $defaultColor;
+        border-bottom: 1px solid $activeColor;
         dt {
-          @include active();
+          line-height: 30px;
+          font-size: 12px;
+          a {
+            font-size: 16px;
+            font-weight: 600;
+          }
         }
         dd {
-          display: block;
+          display: none;
+          .book-time {
+            text-align: right;
+            display: block;
+          }
+          p {
+            margin: 5px 0;
+          }
+        }
+        &:hover {
+          dt {
+            @include active();
+          }
+          dd {
+            display: block;
+          }
         }
       }
     }
@@ -415,7 +424,6 @@ $activeColor: #af5d0d;
       }
     }
   }
-
   textarea {
     width: 100%;
     height: 100px;
@@ -456,8 +464,7 @@ $activeColor: #af5d0d;
     .book-title {
       .book-nav {
         >li {
-          &.book-back {
-          }
+          &.book-back {}
           &.book-navicon {
             display: inline-block;
             position: absolute;
@@ -483,6 +490,9 @@ $activeColor: #af5d0d;
               position: static;
             }
           }
+          &.active {
+            font-size: 20px;
+          }
         }
         &.hover,
         &:hover {
@@ -498,42 +508,71 @@ $activeColor: #af5d0d;
     }
     .book-body {
       margin-right: 0;
+      padding: 30px 8px;
+      .book-item {
+        dd {
+          display: block;
+          .author,
+          .category,
+          .comment,
+          .agree,
+          .click {
+            font-size: 12px;
+          }
+        }
+        .book-time {
+          font-size: 12px;
+          width: 70px;
+        }
+      }
+      .info,
+      .tools {
+        font-size: 12px;
+      }
       .content {
         word-wrap: break-word;
         word-break: normal;
         width: 100%;
         display: block;
         position: relative;
+        overflow-x: auto;
         * {
-          word-break:normal; width:auto; white-space:pre-wrap;word-wrap : break-word ;;
+          word-break: normal;
+          width: auto;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          ;
         }
       }
     }
-    .book-chapter {
-      position: static;
-      margin-bottom: 30px;
-      width: 100%;
-      display: none;
-      li {
+    .book-sidebar {
+      .book-chapter {
+        position: static;
+        margin-bottom: 30px;
         width: 100%;
-        &.active {
+        display: none;
+        li {
           width: 100%;
-          @include active();
+          &.active {
+            width: 100%;
+            @include active();
+            &:hover {
+              width: 100%;
+            }
+            a {
+              color: #fff;
+            }
+          }
           &:hover {
             width: 100%;
+            @include hover();
           }
-          a {
-            color: #fff;
-          }
-        }
-        &:hover {
-          width: 100%;
-          @include hover();
         }
       }
-    }
-    .book-dynamic {
-      display: none;
+      .book-dynamic,
+      .book-new {
+        display: none;
+      }
     }
     .book-footer {
       .book-comments {
@@ -543,19 +582,21 @@ $activeColor: #af5d0d;
             text-align: right;
             width: 100%;
           }
+          .time,
+          .floor {
+            font-size: 12px;
+          }
         }
       }
       &.comment {
         margin-right: 0;
       }
-
     }
     &.book-collapsed {
       .book-title {
         .book-nav {
           >li {
-            &.book-back {
-            }
+            &.book-back {}
             &.book-navicon {
               .fa {
                 &:before {
@@ -596,12 +637,20 @@ $activeColor: #af5d0d;
                 text-align: right;
                 padding-right: 20px;
               }
+              
             }
           }
         }
       }
-      .book-chapter {
-        display: block;
+      .book-body {
+        margin-top: 40px;
+      }
+      .book-sidebar {
+        position: static;
+        width: 100%;
+        .book-chapter {
+          display: block;
+        }
       }
     }
   }

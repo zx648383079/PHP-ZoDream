@@ -3,6 +3,7 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\ModuleController;
 
@@ -38,13 +39,14 @@ class HomeController extends ModuleController {
             })
             ->page();
         $cat_list = TermModel::all();
-        $log_list = [];
+        $comment_list = CommentModel::with('blog')
+            ->where('approved', 1)->order('created_at', 'desc')->limit(4)->all();
         $new_list = BlogModel::order('created_at', 'desc')
             ->select('id', 'title')
             ->limit(4)->all();
         return $this->show(compact('blog_list',
             'cat_list', 'sort', 'category', 'keywords',
-            'log_list', 'new_list'));
+            'comment_list', 'new_list'));
     }
 
     public function detailAction($id) {

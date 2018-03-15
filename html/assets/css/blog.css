@@ -217,12 +217,13 @@
     display: block; }
   .book-skin .book-footer .book-comments .book-comment-form .btn-cancel {
     display: inline-block; }
-  .book-skin .book-chapter {
+  .book-skin .book-sidebar {
     position: absolute;
     width: 200px;
     right: 0;
     top: 130px; }
-    .book-skin .book-chapter li {
+    .book-skin .book-sidebar .book-chapter li,
+    .book-skin .book-sidebar .book-new li {
       background: #f9cfa6;
       list-style: none;
       width: 150px;
@@ -230,44 +231,54 @@
       border-bottom: 1px solid #af5d0d;
       padding-left: 20px;
       box-sizing: border-box; }
-      .book-skin .book-chapter li .fa {
+      .book-skin .book-sidebar .book-chapter li .fa,
+      .book-skin .book-sidebar .book-new li .fa {
         margin-right: 5px; }
-      .book-skin .book-chapter li.active {
+      .book-skin .book-sidebar .book-chapter li.active,
+      .book-skin .book-sidebar .book-new li.active {
         background: #af5d0d;
         color: #fff;
         width: 200px; }
-        .book-skin .book-chapter li.active:hover {
+        .book-skin .book-sidebar .book-chapter li.active:hover,
+        .book-skin .book-sidebar .book-new li.active:hover {
           width: 200px; }
-        .book-skin .book-chapter li.active a {
+        .book-skin .book-sidebar .book-chapter li.active a,
+        .book-skin .book-sidebar .book-new li.active a {
           color: #fff; }
-      .book-skin .book-chapter li:hover {
+      .book-skin .book-sidebar .book-chapter li:hover,
+      .book-skin .book-sidebar .book-new li:hover {
         width: 175px; }
-  .book-skin .book-dynamic {
-    position: absolute;
-    width: 200px;
-    right: 0;
-    top: 400px; }
-    .book-skin .book-dynamic dl {
-      background: #f9cfa6;
-      border-bottom: 1px solid #af5d0d; }
-      .book-skin .book-dynamic dl dt {
-        line-height: 30px;
-        font-size: 12px; }
-        .book-skin .book-dynamic dl dt a {
-          font-size: 16px;
-          font-weight: 600; }
-      .book-skin .book-dynamic dl dd {
-        display: none; }
-        .book-skin .book-dynamic dl dd .book-time {
-          text-align: right;
+    .book-skin .book-sidebar .book-new {
+      margin-top: 50px; }
+      .book-skin .book-sidebar .book-new h3 {
+        padding-left: 10px; }
+      .book-skin .book-sidebar .book-new li {
+        width: 100%; }
+    .book-skin .book-sidebar .book-dynamic {
+      margin-top: 50px; }
+      .book-skin .book-sidebar .book-dynamic h3 {
+        padding-left: 10px; }
+      .book-skin .book-sidebar .book-dynamic dl {
+        background: #f9cfa6;
+        border-bottom: 1px solid #af5d0d; }
+        .book-skin .book-sidebar .book-dynamic dl dt {
+          line-height: 30px;
+          font-size: 12px; }
+          .book-skin .book-sidebar .book-dynamic dl dt a {
+            font-size: 16px;
+            font-weight: 600; }
+        .book-skin .book-sidebar .book-dynamic dl dd {
+          display: none; }
+          .book-skin .book-sidebar .book-dynamic dl dd .book-time {
+            text-align: right;
+            display: block; }
+          .book-skin .book-sidebar .book-dynamic dl dd p {
+            margin: 5px 0; }
+        .book-skin .book-sidebar .book-dynamic dl:hover dt {
+          background: #af5d0d;
+          color: #fff; }
+        .book-skin .book-sidebar .book-dynamic dl:hover dd {
           display: block; }
-        .book-skin .book-dynamic dl dd p {
-          margin: 5px 0; }
-      .book-skin .book-dynamic dl:hover dt {
-        background: #af5d0d;
-        color: #fff; }
-      .book-skin .book-dynamic dl:hover dd {
-        display: block; }
 
 .book-comment-form .title {
   font-size: 20px;
@@ -344,48 +355,70 @@
       line-height: 30px; }
     .book-skin .book-title .book-nav > li.book-search .search-tip {
       position: static; }
+  .book-skin .book-title .book-nav > li.active {
+    font-size: 20px; }
   .book-skin .book-title .book-nav.hover > li, .book-skin .book-title .book-nav:hover > li {
     display: none; }
     .book-skin .book-title .book-nav.hover > li.active, .book-skin .book-title .book-nav.hover > li.book-navicon, .book-skin .book-title .book-nav:hover > li.active, .book-skin .book-title .book-nav:hover > li.book-navicon {
       display: inline-block; }
   .book-skin .book-body {
-    margin-right: 0; }
+    margin-right: 0;
+    padding: 30px 8px; }
+    .book-skin .book-body .book-item dd {
+      display: block; }
+      .book-skin .book-body .book-item dd .author,
+      .book-skin .book-body .book-item dd .category,
+      .book-skin .book-body .book-item dd .comment,
+      .book-skin .book-body .book-item dd .agree,
+      .book-skin .book-body .book-item dd .click {
+        font-size: 12px; }
+    .book-skin .book-body .book-item .book-time {
+      font-size: 12px;
+      width: 70px; }
+    .book-skin .book-body .info,
+    .book-skin .book-body .tools {
+      font-size: 12px; }
     .book-skin .book-body .content {
       word-wrap: break-word;
       word-break: normal;
       width: 100%;
       display: block;
-      position: relative; }
+      position: relative;
+      overflow-x: auto; }
       .book-skin .book-body .content * {
         word-break: normal;
         width: auto;
         white-space: pre-wrap;
         word-wrap: break-word; }
-  .book-skin .book-chapter {
+  .book-skin .book-sidebar .book-chapter {
     position: static;
     margin-bottom: 30px;
     width: 100%;
     display: none; }
-    .book-skin .book-chapter li {
+    .book-skin .book-sidebar .book-chapter li {
       width: 100%; }
-      .book-skin .book-chapter li.active {
+      .book-skin .book-sidebar .book-chapter li.active {
         width: 100%;
         background: #af5d0d;
         color: #fff; }
-        .book-skin .book-chapter li.active:hover {
+        .book-skin .book-sidebar .book-chapter li.active:hover {
           width: 100%; }
-        .book-skin .book-chapter li.active a {
+        .book-skin .book-sidebar .book-chapter li.active a {
           color: #fff; }
-      .book-skin .book-chapter li:hover {
+      .book-skin .book-sidebar .book-chapter li:hover {
         width: 100%;
         background: #d39357;
         color: #fff; }
-  .book-skin .book-dynamic {
+  .book-skin .book-sidebar .book-dynamic,
+  .book-skin .book-sidebar .book-new {
     display: none; }
   .book-skin .book-footer .book-comments .comment-item .actions {
     position: static;
     text-align: right;
     width: 100%; }
+  .book-skin .book-footer .book-comments .comment-item .time,
+  .book-skin .book-footer .book-comments .comment-item .floor {
+    font-size: 12px; }
   .book-skin .book-footer.comment {
     margin-right: 0; }
   .book-skin.book-collapsed .book-title .book-nav > li.book-navicon .fa:before {
@@ -410,7 +443,12 @@
       font-weight: 700;
       text-align: right;
       padding-right: 20px; }
-  .book-skin.book-collapsed .book-chapter {
-    display: block; } }
+  .book-skin.book-collapsed .book-body {
+    margin-top: 40px; }
+  .book-skin.book-collapsed .book-sidebar {
+    position: static;
+    width: 100%; }
+    .book-skin.book-collapsed .book-sidebar .book-chapter {
+      display: block; } }
 
 /*# sourceMappingURL=blog.css.map */
