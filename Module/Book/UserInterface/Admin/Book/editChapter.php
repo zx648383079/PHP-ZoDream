@@ -2,15 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
-$js = <<<JS
-    var ue = UE.getEditor('container');
-JS;
-
-$this->extend('../layouts/header')
-    ->registerJsFile('/assets/ueditor/ueditor.config.js')
-    ->registerJsFile('/assets/ueditor/ueditor.all.js')
-    ->registerJs($js);
+$this->title = '编辑章节';
+$this->extend('../layouts/header');
 ?>
 
     <h1><?=$this->title?></h1>
@@ -45,9 +38,7 @@ $this->extend('../layouts/header')
                     </div>
                 </div>
                 <div class="zd-tab-item">
-                    <script id="container" style="height: 400px" name="content" type="text/plain" required>
-                        <?=$model->body->content?>
-                    </script>
+                    <textarea name="content" style="width: 100%;min-height: 500px"><?=$model->body->content?></textarea>
                 </div>
             </div>
         </div>

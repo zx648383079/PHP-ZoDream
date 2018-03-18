@@ -2,7 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerCssFile('@book.css');
+$this->registerCssFile('@font-awesome.min.css')
+  ->registerCssFile('@book.css');
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">
@@ -15,14 +16,8 @@ $this->registerCssFile('@book.css');
        <?=$this->header();?>
    </head>
    <body class="<?=$this->body_class?>">
-   <div class="Layout topbox active topFLOAT">
-  <div class="topline"></div>
-  <div class="topbtn">
-    <div class="open" onclick="setcookie('topbar_control',1)">打开</div>
-    <div class="close" onclick="setcookie('topbar_control',0)">关闭</div>
-  </div>
-  <div class="topbar"> 
-    <script type="text/javascript">if(getcookie("topbar_control")=="0"){$(".topbar").hide();$(".topbox").removeClass("active");}</script>
+   <div class="Layout topbox active">
+  <div class="topbar">
     <div class="mainbox">
       <div class="left_con"> 
         <ul>
@@ -46,4 +41,3 @@ $this->registerCssFile('@book.css');
   </div>
 </div>
 <div class="topblank"></div>
-<script type="text/javascript">if(getcookie("topbar_control")=="0"){$(".topblank").hide();}</script> 

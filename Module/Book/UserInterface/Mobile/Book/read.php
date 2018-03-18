@@ -105,7 +105,7 @@ $this->extend('../layouts/header2');
 			<div class="bd">
 				<div class="page-content font-l">
 					<p>
-						<?=$chapter->body->content; ?>
+						<?=$chapter->body->html?>
 					</p>
 				</div>
 			</div>

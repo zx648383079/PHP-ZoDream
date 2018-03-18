@@ -5,6 +5,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
+use Zodream\Helpers\Html as HtmlHelper;
 
 class BiQuGe extends BaseSpider {
 
@@ -67,9 +68,10 @@ class BiQuGe extends BaseSpider {
      * @return BookChapterModel
      */
     public function getChapter(Html $html) {
+        /// html 转文本还有问题
         return new BookChapterModel([
             'title' => $html->find('.bookname h1', 0)->text,
-            'content' => $html->find('#content', 0)->html
+            'content' => HtmlHelper::toText($html->find('#content', 0)->html)
         ]);
     }
 }

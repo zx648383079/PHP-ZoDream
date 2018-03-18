@@ -90,9 +90,6 @@ object {
   line-height: 0px;
   overflow: hidden; }
 
-a[title="站长统计"] {
-  display: none; }
-
 .red {
   color: #B01F2E; }
 
@@ -169,7 +166,6 @@ a[title="站长统计"] {
   color: #343434; }
 
 .topbar .mainbox li a {
-  float: left;
   display: inline-block;
   overflow: hidden; }
 
@@ -648,21 +644,17 @@ a[title="站长统计"] {
 .Con {
   display: inline-block;
   height: auto;
-  border: 1px solid #dedddd;
-  border-top: none;
   background-color: #FFF;
-  overflow: hidden; }
+  overflow: hidden;
+  min-height: 600px;
+  margin-bottom: 24px;
+  border: 1px solid #d8d8d8;
+  padding: 60px 64px; }
 
 .Layout.no_h .Con {
   border-top: 1px solid #dedddd; }
   .Layout.no_h .Con.jj_pl {
     background: #f6f3ec; }
-
-.Layout.no_bg .Con {
-  background-color: transparent; }
-
-.Layout.no_bor .Con {
-  border: none; }
 
 .Con .Left {
   float: left;
@@ -944,7 +936,6 @@ a[title="站长统计"] {
 
 .ul_m_list .words {
   width: 60px;
-  _line-height: 30px;
   text-align: center;
   color: #7d7d7d; }
 
@@ -962,7 +953,6 @@ a[title="站长统计"] {
 
 .ul_m_list .time {
   width: 70px;
-  _line-height: 30px;
   text-align: center;
   color: #7d7d7d; }
 
@@ -971,7 +961,6 @@ a[title="站长统计"] {
   width: 788px;
   height: 50px;
   line-height: 40px;
-  _line-height: 42px;
   text-align: center;
   overflow: hidden; }
   .bot_more a {
@@ -1002,11 +991,9 @@ a[title="站长统计"] {
     width: 100%;
     height: 25px;
     line-height: 25px;
-    _line-height: 27px;
     line-height: 26px\0;
     overflow: hidden; }
   .wei_infobox a {
-    float: left;
     display: inline-block;
     height: 25px;
     margin-right: 25px;
@@ -1433,16 +1420,8 @@ body.article .Con.box_con .box_box {
   bottom: 284px;
   z-index: 999; }
 
-* html .rand.on .randBOX {
-  position: absolute;
-  left: expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth)-(parseInt(this.currentStyle.marginLeft, 10)||0)-(parseInt(this.currentStyle.marginRight, 10)||0)-69);
-  top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop, 10)||0)-(parseInt(this.currentStyle.marginBottom, 10)||0)-284)); }
-
 .article1 .rand.on .randBOX {
   bottom: 101px; }
-
-* html .article1 .rand.on .randBOX {
-  top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop, 10)||0)-(parseInt(this.currentStyle.marginBottom, 10)||0)-101)); }
 
 .randBOX {
   display: none;
@@ -2697,11 +2676,6 @@ body.article .Con.box_con .box_box {
   bottom: 101px;
   z-index: 999; }
 
-* html .rand.on .randBOX {
-  position: absolute;
-  left: expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth)-(parseInt(this.currentStyle.marginLeft, 10)||0)-(parseInt(this.currentStyle.marginRight, 10)||0)-69);
-  top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop, 10)||0)-(parseInt(this.currentStyle.marginBottom, 10)||0)-101)); }
-
 .randBOX {
   display: none;
   width: 270px;
@@ -2895,5 +2869,173 @@ body.article .Con.box_con .box_box {
     display: block; }
   .topList .con .Li_Mover dt em {
     color: #666; }
+
+.chapte-box {
+  position: relative;
+  z-index: 101;
+  width: 800px;
+  font-size: 18px;
+  margin: 0 auto; }
+  .chapte-box .read-main {
+    border: 1px solid #d8d8d8;
+    padding: 60px 64px; }
+    .chapte-box .read-main .read-title {
+      position: relative;
+      z-index: 5;
+      margin-bottom: 12px; }
+      .chapte-box .read-main .read-title h2 {
+        height: 32px;
+        margin-bottom: 12px; }
+      .chapte-box .read-main .read-title .info {
+        height: 34px; }
+
+.chapter-control {
+  height: 70px;
+  text-align: center;
+  border: 1px solid #d8d8d8; }
+  .chapter-control .u {
+    line-height: 70px; }
+    .chapter-control .u .pre,
+    .chapter-control .u .bookhome,
+    .chapter-control .u .next {
+      width: 33.333%;
+      display: block;
+      float: left;
+      height: 70px;
+      box-sizing: border-box; }
+    .chapter-control .u .bookhome {
+      border-left: 1px solid #111;
+      border-right: 1px solid #111; }
+
+.chapter-sidebar {
+  position: fixed;
+  width: 60px;
+  z-index: 101;
+  right: 50%;
+  bottom: 0;
+  margin-right: -468px; }
+  .chapter-sidebar > ul {
+    margin: 0;
+    padding: 0; }
+    .chapter-sidebar > ul > li {
+      list-style: none;
+      display: block;
+      height: 60px;
+      text-align: center;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding-top: 8px;
+      box-sizing: border-box;
+      border-bottom: none; }
+      .chapter-sidebar > ul > li a {
+        text-decoration: none; }
+      .chapter-sidebar > ul > li > .fa,
+      .chapter-sidebar > ul > li a .fa {
+        display: block;
+        font-size: 30px; }
+      .chapter-sidebar > ul > li.go-top {
+        padding-top: 14px;
+        display: none; }
+      .chapter-sidebar > ul > li:hover > .fa,
+      .chapter-sidebar > ul > li:hover > .span,
+      .chapter-sidebar > ul > li:hover a .fa {
+        color: #f00; }
+      .chapter-sidebar > ul > li .sidebar-panel {
+        display: none;
+        position: fixed;
+        width: 400px;
+        bottom: 0;
+        margin-left: -410px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        padding-top: 30px; }
+        .chapter-sidebar > ul > li .sidebar-panel .fa-close {
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          font-size: 20px; }
+        .chapter-sidebar > ul > li .sidebar-panel li {
+          line-height: 50px;
+          text-align: left;
+          font-size: 20px; }
+          .chapter-sidebar > ul > li .sidebar-panel li > span {
+            margin: 0 20px; }
+          .chapter-sidebar > ul > li .sidebar-panel li > div {
+            display: inline-block; }
+          .chapter-sidebar > ul > li .sidebar-panel li .theme-box {
+            padding-top: 5px; }
+            .chapter-sidebar > ul > li .sidebar-panel li .theme-box span {
+              border-radius: 50%;
+              display: inline-block;
+              width: 30px;
+              height: 30px;
+              border: 1px solid #333;
+              box-sizing: border-box; }
+              .chapter-sidebar > ul > li .sidebar-panel li .theme-box span.active {
+                border: 4px solid #f00; }
+          .chapter-sidebar > ul > li .sidebar-panel li .font-box span {
+            border: 1px solid #333;
+            padding: 2px 5px; }
+            .chapter-sidebar > ul > li .sidebar-panel li .font-box span.active {
+              border-color: #f00; }
+
+.theme-0 {
+  background: #ede7da; }
+  .theme-0 .chapte-box,
+  .theme-0 .chapter-sidebar,
+  .theme-0 .sidebar-panel {
+    background: #f8f3e9; }
+
+.theme-1 {
+  background: #e0ce9e; }
+  .theme-1 .chapte-box,
+  .theme-1 .chapter-sidebar,
+  .theme-1 .sidebar-panel {
+    background: #f3e9c6; }
+
+.theme-2 {
+  background: #cddfcd; }
+  .theme-2 .chapte-box,
+  .theme-2 .chapter-sidebar,
+  .theme-2 .sidebar-panel {
+    background: #e2eee2; }
+
+.theme-3 {
+  background: #cfdde1; }
+  .theme-3 .chapte-box,
+  .theme-3 .chapter-sidebar,
+  .theme-3 .sidebar-panel {
+    background: #e2eff3; }
+
+.theme-4 {
+  background: #ebcece; }
+  .theme-4 .chapte-box,
+  .theme-4 .chapter-sidebar,
+  .theme-4 .sidebar-panel {
+    background: #f5e4e4; }
+
+.theme-5 {
+  background: #d0d0d0; }
+  .theme-5 .chapte-box,
+  .theme-5 .chapter-sidebar,
+  .theme-5 .sidebar-panel {
+    background: #dcdcdc; }
+
+.theme-5 {
+  background: #0f1112; }
+  .theme-5 .chapte-box,
+  .theme-5 .chapter-sidebar,
+  .theme-5 .sidebar-panel {
+    background: #111; }
+
+.width-640 .chapte-box {
+  width: 640px; }
+
+.width-800 .chapte-box {
+  width: 800px; }
+
+.width-900 .chapte-box {
+  width: 900px; }
+
+.width-1280 .chapte-box {
+  width: 1280px; }
 
 /*# sourceMappingURL=book.css.map */
