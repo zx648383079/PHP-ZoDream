@@ -36,7 +36,11 @@ class BookChapterBodyModel extends Model {
     public function getHtmlAttribute() {
         $args = explode(PHP_EOL, $this->content);
         return implode('', array_map(function ($line) {
-            return sprintf('<p>&nbsp;&nbsp;&nbsp;&nbsp;%s</p>', trim($line));
+            $line = trim($line, '　');
+            if (empty($line)) {
+                return '';
+            }
+            return sprintf('<p>%s</p>', $line);
         }, $args));
     }
 

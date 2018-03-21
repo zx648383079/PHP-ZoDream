@@ -3485,13 +3485,34 @@ body.article .Con.box_con .box_box {
             z-index: 5;
             margin-bottom: 12px;
             h2 {
-                height: 32px;
                 margin-bottom: 12px;
             }
             .info {
-                height: 34px;
+
             }
         }
+        .read-content {
+            p {
+                line-height: 1.8;
+                overflow: hidden;
+                margin: .8em 0;
+                word-wrap: break-word;
+                word-break: break-all;
+                // letter-spacing: 0.2em;
+            }
+        }
+    }
+    &.font-0 {
+        font-family: 'Microsoft YaHei',PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light',sans-serif;
+    }
+    &.font-1 {
+        font-family: PingFangSC-Regular,'-apple-system',Simsun;
+    }
+    &.font-2 {
+        font-family: Kaiti;
+    }
+    &.font-3 {
+        font-family: 方正启体简体,"Microsoft YaHei",微软雅黑,宋体;
     }
 }
 

@@ -2,13 +2,15 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = $chapter->title;
 $this->body_class = 'theme-0 width-800';
 $this->extend('layouts/header2');
 ?>
 <div class="clear"></div>
 <div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a> >
+    <?php if($cat):?>
     <a href="<?=$cat->url?>"><?=$cat->real_name?>小说</a> >
+    <?php endif;?>
     <a href="<?=$book->url?>"><?=$book->name?> 最新章节</a></div>
 <div class="clear"></div>
 <!--body开始-->
@@ -17,7 +19,12 @@ $this->extend('layouts/header2');
     <div class="read-title">
         <h2><?=$chapter->title?></h2>
         <div class="info"><a href="<?=$book->url?>" title="<?=$book->name?>"><?=$book->name?></a>
-            &#160;|&#160;作者:<?=$book->author->name?>&#160;|&#160;更新时间：<?=$chapter->created_at?>
+            &#160;|
+            <?php if($book->author):?>
+            &#160;作者:<?=$book->author->name?>&#160;|
+            <?php endif;?>
+            
+            &#160;更新时间：<?=$chapter->created_at?>
         </div>
     </div>
     <div class="read-content">
