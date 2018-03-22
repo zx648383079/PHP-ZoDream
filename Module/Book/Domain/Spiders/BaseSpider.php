@@ -60,4 +60,16 @@ abstract class BaseSpider {
      * @return BookChapterModel
      */
     abstract public function getChapter(Html $html);
+
+    public static function toText($html) {
+        $html = Html::toText($html);
+        $args = explode(PHP_EOL, $html);
+        return implode(PHP_EOL, array_map(function ($line) {
+            $line = trim($line, '　 ');
+            if (empty($line)) {
+                return '';
+            }
+            return $line;
+        }, $args));
+    }
 }

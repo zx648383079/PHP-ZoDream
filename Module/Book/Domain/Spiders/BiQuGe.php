@@ -70,7 +70,7 @@ class BiQuGe extends BaseSpider {
         /// html 转文本还有问题
         return new BookChapterModel([
             'title' => $html->find('.bookname h1', 0)->text,
-            'content' => Html::toText($html->find('#content', 0)->html)
+            'content' => self::toText($html->find('#content', 0)->html)
         ]);
     }
 }
