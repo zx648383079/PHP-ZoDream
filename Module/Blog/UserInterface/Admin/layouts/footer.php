@@ -5,7 +5,6 @@ $this->registerJsFile('@jquery.min.js')
     ->registerJsFile('@main.min.js')
     ->registerJsFile('@blog_admin.min.js');
 ?>
-        </div>
     </div>
 </div>
 <?=$this->footer()?>
