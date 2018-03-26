@@ -101,6 +101,27 @@ $activeColor: #af5d0d;
     padding: 30px 15px;
     min-height: 800px;
     position: relative;
+    .book-term {
+      .term-info {
+        position: relative;
+        min-height: 50px;
+        img {
+          width: 100%;
+        }
+        h3 {
+          position: absolute;
+          bottom: 4px;
+          line-height: 50px;
+          display: block;
+          background: rgba(0, 0, 0, 0.6);
+          width: 100%;
+          color: #fff;
+          padding: 0 10px;
+          box-sizing: border-box;
+        }
+      }
+      margin-bottom: 20px;
+    }
     .book-sort {
       position: absolute;
       right: 25px;

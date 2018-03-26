@@ -45,6 +45,11 @@ class TermModel extends Model {
         return Url::to('./', ['category' => $this->id]);
     }
 
+    public function getThumbAttribute() {
+	    $thumb = $this->getAttributeSource('thumb');
+        return empty($thumb) ? '/assets/images/banner.jpg' : $thumb;
+    }
+
     public function blog() {
 	    return $this->hasMany(BlogModel::class, 'term_id', 'id');
     }
