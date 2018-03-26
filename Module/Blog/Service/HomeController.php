@@ -44,9 +44,13 @@ class HomeController extends ModuleController {
         $new_list = BlogModel::order('created_at', 'desc')
             ->select('id', 'title')
             ->limit(4)->all();
+        $term = null;
+        if ($category > 0) {
+            $term = TermModel::find($category);
+        }
         return $this->show(compact('blog_list',
             'cat_list', 'sort', 'category', 'keywords',
-            'comment_list', 'new_list'));
+            'comment_list', 'new_list', 'term'));
     }
 
     public function detailAction($id) {

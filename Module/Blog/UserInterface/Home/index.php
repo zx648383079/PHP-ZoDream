@@ -114,6 +114,15 @@ $this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
                 <?php endif;?>
             <?php endforeach;?>
         </div>
+        <?php if (!empty($term)):?>
+        <div class="book-term">
+            <div class="term-info">
+                <img src="<?=$term->thumb?>" alt="<?=$term->name?>">
+                <h3><?=$term->name?></h3>
+            </div>
+            <div class="term-desc"><?=$term->description?></div>
+        </div>
+        <?php endif;?>
         <?php foreach ($blog_list as $item):?>
         <dl class="book-item">
             <dt><a href="<?=$item->url?>"><?=$item->title?></a>
