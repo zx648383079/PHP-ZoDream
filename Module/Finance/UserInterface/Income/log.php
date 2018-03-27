@@ -13,7 +13,7 @@ $this->extend('layouts/header')
 ->registerJs($js, View::JQUERY_READY);
 ?>
 
-    <a class="btn btn-success" href="<?=$this->url('./income/add_log')?>">新增项目</a>
+    <a class="btn btn-success" href="<?=$this->url('./income/add_log')?>">新增流水</a>
     <hr/>
 
     <div>

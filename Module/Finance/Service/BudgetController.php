@@ -14,13 +14,23 @@ class BudgetController extends ModuleController {
     }
 
     public function indexAction() {
-        $model_list = BudgetModel::page();
+        $model_list = BudgetModel::where('deleted_at', 0)->page();
         return $this->show(compact('model_list'));
+    }
+
+    public function addAction() {
+        return $this->editAction(0);
+    }
+
+    public function editAction($id) {
+        $model = BudgetModel::findOrNew($id);
+        return $this->show('create', compact('model'));
     }
 
     public function saveAction() {
         $model = new BudgetModel();
         if ($model->load() && $model->autoIsNew()->save()) {
+            $model->refreshSpent();
             return $this->jsonSuccess([
                 'url' => (string)Url::to('./budget')
             ]);
@@ -29,7 +39,9 @@ class BudgetController extends ModuleController {
     }
 
     public function deleteAction($id) {
-        BudgetModel::where('id', $id)->delete();
+        BudgetModel::where('id', $id)->update([
+            'deleted_at' => time()
+        ]);
         return $this->jsonSuccess([
             'url' => (string)Url::to('./budget')
         ]);

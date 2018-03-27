@@ -66,6 +66,7 @@ class CreateFinanceTables extends Migration {
             $table->set('account_id')->int()->notNull()->comment('资金账户');
             $table->set('channel_id')->int()->defaultVal(0)->comment('支出时填写消费渠道');
             $table->set('project_id')->int()->defaultVal(0)->comment('收入时填写理财项目');
+            $table->set('budget_id')->int()->defaultVal(0)->comment('支出时选择预算');
             $table->set('remark')->text()->comment('备注');
             $table->set('happened_at')->dateTime()->notNull()->comment('发生时间');
             $table->timestamps();
@@ -80,8 +81,9 @@ class CreateFinanceTables extends Migration {
             $table->setComment('预算计划');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(50)->notNull()->comment('预算名');
-            $table->set('budget')->decimal(10, 2)->comment('预算');
-            $table->set('spent')->decimal(10, 2)->comment('花费');
+            $table->set('budget')->decimal(10, 2)->notNull()->defaultVal(0)->comment('预算');
+            $table->set('spent')->decimal(10, 2)->defaultVal(0)->comment('花费');
+            $table->set('cycle')->tinyint(1)->defaultVal(0)->comment('周期');
             $table->softDeletes();
             $table->timestamps();
         });

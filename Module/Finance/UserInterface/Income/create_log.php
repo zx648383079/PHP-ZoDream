@@ -31,6 +31,7 @@ $this->extend('layouts/header')
         <div class="input-group">
             <label>资金账户</label>
             <select class="form-control" name="account_id">
+                <option value="0">请选择</option>
                 <?php foreach($account_list as $item):?>
                     <option value="<?=$item->id?>" <?=$item->id == $model->account_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
@@ -39,6 +40,7 @@ $this->extend('layouts/header')
         <div id="project_id-box" class="input-group">
             <label>理财项目</label>
             <select class="form-control" name="project_id">
+               <option value="0">请选择</option>
                 <?php foreach($project_list as $item):?>
                     <option value="<?=$item->id?>" <?=$item->id == $model->project ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
@@ -47,8 +49,18 @@ $this->extend('layouts/header')
         <div id="channel-box" class="input-group">
             <label>消费渠道</label>
             <select class="form-control" name="channel_id">
+                <option value="0">请选择</option>
                 <?php foreach($channel_list as $item):?>
                     <option value="<?=$item->id?>" <?=$item->id == $model->channel_id ? 'selected' : ''?>><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div id="channel-box" class="input-group">
+            <label>生活预算</label>
+            <select class="form-control" name="budget_id">
+                <option value="0">请选择</option>
+                <?php foreach($budget_list as $item):?>
+                    <option value="<?=$item->id?>" <?=$item->id == $model->budget_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>

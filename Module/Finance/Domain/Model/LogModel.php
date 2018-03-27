@@ -14,6 +14,7 @@ use Domain\Model\Model;
  * @property integer $account_id
  * @property integer $channel_id
  * @property integer $project_id
+ * @property integer $budget_id
  * @property string $remark
  * @property integer $created_at
  * @property integer $updated_at
@@ -42,6 +43,7 @@ class LogModel extends Model {
             'account_id' => 'required|int',
             'channel_id' => 'int',
             'project_id' => 'int',
+            'budget_id' => 'int',
             'remark' => '',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -58,6 +60,7 @@ class LogModel extends Model {
             'account_id' => 'Account Id',
             'channel_id' => 'Channel Id',
             'project_id' => 'Project Id',
+            'budget_id' => 'Budget Id',
             'remark' => 'Remark',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -67,10 +70,6 @@ class LogModel extends Model {
 
     public function getDayAttribute() {
         return date('d', strtotime($this->happened_at));
-    }
-
-    public function getHappenedAtAttribute() {
-        return $this->formatTimeAttribute('happened_at');
     }
 
     public function scopeMonth($query, $time) {

@@ -3,42 +3,12 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '生活预算';
-$url = $this->url('./budget/save');
-$js = <<<JS
-function changeMoney(id) {
-  Dialog.form({
-  money: '花费'
-  }).on('done', function() {
-      ajaxForm('{$url}', {
-          id: id,
-          spent: this.data.money
-      });
-      this.close();
-  });
-}
-JS;
 
-$this->extend('layouts/header')->registerJs($js);
+$this->extend('layouts/header');
 ?>
 
-    <div>
-        <h2>增加预算</h2>
-        <form data-type="ajax" action="<?=$this->url('./budget/save')?>" method="post" class="form-horizontal" role="form">
-            <div class="input-group">
-                <label>名称</label>
-                <input name="name" type="text" class="form-control" size="16" value="" placeholder="请输入名称" />
-            </div>
-            <div class="input-group">
-                <label>预算(元)</label>
-                <input name="budget" type="text" class="form-control" value="1000" />
-            </div>
-            <div class="input-group">
-                <label>已花费(元)</label>
-                <input name="spent" type="text" class="form-control" value="0" />
-            </div>
-            <button type="submit" class="btn btn-success">确认提交</button>
-        </form>
-    </div>
+    <a class="btn btn-success" href="<?=$this->url('./budget/add')?>">新增预算</a>
+    <hr/>
     <div>
         <h2>生活预算</h2>
         <div class="col-xs-12">
@@ -54,19 +24,19 @@ $this->extend('layouts/header')->registerJs($js);
                 </thead>
                 <tbody>
                 <?php foreach($model_list as $item): ?>
-                    <tr class="<?=$item->spent  <= 0 ? 'danger' : ''?>">
+                    <tr class="<?=$item->spent <= 0 ? 'danger' : ''?>">
                         <td><?=$item->name?></td>
                         <td>
-                            <?=$item->budget;?>
+                            <?=$item->budget?>
                         </td>
                         <td>
-                            <?=$item->spent;?>
+                            <?=$item->spent?>
                         </td>
                         <td>
-                            <?=$item->remain;?>
+                            <?=$item->remain?>
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="javascript:changeMoney(<?=$item->id?>);">消费</a>
+                            <a class="btn btn-primary" href="<?=$this->url('./income/add_log', ['budget_id' => $item->id])?>">消费</a>
                             <a class="btn btn-danger" data-type="post" href="<?=$this->url('./budget/delete', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>

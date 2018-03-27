@@ -1,11 +1,14 @@
 <?php
 namespace Module\Finance\Service;
 
+use Module\Finance\Domain\Model\BudgetModel;
 use Module\Finance\Domain\Model\ConsumptionChannelModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Module\ModuleController;
+use Zodream\Helpers\Time;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
 class IncomeController extends ModuleController {
@@ -43,10 +46,17 @@ class IncomeController extends ModuleController {
 
     public function editLogAction($id) {
         $model = LogModel::findOrNew($id);
+        if (Request::has('budget_id')) {
+            $model->budget_id = intval(Request::get('budget_id'));
+        }
+        if (empty($model->happened_at)) {
+            $model->happened_at = Time::format();
+        }
         $channel_list = ConsumptionChannelModel::all();
         $account_list = MoneyAccountModel::all();
         $project_list = FinancialProjectModel::all();
-        return $this->show('create_log', compact('model', 'channel_list', 'account_list', 'project_list'));
+        $budget_list = BudgetModel::where('deleted_at', 0)->all();
+        return $this->show('create_log', compact('model', 'channel_list', 'account_list', 'project_list', 'budget_list'));
     }
 
     public function saveLogAction() {

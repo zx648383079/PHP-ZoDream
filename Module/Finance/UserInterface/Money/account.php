@@ -6,8 +6,8 @@ $this->title = '资金账户列表';
 
 $this->extend('layouts/header');
 ?>
-    <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_account')?>">新增产品</a>
+    <div class="search-box">
+        <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_account')?>">新增账户</a>
     </div>
 
     <hr/>
