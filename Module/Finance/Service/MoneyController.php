@@ -29,7 +29,7 @@ class MoneyController extends ModuleController {
     }
 
     public function accountAction() {
-        $account_list = MoneyAccountModel::all();
+        $account_list = MoneyAccountModel::orderBy('id', 'desc')->all();
         return $this->show(compact('account_list'));
     }
 
@@ -69,7 +69,7 @@ class MoneyController extends ModuleController {
     }
 
     public function projectAction() {
-        $model_list = FinancialProjectModel::with('product')->all();
+        $model_list = FinancialProjectModel::with('product')->orderBy('id', 'desc')->all();
         return $this->show(compact('model_list'));
     }
 
@@ -124,7 +124,7 @@ class MoneyController extends ModuleController {
     }
 
     public function productAction() {
-        $model_list = FinancialProductModel::all();
+        $model_list = FinancialProductModel::orderBy('id', 'desc')->all();
         return $this->show(compact('model_list'));
     }
 

@@ -23,15 +23,10 @@ $this->extend('layouts/header')
 <div class="search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
-            <label class="sr-only" for="exampleInputEmail2">配置项目</label>
-            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="配置项目">
+            <input type="text" class="form-control" id="name" placeholder="配置项目">
         </div>
         <div class="input-group">
-            <input class="form-control" type="email" placeholder="Enter email">
-        </div>
-        <div class="input-group">
-            <label class="sr-only" for="exampleInputPassword2">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+            <input class="form-control" type="text" name="product" placeholder="形态">
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>

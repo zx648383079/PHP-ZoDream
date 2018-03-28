@@ -38,7 +38,7 @@ $this->extend('layouts/header')
                 <tbody>
                 <?php foreach($log_list as $item): ?>
                     <tr class="<?=$item->type !=1 ? 'danger' : ''?>">
-                        <td><?=$item->created_at?></td>
+                        <td><?=$item->happened_at?></td>
                         <td>
                             <?php if ($item->type != 1):?>
                             <button type='button' class='btn btn-danger btn-xs'>支出</button>
@@ -48,6 +48,7 @@ $this->extend('layouts/header')
                         <td>
                             <?=$item->remark?></td>
                         <td>
+                            <a class="btn btn-default" href="<?=$this->url('./income/add_log', ['clone_id' => $item->id])?>">克隆</a>
                             <a class="btn btn-danger" data-type="del" href="<?=$this->url('./income/delete_log', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>

@@ -24,7 +24,7 @@ $this->extend('layouts/header');
                 </thead>
                 <tbody>
                 <?php foreach($model_list as $item): ?>
-                    <tr class="<?=$item->spent <= 0 ? 'danger' : ''?>">
+                    <tr class="<?=$item->remain < 0 ? 'danger' : ''?>">
                         <td><?=$item->name?></td>
                         <td>
                             <?=$item->budget?>
@@ -37,6 +37,7 @@ $this->extend('layouts/header');
                         </td>
                         <td>
                             <a class="btn btn-primary" href="<?=$this->url('./income/add_log', ['budget_id' => $item->id])?>">消费</a>
+                            <a class="btn btn-primary" href="<?=$this->url('./budget/edit', ['id' => $item->id])?>">编辑</a>
                             <a class="btn btn-danger" data-type="post" href="<?=$this->url('./budget/delete', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>

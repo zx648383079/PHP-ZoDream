@@ -17,8 +17,8 @@ $this->extend('layouts/header')
     <form data-type="ajax" action="<?=$this->url('./income/save_log')?>" method="post" class="form-table" role="form">
         <div class="input-group">
             <label>类型</label>
-            <input value="1" name="type" type="radio" <?=$model->type < 1 ? 'checked': ''?>> 收入
-            <input value="0" name="type" type="radio" <?=$model->type == 1 ? 'checked': ''?>> 支出
+            <input value="1" name="type" type="radio" <?=$model->type == 1 ? 'checked': ''?>> 收入
+            <input value="0" name="type" type="radio" <?=$model->type < 1 ? 'checked': ''?>> 支出
         </div>
         <div class="input-group">
             <label>可用金额</label>

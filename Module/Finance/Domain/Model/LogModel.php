@@ -37,7 +37,7 @@ class LogModel extends Model {
 
     protected function rules() {
         return [
-            'type' => 'int:0-1',
+            'type' => 'int:0,9',
             'money' => '',
             'frozen_money' => '',
             'account_id' => 'required|int',

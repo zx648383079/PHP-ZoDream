@@ -24,9 +24,9 @@ class IncomeController extends ModuleController {
             $month = date('Y-m');
         }
         $time = strtotime($month);
-        $income_list = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('id desc')->all();
-        $expenditure_list = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('id desc')->all();
-        $log_list = LogModel::month($time)->orderBy('id desc')->all();
+        $income_list = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', 'desc')->all();
+        $expenditure_list = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', 'desc')->all();
+        $log_list = LogModel::month($time)->orderBy('happened_at', 'desc')->all();
         $day_length = date('t', $time);
         $income_days = LogModel::getMonthLogs($income_list, $day_length);
         $expenditure_days = LogModel::getMonthLogs($expenditure_list, $day_length);
@@ -36,7 +36,7 @@ class IncomeController extends ModuleController {
     public function logAction($type = null) {
         $log_list = LogModel::when(is_numeric($type), function ($query) use ($type) {
             $query->where('type', intval($type));
-        })->page();
+        })->orderBy('happened_at', 'desc')->page();
         return $this->show(compact('log_list'));
     }
 
@@ -46,7 +46,12 @@ class IncomeController extends ModuleController {
 
     public function editLogAction($id) {
         $model = LogModel::findOrNew($id);
+        if (Request::has('clone_id')) {
+            $model = LogModel::findOrNew(intval(Request::get('clone_id')));
+            $model->id = null;
+        }
         if (Request::has('budget_id')) {
+            $model->type = LogModel::TYPE_EXPENDITURE;
             $model->budget_id = intval(Request::get('budget_id'));
         }
         if (empty($model->happened_at)) {
@@ -80,7 +85,7 @@ class IncomeController extends ModuleController {
     }
 
     public function channelAction(){
-        $model_list = ConsumptionChannelModel::all();
+        $model_list = ConsumptionChannelModel::orderBy('id', 'desc')->all();
         return $this->show(compact('model_list'));
     }
 

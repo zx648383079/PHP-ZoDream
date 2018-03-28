@@ -12,11 +12,11 @@ $this->extend('layouts/header');
     <form data-type="ajax" action="<?=$this->url('./budget/save')?>" method="post" class="form-table" role="form">
         <div class="input-group">
             <label>名称</label>
-            <input name="name" type="text" class="form-control" size="16" value="" placeholder="请输入名称" />
+            <input name="name" type="text" class="form-control" size="16" value="<?=$model->name?>" placeholder="请输入名称" />
         </div>
         <div class="input-group">
             <label>预算(元)</label>
-            <input name="budget" type="text" class="form-control" value="1000" />
+            <input name="budget" type="text" class="form-control" value="<?=$model->budget ?: 1000?>" />
         </div>
         <div class="input-group">
             <label>周期</label>

@@ -34,8 +34,8 @@ class FinancialProjectModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-35',
-            'alias' => 'required|string:3-50',
+            'name' => 'required|string:0,35',
+            'alias' => 'required|string:0,50',
             'money' => 'required',
             'account_id' => 'int',
             'earnings' => '',
@@ -43,9 +43,9 @@ class FinancialProjectModel extends Model {
             'end_at' => '',
             'earnings_number' => '',
             'product_id' => 'int',
-            'status' => 'int:0-1',
+            'status' => 'int:0,9',
             'deleted_at' => 'int',
-            'color' => 'int:0-1',
+            'color' => 'int:0,9',
             'remark' => '',
             'created_at' => 'int',
             'updated_at' => 'int',

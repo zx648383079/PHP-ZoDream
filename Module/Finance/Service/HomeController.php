@@ -22,7 +22,7 @@ class HomeController extends ModuleController {
         $now_expenditure_count = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->count();
 
 
-        $time = strtotime(date('-1 month'));
+        $time = strtotime('-1 month');
         $y_income = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->sum('money');
         $y_expenditure = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->sum('money');
         $y_income_count = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->count();

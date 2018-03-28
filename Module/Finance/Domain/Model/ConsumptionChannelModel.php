@@ -18,7 +18,7 @@ class ConsumptionChannelModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-50',
+            'name' => 'required|string:0,50',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

@@ -15,11 +15,11 @@ $this->extend('layouts/header');
         </div>
         <div class="input-group">
             <label>可用金额</label>
-            <input name="money" type="text" class="form-control" placeholder="可用金额" value="<?=$model->money?>">
+            <input name="money" type="text" class="form-control" placeholder="可用金额" value="<?=$model->money ?: 0?>">
         </div>
         <div class="input-group">
             <label>冻结金额</label>
-            <input name="frozen_money" type="text" class="form-control" placeholder="冻结金额" value="<?=$model->frozen_money?>">
+            <input name="frozen_money" type="text" class="form-control" placeholder="冻结金额" value="<?=$model->frozen_money ?: 0?>">
         </div>
         <div class="input-group">
             <label>说明</label>

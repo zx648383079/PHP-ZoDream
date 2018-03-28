@@ -107,4 +107,11 @@ footer {
 .search-box::after {
   clear: both; }
 
+table .btn {
+  padding: 0 8px;
+  margin: 0 4px; }
+
+table .danger {
+  background: rgba(255, 0, 0, 0.2); }
+
 /*# sourceMappingURL=finance.css.map */

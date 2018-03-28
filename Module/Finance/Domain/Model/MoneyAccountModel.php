@@ -25,10 +25,10 @@ class MoneyAccountModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-35',
-            'money' => 'required',
-            'status' => 'int:0-1',
-            'frozen_money' => 'required',
+            'name' => 'required|string:0,35',
+            'money' => 'numeric',
+            'status' => 'int:0,9',
+            'frozen_money' => 'numeric',
             'remark' => '',
             'deleted_at' => 'int',
             'created_at' => 'int',

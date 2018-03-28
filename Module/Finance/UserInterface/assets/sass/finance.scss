@@ -137,3 +137,13 @@ footer {
     clear: both;
   }
 }
+
+table {
+  .btn {
+    padding: 0 8px;
+    margin: 0 4px;
+  }
+  .danger {
+    background: rgba(255, 0, 0, .2);
+  }
+}

@@ -39,9 +39,9 @@ $this->extend('layouts/header');
 
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./money/edit_account', ['id' => $item->id])?>">编辑</a>
                         <?php if($item->status == 0):?>
-                            <a class="btn btn-success btn-xs" data-type="post" href="<?=$this->url('./money/change_account', ['id' => $item->id])?>">启用</a>
+                            <a class="btn btn-success btn-xs" data-type="ajax" href="<?=$this->url('./money/change_account', ['id' => $item->id])?>">启用</a>
                         <?php else: ?>
-                            <a class="btn btn-danger btn-xs" data-type="post" href="<?=$this->url('./money/change_account', ['id' => $item->id])?>">禁用</a>
+                            <a class="btn btn-danger btn-xs" data-type="ajax" href="<?=$this->url('./money/change_account', ['id' => $item->id])?>">禁用</a>
                         <?php endif?>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./money/delete_account', ['id' => $item->id])?>">删除</a>
                     </div>

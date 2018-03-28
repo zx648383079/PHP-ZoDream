@@ -14,7 +14,7 @@ class BudgetController extends ModuleController {
     }
 
     public function indexAction() {
-        $model_list = BudgetModel::where('deleted_at', 0)->page();
+        $model_list = BudgetModel::where('deleted_at', 0)->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 

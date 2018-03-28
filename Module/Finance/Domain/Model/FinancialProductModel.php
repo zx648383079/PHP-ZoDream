@@ -20,7 +20,7 @@ class FinancialProductModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-50',
+            'name' => 'required|string:0,50',
             'status' => 'int:0-1',
             'remark' => '',
             'created_at' => 'int',

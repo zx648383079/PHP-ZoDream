@@ -29,7 +29,7 @@ class BudgetModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-50',
+            'name' => 'required|string:0,50',
             'budget' => '',
             'spent' => '',
             'cycle' => 'int:0,9',
