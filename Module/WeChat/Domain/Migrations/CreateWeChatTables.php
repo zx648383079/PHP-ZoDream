@@ -42,10 +42,10 @@ class CreateWeChatTables extends Migration {
             $table->setComment('微信菜单');
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
-            $table->set('name')->varchar(100)->notNull()->comment('素材ID');
-            $table->set('type')->varchar(100)->notNull()->comment('素材类型');
-            $table->set('content')->text()->notNull()->comment('微信返回数据');
-            $table->set('pages')->text()->notNull()->comment('小程序路径');
+            $table->set('name')->varchar(100)->notNull()->comment('菜单名称');
+            $table->set('type')->varchar(100)->notNull()->comment('菜单类型');
+            $table->set('content')->text()->notNull()->comment('菜单数据');
+            $table->set('pages')->varchar(200)->comment('小程序路径');
             $table->set('parent_id')->int()->defaultVal(0);
             $table->timestamps();
         });

@@ -33,6 +33,11 @@ abstract class EditorModel extends Model {
 
             return $this;
         }
+        if ($this->type == 6) {
+            $this->content = $this->editor['url'];
+            return $this;
+        }
+        return $this;
     }
 
     public function getEditor($key = null) {
@@ -53,6 +58,10 @@ abstract class EditorModel extends Model {
         $this->editor['type'] = $this->type;
         if ($this->editor['type'] == 0) {
             $this->editor['text'] = $this->content;
+            return;
+        }
+        if ($this->editor['type'] == 6) {
+            $this->editor['url'] = $this->content;
             return;
         }
     }

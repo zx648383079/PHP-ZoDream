@@ -28,7 +28,7 @@ class MenuModel extends EditorModel {
             'name' => 'required|string:0,100',
             'type' => 'required|string:0,100',
             'content' => 'required',
-            'pages' => 'required',
+            'pages' => 'string',
             'parent_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

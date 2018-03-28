@@ -4,6 +4,7 @@ namespace Module\WeChat\Service\Admin;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\ThirdParty\WeChat\Menu;
+use Zodream\ThirdParty\WeChat\MenuItem;
 
 class MenuController extends Controller {
 
@@ -112,9 +113,9 @@ class MenuController extends Controller {
         try {
             WeChatModel::find($this->weChatId())
                 ->sdk(Menu::class)
-                ->create(array_map(function (MenuModel $menu) {
+                ->create(MenuItem::menu(array_map(function (MenuModel $menu) {
                     return $menu->toMenu();
-                }, $menu_list));
+                }, $menu_list)));
         } catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }

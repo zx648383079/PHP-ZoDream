@@ -13,7 +13,7 @@ $this->extend('../layouts/header');
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./admin/menu/apply')?>">应用</a>
+    <a data-type="ajax" href="<?=$this->url('./admin/menu/apply')?>">应用</a>
 </div>
 <div class="wx-page">
 
