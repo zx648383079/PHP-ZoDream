@@ -19,10 +19,6 @@ $this->extend('layouts/header');
             <input name="budget" type="text" class="form-control" value="1000" />
         </div>
         <div class="input-group">
-            <label>已花费(元)</label>
-            <input name="spent" type="text" class="form-control" value="0" />
-        </div>
-        <div class="input-group">
             <label>周期</label>
             <select class="form-control" name="cycle">
                 <?php foreach(['一次', '每天', '每周', '每月', '每年'] as $key => $item):?>

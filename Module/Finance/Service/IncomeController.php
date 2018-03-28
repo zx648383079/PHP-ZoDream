@@ -61,12 +61,15 @@ class IncomeController extends ModuleController {
 
     public function saveLogAction() {
         $model = new LogModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => (string)Url::to('./income/log')
-            ]);
+        if (!$model->load() || !$model->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonFailure($model->getFirstError());
+        if ($model->budget_id > 0) {
+            BudgetModel::find($model->budget_id)->refreshSpent();
+        }
+        return $this->jsonSuccess([
+            'url' => (string)Url::to('./income/log')
+        ]);
     }
 
     public function deleteLogAction($id) {
