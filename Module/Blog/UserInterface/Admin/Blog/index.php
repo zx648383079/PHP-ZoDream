@@ -15,7 +15,7 @@ $this->extend('../layouts/header');
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/blog/create')?>">新增产品</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/blog/create')?>">新增文章</a>
     </div>
 
     <table class="table  table-bordered well">
