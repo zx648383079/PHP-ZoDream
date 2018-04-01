@@ -51,7 +51,7 @@ $this->extend('../layouts/header');
                     <?php endif;?>
                 </td>
                 <td>
-                    
+                    <?=$this->chapter_count?>
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">

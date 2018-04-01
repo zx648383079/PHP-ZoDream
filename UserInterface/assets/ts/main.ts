@@ -113,6 +113,20 @@ $(function() {
         $(document.body).append(form);
         form.submit();
     });
+    $(".file-input [data-type=upload]").upload({
+
+    });
+    $(".file-input [data-type=preview]").click(function() {
+        let img = $(this).parents('.file-input').find('input').val();
+        if (!img) {
+            Dialog.tip('请上传图片！');
+            return;
+        }
+        Dialog.box({
+            title: '预览',
+            content: '<img src="'+ img +'">'
+        });
+    });
     $(".zd-tab .zd-tab-head .zd-tab-item").click(function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");

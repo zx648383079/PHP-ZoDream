@@ -70,7 +70,7 @@ class BookModel extends Model {
         ];
     }
 
-    public function getChapters() {
+    public function chapter() {
         return $this->hasMany(BookChapterModel::className(), 'book_id', 'id');
     }
 

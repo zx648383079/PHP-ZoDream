@@ -17,7 +17,7 @@ $this->extend('../layouts/header');
             <select name="cat_id" required>
                 <option value="">请选择</option>
                 <?php foreach($cat_list as $item):?>
-                <option value="<?=$item->id?>" <?=$item->id == $model->cat_id ? 'selected' : ''?>><?=$item->name?></option>
+                <option value="<?=$item->id?>" <?=$item->id == $model->cat_id ? 'selected' : ''?>><?=$item->real_name?></option>
                 <?php endforeach;?>
             </select>
         </div>
@@ -31,8 +31,12 @@ $this->extend('../layouts/header');
             </select>
         </div>
         <div class="input-group">
-            <label>封面</label>
-            <input name="cover" type="text" class="form-control"  placeholder="输入小说封面" value="<?=$model->cover?>">
+            <label for="cover">封面</label>
+            <div class="file-input">
+                <input type="text" id="cover" name="cover" placeholder="请输入小说封面" value="<?=$model->cover?>" size="70">
+                <button type="button" data-type="upload" data-grid="cover">上传</button>
+                <button type="button" data-type="preview">预览</button>
+            </div>
         </div>
         <div class="input-group">
             <label>关键词</label>

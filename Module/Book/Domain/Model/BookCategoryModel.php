@@ -31,6 +31,10 @@ class BookCategoryModel extends Model {
         ];
     }
 
+    public function book() {
+        return $this->hasMany(BookModel::class, 'cat_id', 'id');
+    }
+
     public function getRealNameAttribute() {
         return str_replace('·', '', $this->name);
     }

@@ -22,6 +22,14 @@ $this->extend('../layouts/header');
             <label>简介</label>
             <textarea name="description" class="form-control" placeholder="简介"><?=$model->description?></textarea>
         </div>
+        <div class="input-group">
+            <label for="thumb">图片</label>
+            <div class="file-input">
+                <input type="text" id="thumb" name="thumb" placeholder="请输入图片" value="<?=$model->thumb?>" size="70">
+                <button type="button">上传</button>
+                <button type="button">预览</button>
+            </div>
+        </div>
 
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
