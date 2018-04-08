@@ -73,7 +73,7 @@ class LogModel extends Model {
     }
 
     public function scopeMonth($query, $time) {
-        return $this->scopeTime($query, date('Y-m-01 00:00:00', $time), date('Y-m-31 00:00:00', $time));
+        return $this->scopeTime($query, date('Y-m-01 00:00:00', $time), date('Y-m-31 23:59:59', $time));
     }
 
     public function scopeWeek($query, $now) {
