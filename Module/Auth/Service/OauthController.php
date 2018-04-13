@@ -9,6 +9,7 @@ use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Request;
+use Zodream\Module\OAuth\Domain\Client;
 use Zodream\Service\Factory;
 use Zodream\Service\Routing\Url;
 use Zodream\ThirdParty\OAuth\BaseOAuth;
@@ -44,7 +45,7 @@ class OauthController extends ModuleController {
         $rnd = Str::random(3);
         $user = UserModel::create([
             'name' => empty($auth->username) ? '用户_'.$rnd : $auth->username ,
-            'email' => sprintf('%s_%s@xq.com', $type, $rnd),
+            'email' => sprintf('%s_%s@zodream.cn', $type, $rnd),
             'password' => $rnd,
             'sex' => $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
             'avatar' => $auth->avatar
@@ -59,6 +60,15 @@ class OauthController extends ModuleController {
      * @return BaseOAuth
      */
     protected function getOAuth($type = 'qq') {
+        if ($type == 'zd') {
+            return new Client([
+                'client_id' => '101321779',
+                'client_secret' => 'cedee2ac4df08975927b638098e08e1b',
+                'redirect_uri' => (string)Url::to('./oauth/callback', [
+                    'type' => $type
+                ])
+            ]);
+        }
         static $maps = [
             'qq' => 'QQ',
             'alipay' => 'ALiPay',
