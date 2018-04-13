@@ -10,7 +10,6 @@ use Module\Shop\Domain\Model\NavigationModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
-use Zodream\Helpers\Str;
 
 class CreateShopTables extends Migration {
     /**
