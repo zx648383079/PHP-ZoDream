@@ -16,7 +16,7 @@
               <select id="parent_id" name="parent_id" class="slt">
                 <option value="0">-- 无上级分类 --</option>
                 {for:$cat_list,$item}
-                {if:$item.id == $model.id}
+                {if:$item.id == $model.parent_id}
                 <option value="{$item.id}" selected>{$item.name}</option>
                 {else}
                 <option value="{$item.id}">{$item.name}</option>

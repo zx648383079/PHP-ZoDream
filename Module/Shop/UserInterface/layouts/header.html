@@ -14,7 +14,33 @@
     <!-- 顶部导航 -->
     <div class="topper">
         <div class="w1100 x-auto">
-            <div class="topper-userbar fl" id="top-userbar"></div>
+            <div class="topper-userbar fl" id="top-userbar">
+              {if:Auth::guest()}
+              <font class="c666 mr20">嗨！欢迎来到 {$site_name}</font>
+              <a href="{url:./login}">登陆</a>
+              <span class="sep">|</span>
+              <a href="{url:./register}" class="red">免费注册</a>
+              {else}
+              <a class="m"><i class="icon"></i>{$user.name}</span><b class="icon"></b></a>
+              <font class="c999 ml10">欢迎您回来!</font>
+              <div class="m hide">
+              <div class="avatar fl">
+                  {if:$user.avatar}
+                  <a href="{url:./user/profile}"><img width="60" height="60" src="{$user.avatar}" /></a>
+                  {else}
+                  <a href="{url:./user}">
+                      <img width="60" height="60" src="/assets/image/noavatar_m.gif" />
+                  </a>
+                  {/if}
+              </div>
+              <ul>
+                  <li><a href="{url:./user}">进入用户中心</a></li>
+                  <li><a href="{url:./user/profile}">编辑资料</a></li>
+                  <li><a href="{url:./logout}">退出</a></li>
+              </ul>
+              </div>
+              {/if}
+            </div>
             <div class="topper-links fr">
                 {for:$nav.top,$item}
                 <a href="{$item.link}" {if:$item.target} target="{$item.target}" {/if}>{$item.name}</a><span class="sep">|</span>
@@ -22,31 +48,7 @@
             </div>
         </div>
         </div>
-        {if:Auth::guest()}
-        <font class="c666 mr20">嗨！欢迎来到 {$site_name}</font>
-        <a href="{url:./login}">登陆</a>
-        <span class="sep">|</span>
-        <a href="{url:./register}" class="red">免费注册</a>
-        {else}
-        <a class="m"><i class="icon"></i>{$user.name}</span><b class="icon"></b></a>
-        <font class="c999 ml10">欢迎您回来!</font>
-        <div class="m hide">
-        <div class="avatar fl">
-            {if:$user.avatar}
-            <a href="{url:./user/profile}"><img width="60" height="60" src="{$user.avatar}" /></a>
-            {else}
-            <a href="{url:./user}">
-                <img width="60" height="60" src="/assets/image/noavatar_m.gif" />
-            </a>
-            {/if}
-        </div>
-        <ul>
-            <li><a href="{url:./user}">进入用户中心</a></li>
-            <li><a href="{url:./user/profile}">编辑资料</a></li>
-            <li><a href="{url:./logout}">退出</a></li>
-        </ul>
-        </div>
-        {/if}
+        
     <!-- 顶部导航结束 -->
     <div class="header">
             <div class="w1100">

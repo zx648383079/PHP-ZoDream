@@ -1,4 +1,13 @@
 {this.title=ZoDream}
+{>js}
+  $(function () {
+    $("[data-type=tab] dt a").click(function (e) { 
+      e.preventDefault();
+      $(this).addClass('cur').siblings().removeClass('cur');
+      $(this).parent().parent().find('dd>div').eq($(this).index()).removeClass('hide').siblings().addClass('hide');
+    });
+  });
+{/>}
 {extend:admin/layouts/header}
 <div class="content">
   <div class="loc"><h2><i class="icon"></i>添加新品牌</h2></div>
@@ -13,11 +22,11 @@
           <tr>
             <th>品牌LOGO</th>
             <td>
-              <dl class="upsw pad5">
+              <dl class="upsw pad5" data-type="tab">
                 <dt class="pad5"><a class="cur ml5 mr5">上传文件</a><a class="ml10">输入URL</a></dt>
                 <dd class="mt5 pad5">
                   <div><input name="logo_file" type="file" /><p class="caaa mt10">仅允许上传 "png"、"jpg"、"jpeg"、"gif" 类型的图片</p></div>
-                  <div class="hide"><input name="logo_src" class="w500 txt" type="text" /></div>
+                  <div class="hide"><input name="logo_src" class="w500 txt" type="text" value="{$model.logo}"/></div>
                 </dd>
               </dl>
             </td>

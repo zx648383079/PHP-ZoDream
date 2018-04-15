@@ -17,7 +17,8 @@ class CategoryController extends Controller {
 
     public function editAction($id) {
         $model = CategoryModel::findOrNew($id);
-        return $this->show(compact('model'));
+        $cat_list = CategoryModel::where('id', '!=', $id)->all();
+        return $this->show(compact('model', 'cat_list'));
     }
 
     public function saveAction() {

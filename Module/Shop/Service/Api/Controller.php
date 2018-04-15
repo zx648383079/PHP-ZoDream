@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Service\Api\V1;
+namespace Module\Shop\Service\Api;
 
 use Module\ModuleController;
 

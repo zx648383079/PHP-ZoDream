@@ -1,9 +1,10 @@
 <?php
-namespace Module\Shop\Service\Api\V1;
+namespace Module\Shop\Service\Api;
 
-class HomeController extends Controller {
+class GoodsController extends Controller {
 
     public function indexAction() {
+
         return $this->jsonSuccess('api version v1');
     }
 }

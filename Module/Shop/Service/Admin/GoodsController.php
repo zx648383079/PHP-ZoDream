@@ -10,7 +10,9 @@ class GoodsController extends Controller {
 
     public function indexAction() {
         $model_list = GoodsModel::page();
-        return $this->show(compact('model_list'));
+        $cat_list = CategoryModel::select('id', 'name')->all();
+        $brand_list = BrandModel::select('id', 'name')->all();
+        return $this->show(compact('model_list', 'cat_list', 'brand_list'));
     }
 
     public function createAction() {

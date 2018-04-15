@@ -23,8 +23,8 @@ use Zodream\Html\Page;
  * @property integer $is_hot
  * @property integer $is_new
  * @property integer $user_id
- * @property integer $create_at
- * @property integer $update_at
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class GoodsModel extends BaseGoodsModel {
     public static function tableName() {

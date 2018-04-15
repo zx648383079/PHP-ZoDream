@@ -1,48 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<{include file='backend/lib/meta.html'}>
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/verydows.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/main.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/goods.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/umeditor/themes/default/css/umeditor.min.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/webupload/webuploader.css" />
-<script type="text/javascript" src="public/script/jquery.js"></script>
-<script type="text/javascript" src="public/theme/backend/js/verydows.js"></script>
-<script type="text/javascript" src="public/theme/backend/js/goods.js"></script>
-<script type="text/javascript">
-$(function(){
-  $('#tabs').vdsTabsSwitch();
-  UM.getEditor('goods_brief', {
-    textarea:'goods_brief', toolbar:['source | fontfamily fontsize forecolor bold link unlink | removeformat']
-  });
-  UM.getEditor('goods_content', {textarea:'goods_content', imageUrl: "<{url m=$MOD c='goods' a='image' step='editor'}>", initialFrameWidth: '98%'});
-  $('#gim').find('a i').on('click', function(){
-    $('#gim').hide().find('img').attr('src', '');
-    $('#gimbtns').show();
-    $('#gim input[name="goods_image"]').val('');
-  });
-  $('#album').find('a i').on('click', function(){
-    $(this).parent().remove();
-    if($('#album').find('a').size() == 0) $('#album').hide();
-  });
-});
-
-function submitForm(){
-  $('#goods_name').vdsFieldChecker({rules: {required:[true, '请输入商品名称'], maxlen:[180, '商品名称不能超过180个字符']}});
-  $('#goods_sn').vdsFieldChecker({rules: {maxlen:[20, '商品货号不能超过20个字符']}});
-  $('#now_price').vdsFieldChecker({rules: {required:[true, '请输入当前售价'], decimal:[true, '当前售价不符合格式要求']}});
-  $('#original_price').vdsFieldChecker({rules: {decimal:[true, '原售价不符合格式要求']}});
-  $('#goods_weight').vdsFieldChecker({rules: {decimal:[true, '重量不符合格式要求']}});
-  $('#goods-form').vdsFormChecker();
-}
-</script>
-</head>
-<body>
-<{if $_GET['a'] == 'add'}>
+{this.title=ZoDream}
+{extend:admin/layouts/header}
 <div class="content">
   <div class="loc"><h2><i class="icon"></i>添加新商品</h2></div>
-  <form method="post" enctype="multipart/form-data" action="<{url m=$MOD c='goods' a='add' step='submit'}>" id="goods-form">
+  <form method="post" enctype="multipart/form-data" action="{url:./admin/goods/save}" id="goods-form">
     <div class="box">
       <div class="tabs mt5">
         <ul id="tabs">
@@ -58,7 +18,7 @@ function submitForm(){
         <table class="dataform">
           <tr>
             <th width="110">商品名称</th>
-            <td><input class="w400 txt" name="goods_name" id="goods_name" type="text" /></td>
+            <td><input class="w400 txt" name="name" id="goods_name" type="text" value="{$model.name}"/></td>
           </tr>
           <tr>
             <th>商品分类</th>
@@ -66,11 +26,9 @@ function submitForm(){
               <select id="cate_id" name="cate_id" class="slt">
                 <option value="0">无分类</option>
                 <option disabled="disabled">------------------------------</option>
-                <{if !empty($cate_list)}>
-                <{foreach $cate_list as $v}>
-                <option value="<{$v.cate_id}>"><{str_repeat('|— ',$v.lv)}> <{$v.cate_name}></option>
-                <{/foreach}>
-                <{/if}>
+                {for:$cat_list,$item}
+                <option value="{$item.id}>">{$item.name}</option>
+                {/for}
               </select>
             </td>
           </tr>
@@ -79,12 +37,10 @@ function submitForm(){
             <td>
               <select id="brand_id" name="brand_id" class="slt">
                 <option value="0">无品牌</option>
-                <{if !empty($brand_list)}>
                 <option disabled="disabled">------------------------------</option>
-                <{foreach $brand_list as $v}>
-                <option value="<{$v.brand_id}>"><{$v.brand_name}></option>
-                <{/foreach}>
-                <{/if}>
+                {for:$brand_list,$item}
+                <option value="{$item.id}>">{$item.name}</option>
+                {/for}
               </select>
             </td>
           </tr>

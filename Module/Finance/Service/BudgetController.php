@@ -46,4 +46,10 @@ class BudgetController extends ModuleController {
             'url' => (string)Url::to('./budget')
         ]);
     }
+
+    public function statisticsAction($id) {
+        $model = BudgetModel::find($id);
+
+        return $this->show();
+    }
 }
