@@ -77,11 +77,11 @@ $js = <<<JS
                     }
                 }
             ],
-            "dataZoom": [
-                show: false,
-                start: 0,
-                end: 100
-            ],
+            "dataZoom": {
+                'show': false,
+                'start': 0,
+                'end': 100
+            },
             "series": [
                 {
                     "name": "支出",
@@ -120,7 +120,11 @@ $this->extend('layouts/header')
 ?>
 
     <div>
-        <h2>预算支出曲线图&nbsp;<small>按 <?=$cycle_list[$model->cycle]?> 周期统计</small></h2>
+        <h2> 
+            <strong><?=$model->name?></strong>    
+         预算支出曲线图&nbsp;<small>按 
+         <strong><?=$cycle_list[$model->cycle]?></strong>    
+         周期统计</small></h2>
         <div>
             总支出：<?=$sum?>，总预算：<?=$budget_sum?>，超出：<?=$sum > $budget_sum ? $sum - $budget_sum : 0?>
         </div>

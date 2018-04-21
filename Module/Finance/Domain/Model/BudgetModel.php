@@ -57,13 +57,13 @@ class BudgetModel extends Model {
      * @return float
      */
     public function getSpent() {
-        if ($this->cycle === self::CYCLE_ONCE) {
+        if ($this->cycle == self::CYCLE_ONCE) {
             return $this->spent;
         }
-        if ($this->cycle === self::CYCLE_DAY) {
+        if ($this->cycle == self::CYCLE_DAY) {
             $start_at = date('Y-m-d 00:00:00');
             $end_at = date('Y-m-d 23:59:59');
-        } elseif ($this->cycle === self::CYCLE_WEEK) {
+        } elseif ($this->cycle == self::CYCLE_WEEK) {
             $time = ('1' == date('w')) ? strtotime('Monday') : strtotime('last Monday');
             $start_at = date('Y-m-d 00:00:00', $time);
             $end_at = date('Y-m-d 23:59:59', strtotime('Sunday'));
@@ -103,19 +103,19 @@ class BudgetModel extends Model {
     }
 
     public function getLogs() {
-        if ($this->cycle === self::CYCLE_ONCE) {
+        if ($this->cycle == self::CYCLE_ONCE) {
             return [$this->spent];
         }
-        if ($this->cycle === self::CYCLE_DAY) {
+        if ($this->cycle == self::CYCLE_DAY) {
             return $this->getLogByDay();
         }
-        if ($this->cycle === self::CYCLE_WEEK) {
+        if ($this->cycle == self::CYCLE_WEEK) {
             return $this->getLogByWeek();
         }
-        if ($this->cycle === self::CYCLE_MONTH) {
+        if ($this->cycle == self::CYCLE_MONTH) {
             return $this->getLogByMonth();
         }
-        if ($this->cycle === self::CYCLE_YEAR) {
+        if ($this->cycle == self::CYCLE_YEAR) {
             return $this->getLogByYear();
         }
     }
@@ -146,7 +146,10 @@ class BudgetModel extends Model {
         return self::getLinkUpLog($log_list);
     }
 
-    public static function getLinkUpLog(array $log_list) {
+    public static function getLinkUpLog($log_list) {
+        if (empty($log_list)) {
+            return [];
+        }
         $i = min(array_keys($log_list));
         $length = max(array_keys($log_list));
         $data = [];

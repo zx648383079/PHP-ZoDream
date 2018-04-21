@@ -87,7 +87,7 @@ class LogModel extends Model {
     }
 
     public function scopeSumByDate(Query $query, $format = '%Y%m%d', $as = 'day', $fields = 'SUM(money) as money') {
-        return $query->selectRaw(sprintf('DATE_FORMAT(happened_at, \'%s\') as %s, %s', $format, $as, $fields));
+        return $query->selectRaw(sprintf('DATE_FORMAT(happened_at, \'%s\') as %s, %s', $format, $as, $fields))->groupBy($as);
     }
 
     /**
@@ -99,8 +99,8 @@ class LogModel extends Model {
     public static function getMonthLogs(array $log_list, $day_length) {
         $days = [];
         foreach ($log_list as $item) {
-            $day = $item->day;
-            if (!isset($income_days[$day])) {
+            $day = intval($item->day);
+            if (!isset($days[$day])) {
                 $days[$day] = $item->money;
                 continue;
             }
