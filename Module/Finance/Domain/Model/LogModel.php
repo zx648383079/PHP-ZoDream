@@ -3,6 +3,7 @@ namespace Module\Finance\Domain\Model;
 
 use Carbon\Carbon;
 use Domain\Model\Model;
+use Zodream\Database\Model\Query;
 
 /**
  * Class LogModel
@@ -85,6 +86,10 @@ class LogModel extends Model {
         return $query->where('happened_at', '>=', $start_at)->where('happened_at', '<=', $end_at);
     }
 
+    public function scopeSumByDate(Query $query, $format = '%Y%m%d', $as = 'day', $fields = 'SUM(money) as money') {
+        return $query->selectRaw(sprintf('DATE_FORMAT(happened_at, \'%s\') as %s, %s', $format, $as, $fields));
+    }
+
     /**
      * 获取一个月每天的记录
      * @param array $log_list
@@ -102,7 +107,7 @@ class LogModel extends Model {
             $days[$day] += $item->money;
         }
         $data = [];
-        for ($i = 1; $i <= $day_length; $i ++) {
+        for ($i = 1; $i <= $day_length; $i++) {
             $data[$i] = isset($days[$i]) ? $days[$i] : 0;
         }
         return $data;

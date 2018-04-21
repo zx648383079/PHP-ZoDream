@@ -25,7 +25,11 @@ $this->extend('layouts/header');
                 <tbody>
                 <?php foreach($model_list as $item): ?>
                     <tr class="<?=$item->remain < 0 ? 'danger' : ''?>">
-                        <td><?=$item->name?></td>
+                        <td>
+                            <a href="<?=$this->url('./budget/statistics', ['id' => $item->id])?>" title="查看支出统计图">
+                                <?=$item->name?>
+                            </a>
+                        </td>
                         <td>
                             <?=$item->budget?>
                         </td>

@@ -43,9 +43,9 @@ class BudgetModel extends Model {
         return [
             'id' => 'Id',
             'name' => 'Name',
-            'budget' => 'Budget',
-            'spent' => 'Spent',
-            'cycle' => 'Cycle',
+            'budget' => '预算',
+            'spent' => '已花费',
+            'cycle' => '周期',
             'deleted_at' => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -100,5 +100,59 @@ class BudgetModel extends Model {
 
     public function getRemainAttribute() {
         return $this->budget - $this->getSpent();
+    }
+
+    public function getLogs() {
+        if ($this->cycle === self::CYCLE_ONCE) {
+            return [$this->spent];
+        }
+        if ($this->cycle === self::CYCLE_DAY) {
+            return $this->getLogByDay();
+        }
+        if ($this->cycle === self::CYCLE_WEEK) {
+            return $this->getLogByWeek();
+        }
+        if ($this->cycle === self::CYCLE_MONTH) {
+            return $this->getLogByMonth();
+        }
+        if ($this->cycle === self::CYCLE_YEAR) {
+            return $this->getLogByYear();
+        }
+    }
+
+    public function getLogByDay() {
+        $start_at = date('Y-m-01 00:00:00');
+        $end_at = date('Y-m-31 00:00:00');
+        $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate()->pluck('money', 'day');
+        return self::getLinkUpLog($log_list);
+    }
+
+    public function getLogByWeek() {
+        $start_at = date('Y-01-01 00:00:00');
+        $end_at = date('Y-12-31 00:00:00');
+        $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%u', 'week')->pluck('money', 'week');
+        return self::getLinkUpLog($log_list);
+    }
+
+    public function getLogByMonth() {
+        $start_at = date('Y-01-01 00:00:00');
+        $end_at = date('Y-12-31 00:00:00');
+        $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%m', 'month')->pluck('money', 'month');
+        return self::getLinkUpLog($log_list);
+    }
+
+    public function getLogByYear() {
+        $log_list = LogModel::sumByDate('%Y', 'year')->where('budget_id', $this->id)->pluck('money', 'year');
+        return self::getLinkUpLog($log_list);
+    }
+
+    public static function getLinkUpLog(array $log_list) {
+        $i = min(array_keys($log_list));
+        $length = max(array_keys($log_list));
+        $data = [];
+        for (; $i <= $length; $i++) {
+            $data[$i] = isset($log_list[$i]) ? abs($log_list[$i]) : 0;
+        }
+        return $data;
     }
 }

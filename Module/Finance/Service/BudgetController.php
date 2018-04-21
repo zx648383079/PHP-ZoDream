@@ -3,6 +3,7 @@ namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
 use Module\ModuleController;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
 class BudgetController extends ModuleController {
@@ -49,7 +50,9 @@ class BudgetController extends ModuleController {
 
     public function statisticsAction($id) {
         $model = BudgetModel::find($id);
-
-        return $this->show();
+        $log_list = $model->getLogs();
+        $sum = array_sum($log_list);
+        $budget_sum = count($log_list) * $model->budget;
+        return $this->show(compact('model', 'log_list', 'sum', 'budget_sum'));
     }
 }
