@@ -1,20 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<{include file='backend/lib/meta.html'}>
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/verydows.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/main.css" />
-<script type="text/javascript" src="public/script/jquery.js"></script>
-<script type="text/javascript" src="public/theme/backend/js/verydows.js"></script>
-<script type="text/javascript">
-function submitForm(){
-  $('#instruction').vdsFieldChecker({rules:{maxlen:[240, '使用说明不能超过240个字符']}});
-  $('#seq').vdsFieldChecker({rules:{seq:[true, '排序只能填写0到99的整数']}});
-  $('form').vdsFormChecker();
-}
-</script>
-</head>
-<body>
+{this.title=资讯列表}
+{extend:admin/layouts/header}
 <div class="content">
   <div class="loc"><h2><i class="icon"></i>编辑支付方式</h2></div>
   <form method="post" action="<{url m=$MOD c='payment_method' a='edit' id=$rs.id step='submit'}>">
@@ -60,5 +45,4 @@ function submitForm(){
     </div>
   </form>
 </div>
-</body>
-</html>
+{extend:admin/layouts/footer}

@@ -10,14 +10,7 @@
           <!-- 资讯开始 -->
           <div class="w240 fr cut">
             <div class="news mt10">
-              <h2><a href="{url:./article}" class="fr">更多 <i>&gt;</i></a>最新资讯</h2>
-              {if:$latest_article}
-              <ul>
-                {for:$latest_article,$item}
-                <li><a title="{$item.title}>" href="{url:./article?id=:$item.id}"><b>[{$item.category.name}]</b>{$item.title}</a></li>
-                {/for}
-              </ul>
-              {/if}
+              
             </div>
             <!-- 广告位(240x70)开始 -->
             <div class="module mt10">{ads:2}</div>

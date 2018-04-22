@@ -1,29 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<{include file='backend/lib/meta.html'}>
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/verydows.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/main.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/poper.css" />
-<link rel="stylesheet" type="text/css" href="public/theme/backend/css/shipping.css" />
-<script type="text/javascript" src="public/script/jquery.js"></script>
-<script type="text/javascript" src="public/theme/backend/js/verydows.js"></script>
-<script type="text/javascript" src="public/theme/backend/js/shipping.js"></script>
-<script type="text/javascript">
-function submitForm(){
-  $('#name').vdsFieldChecker({rules:{required:[true, '名称不能为空'], maxlen:[60, '名称不能超过60个字符']}});
-  $('#scopebtn').vdsFieldChecker({rules:{scope:[$('#scopeli dl').size() > 0, '至少添加一个配送范围']}});
-  $('#seq').vdsFieldChecker({rules:{seq:[true, '排序只能填写0到99的整数']}});
-  var scope = {};
-  $('#scopeli dl').each(function(i, e){
-    scope[i] = $(e).data('params');
-  });
-  $('#params').val(JSON.stringify(scope));
-  $('#spform').vdsFormChecker();
-}
-</script>
-</head>
-<body>
+{this.title=资讯列表}
+{extend:admin/layouts/header}
 <{if $_GET['a'] == 'add'}>
 <div class="content">
   <div class="loc"><h2><i class="icon"></i>新增配送方式</h2></div>
@@ -145,5 +121,4 @@ $(function(){
 </div>
 <{/if}>
 <{include file='backend/shipping/ship_scope.html'}>
-</body>
-</html>
+{extend:admin/layouts/footer}

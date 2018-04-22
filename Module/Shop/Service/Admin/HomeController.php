@@ -185,19 +185,19 @@ class HomeController extends Controller {
                             ],
                             [
                                 'name' => '导航设置',
-                                'url' => $this->getUrl('setting/nav')
+                                'url' => $this->getUrl('nav')
                             ],
                             [
                                 'name' => '配送方式',
-                                'url' => $this->getUrl('setting/shipping')
+                                'url' => $this->getUrl('shipping')
                             ],
                             [
                                 'name' => '支付方式',
-                                'url' => $this->getUrl('setting/payment')
+                                'url' => $this->getUrl('payment')
                             ],
                             [
                                 'name' => '物流承运商',
-                                'url' => $this->getUrl('setting/carrier')
+                                'url' => $this->getUrl('carrier')
                             ],
                         ]
                     ],

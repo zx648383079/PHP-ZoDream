@@ -87,7 +87,7 @@
                     <ul>
                       <li><a href="{url:./}">首页</a></li>
                       {for:$nav.middle,$item}
-                        <li><a href="{$item.link}" {if:$item.target} target="{$item.target}" {/if}>{$item.name}</a></li>
+                        <li><a href="{$item.url}" {if:$item.target} target="{$item.target}" {/if}>{$item.name}</a></li>
                         {/for}
                     </ul>
                   </div>

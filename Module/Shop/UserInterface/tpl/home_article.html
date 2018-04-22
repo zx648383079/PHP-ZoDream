@@ -1,0 +1,10 @@
+<script type="text/template" id="homr-article-tpl">
+    <h2><a href="{url:./article}" class="fr">更多 <i>&gt;</i></a>最新资讯</h2>
+    {if:$latest_article}
+    <ul>
+      {for:$latest_article,$item}
+      <li><a title="{$item.title}>" href="{url:./article?id=:$item.id}"><b>[{$item.category.name}]</b>{$item.title}</a></li>
+      {/for}
+    </ul>
+    {/if}
+</script>

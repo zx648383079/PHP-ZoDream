@@ -1,0 +1,63 @@
+{this.title=添加导航}
+{extend:admin/layouts/header}
+<div class="content">
+  <div class="loc"><h2><i class="icon"></i>添加导航</h2></div>
+  <form method="post" action="{url:./admin/nav/save}">
+    <div class="box">
+      <div class="module">
+        <table class="dataform">
+          <tr>
+            <th width="110">名称</th>
+            <td><input class="w200 txt" name="name" id="name" type="text" value="{$model.name}"/></td>
+          </tr>
+          <tr>
+            <th>位置</th>
+            <td>
+              <select name="type" class="slt" id="position">
+                {for:$type_list,$key => $item}
+                <option value="{$key}">{$item}</option>
+                {/for}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>链接地址</th>
+            <td><input class="w500 txt" name="url" id="link" type="text" value="{$model.url}"/></td>
+          </tr>
+          <tr>
+            <th>是否新窗口</th>
+            <td>
+              <div class="pad5">
+                <label class="mr10">
+                  <input type="radio" name="target" value="1" {if:$model.target == 1,'checked="checked"'} />
+                  <font class="red ml5">是</font></label>
+                <label>
+                  <input type="radio" name="target" value="0" {if:$model.target == 0,'checked="checked"'}/>
+                  <font class="green ml5">否</font></label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>排序</th>
+            <td><input class="w50 txt" name="position" id="seq" type="text" value="99" value="{$model.position}"/></td>
+          </tr>
+          <tr>
+            <th>是否显示</th>
+            <td>
+              <div class="pad5">
+                <label class="mr10"><input type="radio" name="visible" value="1" {if:$model.visible == 1,'checked="checked"'} /><font class="red ml5">是</font></label>
+                <label><input type="radio" name="visible" value="0" {if:$model.visible == 0,'checked="checked"'}/><font class="green ml5">否</font></label>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="submitbtn">
+        <button class="ubtn btn">保存并提交</button>
+        <button type="reset" class="fbtn btn">重置表单</button>
+      </div>
+    </div>
+    <input type="hidden" name="id" value="{$model.id}">
+  </form>
+</div>
+{extend:admin/layouts/footer}
