@@ -124,34 +124,37 @@ class BudgetModel extends Model {
         $start_at = date('Y-m-01 00:00:00');
         $end_at = date('Y-m-31 00:00:00');
         $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate()->pluck('money', 'day');
-        return self::getLinkUpLog($log_list);
+        return self::getLinkUpLog($log_list, date('Ymd'));
     }
 
     public function getLogByWeek() {
         $start_at = date('Y-01-01 00:00:00');
         $end_at = date('Y-12-31 00:00:00');
         $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%u', 'week')->pluck('money', 'week');
-        return self::getLinkUpLog($log_list);
+        return self::getLinkUpLog($log_list, date('YW'));
     }
 
     public function getLogByMonth() {
         $start_at = date('Y-01-01 00:00:00');
         $end_at = date('Y-12-31 00:00:00');
         $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%m', 'month')->pluck('money', 'month');
-        return self::getLinkUpLog($log_list);
+        return self::getLinkUpLog($log_list, date('Ym'));
     }
 
     public function getLogByYear() {
         $log_list = LogModel::sumByDate('%Y', 'year')->where('budget_id', $this->id)->pluck('money', 'year');
-        return self::getLinkUpLog($log_list);
+        return self::getLinkUpLog($log_list, date('Y'));
     }
 
-    public static function getLinkUpLog($log_list) {
+    public static function getLinkUpLog($log_list, $max) {
         if (empty($log_list)) {
             return [];
         }
         $i = min(array_keys($log_list));
         $length = max(array_keys($log_list));
+        if ($i < $max && $length < $max) {
+            $length = $max;
+        }
         $data = [];
         for (; $i <= $length; $i++) {
             $data[$i] = isset($log_list[$i]) ? abs($log_list[$i]) : 0;
