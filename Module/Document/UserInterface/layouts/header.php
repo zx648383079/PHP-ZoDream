@@ -14,5 +14,12 @@ $this->registerCssFile('@font-awesome.min.css')
 </head>
 <body>
 <header>
-    zodream
+    <div class="container">
+        ZoDream Document
+    </div>
 </header>
+<div class="container">
+    <div class="left-catelog navbar">
+        <?php $this->extend('./navbar')?>
+    </div>
+    <div class="right-content">

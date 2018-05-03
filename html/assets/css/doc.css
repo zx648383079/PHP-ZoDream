@@ -81,4 +81,7 @@ footer {
     .page-tip.min .toggle::before {
       content: "\f067"; }
 
+.page-footer {
+  text-align: center; }
+
 /*# sourceMappingURL=doc.css.map */
