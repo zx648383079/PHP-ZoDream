@@ -1,10 +1,10 @@
 <?php
-namespace Module\Document\Service;
+namespace Module\Document\Service\Admin;
 
 use Module\Document\Domain\Model\ProjectModel;
-use Module\ModuleController;
 
-class HomeController extends ModuleController {
+class HomeController extends Controller {
+
     public function indexAction() {
         $project_list = ProjectModel::select('name', 'id')->all();
         return $this->show(compact('project_list'));

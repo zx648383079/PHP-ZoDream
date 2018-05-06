@@ -3,6 +3,7 @@ namespace Module\Document\Domain\Model;
 
 
 use Domain\Model\Model;
+use Zodream\Html\Tree;
 
 /**
  * Class ApiModel
@@ -48,5 +49,10 @@ class ApiModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public  static function getTree($project_id) {
+        $data = self::where('project_id', $project_id)->select('id', 'name', 'parent_id')->all();
+        return (new Tree($data))->makeTree();
     }
 }

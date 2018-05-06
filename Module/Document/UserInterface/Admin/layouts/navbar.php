@@ -3,33 +3,42 @@ use Zodream\Template\View;
 /** @var $this View */
 ?>
 
+<?php if(isset($project_list)):?>
 <ul>
-    <li><a href="<?=$this->url('./')?>">
+    <li><a href="<?=$this->url('./admin')?>">
             <i class="fa fa-home"></i><span>首页</span></a></li>
     <li class="expand"><a href="javascript:;">
-            <i class="fa fa-money"></i><span>资金</span></a>
+            <i class="fa fa-money"></i><span>项目列表</span></a>
         <ul>
-            <li><a href="<?=$this->url('./money')?>">
-                    <i class="fa fa-list-alt"></i><span>总资本</span></a></li>
-            <li><a href="<?=$this->url('./money/account')?>">
-                    <i class="fa fa-credit-card"></i><span>资金账户</span></a></li>
-            <li><a href="<?=$this->url('./money/project')?>">
-                    <i class="fa fa-trophy"></i><span>理财项目</span></a></li>
-            <li><a href="<?=$this->url('./money/product')?>">
-                    <i class="fa fa-cubes"></i><span>理财产品</span></a></li>
+            <?php foreach($project_list as $item):?>
+            <li><a href="<?=$this->url('./admin/project', ['id' => $item['id']])?>">
+                    <i class="fa fa-book"></i><span><?=$item['name']?></span></a></li>
+            <?php endforeach;?>
+            <li><a href="<?=$this->url('./admin/project/create')?>">
+                    <i class="fa fa-plus"></i><span>新建项目</span></a></li>
         </ul>
     </li>
-    <li class="expand"><a href="javascript:;">
-            <i class="fa fa-puzzle-piece"></i><span>收支管理</span></a>
-        <ul>
-            <li><a href="<?=$this->url('./income')?>">
-                    <i class="fa fa-exchange"></i><span>月收支</span></a></li>
-            <li><a href="<?=$this->url('./income/log')?>">
-                    <i class="fa fa-recycle"></i><span>月流水</span></a></li>
-            <li><a href="<?=$this->url('./income/channel')?>">
-                    <i class="fa fa-anchor"></i><span>消费渠道</span></a></li>
-         </ul>
-    </li>
-    <li><a href="<?=$this->url('./budget')?>">
-            <i class="fa fa-tasks"></i><span>生活预算</span></a></li>
 </ul>
+<?php else:?>
+<ul>
+    <li><a href="<?=$this->url('./admin')?>">
+            <i class="fa fa-arrow-left"></i><span>返回首页</span></a></li>
+    <li><a href="<?=$this->url('./admin/project', ['id' => $project->id])?>">
+            <i class="fa fa-home"></i><span>项目主页</span></a></li>
+    <?php foreach($tree_list as $item):?>
+    <li><a href="javascript:;">
+            <i class="fa fa-folder-open"></i><span><?=$item['name']?></span></a>
+        <ul>
+            <?php foreach($item['children'] as $child):?>
+            <li><a href="<?=$this->url('./admin/api', ['id' => $child['id']])?>">
+                    <i class="fa fa-file"></i><span><?=$child['name']?></span></a></li>
+            <?php endforeach;?>
+            <li><a href="<?=$this->url('./admin/api/create', ['project_id' => $project->id, 'parent_id' => $item['id']])?>">
+                    <i class="fa fa-plus"></i><span>新建接口</span></a></li>
+        </ul>
+    </li>
+    <?php endforeach;?>
+    <li><a href="<?=$this->url('./admin/api/create', ['project_id' => $project->id])?>">
+                    <i class="fa fa-plus"></i><span>新建接口</span></a></li>
+</ul>
+<?php endif;?>

@@ -17,7 +17,7 @@ use Zodream\Template\View;
         </ul>
     </li>
 </ul>
-<?php else?>
+<?php else:?>
 <ul>
     <li><a href="<?=$this->url('./')?>">
             <i class="fa fa-arrow-left"></i><span>返回首页</span></a></li>

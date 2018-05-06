@@ -15,13 +15,17 @@ use Domain\Model\Model;
  * @property string $mock
  * @property integer $parent_id
  * @property integer $api_id
- * @property integer $method
+ * @property integer $kind
  * @property string $type
  * @property string $remark
  * @property integer $created_at
  * @property integer $updated_at
  */
 class FieldModel extends Model {
+
+    const KIND_REQUEST = 1;
+    const KIND_RESPONSE = 2;
+    const KIND_HEADER = 3;
 
     public static function tableName() {
         return 'doc_field';
@@ -36,7 +40,7 @@ class FieldModel extends Model {
             'mock' => 'string:0,255',
             'parent_id' => 'int',
             'api_id' => 'required|int',
-            'method' => 'int:0,999',
+            'kind' => 'int:0,999',
             'type' => 'string:0,10',
             'remark' => '',
             'created_at' => 'int',
@@ -54,7 +58,7 @@ class FieldModel extends Model {
             'mock' => 'Mock',
             'parent_id' => 'Parent Id',
             'api_id' => 'Api Id',
-            'method' => 'Method',
+            'kind' => 'Kind',
             'type' => 'Type',
             'remark' => 'Remark',
             'created_at' => 'Created At',

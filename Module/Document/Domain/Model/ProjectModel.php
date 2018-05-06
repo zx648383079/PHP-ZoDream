@@ -3,6 +3,7 @@ namespace Module\Document\Domain\Model;
 
 
 use Domain\Model\Model;
+use Zodream\Helpers\Json;
 
 /**
  * Class ProjectModel
@@ -42,5 +43,9 @@ class ProjectModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getEnvironmentsAttribute() {
+        return empty($this->environment) ? [] : Json::decode($this->environment);
     }
 }
