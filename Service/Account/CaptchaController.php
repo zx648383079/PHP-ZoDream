@@ -29,9 +29,18 @@ class CaptchaController extends Controller {
 		return Factory::response()->image($captcha->generate($level));
 	}
 
+	function slideCheckAction() {
+	    $x = floor(Request::request('x'));
+	    $c = Factory::session('slider_x');
+	    if (abs($x - $c) < 5) {
+	        return $this->jsonSuccess();
+        }
+        return $this->jsonFailure($c);
+    }
+
 	function slideAction() {
         $img = new SlideCaptcha(Factory::public_path()->file('assets/images/banner.jpg'));
-        $img->scale(400, 250);
+        $img->scale(300, 130);
         $img->setShape('E:\Desktop\1.jpg');
         $img->generate();
 
@@ -45,6 +54,7 @@ class CaptchaController extends Controller {
         $width = $img->getWidth();
         $height = $img->getHeight();
         $bg_data = $bg->toBase64();
+        Factory::session()->set('slider_x', $img->getPoint()[0]);
         $html = <<<HTML
 <style>
 .slide-box {
