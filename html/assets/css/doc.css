@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   background: #333; }
 
@@ -83,5 +84,53 @@ footer {
 
 .page-footer {
   text-align: center; }
+
+.zd-tab .zd-tab-head .zd-tab-item {
+  width: 130px; }
+
+.page-header {
+  padding: 8px; }
+  .page-header .opt-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0; }
+
+.dialog-box form {
+  min-width: 600px; }
+
+#debug-box a {
+  text-decoration: none; }
+
+#debug-box .uri-box select,
+#debug-box .uri-box input {
+  height: 30px; }
+
+#debug-box .uri-box input {
+  min-width: 300px; }
+
+#debug-box table input {
+  height: 30px;
+  width: 100%; }
+
+.json-box {
+  /*字符串的样式*/
+  /*数字的样式*/
+  /*布尔型数据的样式*/
+  /*null值的样式*/
+  /*key值的样式*/ }
+  .json-box pre {
+    outline: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px; }
+  .json-box .string {
+    color: green; }
+  .json-box .number {
+    color: darkorange; }
+  .json-box .boolean {
+    color: blue; }
+  .json-box .null {
+    color: magenta; }
+  .json-box .key {
+    color: red; }
 
 /*# sourceMappingURL=doc.css.map */

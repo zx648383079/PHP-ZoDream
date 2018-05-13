@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     tslint = require("gulp-tslint"),
     tsProject = ts.createProject('tsconfig.json'),
     moduleRoot = 'Module/Document/';
-    jsRoot = moduleRoot + 'UserInterface/assets/ts/',
+    jsRoot = moduleRoot + 'UserInterface/assets/js/',
+    tsRoot = moduleRoot + 'UserInterface/assets/ts/',
     jsDist = 'html/assets/js',
     cssRoot = moduleRoot + 'UserInterface/assets/sass/',
     cssDist = 'html/assets/css';
@@ -40,7 +41,7 @@ gulp.task('tslint', () =>
 );
 
 gulp.task('ts', function () {
-    return gulp.src(jsRoot + '*.ts')
+    return gulp.src(tsRoot + '*.ts')
     .pipe(tsProject())
     .pipe(uglify())
     .pipe(rename({suffix:'.min'}))

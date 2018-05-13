@@ -69,6 +69,13 @@ let toInt = function (arg) {
     }
     return parseInt(arg);
 };
+
+let strFormat = function(arg: string, ...args: any[]) {
+    return arg.replace(/\{(\d+)\}/g, function(m,i) {
+        return args[i];
+    });
+}
+
 $(function() {
     $("a[data-type=refresh]").click(function() {
         window.location.reload();
@@ -113,9 +120,13 @@ $(function() {
         $(document.body).append(form);
         form.submit();
     });
-    $(".file-input [data-type=upload]").upload({
+    var file_input = $(".file-input [data-type=upload]");
+    if (file_input.length > 0) {
+        file_input.upload({
 
-    });
+        });
+    }
+
     $(".file-input [data-type=preview]").click(function() {
         let img = $(this).parents('.file-input').find('input').val();
         if (!img) {

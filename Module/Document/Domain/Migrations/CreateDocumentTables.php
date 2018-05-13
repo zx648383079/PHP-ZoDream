@@ -40,11 +40,11 @@ class CreateDocumentTables extends Migration {
             $table->setComment('项目字段表');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(50)->notNull()->comment('接口名称');
-            $table->set('title')->varchar(50)->notNull()->comment('接口标题');
+            $table->set('title')->varchar(50)->defaultVal('')->comment('接口标题');
             $table->set('is_required')->bool()->defaultVal(1)->comment('是否必传');
             $table->set('default_value')->varchar()->defaultVal('')->comment('默认值');
             $table->set('mock')->varchar()->defaultVal('')->comment('mock规则');
-            $table->set('parent_id')->int()->notNull()->defaultVal(0);
+            $table->set('parent_id')->int()->defaultVal(0);
             $table->set('api_id')->int()->notNull()->comment('接口id');
             $table->set('kind')->tinyint(3)->defaultVal(1)->comment('参数类型，1:请求字段 2:响应字段 3:header字段');
             $table->set('type')->varchar(10)->defaultVal('')->comment('字段类型');

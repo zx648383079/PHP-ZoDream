@@ -103,3 +103,85 @@ footer {
 .page-footer {
     text-align: center;
 }
+
+.zd-tab {
+    .zd-tab-head {
+        .zd-tab-item {
+            width: 130px;
+        }
+    }
+}
+
+.page-header {
+    padding: 8px;
+    .opt-btn {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+.dialog-box {
+    form {
+        min-width: 600px;
+    }
+}
+
+#debug-box {
+    a {
+        text-decoration: none;
+    }
+    .uri-box {
+        select,
+        input {
+            height: 30px;
+        }
+        input {
+            min-width: 300px;
+        }
+    }
+    table {
+        input {
+            height: 30px;
+            width: 100%;
+        }
+    }
+}
+
+.json-box {
+    pre {
+        outline: 1px solid #ccc;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .string {
+        color: green;
+    }
+
+    /*字符串的样式*/
+
+    .number {
+        color: darkorange;
+    }
+
+    /*数字的样式*/
+
+    .boolean {
+        color: blue;
+    }
+
+    /*布尔型数据的样式*/
+
+    .null {
+        color: magenta;
+    }
+
+    /*null值的样式*/
+
+    .key {
+        color: red;
+    }
+
+    /*key值的样式*/
+}

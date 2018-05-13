@@ -1,27 +1,97 @@
 
-<form data-type="ajax" action="<?=$this->url('./admin/api/save')?>" method="post" class="form-table" role="form">
+<form action="<?=$this->url('./admin/api/save_field')?>" method="post" class="form-table" role="form">
+
+    <?php if($model->kind == 3):?>
     <div class="input-group">
-        <label>接口名称</label>
-        <input name="name" type="text" class="form-control" placeholder="项目名称" value="<?=$model->name?>">
+        <label>字段键</label>
+        <input name="name" type="text" class="form-control" placeholder="字段键" value="<?=$model->name?>">
     </div>
     <div class="input-group">
-        <label>请求类型</label>
-        <select name="method">
-        <?php foreach(['GET', 'POST', 'PUT', 'DELETE', 'OPTION'] as $item):?>
-            <option value="<?=$item?>" <?= $item == $model->method ? 'selected' : '' ?>><?=$item?></option>
-        <?php endforeach;?>
+        <label>字段值</label>
+        <input name="default_value" type="text" class="form-control" placeholder="字段值" value="<?=$model->default_value?>">
+    </div>
+    <div class="input-group">
+        <label>备注说明</label>
+        <textarea name="remark" class="form-control" placeholder="备注说明"><?=$model->remark?></textarea>
+    </div>
+    <?php elseif($model->kind == 1):?>
+    <div class="input-group">
+        <label>参数别名</label>
+        <input name="name" type="text" class="form-control" placeholder="参数别名" value="<?=$model->name?>">
+    </div>
+    <div class="input-group">
+        <label>参数含义</label>
+        <input name="title" type="text" class="form-control" placeholder="参数含义" value="<?=$model->title?>">
+    </div>
+    <div class="input-group">
+        <label>参数类型</label>
+        <select class="form-control" name="field[type]">
+            <?php foreach($model->type_list as $key => $item):?>
+               <option value="<?=$key?>" <?= $key == $model->type ? 'selected' : '' ?>><?=$item?></option>
+            <?php endforeach;?>
         </select>
     </div>
+
     <div class="input-group">
-        <label>接口路径</label>
-        <input name="uri" type="text" class="form-control" placeholder="项目名称" value="<?=$model->uri?>">
+        <label>是否必传</label>
+        <div class="form-group">
+            
+            <label class="radio-inline">
+                <input type="radio" name="is_required" value="1" <?= 1 == $model->is_required ? 'checked' : '' ?> > 是
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="is_required" value="0" <?= 0 == $model->is_required ? 'checked' : '' ?>> 否
+            </label>
+
+        </div>
     </div>
+
     <div class="input-group">
-        <label>接口描述</label>
-        <textarea name="description" class="form-control" placeholder="备注信息"><?=$model->description?></textarea>
+        <label>默认值</label>
+        <input class="form-control" name="default_value" value="<?=$model->default_value?>" placeholder="非必填">
     </div>
+
+   <div class="input-group">
+        <label>备注说明</label>
+        <textarea name="remark" class="form-control" placeholder="备注说明"><?=$model->remark?></textarea>
+    </div>
+    <?php else:?>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="input-group">
+        <label>参数别名</label>
+        <input name="name" type="text" class="form-control" placeholder="参数别名" value="<?=$model->name?>">
+    </div>
+    <div class="input-group">
+        <label>参数含义</label>
+        <input name="title" type="text" class="form-control" placeholder="参数含义" value="<?=$model->title?>">
+    </div>
+    <div class="input-group">
+        <label>参数类型</label>
+        <select class="form-control" name="field[type]">
+            <?php foreach($model->type_list as $key => $item):?>
+               <option value="<?=$key?>" <?= $key == $model->type ? 'selected' : '' ?>><?=$item?></option>
+            <?php endforeach;?>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>MOCK规则
+            <a target="_blank" href="https://github.com/gouguoyin/phprap/wiki/Mock" data-toggle="tooltip" data-placement="right" title="" class="btn-show-tips" data-original-title="点击查看MOCK语法">
+                <i class="fa fa-info-circle"></i>
+            </a>
+        </label>
+        <input class="form-control" name="mock" value="<?=$model->mock?>" placeholder="非必填，如果要使用mock服务，必须填写" datatype="*" ignore="ignore">
+    </div>
+
+   <div class="input-group">
+        <label>备注说明</label>
+        <textarea name="remark" class="form-control" placeholder="备注说明"><?=$model->remark?></textarea>
+    </div>
+    <?php endif;?>
+
+
     <input type="hidden" name="id" value="<?=$model->id?>">
+    <input type="hidden" name="parent_id" value="<?=$model->parent_id?>">
+    <input type="hidden" name="api_id" value="<?=$model->api_id?>">
+    <input type="hidden" name="kind" value="<?=$model->kind?>">
 </form>

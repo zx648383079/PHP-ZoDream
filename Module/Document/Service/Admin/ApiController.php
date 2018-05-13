@@ -5,6 +5,8 @@ use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\ProjectModel;
 use Zodream\Helpers\Json;
+use Zodream\Http\Http;
+use Zodream\Http\Uri;
 use Zodream\Infrastructure\Http\Request;
 
 class ApiController extends Controller {
@@ -13,11 +15,15 @@ class ApiController extends Controller {
         $api = ApiModel::find($id);
         $project = ProjectModel::find($api->project_id);
         $tree_list = ApiModel::getTree($api->project_id);
-        return $this->show(compact('project', 'tree_list', 'api'));
+        $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $id)->all();
+        $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
+        $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
+        $response_json = FieldModel::getDefaultData($id);
+        return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields', 'response_json'));
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => null]);
+        return $this->runMethod('edit', ['id' => 0]);
     }
 
     public function editAction($id, $project_id = 0, $parent_id = 0) {
@@ -30,30 +36,29 @@ class ApiController extends Controller {
         }
         $project = ProjectModel::find($model->project_id);
         $tree_list = ApiModel::getTree($model->project_id);
-        $response_fields = FieldModel::where('method', FieldModel::KIND_RESPONSE)->where('api_id', $id)->all();
-        $request_fields = FieldModel::where('method', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
-        $header_fields = FieldModel::where('method', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
+        $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $id)->all();
+        $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
+        $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
         return $this->show(compact('model', 'project', 'tree_list', 'response_fields', 'request_fields', 'header_fields'));
     }
 
     public function saveAction() {
+        $id = intval(Request::request('id'));
         $model = new ApiModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('api', ['id' => $model->id])
+        if (!$model->load() || !$model->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
+
+        }
+        if ($id < 1) {
+            FieldModel::where('api_id', $id)->update([
+                'api_id' => $model->id
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('api', ['id' => $model->id])
+        ]);
     }
 
-    public function createFieldAction() {
-        return $this->runMethod('editField', ['id' => null]);
-    }
-
-    public function editFieldAction($id) {
-        $model = FieldModel::findOrNew($id);
-        return $this->show(compact('model'));
-    }
 
     public function deleteAction($id) {
         ApiModel::where('id', $id)->delete();
@@ -61,4 +66,80 @@ class ApiController extends Controller {
             'url' => $this->getUrl('')
         ]);
     }
+
+    public function debugAction($id) {
+        $api = ApiModel::find($id);
+        $project = ProjectModel::find($api->project_id);
+        $tree_list = ApiModel::getTree($api->project_id);
+        $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
+        $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
+        return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields'));
+    }
+
+    public function mockAction($id) {
+        $response_json = FieldModel::getMockData($id);
+        return $this->jsonSuccess($response_json);
+    }
+
+    public function debugResultAction() {
+        $url = new Uri(Request::post('url'));
+        $method = Request::post('method');
+        $data = Request::post('request');
+        $real_data = [];
+        foreach ($data['key'] as $i => $item) {
+            $real_data[$item] = $data['value'][$i];
+        }
+        $header = Request::post('header');
+        $headers = [
+            'request' => [],
+            'response' => []
+        ];
+        $real_header = [];
+        foreach ($header['key'] as $i => $item) {
+            $headers['request'][] = sprintf('%s: %s', $item, $header['value'][$i]);
+            $real_header[$item] = $header['value'][$i];
+        }
+        if ($method != 'POST') {
+            $url->setData($data);
+        }
+        $http = new Http($url);
+        $body = $http->header($header)
+            ->maps($data)->method($method)->setHeaderOption(true)
+            ->setOption(CURLOPT_RETURNTRANSFER, 1)
+            ->setOption(CURLOPT_FOLLOWLOCATION, 1)
+            ->setOption(CURLOPT_AUTOREFERER, 1)->getResponseText();
+        $info = $http->getResponseHeader();
+        $headers['response'] = explode(PHP_EOL, substr($body, 0, $info['header_size']));
+        $body = substr($body, $info['header_size']);
+        return $this->show(compact('body', 'headers', 'info'));
+    }
+
+    public function createFieldAction() {
+        return $this->runMethod('editField', ['id' => null]);
+    }
+
+    public function editFieldAction($id, $kind = 0, $parent_id = 0, $api_id = 0) {
+        $model = FieldModel::findOrNew($id);
+        if (empty($id)) {
+            $model->kind = $kind;
+            $model->parent_id = $parent_id;
+            $model->api_id = $api_id;
+        }
+        return $this->show(compact('model'));
+    }
+
+    public function saveFieldAction() {
+        $model = new FieldModel();
+        if ($model->load() && $model->autoIsNew()->setMock()->save()) {
+            return $this->jsonSuccess($model);
+        }
+        return $this->jsonFailure($model->getFirstError());
+    }
+
+    public function deleteFieldAction($id) {
+        FieldModel::where('id', $id)->delete();
+        return $this->jsonSuccess();
+    }
+
+
 }

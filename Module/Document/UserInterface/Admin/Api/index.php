@@ -29,7 +29,7 @@ $this->extend('../layouts/header');
                     </div>
                     <div class="panel-body">
                         <p class="text-muted"><label>接口名称：</label><?=$api->name?></p>
-                        <p class="text-muted"><label>所属模块：</label>{{$api.module.title}}</p>
+                        <p class="text-muted"><label>所属项目：</label><?=$project->name?></p>
                         <p class="text-muted"><label>请求类型：</label><?=$api->method?></p>
                         <p class="text-muted"><label>接口描述：</label><?=$api->description?></p>
                     </div>
@@ -52,22 +52,21 @@ $this->extend('../layouts/header');
                             <table class="table table-striped table-bordered table-hover">
 
                                 <tbody>
-                                {{foreach $envs as $env}}
-                                {{$env_url = {{$env.domain}}|cat:'/'|cat:{{$api.uri}}}}
+                                <?php foreach($project->environments as $item):?>
                                 <tr>
-                                    <td style="width: 20%;">{{$env.title}}({{$env.name}})</td>
-                                    <td style="width: 50%;"><code>{{$env_url}}</code></td>
+                                    <td style="width: 20%;"><?=$item['title']?>(<?=$item['name']?>)</td>
+                                    <td style="width: 50%;"><code><?=$api->getUri($item['domain'])?></code></td>
                                     <td style="width: 15%;">
-                                        <button type="button" data-clipboard-text="{{$env_url}}" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                        <button type="button" class="btn btn-xs btn-success"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                     </td>
                                 </tr>
-                                {{/foreach}}
+                                <?php endforeach;?>
 
                                 <tr>
                                     <td style="width: 20%;">模拟环境(mock)</td>
-                                    <td style="width: 50%;"><code>{{url("mock/{{id_encode($api.id)}}", '', true)}}</code></td>
+                                    <td style="width: 50%;"><code><?=$this->url('./api/mock', ['id' => $api->id])?></code></td>
                                     <td style="width: 15%;">
-                                        <button type="button" data-clipboard-text="{{url("mock/{{id_encode($api.id)}}", '', true)}}" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                        <button type="button" class="btn btn-xs btn-success js_copyUrl"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                     </td>
 
                                 </tr>
@@ -103,14 +102,13 @@ $this->extend('../layouts/header');
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{foreach $header_fields as $header_field}}
-                                <tr class="{{$header_field.class}}">
-                                    <td>{{$header_field.name}}</td>
-                                    <td>{{$header_field.default_value}}</td>
-                                    <td>{{$header_field.intro}}</td>
+                                <?php foreach($header_fields as $item):?>
+                                <tr>
+                                    <td><?=$item['name']?></td>
+                                    <td><?=$item['default_value']?></td>
+                                    <td><?=$item['remark']?></td>
                                 </tr>
-                                {{/foreach}}
-
+                                <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>
@@ -144,16 +142,16 @@ $this->extend('../layouts/header');
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{foreach $request_fields as $request_field}}
-                                <tr class="{{$request_field.class}}">
-                                    <td>{{$request_field.delimiter}}{{if $request_field.parent_id}}--{{/if}}{{$request_field.name}}</td>
-                                    <td>{{$request_field.title}}</td>
-                                    <td>{{\app\field::get_type_list({{$request_field.type}})}}</td>
-                                    <td>{{if $request_field.is_required}}是{{else}}否{{/if}}</td>
-                                    <td>{{$request_field.default_value}}</td>
-                                    <td>{{$request_field.intro}}</td>
+                                <?php foreach($request_fields as $item):?>
+                                <tr>
+                                    <td><?=$item['name']?></td>
+                                    <td><?=$item['title']?></td>
+                                    <td><?=$item->type_list[$item->type]?></td>
+                                    <td><?=$item['is_required'] ? '是' : '否'?></td>
+                                    <td><?=$item['default_value']?></td>
+                                    <td><?=$item['remark']?></td>
                                 </tr>
-                                {{/foreach}}
+                                <?php endforeach;?>
 
                                 </tbody>
                             </table>
@@ -187,16 +185,19 @@ $this->extend('../layouts/header');
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{foreach $response_fields as $response_field}}
-                                <tr class="{{if $response_field.level == 1}}warning{{/if}}">
-                                    <td style="text-align: left;padding-left: 50px;">{{$response_field.delimiter}}{{if $response_field.parent_id}}└{{/if}}{{$response_field.name}}</td>
-                                    <td>{{$response_field.title}}</td>
-                                    <td>{{\app\field::get_type_list({{$response_field.type}})}}</td>
-                                    <td>{{$response_field.mock}}</td>
-                                    <td>{{$response_field.intro}}</td>
-                                </tr>
+                                <?php foreach($response_fields as $item):?>
+                                <tr class="<?=$item['parent_id'] < 1 ? 'warning' : ''?>">
 
-                                {{/foreach}}
+                                    <td style="text-align: left;padding-left: 50px;"><?=$item['parent_id'] ? '└' : ''?><?=$item['name']?></td>
+                                    <td><?=$item['title']?></td>
+                                    <td><?=$item->type_list[$item->type]?></td>
+
+                                    <td><?=$item['mock']?></td>
+
+                                    <td><?=$item['remark']?></td>
+
+                                </tr>
+                                <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>
@@ -214,11 +215,13 @@ $this->extend('../layouts/header');
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                返回示例<a role="button" class="btn fa fa-refresh js_refreshField" data-id="{{$api.id}}" data-toggle="tooltip" title="刷新数据" ></a>
+                返回示例<a role="button" href="javascript:refreshMock('<?=$this->url('./admin/api/mock', ['id' => $api->id])?>');" class="btn fa fa-refresh" title="刷新数据" ></a>
             </div>
             <div class="panel-body">
-                <div class="hidden json-data">{{$respose_json}}</div>
-                <div class="json-box"></div>
+                <div class="json-box">
+                    <pre><code class="language-json"><?=json_encode($response_json)?></code></pre>
+                    
+                </div>
             </div>
             <!-- /.panel-body -->
         </div>

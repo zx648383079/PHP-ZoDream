@@ -4,6 +4,7 @@ namespace Module\Document\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Html\Tree;
+use Zodream\Http\Uri;
 
 /**
  * Class ApiModel
@@ -20,6 +21,10 @@ use Zodream\Html\Tree;
  */
 class ApiModel extends Model {
 
+    public $method_list = [
+        'GET', 'POST', 'PUT', 'DELETE', 'OPTION'
+    ];
+
     public static function tableName() {
         return 'doc_api';
     }
@@ -28,7 +33,7 @@ class ApiModel extends Model {
         return [
             'name' => 'required|string:0,35',
             'method' => 'required|string:0,10',
-            'uri' => 'required|string:0,255',
+            'uri' => 'string:0,255',
             'project_id' => 'required|int',
             'description' => 'string:0,255',
             'parent_id' => 'int',
@@ -51,8 +56,14 @@ class ApiModel extends Model {
         ];
     }
 
+    public function getUri($domain) {
+        return (new Uri($domain))->decode($this->uri);
+    }
+
     public  static function getTree($project_id) {
-        $data = self::where('project_id', $project_id)->select('id', 'name', 'parent_id')->all();
+        $data = self::where('project_id', $project_id)->select('id', 'name', 'parent_id')->asArray()->all();
         return (new Tree($data))->makeTree();
     }
+
+
 }

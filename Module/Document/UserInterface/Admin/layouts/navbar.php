@@ -26,19 +26,21 @@ use Zodream\Template\View;
     <li><a href="<?=$this->url('./admin/project', ['id' => $project->id])?>">
             <i class="fa fa-home"></i><span>项目主页</span></a></li>
     <?php foreach($tree_list as $item):?>
-    <li><a href="javascript:;">
+    <li class="active"><a href="javascript:;">
             <i class="fa fa-folder-open"></i><span><?=$item['name']?></span></a>
         <ul>
+            <?php if(isset($item['children'])):?>
             <?php foreach($item['children'] as $child):?>
             <li><a href="<?=$this->url('./admin/api', ['id' => $child['id']])?>">
                     <i class="fa fa-file"></i><span><?=$child['name']?></span></a></li>
             <?php endforeach;?>
+            <?php endif;?>
             <li><a href="<?=$this->url('./admin/api/create', ['project_id' => $project->id, 'parent_id' => $item['id']])?>">
                     <i class="fa fa-plus"></i><span>新建接口</span></a></li>
         </ul>
     </li>
     <?php endforeach;?>
     <li><a href="<?=$this->url('./admin/api/create', ['project_id' => $project->id])?>">
-                    <i class="fa fa-plus"></i><span>新建接口</span></a></li>
+                    <i class="fa fa-plus"></i><span>新建模块</span></a></li>
 </ul>
 <?php endif;?>
