@@ -8,14 +8,14 @@ var gulp = require('gulp'),
     ts = require("gulp-typescript"),
     tslint = require("gulp-tslint"),
     tsProject = ts.createProject('tsconfig.json'),
-    moduleRoot = 'Module/Document/';
+    moduleRoot = '';
     jsRoot = moduleRoot + 'UserInterface/assets/js/',
     tsRoot = moduleRoot + 'UserInterface/assets/ts/',
     jsDist = 'html/assets/js',
     cssRoot = moduleRoot + 'UserInterface/assets/sass/',
     cssDist = 'html/assets/css';
- 
-gulp.task('sass', function () {
+
+function sassTask() {
     return gulp.src(cssRoot + "*.scss")
         .pipe(sourcemaps.init())
         .pipe(sass())
@@ -23,36 +23,45 @@ gulp.task('sass', function () {
         // .pipe(minCss())
         // .pipe(rename({suffix:'.min'}))
         .pipe(gulp.dest(cssDist));
-});
+}
 
-gulp.task('css', function () {
+function cssTask() {
     return gulp.src(cssRoot + "*.css")
         .pipe(minCss())
         .pipe(rename({suffix:'.min'}))
         .pipe(gulp.dest(cssDist));
-});
+}
 
-gulp.task('tslint', () =>
-    gulp.src(jsRoot + '*.ts')
+function tslintTask() {
+    return gulp.src(jsRoot + '*.ts')
         .pipe(tslint({
             formatter: 'verbose'
         }))
-        .pipe(tslint.report())
-);
+        .pipe(tslint.report());
+}
 
-gulp.task('ts', function () {
+function tsTask() {
     return gulp.src(tsRoot + '*.ts')
     .pipe(tsProject())
     .pipe(uglify())
     .pipe(rename({suffix:'.min'}))
     .pipe(gulp.dest(jsDist));
-});
+}
 
-gulp.task('js', function () {
+function jsTask() {
     return gulp.src(jsRoot + '*.js')
-    .pipe(uglify())
+    //.pipe(uglify())
     .pipe(rename({suffix:'.min'}))
     .pipe(gulp.dest(jsDist));
-});
+}
 
-gulp.task('default', ['css', 'js', 'sass', 'tslint', 'ts']);
+exports.sassTask = sassTask;
+exports.jsTask = jsTask;
+exports.tslintTask = tslintTask;
+exports.tsTask = tsTask;
+exports.cssTask = cssTask;
+
+var build = gulp.series(gulp.parallel(sassTask, cssTask, tslintTask, tsTask, jsTask));
+
+gulp.task('build', build);
+gulp.task('default', build);

@@ -32,20 +32,21 @@ footer {
   vertical-align: baseline;
   padding: 20px 12px 60px 36px;
   top: auto;
-  position: relative;
+  position: absolute;
   overflow-y: visible;
   display: inline-block; }
 
 .right-content {
   width: calc(100% - 208px);
-  position: absolute;
+  position: relative;
   vertical-align: baseline;
   background-color: #f4f4f4;
   flex-grow: unset;
   display: inline-block;
   top: 0;
   padding: 8px;
-  min-height: 300px; }
+  min-height: 300px;
+  margin-left: 208px; }
 
 .page-tip {
   border: 1px dashed #97CCFE;
@@ -87,6 +88,11 @@ footer {
 
 .zd-tab .zd-tab-head .zd-tab-item {
   width: 130px; }
+
+.zd-panel {
+  width: 100%;
+  position: relative;
+  z-index: 0; }
 
 .page-header {
   padding: 8px; }

@@ -1280,6 +1280,7 @@ var DialogContent = /** @class */ (function (_super) {
             this.trigger('done');
         });
         this.onClick(".dialog-close", function () {
+            this.isLoading = false;
             this.close();
         });
         return this;

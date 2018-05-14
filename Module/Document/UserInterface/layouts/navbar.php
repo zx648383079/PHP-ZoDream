@@ -11,7 +11,7 @@ use Zodream\Template\View;
             <i class="fa fa-money"></i><span>项目列表</span></a>
         <ul>
             <?php foreach($project_list as $item):?>
-            <li><a href="<?=$this->url('./money')?>">
+            <li><a href="<?=$this->url('./project', ['id' => $item['id']])?>">
                     <i class="fa fa-book"></i><span><?=$item['name']?></span></a></li>
             <?php endforeach;?>
         </ul>
@@ -24,7 +24,7 @@ use Zodream\Template\View;
     <li><a href="<?=$this->url('./project', ['id' => $project->id])?>">
             <i class="fa fa-home"></i><span>项目主页</span></a></li>
     <?php foreach($tree_list as $item):?>
-    <li><a href="javascript:;">
+    <li class="active"><a href="javascript:;">
             <i class="fa fa-folder-open"></i><span><?=$item['name']?></span></a>
         <ul>
             <?php foreach($item['children'] as $child):?>
