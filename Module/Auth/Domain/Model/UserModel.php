@@ -131,6 +131,24 @@ class UserModel extends BaseModel {
 	}
 
     /**
+     *
+     * @param $username
+     * @param $password
+     * @return bool|UserModel|void|\Zodream\Infrastructure\Interfaces\UserObject
+     * @throws \Exception
+     */
+	public static function findByAccount($username, $password) {
+        $user = self::findByEmail($username);
+        if (empty($user)) {
+            return false;
+        }
+        if (!$user->validatePassword($password)) {
+            return false;
+        }
+        return $user;
+    }
+
+    /**
      * @param $name
      * @return UserModel|boolean
      * @throws \Exception
@@ -197,20 +215,6 @@ class UserModel extends BaseModel {
 		    $this->setError($user->getError());
 			return false;
 		}
-		/*$user->roles = EmpireModel::query('role_user r')->findAll(array(
-			'right' => array(
-				'authorization_role ar',
-				'r.role_id = ar.role_id'
-			),
-			'left' => array(
-				'authorization a',
-				'a.id = ar.authorization_id'
-			),
-			'where' => 'r.user_id = '.$user['id']
-		), array(
-			'id' => 'a.id',
-			'name' => 'a.name'
-		));*/
 		return $user->login();
 	}
 
