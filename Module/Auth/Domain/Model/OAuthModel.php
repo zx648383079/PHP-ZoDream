@@ -56,7 +56,7 @@ class OAuthModel extends Model {
     public static function findUser($identifier,
                                     $type = self::TYPE_QQ) {
         $model = static::where('vendor', $type)
-            ->where('identity', $identifier)->first();
+            ->where('identity', $identifier)->one();
         if (empty($model)) {
             return false;
         }
