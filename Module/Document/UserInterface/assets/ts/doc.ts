@@ -8,16 +8,16 @@ function delField(ele: any, url: string) {
 
 function getRowHtml(data: any, hasTr: boolean = true): string {
     let html: string;
-    switch (data.kind) {
-        case 3:
-            html = strFormat('<td style="width: 20%">{0}</td><td style="width: 35%">{1}</td><td style="width: 35%">{2}</td><td style="width: 10%"><a href="javascript:editField(this, {3});" class="fa fa-pencil"></a><a href="javascript:delField(this, {3});" class="fa fa-trash-o"></a></td>', data.name, data.default_value, data.remark, data.id);
+    switch (data.kind + '') {
+        case '3':
+            html = strFormat('<td style="width: 20%">{0}</td><td style="width: 35%">{1}</td><td style="width: 35%">{2}</td><td style="width: 10%"><a href="javascript:;" onclick="editField(this, \'{3}\');" class="fa fa-pencil"></a><a href="javascript:;" onclick="delField(this, \'{4}\');" class="fa fa-trash-o"></a></td>', data.name, data.default_value, data.remark, data.edit_url, data.delete_url);
             break;
-        case 2:
-            html = strFormat('<td style="width: 20%">{0}</td><td style="width: 35%">{1}</td><td style="width: 35%">{2}</td><td style="width: 10%"><a href="javascript:editField(this, {3});" class="fa fa-pencil"></a><a href="javascript:delField(this, {3});" class="fa fa-trash-o"></a></td>', data.name, data.default_value, data.remark, data.id);
+        case '2':
+            html = strFormat('<td style="text-align: left;padding-left: 50px;">{1}{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td style="width: 10%"><a href="javascript:;" onclick="editField(this, \'{7}\');" class="fa fa-pencil"></a><a href="javascript:;" onclick="delField(this, \'{8}\');" class="fa fa-trash-o"></a>{9}</td>', data.parent_id < 1 ? 'warning' : '', data.parent_id > 0 ? '└' : '', data.name, data.title, data.type_label, data.mock, data.remark, data.edit_url, data.delete_url, data.has_children ? strFormat('<a href="javascript:;" onclick="addField(\'{0}\', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>', data.child_url) : '');
             break;
-        case 1:
+        case '1':
         default:
-            html = strFormat('<td style="width: 20%">{0}</td><td style="width: 35%">{1}</td><td style="width: 35%">{2}</td><td style="width: 10%"><a href="javascript:editField(this, {3});" class="fa fa-pencil"></a><a href="javascript:delField(this, {3});" class="fa fa-trash-o"></a></td>', data.name, data.default_value, data.remark, data.id);
+            html = strFormat('<td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td style="width: 10%"><a href="javascript:;" onclick="editField(this, \'{6}\');" class="fa fa-pencil"></a><a href="javascript:;" onclick="delField(this, \'{7}\');" class="fa fa-trash-o"></a></td>', data.name, data.title, data.type_label, data.is_required ? '是' : '否', data.default_value, data.remark, data.edit_url, data.delete_url);
             break;
     }
     if (hasTr) {
@@ -27,8 +27,8 @@ function getRowHtml(data: any, hasTr: boolean = true): string {
 }
 
 
-function addField(url: string) {
-    Dialog.box({
+function addField(url: string, parent?: any) {
+    let box = Dialog.box({
         url: url,
         title: '添加字段'
     }).on('done', function() {
@@ -36,6 +36,11 @@ function addField(url: string) {
         postJson(form.attr('action'), form.serialize(), function(data) {
             if (data.code != 200) {
                 parseAjax(data);
+                return;
+            }
+            Dialog.remove();
+            if (parent) {
+                $(parent).parents('tr').insertAfter(getRowHtml(data.data))
                 return;
             }
             $("#table-"+data.data.kind+" tbody:last").append(getRowHtml(data.data));
@@ -54,7 +59,8 @@ function editField(ele: any, url: string) {
                 parseAjax(data);
                 return;
             }
-            //$("#table-"+data.data.kind+" tbody:last").append()
+            Dialog.remove();
+            $(ele).parents('tr').html(getRowHtml(data.data, false));
         });
     });
 }

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-
+$this->title = '项目:'.$project->name;
 $this->extend('../layouts/header');
 ?>
 

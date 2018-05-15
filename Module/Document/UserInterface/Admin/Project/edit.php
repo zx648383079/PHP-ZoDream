@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = $model->id ?  '编辑项目:'.$model->name : '新建项目';
 $js = <<<JS
 // 新增环境
 $("body").on('click', '.js_addEnvBtn',function (event) {

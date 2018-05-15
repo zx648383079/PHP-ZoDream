@@ -130,10 +130,19 @@ class ApiController extends Controller {
 
     public function saveFieldAction() {
         $model = new FieldModel();
-        if ($model->load() && $model->autoIsNew()->setMock()->save()) {
-            return $this->jsonSuccess($model);
+        if (!$model->load() || !$model->autoIsNew()->setMock()->save()) {
+            return $this->jsonFailure($model->getFirstError());
+
         }
-        return $this->jsonFailure($model->getFirstError());
+        $data = $model->toArray();
+        $data['edit_url'] = $this->getUrl('api/edit_field', ['id' => $model->id]);
+        $data['delete_url'] = $this->getUrl('api/delete_field', ['id' => $model->id]);
+        $data['has_children'] = $model->has_children;
+        if ($data['has_children']) {
+            $data['child_url'] = $this->getUrl('api/create_field', ['parent_id' => $model->id, 'api_id' => $model->api_id, 'kind' => $model->kind]);
+        }
+        $data['type_label'] = $model->type_label;
+        return $this->jsonSuccess($data);
     }
 
     public function deleteFieldAction($id) {

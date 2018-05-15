@@ -78,6 +78,14 @@ class FieldModel extends Model {
         ];
     }
 
+    public function getHasChildrenAttribute() {
+        return in_array($this->type, ['array', 'object']);
+    }
+
+    public function getTypeLabelAttribute() {
+        return $this->type_list[$this->type];
+    }
+
     public function setMock() {
         if ($this->kind != self::KIND_RESPONSE) {
             return $this;

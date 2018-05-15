@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-
+$this->title = '接口调试';
 $this->extend('../layouts/header');
 ?>
 

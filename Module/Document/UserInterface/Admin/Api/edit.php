@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = $model->id ?  '编辑接口:'.$model->name : '新建接口';
 $js = <<<JS
 $('[name=parent_id]').change(function () { 
     $(".extent-box").toggle($(this).val() > 0);
@@ -76,8 +77,8 @@ $this->extend('../layouts/header');
                                     <td style="width: 35%"><?=$item['default_value']?></td>
                                     <td style="width: 35%"><?=$item['remark']?></td>
                                     <td style="width: 10%">
-                                        <a href="javascript:editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-pencil"></a>
-                                        <a href="javascript:delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
+                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-pencil"></a>
+                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -124,7 +125,7 @@ $this->extend('../layouts/header');
                                 </thead>
                                 <tbody>
                                 <?php foreach($request_fields as $item):?>
-                                <tr class="{{$request_field.class}}">
+                                <tr>
                                     <td><?=$item['name']?></td>
                                     <td><?=$item['title']?></td>
                                     <td><?=$item->type_list[$item->type]?></td>
@@ -132,8 +133,8 @@ $this->extend('../layouts/header');
                                     <td><?=$item['default_value']?></td>
                                     <td><?=$item['remark']?></td>
                                     <td style="width: 10%">
-                                    <a href="javascript:editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-pencil"></a>
-                                        <a href="javascript:delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
+                                    <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-pencil"></a>
+                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -189,10 +190,10 @@ $this->extend('../layouts/header');
 
                                     <td style="width: 10%">
 
-                                        <a href="javascript:editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-pencil"></a>
-                                        <a href="javascript:delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
+                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-pencil"></a>
+                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
                                         <?php if(in_array($item->type, ['array', 'object'])):?>
-                                        <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id])?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
+                                        <a href="javascript:;" onclick="addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id])?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
                                         <?php endif;?>
                                         
 
