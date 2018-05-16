@@ -27,6 +27,12 @@ class UserModel extends BaseModel {
     const SEX_MALE = 1; // 性别男
     const SEX_FEMALE = 2; //性别女
 
+    public $sex_list = [
+        '未知',
+        '男',
+        '女'
+    ];
+
 	public static function tableName() {
         return 'user';
     }
@@ -108,6 +114,10 @@ class UserModel extends BaseModel {
 		  'created_at' => 'Create At',
 		);
 	}
+
+	public function getSexLabelAttribute() {
+	    return $this->sex_list[$this->sex];
+    }
 
 	public function setPassword($password) {
 		$this->password = Hash::make($password);

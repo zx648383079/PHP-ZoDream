@@ -1,0 +1,143 @@
+body {
+  background: #333;
+}
+
+a {
+  text-decoration: none;
+}
+
+footer,
+header,
+.btn,
+.zd-tab .zd-tab-head .zd-tab-item.active,
+.zd-tab .zd-tab-head .zd-tab-item:hover {
+  background: #000;
+  color: #fff;
+}
+
+header {
+  height: 50px;
+  line-height: 50px;
+  position: fixed;
+  z-index: 500;
+  top: 0;
+  left: 0;
+  right: 0;
+  .container {
+    margin-top: 0;
+  }
+}
+
+footer {
+  padding: 32px 20px;
+  position: relative;
+}
+
+.container {
+  width: 1300px;
+  margin: 50px auto 0;
+  position: relative;
+}
+
+.left-catelog {
+  width: 208px;
+  vertical-align: baseline;
+  padding: 20px 12px 60px 36px;
+  top: auto;
+  position: absolute;
+  overflow-y: visible;
+  display: inline-block;
+}
+
+.right-content {
+  width: calc(100% - 208px);
+  position: relative;
+  vertical-align: baseline;
+  background-color: #f4f4f4;
+  flex-grow: unset;
+  display: inline-block;
+  top: 0;
+  padding: 8px;
+  min-height: 300px;
+  margin-left: 208px;
+}
+
+.page-tip {
+  border: 1px dashed #97CCFE;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #F5FAFF;
+  position: relative;
+  .blue {
+    color: #97CCFE;
+  }
+  ul {
+    width: 100%;
+    padding: 0;
+    li {
+      padding-left: 10px;
+      list-style: inside;
+      a {
+        color: #666;
+      }
+    }
+  }
+  .toggle {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    height: 26px;
+    width: 26px;
+    &::before {
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: 14px;
+      font-size: inherit;
+      text-rendering: auto;
+      content: "\f068";
+    }
+  }
+  &.min {
+    width: 200px;
+    ul {
+      display: none;
+    }
+    .toggle {
+      &::before {
+        content: "\f067";
+      }
+    }
+  }
+}
+
+.breadcrumb {
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  >li {
+    display: inline-block;
+    &.active {
+      color: #777;
+    }
+    +li::before {
+      padding: 0 5px;
+      color: #ccc;
+      content: "/\00a0";
+    }
+  }
+}
+
+#table-box {
+  select {
+    height: auto;
+    display: block;
+    min-width: 200px;
+  }
+}
+
+.search {
+  .form-horizontal {
+    display: inline-block;
+  }
+}

@@ -3,7 +3,7 @@
 $this->registerCssFile('@font-awesome.min.css')
     ->registerCssFile('@dialog.css')
     ->registerCssFile('@zodream.css')
-    ->registerCssFile('@account.css');
+    ->registerCssFile('@login.css');
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
