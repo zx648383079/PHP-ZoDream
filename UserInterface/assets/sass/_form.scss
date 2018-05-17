@@ -199,7 +199,7 @@ i {
 
 .form-table {
     .input-group {
-        >label {
+        >label:first-child {
             width: 25%;
             float: left;
             display: block;
@@ -238,11 +238,24 @@ i {
                 color: #767676;
                 margin-bottom: 8px;
             }
+            label {
+                padding: 0 8px;
+                line-height: 30px;
+            }
         }
         &:after {
             content: "";
             display: table;
             clear: both;
+        }
+    }
+    .file-input {
+        button {
+            padding: 0 10px;
+            line-height: 30px;
+            border: none;
+            background: #000;
+            color: #fff;
         }
     }
     .actions {

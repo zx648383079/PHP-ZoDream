@@ -26,8 +26,8 @@ $this->extend('../layouts/header');
             <label for="thumb">图片</label>
             <div class="file-input">
                 <input type="text" id="thumb" name="thumb" placeholder="请输入图片" value="<?=$model->thumb?>" size="70">
-                <button type="button">上传</button>
-                <button type="button">预览</button>
+                <button type="button" data-type="upload">上传</button>
+                <button type="button" data-type="preview">预览</button>
             </div>
         </div>
 
