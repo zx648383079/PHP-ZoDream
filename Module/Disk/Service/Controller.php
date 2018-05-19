@@ -8,6 +8,12 @@ class Controller extends ModuleController {
 
     protected $configs;
 
+    protected function rules() {
+        return [
+          '*' => '@'
+        ];
+    }
+
     public function init() {
         $this->configs = Factory::config('disk', [
             'cache' => 'data/disk/cache/',

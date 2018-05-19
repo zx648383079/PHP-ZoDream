@@ -1,8 +1,8 @@
 <?php
 namespace Module\Disk\Service;
 
-use Module\Auth\Domain\Model\UserModel;
 use Module\Disk\Domain\Model\DiskModel;
+use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
@@ -10,27 +10,29 @@ use Zodream\Database\Command;
 use Zodream\Disk\FileSystem;
 use Zodream\Domain\Access\Auth;
 use Zodream\Helpers\Str;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 use Zodream\Service\Routing\Url;
 
 class DiskController extends Controller {
     
     public function indexAction() {
-        return $this->render('index');
+        $role = [];
+        return $this->show(compact('role'));
     }
 
 
-    public function listAction($id = 0, $category = null, $offset = 0, $length = 20) {
+    public function listAction($id = 0, $type = null, $offset = 0, $length = 20) {
         if (intval($length) < 1) {
             return $this->jsonFailure('长度不对！');
         }
         $user = Auth::id();
         $query = DiskModel::where(['user_id' => $user,
-            'parent_id' => $id, 'delete_at' => null])->ofType(intval($category));
+            'parent_id' => $id, 'deleted_at' => 0])->ofType(intval($type));
         return $this->jsonSuccess($query->limit($length)->offset($offset)->asArray()->all());
     }
 
-    public function actionDelete() {
+    public function deleteAction() {
         $data = Request::post('id');
         if (empty($data)) {
             return $this->jsonFailure('不能为空！');
@@ -48,7 +50,7 @@ class DiskController extends Controller {
         return $this->jsonSuccess();
     }
 
-    public function actionShare() {
+    public function shareAction() {
         $data = Request::post('id,user,mode public,end_at,role 0');
         if (empty($data['id'])) {
             return $this->jsonFailure('不能为空！');
@@ -112,20 +114,20 @@ class DiskController extends Controller {
     /**
      * 增加文件夹
      */
-    public function actionCreate() {
+    public function createAction() {
         $model = new DiskModel();
         $model->name = Request::post('name');
         $model->parent_id = Request::post('parent_id', 0);
         $model->created_at = $model->updated_at = time();
         $model->user_id = Auth::id();
-        $model->is_dir = 1;
+        $model->file_id = 0;
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstErrors());
+            return $this->jsonFailure($model->getFirstError());
         }
         return $this->jsonSuccess($model->toArray());
     }
 
-    function actionRename() {
+    function renameAction() {
         $data = Request::post('id,name');
         $model = DiskModel::find($data['id']);
         if (empty($model)) {
@@ -139,30 +141,26 @@ class DiskController extends Controller {
         return $this->jsonSuccess($model);
     }
 
-    function actionCheck() {
+    function checkAction() {
         $data = Request::post('md5,name,parent_id');
         if (empty($data['md5']) || empty($data['name'])) {
             return $this->jsonFailure('不能为空！');
         }
-        $model = DiskModel::find(['md5' => $data['md5']]);
+        $model = FileModel::where('md5', $data['md5'])->one();
         if (empty($model)) {
             return $this->jsonFailure('MD5 Error', 2);
         }
-        $data['extension'] = FileSystem::getExtension($data['name']);
-        $data['size'] = $model->size;
-        $data['location'] = $model->location;
         $disk = new DiskModel();
         $disk->user_id = Auth::id();
-        $data['created_at'] = $data['updated_at'] = time();
-        if (!$disk->load($data, '') || !$disk->save()) {
+        $disk->file_id = $model->id;
+        $disk->parent_id = intval($data['parent_id']);
+        if (!$disk->save()) {
             return $this->jsonFailure('添加失败', 3);
         }
-        $data['id'] = $disk->id;
-        unset($data['localhost']);
-        return $this->jsonSuccess($data);
+        return $this->jsonSuccess($disk);
     }
 
-    public function actionAdd() {
+    public function addAction() {
         $data = Request::post('name,md5,size,parent_id 0,type:extension,temp');
         $file = Factory::root()->file($this->configs['cache'].$data['temp']);
         if (!$file->exist() || $file->size() != $data['size']) {
@@ -183,7 +181,7 @@ class DiskController extends Controller {
         return $this->jsonSuccess($data);
     }
 
-    public function actionFolder($id) {
+    public function folderAction($id) {
         $user = Auth::id();
         $data = DiskModel::where([
             'is_dir' => 1,
@@ -193,7 +191,7 @@ class DiskController extends Controller {
         return $this->jsonSuccess($data);
     }
 
-    public function actionMove() {
+    public function moveAction() {
         $data = Request::post('id,parent 0,mode 0');
         if (empty($data['id'])) {
             return $this->jsonFailure('没有移动对象');

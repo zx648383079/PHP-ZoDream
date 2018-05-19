@@ -18,6 +18,6 @@ use Zodream\Database\Model\Model;
 class FileModel extends Model {
 
     public static function tableName() {
-        return 'file';
+        return 'disk_file';
     }
 }

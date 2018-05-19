@@ -1,7 +1,7 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layout/header');
+$this->extend('layouts/header');
 ?>
 
 
@@ -9,5 +9,5 @@ $this->extend('layout/header');
 
 
 <?php
-$this->extend('layout/footer');
+$this->extend('layouts/footer');
 ?>

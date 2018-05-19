@@ -2,6 +2,7 @@
 namespace Module\Disk\Domain\Model;
 
 use Zodream\Database\Model\Model;
+use Zodream\Helpers\Time;
 
 /**
  * Class DiskModel 网盘目录数据
@@ -203,5 +204,10 @@ class DiskModel extends Model {
 
     public function getCount() {
         return ($this->right_id - $this->left_id - 1) / 2;
+    }
+
+    public function getDeletedAtAttribute() {
+        $val = $this->getAttributeSource('deleted_at');
+        return empty($val) ? '' : Time::format($val);
     }
 }

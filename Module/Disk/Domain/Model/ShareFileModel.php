@@ -13,6 +13,6 @@ use Zodream\Database\Model\Model;
 class ShareFileModel extends Model {
 
     public static function tableName() {
-        return 'share_file';
+        return 'disk_share_file';
     }
 }

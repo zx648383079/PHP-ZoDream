@@ -4,7 +4,6 @@ namespace Module\Disk\Service;
 use Module\Disk\Domain\Model\DiskModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\ModuleController;
 
 /**
  * Created by PhpStorm.
@@ -12,27 +11,26 @@ use Zodream\Route\Controller\ModuleController;
  * Date: 2017/8/21
  * Time: 22:31
  */
-class TrashController extends ModuleController {
+class TrashController extends Controller {
 
     public function indexAction() {
         return $this->show();
     }
 
     public function listAction($offset = 0, $length = 20) {
-        $data = DiskModel::where(['user_id' => Auth::id()])
-            ->whereNotNull('deleted_at')
-            ->offset($offset)->limit($length)->asArray()->all();
+        $data = DiskModel::where('user_id', Auth::id())
+            ->where('deleted_at', '>', 0)
+            ->offset($offset)->limit($length)
+            ->asArray()->all();
         return $this->jsonSuccess($data);
     }
 
     public function resetAction() {
         $user = Auth::id();
         $id = Request::post('id');
-        $row = DiskModel::where([
-                'id' => ['in', (array)$id],
-                'user_id' => $user
-            ])->update([
-                'deleted_at' => null
+        $row = DiskModel::whereIn('id', (array)$id)
+            ->where('user_id', $user)->update([
+                'deleted_at' => 0
             ]);
         if (empty($row)) {
             return $this->jsonFailure('服务器错误!');
@@ -43,19 +41,17 @@ class TrashController extends ModuleController {
     public function deleteAction() {
         $user = Auth::id();
         $id = Request::post('id');
-        DiskModel::where([
-                'id' => ['in', (array)$id],
-                'user_id' => $user
-            ])->whereNotNull('deleted_at')
+        DiskModel::whereIn('id', (array)$id)
+            ->where('user_id', $user)
+            ->where('deleted_at', '>', 0)
             ->delete();
         return $this->jsonSuccess();
     }
 
     public function clearAction() {
         $user = Auth::id();
-        DiskModel::where([
-            'user_id' => $user
-        ])->whereNotNull('deleted_at')
+        DiskModel::where('user_id', $user)
+            ->where('deleted_at', '>', 0)
             ->delete();
         return $this->jsonSuccess();
     }

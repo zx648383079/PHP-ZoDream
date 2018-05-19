@@ -13,6 +13,6 @@ use Zodream\Database\Model\Model;
 class ShareUserModel extends Model {
 
     public static function tableName() {
-        return 'share_user';
+        return 'disk_share_user';
     }
 }

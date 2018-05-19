@@ -23,7 +23,7 @@ class ShareModel extends Model {
     const SHARE_PRIVATE = 2;  //分享给个人
 
     public static function tableName() {
-        return 'share';
+        return 'disk_share';
     }
 
 
