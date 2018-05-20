@@ -160,12 +160,17 @@ footer {
     height: 30px;
     background: transparent;
     .actions {
+        right: 20px;
         button {
             background: #000;
             color: #fff;
             line-height: 30px;
             padding: 0 8px;
+            margin: 0;
             border: none;
+            &.active {
+                background: #888;
+            }
         }
     }
 }
@@ -194,6 +199,9 @@ footer {
     span {
         line-height: 40px;
     }
+    .btn {
+        padding: 0 10px;
+    }
 }
 
 .table-body {
@@ -216,6 +224,67 @@ footer {
                 display: none;
             }
         }
+        .row-edit {
+            display: none;
+            width: 80%;
+            input {
+                height: 30px;
+                width: 80%;
+            }
+        }
+        .row-editable {
+            .row-name {
+                display: none;
+            }
+            .row-edit {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.grid-box {
+    .col-md-2 {
+        box-sizing: border-box;
+        .file-icon {
+            position: relative;
+            text-align: center;
+            .checkbox {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: none;
+            }
+            .fa {
+                font-size: 60px;
+                line-height: 90px;
+            }
+        }
+        .row-name {
+            display: block;
+            padding: 5px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
+            overflow: hidden;
+            text-align: center;
+        }
+        &.active,
+        &:hover {
+            border: 1px solid;
+            .checkbox {
+                display: block;
+            }
+        }
+        
+    }
+    
+}
+
+.crumb-box {
+    .col-xs-2 {
+        text-align: right;
+        padding: 8px 15px;
     }
 }
 
@@ -273,13 +342,15 @@ footer {
     .dialog-body {
         .row {
             margin: 0;
-            &:hover {
-                background: rgba(0, 0, 0, .1);
-            }
         }
         .file-box {
             max-height: 200px;
             overflow-y: auto;
+            .row {
+                &:hover {
+                    background: rgba(0, 0, 0, .1);
+                }
+            }
         }
     }
 }

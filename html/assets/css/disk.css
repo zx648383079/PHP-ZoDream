@@ -128,12 +128,17 @@ footer {
 .page-header {
   height: 30px;
   background: transparent; }
-  .page-header .actions button {
-    background: #000;
-    color: #fff;
-    line-height: 30px;
-    padding: 0 8px;
-    border: none; }
+  .page-header .actions {
+    right: 20px; }
+    .page-header .actions button {
+      background: #000;
+      color: #fff;
+      line-height: 30px;
+      padding: 0 8px;
+      margin: 0;
+      border: none; }
+      .page-header .actions button.active {
+        background: #888; }
 
 .checkbox {
   display: inline-block;
@@ -153,6 +158,8 @@ footer {
   line-height: 40px; }
   .table-header span {
     line-height: 40px; }
+  .table-header .btn {
+    padding: 0 10px; }
 
 .table-body .row {
   line-height: 30px; }
@@ -166,6 +173,46 @@ footer {
       display: block; }
     .table-body .row:hover .hover-hide {
       display: none; }
+  .table-body .row .row-edit {
+    display: none;
+    width: 80%; }
+    .table-body .row .row-edit input {
+      height: 30px;
+      width: 80%; }
+  .table-body .row .row-editable .row-name {
+    display: none; }
+  .table-body .row .row-editable .row-edit {
+    display: inline-block; }
+
+.grid-box .col-md-2 {
+  box-sizing: border-box; }
+  .grid-box .col-md-2 .file-icon {
+    position: relative;
+    text-align: center; }
+    .grid-box .col-md-2 .file-icon .checkbox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none; }
+    .grid-box .col-md-2 .file-icon .fa {
+      font-size: 60px;
+      line-height: 90px; }
+  .grid-box .col-md-2 .row-name {
+    display: block;
+    padding: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    text-align: center; }
+  .grid-box .col-md-2.active, .grid-box .col-md-2:hover {
+    border: 1px solid; }
+    .grid-box .col-md-2.active .checkbox, .grid-box .col-md-2:hover .checkbox {
+      display: block; }
+
+.crumb-box .col-xs-2 {
+  text-align: right;
+  padding: 8px 15px; }
 
 .dropdown {
   position: relative;
@@ -207,10 +254,10 @@ footer {
       color: #fff; }
   .dialog.dialog-box.upload-dialog .dialog-body .row {
     margin: 0; }
-    .dialog.dialog-box.upload-dialog .dialog-body .row:hover {
-      background: rgba(0, 0, 0, 0.1); }
   .dialog.dialog-box.upload-dialog .dialog-body .file-box {
     max-height: 200px;
     overflow-y: auto; }
+    .dialog.dialog-box.upload-dialog .dialog-body .file-box .row:hover {
+      background: rgba(0, 0, 0, 0.1); }
 
 /*# sourceMappingURL=disk.css.map */

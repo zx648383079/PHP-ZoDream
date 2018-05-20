@@ -19,38 +19,32 @@ class TrashController extends Controller {
 
     public function listAction($offset = 0, $length = 20) {
         $data = DiskModel::where('user_id', Auth::id())
-            ->where('deleted_at', '>', 0)
+            ->where('deleted_at', '>', 100)
             ->offset($offset)->limit($length)
             ->asArray()->all();
         return $this->jsonSuccess($data);
     }
 
     public function resetAction() {
-        $user = Auth::id();
         $id = Request::post('id');
-        $row = DiskModel::whereIn('id', (array)$id)
-            ->where('user_id', $user)->update([
-                'deleted_at' => 0
-            ]);
-        if (empty($row)) {
-            return $this->jsonFailure('服务器错误!');
+        $model_list = DiskModel::auth()->whereIn('id', (array)$id)->where('deleted_at', '>', 0)->all();
+        foreach ($model_list as $item) {
+            $item->resetThis();
         }
         return $this->jsonSuccess();
     }
 
     public function deleteAction() {
-        $user = Auth::id();
         $id = Request::post('id');
-        DiskModel::whereIn('id', (array)$id)
-            ->where('user_id', $user)
-            ->where('deleted_at', '>', 0)
-            ->delete();
+        $model_list = DiskModel::auth()->whereIn('id', (array)$id)->where('deleted_at', '>', 0)->all();
+        foreach ($model_list as $item) {
+            $item->deleteThis();
+        }
         return $this->jsonSuccess();
     }
 
     public function clearAction() {
-        $user = Auth::id();
-        DiskModel::where('user_id', $user)
+        DiskModel::auth()
             ->where('deleted_at', '>', 0)
             ->delete();
         return $this->jsonSuccess();

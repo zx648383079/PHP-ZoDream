@@ -26,7 +26,7 @@ $this->registerJs($js)->extend('layouts/header');
                     <li><a href="#" class="uploadFolder">上传文件夹</a></li>
                 </ul>
             </div>
-            <button v-show="!category" class="btn btn-default" data-toggle="modal" data-target="#createModal">
+            <button v-show="!category" class="btn btn-default" data-type="create">
                 <span class="fa fa-plus"></span>新建文件夹</button>
         </div>
         <div class="actions">
@@ -35,13 +35,13 @@ $this->registerJs($js)->extend('layouts/header');
             <button class="btn" v-bind:class="{'active': !isList}" v-on:click="setList(false)"><span class="fa fa-th-large"></span></button>
         </div>
     </div>
-    <div class="row zd_crumb">
+    <div class="row crumb-box">
         <div class="col-xs-2" v-show="crumb.length > 1">
             <a href="#" v-on:click="top">返回上一级</a> |
         </div>
         <div class="col-xs-10">
             <ol class="breadcrumb">
-                <li v-for="(index,item) in crumb" v-bind:class="{'active': index == crumb.length - 1}">
+                <li v-for="(item, index) in crumb" v-bind:class="{'active': index == crumb.length - 1}">
                     <a href="#" v-on:click="level(item)" v-show="index < crumb.length - 1">{{item.name}}</a>
                     <span v-show="index == crumb.length - 1">{{item.name}}</span>
                 </li>
@@ -83,27 +83,27 @@ $this->registerJs($js)->extend('layouts/header');
             </div>
             <div class="col-md-8">
                 <button v-on:click="shareAll" class="btn btn-default">
-                    <span class="fa fa-share"></span>
+                    <i class="fa fa-share"></i>
                     分享
                 </button>
                 <button v-on:click="downloadAll" class="btn btn-default">
-                    <span class="fa fa-download-alt"></span>
+                    <i class="fa fa-download-alt"></i>
                     下载
                 </button>
                 <button v-on:click="deleteAll" class="btn btn-default">
-                    <span class="fa fa-trash"></span>
+                    <i class="fa fa-trash"></i>
                     删除
                 </button>
                 <button v-on:click="moveAll" class="btn btn-default">
-                    <span class="fa fa-copy"></span>
+                    <i class="fa fa-copy"></i>
                     复制到
                 </button>
                 <button v-on:click="copyAll" class="btn btn-default">
-                    <span class="fa fa-move"></span>
+                    <i class="fa fa-move"></i>
                     移动到
                 </button>
                 <button v-on:click="rename" class="btn btn-default">
-                    <span class="fa fa-pencil"></span>
+                    <i class="fa fa-pencil"></i>
                     重命名
                 </button>
             </div>
@@ -115,9 +115,14 @@ $this->registerJs($js)->extend('layouts/header');
                 <div class="col-md-1">
                     <span class="checkbox" v-bind:class="{'checked': item.checked}"></span>
                 </div>
-                <div v-on:click.stop="enter(item)" class="col-md-6">
+                <div v-on:click.stop="enter(item)" class="col-md-6" v-bind:class="{'row-editable': item.is_edit}">
                     <span class="fa" v-bind:class="{'fa-folder': item.file_id < 1, 'fa-file': item.file_id > 0}"></span>
-                    <span>{{item.name}}</span>
+                    <span class="row-name">{{item.name}}</span>
+                    <div class="row-edit">
+                        <input type="text" v-model="item.new_name">
+                        <i class="fa fa-check"  v-on:click="saveEdit(item)"></i>
+                        <i class="fa fa-close" v-on:click="closeEdit(item)"></i>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <span>{{item.size | size}}</span>
@@ -125,24 +130,25 @@ $this->registerJs($js)->extend('layouts/header');
                 <div class="col-md-3">
                     <span class="hover-hide">{{item.update_at | time}}</span>
                     <div class="row-tools">
-                        <span v-on:click.stop="share(item)" class="fa fa-share"></span>
-                        <span v-on:click.stop="download(item)" class="fa fa-download-alt"></span>
-                        <span v-on:click.stop="move(item)" class="fa fa-move"></span>
-                        <span v-on:click.stop="copy(item)" class="fa fa-copy"></span>
-                        <span v-on:click.stop="rename(item)" class="fa fa-pencil"></span>
-                        <span v-on:click.stop="deleteItem(item)" class="fa fa-trash"></span>
+                        <span v-on:click="share(item)" class="fa fa-share"></span>
+                        <span v-on:click="download(item)" class="fa fa-download-alt"></span>
+                        <span v-on:click="move(item)" class="fa fa-move"></span>
+                        <span v-on:click="copy(item)" class="fa fa-copy"></span>
+                        <span v-on:click="rename(item)" class="fa fa-pencil"></span>
+                        <span v-on:click="deleteItem(item)" class="fa fa-trash"></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div v-show="!isList" class="zd_grid">
+    <div v-show="!isList" class="grid-box">
         <div class="row">
             <div v-for="item in files" v-on:click="check(item)" class="col-md-2">
-                <div  v-bind:class="{'zd_dir': item.is_dir == 1, 'zd_file': item.is_dir != 1}">
-                    <span class="checkbox" v-bind:class="{'checked': item.checked}"></span>
+                <div class="file-icon">
+                    <i class="checkbox" v-bind:class="{'checked': item.checked}"></i>
+                    <i class="fa" v-bind:class="{'fa-folder': item.file_id < 1, 'fa-file': item.file_id > 0}"></i>
                 </div>
-                <div class="zd_name">
+                <div class="row-name">
                     <a href="#" v-on:click.stop="enter(item)">{{item.name}}</a>
                 </div>
             </div>

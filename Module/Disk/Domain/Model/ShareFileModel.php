@@ -15,4 +15,19 @@ class ShareFileModel extends Model {
     public static function tableName() {
         return 'disk_share_file';
     }
+
+    protected function rules() {
+        return [
+            'disk_id' => 'required|int',
+            'share_id' => 'required|int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'disk_id' => 'Disk Id',
+            'share_id' => 'Share Id',
+        ];
+    }
 }

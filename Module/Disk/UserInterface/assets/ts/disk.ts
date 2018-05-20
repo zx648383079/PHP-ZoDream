@@ -85,7 +85,6 @@ function require_disk(baseUrl: string, md5Url: string) {
                     }
                     $("#result input").val(data.data.url);
                     if (data.data.mode == "protected") {
-                        console.log('1');
                         $("#result .row").append('密码：<input type="text" value="'+ data.data.password+'" class="form-control" readonly>');
                     }
                     $("#shareModal .nav-tabs li").removeClass("active");
@@ -273,7 +272,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                 }
             },
             enter: function (item) {
-              if (item.is_dir != 1) {
+              if (item.file_id > 0) {
                   this.check(item);
                   return;
               }
@@ -461,18 +460,45 @@ function require_disk(baseUrl: string, md5Url: string) {
                     }
                 }
             },
-            rename: function (item) {
-                if (item === void 0) {
-                    for (let i = this.files.length - 1; i >= 0; i --) {
-                        if (this.files[i].checked) {
-                            item = this.files[i];
-                            break;
-                        }
+            rename: function (item?: any) {
+                console.log(item);
+                if (item) {
+                    item.is_edit = true;
+                    item.new_name = item.name;
+                    return;
+                }
+                for (let i = this.files.length - 1; i >= 0; i --) {
+                    const file = this.files[i];
+                    if (file.checked) {
+                        file.is_edit = true;
+                        file.new_name = item.name; 
                     }
                 }
-                $("#renameModal input").val(item.name);
-                $("#renameModal").modal("show");
-                indexFile = item;
+            },
+            closeEdit: function(item: any) {
+                item.is_edit = false;
+            },
+            saveEdit: function(item: any) {
+                if (!item.new_name) {
+                    Dialog.tip('文件名不能为空！');
+                    return;
+                }
+                postJson(baseUrl + 'disk/rename', {
+                    name: item.name,
+                    id: item.id,
+                }, function (data) {
+                    if (data.code != 200) {
+                        parseAjax(data);
+                        return;
+                    }
+                    item.name = item.new_name;
+                    $(dataCache[vue.getTag()]).each(function (index, file) {
+                        if (file.id == item.id) {
+                            file.name = item.name;
+                            file.updated_at = data.updated_at;
+                        }
+                    });
+                });
             },
             load: function (category) {
                 category = category.split("#");
@@ -498,64 +524,26 @@ function require_disk(baseUrl: string, md5Url: string) {
     // 模态框事件
     /* ------------------------------------------------*/
     // 新建文件夹
-    $(".create").click(function () {
-        let element = $(this).parent().parent().find('input');
-        let name = element.val();
-        if (!name) {
-            element.addClass("zd_error");
-            return;
-        }
-        $.post(baseUrl + 'disk/create', {
-            name: name,
-            parent_id: vue.getParent()
-        }, function (data) {
-            if (data.code != 200) {
-                element.addClass("zd_error");
-                return;
-            }
-            $('#createModal').modal('hide');
-            element.val("");
-            data.data.checked = false;
-            vue.files.push(data.data);
-            dataCache[vue.getTag()].push(data.data);
-        }, "json");
+    $("[data-type=create]").click(function () {
+        let box = Dialog.form({
+            name: '名称'
+        }, '新建文件夹').on('done', function() {
+            postJson(baseUrl + 'disk/create', {
+                name: this.data.name,
+                parent_id: vue.getParent()
+            }, function (data) {
+                if (data.code != 200) {
+                    parseAjax(data)
+                    return;
+                }
+                box.close();
+                vue.files.push(data.data);
+                dataCache[vue.getTag()].push(data.data);
+            });
+        });
+        
     });
     /* ----------------------------------------------*/
-    // 文件重命名
-    $(".rename").click(function () {
-        let element = $(this).parent().parent().find('input');
-        let name = element.val();
-        if (!name) {
-            element.addClass("zd_error");
-            return;
-        }
-        postJson(baseUrl + 'disk/rename', {
-            name: name,
-            id: indexFile.id,
-            _csrf: csrfToken
-        }, function (data) {
-            if (data.code != 200) {
-                element.addClass("zd_error");
-                return;
-            }
-            $('#renameModal').modal('hide');
-            element.val("");
-            $(vue.files).each(function (index, item) {
-                if (item.id == indexFile.id) {
-                    item.name = name;
-                    item.update_at = data.update_at;
-                }
-                vue.files.$set(index, item);
-            });
-            $(dataCache[vue.getTag()]).each(function (index, item) {
-                if (item.id == indexFile.id) {
-                    item.name = name;
-                    item.update_at = data.update_at;
-                }
-            });
-            indexFile = null;
-        });
-    });
     /* ----------------------------------------------------------*/
     // 文件移动或复制
     let fileIds = [], moveMode = 0, fileParent = 0;
@@ -676,7 +664,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                         return;
                     }
                     let data = $.parseJSON(xhr.responseText);
-                    if (data.status != 'success') {
+                    if (data.code != 200) {
                         file.status = 7;
                         return;
                     }
