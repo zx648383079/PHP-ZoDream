@@ -120,8 +120,8 @@ $this->registerJs($js)->extend('layouts/header');
                     <span class="row-name">{{item.name}}</span>
                     <div class="row-edit">
                         <input type="text" v-model="item.new_name">
-                        <i class="fa fa-check"  v-on:click="saveEdit(item)"></i>
-                        <i class="fa fa-close" v-on:click="closeEdit(item)"></i>
+                        <i class="fa fa-check"  v-on:click.stop="saveEdit(item)"></i>
+                        <i class="fa fa-close" v-on:click.stop="closeEdit(item)"></i>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -130,12 +130,12 @@ $this->registerJs($js)->extend('layouts/header');
                 <div class="col-md-3">
                     <span class="hover-hide">{{item.update_at | time}}</span>
                     <div class="row-tools">
-                        <span v-on:click="share(item)" class="fa fa-share"></span>
-                        <span v-on:click="download(item)" class="fa fa-download-alt"></span>
-                        <span v-on:click="move(item)" class="fa fa-move"></span>
-                        <span v-on:click="copy(item)" class="fa fa-copy"></span>
-                        <span v-on:click="rename(item)" class="fa fa-pencil"></span>
-                        <span v-on:click="deleteItem(item)" class="fa fa-trash"></span>
+                        <span v-on:click.stop="share(item)" class="fa fa-share"></span>
+                        <span v-on:click.stop="download(item)" class="fa fa-download-alt"></span>
+                        <span v-on:click.stop="move(item)" class="fa fa-move"></span>
+                        <span v-on:click.stop="copy(item)" class="fa fa-copy"></span>
+                        <span v-on:click.stop="rename(item)" class="fa fa-pencil"></span>
+                        <span v-on:click.stop="deleteItem(item)" class="fa fa-trash"></span>
                     </div>
                 </div>
             </div>

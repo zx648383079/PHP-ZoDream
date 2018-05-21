@@ -19,6 +19,7 @@ class ServerController extends Controller {
             // 登录
             return $this->redirectWithAuth();
         }
+        TicketModel::where('service', $service)->delete();
         $model = TicketModel::create([
             'service' => $service,
             'ticket' => TicketModel::generateTicket(),
@@ -48,21 +49,21 @@ class ServerController extends Controller {
 
     public function validateAction($service, $ticket) {
         if (!$this->isValidUri($service)) {
-            return join(PHP_EOL, [
-                'no',
-            ]);
+            return $this->jsonFailure('无效的 service');
         }
         $model = TicketModel::where('service', $service)
             ->where('ticket', $ticket)->one();
         if (empty($model)) {
-            return join(PHP_EOL, [
-                'no',
-            ]);
+            return $this->jsonFailure('无效的 ticket');
+//            return join(PHP_EOL, [
+//                'no',
+//            ]);
         }
-        return join(PHP_EOL, [
-            'yes', // 'no'
-            Auth::id()
-        ]);
+        return $this->jsonSuccess($model->user_id);
+//        return join(PHP_EOL, [
+//            'yes', // 'no'
+//            Auth::id()
+//        ]);
     }
 
     public function serviceValidateAction($service, $ticket) {

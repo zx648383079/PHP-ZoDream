@@ -327,7 +327,13 @@ function require_disk(baseUrl: string, md5Url: string) {
                         return;
                     }
                     vue.deleteCache(item);
-                    vue.files.$remove(item);
+                    for (let i = 0, length = vue.files.length; i < length; i++) {
+                        if (vue.files[i].id == item.id) {
+                            vue.files.splice(i, 1);
+                            return;
+                        }
+                    }
+                    
                 })
             },
             // 删除缓存

@@ -4,13 +4,14 @@ namespace Module\Cas\Service;
 use Module\Cas\Domain\Model\ClientTicketModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Http\Http;
+use Zodream\Service\Config;
 use Zodream\Service\Factory;
 use Zodream\Service\Routing\Url;
 
 class ClientController extends Controller {
 
     protected function getServerUrl($path, $params = []) {
-        return Url::to('./server/'.$path, $params);
+        return Url::to('./server/'.$path, $params)->setHost('zodream.localhost');
     }
 
     public function indexAction($ticket = null) {
@@ -55,7 +56,7 @@ class ClientController extends Controller {
             return $this->jsonFailure('user is error!', 401);
         }
         /** @var UserModel $user */
-        $user = call_user_func($userClass.'::findByIdentity', $data['data']['user_id']);
+        $user = call_user_func($userClass.'::findByIdentity', $data['data']);
         Auth::login($user);
         return true;
     }
