@@ -1,6 +1,7 @@
 <?php
 namespace Module\Disk\Service;
 
+use Module\Disk\Domain\FFmpeg;
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
 use Zodream\Service\Factory;
@@ -21,16 +22,28 @@ class FileController extends Controller {
         $video = Factory::root()->file($this->configs['disk'].$file->location);
         if ($file->extension != 'mp4') {
             $tmp = Factory::public_path()->file($video->getName().'.mp4');
-            $cmd = sprintf('%s -i %s -y -c:v libx264 -strict -2 %s', $tool, $video->getFullName(), $tmp->getFullName());
-            shell_exec($cmd);
+            FFmpeg::factory($tool, $video)
+                ->overwrite()
+                ->set('c:v', 'libx264')
+                ->set('strict')
+                ->set('2')->output($tmp)->ready()->start()->join()->stop();
             $video = $tmp;
         }
-        $cmd = sprintf('%s -y -i %s -vcodec copy -acodec copy -vbsf h264_mp4toannexb %s.ts', $tool, $video->getFullName(), $video->getName());
-        echo $cmd, '<br/>';
-        //shell_exec($cmd);
-        $cmd = sprintf('%s -i %s.ts -c copy -map 0 -f segment -segment_list %s.m3u8 -segment_time 5 %s', $tool, $video->getName(), $video->getName(), $video->getName()).'-%03d.ts';
-        echo $cmd;
-        //shell_exec($cmd);
+        $ts = '.ts';
+        FFmpeg::factory($tool, $video)
+            ->overwrite()
+            ->set('vcodec', 'copy')
+            ->set('acodec', 'copy')
+            ->set('vbsf', 'h264_mp4toannexb')
+            ->output($ts)->ready()->start()->join()->stop();
+        FFmpeg::factory($tool, $ts)
+            ->overwrite()
+            ->set('c', 'copy')
+            ->set('map', 0)
+            ->set('f', 'segment')
+            ->set('segment_list', '.m3u8')
+            ->set('segment_time', 5)
+            ->output('-%03d.ts')->ready()->start()->join()->stop();
     }
 
     public function tsAction() {
