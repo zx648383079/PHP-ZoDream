@@ -5,6 +5,7 @@
  *
  * Copyright (c) 2017 ZoDream
  */
+
 @import "prefix";
 @import "loading";
 .dialog-bg {
@@ -13,15 +14,16 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,.4);
+    background: rgba(0, 0, 0, .4);
     z-index: 998;
     display: none;
     &.dialog-bg-private {
-        position:  absolute;
+        position: absolute;
         z-index: 988;
         display: block;
     }
 }
+
 .dialog {
     position: fixed;
     z-index: 999;
@@ -50,9 +52,7 @@
         @include prefix-animation(dialog-message .5s);
         @include prefix-content(transition, top 1s);
     }
-    &.dialog-loading {
-
-    }
+    &.dialog-loading {}
     &.dialog-pop {
         bottom: auto;
         &:before {
@@ -64,12 +64,13 @@
         }
         &.dialog-pop-top,
         &.dialog-pop-leftTop,
-        &.dialog-pop-center, {
+        &.dialog-pop-center,
+            {
             &:before {
                 bottom: -40px;
                 left: 50%;
                 margin-left: -20px;
-                border-top-color:rgba(0, 0, 0, .6);
+                border-top-color: rgba(0, 0, 0, .6);
             }
         }
         &.dialog-pop-left,
@@ -87,7 +88,7 @@
                 top: -40px;
                 left: 50%;
                 margin-left: -20px;
-                border-bottom-color:rgba(0, 0, 0, .6);
+                border-bottom-color: rgba(0, 0, 0, .6);
             }
         }
         &.dialog-pop-right,
@@ -100,7 +101,6 @@
             }
         }
     }
-
     &.dialog-page,
     &.dialog-content,
     &.dialog-box,
@@ -108,13 +108,15 @@
     &.dialog-disk {
         background: #fff;
         min-width: 260px;
+        display: none;
         @include prefix-animation(dialog-box 0.5s);
         .dialog-header {
             position: relative;
-            height: 30px;
+            background: #333;
+            color: #fff;
+            height: 40px;
             line-height: 30px;
             text-align: center;
-            background: #fff;
             padding: 5px 10px;
             border-bottom: 1px solid #ccc;
             .dialog-title {
@@ -131,30 +133,31 @@
             }
             .fa-arrow-left {
                 left: 0;
-                background: #fff;
-                color:#ccc;
-                top:5px;
+                background: #333;
+                color: #fff;
+                top: 5px;
             }
             .dialog-close {
                 right: 0;
-                background:#fff;
-                color:#ccc;
-                top:6px;
+                background: #333;
+                color: #fff;
+                top: 6px;
                 &:hover {
                     @include prefix-content(transform, rotateZ(180deg));
                 }
             }
         }
         .dialog-body {
-            min-height: 100px;            
+            min-height: 100px;
             overflow: auto;
-            padding:10px;
+            padding: 10px;
         }
         .dialog-footer {
             button {
                 width: 50%;
                 border: none;
                 line-height: 30px;
+                background: #333;
                 color: #fff;
                 padding: 0;
                 margin: 0;
@@ -164,22 +167,20 @@
             }
             .dialog-yes {
                 width: 30%;
-                background: #fff;
-                padding: 3px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                margin-right: 5px;
-                line-height: 30px;
-                color: #333;
-            }
-            .dialog-close {
-                width:30%;
-                background: #337ab7;
+                background: #333;
                 color: #fff;
                 padding: 3px;
-                border: 1px solid #337ab7;
-                border-radius: 5px;
-                line-height:30px;
+                border: none;
+                margin-right: 5px;
+                line-height: 30px;
+            }
+            .dialog-close {
+                width: 30%;
+                background: #333;
+                color: #fff;
+                padding: 3px;
+                border: none;
+                line-height: 30px;
             }
         }
     }
@@ -188,12 +189,12 @@
     &.dialog-content {
         .dialog-header {
             .dialog-title {
-                text-align:left;
+                text-align: left;
             }
         }
         .dialog-footer {
             border-top: 1px solid #ccc;
-            padding: 10px;
+            padding: 2px;
             text-align: right;
         }
     }
@@ -201,11 +202,9 @@
         top: 0;
         left: 0;
         right: 0;
-        .dialog-body {
-            
-        }
+        .dialog-body {}
         .dialog-footer {
-            text-align:center
+            text-align: center
         }
     }
     &.dialog-page {
@@ -214,10 +213,10 @@
         width: 100%;
         bottom: 0;
         .dialog-header {
-            .dialog-close{
-                background:#fff;
-                color:#ccc;
-                top:6px;
+            .dialog-close {
+                background: #333;
+                color: #fff;
+                top: 6px;
             }
         }
         .dialog-body {
@@ -230,7 +229,7 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            text-align:center
+            text-align: center
         }
     }
     &.dialog-form {
@@ -241,7 +240,7 @@
                 width: 100%;
                 box-sizing: border-box;
                 border: none;
-                border-bottom: 1px solid #337ab7;
+                border-bottom: 1px solid #333;
                 padding: 5px;
             }
             label {
@@ -252,15 +251,12 @@
                 width: 100px;
                 float: right;
                 border: none;
-                border-bottom: 1px solid #337ab7;
+                border-bottom: 1px solid #333;
                 padding: 5px;
             }
         }
-        
     }
-    &.dialog-box {
-        
-    }
+    &.dialog-box {}
     &.dialog-image {
         @include prefix-content(transition, all 1s);
         .dialog-previous,
@@ -275,13 +271,9 @@
             top: 50%;
             margin-top: -15px;
         }
-        .dialog-previous {
-
-        }
+        .dialog-previous {}
         .dialog-body {
-            img{
-
-            }
+            img {}
         }
         .dialog-next {
             right: 0;
@@ -300,7 +292,7 @@
     }
     &.dialog-disk {
         .dialog-body {
-            min-width: 600px;
+            min-width: 300px;
             min-height: 500px;
             position: relative;
             .dialog-catalog {
@@ -326,9 +318,7 @@
                         .tree-child {
                             margin-left: 15px;
                             display: none;
-                            .tree-item {
-
-                            }
+                            .tree-item {}
                         }
                         &.active,
                         &:hover {
@@ -371,14 +361,16 @@
                 }
             }
         }
+        .dialog-footer {
+            text-align: center
+        }
     }
     &.dialog-closing {
         @include prefix-animation(dialog-closing .5s);
     }
 }
 
-
-@include prefix-keyframes(dialog-message){
+@include prefix-keyframes(dialog-message) {
     0% {
         @include prefix-content(transform, scaleY(0.1));
     }
@@ -393,7 +385,7 @@
     }
 }
 
-@include prefix-keyframes(dialog-box){
+@include prefix-keyframes(dialog-box) {
     0% {
         @include prefix-content(transform, scale(0.7));
     }
@@ -408,39 +400,34 @@
     }
 }
 
-@include prefix-keyframes(dialog-tip){
-  from, 
-  60%, 
-  75%, 
-  90%, 
-  to {
-    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-  }
-
-  from {
-    opacity: 0;
-    @include prefix-content(transform, translate3d(0, 3000px, 0));
-  }
-
-  60% {
-    opacity: 1;
-    @include prefix-content(transform, translate3d(0, -20px, 0));
-  }
-
-  75% {
-    @include prefix-content(transform, translate3d(0, 10px, 0));
-  }
-
-  90% {
-    @include prefix-content(transform, translate3d(0, -5px, 0));
-  }
-
-  to {
-    @include prefix-content(transform, translate3d(0, 0, 0));
-  }
+@include prefix-keyframes(dialog-tip) {
+    from,
+    60%,
+    75%,
+    90%,
+    to {
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    from {
+        opacity: 0;
+        @include prefix-content(transform, translate3d(0, 3000px, 0));
+    }
+    60% {
+        opacity: 1;
+        @include prefix-content(transform, translate3d(0, -20px, 0));
+    }
+    75% {
+        @include prefix-content(transform, translate3d(0, 10px, 0));
+    }
+    90% {
+        @include prefix-content(transform, translate3d(0, -5px, 0));
+    }
+    to {
+        @include prefix-content(transform, translate3d(0, 0, 0));
+    }
 }
 
-@include prefix-keyframes(dialog-closing){
+@include prefix-keyframes(dialog-closing) {
     0% {
         opacity: 1;
         @include prefix-content(transform, scale(1));

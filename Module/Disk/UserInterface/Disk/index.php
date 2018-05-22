@@ -213,8 +213,30 @@ $this->registerJs($js)->extend('layouts/header');
     </div>
 </div>
 
+<div class="dialog dialog-box" data-type="dialog" id="folderModal">
+    <div class="dialog-header">
+        <div class="dialog-title">选择文件夹</div>
+        <i class="fa fa-close dialog-close"></i>
+    </div>
+    <div class="dialog-body">
+        <ul class="tree-box">
+            <li class="active" data-id="0">
+                <div class="tree-item">
+                    <span></span>
+                    <span></span>
+                    <span>全部文件</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="dialog-yes">确认</button>
+        <button type="button" class="dialog-close">取消</button>
+    </div>
+</div>
 
-<div class="dialog dialog-box dialog-hide" id="shareModal">
+
+<div class="dialog dialog-box" data-type="dialog" id="shareModal">
     <div class="dialog-header">
         <div class="dialog-title">分享文件</div>
         <i class="fa fa-close dialog-close"></i>
@@ -288,7 +310,7 @@ $this->registerJs($js)->extend('layouts/header');
     <div class="dialog-footer">
         <button type="button" v-show="modeType == 'internal'" class="btn btn-primary">分享到部门</button>
         <button type="button" v-show="modeType == 'private'" class="btn btn-primary">分享给好友</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="dialog-close">关闭</button>
     </div>
 </div>
 

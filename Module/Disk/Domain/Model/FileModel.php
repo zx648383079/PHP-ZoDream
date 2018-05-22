@@ -77,6 +77,16 @@ class FileModel extends Model {
     }
 
     public function scopeOfType($query, $type) {
+        return static::searchType($query, $type);
+    }
+
+    /**
+     * 搜索类型
+     * @param $query
+     * @param $type
+     * @return mixed
+     */
+    public static function searchType($query, $type) {
         switch ($type) {
             case self::TYPE_IMAGE:
                 return $query->whereIn('extension', self::$extensionMaps[self::TYPE_IMAGE]);

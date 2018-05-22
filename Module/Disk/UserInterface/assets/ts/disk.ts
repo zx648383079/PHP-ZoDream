@@ -156,6 +156,8 @@ function require_disk(baseUrl: string, md5Url: string) {
     // 主界面数据
     let dataCache = {},
         indexFile = null,
+        shareBox = $('#shareModal').dialog();
+        folderBox = $('#folderModal').dialog();
         downloadFile = function (url) {
             let download = $(".downloadFrame");
             if (download.length < 1) {
@@ -411,7 +413,7 @@ function require_disk(baseUrl: string, md5Url: string) {
             },
             share: function (item) {
                 fileIds = [item.id];
-                $("#shareModal").modal("show");
+                shareBox.show();
             },
             shareAll: function () {
                 fileIds = [];
@@ -424,7 +426,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                     alert("请选择文件");
                     return;
                 }
-                $("#shareModal").modal("show");
+                shareBox.show();
             },
             download: function (item) {
                 if (item.is_dir == 1) {
@@ -437,12 +439,12 @@ function require_disk(baseUrl: string, md5Url: string) {
 
             },
             move: function (item) {
-                $("#folderModal").modal("show");
+                folderBox.show();
                 fileIds = [item.id];
                 moveMode = 0;
             },
             moveAll: function () {
-                $("#folderModal").modal("show");
+                folderBox.show();
                 fileIds = [];
                 moveMode = 0;
                 for (let i = this.files.length - 1; i >= 0; i --) {
@@ -452,12 +454,12 @@ function require_disk(baseUrl: string, md5Url: string) {
                 }
             },
             copy: function (item) {
-                $("#folderModal").modal("show");
+                folderBox.show();
                 fileIds = [item.id];
                 moveMode = 1;
             },
             copyAll: function () {
-                $("#folderModal").modal("show");
+                folderBox.show();
                 fileIds = [];
                 moveMode = 1;
                 for (let i = this.files.length - 1; i >= 0; i --) {
@@ -509,7 +511,7 @@ function require_disk(baseUrl: string, md5Url: string) {
             load: function (category) {
                 category = category.split("#");
                 if (category.length > 1) {
-                    category = parseInt(category[1].substr(9));
+                    category = parseInt(category[1].substr(5));
                 } else {
                     category = null;
                 }
@@ -522,7 +524,7 @@ function require_disk(baseUrl: string, md5Url: string) {
     });
     vue.load(window.location.hash);
 
-    $(".menu a").click(function () {
+    $(".disk-menu a").click(function () {
         vue.load($(this).attr("href"));
     });
 
@@ -553,9 +555,9 @@ function require_disk(baseUrl: string, md5Url: string) {
     /* ----------------------------------------------------------*/
     // 文件移动或复制
     let fileIds = [], moveMode = 0, fileParent = 0;
-    $(".zd_tree").on("click", ".zd_tree_item", function (event) {
+    $(".tree-box").on("click", ".tree-item", function (event) {
         event.stopPropagation();
-        $(".zd_tree li").removeClass("active");
+        $(".tree-box li").removeClass("active");
         let father = $(this);
         let parent = father.parent();
         fileParent = parent.attr("data-id");
@@ -580,10 +582,10 @@ function require_disk(baseUrl: string, md5Url: string) {
                 return;
             }
             let html = "";
-            let padding = parseInt(father.css("padding-left")) + 30 + "px";
+            let padding = parseInt(father.css("padding-left")) + 16 + "px";
             $(data.data).each(function (index, item) {
                 html += '<li data-id="'+item.id
-                    +'"><div class="zd_tree_item" style="padding-left: '+padding
+                    +'"><div class="tree-item" style="padding-left: '+padding
                     +'"><span></span><span></span><span>'+item.name
                     +'</span></div></li>';
             });
@@ -591,8 +593,8 @@ function require_disk(baseUrl: string, md5Url: string) {
         });
     });
 
-    $("#folderModal .choose").click(function () {
-        $("#folderModal").modal("hide");
+    folderBox.on('done', function() {
+        this.hide();
         if (fileIds.length < 1) {
             return;
         }

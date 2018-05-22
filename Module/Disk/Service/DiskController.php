@@ -27,9 +27,16 @@ class DiskController extends Controller {
             return $this->jsonFailure('长度不对！');
         }
         $data = DiskModel::auth()
+            ->alias('d')
+            ->left('disk_file f', 'd.file_id', 'f.id')
+            ->when(!empty($type), function ($query) use ($type) {
+                return FileModel::searchType($query, $type);
+            })
             ->where( 'parent_id', $id)
             ->where('deleted_at', 0)
+            ->orderBy('file_id', 'asc')
             ->orderBy('left_id', 'asc')
+            ->select('d.*', 'f.extension', 'f.size')
             ->limit($length)->offset($offset)->asArray()->all();
         return $this->jsonSuccess($data);
     }

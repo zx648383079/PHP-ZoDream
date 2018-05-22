@@ -328,17 +328,7 @@ footer {
     right: 0;
     bottom: 0;
     width: 50%;
-    .dialog-header {
-        background: #333;
-        color: #fff;
-        height: 40px;
-        .dialog-actions {
-            .dialog-close {
-                background: #333;
-                color: #fff;
-            }
-        }
-    }
+    display: block;
     .dialog-body {
         .row {
             margin: 0;
@@ -350,6 +340,88 @@ footer {
                 &:hover {
                     background: rgba(0, 0, 0, .1);
                 }
+            }
+        }
+    }
+}
+
+.tree-box {
+    .tree-item {
+        display: block;
+        white-space: nowrap;
+        text-decoration: none;
+        >span {
+            cursor: pointer;
+            display: inline-block;
+            zoom: 1;
+            vertical-align: middle;
+            &:first-child,
+            &:nth-child(2), {
+                display: inline-block;
+                width: 20px;
+                font: normal normal normal 14px/1 FontAwesome;
+                font-size: inherit;
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+            }
+            &:first-child {
+                &:before {
+                    content: "\f054";
+                }
+            }
+            &:nth-child(2) {
+                &:before {
+                    content: "\f07b";
+                }
+            }
+        }
+        &:hover {
+            background: #f4f9fd;
+            border-color: #e5f0fb;
+        }
+    }
+    li {
+        list-style: none;
+        ul{
+            display: none;
+        }
+        &.open {
+            >ul {
+                display: block;
+            }
+            >.tree-item {
+                >span {
+                    &:first-child {
+                        &:before {
+                            content: "\f078";
+                        }
+                    }
+                    &:nth-child(2) {
+                        &:before {
+                            content: "\f07c";
+                        }
+                    }
+                }
+                &.empty {
+                    >span {
+                        &:first-child {
+                            &:before {
+                                content: " ";
+                            }
+                        }
+                        &:nth-child(2) {
+                            &:before {
+                                content: "\f07b";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.active {
+            >.tree-item {
+                background: #e5f0fb;
+                border-color: #BBD4EF #fff;
             }
         }
     }

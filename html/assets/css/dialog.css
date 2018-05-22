@@ -917,16 +917,18 @@
   .dialog.dialog-page, .dialog.dialog-content, .dialog.dialog-box, .dialog.dialog-form, .dialog.dialog-disk {
     background: #fff;
     min-width: 260px;
+    display: none;
     animation: dialog-box 0.5s;
     -webkit-animation: dialog-box 0.5s;
     -moz-animation: dialog-box 0.5s;
     -o-animation: dialog-box 0.5s; }
     .dialog.dialog-page .dialog-header, .dialog.dialog-content .dialog-header, .dialog.dialog-box .dialog-header, .dialog.dialog-form .dialog-header, .dialog.dialog-disk .dialog-header {
       position: relative;
-      height: 30px;
+      background: #333;
+      color: #fff;
+      height: 40px;
       line-height: 30px;
       text-align: center;
-      background: #fff;
       padding: 5px 10px;
       border-bottom: 1px solid #ccc; }
       .dialog.dialog-page .dialog-header .dialog-title, .dialog.dialog-content .dialog-header .dialog-title, .dialog.dialog-box .dialog-header .dialog-title, .dialog.dialog-form .dialog-header .dialog-title, .dialog.dialog-disk .dialog-header .dialog-title {
@@ -941,13 +943,13 @@
         line-height: 30px; }
       .dialog.dialog-page .dialog-header .fa-arrow-left, .dialog.dialog-content .dialog-header .fa-arrow-left, .dialog.dialog-box .dialog-header .fa-arrow-left, .dialog.dialog-form .dialog-header .fa-arrow-left, .dialog.dialog-disk .dialog-header .fa-arrow-left {
         left: 0;
-        background: #fff;
-        color: #ccc;
+        background: #333;
+        color: #fff;
         top: 5px; }
       .dialog.dialog-page .dialog-header .dialog-close, .dialog.dialog-content .dialog-header .dialog-close, .dialog.dialog-box .dialog-header .dialog-close, .dialog.dialog-form .dialog-header .dialog-close, .dialog.dialog-disk .dialog-header .dialog-close {
         right: 0;
-        background: #fff;
-        color: #ccc;
+        background: #333;
+        color: #fff;
         top: 6px; }
         .dialog.dialog-page .dialog-header .dialog-close:hover, .dialog.dialog-content .dialog-header .dialog-close:hover, .dialog.dialog-box .dialog-header .dialog-close:hover, .dialog.dialog-form .dialog-header .dialog-close:hover, .dialog.dialog-disk .dialog-header .dialog-close:hover {
           transform: rotateZ(180deg);
@@ -963,6 +965,7 @@
       width: 50%;
       border: none;
       line-height: 30px;
+      background: #333;
       color: #fff;
       padding: 0;
       margin: 0; }
@@ -970,26 +973,24 @@
         outline: -webkit-focus-ring-color auto 0px; }
     .dialog.dialog-page .dialog-footer .dialog-yes, .dialog.dialog-content .dialog-footer .dialog-yes, .dialog.dialog-box .dialog-footer .dialog-yes, .dialog.dialog-form .dialog-footer .dialog-yes, .dialog.dialog-disk .dialog-footer .dialog-yes {
       width: 30%;
-      background: #fff;
-      padding: 3px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-right: 5px;
-      line-height: 30px;
-      color: #333; }
-    .dialog.dialog-page .dialog-footer .dialog-close, .dialog.dialog-content .dialog-footer .dialog-close, .dialog.dialog-box .dialog-footer .dialog-close, .dialog.dialog-form .dialog-footer .dialog-close, .dialog.dialog-disk .dialog-footer .dialog-close {
-      width: 30%;
-      background: #337ab7;
+      background: #333;
       color: #fff;
       padding: 3px;
-      border: 1px solid #337ab7;
-      border-radius: 5px;
+      border: none;
+      margin-right: 5px;
+      line-height: 30px; }
+    .dialog.dialog-page .dialog-footer .dialog-close, .dialog.dialog-content .dialog-footer .dialog-close, .dialog.dialog-box .dialog-footer .dialog-close, .dialog.dialog-form .dialog-footer .dialog-close, .dialog.dialog-disk .dialog-footer .dialog-close {
+      width: 30%;
+      background: #333;
+      color: #fff;
+      padding: 3px;
+      border: none;
       line-height: 30px; }
   .dialog.dialog-box .dialog-header .dialog-title, .dialog.dialog-form .dialog-header .dialog-title, .dialog.dialog-content .dialog-header .dialog-title {
     text-align: left; }
   .dialog.dialog-box .dialog-footer, .dialog.dialog-form .dialog-footer, .dialog.dialog-content .dialog-footer {
     border-top: 1px solid #ccc;
-    padding: 10px;
+    padding: 2px;
     text-align: right; }
   .dialog.dialog-content {
     top: 0;
@@ -1003,8 +1004,8 @@
     width: 100%;
     bottom: 0; }
     .dialog.dialog-page .dialog-header .dialog-close {
-      background: #fff;
-      color: #ccc;
+      background: #333;
+      color: #fff;
       top: 6px; }
     .dialog.dialog-page .dialog-body {
       position: absolute;
@@ -1022,7 +1023,7 @@
     width: 100%;
     box-sizing: border-box;
     border: none;
-    border-bottom: 1px solid #337ab7;
+    border-bottom: 1px solid #333;
     padding: 5px; }
   .dialog.dialog-form .dialog-body label {
     font-size: 20px; }
@@ -1031,7 +1032,7 @@
     width: 100px;
     float: right;
     border: none;
-    border-bottom: 1px solid #337ab7;
+    border-bottom: 1px solid #333;
     padding: 5px; }
   .dialog.dialog-image {
     transition: all 1s;
@@ -1059,7 +1060,7 @@
     .dialog.dialog-image:hover .dialog-close {
       display: block; }
   .dialog.dialog-disk .dialog-body {
-    min-width: 600px;
+    min-width: 300px;
     min-height: 500px;
     position: relative; }
     .dialog.dialog-disk .dialog-body .dialog-catalog {
@@ -1108,6 +1109,8 @@
         .dialog.dialog-disk .dialog-body .dialog-content .file-item:hover {
           border: 1px solid #337ab7;
           color: #337ab7; }
+  .dialog.dialog-disk .dialog-footer {
+    text-align: center; }
   .dialog.dialog-closing {
     animation: dialog-closing 0.5s;
     -webkit-animation: dialog-closing 0.5s;

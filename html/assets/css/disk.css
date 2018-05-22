@@ -244,14 +244,8 @@ footer {
 .dialog.dialog-box.upload-dialog {
   right: 0;
   bottom: 0;
-  width: 50%; }
-  .dialog.dialog-box.upload-dialog .dialog-header {
-    background: #333;
-    color: #fff;
-    height: 40px; }
-    .dialog.dialog-box.upload-dialog .dialog-header .dialog-actions .dialog-close {
-      background: #333;
-      color: #fff; }
+  width: 50%;
+  display: block; }
   .dialog.dialog-box.upload-dialog .dialog-body .row {
     margin: 0; }
   .dialog.dialog-box.upload-dialog .dialog-body .file-box {
@@ -259,5 +253,47 @@ footer {
     overflow-y: auto; }
     .dialog.dialog-box.upload-dialog .dialog-body .file-box .row:hover {
       background: rgba(0, 0, 0, 0.1); }
+
+.tree-box .tree-item {
+  display: block;
+  white-space: nowrap;
+  text-decoration: none; }
+  .tree-box .tree-item > span {
+    cursor: pointer;
+    display: inline-block;
+    zoom: 1;
+    vertical-align: middle; }
+    .tree-box .tree-item > span:first-child, .tree-box .tree-item > span:nth-child(2) {
+      display: inline-block;
+      width: 20px;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased; }
+    .tree-box .tree-item > span:first-child:before {
+      content: "\f054"; }
+    .tree-box .tree-item > span:nth-child(2):before {
+      content: "\f07b"; }
+  .tree-box .tree-item:hover {
+    background: #f4f9fd;
+    border-color: #e5f0fb; }
+
+.tree-box li {
+  list-style: none; }
+  .tree-box li ul {
+    display: none; }
+  .tree-box li.open > ul {
+    display: block; }
+  .tree-box li.open > .tree-item > span:first-child:before {
+    content: "\f078"; }
+  .tree-box li.open > .tree-item > span:nth-child(2):before {
+    content: "\f07c"; }
+  .tree-box li.open > .tree-item.empty > span:first-child:before {
+    content: " "; }
+  .tree-box li.open > .tree-item.empty > span:nth-child(2):before {
+    content: "\f07b"; }
+  .tree-box li.active > .tree-item {
+    background: #e5f0fb;
+    border-color: #BBD4EF #fff; }
 
 /*# sourceMappingURL=disk.css.map */
