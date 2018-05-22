@@ -1,18 +1,18 @@
 <?php
 namespace Module\Cas\Service;
 
+use Module\Cas\Domain\Model\PGTicketModel;
+use Module\Cas\Domain\Model\ServiceModel;
 use Module\Cas\Domain\Model\TicketModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Http\Uri;
 
 class ServerController extends Controller {
 
-    protected function isValidUri($url) {
-        return true;
-    }
-
     public function loginAction($service) {
-        if (!$this->isValidUri($service)) {
+        $url = new Uri($service);
+        $serviceModel = ServiceModel::findByUrl($url);
+        if (empty($serviceModel)) {
             return $this->redirectWithMessage();
         }
         if (Auth::guest()) {
@@ -20,19 +20,24 @@ class ServerController extends Controller {
             return $this->redirectWithAuth();
         }
         TicketModel::where('service', $service)->delete();
-        $model = TicketModel::create([
-            'service' => $service,
-            'ticket' => TicketModel::generateTicket(),
+        $model = new TicketModel([
+            'service_id' => $serviceModel->id,
+            'service_url' => $service,
             'user_id' => Auth::id(),
-            'expired_at' => time() + 36000
+            'expired_at' => time() + 7200
         ]);
-        $url = new Uri($service);
+        $model->ticket = $model->generateTicket();
+        if (!$model->save()) {
+            return $this->redirectWithMessage();
+        }
         $url->addData('ticket', $model->ticket);
         return $this->redirect($url);
     }
 
     public function logoutAction($service, $url) {
-        if (!$this->isValidUri($service)) {
+        $url = new Uri($service);
+        $serviceModel = ServiceModel::findByUrl($url);
+        if (empty($serviceModel)) {
             return;
         }
         $model = TicketModel::findByService($service);
@@ -43,12 +48,15 @@ class ServerController extends Controller {
         foreach ($ticket_list as $item) {
             $item->sendLogout();
         }
-        $model->delete();
+        $model->invalidTicket();
+        PGTicketModel::invalidTicketByUser($model->user_id);
         return $this->redirect($url);
     }
 
     public function validateAction($service, $ticket) {
-        if (!$this->isValidUri($service)) {
+        $url = new Uri($service);
+        $serviceModel = ServiceModel::findByUrl($url);
+        if (empty($serviceModel)) {
             return $this->jsonFailure('无效的 service');
         }
         $model = TicketModel::where('service', $service)
@@ -67,79 +75,104 @@ class ServerController extends Controller {
     }
 
     public function serviceValidateAction($service, $ticket) {
-        if (!$this->isValidUri($service)) {
+        $url = new Uri($service);
+        $serviceModel = ServiceModel::findByUrl($url);
+        if (empty($serviceModel)) {
             return;
         }
         $model = TicketModel::where('service', $service)
             ->where('ticket', $ticket)->one();
         if (empty($model)) {
             return $this->json([
-                'localName' => 'serviceResponse',
-                'authenticationFailure' => [
-                    [
-                        '@attributes' => [
-                            'code' => 401,
-                        ],
-                        '@value' => 'ticket error',
+                'serviceResponse' => [
+                    'authenticationFailure' => [
+                        'code' => 401,
+                        'description' => 'ticket error',
                     ]
-                ]
+                ],
+
             ], 'xml');
         }
         return $this->json([
-            'localName' => 'serviceResponse',
-            'authenticationSuccess' => [
-                [
-                    'user' => [
-                        Auth::id()
-                    ]
+            'serviceResponse' => [
+                'authenticationSuccess' => [
+                    'user' => Auth::id()
                 ]
-            ],
+            ]
         ], 'xml');
     }
 
     public function proxyAction($targetService, $pgt) {
+        $model = PGTicketModel::getByTicket($pgt);
+        if (empty($model)) {
+            return;
+        }
+        $proxies = $model->proxies;
+        array_unshift($proxies, $model->pgt_url);
+        $ticket = new TicketModel();
+        $ticket->user_id = $model->user_id;
+        $ticket->service_url = $targetService;
+        $ticket->proxies = $proxies;
+        if (!$ticket->save()) {
+            return;
+        }
         return $this->json([
-            'localName' => 'serviceResponse',
-            'proxySuccess' => [
-                [
-                    'proxyTicket' => [
-                        Auth::id()
-                    ],
+            'serviceResponse' => [
+                'proxySuccess' => [
+                    'proxyTicket' => $ticket->ticket,
                 ]
             ],
-//            'proxyFailure' => [
-//                [
-//                    '@attributes' => [
-//                        'code' => 401,
-//                    ],
-//                    '@value' => 'error',
+//            'serviceResponse' => [
+//                'proxyFailure' => [
+//                    'code' => 401,
+//                    'description' => 'error',
 //                ]
 //            ]
         ], 'xml');
     }
 
     public function proxyValidateAction($service, $ticket, $pgtUrl) {
-        if (!$this->isValidUri($service)) {
+        $url = new Uri($service);
+        $serviceModel = ServiceModel::findByUrl($url);
+        if (empty($serviceModel)) {
             return;
         }
+        $ticket = TicketModel::getByTicket($ticket);
+        if (empty($ticket)) {
+            return;
+        }
+        if (!$ticket->isProxy()) {
+            return;
+        }
+        if ($ticket->service_url != $service) {
+            return;
+        }
+        $ticket->invalidTicket();
+        $pgTicket = PGTicketModel::create([
+            'user_id' => $ticket->user_id,
+            'pgt_url' => $pgtUrl,
+            'proxies' => $ticket->proxies,
+            'ticket' => PGTicketModel::generateTicket(),
+            'service_id' => $serviceModel->id
+        ]);
+        $iou = PGTicketModel::generateOne(64, 'PGTIOU-');
+        if (!PGTicketModel::call($pgtUrl, $iou)) {
+            $iou = null;
+        }
+        $attr = $ticket->user->getCASAttributes() || [];
         return $this->json([
-            'localName' => 'serviceResponse',
-            'authenticationSuccess' => [
-                [
-                    'user' => [
-                        Auth::id()
-                    ],
-                    'proxy' => [
-                        ''
-                    ]
+            'serviceResponse' => [
+                'authenticationSuccess' => [
+                    'user' => $ticket->user_id,
+                    'proxy' => $ticket->proxies,
+                    'attributes' => $attr,
+                    'proxyGrantingTicket' => $iou
                 ]
             ],
-//            'authenticationFailure' => [
-//                [
-//                    '@attributes' => [
-//                        'code' => 401,
-//                    ],
-//                    '@value' => 'error',
+//            'serviceResponse' => [
+//                'authenticationFailure' => [
+//                    'code' => 401,
+//                    'description' => 'error',
 //                ]
 //            ]
         ], 'xml');
