@@ -19,7 +19,7 @@ class ServerController extends Controller {
             // 登录
             return $this->redirectWithAuth();
         }
-        TicketModel::where('service', $service)->delete();
+        TicketModel::where('service_url', $service)->delete();
         $model = new TicketModel([
             'service_id' => $serviceModel->id,
             'service_url' => $service,
@@ -34,9 +34,9 @@ class ServerController extends Controller {
         return $this->redirect($url);
     }
 
-    public function logoutAction($service, $url) {
-        $url = new Uri($service);
-        $serviceModel = ServiceModel::findByUrl($url);
+    public function logoutAction($service, $url = null) {
+        $uri = new Uri($service);
+        $serviceModel = ServiceModel::findByUrl($uri);
         if (empty($serviceModel)) {
             return;
         }
@@ -50,7 +50,7 @@ class ServerController extends Controller {
         }
         $model->invalidTicket();
         PGTicketModel::invalidTicketByUser($model->user_id);
-        return $this->redirect($url);
+        return $this->redirect(empty($url) ? $uri : $url);
     }
 
     public function validateAction($service, $ticket) {
@@ -61,7 +61,7 @@ class ServerController extends Controller {
         }
         $model = TicketModel::where('service', $service)
             ->where('ticket', $ticket)->one();
-        if (empty($model)) {
+        if (empty($model) || $model->isExpired()) {
             return $this->jsonFailure('无效的 ticket');
 //            return join(PHP_EOL, [
 //                'no',

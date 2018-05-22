@@ -112,7 +112,7 @@ class TicketModel extends Model {
      * @return static
      */
     public static function findByService($service) {
-        return self::where('service', $service)->one();
+        return self::where('service_url', $service)->one();
     }
 
     /**
@@ -124,7 +124,7 @@ class TicketModel extends Model {
     }
 
     public function sendLogout() {
-        $uri = new Uri($this->service);
+        $uri = new Uri($this->service_url);
         (new Http($uri->addPath('logout')))->get();
     }
 }
