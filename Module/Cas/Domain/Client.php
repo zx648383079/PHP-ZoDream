@@ -111,7 +111,4 @@ class Client {
         }
         return false;
     }
-
-
-
 }

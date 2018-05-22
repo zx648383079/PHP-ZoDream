@@ -35,7 +35,7 @@ class ServerController extends Controller {
     }
 
     public function logoutAction($service, $url = null) {
-        $uri = new Uri($service);
+        $uri = new Uri();
         $serviceModel = ServiceModel::findByUrl($uri);
         if (empty($serviceModel)) {
             return;

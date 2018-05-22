@@ -18,7 +18,7 @@ class ClientController extends Controller {
         }
         ClientTicketModel::create([
             'ticket' => $ticket,
-            'session_id' => Factory::seserrorsion()->id()
+            'session_id' => Factory::session()->id()
         ]);
         return $this->redirect('/');
     }
@@ -31,7 +31,7 @@ class ClientController extends Controller {
      */
     public function logoutAction($ticket) {
         if (!Client::handleLogoutRequests()) {
-            return $this->jsonFailure('IP ');
+            return $this->jsonFailure('IP error');
         }
         $model = ClientTicketModel::findByTicket($ticket);
         Factory::session()->destroySession($model->session_id);
