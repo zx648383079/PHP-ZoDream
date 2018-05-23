@@ -18,8 +18,11 @@ class TrashController extends Controller {
     }
 
     public function listAction($offset = 0, $length = 20) {
-        $data = DiskModel::where('user_id', Auth::id())
-            ->where('deleted_at', '>', 100)
+        $data = DiskModel::auth()
+            ->alias('d')
+            ->left('disk_file f', 'd.file_id', 'f.id')
+            ->where('d.deleted_at', '>', 100)
+            ->select('d.*', 'f.extension', 'f.size')
             ->offset($offset)->limit($length)
             ->asArray()->all();
         return $this->jsonSuccess($data);

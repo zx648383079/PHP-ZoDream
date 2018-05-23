@@ -6,7 +6,9 @@ use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
+use PHPUnit\Util\RegularExpressionTest;
 use Zodream\Database\Command;
+use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
 use Zodream\Domain\Access\Auth;
 use Zodream\Helpers\Str;
@@ -38,6 +40,11 @@ class DiskController extends Controller {
             ->orderBy('left_id', 'asc')
             ->select('d.*', 'f.extension', 'f.size')
             ->limit($length)->offset($offset)->asArray()->all();
+        foreach ($data as &$item) {
+            $item['type'] = FileModel::getType($item['extension']);
+            $item['url'] = $this->getUrl($item);
+        }
+        unset($item);
         return $this->jsonSuccess($data);
     }
 
@@ -152,6 +159,8 @@ class DiskController extends Controller {
         }
         $model = FileModel::where('md5', $data['md5'])->one();
         if (empty($model)) {
+            // 保存文件名等待上传获取
+            Factory::session()->set('file_'.$data['md5'], $data['name']);
             return $this->jsonFailure('MD5 Error', 2);
         }
         $disk = new DiskModel();
@@ -162,25 +171,28 @@ class DiskController extends Controller {
         if (!$disk->addAsLast()) {
             return $this->jsonFailure($model->getFirstError(), 3);
         }
+        $disk->type = $model->type;
+        $disk->size = $model->size;
+        $disk->url = $this->getUrl($disk);
         return $this->jsonSuccess($disk);
     }
 
     public function addAction() {
-        $data = Request::post('name,md5,size,parent_id 0,type:extension,temp');
-        $file = Factory::root()->file($this->configs['cache'].$data['temp']);
+        $data = Request::post('name,md5,size,parent_id 0,type,temp');
+        $file = $this->cacheFolder->file($data['md5']);
         if (!$file->exist() || $file->size() != $data['size']) {
             return $this->jsonFailure('FILE ERROR!');
         }
         $data['location'] = md5($data['name'].time()).FileSystem::getExtension($data['name'], true);
-        if (!$file->move(Factory::root()->file($this->configs['disk'].$data['location']))) {
+        if (!$file->move($this->diskFolder->file($data['location']))) {
             return $this->jsonFailure('MOVE FILE ERROR!');
         }
         $fileModel = FileModel::create([
             'name' => $data['name'],
-            'extension' => $data['extension'],
+            'extension' => $data['type'],
             'md5' => $data['md5'],
             'location' => $data['location'],
-            'size' => $file->size(),
+            'size' => $data['size'],
         ]);
         if (empty($fileModel)) {
             return $this->jsonFailure('添加失败');
@@ -193,7 +205,10 @@ class DiskController extends Controller {
         if (!$model->addAsLast()) {
             return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonSuccess($data);
+        $model->type = FileModel::getType($data['type']);
+        $model->size = $data['size'];
+        $model->url = $this->getUrl($model);
+        return $this->jsonSuccess($model);
     }
 
     public function folderAction($id) {
@@ -244,5 +259,15 @@ class DiskController extends Controller {
             $item->copyTo($disk);
         }
         return $this->jsonSuccess('成功');
+    }
+
+    public function getUrl($file) {
+        if ($file['type'] == FileModel::TYPE_MUSIC) {
+            return (string)Url::to('./file/music', ['id' => $file['id']]);
+        }
+        if ($file['type'] == FileModel::TYPE_VIDEO) {
+            return (string)Url::to('./file', ['id' => $file['id']]);
+        }
+        return '';
     }
 }

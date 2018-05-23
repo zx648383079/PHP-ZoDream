@@ -15,6 +15,7 @@ use Zodream\Database\Model\Model;
  * @property integer $size 文件大小 字节
  * @property string $created_at 上传时间
  * @property integer $updated_at
+ * @property integer $type
  */
 class FileModel extends Model {
 
@@ -105,12 +106,16 @@ class FileModel extends Model {
         }
     }
 
-    public function getTypeAttribute() {
+    public static function getType($extension) {
         foreach (self::$extensionMaps as $key => $maps) {
-            if (in_array($this->extension, $maps)) {
+            if (in_array($extension, $maps)) {
                 return $key;
             }
         }
         return self::TYPE_UNKNOW;
+    }
+
+    public function getTypeAttribute() {
+        return static::getType($this->extension);
     }
 }

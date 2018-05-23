@@ -2,6 +2,7 @@
 namespace Module\Disk\Domain\Model;
 
 use Zodream\Database\Model\Model;
+use Zodream\Domain\Access\Auth;
 
 /**
  * Class ShareModel
@@ -14,6 +15,7 @@ use Zodream\Database\Model\Model;
  * @property integer $death_at 过期时间
  * @property integer $view_count 查看人数
  * @property integer $down_count 下载人数
+ * @property integer $save_count 保存人数
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -35,6 +37,7 @@ class ShareModel extends Model {
             'user_id' => 'int',
             'death_at' => 'int',
             'view_count' => 'int',
+            'save_count' => 'int',
             'down_count' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -50,12 +53,16 @@ class ShareModel extends Model {
             'user_id' => 'User Id',
             'death_at' => 'Death At',
             'view_count' => 'View Count',
+            'save_count' => 'Save Count',
             'down_count' => 'Down Count',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
+    public function scopeAuth($query) {
+        return $query->where('user_id', Auth::id());
+    }
 
 
 }

@@ -84,8 +84,8 @@ class ShareController extends Controller {
     public function meAction() {
         $user = Auth::id();
         $models = ShareUserModel::alisa('su')
-            ->leftJoin('zd_share s', ['su.share_id' => 's.id'])
-            ->leftJoin('zd_user u', ['u.id' => 's.user_id'])
+            ->leftJoin('share s', ['su.share_id' => 's.id'])
+            ->leftJoin('user u', ['u.id' => 's.user_id'])
             ->where(['su.user_id' => $user])
             ->orderBy('s.create_at desc')
             ->select('s.id as id, s.title as title, s.create_at as create_at, u.id as user_id, u.username as username, u.avatar as avatar')
@@ -95,18 +95,18 @@ class ShareController extends Controller {
 
 
     public function myListAction() {
-        $user = Auth::id();
-        $models = ShareModel::where(['user_id' => $user])->asArray()->all();
+        $models = ShareModel::alisa('s')
+//            ->leftJoin('disk d', 's.disk_id', 'd.id')
+//            ->leftJoin('disk_file f', 'd.file_id', 'f.id')
+            ->where('s.user_id', Auth::id())
+            ->select('s.name', 's.id', 's.mode', 's.created_at',
+                's.view_count', 's.down_count', 's.save_count')->asArray()->all();
         return $this->jsonSuccess($models);
     }
 
     public function cancelAction() {
-        $user = Auth::id();
         $id = Request::post('id');
-        $row = ShareModel::where([
-                'id' => ['in', (array)$id],
-                'user_id' => $user
-            ])->delete();
+        $row = ShareModel::auth()->whereIn('id', (array)$id)->delete();
         if (empty($row)) {
             return $this->jsonFailure('服务器错误!');
         }

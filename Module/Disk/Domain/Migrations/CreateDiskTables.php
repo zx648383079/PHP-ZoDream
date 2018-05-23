@@ -46,6 +46,7 @@ class CreateDiskTables extends Migration {
             $table->set('death_at')->int(10)->defaultVal(0);
             $table->set('view_count')->int(10)->defaultVal(0);
             $table->set('down_count')->int(10)->defaultVal(0);
+            $table->set('save_count')->int(10)->defaultVal(0);
             $table->timestamps();
         });
         Schema::createTable(ShareFileModel::tableName(), function(Table $table) {

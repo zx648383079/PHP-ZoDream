@@ -65,7 +65,7 @@ $this->registerJs($js)->extend('layouts/header');
                     <span class="checkbox" v-bind:class="{'checked': item.checked}"></span>
                 </div>
                 <div v-on:click.stop="enter(item)" class="col-md-3">
-                    <i class="fa" v-bind:class="{'fa-lock': item.mode == 'protected', 'fa-user': item.mode == 'private', 'fa-unlock': item.mode == 'public', 'fa-users': item.mode == 'internal'}" aria-hidden="true"></i>
+                    <i class="fa" v-bind:class="{'fa-lock': item.mode == 1, 'fa-user': item.mode == 2, 'fa-unlock': item.mode == 0, 'fa-users': item.mode == 3}" aria-hidden="true"></i>
                     <a target="_blank" v-bind:href="'<?=$this->url(['./share'])?>&id=' + item.id">{{item.name}}</a>
                 </div>
                 <div class="col-md-2 share_time">

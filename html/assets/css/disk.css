@@ -244,8 +244,7 @@ footer {
 .dialog.dialog-box.upload-dialog {
   right: 0;
   bottom: 0;
-  width: 50%;
-  display: block; }
+  width: 50%; }
   .dialog.dialog-box.upload-dialog .dialog-body .row {
     margin: 0; }
   .dialog.dialog-box.upload-dialog .dialog-body .file-box {
@@ -253,6 +252,12 @@ footer {
     overflow-y: auto; }
     .dialog.dialog-box.upload-dialog .dialog-body .file-box .row:hover {
       background: rgba(0, 0, 0, 0.1); }
+  .dialog.dialog-box.upload-dialog.max {
+    display: block; }
+  .dialog.dialog-box.upload-dialog.min {
+    height: 40px;
+    width: 100px;
+    display: block; }
 
 .tree-box .tree-item {
   display: block;

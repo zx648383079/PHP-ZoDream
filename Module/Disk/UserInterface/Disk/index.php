@@ -10,7 +10,10 @@ $md5_url = $this->asset('@disk.md5.min.js');
 $js = <<<JS
     require_disk('{$base_url}', '{$md5_url}');
 JS;
-$this->registerJs($js)->extend('layouts/header');
+$this->registerJs($js)
+    ->registerCssFile('@APlayer.min.css')
+    ->registerJsFile('@APlayer.min.js')
+    ->extend('layouts/header');
 ?>
 
 <div id="content">
@@ -128,7 +131,7 @@ $this->registerJs($js)->extend('layouts/header');
                     <span>{{item.size | size}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="hover-hide">{{item.update_at | time}}</span>
+                    <span class="hover-hide">{{item.updated_at | time}}</span>
                     <div class="row-tools">
                         <span v-on:click.stop="share(item)" class="fa fa-share"></span>
                         <span v-on:click.stop="download(item)" class="fa fa-download-alt"></span>
@@ -313,6 +316,8 @@ $this->registerJs($js)->extend('layouts/header');
         <button type="button" class="dialog-close">关闭</button>
     </div>
 </div>
+
+<div id="player"></div>
 
 <?php
 $this->extend('layouts/footer');

@@ -2,6 +2,9 @@ Vue.filter('time', function (value) {
     if (!value) {
         return;
     }
+    if (!/^\d+$/.test(value)) {
+        return value;
+    }
     let date = new Date();
     date.setTime(parseInt(value) * 1000);
     return date.toLocaleString();
@@ -11,6 +14,9 @@ Vue.filter('size', function (value) {
         return "--";
     }
     value = parseFloat(value);
+    if (value == 0) {
+        return "0 B";
+    }
     let k = 1000, // or 1024
         sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
         i = Math.floor(Math.log(value) / Math.log(k));
@@ -156,8 +162,9 @@ function require_disk(baseUrl: string, md5Url: string) {
     // 主界面数据
     let dataCache = {},
         indexFile = null,
-        shareBox = $('#shareModal').dialog();
-        folderBox = $('#folderModal').dialog();
+        shareBox = $('#shareModal').dialog(),
+        folderBox = $('#folderModal').dialog(),
+        player = null,
         downloadFile = function (url) {
             let download = $(".downloadFrame");
             if (download.length < 1) {
@@ -168,7 +175,17 @@ function require_disk(baseUrl: string, md5Url: string) {
             }
             download.attr("src", url);
             download.hide();
-        };
+        }, 
+        getPlayer = function() {
+            if (player) {
+                return player;
+            }
+            return player = new APlayer({
+                container: document.getElementById('player'),
+                fixed: true,
+                audio: []
+            });
+        }; 
     let vue = new Vue({
         el: "#content",
         data: {
@@ -187,6 +204,9 @@ function require_disk(baseUrl: string, md5Url: string) {
         },
         computed: {
             sortFiles: function() {
+                if (!this.orderKey) {
+                    return this.files;
+                }
                 return this.files.sort(sortBy(this.orderKey, this.order));
             }
         },
@@ -274,13 +294,28 @@ function require_disk(baseUrl: string, md5Url: string) {
                 }
             },
             enter: function (item) {
-              if (item.file_id > 0) {
-                  this.check(item);
-                  return;
-              }
-                this.crumb.push(item);
-                this.offset = 0;
-                this.getList();
+                if (item.file_id == 0) {
+                    this.crumb.push(item);
+                    this.offset = 0;
+                    this.getList();
+                    return;
+                }
+                if (item.type == 3) {
+                    window.open(item.url, "_blank");
+                    return;
+                }
+                if (item.type == 5) {
+                    getPlayer().list.add({
+                        name: item.name,
+                        artist: '未知',
+                        url: item.url,
+                        cover: '/assets/images/favicon.png',
+                    });
+                    player.skipBack();
+                    player.play();
+                    return;
+                }
+                this.check(item);
             },
             top: function () {
                this.crumb.pop();
@@ -469,7 +504,6 @@ function require_disk(baseUrl: string, md5Url: string) {
                 }
             },
             rename: function (item?: any) {
-                console.log(item);
                 if (item) {
                     item.is_edit = true;
                     item.new_name = item.name;
@@ -677,7 +711,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                         return;
                     }
                     file.status = 3;
-                    file.type = data.type;
+                    file.type = data.data.type;
                     addFile(index);
                 };
                 file.status = 2;
@@ -685,8 +719,8 @@ function require_disk(baseUrl: string, md5Url: string) {
                 // 开始上传
                 xhr.open("POST", baseUrl + 'upload', true);
                 // 不支持中文
-                file.temp = Math.random() + file.name.replace(/[\u4E00-\u9FA5]/g, '');
-                xhr.setRequestHeader("X-FILENAME", file.temp);
+                //file.temp = Math.random() + file.name.replace(/[\u4E00-\u9FA5]/g, '');
+                xhr.setRequestHeader("X-FILENAME", file.md5);
                 xhr.send(file.file);
             }
         },
@@ -765,6 +799,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         }, multipleEvent = function (event) {
             event.stopPropagation();
             event.preventDefault();
+            upload.mode = 2;
             let files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
             for (let i = 0; i < files.length; i ++) {
                 upload.addItem(files[i]);

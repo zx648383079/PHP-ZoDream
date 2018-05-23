@@ -328,7 +328,6 @@ footer {
     right: 0;
     bottom: 0;
     width: 50%;
-    display: block;
     .dialog-body {
         .row {
             margin: 0;
@@ -342,6 +341,14 @@ footer {
                 }
             }
         }
+    }
+    &.max {
+        display: block;
+    }
+    &.min {
+        height: 40px;
+        width: 100px;
+        display: block;
     }
 }
 

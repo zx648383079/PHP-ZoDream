@@ -2,6 +2,7 @@
 namespace Module\Disk\Service;
 
 use Zodream\Domain\Upload\UploadInput;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 
 /**
@@ -13,13 +14,19 @@ class UploadController extends Controller {
     
     public function indexAction() {
         set_time_limit(0);
+        $md5 = Request::server('HTTP_X_FILENAME');
+        $name = Factory::session('file_'.$md5);
+        if (empty($name)) {
+            $name = $md5;
+        }
         $upload = new UploadInput();
-        $result = $upload->setFile(Factory::root()
-            ->file($this->configs['cache'].$upload->getName()))
+        $result = $upload->setName($name)
+            ->setFile($this->cacheFolder->file($md5))
             ->save();
         if (!$result) {
             return $this->jsonFailure($upload->getError());
         }
+        Factory::log()->info($name);
         return $this->jsonSuccess([
             'name' => $upload->getName(),
             'size' => $upload->getSize(),

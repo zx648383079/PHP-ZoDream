@@ -16,10 +16,12 @@ class DownloadController extends Controller {
         if (empty($model)) {
             return $this->jsonFailure('ID ERROR!');
         }
-        $file = Factory::root()->file($this->configs['disk'].$model->location);
-        if (!is_file($file)) {
+        $file = $this->diskFolder->file($model->file->location);
+        if (!$file->exist()) {
             return $this->jsonFailure('FILE ERROR!');
         }
+        $file->setExtension($model->file->extension)
+            ->setName($model->name);
         return Factory::response()
             ->file($file);
     }

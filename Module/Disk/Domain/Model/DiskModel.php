@@ -20,7 +20,9 @@ use Zodream\Database\Model\Query;
  * @property integer $deleted_at
  * @property integer $updated_at
  * @property integer $created_at
+ * @property FileModel $file
  * @method Query auth();
+ *
  */
 class DiskModel extends Model {
 
