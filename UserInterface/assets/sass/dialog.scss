@@ -109,6 +109,7 @@
         background: #fff;
         min-width: 260px;
         display: none;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         @include prefix-animation(dialog-box 0.5s);
         .dialog-header {
             position: relative;
