@@ -6,15 +6,14 @@ use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
-use PHPUnit\Util\RegularExpressionTest;
 use Zodream\Database\Command;
-use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
 use Zodream\Domain\Access\Auth;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 use Zodream\Service\Routing\Url;
+use Exception;
 
 class DiskController extends Controller {
     
@@ -62,12 +61,12 @@ class DiskController extends Controller {
     }
 
     public function shareAction() {
-        $data = Request::post('id,user,mode public,end_at,role 0');
+        $data = Request::post('id,user,mode 0,end_at');
         if (empty($data['id'])) {
             return $this->jsonFailure('不能为空！');
         }
         if (!empty($data['user'])) {
-            $data['mode'] = 'private';
+            $data['mode'] = 2;
         }
         $disk = DiskModel::find(current($data['id']));
         $user = Auth::id();
@@ -76,19 +75,18 @@ class DiskController extends Controller {
         }
         $model = new ShareModel();
         $model->name = Str::substr($disk->name, 0, 36).(count($data['id']) > 1 ? '等'.count($data['id']).'个文件' : null);
-        $model->mode = $data['mode'];
+        $model->mode = intval($data['mode']);
         $model->user_id = $user;
-        if ($data['mode'] == 'protected') {
+        if ($data['mode'] == 1) {
             $data['password'] = $model->password = Str::random(6);
         }
-        $model->created_at = time();
         if (!empty($data['death_at'])) {
-            $model->death_at = strtotime($data['death_at']);
+            $model->death_at = time();
         }
         if (!$model->save()) {
             return $this->jsonFailure('分享失败');
         }
-        $data['url'] = Url::to(['/share', 'id' => $model->id], true);
+        $data['url'] = (string)Url::to('./share', ['id' => $model->id]);
         $transaction = Command::getInstance()->beginTransaction();
         try {
             $disks = [];
@@ -96,14 +94,14 @@ class DiskController extends Controller {
                 $disks[] = [$item, $model->id];
             }
             ShareFileModel::record()
-                ->batchInsert('zd_share_disk', ['disk_id', 'share_id'], $disks);
-            if ($model->mode == 'private') {
+                ->batchInsert(['disk_id', 'share_id'], $disks);
+            if ($model->mode == ShareModel::SHARE_PRIVATE) {
                 $users = [];
                 foreach ((array)$data['user'] as $item) {
                     $users[] = [$item, $model->id];
                 }
                 ShareUserModel::record()
-                    ->batchInsert('zd_share_user', ['user_id', 'share_id'], $users);
+                    ->batchInsert(['user_id', 'share_id'], $users);
 //                Bulletin::message($data['user'],
 //                    Yii::$app->user->identity->usrname.'给你分享了文件！',
 //                    Html::a('查看', $data['url']));

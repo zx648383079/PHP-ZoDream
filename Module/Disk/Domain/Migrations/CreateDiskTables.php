@@ -41,9 +41,9 @@ class CreateDiskTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('mode')->tinyint(2)->defaultVal(ShareModel::SHARE_PUBLIC);
-            $table->set('password')->varchar(20);
-            $table->set('user_id')->int(10);
-            $table->set('death_at')->int(10)->defaultVal(0);
+            $table->set('password')->varchar(20)->defaultVal('');
+            $table->set('user_id')->int(10)->notNull();
+            $table->timestamp('death_at');
             $table->set('view_count')->int(10)->defaultVal(0);
             $table->set('down_count')->int(10)->defaultVal(0);
             $table->set('save_count')->int(10)->defaultVal(0);

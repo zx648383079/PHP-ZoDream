@@ -32,7 +32,7 @@ header,
 .btn,
 .zd-tab .zd-tab-head .zd-tab-item.active,
 .zd-tab .zd-tab-head .zd-tab-item:hover {
-  background: #000;
+  background: #333;
   color: #fff; }
 
 header {
@@ -238,15 +238,28 @@ footer {
   .dropdown:hover .dropdown-menu {
     display: block; }
 
-.dialog-hide {
-  display: none; }
+.dialog.dialog-box .dialog-body.zd-tab {
+  padding: 0; }
+  .dialog.dialog-box .dialog-body.zd-tab .zd-tab-body {
+    margin-top: 10px; }
+    .dialog.dialog-box .dialog-body.zd-tab .zd-tab-body .form-control {
+      font-size: 20px;
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      border-bottom: 1px solid #333;
+      padding: 5px; }
+
+.dialog.dialog-box .dialog-body .row {
+  margin: 0; }
+
+#shareModal {
+  width: 600px; }
 
 .dialog.dialog-box.upload-dialog {
   right: 0;
   bottom: 0;
   width: 50%; }
-  .dialog.dialog-box.upload-dialog .dialog-body .row {
-    margin: 0; }
   .dialog.dialog-box.upload-dialog .dialog-body .file-box {
     max-height: 200px;
     overflow-y: auto; }

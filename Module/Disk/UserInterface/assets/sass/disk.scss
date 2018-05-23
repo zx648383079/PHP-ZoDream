@@ -40,7 +40,7 @@ header,
 .btn,
 .zd-tab .zd-tab-head .zd-tab-item.active,
 .zd-tab .zd-tab-head .zd-tab-item:hover {
-    background: #000;
+    background: #333;
     color: #fff;
 }
 
@@ -320,8 +320,34 @@ footer {
     }
 }
 
-.dialog-hide {
-    display: none;
+.dialog.dialog-box {
+    .dialog-body {
+        &.zd-tab {
+            padding: 0;
+            .zd-tab-head {
+
+            }
+            .zd-tab-body {
+                margin-top: 10px;
+                .form-control {
+                    font-size: 20px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    border: none;
+                    border-bottom: 1px solid #333;
+                    padding: 5px;
+                }
+            }
+        }
+        
+        .row {
+            margin: 0;
+        }
+    }
+}
+
+#shareModal {
+    width: 600px;
 }
 
 .dialog.dialog-box.upload-dialog {
@@ -329,9 +355,6 @@ footer {
     bottom: 0;
     width: 50%;
     .dialog-body {
-        .row {
-            margin: 0;
-        }
         .file-box {
             max-height: 200px;
             overflow-y: auto;

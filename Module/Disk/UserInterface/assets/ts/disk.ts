@@ -67,7 +67,8 @@ function require_disk(baseUrl: string, md5Url: string) {
             users: [],
             selectUsers: [],
             role: null,
-            name: null
+            name: null,
+            result: null
         },
         methods: {
             share: function () {
@@ -75,7 +76,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                     return;
                 }
                 let users = [];
-                if (this.modeType == "private") {
+                if (this.modeType == 2) {
                     $(this.selectUsers).each(function (index, item) {
                         users.push(item.id);
                     });
@@ -89,13 +90,10 @@ function require_disk(baseUrl: string, md5Url: string) {
                     if (data.code != 200) {
                         return;
                     }
-                    $("#result input").val(data.data.url);
-                    if (data.data.mode == "protected") {
-                        $("#result .row").append('密码：<input type="text" value="'+ data.data.password+'" class="form-control" readonly>');
+                    share.result = data.data.url;
+                    if (data.data.mode == 1) {
+                        share.result += ' 密码：' + data.data.password;
                     }
-                    $("#shareModal .nav-tabs li").removeClass("active");
-                    $("#shareModal #result").addClass("active").siblings().removeClass("active");
-                    
                 });
             },
             getUser: function () {
@@ -142,11 +140,15 @@ function require_disk(baseUrl: string, md5Url: string) {
                 }
             },
             create: function (modeType) {
-                if (modeType != "protected") {
-                    modeType = "public";
+                if (modeType != 1) {
+                    modeType = 0;
                 }
                 this.modeType = modeType;
                 this.share();
+            },
+            show: function() {
+                this.result = 0;
+                shareBox.show();
             }
         }
     });
@@ -448,7 +450,7 @@ function require_disk(baseUrl: string, md5Url: string) {
             },
             share: function (item) {
                 fileIds = [item.id];
-                shareBox.show();
+                share.show();
             },
             shareAll: function () {
                 fileIds = [];
@@ -461,14 +463,14 @@ function require_disk(baseUrl: string, md5Url: string) {
                     alert("请选择文件");
                     return;
                 }
-                shareBox.show();
+                share.show();
             },
             download: function (item) {
-                if (item.is_dir == 1) {
+                if (item.file_id == 0) {
                     alert("暂不支持文件夹下载！");
                     return;
                 }
-                downloadFile(baseUrl + 'disk/download?id=' + item.id);
+                downloadFile(baseUrl + 'download?id=' + item.id);
             },
             downloadAll: function () {
 

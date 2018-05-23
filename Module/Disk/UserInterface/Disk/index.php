@@ -134,7 +134,7 @@ $this->registerJs($js)
                     <span class="hover-hide">{{item.updated_at | time}}</span>
                     <div class="row-tools">
                         <span v-on:click.stop="share(item)" class="fa fa-share"></span>
-                        <span v-on:click.stop="download(item)" class="fa fa-download-alt"></span>
+                        <span v-on:click.stop="download(item)" class="fa fa-download"></span>
                         <span v-on:click.stop="move(item)" class="fa fa-move"></span>
                         <span v-on:click.stop="copy(item)" class="fa fa-copy"></span>
                         <span v-on:click.stop="rename(item)" class="fa fa-pencil"></span>
@@ -244,47 +244,35 @@ $this->registerJs($js)
         <div class="dialog-title">分享文件</div>
         <i class="fa fa-close dialog-close"></i>
     </div>
-    <div class="dialog-body">
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active" v-on:click="modeType = 'public'"><a href="#link" aria-controls="link" role="tab" data-toggle="tab">链接分享</a></li>
-            <li role="presentation" v-on:click="modeType = 'internal'"><a href="#role" aria-controls="role" role="tab" data-toggle="tab">分享到部门</a></li>
-            <li role="presentation" v-on:click="modeType = 'private'"><a href="#friend" aria-controls="friend" role="tab" data-toggle="tab">分享给好友</a></li>
+    <div class="dialog-body zd-tab">
+        <ul class="zd-tab-head">
+            <li class="zd-tab-item active" v-on:click="modeType = 0">链接分享</li>
+            <li class="zd-tab-item" v-on:click="modeType = 2">分享给好友</li>
         </ul>
 
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="link">
-                <div class="row">
+        <div class="zd-tab-body">
+            <div class="zd-tab-item active">
+                <div class="row" v-if="result">
+                    <input type="text" class="form-control" readonly v-model="result">
+                </div>
+                <div class="row" v-if="!result">
                     <div class="col-md-4">
-                        <button class="btn btn-primary" v-on:click="create('public')">创建公开链接</button>
+                        <button class="btn btn-primary" v-on:click="create(0)">创建公开链接</button>
                     </div>
                     <div class="col-md-8">
                         <p>（文件会出现在你的分享主页，其他人都能查看下载）</p>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" v-if="!result">
                     <div class="col-md-4">
-                        <button class="btn btn-primary" v-on:click="create('protected')">创建私密链接</button>
+                        <button class="btn btn-primary" v-on:click="create(1)">创建私密链接</button>
                     </div>
                     <div class="col-md-8">
                         <p>（只有分享的好友能看到，其他人都看不到）</p>
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="role">
-                <div class="row">
-                    <ul class="zd_role_tree">
-                        <?php foreach ($role as $item):?>
-                            <?php if (array_key_exists($item['role_id'], $roles)):?>
-                                <li data-id="<?=$item['role_id']?>">
-                                    <div><?=$roles[$item['role_id']]['name']?></div>
-                                    <?=Tree::makeUl($roles, $item['role_id'])?>
-                                </li>
-                            <?php endif;?>
-                        <?php endforeach;?>
-                    </ul>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="friend">
+            <div class="zd-tab-item">
                 <div class="row">
                     <div class="col-md-5">
                         <ul class="zd_listbox" id="users">
@@ -303,16 +291,10 @@ $this->registerJs($js)
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="result">
-                <div class="row">
-                    <input type="text" class="form-control" readonly>
-                </div>
-            </div>
         </div>
     </div>
     <div class="dialog-footer">
-        <button type="button" v-show="modeType == 'internal'" class="btn btn-primary">分享到部门</button>
-        <button type="button" v-show="modeType == 'private'" class="btn btn-primary">分享给好友</button>
+        <button type="button" v-show="modeType == 2" class="btn btn-primary">分享给好友</button>
         <button type="button" class="dialog-close">关闭</button>
     </div>
 </div>
