@@ -14,4 +14,31 @@
     color: #fff;
     text-decoration: none; }
 
+.login-form .input-group input[type="text"],
+.login-form .input-group input[type="email"],
+.login-form .input-group input[type="password"] {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #767676; }
+
+.login-form .input-group .fa {
+  transition: all .5s; }
+
+.login-form .input-group.input-focus input {
+  padding-left: 0;
+  padding-right: 30px;
+  border-bottom: 2px solid #000; }
+
+.login-form .input-group.input-focus .fa {
+  left: 280px;
+  color: #767676; }
+
+.login-form .btn {
+  background: #333;
+  color: #fff;
+  width: 100%;
+  margin: 0; }
+  .login-form .btn:hover {
+    background: #000; }
+
 /*# sourceMappingURL=login.css.map */

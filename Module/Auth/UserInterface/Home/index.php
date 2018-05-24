@@ -7,12 +7,12 @@ $this->extend('layouts/header');
         <div class="login">
             <form class="form-ico login-form" action="<?= $this->url('/auth/home/login') ?>" method="POST">
                 <div class="input-group">
-                    <input type="email" name="email" placeholder="请输入账号" required>
+                    <input type="email" name="email" placeholder="请输入账号" required autocomplete="off">
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </div>
                 <div class="input-group">
-                    <input type="password" name="password" placeholder="请输入密码" required>
-                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <input type="password" name="password" placeholder="请输入密码" required autocomplete="off">
+                    <i class="fa fa-lock" aria-hidden="true" ></i>
                 </div>
 
                 <div class="input-group">

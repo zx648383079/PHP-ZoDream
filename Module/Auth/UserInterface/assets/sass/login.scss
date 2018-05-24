@@ -15,3 +15,38 @@
         text-decoration: none;
     }
 }
+
+.login-form {
+    .input-group {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"], {
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #767676;
+        }
+        .fa {
+            transition: all .5s;
+        }
+        &.input-focus {
+            input {
+                padding-left: 0;
+                padding-right: 30px;
+                border-bottom: 2px solid #000;
+            }
+            .fa {
+                left: 280px;
+                color: #767676;
+            }
+        }
+    }
+    .btn {
+        background: #333;
+        color: #fff;
+        width: 100%;
+        margin: 0;
+        &:hover {
+            background: #000;
+        }
+    }
+}
