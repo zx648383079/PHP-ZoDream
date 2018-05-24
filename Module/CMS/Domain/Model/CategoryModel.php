@@ -30,7 +30,7 @@ class CategoryModel extends BaseModel {
     const TYPE_LINK = 2; //外链
 
     public static function tableName() {
-        return 'category';
+        return 'cms_category';
     }
 
     /**

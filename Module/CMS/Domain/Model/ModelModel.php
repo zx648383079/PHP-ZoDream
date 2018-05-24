@@ -18,7 +18,7 @@ use Zodream\Database\Schema\Table;
 class ModelModel extends BaseModel {
 
     public static function tableName() {
-        return 'model';
+        return 'cms_model';
     }
 
     /**

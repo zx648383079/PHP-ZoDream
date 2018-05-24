@@ -23,7 +23,7 @@ namespace Module\CMS\Domain\Model;
 class ModelFieldModel extends BaseModel {
 
     public static function tableName() {
-        return 'model_field';
+        return 'cms_model_field';
     }
 
     /**

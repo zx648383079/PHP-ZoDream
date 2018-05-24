@@ -18,7 +18,7 @@ use Zodream\Html\Page;
  */
 class ContentModel extends BaseModel {
     public static function tableName() {
-        return 'content_'.static::site();
+        return 'cms_content_'.static::site();
     }
 
     /**
