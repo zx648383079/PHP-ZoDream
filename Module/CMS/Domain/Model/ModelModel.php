@@ -6,9 +6,9 @@ use Zodream\Database\Schema\Table;
  * Class ContentModel
  * @package Domain\Model\CMS
  * @property integer $id
- * @property integer $type
- * @property string $table
  * @property string $name
+ * @property string $table
+ * @property integer $type
  * @property integer $position
  * @property string $category_template
  * @property string $list_template
@@ -19,6 +19,33 @@ class ModelModel extends BaseModel {
 
     public static function tableName() {
         return 'cms_model';
+    }
+
+    protected function rules() {
+        return [
+            'name' => 'required|string:0,100',
+            'table' => 'required|string:0,100',
+            'type' => 'int:0,9',
+            'position' => 'int:0,999',
+            'category_template' => 'string:0,20',
+            'list_template' => 'string:0,20',
+            'show_template' => 'string:0,20',
+            'setting' => '',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'table' => 'Table',
+            'type' => 'Type',
+            'position' => 'Position',
+            'category_template' => 'Category Template',
+            'list_template' => 'List Template',
+            'show_template' => 'Show Template',
+            'setting' => 'Setting',
+        ];
     }
 
     /**
