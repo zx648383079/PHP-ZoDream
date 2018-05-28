@@ -10,6 +10,10 @@ footer,
 header {
     background: #000;
     color: #fff; 
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
 }
 .btn,
 .zd-tab .zd-tab-head .zd-tab-item.active,

@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Migrations;
 
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ContentModel;
+use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
@@ -76,6 +77,12 @@ class CreateCmsTables extends Migration {
             $table->set('type')->tinyint(1)->notNull();
             $table->set('code')->char(20)->unique()->notNull();
         });
+        Schema::createTable(LinkageDataModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(100)->notNull();
+            $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('position')->tinyint(3)->defaultVal(99);
+        });
     }
 
     public function down() {
@@ -84,5 +91,6 @@ class CreateCmsTables extends Migration {
         Schema::dropTable(CategoryModel::tableName());
         Schema::dropTable(ContentModel::tableName());
         Schema::dropTable(LinkageModel::tableName());
+        Schema::dropTable(LinkageDataModel::tableName());
     }
 }
