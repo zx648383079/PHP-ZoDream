@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '菜单管理';
-$this->extend('../layouts/header');
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -47,7 +46,3 @@ $this->extend('../layouts/header');
     </div>
     
 </div>
-
-<?php
-$this->extend('../layouts/footer');
-?>

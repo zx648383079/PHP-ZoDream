@@ -9,7 +9,6 @@ $('[name=parent_id]').change(function () {
 });
 JS;
 $this->registerJs($js, View::JQUERY_READY);
-$this->extend('../layouts/header');
 ?>
 
     <h1><?=$this->title?></h1>
@@ -228,7 +227,3 @@ $this->extend('../layouts/header');
         <input type="hidden" name="parent_id" value="<?=$model->parent_id?>">
         <input type="hidden" name="project_id" value="<?=$model->project_id?>">
     </form>
-
-<?php
-$this->extend('../layouts/footer');
-?>

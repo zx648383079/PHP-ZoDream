@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '编辑菜单';
-$this->extend('../layouts/header');
 ?>
 
 <div class="page-tip">
@@ -34,5 +33,3 @@ $this->extend('../layouts/header');
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
 </div>
-
-<?php $this->extend('../layouts/footer');?>

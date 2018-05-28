@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '文章列表';
-
-$this->extend('../layouts/header');
 ?>
 
     <div class="search">
@@ -37,7 +36,3 @@ $this->extend('../layouts/header');
         <?php endforeach; ?>
         </tbody>
     </table>
-
-<?php
-$this->extend('../layouts/footer');
-?>

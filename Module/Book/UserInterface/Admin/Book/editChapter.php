@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '编辑章节';
-$this->extend('../layouts/header');
 ?>
 
     <h1><?=$this->title?></h1>
@@ -48,5 +47,3 @@ $this->extend('../layouts/header');
         <input type="hidden" name="id" value="<?=$model->id?>">
         <input type="hidden" name="book_id" value="<?=$model->book_id?>">
     </form>
-
-<?php $this->extend('../layouts/footer');?>

@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -9,8 +10,7 @@ $("#type-box").change(function() {
 });
 JS;
 
-$this->extend('layouts/header')
-->registerJs($js, View::JQUERY_READY);
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 
     <a class="btn btn-success" href="<?=$this->url('./income/add_log')?>">新增流水</a>
@@ -60,7 +60,3 @@ $this->extend('layouts/header')
     <div align="center">
         <?=$log_list->getLink()?>
     </div>
-
-<?php
-$this->extend('layouts/footer');
-?>

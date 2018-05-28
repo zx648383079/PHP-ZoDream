@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '文章列表';
-
-$this->extend('../layouts/header');
 ?>
 
     <div class="search">
@@ -64,7 +63,3 @@ $this->extend('../layouts/header');
     <div align="center">
         <?=$blog_list->getLink()?>
     </div>
-
-<?php
-$this->extend('../layouts/footer');
-?>

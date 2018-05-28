@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -12,8 +13,7 @@ $js = <<<JS
 JS;
 $this->registerJs($js)
     ->registerCssFile('@APlayer.min.css')
-    ->registerJsFile('@APlayer.min.js')
-    ->extend('layouts/header');
+    ->registerJsFile('@APlayer.min.js');
 ?>
 
 <div id="content">
@@ -300,7 +300,3 @@ $this->registerJs($js)
 </div>
 
 <div id="player"></div>
-
-<?php
-$this->extend('layouts/footer');
-?>

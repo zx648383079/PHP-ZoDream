@@ -6,18 +6,11 @@ use Module\Finance\Domain\Model\ConsumptionChannelModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
-use Module\ModuleController;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
-class IncomeController extends ModuleController {
-
-    protected function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
+class IncomeController extends Controller {
 
     public function indexAction($month = null) {
         if (empty($month)) {

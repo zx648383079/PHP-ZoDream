@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -9,8 +10,7 @@ JS;
 $this->registerJs($js);
 $this->registerCssFile('@video-js.min.css')
     ->registerJsFile('@video.min.js')
-    ->registerJsFile('@videojs-contrib-hls.min.js')
-    ->extend('layouts/header');
+    ->registerJsFile('@videojs-contrib-hls.min.js');
 ?>
 
 <video id="example-video" width="600" height="300" class="video-js vjs-default-skin" controls>
@@ -18,7 +18,3 @@ $this->registerCssFile('@video-js.min.css')
      src="<?=$this->url('./file/m3u8', ['id' => $disk->file_id])?>"
      type="application/x-mpegURL">
 </video>
-
-<?php
-$this->extend('layouts/footer');
-?>

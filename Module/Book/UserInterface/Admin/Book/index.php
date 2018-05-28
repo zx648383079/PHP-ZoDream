@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
-$this->extend('../layouts/header');
 ?>
    <div class="search">
         <form class="form-horizontal" role="form">
@@ -67,5 +66,3 @@ $this->extend('../layouts/header');
     <div align="center">
         <?=$model_list->getLink()?>
     </div>
-
-<?php $this->extend('../layouts/footer');?>

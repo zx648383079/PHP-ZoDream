@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -13,8 +14,7 @@ $js = <<<JS
     });
 JS;
 
-$this->extend('../layouts/header')
-    ->registerJsFile('/assets/ueditor/ueditor.config.js')
+$this->registerJsFile('/assets/ueditor/ueditor.config.js')
     ->registerJsFile('/assets/ueditor/ueditor.all.js')
     ->registerJs($js);
 ?>
@@ -83,8 +83,3 @@ $this->extend('../layouts/header')
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
-
-
-<?php
-$this->extend('../layouts/footer');
-?>

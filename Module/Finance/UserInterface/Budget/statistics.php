@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -114,8 +115,7 @@ $js = <<<JS
         myChart.setOption(option);
 JS;
 
-$this->extend('layouts/header')
-    ->registerJsFile('@echarts.min.js')
+$this->registerJsFile('@echarts.min.js')
     ->registerJs($js);
 ?>
 
@@ -131,8 +131,3 @@ $this->extend('layouts/header')
         <div style="border:1px solid #e0e0e0;"></div>
         <div id="log_grid" style="width: 100%;height:400px;"></div>
     </div>
-    
-
-<?php
-$this->extend('layouts/footer');
-?>

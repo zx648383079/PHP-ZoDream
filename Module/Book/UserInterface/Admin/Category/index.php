@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
-$this->extend('../layouts/header');
 ?>
    <div class="search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./admin/category/create')?>">新增分类</a>
@@ -35,4 +34,3 @@ $this->extend('../layouts/header');
         <?php endforeach; ?>
         </tbody>
     </table>
-<?php $this->extend('../layouts/footer');?>

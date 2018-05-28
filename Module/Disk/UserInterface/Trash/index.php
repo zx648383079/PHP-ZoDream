@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -9,7 +10,7 @@ $base_url = $this->url('./');
 $js = <<<JS
 require_trash('{$base_url}');
 JS;
-$this->registerJs($js)->extend('layouts/header');
+$this->registerJs($js);
 ?>
 
 <div id="content">
@@ -82,9 +83,3 @@ $this->registerJs($js)->extend('layouts/header');
         </div>
     </div>
 </div>
-
-
-
-<?php
-$this->extend('layouts/footer');
-?>

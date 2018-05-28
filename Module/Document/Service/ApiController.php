@@ -4,9 +4,8 @@ namespace Module\Document\Service;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\ProjectModel;
-use Module\ModuleController;
 
-class ApiController extends ModuleController {
+class ApiController extends Controller {
 
     public function indexAction($id) {
         $api = ApiModel::find($id);

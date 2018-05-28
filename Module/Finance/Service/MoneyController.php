@@ -5,17 +5,10 @@ use Module\Finance\Domain\Model\FinancialProductModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
-use Module\ModuleController;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
-class MoneyController extends ModuleController {
-
-    protected function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
+class MoneyController extends Controller {
 
     public function indexAction() {
         $account_list = MoneyAccountModel::all();

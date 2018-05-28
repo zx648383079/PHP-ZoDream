@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
@@ -16,8 +17,7 @@ $js = <<<JS
     }
 JS;
 
-$this->extend('layouts/header')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 
 <div class="search">
@@ -80,7 +80,3 @@ $this->extend('layouts/header')
     <hr/>
 
     <a class="btn btn-success" href="<?=$this->url('./money/add_project')?>">新增项目</a>
-
-<?php
-$this->extend('layouts/footer');
-?>

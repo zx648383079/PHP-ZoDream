@@ -146,6 +146,9 @@ $(function() {
     $(".page-tip .toggle").click(function() {
         $(this).parents('.page-tip').toggleClass('min');
     });
+    $('.left-catelog .left-catelog-toggle').click(function() {
+        $(this).parents('.left-catelog').toggleClass('expand');
+    });
     var autoRedirct = function() {
         let ele = $(".autoRedirct");
         if (ele.length < 1) {

@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '评论列表';
-
-$this->extend('../layouts/header');
 ?>
 
     <div class="search">
@@ -60,7 +59,3 @@ $this->extend('../layouts/header');
     <div align="center">
         <?=$comment_list->getLink()?>
     </div>
-
-<?php
-$this->extend('../layouts/footer');
-?>

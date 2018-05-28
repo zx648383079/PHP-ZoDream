@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '接口：'.$api->name;
-$this->extend('../layouts/header');
 ?>
 
 <div class="row">
@@ -215,7 +214,3 @@ $this->extend('../layouts/header');
     <!-- /.col-lg-12 -->
 </div>
         </div>
-
-<?php
-$this->extend('../layouts/footer');
-?>

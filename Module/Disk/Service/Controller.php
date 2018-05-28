@@ -7,6 +7,8 @@ use Zodream\Service\Factory;
 
 class Controller extends ModuleController {
 
+    public $layout = 'main';
+
     /**
      * @var Directory
      */

@@ -1,10 +1,10 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '更改密码';
 
-$this->extend('../layouts/header');
 ?>
 
     <h1><?=$this->title?></h1>
@@ -30,7 +30,3 @@ $this->extend('../layouts/header');
         <button type="submit" class="btn btn-success">确认更改</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
     </form>
-
-<?php
-$this->extend('../layouts/footer');
-?>

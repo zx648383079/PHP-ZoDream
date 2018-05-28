@@ -4,7 +4,6 @@ use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '编辑微信公众号';
-$this->extend('../layouts/header');
 ?>
 
 <div class="page-tip">
@@ -89,6 +88,3 @@ $this->extend('../layouts/header');
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
 </div>
-
-
-<?php $this->extend('../layouts/footer');?>

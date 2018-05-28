@@ -6,8 +6,7 @@ $this->title = '编辑图文';
 $js = <<<JS
     var ue = UE.getEditor('container');
 JS;
-$this->extend('../layouts/header')
-    ->registerJsFile('/assets/ueditor/ueditor.config.js')
+$this->registerJsFile('/assets/ueditor/ueditor.config.js')
     ->registerJsFile('/assets/ueditor/ueditor.all.js')
     ->registerJs($js);
 ?>
@@ -53,4 +52,3 @@ $this->extend('../layouts/header')
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
 </div>
-<?php $this->extend('../layouts/footer');?>

@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '用户列表';
-
-$this->extend('../layouts/header');
 ?>
 
     <div class="search">
@@ -52,7 +51,3 @@ $this->extend('../layouts/header');
     <div align="center">
         <?=$user_list->getLink()?>
     </div>
-
-<?php
-$this->extend('../layouts/footer');
-?>

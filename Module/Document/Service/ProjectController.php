@@ -3,9 +3,8 @@ namespace Module\Document\Service;
 
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\ProjectModel;
-use Module\ModuleController;
 
-class ProjectController extends ModuleController {
+class ProjectController extends Controller {
 
     public function indexAction($id) {
         $project = ProjectModel::find($id);

@@ -31,8 +31,9 @@ $this->registerCssFile([
             ZoDream CMS Admin
         </div>
     </header>
-    <div class="container">
+    <div class="container page-box">
         <div class="left-catelog navbar">
+            <span class="left-catelog-toggle"></span>
             <ul>
                 <li><a href="<?=$this->url('./')?>">
                         <i class="fa fa-home"></i><span>首页</span></a></li>

@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '消费渠道';
-
-$this->extend('layouts/header');
 ?>
 
     <div>
@@ -40,7 +39,3 @@ $this->extend('layouts/header');
             </table>
         </div>
     </div>
-
-<?php
-$this->extend('layouts/footer');
-?>

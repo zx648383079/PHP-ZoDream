@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '生活预算';
-
-$this->extend('layouts/header');
 ?>
 
     <a class="btn btn-success" href="<?=$this->url('./budget/add')?>">新增预算</a>
@@ -53,7 +52,3 @@ $this->extend('layouts/header');
     <div align="center">
         <?=$model_list->getLink()?>
     </div>
-
-<?php
-$this->extend('layouts/footer');
-?>

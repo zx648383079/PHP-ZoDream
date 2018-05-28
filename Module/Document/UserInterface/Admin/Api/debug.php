@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '接口调试';
-$this->extend('../layouts/header');
 ?>
 
 <div id="debug-box">
@@ -114,6 +113,3 @@ $this->extend('../layouts/header');
         </div>
         </form>
     </div>
-<?php
-$this->extend('../layouts/footer');
-?>

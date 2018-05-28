@@ -4,15 +4,9 @@ namespace Module\Finance\Service;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
-use Module\ModuleController;
 
-class HomeController extends ModuleController {
+class HomeController extends Controller {
 
-    protected function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
 
     public function indexAction() {
         $time = strtotime(date('Y-m'));

@@ -2,17 +2,10 @@
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
-use Module\ModuleController;
-use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Routing\Url;
 
-class BudgetController extends ModuleController {
+class BudgetController extends Controller {
 
-    protected function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
 
     public function indexAction() {
         $model_list = BudgetModel::where('deleted_at', 0)->orderBy('id', 'desc')->page();

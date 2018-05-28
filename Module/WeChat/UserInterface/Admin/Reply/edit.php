@@ -9,8 +9,7 @@ $('#event').change(function() {
     $(".click-box").toggle($(this).val() == 'CLICK');
 });
 JS;
-$this->extend('../layouts/header')
-    ->registerJs($js, View::JQUERY_READY);
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="page-tip">
@@ -59,5 +58,3 @@ $this->extend('../layouts/header')
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>
 </div>
-
-<?php $this->extend('../layouts/footer');?>

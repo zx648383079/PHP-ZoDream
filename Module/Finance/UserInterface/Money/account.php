@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '资金账户列表';
-
-$this->extend('layouts/header');
 ?>
     <div class="search-box">
         <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_account')?>">新增账户</a>
@@ -50,7 +49,3 @@ $this->extend('layouts/header');
         <?php endforeach; ?>
         </tbody>
     </table>
-
-<?php
-$this->extend('layouts/footer');
-?>

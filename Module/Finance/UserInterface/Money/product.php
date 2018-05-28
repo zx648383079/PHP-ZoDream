@@ -1,10 +1,9 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '理财产品列表';
-
-$this->extend('layouts/header');
 ?>
     <div class="search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_product')?>">新增产品</a>
@@ -46,7 +45,3 @@ $this->extend('layouts/header');
         <?php endforeach; ?>
         </tbody>
     </table>
-
-<?php
-$this->extend('layouts/footer');
-?>

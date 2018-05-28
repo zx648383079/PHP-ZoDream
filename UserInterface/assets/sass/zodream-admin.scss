@@ -1,0 +1,203 @@
+body {
+    background: #333;
+}
+
+a {
+    text-decoration: none;
+}
+
+footer,
+header {
+    background: #000;
+    color: #fff; 
+}
+.btn,
+.zd-tab .zd-tab-head .zd-tab-item.active,
+.zd-tab .zd-tab-head .zd-tab-item:hover {
+    background: #333;
+    color: #fff;
+}
+
+header {
+    height: 50px;
+    line-height: 50px;
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    left: 0;
+    right: 0;
+    .container {
+        margin-top: 0;
+    }
+}
+
+footer {
+    padding: 32px 20px;
+    position: relative;
+}
+
+.container {
+    width: 1300px;
+    margin: 50px auto 0;
+    position: relative;
+}
+
+.left-catelog {
+    width: 208px;
+    vertical-align: baseline;
+    padding: 20px 12px 60px 36px;
+    top: auto;
+    position: absolute;
+    overflow-y: visible;
+    display: inline-block;
+    .left-catelog-toggle {
+        display: none;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        &::before {
+            content: "\f0c9";
+        }
+    }
+}
+
+.right-content {
+    width: calc(100% - 208px);
+    position: relative;
+    vertical-align: baseline;
+    background-color: #f4f4f4;
+    flex-grow: unset;
+    display: inline-block;
+    top: 0;
+    padding: 8px;
+    min-height: 300px;
+    margin-left: 208px;
+}
+
+.page-tip {
+    border: 1px dashed #333;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #F5FAFF;
+    position: relative;
+    .blue {
+        color: #333;
+    }
+    ul {
+        width: 100%;
+        padding: 0;
+        li {
+            padding-left: 10px;
+            list-style: inside;
+            a {
+                color: #666;
+            }
+        }
+    }
+    .toggle {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        height: 26px;
+        width: 26px;
+        &::before {
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: 14px;
+            font-size: inherit;
+            text-rendering: auto;
+            content: "\f068";
+        }
+    }
+    &.min {
+        width: 200px;
+        ul {
+            display: none;
+        }
+        .toggle {
+            &::before {
+                content: "\f067";
+            }
+        }
+    }
+}
+
+.breadcrumb {
+    padding: 8px 15px;
+    list-style: none;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    >li {
+        display: inline-block;
+        &.active {
+            color: #777;
+        }
+        +li::before {
+            padding: 0 5px;
+            color: #ccc;
+            content: "/\00a0";
+        }
+    }
+}
+
+.page-header {
+    height: 30px;
+    background: transparent;
+    .actions {
+        right: 20px;
+        button {
+            background: #000;
+            color: #fff;
+            line-height: 30px;
+            padding: 0 8px;
+            margin: 0;
+            border: none;
+            &.active {
+                background: #888;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px){
+    .container {
+        width: 100%;
+    }
+    .page-box {
+        min-height: calc(100vh - 50px);
+    }
+    .left-catelog {
+        left: -208px;
+        transition: left .3s;
+        z-index: 189;
+        bottom: 0;
+        .left-catelog-toggle {
+            display: block;
+            position: fixed;
+            left: 10px;
+            bottom: 10px;
+            font-size: 24px;
+            background: #333;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            transition: all .3s;
+            padding: 4px 6px;
+            color: #fff;
+            z-index: 199;
+        }
+        &.expand {
+            left: 0;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            .left-catelog-toggle {
+                box-shadow: none;
+                left: 5px;
+                &::before {
+                    content: "\f00d";
+                }
+            }
+        }
+    }
+    .right-content {
+        margin-left: 0;
+        width: 100%;
+    }
+}
