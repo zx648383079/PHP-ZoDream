@@ -11,12 +11,11 @@ use Domain\Model\Model;
 * @property integer $status
 * @property integer $position
 * @property integer $threads
-* @property integer $todaypost
 * @property integer $posts
 */
 class ForumModel extends Model {
 	public static function tableName() {
-        return 'forum';
+        return 'bbs_forum';
     }
 
 
@@ -28,7 +27,6 @@ class ForumModel extends Model {
 		  'status' => 'int:0-1',
 		  'position' => 'int',
 		  'threads' => 'int',
-		  'todaypost' => 'int',
 		  'posts' => 'int',
 		);
 	}
@@ -42,8 +40,12 @@ class ForumModel extends Model {
 		  'status' => 'Status',
 		  'position' => 'Position',
 		  'threads' => 'Threads',
-		  'todaypost' => 'Todaypost',
 		  'posts' => 'Posts',
 		);
 	}
+
+
+	public function children() {
+	    return $this->hasMany(static::class, 'parent_id', 'id');
+    }
 }

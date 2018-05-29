@@ -18,7 +18,7 @@ use Domain\Model\Model;
 */
 class ThreadModel extends Model {
 	public static function tableName() {
-        return 'thread';
+        return 'bbs_thread';
     }
 
     protected function rules() {

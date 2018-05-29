@@ -16,7 +16,7 @@ use Domain\Model\Model;
 */
 class ThreadPostModel extends Model {
 	public static function tableName() {
-        return 'thread_post';
+        return 'bbs_thread_post';
     }
 
     protected function rules() {
