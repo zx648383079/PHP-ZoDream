@@ -27,6 +27,7 @@ PHP开发
 |[模板生成系统](https://github.com/zodream/gzo)|可视化便捷操作开放模块，适用于代码生成|已完成1.0|本地使用|
 |[用户管理系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Auth)|暂时只完成第三方登录、本地登录、注册功能，权限控制待开发|已完成1.0|[demo](http://zodream.cn/auth)|
 |[CMS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/CMS)|内容管理系统|开发中|未上线|
+|[CAS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Cas)|基于cas的单点登录|开发中|未上线|
 |[聊天系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Chat)|聊天室|待开发|未上线|
 |[BBS论坛系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Forum)|BBS论坛系统|待开发|未上线|
 |[任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)|计划任务系统|待开发|未上线|
