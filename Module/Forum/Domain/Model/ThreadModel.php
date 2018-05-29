@@ -4,17 +4,14 @@ namespace Module\Forum\Domain\Model;
 use Domain\Model\Model;
 /**
 * Class ThreadModel
-* @property integer $id
-* @property integer $forum_id
-* @property string $title
-* @property integer $readperm
-* @property integer $user_id
-* @property string $user_name
-* @property integer $replies
-* @property integer $views
-* @property integer $update_at
-* @property integer $update_user
-* @property integer $create_at
+ * @property integer $id
+ * @property integer $forum_id
+ * @property string $title
+ * @property integer $user_id
+ * @property integer $view_count
+ * @property integer $post_count
+ * @property integer $created_at
+ * @property integer $updated_at
 */
 class ThreadModel extends Model {
 	public static function tableName() {
@@ -22,33 +19,27 @@ class ThreadModel extends Model {
     }
 
     protected function rules() {
-		return array (
-		  'forum_id' => 'required|int',
-		  'title' => 'required|string:3-100',
-		  'readperm' => 'int',
-		  'user_id' => 'required|int',
-		  'user_name' => 'required|string:3-45',
-		  'replies' => 'int',
-		  'views' => 'int',
-		  'update_at' => 'int',
-		  'update_user' => 'int',
-		  'create_at' => 'int',
-		);
-	}
+        return [
+            'forum_id' => 'required|int',
+            'title' => 'required|string:0,200',
+            'user_id' => 'required|int',
+            'view_count' => 'int',
+            'post_count' => 'int',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
 
-	protected function labels() {
-		return array (
-		  'id' => 'Id',
-		  'forum_id' => 'Forum Id',
-		  'title' => 'Title',
-		  'readperm' => 'Readperm',
-		  'user_id' => 'User Id',
-		  'user_name' => 'User Name',
-		  'replies' => 'Replies',
-		  'views' => 'Views',
-		  'update_at' => 'Update At',
-		  'update_user' => 'Update User',
-		  'create_at' => 'Create At',
-		);
-	}
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'forum_id' => 'Forum Id',
+            'title' => 'Title',
+            'user_id' => 'User Id',
+            'view_count' => 'View Count',
+            'post_count' => 'Post Count',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
 }
