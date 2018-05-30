@@ -67,6 +67,9 @@ class BiQuGe extends BaseSpider {
      * @return BookChapterModel
      */
     public function getChapter(Html $html) {
+        if ($html->isEmpty()) {
+            return null;
+        }
         /// html 转文本还有问题
         return new BookChapterModel([
             'title' => $html->find('.bookname h1', 0)->text,

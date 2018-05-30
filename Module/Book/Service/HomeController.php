@@ -2,10 +2,14 @@
 namespace Module\Book\Service;
 
 use Module\Book\Domain\Model\BookModel;
+use Zodream\Infrastructure\Http\Request;
 
 class HomeController extends Controller {
 
     public function indexAction() {
+        if (Request::isMobile()) {
+            return $this->redirect('./mobile');
+        }
         $recommend_book = BookModel::limit(4)->all();
         $hot_book = BookModel::order('click_count', 'desc')->limit(10)->all();
 
