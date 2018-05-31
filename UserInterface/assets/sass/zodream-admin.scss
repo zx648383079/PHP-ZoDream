@@ -30,9 +30,6 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    .container {
-        margin-top: 0;
-    }
 }
 
 footer {
@@ -41,9 +38,13 @@ footer {
 }
 
 .container {
-    width: 1300px;
-    margin: 50px auto 0;
+    width: 1200px;
+    margin: 0 auto;
     position: relative;
+}
+
+.page-box {
+    margin-top: 50px;
 }
 
 .left-catelog {
@@ -163,10 +164,14 @@ footer {
     }
 }
 
-@media (max-width: 767px){
+@media (max-width: 1200px){
     .container {
         width: 100%;
     }
+
+}
+
+@media (max-width: 767px){
     .page-box {
         min-height: calc(100vh - 50px);
     }

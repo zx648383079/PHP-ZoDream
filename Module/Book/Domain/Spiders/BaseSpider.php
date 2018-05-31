@@ -24,6 +24,10 @@ abstract class BaseSpider {
         }
         $html = Spider::url($uri);
         $book = $this->getBook($html);
+        if ($book->isExist()) {
+            $this->debug(sprintf('《%s》 已存在书库', $book->name));
+            return;
+        }
         $book->save();
         $chapters = $this->getCatalog($html, $uri);
         $this->downloadChapter($book, $chapters, $next);
@@ -101,14 +105,14 @@ abstract class BaseSpider {
                 $failure = 0;
             }
             if ($failure > 10) {
-                $this->debug(sprintf('下载章节 《%s》 失败，跳过。。。', $url, $failure * 3));
+                $this->debug(sprintf('下载章节 《%s》 失败，跳过。。。', $url));
                 $i++;
                 $failure = 0;
                 continue;
             }
-            $failure++;
-            $this->debug(sprintf('下载章节 《%s》 失败，%s 秒后重试', $url, $failure * 3));
-            sleep($failure * 3);
+            $failure ++;
+            $this->debug(sprintf('下载章节 《%s》 失败，%s 秒后重试', $url, $failure * 2));
+            sleep($failure * 2);
             continue;
         }
     }

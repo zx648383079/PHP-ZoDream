@@ -37,7 +37,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '用户';
         <div class="input-group">
             <label for="thumb">头像</label>
             <div class="file-input">
-                <input type="text" id="thumb" name="avatar" placeholder="请输入图片" value="<?=$model->avatar?>" size="70">
+                <input type="text" id="thumb" name="avatar" placeholder="请输入图片" value="<?=$model->avatar?>">
                 <button type="button" data-type="upload">上传</button>
                 <button type="button" data-type="preview">预览</button>
             </div>

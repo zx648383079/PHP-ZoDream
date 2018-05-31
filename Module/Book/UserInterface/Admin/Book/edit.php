@@ -32,7 +32,7 @@ $this->title = '小说';
         <div class="input-group">
             <label for="cover">封面</label>
             <div class="file-input">
-                <input type="text" id="cover" name="cover" placeholder="请输入小说封面" value="<?=$model->cover?>" size="70">
+                <input type="text" id="cover" name="cover" placeholder="请输入小说封面" value="<?=$model->cover?>">
                 <button type="button" data-type="upload" data-grid="cover">上传</button>
                 <button type="button" data-type="preview">预览</button>
             </div>

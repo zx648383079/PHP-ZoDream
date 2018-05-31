@@ -116,4 +116,13 @@ class BookModel extends Model {
     public function getLastChapterAttribute() {
         return BookChapterModel::where('book_id', $this->id)->order('created_at', 'desc')->one();
     }
+
+    /**
+     * 判断小说是否已存在
+     * @return bool
+     */
+    public function isExist() {
+        return static::where('name', $this->name)
+            ->where('id', '<>', $this->id)->count() > 0;
+    }
 }

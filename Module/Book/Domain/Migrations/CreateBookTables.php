@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Migrations;
 
+use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;

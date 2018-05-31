@@ -890,6 +890,23 @@ i.checkbox {
   line-height: 30px;
   margin-top: 8px; }
 
+.form-table .input-group input[type="text"],
+.form-table .input-group input[type="email"],
+.form-table .input-group input[type="tel"],
+.form-table .input-group input[type="password"],
+.form-table .input-group input[type="url"],
+.form-table .input-group input[type="number"] {
+  height: 30px;
+  min-width: 200px; }
+
+.form-table .input-group select {
+  height: 30px;
+  min-width: 100px; }
+
+.form-table .input-group textarea {
+  min-width: 200px;
+  min-height: 90px; }
+
 .form-table .input-group > label:first-child {
   width: 25%;
   float: left;
@@ -903,17 +920,7 @@ i.checkbox {
   float: left; }
   .form-table .input-group > div textarea {
     width: 100%;
-    resize: vertical;
-    height: 100px; }
-  .form-table .input-group > div input[type="text"],
-  .form-table .input-group > div input[type="email"],
-  .form-table .input-group > div input[type="tel"],
-  .form-table .input-group > div input[type="password"],
-  .form-table .input-group > div input[type="url"],
-  .form-table .input-group > div input[type="number"],
-  .form-table .input-group > div select {
-    height: 30px;
-    min-width: 100px; }
+    resize: vertical; }
   .form-table .input-group > div .inline {
     line-height: 30px;
     min-width: 100px;

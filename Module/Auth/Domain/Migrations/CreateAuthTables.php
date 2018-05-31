@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Migrations;
 
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -42,6 +43,11 @@ class CreateAuthTables extends Migration {
             $table->set('mode')->varchar(20);
             $table->timestamp('created_at');
         });
+        Schema::createTable(UserMetaModel::tableName(), function(Table $table) {
+            $table->set('user_id')->int()->notNull();
+            $table->set('key')->varchar(100)->notNull();
+            $table->set('value')->text()->defaultVal('');
+        });
     }
 
     /**
@@ -53,5 +59,6 @@ class CreateAuthTables extends Migration {
         Schema::dropTable(UserModel::tableName());
         Schema::dropTable(OAuthModel::tableName());
         Schema::dropTable(LoginLogModel::tableName());
+        Schema::dropTable(UserMetaModel::tableName());
     }
 }

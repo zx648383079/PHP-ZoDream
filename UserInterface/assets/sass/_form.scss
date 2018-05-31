@@ -199,6 +199,23 @@ i {
 
 .form-table {
     .input-group {
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="url"],
+        input[type="number"] {
+            height: $lineHeight;
+            min-width: 200px;
+        }
+        select {
+            height: $lineHeight;
+            min-width: 100px;
+        }
+        textarea {
+            min-width: 200px;
+            min-height: $lineHeight * 3 
+        }
         >label:first-child {
             width: 25%;
             float: left;
@@ -213,18 +230,8 @@ i {
             textarea {
                 width: 100%;
                 resize: vertical;
-                height: 100px;
             }
-            input[type="text"],
-            input[type="email"],
-            input[type="tel"],
-            input[type="password"],
-            input[type="url"],
-            input[type="number"], 
-            select {
-                height: $lineHeight;
-                min-width: 100px;
-            }
+            
 
             .inline {
                 line-height: $lineHeight;
