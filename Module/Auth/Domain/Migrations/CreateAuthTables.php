@@ -44,6 +44,7 @@ class CreateAuthTables extends Migration {
             $table->timestamp('created_at');
         });
         Schema::createTable(UserMetaModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('key')->varchar(100)->notNull();
             $table->set('value')->text()->defaultVal('');

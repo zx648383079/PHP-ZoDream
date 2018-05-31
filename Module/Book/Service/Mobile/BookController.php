@@ -27,7 +27,9 @@ class BookController extends Controller {
         $cat = BookCategoryModel::find($book->cat_id);
         $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(8)->all();
         BookHistoryModel::log($chapter);
-        return $this->show(compact('book', 'cat', 'chapter', 'like_book'));
+        $setting = new Setting();
+        $setting->load()->apply()->save();
+        return $this->show(compact('book', 'cat', 'chapter', 'like_book', 'setting'));
     }
 
     public function downloadAction($id) {

@@ -25,6 +25,27 @@ class OAuthModel extends Model {
         return 'user_oauth';
     }
 
+    protected function rules() {
+        return [
+            'user_id' => 'required|int',
+            'vendor' => 'string:0,30',
+            'identity' => 'string:0,100',
+            'data' => '',
+            'created_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'user_id' => 'User Id',
+            'vendor' => 'Vendor',
+            'identity' => 'Identity',
+            'data' => 'Data',
+            'created_at' => 'Created At',
+        ];
+    }
+
 
     public function user() {
         return $this->hasOne(UserModel::class, 'id', 'user_id');

@@ -1,28 +1,28 @@
-function setTheme(name: string) {
-    $('.sidebar-panel .theme-box .' + name).addClass('active');
+function setTheme(name: number) {
+    $('.sidebar-panel .theme-box .theme-' + name).addClass('active');
     $('body').addClass(name);
-    $.cookie('z1', name);
+    $.cookie('theme', name);
 }
 function setFont(index: number) {
     $('.sidebar-panel .font-box span').eq(index).addClass('active');
     $(".chapte-box").addClass('font-' + index);
-    $.cookie('z2', index);
+    $.cookie('font', index);
 }
 function setSize(size: number) {
     $('.sidebar-panel .size-box .lang').text(size);
     $(".chapte-box").css('font-size', size + 'px');
-    $.cookie('z3', size);
+    $.cookie('size', size);
 }
 function setWidth(width: number) {
     $('.sidebar-panel .width-box .lang').text(width);
     $('body').addClass('width-' + width);
-    $.cookie('z4', width);
+    $.cookie('width', width);
 }
 $(function() {
-    setTheme($.cookie('z1') || 'theme-0');
-    setFont($.cookie('z2') || 3);
-    setSize($.cookie('z3') || 18);
-    setWidth($.cookie('z4') || 800);
+    setTheme($.cookie('theme') || 0);
+    setFont($.cookie('font') || 3);
+    setSize($.cookie('size') || 18);
+    setWidth($.cookie('width') || 800);
     $(document).keydown(function(event) {
         let url: string;
         if (event.keyCode == 37) {
@@ -62,7 +62,7 @@ $(function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').attr('class');
         let newClass = $(this).attr('class');
         $('body').removeClass(oldClass);
-        setTheme(newClass);
+        setTheme(newClass.substr(8));
     });
     $('.sidebar-panel .font-box span').click(function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').index();

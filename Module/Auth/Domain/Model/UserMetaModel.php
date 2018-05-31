@@ -4,10 +4,35 @@ namespace Module\Auth\Domain\Model;
 use Domain\Model\Model;
 use Zodream\Domain\Access\Auth;
 
+/**
+ * Class UserMetaModel
+ * @package Module\Auth\Domain\Model
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $key
+ * @property string $value
+ */
 class UserMetaModel extends Model {
 
     public static function tableName() {
         return 'user_meta';
+    }
+
+    protected function rules() {
+        return [
+            'user_id' => 'required|int',
+            'key' => 'required|string:0,100',
+            'value' => 'required',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'user_id' => 'User Id',
+            'key' => 'Key',
+            'value' => 'Value',
+        ];
     }
 
     public static function getArr($key) {

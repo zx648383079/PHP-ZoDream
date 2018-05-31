@@ -7,10 +7,41 @@ use Zodream\Html\Page;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Http\Request;
 
+/**
+ * Class BookHistoryModel
+ * @package Module\Book\Domain\Model
+ * @property integer $user_id
+ * @property integer $book_id
+ * @property integer $chapter_id
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
 class BookHistoryModel extends Model {
     public static function tableName() {
         return 'book_history';
     }
+
+    protected function rules() {
+        return [
+            'user_id' => 'required|int',
+            'book_id' => 'required|int',
+            'chapter_id' => 'required|int',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'user_id' => 'User Id',
+            'book_id' => 'Book Id',
+            'chapter_id' => 'Chapter Id',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
 
     public static function log(BookChapterModel $chapter) {
         if (!Auth::guest()) {

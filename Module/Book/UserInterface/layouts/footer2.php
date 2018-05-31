@@ -32,7 +32,7 @@ $this->registerJsFile('@jquery.min.js')
             <i class="fa fa-close"></i>
             <ul>
               <li>
-                <span>阅读主体</span>
+                <span>阅读主题</span>
                 <div class="theme-box">
                   <span class="theme-0 active"></span>
                   <span class="theme-1"></span>
