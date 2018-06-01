@@ -51,12 +51,16 @@ class Setting {
 
     public function apply() {
         foreach ($this->__attributes as $key => $item) {
+            if ($item == Request::cookie($key)) {
+                continue;
+            }
             Cookie::forever($key, $item);
         }
         return $this;
     }
 
     public function save() {
+        $this->apply();
         if (Auth::guest()) {
             return false;
         }
@@ -69,5 +73,15 @@ class Setting {
         }
         $this->isChange = false;
         return UserMetaModel::updateArr(self::KEY, $this->__attributes);
+    }
+
+    public function setAttribute($key, $value = null) {
+        if (!is_array($key)
+            && isset($this->__attributes[$key])
+            && $this->__attributes[$key] == $value) {
+            return $this;
+        }
+        $this->isChange = true;
+        return parent::setAttribute($key, $value);
     }
 }

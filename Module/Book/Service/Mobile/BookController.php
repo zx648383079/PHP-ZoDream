@@ -28,7 +28,7 @@ class BookController extends Controller {
         $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(8)->all();
         BookHistoryModel::log($chapter);
         $setting = new Setting();
-        $setting->load()->apply()->save();
+        $setting->load()->save();
         return $this->show(compact('book', 'cat', 'chapter', 'like_book', 'setting'));
     }
 

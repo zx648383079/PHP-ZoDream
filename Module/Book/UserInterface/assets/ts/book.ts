@@ -1,24 +1,25 @@
-function setTheme(name: number) {
-    $('.sidebar-panel .theme-box .theme-' + name).addClass('active');
-    $('body').addClass(name);
-    $.cookie('theme', name);
-}
-function setFont(index: number) {
-    $('.sidebar-panel .font-box span').eq(index).addClass('active');
-    $(".chapte-box").addClass('font-' + index);
-    $.cookie('font', index);
-}
-function setSize(size: number) {
-    $('.sidebar-panel .size-box .lang').text(size);
-    $(".chapte-box").css('font-size', size + 'px');
-    $.cookie('size', size);
-}
-function setWidth(width: number) {
-    $('.sidebar-panel .width-box .lang').text(width);
-    $('body').addClass('width-' + width);
-    $.cookie('width', width);
-}
 $(function() {
+    var settingBox = $("#setting-box").dialog();
+    function setTheme(name: number) {
+        settingBox.find('.theme-box .theme-' + name).addClass('active');
+        $('body').addClass('theme-' + name);
+        $.cookie('theme', name);
+    }
+    function setFont(index: number) {
+        settingBox.find('.font-box span').eq(index).addClass('active');
+        $(".chapte-box").addClass('font-' + index);
+        $.cookie('font', index);
+    }
+    function setSize(size: number) {
+        settingBox.find('.size-box .lang').text(size);
+        $(".chapte-box").css('font-size', size + 'px');
+        $.cookie('size', size);
+    }
+    function setWidth(width: number) {
+        settingBox.find('.width-box .lang').text(width);
+        $('body').addClass('width-' + width);
+        $.cookie('width', width);
+    }
     setTheme($.cookie('theme') || 0);
     setFont($.cookie('font') || 3);
     setSize($.cookie('size') || 18);
@@ -50,27 +51,21 @@ $(function() {
         $(".chapter-sidebar .go-top").toggle($(this).scrollTop() > 100);
     });
     $(".chapter-sidebar .do-setting").click(function() {
-        $(this).find('.sidebar-panel').toggle();
+        settingBox.toggle();
     });
-    $('.sidebar-panel').click(function(e) {
-        e.stopPropagation();
-    });
-    $('.sidebar-panel .fa-close').click(function() {
-        $(this).parents('.sidebar-panel').hide();
-    });
-    $('.sidebar-panel .theme-box span').click(function() {
+    settingBox.on('click', '.theme-box span', function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').attr('class');
         let newClass = $(this).attr('class');
         $('body').removeClass(oldClass);
         setTheme(newClass.substr(8));
     });
-    $('.sidebar-panel .font-box span').click(function() {
+    settingBox.on('click', '.font-box span', function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').index();
         let newClass = $(this).index();
         $(".chapte-box").removeClass('font-' + oldClass);
         setFont(newClass);
     });
-    $('.sidebar-panel .size-box .fa').click(function() {
+    settingBox.on('click', '.size-box .fa', function() {
         let $this = $(this);
         let ele = $this.parent().find('.lang');
         let val = parseInt(ele.text()) || 18;
@@ -85,7 +80,7 @@ $(function() {
         }
         setSize(val);
     });
-    $('.sidebar-panel .width-box .fa').click(function() {
+    settingBox.on('click', '.width-box .fa', function() {
         let list = [
             640,
             800,
