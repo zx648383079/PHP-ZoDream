@@ -15,11 +15,6 @@ $this->registerJsFile('@book_mobile.min.js')
             首页
         </a>
     </header>
-    <div class="toolbar">
-        <a class="button lightoff" href="javascript:;"><i></i></a>
-        <a class="button huyanon"  href="javascript:;">护眼</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        字体：<a class="fontsize" data-role="inc" href="javascript:;">+A</a> <a class="fontsize" data-role="des" href="javascript:;">-A</a>
-    </div>
     <div class="page-control">
         <div class="bd">
             <?php if($chapter->previous):?>
@@ -33,14 +28,8 @@ $this->registerJsFile('@book_mobile.min.js')
         </div>
     </div>
 	<div class="container">
-		<div class="mod mod-page" id="ChapterView" data-already-grab="" data-hongbao="-1">
-			<div class="bd">
-				<div class="page-content font-l">
-					<p>
-						<?=$chapter->body->html?>
-					</p>
-				</div>
-			</div>
+		<div class="chapte-box">
+			<?=$chapter->body->html?>
 		</div>
 		<div class="tuijian">
 			<span>推荐阅读：</span>
@@ -80,6 +69,7 @@ $this->registerJsFile('@book_mobile.min.js')
                         <span class="theme-3"></span>
                         <span class="theme-4"></span>
                         <span class="theme-5"></span>
+                        <span class="theme-6"></span>
                     </div>
                 </li>
                 <li>
@@ -96,14 +86,6 @@ $this->registerJsFile('@book_mobile.min.js')
                     <div class="size-box">
                         <i class="fa fa-minus"></i>
                         <span class="lang">18</span>
-                        <i class="fa fa-plus"></i>
-                    </div>
-                </li>
-                <li>
-                    <span>页面宽度</span>
-                    <div class="width-box">
-                        <i class="fa fa-minus"></i>
-                        <span class="lang">800</span>
                         <i class="fa fa-plus"></i>
                     </div>
                 </li>

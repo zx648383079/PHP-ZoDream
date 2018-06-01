@@ -37,7 +37,7 @@ $this->title = '编辑章节';
                     </div>
                 </div>
                 <div class="zd-tab-item">
-                    <textarea name="content" style="width: 100%;min-height: 500px"><?=$model->body->content?></textarea>
+                    <textarea name="content" style="width: 100%;min-height: 500px"><?=$model->body ? $model->body->content : ''?></textarea>
                 </div>
             </div>
         </div>

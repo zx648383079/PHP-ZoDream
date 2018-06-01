@@ -3,6 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->registerCssFile('@font-awesome.min.css')
+  ->registerCssFile('@dialog.css')
   ->registerCssFile('@book.css');
 ?>
 <!DOCTYPE html>

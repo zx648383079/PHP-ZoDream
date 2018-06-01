@@ -36,12 +36,12 @@ class UserMetaModel extends Model {
     }
 
     public static function getArr($key) {
-        $value = self::where('user_id', Auth::id())->where('key', $key)->value('value');
+        $value = self::where('user_id', Auth::id())->where('`key`', $key)->value('`value`');
         return empty($value) ? [] : unserialize($value);
     }
 
     public static function updateArr($key, array $value) {
-        self::record()->where('user_id', Auth::id())->where('key', $key)
+        self::record()->where('user_id', Auth::id())->where('`key`', $key)
             ->update([
                 'value' => serialize($value)
             ]);

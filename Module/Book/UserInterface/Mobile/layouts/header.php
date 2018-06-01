@@ -2,7 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerCssFile('@book_mobile.css');
+$this->registerCssFile('@font-awesome.min.css')
+    ->registerCssFile('@dialog.css')
+    ->registerCssFile('@book_mobile.css');
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

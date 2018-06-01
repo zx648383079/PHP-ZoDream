@@ -4,6 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->registerJsFile('@jquery.min.js')
   ->registerJsFile('@jquery.cookie.js')
+  ->registerJsFile('@jquery.dialog.min.js')
   ->registerJsFile('@book.min.js');
 ?>
     <div class="Layout ft">
@@ -50,6 +51,7 @@ $this->registerJsFile('@jquery.min.js')
                         <span class="theme-3"></span>
                         <span class="theme-4"></span>
                         <span class="theme-5"></span>
+                        <span class="theme-6"></span>
                     </div>
                 </li>
                 <li>

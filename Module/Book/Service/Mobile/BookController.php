@@ -5,6 +5,7 @@ use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Setting;
 use Module\Book\Service\Controller;
 
 class BookController extends Controller {

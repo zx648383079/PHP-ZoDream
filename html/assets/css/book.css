@@ -2950,91 +2950,87 @@ body.article .Con.box_con .box_box {
       .chapter-sidebar > ul > li:hover > .span,
       .chapter-sidebar > ul > li:hover a .fa {
         color: #f00; }
-      .chapter-sidebar > ul > li .sidebar-panel {
-        display: none;
-        position: fixed;
-        width: 400px;
-        bottom: 0;
-        margin-left: -410px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        padding-top: 30px; }
-        .chapter-sidebar > ul > li .sidebar-panel .fa-close {
-          position: absolute;
-          right: 10px;
-          top: 10px;
-          font-size: 20px; }
-        .chapter-sidebar > ul > li .sidebar-panel li {
-          line-height: 50px;
-          text-align: left;
-          font-size: 20px; }
-          .chapter-sidebar > ul > li .sidebar-panel li > span {
-            margin: 0 20px; }
-          .chapter-sidebar > ul > li .sidebar-panel li > div {
-            display: inline-block; }
-          .chapter-sidebar > ul > li .sidebar-panel li .theme-box {
-            padding-top: 5px; }
-            .chapter-sidebar > ul > li .sidebar-panel li .theme-box span {
-              border-radius: 50%;
-              display: inline-block;
-              width: 30px;
-              height: 30px;
-              border: 1px solid #333;
-              box-sizing: border-box; }
-              .chapter-sidebar > ul > li .sidebar-panel li .theme-box span.active {
-                border: 4px solid #f00; }
-          .chapter-sidebar > ul > li .sidebar-panel li .font-box span {
-            border: 1px solid #333;
-            padding: 2px 5px; }
-            .chapter-sidebar > ul > li .sidebar-panel li .font-box span.active {
-              border-color: #f00; }
+
+#setting-box .dialog-header {
+  background: transparent;
+  border: none;
+  height: 30px; }
+  #setting-box .dialog-header .dialog-close {
+    background: transparent;
+    color: #000;
+    font-size: 20px; }
+
+#setting-box li {
+  line-height: 50px;
+  text-align: left;
+  font-size: 20px; }
+  #setting-box li > span {
+    margin: 0 20px; }
+  #setting-box li > div {
+    display: inline-block; }
+  #setting-box li .theme-box {
+    padding-top: 5px; }
+    #setting-box li .theme-box span {
+      border-radius: 50%;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #333;
+      box-sizing: border-box; }
+      #setting-box li .theme-box span.active {
+        border: 4px solid #f00; }
+  #setting-box li .font-box span {
+    border: 1px solid #333;
+    padding: 2px 5px; }
+    #setting-box li .font-box span.active {
+      border-color: #f00; }
 
 .theme-0 {
   background: #ede7da; }
   .theme-0 .chapte-box,
   .theme-0 .chapter-sidebar,
-  .theme-0 .sidebar-panel {
+  .theme-0 #setting-box {
     background: #f8f3e9; }
 
 .theme-1 {
   background: #e0ce9e; }
   .theme-1 .chapte-box,
   .theme-1 .chapter-sidebar,
-  .theme-1 .sidebar-panel {
+  .theme-1 #setting-box {
     background: #f3e9c6; }
 
 .theme-2 {
   background: #cddfcd; }
   .theme-2 .chapte-box,
   .theme-2 .chapter-sidebar,
-  .theme-2 .sidebar-panel {
+  .theme-2 #setting-box {
     background: #e2eee2; }
 
 .theme-3 {
   background: #cfdde1; }
   .theme-3 .chapte-box,
   .theme-3 .chapter-sidebar,
-  .theme-3 .sidebar-panel {
+  .theme-3 #setting-box {
     background: #e2eff3; }
 
 .theme-4 {
   background: #ebcece; }
   .theme-4 .chapte-box,
   .theme-4 .chapter-sidebar,
-  .theme-4 .sidebar-panel {
+  .theme-4 #setting-box {
     background: #f5e4e4; }
 
 .theme-5 {
   background: #d0d0d0; }
   .theme-5 .chapte-box,
   .theme-5 .chapter-sidebar,
-  .theme-5 .sidebar-panel {
+  .theme-5 #setting-box {
     background: #dcdcdc; }
 
-.theme-5 {
+.theme-6 {
   background: #0f1112; }
-  .theme-5 .chapte-box,
-  .theme-5 .chapter-sidebar,
-  .theme-5 .sidebar-panel {
+  .theme-6 .chapte-box,
+  .theme-6 .chapter-sidebar {
     background: #111; }
 
 .width-640 .chapte-box {

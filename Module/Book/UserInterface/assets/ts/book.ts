@@ -1,5 +1,5 @@
 $(function() {
-    var settingBox = $("#setting-box").dialog();
+    let settingBox = $("#setting-box").dialog();
     function setTheme(name: number) {
         settingBox.find('.theme-box .theme-' + name).addClass('active');
         $('body').addClass('theme-' + name);
@@ -53,19 +53,19 @@ $(function() {
     $(".chapter-sidebar .do-setting").click(function() {
         settingBox.toggle();
     });
-    settingBox.on('click', '.theme-box span', function() {
+    settingBox.find('.theme-box span').click(function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').attr('class');
-        let newClass = $(this).attr('class');
+        let newClass = $(this).index();
         $('body').removeClass(oldClass);
-        setTheme(newClass.substr(8));
+        setTheme(newClass);
     });
-    settingBox.on('click', '.font-box span', function() {
+    settingBox.find('.font-box span').click(function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').index();
         let newClass = $(this).index();
         $(".chapte-box").removeClass('font-' + oldClass);
         setFont(newClass);
     });
-    settingBox.on('click', '.size-box .fa', function() {
+    settingBox.find('.size-box .fa').click(function() {
         let $this = $(this);
         let ele = $this.parent().find('.lang');
         let val = parseInt(ele.text()) || 18;
@@ -80,7 +80,7 @@ $(function() {
         }
         setSize(val);
     });
-    settingBox.on('click', '.width-box .fa', function() {
+    settingBox.find('.width-box .fa').click(function() {
         let list = [
             640,
             800,

@@ -1,70 +1,24 @@
-function setTheme(name: number) {
-    $('.sidebar-panel .theme-box .theme-' + name).addClass('active');
-    $('body').addClass(name);
-    $.cookie('theme', name);
-}
-function setFont(index: number) {
-    $('.sidebar-panel .font-box span').eq(index).addClass('active');
-    $(".chapte-box").addClass('font-' + index);
-    $.cookie('font', index);
-}
-function setSize(size: number) {
-    $('.sidebar-panel .size-box .lang').text(size);
-    $(".chapte-box").css('font-size', size + 'px');
-    $.cookie('size', size);
-}
-function setWidth(width: number) {
-    $('.sidebar-panel .width-box .lang').text(width);
-    $('body').addClass('width-' + width);
-    $.cookie('width', width);
-}
 $(function() {
+    let settingBox = $("#setting-box"),
+        box = $('.chapter');
+    function setTheme(name: number) {
+        settingBox.find('.theme-box .theme-' + name).addClass('active');
+        $('body').addClass('theme-' + name);
+        $.cookie('theme', name);
+    }
+    function setFont(index: number) {
+        settingBox.find('.font-box span').eq(index).addClass('active');
+        $(".chapte-box").addClass('font-' + index);
+        $.cookie('font', index);
+    }
+    function setSize(size: number) {
+        settingBox.find('.size-box .lang').text(size);
+        $(".chapte-box").css('font-size', size + 'px');
+        $.cookie('size', size);
+    }
     setTheme($.cookie('theme') || 0);
     setFont($.cookie('font') || 3);
     setSize($.cookie('size') || 18);
-    var box = $(".chapter");
-    $(".toolbar .lightoff").click(function () { 
-        box.removeClass('best-eye').toggleClass('night');
-    });
-    $(".toolbar .huyanon").click(function () { 
-        box.removeClass('night').toggleClass('best-eye');
-    });
-    var sizes = [
-        'font-s',
-        'font-l',
-        'font-xl',
-        'font-xxl',
-        'font-xxxl'
-    ];
-    var pagebox = $(".page-content")
-    $('.toolbar .fontsize').click(function (e) {
-        if ($(this).attr('data-role') == 'inc') {
-            var selected = false;
-            for (var i = 0; i < sizes.length; i++) {
-                const size = sizes[i];
-                if (selected) {
-                    pagebox.removeClass(sizes[i - 1]).addClass(size);
-                    return;
-                }
-                if (pagebox.hasClass(size)) {
-                    selected = true;
-                }
-            }
-            return;
-        }
-        var selected = false;
-        for (var i = sizes.length - 1; i >= 0; i--) {
-            const size = sizes[i];
-            if (selected) {
-                pagebox.removeClass(sizes[i + 1]).addClass(size);
-                return;
-            }
-            if (pagebox.hasClass(size)) {
-                selected = true;
-            }
-        }
-        return;
-    });
     $(document).click(function (e) {
         if (!box.hasClass('min-mode')) {
             return;
@@ -88,4 +42,35 @@ $(function() {
         }
         $(window).scrollTop(top + height - 30);
     });
+    settingBox.find('.dialog-close').click(function() {
+        box.removeClass('expanded');
+    });
+    settingBox.find('.theme-box span').click(function() {
+        let oldClass = $(this).parent().find('.active').removeClass('active').attr('class');
+        let newClass = $(this).index();
+        $('body').removeClass(oldClass);
+        setTheme(newClass);
+    });
+    settingBox.find('.font-box span').click(function() {
+        let oldClass = $(this).parent().find('.active').removeClass('active').index();
+        let newClass = $(this).index();
+        $(".chapte-box").removeClass('font-' + oldClass);
+        setFont(newClass);
+    });
+    settingBox.find('.size-box .fa').click(function() {
+        let $this = $(this);
+        let ele = $this.parent().find('.lang');
+        let val = parseInt(ele.text()) || 18;
+        let isMinus = $this.hasClass('fa-minus');
+        if ((val <= 12 && isMinus) || (val >= 48 && !isMinus)) {
+            return;
+        }
+        if (isMinus) {
+            val -= 2;
+        } else {
+            val += 2;
+        }
+        setSize(val);
+    });
+    
 });
