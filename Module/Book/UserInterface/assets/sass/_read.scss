@@ -121,3 +121,18 @@ $box-width: (
         }
     }
 }
+
+.chapte-box {
+    &.font-0 {
+        font-family: 'Microsoft YaHei',PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light',sans-serif;
+    }
+    &.font-1 {
+        font-family: PingFangSC-Regular,'-apple-system',Simsun;
+    }
+    &.font-2 {
+        font-family: Kaiti;
+    }
+    &.font-3 {
+        font-family: 方正启体简体,"Microsoft YaHei",微软雅黑,宋体;
+    }
+}

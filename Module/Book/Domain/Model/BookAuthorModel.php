@@ -45,4 +45,23 @@ class BookAuthorModel extends Model {
     public function getWapUrlAttribute() {
         return Url::to('./mobile/author', ['id' => $this->id]);
     }
+
+    /**
+     * 新建
+     * @param $name
+     * @return static
+     */
+    public static function findOrNewByName($name) {
+        $name = trim($name);
+        if (empty($name)) {
+            $name = '未知';
+        }
+        $model = static::where('name', $name)->one();
+        if (!empty($model)) {
+            return $model;
+        }
+        return static::create([
+            'name' => $name
+        ]);
+    }
 }

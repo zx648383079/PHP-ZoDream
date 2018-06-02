@@ -45,6 +45,11 @@ class BookController extends Controller {
 
     public function deleteAction($id) {
         BookModel::where('id', $id)->delete();
+        $ids = BookChapterModel::where('book_id', $id)->pluck('id');
+        if (empty($ids)) {
+            BookChapterModel::where('book_id', $id)->delete();
+            BookChapterBodyModel::whereIn('id', $ids)->delete();
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('book')
         ]);
@@ -54,9 +59,11 @@ class BookController extends Controller {
         $book = BookModel::find($book);
         $model_list = BookChapterModel::where('book_id', $book->id)
             ->when(!empty($keywords), function ($query) {
-                BookModel::search($query, 'name');
+                $query->where(function ($query) {
+                    BookModel::search($query, 'title');
+                });
             })->order('id', 'desc')->page();
-        return $this->show(compact('model_list',  'book'));
+        return $this->show(compact('model_list',  'book', 'keywords'));
     }
 
     public function createChapterAction($book) {

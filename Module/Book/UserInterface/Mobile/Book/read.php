@@ -30,17 +30,16 @@ $this->registerJsFile('@book_mobile.min.js')
 	<div class="container">
 		<div class="chapte-box">
 			<?=$chapter->body->html?>
-		</div>
-		<div class="tuijian">
+        </div>
+        <?php if($like_book):?>
+        <div class="tuijian">
 			<span>推荐阅读：</span>
             <?php foreach ($like_book as $key => $item):?>
                 <?= $key > 0 ? '、' : ''?>
                 <a href="<?=$item->wap_url?>"><?=$item->name?></a>
             <?php endforeach;?>
 		</div>
-		<div class="slide-ad">
-			<!--广告-->
-		</div>
+        <?php endif;?>
 
 	</div>
     <div class="page-control">

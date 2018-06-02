@@ -36,8 +36,8 @@ class BookModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,100',
-            'cover' => 'required|string:0,200',
-            'description' => 'required|string:0,200',
+            'cover' => 'string:0,200',
+            'description' => 'string:0,200',
             'author_id' => 'int',
             'user_id' => 'int',
             'cat_id' => 'int:0,999',

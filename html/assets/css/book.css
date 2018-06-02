@@ -648,8 +648,7 @@ object {
   overflow: hidden;
   min-height: 600px;
   margin-bottom: 24px;
-  border: 1px solid #d8d8d8;
-  padding: 60px 64px; }
+  border: 1px solid #d8d8d8; }
 
 .Layout.no_h .Con {
   border-top: 1px solid #dedddd; }
@@ -2891,14 +2890,6 @@ body.article .Con.box_con .box_box {
       margin: .8em 0;
       word-wrap: break-word;
       word-break: break-all; }
-  .chapte-box.font-0 {
-    font-family: 'Microsoft YaHei',PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light',sans-serif; }
-  .chapte-box.font-1 {
-    font-family: PingFangSC-Regular,'-apple-system',Simsun; }
-  .chapte-box.font-2 {
-    font-family: Kaiti; }
-  .chapte-box.font-3 {
-    font-family: 方正启体简体,"Microsoft YaHei",微软雅黑,宋体; }
 
 .chapter-control {
   height: 70px;
@@ -3044,5 +3035,17 @@ body.article .Con.box_con .box_box {
 
 .width-1280 .chapte-box {
   width: 1280px; }
+
+.chapte-box.font-0 {
+  font-family: 'Microsoft YaHei',PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light',sans-serif; }
+
+.chapte-box.font-1 {
+  font-family: PingFangSC-Regular,'-apple-system',Simsun; }
+
+.chapte-box.font-2 {
+  font-family: Kaiti; }
+
+.chapte-box.font-3 {
+  font-family: 方正启体简体,"Microsoft YaHei",微软雅黑,宋体; }
 
 /*# sourceMappingURL=book.css.map */

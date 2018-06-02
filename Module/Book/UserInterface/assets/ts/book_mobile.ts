@@ -16,9 +16,16 @@ $(function() {
         $(".chapte-box").css('font-size', size + 'px');
         $.cookie('size', size);
     }
+    function resize() {
+        settingBox.css('top', ($(window).height() - settingBox.height()) / 2 + 'px');
+    }
     setTheme($.cookie('theme') || 0);
     setFont($.cookie('font') || 3);
     setSize($.cookie('size') || 18);
+    resize();
+    $(window).resize(function() {
+        resize();
+    });
     $(document).click(function (e) {
         if (!box.hasClass('min-mode')) {
             return;
@@ -41,6 +48,9 @@ $(function() {
             return;
         }
         $(window).scrollTop(top + height - 30);
+    });
+    settingBox.click(function(e) {
+        e.stopPropagation();
     });
     settingBox.find('.dialog-close').click(function() {
         box.removeClass('expanded');

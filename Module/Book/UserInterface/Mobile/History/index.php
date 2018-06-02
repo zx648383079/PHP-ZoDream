@@ -30,6 +30,7 @@ $this->extend('../layouts/header');
 				<ul>
 					<?php if (!$chapter_list->isEmpty()): ?>
                     <?php foreach ($chapter_list as $item):?>
+                        <?php if($item->book):?>
                             <li class="column-2 ">
                                 <div class="right">
                                     <a class="name" href="<?=$item->book->wap_url?>"><?=$item->book->name?></a>
@@ -38,6 +39,7 @@ $this->extend('../layouts/header');
                                     <p class="info">作者：<?=$item->book->author->name?>  <span class="words">字数：<?=$item->book->size?></span></p>
                                 </div>
                             </li>
+                        <?php endif;?>
                     <?php endforeach;?>
                     <?php else:?>
                         很抱歉！没有找到您的阅读记录哦:)

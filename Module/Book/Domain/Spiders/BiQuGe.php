@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Spiders;
 
+use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
@@ -25,41 +26,46 @@ class BiQuGe extends BaseSpider {
     }
 
     /**
-     * @param $html
+     * @param Html $html
+     * @param Uri $uri
      * @return BookModel
      */
-    public function getBook(Html $html) {
+    public function getBook(Html $html, Uri $uri) {
         $author = $html->find('#info p', 0)->text;
         $author = explode('：', $author, 2);
+        $path = $html->find('#fmimg img', 0)->src;
+        if (!empty($path)) {
+            $path = (clone $uri)->setPath($path)->encode();
+        }
         return new BookModel([
             'name' => $html->find('#info h1', 0)->text,
-            'cover' => $html->find('#fmimg img', 0)->src,
+            'cover' => $path,
             'description' => $html->find('#intro', 0)->text,
+            'author_id' => BookAuthorModel::findOrNewByName(end($author))->id
         ]);
     }
 
     /**
      * @param Html $html
      * @param Uri $baseUri
-     * @return Uri[]
+     * @return array[]
      */
     public function getCatalog(Html $html, Uri $baseUri) {
         $uris = [];
-        $html->find('#list', 0)->matches('#<a[^<>]+href="/book/(\d+)/(\d+).html"#i',
+        $html->find('#list', 0)->matches('#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i',
             function ($match) use (&$uris, $baseUri) {
             if (strpos($match[0], $baseUri->getPath()) === false) {
                 return;
             }
-            $uris[] = $match[2];
+            $uris[$match[2]] = $match[3];
         });
-        $uris = array_unique($uris);
-        sort($uris);
-        foreach ($uris as &$uri) {
+        $data = [];
+        foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;
-            $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$uri.'.html');
-            $uri = $chapterUri;
+            $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$key.'.html');
+            $data[] = [$chapterUri, $name];
         }
-        return $uris;
+        return $data;
     }
 
     /**

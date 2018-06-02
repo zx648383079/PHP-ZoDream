@@ -3302,6 +3302,18 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 .width-1280 .chapte-box {
   width: 1280px; }
 
+.chapte-box.font-0 {
+  font-family: 'Microsoft YaHei',PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light',sans-serif; }
+
+.chapte-box.font-1 {
+  font-family: PingFangSC-Regular,'-apple-system',Simsun; }
+
+.chapte-box.font-2 {
+  font-family: Kaiti; }
+
+.chapte-box.font-3 {
+  font-family: 方正启体简体,"Microsoft YaHei",微软雅黑,宋体; }
+
 #setting-box {
   position: fixed;
   left: 0;

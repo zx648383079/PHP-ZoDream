@@ -1,1 +1,1 @@
-{"version":3,"names":[],"mappings":"","sources":["book_admin.scss"],"sourcesContent":[""],"file":"book_admin.css"}
+{"version":3,"file":"book_admin.css","sources":["book_admin.scss"],"sourcesContent":[".search {\r\n    .form-horizontal {\r\n        display: inline-block;\r\n    }\r\n}"],"names":[],"mappings":"AAAA,AACI,OADG,CACH,gBAAgB,CAAC;EACb,OAAO,EAAE,YAAY,GACxB"}
