@@ -76,10 +76,14 @@ class BiQuGe extends BaseSpider {
         if ($html->isEmpty()) {
             return null;
         }
+        $content = $html->find('#content', 0);
+        if (empty($content)) {
+            return null;
+        }
         /// html 转文本还有问题
         return new BookChapterModel([
             'title' => $html->find('.bookname h1', 0)->text,
-            'content' => self::toText($html->find('#content', 0)->html)
+            'content' => self::toText($content->html)
         ]);
     }
 }
