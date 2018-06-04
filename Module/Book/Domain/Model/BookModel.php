@@ -13,6 +13,7 @@ use Zodream\Service\Routing\Url;
 /**
  * Class BookModel
  * @package Domain\Model\Book
+ * @property integer $id
  * @property string $name
  * @property string $cover 封面
  * @property string $description 简介
