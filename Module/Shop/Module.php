@@ -9,12 +9,7 @@ use Zodream\Template\Engine\ParserCompiler;
 class Module extends BaseModule {
 
     public function boot() {
-        Factory::view()->setConfigs([
-            'suffix' => '.html'
-        ])->setEngine(ParserCompiler::class)
-            ->getEngine()->registerFunc('ads', function () {
-                return '';
-            });
+
     }
 
     public function getMigration() {

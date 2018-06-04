@@ -5,10 +5,18 @@ require_once(APP_DIR.'/vendor/autoload.php');
 use Zodream\Http\Curl;
 use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Uri;
+use Zodream\Template\Engine\ParserCompiler;
 
-$spider = new \Module\Book\Domain\Spiders\BiQuGe();
 
-$spider->invoke(new Uri('https://www.qu.la/book/68815/'), [$spider, 'invoke']);
+$parse = new ParserCompiler();
+
+echo $parse->parse('{$type_list.$item.type}');
+
+die();
+//$spider = new \Module\Book\Domain\Spiders\BiQuGe();
+//
+//$spider->invoke(new Uri('https://www.qu.la/book/68815/'), [$spider, 'invoke']);
+
 
 
 //Factory::config()->set([

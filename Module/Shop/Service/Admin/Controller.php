@@ -6,6 +6,8 @@ use Zodream\Service\Routing\Url;
 
 class Controller extends ModuleController {
 
+    public $layout = '/Admin/layouts/main';
+
     protected function getUrl($path, $args = []) {
         return (string)Url::to('./admin/'.$path, $args);
     }

@@ -65,7 +65,6 @@ class CreateShopTables extends Migration {
             $table->set('logo')->varchar(200)->comment('LOGO');
             $table->set('url')->varchar(200)->comment('官网');
         });
-
         Schema::createTable(GoodsModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('cat_id')->int()->notNull();
