@@ -159,7 +159,11 @@ i {
             background: transparent;
             height: $lineHeight;
             box-sizing: border-box;
+            &.height-auto {
+                height: auto;
+            }
         }
+        
     }
     .btn {
         line-height: $lineHeight;

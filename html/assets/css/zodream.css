@@ -860,6 +860,15 @@ i.checkbox {
     background: transparent;
     height: 30px;
     box-sizing: border-box; }
+    .form-inline .input-group input[type="text"].height-auto,
+    .form-inline .input-group input[type="email"].height-auto,
+    .form-inline .input-group input[type="tel"].height-auto,
+    .form-inline .input-group input[type="password"].height-auto,
+    .form-inline .input-group input[type="url"].height-auto,
+    .form-inline .input-group input[type="number"].height-auto,
+    .form-inline .input-group select.height-auto,
+    .form-inline .input-group textarea.height-auto {
+      height: auto; }
 
 .form-inline .btn {
   line-height: 30px;
