@@ -31,6 +31,14 @@ class GoodsModel extends BaseGoodsModel {
         return 'goods';
     }
 
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
+    }
+
+    public function brand() {
+        return $this->hasOne(BrandModel::class, 'id', 'brand_id');
+    }
+
     /**
      * @return Page
      */

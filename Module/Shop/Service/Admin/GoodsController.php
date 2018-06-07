@@ -9,7 +9,8 @@ use Module\Shop\Domain\Model\GoodsModel;
 class GoodsController extends Controller {
 
     public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0) {
-        $model_list = GoodsModel::when(!empty($keywords), function ($query) {
+        $model_list = GoodsModel::with('category', 'brand')
+            ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
                     GoodsModel::search($query, 'name');
                 });
