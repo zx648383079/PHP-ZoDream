@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '编辑章节';
+$this->title = '编辑商品';
 $js = <<<JS
     var ue = UE.getEditor('container');
 JS;
@@ -13,7 +13,7 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
 ?>
 
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/book/save_chapter')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/goods/save')?>" method="post" class="form-table" role="form">
         <div class="zd-tab">
             <div class="zd-tab-head">
                 <div class="zd-tab-item active">
@@ -26,34 +26,38 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
             <div class="zd-tab-body">
                 <div class="zd-tab-item active">
                     <div class="input-group">
-                        <label>章节名</label>
-                        <input name="title" type="text" class="form-control"  placeholder="输入章节名" value="<?=$model->title?>">
+                        <label>商品名</label>
+                        <input name="name" type="text" class="form-control"  placeholder="输入商品名" value="<?=$model->name?>">
+                    </div>
+                    <div class="input-group">
+                        <label>货号</label>
+                        <input name="sign" type="text" class="form-control"  placeholder="输入货号" value="<?=$model->sign?>">
                     </div>
                     <div class="input-group">
                         <label>分类</label>
                         <select name="cat_id" required>
                             <option value="">请选择</option>
                             <?php foreach($cat_list as $item):?>
-                            <option value="<?=$item->id?>" <?=$item->id == $model->cat_id ? 'selected' : ''?>><?=$item->real_name?></option>
+                            <option value="<?=$item->id?>" <?=$item->id == $model->cat_id ? 'selected' : ''?>><?=$item->name?></option>
                             <?php endforeach;?>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>作者</label>
-                        <select name="author_id" required>
+                        <label>品牌</label>
+                        <select name="brand_id" required>
                             <option value="">请选择</option>
-                            <?php foreach($author_list as $item):?>
-                            <option value="<?=$item->id?>" <?=$item->id == $model->author_id ? 'selected' : ''?>><?=$item->name?></option>
+                            <?php foreach($brand_list as $item):?>
+                            <option value="<?=$item->id?>" <?=$item->id == $model->brand_id ? 'selected' : ''?>><?=$item->name?></option>
                             <?php endforeach;?>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>章节名</label>
-                        <input name="title" type="text" class="form-control"  placeholder="输入章节名" value="<?=$model->title?>">
+                        <label>价格</label>
+                        <input name="price" type="text" class="form-control"  placeholder="输入价格" value="<?=$model->price?>">
                     </div>
                     <div class="input-group">
-                        <label>章节名</label>
-                        <input name="title" type="text" class="form-control"  placeholder="输入章节名" value="<?=$model->title?>">
+                        <label>市场价</label>
+                        <input name="market_price" type="text" class="form-control"  placeholder="输入市场价" value="<?=$model->market_price?>">
                     </div>
                     <div class="input-group">
                         <label>关键词</label>
@@ -65,24 +69,24 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
                     </div>
                     <div class="input-group">
                         <label>
-                            <input value="1" name="comment_status" type="checkbox" <?=$model->comment_status || $model->id < 1 ? 'checked': ''?>> 是否允许评论
+                            <input value="1" name="is_best" type="checkbox" <?=$model->is_best || $model->id < 1 ? 'checked': ''?>> 精品
                         </label>
                     </div>
                     <div class="input-group">
                         <label>
-                            <input value="1" name="comment_status" type="checkbox" <?=$model->comment_status || $model->id < 1 ? 'checked': ''?>> 是否允许评论
+                            <input value="1" name="is_hot" type="checkbox" <?=$model->is_hot || $model->id < 1 ? 'checked': ''?>> 热门
                         </label>
                     </div>
                     <div class="input-group">
                         <label>
-                            <input value="1" name="comment_status" type="checkbox" <?=$model->comment_status || $model->id < 1 ? 'checked': ''?>> 是否允许评论
+                            <input value="1" name="is_new" type="checkbox" <?=$model->is_new || $model->id < 1 ? 'checked': ''?>> 最新
                         </label>
                     </div>
                     <div class="input-group">
-                        <label for="cover">LOGO</label>
+                        <label for="image">主图</label>
                         <div class="file-input">
-                            <input type="text" id="cover" name="cover" placeholder="请输入LOGO" value="<?=$model->cover?>">
-                            <button type="button" data-type="upload" data-grid="cover">上传</button>
+                            <input type="text" id="image" name="image" placeholder="请输入主图" value="<?=$model->image?>">
+                            <button type="button" data-type="upload" data-grid="image">上传</button>
                             <button type="button" data-type="preview">预览</button>
                         </div>
                     </div>
@@ -98,5 +102,4 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
         <input type="hidden" name="id" value="<?=$model->id?>">
-        <input type="hidden" name="book_id" value="<?=$model->book_id?>">
     </form>

@@ -19,10 +19,12 @@ $this->title = 'ZoDream';
         <thead>
         <tr>
             <th>ID</th>
-            <th>标题</th>
+            <th>商品名</th>
             <th>分类</th>
-            <th>作者</th>
-            <th>统计</th>
+            <th>品牌</th>
+            <th>价格</th>
+            <th>推荐</th>
+            <th>销量</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -33,7 +35,7 @@ $this->title = 'ZoDream';
                 <td><?=$item->name?></td>
                 <td>
                     <?php if ($item->category):?>
-                        <a href="<?=$this->url('./admin/book', ['cat_id' => $item->cat_id])?>">
+                        <a href="<?=$this->url('./admin/goods', ['cat_id' => $item->cat_id])?>">
                             <?=$item->category->name?>
                         </a>
                     <?php else:?>
@@ -41,16 +43,22 @@ $this->title = 'ZoDream';
                     <?php endif;?>
                 </td>
                 <td>
-                    <?php if ($item->author):?>
-                        <a href="<?=$this->url('./admin/book', ['author_id' => $item->author_id])?>">
-                            <?=$item->author->name?>
+                    <?php if ($item->brand):?>
+                        <a href="<?=$this->url('./admin/goods', ['brand_id' => $item->brand_id])?>">
+                            <?=$item->brand->name?>
                         </a>
                     <?php else:?>
-                    [未分类]
+                    [无]
                     <?php endif;?>
                 </td>
                 <td>
-                    <?=$this->chapter_count?>
+                    <?=$this->price?>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    <?=$this->sales?>
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">

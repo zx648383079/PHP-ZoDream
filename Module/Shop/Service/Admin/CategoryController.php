@@ -24,9 +24,11 @@ class CategoryController extends Controller {
     public function saveAction() {
         $model = new CategoryModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('category'), '保存成功！');
+            return $this->jsonSuccess([
+                'url' => $this->getUrl('category')
+            ]);
         }
-        return $this->redirectWithMessage($this->getUrl('category'), $model->getFirstError());
+        return $this->jsonFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {

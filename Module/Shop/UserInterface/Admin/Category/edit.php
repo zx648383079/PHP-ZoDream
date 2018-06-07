@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = 'ZoDream';
 ?>
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/term/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/category/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>
@@ -15,7 +15,7 @@ $this->title = 'ZoDream';
             <label>名称</label>
             <select name="parent_id">
               <option value="0">-- 无上级分类 --</option>
-                <?php foreach($tree_list as $item):?>
+                <?php foreach($cat_list as $item):?>
                 <?php if($item['id'] != $model->id):?>
                 <option value="<?=$item['id']?>" <?= $item['id'] == $model->parent_id ? 'selected' : '' ?>><?=$item['name']?></option>
                 <?php endif;?>

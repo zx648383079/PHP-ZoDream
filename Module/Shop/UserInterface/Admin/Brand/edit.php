@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = 'ZoDream';
 ?>
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/term/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/brand/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>

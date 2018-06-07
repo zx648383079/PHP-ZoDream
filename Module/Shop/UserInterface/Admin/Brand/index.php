@@ -12,7 +12,7 @@ $this->title = 'ZoDream';
         <thead>
         <tr>
             <th>ID</th>
-            <th>分类名</th>
+            <th>品牌名</th>
             <th>统计</th>
             <th>操作</th>
         </tr>
@@ -21,13 +21,13 @@ $this->title = 'ZoDream';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->real_name?></td>
-                <td><?=$item->book_count?></td>
+                <td><?=$item->name?></td>
+                <td><?=$item->goods_count?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/goods', ['cat_id' => $item->id])?>">查看</a>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/category/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/category/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/goods', ['brand_id' => $item->id])?>">查看</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/brand/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/brand/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>
