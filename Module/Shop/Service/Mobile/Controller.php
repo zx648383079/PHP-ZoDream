@@ -4,14 +4,17 @@ namespace Module\Shop\Service\Mobile;
 use Module\ModuleController;
 use Module\Shop\Domain\Model\ArticleModel;
 use Module\Shop\Domain\Model\CategoryModel;
+use Zodream\Service\Routing\Url;
 
 class Controller extends ModuleController {
 
+    public $layout = '/Mobile/layouts/main';
+
     public function prepare() {
-        $helper_list = ArticleModel::getHelps();
-        $site_name = 'zodream shop';
-        $hot_searches = [];
-        $categories = CategoryModel::where('parent_id', 0)->all();
-        $this->send(compact('helper_list', 'site_name', 'categories', 'hot_searches'));
+
+    }
+
+    protected function getUrl($path, $args = []) {
+        return (string)Url::to('./mobile/'.$path, $args);
     }
 }
