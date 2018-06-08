@@ -46,8 +46,8 @@ class CreateAuthTables extends Migration {
         Schema::createTable(UserMetaModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
-            $table->set('key')->varchar(100)->notNull();
-            $table->set('value')->text()->defaultVal('');
+            $table->set('name')->varchar(100)->notNull();
+            $table->set('content')->text()->defaultVal('');
         });
     }
 

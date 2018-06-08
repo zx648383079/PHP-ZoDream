@@ -9,8 +9,8 @@ use Zodream\Domain\Access\Auth;
  * @package Module\Auth\Domain\Model
  * @property integer $id
  * @property integer $user_id
- * @property string $key
- * @property string $value
+ * @property string $name
+ * @property string $content
  */
 class UserMetaModel extends Model {
 
@@ -21,8 +21,8 @@ class UserMetaModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'required|int',
-            'key' => 'required|string:0,100',
-            'value' => 'required',
+            'name' => 'required|string:0,100',
+            'content' => 'required',
         ];
     }
 
@@ -30,28 +30,28 @@ class UserMetaModel extends Model {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',
-            'key' => 'Key',
-            'value' => 'Value',
+            'name' => 'Name',
+            'content' => 'Content',
         ];
     }
 
     public static function getArr($key) {
-        $value = self::where('user_id', Auth::id())->where('`key`', $key)->value('`value`');
+        $value = self::where('user_id', Auth::id())->where('name', $key)->value('content');
         return empty($value) ? [] : unserialize($value);
     }
 
     public static function updateArr($key, array $value) {
-        self::record()->where('user_id', Auth::id())->where('`key`', $key)
+        self::record()->where('user_id', Auth::id())->where('name', $key)
             ->update([
-                'value' => serialize($value)
+                'content' => serialize($value)
             ]);
     }
 
     public static function insertArr($key, array $value) {
         static::create([
             'user_id' => Auth::id(),
-            'key' => $key,
-            'value' => serialize($value)
+            'name' => $key,
+            'content' => serialize($value)
         ]);
     }
 }
