@@ -20,7 +20,7 @@ use Domain\Model\Model;
  */
 class CategoryModel extends Model {
     public static function tableName() {
-        return 'category';
+        return 'shop_category';
     }
 
     protected function rules() {

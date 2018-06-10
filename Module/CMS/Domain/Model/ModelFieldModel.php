@@ -16,6 +16,7 @@ namespace Module\CMS\Domain\Model;
  * @property string $tip_message
  * @property string $error_message
  * @property string $setting
+ * @property ModelModel $model
  */
 class ModelFieldModel extends BaseModel {
 
@@ -27,6 +28,11 @@ class ModelFieldModel extends BaseModel {
         'select' => '下拉选择',
         'checkbox' => '复选框',
         'color' => '颜色选取',
+        'email' => '邮箱字段',
+        'password' => '密码字段',
+        'url' => '链接字段',
+        'ip' => 'IP字段',
+        'number' => '数字字段',
         'date' => '日期时间',
         'file' => '单文件',
         'files' => '多文件',
@@ -74,31 +80,36 @@ class ModelFieldModel extends BaseModel {
         ];
     }
 
-    /**
-     * @return ModelModel
-     */
-    public function getModel() {
+    public function model() {
         return $this->hasOne(ModelModel::class, 'id', 'model_id');
     }
 
     public function insert() {
         parent::insert();
-        $table = $this->getModel()->getContentExtendTable();
+        $table = $this->model->getContentExtendTable();
         $table->set($this->field)->comment($this->name);
         return $table->alert();
     }
 
     public function update() {
         parent::update();
-        $table = $this->getModel()->getContentExtendTable();
-        $table->set($this->field)->setOldField($this->_oldData['field'])->comment($this->name);
+        $table = $this->model->getContentExtendTable();
+        $table->set($this->field)->setOldField($this->__oldAttributes['field'])->comment($this->name);
         return $table->alert();
     }
 
     public function delete($where = null, $parameters = array()) {
         parent::delete($where, $parameters);
-        $table = $this->getModel()->getContentExtendTable();
+        $table = $this->model->getContentExtendTable();
         $table->set($this->field);
         return $table->dropColumn();
+    }
+
+    public function validateValue($value) {
+        return true;
+    }
+
+    public function toInput($value = null) {
+        return '';
     }
 }

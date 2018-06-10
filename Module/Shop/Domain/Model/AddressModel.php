@@ -20,12 +20,9 @@ class AddressModel extends Model {
     const STATUS_FIXED = 1;
 
 	public static function tableName() {
-        return 'address';
+        return 'shop_address';
     }
 
-	protected $primaryKey = [
-        'id',
-    ];
 
 	protected function rules() {
 		return [

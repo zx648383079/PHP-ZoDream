@@ -1,10 +1,13 @@
 <?php
 namespace Module\CMS\Service\Admin;
 
+use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\ModelModel;
+
 class CategoryController extends Controller {
     public function indexAction() {
-
-        return $this->show();
+        $model_list = CategoryModel::page();
+        return $this->show(compact('model_list'));
     }
 
     public function createAction() {
@@ -12,23 +15,25 @@ class CategoryController extends Controller {
     }
 
     public function editAction($id) {
-        $model = ProjectModel::findOrNew($id);
-        $project_list = ProjectModel::select('name', 'id')->all();
-        return $this->show(compact('model', 'project_list'));
+        $model = CategoryModel::findOrNew($id);
+        $model_list = ModelModel::select('name', 'id')->all();
+        return $this->show(compact('model', 'model_list'));
     }
 
     public function saveAction() {
-        $model = new ProjectModel();
-        if (!$model->load() || !$model->autoIsNew()->setMock()->save()) {
+        $model = new CategoryModel();
+        if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('category')
+        ]);
     }
 
     public function deleteAction($id) {
-        ProjectModel::where('id', $id)->delete();
+        CategoryModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('')
+            'url' => $this->getUrl('category')
         ]);
     }
 }

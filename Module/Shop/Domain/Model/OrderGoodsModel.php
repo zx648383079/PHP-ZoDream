@@ -18,7 +18,7 @@ use Domain\Model\Model;
  */
 class OrderGoodsModel extends BaseGoodsModel {
     public static function tableName() {
-        return 'order_goods';
+        return 'shop_order_goods';
     }
 
     /**

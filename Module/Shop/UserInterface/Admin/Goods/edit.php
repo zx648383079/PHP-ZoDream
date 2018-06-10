@@ -60,6 +60,10 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
                         <input name="market_price" type="text" class="form-control"  placeholder="输入市场价" value="<?=$model->market_price?>">
                     </div>
                     <div class="input-group">
+                        <label>库存</label>
+                        <input name="stock" type="text" class="form-control"  placeholder="输入库存" value="<?=$model->stock?>">
+                    </div>
+                    <div class="input-group">
                         <label>关键词</label>
                         <textarea name="keywords" class="form-control" placeholder="关键词"><?=$model->keywords?></textarea>
                     </div>
@@ -85,7 +89,7 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
                     <div class="input-group">
                         <label for="image">主图</label>
                         <div class="file-input">
-                            <input type="text" id="image" name="image" placeholder="请输入主图" value="<?=$model->image?>">
+                            <input type="text" id="image" name="thumb" placeholder="请输入主图" value="<?=$model->thumb?>">
                             <button type="button" data-type="upload" data-grid="image">上传</button>
                             <button type="button" data-type="preview">预览</button>
                         </div>

@@ -45,6 +45,7 @@ class CreateShopTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('分类名');
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('description')->varchar(200)->comment('关键字');
+            $table->set('thumb')->varchar(200);
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
         });

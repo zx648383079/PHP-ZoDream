@@ -3,26 +3,13 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
-$this->extend('../layouts/search');
+$this->extend('../layouts/header');
 ?>
 
 <div class="has-header">
 
-    <div class="banner-box">
-
-    </div>
-
-    <div class="menu-box">
-        <?php foreach($cat_list as $item):?>
-        <a href="<?=$this->url('./mobile/search', ['cat_id' => $item->id])?>" class="menu-item">
-            <img class="menu-icon" src="<?=$item->thumb?>" alt="">
-            <div class="menu-name"><?=$item->name?></div>
-        </a>
-        <?php endforeach;?>
-    </div>
-
     <div class="goods-list">
-        <?php foreach($hot_list as $item):?>
+        <?php foreach($goods_list as $item):?>
         <div class="item-view">
             <div class="item-img">
                 <a href="<?=$this->url('./mobile/goods', ['id' => $item->id])?>"><img src="<?=$item->thumb?>" alt=""></a>

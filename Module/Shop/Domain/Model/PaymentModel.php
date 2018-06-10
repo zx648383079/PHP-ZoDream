@@ -17,7 +17,7 @@ use Domain\Model\Model;
  */
 class PaymentModel extends Model {
     public static function tableName() {
-        return 'payment';
+        return 'shop_payment';
     }
 
     /**

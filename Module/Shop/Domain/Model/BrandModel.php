@@ -15,7 +15,7 @@ use Domain\Model\Model;
  */
 class BrandModel extends Model {
     public static function tableName() {
-        return 'brand';
+        return 'shop_brand';
     }
 
     protected function rules() {

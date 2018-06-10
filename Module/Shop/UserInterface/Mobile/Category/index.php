@@ -8,16 +8,10 @@ $this->extend('../layouts/search');
 
 <div class="has-header">
 
-    <div class="banner-box">
 
-    </div>
-
-    <div class="menu-box">
+    <div class="category-menu">
         <?php foreach($cat_list as $item):?>
-        <a href="<?=$this->url('./mobile/search', ['cat_id' => $item->id])?>" class="menu-item">
-            <img class="menu-icon" src="<?=$item->thumb?>" alt="">
-            <div class="menu-name"><?=$item->name?></div>
-        </a>
+        <div class="menu-item"><?=$item->name?></div>
         <?php endforeach;?>
     </div>
 

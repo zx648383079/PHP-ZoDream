@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Service\Admin;
 
+use Module\CMS\Domain\Model\CategoryModel;
 use Module\ModuleController;
 use Zodream\Service\Routing\Url;
 
@@ -15,7 +16,7 @@ class Controller extends ModuleController {
     }
 
     public function prepare() {
-        $cat_list = [];
+        $cat_list = CategoryModel::select('id', 'name', 'parent_id')->all();
         $this->send(compact('cat_list'));
     }
 

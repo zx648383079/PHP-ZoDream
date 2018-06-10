@@ -12,19 +12,15 @@ $this->title = 'ZoDream';
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/goods/create')?>">新增商品</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/content/create', ['cat_id' => $cat->id])?>">新增文章</a>
     </div>
 
     <table class="table  table-bordered well">
         <thead>
         <tr>
             <th>ID</th>
-            <th>商品名</th>
+            <th>标题</th>
             <th>分类</th>
-            <th>品牌</th>
-            <th>价格</th>
-            <th>推荐</th>
-            <th>销量</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -32,10 +28,10 @@ $this->title = 'ZoDream';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
+                <td><?=$item->title?></td>
                 <td>
                     <?php if ($item->category):?>
-                        <a href="<?=$this->url('./admin/goods', ['cat_id' => $item->cat_id])?>">
+                        <a href="<?=$this->url('./admin/content', ['cat_id' => $item->cat_id])?>">
                             <?=$item->category->name?>
                         </a>
                     <?php else:?>
@@ -43,27 +39,9 @@ $this->title = 'ZoDream';
                     <?php endif;?>
                 </td>
                 <td>
-                    <?php if ($item->brand):?>
-                        <a href="<?=$this->url('./admin/goods', ['brand_id' => $item->brand_id])?>">
-                            <?=$item->brand->name?>
-                        </a>
-                    <?php else:?>
-                    [无]
-                    <?php endif;?>
-                </td>
-                <td>
-                    <?=$item->price?>
-                </td>
-                <td>
-                    
-                </td>
-                <td>
-                    <?=$item->sales?>
-                </td>
-                <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/goods/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/goods/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/content/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/content/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

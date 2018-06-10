@@ -39,7 +39,7 @@ class GoodsController extends Controller {
         $model = new GoodsModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => $this->getUrl('category')
+                'url' => $this->getUrl('goods')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -48,7 +48,7 @@ class GoodsController extends Controller {
     public function deleteAction($id) {
         GoodsModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('category')
+            'url' => $this->getUrl('goods')
         ]);
     }
 }

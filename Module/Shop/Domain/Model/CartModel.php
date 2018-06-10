@@ -21,7 +21,7 @@ use Zodream\Service\Factory;
  */
 class CartModel extends BaseGoodsModel {
     public static function tableName() {
-        return 'cart';
+        return 'shop_cart';
     }
 
     public function getTotal() {

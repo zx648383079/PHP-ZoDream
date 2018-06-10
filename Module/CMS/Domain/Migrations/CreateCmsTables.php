@@ -24,6 +24,7 @@ class CreateCmsTables extends Migration {
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('form_type')->tinyint(3)->defaultVal(0);
             $table->set('is_required')->bool()->defaultVal(1);
+            $table->set('is_default')->bool()->defaultVal(0);
             $table->set('match')->varchar();
             $table->set('tip_message')->varchar();
             $table->set('error_message')->varchar();
@@ -63,7 +64,7 @@ class CreateCmsTables extends Migration {
         Schema::createTable(ContentModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
-            $table->set('category_id')->int()->notNull();
+            $table->set('cat_id')->int()->notNull();
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
             $table->set('description')->varchar();

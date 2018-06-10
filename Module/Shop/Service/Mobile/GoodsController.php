@@ -1,9 +1,12 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
+use Module\Shop\Domain\Model\GoodsModel;
+
 class GoodsController extends Controller {
 
     public function indexAction($id) {
-        return $this->show();
+        $goods = GoodsModel::find($id);
+        return $this->show(compact('goods'));
     }
 }

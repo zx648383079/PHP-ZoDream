@@ -1,6 +1,8 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
+use Zodream\Database\Query\Query;
+use Zodream\Database\Query\Record;
 use Zodream\Database\Schema\Table;
 /**
  * Class ContentModel
@@ -48,13 +50,16 @@ class ModelModel extends BaseModel {
         ];
     }
 
+    public function fields() {
+        return $this->hasMany(ModelFieldModel::class, 'model_id');
+    }
+
     /**
      * @return ModelFieldModel[]
      */
     public function getFields() {
         $data = array();
-        $args = $this->hasMany(ModelFieldModel::class, 'model_id');
-        foreach ($args as $item){
+        foreach ($this->fields as $item){
             /** @var $item ModelFieldModel */
             $data[$item->field] = $item;
         }
@@ -63,6 +68,14 @@ class ModelModel extends BaseModel {
 
     public function getContentExtendTable() {
         return new Table(static::getExtendTable($this->table));
+    }
+
+    public function getContentExtendQuery() {
+        return (new Query())->from(static::getExtendTable($this->table));
+    }
+
+    public function getContentExtendRecord() {
+        return (new Record())->setTable(static::getExtendTable($this->table));
     }
 
     public function createTable() {

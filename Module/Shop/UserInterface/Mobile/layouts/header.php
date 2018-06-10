@@ -3,9 +3,9 @@
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
     <span class="title">
-        个人中心
+        <?=$this->title?>
     </span>
-    <a class="btn" href="login.html">
+    <!-- <a class="btn" href="login.html">
         退出
-    </a>
+    </a> -->
 </header>

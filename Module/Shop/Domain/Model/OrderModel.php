@@ -55,7 +55,7 @@ class OrderModel extends Model {
     const TYPE_PRESELL = 2; //预售订单
 
     public static function tableName() {
-        return 'order';
+        return 'shop_order';
     }
 
     /**

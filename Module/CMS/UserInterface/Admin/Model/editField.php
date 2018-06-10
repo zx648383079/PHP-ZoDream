@@ -12,13 +12,21 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'字段';
         <input name="name" type="text" class="form-control" placeholder="名称" value="<?=$model->name?>">
     </div>
     <div class="input-group">
-        <label>表名</label>
-        <input name="field" type="text" class="form-control" placeholder="表名" value="<?=$model->field?>">
+        <label>字段名</label>
+        <input name="field" type="text" class="form-control" placeholder="字段名" value="<?=$model->field?>">
     </div>
     <div class="input-group">
         <label>类型</label>
-        <input value="1" name="type" type="radio" <?=$model->type == 1 ? 'checked': ''?>> 表单
-        <input value="0" name="type" type="radio" <?=$model->type < 1 ? 'checked': ''?>> 实体
+        <select name="type" required>
+            <?php foreach($model->type_list as $key => $item):?>
+            <option value="<?=$key?>" <?=$item == $model->type ? 'selected' : ''?>><?=$item?></option>
+            <?php endforeach;?>
+        </select>
+    </div>
+    <div class="input-group">
+        <label>是否必填</label>
+        <input value="1" name="is_required" type="radio" <?=$model->is_required == 1 ? 'checked': ''?>> 必填
+        <input value="0" name="is_required" type="radio" <?=$model->is_required < 1 ? 'checked': ''?>> 非必填
     </div>
     <div class="input-group">
         <label>长度</label>

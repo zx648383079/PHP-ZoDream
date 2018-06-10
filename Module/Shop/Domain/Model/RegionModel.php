@@ -11,7 +11,7 @@ use Domain\Model\Model;
 */
 class RegionModel extends Model {
 	public static function tableName() {
-        return 'region';
+        return 'shop_region';
     }
 
     protected function rules() {

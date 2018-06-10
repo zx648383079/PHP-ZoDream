@@ -23,6 +23,7 @@ namespace Module\CMS\Domain\Model;
  * @property string $setting
  * @property integer $created_at
  * @property integer $updated_at
+ * @property ModelModel $model
  */
 class CategoryModel extends BaseModel {
     const TYPE_CONTENT = 0; //内容
@@ -80,10 +81,7 @@ class CategoryModel extends BaseModel {
         ];
     }
 
-    /**
-     * @return ModelModel
-     */
-    public function getModel() {
+    public function model() {
         return $this->hasOne(ModelModel::class, 'id', 'model_id');
     }
 

@@ -7,7 +7,7 @@ use Zodream\Html\Page;
  * @package Domain\Model\CMS
  * @property integer $id
  * @property string $title
- * @property integer $category_id
+ * @property integer $cat_id
  * @property string $keywords
  * @property string $thumb
  * @property string $description
@@ -15,8 +15,12 @@ use Zodream\Html\Page;
  * @property integer $view_count
  * @property integer $created_at
  * @property integer $updated_at
+ * @property CategoryModel $category
  */
 class ContentModel extends BaseModel {
+
+    protected $extend_data = null;
+
     public static function tableName() {
         return 'cms_content_'.static::site();
     }
@@ -24,7 +28,7 @@ class ContentModel extends BaseModel {
     protected function rules() {
         return [
             'title' => 'required|string:0,100',
-            'category_id' => 'required|int',
+            'cat_id' => 'required|int',
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
             'description' => 'string:0,255',
@@ -39,7 +43,7 @@ class ContentModel extends BaseModel {
         return [
             'id' => 'Id',
             'title' => 'Title',
-            'category_id' => 'Category Id',
+            'cat_id' => 'Category Id',
             'keywords' => 'Keywords',
             'thumb' => 'Thumb',
             'description' => 'Description',
@@ -50,27 +54,16 @@ class ContentModel extends BaseModel {
         ];
     }
 
-    /**
-     * @param $words
-     * @return Page
-     */
-    public static function search($words) {
-        return static::findPage();
-    }
-
-    /**
-     * @return CategoryModel
-     */
-    public function getCategory() {
-        return $this->hasOne(CategoryModel::class, 'id', 'category_id');
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
     }
 
     public function save() {
         $data = array();
-        foreach ($this->getCategory()
-                     ->getModel()->getFields() as $field) {
+        foreach ($this->category
+                     ->model->getFields() as $field) {
             $value = $this->get($field->field);
-            if ($field->valid($value)) {
+            if ($field->validateValue($value)) {
                 $data[$field->field] = $value;
                 continue;
             }
@@ -81,8 +74,8 @@ class ContentModel extends BaseModel {
         if (empty($result)) {
             return $result;
         }
-        $record = $this->getCategory()
-            ->getModel()
+        $record = $this->category
+            ->model
             ->getContentExtendTable()
             ->record();
         $record->set($data);
@@ -91,5 +84,22 @@ class ContentModel extends BaseModel {
         }
         return $record->where(['id' => $this->id])
             ->update();
+    }
+
+    public function getExtendValue($key, $default = null) {
+        if (is_array($this->extend_data)) {
+            return isset($this->extend_data[$key]) ? $this->extend_data[$key] : $default;
+        }
+        if (!$this->id) {
+            $this->extend_data = [];
+            return $default;
+        }
+        $this->extend_data = $this->category->model->getContentExtendQuery()
+            ->where('id', $this->id)->one();
+        if (empty($this->extend_data)) {
+            $this->extend_data = [];
+            return $default;
+        }
+        return isset($this->extend_data[$key]) ? $this->extend_data[$key] : $default;
     }
 }

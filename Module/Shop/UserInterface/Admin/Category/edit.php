@@ -12,7 +12,7 @@ $this->title = 'ZoDream';
             <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->name?>">
         </div>
         <div class="input-group">
-            <label>名称</label>
+            <label>上级分类</label>
             <select name="parent_id">
               <option value="0">-- 无上级分类 --</option>
                 <?php foreach($cat_list as $item):?>
@@ -23,9 +23,9 @@ $this->title = 'ZoDream';
             </select>
         </div>
         <div class="input-group">
-            <label for="cover">LOGO</label>
+            <label for="cover">图片</label>
             <div class="file-input">
-                <input type="text" id="cover" name="cover" placeholder="请输入LOGO" value="<?=$model->cover?>">
+                <input type="text" id="cover" name="thumb" placeholder="请输入图片" value="<?=$model->thumb?>">
                 <button type="button" data-type="upload" data-grid="cover">上传</button>
                 <button type="button" data-type="preview">预览</button>
             </div>
