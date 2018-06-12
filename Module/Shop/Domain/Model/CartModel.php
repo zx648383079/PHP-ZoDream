@@ -7,6 +7,8 @@ namespace Module\Shop\Domain\Model;
  * Date: 2016/12/15
  * Time: 19:07
  */
+use Zodream\Domain\Access\Auth;
+use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 
@@ -33,7 +35,7 @@ class CartModel extends BaseGoodsModel {
      * @return static[]
      */
     public static function getAllGoods() {
-        return static::findAll(['user_id' => Factory::user()->getId()]);
+        return static::with('goods')->belongOwn()->all();
     }
 
     /**
@@ -42,20 +44,23 @@ class CartModel extends BaseGoodsModel {
      * @return static[]
      */
     public static function getSomeGoods($args) {
-        return static::findAll([
-            'user_id' => Factory::user()->getId(),
-            'goods_id' => [
-                'in',
-                $args
-            ]
-        ]);
+        return static::with('goods')->belongOwn()->whereIn('goods_id', $args)->all();
+    }
+
+    public function scopeBelongOwn($query) {
+        if (Auth::guest()) {
+            return $query->where('session_id', static::getSessionIp());
+        }
+        return $query->where(function ($query) {
+            $query->where('user_id', Auth::id())
+                ->orWhere('session_id', static::getSessionIp());
+        });
     }
 
     public function save() {
         if ($this->number <= 0) {
             return $this->delete();
         }
-
         return parent::save();
     }
 
@@ -69,9 +74,16 @@ class CartModel extends BaseGoodsModel {
         if (!empty($session_ip)) {
             return $session_ip;
         }
-        $session_ip = $ip . "_" . Factory::session()->id();
-        $time = time() + (3600 * 24 * 365);
-        Factory::response()->header->setCookie('session_id_ip', $session_ip, $time, "/");
+        $session_ip = $ip . '_' . Factory::session()->id();
+        Cookie::forever('session_id_ip', $session_ip, '/');
         return $session_ip;
+    }
+
+    public static function addGoods(GoodsModel $goods, $amount) {
+
+    }
+    
+    public static function fromGoods(GoodsModel $goods) {
+        return new static();
     }
 }

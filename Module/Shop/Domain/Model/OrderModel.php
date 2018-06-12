@@ -98,4 +98,20 @@ class OrderModel extends Model {
     public function pay() {
         $this->getPayment()->pay($this);
     }
+
+    public function addGoods($goods) {
+
+    }
+
+    public function setAddress(AddressModel $address) {
+
+    }
+
+    public function setPayment(PaymentModel $payment) {
+
+    }
+
+    public function setShipping() {
+
+    }
 }

@@ -123,4 +123,8 @@ class GoodsModel extends BaseGoodsModel {
     public function getTags() {
         return [];
     }
+
+    public function getPrice($amount) {
+        return $this->price * $amount;
+    }
 }
