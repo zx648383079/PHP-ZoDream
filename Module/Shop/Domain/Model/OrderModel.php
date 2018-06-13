@@ -75,7 +75,7 @@ class OrderModel extends Model {
     }
 
     public function getDelivery() {
-        return DeliveryModel::findOne($this->delivery_id);
+        return ShippingModel::findOne($this->delivery_id);
     }
 
     public function createOrder() {

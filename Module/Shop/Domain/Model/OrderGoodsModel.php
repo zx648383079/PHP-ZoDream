@@ -2,14 +2,6 @@
 namespace Module\Shop\Domain\Model;
 
 /**
- * Created by PhpStorm.
- * User: zx648
- * Date: 2016/12/15
- * Time: 19:07
- */
-use Domain\Model\Model;
-
-/**
  * Class OrderGoodsModel
  * @package Domain\Model\Shopping
  * @property integer $order_id

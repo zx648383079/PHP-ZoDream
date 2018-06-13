@@ -15,9 +15,9 @@ use Domain\Model\Model;
  * @property integer $id
  * @property string $name
  */
-class DeliveryModel extends Model {
+class ShippingModel extends Model {
     public static function tableName() {
-        return 'delivery';
+        return 'shipping';
     }
 
     /**
