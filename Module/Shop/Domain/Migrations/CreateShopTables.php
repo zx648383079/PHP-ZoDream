@@ -4,9 +4,13 @@ namespace Module\Shop\Domain\Migrations;
 use Module\Shop\Domain\Model\ArticleCategoryModel;
 use Module\Shop\Domain\Model\ArticleModel;
 use Module\Shop\Domain\Model\BrandModel;
+use Module\Shop\Domain\Model\CartModel;
 use Module\Shop\Domain\Model\CategoryModel;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\NavigationModel;
+use Module\Shop\Domain\Model\OrderAddressModel;
+use Module\Shop\Domain\Model\OrderGoodsModel;
+use Module\Shop\Domain\Model\OrderModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
@@ -86,6 +90,34 @@ class CreateShopTables extends Migration {
             $table->set('is_new')->bool()->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();
+        });
+        Schema::createTable(CartModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('number')->int()->defaultVal(1);
+            $table->set('price')->decimal(8, 2);
+        });
+        Schema::createTable(OrderModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('status')->int()->notNull();
+            $table->set('payment_id')->int()->notNull();
+            $table->set('shipping_id')->int()->defaultVal(1);
+            $table->timestamps();
+        });
+        Schema::createTable(OrderGoodsModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('number')->int()->defaultVal(1);
+            $table->set('price')->decimal(8, 2);
+        });
+        Schema::createTable(OrderAddressModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('region_id')->int()->notNull();
+            $table->set('tel')->varchar(11)->notNull();
+            $table->set('address')->varchar()->notNull();
         });
     }
 

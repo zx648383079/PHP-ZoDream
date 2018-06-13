@@ -7,6 +7,7 @@ namespace Module\Shop\Domain\Model;
  * Date: 2016/12/15
  * Time: 19:07
  */
+use Domain\Model\Model;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Http\Request;
@@ -21,7 +22,7 @@ use Zodream\Service\Factory;
  * @property integer $activity_id //活动ID
  * @property string $activity_type //活动类型
  */
-class CartModel extends BaseGoodsModel {
+class CartModel extends Model {
     public static function tableName() {
         return 'shop_cart';
     }

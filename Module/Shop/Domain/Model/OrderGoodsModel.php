@@ -1,6 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Model;
 
+use Domain\Model\Model;
+
 /**
  * Class OrderGoodsModel
  * @package Domain\Model\Shopping
@@ -8,7 +10,7 @@ namespace Module\Shop\Domain\Model;
  * @property integer $goods_id
  * @property integer $user_id
  */
-class OrderGoodsModel extends BaseGoodsModel {
+class OrderGoodsModel extends Model {
     public static function tableName() {
         return 'shop_order_goods';
     }
