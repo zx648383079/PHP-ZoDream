@@ -1,3 +1,7 @@
+a {
+    text-decoration: none;
+}
+
 header,
 .header {
     width: 100%;
@@ -60,6 +64,16 @@ header,
     .title {
         line-height: 44px;
     }
+    .top-tab {
+        a {
+            color: #fff;
+            line-height: 50px;
+            padding: 0 5px;
+            &.active {
+                color: #f00;
+            }
+        }
+    }
 }
 
 
@@ -109,6 +123,21 @@ footer,
         a {
             width: 100%;
             text-align: center;
+        }
+    }
+    &.goods-navbar {
+        a {
+            width: 14%;
+            margin: 0;
+            &.btn {
+                width: 29%;
+                padding: 0;
+                text-align: center;
+                line-height: 50px;
+                &.btn-orange {
+                    background: #ff9600;
+                }
+            }
         }
     }
 }

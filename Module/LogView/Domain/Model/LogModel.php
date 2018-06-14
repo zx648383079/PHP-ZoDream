@@ -2,6 +2,7 @@
 namespace Module\LogView\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Database\Model\Query;
 
 /**
  * Class LogModel
@@ -39,6 +40,7 @@ class LogModel extends Model {
 
     protected function rules() {
         return [
+            'id' => 'int',
             'file_id' => 'required|int',
             'date' => '',
             'time' => '',
@@ -92,5 +94,40 @@ class LogModel extends Model {
             'cs_bytes' => '接收的字节数',
             'time_taken' => '所用时间',
         ];
+    }
+
+    public function scopeOfType(Query $query, $name, $operator, $value) {
+        if (empty($name) || !$this->hasColumn($name)) {
+            return $query;
+        }
+        if (in_array(strtolower($operator), [
+            '=', '<', '>', '<=', '>=', '<>', '!=',
+            'in', 'not in', 'is', 'is not',
+            'like', 'like binary', 'not like', 'between', 'not between', 'ilike',
+            '&', '|', '^', '<<', '>>',
+            'rlike', 'regexp', 'not regexp',
+            '~', '~*', '!~', '!~*', 'similar to',
+            'not similar to'
+        ])) {
+            return $query->where($name, $operator, $value);
+        }
+        return $query;
+    }
+
+    public function scopeSortOrder(Query $query, $sort, $order) {
+        if (empty($sort) || !$this->hasColumn($sort)) {
+            return $query;
+        }
+        return $query->orderBy($sort, $order);
+    }
+
+    public function scopeCountByDate(Query $query, $format = '%Y%m%d', $as = 'day', $fields = 'COUNT(id) as count') {
+        return $query->selectRaw(sprintf('DATE_FORMAT(`date`, \'%s\') as %s, %s', $format, $as, $fields))
+            ->groupBy($as);
+    }
+
+    public function scopeCountByTime(Query $query, $format = '%H', $as = 'hour', $fields = 'COUNT(id) as count') {
+        return $query->selectRaw(sprintf('DATE_FORMAT(`time`, \'%s\') as %s, %s', $format, $as, $fields))
+            ->groupBy($as);
     }
 }

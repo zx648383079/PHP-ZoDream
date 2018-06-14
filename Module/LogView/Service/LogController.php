@@ -12,9 +12,11 @@ use Zodream\Service\Factory;
 
 class LogController extends Controller {
 
-    public function indexAction($id) {
+    public function indexAction($id, $keywords = null, $operator = null, $name = null, $sort = 'id', $order = 'desc') {
         $file = FileModel::find($id);
-        $log_list = LogModel::where('file_id', $id)
+        $log_list = LogModel::ofType($name, $operator, $keywords)
+            ->sortOrder($sort, $order)
+            ->where('file_id', $id)
             ->page();
         $file_list = FileModel::all();
         return $this->show(compact('file', 'log_list', 'file_list'));
