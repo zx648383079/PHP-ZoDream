@@ -32,6 +32,7 @@ PHP开发
 |[BBS论坛系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Forum)|BBS论坛系统|待开发|未上线|
 |[任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)|计划任务系统|待开发|未上线|
 |[商城系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Shop)|商城系统|待开发|未上线|
+|[LOG查看系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/LogView)|LOG查看系统，主要实现对iis日志的读取显示，可以标记，并根据标记进行推断整理，进行可疑访问查找|开发中|未上线|
 |[可视化编辑系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Template)|可视化拖拽编辑系统系统|待开发|未上线|
 
 
