@@ -130,4 +130,21 @@ class LogModel extends Model {
         return $query->selectRaw(sprintf('DATE_FORMAT(`time`, \'%s\') as %s, %s', $format, $as, $fields))
             ->groupBy($as);
     }
+
+    public static function getRoundLogs(array $log_list, $min = 0, $max = 24, $key = 'hour') {
+        $args = [];
+        foreach ($log_list as $item) {
+            $index = intval($item[$key]);
+            if (!isset($args[$index])) {
+                $args[$index] = $item['count'];
+                continue;
+            }
+            $args[$index] += $item['count'];
+        }
+        $data = [];
+        for (; $min <= $max; $min ++) {
+            $data[$min] = isset($args[$min]) ? $args[$min] : 0;
+        }
+        return $data;
+    }
 }

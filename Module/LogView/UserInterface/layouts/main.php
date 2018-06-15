@@ -37,16 +37,27 @@ $this->registerCssFile([
             <li><a href="<?=$this->url('./')?>">
                     <i class="fa fa-home"></i><span>首页</span></a></li>
             <li class="expand"><a href="javascript:;">
-                    <i class="fa fa-money"></i><span>文件列表</span></a>
+                    <i class="fa fa-th-list"></i><span>文件列表</span></a>
                 <ul>
                     <?php if (isset($file_list)):?>
                         <?php foreach($file_list as $item):?>
                             <li><a href="<?=$this->url('./log', ['id' => $item['id']])?>">
-                                    <i class="fa fa-book"></i><span><?=$item['name']?></span></a></li>
+                                    <i class="fa fa-file"></i><span><?=$item['name']?></span></a></li>
                         <?php endforeach;?>
                     <?php endif;?>
                     <li><a href="<?=$this->url('./log/create')?>">
                             <i class="fa fa-plus"></i><span>上传文件</span></a></li>
+                </ul>
+            </li>
+            <li class="expand"><a href="javascript:;">
+                    <i class="fa fa-user-md"></i><span>智能分析</span></a>
+                <ul>
+                    <li><a href="<?=$this->url('./analysis')?>">
+                            <i class="fa fa-line-chart"></i><span>次数曲线图</span></a></li>
+                    <li><a href="<?=$this->url('./analysis/top')?>">
+                            <i class="fa fa-list-ol"></i><span>统计排行</span></a></li>
+                    <li><a href="<?=$this->url('./analysis/infer')?>">
+                            <i class="fa fa-list-ol"></i><span>可疑推断</span></a></li>
                 </ul>
             </li>
         </ul>

@@ -5,6 +5,7 @@ namespace Module\LogView\Service;
 use Module\LogView\Domain\Model\FileModel;
 use Module\LogView\Domain\Model\LogModel;
 use Module\LogView\Domain\Parser\IIS;
+use Module\LogView\Domain\Tag;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 use Zodream\Infrastructure\Http\Request;
@@ -66,5 +67,11 @@ class LogController extends Controller {
             });
         });
         return $this->redirectWithMessage(['./log', 'id' => $model->id],  '上传成功！');
+    }
+
+    public function tagAction($name) {
+        $value = Request::request('value');
+        Tag::toggle($name, $value);
+        return $this->jsonSuccess();
     }
 }
