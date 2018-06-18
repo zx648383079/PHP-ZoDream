@@ -45,8 +45,14 @@ $(".book-search .search-tip").on('click', 'li', function() {
 });
 
 JS;
-
-$this->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
+$data = [];
+if (!empty($term)) {
+    $data = [
+        'keywords' => $term->keywords,
+        'description' => $term->description,
+    ];
+}
+$this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
 ?>
 
     <div class="book-title">

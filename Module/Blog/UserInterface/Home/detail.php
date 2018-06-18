@@ -27,7 +27,10 @@ $js = <<<JS
 JS;
 
 $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');
-$this->extend('layouts/header')
+$this->extend('layouts/header', [
+        'keywords' => $blog->keywords,
+        'description' => $blog->description,
+    ])
     ->registerJs($js, View::JQUERY_READY)
     ->registerJsFile('ueditor/ueditor.parse.min.js')
     ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');

@@ -1,6 +1,7 @@
 <?php
 namespace Service\Ueditor;
 
+use Infrastructure\Environment;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\Service\Config;
 use Zodream\Infrastructure\Http\Request;

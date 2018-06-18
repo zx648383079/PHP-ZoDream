@@ -131,7 +131,7 @@
           margin-left: 10px; }
       .book-skin .book-body .book-item:hover dd {
         display: block; }
-      .book-skin .book-body .book-item:nth-child(2) dd {
+      .book-skin .book-body .book-item:nth-child(2) dd, .book-skin .book-body .book-item:nth-child(3) dd, .book-skin .book-body .book-item:nth-child(4) dd {
         display: block; }
     .book-skin .book-body .info {
       border-bottom: 1px dotted #af5d0d;
