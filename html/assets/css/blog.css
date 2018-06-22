@@ -67,6 +67,11 @@
     padding: 30px 15px;
     min-height: 800px;
     position: relative; }
+    .book-skin .book-body .book-fork img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: 0; }
     .book-skin .book-body .book-term {
       margin-bottom: 20px; }
       .book-skin .book-body .book-term .term-info {

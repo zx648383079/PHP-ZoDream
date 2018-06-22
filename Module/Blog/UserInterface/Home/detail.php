@@ -75,6 +75,9 @@ $this->extend('layouts/header', [
 
 
     <div class="book-body">
+        <a class="book-fork" href="https://github.com/zx648383079/PHP-ZoDream">
+            <img src="/assets/images/forkme.png" alt="Fork Me On Github">
+        </a>
         <div class="info">
             <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></span>
             <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></span>

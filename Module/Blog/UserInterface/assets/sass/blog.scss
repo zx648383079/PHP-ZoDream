@@ -101,6 +101,14 @@ $activeColor: #af5d0d;
     padding: 30px 15px;
     min-height: 800px;
     position: relative;
+    .book-fork {
+      img {
+        position: absolute; 
+        top: 0; 
+        right: 0; 
+        border: 0;
+      }
+    }
     .book-term {
       .term-info {
         position: relative;
