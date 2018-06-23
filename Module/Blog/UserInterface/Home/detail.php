@@ -24,6 +24,10 @@ $js = <<<JS
     $(".book-navicon").click(function() {
         $('.book-skin').toggleClass("book-collapsed");
     });
+    $("#content").sideNav({
+        target: '.book-side-nav',
+        contentLength: 20
+    });
 JS;
 
 $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');
@@ -31,6 +35,7 @@ $this->extend('layouts/header', [
         'keywords' => $blog->keywords,
         'description' => $blog->description,
     ])
+    ->registerJsFile('@jquery.sideNav.min.js')
     ->registerJs($js, View::JQUERY_READY)
     ->registerJsFile('ueditor/ueditor.parse.min.js')
     ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
@@ -51,7 +56,7 @@ $this->extend('layouts/header', [
         </ul>
     </div>
 
-        <div class="book-sidebar">
+    <div class="book-sidebar">
         <div class="book-chapter">
             <ul>
                 <?php foreach ($cat_list as $item): ?>
@@ -70,6 +75,9 @@ $this->extend('layouts/header', [
                     </dd>
                 </dl>
             <?php endforeach;?>
+        </div>
+
+        <div class="book-side-nav">
         </div>
     </div>
 
@@ -102,7 +110,5 @@ $this->extend('layouts/header', [
     <div id="comments" class="book-footer comment">
         
     </div>
-
-
 
     <?php $this->extend('layouts/footer');?>
