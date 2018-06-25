@@ -74,4 +74,10 @@ class LogController extends Controller {
         Tag::toggle($name, $value);
         return $this->jsonSuccess();
     }
+
+    public function clearAction() {
+        FileModel::where(1)->delete();
+        LogModel::where(1)->delete();
+        return $this->redirectWithMessage('./',  '清除成功！');
+    }
 }

@@ -47,6 +47,8 @@ $this->registerCssFile([
                     <?php endif;?>
                     <li><a href="<?=$this->url('./log/create')?>">
                             <i class="fa fa-plus"></i><span>上传文件</span></a></li>
+                    <li><a href="<?=$this->url('./log/clear')?>">
+                            <i class="fa fa-trash"></i><span>清除全部</span></a></li>
                 </ul>
             </li>
             <li class="expand"><a href="javascript:;">

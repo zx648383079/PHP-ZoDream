@@ -44,7 +44,8 @@ class AnalysisController extends Controller {
         $new_ip = [];
         $new_path = [];
         if (!empty($ip_pool)) {
-            $new_path = LogModel::whereIn('c_ip', $ip_pool)->pluck('cs_uri_stem');
+            $new_path = LogModel::whereIn('c_ip', $ip_pool)
+                    ->where('sc_status', 200)->pluck('cs_uri_stem');
         }
 
         if (!empty($path_pool)) {

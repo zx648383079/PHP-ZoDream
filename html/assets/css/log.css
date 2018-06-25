@@ -14,4 +14,8 @@
 .tag-table td:hover .fa-tag {
   display: inline-block; }
 
+@media (min-width: 768px) {
+  .right-content {
+    min-height: 700px; } }
+
 /*# sourceMappingURL=log.css.map */
