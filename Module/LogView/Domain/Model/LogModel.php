@@ -97,8 +97,19 @@ class LogModel extends Model {
     }
 
     public function scopeOfType(Query $query, $name, $operator, $value) {
-        if (empty($name) || !$this->hasColumn($name)) {
+        if (!is_array($name)) {
+            $this->appendQuery($query, $name, $operator, $value);
             return $query;
+        }
+        foreach ($name as $i => $item) {
+            $this->appendQuery($query, $item, $operator[$i], $value[$i]);
+        }
+        return $query;
+    }
+
+    protected function appendQuery(Query $query, $name, $operator, $value) {
+        if (empty($name) || !$this->hasColumn($name)) {
+            return;
         }
         if (in_array(strtolower($operator), [
             '=', '<', '>', '<=', '>=', '<>', '!=',
@@ -109,9 +120,8 @@ class LogModel extends Model {
             '~', '~*', '!~', '!~*', 'similar to',
             'not similar to'
         ])) {
-            return $query->where($name, $operator, $value);
+            $query->where($name, $operator, $value);
         }
-        return $query;
     }
 
     public function scopeSortOrder(Query $query, $sort, $order) {
