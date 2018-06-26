@@ -20,7 +20,7 @@ class CreateLogTables extends Migration {
         Schema::createTable(LogModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('file_id')->int()->notNull();
-            $table->set('date')->date()->defaultVal('0000-00-00');
+            $table->set('date')->date()->defaultVal('0001-01-01');
             $table->set('time')->time()->defaultVal('00:00:00');
             $table->set('s_sitename')->varchar(30)->defaultVal('');
             $table->set('s_computername')->varchar(30)->defaultVal('');

@@ -13,11 +13,15 @@ use Zodream\Service\Factory;
 
 class LogController extends Controller {
 
-    public function indexAction($id, $keywords = null, $operator = null, $name = null, $sort = 'id', $order = 'desc') {
+    public function indexAction($id, $keywords = null, $operator = null, $name = null, $sort = 'id', $order = 'desc', $auto = null) {
         $file = FileModel::find($id);
         $log_list = LogModel::ofType($name, $operator, $keywords)
             ->sortOrder($sort, $order)
             ->where('file_id', $id)
+            ->when(!empty($auto), function ($query) {
+                $query->where('sc_status', 200)
+                    ->where('cs_method', 'POST');
+            })
             ->page();
         $file_list = FileModel::all();
         return $this->show(compact('file', 'log_list', 'file_list'));
@@ -76,8 +80,8 @@ class LogController extends Controller {
     }
 
     public function clearAction() {
-        FileModel::where(1)->delete();
-        LogModel::where(1)->delete();
+        FileModel::record()->delete();
+        LogModel::record()->delete();
         return $this->redirectWithMessage('./',  '清除成功！');
     }
 }

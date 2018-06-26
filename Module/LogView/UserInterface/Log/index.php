@@ -48,6 +48,9 @@ $operators = [
         <div class="input-group">
             <input type="text" class="form-control" name="keywords" id="keywords" placeholder="">
         </div>
+        <div class="input-group">
+            <input type="checkbox" class="form-control" name="auto" id="auto" value="1">危害操作
+        </div>
         <button type="submit" class="btn btn-default">搜索</button>
         <input type="hidden" name="id" value="<?=$file->id?>">
     </form>
