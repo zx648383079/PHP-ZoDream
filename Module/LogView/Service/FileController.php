@@ -1,5 +1,5 @@
 <?php
-namespace Module\LogView;
+namespace Module\LogView\Service;
 
 
 use Module\LogView\Domain\Model\FileModel;
@@ -9,6 +9,8 @@ use Module\LogView\Service\Controller;
 use Zodream\Service\Factory;
 
 class FileController extends Controller {
+
+    public $layout = false;
 
     protected function rules() {
         return [

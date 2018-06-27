@@ -3,6 +3,8 @@ namespace Module\LogView\Domain\Parser;
 
 use Zodream\Disk\File;
 use Zodream\Disk\Stream;
+use Zodream\Domain\Debug\Log;
+use Exception;
 
 class IIS {
     /**
@@ -33,13 +35,16 @@ class IIS {
         }
         $file->openRead();
         $headers = null;
+        $index = -1;
         while (!$file->isEnd()) {
+            $index ++;
             $line = $file->readLine();
             if (empty($line)) {
                 continue;
             }
             if (strpos($line, '#Fields') === 0) {
                 $headers = $this->parserHeaders($line);
+                Log::notice($line);
                 continue;
             }
             if (empty($headers)
@@ -50,7 +55,12 @@ class IIS {
             if (empty($data)) {
                 continue;
             }
-            $callback($data);
+            try {
+                $callback($data);
+                Log::notice(sprintf('line %s success!', $index));
+            } catch (Exception $ex) {
+                Log::error(sprintf('line %s error!', $index));
+            }
         }
         $file->close();
     }

@@ -9,6 +9,8 @@ use Zodream\Spider\Support\Uri;
 
 class SpiderController extends Controller {
 
+    public $layout = false;
+
     protected $maps = [
         'www.qu.la' => BiQuGe::class
     ];

@@ -33,6 +33,7 @@ $operators = [
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <select name="name">
+                <option value="">请选择</option>
             <?php foreach($columns as $key => $item):?>
                <option value="<?=$key?>"><?=$item?></option>
             <?php endforeach;?>
@@ -40,6 +41,7 @@ $operators = [
         </div>
         <div class="input-group">
             <select name="operator">
+                <option value="">请选择</option>
             <?php foreach($operators as $item):?>
                <option value="<?=$item?>"><?=$item?></option>
             <?php endforeach;?>
