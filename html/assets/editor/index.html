@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="medium-editor.min.css">
+    <link rel="stylesheet" href="default.min.css">
+    <link rel="stylesheet" href="medium-editor-handsontable.min.css">
+    <link rel="stylesheet" href="medium-editor-insert-plugin.min.css">
+</head>
+<body>
+
+    <div id="editor"></div>
+
+    <script src="medium-editor.min.js"></script>
+    <script src="medium-editor-handsontable.min.js"></script>
+    <script src="medium-editor-insert-plugin.min.js"></script>
+    <script>
+    var editor = new MediumEditor('#editor', {
+        buttonLabels: 'fontawesome',
+        extensions: {
+            spreadsheet: new MediumEditorSpreadsheet()
+        },
+        toolbar: {
+            buttons: [
+                'h2',
+                'bold',
+                'italic',
+                'spreadsheet'
+            ],
+            static: true,
+            sticky: true
+        }
+    });
+
+    </script>
+</body>
+</html>
