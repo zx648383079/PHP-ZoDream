@@ -1,5 +1,5 @@
 <?php
-namespace Module\SMS\Doamin\Migrations;
+namespace Module\SMS\Domain\Migrations;
 
 use Module\SMS\Doamin\Model\SmsLogModel;
 use Module\SMS\Doamin\Model\SmsSignatureModel;

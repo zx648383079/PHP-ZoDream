@@ -1,5 +1,5 @@
 <?php
-namespace Module\SMS\Doamin\Model;
+namespace Module\SMS\Domain\Model;
 
 use Domain\Model\Model;
 
