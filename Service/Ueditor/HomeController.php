@@ -103,7 +103,7 @@ class HomeController extends Controller {
 	 * 上传图片
 	 */
 	function uploadimageAction() {
-		$this->upload($this->configs['imageFieldName'], array(
+		return $this->upload($this->configs['imageFieldName'], array(
 				'pathFormat' => $this->configs['imagePathFormat'],
 				'maxSize' => $this->configs['imageMaxSize'],
 				'allowFiles' => $this->configs['imageAllowFiles']

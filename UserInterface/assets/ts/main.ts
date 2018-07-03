@@ -87,7 +87,7 @@ $(function() {
             return;
         }
         postJson($(this).attr('href'), function(data) {
-            if (data.code == 0 && !data.msg) {
+            if (data.code == 200 && !data.msg) {
                 data.msg = '删除成功！';
             }
             parseAjax(data);
@@ -100,10 +100,10 @@ $(function() {
         let errorTip = $this.attr('data-error') || '提交失败！';
         let callback = $this.attr('data-callback');
         postJson($this.attr('href'), function(data) {
-            if (data.code == 0 && !data.msg) {
+            if (data.code == 200 && !data.msg) {
                 data.msg = successTip;
             }
-            if (data.code == 0 && callback) {
+            if (data.code == 200 && callback) {
                 eval(callback + '($this, data);');
             }
             parseAjax(data);
@@ -123,7 +123,12 @@ $(function() {
     var file_input = $(".file-input [data-type=upload]");
     if (file_input.length > 0) {
         file_input.upload({
-
+            url: '/ueditor.php?action=uploadimage',
+            name: 'upfile',
+            template: '{url}',
+            afterUpload: function(data) {
+                return data;
+            }
         });
     }
 
