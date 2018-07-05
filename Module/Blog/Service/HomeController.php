@@ -57,6 +57,9 @@ class HomeController extends ModuleController {
         $id = intval($id);
         BlogModel::record()->where('id', $id)->updateOne('click_count');
         $blog = BlogModel::find($id);
+        if (empty($blog)) {
+            return $this->redirect('./');
+        }
         $cat_list = TermModel::all();
         $log_list = BlogLogModel::alias('l')
             ->left('blog b', 'b.id = l.id_value')
