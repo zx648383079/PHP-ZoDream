@@ -35,42 +35,49 @@
                 word-break: break-all;
             }
         }
-        &:hover {
-            .font-gird {
-                p {
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .metro-grid {
+        .item {
+            &:hover {
+                .font-gird {
+                    p {
+                        display: block;
+                    }
+                }
+                .back-grid {
                     display: block;
                 }
             }
-            .back-grid {
-                display: block;
-            }
-        }
-        &.hover-middle {
-            &:hover {
-                .font-gird {
-                    left: -125px;
-                }
-                .back-grid {
-                    left: 125px;
+            &.hover-middle {
+                &:hover {
+                    .font-gird {
+                        left: -125px;
+                    }
+                    .back-grid {
+                        left: 125px;
+                    }
                 }
             }
-        }
-        &.hover-left {
-            &:hover {
-                .font-gird {
-                    left: -250px;
-                }
-                .back-grid {
+            &.hover-left {
+                &:hover {
+                    .font-gird {
+                        left: -250px;
+                    }
+                    .back-grid {
+                    }
                 }
             }
-        }
-        &.hover-right {
-            &:hover {
-                .font-gird {
-                    
-                }
-                .back-grid {
-                    left: -250px;
+            &.hover-right {
+                &:hover {
+                    .font-gird {
+                        
+                    }
+                    .back-grid {
+                        left: -250px;
+                    }
                 }
             }
         }

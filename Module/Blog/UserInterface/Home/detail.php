@@ -24,9 +24,16 @@ $js = <<<JS
     $(".book-navicon").click(function() {
         $('.book-skin').toggleClass("book-collapsed");
     });
-    $("#content").sideNav({
+    var side = $("#content").sideNav({
         target: '.book-side-nav',
         contentLength: 20
+    }), 
+    checkSize = function() { 
+        side.box.toggle($(window).width() > 767);
+    };
+    checkSize();
+    $(window).resize(function () {
+        checkSize();
     });
 JS;
 

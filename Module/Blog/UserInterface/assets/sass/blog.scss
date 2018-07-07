@@ -107,6 +107,7 @@ $activeColor: #af5d0d;
                 top: 0;
                 right: 0;
                 border: 0;
+                z-index: 99;
             }
         }
         .book-term {
@@ -560,6 +561,8 @@ $activeColor: #af5d0d;
                     }
                     &.active {
                         font-size: 20px;
+                        padding-left: 50px;
+                        line-height: 34px;
                     }
                 }
                 &.hover,
@@ -638,7 +641,8 @@ $activeColor: #af5d0d;
                 }
             }
             .book-dynamic,
-            .book-new {
+            .book-new,
+            .book-side-nav {
                 display: none;
             }
         }

@@ -1235,17 +1235,19 @@ i.checkbox {
       transition: all 1s; }
       .metro-grid .item .back-grid .item-content {
         word-break: break-all; }
-    .metro-grid .item:hover .font-gird p {
-      display: block; }
-    .metro-grid .item:hover .back-grid {
-      display: block; }
-    .metro-grid .item.hover-middle:hover .font-gird {
-      left: -125px; }
-    .metro-grid .item.hover-middle:hover .back-grid {
-      left: 125px; }
-    .metro-grid .item.hover-left:hover .font-gird {
-      left: -250px; }
-    .metro-grid .item.hover-right:hover .back-grid {
-      left: -250px; }
+
+@media screen and (min-width: 768px) {
+  .metro-grid .item:hover .font-gird p {
+    display: block; }
+  .metro-grid .item:hover .back-grid {
+    display: block; }
+  .metro-grid .item.hover-middle:hover .font-gird {
+    left: -125px; }
+  .metro-grid .item.hover-middle:hover .back-grid {
+    left: 125px; }
+  .metro-grid .item.hover-left:hover .font-gird {
+    left: -250px; }
+  .metro-grid .item.hover-right:hover .back-grid {
+    left: -250px; } }
 
 /*# sourceMappingURL=zodream.css.map */

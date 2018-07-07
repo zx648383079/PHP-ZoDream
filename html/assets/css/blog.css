@@ -71,7 +71,8 @@
       position: absolute;
       top: 0;
       right: 0;
-      border: 0; }
+      border: 0;
+      z-index: 99; }
     .book-skin .book-body .book-term {
       margin-bottom: 20px; }
       .book-skin .book-body .book-term .term-info {
@@ -407,7 +408,9 @@
     .book-skin .book-title .book-nav > li.book-search .search-tip {
       position: static; }
   .book-skin .book-title .book-nav > li.active {
-    font-size: 20px; }
+    font-size: 20px;
+    padding-left: 50px;
+    line-height: 34px; }
   .book-skin .book-title .book-nav.hover > li, .book-skin .book-title .book-nav:hover > li {
     display: none; }
     .book-skin .book-title .book-nav.hover > li.active, .book-skin .book-title .book-nav.hover > li.book-navicon, .book-skin .book-title .book-nav:hover > li.active, .book-skin .book-title .book-nav:hover > li.book-navicon {
@@ -461,7 +464,8 @@
         background: #d39357;
         color: #fff; }
   .book-skin .book-sidebar .book-dynamic,
-  .book-skin .book-sidebar .book-new {
+  .book-skin .book-sidebar .book-new,
+  .book-skin .book-sidebar .book-side-nav {
     display: none; }
   .book-skin .book-footer .book-comments .comment-item .actions {
     position: static;
