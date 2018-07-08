@@ -7,7 +7,9 @@ class GoodsController extends Controller {
 
     public function indexAction($id) {
         $goods = GoodsModel::find($id);
-        return $this->show(compact('goods'));
+        $goods_list = GoodsModel::limit(4)->all();
+        $comment_list = [];
+        return $this->show(compact('goods', 'goods_list', 'comment_list'));
     }
 
     public function priceAction($id, $amount = 1) {

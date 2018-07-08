@@ -2,10 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '品牌';
 ?>
    <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/category/create')?>">新增分类</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/brand/create')?>">新增品牌</a>
     </div>
 
     <table class="table  table-bordered well">

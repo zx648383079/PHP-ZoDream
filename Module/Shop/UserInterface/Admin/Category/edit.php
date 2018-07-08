@@ -2,14 +2,14 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '分类';
 ?>
     <h1><?=$this->title?></h1>
     <form data-type="ajax" action="<?=$this->url('./admin/category/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>
-            <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->name?>">
+            <input name="name" type="text" class="form-control"  placeholder="输入分类名" value="<?=$model->name?>" required>
         </div>
         <div class="input-group">
             <label>上级分类</label>

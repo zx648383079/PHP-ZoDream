@@ -1,7 +1,10 @@
-.zd-tab {
-    .zd-tab-head {
+.zd-tab,
+.tab-box {
+    .zd-tab-head,
+    .tab-header {
         position: relative;
-        .zd-tab-item {
+        .zd-tab-item,
+        .tab-item {
             &.active,
             &:hover {
                 @include active();
@@ -41,8 +44,10 @@
             }
         }
     }
-    .zd-tab-body {
-        .zd-tab-item {
+    .zd-tab-body,
+    .tab-body {
+        .zd-tab-item,
+        .tab-item {
             &.active {
                 display: block;
                 background: transparent;

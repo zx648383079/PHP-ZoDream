@@ -229,4 +229,10 @@ footer,
     .goods-list .item-view .item-actions .item-price {
       color: #e1454b; }
 
+.goods-gallary-box img {
+  height: 360px; }
+
+.tab-box.goods-content .tab-item {
+  width: 33%; }
+
 /*# sourceMappingURL=shop_mobile.css.map */

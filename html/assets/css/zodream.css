@@ -1042,41 +1042,109 @@ i.checkbox {
       top: 0;
       left: 30px; }
 
-.zd-tab .zd-tab-head {
+.zd-tab .zd-tab-head,
+.zd-tab .tab-header,
+.tab-box .zd-tab-head,
+.tab-box .tab-header {
   position: relative; }
-  .zd-tab .zd-tab-head .zd-tab-item {
+  .zd-tab .zd-tab-head .zd-tab-item,
+  .zd-tab .zd-tab-head .tab-item,
+  .zd-tab .tab-header .zd-tab-item,
+  .zd-tab .tab-header .tab-item,
+  .tab-box .zd-tab-head .zd-tab-item,
+  .tab-box .zd-tab-head .tab-item,
+  .tab-box .tab-header .zd-tab-item,
+  .tab-box .tab-header .tab-item {
     display: inline-block;
     width: 150px;
     height: 30px;
     line-height: 30px;
     text-align: center;
     position: relative; }
-    .zd-tab .zd-tab-head .zd-tab-item.active, .zd-tab .zd-tab-head .zd-tab-item:hover {
+    .zd-tab .zd-tab-head .zd-tab-item.active, .zd-tab .zd-tab-head .zd-tab-item:hover,
+    .zd-tab .zd-tab-head .tab-item.active,
+    .zd-tab .zd-tab-head .tab-item:hover,
+    .zd-tab .tab-header .zd-tab-item.active,
+    .zd-tab .tab-header .zd-tab-item:hover,
+    .zd-tab .tab-header .tab-item.active,
+    .zd-tab .tab-header .tab-item:hover,
+    .tab-box .zd-tab-head .zd-tab-item.active,
+    .tab-box .zd-tab-head .zd-tab-item:hover,
+    .tab-box .zd-tab-head .tab-item.active,
+    .tab-box .zd-tab-head .tab-item:hover,
+    .tab-box .tab-header .zd-tab-item.active,
+    .tab-box .tab-header .zd-tab-item:hover,
+    .tab-box .tab-header .tab-item.active,
+    .tab-box .tab-header .tab-item:hover {
       background: #00BFFF;
       color: #fff; }
-      .zd-tab .zd-tab-head .zd-tab-item.active .fa, .zd-tab .zd-tab-head .zd-tab-item:hover .fa {
+      .zd-tab .zd-tab-head .zd-tab-item.active .fa, .zd-tab .zd-tab-head .zd-tab-item:hover .fa,
+      .zd-tab .zd-tab-head .tab-item.active .fa,
+      .zd-tab .zd-tab-head .tab-item:hover .fa,
+      .zd-tab .tab-header .zd-tab-item.active .fa,
+      .zd-tab .tab-header .zd-tab-item:hover .fa,
+      .zd-tab .tab-header .tab-item.active .fa,
+      .zd-tab .tab-header .tab-item:hover .fa,
+      .tab-box .zd-tab-head .zd-tab-item.active .fa,
+      .tab-box .zd-tab-head .zd-tab-item:hover .fa,
+      .tab-box .zd-tab-head .tab-item.active .fa,
+      .tab-box .zd-tab-head .tab-item:hover .fa,
+      .tab-box .tab-header .zd-tab-item.active .fa,
+      .tab-box .tab-header .zd-tab-item:hover .fa,
+      .tab-box .tab-header .tab-item.active .fa,
+      .tab-box .tab-header .tab-item:hover .fa {
         display: block; }
-    .zd-tab .zd-tab-head .zd-tab-item .fa-close {
+    .zd-tab .zd-tab-head .zd-tab-item .fa-close,
+    .zd-tab .zd-tab-head .tab-item .fa-close,
+    .zd-tab .tab-header .zd-tab-item .fa-close,
+    .zd-tab .tab-header .tab-item .fa-close,
+    .tab-box .zd-tab-head .zd-tab-item .fa-close,
+    .tab-box .zd-tab-head .tab-item .fa-close,
+    .tab-box .tab-header .zd-tab-item .fa-close,
+    .tab-box .tab-header .tab-item .fa-close {
       position: absolute;
       right: 10px;
       top: 6px;
       display: none; }
-  .zd-tab .zd-tab-head.has-over > .fa {
+  .zd-tab .zd-tab-head.has-over > .fa,
+  .zd-tab .tab-header.has-over > .fa,
+  .tab-box .zd-tab-head.has-over > .fa,
+  .tab-box .tab-header.has-over > .fa {
     position: absolute;
     width: 30px;
     text-align: center;
     line-height: 30px; }
-    .zd-tab .zd-tab-head.has-over > .fa:last-child {
+    .zd-tab .zd-tab-head.has-over > .fa:last-child,
+    .zd-tab .tab-header.has-over > .fa:last-child,
+    .tab-box .zd-tab-head.has-over > .fa:last-child,
+    .tab-box .tab-header.has-over > .fa:last-child {
       right: 0;
       top: 0; }
-  .zd-tab .zd-tab-head.has-over .zd-tab-head-content ul {
+  .zd-tab .zd-tab-head.has-over .zd-tab-head-content ul,
+  .zd-tab .tab-header.has-over .zd-tab-head-content ul,
+  .tab-box .zd-tab-head.has-over .zd-tab-head-content ul,
+  .tab-box .tab-header.has-over .zd-tab-head-content ul {
     padding: 0;
     margin: 0 30px; }
 
-.zd-tab .zd-tab-body .zd-tab-item {
+.zd-tab .zd-tab-body .zd-tab-item,
+.zd-tab .zd-tab-body .tab-item,
+.zd-tab .tab-body .zd-tab-item,
+.zd-tab .tab-body .tab-item,
+.tab-box .zd-tab-body .zd-tab-item,
+.tab-box .zd-tab-body .tab-item,
+.tab-box .tab-body .zd-tab-item,
+.tab-box .tab-body .tab-item {
   display: none;
   width: 100%; }
-  .zd-tab .zd-tab-body .zd-tab-item.active {
+  .zd-tab .zd-tab-body .zd-tab-item.active,
+  .zd-tab .zd-tab-body .tab-item.active,
+  .zd-tab .tab-body .zd-tab-item.active,
+  .zd-tab .tab-body .tab-item.active,
+  .tab-box .zd-tab-body .zd-tab-item.active,
+  .tab-box .zd-tab-body .tab-item.active,
+  .tab-box .tab-body .zd-tab-item.active,
+  .tab-box .tab-body .tab-item.active {
     display: block;
     background: transparent;
     color: #767676; }

@@ -2,14 +2,14 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '品牌';
 ?>
     <h1><?=$this->title?></h1>
     <form data-type="ajax" action="<?=$this->url('./admin/brand/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>
-            <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->name?>">
+            <input name="name" type="text" class="form-control"  placeholder="输入品牌名称" value="<?=$model->name?>">
         </div>
         
         <div class="input-group">
