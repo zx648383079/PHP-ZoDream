@@ -1,0 +1,68 @@
+.autocompleter {
+    width: 100%;
+    background: #F5FAFF;
+    display: none;
+}
+
+.autocompleter-show {
+    display: block;
+}
+
+.autocompleter,
+.autocompleter-hint {
+    position: absolute;
+}
+
+.autocompleter-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.autocompleter-item {
+    cursor: pointer;
+    padding: 6px 12px;
+    color: #333;
+    font-size: 20px;
+}
+
+.autocompleter-item:hover {
+    /* Hover State */
+    background: #767676;
+    color: #fff;
+}
+
+.autocompleter-item-selected {
+    /* Selected State */
+    background: #333;
+    color: #fff;
+}
+
+.autocompleter-item strong {
+    /* Highlight Matches */
+    background: rgb(214, 74, 81);
+    text-shadow: 0 1px 0 #ffffff;
+}
+
+.autocompleter-hint {
+    width: 100%;
+    display: none;
+
+    /** Need absolute position over input text */
+}
+
+.autocompleter-hint-show {
+    display: block;
+}
+
+.autocompleter-hint span {
+    color: #bbbbbb;
+    color: #fff;
+}
+
+.form-inline .input-group .auto-input {
+    display: inline-block;
+    position: relative;
+}
