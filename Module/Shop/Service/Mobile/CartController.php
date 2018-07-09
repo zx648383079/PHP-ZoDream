@@ -7,7 +7,7 @@ use Module\Shop\Domain\Model\GoodsModel;
 class CartController extends Controller {
 
     public function indexAction() {
-        //$goods_list = CartModel::getAllGoods();
+        $goods_list = CartModel::getAllGoods();
         return $this->show(compact('goods_list'));
     }
 

@@ -40,7 +40,7 @@ $this->title = 'ZoDream';
     <div class="comment-box">
         <div class="comment-header">
             评价
-            <i class="fa fa-next"></i>
+            <i class="fa fa-angle-right"></i>
         </div>
         <div class="comment-stats">
             <a href="">好评（2000）</a>
@@ -107,7 +107,7 @@ $this->title = 'ZoDream';
         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         购物车
     </a>
-    <a class="btn btn-orange" href="<?=$this->url('./mobile/user')?>">
+    <a class="btn btn-orange" href="javascript:addToCart('<?=$goods->id?>');">
         加入购物车
     </a>
     <a class="btn" href="<?=$this->url('./mobile/user')?>">

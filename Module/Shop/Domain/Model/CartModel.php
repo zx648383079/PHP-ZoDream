@@ -15,16 +15,34 @@ use Zodream\Service\Factory;
 
 /**
  * Class CartModel
- * @package Domain\Model\Shopping
- * @property integer $goods_id
+ * @property integer $id
  * @property integer $user_id
- * @property integer $session_id
- * @property integer $activity_id //活动ID
- * @property string $activity_type //活动类型
+ * @property integer $goods_id
+ * @property integer $number
+ * @property float $price
  */
 class CartModel extends Model {
     public static function tableName() {
         return 'shop_cart';
+    }
+
+    protected function rules() {
+        return [
+            'user_id' => 'required|int',
+            'goods_id' => 'required|int',
+            'number' => 'int',
+            'price' => '',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'user_id' => 'User Id',
+            'goods_id' => 'Goods Id',
+            'number' => 'Number',
+            'price' => 'Price',
+        ];
     }
 
     public function getTotal() {
@@ -81,7 +99,12 @@ class CartModel extends Model {
     }
 
     public static function addGoods(GoodsModel $goods, $amount) {
-
+        return static::create([
+            'user_id' => Auth::id(),
+            'goods_id' => $goods->id,
+            'amount' => $amount,
+            'price' => $goods->price
+        ]);
     }
     
     public static function fromGoods(GoodsModel $goods) {

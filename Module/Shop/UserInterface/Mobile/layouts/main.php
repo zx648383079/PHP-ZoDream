@@ -11,7 +11,7 @@ $this->registerCssFile([
     '@jquery.min.js',
     '@jquery.dialog.min.js',
     '@main.min.js',
-    '@shop_mobile.min.js'
+    '@shop.min.js'
 ]);
 ?>
 <!DOCTYPE html>

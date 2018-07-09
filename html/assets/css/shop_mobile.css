@@ -232,6 +232,38 @@ footer,
 .goods-gallary-box img {
   height: 360px; }
 
+.goods-info .goods-header {
+  position: relative; }
+  .goods-info .goods-header .goods-name {
+    margin-right: 50px;
+    line-height: 50px; }
+  .goods-info .goods-header .goods-collect {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    text-align: center; }
+    .goods-info .goods-header .goods-collect .fa-like {
+      display: block; }
+      .goods-info .goods-header .goods-collect .fa-like::before {
+        content: "\f08a"; }
+    .goods-info .goods-header .goods-collect.active .fa-like::before {
+      content: "\f004"; }
+
+.comment-box .comment-header {
+  position: relative; }
+  .comment-box .comment-header .fa {
+    position: absolute;
+    right: 0; }
+
+.comment-box .comment-more {
+  text-align: center;
+  display: block; }
+
+.recomment-box .goods-list .item-view {
+  width: 33%; }
+
 .tab-box.goods-content .tab-item {
   width: 33%; }
 
