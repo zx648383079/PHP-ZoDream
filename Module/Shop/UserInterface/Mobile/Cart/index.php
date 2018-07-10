@@ -2,11 +2,11 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '我的购物车';
 
 $js = <<<JS
 $(".swipe-row").swipeAction();
-<<<;
+JS;
 
 $this->extend('../layouts/header')
     ->registerJsFile('@jquery.swipeAction.js')
@@ -15,20 +15,39 @@ $this->extend('../layouts/header')
 
 <div class="has-header">
     <div class="cart-box">
-        <div class="swipe-box box">
+        <div class="swipe-box goods-list">
+            <?php foreach($goods_list as $item):?>
             <div class="swipe-row">
-                <div class="swipe-content">
-                    这是一个人问题
+                <div class="swipe-content goods-item">
+                    <i class="fa fa-check"></i>
+                    <div class="goods-img">
+                        <img src="<?=$item->goods->thumb?>" alt="">
+                    </div>
+                    <div class="goods-info">
+                        <h4><?=$item->goods->name?></h4>
+                        <span><?=$item->price?></span>
+                        <div class="number-box">
+                            <i class="fa fa-minus"></i>
+                            <input type="text" name="" value="<?=$item->amount?>">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </div>
                 </div>
                 <div class="actions-right">
-                    <button>删除111111</button>
+                    <i class="fa fa-trash"></i>
                 </div>
             </div>
+            <?php endforeach;?>
         </div>
     </div>
     <div class="cart-footer">
-        
+        <i class="fa fa-check"></i>
+        <span>全选</span>
 
+        <div class="cart-amount">
+            <span>0</span>
+            <a href="" class="btn">结算</a>
+        </div>
     </div>
 </div>
 

@@ -1,17 +1,20 @@
 <?php
 namespace Module\Shop\Domain\Migrations;
 
+use Module\Shop\Domain\Model\AddressModel;
 use Module\Shop\Domain\Model\ArticleCategoryModel;
 use Module\Shop\Domain\Model\ArticleModel;
 use Module\Shop\Domain\Model\BrandModel;
 use Module\Shop\Domain\Model\CartModel;
 use Module\Shop\Domain\Model\CategoryModel;
+use Module\Shop\Domain\Model\CollectGoodsModel;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\NavigationModel;
 use Module\Shop\Domain\Model\OrderAddressModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
+use Module\Shop\Domain\Model\RegionModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
@@ -45,6 +48,14 @@ class CreateShopTables extends Migration {
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
         });
+        Schema::createTable(AddressModel::tableName(), function(Table $table) {
+            $table->set('id')->pk();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('region_id')->int()->notNull();
+            $table->set('tel')->varchar(11)->notNull();
+            $table->set('address')->varchar()->notNull();
+            $table->timestamps();
+        });
         Schema::createTable(CategoryModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull()->comment('分类名');
@@ -53,6 +64,12 @@ class CreateShopTables extends Migration {
             $table->set('thumb')->varchar(200);
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
+        });
+        Schema::createTable(CollectGoodsModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('goods_id')->int()->notNull();
+            $table->timestamp('created_at');
         });
         Schema::createTable(NavigationModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
@@ -120,6 +137,7 @@ class CreateShopTables extends Migration {
             $table->set('region_id')->int()->notNull();
             $table->set('tel')->varchar(11)->notNull();
             $table->set('address')->varchar()->notNull();
+            $table->set('best_time')->varchar()->notNull();
         });
         Schema::createTable(PaymentModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
@@ -128,6 +146,12 @@ class CreateShopTables extends Migration {
             $table->set('icon')->varchar(100)->defaultVal('');
             $table->set('description')->varchar()->defaultVal('');
             $table->set('settings')->text();
+        });
+        Schema::createTable(RegionModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('full_name')->varchar(100)->defaultVal('');
         });
     }
 
@@ -139,6 +163,9 @@ class CreateShopTables extends Migration {
     public function down() {
         Schema::dropTable(ArticleModel::tableName());
         Schema::dropTable(ArticleCategoryModel::tableName());
+        Schema::dropTable(CollectGoodsModel::tableName());
+        Schema::dropTable(GoodsModel::tableName());
+        Schema::dropTable(CartModel::tableName());
         Schema::dropTable(NavigationModel::tableName());
     }
 

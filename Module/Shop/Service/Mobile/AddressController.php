@@ -6,13 +6,19 @@ use Module\Shop\Domain\Model\AddressModel;
 
 class AddressController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $model_list = AddressModel::page();
         return $this->show(compact('model_list'));
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => null]);
+        return $this->runMethodNotProcess('edit', ['id' => null]);
     }
 
     public function editAction($id) {

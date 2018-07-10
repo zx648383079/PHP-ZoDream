@@ -5,6 +5,12 @@ use Module\Shop\Domain\Model\OrderModel;
 
 class OrderController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $order_list = OrderModel::all();
         return $this->show(compact('order_list'));
