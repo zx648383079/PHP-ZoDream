@@ -10,30 +10,25 @@ $this->extend('../layouts/header');
 <div class="has-header">
     <div class="user-header">
         <div class="avatar">
-            <img src="image/avatar.jpg">
+            <img src="<?=$user->avatar?>">
         </div>
         <div class="name">
-            欢迎您，<a href="login.html">ZoDream</a>~
+            欢迎您，<a href="<?=$this->url('./mobile/member/profile')?>"><?=$user->name?></a>~
         </div>
     </div>
-    <div class="menu-grid">
-        <a href="friend.html" class="item">
+    <div class="menu-grid"><a href="<?=$this->url('./mobile/order')?>" class="item">
             <i class="fa fa-users" aria-hidden="true"></i>
-            好友
-        </a>
-        <a href="" class="item">
+            订单
+        </a><a href="<?=$this->url('./mobile/collect')?>" class="item">
             <i class="fa fa-bookmark" aria-hidden="true"></i>
             关注
-        </a>
-        <a href="message.html" class="item">
+        </a><a href="message.html" class="item">
             <i class="fa fa-comments" aria-hidden="true"></i>
             留言
-        </a>
-        <a href="" class="item">
+        </a><a href="" class="item">
             <i class="fa fa-shield" aria-hidden="true"></i>
             安全
-        </a>
-        <a href="" class="item">
+        </a><a href="" class="item">
             <i class="fa fa-cog" aria-hidden="true"></i>
             设置
         </a>
@@ -42,16 +37,13 @@ $this->extend('../layouts/header');
         <a href="" class="item">
             <i class="fa fa-users" aria-hidden="true"></i>
             好友
-        </a>
-        <a href="" class="item">
+        </a><a href="" class="item">
             <i class="fa fa-bookmark" aria-hidden="true"></i>
             关注
-        </a>
-        <a href="" class="item">
+        </a><a href="" class="item">
             <i class="fa fa-comments" aria-hidden="true"></i>
             留言
-        </a>
-        <a href="" class="item">
+        </a><a href="" class="item">
             <i class="fa fa-shield" aria-hidden="true"></i>
             安全
         </a>

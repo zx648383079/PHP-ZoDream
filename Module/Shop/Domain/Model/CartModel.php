@@ -67,12 +67,13 @@ class CartModel extends Model {
     }
 
     public function scopeBelongOwn($query) {
-        if (Auth::guest()) {
-            return $query->where('session_id', static::getSessionIp());
-        }
+//        if (Auth::guest()) {
+//            return $query->where('session_id', static::getSessionIp());
+//        }
         return $query->where(function ($query) {
             $query->where('user_id', Auth::id())
-                ->orWhere('session_id', static::getSessionIp());
+//                ->orWhere('session_id', static::getSessionIp())
+            ;
         });
     }
 

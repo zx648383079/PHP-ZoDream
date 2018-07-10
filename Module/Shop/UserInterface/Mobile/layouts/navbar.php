@@ -11,7 +11,7 @@
         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         购物车
     </a>
-    <a href="<?=$this->url('./mobile/user')?>">
+    <a href="<?=$this->url('./mobile/member')?>">
         <i class="fa fa-user" aria-hidden="true"></i>
         我的
     </a>

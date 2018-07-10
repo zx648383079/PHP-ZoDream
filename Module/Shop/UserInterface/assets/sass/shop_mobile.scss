@@ -48,7 +48,7 @@ header,
         position: absolute;
         left: 10px;
         top: 50%;
-        margin-top: -12px;
+        margin-top: -16px;
         font-size: 25px;
         color: #fff;
     }
@@ -143,7 +143,7 @@ footer,
 }
 
 .has-header {
-    margin-top: 50px;
+    margin-top: 44px;
 }
 
 .menu-box {
@@ -320,5 +320,90 @@ footer,
 .tab-box.goods-content {
     .tab-item {
         width: 33%;
+    }
+}
+
+.user-header {
+    position: relative;
+    padding-top: 25px;
+    padding-bottom: 30px;
+    background: #00E0F2;
+    .avatar {
+        width: 90px;
+        height: 90px;
+        margin: 0px auto;
+        text-align: center;
+        line-height: 0;
+        position: relative;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+        }
+        &::after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            border: 2px solid #99e3ff;
+            border-radius: 100%;
+            position: absolute;
+            left: -7px;
+            top: -7px;
+            z-index: 0;
+        }
+    }
+    .name {
+        text-align: center;
+        padding-top: 10px;
+    }
+}
+
+.menu-grid {
+    .item {
+        border-right: 1px dotted #4693d0;
+        width: 20%;
+        text-align: center;
+        display: inline-block;
+        box-sizing: border-box;
+        line-height: 30px;
+        &:nth-child(5n) {
+            border: 0;
+        }
+    }
+}
+.menu-large {
+    .item {
+        width: 50%;
+        display: inline-block;
+        border-right: 1px dotted #4693d0;
+        border-top: 1px dotted #4693d0;
+        height: 70px;
+        text-align: center;
+        .fa {
+            font-size: 50px;
+            margin-top: 10px;
+        }
+        &:nth-child(even) {
+            border-right: 0;
+        }
+        &:first-child,
+        &:nth-child(2) {
+            border-top: 0;
+        }
+    }
+}
+
+
+
+.menu-list {
+    a {
+        display: block;
+        padding: 10px;
+        background: #99e3ff;
+        margin-top: 2px;
+        .fa:nth-child(2) {
+            float: right;
+            margin-right: 10px;
+        }
     }
 }
