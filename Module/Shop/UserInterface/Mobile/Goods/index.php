@@ -29,7 +29,7 @@ $this->title = '商品详情';
     <div class="goods-info">
         <div class="goods-header">
             <h1 class="goods-name"><?=$goods->name?></h1>
-            <div class="goods-collect">
+            <div class="goods-collect <?=$goods->is_collect ? 'active' : ''?>" onclick="collectGoods('<?=$goods->id?>', this)">
                 <i class="fa fa-like"></i>
                 收藏
             </div>

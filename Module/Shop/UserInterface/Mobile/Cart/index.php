@@ -9,7 +9,7 @@ $(".swipe-row").swipeAction();
 JS;
 
 $this->extend('../layouts/header')
-    ->registerJsFile('@jquery.swipeAction.js')
+    ->registerJsFile('@jquery.swipeAction.min.js')
     ->registerJs($js);
 ?>
 
@@ -19,7 +19,7 @@ $this->extend('../layouts/header')
             <?php foreach($goods_list as $item):?>
             <div class="swipe-row">
                 <div class="swipe-content goods-item">
-                    <i class="fa fa-check"></i>
+                    <i class="fa check-box"></i>
                     <div class="goods-img">
                         <img src="<?=$item->goods->thumb?>" alt="">
                     </div>
@@ -28,7 +28,7 @@ $this->extend('../layouts/header')
                         <span><?=$item->price?></span>
                         <div class="number-box">
                             <i class="fa fa-minus"></i>
-                            <input type="text" name="" value="<?=$item->amount?>">
+                            <input type="text" name="" value="<?=$item->number?>">
                             <i class="fa fa-plus"></i>
                         </div>
                     </div>
@@ -41,12 +41,12 @@ $this->extend('../layouts/header')
         </div>
     </div>
     <div class="cart-footer">
-        <i class="fa fa-check"></i>
+        <i class="fa check-box"></i>
         <span>全选</span>
 
         <div class="cart-amount">
             <span>0</span>
-            <a href="" class="btn">结算</a>
+            <a href="<?=$this->url('./mobile/cashier')?>" class="btn">结算</a>
         </div>
     </div>
 </div>

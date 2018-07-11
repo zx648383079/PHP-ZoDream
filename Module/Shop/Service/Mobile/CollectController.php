@@ -12,7 +12,8 @@ class CollectController extends Controller {
     }
 
     public function indexAction() {
-        return $this->show();
+        $goods_list = CollectGoodsModel::with('goods')->page();
+        return $this->show(compact('goods_list'));
     }
 
     public function addAction($id) {
@@ -28,6 +29,7 @@ class CollectController extends Controller {
     }
 
     public function toggleAction($id) {
+        $id = intval($id);
         if (CollectGoodsModel::exist($id)) {
             CollectGoodsModel::remove($id);
             return $this->jsonSuccess(false);

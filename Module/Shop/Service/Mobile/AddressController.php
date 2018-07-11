@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Service\Admin;
+namespace Module\Shop\Service\Mobile;
 
 
 use Module\Shop\Domain\Model\AddressModel;

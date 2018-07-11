@@ -146,6 +146,106 @@ footer,
     margin-top: 44px;
 }
 
+.goods-list {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+    text-align: center;
+    .item-view {
+        position: relative;
+        display: block;
+        float: left;
+        width: 50%;
+        max-width: 50%;
+        box-sizing: border-box;
+        .item-img {
+            img {
+                
+            }
+        }
+        .item-title {
+            display: block;
+            width: 100%;
+            height: 24px;
+            text-align: center;
+            color: #404245;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 32px;
+            overflow: hidden;
+        }
+        .item-actions {
+            .item-price {
+                color: #e1454b;
+            }
+            .item-btn {
+                
+            }
+        }
+    }
+}
+
+.swipe-box {
+    overflow: hidden;
+    .swipe-row {
+        width: 100%;
+        position: relative;
+        height: 80px; 
+        padding: 0;
+        margin: 0;
+        transition: left .5s;
+        .swipe-content {
+            width: 100%;
+            display: block;
+            height: 80px;
+        }
+        .actions-left,
+        .actions-right {
+            position: absolute;
+            height: 80px; 
+            min-height: 80px;
+            max-height: 80px;
+            text-align: center;
+            font-size: 22px;
+            top: 0;
+            white-space: nowrap;
+            .fa {
+                font-size: 30px;
+                padding: 20px 15px;
+            }
+        }
+        .actions-left {
+            color: #FFF;
+            background-color: rgb(0, 187, 72);
+            right: 100%;
+        }
+        .actions-right {
+            color: #FFF;
+            background-color: #BB0000;
+            left: 100%;
+        }
+    }
+    &.goods-list {
+        text-align: left;
+        .goods-item {
+            .goods-img {
+                display: inline-block;
+                img {
+                    width: 80px;
+                }
+            }
+            .goods-info {
+                display: inline-block;
+                height: 80px;
+                vertical-align: top;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
 .menu-box {
     position: relative;
     display: block;
@@ -216,43 +316,62 @@ footer,
     }
 }
 
-.goods-list {
-    position: relative;
-    display: block;
+.check-box {
+    &::before {
+        content: "\f10c";
+    }
+    &.active {
+        &::before {
+            content: "\f058";
+        }  
+    }
+}
+
+.number-box {
+    input {
+        width: 50px;
+        text-align: center;
+        border: none;
+    }
+}
+
+.cart-box {
+    .goods-list {
+        .goods-item {
+            position: relative;
+            .check-box {
+                font-size: 30px;
+                width: 50px;
+                text-align: center;
+                position: relative;
+                top: -35px;
+            }
+            .number-box {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
+        }
+    }
+}
+
+.cart-footer {
+    position: fixed;
+    bottom: 48px;
+    left: 0;
     width: 100%;
-    max-width: 100%;
-    margin-top: 15px;
-    text-align: center;
-    .item-view {
-        position: relative;
-        display: block;
-        float: left;
-        width: 50%;
-        max-width: 50%;
-        box-sizing: border-box;
-        .item-img {
-            img {
-                
-            }
-        }
-        .item-title {
-            display: block;
-            width: 100%;
-            height: 24px;
-            text-align: center;
-            color: #404245;
-            font-size: 13px;
-            font-weight: normal;
-            line-height: 32px;
-            overflow: hidden;
-        }
-        .item-actions {
-            .item-price {
-                color: #e1454b;
-            }
-            .item-btn {
-                
-            }
+    .check-box {
+        font-size: 30px;
+        width: 50px;
+        text-align: center;
+    }
+    span {
+        line-height: 30px;
+    }
+    .cart-amount {
+        float: right;
+        .btn {
+            margin-right: 0;
         }
     }
 }
@@ -347,8 +466,8 @@ footer,
             border: 2px solid #99e3ff;
             border-radius: 100%;
             position: absolute;
-            left: -7px;
-            top: -7px;
+            left: -5px;
+            top: -5px;
             z-index: 0;
         }
     }

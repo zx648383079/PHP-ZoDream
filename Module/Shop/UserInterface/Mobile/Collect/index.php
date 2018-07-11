@@ -8,7 +8,7 @@ $(".swipe-row").swipeAction();
 JS;
 
 $this->extend('../layouts/header')
-    ->registerJsFile('@jquery.swipeAction.js')
+    ->registerJsFile('@jquery.swipeAction.min.js')
     ->registerJs($js);
 ?>
 

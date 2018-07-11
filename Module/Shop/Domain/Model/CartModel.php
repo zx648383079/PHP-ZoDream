@@ -49,6 +49,10 @@ class CartModel extends Model {
         return bcmul($this->number, $this->price);
     }
 
+    public function goods() {
+        return $this->hasOne(GoodsModel::class, 'id', 'goods_id');
+    }
+
     /**
      * 获取所有的商品
      * @return static[]
@@ -99,11 +103,11 @@ class CartModel extends Model {
         return $session_ip;
     }
 
-    public static function addGoods(GoodsModel $goods, $amount) {
+    public static function addGoods(GoodsModel $goods, $amount = 1) {
         return static::create([
             'user_id' => Auth::id(),
             'goods_id' => $goods->id,
-            'amount' => $amount,
+            'number' => $amount,
             'price' => $goods->price
         ]);
     }

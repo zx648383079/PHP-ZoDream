@@ -50,9 +50,9 @@ $this->extend('../layouts/header');
     </div>
 
     <div class="menu-list">
-        <a href="">
+        <a href="<?=$this->url('./mobile/address')?>">
             <i class="fa fa-users" aria-hidden="true"></i>
-            好友
+            我的收货地址
             <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </a>
         <a href="">

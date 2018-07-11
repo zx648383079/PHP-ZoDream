@@ -8,6 +8,7 @@ namespace Module\Shop\Domain\Model;
  * Time: 19:07
  */
 use Domain\Model\Model;
+use Zodream\Domain\Access\Auth;
 use Zodream\Html\Page;
 
 /**
@@ -127,5 +128,12 @@ class GoodsModel extends Model {
 
     public function getPrice($amount) {
         return $this->price * $amount;
+    }
+
+    public function getIsCollectAttribute() {
+        if (Auth::guest()) {
+            return false;
+        }
+        return CollectGoodsModel::where('user_id', Auth::id())->where('goods_id', $this->id)->count() > 0;
     }
 }

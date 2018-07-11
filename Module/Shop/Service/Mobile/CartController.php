@@ -14,7 +14,7 @@ class CartController extends Controller {
     public function addAction($goods, $amount = 1) {
         $goods = GoodsModel::find($goods);
         CartModel::addGoods($goods, $amount);
-        return $this->jsonSuccess();
+        return $this->jsonSuccess(null, '加入购物车成功！');
     }
 
     public function updateAction($id, $amount) {
