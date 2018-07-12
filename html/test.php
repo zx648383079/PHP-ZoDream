@@ -2,15 +2,38 @@
 define('DEBUG', true);
 define('APP_DIR', dirname(dirname(__FILE__)));
 require_once(APP_DIR.'/vendor/autoload.php');
-use Zodream\Http\Curl;
 use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Uri;
 use Zodream\Template\Engine\ParserCompiler;
+use Zodream\Service\Factory;
+use Zodream\Route\RouteCompiler;
+use Zodream\Database\Relation;
 
+$data = [
+    'id' => 1,
+    'name' => '2'
+];
+Relation::create($data, [
+    'user' => [
+        'query' => $query,
+        'link' => ['id', 'user_id'],
+    ],
+    'book' => [
+        'query' => $query,
+        'link' => ['id' => 'book_id']
+    ]
+]);
 
-$parse = new ParserCompiler();
-
-echo $parse->parse('{$type_list.$item.type}');
+Relation::create($data, [
+    'user' => [
+        'query' => $query,
+        'link' => ['id', 'user_id'],
+        'relation' => [
+            'query' => $query,
+            'link' => ['id', 'user_id'],
+        ]
+    ],
+]);
 
 die();
 //$spider = new \Module\Book\Domain\Spiders\BiQuGe();
