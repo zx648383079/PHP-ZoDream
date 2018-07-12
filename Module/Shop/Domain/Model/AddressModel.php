@@ -5,14 +5,13 @@ use Domain\Model\Model;
 /**
  * Class AddressModel
  * @property integer $id
- * @property integer $user_id
  * @property string $name
- * @property string $tel
  * @property integer $region_id
+ * @property integer $user_id
+ * @property string $tel
  * @property string $address
- * @property integer $status
- * @property integer $create_at
- * @property integer $update_at
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class AddressModel extends Model {
 
@@ -24,39 +23,37 @@ class AddressModel extends Model {
     }
 
 
-	protected function rules() {
-		return [
+    protected function rules() {
+        return [
+            'name' => 'required|string:0,30',
+            'region_id' => 'required|int',
             'user_id' => 'required|int',
-            'name' => 'string:3-45',
-            'tel' => 'string:3-20',
-            'region_id' => 'int',
-            'address' => 'string:3-200',
-            'status' => 'int:0-1',
-            'create_at' => 'int',
-            'update_at' => 'int',
+            'tel' => 'required|string:0,11',
+            'address' => 'required|string:0,255',
+            'created_at' => 'int',
+            'updated_at' => 'int',
         ];
-	}
-
-	protected function labels() {
-		return [
-            'id' => 'Id',
-            'user_id' => 'User Id',
-            'name' => 'Name',
-            'tel' => 'Tel',
-            'region_id' => 'Region Id',
-            'address' => 'Address',
-            'status' => 'Status',
-            'create_at' => 'Create At',
-            'update_at' => 'Update At',
-        ];
-	}
-
-	public function save() {
-	    if (!empty($this->id) && $this->status == self::STATUS_FIXED) {
-            $this->offsetUnset('id');
-	        $this->isNewRecord = true;
-        }
-        return parent::save();
     }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'region_id' => 'Region Id',
+            'user_id' => 'User Id',
+            'tel' => 'Tel',
+            'address' => 'Address',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
+//	public function save() {
+//	    if (!empty($this->id) && $this->status == self::STATUS_FIXED) {
+//            $this->offsetUnset('id');
+//	        $this->isNewRecord = true;
+//        }
+//        return parent::save();
+//    }
 
 }

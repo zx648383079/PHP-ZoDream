@@ -3,6 +3,7 @@ namespace Module\Shop\Service\Mobile;
 
 
 use Module\Shop\Domain\Model\AddressModel;
+use Zodream\Domain\Access\Auth;
 
 class AddressController extends Controller {
 
@@ -28,6 +29,7 @@ class AddressController extends Controller {
 
     public function saveAction() {
         $model = new AddressModel();
+        $model->user_id = Auth::id();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('address')

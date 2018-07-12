@@ -50,5 +50,3 @@ $this->extend('../layouts/header');
         <a href="" class="btn">立即支付</a>
     </div>
 </div>
-
-<?php $this->extend('../layouts/navbar');?>

@@ -5,7 +5,5 @@
     <span class="title">
         <?=$this->title?>
     </span>
-    <!-- <a class="btn" href="login.html">
-        退出
-    </a> -->
+    <?=isset($header_btn) ? $header_btn : null?>
 </header>

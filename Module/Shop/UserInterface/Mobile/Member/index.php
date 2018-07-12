@@ -4,7 +4,13 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '个人中心';
 
-$this->extend('../layouts/header');
+$header_btn = <<<HTML
+<a class="btn" href="./">
+    退出
+</a>
+HTML;
+
+$this->extend('../layouts/header', compact('header_btn'));
 ?>
 
 <div class="has-header">

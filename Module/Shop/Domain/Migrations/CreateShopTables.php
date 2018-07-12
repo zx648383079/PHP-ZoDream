@@ -49,9 +49,10 @@ class CreateShopTables extends Migration {
             $table->set('position')->tinyint(3)->defaultVal(99);
         });
         Schema::createTable(AddressModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
+            $table->set('user_id')->int()->notNull();
             $table->set('tel')->varchar(11)->notNull();
             $table->set('address')->varchar()->notNull();
             $table->timestamps();
