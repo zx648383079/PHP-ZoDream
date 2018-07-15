@@ -23,15 +23,15 @@ $this->extend('../layouts/header');
     </div>
 
     <div class="goods-list">
-            <?php foreach($order->goods as $goods):?>
+            <?php foreach($goods_list as $goods):?>
             <div class="goods-item">
                 <div class="goods-img">
-                    <img src="<?=$item->goods->thumb?>" alt="">
+                    <img src="<?=$goods->thumb?>" alt="">
                 </div>
                 <div class="goods-info">
-                    <h4><?=$item->goods->name?></h4>
-                    <span class="price"><?=$item->price?></span>
-                    <span class="amount"> x <?=$item->amount?></span>
+                    <h4><?=$goods->name?></h4>
+                    <span class="price"><?=$goods->price?></span>
+                    <span class="amount"> x <?=$goods->number?></span>
                 </div>
             </div>
             <?php endforeach;?>
@@ -57,5 +57,3 @@ $this->extend('../layouts/header');
             </div>
         </div>
 </div>
-
-<?php $this->extend('../layouts/navbar');?>

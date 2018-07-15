@@ -28,12 +28,12 @@ $this->extend('../layouts/header');
                 <?php foreach($order->goods as $goods):?>
                 <div class="goods-item">
                     <div class="goods-img">
-                        <img src="<?=$item->goods->thumb?>" alt="">
+                        <img src="<?=$goods->thumb?>" alt="">
                     </div>
                     <div class="goods-info">
-                        <h4><?=$item->goods->name?></h4>
-                        <span class="price"><?=$item->price?></span>
-                        <span class="amount"> x <?=$item->amount?></span>
+                        <h4><?=$goods->name?></h4>
+                        <span class="price"><?=$goods->price?></span>
+                        <span class="amount"> x <?=$goods->number?></span>
                     </div>
                 </div>
                 <?php endforeach;?>
@@ -44,6 +44,7 @@ $this->extend('../layouts/header');
             <div class="order-footer">
                 <div class="order-actions">
                     <a href="">支付</a>
+                    <a href="<?=$this->url('./mobile/order/detail', ['id' => $order->id])?>">详情</a>
                     <a href="">确认收货</a>
                     <a href="">评价</a>
                     <a href="">退换货</a>
@@ -54,5 +55,3 @@ $this->extend('../layouts/header');
         <?php endforeach;?>
     </div>
 </div>
-
-<?php $this->extend('../layouts/navbar');?>

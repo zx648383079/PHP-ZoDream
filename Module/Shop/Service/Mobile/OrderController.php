@@ -1,7 +1,9 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
+use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
+use Zodream\Domain\Access\Auth;
 
 class OrderController extends Controller {
 
@@ -12,13 +14,16 @@ class OrderController extends Controller {
     }
 
     public function indexAction() {
-        $order_list = OrderModel::all();
+        $order_list = OrderModel::with('goods')
+            ->where('user_id', Auth::id())
+            ->page();
         return $this->show(compact('order_list'));
     }
 
     public function detailAction($id) {
         $order = OrderModel::find($id);
-        return $this->show(compact('order'));
+        $goods_list = OrderGoodsModel::where('order_id', $id)->all();
+        return $this->show(compact('order', 'goods_list'));
     }
 
     public function payAction($id) {

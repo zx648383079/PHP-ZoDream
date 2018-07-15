@@ -5,13 +5,40 @@ use Domain\Model\Model;
 
 /**
  * Class OrderGoodsModel
- * @package Domain\Model\Shopping
+ * @property integer $id
  * @property integer $order_id
- * @property integer $goods_id
- * @property integer $user_id
+ * @property string $name
+ * @property integer $region_id
+ * @property string $tel
+ * @property string $address
+ * @property string $best_time
  */
 class OrderAddressModel extends Model {
     public static function tableName() {
         return 'shop_order_address';
+    }
+
+    protected function rules() {
+        return [
+            'id' => 'required|int',
+            'order_id' => 'required|int',
+            'name' => 'required|string:0,30',
+            'region_id' => 'required|int',
+            'tel' => 'required|string:0,11',
+            'address' => 'required|string:0,255',
+            'best_time' => 'required|string:0,255',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'order_id' => 'Order Id',
+            'name' => 'Name',
+            'region_id' => 'Region Id',
+            'tel' => 'Tel',
+            'address' => 'Address',
+            'best_time' => 'Best Time',
+        ];
     }
 }

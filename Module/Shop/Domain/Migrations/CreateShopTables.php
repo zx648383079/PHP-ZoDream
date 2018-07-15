@@ -12,6 +12,7 @@ use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\NavigationModel;
 use Module\Shop\Domain\Model\OrderAddressModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
+use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
 use Module\Shop\Domain\Model\RegionModel;
@@ -53,7 +54,7 @@ class CreateShopTables extends Migration {
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
             $table->set('user_id')->int()->notNull();
-            $table->set('tel')->varchar(11)->notNull();
+            $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
             $table->timestamps();
         });
@@ -119,24 +120,41 @@ class CreateShopTables extends Migration {
         });
         Schema::createTable(OrderModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
-            $table->set('status')->int()->notNull();
-            $table->set('payment_id')->int()->notNull();
-            $table->set('shipping_id')->int()->defaultVal(1);
+            $table->set('user_id')->int()->notNull();
+            $table->set('status')->int()->defaultVal(0);
+            $table->set('payment_id')->int()->defaultVal(0);
+            $table->set('shipping_id')->int()->defaultVal(0);
+            $table->set('goods_amount')->decimal(8, 2)->defaultVal(0);
+            $table->set('order_amount')->decimal(8, 2)->defaultVal(0);
+            $table->set('discount')->decimal(8, 2)->defaultVal(0);
+            $table->set('shipping_fee')->decimal(8, 2)->defaultVal(0);
+            $table->set('pay_fee')->decimal(8, 2)->defaultVal(0);
             $table->timestamps();
         });
         Schema::createTable(OrderGoodsModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
-            $table->set('user_id')->int()->notNull();
             $table->set('order_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
+            $table->set('name')->varchar(100)->notNull()->comment('商品名');
+            $table->set('sign')->varchar(100)->notNull();
+            $table->set('thumb')->varchar(200)->comment('缩略图');
             $table->set('number')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
         });
+        Schema::createTable(OrderLogModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('order_id')->int()->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('status')->int()->defaultVal(1);
+            $table->set('remark')->varchar()->defaultVal('');
+            $table->timestamp('created_at');
+        });
         Schema::createTable(OrderAddressModel::tableName(), function(Table $table) {
-            $table->set('id')->pk();
+            $table->set('id')->pk()->ai();
+            $table->set('order_id')->int()->notNull();
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
-            $table->set('tel')->varchar(11)->notNull();
+            $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
             $table->set('best_time')->varchar()->notNull();
         });

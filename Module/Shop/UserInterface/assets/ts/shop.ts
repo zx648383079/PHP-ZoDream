@@ -40,6 +40,9 @@ $(function() {
     $(".check-box").click(function() {
         $(this).toggleClass('active').trigger('change');
     });
+    $(".toggle-box").click(function() {
+        $(this).toggleClass('active').trigger('change');
+    });
     $('.number-box .fa-minus').click(function() {
         let input = $(this).closest('.number-box').find('input'),
             min = input.attr('min') || 0,

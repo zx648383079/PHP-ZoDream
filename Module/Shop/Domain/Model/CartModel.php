@@ -20,6 +20,7 @@ use Zodream\Service\Factory;
  * @property integer $goods_id
  * @property integer $number
  * @property float $price
+ * @property GoodsModel $goods
  */
 class CartModel extends Model {
     public static function tableName() {

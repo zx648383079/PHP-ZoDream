@@ -13,7 +13,7 @@ HTML;
 $this->extend('../layouts/header', compact('header_btn'));
 ?>
 
-<div class="has-header">
+<div class="has-header has-footer">
     <div class="user-header">
         <div class="avatar">
             <img src="<?=$user->avatar?>">
@@ -28,13 +28,13 @@ $this->extend('../layouts/header', compact('header_btn'));
         </a><a href="<?=$this->url('./mobile/collect')?>" class="item">
             <i class="fa fa-bookmark" aria-hidden="true"></i>
             关注
-        </a><a href="message.html" class="item">
+        </a><a href="<?=$this->url('./mobile/message')?>" class="item">
             <i class="fa fa-comments" aria-hidden="true"></i>
-            留言
+            消息
         </a><a href="" class="item">
             <i class="fa fa-shield" aria-hidden="true"></i>
             安全
-        </a><a href="" class="item">
+        </a><a href="<?=$this->url('./mobile/member/profile')?>" class="item">
             <i class="fa fa-cog" aria-hidden="true"></i>
             设置
         </a>
@@ -69,7 +69,7 @@ $this->extend('../layouts/header', compact('header_btn'));
             <i class="fa fa-comments" aria-hidden="true"></i>
             留言
         </a>
-        <a href="help.html">
+        <a href="<?=$this->url('./mobile/article')?>">
             <i class="fa fa-gift" aria-hidden="true"></i>
             帮助
         </a>

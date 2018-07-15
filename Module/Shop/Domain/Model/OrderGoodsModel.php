@@ -2,18 +2,49 @@
 namespace Module\Shop\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Domain\Access\Auth;
 
 /**
  * Class OrderGoodsModel
- * @package Domain\Model\Shopping
+ * @property integer $id
  * @property integer $order_id
  * @property integer $goods_id
- * @property integer $user_id
+ * @property string $name
+ * @property string $sign
+ * @property string $thumb
+ * @property integer $number
+ * @property float $price
  */
 class OrderGoodsModel extends Model {
     public static function tableName() {
         return 'shop_order_goods';
     }
+
+    protected function rules() {
+        return [
+            'order_id' => 'required|int',
+            'goods_id' => 'required|int',
+            'name' => 'required|string:0,100',
+            'sign' => 'required|string:0,100',
+            'thumb' => 'string:0,200',
+            'number' => 'int',
+            'price' => '',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'order_id' => 'Order Id',
+            'goods_id' => 'Goods Id',
+            'name' => 'Name',
+            'sign' => 'Sign',
+            'thumb' => 'Thumb',
+            'number' => 'Number',
+            'price' => 'Price',
+        ];
+    }
+
 
     /**
      * @return float
@@ -35,8 +66,8 @@ class OrderGoodsModel extends Model {
         $model->order_id = $orderId;
         $model->name = $goods->name;
         $model->thumb = $goods->thumb;
+        $model->sign = $goods->sign;
         $model->price = $goods->price;
-        $model->user_id = Factory::user()->getId();
         $model->number = $number;
         $model->save();
         return $model;
@@ -56,10 +87,10 @@ class OrderGoodsModel extends Model {
         $model = new static();
         $model->goods_id = $cart->goods_id;
         $model->order_id = $orderId;
-        $model->name = $cart->name;
-        $model->thumb = $cart->thumb;
+        $model->name = $cart->goods->name;
+        $model->sign = $cart->goods->sign;
+        $model->thumb = $cart->goods->thumb;
         $model->price = $cart->price;
-        $model->user_id = Factory::user()->getId();
         $model->number = $number;
         $model->save();
         // 删除购物车中的商品
