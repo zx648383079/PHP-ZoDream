@@ -5,30 +5,30 @@ a {
 header,
 .header {
     width: 100%;
-    height: 44px;
-    border-bottom: 1px solid #e1e1e1;
+    height: 2.75rem;
+    border-bottom: 0.0625rem solid #e1e1e1;
     .brand {
         width: 20%;
-        font-size: 30px;
-        margin-left: 10px;
+        font-size: 1.875rem;
+        margin-left: 0.625rem;
         float: left;
     }
     .search {
-        height: 30px;
+        height: 1.875rem;
         width: 90%;
-        margin: 3px auto 0;
+        margin: 0.1875rem auto 0;
         .fa {
             position: absolute;
-            margin-top: 10px;
-            margin-left: 5px;
+            margin-top: 0.625rem;
+            margin-left: 0.3125rem;
             z-index: 99;
         }
         input {
-            margin-top: 2px;
+            margin-top: 0.125rem;
             width: 100%;
-            font-size: 20px;
+            font-size: 1.25rem;
             border: 1px solid #333;
-            padding: 4px 0 4px 20px;
+            padding: 0.25rem 0 0.25rem 1.25rem;
             box-sizing: border-box;
             background: transparent;
         }
@@ -48,35 +48,35 @@ header,
     .right,
     .btn {
         top: 50%;
-        margin-top: -16px;
-        font-size: 25px;
+        margin-top: -1rem;
+        font-size: 1.5625rem;
         color: #fff;
     }
     .back {
         position: absolute;
-        left: 10px;
+        left: 0.625rem;
         
     }
     .btn {
         position: absolute;
         right: 0;
         margin: 0;
-        line-height: 44px;
+        line-height: 2.75rem;
         top: 0;
-        padding: 0 5px;
+        padding: 0 0.3125rem;
     }
     .right {
         position: absolute;
-        right: 10px;
+        right: 0.625rem;
     }
     .title {
-        line-height: 44px;
+        line-height: 2.75rem;
     }
     .top-tab {
         a {
             color: #fff;
-            line-height: 50px;
-            padding: 0 5px;
+            line-height: 3.125rem;
+            padding: 0 0.3125rem;
             &.active {
                 color: #f00;
             }
@@ -98,16 +98,16 @@ footer,
 
 footer,
 .footer {
-    height: 48px;
+    height: 3rem;
     background: #fff;
-    border: 1px solid #e1e1e1;
+    border: 0.0625rem solid #e1e1e1;
     a,
     .item {
         width: 25%;
         text-align: center;
         display: block;
         float: left;
-        padding-top: 4px;
+        padding-top: 0.25rem;
         box-sizing: border-box;
         position: relative;
         font-size: .9rem;
@@ -115,13 +115,13 @@ footer,
         .tip {
             display: block;
             position: absolute;
-            right: 30px;
-            top: 0px;
-            width: 16px;
-            height: 16px;
+            right: 1.875rem;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
             color: #fff;
             background: #e1454b;
-            font-size: 10px;
+            font-size: 0.625rem;
         }
         &.active {
             color: #4693d0;
@@ -146,7 +146,7 @@ footer,
                 width: 29%;
                 padding: 0;
                 text-align: center;
-                line-height: 50px;
+                line-height: 3.125rem;
                 &.btn-orange {
                     background: #ff9600;
                 }
@@ -156,10 +156,10 @@ footer,
 }
 
 .has-header {
-    margin-top: 44px;
+    margin-top: 2.75rem;
 }
 .has-footer {
-    margin-bottom: 50px;
+    margin-bottom: 3.125rem;
 }
 
 .goods-list {
@@ -167,7 +167,7 @@ footer,
     display: block;
     width: 100%;
     max-width: 100%;
-    margin-top: 15px;
+    margin-top: 0.9375rem;
     text-align: center;
     .item-view {
         position: relative;
@@ -184,12 +184,12 @@ footer,
         .item-title {
             display: block;
             width: 100%;
-            height: 24px;
+            height: 1.5rem;
             text-align: center;
             color: #404245;
-            font-size: 13px;
+            font-size: 0.8125rem;
             font-weight: normal;
-            line-height: 32px;
+            line-height: 2rem;
             overflow: hidden;
         }
         .item-actions {
@@ -208,28 +208,28 @@ footer,
     .swipe-row {
         width: 100%;
         position: relative;
-        height: 80px; 
+        height: 5rem; 
         padding: 0;
         margin: 0;
         transition: left .5s;
         .swipe-content {
             width: 100%;
             display: block;
-            height: 80px;
+            height: 5rem;
         }
         .actions-left,
         .actions-right {
             position: absolute;
-            height: 80px; 
-            min-height: 80px;
-            max-height: 80px;
+            height: 5rem; 
+            min-height: 5rem;
+            max-height: 5rem;
             text-align: center;
-            font-size: 22px;
+            font-size: 1.375rem;
             top: 0;
             white-space: nowrap;
             .fa {
-                font-size: 30px;
-                padding: 25px 15px;
+                font-size: 1.875rem;
+                padding: 1.5625rem 0.9375rem;
             }
             a {
                 color: #fff;
@@ -253,12 +253,12 @@ footer,
             .goods-img {
                 display: inline-block;
                 img {
-                    width: 80px;
+                    width: 5rem;
                 }
             }
             .goods-info {
                 display: inline-block;
-                height: 80px;
+                height: 5rem;
                 vertical-align: top;
                 overflow: hidden;
             }
@@ -272,7 +272,7 @@ footer,
     width: 100%;
     background-color: #ffffff;
     overflow: hidden;
-    border-bottom: #e2e2e2 1px solid;
+    border-bottom: #e2e2e2 0.0625rem solid;
     .menu-item {
         position: relative;
         float: left;
@@ -280,28 +280,28 @@ footer,
         width: 20%;
         border: none;
         box-sizing: border-box;
-        padding: 12px 0;
+        padding: 0.75rem 0;
         text-decoration: none;
         .menu-icon {
             display: block;
-            width: 44px;
-            height: 44px;
+            width: 2.75rem;
+            height: 2.75rem;
             margin: 0 auto;
             overflow: hidden;
         }
         .menu-name {
             display: block;
             width: 100%;
-            height: 24px;
-            line-height: 24px;
+            height: 1.5rem;
+            line-height: 1.5rem;
             box-sizing: border-box;
             border: none;
             overflow: hidden;
             color: #404245;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: normal;
             text-align: center;
-            margin-top: 4px;
+            margin-top: 0.25rem;
         }
     }
 }
@@ -314,23 +314,23 @@ footer,
     width: 35%;
     height: 100%;
     box-sizing: border-box;
-    border-right: #e2e2e2 1px solid;
+    border-right: #e2e2e2 0.0625rem solid;
     overflow-x: hidden;
     overflow-y: scroll;
-    padding: 50px 0 50px;
+    padding: 3.125rem 0 3.125rem;
     .menu-item {
         display: block;
         width: 100%;
-        height: 60px;
+        height: 3.75rem;
         color: #404245;
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: normal;
-        line-height: 60px;
+        line-height: 3.75rem;
         text-align: center;
         box-sizing: border-box;
-        border-bottom: #e2e2e2 1px solid;
+        border-bottom: #e2e2e2 0.0625rem solid;
         &.active {
-            border-left: #55595f 4px solid;
+            border-left: #55595f 0.25rem solid;
             background-color: #ffffff;
         }
     }
@@ -360,7 +360,7 @@ footer,
 
 .number-box {
     input {
-        width: 50px;
+        width: 3.125rem;
         text-align: center;
         border: none;
     }
@@ -371,11 +371,11 @@ footer,
         .goods-item {
             position: relative;
             .check-box {
-                font-size: 30px;
-                width: 50px;
+                font-size: 1.875rem;
+                width: 3.125rem;
                 text-align: center;
                 position: relative;
-                top: -35px;
+                top: -2.1875rem;
             }
             .number-box {
                 position: absolute;
@@ -387,14 +387,14 @@ footer,
 }
 
 .cart-footer {
-    bottom: 48px;
+    bottom: 3rem;
     .check-box {
-        font-size: 30px;
-        width: 50px;
+        font-size: 1.875rem;
+        width: 3.125rem;
         text-align: center;
     }
     span {
-        line-height: 30px;
+        line-height: 1.875rem;
     }
     .cart-amount {
         float: right;
@@ -413,12 +413,12 @@ footer,
             .goods-img {
                 display: inline-block;
                 img {
-                    width: 80px;
+                    width: 5rem;
                 }
             }
             .goods-info {
                 display: inline-block;
-                height: 80px;
+                height: 5rem;
                 vertical-align: top;
                 overflow: hidden;
                 .amount {
@@ -432,22 +432,22 @@ footer,
 
 .checkout-box {
     .address-box {
-        padding: 0 60px;
+        padding: 0 3.75rem;
         position: relative;
-        border-bottom: 1px solid;
+        border-bottom: 0.0625rem solid;
         .fa {
             position: absolute;
-            font-size: 40px;
-            top: 12px;
+            font-size: 2.5rem;
+            top: 0.75rem;
             &.fa-map-marker {
-                left: 19px;
+                left: 1.1875rem;
             }
             &.fa-chevron-right {
-                right: 5px;
+                right: 0.3125rem;
             }
         }
         .name {
-            font-size: 30px;
+            font-size: 1.875rem;
         }
         .tel {
             
@@ -455,43 +455,43 @@ footer,
         .default {
             background: #f00;
             color: #fff;
-            padding: 2px 7px;
+            padding: 0.125rem 0.4375rem;
         }
     }
 
     .line-item {
         position: relative;
-        line-height: 30px;
+        line-height: 1.875rem;
         
         .fa {
             position: absolute; 
-            right: 5px;
-            top: 7px;
+            right: 0.3125rem;
+            top: 0.4375rem;
         }
         span {
             &:nth-child(2) {
                 float: right;
-                margin-right: 20px;
+                margin-right: 1.25rem;
             }
         }
     }
     .shipping-box,
     .payment-box {
-        border-bottom: 1px solid;
+        border-bottom: 0.0625rem solid;
     }
 }
 
 .checkout-footer {
     text-align: right;
-    border-top: 1px solid #ff77ff;
+    border-top: 0.0625rem solid #ff77ff;
     .btn {
-        margin: 0 0 0 5px;
+        margin: 0 0 0 0.3125rem;
     }
 }
 
 .goods-gallary-box {
     img {
-        height: 360px;
+        height: 22.5rem;
         max-width: 100%;
     }
 }
@@ -500,15 +500,15 @@ footer,
     .goods-header {
         position: relative;
         .goods-name {
-            margin-right: 50px;
-            line-height: 50px;
+            margin-right: 3.125rem;
+            line-height: 3.125rem;
         }
         .goods-collect {
             position: absolute;
             top: 0;
             right: 0;
-            width: 50px;
-            height: 50px;
+            width: 3.125rem;
+            height: 3.125rem;
             text-align: center;
             .fa-like {
                 display: block;
@@ -558,13 +558,13 @@ footer,
 
 .user-header {
     position: relative;
-    padding-top: 25px;
-    padding-bottom: 30px;
+    padding-top: 1.5625rem;
+    padding-bottom: 1.875rem;
     background: #00E0F2;
     .avatar {
-        width: 90px;
-        height: 90px;
-        margin: 0px auto;
+        width: 5.625rem;
+        height: 5.625rem;
+        margin: 0 auto;
         text-align: center;
         line-height: 0;
         position: relative;
@@ -575,30 +575,30 @@ footer,
         }
         &::after {
             content: "";
-            width: 100px;
-            height: 100px;
-            border: 2px solid #99e3ff;
+            width: 6.25rem;
+            height: 6.25rem;
+            border: 0.125rem solid #99e3ff;
             border-radius: 100%;
             position: absolute;
-            left: -5px;
-            top: -5px;
+            left: -0.3125rem;
+            top: -0.3125rem;
             z-index: 0;
         }
     }
     .name {
         text-align: center;
-        padding-top: 10px;
+        padding-top: 0.625rem;
     }
 }
 
 .menu-grid {
     .item {
-        border-right: 1px dotted #4693d0;
+        border-right: 0.0625rem dotted #4693d0;
         width: 20%;
         text-align: center;
         display: inline-block;
         box-sizing: border-box;
-        line-height: 30px;
+        line-height: 1.875rem;
         &:nth-child(5n) {
             border: 0;
         }
@@ -608,13 +608,13 @@ footer,
     .item {
         width: 50%;
         display: inline-block;
-        border-right: 1px dotted #4693d0;
-        border-top: 1px dotted #4693d0;
-        height: 70px;
+        border-right: 0.0625rem dotted #4693d0;
+        border-top: 0.0625rem dotted #4693d0;
+        height: 4.375rem;
         text-align: center;
         .fa {
-            font-size: 50px;
-            margin-top: 10px;
+            font-size: 3.125rem;
+            margin-top: 0.625rem;
         }
         &:nth-child(even) {
             border-right: 0;
@@ -631,12 +631,12 @@ footer,
 .menu-list {
     a {
         display: block;
-        padding: 10px;
+        padding: 0.625rem;
         background: #99e3ff;
-        margin-top: 2px;
+        margin-top: 0.125rem;
         .fa:nth-child(2) {
             float: right;
-            margin-right: 10px;
+            margin-right: 0.625rem;
         }
     }
 }
@@ -647,21 +647,21 @@ footer,
             width: 100%;
         }
         span {
-            line-height: 30px;
+            line-height: 1.875rem;
         }
         textarea {
             width: 100%;
-            height: 80px;
+            height: 5rem;
         }
     }
     .input-radio {
-        line-height: 30px;
+        line-height: 1.875rem;
         position: relative;
         .fa {
             position: absolute;
-            right: 10px;
-            font-size: 25px;
-            top: 2px;
+            right: 0.625rem;
+            font-size: 1.5625rem;
+            top: 0.125rem;
         }
     }
 }
@@ -678,20 +678,20 @@ footer,
         position: relative;
         .address-first {
             position: absolute;
-            top: 15px;
-            left: 5px;
-            width: 50px;
-            height: 50px;
-            line-height: 50px;
+            top: 0.9375rem;
+            left: 0.3125rem;
+            width: 3.125rem;
+            height: 3.125rem;
+            line-height: 3.125rem;
             border-radius: 50%;
             background: #333;
             color: #fff;
             text-align: center;
         }
         .address-info {
-            margin-left: 60px;
+            margin-left: 3.75rem;
             .name {
-                font-size: 30px;
+                font-size: 1.875rem;
             }
             .tel {
                 
@@ -699,7 +699,7 @@ footer,
             .default {
                 background: #f00;
                 color: #fff;
-                padding: 2px 7px;
+                padding: 0.125rem 0.4375rem;
             }
         }
     }
@@ -709,11 +709,11 @@ footer,
 .order-header {
     a {
         display: inline-block;
-        line-height: 30px;
+        line-height: 1.875rem;
         width: 15%;
         text-align: center;
         &.active {
-            border-bottom: 2px solid;
+            border-bottom: 0.125rem solid;
         }
     }
 }
