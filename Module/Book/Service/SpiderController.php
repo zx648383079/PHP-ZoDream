@@ -12,7 +12,8 @@ class SpiderController extends Controller {
     public $layout = false;
 
     protected $maps = [
-        'www.qu.la' => BiQuGe::class
+        'www.qu.la' => BiQuGe::class,
+        'www.biquge5200.cc' => BiQuGe::class,
     ];
 
     protected function rules() {

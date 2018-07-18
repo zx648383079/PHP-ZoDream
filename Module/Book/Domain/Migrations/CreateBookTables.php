@@ -39,6 +39,7 @@ class CreateBookTables extends Migration {
             $table->set('title')->varchar(200)->comment('标题');
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('position')->tinyint(4)->defaultVal(99);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -13,8 +13,11 @@ class BookController extends Controller {
     public function indexAction($id, $page = null) {
         $book = BookModel::find($id);
         $cat = BookCategoryModel::find($book->cat_id);
-        $chapter_list = BookChapterModel::where('book_id', $id)->order('created_at', 'asc')->page();
-        $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(8)->all();
+        $chapter_list = BookChapterModel::where('book_id', $id)
+            ->order('position', 'asc')
+            ->order('created_at', 'asc')->page();
+        $like_book = BookModel::where('cat_id', $book->cat_id)
+            ->where('id', '<>', $id)->order('click_count', 'desc')->limit(8)->all();
         if (is_null($page)) {
             $new_chapter = BookChapterModel::where('book_id', $id)->order('created_at', 'desc')->limit(3)->all();
             $this->send(compact('new_chapter'));
