@@ -5,7 +5,7 @@ namespace Module\OpenPlatform\Service;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 class PlatformController extends Controller {
 
@@ -24,8 +24,8 @@ class PlatformController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(Request::request('id'));
-        $data = Request::post();
+        $id = intval(app('request')->request('id'));
+        $data = app('request')->get();
         unset($data['appid']);
         unset($data['secret']);
         if ($id > 0) {
@@ -40,7 +40,7 @@ class PlatformController extends Controller {
         }
         if ($model->load() && $model->save()) {
             return $this->jsonSuccess([
-                'url' => (string)Url::to('./platform')
+                'url' => (string)URL::to('./platform')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -49,7 +49,7 @@ class PlatformController extends Controller {
     public function deleteAction($id) {
         PlatformModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)Url::to('./platform')
+            'url' => (string)URL::to('./platform')
         ]);
     }
 }

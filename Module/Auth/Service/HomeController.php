@@ -8,7 +8,7 @@ use Module\ModuleController;
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 class HomeController extends ModuleController {
 
@@ -21,10 +21,10 @@ class HomeController extends ModuleController {
     public function indexAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            return $this->redirect(Request::get('redirect_uri', '/'));
+            return $this->redirect(app('request')->get('redirect_uri', '/'));
         }
         $time = Carbon::today()->startOfDay()->timestamp;
-        $num = LoginLogModel::where('ip', Request::ip())
+        $num = LoginLogModel::where('ip', app('request')->ip())
             ->where('status', 0)
             ->where('created_at', '>=', $time)->count();
         if ($num > 2) {
@@ -32,13 +32,13 @@ class HomeController extends ModuleController {
             $this->send('code', $num);
             Factory::session()->set('level', $num);
         }
-        $redirect_uri = Request::get('redirect_uri');
+        $redirect_uri = app('request')->get('redirect_uri');
         $title = '用户登录';
         return $this->show(compact('redirect_uri', 'title'));
     }
 
     public function checkAction() {
-        list($name, $value) = Request::post('name,value');
+        list($name, $value) = app('request')->get('name,value');
         if (!in_array($name, ['username', 'email'])) {
             return $this->jsonFailure('查询失败！');
         }
@@ -49,9 +49,9 @@ class HomeController extends ModuleController {
     public function loginAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            $redirect_uri = Request::request('redirect_uri');
+            $redirect_uri = app('request')->request('redirect_uri');
             return $this->jsonSuccess([
-                'url' => (string)Url::to(empty($redirect_uri) ? '/' : $redirect_uri)
+                'url' => (string)URL::to(empty($redirect_uri) ? '/' : $redirect_uri)
             ], '登录成功！');
         }
         return $this->jsonFailure($user->getFirstError());

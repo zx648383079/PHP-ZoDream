@@ -8,7 +8,7 @@ namespace Module\Book\Domain\Model;
  * Time: 21:00
  */
 use Domain\Model\Model;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 /**
  * Class BookModel
@@ -92,15 +92,15 @@ class BookModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./book', ['id' => $this->id]);
+        return URL::to('./book', ['id' => $this->id]);
     }
 
     public function getDownloadUrlAttribute() {
-        return Url::to('./book/download', ['id' => $this->id]);
+        return URL::to('./book/download', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('./mobile/book', ['id' => $this->id]);
+        return URL::to('./mobile/book', ['id' => $this->id]);
     }
 
     public function getFirstChapterAttribute() {

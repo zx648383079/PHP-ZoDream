@@ -3,7 +3,7 @@ namespace Module\Cas\Domain;
 
 use Zodream\Http\Http;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 class Client {
 
@@ -26,12 +26,12 @@ class Client {
 
 
     public static function getServerUrl($path, $params = []) {
-        return Url::to('./server/'.$path, $params)->setHost(static::getServerHostname());
+        return URL::to('./server/'.$path, $params)->setHost(static::getServerHostname());
     }
 
     public static function getServerLoginURL($gateway = false, $renew = false) {
         $uri = static::getServerUrl('login', [
-            'service' => (string)Url::to('./client')
+            'service' => (string)URL::to('./client')
         ]);
         if ($renew) {
             return $uri->addData('renew', 'true');
@@ -45,7 +45,7 @@ class Client {
 
     public static function getServerServiceValidateURL() {
         return static::getServerUrl('validate', [
-            'service' => (string)Url::to('./client')
+            'service' => (string)URL::to('./client')
         ]);
     }
 
@@ -80,7 +80,7 @@ class Client {
     }
 
     protected static function isLogoutRequest() {
-        return Request::post('logoutRequest');
+        return app('request')->get('logoutRequest');
     }
 
 
@@ -100,7 +100,7 @@ class Client {
         if (!is_array($allowed_clients)) {
             $allowed_clients = [static::getServerHostname()];
         }
-        $client_ip = Request::server('REMOTE_ADDR');
+        $client_ip = app('request')->server('REMOTE_ADDR');
         $client = gethostbyaddr($client_ip);
         foreach ($allowed_clients as $allowed_client) {
             if (($client == $allowed_client)

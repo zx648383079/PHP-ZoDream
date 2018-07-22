@@ -39,7 +39,7 @@ class CommentController extends ModuleController {
     }
 
     public function saveAction() {
-        $data = Request::request('name,email,url,content,parent_id,blog_id');
+        $data = app('request')->request('name,email,url,content,parent_id,blog_id');
         if (!BlogModel::canComment($data['blog_id'])) {
             return $this->jsonFailure('不允许评论！');
         }

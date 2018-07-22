@@ -50,7 +50,7 @@ class LoginLogModel extends Model {
      */
 	public static function addLoginLog($user, $status = false, $mode = 1) {
 		return static::create([
-            'ip' => Request::ip(),
+            'ip' => app('request')->ip(),
             'user' => $user,
             'status' => $status,
             'mode' => $mode,

@@ -1,7 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Model;
 
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 use Zodream\ThirdParty\WeChat\MenuItem;
 
 
@@ -67,7 +67,7 @@ class MenuModel extends EditorModel {
             return $menu->setUrl($this->content);
         }
         if ($this->type == self::TYPE_MINI) {
-            return $menu->setMini($this->content, $this->pages, Url::to('./'));
+            return $menu->setMini($this->content, $this->pages, URL::to('./'));
         }
         return $menu->setKey('menu_'.$this->id);
     }

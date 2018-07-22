@@ -7,7 +7,7 @@ use Zodream\Infrastructure\Http\Request;
 class HomeController extends Controller {
 
     public function indexAction() {
-        if (Request::isMobile()) {
+        if (app('request')->isMobile()) {
             return $this->redirect('./mobile');
         }
         $recommend_book = BookModel::limit(4)->all();

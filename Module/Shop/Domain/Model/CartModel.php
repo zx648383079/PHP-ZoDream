@@ -94,8 +94,8 @@ class CartModel extends Model {
      * @return string
      */
     public static function getSessionIp() {
-        $ip = Request::ip();
-        $session_ip = Request::cookie('session_id_ip');
+        $ip = app('request')->ip();
+        $session_ip = app('request')->cookie('session_id_ip');
         if (!empty($session_ip)) {
             return $session_ip;
         }

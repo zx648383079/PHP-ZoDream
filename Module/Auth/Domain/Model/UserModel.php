@@ -237,7 +237,7 @@ class UserModel extends BaseModel {
     }
 
     protected function getBasicAuthCredentials() {
-        $header = Request::header('Authorization');
+        $header = app('request')->header('Authorization');
         if (empty($header)) {
             return [null, null];
         }

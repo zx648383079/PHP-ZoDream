@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') || die();
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 use Zodream\Service\Config;
 use Zodream\Helpers\Json;
 /** @var $this \Zodream\Template\View */

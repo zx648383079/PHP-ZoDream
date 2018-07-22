@@ -57,7 +57,8 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
           <div class="head">
             <h2>最新<?=$cat->real_name?>小说</h2>
             <span class="j"></span> </div>
-          <div class="con">
+            <?php if($book):?>
+            <div class="con">
               <div class="con">
                   <h2><a href="<?=$book->url?>" title="<?=$book->name?>" target="_blank"><?=$book->name?></a><span> 作者：
                           <a href="<?=$book->author->url?>" target="_blank" title="<?=$book->author->name?>作品"><?=$book->author->name?></a></span></h2>
@@ -66,6 +67,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                   </p>
               </div>
           </div>
+            <?php endif;?>
         </div>
         <div class="d">
           <div class="head">

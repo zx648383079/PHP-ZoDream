@@ -17,9 +17,9 @@ class WeightController extends Controller {
     }
 
     public function createAction() {
-        $page = intval(Request::post('page'));
-        $weight = intval(Request::post('weight'));
-        $parent_id = intval(Request::post('parent_id'));
+        $page = intval(app('request')->get('page'));
+        $weight = intval(app('request')->get('weight'));
+        $parent_id = intval(app('request')->get('parent_id'));
         return $this->jsonSuccess(PageWeightModel::create([
             'page_id' => $page,
             'weight_id' => $weight,

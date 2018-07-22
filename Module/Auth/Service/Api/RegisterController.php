@@ -16,7 +16,7 @@ class RegisterController extends RestController {
 
     public function indexAction() {
         $model = new UserModel();
-        if ($model->load(Request::post('email,fullName:name,password,confirmPassword:rePassword,terms:agree'))
+        if ($model->load(app('request')->get('email,fullName:name,password,confirmPassword:rePassword,terms:agree'))
             && $model->signUp()) {
             return $this->jsonSuccess([], '登录成功！');
         }

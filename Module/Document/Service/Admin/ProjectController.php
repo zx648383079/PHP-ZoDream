@@ -26,14 +26,14 @@ class ProjectController extends Controller {
 
     public function saveAction() {
         $model = new ProjectModel();
-        $id = intval(Request::post('id'));
+        $id = intval(app('request')->get('id'));
         if (!empty($id)) {
             $model->id = $id;
             $model->isNewRecord = false;
         }
-        $model->name = Request::post('name');
-        $model->description = Request::post('description');
-        $data = Request::post('environment');
+        $model->name = app('request')->get('name');
+        $model->description = app('request')->get('description');
+        $data = app('request')->get('environment');
         $env = [];
         foreach ($data['name'] as $key => $item) {
             if (empty($item)) {

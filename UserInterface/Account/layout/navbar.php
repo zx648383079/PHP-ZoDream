@@ -1,7 +1,7 @@
 <?php
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 /** @var $this \Zodream\Template\View */
 ?>
 <nav class="navbar navbar-default" role="navigation">
@@ -13,15 +13,15 @@ use Zodream\Service\Routing\Url;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?=Url::to('/index.php');?>">ZoDream</a>
+        <a class="navbar-brand" href="<?=URL::to('/index.php');?>">ZoDream</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="<?=Url::to('/index.php');?>">首页</a></li>
-            <li><a href="<?=Url::to(['/']);?>">个人中心</a></li>
-            <li><a href="<?=Url::to(['task/all']);?>">任务大厅</a></li>
+            <li><a href="<?=URL::to('/index.php');?>">首页</a></li>
+            <li><a href="<?=URL::to(['/']);?>">个人中心</a></li>
+            <li><a href="<?=URL::to(['task/all']);?>">任务大厅</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">

@@ -3,7 +3,7 @@ namespace Domain\Model;
 
 use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 /**
 * Class LogModel
@@ -53,8 +53,8 @@ class LogModel extends Model {
 		return (new static)->add(array(
 			'event' => $action,
 			'data' => is_string($data) ? $data : json_encode($data),
-			'url' => Url::to(),
-			'ip' => Request::ip(),
+			'url' => URL::to(),
+			'ip' => app('request')->ip(),
 			'create_at' => time(),
 			'user' => Auth::guest() ? null : Auth::user()['name']
 		));
@@ -68,7 +68,7 @@ class LogModel extends Model {
 	 */
 	public static function hasLog($action, $data = null) {
 	    $where = [
-	        'ip' => Request::ip()
+	        'ip' => app('request')->ip()
         ];
 		if (!Auth::guest()) {
 		    $where['user'] = [Auth::user()['name'], 'or'];

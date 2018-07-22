@@ -11,7 +11,7 @@ use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Module\OAuth\Domain\Client;
 use Zodream\Service\Factory;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 use Zodream\ThirdParty\OAuth\BaseOAuth;
 
 class OauthController extends ModuleController {
@@ -64,7 +64,7 @@ class OauthController extends ModuleController {
             return new Client([
                 'client_id' => '101321779',
                 'client_secret' => 'cedee2ac4df08975927b638098e08e1b',
-                'redirect_uri' => (string)Url::to('./oauth/callback', [
+                'redirect_uri' => (string)URL::to('./oauth/callback', [
                     'type' => $type
                 ])
             ]);

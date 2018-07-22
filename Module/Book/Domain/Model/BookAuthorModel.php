@@ -2,7 +2,7 @@
 namespace Module\Book\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 /**
  * Class BookAuthorModel
@@ -39,11 +39,11 @@ class BookAuthorModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return Url::to('./author', ['id' => $this->id]);
+        return URL::to('./author', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return Url::to('./mobile/author', ['id' => $this->id]);
+        return URL::to('./mobile/author', ['id' => $this->id]);
     }
 
     /**

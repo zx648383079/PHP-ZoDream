@@ -81,7 +81,7 @@ abstract class BaseSpider {
     }
 
     protected function debug($content) {
-        if (!Request::isCli()) {
+        if (!app('request')->isCli()) {
             return;
         }
         echo $content,PHP_EOL;

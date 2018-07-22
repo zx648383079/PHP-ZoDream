@@ -20,8 +20,8 @@ class ShareController extends Controller {
         if (Auth::id() != $model->user_id
             &&  $model->mode != 'public') {
             if ($model->mode == 'protected') {
-                if (Request::isPost()) {
-                    Factory::session()->set('sharePassword', Request::post('password'));
+                if (app('request')->isPost()) {
+                    Factory::session()->set('sharePassword', app('request')->get('password'));
                 }
                 if (Factory::session('sharePassword') != $model->password) {
                     return $this->show('password');
@@ -105,7 +105,7 @@ class ShareController extends Controller {
     }
 
     public function cancelAction() {
-        $id = Request::post('id');
+        $id = app('request')->get('id');
         $row = ShareModel::auth()->whereIn('id', (array)$id)->delete();
         if (empty($row)) {
             return $this->jsonFailure('服务器错误!');

@@ -37,7 +37,7 @@ class HomeController extends Controller {
 	}
 
     public function dbsAction() {
-        Config::setValue('db', Request::post('host,port,database information_schema,user,password'));
+        Config::setValue('db', app('request')->get('host,port,database information_schema,user,password'));
         return $this->json([
             'status' => 1,
             'data' => Schema::getAllDatabase()
@@ -48,16 +48,16 @@ class HomeController extends Controller {
         $handle = opendir(APP_DIR. '/Service');
         $generate = new Generate();
         $data = Config::getValue();
-        $data['db'] = array_merge($data['db'], Request::post('db'));
+        $data['db'] = array_merge($data['db'], app('request')->get('db'));
         Config::setValue('db', $data['db']);
         $generate->makeConfig(array(), 'config');
-        $generate->createDatabase(Request::post('db.database'));
+        $generate->createDatabase(app('request')->get('db.database'));
         unset($data['view']);
         while (false !== ($file = readdir($handle))) {
             if ('.' == $file || '..' == $file ||
                 'Bootstrap.php' == $file ||
                 'config' == $file ||
-                APP_MODULE == $file) {
+                app('app.module') == $file) {
                 continue;
             }
             $generate->makeConfig($data, $file);
@@ -66,7 +66,7 @@ class HomeController extends Controller {
         $generate->importSql(APP_DIR.'/document/zodream.sql');
         return $this->json([
             'status' => 1,
-            'url' => (string)Url::to(['complete'])
+            'url' => (string)URL::to(['complete'])
         ]);
     }
 

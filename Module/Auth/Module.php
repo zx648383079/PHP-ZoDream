@@ -12,8 +12,8 @@ class Module extends BaseModule {
 
     public function getControllerNamespace() {
         $prefix = parent::getControllerNamespace();
-        if (APP_MODULE != 'Home') {
-            return $prefix .'\\'. APP_MODULE;
+        if (app('app.module') != 'Home') {
+            return $prefix .'\\'. app('app.module');
         }
         return $prefix;
     }

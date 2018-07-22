@@ -67,7 +67,7 @@ class PageWeightModel extends Model {
     }
 
     public static function saveFromPost() {
-        $weight = WeightModel::find(intval(Request::request('weight_id')));
+        $weight = WeightModel::find(intval(app('request')->request('weight_id')));
         $maps = ['id', 'page_id', 'weight_id', 'parent_id',
             'position', 'title', 'content', 'is_share', 'settings'];
         $data = $weight->getPostConfigs();

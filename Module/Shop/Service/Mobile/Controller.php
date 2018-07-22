@@ -4,7 +4,7 @@ namespace Module\Shop\Service\Mobile;
 use Module\ModuleController;
 use Module\Shop\Domain\Model\ArticleModel;
 use Module\Shop\Domain\Model\CategoryModel;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 class Controller extends ModuleController {
 
@@ -15,6 +15,6 @@ class Controller extends ModuleController {
     }
 
     protected function getUrl($path, $args = []) {
-        return (string)Url::to('./mobile/'.$path, $args);
+        return (string)URL::to('./mobile/'.$path, $args);
     }
 }

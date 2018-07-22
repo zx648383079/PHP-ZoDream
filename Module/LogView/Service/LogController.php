@@ -46,7 +46,7 @@ class LogController extends Controller {
         if (!$upload->save()) {
             return $this->redirectWithMessage('./',  end($upload->getError()));
         }
-        $name = Request::get('name');
+        $name = app('request')->get('name');
         if (empty($name)) {
             $name = $upload->get()->getName();
         }
@@ -74,7 +74,7 @@ class LogController extends Controller {
     }
 
     public function tagAction($name) {
-        $value = Request::request('value');
+        $value = app('request')->request('value');
         Tag::toggle($name, $value);
         return $this->jsonSuccess();
     }

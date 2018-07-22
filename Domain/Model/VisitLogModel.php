@@ -20,7 +20,7 @@ ENGINE = InnoDB DEFAULT CHARSET=UTF8;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 /**
  * Class VisitLogModel
@@ -74,18 +74,18 @@ class VisitLogModel extends Model {
 	}
 
 	public static function addLog() {
-		$os = Request::os();
-		$browser = Request::browser();
+		$os = app('request')->os();
+		$browser = app('request')->browser();
 		$model = new static;
-		$model->ip = Request::ip();
+		$model->ip = app('request')->ip();
 		$model->browser = $browser[0];
 		$model->browser_version = $browser[1];
 		$model->os = $os[0];
 		$model->os_version = $os[1];
 		$model->referer = Url::referrer();
-		$model->url = Url::to();
+		$model->url = URL::to();
 		$model->session = Factory::session()->id();
-		$model->agent = Request::server('HTTP_USER_AGENT', '-');
+		$model->agent = app('request')->server('HTTP_USER_AGENT', '-');
 		$model->create_at = Time::format();
 		return $model->save();
 	}

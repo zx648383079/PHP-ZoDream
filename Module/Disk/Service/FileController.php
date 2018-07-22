@@ -56,11 +56,11 @@ class FileController extends Controller {
         return Factory::response()->file($m3u8File);
     }
 
-    public function runMethod($action, array $vars = array()) {
+    public function invokeMethod($action, array $vars = array()) {
         if (strpos($action, '.ts')) {
             return $this->tsAction($action);
         }
-        return parent::runMethod($action, $vars);
+        return $this->runMethodNotProcess($action, $vars);
     }
 
     public function tsAction($name) {

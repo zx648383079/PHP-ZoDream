@@ -59,7 +59,7 @@ class BookHistoryModel extends Model {
             ]);
             return;
         }
-        $history = Request::cookie(static::tableName());
+        $history = app('request')->cookie(static::tableName());
         $history = empty($history) ? [] : unserialize($history);
         $history[$chapter->book_id] = $chapter->id;
         if (count($history) > 10) {
@@ -69,7 +69,7 @@ class BookHistoryModel extends Model {
     }
 
     public static function getHistoryId() {
-        $history = Request::cookie(static::tableName());
+        $history = app('request')->cookie(static::tableName());
         return empty($history) ? [] : unserialize($history);
     }
 

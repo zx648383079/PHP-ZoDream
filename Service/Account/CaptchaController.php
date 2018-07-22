@@ -16,7 +16,7 @@ class CaptchaController extends Controller {
 	}
 	
 	function indexAction() {
-		$level = intval(Request::get('level'));
+		$level = intval(app('request')->get('level'));
 		if (empty($level)) {
 			$level = Factory::session('level');
 		}
@@ -30,7 +30,7 @@ class CaptchaController extends Controller {
 	}
 
 	function slideCheckAction() {
-	    $x = floor(Request::request('x'));
+	    $x = floor(app('request')->request('x'));
 	    $c = Factory::session('slider_x');
 	    if (abs($x - $c) < 5) {
 	        return $this->jsonSuccess();

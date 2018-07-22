@@ -43,7 +43,7 @@ class ApiController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(Request::request('id'));
+        $id = intval(app('request')->request('id'));
         $model = new ApiModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
@@ -82,14 +82,14 @@ class ApiController extends Controller {
     }
 
     public function debugResultAction() {
-        $url = new Uri(Request::post('url'));
-        $method = Request::post('method');
-        $data = Request::post('request');
+        $url = new Uri(app('request')->get('url'));
+        $method = app('request')->get('method');
+        $data = app('request')->get('request');
         $real_data = [];
         foreach ($data['key'] as $i => $item) {
             $real_data[$item] = $data['value'][$i];
         }
-        $header = Request::post('header');
+        $header = app('request')->get('header');
         $headers = [
             'request' => [],
             'response' => []

@@ -8,7 +8,7 @@ use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 
 class IncomeController extends Controller {
 
@@ -39,13 +39,13 @@ class IncomeController extends Controller {
 
     public function editLogAction($id) {
         $model = LogModel::findOrNew($id);
-        if (Request::has('clone_id')) {
-            $model = LogModel::findOrNew(intval(Request::get('clone_id')));
+        if (app('request')->has('clone_id')) {
+            $model = LogModel::findOrNew(intval(app('request')->get('clone_id')));
             $model->id = null;
         }
-        if (Request::has('budget_id')) {
+        if (app('request')->has('budget_id')) {
             $model->type = LogModel::TYPE_EXPENDITURE;
-            $model->budget_id = intval(Request::get('budget_id'));
+            $model->budget_id = intval(app('request')->get('budget_id'));
         }
         if (empty($model->happened_at)) {
             $model->happened_at = Time::format();
@@ -66,14 +66,14 @@ class IncomeController extends Controller {
             BudgetModel::find($model->budget_id)->refreshSpent();
         }
         return $this->jsonSuccess([
-            'url' => (string)Url::to('./income/log')
+            'url' => (string)URL::to('./income/log')
         ]);
     }
 
     public function deleteLogAction($id) {
         LogModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)Url::to('./income/log')
+            'url' => (string)URL::to('./income/log')
         ]);
     }
 
@@ -86,7 +86,7 @@ class IncomeController extends Controller {
         $model = new ConsumptionChannelModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)Url::to('./income/channel')
+                'url' => (string)URL::to('./income/channel')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -95,7 +95,7 @@ class IncomeController extends Controller {
     public function deleteChannelAction($id) {
         ConsumptionChannelModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)Url::to('./income/channel')
+            'url' => (string)URL::to('./income/channel')
         ]);
     }
 }

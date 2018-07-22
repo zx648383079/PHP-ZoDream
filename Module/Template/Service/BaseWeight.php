@@ -48,7 +48,7 @@ abstract class BaseWeight {
     }
 
     public function parseConfigs() {
-        return Request::request();
+        return app('request')->request();
     }
 
     /**

@@ -21,14 +21,14 @@ class Environment {
 	 * 获取服务器
 	 */
 	public static function getServer() {
-		return Request::server('SERVER_SOFTWARE');
+		return app('request')->server('SERVER_SOFTWARE');
 	}
 	
 	/**
 	 * 获取域名
 	 */
 	public static function getName() {
-		return Request::server('SERVER_NAME');
+		return app('request')->server('SERVER_NAME');
 	}
 	
 	/**

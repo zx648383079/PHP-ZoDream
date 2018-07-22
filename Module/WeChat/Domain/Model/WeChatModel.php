@@ -2,7 +2,7 @@
 namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 use Zodream\ThirdParty\WeChat\BaseWeChat;
 use Zodream\ThirdParty\WeChat\Message;
 
@@ -143,7 +143,7 @@ class WeChatModel extends Model {
      * @return string
      */
     public function getApiUrlAttribute() {
-        return Url::to('./message/id/'.$this->id);
+        return URL::to('./message/id/'.$this->id);
     }
 
     public function getTypeLabelAttribute() {

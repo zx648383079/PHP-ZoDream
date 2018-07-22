@@ -14,7 +14,7 @@ class UploadController extends Controller {
     
     public function indexAction() {
         set_time_limit(0);
-        $md5 = Request::server('HTTP_X_FILENAME');
+        $md5 = app('request')->server('HTTP_X_FILENAME');
         $name = Factory::session('file_'.$md5);
         if (empty($name)) {
             $name = $md5;

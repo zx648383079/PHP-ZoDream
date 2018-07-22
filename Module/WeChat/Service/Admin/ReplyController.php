@@ -2,7 +2,7 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\ReplyModel;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 use Zodream\ThirdParty\WeChat\EventEnum;
 
 class ReplyController extends Controller {

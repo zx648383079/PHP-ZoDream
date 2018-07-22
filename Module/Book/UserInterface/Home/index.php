@@ -29,6 +29,7 @@ $this->extend('layouts/header');
     <div class="head">
       <h2>封推新书 THE BEST NEWBOOK</h2></div>
     <div class="con">
+    <?php if($book):?>
         <div class="u">
             <div class="pic"><a href="<?=$book->url?>" title="<?=$book->name?>" target="_blank">
                     <img class="lazy" src="<?=$book->cover?>" alt="<?=$book->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
@@ -42,7 +43,10 @@ $this->extend('layouts/header');
                     <br>
                     <?=$book->last_chapter->description?>
                 </p>
-            </div></div>
+            </div>
+        </div>
+    <?php endif;?>
+
       <div class="d">
         <div class="n_p_box">
           <div></div>

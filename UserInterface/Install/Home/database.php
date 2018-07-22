@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 /** @var $this \Zodream\Template\View */
 $this->extend('layouts/header');
 $js = <<<JS
@@ -23,7 +23,7 @@ $this->registerJs($js);
 
 <div class="main">
 <h1>设置您的数据库连接</h1>
-<form method="post" action="<?=Url::to(['import'])?>">
+<form method="post" action="<?=URL::to(['import'])?>">
 	<p>请在下方填写您的数据库连接信息。如果您不确定，请联系您的服务提供商。</p>
 	<table class="ms-Table">
 		<tr>

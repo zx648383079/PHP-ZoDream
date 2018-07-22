@@ -29,7 +29,7 @@ class PlatformController extends ModuleController {
     public function loginAction() {
         $manage = new Manage();
         $uri = $manage->set('redirect_uri',
-            (string)Url::to('wechat/callback', true))->login();
+            (string)URL::to('wechat/callback', true))->login();
         return $this->redirect($uri);
     }
 

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Domain\Access\Auth;
 use Zodream\Html\Bootstrap\FormWidget;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 /** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */
 
@@ -60,7 +60,7 @@ HTML;
 <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="avatar-form" action="<?=Url::to(['avatar'])?>" enctype="multipart/form-data" method="post">
+            <form class="avatar-form" action="<?=URL::to(['avatar'])?>" enctype="multipart/form-data" method="post">
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal" type="button">×</button>
                     <h4 class="modal-title" id="avatar-modal-label">更改头像</h4>

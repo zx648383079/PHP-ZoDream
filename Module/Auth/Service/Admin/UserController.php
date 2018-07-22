@@ -28,7 +28,7 @@ class UserController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(Request::request('id'));
+        $id = intval(app('request')->request('id'));
         $rule = $id > 0 ? [
             'name' => 'required|string',
             'email' => 'required|email',
@@ -42,7 +42,7 @@ class UserController extends Controller {
             'avatar' => 'string',
             'password' => 'required|string',
         ];
-        $data = Request::post('name,email,sex,avatar,password,confirm_password');
+        $data = app('request')->get('name,email,sex,avatar,password,confirm_password');
         if ($id < 1 && $data['password'] != $data['confirm_password']) {
             return $this->jsonFailure('两次密码不一致！');
         }

@@ -29,7 +29,7 @@ class TrashController extends Controller {
     }
 
     public function resetAction() {
-        $id = Request::post('id');
+        $id = app('request')->get('id');
         $model_list = DiskModel::auth()->whereIn('id', (array)$id)->where('deleted_at', '>', 0)->all();
         foreach ($model_list as $item) {
             $item->resetThis();
@@ -38,7 +38,7 @@ class TrashController extends Controller {
     }
 
     public function deleteAction() {
-        $id = Request::post('id');
+        $id = app('request')->get('id');
         $model_list = DiskModel::auth()->whereIn('id', (array)$id)->where('deleted_at', '>', 0)->all();
         foreach ($model_list as $item) {
             $item->deleteThis();

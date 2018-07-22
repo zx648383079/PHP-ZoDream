@@ -12,7 +12,7 @@ use Zodream\Domain\Access\Auth;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
-use Zodream\Service\Routing\Url;
+use Zodream\Infrastructure\Http\URL;
 use Exception;
 
 class DiskController extends Controller {
@@ -48,7 +48,7 @@ class DiskController extends Controller {
     }
 
     public function deleteAction() {
-        $id = Request::post('id');
+        $id = app('request')->get('id');
         if (empty($id)) {
             return $this->jsonFailure('不能为空！');
         }
@@ -61,7 +61,7 @@ class DiskController extends Controller {
     }
 
     public function shareAction() {
-        $data = Request::post('id,user,mode 0,end_at');
+        $data = app('request')->get('id,user,mode 0,end_at');
         if (empty($data['id'])) {
             return $this->jsonFailure('不能为空！');
         }
@@ -86,7 +86,7 @@ class DiskController extends Controller {
         if (!$model->save()) {
             return $this->jsonFailure('分享失败');
         }
-        $data['url'] = (string)Url::to('./share', ['id' => $model->id]);
+        $data['url'] = (string)URL::to('./share', ['id' => $model->id]);
         $transaction = Command::getInstance()->beginTransaction();
         try {
             $disks = [];
@@ -125,8 +125,8 @@ class DiskController extends Controller {
      */
     public function createAction() {
         $model = new DiskModel();
-        $model->name = Request::post('name');
-        $model->parent_id = intval(Request::post('parent_id', 0));
+        $model->name = app('request')->get('name');
+        $model->parent_id = intval(app('request')->get('parent_id', 0));
         $model->created_at = $model->updated_at = time();
         $model->user_id = Auth::id();
         $model->file_id = 0;
@@ -137,7 +137,7 @@ class DiskController extends Controller {
     }
 
     function renameAction() {
-        $data = Request::post('id,name');
+        $data = app('request')->get('id,name');
         $model = DiskModel::find($data['id']);
         if (empty($model)) {
             return $this->jsonFailure('选择错误的文件！');
@@ -151,7 +151,7 @@ class DiskController extends Controller {
     }
 
     function checkAction() {
-        $data = Request::post('md5,name,parent_id');
+        $data = app('request')->get('md5,name,parent_id');
         if (empty($data['md5']) || empty($data['name'])) {
             return $this->jsonFailure('不能为空！');
         }
@@ -176,7 +176,7 @@ class DiskController extends Controller {
     }
 
     public function addAction() {
-        $data = Request::post('name,md5,size,parent_id 0,type,temp');
+        $data = app('request')->get('name,md5,size,parent_id 0,type,temp');
         $file = $this->cacheFolder->file($data['md5']);
         if (!$file->exist() || $file->size() != $data['size']) {
             return $this->jsonFailure('FILE ERROR!');
@@ -216,8 +216,8 @@ class DiskController extends Controller {
     }
 
     public function moveAction() {
-        $id = Request::post('id');
-        $parent_id = intval(Request::post('parent'));
+        $id = app('request')->get('id');
+        $parent_id = intval(app('request')->get('parent'));
         if (empty($id)) {
             return $this->jsonFailure('没有移动对象');
         }
@@ -238,8 +238,8 @@ class DiskController extends Controller {
     }
 
     public function copyAction() {
-        $id = Request::post('id');
-        $parent_id = intval(Request::post('parent'));
+        $id = app('request')->get('id');
+        $parent_id = intval(app('request')->get('parent'));
         if (empty($id)) {
             return $this->jsonFailure('没有移动对象');
         }
@@ -261,10 +261,10 @@ class DiskController extends Controller {
 
     public function getUrl($file) {
         if ($file['type'] == FileModel::TYPE_MUSIC) {
-            return (string)Url::to('./file/music', ['id' => $file['id']]);
+            return (string)URL::to('./file/music', ['id' => $file['id']]);
         }
         if ($file['type'] == FileModel::TYPE_VIDEO) {
-            return (string)Url::to('./file', ['id' => $file['id']]);
+            return (string)URL::to('./file', ['id' => $file['id']]);
         }
         return '';
     }

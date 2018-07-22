@@ -12,7 +12,7 @@ class HomeController extends Controller {
 	protected $configs = array();
 
 	protected function jsonReturn($data) {
-		$callback = Request::get('callback');
+		$callback = app('request')->get('callback');
 		if (is_null($callback)) {
 			return $this->json($data, 'JSON');
 		}
@@ -48,8 +48,8 @@ class HomeController extends Controller {
 		$allowFiles = substr(str_replace('.', '|', join('', $allowFiles)), 1);
 
 		/* 获取参数 */
-		$size = Request::get('size', $listSize);
-		$start = Request::get('start', 0);
+		$size = app('request')->get('size', $listSize);
+		$start = app('request')->get('start', 0);
 		$end = $start + $size;
 
 		/* 获取文件列表 */
@@ -85,7 +85,7 @@ class HomeController extends Controller {
 	}
 
 	public function indexAction() {
-		$action = strtolower(Request::get('action'));
+		$action = strtolower(app('request')->get('action'));
 		if (is_null($action) || !$this->hasMethod($action)) {
 			return $this->jsonReturn(array(
 				'state'=> '请求地址出错'
@@ -173,7 +173,7 @@ class HomeController extends Controller {
 		
 		/* 抓取远程图片 */
 		$list = array();
-		$source = Request::post($fieldName, Request::get($fieldName));
+		$source = app('request')->get($fieldName, app('request')->get($fieldName));
 		foreach ($source as $imgUrl) {
 			$item = new Uploader($imgUrl, $config, 'remote');
 			$info = $item->getFileInfo();

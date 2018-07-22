@@ -30,7 +30,7 @@ class Setting {
             $this->isNew = false;
         }
         foreach ($this->__attributes as $key => $item) {
-            $this->__attributes[$key] = Request::cookie($key, $item);
+            $this->__attributes[$key] = app('request')->cookie($key, $item);
             if ($this->__attributes[$key] != $item) {
                 $this->isChange = true;
             }
@@ -51,7 +51,7 @@ class Setting {
 
     public function apply() {
         foreach ($this->__attributes as $key => $item) {
-            if ($item == Request::cookie($key)) {
+            if ($item == app('request')->cookie($key)) {
                 continue;
             }
             Cookie::forever($key, $item);
