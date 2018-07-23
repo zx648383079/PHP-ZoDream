@@ -1,0 +1,425 @@
+body {
+  background: #767676;
+  margin-top: 50px;
+}
+
+.dialog-menu {
+  position: fixed;
+  background: #fff;
+  width: 9.375rem;
+  display: none;
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style: none;
+      padding: 0 0.5rem;
+      line-height: 1.875rem;
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+.dialog-chat {
+  .dialog-box {
+    background: #fff;
+    position: absolute;
+    display: none;
+    .dialog-header {
+      position: relative;
+      .dialog-action {
+        position: absolute;
+        display: inline-block;
+        top: 0;
+        right: 0;
+        font-size: 1.25rem;
+        .fa {
+          padding: 0.25rem;
+        }
+      }
+      .dialog-title {
+        text-align: center;
+        line-height: 1.875rem;
+      }
+    }
+    .dialog-info {
+      .dialog-info-avatar {
+
+      }
+      .dialog-info-name {
+
+      }
+    }
+
+    .dialog-tab {
+      .dialog-tab-header {
+        line-height: 1.875rem;
+        .dialog-tab-item {
+          display: inline-block;
+          padding: 0 0.5rem;
+          &.active {
+
+          }
+        }
+      }
+      .dialog-tab-box {
+        .dialog-tab-item {
+          display: none;
+          &.active {
+            display: block;
+          }
+        }
+      }
+    }
+    .dialog-panel {
+      .dialog-panel-header {
+        cursor: pointer;
+        .dialog-panel-icon {
+          display: inline-block;
+          font: normal normal normal 14px/1 FontAwesome;
+          font-size: inherit;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          &:before {
+            content: "\f054";
+          }
+        }
+      }
+      .dialog-panel-box {
+        display: none;
+      }
+      &.expanded {
+        .dialog-panel-header {
+          .dialog-panel-icon {
+            &:before {
+              content: "\f078";
+            }
+          }
+        }
+        .dialog-panel-box {
+          display: block;
+        }
+      }
+    }
+  }
+  .dialog-chat-box {
+    width: 12.5rem;
+    .dialog-info {
+      display: inline-block;
+      padding: 1.25rem 0.5rem 0.9375rem;
+      .dialog-info-avatar {
+        display: inline-block;
+        img {
+          width: 3.75rem;
+          border-radius: 50%;
+        }
+      }
+      .dialog-info-name {
+        display: inline-block;
+        * {
+          margin: 0;
+        }
+      }
+      .dialog-message-count {
+        display: none;
+      }
+    }
+    .dialog-tab {
+      .dialog-tab-header {
+        border-bottom: 1px solid;
+        border-top: 1px solid;
+        .dialog-tab-item {
+          width: 33%;
+          box-sizing: border-box;
+          text-align: center;
+          &.active {
+            color: #f00;
+          }
+        }
+      }
+    }
+    .dialog-user {
+      position: relative;
+      padding: 0.5rem;
+      .dialog-user-avatar {
+        display: inline-block;
+        img {
+          width: 3.75rem;
+          border-radius: 50%;
+        }
+      }
+      .dialog-user-info {
+        display: inline-block;
+        vertical-align: top;
+        * {
+          margin: 0;
+        }
+        .time {
+          position: absolute;
+          right: 0;
+        }
+        .count {
+          position: absolute;
+          right: 0;
+          top: 0;
+          color: #fff;
+          display: block;
+          width: 0.9375rem;
+          font-size: 0.75rem;
+          background: #f00;
+          border-radius: 50%;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .dialog-chat-room {
+    width: 31.25rem;
+    .dialog-header {
+      border-bottom: 1px solid;
+    }
+    .dialog-message-box {
+      height: 25rem;
+      overflow-y: auto;
+      * {
+        margin: 0;
+      }
+      .message-more,
+      .message-line,
+      .message-tip {
+        text-align: center;
+      }
+      .message-left,
+      .message-right {
+        position: relative;
+        margin: 0.5rem 0;
+        &:after {
+          content: ' ';
+          clear: both;
+          display: table;
+        }
+        .avatar {
+          position: absolute;
+          top: 0;
+          height: 2.5rem;
+          width: 2.5rem;
+          border-radius: 50%;
+        }
+        .content {
+          max-width: 66%;
+          background: rgba(0,255,255,0.16);
+          line-height: 2.5rem;
+          padding: 0 0.625rem;
+          word-break: break-word;
+          &::before {
+            content: '';
+            position: absolute;
+            z-index: 10;
+            border: 0.375rem solid transparent;
+            top: 0.9375rem;
+          }
+        }
+      }
+      .message-left {
+        .avatar {
+          left: 0;
+        }
+        .content {
+          margin-left: 3.25rem;
+          float: left;
+          &::before {
+            left: 2.5rem;
+            border-right-color: rgba(0, 255, 255, 0.16);
+          }
+        }
+      }
+      .message-right {
+        .avatar {
+          right: 0;
+        }
+        .content {
+          float: right;
+          margin-right: 3.25rem;
+          &::before {
+            right: 2.5rem;
+            border-left-color: rgba(0, 255, 255, 0.16);
+          }
+        }
+      }
+    }
+    .dialog-message-tools {
+      font-size: 1.25rem;
+      line-height: 1.875rem;
+      border-bottom: 1px solid;
+      border-top: 1px solid;
+      .fa {
+        width: 1.875rem;
+        text-align: center;
+      }
+    }
+    .dialog-message-text {
+      height: 5rem;
+      overflow-y: auto;
+    }
+    .dailog-message-action {
+      text-align: right;
+      button {
+        width: 6.25rem;
+        line-height: 1.875rem;
+      }
+    }
+  }
+  .dialog-search-box {
+    width: 31.25rem;
+    .dialog-tab-header {
+      line-height: 3.125rem;
+      text-align: center;
+      .dialog-tab-item {
+        display: inline-block;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+        &.active {
+          border-bottom: 0.3125rem solid;
+        }
+      }
+    }
+    .dialog-search {
+      position: relative;
+      font-size: 1.25rem;
+      input {
+        height: 1.875rem;
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 1.875rem;
+      }
+      .fa {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.4375rem;
+      }
+    }
+    .dialog-search-list {
+      .dialog-info {
+        display: inline-block;
+        width: 12.5rem;
+        border: 1px solid;
+        padding: 0.5rem;
+        .dialog-info-avatar {
+          display: inline-block;
+          img {
+            width: 3.75rem;
+            border-radius: 50%;
+          }
+        }
+        .dialog-info-name {
+          display: inline-block;
+          * {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+  .dialog-user-box ,
+  .dialog-add-box {
+    width: 18.75rem;
+    text-align: center;
+    .dialog-user-avatar {
+      padding: 0.5rem;
+      img {
+        width: 6.25rem;
+        border-radius: 50%;
+      }
+    }
+    .dialog-add-action {
+      select {
+        display: block;
+        width: 100%;
+        height: 1.875rem;
+      }
+      button {
+        width: 50%;
+        line-height: 1.875rem;
+      }
+    }
+    p {
+      margin: 0;
+    }
+  }
+  &.dialog-fixed {
+    .dialog-chat-box {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      &.dialog-min {
+        .dialog-header,
+        .dialog-tab {
+          display: none;
+        }
+        .dialog-info {
+          padding: 0;
+          height: 1.875rem;
+          width: 100%;
+          text-align: center;
+          .dialog-info-avatar {
+            position: absolute;
+            left: 0;
+            img {
+              width: 1.875rem;
+            }
+          }
+          .dialog-info-name {
+            line-height: 1.875rem;
+            p {
+              display: none;
+            }
+          }
+          .dialog-message-count {
+            display: block;
+            position: absolute;
+            left: -0.75rem;
+            top: -0.6875rem;
+            line-height: 1.25rem;
+            background: #f00;
+            color: #fff;
+            border-radius: 50%;
+            min-width: 1.25rem;
+          }
+        }
+      }
+    }
+  }
+  &.dialog-chat-page {
+    width: 100%;
+    max-width: 50rem;
+    position: relative;
+    margin: 0 auto;
+    .dialog-chat-box,
+    .dialog-chat-room {
+      display: block;
+    }
+    .dialog-chat-box {
+      width: 15.625rem;
+      .dialog-header {
+        .dialog-action {
+          .fa-minus,
+          .fa-close {
+            display: none;
+          }
+        }
+      }
+      .dialog-tab {
+        .dialog-tab-box {
+          .dialog-tab-item{
+            height: 29rem;
+            overflow-y: auto;
+          }
+        }
+      }
+    }
+    .dialog-chat-room {
+      left: 250px;
+    }
+  }
+}

@@ -49,7 +49,7 @@ class HomeController extends ModuleController {
     public function loginAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            $redirect_uri = app('request')->request('redirect_uri');
+            $redirect_uri = app('request')->get('redirect_uri');
             return $this->jsonSuccess([
                 'url' => (string)URL::to(empty($redirect_uri) ? '/' : $redirect_uri)
             ], '登录成功！');
