@@ -5,20 +5,45 @@ body {
 
 .dialog-menu {
   position: fixed;
-  background: #fff;
   width: 9.375rem;
   display: none;
+  z-index: 910;
   ul {
-    margin: 0;
-    padding: 0;
-    li {
-      list-style: none;
-      padding: 0 0.5rem;
-      line-height: 1.875rem;
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      li {
+          list-style: none;
+          line-height: 1.875rem;
+          position: relative;
+          width: 9.375rem;
+          cursor: pointer;
+          span {
+              display: block;
+              padding: 0 0.5rem;
+              i {
+                  &:nth-child(2) {
+                      position: absolute;
+                      right: 0.625rem;
+                      line-height: 1.875rem;
+                  }
+              }
+          }
+          ul {
+              position: absolute;
+              top: 0;
+              left: 9.375rem;
+              display: none;
+          }
+          &:hover {
+              >span {
+                  background: rgba(0, 0, 0, 0.1);
+              }
+              >ul {
+                  display: block;
+              }
+          }
       }
-    }
   }
 }
 .dialog-chat {

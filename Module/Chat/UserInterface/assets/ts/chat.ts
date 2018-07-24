@@ -3,7 +3,7 @@ interface ChatMenuItem {
     text?: string,
     icon?: string,
     toggle?: ()=>boolean,
-    onclick?: (menuItem: ChatMenuItem) => void,
+    onclick?: (menuItem: JQuery) => void,
     children?: Array<ChatMenuItem>
 }
 
@@ -15,10 +15,33 @@ class ChatMenu {
         private box: JQuery,
         private menus: Array<ChatMenuItem> = []
     ) {
-
+        this.bindEvent();
     }
 
     private events: any = {};
+    private menuMap: any;
+
+    public bindEvent() {
+        let _this = this;
+        this.box.on('click', 'li', function() {
+            _this.clickLi($(this));
+        });
+    }
+
+    public clickLi(li: JQuery) {
+        let name = li.attr('data-name'),
+            menu: ChatMenuItem;
+        if (name && this.menuMap.hasOwnProperty(name)) {
+            menu = this.menuMap[name];
+            if (menu && menu.onclick) {
+                menu.onclick(li);
+            }
+        }
+        if (name && this.hasEvent(name)) {
+            this.trigger(name, li, menu);
+        }
+        this.trigger('click', li, menu);
+    }
 
     public addMenu(menu: ChatMenuItem | any) {
         this.menus.push(menu);
@@ -26,6 +49,7 @@ class ChatMenu {
     }
 
     public show(x: number, y: number) {
+        this.refresh();
         this.box.css({
             'left': x + 'px',
             'top': y + 'px'
@@ -38,19 +62,44 @@ class ChatMenu {
     }
 
     public refresh() {
-
+        this.menuMap = {};
+        let menus = this.cleanMenuList(this.menus),
+            html = menus ? this.getMenuHtml(menus) : '';
+        this.box.html(html);
     }
 
-    private getMenuHtml(menus: Array<ChatMenuItem>) {
+    private getMenuHtml(menus: Array<ChatMenuItem>): string {
         let html = '';
-
+        menus.forEach(menu => {
+            html += this.getMenuItemHtml(menu);
+        });
+        return '<ul>'+ html + '</ul>';
     }
 
     private getMenuItemHtml(menu: ChatMenuItem): string {
-        if (menu.toggle && menu.toggle() === false) {
+        let name = (menu.text || menu.name),
+            html = '<li data-name="'+  name
+        +'"><span><i class="fa fa-'+menu.icon+'"></i>' + (menu.text || menu.name),
+            menus = this.cleanMenuList(menu.children);
+        this.menuMap[name] = menu;
+        if (menus && menus.length > 0) {
+            return html + '<i class="fa fa-chevron-right"></i></span>' + this.getMenuHtml(menus) + '</li>';
+        }
+        return html + '</span></li>';
+    }
+
+    private cleanMenuList(menus?: Array<ChatMenuItem>): Array<ChatMenuItem> {
+        if (!menus || menus.length == 0) {
             return null;
         }
-        
+        let real_menu = [];
+        menus.forEach(menu => {
+            if (menu.toggle && menu.toggle() === false) {
+                return;
+            }
+            real_menu.push(menu);
+        });
+        return real_menu;
     }
 
     public on(event: string, callback: Function): this {
@@ -110,7 +159,7 @@ class ChatSearchBox {
         public box: JQuery,
         private parent: ChatRoom
     ) {
-        
+        this.bindEvent();
     }
 
     /**
@@ -185,7 +234,8 @@ class ChatMessageBox {
         public box: JQuery,
         private parent: ChatRoom
     ) {
-        
+        this.refresh();
+        this.bindEvent();
     }
 
     public editor: ChatEditor;
@@ -213,21 +263,20 @@ class ChatUserBox {
         public box: JQuery,
         private parent: ChatRoom
     ) {
-        
+        this.refresh();
+        this.bindEvent();
     }
 
     public menu: ChatMenu;
 
     public refresh() {
-        this.menu = new ChatMenu(this.box.find('.dialog-menu'));
+        this.menu = new ChatMenu(this.box.find('.dialog-menu'), USER_MENU);
     }
 
     public bindEvent() {
         let _this = this;
         $(document).click(function() {
             _this.menu.hide();
-        }).on('selectionchange', function(e) {
-            console.log(e);
         });
         this.box.click(function() {
             if ($(this).hasClass('dialog-min')) {
@@ -258,6 +307,7 @@ class ChatUserBox {
             return false;
         });
         this.menu.on('click', function() {
+            console.log(arguments);
             _this.parent.userBox.show();
         });
     }
@@ -267,7 +317,7 @@ class ChatRoom {
     constructor(
         public target: JQuery
     ) {
-
+        this.refresh();
     }
 
     public mainBox: ChatUserBox;
@@ -285,9 +335,22 @@ class ChatRoom {
     }
 }
 
+const USER_MENU: Array<ChatMenuItem> = [
+    {
+        icon: 'eye',
+        text: '查看资料'
+    },
+    {
+        icon: 'bookmark',
+        text: '移动好友'
+    },
+    {
+        icon: 'trash',
+        text: '删除好友'
+    },
+];
+
 new ChatRoom($('.dialog-chat-page'));
-
-
 
 $(function() {
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {

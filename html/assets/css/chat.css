@@ -4,18 +4,35 @@ body {
 
 .dialog-menu {
   position: fixed;
-  background: #fff;
   width: 9.375rem;
-  display: none; }
+  display: none;
+  z-index: 910; }
   .dialog-menu ul {
     margin: 0;
-    padding: 0; }
+    padding: 0;
+    background: #fff; }
     .dialog-menu ul li {
       list-style: none;
-      padding: 0 0.5rem;
-      line-height: 1.875rem; }
-      .dialog-menu ul li:hover {
+      line-height: 1.875rem;
+      position: relative;
+      width: 9.375rem;
+      cursor: pointer; }
+      .dialog-menu ul li span {
+        display: block;
+        padding: 0 0.5rem; }
+        .dialog-menu ul li span i:nth-child(2) {
+          position: absolute;
+          right: 0.625rem;
+          line-height: 1.875rem; }
+      .dialog-menu ul li ul {
+        position: absolute;
+        top: 0;
+        left: 9.375rem;
+        display: none; }
+      .dialog-menu ul li:hover > span {
         background: rgba(0, 0, 0, 0.1); }
+      .dialog-menu ul li:hover > ul {
+        display: block; }
 
 .dialog-chat .dialog-box {
   background: #fff;
