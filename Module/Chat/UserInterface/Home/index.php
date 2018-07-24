@@ -17,10 +17,10 @@ $this->title = 'ZoDream Chat';
         </div>
         <div class="dialog-info">
             <div class="dialog-info-avatar">
-                <img src="./image/avatar.jpg" alt="">
+                <img src="<?=$user->avatar?>" alt="">
             </div>
             <div class="dialog-info-name">
-                <h3>123</h3>
+                <h3><?=$user->name?></h3>
                 <p>......</p>
             </div>
             <div class="dialog-message-count">
@@ -56,12 +56,14 @@ $this->title = 'ZoDream Chat';
                     </div>
                 </div>
                 <div class="dialog-tab-item">
+                    <?php foreach($group_list as $item):?>
                     <div class="dialog-panel expanded">
                         <div class="dialog-panel-header">
                             <i class="dialog-panel-icon"></i>
-                            <span>my friends (1 / 29)</span>
+                            <span><?=$item->name?> (<?=$item->online_count?> / <?=$item->count?>)</span>
                         </div>
                         <div class="dialog-panel-box">
+                            <?php foreach($item->friends as $friend):?>
                             <div class="dialog-user">
                                 <div class="dialog-user-avatar">
                                     <img src="./image/avatar.jpg" alt="">
@@ -77,31 +79,12 @@ $this->title = 'ZoDream Chat';
                                     </p>
                                 </div>
                             </div>
+                            <?php endforeach;?>
                         </div>
                     </div>
-                    <div class="dialog-panel">
-                        <div class="dialog-panel-header">
-                            <i class="fa fa-chevron-right"></i>
-                            <span>my friends (1 / 29)</span>
-                        </div>
-                        <div class="dialog-panel-box">
-                            <div class="dialog-user">
-                                <div class="dialog-user-avatar">
-                                    <img src="./image/avatar.jpg" alt="">
-                                </div>
-                                <div class="dialog-user-info">
-                                    <p>
-                                        <span class="name">12</span>
-                                        <span class="time">2m ago</span>
-                                    </p>
-                                    <p>
-                                        <span class="content">121312312323</span>
-                                        <span class="count">1</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach;?>
+                    
+
                 </div>
                 <div class="dialog-tab-item">
                     <div class="dialog-user">
@@ -155,14 +138,14 @@ $this->title = 'ZoDream Chat';
             </div>
             <p class="message-line">2M ago</p>
             <div class="message-right">
-                <img class="avatar" src="./image/avatar.jpg">
+                <img class="avatar" src="<?=$user->avatar?>">
                 <div class="content">
                     1312323213213123
                 </div>
             </div>
             <p class="message-line">2M ago</p>
             <div class="message-right">
-                <img class="avatar" src="./image/avatar.jpg">
+                <img class="avatar" src="<?=$user->avatar?>">
                 <div class="content">
                     1312323213213123
                 </div>
