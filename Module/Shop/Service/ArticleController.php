@@ -8,7 +8,7 @@ class ArticleController extends Controller {
 
     public function indexAction($id = null) {
         if ($id > 0) {
-            return $this->runMethod('detail');
+            return $this->runMethodNotProcess('detail');
         }
         return $this->show();
     }

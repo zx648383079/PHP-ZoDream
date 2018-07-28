@@ -4,6 +4,7 @@ namespace Module\Book\Service;
 
 use Module\Book\Domain\Spiders\BaseSpider;
 use Module\Book\Domain\Spiders\BiQuGe;
+use Module\Book\Domain\Spiders\Txt;
 use Zodream\Service\Factory;
 use Zodream\Spider\Support\Uri;
 
@@ -45,4 +46,12 @@ class SpiderController extends Controller {
         $class = $this->maps[$uri->getHost()];
         return new $class;
     }
+
+
+    public function importAction($file) {
+        $txt = new Txt();
+        $txt->invoke($file);
+        return $this->showContent('导入执行完成！');
+    }
+
 }

@@ -74,7 +74,7 @@ class MenuController extends Controller {
     }
 
     public function addAction($parent_id = 0) {
-        return $this->runMethod('edit', ['id' => null, 'parent_id' => $parent_id]);
+        return $this->runMethodNotProcess('edit', ['id' => null, 'parent_id' => $parent_id]);
     }
 
     public function editAction($id, $parent_id = 0) {

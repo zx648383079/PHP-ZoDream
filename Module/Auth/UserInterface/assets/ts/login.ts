@@ -16,4 +16,10 @@ $(function() {
         });
         return false;
     });
+    $(".login-form .other-box .fa-qrcode").click(function() {
+        $(".login-box").addClass('slided');
+    });
+    $(".login-form .login-qr-box .btn").click(function() {
+        $(".login-box").removeClass('slided');
+    });
 });

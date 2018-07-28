@@ -14,7 +14,7 @@ class ContentController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => null]);
+        return $this->runMethodNotProcess('edit', ['id' => null]);
     }
 
     public function editAction($id, $cat_id = 0) {

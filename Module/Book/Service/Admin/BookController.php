@@ -23,7 +23,7 @@ class BookController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => null]);
+        return $this->runMethodNotProcess('edit', ['id' => null]);
     }
 
     public function editAction($id) {
@@ -67,7 +67,7 @@ class BookController extends Controller {
     }
 
     public function createChapterAction($book) {
-        return $this->runMethod('editChapter', ['id' => null, 'book' => $book]);
+        return $this->runMethodNotProcess('editChapter', ['id' => null, 'book' => $book]);
     }
 
     public function editChapterAction($id, $book = 0) {

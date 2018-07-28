@@ -11,7 +11,7 @@ class LinkageController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => null]);
+        return $this->runMethodNotProcess('edit', ['id' => null]);
     }
 
     public function editAction($id) {
@@ -43,7 +43,7 @@ class LinkageController extends Controller {
     }
 
     public function createFieldAction() {
-        return $this->runMethod('editField', ['id' => null]);
+        return $this->runMethodNotProcess('editField', ['id' => null]);
     }
 
     public function editFieldAction($id, $linkage_id = null, $parent_id = null) {

@@ -11,7 +11,7 @@ class ModelController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => null]);
+        return $this->runMethodNotProcess('edit', ['id' => null]);
     }
 
     public function editAction($id) {
@@ -46,7 +46,7 @@ class ModelController extends Controller {
     }
 
     public function createFieldAction() {
-        return $this->runMethod('editField', ['id' => null]);
+        return $this->runMethodNotProcess('editField', ['id' => null]);
     }
 
     public function editFieldAction($id, $model_id = null) {

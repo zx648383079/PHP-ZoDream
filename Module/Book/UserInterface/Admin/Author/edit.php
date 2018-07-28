@@ -9,7 +9,7 @@ $this->title = '作者';
         
         <div class="input-group">
             <label>名称</label>
-            <input name="name" type="text" class="form-control"  placeholder="输入形态名称" value="<?=$model->name?>">
+            <input name="name" type="text" class="form-control"  placeholder="输入作者名" value="<?=$model->name?>">
         </div>
         <div class="input-group">
             <label>关键词</label>

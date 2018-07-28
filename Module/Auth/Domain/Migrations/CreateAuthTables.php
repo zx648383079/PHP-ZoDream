@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Migrations;
 
 use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
@@ -47,7 +48,15 @@ class CreateAuthTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull();
-            $table->set('content')->text()->defaultVal('');
+            $table->set('content')->text()->notNull();
+        });
+        Schema::createTable(LoginQrModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('token')->varchar(32)->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->timestamp('expired_at');
+            $table->timestamp('created_at');
         });
     }
 
@@ -61,5 +70,6 @@ class CreateAuthTables extends Migration {
         Schema::dropTable(OAuthModel::tableName());
         Schema::dropTable(LoginLogModel::tableName());
         Schema::dropTable(UserMetaModel::tableName());
+        Schema::dropTable(LoginQrModel::tableName());
     }
 }

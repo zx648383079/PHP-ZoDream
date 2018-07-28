@@ -23,7 +23,7 @@ class ApiController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethod('edit', ['id' => 0]);
+        return $this->runMethodNotProcess('edit', ['id' => 0]);
     }
 
     public function editAction($id, $project_id = 0, $parent_id = 0) {
@@ -115,7 +115,7 @@ class ApiController extends Controller {
     }
 
     public function createFieldAction() {
-        return $this->runMethod('editField', ['id' => null]);
+        return $this->runMethodNotProcess('editField', ['id' => null]);
     }
 
     public function editFieldAction($id, $kind = 0, $parent_id = 0, $api_id = 0) {

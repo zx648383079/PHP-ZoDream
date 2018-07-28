@@ -1,6 +1,82 @@
-.login {
+.login-box {
     max-width: 300px;
-    margin: 30vh auto 40vh;
+    margin: 20vh auto 40vh;
+    overflow: hidden;
+    .login-form {
+        position: relative;
+        transition: all .5s;
+        .input-box {
+            padding-top: 70px;
+        }
+        .input-group {
+            input[type="text"],
+            input[type="email"],
+            input[type="password"], {
+                border: none;
+                outline: none;
+                border-bottom: 1px solid #767676;
+            }
+            .fa {
+                transition: all .5s;
+            }
+            &.input-focus {
+                input {
+                    padding-left: 0;
+                    padding-right: 30px;
+                    border-bottom: 2px solid #000;
+                }
+                .fa {
+                    left: 280px;
+                    color: #767676;
+                }
+            }
+        }
+        .btn {
+            background: #333;
+            color: #fff;
+            width: 100%;
+            margin: 0;
+            &:hover {
+                background: #000;
+            }
+        }
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+        .find-link {
+            float: right;
+        }
+        .other-box {
+            line-height: 30px;
+            .fa {
+                float: right;
+                line-height: 30px;
+                margin-right: 10px;
+            }
+        }
+        .login-qr-box {
+            position: absolute;
+            top: 0;
+            left: 300px;
+            width: 300px;
+            text-align: center;
+            .fa-refresh {
+                position: absolute;
+                top: 106px;
+                left: 129px;
+                font-size: 50px;
+                color: #f00;
+                display: none;
+            }
+        }
+    }
+    &.slided {
+        .login-form {
+            transform: translate(-300px, 0);
+            min-height: 300px;
+        }
+    }
 }
 .footer {
     background: #000;
@@ -16,37 +92,3 @@
     }
 }
 
-.login-form {
-    .input-group {
-        input[type="text"],
-        input[type="email"],
-        input[type="password"], {
-            border: none;
-            outline: none;
-            border-bottom: 1px solid #767676;
-        }
-        .fa {
-            transition: all .5s;
-        }
-        &.input-focus {
-            input {
-                padding-left: 0;
-                padding-right: 30px;
-                border-bottom: 2px solid #000;
-            }
-            .fa {
-                left: 280px;
-                color: #767676;
-            }
-        }
-    }
-    .btn {
-        background: #333;
-        color: #fff;
-        width: 100%;
-        margin: 0;
-        &:hover {
-            background: #000;
-        }
-    }
-}

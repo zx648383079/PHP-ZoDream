@@ -92,7 +92,7 @@ class HomeController extends Controller {
 			));
 		}
 		$this->configs = Config::ueditor();
-		return $this->runMethod($action);
+		return $this->runMethodNotProcess($action);
 	}
 	
 	function configAction() {
