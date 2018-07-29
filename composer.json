@@ -5,7 +5,7 @@
   "homepage": "https://zodream.cn",
   "license": "MIT",
   "require" : {
-    "php" : ">=5.6.0",
+    "php" : ">=7.0.0",
     "zodream/zodream" : "dev-master",
     "zodream/disk" : "dev-master",
     "zodream/gzo" : "dev-master",
@@ -24,9 +24,7 @@
 
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpspreadsheet": "^1.0",
-    "monolog/monolog": "~1.22",
     "phpmailer/phpmailer": "~5.2",
-    "psr/log": "~1.0",
     "nesbot/carbon": "^1.22",
     "mtdowling/cron-expression": "~1.0",
     "zhuzhichao/ip-location-zh": "^2.4",
