@@ -80,10 +80,10 @@ class Sj extends BaseSpider {
         }
         /// html 转文本还有问题
         $text = self::toText($content->html);
-        $encoding = mb_detect_encoding($text, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
+        //$encoding = mb_detect_encoding($text, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
         return new BookChapterModel([
             'title' => $html->find('.txt_cont h1', 0)->text,
-            'content' => iconv($encoding, 'utf-8//ignore', $text)
+            'content' => mb_convert_encoding($text, 'utf-8', 'ASCII, UTF-8, GB2312, GBK, BIG5')
         ]);
     }
 }
