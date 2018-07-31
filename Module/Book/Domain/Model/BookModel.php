@@ -8,6 +8,8 @@ namespace Module\Book\Domain\Model;
  * Time: 21:00
  */
 use Domain\Model\Model;
+use Zodream\Database\Model\Query;
+use Zodream\Domain\Access\Auth;
 use Zodream\Infrastructure\Http\URL;
 
 /**
@@ -20,6 +22,7 @@ use Zodream\Infrastructure\Http\URL;
  * @property integer $words_count 字数
  * @property integer $author_id 作者
  * @property integer $user_id
+ * @property integer $classify
  * @property integer $cat_id
  * @property integer $size
  * @property integer $click_count
@@ -28,8 +31,15 @@ use Zodream\Infrastructure\Http\URL;
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
+ * @method Query ofClassify()
  */
 class BookModel extends Model {
+
+    public $classify_list = [
+        '无分级',
+        '成人级',
+    ];
+
     public static function tableName() {
         return 'book';
     }
@@ -41,6 +51,7 @@ class BookModel extends Model {
             'description' => 'string:0,200',
             'author_id' => 'int',
             'user_id' => 'int',
+            'classify' => 'int',
             'cat_id' => 'int:0,999',
             'size' => 'int',
             'click_count' => 'int',
@@ -60,6 +71,7 @@ class BookModel extends Model {
             'description' => 'Description',
             'author_id' => 'Author Id',
             'user_id' => 'User Id',
+            'classify' => 'Classify',
             'cat_id' => 'Cat Id',
             'size' => 'Size',
             'click_count' => 'Click Count',
@@ -81,6 +93,16 @@ class BookModel extends Model {
 
     public function author() {
         return $this->hasOne(BookAuthorModel::className(), 'id', 'author_id');
+    }
+
+    /**
+     * 小说分级，未登录自动屏蔽有分级的
+     * @param $query
+     */
+    public function scopeOfClassify($query) {
+        if (Auth::guest()) {
+            $query->where('classify', 0);
+        }
     }
 
     public function getCoverAttribute() {

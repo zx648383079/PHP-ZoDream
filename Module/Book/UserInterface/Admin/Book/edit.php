@@ -30,6 +30,14 @@ $this->title = '小说';
             </select>
         </div>
         <div class="input-group">
+            <label>分级</label>
+            <select name="classify" required>
+                <?php foreach($model->classify_list as $key => $item):?>
+                <option value="<?=$key?>" <?=$key == $model->classify ? 'selected' : ''?>><?=$item?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="input-group">
             <label for="cover">封面</label>
             <div class="file-input">
                 <input type="text" id="cover" name="cover" placeholder="请输入小说封面" value="<?=$model->cover?>">

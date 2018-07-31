@@ -7,11 +7,15 @@ use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Setting;
 use Module\Book\Service\Controller;
+use Zodream\Domain\Access\Auth;
 
 class BookController extends Controller {
 
     public function indexAction($id, $page = null) {
         $book = BookModel::find($id);
+        if (Auth::guest() && $book->classify > 0) {
+            return $this->redirectWithAuth();
+        }
         $cat = BookCategoryModel::find($book->cat_id);
         $chapter_list = BookChapterModel::where('book_id', $id)
             ->order('position', 'asc')
@@ -28,6 +32,9 @@ class BookController extends Controller {
     public function readAction($id) {
         $chapter = BookChapterModel::find($id);
         $book = BookModel::find($chapter->book_id);
+        if (Auth::guest() && $book->classify > 0) {
+            return $this->redirectWithAuth();
+        }
         $cat = BookCategoryModel::find($book->cat_id);
         $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(8)->all();
         BookHistoryModel::log($chapter);
@@ -38,6 +45,9 @@ class BookController extends Controller {
 
     public function downloadAction($id) {
         $book = BookModel::find($id);
+        if (Auth::guest() && $book->classify > 0) {
+            return $this->redirectWithAuth();
+        }
         $cat = BookCategoryModel::find($book->cat_id);
         $hot_book = BookModel::where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
         $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();

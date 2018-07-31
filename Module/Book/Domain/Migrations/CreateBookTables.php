@@ -23,6 +23,7 @@ class CreateBookTables extends Migration {
             $table->set('description')->varchar(200)->defaultVal('')->comment('简介');
             $table->set('author_id')->int()->defaultVal(0)->comment('作者');
             $table->set('user_id')->int()->defaultVal(0);
+            $table->set('classify')->tinyint(2)->defaultVal(0)->comment('小说分级');
             $table->set('cat_id')->tinyint(3)->defaultVal(0)->comment('分类');
             $table->set('size')->int()->defaultVal(0)->comment('总字数');
             $table->set('click_count')->int()->defaultVal(0)->comment('点击数');

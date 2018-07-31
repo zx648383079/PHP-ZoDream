@@ -155,17 +155,20 @@ $this->extend('../layouts/header');
 			</div>
 			<div class="bd">
                 <ul>
-                    <?php foreach ($book_list as $key => $item):?>
-                        <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
-                            <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
-                            <div class="title">
-                                <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
-                                <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>
-                            </div>
-                            <div class="words">0</div>
-                            <div class="author"><a href="<?=$item->author->wap_url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
-                            <div class="abover"><span><?=$item->status?></span></div>
-                        </li>
+                <?php foreach ($book_list as $item):?>
+					<li class="column-2 ">
+						<a class="name" href="<?=$item->wap_url?>"><?=$item->name?></a>
+						<span style="float:right;font-size:0.8125em;color: #999;"><?=$item->status?></span>
+                        <?php if ($item->last_chapter):?>
+                        <p class="update">最新章节：
+                            <a href="<?=$item->last_chapter->wap_url?>"><?=$item->last_chapter->title?></a>
+                        </p>
+                        <?php endif;?>
+						<p class="info">作者：
+							<a href="<?=$item->wap_url?>" class="author"><?=$item->author->name?></a>
+							<span class="words">字数：<?=$item->size?></span>
+						</p>
+					</li>
                     <?php endforeach;?>
                     <li class="column-2 "><span style="float: right;font-size:12px;">[<a href="<?=$this->url('./mobile/search/list')?>">更多小说更新列表···</a>]</span></li>
                 </ul>

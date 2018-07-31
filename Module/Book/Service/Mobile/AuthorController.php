@@ -9,7 +9,7 @@ class AuthorController extends Controller {
 
     public function indexAction($id) {
         $author = BookAuthorModel::find($id);
-        $book_list = BookModel::where('author_id', $id)->all();
+        $book_list = BookModel::ofClassify()->where('author_id', $id)->all();
         return $this->show(compact('author', 'book_list'));
     }
 }
