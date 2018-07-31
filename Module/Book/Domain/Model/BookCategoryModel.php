@@ -60,10 +60,10 @@ class BookCategoryModel extends Model {
     }
 
     public function getRecommendBookAttribute() {
-        return $this->recommend_book = BookModel::where('cat_id', $this->id)->limit(4)->all();
+        return $this->recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->limit(4)->all();
     }
 
     public function getBestRecommendBookAttribute() {
-        return $this->best_recommend_book = BookModel::where('cat_id', $this->id)->limit(5)->all();
+        return $this->best_recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->limit(5)->all();
     }
 }
