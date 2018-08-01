@@ -4,6 +4,7 @@ namespace Module\Book\Service;
 
 use Module\Book\Domain\Spiders\BaseSpider;
 use Module\Book\Domain\Spiders\BiQuGe;
+use Module\Book\Domain\Spiders\Hun;
 use Module\Book\Domain\Spiders\Sj;
 use Module\Book\Domain\Spiders\Txt;
 use Zodream\Service\Factory;
@@ -16,7 +17,8 @@ class SpiderController extends Controller {
     protected $maps = [
         'www.qu.la' => BiQuGe::class,
         'www.biquge5200.cc' => BiQuGe::class,
-        'www.sjtxt.la' => Sj::class
+        'www.sjtxt.la' => Sj::class,
+        'www.haohunhun.com' => Hun::class
     ];
 
     protected function rules() {

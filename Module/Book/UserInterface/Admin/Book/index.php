@@ -12,7 +12,8 @@ $this->title = 'ZoDream';
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/book/create')?>">新增小说</a>
+       <a class="btn btn-success pull-right" href="<?=$this->url('./admin/book/create')?>">新增小说</a>
+       <a class="btn btn-success pull-right" data-type="ajax" href="<?=$this->url('./admin/book/refresh')?>">整理小说</a>
     </div>
 
     <table class="table  table-bordered well">

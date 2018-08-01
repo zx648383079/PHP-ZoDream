@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Helpers\Str;
 /** @var $this View */
 $this->title = $book->name;
 ?>
@@ -29,7 +30,7 @@ $this->title = $book->name;
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->title?></td>
+                <td><?=Str::substr($item->title, 0, 20)?></td>
                 <td>
                 </td>
                 <td>

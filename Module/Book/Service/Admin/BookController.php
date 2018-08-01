@@ -46,7 +46,7 @@ class BookController extends Controller {
     public function deleteAction($id) {
         BookModel::where('id', $id)->delete();
         $ids = BookChapterModel::where('book_id', $id)->pluck('id');
-        if (empty($ids)) {
+        if (!empty($ids)) {
             BookChapterModel::where('book_id', $id)->delete();
             BookChapterBodyModel::whereIn('id', $ids)->delete();
         }
@@ -95,6 +95,19 @@ class BookController extends Controller {
         return $this->jsonSuccess([
             'url' => $this->getUrl('book/chapter', ['book' => $model->book_id])
         ]);
+    }
+
+    public function refreshAction() {
+        $ids = BookChapterModel::query()->alias('c')
+            ->left('book b', 'b.id', '=', 'c.book_id')
+            ->where('b.id is null')
+            ->select('c.id')
+            ->pluck();
+        if (!empty($ids)) {
+            BookChapterModel::whereIn('id', $ids)->delete();
+            BookChapterBodyModel::whereIn('id', $ids)->delete();
+        }
+        return $this->jsonSuccess();
     }
 
 

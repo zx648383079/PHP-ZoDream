@@ -15,7 +15,8 @@ abstract class BaseSpider {
 
     public function invoke(Uri $uri, callable $next = null) {
         if ($this->isContentPage($uri)) {
-            $chapter = $this->getChapter(Spider::url($uri));
+            $html = $this->decode(Spider::url($uri));
+            $chapter = $this->getChapter($html);
             if ($chapter instanceof Model) {
                 $chapter->save();
             }
@@ -25,7 +26,7 @@ abstract class BaseSpider {
             $this->getSpiderUrl($uri);
             return null;
         }
-        $html = Spider::url($uri);
+        $html = $this->decode(Spider::url($uri));
         $book = $this->getBook($html, $uri);
         if ($book->isExist()) {
             $this->debug(sprintf('《%s》 已存在书库', $book->name));
@@ -35,6 +36,10 @@ abstract class BaseSpider {
         $chapters = $this->getCatalog($html, $uri);
         $this->downloadChapter($book, $chapters, $next);
         return;
+    }
+
+    protected function decode(Html $html) {
+        return $html;
     }
 
     /**
@@ -72,7 +77,8 @@ abstract class BaseSpider {
         $html = Html::toText($html);
         $args = explode(PHP_EOL, $html);
         return implode(PHP_EOL, array_map(function ($line) {
-            $line = trim($line, '　 ');
+            //$line = trim($line, '　 ');
+            $line = trim($line, ' ');
             if (empty($line)) {
                 return '';
             }
@@ -112,7 +118,7 @@ abstract class BaseSpider {
                 $failure = 0;
                 continue;
             }
-            if ($failure > 10) {
+            if ($failure > 3) {
                 $chapter = new BookChapterModel([
                     'title' => $title,
                     'content' => (string)$url,
