@@ -22,8 +22,9 @@ class ApiController extends Controller {
         return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields', 'response_json'));
     }
 
-    public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+    public function createAction($project_id = 0, $parent_id = 0) {
+        $id = 0;
+        return $this->runMethodNotProcess('edit', compact('id', 'project_id', 'parent_id'));
     }
 
     public function editAction($id, $project_id = 0, $parent_id = 0) {
@@ -43,11 +44,10 @@ class ApiController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(app('request')->request('id'));
+        $id = intval(app('request')->get('id'));
         $model = new ApiModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
-
         }
         if ($id < 1) {
             FieldModel::where('api_id', $id)->update([

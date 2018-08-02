@@ -42,7 +42,7 @@ use Zodream\Domain\Access\Auth;
     <form id="comment-form" method="post" action="<?=$this->url('./comment/save')?>">
         <input type="hidden" name="blog_id" value="<?=$blog_id?>">
         <input type="hidden" name="parent_id">
-        <?php if (Auth::guest()):?>
+        <?php if (auth()->guest()):?>
         <div class="form-table">
             <div class="form-group">
                 <label>姓名</label>

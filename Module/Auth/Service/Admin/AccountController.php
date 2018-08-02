@@ -10,7 +10,7 @@ use Zodream\Infrastructure\Http\URL;
 class AccountController extends Controller {
 
     public function indexAction() {
-        $model = Auth::user();
+        $model = auth()->user();
         return $this->show(compact('model'));
     }
 
@@ -21,7 +21,7 @@ class AccountController extends Controller {
 
     public function updateAction() {
         /** @var UserModel $model */
-        $model = Auth::user();
+        $model = auth()->user();
         $model->name = app('request')->get('name');
         if ($model->save()) {
             return $this->jsonSuccess([
@@ -42,13 +42,13 @@ class AccountController extends Controller {
             return $this->jsonFailure('两次密码不一致！');
         }
         /** @var UserModel $model */
-        $model = Auth::user();
+        $model = auth()->user();
         if (!$model->validatePassword($old_password)) {
             return $this->jsonFailure('密码不正确！');
         }
         $model->setPassword($password);
         if ($model->save()) {
-            Auth::user()->logout();
+            auth()->user()->logout();
             return $this->jsonSuccess([
                 'url' => (string)URL::to('./')
             ]);

@@ -24,7 +24,7 @@ class BookController extends Controller {
 
     public function indexAction($id) {
         $book = BookModel::find($id);
-        if (Auth::guest() && $book->classify > 0) {
+        if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
@@ -40,7 +40,7 @@ class BookController extends Controller {
     public function readAction($id) {
         $chapter = BookChapterModel::find($id);
         $book = BookModel::find($chapter->book_id);
-        if (Auth::guest() && $book->classify > 0) {
+        if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
@@ -54,7 +54,7 @@ class BookController extends Controller {
 
     public function downloadAction($id) {
         $book = BookModel::find($id);
-        if (Auth::guest() && $book->classify > 0) {
+        if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);

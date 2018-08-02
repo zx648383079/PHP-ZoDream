@@ -3,7 +3,6 @@ namespace Module\Auth\Service\Api;
 
 
 use Module\Auth\Domain\Model\UserModel;
-use Zodream\Domain\Access\JWTAuth;
 use Zodream\Route\Controller\RestController;
 
 class LoginController extends RestController {
@@ -17,10 +16,10 @@ class LoginController extends RestController {
     public function indexAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            return $this->jsonSuccess([
-                'token' => JWTAuth::createToken($user)
-            ], '登录成功！');
+            return $this->render([
+                'token' => auth()->createToken($user)
+            ]);
         }
-        return $this->jsonFailure($user->getFirstError());
+        return $this->renderFailure($user->getFirstError());
     }
 }

@@ -18,8 +18,9 @@ class RegisterController extends RestController {
         $model = new UserModel();
         if ($model->load(app('request')->get('email,fullName:name,password,confirmPassword:rePassword,terms:agree'))
             && $model->signUp()) {
-            return $this->jsonSuccess([], '登录成功！');
+            return $this->render([
+            ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 }

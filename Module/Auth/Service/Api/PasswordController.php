@@ -6,10 +6,12 @@ use Zodream\Route\Controller\RestController;
 class PasswordController extends RestController {
 
     public function indexAction() {
-        return $this->jsonSuccess();
+        return $this->render([
+        ]);
     }
 
     public function resetAction() {
-        return $this->jsonSuccess();
+        return $this->render([
+        ]);
     }
 }

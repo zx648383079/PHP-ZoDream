@@ -58,7 +58,7 @@ class HomeController extends ModuleController {
     }
 
     public function logoutAction() {
-        Auth::user()->logout();
+        auth()->user()->logout();
         return $this->redirect('/');
     }
 }

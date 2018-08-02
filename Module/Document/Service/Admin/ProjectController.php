@@ -45,6 +45,9 @@ class ProjectController extends Controller {
                 'domain' => $data['domain'][$key]
             ];
         }
+        if (empty($env)) {
+            return $this->jsonFailure('请至少填写一个环境域名');
+        }
         $model->environment = Json::encode($env);
         if ($model->save()) {
             return $this->jsonSuccess([

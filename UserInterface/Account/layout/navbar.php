@@ -31,7 +31,7 @@ use Zodream\Infrastructure\Http\URL;
         </form>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?=Auth::user()['name']?><span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?=auth()->user()['name']?><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><?=Html::a('消息', ['message'])?></li>
                     <li><?=Html::a('个人中心', ['info'])?></li>

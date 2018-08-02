@@ -49,7 +49,7 @@ class ClientController extends Controller {
         }
         /** @var UserModel $user */
         $user = call_user_func($userClass.'::findByIdentity', $id);
-        Auth::login($user);
+        auth()->login($user);
         return true;
     }
 }

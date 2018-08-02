@@ -69,7 +69,7 @@ class DiskController extends Controller {
             $data['mode'] = 2;
         }
         $disk = DiskModel::find(current($data['id']));
-        $user = Auth::id();
+        $user = auth()->id();
         if ($disk->user_id != $user) {
             return $this->jsonFailure('请不要进行危险操作！');
         }
@@ -128,7 +128,7 @@ class DiskController extends Controller {
         $model->name = app('request')->get('name');
         $model->parent_id = intval(app('request')->get('parent_id', 0));
         $model->created_at = $model->updated_at = time();
-        $model->user_id = Auth::id();
+        $model->user_id = auth()->id();
         $model->file_id = 0;
         if (!$model->addAsLast()) {
             return $this->jsonFailure($model->getFirstError());
@@ -162,7 +162,7 @@ class DiskController extends Controller {
             return $this->jsonFailure('MD5 Error', 2);
         }
         $disk = new DiskModel();
-        $disk->user_id = Auth::id();
+        $disk->user_id = auth()->id();
         $disk->file_id = $model->id;
         $disk->name = $model->name;
         $disk->parent_id = intval($data['parent_id']);
@@ -196,7 +196,7 @@ class DiskController extends Controller {
             return $this->jsonFailure('添加失败');
         }
         $model = new DiskModel();
-        $model->user_id = Auth::id();
+        $model->user_id = auth()->id();
         $model->file_id = $fileModel->id;
         $model->name = $fileModel->name;
         $model->parent_id = $data['parent_id'];

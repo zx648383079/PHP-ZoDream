@@ -49,7 +49,7 @@ $this->registerCssFile([
                     </ul>
                 </li>
                 <li class="expand"><a href="javascript:;">
-                        <i class="fa fa-user"></i><span><?=Auth::user()->name?></span></a>
+                        <i class="fa fa-user"></i><span><?=auth()->user()->name?></span></a>
                     <ul>
                             <li><a href="<?=$this->url('./admin/account')?>">
                                 <i class="fa fa-info-circle"></i><span>个人资料</span></a></li>

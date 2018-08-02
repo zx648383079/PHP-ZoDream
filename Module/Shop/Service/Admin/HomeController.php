@@ -8,7 +8,7 @@ class HomeController extends Controller {
 
     public function indexAction() {
         $menu_list = $this->getMenus();
-        $user = Auth::user();
+        $user = auth()->user();
         return $this->show(compact('user', 'menu_list'));
     }
 

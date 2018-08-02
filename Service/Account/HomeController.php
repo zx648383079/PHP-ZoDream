@@ -14,8 +14,8 @@ class HomeController extends Controller {
 				'p.id = c.post_id'
 			],
 			'where' => [
-				'p.user_id' => Auth::user()['id'],
-				'c.user_id != '.Auth::user()['id']
+				'p.user_id' => auth()->user()['id'],
+				'c.user_id != '.auth()->user()['id']
 			],
 			'order' => 'c.create_at desc'
 		])->select([

@@ -17,9 +17,9 @@ class HomeController extends ModuleController {
     }
 
     public function indexAction() {
-        $user = Auth::user();
+        $user = auth()->user();
         $group_list = FriendGroupModel::with('friends')
-            ->whereIn('user_id', [0, Auth::id()])->all();
+            ->whereIn('user_id', [0, auth()->id()])->all();
         return $this->show(compact('user', 'group_list'));
     }
 

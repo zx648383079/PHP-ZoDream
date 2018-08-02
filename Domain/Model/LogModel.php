@@ -56,7 +56,7 @@ class LogModel extends Model {
 			'url' => URL::to(),
 			'ip' => app('request')->ip(),
 			'create_at' => time(),
-			'user' => Auth::guest() ? null : Auth::user()['name']
+			'user' => auth()->guest() ? null : auth()->user()['name']
 		));
 	}
 
@@ -70,8 +70,8 @@ class LogModel extends Model {
 	    $where = [
 	        'ip' => app('request')->ip()
         ];
-		if (!Auth::guest()) {
-		    $where['user'] = [Auth::user()['name'], 'or'];
+		if (!auth()->guest()) {
+		    $where['user'] = [auth()->user()['name'], 'or'];
 		}
 		$where['event'] = $action;
 		if (!is_null($data)) {

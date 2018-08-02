@@ -44,17 +44,17 @@ class BookHistoryModel extends Model {
 
 
     public static function log(BookChapterModel $chapter) {
-        if (!Auth::guest()) {
+        if (!auth()->guest()) {
             if (static::hasHistory($chapter->book_id)) {
                 static::where('book_id', $chapter->book_id)
-                    ->where('user_id', Auth::id())->update([
+                    ->where('user_id', auth()->id())->update([
                         'chapter_id' => $chapter->id
                     ]);
                 return;
             }
             static::create([
                 'chapter_id' => $chapter->id,
-                'user_id' => Auth::id(),
+                'user_id' => auth()->id(),
                 'book_id' => $chapter->book_id
             ]);
             return;
@@ -75,7 +75,7 @@ class BookHistoryModel extends Model {
 
     public static function hasHistory($book_id) {
         return static::where('book_id', $book_id)
-                ->where('user_id', Auth::id())->count() > 0;
+                ->where('user_id', auth()->id())->count() > 0;
     }
 
     /**
@@ -83,11 +83,11 @@ class BookHistoryModel extends Model {
      * @return Page
      */
     public static function getHistory() {
-        if (Auth::guest()) {
+        if (auth()->guest()) {
             return BookChapterModel::with('book')
                 ->whereIn('id', static::getHistoryId())->page();
         }
-        $page = static::where('user_id', Auth::id())->orderBy('updated_at', 'desc')
+        $page = static::where('user_id', auth()->id())->orderBy('updated_at', 'desc')
             ->select('chapter_id')
             ->page();
         $ids = [];

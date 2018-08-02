@@ -10,7 +10,7 @@ use Zodream\Infrastructure\Http\URL;
 class PlatformController extends Controller {
 
     public function indexAction() {
-        $model_list = PlatformModel::where('user_id', Auth::id())->page();
+        $model_list = PlatformModel::where('user_id', auth()->id())->page();
         return $this->show(compact('model_list'));
     }
 
@@ -24,12 +24,12 @@ class PlatformController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(app('request')->request('id'));
+        $id = intval(app('request')->get('id'));
         $data = app('request')->get();
         unset($data['appid']);
         unset($data['secret']);
         if ($id > 0) {
-            $model = PlatformModel::where('user_id', Auth::id())
+            $model = PlatformModel::where('user_id', auth()->id())
                 ->where('id', $id)->one();
         } else {
             $model = new PlatformModel();

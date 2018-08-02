@@ -39,13 +39,13 @@ class CommentController extends ModuleController {
     }
 
     public function saveAction() {
-        $data = app('request')->request('name,email,url,content,parent_id,blog_id');
+        $data = app('request')->get('name,email,url,content,parent_id,blog_id');
         if (!BlogModel::canComment($data['blog_id'])) {
             return $this->jsonFailure('不允许评论！');
         }
-        if (!Auth::guest()) {
-            $data['user_id'] = Auth::id();
-            $data['name'] = Auth::user()->name;
+        if (!auth()->guest()) {
+            $data['user_id'] = auth()->id();
+            $data['name'] = auth()->user()->name;
         }
         $data['parent_id'] = intval($data['parent_id']);
 

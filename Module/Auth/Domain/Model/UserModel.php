@@ -280,7 +280,7 @@ class UserModel extends BaseModel {
 			return false;
 		}
 		/** @var $user static */
-		$user = Auth::user();
+		$user = auth()->user();
 		if (!$user->validatePassword($this->password)) {
 			return false;
 		}

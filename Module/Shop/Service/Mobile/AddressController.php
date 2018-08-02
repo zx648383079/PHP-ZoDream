@@ -29,7 +29,7 @@ class AddressController extends Controller {
 
     public function saveAction() {
         $model = new AddressModel();
-        $model->user_id = Auth::id();
+        $model->user_id = auth()->id();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('address')

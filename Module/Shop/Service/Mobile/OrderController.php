@@ -15,7 +15,7 @@ class OrderController extends Controller {
 
     public function indexAction() {
         $order_list = OrderModel::with('goods')
-            ->where('user_id', Auth::id())
+            ->where('user_id', auth()->id())
             ->page();
         return $this->show(compact('order_list'));
     }

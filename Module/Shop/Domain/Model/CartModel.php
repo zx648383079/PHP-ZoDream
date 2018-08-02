@@ -72,11 +72,11 @@ class CartModel extends Model {
     }
 
     public function scopeBelongOwn($query) {
-//        if (Auth::guest()) {
+//        if (auth()->guest()) {
 //            return $query->where('session_id', static::getSessionIp());
 //        }
         return $query->where(function ($query) {
-            $query->where('user_id', Auth::id())
+            $query->where('user_id', auth()->id())
 //                ->orWhere('session_id', static::getSessionIp())
             ;
         });
@@ -106,7 +106,7 @@ class CartModel extends Model {
 
     public static function addGoods(GoodsModel $goods, $amount = 1) {
         return static::create([
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'goods_id' => $goods->id,
             'number' => $amount,
             'price' => $goods->price

@@ -21,7 +21,7 @@ abstract class Model extends BaseModel {
      */
     public static function search($query, $columns, $saveLog = true, $key = 'keywords') {
         $columns = (array)$columns;
-        $keywords = explode(' ', app('request')->request($key));
+        $keywords = explode(' ', app('request')->get($key));
         foreach ($keywords as $item) {
             $item = trim(trim($item), '%');
             if (empty($item)) {

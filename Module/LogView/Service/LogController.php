@@ -74,7 +74,7 @@ class LogController extends Controller {
     }
 
     public function tagAction($name) {
-        $value = app('request')->request('value');
+        $value = app('request')->get('value');
         Tag::toggle($name, $value);
         return $this->jsonSuccess();
     }

@@ -35,7 +35,7 @@ $this->extend([
         </div>
         <div id="crop-avatar" class="col-md-9">
             <?=
-            FormWidget::begin(Auth::user()->get())
+            FormWidget::begin(auth()->user()->get())
                 ->html('avatar', function ($avatar) {
                     return <<<HTML
 <div class="col-md-offset-2 avatar-view">

@@ -100,7 +100,7 @@ class BookModel extends Model {
      * @param $query
      */
     public function scopeOfClassify($query) {
-        if (Auth::guest()) {
+        if (auth()->guest()) {
             $query->where('classify', 0);
         }
     }

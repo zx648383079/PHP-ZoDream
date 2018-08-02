@@ -11,7 +11,7 @@ use Zodream\Validate\Validator;
 class UserController extends Controller {
 
     public function indexAction($keywords = null) {
-        $user_list = UserModel::where('id', '!=', Auth::id())
+        $user_list = UserModel::where('id', '!=', auth()->id())
             ->when(!empty($keywords), function ($query) {
             OAuthModel::search($query, 'name');
         })->page();
@@ -28,7 +28,7 @@ class UserController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(app('request')->request('id'));
+        $id = intval(app('request')->get('id'));
         $rule = $id > 0 ? [
             'name' => 'required|string',
             'email' => 'required|email',
@@ -62,7 +62,7 @@ class UserController extends Controller {
     }
 
     public function deleteAction($id) {
-        if ($id == Auth::id()) {
+        if ($id == auth()->id()) {
             return $this->jsonFailure('不能删除自己！');
         }
         UserModel::where('id', $id)->delete();

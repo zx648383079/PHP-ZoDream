@@ -116,7 +116,7 @@ class OrderModel extends Model {
         $this->goods_amount = $total;
         $this->shipping_fee = 0;//$this->getDelivery()->getFee();
         $this->pay_fee = 0;//$this->getPayment()->getFee();
-        $this->user_id = Auth::id();
+        $this->user_id = auth()->id();
         $this->save();
         foreach ($carts as $item) {
             OrderGoodsModel::addCartGoods($this->id, $item);

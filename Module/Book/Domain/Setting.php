@@ -21,7 +21,7 @@ class Setting {
 
 
     public function load() {
-        if (!Auth::guest()) {
+        if (!auth()->guest()) {
             $this->__attributes = UserMetaModel::getArr(self::KEY);
         }
         if (empty($this->__attributes)) {
@@ -61,7 +61,7 @@ class Setting {
 
     public function save() {
         $this->apply();
-        if (Auth::guest()) {
+        if (auth()->guest()) {
             return false;
         }
         if ($this->isNew) {

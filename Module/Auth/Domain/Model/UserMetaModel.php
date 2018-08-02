@@ -36,12 +36,12 @@ class UserMetaModel extends Model {
     }
 
     public static function getArr($key) {
-        $value = self::where('user_id', Auth::id())->where('name', $key)->value('content');
+        $value = self::where('user_id', auth()->id())->where('name', $key)->value('content');
         return empty($value) ? [] : unserialize($value);
     }
 
     public static function updateArr($key, array $value) {
-        self::record()->where('user_id', Auth::id())->where('name', $key)
+        self::record()->where('user_id', auth()->id())->where('name', $key)
             ->update([
                 'content' => serialize($value)
             ]);
@@ -49,7 +49,7 @@ class UserMetaModel extends Model {
 
     public static function insertArr($key, array $value) {
         static::create([
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'name' => $key,
             'content' => serialize($value)
         ]);

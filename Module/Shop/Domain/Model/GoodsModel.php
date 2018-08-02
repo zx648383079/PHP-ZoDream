@@ -131,9 +131,9 @@ class GoodsModel extends Model {
     }
 
     public function getIsCollectAttribute() {
-        if (Auth::guest()) {
+        if (auth()->guest()) {
             return false;
         }
-        return CollectGoodsModel::where('user_id', Auth::id())->where('goods_id', $this->id)->count() > 0;
+        return CollectGoodsModel::where('user_id', auth()->id())->where('goods_id', $this->id)->count() > 0;
     }
 }

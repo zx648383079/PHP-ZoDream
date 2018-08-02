@@ -51,13 +51,13 @@ $this->registerJs($js, View::JQUERY_READY);
                     <?php foreach($model->environments as $item):?>
                     <tr>
                         <td>
-                            <input type="text" name="environment[name][]" value="<?=$item['name']?>">
+                            <input type="text" name="environment[name][]" value="<?=$item['name']?>" placeholder="例如：dev">
                         </td>
                         <td>
-                            <input type="text" name="environment[title][]" value="<?=$item['title']?>">
+                            <input type="text" name="environment[title][]" value="<?=$item['title']?>" placeholder="例如：测试环境">
                         </td>
                         <td>
-                            <input type="text" name="environment[domain][]" value="<?=$item['domain']?>">
+                            <input type="text" name="environment[domain][]" value="<?=$item['domain']?>" placeholder="例如：http://zodream.cn">
                         </td>
                         <td>
                             <a href="javascript:void(0);" class="fa fa-plus js_addEnvBtn" data-title="添加环境" ></a>
@@ -67,13 +67,13 @@ $this->registerJs($js, View::JQUERY_READY);
                     <?php endforeach;?>
                     <tr>
                         <td>
-                            <input type="text" name="environment[name][]">
+                            <input type="text" name="environment[name][]" placeholder="例如：dev">
                         </td>
                         <td>
-                            <input type="text" name="environment[title][]" >
+                            <input type="text" name="environment[title][]" placeholder="例如：测试环境">
                         </td>
                         <td>
-                            <input type="text" name="environment[domain][]">
+                            <input type="text" name="environment[domain][]" placeholder="例如：http://zodream.cn">
                         </td>
                         <td>
                             <a href="javascript:void(0);" class="fa fa-plus js_addEnvBtn" data-title="添加环境"></a>

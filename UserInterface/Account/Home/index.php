@@ -14,10 +14,10 @@ $this->extend([
 <div class="container">
     <div class="row" id="info">
         <div class="col-md-3">
-            <img src="<?=Auth::user()['avatar']?>">
+            <img src="<?=auth()->user()['avatar']?>">
         </div>
         <div class="col-md-9">
-            <p><?=Auth::user()['name']?> <button class="btn btn-primary">签到</button></p>
+            <p><?=auth()->user()['name']?> <button class="btn btn-primary">签到</button></p>
             <p><?=Html::a('查看个人信息', 'info')?></p>
             <p>个性签名</p>
         </div>

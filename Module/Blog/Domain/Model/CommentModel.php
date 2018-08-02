@@ -131,7 +131,7 @@ class CommentModel extends Model {
 
     public static function canAgree($id) {
 	    return BlogLogModel::where([
-	        'user_id' => Auth::id(),
+	        'user_id' => auth()->id(),
             'type' => BlogLogModel::TYPE_COMMENT,
             'id_value' => $id,
             'action' => ['in', [BlogLogModel::ACTION_AGREE, BlogLogModel::ACTION_DISAGREE]]

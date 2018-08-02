@@ -17,7 +17,7 @@ class ShareController extends Controller {
         if (empty($model)) {
             return static::noFound();
         }
-        if (Auth::id() != $model->user_id
+        if (auth()->id() != $model->user_id
             &&  $model->mode != 'public') {
             if ($model->mode == 'protected') {
                 if (app('request')->isPost()) {
@@ -26,10 +26,10 @@ class ShareController extends Controller {
                 if (Factory::session('sharePassword') != $model->password) {
                     return $this->show('password');
                 }
-            } elseif (Auth::guest()) {
+            } elseif (auth()->guest()) {
                 return $this->show('error');
             } elseif ($model->mode == 'private') {
-                $user = Auth::id();
+                $user = auth()->id();
                 $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => $user])->count();
                 if ($count < 0) {
                     return $this->show('error');
@@ -82,7 +82,7 @@ class ShareController extends Controller {
     }
 
     public function meAction() {
-        $user = Auth::id();
+        $user = auth()->id();
         $models = ShareUserModel::alisa('su')
             ->leftJoin('share s', ['su.share_id' => 's.id'])
             ->leftJoin('user u', ['u.id' => 's.user_id'])
@@ -98,7 +98,7 @@ class ShareController extends Controller {
         $models = ShareModel::alisa('s')
 //            ->leftJoin('disk d', 's.disk_id', 'd.id')
 //            ->leftJoin('disk_file f', 'd.file_id', 'f.id')
-            ->where('s.user_id', Auth::id())
+            ->where('s.user_id', auth()->id())
             ->select('s.name', 's.id', 's.mode', 's.created_at',
                 's.view_count', 's.down_count', 's.save_count')->asArray()->all();
         return $this->jsonSuccess($models);

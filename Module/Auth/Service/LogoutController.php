@@ -7,8 +7,8 @@ use Zodream\Domain\Access\Auth;
 class LogoutController extends ModuleController {
 
     public function indexAction() {
-        if (!Auth::guest()) {
-            Auth::user()->logout();
+        if (!auth()->guest()) {
+            auth()->user()->logout();
         }
         return $this->redirect('/');
     }

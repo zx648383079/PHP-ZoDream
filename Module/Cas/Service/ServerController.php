@@ -15,7 +15,7 @@ class ServerController extends Controller {
         if (empty($serviceModel)) {
             return $this->redirectWithMessage();
         }
-        if (Auth::guest()) {
+        if (auth()->guest()) {
             // 登录
             return $this->redirectWithAuth();
         }
@@ -23,7 +23,7 @@ class ServerController extends Controller {
         $model = new TicketModel([
             'service_id' => $serviceModel->id,
             'service_url' => $service,
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'expired_at' => time() + 7200
         ]);
         $model->ticket = $model->generateTicket();
@@ -70,7 +70,7 @@ class ServerController extends Controller {
         return $this->jsonSuccess($model->user_id);
 //        return join(PHP_EOL, [
 //            'yes', // 'no'
-//            Auth::id()
+//            auth()->id()
 //        ]);
     }
 
@@ -96,7 +96,7 @@ class ServerController extends Controller {
         return $this->json([
             'serviceResponse' => [
                 'authenticationSuccess' => [
-                    'user' => Auth::id()
+                    'user' => auth()->id()
                 ]
             ]
         ], 'xml');
@@ -183,7 +183,7 @@ class ServerController extends Controller {
             'localName' => 'Envelope',
             'NameIdentifier' => [
                 [
-                    Auth::id()
+                    auth()->id()
                 ]
             ],
         ], 'xml');

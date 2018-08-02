@@ -35,13 +35,13 @@ use Zodream\Infrastructure\Http\URL;
         </form>
 
         <ul class="nav navbar-nav navbar-right">
-            <?php if (Auth::guest()) :?>
+            <?php if (auth()->guest()) :?>
                 <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => URL::to()])?></li>
                 <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
             <?php else:?>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    <?=Auth::user()['name']?><span class="caret"></span></a>
+                    <?=auth()->user()['name']?><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><?=Html::a('消息', ['account.php/message'])?></li>
                     <li><?=Html::a('个人中心', ['account.php/info'])?></li>

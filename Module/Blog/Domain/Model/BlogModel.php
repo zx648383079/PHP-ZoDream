@@ -129,7 +129,7 @@ class BlogModel extends Model {
 
     public static function canRecommend($id) {
         return BlogLogModel::where([
-                'user_id' => Auth::id(),
+                'user_id' => auth()->id(),
                 'type' => BlogLogModel::TYPE_BLOG,
                 'id_value' => $id,
                 'action' => BlogLogModel::ACTION_RECOMMEND

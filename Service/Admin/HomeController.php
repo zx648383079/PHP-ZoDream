@@ -16,12 +16,12 @@ class HomeController extends Controller {
 
 	function indexAction() {
 		return $this->show(array(
-			'name' => Auth::user()->name
+			'name' => auth()->user()->name
 		));
 	}
 
 	function mainAction() {
-		$user = Auth::user();
+		$user = auth()->user();
 		$search = VisitLogModel::getTopSearch();
 		return $this->show(array(
 			'name' => $user['name'],

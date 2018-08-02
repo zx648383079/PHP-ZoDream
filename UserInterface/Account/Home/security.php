@@ -49,7 +49,7 @@ $this->extend([
                 <div role="tabpanel" class="tab-pane active" id="phone">
                     <?=FormWidget::begin()
                         ->hidden('type', ['value' => 1])
-                        ->text('phone', ['value' => Auth::user()['phone']])
+                        ->text('phone', ['value' => auth()->user()['phone']])
                         ->text('newphone', ['placeholder' => '新手机号码'])
                         ->html('<input type="text" class="form-control" name="code" placeholder="验证码">
                         <button class="btn btn-primary">发送验证码</button>')
@@ -59,7 +59,7 @@ $this->extend([
                 <div role="tabpanel" class="tab-pane" id="email">
                     <?=FormWidget::begin()
                         ->hidden('type', ['value' => 2])
-                        ->text('email', ['value' => Auth::user()['email']])
+                        ->text('email', ['value' => auth()->user()['email']])
                         ->button('确定')
                         ->end();?>
                 </div>

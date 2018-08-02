@@ -16,7 +16,7 @@ abstract class ModuleController extends BaseController {
     }
 
     protected function checkUser() {
-        if (!Auth::guest()) {
+        if (!auth()->guest()) {
             return true;
         }
         $user = new UserModel();
