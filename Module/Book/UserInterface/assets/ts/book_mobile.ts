@@ -52,7 +52,7 @@ $(function() {
     settingBox.click(function(e) {
         e.stopPropagation();
     });
-    settingBox.find('.dialog-close').click(function() {
+    settingBox.find('.dialog-close,.dialog-yes').click(function() {
         box.removeClass('expanded');
     });
     settingBox.find('.theme-box span').click(function() {

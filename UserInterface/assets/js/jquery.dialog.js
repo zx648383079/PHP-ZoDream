@@ -80,6 +80,7 @@ var Eve = /** @class */ (function () {
         return this.options.hasOwnProperty('on' + event);
     };
     Eve.prototype.trigger = function (event) {
+        var _a;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -89,7 +90,6 @@ var Eve = /** @class */ (function () {
             return;
         }
         return (_a = this.options[realEvent]).call.apply(_a, [this].concat(args));
-        var _a;
     };
     return Eve;
 }());
@@ -555,7 +555,7 @@ var Dialog = /** @class */ (function () {
     Dialog.content = function (content, hasYes, hasNo) {
         if (typeof content != 'object') {
             content = {
-                content: content,
+                content: content + '',
                 hasYes: hasYes,
                 hasNo: hasNo
             };
@@ -572,9 +572,9 @@ var Dialog = /** @class */ (function () {
      */
     Dialog.box = function (content, title, hasYes, hasNo) {
         if (title === void 0) { title = '提示'; }
-        if (typeof content != 'object') {
+        if (typeof content != 'object' || content instanceof Array) {
             content = {
-                content: content,
+                content: content + '',
                 title: title,
                 hasYes: hasYes,
                 hasNo: hasNo
@@ -595,7 +595,7 @@ var Dialog = /** @class */ (function () {
         if (title === void 0) { title = '提示'; }
         return this.create({
             type: DialogType.form,
-            content: content,
+            content: content ? content : '',
             title: title,
             hasYes: hasYes,
             hasNo: hasNo,
@@ -613,7 +613,7 @@ var Dialog = /** @class */ (function () {
         if (title === void 0) { title = '提示'; }
         if (typeof content != 'object') {
             content = {
-                content: content,
+                content: content + '',
                 title: title,
                 hasYes: hasYes,
                 hasNo: hasNo
@@ -816,6 +816,9 @@ var DialogPlugin = /** @class */ (function () {
         }
         option.type = Dialog.parseEnum(element.attr('dialog-type') || this.option.type, DialogType);
         option.content = element.attr('dialog-content') || this.option.content;
+        if (!option.content) {
+            option.content = '';
+        }
         option.url = element.attr('dialog-url') || this.option.url;
         option.time = parseInt(element.attr('dialog-time')) || this.option.time;
         if (option.type == DialogType.pop && !option.target) {
@@ -846,6 +849,20 @@ var DialogPlugin = /** @class */ (function () {
     DialogPlugin.prototype.hide = function () {
         this.getDialog().hide();
         return this;
+    };
+    /**
+     *
+     */
+    DialogPlugin.prototype.toggle = function () {
+        this.getDialog().toggle();
+        return this;
+    };
+    /**
+     *
+     * @param tag
+     */
+    DialogPlugin.prototype.find = function (tag) {
+        return this.getDialog().find(tag);
     };
     /**
      * on
@@ -1335,11 +1352,17 @@ var DialogContent = /** @class */ (function (_super) {
             e.stopPropagation();
         });
         this.onClick(".dialog-yes", function () {
-            this.trigger('done');
+            if (this.hasEvent('done')) {
+                this.trigger('done');
+                return;
+            }
+            this.close();
         });
         this.onClick(".dialog-close", function () {
-            //this.isLoading = false;
             this.close();
+            if (this.hasEvent('cancel')) {
+                this.trigger('cancel');
+            }
         });
         return this;
     };
@@ -1769,12 +1792,23 @@ var DialogImage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    DialogImage.prototype.init = function () {
+        Dialog.addItem(this);
+        this.createCore().createContent()
+            .appendParent().setProperty().bindEvent();
+        if (this.status == DialogStatus.show) {
+            this.showBox();
+        }
+    };
     DialogImage.prototype.createContent = function () {
         this.box.html(this.getContentHtml());
         this._img = this.box.find('.dialog-body img');
         return this;
     };
     DialogImage.prototype.setProperty = function () {
+        if (!this._img) {
+            return this;
+        }
         var target = this.options.target || Dialog.$window;
         var maxWidth = target.width();
         var width = this._img.width();

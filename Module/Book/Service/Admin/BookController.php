@@ -100,7 +100,7 @@ class BookController extends Controller {
     public function refreshAction() {
         $ids = BookChapterModel::query()->alias('c')
             ->left('book b', 'b.id', '=', 'c.book_id')
-            ->where('b.id is null')
+            ->where('b.id')
             ->select('c.id')
             ->pluck();
         if (!empty($ids)) {

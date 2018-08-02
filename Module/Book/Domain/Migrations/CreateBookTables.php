@@ -89,6 +89,9 @@ class CreateBookTables extends Migration {
             ['name' => '科幻·灵异'],
             ['name' => '同人·网游'],
         ]);
+        BookAuthorModel::record()->insert([
+           ['name' => '未知']
+        ]);
 
     }
 }
