@@ -2914,6 +2914,7 @@ input {
                     font-size: .875em;
                     background: #FAF6F2;
                     color: #aaa;
+                    overflow: hidden;
                 }
             }
             .read {
@@ -3093,6 +3094,7 @@ input {
         p {
             padding-bottom: 1em;
             line-height: 1.6em;
+            word-break: break-all;
         }
     }
     .toolbar {

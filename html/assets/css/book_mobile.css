@@ -2350,7 +2350,8 @@ input.btn {
       text-align: center;
       font-size: .875em;
       background: #FAF6F2;
-      color: #aaa; }
+      color: #aaa;
+      overflow: hidden; }
   .cover .detail .ft .read {
     background: #B9A886;
     color: #fff; }
@@ -2497,7 +2498,8 @@ input.btn {
     font-size: .875em; }
     .chapter .chapte-box p {
       padding-bottom: 1em;
-      line-height: 1.6em; }
+      line-height: 1.6em;
+      word-break: break-all; }
   .chapter .toolbar {
     text-align: center;
     padding: 5px; }

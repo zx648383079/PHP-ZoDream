@@ -40,8 +40,8 @@ class BiQuGe extends BaseSpider {
         return new BookModel([
             'name' => $html->find('#info h1', 0)->text,
             'cover' => $path,
-            'description' => $html->find('#intro', 0)->text,
-            'author_id' => BookAuthorModel::findOrNewByName(end($author))->id,
+            'description' => '',$html->find('#intro', 0)->text,
+            'author_id' => 1,//BookAuthorModel::findOrNewByName(end($author))->id,
             'cat_id' => 1,
             'classify' => 1
         ]);
