@@ -8,7 +8,7 @@ namespace Module\Book\Domain\Model;
  * Time: 21:00
  */
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\URL;
+
 
 /**
  * Class BookChapterModel
@@ -65,11 +65,11 @@ class BookChapterModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return URL::to('./book/read', ['id' => $this->id]);
+        return url('./book/read', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return URL::to('./mobile/book/read', ['id' => $this->id]);
+        return url('./mobile/book/read', ['id' => $this->id]);
     }
 
     public function getPreviousAttribute() {

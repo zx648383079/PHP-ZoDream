@@ -4,7 +4,7 @@ namespace Service\Admin;
  * 后台首页
  */
 use Domain\Model\VisitLogModel;
-use Zodream\Domain\Access\Auth;
+
 
 class HomeController extends Controller {
 

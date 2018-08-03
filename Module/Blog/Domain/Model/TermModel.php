@@ -2,7 +2,7 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\URL;
+
 
 /**
  * Class TermModel
@@ -42,7 +42,7 @@ class TermModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return URL::to('./', ['category' => $this->id]);
+        return url('./', ['category' => $this->id]);
     }
 
     public function getThumbAttribute() {

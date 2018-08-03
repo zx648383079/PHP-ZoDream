@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Html\Bootstrap\FormWidget;
 /** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */

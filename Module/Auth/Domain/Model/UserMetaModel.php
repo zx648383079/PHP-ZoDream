@@ -2,7 +2,7 @@
 namespace Module\Auth\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Domain\Access\Auth;
+
 
 /**
  * Class UserMetaModel

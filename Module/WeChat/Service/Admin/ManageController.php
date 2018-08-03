@@ -2,7 +2,7 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\Infrastructure\Http\URL;
+
 
 class ManageController extends Controller {
 

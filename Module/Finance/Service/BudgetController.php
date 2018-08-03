@@ -2,7 +2,7 @@
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
-use Zodream\Infrastructure\Http\URL;
+
 
 class BudgetController extends Controller {
 
@@ -26,7 +26,7 @@ class BudgetController extends Controller {
         if ($model->load() && $model->autoIsNew()->save()) {
             $model->refreshSpent();
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./budget')
+                'url' => url('./budget')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -37,7 +37,7 @@ class BudgetController extends Controller {
             'deleted_at' => time()
         ]);
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./budget')
+            'url' => url('./budget')
         ]);
     }
 

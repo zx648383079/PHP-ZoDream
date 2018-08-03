@@ -1,6 +1,6 @@
 <?php
 use Zodream\Template\View;
-use Zodream\Domain\Access\Auth;
+
 /** @var $this View */
 ?>
 <?php if (!empty($hot_comments)): ?>

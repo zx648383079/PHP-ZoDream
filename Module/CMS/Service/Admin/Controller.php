@@ -3,7 +3,7 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\URL;
+
 
 class Controller extends ModuleController {
 
@@ -21,6 +21,6 @@ class Controller extends ModuleController {
     }
 
     protected function getUrl($path, $args = []) {
-        return (string)URL::to('./admin/'.$path, $args);
+        return url('./admin/'.$path, $args);
     }
 }

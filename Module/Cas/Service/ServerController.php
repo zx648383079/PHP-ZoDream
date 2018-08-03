@@ -4,7 +4,7 @@ namespace Module\Cas\Service;
 use Module\Cas\Domain\Model\PGTicketModel;
 use Module\Cas\Domain\Model\ServiceModel;
 use Module\Cas\Domain\Model\TicketModel;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Http\Uri;
 
 class ServerController extends Controller {

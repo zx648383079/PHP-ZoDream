@@ -4,9 +4,9 @@ namespace Module\Blog\Domain\Model;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Database\Query\Query;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\URL;
+
+
+
 
 /**
 * Class BlogModel
@@ -89,7 +89,7 @@ class BlogModel extends Model {
     }
 
 	public function getUrlAttribute() {
-	    return URL::to('./detail', ['id' => $this->id]);
+	    return url('./detail', ['id' => $this->id]);
     }
 
 	public function getPreviousAttribute() {

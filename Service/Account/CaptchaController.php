@@ -5,7 +5,7 @@ namespace Service\Account;
  */
 use Zodream\Image\Captcha;
 use Zodream\Image\SlideCaptcha;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Service\Factory;
 
 class CaptchaController extends Controller {

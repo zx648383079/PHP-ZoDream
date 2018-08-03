@@ -8,11 +8,11 @@ use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
 use Zodream\Database\Command;
 use Zodream\Disk\FileSystem;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Service\Factory;
-use Zodream\Infrastructure\Http\URL;
+
 use Exception;
 
 class DiskController extends Controller {
@@ -86,7 +86,7 @@ class DiskController extends Controller {
         if (!$model->save()) {
             return $this->jsonFailure('分享失败');
         }
-        $data['url'] = (string)URL::to('./share', ['id' => $model->id]);
+        $data['url'] = url('./share', ['id' => $model->id]);
         $transaction = Command::getInstance()->beginTransaction();
         try {
             $disks = [];
@@ -261,10 +261,10 @@ class DiskController extends Controller {
 
     public function getUrl($file) {
         if ($file['type'] == FileModel::TYPE_MUSIC) {
-            return (string)URL::to('./file/music', ['id' => $file['id']]);
+            return url('./file/music', ['id' => $file['id']]);
         }
         if ($file['type'] == FileModel::TYPE_VIDEO) {
-            return (string)URL::to('./file', ['id' => $file['id']]);
+            return url('./file', ['id' => $file['id']]);
         }
         return '';
     }

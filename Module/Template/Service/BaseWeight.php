@@ -4,7 +4,7 @@ namespace Module\Template\Service;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Page;
 use Zodream\Disk\Directory;
-use Zodream\Infrastructure\Http\Request;
+
 
 abstract class BaseWeight {
     /**

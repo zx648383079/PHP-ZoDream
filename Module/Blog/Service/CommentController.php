@@ -4,8 +4,8 @@ namespace Module\Blog\Service;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\ModuleController;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
+
+
 
 class CommentController extends ModuleController {
 

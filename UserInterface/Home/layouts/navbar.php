@@ -1,8 +1,5 @@
 <?php
-use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Support\Html;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\URL;
 /** @var $this \Zodream\Template\View */
 ?>
 <nav class="navbar navbar-default" role="navigation">
@@ -14,18 +11,18 @@ use Zodream\Infrastructure\Http\URL;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?=URL::to('/');?>">ZoDream</a>
+        <a class="navbar-brand" href="<?=$this->url('/');?>">ZoDream</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="<?=URL::to('/');?>">首页</a></li>
-            <li<?=$this->cas(Url::hasUri('blog'), ' class="active"');?>><a href="<?=URL::to('/blog');?>">博客</a></li>
-            <li<?=$this->cas(Url::hasUri('laboratory'));?>><a href="<?=URL::to('/laboratory');?>">实验室</a></li>
-            <li<?=$this->cas(Url::hasUri('document'));?>><a href="<?=URL::to('/document');?>">文档</a></li>
-            <li<?=$this->cas(Url::hasUri('talk'));?>><a href="<?=URL::to('/talk');?>">日志</a></li>
-            <li<?=$this->cas(Url::hasUri('about'));?>><a href="<?=URL::to('/about');?>">关于</a></li>
+            <li><a href="<?=$this->url('/');?>">首页</a></li>
+            <li<?=$this->cas(Url::hasUri('blog'), ' class="active"');?>><a href="<?=$this->url('/blog');?>">博客</a></li>
+            <li<?=$this->cas(Url::hasUri('laboratory'));?>><a href="<?=$this->url('/laboratory');?>">实验室</a></li>
+            <li<?=$this->cas(Url::hasUri('document'));?>><a href="<?=$this->url('/document');?>">文档</a></li>
+            <li<?=$this->cas(Url::hasUri('talk'));?>><a href="<?=$this->url('/talk');?>">日志</a></li>
+            <li<?=$this->cas(Url::hasUri('about'));?>><a href="<?=$this->url('/about');?>">关于</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
@@ -36,7 +33,7 @@ use Zodream\Infrastructure\Http\URL;
 
         <ul class="nav navbar-nav navbar-right">
             <?php if (auth()->guest()) :?>
-                <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => URL::to()])?></li>
+                <li><?=Html::a('登录', ['account.php/auth', 'ReturnUrl' => $this->url()])?></li>
                 <li><?=Html::a('注册', ['account.php/auth/register'])?></li>
             <?php else:?>
             <li class="dropdown">

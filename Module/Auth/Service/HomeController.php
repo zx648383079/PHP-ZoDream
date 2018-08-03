@@ -5,10 +5,10 @@ use Carbon\Carbon;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
+
+
 use Zodream\Service\Factory;
-use Zodream\Infrastructure\Http\URL;
+
 
 class HomeController extends ModuleController {
 
@@ -51,7 +51,7 @@ class HomeController extends ModuleController {
         if ($user->load() && $user->signIn()) {
             $redirect_uri = app('request')->get('redirect_uri');
             return $this->jsonSuccess([
-                'url' => (string)URL::to(empty($redirect_uri) ? '/' : $redirect_uri)
+                'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
             ], '登录成功！');
         }
         return $this->jsonFailure($user->getFirstError());

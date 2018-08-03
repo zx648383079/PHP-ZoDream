@@ -8,7 +8,7 @@ namespace Domain\Model;
  */
 use Zodream\Database\Model\Model as BaseModel;
 use Zodream\Database\Query\Query;
-use Zodream\Infrastructure\Http\Request;
+
 
 abstract class Model extends BaseModel {
     /**

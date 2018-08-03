@@ -3,7 +3,7 @@ namespace Module\Cas\Service;
 
 use Module\Cas\Domain\Client;
 use Module\Cas\Domain\Model\ClientTicketModel;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Service\Config;
 use Zodream\Service\Factory;
 

@@ -6,8 +6,8 @@ use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
+
+
 use Zodream\Service\Factory;
 
 class ShareController extends Controller {

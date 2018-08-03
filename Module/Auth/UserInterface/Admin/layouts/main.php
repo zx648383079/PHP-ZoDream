@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Zodream\Domain\Access\Auth;
+
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',

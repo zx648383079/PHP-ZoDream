@@ -1,7 +1,7 @@
 <?php
 namespace Module\OpenPlatform\Domain;
 
-use Zodream\Infrastructure\Http\Request;
+
 
 class Hmac {
 

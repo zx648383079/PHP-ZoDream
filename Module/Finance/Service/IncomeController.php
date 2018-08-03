@@ -7,8 +7,8 @@ use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\URL;
+
+
 
 class IncomeController extends Controller {
 
@@ -66,14 +66,14 @@ class IncomeController extends Controller {
             BudgetModel::find($model->budget_id)->refreshSpent();
         }
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./income/log')
+            'url' => url('./income/log')
         ]);
     }
 
     public function deleteLogAction($id) {
         LogModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./income/log')
+            'url' => url('./income/log')
         ]);
     }
 
@@ -86,7 +86,7 @@ class IncomeController extends Controller {
         $model = new ConsumptionChannelModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./income/channel')
+                'url' => url('./income/channel')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -95,7 +95,7 @@ class IncomeController extends Controller {
     public function deleteChannelAction($id) {
         ConsumptionChannelModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./income/channel')
+            'url' => url('./income/channel')
         ]);
     }
 }

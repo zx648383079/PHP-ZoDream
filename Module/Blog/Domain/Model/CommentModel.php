@@ -2,7 +2,7 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Domain\Access\Auth;
+
 
 /**
  * Class CommentModel

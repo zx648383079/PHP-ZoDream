@@ -66,7 +66,7 @@ class HomeController extends Controller {
         $generate->importSql(APP_DIR.'/document/zodream.sql');
         return $this->json([
             'status' => 1,
-            'url' => (string)URL::to(['complete'])
+            'url' => url(['complete'])
         ]);
     }
 

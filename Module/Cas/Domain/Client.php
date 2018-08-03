@@ -2,8 +2,8 @@
 namespace Module\Cas\Domain;
 
 use Zodream\Http\Http;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\URL;
+
+
 
 class Client {
 
@@ -26,12 +26,12 @@ class Client {
 
 
     public static function getServerUrl($path, $params = []) {
-        return URL::to('./server/'.$path, $params)->setHost(static::getServerHostname());
+        return url('./server/'.$path, $params)->setHost(static::getServerHostname());
     }
 
     public static function getServerLoginURL($gateway = false, $renew = false) {
         $uri = static::getServerUrl('login', [
-            'service' => (string)URL::to('./client')
+            'service' => url('./client')
         ]);
         if ($renew) {
             return $uri->addData('renew', 'true');
@@ -45,7 +45,7 @@ class Client {
 
     public static function getServerServiceValidateURL() {
         return static::getServerUrl('validate', [
-            'service' => (string)URL::to('./client')
+            'service' => url('./client')
         ]);
     }
 

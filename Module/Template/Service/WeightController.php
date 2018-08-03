@@ -3,7 +3,7 @@ namespace Module\Template\Service;
 
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\WeightModel;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Route\Controller\Controller;
 
 class WeightController extends Controller {

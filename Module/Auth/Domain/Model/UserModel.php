@@ -1,12 +1,12 @@
 <?php
 namespace Module\Auth\Domain\Model;
 
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Database\Model\UserModel as BaseModel;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Security\Hash;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Service\Factory;
 
 /**

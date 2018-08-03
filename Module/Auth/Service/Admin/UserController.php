@@ -4,8 +4,8 @@ namespace Module\Auth\Service\Admin;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
+
+
 use Zodream\Validate\Validator;
 
 class UserController extends Controller {

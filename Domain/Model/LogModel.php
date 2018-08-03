@@ -1,9 +1,9 @@
 <?php
 namespace Domain\Model;
 
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\URL;
+
+
+
 
 /**
 * Class LogModel
@@ -53,7 +53,7 @@ class LogModel extends Model {
 		return (new static)->add(array(
 			'event' => $action,
 			'data' => is_string($data) ? $data : json_encode($data),
-			'url' => URL::to(),
+			'url' => url()->current(),
 			'ip' => app('request')->ip(),
 			'create_at' => time(),
 			'user' => auth()->guest() ? null : auth()->user()['name']

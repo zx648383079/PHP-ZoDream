@@ -7,7 +7,7 @@ use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Setting;
 use Module\Book\Service\Controller;
-use Zodream\Domain\Access\Auth;
+
 
 class BookController extends Controller {
 

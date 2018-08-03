@@ -2,7 +2,7 @@
 namespace Module\Disk\Domain\Model;
 
 use Zodream\Database\Model\Model;
-use Zodream\Domain\Access\Auth;
+
 
 /**
  * Class ShareModel

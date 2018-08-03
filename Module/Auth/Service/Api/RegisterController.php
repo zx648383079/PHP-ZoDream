@@ -3,7 +3,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Domain\Access\JWTAuth;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Route\Controller\RestController;
 
 class RegisterController extends RestController {

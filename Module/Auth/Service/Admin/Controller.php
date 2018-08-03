@@ -2,7 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\URL;
+
 
 class Controller extends ModuleController {
 
@@ -15,7 +15,7 @@ class Controller extends ModuleController {
     }
 
     protected function getUrl($path, $args = []) {
-        return (string)URL::to('./admin/'.$path, $args);
+        return url('./admin/'.$path, $args);
     }
 
     public function redirectWithMessage($url, $message, $time = 4, $status = 404) {

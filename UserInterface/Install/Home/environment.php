@@ -1,6 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
-use Zodream\Infrastructure\Http\URL;
+
 /** @var $this \Zodream\Template\View */
 $this->extend('layouts/header');
 ?>
@@ -83,7 +83,7 @@ $this->extend('layouts/header');
     </tbody>
 </table>
 
-<a class="btn btn-primary" href="<?=URL::to(['database']);?>">下一步</a>
+<a class="btn btn-primary" href="<?==$this->url(['database']);?>">下一步</a>
 </div>
 
 <?php $this->extend('layouts/footer');?>

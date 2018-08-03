@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Zodream\Domain\Access\Auth;
+
 
 class MemberController extends Controller {
 

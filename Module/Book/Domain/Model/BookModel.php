@@ -9,8 +9,8 @@ namespace Module\Book\Domain\Model;
  */
 use Domain\Model\Model;
 use Zodream\Database\Model\Query;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\URL;
+
+
 
 /**
  * Class BookModel
@@ -114,15 +114,15 @@ class BookModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return URL::to('./book', ['id' => $this->id]);
+        return url('./book', ['id' => $this->id]);
     }
 
     public function getDownloadUrlAttribute() {
-        return URL::to('./book/download', ['id' => $this->id]);
+        return url('./book/download', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return URL::to('./mobile/book', ['id' => $this->id]);
+        return url('./mobile/book', ['id' => $this->id]);
     }
 
     public function getFirstChapterAttribute() {

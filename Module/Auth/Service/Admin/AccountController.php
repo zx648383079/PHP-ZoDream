@@ -3,9 +3,9 @@ namespace Module\Auth\Service\Admin;
 
 
 use Module\Auth\Domain\Model\UserModel;
-use Zodream\Domain\Access\Auth;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\URL;
+
+
+
 
 class AccountController extends Controller {
 
@@ -50,7 +50,7 @@ class AccountController extends Controller {
         if ($model->save()) {
             auth()->user()->logout();
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./')
+                'url' => url('./')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

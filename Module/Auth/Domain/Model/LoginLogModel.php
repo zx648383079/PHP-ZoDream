@@ -1,7 +1,7 @@
 <?php
 namespace Module\Auth\Domain\Model;
 
-use Zodream\Infrastructure\Http\Request;
+
 use Domain\Model\Model;
 
 /**

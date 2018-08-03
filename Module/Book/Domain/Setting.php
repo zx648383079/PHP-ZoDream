@@ -2,9 +2,9 @@
 namespace Module\Book\Domain;
 
 use Module\Auth\Domain\Model\UserMetaModel;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Infrastructure\Cookie;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Infrastructure\Traits\Attributes;
 
 class Setting {

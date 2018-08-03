@@ -2,7 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\Request;
+
 
 /**
  * Class PageWeightModel

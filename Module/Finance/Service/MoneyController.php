@@ -5,8 +5,8 @@ use Module\Finance\Domain\Model\FinancialProductModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\URL;
+
+
 
 class MoneyController extends Controller {
 
@@ -39,7 +39,7 @@ class MoneyController extends Controller {
         $model = new MoneyAccountModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./money/account')
+                'url' => url('./money/account')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -48,7 +48,7 @@ class MoneyController extends Controller {
     public function changeAccountAction($id) {
         MoneyAccountModel::record()->where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./money/account')
+            'url' => url('./money/account')
         ]);
     }
 
@@ -57,7 +57,7 @@ class MoneyController extends Controller {
             'deleted_at' => time()
         ]);
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./money/account')
+            'url' => url('./money/account')
         ]);
     }
 
@@ -81,7 +81,7 @@ class MoneyController extends Controller {
         $model = new FinancialProjectModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./money/project')
+                'url' => url('./money/project')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -90,7 +90,7 @@ class MoneyController extends Controller {
     public function deleteProjectAction($id) {
         FinancialProjectModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./money/project')
+            'url' => url('./money/project')
         ]);
     }
 
@@ -110,7 +110,7 @@ class MoneyController extends Controller {
         $model->remark = sprintf('理财项目 %s 收益', $project->name);
         if ($model->save()) {
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./money/project')
+                'url' => url('./money/project')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -134,7 +134,7 @@ class MoneyController extends Controller {
         $model = new FinancialProductModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => (string)URL::to('./money/product')
+                'url' => url('./money/product')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -143,14 +143,14 @@ class MoneyController extends Controller {
     public function deleteProductAction($id) {
         FinancialProductModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./money/product')
+            'url' => url('./money/product')
         ]);
     }
 
     public function changeProductAction($id) {
         FinancialProductModel::record()->where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
-            'url' => (string)URL::to('./money/product')
+            'url' => url('./money/product')
         ]);
     }
 }

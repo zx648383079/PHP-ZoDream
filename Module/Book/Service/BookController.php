@@ -9,7 +9,7 @@ use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Setting;
 use Zodream\Disk\File;
 use Zodream\Disk\Stream;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Service\Factory;
 
 class BookController extends Controller {

@@ -2,7 +2,7 @@
 namespace Module\Shop\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Domain\Access\Auth;
+
 
 /**
  * Class OrderGoodsModel

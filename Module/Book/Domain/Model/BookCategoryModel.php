@@ -2,7 +2,7 @@
 namespace Module\Book\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\URL;
+
 
 /**
  * Class BookCategoryModel
@@ -52,11 +52,11 @@ class BookCategoryModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return URL::to('./category', ['id' => $this->id]);
+        return url('./category', ['id' => $this->id]);
     }
 
     public function getWapUrlAttribute() {
-        return URL::to('./mobile/category', ['id' => $this->id]);
+        return url('./mobile/category', ['id' => $this->id]);
     }
 
     public function getRecommendBookAttribute() {

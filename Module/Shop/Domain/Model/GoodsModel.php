@@ -8,7 +8,7 @@ namespace Module\Shop\Domain\Model;
  * Time: 19:07
  */
 use Domain\Model\Model;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Html\Page;
 
 /**

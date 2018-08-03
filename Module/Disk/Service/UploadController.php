@@ -2,7 +2,7 @@
 namespace Module\Disk\Service;
 
 use Zodream\Domain\Upload\UploadInput;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Service\Factory;
 
 /**

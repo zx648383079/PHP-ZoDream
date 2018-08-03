@@ -8,7 +8,7 @@ use Module\LogView\Domain\Parser\IIS;
 use Module\LogView\Domain\Tag;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Service\Factory;
 
 class LogController extends Controller {

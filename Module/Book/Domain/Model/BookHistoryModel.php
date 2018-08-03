@@ -2,10 +2,10 @@
 namespace Module\Book\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Cookie;
-use Zodream\Infrastructure\Http\Request;
+
 
 /**
  * Class BookHistoryModel

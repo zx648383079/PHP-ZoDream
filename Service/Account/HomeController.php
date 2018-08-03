@@ -2,7 +2,7 @@
 namespace Service\Account;
 
 use Domain\Model\Blog\CommentModel;
-use Zodream\Domain\Access\Auth;
+
 use Zodream\Infrastructure\Http\Request\Post;
 
 class HomeController extends Controller {

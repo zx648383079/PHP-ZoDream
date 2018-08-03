@@ -18,9 +18,9 @@ PRIMARY KEY (`id`))
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;
  */
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Http\Request;
+
 use Zodream\Service\Factory;
-use Zodream\Infrastructure\Http\URL;
+
 
 /**
  * Class VisitLogModel
@@ -83,7 +83,7 @@ class VisitLogModel extends Model {
 		$model->os = $os[0];
 		$model->os_version = $os[1];
 		$model->referer = Url::referrer();
-		$model->url = URL::to();
+		$model->url = url()->current();
 		$model->session = Factory::session()->id();
 		$model->agent = app('request')->server('HTTP_USER_AGENT', '-');
 		$model->create_at = Time::format();

@@ -4,7 +4,7 @@ namespace Module\Chat\Service;
 
 use Module\Chat\Domain\Model\FriendGroupModel;
 use Module\ModuleController;
-use Zodream\Domain\Access\Auth;
+
 
 class HomeController extends ModuleController {
 
