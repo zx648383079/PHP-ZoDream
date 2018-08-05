@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Helpers\Disk;
 /** @var $this View */
 $this->title = 'ZoDream';
 $this->extend('layouts/header');
@@ -56,8 +57,8 @@ $this->extend('layouts/header');
           <div class="btn" style="width:108px"><a href="<?=$book->url?>" class="yd" title="在线阅读" style="margin-right:2px">在线阅读</a></div>
 		  <div class="down">
 		  txt文件：<a href="<?=$this->url('./book/txt', ['id' => $book->id])?>" title="<?=$book->name?>txt电子书" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'txt', '<?=$book->name?>','','']);">
-                  点击下载( MB)</a> | zip压缩包：<a href="<?=$this->url('./book/zip', ['id' => $book->id])?>" title="<?=$book->name?>txt电子书zip压缩包" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'zip', '<?=$book->name?>','','']);">
-                  点击下载( MB)</a>
+                  点击下载(<?=Disk::size($book->size)?>)</a> | zip压缩包：<a href="<?=$this->url('./book/zip', ['id' => $book->id])?>" title="<?=$book->name?>txt电子书zip压缩包" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'zip', '<?=$book->name?>','','']);">
+                  点击下载(<?=Disk::size($book->size / 3)?>)</a>
 		  </div>
         </div>
         <div class="vote">说明：zip压缩包解压后可得到txt文件，txt文件比较大，请不要用记事本直接打开，除非你的电脑配置够好，否者会卡机或者假死。推荐用专业的文档编辑工具打开（如：Notepad++等），会省很多事。

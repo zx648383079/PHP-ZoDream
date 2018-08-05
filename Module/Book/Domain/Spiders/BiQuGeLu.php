@@ -7,14 +7,20 @@ use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 
-class Sj extends BaseSpider {
+class BiQuGeLu extends BaseSpider {
+
+    protected $matchCatalog = '#^/?book/\d+/?$#i';
+
+    protected $matchContent = '#^/?book/\d+/\d+\.html$#i';
+
+    protected $matchList = '#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
 
     /**
      * @param Uri $uri
      * @return boolean
      */
     public function isCatalogPage(Uri $uri) {
-        return preg_match('#^/?book/\d+/?$#i', $uri->getPath(), $match);
+        return preg_match($this->matchCatalog, $uri->getPath(), $match);
     }
 
     /**
@@ -22,7 +28,7 @@ class Sj extends BaseSpider {
      * @return boolean
      */
     public function isContentPage(Uri $uri) {
-        return preg_match('#^/?book/\d+/\d+\.html$#i', $uri->getPath(), $match);
+        return preg_match($this->matchContent, $uri->getPath(), $match);
     }
 
     /**
@@ -31,18 +37,13 @@ class Sj extends BaseSpider {
      * @return BookModel
      */
     public function getBook(Html $html, Uri $uri) {
-        //$author = $html->find('#info p', 0)->text;
-        //$author = explode('：', $author, 2);
-        //$path = $html->find('#fmimg img', 0)->src;
-//        if (!empty($path)) {
-//            $path = (clone $uri)->setPath($path)->encode();
-//        }
         return new BookModel([
-            'name' => $html->find('#info', 0)->find('h1', 0)->text,
-            'cover' => '',
-            'description' => '',
-            'author_id' => 1,
-            'cat_id' => 1
+            'name' => $html->find('.info h2', 0)->text,
+            'cover' => '/assets/images/book_default.jpg',
+            'description' => '',//$html->find('#intro', 0)->text,
+            'author_id' => 1,//BookAuthorModel::findOrNewByName(end($author))->id,
+            'cat_id' => 1,
+            'classify' => 1
         ]);
     }
 
@@ -53,12 +54,22 @@ class Sj extends BaseSpider {
      */
     public function getCatalog(Html $html, Uri $baseUri) {
         $uris = [];
-        $html->find('#info', 2)->matches('#<a[^<>]+href="(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i',
+        $html->find('.listmain', 0)->matches($this->matchList,
             function ($match) use (&$uris, $baseUri) {
-                if (!$this->isNewChapter($match[1])) {
+                if (count($match) == 3) {
+                    if (!$this->isNewChapter($match[1])) {
+                        return;
+                    }
+                    $uris[$match[1]] = $match[2];
                     return;
                 }
-                $uris[$match[1]] = $match[2];
+                if (strpos($match[0], $baseUri->getPath()) === false) {
+                    return;
+                }
+                if (!$this->isNewChapter($match[2])) {
+                    return;
+                }
+                $uris[$match[2]] = $match[3];
         });
         $data = [];
         foreach ($uris as $key => $name) {
@@ -77,16 +88,14 @@ class Sj extends BaseSpider {
         if ($html->isEmpty()) {
             return null;
         }
-        $content = $html->find('#content1', 0);
+        $content = $html->find('#content', 0);
         if (empty($content)) {
             return null;
         }
         /// html 转文本还有问题
-        $text = self::toText($content->html);
-        //$encoding = mb_detect_encoding($text, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
         return new BookChapterModel([
-            'title' => $html->find('.txt_cont h1', 0)->text,
-            'content' => mb_convert_encoding($text, 'utf-8', 'ASCII, UTF-8, GB2312, GBK, BIG5')
+            'title' => $html->find('.content h1', 0)->text,
+            'content' => self::toText($content->html)
         ]);
     }
 }

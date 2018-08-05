@@ -10,6 +10,24 @@ $this->title = 'ZoDream';
                 <label class="sr-only" for="keywords">标题</label>
                 <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题">
             </div>
+            <div class="input-group">
+                <label>分类</label>
+                <select name="cat_id">
+                    <option value="">请选择</option>
+                    <?php foreach($cat_list as $item):?>
+                    <option value="<?=$item->id?>"><?=$item->real_name?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>作者</label>
+                <select name="author_id">
+                    <option value="">请选择</option>
+                    <?php foreach($author_list as $item):?>
+                    <option value="<?=$item->id?>"><?=$item->name?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/book/create')?>">新增小说</a>

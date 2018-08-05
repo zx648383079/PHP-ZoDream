@@ -64,7 +64,10 @@ class Hun extends BaseSpider {
         $uris = [];
        $html->matches('#\<li[^\>\<]+\>\<div\sclass="novel_num"\>\</div\>\<a\shref="(\d+)\.html"\>(.+?)\</a\>\</li\>#',
            function ($match) use (&$uris, $baseUri) {
-           $uris[$match[1]] = $match[2];
+               if (!$this->isNewChapter($match[1])) {
+                   return;
+               }
+               $uris[$match[1]] = $match[2];
        });
         $data = [];
         foreach ($uris as $key => $name) {

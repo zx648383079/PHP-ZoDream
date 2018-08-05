@@ -9,12 +9,18 @@ use Zodream\Spider\Support\Uri;
 
 class BiQuGe extends BaseSpider {
 
+    protected $matchCatalog = '#^/?book/\d+/?$#i';
+
+    protected $matchContent = '#^/?book/\d+/\d+\.html$#i';
+
+    protected $matchList = '#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
+
     /**
      * @param Uri $uri
      * @return boolean
      */
     public function isCatalogPage(Uri $uri) {
-        return preg_match('#^/?book/\d+/?$#i', $uri->getPath(), $match);
+        return preg_match($this->matchCatalog, $uri->getPath(), $match);
     }
 
     /**
@@ -22,7 +28,7 @@ class BiQuGe extends BaseSpider {
      * @return boolean
      */
     public function isContentPage(Uri $uri) {
-        return preg_match('#^/?book/\d+/\d+\.html$#i', $uri->getPath(), $match);
+        return preg_match($this->matchContent, $uri->getPath(), $match);
     }
 
     /**
@@ -40,7 +46,7 @@ class BiQuGe extends BaseSpider {
         return new BookModel([
             'name' => $html->find('#info h1', 0)->text,
             'cover' => $path,
-            'description' => '',$html->find('#intro', 0)->text,
+            'description' => '',//$html->find('#intro', 0)->text,
             'author_id' => 1,//BookAuthorModel::findOrNewByName(end($author))->id,
             'cat_id' => 1,
             'classify' => 1
@@ -54,9 +60,19 @@ class BiQuGe extends BaseSpider {
      */
     public function getCatalog(Html $html, Uri $baseUri) {
         $uris = [];
-        $html->find('#list', 0)->matches('#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i',
+        $html->find('#list', 0)->matches($this->matchList,
             function ($match) use (&$uris, $baseUri) {
+            if (count($match) == 3) {
+                if (!$this->isNewChapter($match[1])) {
+                    return;
+                }
+                $uris[$match[1]] = $match[2];
+                return;
+            }
             if (strpos($match[0], $baseUri->getPath()) === false) {
+                return;
+            }
+            if (!$this->isNewChapter($match[2])) {
                 return;
             }
             $uris[$match[2]] = $match[3];

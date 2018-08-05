@@ -70,7 +70,7 @@ $this->extend('../layouts/header');
 						<td width="5">&nbsp;</td>
 						<td width="50%">
 							<a class="collect" href="<?=$book->download_url?>">
-                                <?=$book->name?>txt下载</a>
+                                TXT下载</a>
 						</td>
 					</tr>
 				</table>

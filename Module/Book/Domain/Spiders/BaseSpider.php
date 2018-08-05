@@ -13,6 +13,19 @@ abstract class BaseSpider {
 
     protected $url_list = [];
 
+    protected $start = null;
+
+    protected $isNewChapter = true;
+
+    /**
+     * @param null $start
+     * @return BaseSpider
+     */
+    public function setStart($start) {
+        $this->start = $start;
+        return $this;
+    }
+
     public function invoke(Uri $uri, callable $next = null) {
         if ($this->isContentPage($uri)) {
             $html = $this->decode(Spider::url($uri));
@@ -28,14 +41,37 @@ abstract class BaseSpider {
         }
         $html = $this->decode(Spider::url($uri));
         $book = $this->getBook($html, $uri);
-        if ($book->isExist()) {
-            $this->debug(sprintf('《%s》 已存在书库', $book->name));
+        $book = $this->getRealBook($book);
+        if (empty($book)) {
             return;
         }
-        $book->save();
+        $this->isNewChapter = false;
         $chapters = $this->getCatalog($html, $uri);
         $this->downloadChapter($book, $chapters, $next);
         return;
+    }
+
+    protected function isNewChapter($num) {
+        if ($this->isNewChapter || empty($this->start)) {
+            return true;
+        }
+        if ($num == $this->start) {
+            $this->isNewChapter = true;
+            return true;
+        }
+        return false;
+    }
+
+    protected function getRealBook(BookModel $book) {
+        if (!$book->isExist()) {
+            $book->save();
+            return $book;
+        }
+        if (empty($this->start)) {
+            $this->debug(sprintf('《%s》 已存在书库', $book->name));
+            return null;
+        }
+        return BookModel::where('name', $book->name)->one();
     }
 
     protected function decode(Html $html) {

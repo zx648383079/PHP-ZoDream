@@ -75,7 +75,7 @@ class BookController extends Controller {
         $file = $this->getBookFile($book);
         $zipFile = new File($file->getFullName().'.zip');
         $zip = new \ZipArchive();
-        $zip->open((string)$zipFile,ZIPARCHIVE::CREATE);
+        $zip->open((string)$zipFile,\ZipArchive::CREATE);
         $zip->addFile((string)$file, 'all.txt');
         $zip->close();
         $zipFile->setName($book->name.'.zip');

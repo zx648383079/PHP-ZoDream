@@ -41,7 +41,7 @@ $this->extend('layouts/header');
                           <?php endif;?>
                       </div>
                   </div>
-                  <div class="words">0</div>
+                  <div class="words"><?=$item->size?></div>
                   <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
                   <div class="abover"><span><?=$item->status?></span></div>
               </li>

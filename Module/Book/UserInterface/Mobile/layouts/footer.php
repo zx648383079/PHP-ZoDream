@@ -16,7 +16,7 @@ $this->registerJsFile('@jquery.min.js')
 	</div>
 	<div class="section copyright">
 		<p class="copy"><a href="<?=$this->url('./mobile')?>"><?=$site_name?>移动版</a>
-            <a href="<?=$this->url('./mobile')?>"><?=$this->url('./mobile')->getHost()?></a></p>
+            <a href="<?=$this->url('./mobile')?>"><?=url()->getHost()?></a></p>
 		<p><span class="time">版权声明：本站小说为转载作品，所有章节均由网友上传，转载至本站只是为了宣传本书让更多读者欣赏。</span></p>
 	</div>
 </div>

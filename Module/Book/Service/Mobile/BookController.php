@@ -20,7 +20,7 @@ class BookController extends Controller {
         $chapter_list = BookChapterModel::where('book_id', $id)
             ->order('position', 'asc')
             ->order('created_at', 'asc')->page();
-        $like_book = BookModel::where('cat_id', $book->cat_id)
+        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)
             ->where('id', '<>', $id)->order('click_count', 'desc')->limit(8)->all();
         if (is_null($page)) {
             $new_chapter = BookChapterModel::where('book_id', $id)->order('created_at', 'desc')->limit(3)->all();
@@ -36,7 +36,7 @@ class BookController extends Controller {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
-        $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(8)->all();
+        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(8)->all();
         BookHistoryModel::log($chapter);
         $setting = new Setting();
         $setting->load()->save();
@@ -49,9 +49,9 @@ class BookController extends Controller {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
-        $hot_book = BookModel::where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
-        $like_book = BookModel::where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();
-        $author_book = BookModel::where('author_id', $book->author_id)->order('created_at', 'desc')->all();
+        $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
+        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();
+        $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->order('created_at', 'desc')->all();
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
     }
 }

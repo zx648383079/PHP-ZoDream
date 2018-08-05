@@ -8,8 +8,8 @@ use Zodream\Domain\Debug\Log;
 class Txt {
 
     public function isTitle(string $line): bool {
-        //return preg_match('/^第.{1,20}[章|节|卷].{1,50}$/', trim($line));
-        return preg_match('/^(\d|\d{2}|1\d{0,2})$/', trim($line));
+        return preg_match('/^(正文)?\s*第.{1,20}[章|节|回|部|卷]\s*.{1,50}$/', trim($line));
+        //return preg_match('/^(\d|\d{2}|1\d{0,2})$/', trim($line));
     }
 
     public function save(string $title, $content) {
@@ -20,7 +20,7 @@ class Txt {
         $model =  new BookChapterModel([
             'title' => trim($title),
             'content' => $content,
-            'book_id' => 15
+            'book_id' => 81
         ]);
         $model->save();
     }

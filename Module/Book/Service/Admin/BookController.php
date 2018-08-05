@@ -19,7 +19,9 @@ class BookController extends Controller {
             })->when(!empty($author_id), function ($query) use ($author_id) {
                 $query->where('author_id', intval($author_id));
             })->order('id', 'desc')->page();
-        return $this->show(compact('model_list'));
+        $cat_list = BookCategoryModel::select('id', 'name')->all();
+        $author_list = BookAuthorModel::select('id', 'name')->all();
+        return $this->show(compact('model_list', 'cat_list', 'author_list'));
     }
 
     public function createAction() {
@@ -35,7 +37,13 @@ class BookController extends Controller {
 
     public function saveAction() {
         $model = new BookModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if (!$model->load()) {
+            return $this->jsonFailure('输入数据有误！');
+        }
+        if ($model->isExist()) {
+            return $this->jsonFailure('书籍已存在！');
+        }
+        if ($model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('book')
             ]);
@@ -98,6 +106,24 @@ class BookController extends Controller {
     }
 
     public function refreshAction() {
+        $this->deleteNoBookChapter();
+        $this->refreshBookSize();
+        return $this->jsonSuccess();
+    }
+
+    protected function refreshBookSize() {
+        $ids = BookModel::pluck('id');
+        foreach ($ids as $id) {
+            $ids = BookChapterModel::where('book_id', $id)->pluck('id');
+            $length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
+            BookModel::record()->where('id', $id)
+                ->update([
+                    'size' => $length
+                ]);
+        }
+    }
+
+    protected function deleteNoBookChapter(): void {
         $ids = BookChapterModel::query()->alias('c')
             ->left('book b', 'b.id', '=', 'c.book_id')
             ->where('b.id')
@@ -107,7 +133,6 @@ class BookController extends Controller {
             BookChapterModel::whereIn('id', $ids)->delete();
             BookChapterBodyModel::whereIn('id', $ids)->delete();
         }
-        return $this->jsonSuccess();
     }
 
 
