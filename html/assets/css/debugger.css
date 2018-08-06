@@ -1,0 +1,63 @@
+* {
+  margin: 0;
+  padding: 0; }
+
+.debugger-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  color: #333;
+  border: 1px solid #c9c9c9;
+  background: #EDEAE0;
+  min-width: 50px;
+  white-space: nowrap;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.15); }
+  .debugger-bar .bar-title {
+    cursor: pointer;
+    padding: 0 8px; }
+  .debugger-bar .bar-info {
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #f9cfa6; }
+    .debugger-bar .bar-info table {
+      border-collapse: collapse; }
+      .debugger-bar .bar-info table td {
+        line-height: 20px;
+        text-align: left;
+        border: 1px solid #af5d0d; }
+    .debugger-bar .bar-info::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+      margin-right: 5px;
+      background: #f5f5f5;
+      transition: all 0.3s ease-in-out;
+      border-radius: 0px; }
+    .debugger-bar .bar-info::-webkit-scrollbar-track {
+      -webkit-border-radius: 0px;
+      border-radius: 0px; }
+    .debugger-bar .bar-info::-webkit-scrollbar-thumb {
+      -webkit-border-radius: 0px;
+      border-radius: 0px;
+      background: rgba(0, 0, 0, 0.5); }
+      .debugger-bar .bar-info::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.6); }
+      .debugger-bar .bar-info::-webkit-scrollbar-thumb:active {
+        background: rgba(0, 0, 0, 0.8); }
+      .debugger-bar .bar-info::-webkit-scrollbar-thumb:window-inactive {
+        background: rgba(0, 0, 0, 0.4); }
+  .debugger-bar:hover {
+    opacity: 1;
+    transition: opacity 0.1s; }
+  .debugger-bar.expanded .bar-title .fa-close {
+    float: right; }
+  .debugger-bar.expanded .bar-info {
+    display: block; }
+
+.debugger-blue-screen .bs-header {
+  background: #CD1818;
+  color: white;
+  font-size: 13pt;
+  padding: 1px 25px; }
+
+/*# sourceMappingURL=debugger.css.map */
