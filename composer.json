@@ -36,7 +36,8 @@
     "mtdowling/cron-expression": "~1.0",
     "zhuzhichao/ip-location-zh": "^2.4",
     "khanamiryan/qrcode-detector-decoder": "^1.0",
-    "bacon/bacon-qr-code": "^1.0.3"
+    "bacon/bacon-qr-code": "^1.0.3",
+    "symfony/var-dumper": "^4.1"
   },
   "require-dev": {
     "phpunit/phpunit": "6.*",
