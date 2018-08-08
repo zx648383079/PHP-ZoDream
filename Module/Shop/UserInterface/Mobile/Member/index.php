@@ -16,10 +16,10 @@ $this->extend('../layouts/header', compact('header_btn'));
 <div class="has-header has-footer">
     <div class="user-header">
         <div class="avatar">
-            <img src="<?=$user->avatar?>">
+            <img src="<?=$user ? $user->avatar : '/assets/images/avatar/1.png'?>">
         </div>
         <div class="name">
-            欢迎您，<a href="<?=$this->url('./mobile/member/profile')?>"><?=$user->name?></a>~
+            欢迎您，<a href="<?=$this->url('./mobile/member/profile')?>"><?=$user ? $user->name : '请登陆'?></a>~
         </div>
     </div>
     <div class="menu-grid"><a href="<?=$this->url('./mobile/order')?>" class="item">

@@ -7,6 +7,7 @@ class CategoryController extends Controller {
 
     public function indexAction() {
         $cat_list = CategoryModel::where('parent_id', 0)->all();
-        return $this->show(compact('cat_list'));
+        $hot_list = [];
+        return $this->show(compact('cat_list', 'hot_list'));
     }
 }
