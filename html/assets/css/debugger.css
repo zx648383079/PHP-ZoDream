@@ -76,6 +76,17 @@
     .debugger-blue-screen .panel .panel-body .panel .panel-header {
       background: #f9cfa6;
       color: #333; }
+    .debugger-blue-screen .panel .panel-body .highlight {
+      background: #CD1818;
+      color: #fff; }
+  .debugger-blue-screen .panel .func-val {
+    color: #f00;
+    display: inline-block;
+    max-width: 200px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis; }
   .debugger-blue-screen .panel.expanded > .panel-body {
     display: block; }
 
