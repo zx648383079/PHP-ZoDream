@@ -457,6 +457,12 @@ footer,
             color: #fff;
             padding: 0.125rem 0.4375rem;
         }
+        &.empty-address {
+            height: 3.875rem;
+            h3 {
+                line-height: 3.875rem;
+            }
+        }
     }
 
     .line-item {

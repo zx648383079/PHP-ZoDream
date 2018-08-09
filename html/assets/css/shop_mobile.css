@@ -377,6 +377,10 @@ footer,
     background: #f00;
     color: #fff;
     padding: 0.125rem 0.4375rem; }
+  .checkout-box .address-box.empty-address {
+    height: 3.875rem; }
+    .checkout-box .address-box.empty-address h3 {
+      line-height: 3.875rem; }
 
 .checkout-box .line-item {
   position: relative;
