@@ -4,10 +4,17 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = $model->id > 0 ? '编辑' : '新增'. '用户';
+$js = <<<JS
+$('#role-box').select2();
+JS;
+
+$this->registerCssFile('@select2.min.css')
+    ->registerJsFile('@select2.min.js')
+    ->registerJs($js, View::JQUERY_READY);
 ?>
 
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./user/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/user/save')?>" method="post" class="form-table" role="form">
         <div class="input-group">
             <label>用户名</label>
             <div>
@@ -52,6 +59,16 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '用户';
             <label>确认密码</label>
             <div>
                 <input name="confirm_password" type="password" class="form-control"  placeholder="确认密码" <?=$model->id ? '' : 'required'?>>
+            </div>
+        </div>
+        <div class="input-group">
+            <label>角色</label>
+            <div>
+                <select name="roles[]" id="role-box" multiple style="width: 100%">
+                    <?php foreach($role_list as $item):?>
+                    <option value="<?=$item->id?>" <?=in_array($item->id, $model->role_ids) ? 'selected' : ''?>><?=$item->display_name?></option>
+                    <?php endforeach;?>
+                </select>
             </div>
         </div>
         <button type="submit" class="btn btn-success">确认保存</button>

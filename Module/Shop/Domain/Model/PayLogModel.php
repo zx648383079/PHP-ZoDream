@@ -22,6 +22,6 @@ use Domain\Model\Model;
  */
 class PayLogModel extends Model {
     public static function tableName() {
-        return 'pay_log';
+        return 'shop_pay_log';
     }
 }

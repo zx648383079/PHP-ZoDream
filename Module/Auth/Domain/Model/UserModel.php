@@ -2,9 +2,12 @@
 namespace Module\Auth\Domain\Model;
 
 
+use Module\Auth\Domain\Model\Concerns\FindPasswordTrait;
+use Module\Auth\Domain\Model\Concerns\LoginTrait;
+use Module\Auth\Domain\Model\Concerns\PasswordTrait;
+use Module\Auth\Domain\Model\Concerns\RegisterTrait;
+use Module\Auth\Domain\Model\Concerns\UserRoleTrait;
 use Zodream\Database\Model\UserModel as BaseModel;
-use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Security\Hash;
 
 use Zodream\Service\Factory;
@@ -24,6 +27,8 @@ use Zodream\Service\Factory;
  */
 class UserModel extends BaseModel {
 
+    use LoginTrait, RegisterTrait, PasswordTrait, UserRoleTrait, FindPasswordTrait;
+
     const SEX_MALE = 1; // 性别男
     const SEX_FEMALE = 2; //性别女
 
@@ -36,12 +41,6 @@ class UserModel extends BaseModel {
 	public static function tableName() {
         return 'user';
     }
-
-    protected $primaryKey = array (
-	  	'id',
-		'name',
-	  	'email',
-	);
 	
 	public $rememberMe = false;
 	
@@ -73,32 +72,7 @@ class UserModel extends BaseModel {
 			'created_at' => 'int',
 		);
 	}
-	
-	public function signInRules() {
-		return [
-			'email' => 'required|email',
-			'password' => 'required|string:0,30',
-			'code' => 'validateCode'
-		];
-	}
-	
-	public function signUpRules() {
-		return [
-			'name' => 'required|string:0,20',
-			'email' => 'required|email',
-			'password' => 'required|string:0,30',
-			'rePassword' => 'validateRePassword',
-			'agree' => ['validateAgree', 'message' => '必须同意相关协议！']
-		];
-	}
 
-	public function resetRules() {
-		return [
-			'oldPassword'     => 'required|string:0,30',
-			'password' => 'required|string:0,30',
-			'rePassword' => 'validateRePassword',
-		];
-	}
 
 	protected function labels() {
 		return array (
@@ -198,93 +172,6 @@ class UserModel extends BaseModel {
 		}
 		return true;
 	}
-	
-	public function signIn() {
-		if (!$this->validate($this->signInRules())) {
-			return false;
-		}
-		$user = $this->findByEmail($this->email);
-		if (empty($user)) {
-			$this->setError('email', '邮箱未注册！');
-			return false;
-		}
-		if (!$user->validatePassword($this->password)) {
-			$this->setError('password', '密码错误！');
-			return false;
-		}
-		if ($user->deleted_at > 0) {
-            $this->setError('deleted_at', '此用户已被禁止登录！');
-            return false;
-        }
-		if (!empty($this->rememberMe)) {
-			$token = Str::random(10);
-			$user->token = $token;
-			Cookie::set('token', $token, 3600 * 24 * 30);
-		}
-		if (!$user->save()) {
-		    $this->setError($user->getError());
-			return false;
-		}
-		return $user->login();
-	}
 
-    /**
-     * @return UserModel|boolean
-     */
-	public function signInHeader() {
-        list($this->email, $this->password) = $this->getBasicAuthCredentials();
-        return $this->signIn();
-    }
 
-    protected function getBasicAuthCredentials() {
-        $header = app('request')->header('Authorization');
-        if (empty($header)) {
-            return [null, null];
-        }
-        if (is_array($header)) {
-            $header = current($header);
-        }
-        if (strpos($header, 'Basic ') !== 0) {
-            return [null, null];
-        }
-        if (!($decoded = base64_decode(substr($header, 6)))) {
-            return [null, null];
-        }
-        if (strpos($decoded, ':') === false) {
-            return [null, null]; // HTTP Basic header without colon isn't valid
-        }
-        return explode(':', $decoded, 2);
-    }
-	
-	public function signUp() {
-		if (!$this->validate($this->signUpRules())) {
-			return false;
-		}
-        $user = $this->findByEmail($this->email);
-        if (!empty($user)) {
-            $this->setError('email', '邮箱已注册！');
-            return false;
-        }
-		$this->setPassword($this->password);
-		$this->created_at = time();
-		$this->avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
-		$this->sex = self::SEX_FEMALE;
-		if (!$this->save()) {
-			return false;
-		}
-		return $this->login();
-	}
-
-	public function resetPassword() {
-		if (!$this->validate($this->resetRules())) {
-			return false;
-		}
-		/** @var $user static */
-		$user = auth()->user();
-		if (!$user->validatePassword($this->password)) {
-			return false;
-		}
-		$user->setPassword($this->password);
-		return $user->save();
-	}
 }

@@ -14,15 +14,15 @@ class RegisterController extends ModuleController {
     }
 
     public function indexAction() {
-        return $this->show(array(
-            'title' => '后台注册'
-        ));
+        return $this->show();
     }
 
     public function postAction() {
         $model = new UserModel();
         if ($model->load() && $model->signUp()) {
-            return $this->jsonSuccess($model);
+            return $this->jsonSuccess([
+                'url' => url('/')
+            ]);
         }
         return $this->jsonFailure($model->getError());
     }

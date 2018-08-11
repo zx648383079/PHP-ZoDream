@@ -10,20 +10,18 @@ namespace Module\Shop\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class PaymentModel
+ * Class GoodsModel
  * @package Domain\Model\Shopping
  * @property integer $id
- * @property string $name
+ * @property string $content
+ * @property integer $star
+ * @property integer $user_id
+ * @property integer $goods_id
+ * @property integer $create_at
+ *
  */
-class ShippingModel extends Model {
+class CommentModel extends Model {
     public static function tableName() {
-        return 'shop_shipping';
-    }
-
-    /**
-     * @return float
-     */
-    public function getFee() {
-        return 0;
+        return 'shop_comment';
     }
 }

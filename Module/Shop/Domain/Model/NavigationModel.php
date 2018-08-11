@@ -22,7 +22,7 @@ class NavigationModel extends Model {
     ];
 
     public static function tableName() {
-        return 'navigation';
+        return 'shop_navigation';
     }
 
 

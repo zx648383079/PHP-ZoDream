@@ -13,6 +13,6 @@ use Domain\Model\Model;
  */
 class GoodsImageModel extends Model {
     public static function tableName() {
-        return 'goods_image';
+        return 'shop_goods_image';
     }
 }

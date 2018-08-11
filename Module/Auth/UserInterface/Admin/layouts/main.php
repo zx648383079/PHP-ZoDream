@@ -49,6 +49,19 @@ $this->registerCssFile([
                     </ul>
                 </li>
                 <li class="expand"><a href="javascript:;">
+                        <i class="fa fa-users"></i><span>权限管理</span></a>
+                    <ul>
+                            <li><a href="<?=$this->url('./admin/role')?>">
+                                <i class="fa fa-list"></i><span>角色列表</span></a></li>
+                            <li><a href="<?=$this->url('./admin/role/create')?>">
+                                <i class="fa fa-plus"></i><span>新增角色</span></a></li>
+                            <li><a href="<?=$this->url('./admin/permission')?>">
+                                <i class="fa fa-list"></i><span>权限列表</span></a></li>
+                            <li><a href="<?=$this->url('./admin/permission/create')?>">
+                                <i class="fa fa-plus"></i><span>新增权限</span></a></li>
+                    </ul>
+                </li>
+                <li class="expand"><a href="javascript:;">
                         <i class="fa fa-user"></i><span><?=auth()->user()->name?></span></a>
                     <ul>
                             <li><a href="<?=$this->url('./admin/account')?>">

@@ -3,6 +3,7 @@ namespace Module\Auth\Service\Admin;
 
 
 use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Model\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
 
 
@@ -24,7 +25,8 @@ class UserController extends Controller {
 
     public function editAction($id) {
         $model = UserModel::findOrNew($id);
-        return $this->show(compact('model'));
+        $role_list = RoleModel::all();
+        return $this->show(compact('model', 'role_list'));
     }
 
     public function saveAction() {
@@ -56,6 +58,7 @@ class UserController extends Controller {
         if (!$model->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
+        $model->setRole(app('request')->get('roles'));
         return $this->jsonSuccess([
             'url' => $this->getUrl('user')
         ]);

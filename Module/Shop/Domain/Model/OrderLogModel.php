@@ -17,6 +17,6 @@ use Domain\Model\Model;
  */
 class OrderLogModel extends Model {
     public static function tableName() {
-        return 'order_log';
+        return 'shop_order_log';
     }
 }

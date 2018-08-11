@@ -10,18 +10,14 @@ namespace Module\Shop\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class GoodsModel
+ * Class PaymentModel
  * @package Domain\Model\Shopping
  * @property integer $id
- * @property string $content
- * @property integer $star
- * @property integer $user_id
- * @property integer $goods_id
- * @property integer $create_at
- *
+ * @property string $name
  */
-class GoodsCommentModel extends Model {
+class ShippingRegionModel extends Model {
     public static function tableName() {
-        return 'goods_comment';
+        return 'shop_shipping_region';
     }
+
 }

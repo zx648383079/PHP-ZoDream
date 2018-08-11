@@ -18,8 +18,8 @@ use Domain\Model\Model;
  * @property integer $size
  *
  */
-class GoodsCommentImageModel extends Model {
+class CommentImageModel extends Model {
     public static function tableName() {
-        return 'goods_comment_image';
+        return 'shop_comment_image';
     }
 }

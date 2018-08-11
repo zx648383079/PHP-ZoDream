@@ -34,6 +34,9 @@
       .debugger-bar .bar-info table .error-tr {
         background: #CD1818;
         color: #fff; }
+      .debugger-bar .bar-info table .header-tr td {
+        line-height: 30px;
+        font-weight: 600; }
       .debugger-bar .bar-info table td {
         line-height: 20px;
         text-align: left;

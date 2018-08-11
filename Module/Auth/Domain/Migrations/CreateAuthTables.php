@@ -4,8 +4,12 @@ namespace Module\Auth\Domain\Migrations;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Model\PermissionModel;
+use Module\Auth\Domain\Model\RoleModel;
+use Module\Auth\Domain\Model\RolePermissionModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Model\UserRoleModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
@@ -57,6 +61,28 @@ class CreateAuthTables extends Migration {
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamp('expired_at');
             $table->timestamp('created_at');
+        });
+        Schema::createTable(RoleModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(40)->notNull()->unique();
+            $table->set('display_name')->varchar(100)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->timestamps();
+        });
+        Schema::createTable(UserRoleModel::tableName(), function(Table $table) {
+            $table->set('user_id')->int()->notNull()->unsigned();
+            $table->set('role_id')->int()->notNull()->unsigned();
+        });
+        Schema::createTable(PermissionModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(40)->notNull()->unique();
+            $table->set('display_name')->varchar(100)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->timestamps();
+        });
+        Schema::createTable(RolePermissionModel::tableName(), function(Table $table) {
+            $table->set('role_id')->int()->notNull()->unsigned();
+            $table->set('permission_id')->int()->notNull()->unsigned();
         });
     }
 

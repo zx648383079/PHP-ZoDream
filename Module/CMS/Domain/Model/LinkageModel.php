@@ -16,10 +16,6 @@ class LinkageModel extends Model {
         return 'cms_linkage';
     }
 
-    protected $primaryKey = [
-        'id',
-        'code',
-    ];
 
     protected function rules() {
         return [

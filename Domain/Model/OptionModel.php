@@ -15,9 +15,7 @@ class OptionModel extends Model {
         return 'options';
     }
 
-    protected $primaryKey = array (
-		'name',
-	);
+    protected $primaryKey = 'name';
 
 	protected function rules() {
 		return array (

@@ -7,7 +7,7 @@ $this->title = '个人资料';
 ?>
 
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./account/update')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/account/update')?>" method="post" class="form-table" role="form">
         <div class="input-group">
             <label>用户名</label>
             <div>

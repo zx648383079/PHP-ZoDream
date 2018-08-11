@@ -8,7 +8,7 @@ $this->title = '更改密码';
 ?>
 
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./account/update_password')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/account/update_password')?>" method="post" class="form-table" role="form">
         <div class="input-group">
             <label>原密码</label>
             <div>
