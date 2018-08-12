@@ -84,7 +84,7 @@ $this->extend('../layouts/header');
 			<!--首页广告1-->
 		</div>
 		<div class="mod block">
-			<div class="hd" style="height: 16px;">
+			<div class="hd hd-header">
 				<h4 style="float: left;">新书推荐</h4>
 				<span style="float: right;font-size: 12px;">[
 					<a href='<?=$this->url('./mobile/search/list', ['sort' => 'created_at'])?>'>更多···</a>]</span>
@@ -118,7 +118,7 @@ $this->extend('../layouts/header');
 			</div>
 		</div>
 		<div class="mod block">
-			<div class="hd" style="height: 16px;">
+			<div class="hd hd-header" >
 				<h4 style="float: left;">完本推荐</h4>
 				<span style="float: right;font-size: 12px;">[
 					<a href='<?=$this->url('./mobile/search/list', ['status' => 2])?>'>更多···</a>]</span>
@@ -179,7 +179,7 @@ $this->extend('../layouts/header');
 			</div>
 		</div>
 		<div class="mod block book-all-list">
-			<div class="hd" style="height: 16px;padding: 10px;">
+			<div class="hd hd-header">
 				<h4>最近更新小说列表</h4>
 			</div>
 			<div class="bd">

@@ -75,7 +75,7 @@ $this->extend('../layouts/header');
 			<!--广告-->
 		</div>
 		<div class="mod block column-list">
-			<div class="hd" style="height: 16px;">
+			<div class="hd hd-header">
 				<h4 style="float: left;">最新
                     <?=$cat->real_name ?>小说推荐</h4>
 				<span style="float: right;font-size: 12px;">[
@@ -97,7 +97,7 @@ $this->extend('../layouts/header');
 			</div>
 		</div>
 		<div class="mod block column-list">
-			<div class="hd" style="height: 16px;">
+			<div class="hd hd-header">
 				<h4 style="float: left;">完本
                     <?=$cat->real_name ?>小说推荐</h4>
 				<span style="float: right;font-size: 12px;">[
@@ -149,7 +149,7 @@ $this->extend('../layouts/header');
 			</div>
 		</div>
 		<div class="mod block book-all-list">
-			<div class="hd" style="height: 16px;padding: 10px;">
+			<div class="hd hd-header">
 				<h4>
                     <?=$cat->real_name ?>小说最近更新列表</h4>
 			</div>

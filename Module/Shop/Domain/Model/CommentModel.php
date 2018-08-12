@@ -24,4 +24,31 @@ class CommentModel extends Model {
     public static function tableName() {
         return 'shop_comment';
     }
+
+    protected function rules() {
+        return [
+            'user_id' => 'required|int',
+            'item_type' => 'int:0,99',
+            'item_id' => 'required|int',
+            'title' => 'required|string:0,255',
+            'content' => 'required|string:0,255',
+            'rank' => 'int:0,99',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'user_id' => 'User Id',
+            'item_type' => 'Item Type',
+            'item_id' => 'Item Id',
+            'title' => 'Title',
+            'content' => 'Content',
+            'rank' => 'Rank',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
 }

@@ -72,7 +72,8 @@ $this->extend('../layouts/header');
 			<!--广告-->
 		</div>
 		<div class="mod page">
-			<?=$book_list->getLink()?>
+            <?=$book_list->getLink()?>
+            <div class="clearfix"></div>
 		</div>
 	</div>
 <?php $this->extend('../layouts/footer');?>

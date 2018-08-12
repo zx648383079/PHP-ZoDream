@@ -9,7 +9,7 @@ use Module\Shop\Domain\Model\AttributeModel;
 use Module\Shop\Domain\Model\BrandModel;
 use Module\Shop\Domain\Model\CartModel;
 use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\CollectGoodsModel;
+use Module\Shop\Domain\Model\CollectModel;
 use Module\Shop\Domain\Model\CommentImageModel;
 use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
@@ -20,11 +20,15 @@ use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
+use Module\Shop\Domain\Model\ProductAttributeModel;
 use Module\Shop\Domain\Model\ProductModel;
 use Module\Shop\Domain\Model\RegionModel;
 use Module\Shop\Domain\Model\ShippingGroupModel;
 use Module\Shop\Domain\Model\ShippingModel;
 use Module\Shop\Domain\Model\ShippingRegionModel;
+use Module\Shop\Domain\Model\WarehouseGoodsModel;
+use Module\Shop\Domain\Model\WarehouseModel;
+use Module\Shop\Domain\Model\WarehouseRegionModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
@@ -78,6 +82,7 @@ class CreateShopTables extends Migration {
             $table->set('full_name')->varchar(100)->defaultVal('');
         });
         $this->createShipping();
+        $this->createWarehouse();
     }
 
     /**
@@ -88,7 +93,7 @@ class CreateShopTables extends Migration {
     public function down() {
         Schema::dropTable(ArticleModel::tableName());
         Schema::dropTable(ArticleCategoryModel::tableName());
-        Schema::dropTable(CollectGoodsModel::tableName());
+        Schema::dropTable(CollectModel::tableName());
         Schema::dropTable(GoodsModel::tableName());
         Schema::dropTable(CartModel::tableName());
         Schema::dropTable(NavigationModel::tableName());
@@ -196,8 +201,11 @@ class CreateShopTables extends Migration {
         Schema::createTable(ProductModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('goods_id')->int()->notNull();
-            $table->set('stock')->int()->defaultVal(0);
             $table->set('price')->decimal(10, 2)->defaultVal(0);
+        });
+        Schema::createTable(ProductAttributeModel::tableName(), function (Table $table) {
+            $table->set('product_id')->int()->notNull();
+            $table->set('attribute_id')->int()->notNull();
         });
     }
 
@@ -258,7 +266,7 @@ class CreateShopTables extends Migration {
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
         });
-        Schema::createTable(CollectGoodsModel::tableName(), function (Table $table) {
+        Schema::createTable(CollectModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
@@ -299,6 +307,24 @@ class CreateShopTables extends Migration {
             $table->set('goods_id')->int()->notNull();
             $table->set('number')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
+        });
+    }
+
+    protected function createWarehouse(): void {
+        Schema::createTable(WarehouseModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('tel')->varchar(30)->notNull();
+            $table->set('address')->varchar()->defaultVal('');
+        });
+        Schema::createTable(WarehouseGoodsModel::tableName(), function (Table $table) {
+            $table->set('warehouse_id')->int()->notNull();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('product_id')->int()->defaultVal(0);
+        });
+        Schema::createTable(WarehouseRegionModel::tableName(), function (Table $table) {
+            $table->set('warehouse_id')->int()->notNull();
+            $table->set('region_id')->int()->notNull();
         });
     }
 

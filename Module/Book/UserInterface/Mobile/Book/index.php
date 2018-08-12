@@ -117,6 +117,7 @@ $this->extend('../layouts/header');
 		</div>
 		<div class="mod page">
 			<?=$chapter_list->getLink()?>
+			<div class="clearfix"></div>
 		</div>
 		<div class="mod block column-list">
 			<div class="hd" boxid="heiyanMobileChapterJingpin">

@@ -11,15 +11,34 @@ use Domain\Model\Model;
 
 /**
  * Class GoodsCommentImageModel
- * @package Domain\Model\Shopping
  * @property integer $id
  * @property integer $comment_id
- * @property string $file
- * @property integer $size
+ * @property string $image
+ * @property integer $created_at
+ * @property integer $updated_at
  *
  */
 class CommentImageModel extends Model {
     public static function tableName() {
         return 'shop_comment_image';
+    }
+
+    protected function rules() {
+        return [
+            'comment_id' => 'required|int',
+            'image' => 'required|string:0,255',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'comment_id' => 'Comment Id',
+            'image' => 'Image',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
     }
 }

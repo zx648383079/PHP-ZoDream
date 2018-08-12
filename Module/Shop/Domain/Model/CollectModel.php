@@ -12,9 +12,9 @@ use Domain\Model\Model;
  * @property integer $goods_id
  * @property integer $created_at
  */
-class CollectGoodsModel extends Model {
+class CollectModel extends Model {
     public static function tableName() {
-        return 'shop_collect_goods';
+        return 'shop_collect';
     }
 
     protected function rules() {

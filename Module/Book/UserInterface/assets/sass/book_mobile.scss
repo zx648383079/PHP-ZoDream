@@ -84,25 +84,25 @@ textarea {
 }
 
 .alert {
-    padding: 8px 35px 8px 14px;
-    margin-bottom: 20px;
+    padding: 0.5rem 2.1875rem 0.5rem 0.875rem;
+    margin-bottom: 1.25rem;
     background-color: #fcf8e3;
-    border: 1px solid #fbeed5;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    border: 0.0625rem solid #fbeed5;
+    -webkit-border-radius: 0.25rem;
+    -moz-border-radius: 0.25rem;
+    border-radius: 0.25rem;
     color: #c09853;
     h4 {
         color: #c09853;
         margin: 0;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 0.875rem;
     }
     .close {
         position: relative;
-        top: -2px;
-        right: -21px;
-        line-height: 20px;
+        top: -0.125rem;
+        right: -1.3125rem;
+        line-height: 1.25rem;
     }
 }
 
@@ -143,15 +143,15 @@ textarea {
 }
 
 .alert-block {
-    padding-top: 14px;
-    padding-bottom: 14px;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
     p,
     ul {
         margin-bottom: 0;
     }
     p {
-        margin-top: 5px;
-        font-size: 12px;
+        margin-top: 0.3125rem;
+        font-size: 0.75rem;
     }
 }
 
@@ -164,20 +164,20 @@ table {
 
 .table {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     td {
-        padding: 8px;
-        line-height: 20px;
+        padding: 0.5rem;
+        line-height: 1.25rem;
         text-align: left;
         vertical-align: top;
-        border-top: 1px solid #ddd;
+        border-top: 0.0625rem solid #ddd;
     }
     th {
-        padding: 8px;
-        line-height: 20px;
+        padding: 0.5rem;
+        line-height: 1.25rem;
         text-align: left;
         vertical-align: top;
-        border-top: 1px solid #ddd;
+        border-top: 0.0625rem solid #ddd;
         font-weight: 700;
     }
     thead th {
@@ -202,7 +202,7 @@ table {
         }
     }
     tbody+tbody {
-        border-top: 2px solid #ddd;
+        border-top: 0.125rem solid #ddd;
     }
     .table {
         background-color: #fff;
@@ -212,20 +212,20 @@ table {
 .table-condensed {
     td,
     th {
-        padding: 4px 5px;
+        padding: 0.25rem 0.3125rem;
     }
 }
 
 .table-bordered {
-    border: 1px solid #ddd;
+    border: 0.0625rem solid #ddd;
     border-collapse: separate;
     border-left: 0;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: 0.25rem;
+    -moz-border-radius: 0.25rem;
+    border-radius: 0.25rem;
     td,
     th {
-        border-left: 1px solid #ddd;
+        border-left: 0.0625rem solid #ddd;
     }
     caption+ {
         tbody tr:first-child {
@@ -261,70 +261,70 @@ table {
     tbody:first-child tr:first-child> {
         td:first-child,
         th:first-child {
-            -webkit-border-top-left-radius: 4px;
-            -moz-border-radius-topleft: 4px;
-            border-top-left-radius: 4px;
+            -webkit-border-top-left-radius: 0.25rem;
+            -moz-border-radius-topleft: 0.25rem;
+            border-top-left-radius: 0.25rem;
         }
     }
     thead:first-child tr:first-child>th:first-child {
-        -webkit-border-top-left-radius: 4px;
-        -moz-border-radius-topleft: 4px;
-        border-top-left-radius: 4px;
+        -webkit-border-top-left-radius: 0.25rem;
+        -moz-border-radius-topleft: 0.25rem;
+        border-top-left-radius: 0.25rem;
     }
     tbody:first-child tr:first-child> {
         td:last-child,
         th:last-child {
-            -webkit-border-top-right-radius: 4px;
-            -moz-border-radius-topright: 4px;
-            border-top-right-radius: 4px;
+            -webkit-border-top-right-radius: 0.25rem;
+            -moz-border-radius-topright: 0.25rem;
+            border-top-right-radius: 0.25rem;
         }
     }
     thead:first-child tr:first-child>th:last-child {
-        -webkit-border-top-right-radius: 4px;
-        -moz-border-radius-topright: 4px;
-        border-top-right-radius: 4px;
+        -webkit-border-top-right-radius: 0.25rem;
+        -moz-border-radius-topright: 0.25rem;
+        border-top-right-radius: 0.25rem;
     }
     tbody:last-child tr:last-child> {
         td:first-child,
         th:first-child {
-            -webkit-border-bottom-left-radius: 4px;
-            -moz-border-radius-bottomleft: 4px;
-            border-bottom-left-radius: 4px;
+            -webkit-border-bottom-left-radius: 0.25rem;
+            -moz-border-radius-bottomleft: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
         }
     }
     tfoot:last-child tr:last-child> {
         td:first-child,
         th:first-child {
-            -webkit-border-bottom-left-radius: 4px;
-            -moz-border-radius-bottomleft: 4px;
-            border-bottom-left-radius: 4px;
+            -webkit-border-bottom-left-radius: 0.25rem;
+            -moz-border-radius-bottomleft: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
         }
     }
     thead:last-child tr:last-child>th:first-child {
-        -webkit-border-bottom-left-radius: 4px;
-        -moz-border-radius-bottomleft: 4px;
-        border-bottom-left-radius: 4px;
+        -webkit-border-bottom-left-radius: 0.25rem;
+        -moz-border-radius-bottomleft: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
     }
     tbody:last-child tr:last-child> {
         td:last-child,
         th:last-child {
-            -webkit-border-bottom-right-radius: 4px;
-            -moz-border-radius-bottomright: 4px;
-            border-bottom-right-radius: 4px;
+            -webkit-border-bottom-right-radius: 0.25rem;
+            -moz-border-radius-bottomright: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
         }
     }
     tfoot:last-child tr:last-child> {
         td:last-child,
         th:last-child {
-            -webkit-border-bottom-right-radius: 4px;
-            -moz-border-radius-bottomright: 4px;
-            border-bottom-right-radius: 4px;
+            -webkit-border-bottom-right-radius: 0.25rem;
+            -moz-border-radius-bottomright: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
         }
     }
     thead:last-child tr:last-child>th:last-child {
-        -webkit-border-bottom-right-radius: 4px;
-        -moz-border-radius-bottomright: 4px;
-        border-bottom-right-radius: 4px;
+        -webkit-border-bottom-right-radius: 0.25rem;
+        -moz-border-radius-bottomright: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
     }
     tfoot+tbody:last-child tr:last-child td {
         &:first-child {
@@ -341,33 +341,33 @@ table {
     caption+ {
         tbody tr:first-child td:first-child,
         thead tr:first-child th:first-child {
-            -webkit-border-top-left-radius: 4px;
-            -moz-border-radius-topleft: 4px;
-            border-top-left-radius: 4px;
+            -webkit-border-top-left-radius: 0.25rem;
+            -moz-border-radius-topleft: 0.25rem;
+            border-top-left-radius: 0.25rem;
         }
     }
     colgroup+ {
         tbody tr:first-child td:first-child,
         thead tr:first-child th:first-child {
-            -webkit-border-top-left-radius: 4px;
-            -moz-border-radius-topleft: 4px;
-            border-top-left-radius: 4px;
+            -webkit-border-top-left-radius: 0.25rem;
+            -moz-border-radius-topleft: 0.25rem;
+            border-top-left-radius: 0.25rem;
         }
     }
     caption+ {
         tbody tr:first-child td:last-child,
         thead tr:first-child th:last-child {
-            -webkit-border-top-right-radius: 4px;
-            -moz-border-radius-topright: 4px;
-            border-top-right-radius: 4px;
+            -webkit-border-top-right-radius: 0.25rem;
+            -moz-border-radius-topright: 0.25rem;
+            border-top-right-radius: 0.25rem;
         }
     }
     colgroup+ {
         tbody tr:first-child td:last-child,
         thead tr:first-child th:last-child {
-            -webkit-border-top-right-radius: 4px;
-            -moz-border-radius-topright: 4px;
-            border-top-right-radius: 4px;
+            -webkit-border-top-right-radius: 0.25rem;
+            -moz-border-radius-topright: 0.25rem;
+            border-top-right-radius: 0.25rem;
         }
     }
 }
@@ -408,73 +408,73 @@ table {
     td.span1,
     th.span1 {
         float: none;
-        width: 44px;
+        width: 2.75rem;
         margin-left: 0;
     }
     td.span2,
     th.span2 {
         float: none;
-        width: 124px;
+        width: 7.75rem;
         margin-left: 0;
     }
     td.span3,
     th.span3 {
         float: none;
-        width: 204px;
+        width: 12.75rem;
         margin-left: 0;
     }
     td.span4,
     th.span4 {
         float: none;
-        width: 284px;
+        width: 17.75rem;
         margin-left: 0;
     }
     td.span5,
     th.span5 {
         float: none;
-        width: 364px;
+        width: 22.75rem;
         margin-left: 0;
     }
     td.span6,
     th.span6 {
         float: none;
-        width: 444px;
+        width: 27.75rem;
         margin-left: 0;
     }
     td.span7,
     th.span7 {
         float: none;
-        width: 524px;
+        width: 32.75rem;
         margin-left: 0;
     }
     td.span8,
     th.span8 {
         float: none;
-        width: 604px;
+        width: 37.75rem;
         margin-left: 0;
     }
     td.span9,
     th.span9 {
         float: none;
-        width: 684px;
+        width: 42.75rem;
         margin-left: 0;
     }
     td.span10,
     th.span10 {
         float: none;
-        width: 764px;
+        width: 47.75rem;
         margin-left: 0;
     }
     td.span11,
     th.span11 {
         float: none;
-        width: 844px;
+        width: 52.75rem;
         margin-left: 0;
     }
     td.span12,
     th.span12 {
         float: none;
-        width: 924px;
+        width: 57.75rem;
         margin-left: 0;
     }
     tbody tr {
@@ -510,39 +510,39 @@ table {
 
 .badge {
     display: inline-block;
-    padding: 2px 4px;
-    font-size: 11.84px;
+    padding: 0.125rem 0.25rem;
+    font-size: 0.74rem;
     font-weight: 700;
-    line-height: 14px;
+    line-height: 0.875rem;
     color: #fff;
     vertical-align: baseline;
     white-space: nowrap;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    text-shadow: 0 -0.0625rem 0 rgba(0, 0, 0, 0.25);
     background-color: #999;
 }
 
 .label {
     display: inline-block;
-    padding: 2px 4px;
-    font-size: 11.84px;
+    padding: 0.125rem 0.25rem;
+    font-size: 0.74rem;
     font-weight: 700;
-    line-height: 14px;
+    line-height: 0.875rem;
     color: #fff;
     vertical-align: baseline;
     white-space: nowrap;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    text-shadow: 0 -0.0625rem 0 rgba(0, 0, 0, 0.25);
     background-color: #999;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 0.1875rem;
+    -moz-border-radius: 0.1875rem;
+    border-radius: 0.1875rem;
 }
 
 .badge {
-    padding-left: 9px;
-    padding-right: 9px;
-    -webkit-border-radius: 9px;
-    -moz-border-radius: 9px;
-    border-radius: 9px;
+    padding-left: 0.5625rem;
+    padding-right: 0.5625rem;
+    -webkit-border-radius: 0.5625rem;
+    -moz-border-radius: 0.5625rem;
+    border-radius: 0.5625rem;
     &:empty {
         display: none;
     }
@@ -625,7 +625,7 @@ a {
     .badge,
     .label {
         position: relative;
-        top: -1px;
+        top: -0.0625rem;
     }
 }
 
@@ -765,19 +765,19 @@ a {
 }
 
 .font-small {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .font-normal {
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .font-big {
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .font-large {
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 pre.note {
@@ -791,18 +791,18 @@ pre.note {
 
 .space-10 {
     font-size: 0;
-    padding-top: 10px;
+    padding-top: 0.625rem;
 }
 
 .space-20 {
     font-size: 0;
-    padding-top: 20px;
+    padding-top: 1.25rem;
 }
 
 .img-border {
-    padding: 1px;
+    padding: 0.0625rem;
     background: #fff;
-    border: 1px solid #ccc;
+    border: 0.0625rem solid #ccc;
 }
 
 .yahei {
@@ -813,7 +813,7 @@ pre.note {
     display: none;
     position: fixed;
     right: 0;
-    bottom: 30px;
+    bottom: 1.875rem;
 }
 
 html.ie6 .bottom-tools {
@@ -822,35 +822,35 @@ html.ie6 .bottom-tools {
 
 .bottom-tools .gotop {
     display: block;
-    width: 44px;
-    height: 56px;
+    width: 2.75rem;
+    height: 3.5rem;
     background: #ccc;
     position: relative;
     cursor: pointer;
 }
 
 .radius-5 {
-    border-radius: 5px !important;
+    border-radius: 0.3125rem !important;
 }
 
 .radius-8 {
-    border-radius: 8px !important;
+    border-radius: 0.5rem !important;
 }
 
 .radius-big {
-    border-radius: 50px !important;
+    border-radius: 3.125rem !important;
 }
 
 .button-small {
     display: inline-block;
-    font-size: 12px;
-    padding: 0 9px;
+    font-size: 0.75rem;
+    padding: 0 0.5625rem;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 0.125rem;
     font-family: Arial, '宋体';
     text-decoration: none;
-    line-height: 24px;
-    height: 24px;
+    line-height: 1.5rem;
+    height: 1.5rem;
     border: none;
     img {
         float: left;
@@ -859,14 +859,14 @@ html.ie6 .bottom-tools {
 
 .button-small-2 {
     display: inline-block;
-    font-size: 14px;
-    padding: 0 9px;
+    font-size: 0.875rem;
+    padding: 0 0.5625rem;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 0.375rem;
     font-family: Arial, '宋体';
     text-decoration: none;
-    line-height: 26px;
-    height: 26px;
+    line-height: 1.625rem;
+    height: 1.625rem;
     border: none;
     img {
         float: left;
@@ -875,14 +875,14 @@ html.ie6 .bottom-tools {
 
 .button-medium {
     display: inline-block;
-    font-size: 14px;
-    padding: 0 14px;
+    font-size: 0.875rem;
+    padding: 0 0.875rem;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 0.125rem;
     font-family: Arial, '宋体';
     text-decoration: none;
-    line-height: 30px;
-    height: 30px;
+    line-height: 1.875rem;
+    height: 1.875rem;
     border: none;
     font-weight: 700;
     img {
@@ -892,14 +892,14 @@ html.ie6 .bottom-tools {
 
 .button-large {
     display: inline-block;
-    font-size: 16px;
-    padding: 0 20px;
+    font-size: 1rem;
+    padding: 0 1.25rem;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 0.125rem;
     font-family: Arial, '宋体';
     text-decoration: none;
-    line-height: 36px;
-    height: 36px;
+    line-height: 2.25rem;
+    height: 2.25rem;
     border: none;
     font-weight: 700;
     img {
@@ -909,16 +909,16 @@ html.ie6 .bottom-tools {
 
 .button-input {
     display: inline-block;
-    font-size: 16px;
-    padding: 0 12px;
+    font-size: 1rem;
+    padding: 0 0.75rem;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 0.125rem;
     font-family: Arial, '宋体';
     text-decoration: none;
-    line-height: 34px;
-    height: 34px;
+    line-height: 2.125rem;
+    height: 2.125rem;
     border: none;
-    width: 120px;
+    width: 7.5rem;
     text-align: center;
     font-weight: 700;
     img {
@@ -949,14 +949,14 @@ html.ie6 .bottom-tools {
 }
 
 .button-b {
-    padding-top: 6px;
-    padding-bottom: 5px;
-    font-size: 14px;
+    padding-top: 0.375rem;
+    padding-bottom: 0.3125rem;
+    font-size: 0.875rem;
     font-weight: 700;
 }
 
 html.ie6 .button-b {
-    padding-top: 4px;
+    padding-top: 0.25rem;
 }
 
 .button-disabled {
@@ -964,7 +964,7 @@ html.ie6 .button-b {
     filter: none !important;
     border-color: #bbb !important;
     background: #d1d1d1 !important;
-    box-shadow: 0 1px 1px lightGrey, inset 0 1px 1px #f5f5f5 !important;
+    box-shadow: 0 0.0625rem 0.0625rem lightGrey, inset 0 0.0625rem 0.0625rem #f5f5f5 !important;
     text-shadow: none;
     color: #999 !important;
     .sp {
@@ -1080,10 +1080,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #75a875, #578a57);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff75a875', endColorstr='#ff578a57', GradientType=0);
-    border: 1px solid #95a995;
+    border: 0.0625rem solid #95a995;
     color: #fff !important;
-    text-shadow: 0 0 2px #3e4d3e;
-    border-radius: 5px;
+    text-shadow: 0 0 0.125rem #3e4d3e;
+    border-radius: 0.3125rem;
     cursor: pointer;
     text-decoration: none;
     &:hover {
@@ -1117,10 +1117,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #f60, #d35908);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff6600', endColorstr='#ffd35908', GradientType=0);
-    border: 1px solid #a04203;
+    border: 0.0625rem solid #a04203;
     color: #fff !important;
-    text-shadow: 0 0 2px #000;
-    border-radius: 5px;
+    text-shadow: 0 0 0.125rem #000;
+    border-radius: 0.3125rem;
     cursor: pointer;
     text-decoration: none;
     &:hover {
@@ -1154,10 +1154,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #d37575, #c55757);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd37575', endColorstr='#ffc55757', GradientType=0);
-    border: 1px solid #ac6060;
+    border: 0.0625rem solid #ac6060;
     color: #fff !important;
-    text-shadow: 0 0 2px #3b1f1f;
-    border-radius: 5px;
+    text-shadow: 0 0 0.125rem #3b1f1f;
+    border-radius: 0.3125rem;
     cursor: pointer;
     text-decoration: none;
     &:hover {
@@ -1183,7 +1183,7 @@ html.ie6 .button-b {
 }
 
 .button-g-black {
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     background-color: #373737;
     background-image: -moz-linear-gradient(top, #494949, #1d1d1d);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#494949), to(#1d1d1d));
@@ -1192,10 +1192,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #494949, #1d1d1d);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff494949', endColorstr='#ff1d1d1d', GradientType=0);
-    border: 1px solid #202020;
+    border: 0.0625rem solid #202020;
     color: #ccc !important;
     text-align: center;
-    box-shadow: 1px 1px 2px 0 #a9a9a9;
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0 #a9a9a9;
     &:active {
         background-color: #353535;
         background-image: -moz-linear-gradient(top, #2f2f2f, #3c3c3c);
@@ -1209,7 +1209,7 @@ html.ie6 .button-b {
 }
 
 .button-g-blue {
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     background-color: #36519f;
     background-image: -moz-linear-gradient(top, #4061b3, #273a80);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#4061b3), to(#273a80));
@@ -1218,10 +1218,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #4061b3, #273a80);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff4061b3', endColorstr='#ff273a80', GradientType=0);
-    border: 1px solid #a7adbf;
+    border: 0.0625rem solid #a7adbf;
     color: #fff !important;
     text-align: center;
-    box-shadow: 1px 1px 2px 0 #a9a9a9;
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0 #a9a9a9;
     &:active {
         background-color: #355195;
         background-image: -moz-linear-gradient(top, #334d8d, #3957a0);
@@ -1235,7 +1235,7 @@ html.ie6 .button-b {
 }
 
 .button-g-green {
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     background-color: #366c36;
     background-image: -moz-linear-gradient(top, #418241, #264b26);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#418241), to(#264b26));
@@ -1244,10 +1244,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #418241, #264b26);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff418241', endColorstr='#ff264b26', GradientType=0);
-    border: 1px solid #1e3b1e;
+    border: 0.0625rem solid #1e3b1e;
     color: #fff !important;
     text-align: center;
-    box-shadow: 1px 1px 2px 0 #a9a9a9;
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0 #a9a9a9;
     &:active {
         background-color: #336733;
         background-image: -moz-linear-gradient(top, #306030, #397139);
@@ -1261,7 +1261,7 @@ html.ie6 .button-b {
 }
 
 .button-g-lightgreen {
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     background-color: #0fc0b5;
     background-image: -moz-linear-gradient(top, #0bcbc3, #16afa1);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0bcbc3), to(#16afa1));
@@ -1270,10 +1270,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #0bcbc3, #16afa1);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0bcbc3', endColorstr='#ff16afa1', GradientType=0);
-    border: 1px solid #00beb3;
+    border: 0.0625rem solid #00beb3;
     color: #fff !important;
     text-align: center;
-    box-shadow: 1px 1px 2px 0 #a9a9a9;
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0 #a9a9a9;
     &:active {
         background-color: #09a49e;
         background-image: -moz-linear-gradient(top, #089b95, #0ab3ac);
@@ -1287,7 +1287,7 @@ html.ie6 .button-b {
 }
 
 .button-g-grey {
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     background-color: #e8e8e8;
     background-image: -moz-linear-gradient(top, #efefef, #dedede);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#efefef), to(#dedede));
@@ -1296,10 +1296,10 @@ html.ie6 .button-b {
     background-image: linear-gradient(to bottom, #efefef, #dedede);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffefefef', endColorstr='#ffdedede', GradientType=0);
-    border: 1px solid #989898;
+    border: 0.0625rem solid #989898;
     color: #393939 !important;
     text-align: center;
-    box-shadow: 1px 1px 2px 0 #c9c9c9;
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0 #c9c9c9;
     &:active {
         background-color: #dbdbdb;
         background-image: -moz-linear-gradient(top, #d6d6d6, #e2e2e2);
@@ -1326,8 +1326,8 @@ html.ie6 .button-b {
     }
     .ui-dialog-close {
         position: absolute;
-        right: 2px;
-        top: 2px;
+        right: 0.125rem;
+        top: 0.125rem;
         z-index: 10;
         display: block;
         cursor: pointer;
@@ -1339,11 +1339,11 @@ html.ie6 .button-b {
 
 .ui-dialog-basic {
     .ui-dialog-close {
-        right: 10px;
-        top: 8px;
+        right: 0.625rem;
+        top: 0.5rem;
         overflow: hidden;
-        font-size: 14px;
-        padding: 3px 5px;
+        font-size: 0.875rem;
+        padding: 0.1875rem 0.3125rem;
         font-family: Verdana;
         color: #333;
         font-weight: 700;
@@ -1351,20 +1351,20 @@ html.ie6 .button-b {
     .mod {
         background: #fff;
         .hd {
-            padding: 0 40px 0 15px;
-            line-height: 42px;
+            padding: 0 2.5rem 0 0.9375rem;
+            line-height: 2.625rem;
             background: #f4f4f4;
             .icon {
-                margin: 12px 10px 0 0;
+                margin: 0.75rem 0.625rem 0 0;
                 float: left;
             }
             .title {
-                font-size: 16px;
+                font-size: 1rem;
                 font-weight: 700;
             }
         }
         .bd {
-            padding: 15px;
+            padding: 0.9375rem;
             background: 0 0;
         }
     }
@@ -1373,7 +1373,7 @@ html.ie6 .button-b {
 .ui-dialog-bolder {
     background: url(../images/dialog-border-bg.png) center center;
     .inner {
-        margin: 8px;
+        margin: 0.5rem;
     }
 }
 
@@ -1386,63 +1386,63 @@ html.ie6 .button-b {
         background: #f4f4f4;
     }
     .bd {
-        padding: 20px 15px 10px !important;
+        padding: 1.25rem 0.9375rem 0.625rem !important;
         .lpic {
-            width: 75px;
-            padding-top: 5px;
+            width: 4.6875rem;
+            padding-top: 0.3125rem;
             label {
-                font-size: 14px;
+                font-size: 0.875rem;
             }
         }
         .item {
-            margin-bottom: 15px;
+            margin-bottom: 0.9375rem;
             .text-border {
-                width: 220px;
-                height: 20px;
-                font-size: 14px;
+                width: 13.75rem;
+                height: 1.25rem;
+                font-size: 0.875rem;
                 color: #666;
             }
         }
         .forget-password {
             color: #666;
-            margin-left: 10px;
-            font-size: 12px;
+            margin-left: 0.625rem;
+            font-size: 0.75rem;
         }
         .authCode {
             img {
-                border: 1px solid #ccc;
-                margin-right: 9px;
+                border: 0.0625rem solid #ccc;
+                margin-right: 0.5625rem;
             }
             .text-border {
-                width: 104px;
+                width: 6.5rem;
             }
         }
         .button-area {
             .lpic {
-                padding-top: 10px;
+                padding-top: 0.625rem;
             }
             label {
                 color: #666;
-                font-size: 12px;
+                font-size: 0.75rem;
                 input {
-                    margin-right: 2px;
-                    vertical-align: -3px;
+                    margin-right: 0.125rem;
+                    vertical-align: -0.1875rem;
                 }
             }
         }
         .reg-btn {
             color: #09f;
-            font-size: 14px;
-            margin-left: 10px;
+            font-size: 0.875rem;
+            margin-left: 0.625rem;
             &:hover {
                 text-decoration: underline;
             }
         }
         .authorization {
             color: #666;
-            padding-top: 10px;
-            margin: 15px 0 0 75px;
-            border-top: 1px solid #E9E9E9;
+            padding-top: 0.625rem;
+            margin: 0.9375rem 0 0 4.6875rem;
+            border-top: 0.0625rem solid #E9E9E9;
             a,
             img,
             span {
@@ -1453,18 +1453,18 @@ html.ie6 .button-b {
 }
 
 .owner-ban-dialog .bd {
-    font-size: 12px;
+    font-size: 0.75rem;
     .radio {
-        margin-right: 3px;
-        vertical-align: -2px;
+        margin-right: 0.1875rem;
+        vertical-align: -0.125rem;
     }
     li {
-        margin-bottom: 10px;
+        margin-bottom: 0.625rem;
     }
     .buttons {
         text-align: right;
-        margin-top: 10px;
-        padding-top: 10px;
+        margin-top: 0.625rem;
+        padding-top: 0.625rem;
         .error {
             float: left;
             color: red;
@@ -1472,7 +1472,7 @@ html.ie6 .button-b {
     }
     textarea {
         width: 96%;
-        height: 50px;
+        height: 3.125rem;
     }
 }
 
@@ -1482,16 +1482,16 @@ html.ie6 .button-b {
 
 .email-suggest {
     background: #FAFAFA;
-    border: 1px solid #C5C7D2;
+    border: 0.0625rem solid #C5C7D2;
     border-radius: 0;
     position: absolute;
     li {
-        padding: 1px;
+        padding: 0.0625rem;
         a {
             cursor: pointer;
             display: block;
-            padding: 5px;
-            font-size: 12px;
+            padding: 0.3125rem;
+            font-size: 0.75rem;
             font-family: Arial;
             &.ui-state-focus,
             &.ui-state-hover,
@@ -1504,8 +1504,8 @@ html.ie6 .button-b {
 
 .button-emotion {
     display: inline-block;
-    width: 24px;
-    height: 25px;
+    width: 1.5rem;
+    height: 1.5625rem;
     background: url(../images/btn-emotion.png?bust=1) no-repeat;
     overflow: hidden;
 }
@@ -1516,16 +1516,16 @@ html.ie6 .button-b {
     clear: both;
     visibility: visible;
     z-index: 1001;
-    width: 450px;
+    width: 28.125rem;
     .top {
-        height: 15px;
+        height: 0.9375rem;
         background: #F7F7F7;
     }
     .arrow {
         position: absolute;
-        top: -7px;
-        left: 5px;
-        font-size: 16px;
+        top: -0.4375rem;
+        left: 0.3125rem;
+        font-size: 1rem;
         em {
             position: absolute;
             &.t {
@@ -1533,17 +1533,17 @@ html.ie6 .button-b {
             }
             &.b {
                 color: #A0A0A0;
-                top: -1px;
+                top: -0.0625rem;
             }
         }
     }
     .inner {
         background: #FFF;
-        border: 1px solid #A0A0A0;
+        border: 0.0625rem solid #A0A0A0;
     }
     ul {
-        width: 440px;
-        margin: 10px 0 10px 8px;
+        width: 27.5rem;
+        margin: 0.625rem 0 0.625rem 0.5rem;
         overflow: hidden;
         &:after,
         &:before {
@@ -1557,20 +1557,20 @@ html.ie6 .button-b {
     }
     li {
         float: left;
-        height: 28px;
+        height: 1.75rem;
         overflow: hidden;
-        padding: 0 1px 1px 0;
-        width: 28px;
+        padding: 0 0.0625rem 0.0625rem 0;
+        width: 1.75rem;
         a {
-            border: 1px solid #EDEDED;
+            border: 0.0625rem solid #EDEDED;
             display: block;
-            height: 26px;
+            height: 1.625rem;
             overflow: hidden;
             text-align: center;
-            width: 26px;
+            width: 1.625rem;
             &:hover {
                 background: #D3EFF6;
-                border: 1px solid #2C89A8;
+                border: 0.0625rem solid #2C89A8;
             }
         }
     }
@@ -1578,34 +1578,34 @@ html.ie6 .button-b {
 
 .ui-flyout {
     display: none;
-    padding: 10px;
+    padding: 0.625rem;
     background: url(../images/crossword.png);
-    font-size: 14px;
-    border: 1px solid #ccc;
+    font-size: 0.875rem;
+    border: 0.0625rem solid #ccc;
     .close {
         position: absolute;
-        right: 10px;
-        top: 8px;
+        right: 0.625rem;
+        top: 0.5rem;
         color: #ccc;
     }
 }
 
 .ui-flyout-box {
-    box-shadow: 0 0 3px #c7c7c7;
+    box-shadow: 0 0 0.1875rem #c7c7c7;
 }
 
 .ui-flyout-confirm {
-    border: 1px solid #B9B9B9;
+    border: 0.0625rem solid #B9B9B9;
     text-align: center;
-    padding: 6px 10px;
-    box-shadow: 0 1px 5px silver;
-    border-radius: 5px;
+    padding: 0.375rem 0.625rem;
+    box-shadow: 0 0.0625rem 0.3125rem silver;
+    border-radius: 0.3125rem;
     p.text {
-        font-size: 12px;
-        border: 1px solid #dedede;
+        font-size: 0.75rem;
+        border: 0.0625rem solid #dedede;
         background-color: #f9f9f9;
-        margin-bottom: 10px;
-        padding: 5px 8px;
+        margin-bottom: 0.625rem;
+        padding: 0.3125rem 0.5rem;
         text-align: center;
         color: #f60;
         line-height: 1.8em;
@@ -1618,10 +1618,10 @@ html.ie6 .button-b {
 .ui-info-ok,
 .ui-info-waiting,
 .ui-info-warning {
-    padding: 8px 10px;
-    border-width: 1px;
+    padding: 0.5rem 0.625rem;
+    border-width: 0.0625rem;
     border-style: solid;
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .ui-info-ok {
@@ -1641,7 +1641,7 @@ html.ie6 .button-b {
     border-color: #3898e2;
     color: #3898e2;
     img {
-        margin-right: 3px;
+        margin-right: 0.1875rem;
     }
 }
 
@@ -1665,9 +1665,9 @@ html.ie6 .button-b {
     a {
         background: url(../images/sprite-share.png) no-repeat;
         display: inline-block;
-        width: 16px;
-        height: 16px;
-        padding-right: 1px;
+        width: 1rem;
+        height: 1rem;
+        padding-right: 0.0625rem;
         overflow: hidden;
         cursor: pointer;
         vertical-align: middle;
@@ -1676,25 +1676,25 @@ html.ie6 .button-b {
         vertical-align: middle;
     }
     .share-sina {
-        background-position: 0 -20px;
+        background-position: 0 -1.25rem;
     }
     .share-qzone {
         background-position: 0 0;
     }
     .share-renren {
-        background-position: 0 -60px;
+        background-position: 0 -3.75rem;
     }
     .share-kaixin {
-        background-position: 0 -120px;
+        background-position: 0 -7.5rem;
     }
     .share-tenwb {
-        background-position: 0 -80px;
+        background-position: 0 -5rem;
     }
     .share-baidu {
-        background-position: 0 -40px;
+        background-position: 0 -2.5rem;
     }
     .share-douban {
-        background-position: 0 -100px;
+        background-position: 0 -6.25rem;
     }
 }
 
@@ -1702,19 +1702,19 @@ html.ie6 .button-b {
     position: fixed;
     z-index: 30;
     left: 50%;
-    bottom: 100px;
+    bottom: 6.25rem;
     display: none;
-    font-size: 14px;
-    padding: 8px 20px;
-    border-radius: 3px;
-    box-shadow: 0 1px 6px #272727, inset 0 1px 0 #A8A3A3;
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.1875rem;
+    box-shadow: 0 0.0625rem 0.375rem #272727, inset 0 0.0625rem 0 #A8A3A3;
     color: #fff;
     background: #414141;
 }
 
 .ui-tags {
     background: #fff;
-    border: 1px solid #999;
+    border: 0.0625rem solid #999;
     position: relative;
     padding-bottom: 0;
     zoom: 1;
@@ -1728,30 +1728,30 @@ html.ie6 .button-b {
         clear: both;
     }
     .input-tags {
-        border: 1px solid #fff;
-        height: 18px;
-        line-height: 18px;
-        margin: 3px;
-        width: 50px !important;
-        font-size: 12px;
+        border: 0.0625rem solid #fff;
+        height: 1.125rem;
+        line-height: 1.125rem;
+        margin: 0.1875rem;
+        width: 3.125rem !important;
+        font-size: 0.75rem;
     }
     .names-tags li {
         position: relative;
         display: inline-block;
         float: left;
-        margin: 3px;
+        margin: 0.1875rem;
         a {
-            border-radius: 3px;
+            border-radius: 0.1875rem;
             display: block;
             float: left;
             background: #333;
-            padding: 0 18px 0 4px;
-            height: 18px;
-            line-height: 18px;
-            border: 1px solid #000;
+            padding: 0 1.125rem 0 0.25rem;
+            height: 1.125rem;
+            line-height: 1.125rem;
+            border: 0.0625rem solid #000;
             white-space: nowrap;
             color: #fff !important;
-            font-size: 12px;
+            font-size: 0.75rem;
             &:hover {
                 background: #000;
                 .rm {
@@ -1760,13 +1760,13 @@ html.ie6 .button-b {
             }
             .rm {
                 cursor: pointer;
-                width: 11px;
-                height: 11px;
+                width: 0.6875rem;
+                height: 0.6875rem;
                 overflow: hidden;
                 display: block;
                 position: absolute;
-                right: 4px;
-                top: 5px;
+                right: 0.25rem;
+                top: 0.3125rem;
                 background: url(../images/btn-tag-del.gif) no-repeat;
             }
         }
@@ -1775,15 +1775,15 @@ html.ie6 .button-b {
 
 .play-audio {
     display: inline-block;
-    width: 50px;
-    height: 18px;
-    line-height: 18px;
-    padding: 0 5px;
-    margin-left: 5px;
+    width: 3.125rem;
+    height: 1.125rem;
+    line-height: 1.125rem;
+    padding: 0 0.3125rem;
+    margin-left: 0.3125rem;
     text-align: right;
     background: #7C7874;
     font-family: Arial;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     color: #fff !important;
     white-space: nowrap;
     position: relative;
@@ -1794,12 +1794,12 @@ html.ie6 .button-b {
         border-style: solid;
         display: block;
         overflow: hidden;
-        border-bottom: 5px solid transparent;
-        border-left: 5px solid #fff;
+        border-bottom: 0.3125rem solid transparent;
+        border-left: 0.3125rem solid #fff;
         border-right: none;
-        border-top: 5px solid transparent;
-        top: 4px;
-        left: 8px;
+        border-top: 0.3125rem solid transparent;
+        top: 0.25rem;
+        left: 0.5rem;
     }
 }
 
@@ -1810,9 +1810,9 @@ html.ie6 .play-audio i {
 }
 
 .play-audio i.stop {
-    width: 7px;
-    height: 7px;
-    top: 5px;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    top: 0.3125rem;
     border: none;
     background: #fff;
 }
@@ -1851,19 +1851,19 @@ html.ie6 .play-audio i {
 }
 
 .mod-main .hd {
-    padding-bottom: 30px;
+    padding-bottom: 1.875rem;
     h2 {
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 }
 
 .tab-choose a {
     vertical-align: middle;
-    padding: 0 7px;
+    padding: 0 0.4375rem;
     display: inline-block;
-    min-width: 80px;
-    height: 36px;
-    line-height: 36px;
+    min-width: 5rem;
+    height: 2.25rem;
+    line-height: 2.25rem;
     font-weight: 700;
     color: #fff;
     text-align: center;
@@ -1875,20 +1875,20 @@ html.ie6 .play-audio i {
         i {
             position: absolute;
             left: 50%;
-            bottom: -15px;
-            margin-left: -10px;
+            bottom: -0.9375rem;
+            margin-left: -0.625rem;
             display: inline-block;
             width: 0;
             height: 0;
             line-height: 0;
             font-size: 0;
-            border-width: 10px;
+            border-width: 0.625rem;
             border-color: #999 transparent transparent;
             border-style: solid dashed dashed;
         }
     }
     .count {
-        font-size: 12px;
+        font-size: 0.75rem;
         color: #f60;
     }
 }
@@ -1899,9 +1899,9 @@ html.ie6 .play-audio i {
         color: #09c;
     }
     li {
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #ECECEC;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 0.0625rem solid #ECECEC;
         &:last-child {
             border-bottom: none;
             margin-bottom: 0;
@@ -1909,14 +1909,14 @@ html.ie6 .play-audio i {
     }
     .left {
         text-align: center;
-        width: 45px;
-        padding-right: 10px;
+        width: 2.8125rem;
+        padding-right: 0.625rem;
         img {
-            width: 40px;
+            width: 2.5rem;
             border-radius: 100%;
         }
         p {
-            margin-bottom: 10px;
+            margin-bottom: 0.625rem;
         }
         a {
             color: #369;
@@ -1931,8 +1931,8 @@ html.ie6 .play-audio i {
     .right h3 {
         font-size: 1em;
         font-weight: 400;
-        padding: 5px 0;
-        margin-bottom: 5px;
+        padding: 0.3125rem 0;
+        margin-bottom: 0.3125rem;
         a {
             color: #2e79bd;
         }
@@ -1946,7 +1946,7 @@ html.ie6 .play-audio i {
     .summary {
         line-height: 1.3em;
         font-size: .875em;
-        margin-bottom: 3px;
+        margin-bottom: 0.1875rem;
         word-break: break-all;
         word-wrap: break-word;
         color: #666;
@@ -1956,36 +1956,36 @@ html.ie6 .play-audio i {
     }
     .controls {
         text-align: right;
-        padding-right: 5px;
+        padding-right: 0.3125rem;
         a {
             font-size: .75em;
             color: #999;
-            margin-left: 3px;
+            margin-left: 0.1875rem;
         }
         .name {
             float: left;
             font-size: .75em;
             margin-left: 0;
-            margin-top: 4px;
-            padding-left: 15px;
+            margin-top: 0.25rem;
+            padding-left: 0.9375rem;
             background: url(../images/mobile-user-icon.png) no-repeat left center;
         }
         .reply {
             background: url(../images/mobile-reply-icon.png) no-repeat left center;
-            padding-left: 15px;
+            padding-left: 0.9375rem;
         }
     }
     .time {
         font-size: .75em;
         color: #999;
         background: url(../images/mobile-time-icon.png) no-repeat left center;
-        padding-left: 15px;
+        padding-left: 0.9375rem;
     }
     .form {
-        padding: 0 5px;
+        padding: 0 0.3125rem;
         .content {
             line-height: 1.8em;
-            margin-bottom: 10px;
+            margin-bottom: 0.625rem;
             color: #666;
             a {
                 color: #666;
@@ -1995,8 +1995,8 @@ html.ie6 .play-audio i {
         textarea {
             display: block;
             background: #fff;
-            border: 1px solid #bfbfbf;
-            padding: 10px;
+            border: 0.0625rem solid #bfbfbf;
+            padding: 0.625rem;
             width: 78%;
             overflow: hidden;
             height: 1.1em;
@@ -2004,32 +2004,32 @@ html.ie6 .play-audio i {
         }
         .submit {
             float: right;
-            width: 56px;
-            height: 34px;
-            line-height: 34px;
-            margin-right: 10px;
-            font-size: 14px;
+            width: 3.5rem;
+            height: 2.125rem;
+            line-height: 2.125rem;
+            margin-right: 0.625rem;
+            font-size: 0.875rem;
         }
     }
     .reply-list {
-        padding: 10px;
+        padding: 0.625rem;
         background: #f7f7f7;
-        border-radius: 3px;
-        margin-top: 6px;
-        border: 1px solid #e0e0e0;
-        margin-bottom: 10px;
+        border-radius: 0.1875rem;
+        margin-top: 0.375rem;
+        border: 0.0625rem solid #e0e0e0;
+        margin-bottom: 0.625rem;
         position: relative;
         .ico {
             position: absolute;
-            top: -6px;
-            right: 30px;
+            top: -0.375rem;
+            right: 1.875rem;
             display: block;
-            width: 11px;
-            height: 6px;
+            width: 0.6875rem;
+            height: 0.375rem;
             background: url(../images/mobile-reply-list-arrow.png) no-repeat left top;
         }
         li {
-            border-bottom: 1px solid #e6e6e6;
+            border-bottom: 0.0625rem solid #e6e6e6;
             br {
                 display: none;
             }
@@ -2039,8 +2039,8 @@ html.ie6 .play-audio i {
             }
         }
         .more {
-            border-top: 1px solid #e6e6e6;
-            padding-top: 10px;
+            border-top: 0.0625rem solid #e6e6e6;
+            padding-top: 0.625rem;
             text-align: center;
             font-size: .875em;
             a {
@@ -2055,15 +2055,15 @@ html {
     height: 100%;
 }
 
-@media screen and (max-device-width: 480px) {
+@media screen and (max-device-width: 30rem) {
     body {
         -webkit-text-size-adjust: none;
     }
 }
 
-@media screen and (max-device-width: 320px) {
+@media screen and (max-device-width: 20rem) {
     body {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
 }
 
@@ -2074,79 +2074,94 @@ a {
 
 body {
     overflow-x: hidden;
-    font-size: 16px;
+    font-size: 1rem;
     color: #666;
     background: #fff;
 }
 
 .container {
-    padding-top: 10px;
-    background: url(../images/body-bg.png);
-    padding-bottom: 10px;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
 }
 
 .mod {
-    margin: 10px;
+    margin: 0.625rem;
 }
 
 .mod-back {
-    margin-top: 30px;
+    margin-top: 1.875rem;
     font-size: .875em;
     .bd {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        padding-left: 3px;
+        padding-left: 0.1875rem;
     }
     a,
     span {
         vertical-align: middle;
     }
-    .home {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        background: url(../images/breadcrumb-icon-home.png) no-repeat;
-    }
+    .home,
     .divide {
         display: inline-block;
-        width: 5px;
-        height: 9px;
-        margin: 0 3px;
-        background: url(../images/arrow-breadcrumb.gif) no-repeat;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+    }
+    .home {
+        width: 1rem;
+        height: 1rem;
+        font-size: 1.1875rem;
+        &::before {
+            content: "\f015";
+        }
+    }
+    .divide {
+        width: 0.3125rem;
+        height: 0.5625rem;
+        margin: 0 0.1875rem;    
+        font-size: 0.75rem;
+        &::before {
+            content: "\f054";
+        }
     }
 }
 
 .empty {
-    padding: 15px 0;
+    padding: 0.9375rem 0;
     color: #999;
 }
 
 .top-alert .alert {
-    margin-top: -10px;
+    margin-top: -0.625rem;
     border-radius: 0;
-    box-shadow: 0 2px 5px 0 #afafaf;
+    box-shadow: 0 0.125rem 0.3125rem 0 #afafaf;
 }
 
 .page-title {
-    padding: 0 10px;
+    padding: 0 0.625rem;
     font-size: 1em;
     font-weight: 400;
     color: #333;
-    text-shadow: 1px 1px 1px #fff;
-    margin-bottom: 15px;
+    text-shadow: 0.0625rem 0.0625rem 0.0625rem #fff;
+    margin-bottom: 0.9375rem;
 }
 
 .block {
-    margin: 0 10px 15px;
+    margin: 0 0.625rem 0.9375rem;
     background: #fff;
-    border: 1px solid #ddd;
+    border: 0.0625rem solid #ddd;
     .hd {
-        padding: 10px;
-        border-bottom: 1px solid #E2B4AC;
+        padding: 0.625rem;
+        border-bottom: 0.0625rem solid #E2B4AC;
         h4 {
             font-weight: 400;
             color: #a44b3b;
+        }
+        &.hd-header {
+            height: 2.25rem;
+            padding: 0.625rem;
         }
     }
     .tab-switch {
@@ -2164,8 +2179,8 @@ body {
             text-align: center;
             float: left;
             width: 50%;
-            height: 40px;
-            line-height: 40px;
+            height: 2.5rem;
+            line-height: 2.5rem;
             font-size: 1em;
         }
         .active {
@@ -2174,15 +2189,15 @@ body {
         }
     }
     .bd {
-        padding: 10px;
+        padding: 0.625rem;
     }
     .ft {
         &.more {
-            border-top: 1px solid #ddd;
+            border-top: 0.0625rem solid #ddd;
         }
         .btn {
-            height: 30px;
-            line-height: 30px;
+            height: 1.875rem;
+            line-height: 1.875rem;
             font-size: .875em;
         }
     }
@@ -2207,14 +2222,14 @@ body {
         float: left;
         width: 25%;
         text-align: center;
-        padding-bottom: 10px;
+        padding-bottom: 0.625rem;
     }
     img {
         width: 80%;
-        max-width: 100px;
-        border: 1px solid #CBA;
-        padding: 1px;
-        box-shadow: 0 0 3px 0 #ccc;
+        max-width: 6.25rem;
+        border: 0.0625rem solid #CBA;
+        padding: 0.0625rem;
+        box-shadow: 0 0 0.1875rem 0 #ccc;
     }
     .name {
         text-overflow: ellipsis;
@@ -2225,12 +2240,12 @@ body {
 }
 
 .reply-list li {
-    border-bottom: 1px dotted #dfdfdf;
+    border-bottom: 0.0625rem dotted #dfdfdf;
     .name {
         color: #960;
     }
     .right {
-        padding-top: 5px;
+        padding-top: 0.3125rem;
     }
     &:last-child {
         border-bottom: none;
@@ -2251,8 +2266,8 @@ body {
         float: none;
         width: auto;
         padding: 0;
-        margin-bottom: 5px;
-        height: 115px;
+        margin-bottom: 0.3125rem;
+        height: 7.1875rem;
         &:after,
         &:before {
             display: table;
@@ -2263,23 +2278,23 @@ body {
             clear: both;
         }
         .left {
-            padding-right: 16px;
+            padding-right: 1rem;
             img {
-                border: 1px solid #CBA;
-                padding: 1px;
-                box-shadow: 0 0 3px 0 #ccc;
+                border: 0.0625rem solid #CBA;
+                padding: 0.0625rem;
+                box-shadow: 0 0 0.1875rem 0 #ccc;
             }
         }
         .right {
             white-space: normal;
-            padding-top: 5px;
+            padding-top: 0.3125rem;
             a {
                 color: #333;
             }
             .summary {
                 height: 6em;
                 line-height: 1.6em;
-                padding: 5px 10px 0 0;
+                padding: 0.3125rem 0.625rem 0 0;
                 font-size: .8em;
                 overflow: hidden;
                 color: #666;
@@ -2289,13 +2304,13 @@ body {
     }
     i {
         float: left;
-        margin: 5px 8px 0 5px;
-        width: 5px;
-        height: 5px;
+        margin: 0.3125rem 0.5rem 0 0.3125rem;
+        width: 0.3125rem;
+        height: 0.3125rem;
         background: #960;
     }
     li {
-        padding: 5px 0;
+        padding: 0.3125rem 0;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -2305,8 +2320,8 @@ body {
         }
         span {
             color: #960;
-            margin-right: 10px;
-            font-size: 12px;
+            margin-right: 0.625rem;
+            font-size: 0.75rem;
             a {
                 float: none;
             }
@@ -2328,9 +2343,9 @@ body {
         clear: both;
     }
     li {
-        border-bottom: 1px dotted #dfdfdf;
+        border-bottom: 0.0625rem dotted #dfdfdf;
         a {
-            padding: 8px 0;
+            padding: 0.5rem 0;
             display: block;
         }
         &:last-child {
@@ -2347,8 +2362,8 @@ body {
         color: #999;
     }
     &.bottom {
-        margin-top: 15px;
-        margin-bottom: 15px;
+        margin-top: 0.9375rem;
+        margin-bottom: 0.9375rem;
     }
 }
 
@@ -2356,37 +2371,37 @@ body {
     h4 {
         text-align: center;
         background: #f4f4f4;
-        padding: 5px 0;
+        padding: 0.3125rem 0;
     }
     .submit-item {
-        margin-top: 10px;
+        margin-top: 0.625rem;
     }
     .item {
-        padding: 5px;
+        padding: 0.3125rem;
     }
     .item-label {
         float: left;
-        padding-right: 10px;
-        padding-top: 2px;
+        padding-right: 0.625rem;
+        padding-top: 0.125rem;
     }
     .item-control {
         overflow: hidden;
     }
     .forget {
-        margin-left: 10px;
+        margin-left: 0.625rem;
         color: #06c;
     }
     .text {
-        border: 1px solid #ccc;
-        border-radius: 3px;
+        border: 0.0625rem solid #ccc;
+        border-radius: 0.1875rem;
         width: 95%;
-        padding: 3px;
+        padding: 0.1875rem;
     }
     .text-code {
         width: 30%;
     }
     .code {
-        border: 1px solid #ccc;
+        border: 0.0625rem solid #ccc;
     }
     .button {
         width: 100%;
@@ -2394,20 +2409,20 @@ body {
 }
 
 .slide-ad {
-    margin: 10px 0;
+    margin: 0.625rem 0;
     text-align: center;
     img {
-        box-shadow: 0 0 2px 0 #b1b1b1;
-        max-height: 100px;
-        max-width: 480px;
+        box-shadow: 0 0 0.125rem 0 #b1b1b1;
+        max-height: 6.25rem;
+        max-width: 30rem;
         width: 100%;
     }
 }
 
 .btn {
     display: inline-block;
-    height: 26px;
-    line-height: 26px;
+    height: 1.625rem;
+    line-height: 1.625rem;
     text-align: center;
     background-color: #f1f1f1;
     background-image: -moz-linear-gradient(top, #f1f1f1, #f1f1f1);
@@ -2418,7 +2433,7 @@ body {
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff1f1f1', endColorstr='#fff1f1f1', GradientType=0);
     color: #838383;
-    padding: 0 30px;
+    padding: 0 1.875rem;
     border: none;
     border-radius: 0;
 }
@@ -2453,9 +2468,9 @@ body {
 }
 
 .btn.small {
-    height: 22px;
-    line-height: 22px;
-    padding: 0 10px;
+    height: 1.375rem;
+    line-height: 1.375rem;
+    padding: 0 0.625rem;
     font-size: .75em;
 }
 
@@ -2473,8 +2488,8 @@ input {
         border: none;
     }
     &.btn {
-        height: 30px;
-        line-height: 30px;
+        height: 1.875rem;
+        line-height: 1.875rem;
     }
 }
 
@@ -2483,26 +2498,26 @@ input {
     position: relative;
     font-size: .875em;
     .top {
-        height: 54px;
-        line-height: 54px;
-        padding: 0 10px 0 100px;
+        height: 3.375rem;
+        line-height: 3.375rem;
+        padding: 0 0.625rem 0 6.25rem;
         background: url(../images/header-top-bg.png);
-        border-bottom: 1px solid #494949;
+        border-bottom: 0.0625rem solid #494949;
         font-size: 1em;
         color: #ccc;
         a {
             color: #ccc;
             float: left;
             width: 20%;
-            line-height: 54px;
+            line-height: 3.375rem;
         }
     }
     .bottom {
-        height: 40px;
-        line-height: 40px;
-        padding: 0 10px 0 100px;
-        border-top: 1px solid #fcfcfc;
-        border-bottom: 1px solid #d6d6d6;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        padding: 0 0.625rem 0 6.25rem;
+        border-top: 0.0625rem solid #fcfcfc;
+        border-bottom: 0.0625rem solid #d6d6d6;
         background: #f5f5f5;
         a {
             color: #960;
@@ -2522,16 +2537,16 @@ input {
         float: right;
         a {
             color: #666;
-            margin-left: 5px;
+            margin-left: 0.3125rem;
         }
         span img {
-            vertical-align: -7px;
+            vertical-align: -0.4375rem;
         }
     }
     .logo {
         position: absolute;
         top: 0;
-        margin-left: 10px;
+        margin-left: 0.625rem;
     }
     .tag a {
         color: #757575;
@@ -2539,8 +2554,7 @@ input {
 }
 
 .channel {
-    background: url(../images/body-bg.png);
-    padding: 10px 10px 0;
+    padding: 0.625rem 0.625rem 0;
     font-size: .875em;
     position: relative;
     z-index: 1;
@@ -2556,21 +2570,21 @@ input {
     a {
         float: left;
         width: 33%;
-        height: 30px;
-        line-height: 30px;
+        height: 1.875rem;
+        line-height: 1.875rem;
         text-align: center;
         background: #9f9386;
         color: #fff;
-        margin-bottom: 1px;
+        margin-bottom: 0.0625rem;
     }
     .xuanyi {
         width: 34%;
         box-sizing: border-box;
-        border-left: 1px solid #d2ccc6;
-        border-right: 1px solid #d2ccc6;
+        border-left: 0.0625rem solid #d2ccc6;
+        border-right: 0.0625rem solid #d2ccc6;
     }
     .active {
-        background: #b08116 url(../images/jingxuan.png) no-repeat center top;
+        background: #b08116;
     }
 }
 
@@ -2581,12 +2595,12 @@ input {
         color: #999;
     }
     .section {
-        padding: 0 10px 10px;
+        padding: 0 0.625rem 0.625rem;
     }
     .nav {
-        padding-top: 20px;
+        padding-top: 1.25rem;
         a {
-            margin-right: 5px;
+            margin-right: 0.3125rem;
         }
     }
     .copyright {
@@ -2597,7 +2611,7 @@ input {
         font-size: .75em;
     }
     h4 {
-        margin-bottom: 6px;
+        margin-bottom: 0.375rem;
         color: #ccc;
         a {
             color: #ccc;
@@ -2618,7 +2632,7 @@ input {
             vertical-align: middle;
         }
         .count {
-            margin: 0 3px;
+            margin: 0 0.1875rem;
             color: #f60;
             font-weight: 700;
         }
@@ -2626,14 +2640,14 @@ input {
 }
 
 .chapter-list {
-    text-shadow: 0 0 1px #ddd;
+    text-shadow: 0 0 0.0625rem #ddd;
     .hd .item {
         width: 50%;
         padding: 0;
     }
     li {
-        padding: 8px 10px 8px 2px;
-        border-bottom: 1px solid #e7e7e7;
+        padding: 0.5rem 0.625rem 0.5rem 0.125rem;
+        border-bottom: 0.0625rem solid #e7e7e7;
         font-size: .875em;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -2648,13 +2662,13 @@ input {
 }
 
 .donate-form .donate-items {
-    margin-bottom: 5px;
-    border-bottom: 1px solid #E2B4AC;
+    margin-bottom: 0.3125rem;
+    border-bottom: 0.0625rem solid #E2B4AC;
     label {
         display: block;
-        padding: 6px 0;
+        padding: 0.375rem 0;
         color: #666;
-        border-bottom: 1px dotted #d1d1d1;
+        border-bottom: 0.0625rem dotted #d1d1d1;
         img,
         input,
         span {
@@ -2677,39 +2691,39 @@ input {
     text-align: center;
     position: relative;
     display: none;
-    border-top: 1px solid #656260;
-    border-bottom: 1px solid #656260;
+    border-top: 0.0625rem solid #656260;
+    border-bottom: 0.0625rem solid #656260;
     a {
         display: block;
-        padding: 15px 0;
+        padding: 0.9375rem 0;
     }
     img {
-        height: 48px;
+        height: 3rem;
         display: block;
         margin: 0 auto;
     }
     .close {
         display: block;
-        width: 16px;
-        height: 16px;
+        width: 1rem;
+        height: 1rem;
         background: url(../images/download-close.png?2) rgba(255, 255, 255, 0.3) no-repeat center center;
         cursor: pointer;
         border-radius: 100%;
         position: absolute;
-        right: 5px;
-        top: 5px;
+        right: 0.3125rem;
+        top: 0.3125rem;
     }
 }
 
 .index {
     .container {
         padding-bottom: 0;
-        padding-top: 5px;
+        padding-top: 0.3125rem;
     }
     .billboard {
         overflow: hidden;
         background: 0 0;
-        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.85), inset 0 0 1px rgba(255, 255, 255, 0.35);
+        box-shadow: 0 0.0625rem 0.3125rem rgba(0, 0, 0, 0.85), inset 0 0 0.0625rem rgba(255, 255, 255, 0.35);
         .bd {
             border-top: none;
             padding: 0;
@@ -2729,15 +2743,15 @@ input {
         }
         .handles {
             position: absolute;
-            right: 10px;
-            bottom: 10px;
+            right: 0.625rem;
+            bottom: 0.625rem;
             width: 100%;
             text-align: center;
             span {
                 display: inline-block;
-                width: 10px;
-                height: 10px;
-                margin: 0 2px;
+                width: 0.625rem;
+                height: 0.625rem;
+                margin: 0 0.125rem;
                 background: #ebebeb;
                 cursor: pointer;
                 &.active {
@@ -2759,8 +2773,8 @@ input {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
-                padding: 10px;
-                border-bottom: 1px solid #eee;
+                padding: 0.625rem;
+                border-bottom: 0.0625rem solid #eee;
                 a {
                     color: #666;
                 }
@@ -2778,12 +2792,12 @@ input {
             }
             span {
                 display: inline-block;
-                line-height: 20px;
-                width: 20px;
-                height: 20px;
-                margin-right: 10px;
+                line-height: 1.25rem;
+                width: 1.25rem;
+                height: 1.25rem;
+                margin-right: 0.625rem;
                 font-size: .75em;
-                border-radius: 10px;
+                border-radius: 0.625rem;
                 background: #f0f0f0;
                 font-family: Arial;
                 text-align: center;
@@ -2796,8 +2810,8 @@ input {
         }
     }
     .words {
-        margin-top: 10px;
-        padding: 10px;
+        margin-top: 0.625rem;
+        padding: 0.625rem;
         font-size: .875em;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -2808,17 +2822,17 @@ input {
         }
     }
     .search-form {
-        padding-top: 10px;
+        padding-top: 0.625rem;
     }
 }
 
 .home .reading {
     .bd {
-        padding: 0 10px;
+        padding: 0 0.625rem;
     }
     li {
-        padding: 10px 0;
-        border-bottom: 1px dotted #ccc;
+        padding: 0.625rem 0;
+        border-bottom: 0.0625rem dotted #ccc;
         &:last-child {
             border-bottom: none;
         }
@@ -2836,15 +2850,15 @@ input {
         .continue,
         .read {
             float: right;
-            margin-top: 6px;
+            margin-top: 0.375rem;
             font-size: .75em;
-            padding: 0 7px;
-            border-radius: 3px;
-            height: 26px;
-            line-height: 26px;
+            padding: 0 0.4375rem;
+            border-radius: 0.1875rem;
+            height: 1.625rem;
+            line-height: 1.625rem;
         }
         p {
-            margin-top: 6px;
+            margin-top: 0.375rem;
             font-size: .75em;
             color: #999;
             a {
@@ -2857,34 +2871,34 @@ input {
 .cover {
     .detail {
         .left {
-            padding-right: 16px;
+            padding-right: 1rem;
             img {
-                box-shadow: 0 0 3px #333;
-                border: 1px solid #CBA;
-                padding: 1px;
+                box-shadow: 0 0 0.1875rem #333;
+                border: 0.0625rem solid #CBA;
+                padding: 0.0625rem;
             }
         }
         .right {
-            padding-top: 3px;
+            padding-top: 0.1875rem;
             h1 {
                 font-weight: 400;
                 font-size: 1.4em;
-                text-shadow: 0 0 1px #ddd;
+                text-shadow: 0 0 0.0625rem #ddd;
                 color: #333;
                 height: 1.7em;
             }
             .info {
                 font-size: .75em;
                 line-height: 1.6em;
-                text-shadow: 0 0 1px #ddd;
+                text-shadow: 0 0 0.0625rem #ddd;
             }
             .status {
                 float: right;
-                padding: 3px 6px;
+                padding: 0.1875rem 0.375rem;
                 font-size: .75em;
                 margin-top: -2em;
                 color: #fff;
-                border-radius: 10px;
+                border-radius: 0.625rem;
             }
             .is-serialize {
                 background: #977fb9;
@@ -2893,23 +2907,23 @@ input {
                 background: #c8923d;
                 i {
                     display: inline-block;
-                    width: 4px;
-                    height: 4px;
+                    width: 0.25rem;
+                    height: 0.25rem;
                     border-radius: 100%;
-                    border: 2px solid #fff;
-                    margin-left: 3px;
+                    border: 0.125rem solid #fff;
+                    margin-left: 0.1875rem;
                 }
             }
         }
         .ft {
-            padding-top: 15px;
+            padding-top: 0.9375rem;
             table {
                 width: 100%;
                 a {
                     display: block;
-                    height: 36px;
-                    line-height: 36px;
-                    border: 1px solid;
+                    height: 2.25rem;
+                    line-height: 2.25rem;
+                    border: 0.0625rem solid;
                     text-align: center;
                     font-size: .875em;
                     background: #FAF6F2;
@@ -2930,10 +2944,10 @@ input {
         }
     }
     .vote {
-        border-top: 1px solid #DADADA;
-        border-bottom: 1px solid #DADADA;
-        margin: 10px 0;
-        padding: 6px 10px;
+        border-top: 0.0625rem solid #DADADA;
+        border-bottom: 0.0625rem solid #DADADA;
+        margin: 0.625rem 0;
+        padding: 0.375rem 0.625rem;
         &:after,
         &:before {
             display: table;
@@ -2964,14 +2978,14 @@ input {
             color: #B47850;
         }
         .support {
-            border-left: 1px solid #DADADA;
+            border-left: 0.0625rem solid #DADADA;
         }
     }
     .book-intro {
         text-indent: 2em;
         font-size: .8125em;
         line-height: 1.6em;
-        text-shadow: 0 0 1px #ddd;
+        text-shadow: 0 0 0.0625rem #ddd;
     }
     .update .time {
         float: right;
@@ -2980,8 +2994,8 @@ input {
         color: #999;
     }
     .update-chapter .bd {
-        text-shadow: 0 0 1px #ddd;
-        padding: 10px;
+        text-shadow: 0 0 0.0625rem #ddd;
+        padding: 0.625rem;
         a {
             display: block;
             height: 3em;
@@ -2998,7 +3012,7 @@ input {
             color: #09c;
         }
         .donate-counts {
-            margin-bottom: 15px;
+            margin-bottom: 0.9375rem;
         }
         table {
             width: 100%;
@@ -3007,7 +3021,7 @@ input {
                 font-size: .75em;
                 text-align: left;
                 color: #999;
-                padding: 10px 0 10px 5px;
+                padding: 0.625rem 0 0.625rem 0.3125rem;
                 .count {
                     color: #09c;
                 }
@@ -3018,14 +3032,14 @@ input {
         }
         .bd h4 {
             font-size: 1em;
-            padding-bottom: 6px;
+            padding-bottom: 0.375rem;
             color: #666;
         }
         ul li {
-            margin-bottom: 5px;
-            padding: 3px 0;
+            margin-bottom: 0.3125rem;
+            padding: 0.1875rem 0;
             color: #666;
-            border-bottom: 1px dotted #DADADA;
+            border-bottom: 0.0625rem dotted #DADADA;
             font-size: .875em;
             &:last-child {
                 border-bottom: none;
@@ -3034,7 +3048,7 @@ input {
             .name {
                 display: inline-block;
                 max-width: 50%;
-                margin-right: 5px;
+                margin-right: 0.3125rem;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
@@ -3047,7 +3061,7 @@ input {
                 color: #09c;
             }
             img {
-                vertical-align: -2px;
+                vertical-align: -0.125rem;
             }
         }
     }
@@ -3065,16 +3079,16 @@ input {
         color: #960;
         background: #f5f5f5;
         text-align: center;
-        height: 50px;
-        line-height: 50px;
-        margin-bottom: 0px;
+        height: 3.125rem;
+        line-height: 3.125rem;
+        margin-bottom: 0rem;
         position: relative;
         box-sizing: border-box;
         .home,
         .back {
             position: absolute;
             top: 0;
-            width: 40px;
+            width: 2.5rem;
         }
         .back {
             left: 0;
@@ -3083,10 +3097,10 @@ input {
             right: 0;
         }
         .title {
-            margin: 0 30px;
+            margin: 0 1.875rem;
             overflow: hidden;
             display: block;
-            height: 40px;
+            height: 2.5rem;
         }
     }
     .chapte-box {
@@ -3099,52 +3113,52 @@ input {
     }
     .toolbar {
         text-align: center;
-        padding: 5px;
+        padding: 0.3125rem;
         a {
-            font-size: 16px;
-            padding: 8px 8px;
-            line-height: 35px;
+            font-size: 1rem;
+            padding: 0.5rem 0.5rem;
+            line-height: 2.1875rem;
         }
         .huyanon {
             background: #b9ecc4;
         }
     }
     .mod-page {
-        margin-bottom: 30px;
+        margin-bottom: 1.875rem;
         .ft {
             color: #999;
             a {
                 color: #999;
-                margin-left: 10px;
+                margin-left: 0.625rem;
             }
         }
     }
     .top-alert {
         .btn {
-            padding: 0 15px;
-            height: 26px;
-            line-height: 26px;
+            padding: 0 0.9375rem;
+            height: 1.625rem;
+            line-height: 1.625rem;
             font-size: .875em;
-            border: 1px solid #ccc;
+            border: 0.0625rem solid #ccc;
         }
         .btn-blue {
             border-color: #5BA1CF;
         }
     }
     .author-say {
-        padding: 15px;
-        border-top: 1px solid #E2B4AC;
+        padding: 0.9375rem;
+        border-top: 0.0625rem solid #E2B4AC;
         color: #999;
         .name {
             color: #960;
         }
         p {
-            padding-bottom: 10px;
+            padding-bottom: 0.625rem;
         }
     }
     .page-control {
-        border-top: 1px dotted #ddd;
-        padding-top: 10px;
+        border-top: 0.0625rem dotted #ddd;
+        padding-top: 0.625rem;
         background: #f5f5f5;
         .bd {
             &:after,
@@ -3159,8 +3173,8 @@ input {
         }
         a {
             display: block;
-            height: 38px;
-            line-height: 30px;
+            height: 2.375rem;
+            line-height: 1.875rem;
             text-align: center;
             color: #960;
         }
@@ -3173,7 +3187,7 @@ input {
             float: left;
             width: 40%;
             span {
-                margin-right: 5px;
+                margin-right: 0.3125rem;
             }
         }
         .catalog {
@@ -3185,7 +3199,7 @@ input {
             color: #666;
             width: 40%;
             span {
-                margin-left: 5px;
+                margin-left: 0.3125rem;
             }
         }
     }
@@ -3203,10 +3217,10 @@ input {
         .toolbar {
             .lightoff {
                 i {
-                    width: 19px;
-                    height: 19px;
+                    width: 1.1875rem;
+                    height: 1.1875rem;
                     background-position: 0 0;
-                    vertical-align: -6px;
+                    vertical-align: -0.375rem;
                 }
             }
         }
@@ -3259,13 +3273,13 @@ input {
                 top: 0;
             }
             .toolbar {
-                bottom: 48px;
+                bottom: 3rem;
             }
             .page-control {
                 bottom: 0;
             }
             .container {
-                padding: 50px 0 100px;
+                padding: 3.125rem 0 6.25rem;
             }
             #setting-box {
                 display: block;
@@ -3277,13 +3291,13 @@ input {
 .chapter-recommend {
     background: #ece4da url(../images/chapter-last-recommend-bg-repeat-x.png) repeat-x;
     .hd {
-        height: 60px;
-        line-height: 60px;
+        height: 3.75rem;
+        line-height: 3.75rem;
         .icon {
             float: left;
-            width: 46px;
-            height: 46px;
-            margin: 8px 10px 0;
+            width: 2.875rem;
+            height: 2.875rem;
+            margin: 0.5rem 0.625rem 0;
             background: url(../images/chapter-last-recommend-icon.png);
         }
         h4 {
@@ -3303,8 +3317,8 @@ input {
         a {
             float: left;
             width: 50%;
-            height: 40px;
-            line-height: 40px;
+            height: 2.5rem;
+            line-height: 2.5rem;
             padding: 0;
             margin: 0;
             background: #d0c6ba;
@@ -3319,12 +3333,12 @@ input {
         }
     }
     li {
-        padding: 15px 10px;
-        border-bottom: 1px solid #c9bfb2;
+        padding: 0.9375rem 0.625rem;
+        border-bottom: 0.0625rem solid #c9bfb2;
     }
     .bd {
         h5 {
-            padding-bottom: 10px;
+            padding-bottom: 0.625rem;
             font-size: 1em;
             a {
                 color: #5a4c3c;
@@ -3342,14 +3356,14 @@ input {
         }
         .divide {
             color: #998b7b;
-            margin: 0 3px;
+            margin: 0 0.1875rem;
             font-size: .875em;
         }
         .finished,
         .unfinished {
             display: inline-block;
-            padding: 2px;
-            margin-right: 5px;
+            padding: 0.125rem;
+            margin-right: 0.3125rem;
             color: #fff;
             background: #a89784;
         }
@@ -3360,12 +3374,12 @@ input {
             border-style: solid;
             display: block;
             overflow: hidden;
-            border-bottom: 5px solid transparent;
-            border-left: 5px solid #a89784;
+            border-bottom: 0.3125rem solid transparent;
+            border-left: 0.3125rem solid #a89784;
             border-right: none;
-            border-top: 5px solid transparent;
+            border-top: 0.3125rem solid transparent;
             float: right;
-            margin: 2px -7px 0 0;
+            margin: 0.125rem -0.4375rem 0 0;
         }
     }
 }
@@ -3387,10 +3401,10 @@ html.ie6 .chapter-recommend .bd {
         border-style: solid;
         display: block;
         overflow: hidden;
-        border-bottom: 5px solid transparent;
-        border-left: 5px solid #84a885;
+        border-bottom: 0.3125rem solid transparent;
+        border-left: 0.3125rem solid #84a885;
         border-right: none;
-        border-top: 5px solid transparent;
+        border-top: 0.3125rem solid transparent;
     }
 }
 
@@ -3403,15 +3417,15 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 .chapter-recommend .bd {
     .collect,
     .diamond {
-        padding: 3px 0 2px 20px;
-        margin-right: 5px;
+        padding: 0.1875rem 0 0.125rem 1.25rem;
+        margin-right: 0.3125rem;
         background: url(../images/chapter-last-recommend-collect-icon.png) left center no-repeat;
     }
     .support {
-        padding: 3px 0 2px 20px;
-        margin-right: 5px;
+        padding: 0.1875rem 0 0.125rem 1.25rem;
+        margin-right: 0.3125rem;
         background: url(../images/chapter-last-recommend-collect-icon.png) left center no-repeat;
-        padding-left: 16px;
+        padding-left: 1rem;
         background-image: url(../images/chapter-last-recommend-support-icon.png);
     }
     .diamond {
@@ -3431,27 +3445,27 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 .review {
     .page-title {
         color: #960;
-        margin-bottom: 5px;
+        margin-bottom: 0.3125rem;
     }
     .detail {
-        margin-top: 5px;
-        border-bottom: 1px solid #E2B4AC;
+        margin-top: 0.3125rem;
+        border-bottom: 0.0625rem solid #E2B4AC;
         .info {
             font-size: .75em;
             color: #999;
-            padding-bottom: 10px;
+            padding-bottom: 0.625rem;
         }
         .bd {
             line-height: 1.6em;
             font-size: 1em;
-            padding: 15px 0 0;
+            padding: 0.9375rem 0 0;
             .controls {
-                margin: 20px 0 3px;
+                margin: 1.25rem 0 0.1875rem;
                 text-align: right;
                 font-size: .875em;
                 a {
                     color: #999;
-                    margin-left: 3px;
+                    margin-left: 0.1875rem;
                 }
             }
         }
@@ -3466,7 +3480,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             background: #f4f4f4;
         }
         .filter {
-            padding: 8px 10px 3px;
+            padding: 0.5rem 0.625rem 0.1875rem;
             line-height: 2em;
             &:after,
             &:before {
@@ -3480,33 +3494,33 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             a {
                 float: left;
                 line-height: 1.4em;
-                margin-bottom: 5px;
+                margin-bottom: 0.3125rem;
             }
             span {
                 float: left;
                 line-height: 1.4em;
-                margin-bottom: 5px;
+                margin-bottom: 0.3125rem;
                 color: #000;
             }
             a {
-                margin-right: 10px;
+                margin-right: 0.625rem;
                 color: #7C7C7C;
                 float: left;
                 white-space: nowrap;
                 &.current {
                     background: #1AA5DB;
                     color: #fff;
-                    padding: 0 3px;
+                    padding: 0 0.1875rem;
                 }
             }
         }
     }
     li {
-        margin: 5px;
-        border-bottom: 1px dotted #ddd;
+        margin: 0.3125rem;
+        border-bottom: 0.0625rem dotted #ddd;
         line-height: 1.6em;
         .left {
-            padding-right: 10px;
+            padding-right: 0.625rem;
             font-family: Arial;
             font-size: .875em;
             color: #999;
@@ -3526,7 +3540,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             color: #999;
         }
         .words {
-            margin-left: 3px;
+            margin-left: 0.1875rem;
         }
         .info {
             font-size: .875em;
@@ -3547,32 +3561,32 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 }
 
 .tips {
-    margin-top: 5px;
+    margin-top: 0.3125rem;
     font-size: .75em;
     color: #999;
 }
 
 .hot-list {
     .bd {
-        padding-top: 10px;
+        padding-top: 0.625rem;
     }
     li {
         float: left;
         width: 33%;
         text-align: center;
-        margin-bottom: 15px;
+        margin-bottom: 0.9375rem;
         h5 {
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            padding: 5px 0;
+            padding: 0.3125rem 0;
         }
     }
     .buttons {
-        padding: 10px 0;
+        padding: 0.625rem 0;
         text-align: center;
         a {
-            margin-right: 10px;
+            margin-right: 0.625rem;
             color: #999;
         }
     }
@@ -3599,8 +3613,8 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     }
     .list {
         li {
-            padding: 10px;
-            border-bottom: 1px dotted #ddd;
+            padding: 0.625rem;
+            border-bottom: 0.0625rem dotted #ddd;
             &:last-child {
                 border-bottom: none;
             }
@@ -3613,7 +3627,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             font-size: .75em;
             color: #666;
             span {
-                margin-right: 10px;
+                margin-right: 0.625rem;
             }
         }
         .num {
@@ -3623,7 +3637,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             color: #999;
         }
         .desc {
-            margin-top: 5px;
+            margin-top: 0.3125rem;
             color: #999;
             font-size: .75em;
         }
@@ -3631,14 +3645,14 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 }
 
 .other-link {
-    margin-top: 25px;
+    margin-top: 1.5625rem;
     font-size: .875em;
     color: #999;
     .bd {
-        padding: 0 5px;
+        padding: 0 0.3125rem;
     }
     .divide {
-        margin: 0 5px;
+        margin: 0 0.3125rem;
     }
     a {
         color: #960;
@@ -3655,42 +3669,42 @@ html.ie6 .chapter-recommend .bd .unfinished i {
         .hd {
             background: #b4ab94;
             color: #fff;
-            padding: 13px 15px;
+            padding: 0.8125rem 0.9375rem;
             font-family: 1em;
             i {
                 display: inline-block;
-                margin: 0 5px 0 0;
+                margin: 0 0.3125rem 0 0;
                 float: left;
             }
         }
     }
     .my-shelf {
         .hd i {
-            width: 23px;
-            height: 21px;
+            width: 1.4375rem;
+            height: 1.3125rem;
             background: url(../images/my-shelf-icon.png);
         }
         li {
-            padding: 15px;
-            border-bottom: 1px solid #e0d7d3;
+            padding: 0.9375rem;
+            border-bottom: 0.0625rem solid #e0d7d3;
             &:last-child {
                 border-bottom: none;
             }
         }
         .column-2 {
             .left {
-                margin-right: 15px;
+                margin-right: 0.9375rem;
             }
             .right {
                 h4 {
-                    padding: 8px 0 10px;
+                    padding: 0.5rem 0 0.625rem;
                     font-size: 1.2em;
                     a {
                         color: #4d3d34;
                     }
                 }
                 p {
-                    margin-bottom: 6px;
+                    margin-bottom: 0.375rem;
                     font-size: .875em;
                     color: #666;
                     text-overflow: ellipsis;
@@ -3707,15 +3721,15 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             }
             .read {
                 clear: both;
-                padding-top: 10px;
+                padding-top: 0.625rem;
                 text-align: center;
                 table {
                     width: 100%;
                 }
                 a {
                     display: block;
-                    height: 40px;
-                    line-height: 40px;
+                    height: 2.5rem;
+                    line-height: 2.5rem;
                     color: #fff;
                     background: #807662;
                 }
@@ -3728,7 +3742,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
             background: #e1dddb;
             a {
                 display: block;
-                padding: 10px 0;
+                padding: 0.625rem 0;
                 text-align: center;
                 color: #94847b;
             }
@@ -3736,24 +3750,24 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     }
     .my-books {
         .hd i {
-            width: 17px;
-            height: 21px;
+            width: 1.0625rem;
+            height: 1.3125rem;
             background: url(../images/my-book-icon.png);
         }
         li {
-            padding: 15px;
-            border-bottom: 1px solid #e0d7d3;
+            padding: 0.9375rem;
+            border-bottom: 0.0625rem solid #e0d7d3;
             &:last-child {
                 border-bottom: none;
             }
             .left {
-                padding-right: 15px;
+                padding-right: 0.9375rem;
                 img {
-                    box-shadow: 0 0 3px 0 #333;
+                    box-shadow: 0 0 0.1875rem 0 #333;
                 }
             }
             h4 {
-                padding: 8px 0;
+                padding: 0.5rem 0;
                 font-size: 1.2em;
                 a {
                     color: #4d3d34;
@@ -3763,20 +3777,20 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     }
     .my-comments {
         .hd i {
-            width: 23px;
-            height: 21px;
+            width: 1.4375rem;
+            height: 1.3125rem;
             background: url(../images/my-comment-icon.png);
         }
         li {
-            padding: 15px;
-            border-bottom: 1px solid #e0d7d3;
+            padding: 0.9375rem;
+            border-bottom: 0.0625rem solid #e0d7d3;
             &:last-child {
                 border-bottom: none;
             }
         }
         h5 {
             font-size: 1em;
-            padding-bottom: 10px;
+            padding-bottom: 0.625rem;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
@@ -3787,7 +3801,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
         .summary {
             font-size: .75em;
             line-height: 1.6em;
-            padding-bottom: 10px;
+            padding-bottom: 0.625rem;
         }
         .controls {
             font-size: .75em;
@@ -3803,8 +3817,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 }
 
 .search-form {
-    padding: 5px 10px;
-    background: url(../images/body-bg.png);
+    padding: 0.3125rem 0.625rem;
     table {
         width: 100%;
         table-layout: fixed;
@@ -3813,29 +3826,30 @@ html.ie6 .chapter-recommend .bd .unfinished i {
         vertical-align: top;
     }
     .text-border {
-        padding: 6px;
+        padding: 0.375rem;
         width: 95%;
-        border: 1px solid #ccc;
+        border: 0.0625rem solid #ccc;
         font-size: .75em;
-        border-radius: 2px;
+        border-radius: 0.125rem;
     }
     .btn {
         font-size: .8em;
-        height: 28px;
-        line-height: 27px;
+        height: 1.75rem;
+        line-height: 1.6875rem;
+        margin: 0;
     }
     label {
-        margin-right: 5px;
+        margin-right: 0.3125rem;
     }
     p {
-        margin-top: 10px;
+        margin-top: 0.625rem;
         font-size: .75em;
     }
     .hot-key {
         font-size: .75em;
-        padding-top: 5px;
+        padding-top: 0.3125rem;
         a {
-            margin-right: 5px;
+            margin-right: 0.3125rem;
             color: #2187EC;
         }
         .hot {
@@ -3845,7 +3859,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 }
 
 .results {
-    margin-top: 15px;
+    margin-top: 0.9375rem;
     .hd {
         a {
             color: #666;
@@ -3856,15 +3870,15 @@ html.ie6 .chapter-recommend .bd .unfinished i {
         }
     }
     li {
-        margin-bottom: 10px;
-        padding: 10px;
-        border-bottom: 1px dotted #ddd;
+        margin-bottom: 0.625rem;
+        padding: 0.625rem;
+        border-bottom: 0.0625rem dotted #ddd;
         &:last-child {
             border-bottom: none;
         }
     }
     .left {
-        padding-right: 15px;
+        padding-right: 0.9375rem;
     }
     .name {
         color: #333;
@@ -3875,7 +3889,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     }
     .tags {
         font-size: .75em;
-        padding-top: 10px;
+        padding-top: 0.625rem;
         color: #999;
         text-align: right;
         text-overflow: ellipsis;
@@ -3884,25 +3898,25 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     }
     .ft {
         text-align: center;
-        padding: 10px 0;
+        padding: 0.625rem 0;
         font-size: .75em;
         font-family: Arial;
         a {
-            margin: 0 3px;
+            margin: 0 0.1875rem;
         }
     }
 }
 
 .book-list {
     .left img {
-        box-shadow: 0 0 3px 0 #ccc;
+        box-shadow: 0 0 0.1875rem 0 #ccc;
     }
     h5 {
         font-size: .875em;
-        padding-bottom: 5px;
+        padding-bottom: 0.3125rem;
         font-weight: 400;
         img {
-            vertical-align: -2px;
+            vertical-align: -0.125rem;
         }
     }
     .status {
@@ -3916,18 +3930,18 @@ html.ie6 .chapter-recommend .bd .unfinished i {
         color: #977fb9;
     }
     .time {
-        margin-top: 10px;
+        margin-top: 0.625rem;
         font-size: .75em;
         color: #999;
     }
     .right {
-        padding-top: 5px;
+        padding-top: 0.3125rem;
         .info {
-            margin-bottom: 4px;
+            margin-bottom: 0.25rem;
             color: #333;
         }
         .author {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: #999;
             a {
                 color: #666;
@@ -3937,7 +3951,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     .summary {
         text-indent: 2em;
         font-size: .75em;
-        margin-top: 5px;
+        margin-top: 0.3125rem;
         color: #666;
         line-height: 1.6em;
     }
@@ -3951,7 +3965,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
         font-size: .875em;
     }
     .info {
-        margin-top: 10px;
+        margin-top: 0.625rem;
         font-size: .75em;
         color: #999;
     }
@@ -3959,25 +3973,15 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 
 .pagination {
     display: block;
-    height: 28px;
-    margin: 10px auto;
-    li {
-        display: inline-block;
-        padding: 2px 0;
-        width: 24px;
-        height: 22px;
-        line-height: 22px;
-        text-align: center;
-        color: #666;
-        margin-right: 2px;
-        background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#fefefe));
-        background: -webkit-linear-gradient(top, #fff, #fefefe);
-        background: -moz-linear-gradient(top, #fff, #fefefe);
-        background: -o-linear-gradient(top, #fff, #fefefe);
-        border: 1px solid #c0c0c0;
-        font-size: 14px;
-        &.active {
-            background: #c0c0c0;
+    height: 1.75rem;
+    margin: 0.625rem auto;
+    >li {
+        >a,
+        >span {
+            font-size: 12px;
+            padding: 6px;
+            min-width: 25px;
+            text-align: center;
         }
     }
 }
@@ -3987,22 +3991,22 @@ html.ie6 .chapter-recommend .bd .unfinished i {
 .nextPage,
 .endPage {
     display: block;
-    height: 22px;
-    line-height: 22px;
+    height: 1.375rem;
+    line-height: 1.375rem;
     float: left;
     text-align: center;
     color: #666;
-    margin-right: 2px;
+    margin-right: 0.125rem;
     background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#fefefe));
     background: -webkit-linear-gradient(top, #fff, #fefefe);
     background: -moz-linear-gradient(top, #fff, #fefefe);
     background: -o-linear-gradient(top, #fff, #fefefe);
-    border: 1px solid #c0c0c0;
-    font-size: 14px;
+    border: 0.0625rem solid #c0c0c0;
+    font-size: 0.875rem;
 }
 
 .tuijian {
-    margin: 10px;
+    margin: 0.625rem;
     span,
     a {
         color: #850;
@@ -4016,7 +4020,7 @@ html.ie6 .chapter-recommend .bd .unfinished i {
     position: fixed;
     left: 0;
     width: 100%;
-    top: 60px;
+    top: 3.75rem;
     .dialog-header {
         height: 0;
     }
