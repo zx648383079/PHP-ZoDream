@@ -48,6 +48,10 @@ class AddressModel extends Model {
         ];
     }
 
+    public function region() {
+	    return $this->hasOne(RegionModel::class, 'id', 'region_id');
+    }
+
 //	public function save() {
 //	    if (!empty($this->id) && $this->status == self::STATUS_FIXED) {
 //            $this->offsetUnset('id');

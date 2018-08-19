@@ -18,7 +18,7 @@ function collectGoods(id: number, target?: any) {
 }
 
 function mapItem(cb: (JQuery) => any) {
-    $(".goods-item").each(function () {
+    $(".cart-item").each(function () {
         if (cb($(this)) == false) {
             return false;
         }
@@ -34,6 +34,10 @@ function mapCheckedItem(cb: (JQuery) => any) {
             return false;
         }
     });
+}
+
+function refreshCart() {
+
 }
 
 $(function() {
@@ -54,7 +58,7 @@ $(function() {
     });
     $('.number-box .fa-plus').click(function() {
         let input = $(this).closest('.number-box').find('input'),
-            max = input.attr('max') || 1,
+            max = input.attr('max') || 999,
             amount = Number(input.val()) || 0;
         if (amount < max) {
             amount += 1;
@@ -62,3 +66,37 @@ $(function() {
         input.val(amount).trigger('change');
     });
 });
+function bindCart(baseUrl: string) {
+    $('.number-box input').change(function() {
+        let _this = $(this),
+            amount = _this.val(),
+            box = _this.closest('.cart-item'),
+            id = box.attr('data-id');
+        $.getJSON(baseUrl + 'cart/update', {
+            id: id,
+            amount: amount
+        }, function(data) {
+            parseAjax(data);
+        });
+    });
+    $('.cart-item .fa-trash').click(function() {
+        let _this = $(this),
+            box = _this.closest('.cart-item'),
+            id = box.attr('data-id');
+        $.getJSON(baseUrl + 'cart/delete', {
+            id: id,
+        }, function(data) {
+            parseAjax(data);
+            if (data.code == 200) {
+                box.remove();
+            }
+        });
+    });
+    $(".cart-item .check-box").change(function() {
+        refreshCart();
+    });
+    $(".cart-footer .check-box").change(function() {
+        $(".cart-item .check-box").toggleClass('active', $(this).hasClass('active'));
+        refreshCart();
+    })
+}

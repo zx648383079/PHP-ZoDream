@@ -303,6 +303,7 @@ class CreateShopTables extends Migration {
         });
         Schema::createTable(CartModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
+            $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->set('number')->int()->defaultVal(1);

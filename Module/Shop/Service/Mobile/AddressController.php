@@ -14,7 +14,7 @@ class AddressController extends Controller {
     }
 
     public function indexAction() {
-        $model_list = AddressModel::page();
+        $model_list = AddressModel::with('region')->page();
         return $this->show(compact('model_list'));
     }
 

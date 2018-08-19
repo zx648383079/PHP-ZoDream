@@ -4,7 +4,14 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '结算';
 
-$this->extend('../layouts/header');
+$js = <<<JS
+$('select').select();
+JS;
+
+$this->extend('../layouts/header')
+    ->registerCssFile('@dialog-select.css')
+    ->registerJsFile('@jquery.selectbox.min.js')
+    ->registerJs($js);
 ?>
 
 <div class="has-header checkout-box">
@@ -44,13 +51,25 @@ $this->extend('../layouts/header');
 
     <div class="line-item shipping-box">
         <span>配送方式</span>
-        <span>请选择</span>
-        <i class="fa fa-chevron-right"></i>
+        <span>
+            <select name="shipping">
+                <option value="0">请选择</option>
+                <?php foreach($shipping_list as $item):?>
+                <option value="<?=$item->id?>"><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
+        </span>
     </div>
     <div class="line-item payment-box">
         <span>支付方式</span>
-        <span>请选择</span>
-        <i class="fa fa-chevron-right"></i>
+        <span>
+            <select name="payment">
+                <option value="0">请选择</option>
+                <?php foreach($payment_list as $item):?>
+                <option value="<?=$item->id?>"><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
+        </span>
     </div>
 
     <div class="checkout-amount">

@@ -11,13 +11,38 @@ use Domain\Model\Model;
 
 /**
  * Class PaymentModel
- * @package Domain\Model\Shopping
  * @property integer $id
  * @property string $name
+ * @property string $code
+ * @property string $icon
+ * @property string $description
+ * @property string $settings
  */
 class PaymentModel extends Model {
+
     public static function tableName() {
         return 'shop_payment';
+    }
+
+    protected function rules() {
+        return [
+            'name' => 'required|string:0,30',
+            'code' => 'required|string:0,30',
+            'icon' => 'string:0,100',
+            'description' => 'string:0,255',
+            'settings' => '',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'code' => 'Code',
+            'icon' => 'Icon',
+            'description' => 'Description',
+            'settings' => 'Settings',
+        ];
     }
 
     /**
@@ -34,5 +59,13 @@ class PaymentModel extends Model {
 
     public function callback() {
 
+    }
+
+    public static function paymentList() {
+        return [
+            'balance' =>  '余额支付',
+            'alipay' =>  '支付宝支付',
+            'wx' =>  '微信支付',
+        ];
     }
 }

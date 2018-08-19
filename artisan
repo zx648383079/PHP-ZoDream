@@ -4,4 +4,4 @@ use Zodream\Service\Console;
 
 require_once __DIR__.'/Service/Bootstrap.php';
 $app = new Console(APP_DIR);
-$app->handle()->send();
+$app->autoResponse();

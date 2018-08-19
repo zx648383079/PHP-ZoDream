@@ -1,0 +1,30 @@
+@mixin lineItem() {
+    .line-item {
+        position: relative;
+        line-height: 1.875rem;
+        border-bottom: 1px solid #f6f6f9;
+        .fa {
+            position: absolute; 
+            right: 0.3125rem;
+            top: 0.4375rem;
+        }
+        span {
+            &:nth-child(2) {
+                float: right;
+                margin-right: 1.25rem;
+            }
+        }
+    }
+}
+
+@mixin menuA() {
+    display: block;
+    padding: 0.625rem;
+    background: #99e3ff;
+    margin-top: 0.125rem;
+    .fa:nth-child(2),
+    .fa-chevron-right {
+        float: right;
+        margin-right: 0.625rem;
+    }
+}

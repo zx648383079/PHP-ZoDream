@@ -45,4 +45,16 @@ class ShippingModel extends Model {
     public function getFee() {
         return 0;
     }
+
+    public function canUsePayment(PaymentModel $payment) {
+        return true;
+    }
+
+    /**
+     * @param AddressModel $address
+     * @return static[]
+     */
+    public static function getByAddress(AddressModel $address) {
+        return static::all();
+    }
 }

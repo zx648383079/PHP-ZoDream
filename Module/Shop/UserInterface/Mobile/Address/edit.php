@@ -9,7 +9,23 @@ $header_btn = <<<HTML
     保存
 </a>
 HTML;
-$this->extend('../layouts/header', compact('header_btn'));
+$url = $this->url('./region/tree');
+$js = <<<JS
+$('.region-box').select({
+    default: {$model->region_id} + 0,
+    column: 3,
+    textTag: 'name',
+    data: '{$url}',
+    ondone: function (prov, city, dist, t1, t2, t3) { 
+        $('.region-box span').text(t1 + ' ' + t2 + ' ' + t3);
+        $('.region-box input').val(dist);
+    }
+});
+JS;
+$this->extend('../layouts/header', compact('header_btn'))
+    ->registerCssFile('@dialog-select.css')
+    ->registerJsFile('@jquery.selectbox.min.js')
+    ->registerJs($js);
 ?>
 
 <div class="has-header">
@@ -20,7 +36,7 @@ $this->extend('../layouts/header', compact('header_btn'));
         <div class="input-group">
             <input type="text" name="tel" placeholder="手机号" required value="<?=$model->tel?>">
         </div>
-        <div class="input-group">
+        <div class="input-group region-box">
             <span>地址</span>
             <input type="hidden" name="region_id" value="<?=$model->region_id ?: 1?>">
         </div>

@@ -24,6 +24,8 @@ use Domain\Model\Model;
  * @property float $pay_fee
  * @property integer $created_at
  * @property integer $updated_at
+ * @property PaymentModel $payment
+ * @property ShippingModel $shipping
  */
 class OrderModel extends Model {
 
@@ -99,12 +101,12 @@ class OrderModel extends Model {
         return $total;
     }
 
-    public function getPayment() {
-        return PaymentModel::find($this->pay_id);
+    public function payment() {
+        return $this->hasOne(PaymentModel::class, 'id', 'payment_id');
     }
 
-    public function getDelivery() {
-        return ShippingModel::find($this->delivery_id);
+    public function shipping() {
+        return $this->hasOne(ShippingModel::class, 'id', 'shipping_id');
     }
 
     public function createOrder() {
@@ -114,8 +116,8 @@ class OrderModel extends Model {
             $total += $item->getTotal();
         }
         $this->goods_amount = $total;
-        $this->shipping_fee = 0;//$this->getDelivery()->getFee();
-        $this->pay_fee = 0;//$this->getPayment()->getFee();
+        $this->shipping_fee = $this->shipping->getFee();
+        $this->pay_fee = $this->payment->getFee();
         $this->user_id = auth()->id();
         $this->save();
         foreach ($carts as $item) {
@@ -125,7 +127,7 @@ class OrderModel extends Model {
     }
 
     public function pay() {
-        $this->getPayment()->pay($this);
+        $this->payment->pay($this);
     }
 
     public function addGoods($goods) {
@@ -137,11 +139,13 @@ class OrderModel extends Model {
     }
 
     public function setPayment(PaymentModel $payment) {
-
+        $this->payment_id = $payment->id;
+        $this->setRelation('payment', $payment);
     }
 
-    public function setShipping() {
-
+    public function setShipping(ShippingModel $shipping) {
+        $this->shipping_id = $shipping->id;
+        $this->setRelation('shipping', $shipping);
     }
 
     /**

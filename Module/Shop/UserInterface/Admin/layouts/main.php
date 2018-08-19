@@ -48,11 +48,20 @@ $this->registerCssFile([
                         <li><a href="<?=$this->url('./admin/brand/create')?>"><i class="fa fa-list"></i><span>新建品牌</span></a></li>
                     </ul>
                 </li>
-                <li class="expand">
+                <li>
                     <a href="javascript:;"><i class="fa fa-briefcase"></i><span>订单管理</span></a>
                     <ul>
-                    <li><a href="<?=$this->url('./admin/order')?>"><i class="fa fa-list"></i><span>订单列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/order')?>"><i class="fa fa-list"></i><span>订单列表</span></a></li>
                         <li><a href="<?=$this->url('./admin/order/create')?>"><i class="fa fa-list"></i><span>新建订单</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;"><i class="fa fa-briefcase"></i><span>商城设置</span></a>
+                    <ul>
+                        <li><a href="<?=$this->url('./admin/payment')?>"><i class="fa fa-list"></i><span>支付列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/payment/create')?>"><i class="fa fa-list"></i><span>新建支付</span></a></li>
+                        <li><a href="<?=$this->url('./admin/shipping')?>"><i class="fa fa-list"></i><span>配送列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/shipping/create')?>"><i class="fa fa-list"></i><span>新建配送</span></a></li>
                     </ul>
                 </li>
             </ul>

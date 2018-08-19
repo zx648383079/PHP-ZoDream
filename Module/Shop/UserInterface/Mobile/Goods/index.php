@@ -20,7 +20,7 @@ $this->title = '商品详情';
     </a> -->
 </header>
 
-<div class="has-header">
+<div class="has-header has-footer">
 
     <div class="goods-gallary-box">
         <img src="<?=$goods->thumb?>" alt="">

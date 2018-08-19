@@ -154,6 +154,12 @@ $(function() {
     $('.left-catelog .left-catelog-toggle').click(function() {
         $(this).parents('.left-catelog').toggleClass('expand');
     });
+    $('.left-catelog li a').click(function() {
+        let box = $(this).closest('li');
+        if (box.find('ul').length > 0) {
+            box.toggleClass('expand')
+        }
+    });
     var autoRedirct = function() {
         let ele = $(".autoRedirct");
         if (ele.length < 1) {

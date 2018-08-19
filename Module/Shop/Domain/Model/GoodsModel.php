@@ -98,26 +98,7 @@ class GoodsModel extends Model {
         return $this->hasOne(BrandModel::class, 'id', 'brand_id');
     }
 
-    /**
-     * @return Page
-     */
-    public function getComments() {
-        return new Page();
-    }
 
-    /**
-     * @return array
-     */
-    public function getProperties() {
-        return $this->hasMany(GoodsPropertyModel::class, 'goods_id', 'id');
-    }
-
-    /**
-     * @return GoodsImageModel[]
-     */
-    public function getImages() {
-        return $this->hasMany(GoodsImageModel::class, 'goods_id', 'id');
-    }
 
     /**
      * @return array
@@ -134,6 +115,19 @@ class GoodsModel extends Model {
         if (auth()->guest()) {
             return false;
         }
-        return CollectGoodsModel::where('user_id', auth()->id())->where('goods_id', $this->id)->count() > 0;
+        return CollectModel::where('user_id', auth()->id())->where('goods_id', $this->id)->count() > 0;
+    }
+
+    public function canBuy(int $amount = 1): bool {
+        return true;
+    }
+
+    /**
+     * 获取最终的单价
+     * @param int $amount
+     * @return float|int
+     */
+    public function final_price(int $amount = 1): float {
+        return $this->price;
     }
 }

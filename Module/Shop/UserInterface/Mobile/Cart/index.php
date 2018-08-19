@@ -4,8 +4,11 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '我的购物车';
 
+$url = $this->url('./mobile/');
+
 $js = <<<JS
 $(".swipe-row").swipeAction();
+bindCart('{$url}');
 JS;
 
 $this->extend('../layouts/header')
@@ -17,7 +20,7 @@ $this->extend('../layouts/header')
     <div class="cart-box">
         <div class="swipe-box goods-list">
             <?php foreach($goods_list as $item):?>
-            <div class="swipe-row">
+            <div class="swipe-row cart-item" data-id="<?=$item->id?>">
                 <div class="swipe-content goods-item">
                     <i class="fa check-box"></i>
                     <div class="goods-img">
@@ -28,7 +31,7 @@ $this->extend('../layouts/header')
                         <span><?=$item->price?></span>
                         <div class="number-box">
                             <i class="fa fa-minus"></i>
-                            <input type="text" name="" value="<?=$item->number?>">
+                            <input type="text" name="" value="<?=$item->number?>" min="1">
                             <i class="fa fa-plus"></i>
                         </div>
                     </div>

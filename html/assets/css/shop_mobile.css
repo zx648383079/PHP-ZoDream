@@ -384,7 +384,8 @@ footer,
 
 .checkout-box .line-item {
   position: relative;
-  line-height: 1.875rem; }
+  line-height: 1.875rem;
+  border-bottom: 1px solid #f6f6f9; }
   .checkout-box .line-item .fa {
     position: absolute;
     right: 0.3125rem;
@@ -395,7 +396,13 @@ footer,
 
 .checkout-box .shipping-box,
 .checkout-box .payment-box {
-  border-bottom: 0.0625rem solid; }
+  border-bottom: 0.0625rem solid;
+  line-height: 2rem; }
+  .checkout-box .shipping-box .dialog-select-input,
+  .checkout-box .payment-box .dialog-select-input {
+    border: none;
+    line-height: 2rem;
+    height: 2rem; }
 
 .checkout-footer {
   text-align: right;
@@ -497,14 +504,64 @@ footer,
   .menu-large .item:first-child, .menu-large .item:nth-child(2) {
     border-top: 0; }
 
+.menu-panel .panel-header {
+  display: block;
+  padding: 0.625rem;
+  background: #99e3ff;
+  margin-top: 0.125rem; }
+  .menu-panel .panel-header .fa:nth-child(2),
+  .menu-panel .panel-header .fa-chevron-right {
+    float: right;
+    margin-right: 0.625rem; }
+
+.menu-panel .panel-body a {
+  width: 25%;
+  display: inline-block;
+  border-right: 0.0625rem dotted #4693d0;
+  text-align: center; }
+  .menu-panel .panel-body a .menu-item-icon {
+    font-size: 3.125rem;
+    display: block; }
+  .menu-panel .panel-body a:last-child {
+    border-right: 0; }
+
 .menu-list a {
   display: block;
   padding: 0.625rem;
   background: #99e3ff;
   margin-top: 0.125rem; }
-  .menu-list a .fa:nth-child(2) {
+  .menu-list a .fa:nth-child(2),
+  .menu-list a .fa-chevron-right {
     float: right;
     margin-right: 0.625rem; }
+
+.profile-box {
+  margin-bottom: 2rem; }
+  .profile-box .line-item {
+    position: relative;
+    line-height: 1.875rem;
+    border-bottom: 1px solid #f6f6f9; }
+    .profile-box .line-item .fa {
+      position: absolute;
+      right: 0.3125rem;
+      top: 0.4375rem; }
+    .profile-box .line-item span:nth-child(2) {
+      float: right;
+      margin-right: 1.25rem; }
+  .profile-box .avatar-item {
+    line-height: 3rem; }
+    .profile-box .avatar-item .fa {
+      top: 1rem; }
+
+.btn.del-btn {
+  margin: 0.875rem;
+  box-sizing: border-box;
+  padding: 0.375rem;
+  display: block;
+  text-align: center; }
+
+.share-box {
+  text-align: center; }
 
 .form-inline .input-group input {
   width: 100%; }
