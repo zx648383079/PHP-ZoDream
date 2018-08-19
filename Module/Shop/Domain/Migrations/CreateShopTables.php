@@ -2,6 +2,8 @@
 namespace Module\Shop\Domain\Migrations;
 
 use Module\Shop\Domain\Model\AddressModel;
+use Module\Shop\Domain\Model\Advertisement\AdModel;
+use Module\Shop\Domain\Model\Advertisement\AdPositionModel;
 use Module\Shop\Domain\Model\ArticleCategoryModel;
 use Module\Shop\Domain\Model\ArticleModel;
 use Module\Shop\Domain\Model\AttributeGroupModel;
@@ -40,6 +42,8 @@ class CreateShopTables extends Migration {
      * @return void
      */
     public function up() {
+        $this->createAd();
+
         $this->createArticle();
         Schema::createTable(AddressModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
@@ -326,6 +330,28 @@ class CreateShopTables extends Migration {
         Schema::createTable(WarehouseRegionModel::tableName(), function (Table $table) {
             $table->set('warehouse_id')->int()->notNull();
             $table->set('region_id')->int()->notNull();
+        });
+    }
+
+    protected function createAd(): void {
+        Schema::createTable(AdModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('position_id')->int()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(1);
+            $table->set('url')->varchar()->notNull();
+            $table->set('content')->varchar()->notNull();
+            $table->timestamp('start_at');
+            $table->timestamp('end_at');
+            $table->timestamps();
+        });
+        Schema::createTable(AdPositionModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('width')->varchar(20)->notNull();
+            $table->set('height')->varchar(20)->notNull();
+            $table->set('template')->varchar()->notNull();
+            $table->timestamps();
         });
     }
 

@@ -56,6 +56,24 @@ $this->registerCssFile([
                     </ul>
                 </li>
                 <li>
+                    <a href="javascript:;"><i class="fa fa-briefcase"></i><span>文章管理</span></a>
+                    <ul>
+                        <li><a href="<?=$this->url('./admin/article')?>"><i class="fa fa-list"></i><span>文章列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/article/create')?>"><i class="fa fa-list"></i><span>新建文章</span></a></li>
+                        <li><a href="<?=$this->url('./admin/article/category')?>"><i class="fa fa-list"></i><span>分类列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/article/create_category')?>"><i class="fa fa-list"></i><span>新建分类</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;"><i class="fa fa-briefcase"></i><span>广告管理</span></a>
+                    <ul>
+                        <li><a href="<?=$this->url('./admin/ad')?>"><i class="fa fa-list"></i><span>广告列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/ad/create')?>"><i class="fa fa-list"></i><span>新建广告</span></a></li>
+                        <li><a href="<?=$this->url('./admin/ad/position')?>"><i class="fa fa-list"></i><span>广告位列表</span></a></li>
+                        <li><a href="<?=$this->url('./admin/ad/create_position')?>"><i class="fa fa-list"></i><span>新建广告位</span></a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="javascript:;"><i class="fa fa-briefcase"></i><span>商城设置</span></a>
                     <ul>
                         <li><a href="<?=$this->url('./admin/payment')?>"><i class="fa fa-list"></i><span>支付列表</span></a></li>

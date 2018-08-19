@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Advertisement;
+namespace Module\Shop\Domain\Model\Advertisement;
 
 use Domain\Model\Model;
 
