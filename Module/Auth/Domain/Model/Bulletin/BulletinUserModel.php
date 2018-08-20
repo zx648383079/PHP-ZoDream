@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Bulletin;
+namespace Module\Auth\Domain\Model\Bulletin;
 
 use Domain\Model\Model;
 /**

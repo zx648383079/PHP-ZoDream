@@ -16,7 +16,7 @@ use Domain\Model\Model;
  */
 class AdPositionModel extends Model {
     public static function tableName() {
-        return 'ad_position';
+        return 'shop_ad_position';
     }
 
 }

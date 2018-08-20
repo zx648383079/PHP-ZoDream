@@ -48,8 +48,9 @@ $this->registerCssFile([
                                 <i class="fa fa-plus"></i><span>新增用户</span></a></li>
                     </ul>
                 </li>
-                <li class="expand"><a href="javascript:;">
-                        <i class="fa fa-users"></i><span>权限管理</span></a>
+                <li>
+                    <a href="javascript:;">
+                        <i class="fa fa-magnet"></i><span>权限管理</span></a>
                     <ul>
                             <li><a href="<?=$this->url('./admin/role')?>">
                                 <i class="fa fa-list"></i><span>角色列表</span></a></li>
@@ -59,6 +60,16 @@ $this->registerCssFile([
                                 <i class="fa fa-list"></i><span>权限列表</span></a></li>
                             <li><a href="<?=$this->url('./admin/permission/create')?>">
                                 <i class="fa fa-plus"></i><span>新增权限</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="fa fa-bullhorn"></i><span>消息管理</span></a>
+                    <ul>
+                            <li><a href="<?=$this->url('./admin/bulletin')?>">
+                                <i class="fa fa-list"></i><span>消息列表</span></a></li>
+                            <li><a href="<?=$this->url('./admin/bulletin/create')?>">
+                                <i class="fa fa-plus"></i><span>发送消息</span></a></li>
                     </ul>
                 </li>
                 <li class="expand"><a href="javascript:;">

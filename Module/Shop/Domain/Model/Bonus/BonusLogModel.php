@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Bonus;
+namespace Module\Shop\Domain\Bonus;
 
 use Domain\Model\Model;
 
@@ -14,6 +14,6 @@ use Domain\Model\Model;
  */
 class BonusLogModel extends Model {
     public static function tableName() {
-        return 'bonus_log';
+        return 'shop_bonus_log';
     }
 }

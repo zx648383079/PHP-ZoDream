@@ -21,7 +21,7 @@ use Domain\Model\Model;
  */
 class ArticleModel extends Model {
     public static function tableName() {
-        return 'article';
+        return 'shop_article';
     }
 
     protected function rules() {

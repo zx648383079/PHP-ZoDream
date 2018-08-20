@@ -1,6 +1,8 @@
 <?php
 namespace Module\Auth\Domain\Migrations;
 
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
+use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\OAuthModel;
@@ -60,7 +62,7 @@ class CreateAuthTables extends Migration {
             $table->set('token')->varchar(32)->notNull();
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamp('expired_at');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
         Schema::createTable(RoleModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
@@ -83,6 +85,21 @@ class CreateAuthTables extends Migration {
         Schema::createTable(RolePermissionModel::tableName(), function(Table $table) {
             $table->set('role_id')->int()->notNull()->unsigned();
             $table->set('permission_id')->int()->notNull()->unsigned();
+        });
+        Schema::createTable(BulletinModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('title')->varchar(100)->notNull();
+            $table->set('content')->varchar()->notNull();
+            $table->set('type')->tinyint(2)->defaultVal(0);
+            $table->set('user_id')->int()->notNull();
+            $table->timestamps();
+        });
+        Schema::createTable(BulletinUserModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('bulletin_id')->int()->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('user_id')->int()->notNull();
+            $table->timestamps();
         });
     }
 

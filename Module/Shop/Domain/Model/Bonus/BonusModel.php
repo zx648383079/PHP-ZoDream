@@ -1,5 +1,5 @@
 <?php
-namespace Domain\Model\Bonus;
+namespace Module\Shop\Domain\Bonus;
 
 use Domain\Model\Model;
 
@@ -24,7 +24,7 @@ class BonusModel extends Model {
     const EXPIRE_TIME = 86400;
 
     public static function tableName() {
-        return 'bonus';
+        return 'shop_bonus';
     }
 
     public function getMoney() {

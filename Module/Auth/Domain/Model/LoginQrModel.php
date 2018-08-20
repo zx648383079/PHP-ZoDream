@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Helpers\Str;
 
 /**
  * Class LoginQrModel
@@ -43,5 +44,33 @@ class LoginQrModel extends Model {
             'expired_at' => 'Expired At',
             'created_at' => 'Created At',
         ];
+    }
+
+    /**
+     * 是否过期
+     * @return bool
+     */
+    public function isExpired() {
+        return $this->expired_at < time();
+    }
+
+    public static function generateToken() {
+        return bin2hex(md5(Str::randomBytes(20).time()));
+    }
+
+    /**
+     * @param $token
+     * @return static
+     */
+    public static function findByToken($token) {
+        return self::where('token', $token)->one();
+    }
+
+    public static function createNew() {
+        return self::create([
+           'token' => self::generateToken(),
+           'status' => 0,
+           'expired_at' => time() + 600,
+        ]);
     }
 }

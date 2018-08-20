@@ -1,7 +1,14 @@
 <?php
 use Zodream\Template\View;
 /** @var $this View */
-$this->extend('layouts/header');
+
+$url = $this->url('./');
+$js = <<<JS
+bindLogin('{$url}');
+JS;
+
+$this->extend('layouts/header')
+    ->registerJs($js, View::JQEURY_READY);
 ?>
     <section class="container">
         <div class="login-box">
@@ -35,7 +42,7 @@ $this->extend('layouts/header');
                 </div>
                 <div class="login-qr-box">
                     <div class="qr-box">
-                        <img src="<?=$this->url('./qr')?>" alt="">
+                        <img lazy-src="<?=$this->url('./qr')?>" alt="">
                         <i class="fa fa-refresh"></i>
                     </div>
                     <button type="button" class="btn">返回登录</button>

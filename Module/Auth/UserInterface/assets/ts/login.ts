@@ -16,10 +16,63 @@ $(function() {
         });
         return false;
     });
+
+});
+
+function bindLogin(baseUrl: string) {
+    let is_init = false,
+        is_checking = false,
+        qr_box = $(".login-form .login-qr-box"),
+        refreshQr = function() {
+            qr_box.find('.qr-box img').attr('src', baseUrl + 'qr?v=' + Math.random());
+            is_checking = true;
+            check_loop();
+        },
+        check_qr = function(cb) {
+            $.getJSON(baseUrl + 'qr/check', function(data) {
+                if (data.code == 200) {
+                    qr_box.addClass('qr_success');
+                    is_checking = false;
+                    parseAjax(data);
+                    return;
+                }
+                if (data.code == 201) {
+                    cb && cb();
+                    return;
+                }
+                if (data.code == 202) {
+                    qr_box.addClass('waiting_confirm');
+                    cb && cb();
+                    return;
+                }
+                if (data.code == 203) {
+                    qr_box.addClass('qr_reject');
+                    is_checking = false;
+                    return;
+                }
+                qr_box.addClass('qr_expired');
+                is_checking = false;
+            });
+        }, 
+        check_loop = function() {
+            if (!is_checking) {
+                return;
+            }
+            setTimeout(() => {
+                check_qr(check_loop);
+            }, 2000);
+        };
     $(".login-form .other-box .fa-qrcode").click(function() {
         $(".login-box").addClass('slided');
+        if (!is_init) {
+            is_init = true;
+            refreshQr();
+        }
     });
-    $(".login-form .login-qr-box .btn").click(function() {
+    qr_box.find(".fa-refresh").click(function() {
+        refreshQr();
+    });
+    qr_box.find(".btn").click(function() {
         $(".login-box").removeClass('slided');
     });
-});
+}

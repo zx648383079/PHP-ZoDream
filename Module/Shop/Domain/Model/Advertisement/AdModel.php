@@ -25,7 +25,7 @@ class AdModel extends Model {
     const VIDEO = 3;
 
     public static function tableName() {
-        return 'ad';
+        return 'shop_ad';
     }
 
     public function getHtml() {
