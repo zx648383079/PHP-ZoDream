@@ -6,13 +6,13 @@ use Zodream\Helpers\Str;
 
 /**
  * Class LoginQrModel
- * @package Module\Auth\Domain\Model
  * @property integer $id
  * @property integer $user_id
  * @property string $token
  * @property integer $status
  * @property integer $expired_at
  * @property integer $created_at
+ * @property integer $updated_at
  */
 class LoginQrModel extends Model {
 
@@ -32,6 +32,7 @@ class LoginQrModel extends Model {
             'status' => 'int:0,9',
             'expired_at' => 'int',
             'created_at' => 'int',
+            'updated_at' => 'int',
         ];
     }
 
@@ -43,6 +44,7 @@ class LoginQrModel extends Model {
             'status' => 'Status',
             'expired_at' => 'Expired At',
             'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -55,7 +57,7 @@ class LoginQrModel extends Model {
     }
 
     public static function generateToken() {
-        return bin2hex(md5(Str::randomBytes(20).time()));
+        return md5(Str::randomBytes(20).time());
     }
 
     /**
@@ -70,7 +72,7 @@ class LoginQrModel extends Model {
         return self::create([
            'token' => self::generateToken(),
            'status' => 0,
-           'expired_at' => time() + 600,
+           'expired_at' => time() + 300,
         ]);
     }
 }

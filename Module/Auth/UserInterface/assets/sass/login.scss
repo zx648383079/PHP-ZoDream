@@ -61,13 +61,60 @@
             left: 300px;
             width: 300px;
             text-align: center;
-            .fa-refresh {
-                position: absolute;
-                top: 106px;
-                left: 129px;
-                font-size: 50px;
-                color: #f00;
+            .qr-box {
+                .fa-refresh {
+                    position: absolute;
+                    top: 106px;
+                    left: 129px;
+                    font-size: 50px;
+                    color: #f00;
+                    display: none;
+                }
+            }
+            .scan-box,
+            .success-box,
+            .failure-box {
                 display: none;
+                min-height: 250px;
+                .fa {
+                    font-size: 80px;
+                    margin: 80px 30px 20px;
+                }
+            }
+            .failure-box {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                background: rgba(0,0,0,.4);
+                color: #fff;
+            }
+            &.waiting_confirm {
+                .scan-box {
+                    display: block;
+                }
+                .qr-box {
+                    display: none;
+                }
+            }
+            &.qr_expired {
+                .qr-box {
+                    .fa-refresh {
+                        display: block;
+                    }
+                }
+            }
+            &.qr_reject {
+                .failure-box {
+                    display: block;
+                }
+            }
+            &.qr_success {
+                .qr-box {
+                    display: none;
+                }
+                .success-box {
+                    display: block;
+                }
             }
         }
     }

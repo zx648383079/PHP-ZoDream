@@ -27,11 +27,12 @@ function bindLogin(baseUrl: string) {
             qr_box.find('.qr-box img').attr('src', baseUrl + 'qr?v=' + Math.random());
             is_checking = true;
             check_loop();
+            qr_box.attr('class', 'login-qr-box');
         },
         check_qr = function(cb) {
             $.getJSON(baseUrl + 'qr/check', function(data) {
                 if (data.code == 200) {
-                    qr_box.addClass('qr_success');
+                    qr_box.attr('class', 'login-qr-box qr_success');
                     is_checking = false;
                     parseAjax(data);
                     return;
@@ -41,16 +42,16 @@ function bindLogin(baseUrl: string) {
                     return;
                 }
                 if (data.code == 202) {
-                    qr_box.addClass('waiting_confirm');
+                    qr_box.attr('class', 'login-qr-box waiting_confirm');
                     cb && cb();
                     return;
                 }
                 if (data.code == 203) {
-                    qr_box.addClass('qr_reject');
+                    qr_box.attr('class', 'login-qr-box qr_reject');
                     is_checking = false;
                     return;
                 }
-                qr_box.addClass('qr_expired');
+                qr_box.attr('class', 'login-qr-box qr_expired');
                 is_checking = false;
             });
         }, 
@@ -60,7 +61,7 @@ function bindLogin(baseUrl: string) {
             }
             setTimeout(() => {
                 check_qr(check_loop);
-            }, 2000);
+            }, 3000);
         };
     $(".login-form .other-box .fa-qrcode").click(function() {
         $(".login-box").addClass('slided');

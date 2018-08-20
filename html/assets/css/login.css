@@ -46,13 +46,41 @@
       left: 300px;
       width: 300px;
       text-align: center; }
-      .login-box .login-form .login-qr-box .fa-refresh {
+      .login-box .login-form .login-qr-box .qr-box .fa-refresh {
         position: absolute;
         top: 106px;
         left: 129px;
         font-size: 50px;
         color: #f00;
         display: none; }
+      .login-box .login-form .login-qr-box .scan-box,
+      .login-box .login-form .login-qr-box .success-box,
+      .login-box .login-form .login-qr-box .failure-box {
+        display: none;
+        min-height: 250px; }
+        .login-box .login-form .login-qr-box .scan-box .fa,
+        .login-box .login-form .login-qr-box .success-box .fa,
+        .login-box .login-form .login-qr-box .failure-box .fa {
+          font-size: 80px;
+          margin: 80px 30px 20px; }
+      .login-box .login-form .login-qr-box .failure-box {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff; }
+      .login-box .login-form .login-qr-box.waiting_confirm .scan-box {
+        display: block; }
+      .login-box .login-form .login-qr-box.waiting_confirm .qr-box {
+        display: none; }
+      .login-box .login-form .login-qr-box.qr_expired .qr-box .fa-refresh {
+        display: block; }
+      .login-box .login-form .login-qr-box.qr_reject .failure-box {
+        display: block; }
+      .login-box .login-form .login-qr-box.qr_success .qr-box {
+        display: none; }
+      .login-box .login-form .login-qr-box.qr_success .success-box {
+        display: block; }
   .login-box.slided .login-form {
     transform: translate(-300px, 0);
     min-height: 300px; }

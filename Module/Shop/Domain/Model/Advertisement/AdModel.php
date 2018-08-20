@@ -28,6 +28,35 @@ class AdModel extends Model {
         return 'shop_ad';
     }
 
+    protected function rules() {
+        return [
+            'name' => 'required|string:0,30',
+            'position_id' => 'required|int',
+            'type' => 'int:0,9',
+            'url' => 'required|string:0,255',
+            'content' => 'required|string:0,255',
+            'start_at' => 'int',
+            'end_at' => 'int',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'position_id' => 'Position Id',
+            'type' => 'Type',
+            'url' => 'Url',
+            'content' => 'Content',
+            'start_at' => 'Start At',
+            'end_at' => 'End At',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
     public function getHtml() {
         switch ($this->type) {
             case self::TEXT:

@@ -8,7 +8,7 @@ bindLogin('{$url}');
 JS;
 
 $this->extend('layouts/header')
-    ->registerJs($js, View::JQEURY_READY);
+    ->registerJs($js, View::JQUERY_READY);
 ?>
     <section class="container">
         <div class="login-box">
@@ -44,6 +44,18 @@ $this->extend('layouts/header')
                     <div class="qr-box">
                         <img lazy-src="<?=$this->url('./qr')?>" alt="">
                         <i class="fa fa-refresh"></i>
+                    </div>
+                    <div class="scan-box">
+                        <i class="fa fa-check-circle"></i>
+                        <p>扫描成功，等待确认</p>
+                    </div>
+                    <div class="success-box">
+                        <i class="fa fa-check-circle"></i>
+                        <p>登陆成功</p>
+                    </div>
+                    <div class="failure-box">
+                        <i class="fa fa-refresh"></i>
+                        <p>登陆失败</p>
                     </div>
                     <button type="button" class="btn">返回登录</button>
                 </div>

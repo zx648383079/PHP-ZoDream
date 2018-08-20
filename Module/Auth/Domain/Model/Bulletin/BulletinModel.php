@@ -20,25 +20,27 @@ class BulletinModel extends Model {
     }
 
     protected function rules() {
-		return array (
-		  'title' => 'required|string:3-100',
-		  'content' => '',
-		  'type' => '|int',
-		  'create_at' => '|int',
-		  'delete_at' => '|int',
-		);
-	}
+        return [
+            'title' => 'required|string:0,100',
+            'content' => 'required|string:0,255',
+            'type' => 'int:0,99',
+            'user_id' => 'required|int',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
 
-	protected function labels() {
-		return array (
-		  'id' => 'Id',
-		  'title' => 'Title',
-		  'content' => 'Content',
-		  'type' => 'Type',
-		  'create_at' => 'Create At',
-		  'delete_at' => 'Delete At',
-		);
-	}
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'title' => 'Title',
+            'content' => 'Content',
+            'type' => 'Type',
+            'user_id' => 'User Id',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
 
 	/**
 	 * SEND MESSAGE TO ANY USERS

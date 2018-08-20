@@ -29,11 +29,16 @@ class QrController extends ModuleController {
             return $this->jsonFailure('unknow error');
         }
         $model = LoginQrModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('USER_TIPS_QR_OVERTIME', 204);
+        }
         if ($model->user_id > 0
             && $model->status == LoginQrModel::STATUS_SUCCESS) {
             $user = UserModel::findIdentity($model->user_id);
             $user->login();
-            return $this->jsonSuccess();
+            return $this->jsonSuccess([
+                'url' => url('/')
+            ], '登陆成功');
         }
         if ($model->isExpired()) {
             return $this->jsonFailure('USER_TIPS_QR_OVERTIME', 204);
