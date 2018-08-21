@@ -19,17 +19,16 @@ use Domain\Model\Model;
  */
 class PageModel extends Model {
     public static function tableName() {
-        return 'page';
+        return 'tpl_page';
     }
 
     protected function rules() {
         return [
-            'id' => 'required|int',
-            'name' => 'required|string:3-100',
-            'title' => 'required|string:3-200',
-            'keywords' => 'string:3-255',
-            'description' => 'string:3-255',
-            'template' => 'string:3-255',
+            'name' => 'required|string:0,100',
+            'title' => 'string:0,200',
+            'keywords' => 'string:0,255',
+            'description' => 'string:0,255',
+            'template' => 'string:0,255',
             'settings' => '',
             'deleted_at' => 'int',
             'created_at' => 'int',

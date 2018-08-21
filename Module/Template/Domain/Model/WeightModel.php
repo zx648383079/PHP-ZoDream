@@ -32,18 +32,19 @@ class WeightModel extends Model {
     const ADAPT_MOBILE = 2; // 适应手机
 
     public static function tableName() {
-        return 'weight';
+        return 'tpl_weight';
     }
 
 
     protected function rules() {
         return [
-            'name' => 'required|string:3-30',
-            'description' => 'string:3-200',
-            'thumb' => 'string:3-100',
-            'type' => 'int:0-3',
-            'editable' => 'int:0-1',
-            'path' => 'string:3-200',
+            'name' => 'required|string:0,30',
+            'description' => 'string:0,200',
+            'thumb' => 'string:0,100',
+            'type' => 'int:0,999',
+            'adapt_to' => 'int:0,9',
+            'editable' => 'int:0,9',
+            'path' => 'string:0,200',
         ];
     }
 

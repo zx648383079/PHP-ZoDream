@@ -24,7 +24,7 @@ use Domain\Model\Model;
 class PageWeightModel extends Model {
 
     public static function tableName() {
-        return 'page_weight';
+        return 'tpl_page_weight';
     }
 
     protected function rules() {
@@ -33,10 +33,10 @@ class PageWeightModel extends Model {
             'weight_id' => 'required|int',
             'parent_id' => 'int',
             'position' => 'int',
-            'title' => 'string:3-200',
+            'title' => 'string:0,200',
             'content' => '',
             'settings' => '',
-            'is_share' => 'int:0-1',
+            'is_share' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
