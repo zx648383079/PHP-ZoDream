@@ -1,8 +1,7 @@
 <?php
-use Tracy\Debugger;
-use Zodream\Service\Web;
+
+use Zodream\Service\Api;
 
 require_once dirname(__DIR__).'/Service/Bootstrap.php';
-Debugger::enable();
-$app = new Web(APP_DIR, 'Api');
+$app = new Api(APP_DIR, 'Api');
 $app->handle()->send();

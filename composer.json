@@ -28,6 +28,7 @@
     "psr/container": "^1.0",
     "psr/log": "~1.0",
     "monolog/monolog": "~1.22",
+    "firebase/php-jwt": "^5.0",
 
     "mobiledetect/mobiledetectlib": "^2.8",
     "phpoffice/phpspreadsheet": "^1.0",
