@@ -64,43 +64,8 @@ class CreateAuthTables extends Migration {
             $table->timestamp('expired_at');
             $table->timestamps();
         });
-        Schema::createTable(RoleModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(40)->notNull()->unique();
-            $table->set('display_name')->varchar(100)->defaultVal('');
-            $table->set('description')->varchar()->defaultVal('');
-            $table->timestamps();
-        });
-        Schema::createTable(UserRoleModel::tableName(), function(Table $table) {
-            $table->set('user_id')->int()->notNull()->unsigned();
-            $table->set('role_id')->int()->notNull()->unsigned();
-        });
-        Schema::createTable(PermissionModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(40)->notNull()->unique();
-            $table->set('display_name')->varchar(100)->defaultVal('');
-            $table->set('description')->varchar()->defaultVal('');
-            $table->timestamps();
-        });
-        Schema::createTable(RolePermissionModel::tableName(), function(Table $table) {
-            $table->set('role_id')->int()->notNull()->unsigned();
-            $table->set('permission_id')->int()->notNull()->unsigned();
-        });
-        Schema::createTable(BulletinModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('title')->varchar(100)->notNull();
-            $table->set('content')->varchar()->notNull();
-            $table->set('type')->tinyint(2)->defaultVal(0);
-            $table->set('user_id')->int()->notNull();
-            $table->timestamps();
-        });
-        Schema::createTable(BulletinUserModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('bulletin_id')->int()->notNull();
-            $table->set('status')->tinyint(1)->defaultVal(0);
-            $table->set('user_id')->int()->notNull();
-            $table->timestamps();
-        });
+        $this->createRole();
+        $this->createBulletin();
     }
 
     /**
@@ -114,5 +79,48 @@ class CreateAuthTables extends Migration {
         Schema::dropTable(LoginLogModel::tableName());
         Schema::dropTable(UserMetaModel::tableName());
         Schema::dropTable(LoginQrModel::tableName());
+    }
+
+    public function createRole(): void {
+        Schema::createTable(RoleModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(40)->notNull()->unique();
+            $table->set('display_name')->varchar(100)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->timestamps();
+        });
+        Schema::createTable(UserRoleModel::tableName(), function (Table $table) {
+            $table->set('user_id')->int()->notNull()->unsigned();
+            $table->set('role_id')->int()->notNull()->unsigned();
+        });
+        Schema::createTable(PermissionModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(40)->notNull()->unique();
+            $table->set('display_name')->varchar(100)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->timestamps();
+        });
+        Schema::createTable(RolePermissionModel::tableName(), function (Table $table) {
+            $table->set('role_id')->int()->notNull()->unsigned();
+            $table->set('permission_id')->int()->notNull()->unsigned();
+        });
+    }
+
+    public function createBulletin(): void {
+        Schema::createTable(BulletinModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('title')->varchar(100)->notNull();
+            $table->set('content')->varchar()->notNull();
+            $table->set('type')->tinyint(2)->defaultVal(0);
+            $table->set('user_id')->int()->notNull();
+            $table->timestamps();
+        });
+        Schema::createTable(BulletinUserModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('bulletin_id')->int()->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('user_id')->int()->notNull();
+            $table->timestamps();
+        });
     }
 }
