@@ -110,6 +110,7 @@ class CreateShopTables extends Migration {
     public function createOrder(): void {
         Schema::createTable(OrderModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
+            $table->set('series_number')->varchar(100)->notNull();
             $table->set('user_id')->int()->notNull();
             $table->set('status')->int()->defaultVal(0);
             $table->set('payment_id')->int()->defaultVal(0);
@@ -289,7 +290,7 @@ class CreateShopTables extends Migration {
             $table->set('cat_id')->int()->notNull();
             $table->set('brand_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
-            $table->set('sign')->varchar(100)->notNull();
+            $table->set('series_number')->varchar(100)->notNull();
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('thumb')->varchar(200)->comment('缩略图');
             $table->set('description')->varchar(200)->comment('关键字');
