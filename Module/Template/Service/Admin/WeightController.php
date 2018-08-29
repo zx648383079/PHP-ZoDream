@@ -1,5 +1,5 @@
 <?php
-namespace Module\Template\Service;
+namespace Module\Template\Service\Admin;
 
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\WeightModel;

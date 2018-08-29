@@ -1,11 +1,10 @@
 <?php
-namespace Module\Template\Service;
+namespace Module\Template\Service\Admin;
 
-use Module\ModuleController;
 use Module\Template\Domain\Model\WeightModel;
 use Module\Template\Domain\Page;
 
-class MobileController extends ModuleController {
+class MobileController extends Controller {
 
     public function indexAction() {
         $weight_list = WeightModel::whereIn('adapt_to', [0, 2])->all();

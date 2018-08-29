@@ -3,6 +3,7 @@ namespace Module\Template\Domain\Migrations;
 
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\WeightModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -15,8 +16,19 @@ class CreateTemplateTables extends Migration {
      * @return void
      */
     public function up() {
+        Schema::createTable(SiteModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(100)->notNull();
+            $table->set('title')->varchar(200)->defaultVal('New Page');
+            $table->set('keywords')->varchar(255);
+            $table->set('description')->varchar(255);
+            $table->set('domain')->varchar(50);
+            $table->timestamps();
+        });
         Schema::createTable(PageModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
+            $table->set('site_id')->int()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('name')->varchar(100)->notNull();
             $table->set('title')->varchar(200)->defaultVal('New Page');
             $table->set('keywords')->varchar(255);
