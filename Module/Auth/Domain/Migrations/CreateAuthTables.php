@@ -27,18 +27,18 @@ class CreateAuthTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('email')->varchar(200)->notNull();
-            $table->set('password')->varchar(100);
-            $table->set('sex')->tinyint(1);
+            $table->set('password')->varchar(100)->notNull();
+            $table->set('sex')->tinyint(1)->defaultVal(0);
             $table->set('avatar')->varchar(255);
             $table->set('token')->varchar(60);
-            $table->softDeletes();
+            $table->set('status')->tinyint(2)->defaultVal(UserModel::STATUS_ACTIVE);
             $table->timestamps();
         });
         Schema::createTable(OAuthModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
-            $table->set('vendor')->varchar(30);
-            $table->set('identity')->varchar(100);
+            $table->set('vendor')->varchar(20)->defaultVal('qq');
+            $table->set('identity')->varchar(100)->notNull();
             $table->set('data')->text();
             $table->timestamp('created_at');
         });

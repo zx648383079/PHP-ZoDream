@@ -22,12 +22,16 @@ use Zodream\Service\Factory;
  * @property integer $sex
  * @property string $avatar
  * @property string $token
- * @property integer $deleted_at
+ * @property integer $status
  * @property integer $created_at
+ * @property integer $updated_at
  */
 class UserModel extends BaseModel {
 
     use LoginTrait, RegisterTrait, PasswordTrait, UserRoleTrait, FindPasswordTrait;
+
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
 
     const SEX_MALE = 1; // 性别男
     const SEX_FEMALE = 2; //性别女
@@ -61,35 +65,36 @@ class UserModel extends BaseModel {
     }
 
     protected function rules() {
-		return array (
-			'name' => 'required|string:0,30',
-			'email' => 'string:0,100',
-			'password' => 'string:0,64',
-			'sex' => 'int',
-			'avatar' => 'string:0,200',
-			'token' => 'string:0,60',
-			'deleted_at' => 'int',
-			'created_at' => 'int',
-		);
-	}
+        return [
+            'name' => 'required|string:0,100',
+            'email' => 'required|string:0,200',
+            'password' => 'required|string:0,100',
+            'sex' => 'int:0,9',
+            'avatar' => 'string:0,255',
+            'token' => 'string:0,60',
+            'status' => 'int:0,99',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'name' => 'Name',
+            'email' => 'Email',
+            'password' => 'Password',
+            'sex' => 'Sex',
+            'avatar' => 'Avatar',
+            'token' => 'Token',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
 
 
-	protected function labels() {
-		return array (
-		  'id' => 'Id',
-		  'name' => 'Name',
-		  'email' => 'Email',
-		  'password' => 'Password',
-		  'sex' => 'Sex',
-		  'avatar' => 'Avatar',
-		  'token' => 'Token',
-		  'login_num' => 'Login Num',
-		  'deleted_at' => 'Previous At',
-		  'created_at' => 'Create At',
-		);
-	}
-
-	public function getSexLabelAttribute() {
+    public function getSexLabelAttribute() {
 	    return $this->sex_list[$this->sex];
     }
 
@@ -111,7 +116,7 @@ class UserModel extends BaseModel {
      * @throws \Exception
      */
 	public static function findIdentity($id) {
-		return static::find($id);
+		return static::where('id', $id)->where('status', self::STATUS_ACTIVE)->first();
 	}
 
     /**
@@ -138,7 +143,7 @@ class UserModel extends BaseModel {
      * @throws \Exception
      */
 	public static function findByName($name) {
-		return static::find(['name' => $name]);
+		return static::where('name', $name)->where('status', self::STATUS_ACTIVE)->first();
 	}
 
     /**
@@ -147,7 +152,7 @@ class UserModel extends BaseModel {
      * @throws \Exception
      */
 	public static function findByEmail($email) {
-		return static::find(['email' => $email]);
+		return static::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
 	}
 
 	public function validateCode() {

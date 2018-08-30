@@ -28,7 +28,7 @@ use Domain\Model\Model;
 class FinancialProjectModel extends Model {
 
     public static function tableName() {
-        return 'financial_project';
+        return 'finance_financial_project';
     }
 
 

@@ -24,7 +24,7 @@ class BudgetModel extends Model {
     const CYCLE_YEAR = 4;
 
     public static function tableName() {
-        return 'budget';
+        return 'finance_budget';
     }
 
     protected function rules() {

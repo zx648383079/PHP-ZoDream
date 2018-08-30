@@ -15,13 +15,13 @@ use Domain\Model\Model;
 class FinancialProductModel extends Model {
 
     public static function tableName() {
-        return 'financial_product';
+        return 'finance_financial_product';
     }
 
     protected function rules() {
         return [
             'name' => 'required|string:0,50',
-            'status' => 'int:0-1',
+            'status' => 'int:0,9',
             'remark' => '',
             'created_at' => 'int',
             'updated_at' => 'int',

@@ -33,7 +33,7 @@ class LogModel extends Model {
     const TYPE_INCOME = 1;
 
     public static function tableName() {
-        return 'money_log';
+        return 'finance_log';
     }
 
     protected function rules() {

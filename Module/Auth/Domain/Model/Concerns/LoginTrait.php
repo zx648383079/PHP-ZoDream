@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Domain\Model\Concerns;
 
+use Module\Auth\Domain\Model\UserModel;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
 
@@ -27,8 +28,8 @@ trait LoginTrait {
             $this->setError('password', '密码错误！');
             return false;
         }
-        if ($user->deleted_at > 0) {
-            $this->setError('deleted_at', '此用户已被禁止登录！');
+        if ($user->status != UserModel::STATUS_ACTIVE) {
+            $this->setError('status', '此用户已被禁止登录！');
             return false;
         }
         if (!empty($this->rememberMe)) {

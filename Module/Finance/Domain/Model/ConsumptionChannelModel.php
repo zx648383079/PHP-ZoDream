@@ -13,7 +13,7 @@ use Domain\Model\Model;
  */
 class ConsumptionChannelModel extends Model {
     public static function tableName() {
-        return 'consumption_channel';
+        return 'finance_consumption_channel';
     }
 
     protected function rules() {

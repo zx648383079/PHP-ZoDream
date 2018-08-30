@@ -20,7 +20,7 @@ use Domain\Model\Model;
 class MoneyAccountModel extends Model {
 
     public static function tableName() {
-        return 'money_account';
+        return 'finance_money_account';
     }
 
     protected function rules() {
