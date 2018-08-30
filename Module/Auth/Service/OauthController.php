@@ -42,10 +42,21 @@ class OauthController extends ModuleController {
         if (empty($auth->info())) {
             return $this->redirectWithMessage('/', '获取用户信息失败');
         }
+        if (!auth()->guest()) {
+            $user = auth()->user();
+            OAuthModel::bindUser($user, $auth->identity, $type);
+            return $this->redirect('/');
+        }
+        if (!empty($auth->email) && ($user = UserModel::findByEmail($auth->email))) {
+            OAuthModel::bindUser($user, $auth->identity, $type);
+            $user->login();
+            return $this->redirect('/');
+        }
         $rnd = Str::random(3);
         $user = UserModel::create([
             'name' => empty($auth->username) ? '用户_'.$rnd : $auth->username ,
-            'email' => sprintf('%s_%s@zodream.cn', $type, $rnd),
+            'email' => empty($auth->email) ?
+                sprintf('%s_%s@zodream.cn', $type, $rnd) : $auth->email,
             'password' => $rnd,
             'sex' => $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
             'avatar' => $auth->avatar

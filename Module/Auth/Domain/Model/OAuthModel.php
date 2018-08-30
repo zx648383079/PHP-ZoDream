@@ -53,12 +53,12 @@ class OAuthModel extends Model {
 
     /**
      * 绑定用户
-     * @param User $user
+     * @param UserModel $user
      * @param $identifier
      * @param string $type
      * @return OAuthModel
      */
-    public static function bindUser(User $user,
+    public static function bindUser(UserModel $user,
                                     $identifier,
                                     $type = self::TYPE_QQ) {
         return static::create([

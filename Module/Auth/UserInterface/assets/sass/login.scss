@@ -118,6 +118,18 @@
             }
         }
     }
+    .login-oauth-box {
+        text-align: center;
+        margin-top: 20px;
+        .box-title {
+            border-bottom: 1px solid #767676;
+        }
+        a {
+            font-size: 30px;
+            color: #333;
+            margin: 5px;
+        }
+    }
     &.slided {
         .login-form {
             transform: translate(-300px, 0);

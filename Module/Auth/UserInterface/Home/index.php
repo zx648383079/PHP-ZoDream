@@ -60,7 +60,13 @@ $this->extend('layouts/header')
                     <button type="button" class="btn">返回登录</button>
                 </div>
             </form>
-            
+            <div class="login-oauth-box">
+                <div class="box-title">第三方登录</div>
+                <a href="<?=$this->url('./oauth', ['type' => 'qq'])?>"><i class="fa fa-qq"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'wechat'])?>"><i class="fa fa-wechat"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'weibo'])?>"><i class="fa fa-weibo"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'github'])?>"><i class="fa fa-github"></i></a>
+            </div>
         </div>
     </section>
 <?php

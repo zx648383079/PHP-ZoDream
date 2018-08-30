@@ -81,6 +81,15 @@
         display: none; }
       .login-box .login-form .login-qr-box.qr_success .success-box {
         display: block; }
+  .login-box .login-oauth-box {
+    text-align: center;
+    margin-top: 20px; }
+    .login-box .login-oauth-box .box-title {
+      border-bottom: 1px solid #767676; }
+    .login-box .login-oauth-box a {
+      font-size: 30px;
+      color: #333;
+      margin: 5px; }
   .login-box.slided .login-form {
     transform: translate(-300px, 0);
     min-height: 300px; }
