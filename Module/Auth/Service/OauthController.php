@@ -47,16 +47,20 @@ class OauthController extends ModuleController {
             OAuthModel::bindUser($user, $auth->identity, $type);
             return $this->redirect('/');
         }
-        if (!empty($auth->email) && ($user = UserModel::findByEmail($auth->email))) {
-            OAuthModel::bindUser($user, $auth->identity, $type);
-            $user->login();
-            return $this->redirect('/');
-        }
         $rnd = Str::random(3);
+        $email = sprintf('%s_%s@zodream.cn', $type, $rnd);
+        if (!empty($auth->email)
+//            && ($user = UserModel::findByEmail($auth->email))) {
+//            OAuthModel::bindUser($user, $auth->identity, $type);
+//            $user->login();
+//            return $this->redirect('/');
+            && UserModel::validateEmail($auth->email) ) {
+            $email = $auth->email;
+        }
+
         $user = UserModel::create([
             'name' => empty($auth->username) ? '用户_'.$rnd : $auth->username ,
-            'email' => empty($auth->email) ?
-                sprintf('%s_%s@zodream.cn', $type, $rnd) : $auth->email,
+            'email' => $email,
             'password' => $rnd,
             'sex' => $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
             'avatar' => $auth->avatar

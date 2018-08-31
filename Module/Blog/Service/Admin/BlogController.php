@@ -9,6 +9,7 @@ class BlogController extends Controller {
 
     public function indexAction($keywords = null, $term_id = null) {
         $blog_list = BlogModel::with('term')
+            ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
                     BlogModel::search($query, 'title');
@@ -25,6 +26,9 @@ class BlogController extends Controller {
 
     public function editAction($id) {
         $model = BlogModel::findOrNew($id);
+        if (!$model->isNewRecord && $model->user_id != auth()->id()) {
+            return $this->redirectWithMessage($this->getUrl('blog'), '博客不存在！');
+        }
         $term_list = TermModel::select('id', 'name')->all();
         return $this->show(compact('model', 'term_list'));
     }
@@ -41,7 +45,7 @@ class BlogController extends Controller {
     }
 
     public function deleteAction($id) {
-        BlogModel::where('id', $id)->delete();
+        BlogModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->jsonSuccess([
             'url' => $this->getUrl('blog')
         ]);

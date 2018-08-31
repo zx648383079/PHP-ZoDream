@@ -110,6 +110,10 @@ class UserModel extends BaseModel {
 	    return !empty($this->agree);
     }
 
+    public static function validateEmail($email) {
+	    return !empty($email) && self::where('email', $email)->count() < 1;
+    }
+
     /**
      * @param $id
      * @return UserModel|boolean
