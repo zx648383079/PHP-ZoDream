@@ -24,14 +24,20 @@ class ArticleController extends Controller {
         return $this->redirectWithMessage($this->getUrl('article'), $model->getFirstError());
     }
 
+
     public function categoryAction() {
         $cat_list = ArticleCategoryModel::all();
         return $this->show(compact('cat_list'));
     }
 
     public function createCategoryAction() {
+        return $this->runMethodNotProcess('editCategory', ['id' => null]);
+    }
+
+    public function editCategoryAction($id, $parent_id = 0) {
         $cat_list = ArticleCategoryModel::all();
-        return $this->show(compact('cat_list'));
+        $model = ArticleCategoryModel::findOrNew($id);
+        return $this->show(compact('cat_list', 'model'));
     }
 
     public function saveCategoryAction() {
