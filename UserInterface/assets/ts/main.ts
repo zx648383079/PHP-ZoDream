@@ -157,10 +157,13 @@ $(function() {
     $('.left-catelog li a').click(function() {
         let box = $(this).closest('li');
         if (box.find('ul').length > 0) {
-            box.toggleClass('expand')
+            box.toggleClass('expand');
+            return;
         }
+        $('.left-catelog li').removeClass('active');
+        box.addClass('active');
     });
-    var autoRedirct = function() {
+    let autoRedirct = function() {
         let ele = $(".autoRedirct");
         if (ele.length < 1) {
             return;

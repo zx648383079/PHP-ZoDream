@@ -8,14 +8,6 @@ class Controller extends ModuleController {
 
     public $layout = '/Admin/layouts/main';
 
-    public function prepare() {
-        if (app('request')->isPjax()) {
-            $this->layout = '/Admin/layouts/x_main';
-        }
-    }
-
-
-
     protected function rules() {
         return [
             '*' => '@'
