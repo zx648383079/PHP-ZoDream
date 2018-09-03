@@ -5,8 +5,6 @@ namespace Module\Auth\Service\Admin;
 use Module\Auth\Domain\Model\UserModel;
 
 
-
-
 class AccountController extends Controller {
 
     public function indexAction() {

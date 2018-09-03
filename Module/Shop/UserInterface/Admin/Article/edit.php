@@ -5,14 +5,14 @@ use Zodream\Template\View;
 $this->title = '分类';
 ?>
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/category/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/article/save')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>
             <input name="name" type="text" class="form-control"  placeholder="输入分类名" value="<?=$model->name?>" required>
         </div>
         <div class="input-group">
-            <label>上级分类</label>
+            <label>分类</label>
             <select name="parent_id">
               <option value="0">-- 无上级分类 --</option>
                 <?php foreach($cat_list as $item):?>

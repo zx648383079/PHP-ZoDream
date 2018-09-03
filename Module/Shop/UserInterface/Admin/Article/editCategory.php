@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '分类';
 ?>
     <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/category/save')?>" method="post" class="form-table" role="form">
+    <form data-type="ajax" action="<?=$this->url('./admin/article/save_category')?>" method="post" class="form-table" role="form">
         
         <div class="input-group">
             <label>名称</label>

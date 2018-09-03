@@ -11,6 +11,8 @@ $this->registerCssFile([
         '@auth.css'
     ])->registerJsFile([
         '@jquery.min.js',
+        '@pace.min.js',
+        '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
         '@main.min.js',
@@ -85,10 +87,15 @@ $this->registerCssFile([
                 </li>
             </ul>
         </div>
-        <div class="right-content">
+        <div id="page-content" class="right-content">
             <?=$content?>
         </div>
     </div>
    <?=$this->footer()?>
+   <script>
+   $(function () {
+       $(document).pjax('a', '#page-content');
+   });
+   </script>
    </body>
 </html>
