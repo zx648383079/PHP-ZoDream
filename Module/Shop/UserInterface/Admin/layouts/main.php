@@ -29,7 +29,7 @@ $this->registerCssFile([
     [
         '商品管理',
         null,
-        'fa-briefcase',
+        'fa fa-briefcase',
         [
             [
                 '商品列表',
@@ -67,7 +67,7 @@ $this->registerCssFile([
     [
         '订单管理',
         null,
-        'fa-briefcase',
+        'fa fa-briefcase',
         [
             [
                 '订单列表',
@@ -84,7 +84,7 @@ $this->registerCssFile([
     [
         '文章管理',
         null,
-        'fa-book',
+        'fa fa-book',
         [
             [
                 '文章列表',
@@ -111,7 +111,7 @@ $this->registerCssFile([
     [
         '广告管理',
         null,
-        'fa-book',
+        'fa fa-book',
         [
             [
                 '广告列表',
