@@ -12,7 +12,6 @@ $this->registerCssFile([
         '@auth.css'
     ])->registerJsFile([
         '@jquery.min.js',
-        '@pace.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
