@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Domain\Migrations;
 
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\LoginLogModel;
@@ -30,6 +31,7 @@ class CreateAuthTables extends Migration {
             $table->set('password')->varchar(100)->notNull();
             $table->set('sex')->tinyint(1)->defaultVal(0);
             $table->set('avatar')->varchar(255);
+            $table->set('money')->int()->defaultVal(0)->unsigned();
             $table->set('token')->varchar(60);
             $table->set('status')->tinyint(2)->defaultVal(UserModel::STATUS_ACTIVE);
             $table->timestamps();
@@ -62,6 +64,16 @@ class CreateAuthTables extends Migration {
             $table->set('token')->varchar(32)->notNull();
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamp('expired_at');
+            $table->timestamps();
+        });
+        Schema::createTable(AccountLogModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->unsigned()->defaultVal(0);
+            $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
+            $table->set('item_id')->int()->defaultVal(0);
+            $table->set('money')->int()->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('remark')->varchar()->notNull();
             $table->timestamps();
         });
         $this->createRole();

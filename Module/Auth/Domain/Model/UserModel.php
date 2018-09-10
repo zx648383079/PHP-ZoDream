@@ -21,6 +21,7 @@ use Zodream\Service\Factory;
  * @property string $password
  * @property integer $sex
  * @property string $avatar
+ * @property integer $money
  * @property string $token
  * @property integer $status
  * @property integer $created_at
@@ -71,6 +72,7 @@ class UserModel extends BaseModel {
             'password' => 'required|string:0,100',
             'sex' => 'int:0,9',
             'avatar' => 'string:0,255',
+            'money' => 'int',
             'token' => 'string:0,60',
             'status' => 'int:0,99',
             'created_at' => 'int',
@@ -86,6 +88,7 @@ class UserModel extends BaseModel {
             'password' => 'Password',
             'sex' => 'Sex',
             'avatar' => 'Avatar',
+            'money' => 'Money',
             'token' => 'Token',
             'status' => 'Status',
             'created_at' => 'Created At',
