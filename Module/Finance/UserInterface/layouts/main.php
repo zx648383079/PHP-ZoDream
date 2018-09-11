@@ -28,7 +28,7 @@ $this->registerCssFile([
     ],
     [
         '资金',
-        null,
+        false,
         'fa fa-money',
         [
             [
@@ -55,7 +55,7 @@ $this->registerCssFile([
     ],
     [
         '收支管理',
-        null,
+        false,
         'fa fa-puzzle-piece',
         [
             [

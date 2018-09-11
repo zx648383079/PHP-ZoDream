@@ -77,10 +77,18 @@ let strFormat = function(arg: string, ...args: any[]) {
 }
 
 $(function() {
-    $("a[data-type=refresh]").click(function() {
-        window.location.reload();
+    let file_upload = new Upload(null, {
+        url: '/ueditor.php?action=uploadimage',
+        name: 'upfile',
+        template: '{url}',
+        afterUpload: function(data) {
+            return data;
+        }
     });
-    $("a[data-type=del]").click(function(e) {
+    $(document).on('click', "a[data-type=refresh]", function() {
+        window.location.reload();
+    })
+    .on('click', "a[data-type=del]", function(e) {
         e.preventDefault();
         let tip = $(this).attr('data-tip') || '确定删除这条数据？';
         if (!confirm(tip)) {
@@ -92,8 +100,8 @@ $(function() {
             }
             parseAjax(data);
         });
-    });
-    $("a[data-type=ajax]").click(function(e) {
+    })
+    .on('click', "a[data-type=ajax]", function(e) {
         e.preventDefault();
         let $this = $(this);
         let successTip = $this.attr('data-success') || '提交成功！';
@@ -108,31 +116,22 @@ $(function() {
             }
             parseAjax(data);
         });
-    });
-    $("form[data-type=ajax]").submit(function() {
+    })
+    .on('submit', "form[data-type=ajax]", function() {
         let $this = $(this);
         ajaxForm($this.attr('action'), $this.serialize());
         return false;
-    });
-    $("a[data-type=post]").click(function(e) {
+    })
+    .on('click', "a[data-type=post]", function(e) {
         e.preventDefault();
         let form = $('<form action="'+ $(this).attr('href') +'" method="post"></form');
         $(document.body).append(form);
         form.submit();
-    });
-    var file_input = $(".file-input [data-type=upload]");
-    if (file_input.length > 0) {
-        file_input.upload({
-            url: '/ueditor.php?action=uploadimage',
-            name: 'upfile',
-            template: '{url}',
-            afterUpload: function(data) {
-                return data;
-            }
-        });
-    }
-
-    $(".file-input [data-type=preview]").click(function() {
+    })
+    .on('click', ".file-input [data-type=upload]", function() {
+        file_upload.start($(this));
+    })
+    .on('click', ".file-input [data-type=preview]", function() {
         let img = $(this).parents('.file-input').find('input').val();
         if (!img) {
             Dialog.tip('请上传图片！');
@@ -142,13 +141,13 @@ $(function() {
             title: '预览',
             content: '<img src="'+ img +'">'
         });
-    });
-    $(".zd-tab .zd-tab-head .zd-tab-item").click(function() {
+    })
+    .on('click', ".zd-tab .zd-tab-head .zd-tab-item", function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
         $this.parents(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
-    });
-    $(".page-tip .toggle").click(function() {
+    })
+    .on('click', ".page-tip .toggle", function() {
         $(this).parents('.page-tip').toggleClass('min');
     });
     $('.left-catelog .left-catelog-toggle').click(function() {

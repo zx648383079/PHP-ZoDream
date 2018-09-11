@@ -28,7 +28,7 @@ $this->registerCssFile([
     ],
     [
         '文章管理',
-         null,
+         false,
          'fa fa-book',
          [
              [
@@ -46,7 +46,7 @@ $this->registerCssFile([
      ],
      [
         '分类管理',
-         null,
+         false,
          'fa fa-tags',
          [
              [

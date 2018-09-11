@@ -29,7 +29,7 @@ $this->registerCssFile([
     ],
     [
        '用户管理',
-        null,
+        false,
         'fa fa-users',
         [
             [
@@ -47,7 +47,7 @@ $this->registerCssFile([
     ],
     [
         '权限管理',
-        null,
+        false,
         'fa fa-magnet',
         [
             [
@@ -74,7 +74,7 @@ $this->registerCssFile([
     ],
     [
         '消息管理',
-        null,
+        false,
         'fa fa-bullhorn',
         [
             [
@@ -91,7 +91,7 @@ $this->registerCssFile([
     ],
     [
         auth()->user()->name,
-        null,
+        false,
         'fa fa-user',
         [
             [

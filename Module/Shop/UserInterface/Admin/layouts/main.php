@@ -28,7 +28,7 @@ $this->registerCssFile([
     ],
     [
         '商品管理',
-        null,
+        false,
         'fa fa-briefcase',
         [
             [
@@ -66,7 +66,7 @@ $this->registerCssFile([
     ],
     [
         '订单管理',
-        null,
+        false,
         'fa fa-briefcase',
         [
             [
@@ -83,7 +83,7 @@ $this->registerCssFile([
     ],
     [
         '文章管理',
-        null,
+        false,
         'fa fa-book',
         [
             [
@@ -110,7 +110,7 @@ $this->registerCssFile([
     ],
     [
         '广告管理',
-        null,
+        false,
         'fa fa-book',
         [
             [
@@ -137,7 +137,7 @@ $this->registerCssFile([
     ],
     [
         '商城设置',
-        null,
+        false,
         'fa fa-briefcase',
         [
             [
