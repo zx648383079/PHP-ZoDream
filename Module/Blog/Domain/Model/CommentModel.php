@@ -88,7 +88,7 @@ class CommentModel extends Model {
     public static function getChildren($postId, $parentId = 0) {
 	    $data = static::find()->alias('c')->left('user u', ['u.id' => 'c.user_id'])
             ->where(['c.post_id' => $postId, 'c.parent_id' => $parentId])
-            ->order('c.create_at desc')->select([
+            ->orderBy('c.create_at desc')->select([
 
             ])->asArray()->all();
 	    foreach ($data as &$item) {
@@ -100,7 +100,7 @@ class CommentModel extends Model {
     public static function getAll($postId) {
         $data = static::find()->alias('c')->left('user u', ['u.id' => 'c.user_id'])
             ->where(['c.post_id' => $postId])
-            ->order('c.parent_id asc,c.create_at desc')->select([
+            ->orderBy('c.parent_id asc,c.create_at desc')->select([
 
             ])->asArray()->all();
         return static::getChildrenByData(0, $data);
@@ -119,13 +119,13 @@ class CommentModel extends Model {
 
     public static function getHots() {
 	    return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
-            ->order('c.agree desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
+            ->orderBy('c.agree desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
             ->limit(5)->asArray()->all();
     }
 
     public static function getNew() {
         return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
-            ->order('c.create_at desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
+            ->orderBy('c.create_at desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
             ->limit(5)->asArray()->all();
     }
 

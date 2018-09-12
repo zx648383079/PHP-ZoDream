@@ -16,7 +16,7 @@ class BlogController extends Controller {
                 });
             })->when(!empty($term_id), function ($query) use ($term_id) {
                 $query->where('term_id', intval($term_id));
-            })->order('id', 'desc')->select('id', 'title', 'term_id', 'comment_count', 'recommend')->page();
+            })->orderBy('id', 'desc')->select('id', 'title', 'term_id', 'comment_count', 'recommend')->page();
         return $this->show(compact('blog_list'));
     }
 

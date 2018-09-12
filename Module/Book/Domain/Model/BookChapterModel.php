@@ -74,15 +74,15 @@ class BookChapterModel extends Model {
 
     public function getPreviousAttribute() {
         return static::where('id', '<', $this->id)->where('book_id', $this->book_id)
-            ->order('position', 'desc')
-            ->order('id desc')->select('id, title')->one();
+            ->orderBy('position', 'desc')
+            ->orderBy('id desc')->select('id, title')->one();
     }
 
     public function getNextAttribute() {
         return static::where('id', '>', $this->id)
             ->where('book_id', $this->book_id)
-            ->order('position', 'asc')
-            ->order('id asc')
+            ->orderBy('position', 'asc')
+            ->orderBy('id asc')
             ->select('id, title')->one();
     }
 

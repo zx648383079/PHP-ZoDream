@@ -40,8 +40,8 @@ class HomeController extends ModuleController {
             ->page();
         $cat_list = TermModel::all();
         $comment_list = CommentModel::with('blog')
-            ->where('approved', 1)->order('created_at', 'desc')->limit(4)->all();
-        $new_list = BlogModel::order('created_at', 'desc')
+            ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->all();
+        $new_list = BlogModel::orderBy('created_at', 'desc')
             ->select('id', 'title')
             ->limit(4)->all();
         $term = null;
@@ -66,7 +66,7 @@ class HomeController extends ModuleController {
             ->left('user u', 'u.id = l.user_id')
             ->where('l.id_value', $id)
             ->where('l.type', BlogLogModel::TYPE_BLOG)
-            ->order('l.created_at desc')
+            ->orderBy('l.created_at desc')
             ->select('l.*', 'b.title', 'u.name')
             ->limit(5)
             ->all();

@@ -93,23 +93,23 @@ class BlogModel extends Model {
     }
 
 	public function getPreviousAttribute() {
-	    return static::where('id', '<', $this->id)->order('id desc')->select('id, title, description, created_at')->one();
+	    return static::where('id', '<', $this->id)->orderBy('id desc')->select('id, title, description, created_at')->one();
     }
 
     public function getNextAttribute() {
-	    return static::where('id', '>', $this->id)->order('id asc')->select('id, title, description, created_at')->one();
+	    return static::where('id', '>', $this->id)->orderBy('id asc')->select('id, title, description, created_at')->one();
     }
 
 	public static function getNew() {
-	    return static::order('create_at desc')->select('id, title, description, created_at')->limit(5)->all();
+	    return static::orderBy('create_at desc')->select('id, title, description, created_at')->limit(5)->all();
     }
 
     public static function getHot() {
-        return static::order('comment_count desc')->select('id, title, description, created_at')->limit(5)->all();
+        return static::orderBy('comment_count desc')->select('id, title, description, created_at')->limit(5)->all();
     }
 
     public static function getBest() {
-        return static::order('recommend desc')
+        return static::orderBy('recommend desc')
             ->select('id, title, description, created_at')
             ->limit(5)->all();
     }
@@ -117,7 +117,7 @@ class BlogModel extends Model {
     public function getHotComment() {
 	    return CommentModel::find()
             ->where(['blog_id' => $this->id])
-            ->order('created_at desc')->limit(5)->all();
+            ->orderBy('created_at desc')->limit(5)->all();
     }
 
     public static function canComment($id) {

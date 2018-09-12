@@ -6,7 +6,7 @@ use Module\Blog\Domain\Model\TermModel;
 class TermController extends Controller {
 
     public function indexAction($keywords = null) {
-        $term_list = TermModel::withCount('blog')->order('id', 'desc')->all();
+        $term_list = TermModel::withCount('blog')->orderBy('id', 'desc')->all();
         return $this->show(compact('term_list'));
     }
 

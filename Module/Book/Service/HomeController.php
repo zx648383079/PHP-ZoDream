@@ -11,23 +11,23 @@ class HomeController extends Controller {
             return $this->redirect('./mobile');
         }
         $recommend_book = BookModel::ofClassify()->limit(4)->all();
-        $hot_book = BookModel::ofClassify()->order('click_count', 'desc')->limit(10)->all();
+        $hot_book = BookModel::ofClassify()->orderBy('click_count', 'desc')->limit(10)->all();
 
-        $new_recommend_book = BookModel::ofClassify()->where('size', '<', 50000)->order('created_at', 'desc')->order('recommend_count', 'desc')->limit(12)->all();
-        $week_click_book = BookModel::ofClassify()->order('click_count', 'desc')->limit(5)->all();
-        $week_recommend_book = BookModel::ofClassify()->order('recommend_count', 'desc')->limit(5)->all();
-        $best_recommend_book = BookModel::ofClassify()->order('recommend_count', 'desc')->limit(12)->all();
+        $new_recommend_book = BookModel::ofClassify()->where('size', '<', 50000)->orderBy('created_at', 'desc')->orderBy('recommend_count', 'desc')->limit(12)->all();
+        $week_click_book = BookModel::ofClassify()->orderBy('click_count', 'desc')->limit(5)->all();
+        $week_recommend_book = BookModel::ofClassify()->orderBy('recommend_count', 'desc')->limit(5)->all();
+        $best_recommend_book = BookModel::ofClassify()->orderBy('recommend_count', 'desc')->limit(12)->all();
 
-        $month_click_book = BookModel::ofClassify()->order('click_count', 'desc')->limit(5)->all();
-        $month_recommend_book = BookModel::ofClassify()->order('recommend_count', 'desc')->limit(5)->all();
+        $month_click_book = BookModel::ofClassify()->orderBy('click_count', 'desc')->limit(5)->all();
+        $month_recommend_book = BookModel::ofClassify()->orderBy('recommend_count', 'desc')->limit(5)->all();
 
-        $click_bang = BookModel::ofClassify()->order('click_count', 'desc')->limit(15)->all();
-        $recommend_bang = BookModel::ofClassify()->order('click_count', 'desc')->limit(15)->all();
-        $size_bang = BookModel::ofClassify()->order('size', 'desc')->limit(15)->all();
+        $click_bang = BookModel::ofClassify()->orderBy('click_count', 'desc')->limit(15)->all();
+        $recommend_bang = BookModel::ofClassify()->orderBy('click_count', 'desc')->limit(15)->all();
+        $size_bang = BookModel::ofClassify()->orderBy('size', 'desc')->limit(15)->all();
 
-        $book_list = BookModel::ofClassify()->order('updated_at', 'desc')->limit(20)->all();
-        $new_book = BookModel::ofClassify()->where('size < 50000')->order('created_at', 'desc')->order('click_count', 'desc')->limit(10)->all();
-        $over_book = BookModel::ofClassify()->where('over_at > 0')->order('click_count', 'desc')->limit(10)->all();
+        $book_list = BookModel::ofClassify()->orderBy('updated_at', 'desc')->limit(20)->all();
+        $new_book = BookModel::ofClassify()->where('size < 50000')->orderBy('created_at', 'desc')->orderBy('click_count', 'desc')->limit(10)->all();
+        $over_book = BookModel::ofClassify()->where('over_at > 0')->orderBy('click_count', 'desc')->limit(10)->all();
         $hot_author = [];
         $book = BookModel::ofClassify()->one();
         return $this->show(compact('recommend_book', 'book',

@@ -40,15 +40,15 @@ class BookCategoryModel extends Model {
     }
 
     public function getBookListAttribute() {
-        return BookModel::where('cat_id', $this->id)->order('click_count', 'desc')->limit(10)->all();
+        return BookModel::where('cat_id', $this->id)->orderBy('click_count', 'desc')->limit(10)->all();
     }
 
     public function getMonthBookAttribute() {
-        return BookModel::where('cat_id', $this->id)->order('click_count', 'desc')->limit(10)->all();
+        return BookModel::where('cat_id', $this->id)->orderBy('click_count', 'desc')->limit(10)->all();
     }
 
     public function getWeekBookAttribute() {
-        return BookModel::where('cat_id', $this->id)->order('click_count', 'desc')->limit(10)->all();
+        return BookModel::where('cat_id', $this->id)->orderBy('click_count', 'desc')->limit(10)->all();
     }
 
     public function getUrlAttribute() {

@@ -126,7 +126,7 @@ class BookModel extends Model {
     }
 
     public function getFirstChapterAttribute() {
-        return BookChapterModel::where('book_id', $this->id)->order('id', 'asc')->one();
+        return BookChapterModel::where('book_id', $this->id)->orderBy('id', 'asc')->one();
     }
 
     public function getStatusAttribute() {
@@ -137,7 +137,7 @@ class BookModel extends Model {
      * @return BookChapterModel
      */
     public function getLastChapterAttribute() {
-        return BookChapterModel::where('book_id', $this->id)->order('created_at', 'desc')->one();
+        return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', 'desc')->one();
     }
 
     /**

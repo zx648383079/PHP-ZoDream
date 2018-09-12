@@ -18,7 +18,7 @@ class BookController extends Controller {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($author_id), function ($query) use ($author_id) {
                 $query->where('author_id', intval($author_id));
-            })->order('id', 'desc')->page();
+            })->orderBy('id', 'desc')->page();
         $cat_list = BookCategoryModel::select('id', 'name')->all();
         $author_list = BookAuthorModel::select('id', 'name')->all();
         return $this->show(compact('model_list', 'cat_list', 'author_list'));
@@ -70,7 +70,7 @@ class BookController extends Controller {
                 $query->where(function ($query) {
                     BookModel::search($query, 'title');
                 });
-            })->order('id', 'desc')->page();
+            })->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list',  'book', 'keywords'));
     }
 

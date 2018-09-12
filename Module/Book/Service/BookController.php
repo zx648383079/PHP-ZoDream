@@ -29,11 +29,11 @@ class BookController extends Controller {
         }
         $cat = BookCategoryModel::find($book->cat_id);
         $chapter_list = BookChapterModel::where('book_id', $id)
-            ->order('position', 'asc')
-            ->order('created_at', 'asc')->all();
-        $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
-        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();
-        $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->order('created_at', 'desc')->all();
+            ->orderBy('position', 'asc')
+            ->orderBy('created_at', 'asc')->all();
+        $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(15)->all();
+        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->orderBy('click_count', 'desc')->limit(10)->all();
+        $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->orderBy('created_at', 'desc')->all();
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
     }
 
@@ -44,8 +44,8 @@ class BookController extends Controller {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
-        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(8)->all();
-        $new_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->where('size < 50000')->order('click_count', 'desc')->limit(8)->all();
+        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(8)->all();
+        $new_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->where('size < 50000')->orderBy('click_count', 'desc')->limit(8)->all();
         BookHistoryModel::log($chapter);
         $setting = new Setting();
         $setting->load()->save();
@@ -58,9 +58,9 @@ class BookController extends Controller {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
-        $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->order('click_count', 'desc')->limit(15)->all();
-        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->order('click_count', 'desc')->limit(10)->all();
-        $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->order('created_at', 'desc')->all();
+        $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(15)->all();
+        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->orderBy('click_count', 'desc')->limit(10)->all();
+        $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->orderBy('created_at', 'desc')->all();
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
     }
 

@@ -22,7 +22,7 @@ class CommentController extends ModuleController {
         $hot_comments = CommentModel::where([
             'blog_id' => intval($blog_id),
             'parent_id' => 0,
-        ])->where('agree', '>', 0)->order('agree desc')->limit(4)->all();
+        ])->where('agree', '>', 0)->orderBy('agree desc')->limit(4)->all();
         return $this->show(compact('hot_comments', 'blog_id'));
     }
 
@@ -31,7 +31,7 @@ class CommentController extends ModuleController {
             ->where([
             'blog_id' => intval($blog_id),
             'parent_id' => intval($parent_id)
-        ])->order($sort, $order)->page();
+        ])->orderBy($sort, $order)->page();
         if ($parent_id > 0) {
             return $this->show('rely', compact('comment_list', 'parent_id'));
         }
@@ -49,7 +49,7 @@ class CommentController extends ModuleController {
         }
         $data['parent_id'] = intval($data['parent_id']);
 
-        $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->order('position desc')->one();
+        $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->orderBy('position desc')->one();
         $data['position'] = empty($last) ? 1 : ($last->position + 1);
         $model = CommentModel::create($data);
         if (empty($model)) {

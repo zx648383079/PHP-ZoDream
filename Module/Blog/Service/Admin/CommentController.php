@@ -15,7 +15,7 @@ class CommentController extends Controller {
                 CommentModel::search($query, 'content');
             })->when(!empty($name), function ($query) {
                 CommentModel::search($query, 'name', false, 'name');
-            })->order('id', 'desc')->page();
+            })->orderBy('id', 'desc')->page();
         return $this->show(compact('comment_list'));
     }
 
