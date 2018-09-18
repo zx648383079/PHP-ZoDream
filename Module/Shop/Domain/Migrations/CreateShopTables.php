@@ -16,6 +16,7 @@ use Module\Shop\Domain\Model\CommentImageModel;
 use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
 use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Model\InvoiceModel;
 use Module\Shop\Domain\Model\NavigationModel;
 use Module\Shop\Domain\Model\OrderAddressModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
@@ -52,6 +53,19 @@ class CreateShopTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
+            $table->timestamps();
+        });
+        Schema::createTable(InvoiceModel::tableName(), function(Table $table) {
+            $table->setComment('用户发票');
+            $table->set('id')->pk()->ai();
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('发票类型');
+            $table->set('name')->varchar(100)->notNull()->comment('抬头');
+            $table->set('tax_no')->varchar(20)->notNull()->comment('税号');
+            $table->set('tel')->char(11)->notNull()->comment('公司电话');
+            $table->set('bank')->varchar(100)->notNull()->comment('开户行');
+            $table->set('account')->varchar(60)->notNull()->comment('银行账号');
+            $table->set('address')->varchar()->notNull()->comment('注册地址');
+            $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });
         $this->createAttribute();
