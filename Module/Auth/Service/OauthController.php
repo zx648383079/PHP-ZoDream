@@ -24,6 +24,7 @@ class OauthController extends ModuleController {
 
     public function indexAction($type = 'qq') {
         $auth = $this->getOAuth($type);
+        session()->set('redirect_uri', app('request')->get('redirect_uri'));
         return $this->redirect($auth->login());
     }
 
@@ -32,12 +33,16 @@ class OauthController extends ModuleController {
         if (!$auth->callback()) {
             return $this->redirectWithMessage('/', '授权回调失败！');
         }
+        $redirect_uri = session('redirect_uri');
+        if (empty($redirect_uri)) {
+            $redirect_uri = '/';
+        }
         $user = OAuthModel::findUser(
             $auth->identity,
             $type);
         if (!empty($user)) {
             $user->login();
-            return $this->redirect('/');
+            return $this->redirect($redirect_uri);
         }
         if (empty($auth->info())) {
             return $this->redirectWithMessage('/', '获取用户信息失败');
@@ -45,7 +50,7 @@ class OauthController extends ModuleController {
         if (!auth()->guest()) {
             $user = auth()->user();
             OAuthModel::bindUser($user, $auth->identity, $type);
-            return $this->redirect('/');
+            return $this->redirect($redirect_uri);
         }
         $rnd = Str::random(3);
         $email = sprintf('%s_%s@zodream.cn', $type, $rnd);
@@ -67,7 +72,7 @@ class OauthController extends ModuleController {
         ]);
         OAuthModel::bindUser($user, $auth->identity, $type);
         $user->login();
-        return $this->redirect('/');
+        return $this->redirect($redirect_uri);
     }
 
     /**

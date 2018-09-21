@@ -62,10 +62,10 @@ $this->extend('layouts/header')
             </form>
             <div class="login-oauth-box">
                 <div class="box-title">第三方登录</div>
-                <a href="<?=$this->url('./oauth', ['type' => 'qq'])?>"><i class="fa fa-qq"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'wechat'])?>"><i class="fa fa-wechat"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'weibo'])?>"><i class="fa fa-weibo"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'github'])?>"><i class="fa fa-github"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri])?>"><i class="fa fa-qq"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'wechat', 'redirect_uri' => $redirect_uri])?>"><i class="fa fa-wechat"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'weibo', 'redirect_uri' => $redirect_uri])?>"><i class="fa fa-weibo"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'github', 'redirect_uri' => $redirect_uri])?>"><i class="fa fa-github"></i></a>
             </div>
         </div>
     </section>
