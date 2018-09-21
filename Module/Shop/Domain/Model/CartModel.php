@@ -49,12 +49,16 @@ class CartModel extends Model {
         ];
     }
 
-    public function getTotal() {
+    public function goods() {
+        return $this->hasOne(GoodsModel::class, 'id', 'goods_id');
+    }
+
+    public function getTotalAttribute() {
         return bcmul($this->number, $this->price);
     }
 
-    public function goods() {
-        return $this->hasOne(GoodsModel::class, 'id', 'goods_id');
+    public function getSavingAttribute() {
+        return $this->goods->market_price - $this->price;
     }
 
     /**
