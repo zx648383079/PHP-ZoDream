@@ -77,14 +77,16 @@ let strFormat = function(arg: string, ...args: any[]) {
 }
 
 $(function() {
-    let file_upload = new Upload(null, {
-        url: '/ueditor.php?action=uploadimage',
-        name: 'upfile',
-        template: '{url}',
-        afterUpload: function(data) {
-            return data;
-        }
-    });
+    if (Upload) {
+        let file_upload = new Upload(null, {
+            url: '/ueditor.php?action=uploadimage',
+            name: 'upfile',
+            template: '{url}',
+            afterUpload: function(data) {
+                return data;
+            }
+        });
+    }
     $(document).on('click', "a[data-type=refresh]", function() {
         window.location.reload();
     })

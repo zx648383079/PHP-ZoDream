@@ -41,7 +41,7 @@ class UserMetaModel extends Model {
     }
 
     public static function updateArr($key, array $value) {
-        self::record()->where('user_id', auth()->id())->where('name', $key)
+        self::where('user_id', auth()->id())->where('name', $key)
             ->update([
                 'content' => serialize($value)
             ]);
