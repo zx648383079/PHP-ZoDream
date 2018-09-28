@@ -109,7 +109,7 @@ class RegionModel extends Model {
                 }
             }
         }
-        self::record()->batchInsert([
+        self::query()->insert([
             'id',
             'name',
             'parent_id',

@@ -93,15 +93,15 @@ class DiskController extends Controller {
             foreach ((array)$data['id'] as $item) {
                 $disks[] = [$item, $model->id];
             }
-            ShareFileModel::record()
-                ->batchInsert(['disk_id', 'share_id'], $disks);
+            ShareFileModel::query()
+                ->insert(['disk_id', 'share_id'], $disks);
             if ($model->mode == ShareModel::SHARE_PRIVATE) {
                 $users = [];
                 foreach ((array)$data['user'] as $item) {
                     $users[] = [$item, $model->id];
                 }
-                ShareUserModel::record()
-                    ->batchInsert(['user_id', 'share_id'], $users);
+                ShareUserModel::query()
+                    ->insert(['user_id', 'share_id'], $users);
 //                Bulletin::message($data['user'],
 //                    Yii::$app->user->identity->usrname.'给你分享了文件！',
 //                    Html::a('查看', $data['url']));

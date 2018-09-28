@@ -65,6 +65,6 @@ class BulletinModel extends Model {
 		foreach ((array)$user as $item) {
 			$data[] = [$bulletin->id, $item];
 		}
-		return BulletinUserModel::batchInsert(['bulletin_id', 'user_id'], $data);
+		return BulletinUserModel::query()->insert(['bulletin_id', 'user_id'], $data);
 	}
 }

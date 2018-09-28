@@ -61,7 +61,7 @@ trait UserRoleTrait {
         if (empty($diff)) {
             return;
         }
-        UserRoleModel::record()->insert(array_map(function ($id) {
+        UserRoleModel::query()->insert(array_map(function ($id) {
             return [
                 'user_id' => $this->id,
                 'role_id' => $id

@@ -74,9 +74,6 @@ class ModelModel extends BaseModel {
         return (new Query())->from(static::getExtendTable($this->table));
     }
 
-    public function getContentExtendRecord() {
-        return (new Record())->setTable(static::getExtendTable($this->table));
-    }
 
     public function createTable() {
         $table = $this->getContentExtendTable();

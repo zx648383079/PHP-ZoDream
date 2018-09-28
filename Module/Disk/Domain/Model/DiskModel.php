@@ -82,7 +82,7 @@ class DiskModel extends Model {
         // 更改目标上级的左右值
         // 移动并更改左右值
         $difLeft = $disk->right_id - 1 - $this->left_id;
-        $this->record()->where('user_id', $this->user_id)
+        $this->where('user_id', $this->user_id)
             ->where('left_id', '>', $this->left_id)
             ->where('right_id', '<', $this->right_id)
             ->updateOne([
@@ -95,7 +95,7 @@ class DiskModel extends Model {
         $this->save();
 
         // 更改原上级的左右值
-        $this->record()->where('user_id', $this->user_id)
+        $this->where('user_id', $this->user_id)
             ->where('left_id', '<', $this->left_id)
             ->where('right_id', '>', $this->right_id)
             ->updateOne('right_id', $this->left_id - $this->right_id - 1);
@@ -113,10 +113,10 @@ class DiskModel extends Model {
         }
         // 先空出位置
         $diff = $this->right_id - $this->left_id + 1;
-        self::record()->where('user_id', $disk->user_id)
+        self::where('user_id', $disk->user_id)
             ->where('left_id', '>=', $disk->right_id)
             ->updateOne('left_id', $diff);
-        self::record()->where('user_id', $disk->user_id)
+        self::where('user_id', $disk->user_id)
             ->where('right_id', '>=', $disk->right_id)
             ->updateOne('right_id', $diff);
         // 复制开始
@@ -127,15 +127,15 @@ class DiskModel extends Model {
     }
 
     public function deleteThis() {
-        $this->record()->where('user_id', $this->user_id)
+        $this->where('user_id', $this->user_id)
             ->where('left_id', '>=', $this->left_id)
             ->where('right_id', '<=', $this->right_id)
             ->delete();
         $num = $this->left_id - $this->right_id - 1;
-        $this->record()->where('user_id', $this->user_id)
+        $this->where('user_id', $this->user_id)
             ->where('right_id', '>', $this->right_id)
             ->updateOne('right_id', $num);
-        $this->record()->where('user_id', $this->user_id)
+        $this->where('user_id', $this->user_id)
             ->where('left_id', '>', $this->right_id)
             ->updateOne('left_id', $num);
     }
@@ -193,10 +193,10 @@ class DiskModel extends Model {
     public function addByLeft($left) {
         $this->left_id = $left + 1;
         $this->right_id = $left + 2;
-        self::record()->where('user_id', $this->user_id)
+        self::where('user_id', $this->user_id)
             ->where('left_id', '>', $left)
             ->updateOne('left_id', 2);
-        self::record()->where('user_id', $this->user_id)
+        self::where('user_id', $this->user_id)
             ->where('right_id', '>', $left)
             ->updateOne('right_id', 2);
         return $this->save();

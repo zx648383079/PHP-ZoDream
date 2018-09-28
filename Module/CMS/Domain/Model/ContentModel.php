@@ -76,14 +76,12 @@ class ContentModel extends BaseModel {
         }
         $record = $this->category
             ->model
-            ->getContentExtendTable()
-            ->record();
-        $record->set($data);
+            ->getContentExtendQuery();
         if ($isNew) {
-            return $record->insert();
+            return $record->insert($data);
         }
         return $record->where(['id' => $this->id])
-            ->update();
+            ->update($data);
     }
 
     public function getExtendValue($key, $default = null) {

@@ -138,11 +138,11 @@ class CartModel extends Model {
     }
 
     public static function clearAll() {
-        return self::record()->delete();
+        return self::query()->delete();
     }
 
     public static function deleteAll() {
-        self::record()->where('user_id', auth()->id)
+        self::where('user_id', auth()->id)
             ->delete();
     }
 
@@ -156,7 +156,7 @@ class CartModel extends Model {
         if (empty($ids)) {
             return;
         }
-        self::record()->where('user_id', auth()->id)
+        self::where('user_id', auth()->id)
             ->whereIn('id', is_array($ids) ? $ids : [intval($ids)])
             ->delete();
     }
@@ -170,7 +170,7 @@ class CartModel extends Model {
         if (empty($ids)) {
             return;
         }
-        self::record()->where('user_id', auth()->id)
+        self::where('user_id', auth()->id)
             ->whereIn('goods_id', is_array($ids) ? $ids : [intval($ids)])
             ->delete();
     }

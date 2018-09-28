@@ -55,7 +55,7 @@ class CommentController extends ModuleController {
         if (empty($model)) {
             return $this->jsonFailure('评论失败！');
         }
-        BlogModel::record()->where('id', $data['blog_id'])->updateOne('comment_count');
+        BlogModel::where('id', $data['blog_id'])->updateOne('comment_count');
         return $this->jsonSuccess($model);
     }
 

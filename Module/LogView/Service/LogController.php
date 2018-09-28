@@ -80,8 +80,8 @@ class LogController extends Controller {
     }
 
     public function clearAction() {
-        FileModel::record()->delete();
-        LogModel::record()->delete();
+        FileModel::query()->delete();
+        LogModel::query()->delete();
         return $this->redirectWithMessage('./',  '清除成功！');
     }
 }

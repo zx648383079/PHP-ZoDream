@@ -55,7 +55,7 @@ class HomeController extends ModuleController {
 
     public function detailAction($id) {
         $id = intval($id);
-        BlogModel::record()->where('id', $id)->updateOne('click_count');
+        BlogModel::where('id', $id)->updateOne('click_count');
         $blog = BlogModel::find($id);
         if (empty($blog)) {
             return $this->redirect('./');

@@ -91,7 +91,7 @@ class RoleModel extends Model {
         if (empty($diff)) {
             return;
         }
-        RolePermissionModel::record()->insert(array_map(function ($id) {
+        RolePermissionModel::query()->insert(array_map(function ($id) {
             return [
                 'role_id' => $this->id,
                 'permission_id' => $id

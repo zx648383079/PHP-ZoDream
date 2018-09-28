@@ -30,6 +30,7 @@ class CreateBookTables extends Migration {
             $table->set('recommend_count')->int()
                 ->defaultVal(0)->comment('点击数');
             $table->timestamp('over_at')->comment('完本日期');
+            $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -41,6 +42,7 @@ class CreateBookTables extends Migration {
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('position')->tinyint(4)->defaultVal(99);
+            $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -81,7 +83,7 @@ class CreateBookTables extends Migration {
     }
 
     public function seed() {
-        BookCategoryModel::record()->insert([
+        BookCategoryModel::query()->insert([
             ['name' => '玄幻·奇幻'],
             ['name' => '仙侠·武侠'],
             ['name' => '都市·言情'],
@@ -89,7 +91,7 @@ class CreateBookTables extends Migration {
             ['name' => '科幻·灵异'],
             ['name' => '同人·网游'],
         ]);
-        BookAuthorModel::record()->insert([
+        BookAuthorModel::query()->insert([
            ['name' => '未知']
         ]);
 

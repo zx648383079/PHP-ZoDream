@@ -46,7 +46,7 @@ class MoneyController extends Controller {
     }
 
     public function changeAccountAction($id) {
-        MoneyAccountModel::record()->where('id', $id)->updateBool('status');
+        MoneyAccountModel::where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
             'url' => url('./money/account')
         ]);
@@ -148,7 +148,7 @@ class MoneyController extends Controller {
     }
 
     public function changeProductAction($id) {
-        FinancialProductModel::record()->where('id', $id)->updateBool('status');
+        FinancialProductModel::where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
             'url' => url('./money/product')
         ]);
