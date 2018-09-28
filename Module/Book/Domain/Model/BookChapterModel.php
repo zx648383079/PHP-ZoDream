@@ -22,6 +22,7 @@ use Domain\Model\Model;
  * @property integer $book_id
  * @property integer $parent_id
  * @property integer $status
+ * @property string $source
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -37,6 +38,7 @@ class BookChapterModel extends Model {
             'title' => 'required|string:0,200',
             'parent_id' => 'int',
             'status' => 'int:0,9',
+            'source' => 'string:0,200',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -50,6 +52,7 @@ class BookChapterModel extends Model {
             'title' => 'Title',
             'parent_id' => 'Parent Id',
             'status' => 'Status',
+            'source' => 'Source',
             'deleted_at' => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

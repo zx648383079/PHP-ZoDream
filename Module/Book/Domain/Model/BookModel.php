@@ -25,6 +25,7 @@ use Zodream\Database\Model\Query;
  * @property integer $classify
  * @property integer $cat_id
  * @property integer $size
+ * @property string $source
  * @property integer $click_count
  * @property integer $recommend_count
  * @property integer $over_at
@@ -54,6 +55,7 @@ class BookModel extends Model {
             'classify' => 'int',
             'cat_id' => 'int:0,999',
             'size' => 'int',
+            'source' => 'string:0,200',
             'click_count' => 'int',
             'recommend_count' => 'int',
             'over_at' => 'int',
@@ -74,6 +76,7 @@ class BookModel extends Model {
             'classify' => 'Classify',
             'cat_id' => 'Cat Id',
             'size' => 'Size',
+            'source' => 'Source',
             'click_count' => 'Click Count',
             'recommend_count' => 'Recommend Count',
             'over_at' => 'Over At',
