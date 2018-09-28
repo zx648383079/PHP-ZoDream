@@ -36,4 +36,20 @@ class TaskController extends Controller {
             'url' => url('./')
         ]);
     }
+
+    public function toggleAction($id) {
+        $model = TaskModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('任务错误');
+        }
+        if ($model->status == TaskModel::STATUS_COMPETE) {
+            return $this->jsonFailure('任务已结束');
+        }
+        if ($model->status == TaskModel::STATUS_RUNNING) {
+            $model->makeEnd();
+            return $this->jsonSuccess($model);
+        }
+        $log = $model->makeNewRun();
+        return $this->jsonSuccess($model, $log);
+    }
 }

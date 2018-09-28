@@ -58,4 +58,25 @@ class TaskModel extends Model {
         return $this->time_length + $log->time;
     }
 
+    public function makeEnd() {
+        $log = TaskLogModel::findRunning($this->id);
+        $log->end_at = time();
+        $this->time_length += $log->getTimeAttribute();
+        $this->status = self::STATUS_NONE;
+        return $log->save() && $this->save();
+    }
+
+    public function makeNewRun() {
+        $this->status = self::STATUS_RUNNING;
+        $log = TaskLogModel::create([
+           'user_id' => auth()->id(),
+           'task_id' => $this->id,
+           'created_at' => time()
+        ]);
+        if ($log && $this->save()) {
+            return $log;
+        }
+        return false;
+    }
+
 }
