@@ -313,6 +313,7 @@ class CreateShopTables extends Migration {
             $table->set('price')->decimal(8, 2)->defaultVal(0);
             $table->set('market_price')->decimal(8, 2)->defaultVal(0);
             $table->set('stock')->int()->defaultVal(1);
+            $table->set('sales')->int()->defaultVal(0)->defaultVal('销量');
             $table->set('is_show')->bool()->defaultVal(1);
             $table->set('is_best')->bool()->defaultVal(0);
             $table->set('is_hot')->bool()->defaultVal(0);
