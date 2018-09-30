@@ -11,8 +11,6 @@ use Zodream\Spider\Support\Uri;
 
 abstract class BaseSpider {
 
-    protected $url_list = [];
-
     protected $start = null;
 
     protected $isNewChapter = true;
@@ -36,10 +34,18 @@ abstract class BaseSpider {
             return $chapter;
         }
         if (!$this->isCatalogPage($uri)) {
-            $this->getSpiderUrl($uri);
             return null;
         }
         $html = $this->decode(Spider::url($uri));
+        return $this->invokeHtml($uri, $next, $html);
+    }
+
+    /**
+     * @param Uri $uri
+     * @param callable $next
+     * @param $html
+     */
+    public function invokeHtml(Html $html, Uri $uri, callable $next) {
         $book = $this->getBook($html, $uri);
         $book = $this->getRealBook($book);
         if (empty($book)) {
@@ -74,7 +80,7 @@ abstract class BaseSpider {
         return BookModel::where('name', $book->name)->one();
     }
 
-    protected function decode(Html $html) {
+    public function decode(Html $html) {
         return $html;
     }
 
@@ -174,53 +180,4 @@ abstract class BaseSpider {
         $this->debug(sprintf('下载章节完成，用时 %s 秒', time() - $time));
     }
 
-    public function getSpiderUrl(Uri $uri) {
-        $html = Spider::url($uri);
-        if ($html->isEmpty()) {
-            return;
-        }
-        $data = $this->getUrl($html, $uri);
-        foreach ($data as $url) {
-            $this->url_list[] = $url->encode();
-        }
-        foreach ($data as $url) {
-            $this->invoke($url);
-        }
-        return;
-    }
-
-    /**
-     * @param Html $html
-     * @param Uri $baseUri
-     * @return Uri[]
-     */
-    public function getUrl(Html $html, Uri $baseUri) {
-        $uris = [];
-        $html->find('#list', 0)->matches('#<a[^<>]+href=["\']([^"\'\s<>]+)["\']#i',
-            function ($match) use (&$uris, $baseUri) {
-                $path = $match[1];
-                if (empty($path)) {
-                    return;
-                }
-                if (strpos($path, '#') === 0 || strpos($path, 'javascript:') === 0) {
-                    return;
-                }
-                $uri = (clone $baseUri)->setData([])->addPath($path);
-                if ($uri->getHost() != $baseUri->getHost()) {
-                    return;
-                }
-                if ($this->isContentPage($uri)) {
-                    return;
-                }
-                if ($this->isExist($uri)) {
-                    return;
-                }
-                $uris[] = $uri->setFragment(null);
-            });
-        return $uris;
-    }
-
-    public function isExist(Uri $uri) {
-        return in_array($uri->encode(), $this->url_list);
-    }
 }

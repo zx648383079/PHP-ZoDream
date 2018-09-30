@@ -14,6 +14,18 @@
 
 ```cmd
 
-php artisan book/spider --url=
+php artisan book/spider --url= --site=
+
+--url   表示单本
+
+--start 开始章节 只对单本下载有效
+
+--site  整站下载
 
 ```
+
+
+
+## 注意
+
+本程序采用单线程下载模式，下载会比较慢

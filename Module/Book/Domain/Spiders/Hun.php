@@ -26,7 +26,7 @@ class Hun extends BaseSpider {
         return preg_match('#^/?hunhun/\d+/\d+/\d+\.html$#i', $uri->getPath(), $match);
     }
 
-    protected function decode(Html $html) {
+    public function decode(Html $html) {
         $content = $html->getHtml();
         //$html->setHtml(iconv('gb2312', 'utf-8//IGNORE', $content));
         $html->setHtml(mb_convert_encoding($content, 'utf-8', 'GB2312, ASCII, UTF-8, GBK, BIG5'));
