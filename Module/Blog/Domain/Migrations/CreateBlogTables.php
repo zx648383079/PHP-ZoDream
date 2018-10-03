@@ -51,6 +51,7 @@ class CreateBlogTables extends Migration {
             $table->set('parent_id')->int(10);
             $table->set('position')->int(10)->defaultVal(1);
             $table->set('user_id')->int(10)->defaultVal(0);
+            $table->set('blog_id')->int(10)->notNull();
             $table->set('ip')->varchar(120);
             $table->set('agent')->varchar(250);
             $table->set('agree')->int(10)->defaultVal(0);
