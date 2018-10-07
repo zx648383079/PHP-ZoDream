@@ -13,7 +13,7 @@ use Module\Book\Domain\Spiders\Sj;
 use Module\Book\Domain\Spiders\BaseSpider;
 use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Html;
-use Zodream\Http\Uri;
+use Zodream\Spider\Support\Uri;
 
 class SiteCrawl {
 
