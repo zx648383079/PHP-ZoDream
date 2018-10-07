@@ -2,6 +2,7 @@
 namespace Module\Book\Domain\Spiders;
 
 use Domain\Model\Model;
+use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 
@@ -177,6 +178,9 @@ abstract class BaseSpider {
             sleep($failure * 2);
             continue;
         }
+        $ids = BookChapterModel::where('book_id', $book->id)->pluck('id');
+        $book->size = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
+        $book->save();
         $this->debug(sprintf('下载章节完成，用时 %s 秒', time() - $time));
     }
 

@@ -11,9 +11,10 @@ use Domain\Model\Model;
  * @property string $name
  * @property integer $group_id
  * @property integer $type
- * @property integer $readonly
+ * @property integer $search_type
  * @property integer $input_type
  * @property string $default_value
+ * @property integer $position
  */
 class AttributeModel extends Model {
 
@@ -26,9 +27,10 @@ class AttributeModel extends Model {
             'name' => 'required|string:0,30',
             'group_id' => 'required|int',
             'type' => 'int:0,9',
-            'readonly' => 'int:0,9',
+            'search_type' => 'int:0,9',
             'input_type' => 'int:0,9',
-            'default_value' => 'required|string:0,255',
+            'default_value' => 'string:0,255',
+            'position' => 'int:0,999',
         ];
     }
 
@@ -38,10 +40,15 @@ class AttributeModel extends Model {
             'name' => 'Name',
             'group_id' => 'Group Id',
             'type' => 'Type',
-            'readonly' => 'Readonly',
+            'search_type' => 'Search Type',
             'input_type' => 'Input Type',
             'default_value' => 'Default Value',
+            'position' => 'Position',
         ];
+    }
+
+    public function group() {
+        return $this->hasOne(AttributeGroupModel::class, 'id', 'group_id');
     }
 
 }

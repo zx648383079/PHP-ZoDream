@@ -17,7 +17,8 @@ class AttributeController extends Controller {
     }
 
     public function editAction($id, $group_id = 0) {
-        $model = AttributeModel::findOrNew($id);
+        $position = 99;
+        $model = AttributeModel::findOrDefault($id, compact('group_id', 'position'));
         if ($group_id > 0) {
             $model->group_id = $group_id;
         }
@@ -29,7 +30,7 @@ class AttributeController extends Controller {
         $model = new AttributeModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => $this->getUrl('attribute')
+                'url' => $this->getUrl('attribute', ['group_id' => $model->group_id])
             ]);
         }
         return $this->jsonFailure($model->getFirstError());

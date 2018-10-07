@@ -26,7 +26,11 @@ $this->title = '属性';
             <tr>
                 <td><?=$item->id?></td>
                 <td><?=$item->name?></td>
-                <td><?=$item->goods_count?></td>
+                <td><?=$item->group->name?></td>
+                <td><?=$item->type?></td>
+                <td><?=$item->input_type?></td>
+                <td><?=$item->default_value?></td>
+                <td><?=$item->position?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/attribute/edit', ['id' => $item->id])?>">编辑</a>

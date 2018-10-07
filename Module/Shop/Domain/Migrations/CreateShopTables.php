@@ -209,7 +209,8 @@ class CreateShopTables extends Migration {
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('search_type')->tinyint(1)->defaultVal(0);
             $table->set('input_type')->tinyint(1)->defaultVal(0);
-            $table->set('default_value')->varchar()->notNull();
+            $table->set('default_value')->varchar()->notNull()->defaultVal('');
+            $table->set('position')->tinyint(3)->defaultVal(99);
         });
         Schema::createTable(GoodsAttributeModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
