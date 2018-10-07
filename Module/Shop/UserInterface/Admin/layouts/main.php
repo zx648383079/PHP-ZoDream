@@ -47,22 +47,49 @@ $this->registerCssFile([
                 'fa fa-list'
             ],
             [
-                '新建分类',
-                './admin/category/create',
-                'fa fa-plus'
-            ],
-            [
                 '品牌列表',
                 './admin/brand',
                 'fa fa-list'
             ],
             [
-                '新建品牌',
-                './admin/brand/create',
-                'fa fa-plus'
+                '商品类型',
+                './admin/attribute/group',
+                'fa fa-list'
             ],
         ],
         true
+    ],
+    [
+        '营销管理',
+        false,
+        'fa fa-briefcase',
+        [
+            [
+                '优惠券',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '满减/满送',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '拼团',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '限时秒杀',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '刮刮卡',
+                './admin/order',
+                'fa fa-list'
+            ],
+        ]
     ],
     [
         '订单管理',
@@ -140,6 +167,11 @@ $this->registerCssFile([
         false,
         'fa fa-briefcase',
         [
+            [
+                '基本设置',
+                './admin/setting',
+                'fa fa-gear'
+            ],
             [
                 '支付列表',
                 './admin/payment',

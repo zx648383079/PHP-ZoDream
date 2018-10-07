@@ -53,7 +53,7 @@ $this->extend('layouts/header');
                  <a href="<?=$author->url?>" title="<?=$author->name?>小说"><?=$author->name?>小说</a>全集免费在线阅读，尽在新书小说网-搜刮好东西。</p>
         </div>
         <div class="read_btn">
-          <div class="btn" style="width:328px"><a href="javascript:addBookmark('<?=$author->name?>新书-新书小说网-搜刮好东西')" class="sc" title="加入收藏夹" style="margin-right:2px">加入收藏夹</a></div>
+          <div class="btn2" style="width:328px"><a href="javascript:addBookmark('<?=$author->name?>新书-新书小说网-搜刮好东西')" class="sc" title="加入收藏夹" style="margin-right:2px">加入收藏夹</a></div>
         </div>
         <div class="vote"><!--AD-->
         </div>

@@ -57,6 +57,10 @@ class AdModel extends Model {
         ];
     }
 
+    public function position() {
+        return $this->hasOne(AdPositionModel::class, 'id', 'position_id');
+    }
+
     public function getHtml() {
         switch ($this->type) {
             case self::TEXT:

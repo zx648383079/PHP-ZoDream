@@ -2505,7 +2505,8 @@ input.btn {
       display: block;
       height: 2.5rem; }
   .chapter .chapte-box {
-    font-size: .875em; }
+    font-size: .875em;
+    padding: 0 0.625rem; }
     .chapter .chapte-box p {
       padding-bottom: 1em;
       line-height: 1.6em;

@@ -7,27 +7,42 @@ use Module\Shop\Domain\Model\ArticleModel;
 
 class ArticleController extends Controller {
 
-    public function indexAction() {
-        return $this->show();
+    public function indexAction($keywords = null, $cat_id = 0) {
+        $model_list = ArticleModel::with('category')
+            ->when(!empty($keywords), function ($query) {
+                $query->where(function ($query) {
+                    ArticleModel::search($query, 'title');
+                });
+            })->when(!empty($cat_id), function ($query) use ($cat_id) {
+                $query->where('cat_id', intval($cat_id));
+            })->page();
+        return $this->show(compact('model_list'));
     }
 
     public function createAction() {
+        return $this->runMethodNotProcess('edit', ['id' => null]);
+    }
+
+    public function editAction($id) {
+        $model = ArticleModel::findOrNew($id);
         $cat_list = ArticleCategoryModel::all();
-        return $this->show(compact('cat_list'));
+        return $this->show(compact('model', 'cat_list'));
     }
 
     public function saveAction() {
         $model = new ArticleModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('article'), '保存成功！');
+            return $this->jsonSuccess([
+                'url' => $this->getUrl('article')
+            ]);
         }
-        return $this->redirectWithMessage($this->getUrl('article'), $model->getFirstError());
+        return $this->jsonFailure($model->getFirstError());
     }
 
 
     public function categoryAction() {
-        $cat_list = ArticleCategoryModel::all();
-        return $this->show(compact('cat_list'));
+        $model_list = ArticleCategoryModel::all();
+        return $this->show(compact('model_list'));
     }
 
     public function createCategoryAction() {
@@ -43,15 +58,17 @@ class ArticleController extends Controller {
     public function saveCategoryAction() {
         $model = new ArticleCategoryModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('article/category'), '保存成功！');
+            return $this->jsonSuccess([
+                'url' => $this->getUrl('article/category')
+            ]);
         }
-        return $this->redirectWithMessage($this->getUrl('article/category'), $model->getFirstError());
+        return $this->jsonFailure($model->getFirstError());
     }
 
-    public function deleteLogAction($id) {
+    public function deleteCategoryAction($id) {
         ArticleCategoryModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('category')
+            'url' => $this->getUrl('article/category')
         ]);
     }
 }

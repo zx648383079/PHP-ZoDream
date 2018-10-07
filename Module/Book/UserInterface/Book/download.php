@@ -54,7 +54,7 @@ $this->extend('layouts/header');
 						2、下载后请尽快删除，好公民应该支持正版阅读。</p>
         </div>
         <div class="read_btn">
-          <div class="btn" style="width:108px"><a href="<?=$book->url?>" class="yd" title="在线阅读" style="margin-right:2px">在线阅读</a></div>
+          <div class="btn2" style="width:108px"><a href="<?=$book->url?>" class="yd" title="在线阅读" style="margin-right:2px">在线阅读</a></div>
 		  <div class="down">
 		  txt文件：<a href="<?=$this->url('./book/txt', ['id' => $book->id])?>" title="<?=$book->name?>txt电子书" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'txt', '<?=$book->name?>','','']);">
                   点击下载(<?=Disk::size($book->size)?>)</a> | zip压缩包：<a href="<?=$this->url('./book/zip', ['id' => $book->id])?>" title="<?=$book->name?>txt电子书zip压缩包" target="_blank" onclick="_czc.push(['_trackEvent', '小说下载', 'zip', '<?=$book->name?>','','']);">

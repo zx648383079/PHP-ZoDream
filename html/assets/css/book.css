@@ -1448,13 +1448,13 @@ body.article .Con.box_con .box_box {
 .randBOX .pic {
   background: url("../images/loading.gif") no-repeat center; }
 
-.randBOX .btn {
+.randBOX .btn2 {
   float: left;
   width: 270px;
   height: 38px;
   margin-top: 10px;
   overflow: hidden; }
-  .randBOX .btn input {
+  .randBOX .btn2 input {
     float: left;
     width: 98px;
     height: 36px;
@@ -1465,14 +1465,14 @@ body.article .Con.box_con .box_box {
     font-size: 14px;
     background-color: #ece9d8;
     overflow: hidden; }
-  .randBOX .btn img {
+  .randBOX .btn2 img {
     float: left;
     width: 10px;
     height: 10px;
     margin: 12px 40px;
     visibility: hidden;
     overflow: hidden; }
-  .randBOX .btn .btn_img {
+  .randBOX .btn2 .btn_img {
     visibility: visible; }
 
 .bw_box div.a_l div span {
@@ -2063,18 +2063,18 @@ body.article .Con.box_con .box_box {
       .h_pic_box .pic span a {
         display: inline-block;
         color: #FFF; }
-  .h_pic_box .btn {
+  .h_pic_box .btn2 {
     width: 58px;
     height: 280px; }
-    .h_pic_box .btn a {
+    .h_pic_box .btn2 a {
       float: left;
       width: 58px;
       height: 70px;
       background: url("../images/allimg_inner.png") no-repeat -58px 0px;
       overflow: hidden; }
-      .h_pic_box .btn a.active {
+      .h_pic_box .btn2 a.active {
         background-position: 0px 0px; }
-    .h_pic_box .btn img {
+    .h_pic_box .btn2 img {
       width: 49px;
       height: 66px;
       margin: 2px 2px 2px 7px; }
@@ -2368,12 +2368,12 @@ body.article .Con.box_con .box_box {
   width: 534px;
   height: 30px;
   overflow: hidden; }
-  .Con.jj .j_box .read_btn .btn {
+  .Con.jj .j_box .read_btn .btn2 {
     float: left;
     width: 236px;
     height: 30px;
     overflow: hidden; }
-    .Con.jj .j_box .read_btn .btn a {
+    .Con.jj .j_box .read_btn .btn2 a {
       float: left;
       width: 108px;
       height: 30px;
@@ -2381,12 +2381,12 @@ body.article .Con.box_con .box_box {
       line-height: 0px;
       background: url("../images/allimg_basic.png") no-repeat;
       overflow: hidden; }
-      .Con.jj .j_box .read_btn .btn a.yd {
+      .Con.jj .j_box .read_btn .btn2 a.yd {
         background-position: -220px -155px;
         margin-right: 20px; }
-      .Con.jj .j_box .read_btn .btn a.sc {
+      .Con.jj .j_box .read_btn .btn2 a.sc {
         background-position: -220px -185px; }
-      .Con.jj .j_box .read_btn .btn a.txt {
+      .Con.jj .j_box .read_btn .btn2 a.txt {
         background-position: -220px -442px; }
   .Con.jj .j_box .read_btn .down {
     height: 30px;
@@ -2700,13 +2700,13 @@ body.article .Con.box_con .box_box {
 .randBOX .pic {
   background: url("../images/loading.gif") no-repeat center; }
 
-.randBOX .btn {
+.randBOX .btn2 {
   float: left;
   width: 270px;
   height: 38px;
   margin-top: 10px;
   overflow: hidden; }
-  .randBOX .btn input {
+  .randBOX .btn2 input {
     float: left;
     width: 98px;
     height: 36px;
@@ -2717,14 +2717,14 @@ body.article .Con.box_con .box_box {
     font-size: 14px;
     background-color: #ece9d8;
     overflow: hidden; }
-  .randBOX .btn img {
+  .randBOX .btn2 img {
     float: left;
     width: 10px;
     height: 10px;
     margin: 12px 40px;
     visibility: hidden;
     overflow: hidden; }
-  .randBOX .btn .btn_img {
+  .randBOX .btn2 .btn_img {
     visibility: visible; }
 
 .bw_box div.a_l div span {

@@ -37,7 +37,7 @@ abstract class BaseSpider {
             return null;
         }
         $html = $this->decode(Spider::url($uri));
-        return $this->invokeHtml($uri, $next, $html);
+        return $this->invokeHtml($html, $uri, $next);
     }
 
     /**

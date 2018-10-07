@@ -141,7 +141,7 @@ class CreateShopTables extends Migration {
             $table->set('order_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
-            $table->set('sign')->varchar(100)->notNull();
+            $table->set('series_number')->varchar(100)->notNull();
             $table->set('thumb')->varchar(200)->comment('缩略图');
             $table->set('number')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
@@ -207,7 +207,7 @@ class CreateShopTables extends Migration {
             $table->set('name')->varchar(30)->notNull();
             $table->set('group_id')->int()->notNull();
             $table->set('type')->tinyint(1)->defaultVal(0);
-            $table->set('readonly')->bool()->defaultVal(0);
+            $table->set('search_type')->tinyint(1)->defaultVal(0);
             $table->set('input_type')->tinyint(1)->defaultVal(0);
             $table->set('default_value')->varchar()->notNull();
         });
@@ -216,15 +216,16 @@ class CreateShopTables extends Migration {
             $table->set('goods_id')->int()->notNull();
             $table->set('attribute_id')->int()->notNull();
             $table->set('value')->varchar()->notNull();
+            $table->set('price')->decimal(10, 2)->defaultVal(0)->comment('附加服务，多选不算在');
         });
         Schema::createTable(ProductModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('goods_id')->int()->notNull();
             $table->set('price')->decimal(10, 2)->defaultVal(0);
-        });
-        Schema::createTable(ProductAttributeModel::tableName(), function (Table $table) {
-            $table->set('product_id')->int()->notNull();
-            $table->set('attribute_id')->int()->notNull();
+            $table->set('stock')->int()->defaultVal(1);
+            $table->set('thumb')->varchar(200)->defaultVal('');
+            $table->set('attributes')->varchar(100)->defaultVal('');
+            $table->set('attributes_value')->varchar(200)->defaultVal('');
         });
     }
 

@@ -51,7 +51,7 @@ $this->extend('layouts/header');
 			 <p>简介：<br/><?=$book->description?></p>
         </div>
         <div class="read_btn">
-          <div class="btn" style="width:328px"><a href="javascript:;" class="sc" title="收藏本书" style="margin-right:2px">加入收藏夹</a>
+          <div class="btn2" style="width:328px"><a href="javascript:;" class="sc" title="收藏本书" style="margin-right:2px">加入收藏夹</a>
               <a href="<?=$book->download_url?>" class="txt" title="<?=$book->name?>txt下载" target="_blank"><?=$book->name?>txt下载</a></div>
         </div>
         <div class="vote"><?=$book->author->name?>的<a href="<?=$cat->url?>"><?=$cat->real_name?></a>作品<?=$book->name?>

@@ -26,7 +26,8 @@ class SiteCrawl {
         'www.sjtxt.la' => Sj::class,
         'www.haohunhun.com' => Hun::class,
         'www.biquge.info' => IBiQuGe::class,
-        'www.shuge.la' => SBiQuGe::class
+        'www.shuge.la' => SBiQuGe::class,
+        'www.booktxt.net' => IBiQuGe::class
     ];
 
     /**
