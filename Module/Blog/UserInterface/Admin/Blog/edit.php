@@ -15,9 +15,7 @@ $js = <<<JS
     });
 JS;
 
-$this->registerJsFile('/assets/ueditor/ueditor.config.js')
-    ->registerJsFile('/assets/ueditor/ueditor.all.js')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
