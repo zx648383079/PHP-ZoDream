@@ -95,7 +95,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
                 <?php endforeach;?>
             </ul>
         </div>
-
+        <?php if(!empty($comment_list)):?>
         <div class="book-dynamic">
             <h3>最新留言</h3>
             <?php foreach ($comment_list as $item): ?>
@@ -108,6 +108,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
             </dl>
             <?php endforeach;?>
         </div>
+        <?php endif;?>
     </div>
     
     <div class="book-body">
@@ -154,9 +155,5 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
 
         </div>
     </div>
-
-
-
-
     
 <?php $this->extend('layouts/footer');?>
