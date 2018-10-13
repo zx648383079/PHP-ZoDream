@@ -77,7 +77,7 @@ let strFormat = function(arg: string, ...args: any[]) {
 }
 
 $(function() {
-    if (Upload) {
+    if ($.upload) {
         let file_upload = new Upload(null, {
             url: '/ueditor.php?action=uploadimage',
             name: 'upfile',

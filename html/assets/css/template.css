@@ -1,0 +1,46 @@
+.template-edit-page .template-page-header .action_list {
+  text-align: right;
+  background: #fcc; }
+
+.template-edit-page .template-page-body {
+  position: relative; }
+  .template-edit-page .template-page-body .template-weight-left {
+    height: 400px;
+    width: 300px; }
+  .template-edit-page .template-page-body .template-weight-box {
+    margin-left: 300px; }
+
+.template-edit-page.view-mode .template-weight-left,
+.template-edit-page.view-mode .template-weight-property {
+  display: none; }
+
+.card {
+  width: 150px;
+  height: 200px;
+  float: left;
+  margin: 5px;
+  position: relative;
+  border: 1px solid;
+  overflow: hidden; }
+  .card .card-logo img {
+    width: 150px;
+    height: 200px; }
+  .card .card-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 80px;
+    background: rgba(255, 255, 255, 0.6); }
+    .card .card-body h3 {
+      text-align: center; }
+  .card.card-add .card-logo {
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100px;
+    height: 100px;
+    margin: 50px auto 0;
+    text-align: center;
+    font-size: 75px; }
+
+/*# sourceMappingURL=template.css.map */
