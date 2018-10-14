@@ -1,0 +1,75 @@
+<?php
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+use Zodream\Html\Dark\Form;
+/** @var $this View */
+$this->title = $site->title;
+?>
+
+<div class="container">
+    <?=Form::open($site, './admin/site/save')?>
+        <div class="zd-tab">
+            <div class="zd-tab-head">
+                <div class="zd-tab-item active">
+                    基本
+                </div>
+                <div class="zd-tab-item">
+                    高级
+                </div>
+            </div>
+            <div class="zd-tab-body">
+                <div class="zd-tab-item active">
+                    <?=Form::text('name', true)?>
+                    <?=Form::text('title', true)?>
+                    <?=Form::text('keywords')?>
+                    <?=Form::text('domain')?>
+                    <?=Form::file('thumb')?>
+                    <?=Form::textarea('description')?>
+                </div>
+                <div class="zd-tab-item">
+                    
+                </div>
+            </div>
+        </div>
+    <?= Form::close('id') ?>
+    <div class="card-box">
+        <?php foreach($page_list as $item):?>
+        <div class="card">
+            <div class="card-logo">
+                <a href="<?=$this->url('./admin/page', ['id' => $item->id])?>">
+                    <img src="<?=$item->thumb?>" alt="">
+                </a>
+            </div>
+            <div class="card-body">
+                <h3><?=$item->title?></h3>
+                <p><?=$item->descriptio ?></p>
+            </div>
+        </div>
+        <?php endforeach;?>
+        
+
+        <div class="card card-add">
+            <div class="card-logo">
+                <a href="<?=$this->url('./admin/page', ['site_id' => $site->id])?>">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <h3>新增普通网页</h3>
+                <p></p>
+            </div>
+        </div>
+
+        <div class="card card-add">
+            <div class="card-logo">
+                <a href="<?=$this->url('./admin/page', ['site_id' => $site->id, 'type' => 1])?>">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <h3>新增WAP网页</h3>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,25 +1,11 @@
 <?php
-
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 
 /** @var $this View */
-$this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@zodream.min.css')
-    ->registerCssFile('@template.min.css')
-    ->registerJsFile('@jquery.min.js')
-    ->registerJsFile('@template.js');
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>模板编辑</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?=$this->header()?>
-</head>
-
-<body class="template-edit-page">
+<div class="template-edit-page">
     <div class="template-page-header">
         <div class="action_list">
             <button class="btn">保存</button>
@@ -195,17 +181,86 @@ $this->registerCssFile('@font-awesome.min.css')
                     </div>
                     <div class="zd-tab-body">
                         <div class="zd-tab-item active">
+                            <div class="input-group">
+                                <label for="">标题</label>
+                                <input type="text">
+                            </div>
+                            
                         </div>
                         <div class="zd-tab-item">
+                            <div class="panel">
+                                <div class="panel-header">标题</div>
+                                <div class="panel-body">
+                                    <div class="input-group">
+                                        <label for="">背景</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="radio" name="" id="">显示
+                                        <input type="radio" name="" id="">不显示
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">边框圆角</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">颜色</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">字体</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">位置</label>
+                                        <select name="" id="">
+                                            <option value="">居左</option>
+                                            <option value="">居中</option>
+                                            <option value="">居右</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <div class="panel-header">边框</div>
+                                <div class="panel-body">
+                                    <div class="input-group">
+                                        <label for="">背景</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">边框</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">边框圆角</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">外边距</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">内边距</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">粗细</label>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="zd-tab-item">
+                            <?php foreach($style_list as $item):?>
+                            <div class="style-item">
+                                <img src="<?=$item['thumb']?>" alt="<?=$item['title']?>">
+                            </div>
+                            <?php endforeach;?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <?=$this->footer()?>
-</body>
-</html>
+</div>

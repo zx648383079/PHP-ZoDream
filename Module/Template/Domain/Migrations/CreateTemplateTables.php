@@ -21,6 +21,7 @@ class CreateTemplateTables extends Migration {
             $table->set('name')->varchar(100)->notNull();
             $table->set('title')->varchar(200)->defaultVal('New Page');
             $table->set('keywords')->varchar(255);
+            $table->set('thumb')->varchar(255);
             $table->set('description')->varchar(255);
             $table->set('domain')->varchar(50);
             $table->timestamps();
@@ -32,9 +33,11 @@ class CreateTemplateTables extends Migration {
             $table->set('name')->varchar(100)->notNull();
             $table->set('title')->varchar(200)->defaultVal('New Page');
             $table->set('keywords')->varchar(255);
+            $table->set('thumb')->varchar(255);
             $table->set('description')->varchar(255);
             $table->set('template')->varchar(255);
             $table->set('settings')->text();
+            $table->set('position')->tinyint(2)->defaultVal(10);
             $table->softDeletes();
             $table->timestamps();
         });

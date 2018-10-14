@@ -1,5 +1,5 @@
 <?php
-
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Template\Domain\Page;
 
@@ -10,23 +10,13 @@ JS;
 
 /** @var $this View */
 /** @var $page Page */
-$this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@template_mobile.css')
-    ->registerJsFile('@jquery.min.js')
+$this->registerCssFile('@template_mobile.css')
     ->registerJsFile('@jquery-ui.min.js')
     ->registerJsFile('@jquery.htmlClean.min.js')
     ->registerJsFile('@template_mobile.min.js')
     ->registerJs($js);
 ?>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <title>可视化布局</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?=$this->header()?>
-</head>
-<body>
+
 <nav class="top-nav">
     <ul class="navbar">
         <li>
@@ -114,7 +104,3 @@ $this->registerCssFile('@font-awesome.min.css')
         </div>
     </div>
 </div>
-
-<?=$this->footer()?>
-</body>
-</html>

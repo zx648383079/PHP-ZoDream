@@ -1,7 +1,6 @@
 <?php
 namespace Module\Template\Domain;
 
-
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Zodream\Disk\Directory;
@@ -40,6 +39,8 @@ class Page {
      */
     protected $isEditMode = false;
 
+    protected $booted = false;
+
     public function __construct($page, $isEditMode = false) {
         $this->page = $page instanceof PageModel
             ? $page :
@@ -47,6 +48,22 @@ class Page {
         $this->directory = Factory::root()
             ->directory('Module/Template/UserInterface/templates/default');
         $this->setIsEditMode($isEditMode);
+
+    }
+
+    public function boot() {
+        if ($this->booted) {
+            return;
+        }
+        $this->booted = true;
+        $this->factory = new ViewFactory();
+        $this->factory->setEngine(ParserCompiler::class)
+            ->setConfigs([
+                'suffix' => '.html'
+            ])
+            ->set('page', $this)
+            ->setDirectory($this->directory)
+            ->getEngine()->registerFunc('weight', '<?=$page->weight(%s)?>');
         $this->loadWeights();
     }
 
@@ -84,16 +101,7 @@ class Page {
     }
 
     public function getFactory() {
-        if (empty($this->factory)) {
-            $this->factory = new ViewFactory();
-            $this->factory->setEngine(ParserCompiler::class)
-                ->setConfigs([
-                    'suffix' => '.html'
-                ])
-                ->set('page', $this)
-                ->setDirectory($this->directory)
-                ->getEngine()->registerFunc('weight', '<?=$page->weight(%s)?>');
-        }
+        $this->boot();
         return $this->factory;
     }
 
@@ -101,6 +109,7 @@ class Page {
         if (!is_array($weight)) {
             $weight = func_get_args();
         }
+        $this->boot();
         $this->weights = array_merge($this->weights, $weight);
     }
 
@@ -117,6 +126,7 @@ class Page {
      * @return PageWeightModel[]
      */
     public function getWeightList($parent_id, $ext = null) {
+        $this->boot();
         $data = [];
         foreach ($this->weights as $weight) {
             if ($weight->parent_id != $parent_id) {
@@ -149,6 +159,7 @@ HTML;
     }
 
     public function renderWeight(PageWeightModel $model) {
+        $this->boot();
         $html = $model->weight
             ->getWeightInstance()
             ->setPage($this)
@@ -173,6 +184,7 @@ HTML;
     }
 
     public function render() {
+        $this->boot();
         return $this->getFactory()->render($this->page->template, [
             'keywords' => $this->page->keywords,
             'description' => $this->page->description,
