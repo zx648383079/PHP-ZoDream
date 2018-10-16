@@ -1,184 +1,119 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Template\Domain\Page;
+
+$base_url = $this->url('./admin/');
+$id = $page->getPage('id');
+$js = <<<JS
+var PAGE_ID = '{$id}',
+    BASE_URI = '{$base_url}';
+JS;
+
 
 /** @var $this View */
+/** @var $page Page */
+$this->registerCssFile('@template.css')
+    ->registerJsFile('@jquery-ui.min.js')
+    ->registerJsFile('@jquery.htmlClean.min.js')
+    ->registerJsFile('@template.min.js')
+    ->registerJs($js);
 ?>
 
-<div class="template-edit-page">
-    <div class="template-page-header">
-        <div class="action_list">
-            <button class="btn">保存</button>
-            <button class="btn">取消</button>
-        </div>
-    </div>
-    <div class="template-page-body">
-        <div id="weight-box" class="zd-panel template-weight-left">
-            <div class="zd-panel-head">
+<nav class="top-nav">
+    <ul class="navbar">
+        <li>
+            <div>
+                <i class="fa fa-mobile"></i>
+                <span>屏幕</span>
+            </div>
+            <ul class="down mobile-size">
+                <li data-size="320*568"><i class="fa fa-mobile"></i>iPhone 5</li>
+                <li data-size="360*640"><i class="fa fa-mobile"></i>Galaxy S5</li>
+                <li data-size="370*640"><i class="fa fa-mobile"></i>Lumia 650</li>
+                <li data-size="375*812"><i class="fa fa-mobile"></i>iPhone X</li>
+                <li data-size="412*732"><i class="fa fa-mobile"></i>Nexus 5X</li>
+                <li data-size="414*736"><i class="fa fa-mobile"></i>iPhone 6 Plus</li>
+                <li data-size="768*1024"><i class="fa fa-tablet"></i>iPad</li>
+                <li data-size="*"><i class="fa fa-desktop"></i>全屏</li>
+            </ul>
+        </li>
+        <li>
+            <div class="mobile-rotate">
+                <i class="fa fa-undo"></i>
+                <span>旋转</span>
+            </div>
+        </li>
+        <li>
+            <a data-type="ajax" href="<?=$this->url('./admin/weight/install')?>">
+                <i class="fa fa-refresh"></i>
+                <span>刷新</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<div id="page-box">
+    <div id="weight" class="left fixed">
+        <div class="panel">
+            <div class="head">
                 <span class="title">部件</span>
                 <a class="fa fa-close"></a>
             </div>
-            <div class="zd-panel-body">
-                <div class="zd-tab">
-                    <div class="zd-tab-head">
-                        <div class="zd-tab-item active">
+            <div class="body">
+            <?php foreach ($weight_list as $key => $weights):?>
+                <ul class="menu">
+                    <li class="expand open">
+                        <div class="head">
                             布局
+                            <span class="fa fa-chevron-down"></span>
                         </div>
-                        <div class="zd-tab-item">
-                            基本
-                        </div>
-                        <div class="zd-tab-item">
-                            高级
-                        </div>
-                    </div>
-                    <div class="zd-tab-body">
-                        <div class="zd-tab-item active">
-                            <div class="zd-list-view">
-                                <div class="zd-list-item">
-                                    <div class="preview">
-                                        <img src="image/banner1.jpg" alt="">
-                                        <p>两栏式</p>
+                        <div class="body list-view">
+                            <?php foreach ($weights as $item):?>
+                            <div class="item weight-grid" data-type="weight" data-weight="<?=$item->id?>">
+                                <div class="preview">
+                                    <div class="thumb">
+                                        <span class="fa fa-user"></span>
                                     </div>
-                                    <div class="action">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-gear"></i>
-                                        <i class="fa fa-remove"></i>
-                                    </div>
-                                    <div class="view">
-                                        <div class="row">
-                                            <div class="col-md-6 weight-list">
-                                            </div>
-                                            <div class="col-md-6 weight-list">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p class="title"><?=$item->name?></p>
                                 </div>
-                                <div class="zd-list-item">
-                                    <div class="preview">
-                                        <img src="image/banner2.jpg" alt="">
-                                        <p>三栏</p>
-                                    </div>
-                                    <div class="action">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-gear"></i>
-                                        <i class="fa fa-remove"></i>
-                                    </div>
-                                    <div class="view">
-                                        <div class="row">
-                                            <div class="col-md-4 weight-list">
-                                            </div>
-                                            <div class="col-md-4 weight-list">
-                                            </div>
-                                            <div class="col-md-4 weight-list">
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="action">
+                                    <?php if ($item->editable):?>
+                                    <a class="edit">编辑</a>
+                                    <?php endif;?>
+                                    <a class="drag">拖拽</a>
+                                    <a class="del">删除</a>
                                 </div>
-                                <div class="zd-list-item">
-                                    <div class="preview">
-                                        <img src="image/banner3.jpeg" alt="">
-                                        <p>四栏</p>
-                                    </div>
-                                    <div class="action">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-gear"></i>
-                                        <i class="fa fa-remove"></i>
-                                    </div>
-                                    <div class="view">
-                                        <div class="row">
-                                            <div class="col-md-3 weight-list">
-                                            </div>
-                                            <div class="col-md-3 weight-list">
-                                            </div>
-                                            <div class="col-md-3 weight-list">
-                                            </div>
-                                            <div class="col-md-3 weight-list">
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="view">
                                 </div>
                             </div>
+                            <?php endforeach;?>
                         </div>
-                        <div class="zd-tab-item">
-                            <div class="zd-list-view">
-                                <div class="zd-list-item">
-                                    <div class="preview">
-                                        <img src="image/banner1.jpg" alt="">
-                                        <p>导航</p>
-                                    </div>
-                                    <div class="action">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-gear"></i>
-                                        <i class="fa fa-remove"></i>
-                                    </div>
-                                    <div class="view">
-                                        <div>
-                                            1111111111111111111
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="zd-list-item">
-                                    <div class="preview">
-                                        <img src="image/banner1.jpg" alt="">
-                                        <p>导航</p>
-                                    </div>
-                                    <div class="action">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-gear"></i>
-                                        <i class="fa fa-remove"></i>
-                                    </div>
-                                    <div class="view">
-                                        <div>
-                                            333333333
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="zd-list-item">
-                                    <div class="preview">
-                                        <img src="image/banner1.jpg" alt="">
-                                        <p>导航</p>
-                                    </div>
-                                    <div class="action">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-gear"></i>
-                                        <i class="fa fa-remove"></i>
-                                    </div>
-                                    <div class="view">
-                                        <div>
-                                            55555
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="zd-tab-item">
-
-                        </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
+                <?php endforeach;?>
             </div>
         </div>
-        <div class="template-weight-box">
-
+    </div>
+    <div id="mainMobile" class="<?= $model->type > 0 ? 'mobile-320':''?>">
+        <div id="mainGrid">
+            <?=$page->template()?>
         </div>
-        <div id="property-box" class="zd-panel right template-weight-property">
-            <div class="zd-panel-head">
+    </div>
+    <div id="property" class="right fixed">
+        <div class="panel">
+            <div class="head">
                 <span class="title">属性</span>
                 <a class="fa fa-close"></a>
             </div>
-            <div class="zd-panel-body">
-                <div class="zd-tab">
-                    <div class="zd-tab-head">
-                        <div class="zd-tab-item active">
+            <div class="body">
+            <div class="zd-tab">
+                    <div class="zd-tab-head"><div class="zd-tab-item active">
                             普通
-                        </div>
-                        <div class="zd-tab-item">
+                        </div><div class="zd-tab-item">
                             高级
-                        </div>
-                        <div class="zd-tab-item">
+                        </div><div class="zd-tab-item">
                             样式
-                        </div>
-                    </div>
+                        </div></div>
                     <div class="zd-tab-body">
                         <div class="zd-tab-item active">
                             <div class="input-group">

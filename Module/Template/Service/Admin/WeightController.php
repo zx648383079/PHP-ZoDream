@@ -49,6 +49,8 @@ class WeightController extends Controller {
             }
             WeightModel::install($item);
         }
-        return $this->jsonSuccess();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
     }
 }

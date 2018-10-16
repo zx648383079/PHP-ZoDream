@@ -83,6 +83,18 @@ class WeightModel extends Model {
         return new $name;
     }
 
+    /**
+     * @return array
+     */
+    public static function groupByType() {
+        $data = self::all();
+        $args = [];
+        foreach ($data as $item) {
+            $args[$item->type][] = $item;
+        }
+        return $args;
+    }
+
 
     public static function findWeights() {
         $directory = new Directory(dirname(dirname(__DIR__)) . '/UserInterface/weights');
