@@ -51,3 +51,34 @@
         }
     }
 }
+
+.weight-page-header {
+    position: fixed;
+    z-index: 10;
+    right: 0;
+    left: 0;
+    height: 44px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-bottom: 0;
+    background-color: #f7f7f7;
+    .title {
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 44px;
+        position: absolute;
+        right: 40px;
+        left: 40px;
+        display: inline-block;
+        overflow: hidden;
+        width: auto;
+        margin: 0;
+        text-overflow: ellipsis;
+    }
+    .action-back {
+
+    }
+    .action-btn {
+
+    }
+}
