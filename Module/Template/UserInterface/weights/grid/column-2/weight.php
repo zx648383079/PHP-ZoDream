@@ -3,7 +3,7 @@
 use Module\Template\Service\BaseWeight;
 use Module\Template\Domain\Model\PageWeightModel;
 
-class Column2Wight extends BaseWeight {
+class Column2Weight extends BaseWeight {
 
     /**
      * 获取生成的部件视图
@@ -14,10 +14,10 @@ class Column2Wight extends BaseWeight {
         return <<<HTML
 <div data-type="weight" data-weight="column-2">
     <div>
-    {$this->weights($pageWeightModel->id, 1)}
+    {$this->weight($pageWeightModel->id, 1)}
     </div>
     <div>
-    {$this->weights($pageWeightModel->id, 2)}
+    {$this->weight($pageWeightModel->id, 2)}
     </div>
 </div>
 HTML;

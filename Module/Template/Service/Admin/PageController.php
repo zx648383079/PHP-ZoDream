@@ -16,4 +16,18 @@ class PageController extends Controller {
         return $this->show(compact('page', 'model', 'style_list', 'weight_list'));
     }
 
+    public function createAction($site_id, $type = 0) {
+        $model = PageModel::create([
+            'site_id' => $site_id,
+            'type' => $type,
+            'name' => 'new_page',
+            'title' => 'New Page',
+            'template' => 'index',
+            'thumb' => '/assets/images/blog.png'
+        ]);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('page', ['id' => $model->id])
+        ]);
+    }
+
 }

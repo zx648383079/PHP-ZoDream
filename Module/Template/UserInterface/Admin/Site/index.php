@@ -10,7 +10,7 @@ $this->title = $site->title;
     <?=Form::open($site, './admin/site/save')?>
         <div class="zd-tab">
             <div class="zd-tab-head">
-                <div class="zd-tab-item active">
+                <div class="zd-tab-item">
                     基本
                 </div>
                 <div class="zd-tab-item">
@@ -18,19 +18,21 @@ $this->title = $site->title;
                 </div>
             </div>
             <div class="zd-tab-body">
-                <div class="zd-tab-item active">
+                <div class="zd-tab-item">
                     <?=Form::text('name', true)?>
                     <?=Form::text('title', true)?>
                     <?=Form::text('keywords')?>
                     <?=Form::text('domain')?>
                     <?=Form::file('thumb')?>
                     <?=Form::textarea('description')?>
+                    <button type="submit" class="btn btn-success">确认保存</button>
                 </div>
                 <div class="zd-tab-item">
                     
                 </div>
             </div>
         </div>
+        
     <?= Form::close('id') ?>
     <div class="card-box">
         <?php foreach($page_list as $item):?>
@@ -50,7 +52,7 @@ $this->title = $site->title;
 
         <div class="card card-add">
             <div class="card-logo">
-                <a href="<?=$this->url('./admin/page', ['site_id' => $site->id])?>">
+                <a data-type="ajax" href="<?=$this->url('./admin/page/create', ['site_id' => $site->id])?>">
                     <i class="fa fa-plus"></i>
                 </a>
             </div>
@@ -62,7 +64,7 @@ $this->title = $site->title;
 
         <div class="card card-add">
             <div class="card-logo">
-                <a href="<?=$this->url('./admin/page', ['site_id' => $site->id, 'type' => 1])?>">
+                <a data-type="ajax" href="<?=$this->url('./admin/page/create', ['site_id' => $site->id, 'type' => 1])?>">
                     <i class="fa fa-plus"></i>
                 </a>
             </div>

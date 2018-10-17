@@ -16,4 +16,26 @@ class SiteController extends Controller {
     }
 
 
+    public function createAction() {
+        $site = SiteModel::create([
+            'name' => 'new_site',
+            'title' => 'New Site',
+            'thumb' => '/assets/images/blog.png'
+        ]);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('site', ['id' => $site->id])
+        ]);
+    }
+
+    public function saveAction() {
+        $model = new SiteModel();
+        if ($model->load() && $model->autoIsNew()->save()) {
+            return $this->jsonSuccess([
+                'url' => $this->getUrl('site', ['id' => $model->id])
+            ]);
+        }
+        return $this->jsonFailure($model->getFirstError());
+    }
+
+
 }

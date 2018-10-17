@@ -3,7 +3,7 @@
 use Module\Template\Service\BaseWeight;
 use Module\Template\Domain\Model\PageWeightModel;
 
-class TestWight extends BaseWeight {
+class TestWeight extends BaseWeight {
 
     /**
      * 获取生成的部件视图
@@ -13,6 +13,6 @@ class TestWight extends BaseWeight {
      * @throws \Zodream\Disk\FileException
      */
     public function render(PageWeightModel $model){
-        return $this->page->getFactory()->render('view', $model);
+        return $this->page->getFactory()->render('view', compact('model'));
     }
 }

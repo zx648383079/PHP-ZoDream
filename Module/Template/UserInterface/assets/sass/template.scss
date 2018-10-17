@@ -176,6 +176,15 @@ $sizes: (320: 568,
                         display: block;
                     }
                 }
+                &.weight-loading {
+                    .view {
+                        text-align: center;
+                        background: rgba(0, 0, 0, .1);
+                        img {
+                            height: 80px;
+                        }
+                    }
+                }
             }
         }
 

@@ -56,14 +56,6 @@ class Page {
             return;
         }
         $this->booted = true;
-        $this->factory = new ViewFactory();
-        $this->factory->setEngine(ParserCompiler::class)
-            ->setConfigs([
-                'suffix' => '.html'
-            ])
-            ->set('page', $this)
-            ->setDirectory($this->directory)
-            ->getEngine()->registerFunc('weight', '<?=$page->weight(%s)?>');
         $this->loadWeights();
     }
 
@@ -101,8 +93,16 @@ class Page {
     }
 
     public function getFactory() {
-        $this->boot();
+        if (empty($this->factory)) {
+            $this->initFactory();
+        }
         return $this->factory;
+    }
+
+    protected function initFactory() {
+        $this->factory = static::newViewFactory()
+            ->set('page', $this)
+            ->setDirectory($this->directory);
     }
 
     public function addWeight($weight) {
@@ -159,28 +159,7 @@ HTML;
     }
 
     public function renderWeight(PageWeightModel $model) {
-        $this->boot();
-        $html = $model->weight
-            ->getWeightInstance()
-            ->setPage($this)
-            ->setDirectory($model->weight->path)
-            ->render($model);
-        if ($this->isEditMode) {
-            $editHtml = $model->weight->editable ? '<a class="edit">编辑</a>' : '';
-            return <<<HTML
-<div class="item weight-grid" data-type="weight" data-id="{$model->id}">
-    <div class="action">
-        {$editHtml}
-        <a class="drag">拖拽</a>
-        <a class="del">删除</a>
-    </div>
-    <div class="view">
-        {$html}
-    </div>
-</div>
-HTML;
-        }
-        return $html;
+        return (new Weight($model, $this))->render($this->isEditMode);
     }
 
     public function render() {
@@ -191,11 +170,31 @@ HTML;
         ]);
     }
 
+    public function renderWithNewRoot(Directory $root, $name, array $data = []) {
+        $directory = $this->getFactory()->getDirectory();
+        $html = $this->getFactory()
+            ->setDirectory($root)
+            ->render($name, $data);
+        $this->getFactory()
+            ->setDirectory($directory);
+        return $html;
+    }
+
     public function template() {
         return $this->render();
     }
 
     public function __toString() {
         return $this->render();
+    }
+
+    public static function newViewFactory() {
+        $factory = new ViewFactory();
+        $factory->setEngine(ParserCompiler::class)
+            ->setConfigs([
+                'suffix' => '.html'
+            ])
+            ->getEngine()->registerFunc('weight', '<?=$page->weight(%s)?>');
+        return $factory;
     }
 }

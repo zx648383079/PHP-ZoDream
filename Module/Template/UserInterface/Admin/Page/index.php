@@ -6,8 +6,7 @@ use Module\Template\Domain\Page;
 $base_url = $this->url('./admin/');
 $id = $page->getPage('id');
 $js = <<<JS
-var PAGE_ID = '{$id}',
-    BASE_URI = '{$base_url}';
+bindPage('{$id}', '{$base_url}');
 JS;
 
 
@@ -17,7 +16,7 @@ $this->registerCssFile('@template.css')
     ->registerJsFile('@jquery-ui.min.js')
     ->registerJsFile('@jquery.htmlClean.min.js')
     ->registerJsFile('@template.min.js')
-    ->registerJs($js);
+    ->registerJs($js, View::JQUERY_READY);
 ?>
 
 <nav class="top-nav">
@@ -84,6 +83,7 @@ $this->registerCssFile('@template.css')
                                     <a class="del">删除</a>
                                 </div>
                                 <div class="view">
+                                    <img src="/assets/images/ajax.gif" alt="">
                                 </div>
                             </div>
                             <?php endforeach;?>

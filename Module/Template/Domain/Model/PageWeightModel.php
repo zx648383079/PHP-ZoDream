@@ -83,7 +83,28 @@ class PageWeightModel extends Model {
         $model = static::findOrNew($args['id']);
         $model->set($args);
         $model->save();
-        die(var_dump($model->getError()));
         return $model;
+    }
+
+    /**
+     * 删除自身及子代
+     * @param $id
+     * @return boolean
+     */
+    public static function removeSelfAndChild($id) {
+        if ($id < 1) {
+            return true;
+        }
+        $data = [$id];
+        $parents = $data;
+        while (true) {
+            $parents = self::whereIn('parent_id', $parents)
+                ->pluck('id');
+            if (empty($parents)) {
+                break;
+            }
+            $data = array_merge($data, $parents);
+        }
+        return self::whereIn('id', $data)->delete();
     }
 }

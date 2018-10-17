@@ -93,6 +93,11 @@
           border: 1px solid #b4183a; }
           #mainMobile #mainGrid .weight-row .weight-grid:hover .action, #mainMobile #mainGrid .weight-row .weight-grid.weight-edit-mode .action {
             display: block; }
+        #mainMobile #mainGrid .weight-row .weight-grid.weight-loading .view {
+          text-align: center;
+          background: rgba(0, 0, 0, 0.1); }
+          #mainMobile #mainGrid .weight-row .weight-grid.weight-loading .view img {
+            height: 80px; }
     #mainMobile #mainGrid::-webkit-scrollbar {
       width: 8px;
       height: 8px; }

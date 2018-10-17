@@ -2,13 +2,8 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Template\Service\BaseWeight;
-use phpDocumentor\Reflection\Types\Self_;
 use Zodream\Disk\Directory;
-use Zodream\Disk\File;
-use Zodream\Disk\FileException;
 use Zodream\Disk\FileObject;
-use Zodream\Helpers\Str;
 use Zodream\Service\Factory;
 
 /**
@@ -63,25 +58,16 @@ class WeightModel extends Model {
 
     }
 
-    /**
-     * @return BaseWeight
-     * @throws FileException
-     */
-    public function getWeightInstance() {
-        $path = $this->path;
-        if (empty($path)) {
-            throw new FileException($path);
+
+    public function getDirectoryAttribute() {
+        if (file_exists($this->path)) {
+            return new Directory(is_dir($this->path)
+                ? $this->path : dirname($this->path));
         }
-        if (is_dir($path)) {
-            $path = rtrim($path, '/\\'). '/weight.php';
-        }
-        if (!is_file($path)) {
-            return new $path;
-        }
-        include_once $path;
-        $name = Str::studly($this->name).'Weight';
-        return new $name;
+        return Factory::root()->child($this->path);
     }
+
+
 
     /**
      * @return array
@@ -117,7 +103,7 @@ class WeightModel extends Model {
 
     protected static function getWeightInfo(Directory $directory) {
         $data = json_decode($directory->childFile('weight.json')->read(), true);
-        $data['path'] = $directory;
+        $data['path'] = $directory->getRelative(Factory::root());
         return $data;
     }
 

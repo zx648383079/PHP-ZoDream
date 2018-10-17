@@ -1,9 +1,11 @@
 <?php
 namespace Module\Template\Service\Admin;
 
+use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\WeightModel;
 
+use Module\Template\Domain\Page;
 use Zodream\Route\Controller\Controller;
 
 class WeightController extends Controller {
@@ -17,14 +19,18 @@ class WeightController extends Controller {
     }
 
     public function createAction() {
-        $page = intval(app('request')->get('page'));
-        $weight = intval(app('request')->get('weight'));
+        $page_id = intval(app('request')->get('page_id'));
+        $weight_id = intval(app('request')->get('weight_id'));
         $parent_id = intval(app('request')->get('parent_id'));
-        return $this->jsonSuccess(PageWeightModel::create([
-            'page_id' => $page,
-            'weight_id' => $weight,
+        $model = PageWeightModel::create([
+            'page_id' => $page_id,
+            'weight_id' => $weight_id,
             'parent_id' => $parent_id
-        ]));
+        ]);
+        $data = $model->toArray();
+        $data['html'] = (new Page(PageModel::find($page_id)))
+            ->renderWeight($model);
+        return $this->jsonSuccess($data);
     }
 
     public function saveAction() {
@@ -33,7 +39,7 @@ class WeightController extends Controller {
     }
 
     public function destroyAction($id) {
-        PageWeightModel::where('id', $id)->delete();
+        PageWeightModel::removeSelfAndChild(intval($id));
         return $this->jsonSuccess();
     }
 

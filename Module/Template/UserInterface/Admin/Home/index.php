@@ -24,7 +24,7 @@ $this->title = '站点选择';
 
         <div class="card card-add">
             <div class="card-logo">
-                <a href="<?=$this->url('./admin/site')?>">
+                <a data-type="ajax" href="<?=$this->url('./admin/site/create')?>">
                     <i class="fa fa-plus"></i>
                 </a>
             </div>

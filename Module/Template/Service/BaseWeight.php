@@ -4,6 +4,7 @@ namespace Module\Template\Service;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Page;
 use Zodream\Disk\Directory;
+use Exception;
 
 
 abstract class BaseWeight {
@@ -69,17 +70,22 @@ abstract class BaseWeight {
      *
      * @param string $name 视图的文件名
      * @param array $data 要传的数据
-     * @return Response
+     * @return string
      * @throws \Exception
      */
     public function show($name = null, $data = array()) {
         $data['page'] = $this->page;
-        return $this->page->getFactory()
-            ->setDirectory($this->directory)
-            ->render($name, $data);
+        return $this->page->renderWithNewRoot($this->directory, $name, $data);
     }
 
     public function __call($name, $arguments) {
+        if (!method_exists($this->page, $name)) {
+            throw new Exception(
+                __('{method} not found!', [
+                    'method' => $name
+                ])
+            );
+        }
         return $this->page->{$name}(...$arguments);
     }
 }

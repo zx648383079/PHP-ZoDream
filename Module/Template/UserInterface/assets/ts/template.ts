@@ -54,6 +54,8 @@ class Weight {
         
     }
 
+
+
     public toggle(state?: boolean) {
         this.box.toggleClass('weight-edit-mode', state);
         return this;
@@ -63,10 +65,19 @@ class Weight {
         this.box.toggleClass('weight-loading', state);
         return this;
     }
+
+    /**
+     * html
+     */
+    public html(html?: string) {
+        return this.box.find('.view').html(html);
+    }
 }
 
 class Page {
     constructor(
+        public id: number,
+        public baseUri: string
     ) {
         this.box = $("#page-box");
         this.element = $('#mainMobile');
@@ -96,12 +107,7 @@ class Page {
             connectWith: ".weight-row"
         });
         this.body.on("click", ".del", function() {
-            let ele = $(this).parent().parent();
-            $.post('/template/weight/destroy?id=' + ele.attr('data-id'), {}, function(data) {
-                if (data.code == 200) {
-                    ele.remove();
-                }
-            });
+            that.removeWeight($(this).closest('.weight-grid'));
         }).on("click", ".edit", function(e) {
             e.stopPropagation();
             that.setWeight($(this).parents('.weight-grid'));
@@ -117,20 +123,31 @@ class Page {
         return this.weight;
     }
 
+    public removeWeight(element: JQuery) {
+        this.post('weight/destroy', {
+            id: element.attr('data-id')
+        }, function(data) {
+            if (data.code == 200) {
+                element.remove();
+            }
+        });
+    }
+
     public addWeight(element: JQuery, parent: JQuery): Weight {
         let that = this;
         element.width('auto');
         let weight = this.setWeight(element).toggleLoading(true);
-        $.post('/template/weight/create', {
-            page: PAGE_ID,
-            weight: element.attr('data-weight'),
+        this.post('weight/create', {
+            weight_id: element.attr('data-weight'),
             parent_id: parent.attr('data-id')
         }, function(data) {
             weight.toggleLoading(false);
             if (data.code == 200) {
                 element.attr('data-id', data.data.id);
+                weight.html(data.data.html);
             }
-        }, 'json');
+        });
+        return weight;
     }
 
     public resize() {
@@ -155,10 +172,20 @@ class Page {
             ]
         });
     }
+
+    /**
+     * postJson
+     */
+    public post(path: string, data: any, cb: any) {
+        data['page_id'] = this.id;
+        postJson(this.baseUri + path, data, cb);
+        return this;
+    }
 }
 
-$(document).ready(function () {
-    let page = new Page(),
+
+function bindPage(pageId: number, baseUri: string) {
+    let page = new Page(pageId, baseUri),
         weight = new Panel('#weight', page),
         property = new Panel('#property', page);
     weight.bindDrag();
@@ -180,4 +207,4 @@ $(document).ready(function () {
     $(".expand>.head").click(function() {
         $(this).parent().toggleClass("open");
     });
-});
+}
