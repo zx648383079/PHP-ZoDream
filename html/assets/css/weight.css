@@ -1,0 +1,71 @@
+.weight-page-bar {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: table;
+  width: 100%;
+  height: 50px;
+  padding: 0;
+  table-layout: fixed;
+  border-top: 0;
+  border-bottom: 0; }
+  .weight-page-bar a {
+    display: table-cell;
+    overflow: hidden;
+    width: 1%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    color: #929292; }
+    .weight-page-bar a i {
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1;
+      display: inline-block;
+      text-decoration: none;
+      -webkit-font-smoothing: antialiased;
+      font-size: 24px;
+      position: relative;
+      z-index: 20;
+      top: 3px;
+      width: 24px;
+      height: 24px;
+      padding-top: 0;
+      padding-bottom: 0; }
+    .weight-page-bar a span {
+      font-size: 11px;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    .weight-page-bar a.active {
+      color: #007aff; }
+
+.weight-page-header {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  left: 0;
+  height: 44px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-bottom: 0;
+  background-color: #f7f7f7; }
+  .weight-page-header .title {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 44px;
+    position: absolute;
+    right: 40px;
+    left: 40px;
+    display: inline-block;
+    overflow: hidden;
+    width: auto;
+    margin: 0;
+    text-overflow: ellipsis; }
+
+/*# sourceMappingURL=weight.css.map */

@@ -23,9 +23,17 @@ class Panel {
         });
     }
 
+    public toggle(state?: boolean) {
+        if (typeof state == 'boolean') {
+            state = !state;
+        }
+        this.element.toggleClass('min', state);
+        return this;
+    }
+
     public bindDrag() {
         let that = this;
-        this.element.find(".weight-grid").draggable({
+        this.element.find(".weight-edit-grid").draggable({
             connectToSortable: ".weight-row",
             helper: "clone",
             opacity: .3,
@@ -70,7 +78,7 @@ class Weight {
      * html
      */
     public html(html?: string) {
-        return this.box.find('.view').html(html);
+        return this.box.find('.weight-view').html(html);
     }
 }
 
@@ -82,6 +90,8 @@ class Page {
         this.box = $("#page-box");
         this.element = $('#mainMobile');
         this.body = $('#mainGrid');
+        this.weightBox = new Panel('#weight', this),
+        this.propertyBox = new Panel('#property', this);
         this._init();
     }
 
@@ -90,6 +100,10 @@ class Page {
     public element: JQuery;
 
     public body: JQuery;
+
+    public weightBox: Panel;
+
+    public propertyBox: Panel;
 
     public weight: Weight;
 
@@ -106,12 +120,13 @@ class Page {
         this.body.find(".weight-row").sortable({
             connectWith: ".weight-row"
         });
-        this.body.on("click", ".del", function() {
-            that.removeWeight($(this).closest('.weight-grid'));
-        }).on("click", ".edit", function(e) {
+        this.body.on("click", ".weight-action .del", function() {
+            that.removeWeight($(this).closest('.weight-edit-grid'));
+        }).on("click", ".weight-action .edit", function(e) {
             e.stopPropagation();
-            that.setWeight($(this).parents('.weight-grid'));
+            that.setWeight($(this).parents('.weight-edit-grid'));
         });
+        this.weightBox.bindDrag();
     }
 
     public setWeight(element: JQuery): Weight {
@@ -120,6 +135,8 @@ class Page {
         }
         this.weight = new Weight(element);
         this.weight.toggle(true);
+        this.weightBox.toggle(true);
+        this.propertyBox.toggle(true);
         return this.weight;
     }
 
@@ -185,10 +202,7 @@ class Page {
 
 
 function bindPage(pageId: number, baseUri: string) {
-    let page = new Page(pageId, baseUri),
-        weight = new Panel('#weight', page),
-        property = new Panel('#property', page);
-    weight.bindDrag();
+    let page = new Page(pageId, baseUri);
     $(".mobile-size li").click(function() {
         $(".mobile-size").parent().removeClass("open");
         let size = $(this).attr("data-size").split("*");

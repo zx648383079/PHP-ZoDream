@@ -82,13 +82,13 @@ class Weight {
         }
         $editHtml = $this->weight->editable ? '<a class="edit">编辑</a>' : '';
         return <<<HTML
-<div class="item weight-grid" data-type="weight" data-id="{$this->model->id}">
-    <div class="action">
+<div class="weight-edit-grid" data-type="weight" data-id="{$this->model->id}">
+    <div class="weight-action">
         {$editHtml}
         <a class="drag">拖拽</a>
         <a class="del">删除</a>
     </div>
-    <div class="view">
+    <div class="weight-view">
         {$html}
     </div>
 </div>

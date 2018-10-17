@@ -68,21 +68,21 @@ $this->registerCssFile('@template.css')
                         </div>
                         <div class="body list-view">
                             <?php foreach ($weights as $item):?>
-                            <div class="item weight-grid" data-type="weight" data-weight="<?=$item->id?>">
-                                <div class="preview">
+                            <div class="weight-edit-grid" data-type="weight" data-weight="<?=$item->id?>">
+                                <div class="weight-preview">
                                     <div class="thumb">
                                         <span class="fa fa-user"></span>
                                     </div>
                                     <p class="title"><?=$item->name?></p>
                                 </div>
-                                <div class="action">
+                                <div class="weight-action">
                                     <?php if ($item->editable):?>
                                     <a class="edit">编辑</a>
                                     <?php endif;?>
                                     <a class="drag">拖拽</a>
                                     <a class="del">删除</a>
                                 </div>
-                                <div class="view">
+                                <div class="weight-view">
                                     <img src="/assets/images/ajax.gif" alt="">
                                 </div>
                             </div>

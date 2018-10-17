@@ -64,19 +64,19 @@
     background: #fff; }
     #mainMobile #mainGrid.preview .row {
       min-height: auto; }
-    #mainMobile #mainGrid.preview .weight-grid .action {
+    #mainMobile #mainGrid.preview .weight-edit-grid .weight-action {
       display: none; }
     #mainMobile #mainGrid .weight-row {
       min-height: 100px; }
-      #mainMobile #mainGrid .weight-row .weight-grid {
+      #mainMobile #mainGrid .weight-row .weight-edit-grid {
         width: 100%;
         min-height: 50px;
         background: #fff;
         box-sizing: border-box;
         border: 1px dotted #7e8; }
-        #mainMobile #mainGrid .weight-row .weight-grid .preview {
+        #mainMobile #mainGrid .weight-row .weight-edit-grid .weight-preview {
           display: none; }
-        #mainMobile #mainGrid .weight-row .weight-grid .action {
+        #mainMobile #mainGrid .weight-row .weight-edit-grid .weight-action {
           position: absolute;
           right: 0;
           font-size: 0.7rem;
@@ -85,18 +85,18 @@
           background: #6a4;
           padding: 2px;
           display: none; }
-          #mainMobile #mainGrid .weight-row .weight-grid .action a {
+          #mainMobile #mainGrid .weight-row .weight-edit-grid .weight-action a {
             cursor: pointer; }
-          #mainMobile #mainGrid .weight-row .weight-grid .action .del {
+          #mainMobile #mainGrid .weight-row .weight-edit-grid .weight-action .del {
             color: #f00; }
-        #mainMobile #mainGrid .weight-row .weight-grid:hover, #mainMobile #mainGrid .weight-row .weight-grid.weight-edit-mode {
+        #mainMobile #mainGrid .weight-row .weight-edit-grid:hover, #mainMobile #mainGrid .weight-row .weight-edit-grid.weight-edit-mode {
           border: 1px solid #b4183a; }
-          #mainMobile #mainGrid .weight-row .weight-grid:hover .action, #mainMobile #mainGrid .weight-row .weight-grid.weight-edit-mode .action {
+          #mainMobile #mainGrid .weight-row .weight-edit-grid:hover .weight-action, #mainMobile #mainGrid .weight-row .weight-edit-grid.weight-edit-mode .weight-action {
             display: block; }
-        #mainMobile #mainGrid .weight-row .weight-grid.weight-loading .view {
+        #mainMobile #mainGrid .weight-row .weight-edit-grid.weight-loading .weight-view {
           text-align: center;
           background: rgba(0, 0, 0, 0.1); }
-          #mainMobile #mainGrid .weight-row .weight-grid.weight-loading .view img {
+          #mainMobile #mainGrid .weight-row .weight-edit-grid.weight-loading .weight-view img {
             height: 80px; }
     #mainMobile #mainGrid::-webkit-scrollbar {
       width: 8px;
@@ -220,22 +220,22 @@
   #property.min {
     display: none; }
 
-#weight .weight-grid {
+#weight .weight-edit-grid {
   cursor: pointer;
   display: inline-block;
   text-align: center;
   margin: 1px 3px; }
-  #weight .weight-grid:hover {
+  #weight .weight-edit-grid:hover {
     border: 1px solid #6a4;
     color: #7e8; }
-  #weight .weight-grid .preview .thumb {
+  #weight .weight-edit-grid .weight-preview .thumb {
     width: 3rem;
     height: 3rem;
     line-height: 3rem; }
-    #weight .weight-grid .preview .thumb .fa {
+    #weight .weight-edit-grid .weight-preview .thumb .fa {
       font-size: 3rem; }
-  #weight .weight-grid .action,
-  #weight .weight-grid .view {
+  #weight .weight-edit-grid .weight-action,
+  #weight .weight-edit-grid .weight-view {
     display: none; }
 
 #property {

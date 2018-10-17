@@ -129,8 +129,8 @@ $sizes: (320: 568,
                 min-height: auto;
             }
 
-            .weight-grid {
-                .action {
+            .weight-edit-grid {
+                .weight-action {
                     display: none;
                 }
             }
@@ -139,17 +139,17 @@ $sizes: (320: 568,
         .weight-row {
             min-height: 100px;
 
-            .weight-grid {
+            .weight-edit-grid {
                 width: 100%;
                 min-height: 50px;
                 background: #fff;
                 box-sizing: border-box;
                 border: 1px dotted #7e8;
-                .preview {
+                .weight-preview {
                     display: none;
                 }
 
-                .action {
+                .weight-action {
                     position: absolute;
                     right: 0;
                     font-size: 0.7rem;
@@ -172,12 +172,12 @@ $sizes: (320: 568,
                 &.weight-edit-mode {
                     border: 1px solid rgb(180, 24, 58);
 
-                    .action {
+                    .weight-action {
                         display: block;
                     }
                 }
                 &.weight-loading {
-                    .view {
+                    .weight-view {
                         text-align: center;
                         background: rgba(0, 0, 0, .1);
                         img {
@@ -262,7 +262,7 @@ $sizes: (320: 568,
 }
 
 #weight {
-    .weight-grid {
+    .weight-edit-grid {
         cursor: pointer;
         display: inline-block;
         text-align: center;
@@ -273,7 +273,7 @@ $sizes: (320: 568,
             color: #7e8;
         }
 
-        .preview {
+        .weight-preview {
             .thumb {
                 width: 3rem;
                 height: 3rem;
@@ -285,8 +285,8 @@ $sizes: (320: 568,
             }
         }
 
-        .action,
-        .view {
+        .weight-action,
+        .weight-view {
             display: none;
         }
     }
