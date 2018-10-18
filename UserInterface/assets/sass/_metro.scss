@@ -1,9 +1,10 @@
 .metro-grid {
-    width: 250px;
+    width: 510px;
     margin: 300px auto 500px;
     .item {
         display: inline-block;
         position: relative;
+        width: 250px;
         .font-gird {
             width: 250px;
             position: absolute;
@@ -73,10 +74,10 @@
             &.hover-right {
                 &:hover {
                     .font-gird {
-                        
+                        left: 250px;
                     }
                     .back-grid {
-                        left: -250px;
+                        
                     }
                 }
             }

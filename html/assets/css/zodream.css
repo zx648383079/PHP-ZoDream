@@ -1275,11 +1275,12 @@ i.checkbox {
     z-index: 99; }
 
 .metro-grid {
-  width: 250px;
+  width: 510px;
   margin: 300px auto 500px; }
   .metro-grid .item {
     display: inline-block;
-    position: relative; }
+    position: relative;
+    width: 250px; }
     .metro-grid .item .font-gird {
       width: 250px;
       position: absolute;
@@ -1315,7 +1316,7 @@ i.checkbox {
     left: 125px; }
   .metro-grid .item.hover-left:hover .font-gird {
     left: -250px; }
-  .metro-grid .item.hover-right:hover .back-grid {
-    left: -250px; } }
+  .metro-grid .item.hover-right:hover .font-gird {
+    left: 250px; } }
 
 /*# sourceMappingURL=zodream.css.map */
