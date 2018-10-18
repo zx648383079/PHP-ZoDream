@@ -1,6 +1,6 @@
+$pre: 'weight-';
 
-
-.weight-page-bar {
+.#{$pre}page-bar {
     position: fixed;
     z-index: 10;
     right: 0;
@@ -52,7 +52,7 @@
     }
 }
 
-.weight-page-header {
+.#{$pre}page-header {
     position: fixed;
     z-index: 10;
     right: 0;

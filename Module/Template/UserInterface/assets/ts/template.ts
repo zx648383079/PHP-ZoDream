@@ -1,3 +1,10 @@
+const DEL_URI = 'weight/destroy',
+    NEW_URI = 'weight/create',
+    EDIT_URI = 'weight/save',
+    SETTING_URI = 'weight/setting',
+    SAVE_SETTING_URI = 'weight/save_setting',
+    INFO_URI = 'weight/info';
+
 class Panel {
     constructor(
         tag: string,
@@ -62,8 +69,6 @@ class Weight {
         
     }
 
-
-
     public toggle(state?: boolean) {
         this.box.toggleClass('weight-edit-mode', state);
         return this;
@@ -79,6 +84,20 @@ class Weight {
      */
     public html(html?: string) {
         return this.box.find('.weight-view').html(html);
+    }
+
+    /**
+     * id
+     */
+    public id(): number {
+        return parseInt(this.box.attr('data-id'));
+    }
+
+    /**
+     * weightId
+     */
+    public weightId(): number {
+        return parseInt(this.box.attr('data-weight'));
     }
 }
 
@@ -106,6 +125,8 @@ class Page {
     public propertyBox: Panel;
 
     public weight: Weight;
+
+    private _cacheSettings: any;
 
     private _init() {
         this._bindEvent();
@@ -141,7 +162,7 @@ class Page {
     }
 
     public removeWeight(element: JQuery) {
-        this.post('weight/destroy', {
+        this.post(DEL_URI, {
             id: element.attr('data-id')
         }, function(data) {
             if (data.code == 200) {
@@ -154,7 +175,7 @@ class Page {
         let that = this;
         element.width('auto');
         let weight = this.setWeight(element).toggleLoading(true);
-        this.post('weight/create', {
+        this.post(NEW_URI, {
             weight_id: element.attr('data-weight'),
             parent_id: parent.attr('data-id')
         }, function(data) {
@@ -188,6 +209,43 @@ class Page {
                 ["data-slide"]
             ]
         });
+    }
+
+    /**
+     * getSetting
+     */
+    public getSetting(id: number, cb: (data: any) => void) {
+        let that = this;
+        if (this._cacheSettings.hasOwnProperty(id)) {
+            cb && cb(this._cacheSettings[id]);
+            return this;
+        }
+        this.post(SETTING_URI, {
+            id: id
+        }, function(data) {
+            if (data.code == 200) {
+                that._cacheSettings[id] = data.data;
+                cb && cb(data.data);
+            }
+        });
+        return this;
+    }
+
+    /**
+     * saveSetting
+     */
+    public saveSetting(id: number, args: any, cb: (data: any) => void) {
+        let that = this;
+        this.post(SAVE_SETTING_URI, {
+            id: id,
+            setting: args
+        }, function(data) {
+            if (data.code == 200) {
+                that._cacheSettings[id] = data;
+                cb && cb(data.data);
+            }
+        });
+        return this;
     }
 
     /**
