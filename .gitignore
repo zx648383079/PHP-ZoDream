@@ -70,3 +70,4 @@ node_modules/
 /html/json
 /package-lock.json
 Module/Template/package-lock.json
+/html/assets/upload

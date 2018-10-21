@@ -208,6 +208,9 @@ $activeColor: #af5d0d;
         }
         .content {
             margin-bottom: 40px;
+            a {
+                color: #06a;
+            }
         }
         .tools {
             border-top: 1px dotted $activeColor;

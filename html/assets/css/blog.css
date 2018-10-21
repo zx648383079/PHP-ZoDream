@@ -146,6 +146,8 @@
         margin-right: 20px; }
     .book-skin .book-body .content {
       margin-bottom: 40px; }
+      .book-skin .book-body .content a {
+        color: #06a; }
     .book-skin .book-body .tools {
       border-top: 1px dotted #af5d0d;
       line-height: 40px;
