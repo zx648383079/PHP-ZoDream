@@ -1275,12 +1275,13 @@ i.checkbox {
     z-index: 99; }
 
 .metro-grid {
-  width: 510px;
-  margin: 300px auto 500px; }
+  width: 250px;
+  margin: 10vh auto 20vh; }
   .metro-grid .item {
     display: inline-block;
     position: relative;
-    width: 250px; }
+    width: 250px;
+    height: 250px; }
     .metro-grid .item .font-gird {
       width: 250px;
       position: absolute;
@@ -1306,17 +1307,20 @@ i.checkbox {
         word-break: break-all; }
 
 @media screen and (min-width: 768px) {
-  .metro-grid .item:hover .font-gird p {
-    display: block; }
-  .metro-grid .item:hover .back-grid {
-    display: block; }
-  .metro-grid .item.hover-middle:hover .font-gird {
-    left: -125px; }
-  .metro-grid .item.hover-middle:hover .back-grid {
-    left: 125px; }
-  .metro-grid .item.hover-left:hover .font-gird {
-    left: -250px; }
-  .metro-grid .item.hover-right:hover .font-gird {
-    left: 250px; } }
+  .metro-grid {
+    width: 510px;
+    margin: 300px auto 500px; }
+    .metro-grid .item:hover .font-gird p {
+      display: block; }
+    .metro-grid .item:hover .back-grid {
+      display: block; }
+    .metro-grid .item.hover-middle:hover .font-gird {
+      left: -125px; }
+    .metro-grid .item.hover-middle:hover .back-grid {
+      left: 125px; }
+    .metro-grid .item.hover-left:hover .font-gird {
+      left: -250px; }
+    .metro-grid .item.hover-right:hover .font-gird {
+      left: 250px; } }
 
 /*# sourceMappingURL=zodream.css.map */

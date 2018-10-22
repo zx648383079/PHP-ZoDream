@@ -1,10 +1,11 @@
 .metro-grid {
-    width: 510px;
-    margin: 300px auto 500px;
+    width: 250px;
+    margin: 10vh auto 20vh;
     .item {
         display: inline-block;
         position: relative;
         width: 250px;
+        height: 250px;
         .font-gird {
             width: 250px;
             position: absolute;
@@ -41,6 +42,8 @@
 
 @media screen and (min-width: 768px) {
     .metro-grid {
+        width: 510px;
+        margin: 300px auto 500px;
         .item {
             &:hover {
                 .font-gird {
