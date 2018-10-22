@@ -5,9 +5,10 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 
 $this->title = $model->id > 0 ? '编辑' : '新增'. '文章';
-
+$configs = app('request')->isMobile() ?
+    ',{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '';
 $js = <<<JS
-    var ue = UE.getEditor('container');
+    var ue = UE.getEditor('container'{$configs});
     $(function () {
         $("select[name=type]").change(function () { 
             $("#source-box").toggle($(this).val() == 1);
