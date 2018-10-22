@@ -26,4 +26,12 @@ class PlatformModel extends Model {
         $this->appid = time();
         $this->secret = '';
     }
+
+    public function sign(array $data) {
+        return '';
+    }
+
+    public function verify(array $data, $sign) {
+        return true;
+    }
 }
