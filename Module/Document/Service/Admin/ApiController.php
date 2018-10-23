@@ -87,12 +87,15 @@ class ApiController extends Controller {
     }
 
     public function debugResultAction() {
+        $this->layout = false;
         $url = new Uri(app('request')->get('url'));
         $method = app('request')->get('method');
         $data = app('request')->get('request');
         $real_data = [];
-        foreach ($data['key'] as $i => $item) {
-            $real_data[$item] = $data['value'][$i];
+        if (!empty($data) && isset($data['key'])) {
+            foreach ($data['key'] as $i => $item) {
+                $real_data[$item] = $data['value'][$i];
+            }
         }
         $header = app('request')->get('header');
         $headers = [
@@ -100,16 +103,18 @@ class ApiController extends Controller {
             'response' => []
         ];
         $real_header = [];
-        foreach ($header['key'] as $i => $item) {
-            $headers['request'][] = sprintf('%s: %s', $item, $header['value'][$i]);
-            $real_header[$item] = $header['value'][$i];
+        if (!empty($header) && isset($header['key'])) {
+            foreach ($header['key'] as $i => $item) {
+                $headers['request'][] = sprintf('%s: %s', $item, $header['value'][$i]);
+                $real_header[$item] = $header['value'][$i];
+            }
         }
         if ($method != 'POST') {
-            $url->setData($data);
+            $url->setData($real_data);
         }
         $http = new Http($url);
         $body = $http->header($header)
-            ->maps($data)->method($method)->setHeaderOption(true)
+            ->maps($real_data)->method($method)->setHeaderOption(true)
             ->setOption(CURLOPT_RETURNTRANSFER, 1)
             ->setOption(CURLOPT_FOLLOWLOCATION, 1)
             ->setOption(CURLOPT_AUTOREFERER, 1)->getResponseText();
@@ -119,8 +124,9 @@ class ApiController extends Controller {
         return $this->show(compact('body', 'headers', 'info'));
     }
 
-    public function createFieldAction() {
-        return $this->runMethodNotProcess('editField', ['id' => null]);
+    public function createFieldAction($kind = 0, $parent_id = 0, $api_id = 0) {
+        $id = 0;
+        return $this->runMethodNotProcess('editField', compact('id', 'kind', 'parent_id', 'api_id'));
     }
 
     public function editFieldAction($id, $kind = 0, $parent_id = 0, $api_id = 0) {

@@ -89,6 +89,7 @@ $this->registerCssFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
+        '@clipboard.min.js',
         '@prism.js',
         '@main.min.js',
         '@doc.min.js'

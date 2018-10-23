@@ -90,7 +90,7 @@ class FieldModel extends Model {
         if ($this->kind != self::KIND_RESPONSE) {
             return $this;
         }
-        $this->default_value = $this->getMockValueAttribute();
+        $this->default_value = $this->getMockValueAttribute().'';
         return $this;
     }
 
@@ -106,6 +106,9 @@ class FieldModel extends Model {
         $rule = $data[1] ? $data[1] : '';
         $value = $data[2] ? $data[2] : '';
         $mock = new MockRule();
+        if ($type == 'array') {
+            $type = 'arr';
+        }
         if(!method_exists($mock, $type)){
             return $this->mock;
         }

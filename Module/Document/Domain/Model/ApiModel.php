@@ -57,7 +57,7 @@ class ApiModel extends Model {
     }
 
     public function getUri($domain) {
-        return (new Uri($domain))->decode($this->uri);
+        return sprintf('%s/%s', trim($domain, '/'), trim($this->uri, '/'));
     }
 
     public  static function getTree($project_id) {

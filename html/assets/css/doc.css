@@ -3,7 +3,7 @@
   text-align: center; }
 
 .zd-tab .zd-tab-head .zd-tab-item {
-  width: 130px; }
+  width: 120px; }
 
 .zd-panel {
   width: 100%;
@@ -11,7 +11,8 @@
   z-index: 0; }
 
 .page-header {
-  padding: 8px; }
+  padding: 8px;
+  height: auto; }
   .page-header .opt-btn {
     position: absolute;
     right: 0;
@@ -43,7 +44,8 @@
   .json-box pre {
     outline: 1px solid #ccc;
     padding: 5px;
-    margin: 5px; }
+    margin: 5px;
+    overflow: auto; }
   .json-box .string {
     color: green; }
   .json-box .number {

@@ -66,9 +66,12 @@ $this->registerCssFile([
         '@prism.css',
         '@zodream.css',
         '@zodream-admin.css',
+        '@dialog.css',
         '@doc.css'
     ])->registerJsFile([
         '@jquery.min.js',
+        '@clipboard.min.js',
+        '@jquery.dialog.min.js',
         '@prism.js',
         '@main.min.js',
         '@doc.min.js'

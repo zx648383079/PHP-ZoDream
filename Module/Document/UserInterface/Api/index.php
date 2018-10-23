@@ -3,6 +3,11 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '接口：'.$api->name;
+$content = json_encode($response_json);
+$js = <<<JS
+refreshJson({$content});
+JS;
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="row">
@@ -50,7 +55,7 @@ $this->title = '接口：'.$api->name;
                                     <td style="width: 20%;"><?=$item['title']?>(<?=$item['name']?>)</td>
                                     <td style="width: 50%;"><code><?=$api->getUri($item['domain'])?></code></td>
                                     <td style="width: 15%;">
-                                        <button type="button" class="btn btn-xs btn-success"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                        <button type="button" class="btn btn-xs btn-success btn-copy" data-clipboard-text="<?=$api->getUri($item['domain'])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -203,7 +208,7 @@ $this->title = '接口：'.$api->name;
             </div>
             <div class="zd-panel-body">
                 <div class="json-box">
-                    <pre><code class="language-json"><?=json_encode($response_json)?></code></pre>
+                    
                     
                 </div>
             </div>

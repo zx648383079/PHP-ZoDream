@@ -3,8 +3,8 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <?php if(isset($info)):?>
-                <a href="javascript:void(0);">status:<?=$info['status_code']?></a>
-                <a href="javascript:void(0);">time:<?=$info['total_time']?> s</a>
+                    <a href="javascript:void(0);">status:<?=$info['http_code']?></a>
+                    <a href="javascript:void(0);">time:<?=$info['total_time']?> s</a>
                 <?php else:?>
                 响应面板
                 <?php endif;?>
@@ -19,7 +19,13 @@
                     <div class="zd-tab-body">
                         <div class="zd-tab-item active">
                             <?php if(isset($body)):?>
-                            <div class="json-box"><?=$body?></div>
+                                <div class="json-box">
+                                </div>
+                                <script>
+                                $(function () {
+                                    refreshJson(<?=$body?>);
+                                });
+                                </script>
                             <?php else:?>
                             暂无数据
                             <?php endif;?>
