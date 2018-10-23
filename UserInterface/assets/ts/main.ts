@@ -147,21 +147,21 @@ $(function() {
     .on('click', ".zd-tab .zd-tab-head .zd-tab-item", function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
-        $this.parents(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
+        $this.closest(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
     })
     .on('click', ".page-tip .toggle", function() {
-        $(this).parents('.page-tip').toggleClass('min');
+        $(this).closest('.page-tip').toggleClass('min');
     });
-    $('.left-catelog .left-catelog-toggle').click(function() {
-        $(this).parents('.left-catelog').toggleClass('expand');
+    $('.sidebar-container .sidebar-container-toggle').click(function() {
+        $(this).closest('.sidebar-container').toggleClass('expand');
     });
-    $('.left-catelog li a').click(function() {
+    $('.sidebar-container li a').click(function() {
         let box = $(this).closest('li');
         if (box.find('ul').length > 0) {
             box.toggleClass('expand');
             return;
         }
-        $('.left-catelog li').removeClass('active');
+        $('.sidebar-container li').removeClass('active');
         box.addClass('active');
     });
     let autoRedirct = function() {

@@ -1,7 +1,31 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Dark\Layout;
 /** @var $this View */
+
+$file_menu = [];
+
+if (isset($file_list)) {
+    foreach($file_list as $item) {
+        $file_menu[] = [
+            $item['name'],
+            ['./log', 'id' => $item['id']],
+            'fa fa-file'
+        ];
+    }
+}
+$file_menu[] = [
+    '上传文件',
+    './log/create',
+    'fa fa-plus',
+];
+$file_menu[] = [
+    '清除全部',
+    './log/clear',
+    'fa fa-trash',
+];
+
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@prism.css',
@@ -14,63 +38,39 @@ $this->registerCssFile([
     '@log.min.js'
 ]);
 ?>
-<!DOCTYPE html>
-<html lang="<?=$this->get('language', 'zh-CN')?>">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="Description" content="<?=$this->description?>" />
-    <meta name="keywords" content="<?=$this->keywords?>" />
-    <title><?=$this->title?></title>
-    <?=$this->header();?>
-</head>
-<body>
-<header>
-    <div class="container">
-        ZoDream Log Viewer
-    </div>
-</header>
-<div class="container page-box">
-    <div class="left-catelog navbar">
-        <span class="left-catelog-toggle"></span>
-        <ul>
-            <li><a href="<?=$this->url('./')?>">
-                    <i class="fa fa-home"></i><span>首页</span></a></li>
-            <li class="expand"><a href="javascript:;">
-                    <i class="fa fa-th-list"></i><span>文件列表</span></a>
-                <ul>
-                    <?php if (isset($file_list)):?>
-                        <?php foreach($file_list as $item):?>
-                            <li><a href="<?=$this->url('./log', ['id' => $item['id']])?>">
-                                    <i class="fa fa-file"></i><span><?=$item['name']?></span></a></li>
-                        <?php endforeach;?>
-                    <?php endif;?>
-                    <li><a href="<?=$this->url('./log/create')?>">
-                            <i class="fa fa-plus"></i><span>上传文件</span></a></li>
-                    <li><a href="<?=$this->url('./log/clear')?>">
-                            <i class="fa fa-trash"></i><span>清除全部</span></a></li>
-                </ul>
-            </li>
-            <li class="expand"><a href="javascript:;">
-                    <i class="fa fa-user-md"></i><span>智能分析</span></a>
-                <ul>
-                    <li><a href="<?=$this->url('./analysis')?>">
-                            <i class="fa fa-line-chart"></i><span>次数曲线图</span></a></li>
-                    <li><a href="<?=$this->url('./analysis/top')?>">
-                            <i class="fa fa-list-ol"></i><span>统计排行</span></a></li>
-                    <li><a href="<?=$this->url('./analysis/infer')?>">
-                            <i class="fa fa-list-ol"></i><span>可疑推断</span></a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="right-content">
-        <?=$content?>
-    </div>
-</div>
-<footer class="page-footer">
-    <a href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
-</footer>
-<?=$this->footer()?>
-</body>
-</html>
+
+<?= Layout::main($this, [
+    [
+        '首页',
+        './',
+        'fa fa-home',
+    ],
+    [
+        '文件列表',
+        false,
+        'fa fa-th-list',
+        $file_menu
+    ],
+    [
+        '智能分析',
+        false,
+        'fa fa-user-md',
+        [
+            [
+                '次数曲线图',
+                './analysis',
+                'fa fa-line-chart'
+            ],
+            [
+                '统计排行',
+                './analysis/top',
+                'fa fa-list-ol'
+            ],
+            [
+                '可疑推断',
+                './analysis/infer',
+                'fa fa-list-ol'
+            ]
+        ]
+    ]
+], 'ZoDream Log Viewer') ?>
