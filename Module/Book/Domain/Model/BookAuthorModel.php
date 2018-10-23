@@ -31,10 +31,10 @@ class BookAuthorModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'avatar' => 'Avatar',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'name' => '笔名',
+            'avatar' => '头像',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

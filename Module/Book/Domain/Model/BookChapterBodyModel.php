@@ -29,7 +29,7 @@ class BookChapterBodyModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'content' => 'Content',
+            'content' => '内容',
         ];
     }
 

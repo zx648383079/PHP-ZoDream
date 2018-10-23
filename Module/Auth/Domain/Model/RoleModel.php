@@ -32,11 +32,11 @@ class RoleModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'display_name' => 'Display Name',
-            'description' => 'Description',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'name' => '角色名',
+            'display_name' => '别名',
+            'description' => '说明',
+            'created_at' => '注册时间',
+            'updated_at' => '更新时间',
         ];
     }
 

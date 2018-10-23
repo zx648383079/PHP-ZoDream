@@ -67,7 +67,7 @@ class MoneyController extends Controller {
     }
 
     public function addProjectAction() {
-        return $this->editProjectAction(0);
+        return $this->runMethodNotProcess('editProject', ['id' => 0]);
     }
 
     public function editProjectAction($id) {

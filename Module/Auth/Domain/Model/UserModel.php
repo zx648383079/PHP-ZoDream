@@ -83,16 +83,16 @@ class UserModel extends BaseModel {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'email' => 'Email',
-            'password' => 'Password',
-            'sex' => 'Sex',
-            'avatar' => 'Avatar',
-            'money' => 'Money',
+            'name' => '昵称',
+            'email' => '邮箱',
+            'password' => '密码',
+            'sex' => '性别',
+            'avatar' => '头像',
+            'money' => '金币',
             'token' => 'Token',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'status' => '状态',
+            'created_at' => '注册时间',
+            'updated_at' => '更新时间',
         ];
     }
 

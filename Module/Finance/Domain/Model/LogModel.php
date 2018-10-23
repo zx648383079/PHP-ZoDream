@@ -55,17 +55,17 @@ class LogModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'type' => 'Type',
-            'money' => 'Money',
-            'frozen_money' => 'Frozen Money',
-            'account_id' => 'Account Id',
-            'channel_id' => 'Channel Id',
-            'project_id' => 'Project Id',
-            'budget_id' => 'Budget Id',
-            'remark' => 'Remark',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'happened_at' => 'Happened At',
+            'type' => '类型呢',
+            'money' => '金额',
+            'frozen_money' => '冻结金额',
+            'account_id' => '账户',
+            'channel_id' => '渠道',
+            'project_id' => '项目',
+            'budget_id' => '预算',
+            'remark' => '备注',
+            'created_at' => '记录时间',
+            'updated_at' => '更新时间',
+            'happened_at' => '发生时间',
         ];
     }
 

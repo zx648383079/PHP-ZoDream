@@ -27,9 +27,9 @@ class ConsumptionChannelModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'name' => '渠道名',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

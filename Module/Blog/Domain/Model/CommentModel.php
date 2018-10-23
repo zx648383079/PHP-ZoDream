@@ -54,12 +54,12 @@ class CommentModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'content' => 'Content',
+            'content' => '内容',
             'name' => 'Name',
             'email' => 'Email',
             'url' => 'Url',
             'ip' => 'Ip',
-            'created_at' => 'Created At',
+            'created_at' => '发布时间',
             'karma' => 'Karma',
             'approved' => 'Approved',
             'agent' => 'Agent',

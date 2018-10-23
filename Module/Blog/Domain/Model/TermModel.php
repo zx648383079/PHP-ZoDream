@@ -33,11 +33,12 @@ class TermModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
+            'name' => '分类',
+            'keywords' => '关键字',
+            'description' => '说明',
             'user_id' => 'User Id',
-            'parent_id' => 'Parent Id',
+            'parent_id' => '上级',
+            'thumb' => '图片'
         ];
     }
 

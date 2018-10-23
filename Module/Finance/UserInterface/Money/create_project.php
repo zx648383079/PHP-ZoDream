@@ -23,7 +23,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Form::text('alias')?>
     <?=Form::text('money', true)?>
     <?=Form::select('account_id', [$account_list])?>
-    <?=Form::select('project_id', [$project_list])?>
+    <?=Form::select('product_id', [$product_list])?>
     <?=Form::text('earnings')?>
     <?=Form::text('start_at')?>
     <?=Form::text('end_at')?>

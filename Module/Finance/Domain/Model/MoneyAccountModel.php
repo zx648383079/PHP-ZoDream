@@ -39,14 +39,14 @@ class MoneyAccountModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'money' => 'Money',
-            'status' => 'Status',
-            'frozen_money' => 'Frozen Money',
-            'remark' => 'Remark',
-            'deleted_at' => 'Deleted At',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'name' => '名称',
+            'money' => '金额',
+            'status' => '状态',
+            'frozen_money' => '冻结资金',
+            'remark' => '备注',
+            'deleted_at' => '删除时间',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

@@ -48,14 +48,14 @@ class BookChapterModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'book_id' => 'Book Id',
-            'title' => 'Title',
-            'parent_id' => 'Parent Id',
-            'status' => 'Status',
-            'source' => 'Source',
-            'deleted_at' => 'Deleted At',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'book_id' => '书',
+            'title' => '标题',
+            'parent_id' => '上级',
+            'status' => '状态',
+            'source' => '来源',
+            'deleted_at' => '删除时间',
+            'created_at' => '发布时间',
+            'updated_at' => '更新时间',
         ];
     }
 

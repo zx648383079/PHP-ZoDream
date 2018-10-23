@@ -26,8 +26,8 @@ class BookCategoryModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'created_at' => 'Created At',
+            'name' => '分类',
+            'created_at' => '创建时间',
         ];
     }
 

@@ -42,13 +42,13 @@ class BudgetModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
+            'name' => '名称',
             'budget' => '预算',
             'spent' => '已花费',
             'cycle' => '周期',
-            'deleted_at' => 'Deleted At',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'deleted_at' => '删除时间',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 
