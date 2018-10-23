@@ -54,6 +54,11 @@ class ApiController extends Controller {
                 'api_id' => $model->id
             ]);
         }
+        if ($model->parent_id < 1) {
+            return $this->jsonSuccess([
+                'url' => $this->getUrl('project', ['id' => $model->project_id])
+            ]);
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('api', ['id' => $model->id])
         ]);
@@ -119,6 +124,7 @@ class ApiController extends Controller {
     }
 
     public function editFieldAction($id, $kind = 0, $parent_id = 0, $api_id = 0) {
+        $this->layout = false;
         $model = FieldModel::findOrNew($id);
         if (empty($id)) {
             $model->kind = $kind;

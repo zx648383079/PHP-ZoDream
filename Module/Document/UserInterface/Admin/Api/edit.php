@@ -224,6 +224,5 @@ $this->registerJs($js, View::JQUERY_READY);
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
         <input type="hidden" name="id" value="<?=$model->id?>">
-        <input type="hidden" name="parent_id" value="<?=$model->parent_id?>">
         <input type="hidden" name="project_id" value="<?=$model->project_id?>">
     </form>

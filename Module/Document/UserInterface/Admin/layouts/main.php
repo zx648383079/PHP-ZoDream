@@ -18,7 +18,8 @@ if(isset($project_list)) {
             'fa fa-money',
             [
 
-            ]
+            ],
+            true
         ]
     ];
     foreach ($project_list as $item) {
@@ -66,7 +67,8 @@ if(isset($project_list)) {
             $item['name'],
             false,
             'fa fa-folder-open',
-            $children
+            $children,
+            true
         ];
     }
     $menus[] = [
