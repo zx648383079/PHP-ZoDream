@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = $model->id ?  '编辑接口:'.$model->name : '新建接口';
 $js = <<<JS
@@ -11,42 +12,16 @@ JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
 
-    <h1><?=$this->title?></h1>
-    <form data-type="ajax" action="<?=$this->url('./admin/api/save')?>" method="post" class="form-table" role="form">
-        <div class="input-group">
-            <label>接口名称</label>
-            <input name="name" type="text" class="form-control" placeholder="项目名称" value="<?=$model->name?>">
-        </div>
-        <div class="input-group">
-            <label>上级</label>
-            <select name="parent_id">
-                <option value="0">顶级</option>
-                <?php foreach($tree_list as $item):?>
-                <?php if($item['id'] != $model->id):?>
-                <option value="<?=$item['id']?>" <?= $item['id'] == $model->parent_id ? 'selected' : '' ?>><?=$item['name']?></option>
-                <?php endif;?>
-                <?php endforeach;?>
-            </select>
-        </div>
-        
-        <div class="extent-box" <?=$model->parent_id < 1 ? ' style="display:none"' : ''?>>
-        <div class="input-group">
-            <label>请求类型</label>
-            <select name="method">
-            <?php foreach($model->method_list as $item):?>
-               <option value="<?=$item?>" <?= $item == $model->method ? 'selected' : '' ?>><?=$item?></option>
-            <?php endforeach;?>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>接口路径</label>
-            <input name="uri" type="text" class="form-control" placeholder="项目名称" value="<?=$model->uri?>">
-        </div>
-        <div class="input-group">
-            <label>接口描述</label>
-            <textarea name="description" class="form-control" placeholder="备注信息"><?=$model->description?></textarea>
-        </div>
-       
+<h1><?=$this->title?></h1>
+<?= Form::open($model, './admin/api/save') ?>
+    <?= Form::text('name', true) ?>
+    <?= Form::select('parent_id', [$tree_list, [0 => '-- 顶级 --']])?>
+
+    <div class="extent-box" <?=$model->parent_id < 1 ? ' style="display:none"' : ''?>>
+        <?= Form::select('method', [$model->method_list])?>
+        <?= Form::text('uri') ?>
+        <?= Form::textarea('description') ?>
+
 
         <div class="row">
             <div class="col-lg-12">
@@ -194,7 +169,7 @@ $this->registerJs($js, View::JQUERY_READY);
                                         <?php if(in_array($item->type, ['array', 'object'])):?>
                                         <a href="javascript:;" onclick="addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id])?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
                                         <?php endif;?>
-                                        
+
 
                                     </td>
 
@@ -217,12 +192,11 @@ $this->registerJs($js, View::JQUERY_READY);
             </div>
             <!-- /.col-lg-6 -->
         </div>
-        
-        </div>
-        
-        
-        <button type="submit" class="btn btn-success">确认保存</button>
-        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
-        <input type="hidden" name="id" value="<?=$model->id?>">
-        <input type="hidden" name="project_id" value="<?=$model->project_id?>">
-    </form>
+
+    </div>
+
+
+    <button type="submit" class="btn btn-success">确认保存</button>
+    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <input type="hidden" name="project_id" value="<?=$model->project_id?>">
+<?= Form::close('id') ?>

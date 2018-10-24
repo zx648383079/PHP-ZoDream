@@ -25,7 +25,7 @@ $this->title = '接口调试';
                             <div class="input-group uri-box">
                                 
                                 <select id="uri-list">
-                                <?php foreach($project->environments as $item):?>
+                                <?php foreach($project->environment as $item):?>
                                 <option value="<?=$item['name']?>" data-url="<?=$api->getUri($item['domain'])?>"><?=$item['name']?></option>
                                 <?php endforeach;?>
                                 </select>

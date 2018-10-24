@@ -8,6 +8,7 @@ use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Service\Factory;
 use Zodream\Route\RouteCompiler;
 use Zodream\Database\Relation;
+use Module\Document\Domain\Model\ProjectModel;
 
 $data = [
     'id' => 1,

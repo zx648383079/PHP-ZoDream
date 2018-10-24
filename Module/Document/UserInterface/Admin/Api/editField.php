@@ -1,3 +1,8 @@
+<?php
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+?>
 
 <form action="<?=$this->url('./admin/api/save_field')?>" method="post" class="form-table" role="form">
 

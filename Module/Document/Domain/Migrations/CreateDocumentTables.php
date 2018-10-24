@@ -19,9 +19,11 @@ class CreateDocumentTables extends Migration {
         Schema::createTable(ProjectModel::tableName(), function(Table $table) {
             $table->setComment('项目表');
             $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(35)->notNull()->comment('账户名');
             $table->set('description')->varchar()->comment('描述');
             $table->set('environment')->text()->comment('环境域名,json字符串');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('是否可见');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -27,7 +27,7 @@ $this->title = '项目：'.$project->name;
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach($project->environments as $item):?>
+                <?php foreach($project->environment as $item):?>
                     <tr>
                         <td>
                             <?=$item['name']?>

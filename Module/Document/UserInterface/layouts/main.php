@@ -18,7 +18,8 @@ if(isset($project_list)) {
             'fa fa-money',
             [
 
-            ]
+            ],
+            true
         ]
     ];
     foreach ($project_list as $item) {
@@ -41,7 +42,7 @@ if(isset($project_list)) {
             'fa fa-home',
         ]
     ];
-    foreach ($tree_list as $item) {
+    foreach ($tree_list as $key => $item) {
         $children = [];
         if(isset($item['children'])) {
             foreach($item['children'] as $child) {
@@ -56,7 +57,8 @@ if(isset($project_list)) {
             $item['name'],
             false,
             'fa fa-folder-open',
-            $children
+            $children,
+            $key < 1
         ];
     }
 }

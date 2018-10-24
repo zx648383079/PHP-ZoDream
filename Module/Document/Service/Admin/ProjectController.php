@@ -9,7 +9,10 @@ use Zodream\Helpers\Json;
 class ProjectController extends Controller {
 
     public function indexAction($id) {
-        $project = ProjectModel::find($id);
+        $project = ProjectModel::findWithAuth($id);
+        if (empty($project)) {
+            return $this->redirect($this->getUrl(''));
+        }
         $tree_list = ApiModel::getTree($id);
         return $this->show(compact('project', 'tree_list'));
     }
@@ -26,30 +29,8 @@ class ProjectController extends Controller {
 
     public function saveAction() {
         $model = new ProjectModel();
-        $id = intval(app('request')->get('id'));
-        if (!empty($id)) {
-            $model->id = $id;
-            $model->isNewRecord = false;
-        }
-        $model->name = app('request')->get('name');
-        $model->description = app('request')->get('description');
-        $data = app('request')->get('environment');
-        $env = [];
-        foreach ($data['name'] as $key => $item) {
-            if (empty($item)) {
-                continue;
-            }
-            $env[] = [
-                'name' => $item,
-                'title' => $data['title'][$key],
-                'domain' => $data['domain'][$key]
-            ];
-        }
-        if (empty($env)) {
-            return $this->jsonFailure('请至少填写一个环境域名');
-        }
-        $model->environment = Json::encode($env);
-        if ($model->save()) {
+        $model->user_id = auth()->id();
+        if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('project', ['id' => $model->id])
             ]);
@@ -58,7 +39,7 @@ class ProjectController extends Controller {
     }
 
     public function deleteAction($id) {
-        ProjectModel::where('id', $id)->delete();
+        ProjectModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->jsonSuccess([
             'url' => $this->getUrl('')
         ]);

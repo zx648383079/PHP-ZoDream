@@ -4,7 +4,6 @@ namespace Module\Document\Service\Admin;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\ProjectModel;
-use Zodream\Helpers\Json;
 use Zodream\Http\Http;
 use Zodream\Http\Uri;
 
@@ -50,7 +49,7 @@ class ApiController extends Controller {
             return $this->jsonFailure($model->getFirstError());
         }
         if ($id < 1) {
-            FieldModel::where('api_id', $id)->update([
+            FieldModel::whereIn('id', ApiModel::clearStore())->update([
                 'api_id' => $model->id
             ]);
         }
@@ -144,7 +143,9 @@ class ApiController extends Controller {
         $model = new FieldModel();
         if (!$model->load() || !$model->autoIsNew()->setMock()->save()) {
             return $this->jsonFailure($model->getFirstError());
-
+        }
+        if ($model->api_id < 1) {
+            ApiModel::preStore($model->id);
         }
         $data = $model->toArray();
         $data['edit_url'] = $this->getUrl('api/edit_field', ['id' => $model->id]);

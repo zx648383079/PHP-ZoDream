@@ -63,18 +63,18 @@ class FieldModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'title' => 'Title',
-            'is_required' => 'Is Required',
-            'default_value' => 'Default Value',
+            'name' => '字段名',
+            'title' => '名称',
+            'is_required' => '是否必须',
+            'default_value' => '默认值',
             'mock' => 'Mock',
             'parent_id' => 'Parent Id',
             'api_id' => 'Api Id',
-            'kind' => 'Kind',
-            'type' => 'Type',
-            'remark' => 'Remark',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'kind' => '类型',
+            'type' => '值类型',
+            'remark' => '备注',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

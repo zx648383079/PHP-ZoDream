@@ -8,6 +8,10 @@ class ProjectController extends Controller {
 
     public function indexAction($id) {
         $project = ProjectModel::find($id);
+        if (!$project->canRead()) {
+            return $this->redirectWithMessage('./',
+                '无权限查看此项目文档');
+        }
         $tree_list = ApiModel::getTree($id);
         return $this->show(compact('project', 'tree_list'));
     }

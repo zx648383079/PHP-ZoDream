@@ -50,7 +50,7 @@ $this->registerJs($js, View::JQUERY_READY);
                             <table class="table table-striped table-bordered table-hover">
 
                                 <tbody>
-                                <?php foreach($project->environments as $item):?>
+                                <?php foreach($project->environment as $item):?>
                                 <tr>
                                     <td style="width: 20%;"><?=$item['title']?>(<?=$item['name']?>)</td>
                                     <td style="width: 50%;"><code><?=$api->getUri($item['domain'])?></code></td>

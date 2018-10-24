@@ -21,6 +21,8 @@ use Zodream\Http\Uri;
  */
 class ApiModel extends Model {
 
+    const PRE_STORE_KEY = 'pre_store_api';
+
     public $method_list = [
         'GET', 'POST', 'PUT', 'DELETE', 'OPTION'
     ];
@@ -45,14 +47,14 @@ class ApiModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'method' => 'Method',
-            'uri' => 'Uri',
-            'project_id' => 'Project Id',
-            'description' => 'Description',
-            'parent_id' => 'Parent Id',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'name' => '接口名称',
+            'method' => '请求类型',
+            'uri' => '接口路径',
+            'project_id' => '项目',
+            'description' => '接口描述',
+            'parent_id' => '上级',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 
@@ -65,5 +67,34 @@ class ApiModel extends Model {
         return (new Tree($data))->makeTree();
     }
 
+    /**
+     * 预存储字段
+     * @param $id
+     * @throws \Exception
+     */
+    public static function preStore($id) {
+        $data = self::getStore();
+        $data[] = $id;
+        session()->set(self::PRE_STORE_KEY, $data);
+    }
 
+    /**
+     * 获取
+     * @throws \Exception
+     */
+    public static function getStore() {
+        $data = session(self::PRE_STORE_KEY);
+        return empty($data) ? [] : $data;
+    }
+
+    /**
+     * 删除
+     * @return array
+     * @throws \Exception
+     */
+    public static function clearStore() {
+        $data = self::getStore();
+        session()->delete(self::PRE_STORE_KEY);
+        return $data;
+    }
 }

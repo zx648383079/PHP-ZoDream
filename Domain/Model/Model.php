@@ -7,17 +7,18 @@ namespace Domain\Model;
  * Time: 21:41
  */
 use Zodream\Database\Model\Model as BaseModel;
-use Zodream\Database\Query\Query;
+use Zodream\Database\Query\Builder;
 
 
 abstract class Model extends BaseModel {
     /**
      * 生成搜索查询语句
-     * @param Query $query
+     * @param Builder $query
      * @param $columns
      * @param bool $saveLog
      * @param string $key
-     * @return Query
+     * @return Builder
+     * @throws \Exception
      */
     public static function search($query, $columns, $saveLog = true, $key = 'keywords') {
         $columns = (array)$columns;

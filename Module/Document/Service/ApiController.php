@@ -10,6 +10,10 @@ class ApiController extends Controller {
     public function indexAction($id) {
         $api = ApiModel::find($id);
         $project = ProjectModel::find($api->project_id);
+        if (!$project->canRead()) {
+            return $this->redirectWithMessage('./',
+                '无权限查看此项目文档');
+        }
         $tree_list = ApiModel::getTree($api->project_id);
         $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $id)->all();
         $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
