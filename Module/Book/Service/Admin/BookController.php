@@ -11,7 +11,7 @@ use Module\Book\Domain\Model\BookModel;
 class BookController extends Controller {
     public function indexAction($keywords = null, $cat_id = null, $author_id = null) {
         $model_list = BookModel::with('category', 'author')
-            ->withCount('chapter')
+            //->withCount('chapter')
             ->when(!empty($keywords), function ($query) {
                 BookModel::search($query, 'name');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
@@ -64,6 +64,9 @@ class BookController extends Controller {
     }
 
     public function chapterAction($book, $keywords = null) {
+        url([
+            'p' => 1
+        ]);
         $book = BookModel::find($book);
         $model_list = BookChapterModel::where('book_id', $book->id)
             ->when(!empty($keywords), function ($query) {

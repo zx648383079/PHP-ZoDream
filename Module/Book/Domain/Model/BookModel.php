@@ -124,6 +124,10 @@ class BookModel extends Model {
         return url('./book/download', ['id' => $this->id]);
     }
 
+    public function getWapDownloadUrlAttribute() {
+        return url('./mobile/book/download', ['id' => $this->id]);
+    }
+
     public function getWapUrlAttribute() {
         return url('./mobile/book', ['id' => $this->id]);
     }

@@ -65,11 +65,11 @@ $this->extend('../layouts/header');
 				<table>
 					<tr>
 						<td width="50%">
-							<a class="read start" href="<?=$book->first_chapter->wap_clsurl?>">从头开始阅读</a>
+							<a class="read start" href="<?=$book->first_chapter->wap_url?>">从头开始阅读</a>
 						</td>
 						<td width="5">&nbsp;</td>
 						<td width="50%">
-							<a class="collect" href="<?=$book->download_url?>">
+							<a class="collect" href="<?=$book->wap_download_url?>">
                                 TXT下载</a>
 						</td>
 					</tr>

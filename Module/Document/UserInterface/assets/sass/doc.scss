@@ -90,3 +90,11 @@
 
     /*key值的样式*/
 }
+
+.sidebar-container {
+    li.expand {
+        .fa-folder::before {
+            content: "\f07c";
+        }
+    }
+}

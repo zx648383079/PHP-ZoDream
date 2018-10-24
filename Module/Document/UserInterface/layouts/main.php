@@ -33,7 +33,7 @@ if(isset($project_list)) {
     $menus = [
         [
             '返回首页',
-            './admin',
+            './',
             'fa fa-arrow-left',
         ],
         [
@@ -56,7 +56,7 @@ if(isset($project_list)) {
         $menus[] = [
             $item['name'],
             false,
-            'fa fa-folder-open',
+            'fa fa-folder',
             $children,
             $key < 1
         ];

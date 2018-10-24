@@ -66,7 +66,7 @@ if(isset($project_list)) {
         $menus[] = [
             $item['name'],
             false,
-            'fa fa-folder-open',
+            'fa fa-folder',
             $children,
             true
         ];
