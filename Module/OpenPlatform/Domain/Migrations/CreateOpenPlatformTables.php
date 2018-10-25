@@ -20,8 +20,7 @@ class CreateOpenPlatformTables extends Migration {
            $table->set('appid')->char(12)->unique()->notNull();
            $table->set('secret')->char(32)->notNull();
            $table->set('sign_type')->tinyint(1)->defaultVal(0)->comment('加密方式');
-//           $table->set('private_key')->text()->defaultVal('');
-//           $table->set('public_key')->text()->defaultVal('');
+           $table->set('public_key')->text()->comment('密钥');
            $table->set('status')->bool()->defaultVal(0);
            $table->timestamps();
         });
