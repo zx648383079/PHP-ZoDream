@@ -123,6 +123,7 @@ $this->registerCssFile([
                 './admin/manage',
                 'fa fa-list'
             ]
-        ]
+        ],
+        true
     ]
 ], 'ZoDream WeChat') ?>

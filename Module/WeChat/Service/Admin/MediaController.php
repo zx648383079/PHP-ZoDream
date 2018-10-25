@@ -25,7 +25,6 @@ class MediaController extends Controller {
 
     public function editAction($id) {
         $model = MediaModel::findOrNew($id);
-        $template_list = TemplateModel::all();
-        return $this->show(compact('model', 'template_list'));
+        return $this->show(compact('model'));
     }
 }

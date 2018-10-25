@@ -53,10 +53,10 @@ class CreateWeChatTables extends Migration {
         Schema::createTable(TemplateModel::tableName(), function(Table $table) {
             $table->setComment('微信图文模板');
             $table->set('id')->pk()->ai();
-            $table->set('type')->tinyint(3)->notNull()->comment('类型：素材、节日、行业');
-            $table->set('cat_id')->int(10)->notNull()->comment('具体分类id');
-            $table->set('name')->varchar(100)->notNull()->comment('素材ID');
-            $table->set('content')->text()->notNull()->comment('微信返回数据');
+            $table->set('type')->tinyint(3)->defaultVal(0)->comment('类型：素材、节日、行业');
+            $table->set('category')->int()->defaultVal(0)->comment('详细分类');
+            $table->set('name')->varchar(100)->notNull()->comment('模板标题');
+            $table->set('content')->text()->notNull()->comment('模板内容');
             $table->timestamps();
         });
     }

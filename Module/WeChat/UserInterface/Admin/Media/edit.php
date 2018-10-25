@@ -1,13 +1,15 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\WeChat\Domain\Model\TemplateModel;
 /** @var $this View */
 $this->title = '编辑图文';
 $js = <<<JS
-    var ue = UE.getEditor('container');
+    bindEditor('#container');
 JS;
-$this->registerJsFile('/assets/ueditor/ueditor.config.js')
-    ->registerJsFile('/assets/ueditor/ueditor.all.js')
+$this->registerJsFile('editor/medium-editor.min.js')
+    ->registerCssFile('editor/medium-editor.min.css')
+    ->registerCssFile('editor/default.min.css')
     ->registerJs($js);
 ?>
 <div class="page-tip">
@@ -27,24 +29,18 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
         <div class="editor-box">
             <div class="editor-template-box">
                 <ul class="template-menu">
-                    <li class="active">素材</li>
-                    <li>行业模板</li>
-                    <li>节日模板</li>
+                    <?php foreach(TemplateModel::$type_list as $key => $item):?>
+                        <li data-url="<?=$this->url('./admin/template', ['type' => $key])?>"><?=$item?></li>
+                    <?php endforeach;?>
                 </ul>
                 <div class="template-box">
                     <ul class="templdate-list">
-                        <?php foreach($template_list as $item):?>
-                           <li>
-                                <?=$item->content?>
-                           </li>
-                        <?php endforeach;?>
+                       
                     </ul>
                 </div>
             </div>
             <div class="editor">
-                <script id="container" style="width: 500px;height: 800px" name="content" type="text/plain" required>
-                        <?=$model->content?>
-                </script>
+                <div id="container"><?=$model->content?></div>
             </div>
             
         </div>
