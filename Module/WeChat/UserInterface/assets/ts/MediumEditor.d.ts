@@ -6,10 +6,74 @@ interface MediumEditorOption {
     paste?: any,
     anchorPreview?: any,
     placeholder?: any
+    activeButtonClass?: string
+    autoLink: boolean
+    buttonLabels: boolean
+    contentWindow: Window
+    disableDoubleReturn: boolean
+    disableEditing: boolean
+    disableExtraSpaces: boolean
+    disableReturn: boolean
+    elementsContainer: HTMLBodyElement
+    extensions: any
+    ownerDocument: Document
+    spellcheck: number
 }
+
+declare class MediumEditorUtil {
+    insertHTMLCommand(doc: Document, html: string)
+}
+
+declare class MediumEditorEvent {
+
+}
+declare class MediumEditorSelection {
+    clearSelection()
+    doesRangeStartWithImages()
+    exportSelection()
+    findMatchingSelectionParent()
+    getCaretOffsets(element: any): {left: number, right: number}
+    getIndexRelativeToAdjacentEmptyBlocks()
+    getSelectedElements(doc: Document): Array<HTMLElement>
+    getSelectedParentElement(doc: Document)
+    getSelectionElement(doc: Document): HTMLElement
+    getSelectionHtml(doc: Document): string
+    getSelectionRange(doc: Document): Range
+    getSelectionStart()
+    getTrailingImageCount()
+    importSelection()
+    importSelectionMoveCursorPastAnchor()
+    importSelectionMoveCursorPastBlocks()
+    moveCursor()
+    rangeSelectsSingleNode()
+    select()
+    selectNode()
+    selectRange()
+    selectionContainsContent()
+    selectionInContentEditableFalse()
+}
+
 declare class MediumEditor {
 
-    constructor(elements: string | HTMLElement | Array<any> | NodeList | HTMLCollection, options?: MediumEditorOption);
+    static selection: MediumEditorSelection
+
+    static util: MediumEditorUtil
+
+    elements: Array<HTMLElement>
+
+    events: MediumEditorEvent
+
+    extensions: Array<any>
+
+    id: number
+
+    isActive: boolean
+
+    options: MediumEditorOption
+
+    origElements: string | HTMLElement | Array<any> | NodeList | HTMLCollection
+
+    constructor(elements: string | HTMLElement | Array<any> | NodeList | HTMLCollection, options?: MediumEditorOption | any);
     /**
      * 删除编辑器
      */
@@ -165,6 +229,32 @@ declare class MediumEditor {
      * @param index 
      */
     setContent(html: string, index?: number)
-    getEditorFromElement(element)
-    
+    /**
+     * 判断焦点在最后
+     */
+    caretIsAtEnd(): boolean
+    /**
+     * 判断焦点在最前
+     */
+    caretIsAtStart(): boolean
+    /**
+     * 设置焦点在最后
+     */
+    setCaretAtEnd()
+    /**
+     * 设置焦点在最前
+     */
+    setCaretAtStart()
+    /**
+     * 插入html
+     * @param html 
+     */
+    insertHTML(html: string)
+    /**
+     * 插入html块
+     * @param html 
+     */
+    insertBlock(html: string)
+
+    static getEditorFromElement(element)
 }

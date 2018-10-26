@@ -11,9 +11,26 @@ class LogController extends Controller {
         ];
     }
 
-    public function indexAction() {
+    public function indexAction($mark = false) {
         $log_list = MessageHistoryModel::where('wid', $this->weChatId())
+            ->when($mark !== false, function ($query) use ($mark) {
+                $query->where('mark', intval($mark));
+            })
             ->page();
         return $this->show(compact('log_list'));
+    }
+
+    public function markAction($id) {
+        MessageHistoryModel::where('id', $id)->updateBool('mark');
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function deleteAction($id) {
+        MessageHistoryModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
     }
 }

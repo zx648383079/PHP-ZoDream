@@ -13,29 +13,55 @@ use Domain\Model\Model;
 abstract class EditorModel extends Model {
 
     const TYPE_TEXT = 0;
-    const TYPE_IMAGE = 1;
-    const TYPE_VIDEO = 2;
-    const TYPE_NEWS = 3;
-    const TYPE_TEMPLATE = 4;
-    const TYPE_EVENT = 5;
-    const TYPE_URL = 6;
-    const TYPE_MINI = 7;
+    const TYPE_MEDIA = 1;
+    const TYPE_NEWS = 2;
+    const TYPE_TEMPLATE = 3;
+    const TYPE_EVENT = 4;
+    const TYPE_URL = 5;
+    const TYPE_MINI = 6;
 
     protected $editor = [];
 
+    public static $type_list = [
+        self::TYPE_TEXT => '文本',
+        self::TYPE_MEDIA => '媒体素材',
+        self::TYPE_NEWS => '图文',
+        self::TYPE_TEMPLATE => '模板消息',
+        self::TYPE_EVENT => '事件',
+        self::TYPE_URL => '网址',
+        self::TYPE_MINI => '小程序'
+    ];
+
+    protected $type_map = [
+        self::TYPE_TEXT => [
+            'text' => 'content'
+        ],
+        self::TYPE_MEDIA => [
+            'media_id' => 'content'
+        ],
+        self::TYPE_NEWS => [
+            'news_id' => 'content'
+        ],
+        self::TYPE_TEMPLATE => [
+            'template_id' => 'content',
+            'template_data' => 'content'
+        ],
+        self::TYPE_EVENT => [
+            'event' => 'content'
+        ],
+        self::TYPE_URL => [
+            'url' => 'content'
+        ],
+        self::TYPE_MINI => [
+            'min_appid' => 'content',
+            'min_path' => 'pages'
+        ]
+    ];
+
     public function setEditor() {
         $this->type = intval($this->editor['type']);
-        if ($this->type == 0) {
-            $this->content = $this->editor['text'];
-            return $this;
-        }
-        if ($this->type == 7) {
-
-            return $this;
-        }
-        if ($this->type == 6) {
-            $this->content = $this->editor['url'];
-            return $this;
+        foreach ($this->type_map[$this->type] as $key => $item) {
+            $this->{$item} = $this->editor[$key];
         }
         return $this;
     }
@@ -55,14 +81,9 @@ abstract class EditorModel extends Model {
         if (!empty($this->editor)) {
             return;
         }
-        $this->editor['type'] = $this->type;
-        if ($this->editor['type'] == 0) {
-            $this->editor['text'] = $this->content;
-            return;
-        }
-        if ($this->editor['type'] == 6) {
-            $this->editor['url'] = $this->content;
-            return;
+        $this->editor['type'] = intval($this->type);
+        foreach ($this->type_map[$this->editor['type']] as $key => $item) {
+            $this->editor[$key] = $this->{$item};
         }
     }
 }

@@ -2,6 +2,7 @@
 namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\ThirdParty\WeChat\User;
 
 
 /**
@@ -12,6 +13,8 @@ use Domain\Model\Model;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property WeChatModel $wechat
+ * @property UserModel $user
  */
 class FansModel extends Model {
     /**
@@ -78,10 +81,10 @@ class FansModel extends Model {
     /**
      * 通过唯一的openid查询粉丝
      * @param $open_id
-     * @return mixed
+     * @return static
      */
     public static function findByOpenId($open_id) {
-        return self::find(['openid' => $open_id]);
+        return self::where('openid', $open_id)->first();
     }
 
     /**
@@ -107,14 +110,14 @@ class FansModel extends Model {
      * 更新失败将会在$this->user->getErrors()中记录错误
      * @param bool $force
      * @return bool
+     * @throws \Exception
      */
     public function updateUser($force = false) {
         $user = $this->user;
         if (!$user || $force) {
             $wechat = $this->wechat;
             $user = new UserModel();
-            $this->populateRelation('user', $user);
-            $data = $wechat->getSdk()->getUserInfo($this->open_id);
+            $data = $wechat->sdk(User::class)->userInfo($this->openid);
             if ($data) {
                 $user->set([
                     'id' => $this->id,

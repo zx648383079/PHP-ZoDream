@@ -81,7 +81,10 @@ class MessageController extends Controller {
 
     protected function parseResponse($reply, MessageResponse $response) {
         $reply = $this->parseReply($reply);
-        if ($reply->type === 0) {
+        if ($reply->type === ReplyModel::TYPE_TEXT) {
+            return $response->setText($reply->content);
+        }
+        if ($reply->type === ReplyModel::TYPE_URL) {
             return $response->setText($reply->content);
         }
     }

@@ -1,8 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
-$this->title = 'ZoDream';
-$this->extend('../layouts/header');
+$this->title = '历史记录';
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -29,9 +28,12 @@ $this->extend('../layouts/header');
                 <td><?=$item->name?></td>
                 <td><?=$item->type?></td>
                 <td><?=$item->appid?></td>
-                <td><?=$item->description?></td>
+                <td><?=$item->message?></td>
                 <td>
-                    <a data-type="del" href="<?=$this->url('./manage/delete', ['id' => $item->id])?>">删除</a>
+                    <?php if($item->mark < 1):?>
+                    <a data-type="ajax" href="<?=$this->url('./admin/log/mark', ['id' => $item->id])?>">标记</a>
+                    <?php endif;?>
+                    <a data-type="del" href="<?=$this->url('./admin/log/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>
@@ -44,5 +46,3 @@ $this->extend('../layouts/header');
         </tr>
     </tfoot>
 </table>
-
-<?php $this->extend('../layouts/footer');?>

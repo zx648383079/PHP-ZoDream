@@ -5,6 +5,7 @@ use Domain\Model\Model;
 
 use Zodream\ThirdParty\WeChat\BaseWeChat;
 use Zodream\ThirdParty\WeChat\Message;
+use Zodream\ThirdParty\WeChat\User;
 
 /**
  * 公众号数据
@@ -165,8 +166,8 @@ class WeChatModel extends Model {
 
     /**
      * 注入sdk
-     * @param $instance
-     * @return BaseWeChat|Message
+     * @param string|mixed $instance
+     * @return BaseWeChat|Message|User|mixed
      * @throws \Exception
      */
     public function sdk($instance) {

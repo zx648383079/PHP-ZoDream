@@ -28,7 +28,9 @@ $this->title = '编辑菜单';
                 <?php endforeach;?>
             </select>
         </div>
-        <?php $this->extend('../layouts/editor'); ?>
+        <?php $this->extend('../layouts/editor', [
+            'tab_id' => false
+        ]); ?>
         <button class="btn btn-primary">保存</button>
         <input type="hidden" name="id" value="<?=$model->id?>">
     </form>

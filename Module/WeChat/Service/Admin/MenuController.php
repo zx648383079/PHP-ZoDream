@@ -3,6 +3,7 @@ namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\Infrastructure\Http\Response;
 use Zodream\ThirdParty\WeChat\Menu;
 use Zodream\ThirdParty\WeChat\MenuItem;
 
@@ -106,7 +107,8 @@ class MenuController extends Controller {
 
     /**
      * 应用
-     * @return \Zodream\Infrastructure\Http\Response
+     * @return Response
+     * @throws \Exception
      */
     public function applyAction() {
         $menu_list = MenuModel::with('children')->where('wid', $this->weChatId())->all();

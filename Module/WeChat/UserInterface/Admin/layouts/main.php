@@ -108,7 +108,7 @@ $this->registerCssFile([
             ],
             [
                 '已收藏的消息',
-                ['./admin/log', 'status' => 'collect'],
+                ['./admin/log', 'mark' => 1],
                 'fa fa-heart'
             ]
         ]
