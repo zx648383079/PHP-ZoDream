@@ -8,7 +8,7 @@ $this->title = '资源管理';
 <div class="page-tip">
     <p class="blue">操作提示</p>
     <ul>
-        <li>关注公众号时自动回复</li>
+        <li>图文素材</li>
     </ul>
     <span class="toggle"></span>
 </div>

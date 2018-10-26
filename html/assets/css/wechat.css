@@ -105,7 +105,7 @@ table .active {
     left: 80px;
     border: 4px solid #D8D8D8;
     overflow-y: auto;
-    padding: 0 15px; }
+    padding: 0 5px; }
     .editor-box .editor-template-box .template-box .templdate-list li {
       list-style: none outside none;
       margin-top: 15px;

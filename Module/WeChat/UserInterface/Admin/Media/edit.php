@@ -7,10 +7,7 @@ $this->title = '编辑图文';
 $js = <<<JS
     bindEditor('#container');
 JS;
-$this->registerJsFile('editor/medium-editor.min.js')
-    ->registerCssFile('editor/medium-editor.min.css')
-    ->registerCssFile('editor/default.min.css')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>
@@ -40,7 +37,9 @@ $this->registerJsFile('editor/medium-editor.min.js')
                 </div>
             </div>
             <div class="editor">
-                <div id="container"><?=$model->content?></div>
+                <script id="container" style="width: 430px;height: 730px" name="content" type="text/plain">
+                        <?=$model->content?>
+                </script>
             </div>
             
         </div>

@@ -10,7 +10,10 @@ $this->registerCssFile([
         '@dialog.css',
         '@wechat.css'
     ])->registerJsFile([
+        'ueditor/ueditor.config.js',
+        'ueditor/ueditor.all.js',
         '@jquery.min.js',
+        '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
         '@main.min.js',
@@ -18,7 +21,7 @@ $this->registerCssFile([
     ]);
 ?>
 
-<?= Layout::main($this, [
+<?= Layout::mainIfPjax($this, [
     [
         '首页',
         './admin',
