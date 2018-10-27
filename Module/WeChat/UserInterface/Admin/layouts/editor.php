@@ -12,6 +12,8 @@ if (!isset($tab_id)) {
 if (!is_array($tab_id)) {
     $tab_id = $tab_id ? [0, 1, 2, 3] : [1, 2, 3, 4, 5, 6];
 }
+$type_id = $model->getEditor('type');
+$this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id : $tab_id[0]));
 ?>
 <div class="zd-tab wx-editor">
     <div class="zd-tab-head">
@@ -131,5 +133,5 @@ if (!is_array($tab_id)) {
         </div>
         <?php endif;?>
     </div>
-    <input type="hidden" class="type-input" name="editor[type]" value="<?=$model->getEditor('type')?>">
+    <input type="hidden" class="type-input" name="editor[type]" value="<?=$type_id?>">
 </div>

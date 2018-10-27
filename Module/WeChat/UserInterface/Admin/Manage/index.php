@@ -8,6 +8,7 @@ $this->title = '公众号管理';
     <p class="blue">操作提示</p>
     <ul>
         <li>公众号管理</li>
+        <li>必须先选择公众号，才能管理公众下面的其他内容</li>
     </ul>
     <span class="toggle"></span>
 </div>

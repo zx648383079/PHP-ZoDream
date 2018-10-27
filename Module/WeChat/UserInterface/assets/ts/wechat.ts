@@ -1,8 +1,7 @@
 /// <reference path="MediumEditor.d.ts/>
 
-$(function () {
-    let typeInput = $(".wx-editor .type-input"),
-        typeId = typeInput.val();
+function bindTab(typeId: number| string) {
+    let typeInput = $(".wx-editor .type-input");
     $(".wx-editor .zd-tab-head .zd-tab-item").click(function() {
         typeInput.val($(this).attr('data-id'));
     }).each((i, item) => {
@@ -11,7 +10,7 @@ $(function () {
             that.trigger('click');
         }
     });
-});
+}
 
 function bindEditor(tag: string) {
     let editor = UE.getEditor('container',{
