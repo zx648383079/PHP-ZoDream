@@ -195,8 +195,7 @@ $js = <<<JS
         myChart.setOption(option);
 JS;
 
-$this->registerJsFile('@echarts.min.js')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 
     <div>

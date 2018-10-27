@@ -8,7 +8,7 @@ $this->extend('layouts/header', ['nav_index' => 98]);
 ?>
 
 <div class="clear"></div>
-<div class="Layout list">
+<div class="box-container list">
   <div class="Head">
     <h2>排行榜</h2>
     <span>Ranking</span> <span class="j"></span>
@@ -22,9 +22,9 @@ $this->extend('layouts/header', ['nav_index' => 98]);
         <div class="tit">
           <h3>全网小说点击榜</h3>
           <ul id="tab_box_01">
-            <li onmouseover="Li_Mover(this,'1','zong','tab')">总</li>
-            <li class="Li_Mover" onmouseover="Li_Mover(this,'1','yue','tab')">月</li>
-            <li onmouseover="Li_Mover(this,'1','zhou','tab')">周</li>
+            <li >总</li>
+            <li class="Li_Mover">月</li>
+            <li>周</li>
           </ul>
         </div>
         <div class="con" id="box_01_zong">
@@ -92,9 +92,9 @@ $this->extend('layouts/header', ['nav_index' => 98]);
         <div class="tit">
           <h3>全网小说推荐榜</h3>
           <ul id="tab_box_02">
-            <li onmouseover="Li_Mover(this, '2', 'zong', 'tab')">总</li>
-            <li class="Li_Mover" onmouseover="Li_Mover(this,'2','yue','tab')">月</li>
-            <li onmouseover="Li_Mover(this,'2','zhou','tab')">周</li>
+            <li>总</li>
+            <li class="Li_Mover">月</li>
+            <li >周</li>
           </ul>
         </div>
         <div class="con" id="box_02_zong">
@@ -162,7 +162,7 @@ $this->extend('layouts/header', ['nav_index' => 98]);
         <div class="tit">
           <h3>全网小说字数榜</h3>
           <ul id="tab_box_03">
-            <li class="Li_Mover" onmouseover="Li_Mover(this,\'3\',\'zong\',\'tab\')">总</li>
+            <li class="Li_Mover">总</li>
           </ul>
         </div>
         <div class="con Li_Mover" id="box_03_zong">
@@ -215,7 +215,7 @@ $this->extend('layouts/header', ['nav_index' => 98]);
                   <?php endforeach;?>
               </ul><div class="more">查看更多……</div>
 			</div>
-			<div class="con Li_Mover" id="box_0'.$m.'_yue">
+			<div class="con Li_Mover" >
 			  <ul>
                   <?php foreach ($cat->month_book as $key => $item): ?>
                       <li <?= $key < 1 ? 'class="Li_Mover"' : '' ?> onmouseover="Li_Mover(this,1,'zong')"><dl class="dl_01">
@@ -254,7 +254,7 @@ $this->extend('layouts/header', ['nav_index' => 98]);
                   <?php endforeach;?>
               </ul><div class="more">查看更多……</div>
 		</div>
-      </div>';
+      </div>
 	    <?php endforeach;?>
      </div>
     <div class="Right">

@@ -8,11 +8,11 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
 
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：
+<div class="box-container local">当前位置：
     <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a> >
     <a href="<?=$cat->url?>"><?=$cat->real_name?>小说</a>
 </div>
-<div class="Layout no_h">
+<div class="box-container no_h">
   <div class="Con lm_new">
     <div class="Left">
       <div class="h_pic_box">
@@ -140,7 +140,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout m_list">
+<div class="box-container m_list">
   <div class="Head">
     <h2>更新列表</h2>
     <span>New List</span> <span class="j"></span>
@@ -167,7 +167,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                   <div class="author">
                       <a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a>
                   </div><div class="abover"><span><?=$item->status?></span>
-                  </div><div class="time"><?=$item->updated_at?></div></li>
+                  </div><div class="time"><?=$item->last_at?></div></li>
           <?php endforeach;?>
          </ul>
 		 <div class="bot_more"><a href="<?=$this->url('./search/list', ['cat_id' => $cat->id])?>" title="查看更多<?=$cat->real_name?>小说">更多<?=$cat->real_name?>小说&nbsp;&gt;&gt;</a></div>

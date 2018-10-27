@@ -20,9 +20,9 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Form::text('money', true)?>
     <?=Form::text('frozen_money')?>
     <?=Form::select('account_id', [$account_list])?>
-    <?=Form::select('project_id', [$project_list])?>
-    <?=Form::select('channel_id', [$channel_list])?>
-    <?=Form::select('budget_id', [$budget_list])?>
+    <?=Form::select('project_id', [$project_list, ['请选择']])?>
+    <?=Form::select('channel_id', [$channel_list, ['请选择']])?>
+    <?=Form::select('budget_id', [$budget_list, ['请选择']])?>
     <?=Form::text('happened_at', true)?>
     <?=Form::textarea('remark')?>
     <button type="submit" class="btn btn-success">确认保存</button>

@@ -8,7 +8,7 @@ $this->extend('layouts/header');
 ?>
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout">
+<div class="box-container">
   <div class="left fyb">
     <div class="head">
       <h2>风云榜</h2>
@@ -54,7 +54,7 @@ $this->extend('layouts/header');
           <input type="button" title="下一页" value="下一页" />
         </div>
         <div class="con_box">
-          <div class="box">';
+          <div class="box">
               <?php foreach ($cat_list as $key => $cat):?>
                   <?php if ($key < 3): ?>
                       <div class="lm_li"><h2><a href="<?=$cat->url?>" title="<?=$cat->name?>"><?=$cat->name?></a></h2>
@@ -68,7 +68,7 @@ $this->extend('layouts/header');
                 <?php endif;?>
               <?php endforeach;?>
           </div>
-		<div class="box" style="display:none;">';
+		<div class="box" style="display:none;">
             <?php foreach ($cat_list as $key => $cat):?>
                 <?php if ($key > 2): ?>
                     <div class="lm_li"><h2><a href="<?=$cat->url?>" title="<?=$cat->name?>"><?=$cat->name?></a></h2>
@@ -88,7 +88,7 @@ $this->extend('layouts/header');
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout bw">
+<div class="box-container bw">
   <div class="Head">
     <h2>新书推荐榜</h2>
     <span class="j"></span>
@@ -169,7 +169,7 @@ $this->extend('layouts/header');
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout jp">
+<div class="box-container jp">
   <div class="Head">
     <h2>精品推荐</h2>
     <span>Boutique Recommend</span> <span class="j"></span>
@@ -289,7 +289,7 @@ $this->extend('layouts/header');
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout ph">
+<div class="box-container ph">
   <div class="Head">
     <h2>排行榜</h2>
     <span>Ranking</span> <span class="j"></span>
@@ -337,7 +337,7 @@ $this->extend('layouts/header');
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout m_list">
+<div class="box-container m_list">
   <div class="Head">
     <h2>更新列表</h2>
     <span>New List</span> <span class="j"></span>
@@ -361,7 +361,7 @@ $this->extend('layouts/header');
                   <div class="author">
                       <a href="#" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a>
                   </div><div class="abover"><span><?=$item->status?></span>
-                  </div><div class="time"><?=$item->updated_at?></div></li>
+                  </div><div class="time"><?=$item->last_at?></div></li>
           <?php endforeach;?>
       </ul>
     </div>

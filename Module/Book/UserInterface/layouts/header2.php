@@ -17,7 +17,7 @@ $this->registerCssFile('@font-awesome.min.css')
        <?=$this->header();?>
    </head>
    <body class="<?=$this->body_class?>">
-   <div class="Layout topbox active">
+   <div class="box-container topbox active">
   <div class="topbar">
     <div class="mainbox">
       <div class="left_con"> 

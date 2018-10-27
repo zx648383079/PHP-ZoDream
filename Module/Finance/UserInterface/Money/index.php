@@ -62,8 +62,7 @@ $js = <<<JS
 JS;
 
 
-$this->registerJsFile('@echarts.min.js')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 
     <div>

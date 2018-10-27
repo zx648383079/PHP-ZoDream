@@ -8,11 +8,11 @@ $this->extend('layouts/header', ['nav_index' => 99]);
 ?>
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：
+<div class="box-container local">当前位置：
     <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>&nbsp;>&nbsp;
     <a href="<?=$this->url('./home/list')?>">小说书库</a></div>
 <div class="clear"></div>
-<div class="Layout m_list list">
+<div class="box-container m_list list">
   <div class="Head">
     <h2>小说列表</h2><span class="j"></span>
     <div class="morelist">

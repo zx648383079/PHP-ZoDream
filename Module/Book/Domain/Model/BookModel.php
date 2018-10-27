@@ -9,7 +9,7 @@ namespace Module\Book\Domain\Model;
  */
 use Domain\Model\Model;
 use Zodream\Database\Model\Query;
-
+use Zodream\Helpers\Time;
 
 
 /**
@@ -145,6 +145,10 @@ class BookModel extends Model {
      */
     public function getLastChapterAttribute() {
         return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', 'desc')->one();
+    }
+
+    public function getLastAtAttribute() {
+        return Time::format($this->__attributes['updated_at'], 'm-d H:i');
     }
 
     /**

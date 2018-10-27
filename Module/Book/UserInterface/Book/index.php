@@ -7,12 +7,12 @@ $this->extend('layouts/header');
 ?>
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：
+<div class="box-container local">当前位置：
     <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a> >
     <a href="<?=$cat->url?>"><?=$cat->real_name?>小说</a>
 </div>
 <div class="clear"></div>
-<div class="Layout no_h">
+<div class="box-container no_h">
   <div class="Con jj">
     <div class="Left">
       <div class="p_box">
@@ -105,7 +105,7 @@ $this->extend('layouts/header');
 </div>
 <div class="clear"></div>
 <a id="comment_done"></a>
-<div class="Layout no_h">
+<div class="box-container no_h">
   <div class="Con jj_pl">
     <div class="Head">
         <h2><?=$book->name?>最新章节列表</h2>

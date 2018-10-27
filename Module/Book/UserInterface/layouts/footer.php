@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->registerJsFile('@jquery.min.js');
 ?>
-    <div class="Layout ft" style="position:relative">
+    <div class="box-container ft" style="position:relative">
         <div class="center">
             <div class="bot_logo"><a href="/" title="<?=$this->site_name?>"><img src="/assets/images/logo.png" alt="<?=$this->site_name?>" /></a></div>
             <div class="link">

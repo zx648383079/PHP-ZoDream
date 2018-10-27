@@ -8,11 +8,11 @@ $this->extend('layouts/header');
 ?>
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>
+<div class="box-container local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>
     > <a href="<?=$cat->url?>"><?=$cat->real_name?>小说下载</a> >  
     <a href="<?=$book->download_url?>" title="<?=$book->name?>txt下载"><?=$book->name?>txt下载</a></div>
 <div class="clear"></div>
-<div class="Layout no_h">
+<div class="box-container no_h">
   <div class="Con jj">
     <div class="Left">
       <div class="p_box">
@@ -108,7 +108,7 @@ $this->extend('layouts/header');
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout no_h">
+<div class="box-container no_h">
 <div align="left">
 <br/><h3>阅读提示：</h3><br/>
 1、小说《<a href="<?=$book->url?>" title="<?=$book->name?>"><?=$book->name?></a>》所描述的内容只是作者【<?=$book->author->name?>】的个人写作观点，不保证其中情节的真实性，请勿模仿！<br/>

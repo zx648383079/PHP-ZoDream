@@ -7,7 +7,7 @@ $this->registerJsFile('@jquery.min.js')
   ->registerJsFile('@jquery.dialog.min.js')
   ->registerJsFile('@book.min.js');
 ?>
-    <div class="Layout ft">
+    <div class="box-container ft">
       <div class="center">
         <div class="bot_logo"><a href="/" title="<?=$this->site_name?>"><img src="/assets/images/logo.png" alt="<?=$this->site_name?>" /></a></div>
         <div class="link">

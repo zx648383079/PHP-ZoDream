@@ -7,7 +7,7 @@ $this->body_class = 'theme-0 width-800';
 $this->extend('layouts/header2');
 ?>
 <div class="clear"></div>
-<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a> >
+<div class="box-container local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a> >
     <?php if($cat):?>
     <a href="<?=$cat->url?>"><?=$cat->real_name?>小说</a> >
     <?php endif;?>

@@ -4,42 +4,11 @@ html {
 
 body {
   background-color: #fbfbfb;
-  font-size: 12px;
   color: #343434;
   font-family: "宋体", Arial, Helvetica;
   margin: 0;
   padding: 0;
   word-wrap: break-word; }
-
-div,
-ul,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-form,
-input,
-p,
-button,
-textarea,
-dl,
-dt,
-dd {
-  margin: 0;
-  padding: 0;
-  word-wrap: break-word; }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #000;
-  font-family: 微软雅黑; }
 
 img {
   border: 0px; }
@@ -69,8 +38,8 @@ textarea {
   textarea:focus {
     outline: none; }
 
-.Layout {
-  width: 979px;
+.box-container {
+  width: 1200px;
   margin: 0px auto;
   padding-top: 10px;
   overflow: hidden; }
@@ -124,7 +93,7 @@ object {
   border-bottom: none; }
 
 .topbar {
-  height: 36px;
+  height: 40px;
   border-bottom: 1px solid #FFF;
   z-index: 888; }
 
@@ -134,7 +103,7 @@ object {
 
 .topbar .mainbox {
   position: relative;
-  width: 979px;
+  width: 1200px;
   margin: 0px auto; }
 
 .topbar .left_con {
@@ -158,7 +127,7 @@ object {
   float: left;
   color: #FFF;
   overflow: hidden;
-  height: 26px;
+  height: 35px;
   padding-top: 12px; }
 
 .topbar ul,
@@ -327,7 +296,7 @@ object {
   border-right: none;
   font-weight: 800; }
 
-.Layout.h {
+.box-container.h {
   width: 100%;
   padding-top: 0px;
   overflow: hidden; }
@@ -336,7 +305,7 @@ object {
   width: 100%;
   height: 145px; }
   .header .top {
-    width: 979px;
+    width: 1200px;
     height: 95px;
     margin: 0px auto;
     z-index: 999;
@@ -390,7 +359,7 @@ object {
 .header #searchword {
   float: left;
   width: 265px;
-  height: 24px;
+  height: 30px;
   padding-left: 25px;
   font-size: 14px;
   color: #343434;
@@ -433,7 +402,7 @@ object {
       color: #B01F2E; }
 
 .header .nav .box {
-  width: 979px;
+  width: 1200px;
   height: 50px;
   margin: 0px auto;
   overflow: hidden; }
@@ -449,7 +418,7 @@ object {
     padding: 0 14px;
     overflow: hidden; }
     .header .nav .box a.home {
-      width: 140px;
+      width: 200px;
       font-size: 14px;
       font-weight: 800;
       border-left: 1px solid #d18049;
@@ -471,14 +440,14 @@ object {
   color: #E7A624 !important;
   background: url("../images/allimg_basic.png") no-repeat 6px -8px; }
 
-.Layout.ft {
+.box-container.ft {
   width: 100%;
   min-height: 120px;
   margin-top: 20px;
   padding-top: 0px;
   border-top: 1px solid #AFAFAF; }
-  .Layout.ft .center {
-    width: 979px;
+  .box-container.ft .center {
+    width: 1200px;
     margin: 0px auto;
     overflow: hidden; }
 
@@ -520,7 +489,7 @@ object {
 
 .Head {
   position: relative;
-  height: 38px;
+  height: 40px;
   border: 1px solid #dedddd;
   border-bottom: 1px solid #afafaf;
   background: #FFF;
@@ -650,14 +619,14 @@ object {
   margin-bottom: 24px;
   border: 1px solid #d8d8d8; }
 
-.Layout.no_h .Con {
+.box-container.no_h .Con {
   border-top: 1px solid #dedddd; }
-  .Layout.no_h .Con.jj_pl {
+  .box-container.no_h .Con.jj_pl {
     background: #f6f3ec; }
 
 .Con .Left {
   float: left;
-  width: 765px;
+  width: 900px;
   height: auto;
   margin-top: -1px;
   margin-bottom: -1px;
@@ -667,7 +636,7 @@ object {
 
 .Con .Right {
   float: right;
-  width: 211px;
+  width: 299px;
   height: auto;
   padding: 20px 0px 0px 0px;
   margin-left: -1px;
@@ -675,7 +644,7 @@ object {
   background-color: #FFF;
   overflow: hidden; }
 
-.Layout.no_h .Con .Right {
+.box-container.no_h .Con .Right {
   position: relative;
   padding-top: 0px; }
 
@@ -683,7 +652,7 @@ object {
   float: left;
   overflow: hidden; }
 
-.Layout .r_box.author .head {
+.box-container .r_box.author .head {
   background-position: 10px -420px; }
 
 .r_box.author .head h2 {
@@ -704,7 +673,7 @@ object {
   .r_box.author .head span a {
     display: inline-block; }
 
-.Layout .r_box.author .pic {
+.box-container .r_box.author .pic {
   width: 90px;
   height: 118px;
   margin: 0px 10px;
@@ -731,38 +700,29 @@ object {
   _margin-top: -1px;
   _padding-bottom: 11px; }
 
-.Layout .r_box.art .head {
+.box-container .r_box.art .head {
   background-position: -166px -420px; }
 
-.Layout .r_box.art .pic {
+.box-container .r_box.art .pic {
   margin-right: 0px;
   _margin-right: 5px; }
 
 .r_box {
-  float: left;
-  width: 211px;
   height: auto;
   padding-bottom: 20px;
   overflow: hidden; }
   .r_box .head {
-    float: left;
-    width: 211px;
     height: 30px;
     font-size: 11px;
     overflow: hidden;
     margin-left: 5px; }
   .r_box ul {
-    float: left;
-    width: 211px;
     height: auto;
     background: url("../images/allimg_basic.png") no-repeat 7px -66px;
     overflow: hidden; }
   .r_box li {
-    float: left;
-    width: 211px;
     height: 26px;
     line-height: 26px;
-    _line-height: 28px;
     overflow: hidden; }
     .r_box li a {
       float: left;
@@ -780,15 +740,10 @@ object {
         float: right;
         color: #b01f2e;
         margin-left: 0px; }
-  .r_box.cn li span {
-    _line-height: 28px; }
   .r_box .first_con {
-    float: left;
-    width: 191px;
     height: auto;
     margin: 5px 0px 10px 0px;
     padding: 10px;
-    _padding-bottom: 9px;
     border-top: 1px solid #d7d7d7;
     border-bottom: 1px solid #d7d7d7;
     background-color: #e8e8e8;
@@ -858,11 +813,8 @@ object {
   padding-top: 12px; }
 
 .m_list .m_head {
-  float: left;
-  width: 788px;
   height: 40px;
   line-height: 50px;
-  _line-height: 52px;
   border-bottom: 1px solid #e5e3e1;
   overflow: hidden; }
   .m_list .m_head span {
@@ -871,10 +823,10 @@ object {
     overflow: hidden; }
 
 .m_list span.c {
-  width: 62px; }
+  width: 82px; }
 
 .m_list span.t {
-  width: 182px; }
+  width: 268px; }
 
 .m_list span.w {
   width: 335px; }
@@ -886,20 +838,15 @@ object {
   width: 76px; }
 
 .m_list span.tm {
-  width: 82px; }
+  width: 95px; }
 
 .ul_m_list {
-  float: left;
-  width: 788px;
   height: auto;
   padding: 10px 0px;
   overflow: hidden; }
   .ul_m_list li {
-    float: left;
-    width: 748px;
     height: 30px;
     line-height: 30px;
-    _line-height: 32px;
     padding: 0px 20px;
     overflow: hidden; }
 
@@ -913,14 +860,14 @@ object {
   .ul_m_list div a {
     display: inline-block; }
   .ul_m_list div.c {
-    width: 60px; }
+    width: 80px; }
     .ul_m_list div.c a {
       color: #7d7d7d; }
       .ul_m_list div.c a:hover {
         color: #B01F2E; }
 
 .ul_m_list .title {
-  width: 444px;
+  width: 535px;
   padding-left: 10px; }
   .ul_m_list .title .t a {
     font-size: 14px;
@@ -951,13 +898,13 @@ object {
     color: #B01F2E; }
 
 .ul_m_list .time {
-  width: 70px;
+  width: 100px;
   text-align: center;
   color: #7d7d7d; }
 
 .bot_more {
   float: left;
-  width: 788px;
+  width: 900px;
   height: 50px;
   line-height: 40px;
   text-align: center;
@@ -1173,7 +1120,7 @@ body.article {
 
 .Con.box_con h2 {
   float: left;
-  width: 979px;
+  width: 1200px;
   height: 50px;
   margin-top: 20px;
   _margin-top: 18px;
@@ -1192,7 +1139,7 @@ body.article {
 
 .Con.box_con .info {
   float: left;
-  width: 979px;
+  width: 1200px;
   height: 15px;
   margin-bottom: 30px;
   line-height: 16px;
@@ -1208,7 +1155,7 @@ body.article {
 
 .Con.box_con .box_head {
   float: left;
-  width: 979px;
+  width: 1200px;
   height: 30px;
   margin-bottom: 30px;
   font-size: 14px;
@@ -1222,7 +1169,7 @@ body.article {
 
 .Con.box_con .box_box {
   float: left;
-  width: 979px;
+  width: 1200px;
   height: auto;
   overflow: hidden; }
 
@@ -1231,7 +1178,7 @@ body.article {
 
 .Con.box_con .box_box ul {
   float: left;
-  width: 979px;
+  width: 1200px;
   height: auto;
   overflow: hidden; }
   .Con.box_con .box_box ul li {
@@ -1266,13 +1213,13 @@ body.article .Con.box_con .box_box {
 
 .Con.box_con .btn_box {
   float: left;
-  width: 979px;
+  width: 1200px;
   height: 110px;
   overflow: hidden; }
   .Con.box_con .btn_box .u {
     position: relative;
     float: left;
-    width: 979px;
+    width: 1200px;
     height: 22px;
     line-height: 22px;
     margin-top: 29px;
@@ -1315,7 +1262,7 @@ body.article .Con.box_con .box_box {
     right: 238px; }
   .Con.box_con .btn_box .d {
     float: left;
-    width: 979px;
+    width: 1200px;
     height: 15px;
     padding-left: 344px;
     margin-top: 22px;
@@ -1480,7 +1427,7 @@ body.article .Con.box_con .box_box {
 
 .left.fyb {
   float: left;
-  width: 200px;
+  width: 299px;
   height: auto;
   overflow: hidden; }
   .left.fyb .head {
@@ -1488,11 +1435,8 @@ body.article .Con.box_con .box_box {
     height: 38px;
     background: url("../images/allimg_index.png") no-repeat 0px 0px;
     overflow: hidden; }
-  .left.fyb h2 {
-    font-size: 0px;
-    line-height: 0px; }
   .left.fyb .con {
-    width: 198px;
+    width: 100%;
     height: auto;
     border: 1px solid #ccc6c3;
     border-top: none;
@@ -1501,15 +1445,14 @@ body.article .Con.box_con .box_box {
     overflow: hidden; }
   .left.fyb ul {
     float: left;
-    width: 188px;
+    width: 100%;
     padding: 0px 5px;
     overflow: hidden; }
   .left.fyb li {
     float: left;
-    width: 188px;
+    width: 100%;
     height: 26px;
     line-height: 26px;
-    _line-height: 28px;
     border-bottom: 1px solid #d4d4d4;
     overflow: hidden; }
     .left.fyb li div {
@@ -1517,9 +1460,9 @@ body.article .Con.box_con .box_box {
       height: 26px;
       overflow: hidden; }
   .left.fyb .div_c {
-    width: 60px; }
+    width: 80px; }
   .left.fyb .div_t {
-    width: 123px;
+    width: 200px;
     padding-left: 5px; }
   .left.fyb a {
     display: inline-block;
@@ -1538,19 +1481,17 @@ body.article .Con.box_con .box_box {
 
 .lm_li {
   float: left;
-  width: 228px;
+  width: 278px;
   margin-left: 26px;
   overflow: hidden; }
   .lm_li a {
     display: inline-block; }
   .lm_li h2 {
-    width: 200px;
     height: 27px;
     border-bottom: 1px solid #ede7e4;
     overflow: hidden;
     font-size: 18px; }
     .lm_li h2 a {
-      width: 80px;
       height: 100%;
       overflow: hidden;
       line-height: 20px; }
@@ -1558,9 +1499,8 @@ body.article .Con.box_con .box_box {
         text-decoration: none;
         color: #B01F2E; }
   .lm_li ul {
-    height: 115px;
+    height: 125px;
     padding-top: 8px;
-    _padding-top: 9px;
     overflow: hidden; }
   .lm_li li {
     height: 24px;
@@ -1574,7 +1514,7 @@ body.article .Con.box_con .box_box {
 
 .right.zxgx {
   float: right;
-  width: 769px;
+  width: 900px;
   height: 455px;
   padding-left: 10px;
   overflow: hidden; }
@@ -1586,14 +1526,12 @@ body.article .Con.box_con .box_box {
     background: #f8f4f2;
     overflow: hidden; }
   .right.zxgx .con {
-    width: 767px;
     height: 408px;
     border: 1px solid #e3dbd7;
     border-top: none;
     background-color: #f8f4f2;
     overflow: hidden; }
   .right.zxgx .u {
-    width: 727px;
     height: 198px;
     padding: 20px;
     border-bottom: 1px solid #afafaf;
@@ -1640,7 +1578,6 @@ body.article .Con.box_con .box_box {
       color: #6c6c6c; }
   .right.zxgx .d {
     position: relative;
-    width: 767px;
     height: 168px; }
 
 .n_p_box {
@@ -1674,7 +1611,7 @@ body.article .Con.box_con .box_box {
 
 .right.zxgx .d .con_box {
   position: absolute;
-  width: 765px;
+  width: 880px;
   height: 128px;
   top: 20px;
   left: 3px;
@@ -1684,32 +1621,26 @@ body.article .Con.box_con .box_box {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 767px;
+  width: 880px;
   height: 128px;
   overflow: hidden; }
   .right.zxgx .d .box .lm_li {
     border-right: 1px solid #e3dbd7; }
 
-.Layout.bw .Head {
+.box-container.bw .Head {
   background-position: 10px -112px; }
 
-.Layout.jp .Head {
+.box-container.jp .Head {
   background-position: 10px -146px; }
 
 .Con.jp .l_con {
-  float: left;
-  width: 748px;
   padding: 20px 8px 0;
   overflow: hidden; }
   .Con.jp .l_con .pic {
-    float: left;
-    width: 750px;
     height: auto;
     overflow: hidden; }
 
 .Con.jp .lm {
-  float: left;
-  width: 750px;
   height: auto;
   overflow: hidden; }
 
@@ -1757,32 +1688,25 @@ body.article .Con.box_con .box_box {
     left: 36px;
     width: 712px; }
 
-.Layout.ph .Head {
+.box-container.ph .Head {
   background-position: 10px -180px; }
 
 .Con.ph .p_box {
   float: left;
-  width: 326px;
+  width: 400px;
   height: auto;
   overflow: hidden; }
   .Con.ph .p_box.pl {
-    width: 325px; }
+    width: 398px; }
 
 .Con.ph .head {
-  float: left;
-  width: 326px;
   height: 37px;
   background-color: #e8e8e8;
   border-bottom: 1px solid #d7d7d7;
   overflow: hidden; }
 
-.Con.ph .p_box.pl .head {
-  width: 325px; }
-
 .Con.ph .head h2 {
   text-align: center;
-  float: left;
-  width: 325px;
   height: 37px;
   font-size: 15px;
   line-height: 37px;
@@ -1797,11 +1721,8 @@ body.article .Con.box_con .box_box {
   boverflow: hidden; }
 
 .Con.ph .p_box .ul_h {
-  float: left;
-  width: 325px;
   height: 26px;
   line-height: 26px;
-  _line-height: 28px;
   padding-top: 5px;
   border-right: 1px solid #dedddd;
   overflow: hidden; }
@@ -1810,16 +1731,14 @@ body.article .Con.box_con .box_box {
     text-align: right;
     overflow: hidden; }
     .Con.ph .p_box .ul_h span.p {
-      width: 42px; }
+      width: 44px; }
     .Con.ph .p_box .ul_h span.s {
-      width: 100px;
+      width: 126px;
       background: none; }
     .Con.ph .p_box .ul_h span.d {
-      width: 170px; }
+      width: 198px; }
 
 .Con.ph .p_box ul {
-  float: left;
-  width: 325px;
   height: auto;
   padding-bottom: 20px;
   border-right: 1px solid #dedddd;
@@ -1827,11 +1746,8 @@ body.article .Con.box_con .box_box {
   overflow: hidden; }
 
 .Con.ph .p_box li {
-  float: left;
-  width: 265px;
   height: 25px;
   line-height: 26px;
-  _line-height: 28px;
   padding: 0px 13px 0px 47px;
   border-bottom: 1px solid #ececec;
   overflow: hidden; }
@@ -1858,7 +1774,7 @@ body.article .Con.box_con .box_box {
     overflow: hidden; }
 
 /*--inner公共 当前位置--*/
-.Layout.local {
+.box-container.local {
   height: 30px;
   padding-top: 11px;
   line-height: 18px; }
@@ -1879,41 +1795,11 @@ body.article .Con.box_con .box_box {
 .bot_more .page_num {
   float: right;
   width: auto;
-  height: 41px;
+  height: 43px;
   padding-top: 9px;
   padding-right: 19px;
   text-align: right;
   overflow: hidden; }
-  .bot_more .page_num div {
-    float: left; }
-  .bot_more .page_num a {
-    float: left;
-    height: 19px;
-    padding: 0px 4px;
-    margin: 0px 2px;
-    line-height: 20px;
-    font-size: 12px;
-    color: #454545;
-    text-align: center;
-    text-decoration: none;
-    border: 1px solid #dedddd;
-    overflow: hidden; }
-    .bot_more .page_num a:hover {
-      color: #B01F2E; }
-    .bot_more .page_num a.info {
-      _line-height: 22px; }
-      .bot_more .page_num a.info:hover {
-        color: #454545; }
-  .bot_more .page_num b {
-    font-weight: normal;
-    color: #B01F2E; }
-  .bot_more .page_num .p_curpage {
-    color: #B01F2E; }
-  .bot_more .page_num a[href="javascript:"],
-  .bot_more .page_num .no,
-  .bot_more .page_num a[href="javascript:"]:hover,
-  .bot_more .page_num .no:hover {
-    color: #CCC; }
 
 .ul_b_list {
   float: left;
@@ -1985,7 +1871,7 @@ body.article .Con.box_con .box_box {
   overflow: hidden; }
   .r_box.tab .head a {
     float: left;
-    width: 105px;
+    width: 146px;
     height: 29px;
     border-bottom: 1px solid #dedddd;
     cursor: pointer;
@@ -2098,13 +1984,11 @@ body.article .Con.box_con .box_box {
 
 .Con.lm_new .new_box {
   float: left;
-  width: 462px;
+  width: 630px;
   height: 342px;
   padding: 0 12px;
   overflow: hidden; }
   .Con.lm_new .new_box div {
-    float: left;
-    width: 462px;
     overflow: hidden; }
 
 .Con.lm_new .u {
@@ -2115,7 +1999,7 @@ body.article .Con.box_con .box_box {
 
 .Con.lm_new .new_box .head {
   position: relative;
-  height: 38px;
+  height: 40px;
   border-bottom: 1px solid #afafaf;
   overflow: visible; }
 
@@ -2169,7 +2053,6 @@ body.article .Con.box_con .box_box {
     float: left;
     width: 462px;
     height: auto;
-    _padding-top: 1px;
     overflow: hidden;
     line-height: 20px;
     padding-bottom: 1px; }
@@ -2179,16 +2062,13 @@ body.article .Con.box_con .box_box {
       padding-bottom: 1px; }
 
 .Con.lm_new .d ul {
-  float: left;
-  width: 462px;
   height: auto;
   padding-top: 11px;
-  _padding-top: 12px;
   overflow: hidden; }
 
 .Con.lm_new .d li {
   float: left;
-  width: 231px;
+  width: 300px;
   height: 20px;
   line-height: 20px;
   overflow: hidden; }
@@ -2207,7 +2087,7 @@ body.article .Con.box_con .box_box {
 .r_box.tab a.r {
   background-position: -323px -449px; }
 
-.Layout.m_list.list .Head h2 {
+.box-container.m_list.list .Head h2 {
   position: absolute;
   top: 0px;
   left: 10px;
@@ -2416,41 +2296,41 @@ body.article .Con.box_con .box_box {
 .Con.jj .r_box.tab a.r {
   background-position: -146px -480px; }
 
-.Con.jj_pl {
-  width: 977px; }
-  .Con.jj_pl .Head {
-    margin: 1px 0px 0px 1px;
-    background-position: 13px -249px;
-    border: none;
-    border-bottom: 1px solid #afafaf; }
-    .Con.jj_pl .Head span.t {
-      position: absolute;
-      top: 0px;
-      left: 80px;
-      font-size: 16px;
-      line-height: 38px;
-      _line-height: 40px;
-      color: #878584; }
-    .Con.jj_pl .Head .morelist {
-      padding-right: 10px; }
-      .Con.jj_pl .Head .morelist b {
-        font-weight: normal;
-        color: #B01F2E; }
-  .Con.jj_pl .con {
+.Con.jj_pl .Head {
+  margin: 1px 0px 0px 1px;
+  background-position: 13px -249px;
+  border: none;
+  border-bottom: 1px solid #afafaf; }
+  .Con.jj_pl .Head span.t {
+    position: absolute;
+    top: 0px;
+    left: 80px;
+    font-size: 16px;
+    line-height: 38px;
+    _line-height: 40px;
+    color: #878584; }
+  .Con.jj_pl .Head .morelist {
+    padding-right: 10px; }
+    .Con.jj_pl .Head .morelist b {
+      font-weight: normal;
+      color: #B01F2E; }
+
+.Con.jj_pl .con {
+  float: left;
+  width: 611px;
+  height: auto;
+  overflow: hidden; }
+
+.Con.jj_pl .list_box ul {
+  margin: 10px; }
+  .Con.jj_pl .list_box ul li {
+    margin: 0 6px 5px;
+    width: 380px;
+    border-bottom: 1px solid #AFAFAF;
+    line-height: 36px;
     float: left;
-    width: 611px;
-    height: auto;
-    overflow: hidden; }
-  .Con.jj_pl .list_box ul {
-    margin: 10px; }
-    .Con.jj_pl .list_box ul li {
-      margin: 0 6px 5px;
-      width: 307px;
-      border-bottom: 1px solid #AFAFAF;
-      line-height: 36px;
-      float: left;
-      overflow: hidden;
-      white-space: nowrap; }
+    overflow: hidden;
+    white-space: nowrap; }
 
 .r_box.jj .head {
   position: relative; }
@@ -2607,7 +2487,7 @@ body.article .Con.box_con .box_box {
   margin-right: 0px;
   _margin-right: 5px; }
 
-.Layout.ss .Head {
+.box-container.ss .Head {
   background-position: 10px -316px; }
 
 .Con.ss .Left {
@@ -2655,17 +2535,17 @@ body.article .Con.box_con .box_box {
   #stip.on {
     visibility: visible; }
 
-.Layout.only_bot .box {
+.box-container.only_bot .box {
   width: 1000px;
   padding-bottom: 10px;
   _padding-bottom: 8px;
   margin-left: -3px\0;
   text-align: center; }
 
-.Layout.only_bot a {
+.box-container.only_bot a {
   display: inline-block;
   color: #b6b2b2; }
-  .Layout.only_bot a:hover {
+  .box-container.only_bot a:hover {
     color: #B01F2E; }
 
 .rand.on .randBOX {
@@ -2730,7 +2610,7 @@ body.article .Con.box_con .box_box {
 .bw_box div.a_l div span {
   font-size: 12px; }
 
-.bodyph .Layout.list .Head {
+.bodyph .box-container.list .Head {
   background-position: 10px -180px; }
 
 .bodyph .Left {
@@ -2743,7 +2623,7 @@ body.article .Con.box_con .box_box {
   display: inline;
   border: #e1e3e2 1px solid;
   padding: 2px 7px 0;
-  width: 231px;
+  width: 292px;
   height: 525px;
   background: url("../images/topList_bg.png") no-repeat center 2px #fff; }
   .topList .tit {
@@ -2780,11 +2660,8 @@ body.article .Con.box_con .box_box {
     .topList .con.Li_Mover {
       display: block; }
     .topList .con ul {
-      width: 233px;
       overflow: hidden; }
     .topList .con li {
-      float: left;
-      width: 233px;
       padding-bottom: 3px;
       overflow: hidden;
       background: url("../images/line02.png") repeat-x left bottom; }

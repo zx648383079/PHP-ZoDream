@@ -8,10 +8,10 @@ $this->extend('layouts/header');
 
 <div class="clear"></div>
 <!--body开始-->
-<div class="Layout local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>
+<div class="box-container local">当前位置：<a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>
     > <a href="<?=$author->url?>" title="<?=$author->name?>作品集"><?=$author->name?>作品集</a></div>
 <div class="clear"></div>
-<div class="Layout no_h">
+<div class="box-container no_h">
   <div class="Con jj">
     <div class="Left">
       <div class="p_box">
@@ -92,7 +92,7 @@ $this->extend('layouts/header');
   </div>
 </div>
 <div class="clear"></div>
-<div class="Layout bw">
+<div class="box-container bw">
   <div class="Head">
     <h2><?=$author->name?>作品集</h2>
     <span class="j"></span>

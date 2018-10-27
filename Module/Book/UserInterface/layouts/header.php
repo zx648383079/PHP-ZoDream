@@ -15,7 +15,7 @@ $this->registerCssFile('@book.css');
        <?=$this->header();?>
    </head>
    <body class="<?=$this->body_class?>">
-    <div class="Layout topbox">
+    <div class="box-container topbox">
         <div class="topbar">
             <div class="mainbox">
             <div class="left_con">
@@ -43,7 +43,7 @@ $this->registerCssFile('@book.css');
             </div>
         </div>
         </div>
-        <div class="Layout h">
+        <div class="box-container h">
         <div class="header">
             <div class="top">
             <div class="logo"><a href="<?=$this->url('./')?>" title="<?=$this->site_name?>-搜刮好东西"><img src="/assets/images/logo.png" alt="<?=$this->site_name?>-搜刮好东西" /></a></div>
