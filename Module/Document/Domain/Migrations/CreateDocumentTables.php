@@ -4,6 +4,7 @@ namespace Module\Document\Domain\Migrations;
 
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
+use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -21,6 +22,7 @@ class CreateDocumentTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(35)->notNull()->comment('账户名');
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('文档类型');
             $table->set('description')->varchar()->comment('描述');
             $table->set('environment')->text()->comment('环境域名,json字符串');
             $table->set('status')->tinyint(1)->defaultVal(0)->comment('是否可见');
@@ -36,6 +38,15 @@ class CreateDocumentTables extends Migration {
             $table->set('project_id')->int()->notNull()->comment('项目');
             $table->set('description')->varchar()->comment('接口简介');
             $table->set('parent_id')->int()->defaultVal(0);
+            $table->timestamps();
+        });
+        Schema::createTable(PageModel::tableName(), function(Table $table) {
+            $table->setComment('项目普通文档页');
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(35)->notNull()->comment('文档');
+            $table->set('project_id')->int()->notNull()->comment('项目');
+            $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('content')->text()->comment('内容');
             $table->timestamps();
         });
         Schema::createTable(FieldModel::tableName(), function(Table $table) {
@@ -64,6 +75,7 @@ class CreateDocumentTables extends Migration {
     public function down() {
         Schema::dropTable(ProjectModel::tableName());
         Schema::dropTable(ApiModel::tableName());
+        Schema::dropTable(PageModel::tableName());
         Schema::dropTable(FieldModel::tableName());
     }
 }

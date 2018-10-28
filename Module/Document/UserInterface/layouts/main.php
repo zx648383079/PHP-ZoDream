@@ -42,13 +42,14 @@ if(isset($project_list)) {
             'fa fa-home',
         ]
     ];
+    $baseUri = $project->type == 1 ? './api' : './page';
     foreach ($tree_list as $key => $item) {
         $children = [];
         if(isset($item['children'])) {
             foreach($item['children'] as $child) {
                 $children[] = [
                     $child['name'],
-                    ['./api', 'id' => $child['id']],
+                    [$baseUri, 'id' => $child['id']],
                     'fa fa-file'
                 ];
             }

@@ -12,7 +12,7 @@ class ProjectController extends Controller {
             return $this->redirectWithMessage('./',
                 '无权限查看此项目文档');
         }
-        $tree_list = ApiModel::getTree($id);
+        $tree_list = $project->type == ProjectModel::TYPE_API ? ApiModel::getTree($id) : PageModel::getTree($id);
         return $this->show(compact('project', 'tree_list'));
     }
 

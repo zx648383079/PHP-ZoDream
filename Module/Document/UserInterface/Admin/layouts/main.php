@@ -47,20 +47,21 @@ if(isset($project_list)) {
             'fa fa-home',
         ]
     ];
+    $baseUri = $project->type == 1 ? './admin/api' : './admin/page';
     foreach ($tree_list as $item) {
         $children = [];
         if(isset($item['children'])) {
             foreach($item['children'] as $child) {
                 $children[] = [
                     $child['name'],
-                    ['./admin/api', 'id' => $child['id']],
+                    [$baseUri, 'id' => $child['id']],
                     'fa fa-file'
                 ];
             }
         }
         $children[] = [
             '新建接口',
-            ['./admin/api/create', 'project_id' => $project->id, 'parent_id' => $item['id']],
+            [$baseUri.'/create', 'project_id' => $project->id, 'parent_id' => $item['id']],
             'fa fa-plus'
         ];
         $menus[] = [
@@ -73,7 +74,7 @@ if(isset($project_list)) {
     }
     $menus[] = [
         '新建模块',
-        ['./admin/api/create', 'project_id' => $project->id],
+        [$baseUri.'/create', 'project_id' => $project->id],
         'fa fa-plus'
     ];
 }

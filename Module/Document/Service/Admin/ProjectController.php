@@ -2,6 +2,7 @@
 namespace Module\Document\Service\Admin;
 
 use Module\Document\Domain\Model\ApiModel;
+use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
 use Zodream\Helpers\Json;
 
@@ -13,7 +14,7 @@ class ProjectController extends Controller {
         if (empty($project)) {
             return $this->redirect($this->getUrl(''));
         }
-        $tree_list = ApiModel::getTree($id);
+        $tree_list = $project->type == ProjectModel::TYPE_API ? ApiModel::getTree($id) : PageModel::getTree($id);
         return $this->show(compact('project', 'tree_list'));
     }
 
@@ -22,7 +23,7 @@ class ProjectController extends Controller {
     }
 
     public function editAction($id) {
-        $model = ProjectModel::findOrNew($id);
+        $model = ProjectModel::findOrDefault($id, ['type' => 1]);
         $project_list = ProjectModel::select('name', 'id')->all();
         return $this->show(compact('model', 'project_list'));
     }

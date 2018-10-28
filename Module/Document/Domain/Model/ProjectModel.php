@@ -14,6 +14,7 @@ use Zodream\Helpers\Json;
  * @property string $description
  * @property string $environment
  * @property integer $status
+ * @property integer $type
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -23,10 +24,12 @@ class ProjectModel extends Model {
     const STATUS_PUBLIC = 0; // 公开
     const STATUS_PRIVATE = 1; // 私有
 
+    const TYPE_NONE = 0;
+    const TYPE_API = 1;
+
     public static function tableName() {
         return 'doc_project';
     }
-
 
     protected function rules() {
         return [
@@ -35,6 +38,7 @@ class ProjectModel extends Model {
             'description' => 'string:0,255',
             'environment' => '',
             'status' => 'int:0,9',
+            'type' => 'int:0,9',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -49,6 +53,7 @@ class ProjectModel extends Model {
             'description' => '项目描述',
             'environment' => '环境',
             'status' => '状态',
+            'type' => '类型',
             'deleted_at' => '删除时间',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

@@ -23,6 +23,9 @@ $("body").on('click', '.js_deleteEnvBtn',function (event) {
     }
     $(this).closest('tr').remove();
 });
+$("#type").change(function (e) { 
+    $("#environment-box").toggle($(this).val() == 1);
+});
 JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
@@ -30,9 +33,15 @@ $this->registerJs($js, View::JQUERY_READY);
 <h1><?=$this->title?></h1>
 <?= Form::open($model, './admin/project/save') ?>
     <?= Form::text('name', true) ?>
+    <?php if(!$model->id):?>
+    <?= Form::select('type', ['普通文档', 'API文档']) ?>
+    <?php endif;?>
+
     <?= Form::select('status', ['公开', '私有']) ?>
     <?= Form::textarea('description') ?>
-    <div class="input-group">
+    
+    <?php if(!$model->id || $model->type == 1):?>
+    <div id="environment-box" class="input-group">
         <label>环境域名</label>
         <table>
             <thead>
@@ -79,6 +88,7 @@ $this->registerJs($js, View::JQUERY_READY);
             </tbody>
         </table>
     </div>
+    <?php endif;?>
 
 
     <button type="submit" class="btn btn-success">确认保存</button>
