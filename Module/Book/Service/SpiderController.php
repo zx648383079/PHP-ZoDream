@@ -28,9 +28,9 @@ class SpiderController extends Controller {
     }
 
 
-    public function importAction($file) {
+    public function importAction($file, $book = 0) {
         $txt = new Txt();
-        $txt->invoke($file);
+        $txt->invoke($file, $book);
         return $this->showContent('导入执行完成！');
     }
 

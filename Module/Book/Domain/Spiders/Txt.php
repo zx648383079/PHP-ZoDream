@@ -1,8 +1,11 @@
 <?php
 namespace Module\Book\Domain\Spiders;
 
+use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
+use Module\Book\Domain\Model\BookModel;
 use Zodream\Debugger\Domain\Log;
+use Zodream\Disk\File;
 use Zodream\Disk\Stream;
 
 class Txt {
@@ -13,7 +16,7 @@ class Txt {
         //return preg_match('/^(\d|\d{2}|1\d{0,2})$/', trim($line));
     }
 
-    public function save(string $title, $content) {
+    public function save(BookModel $book, string $title, $content) {
         if (is_array($content)) {
             $content = implode(PHP_EOL, $content);
         }
@@ -21,12 +24,26 @@ class Txt {
         $model =  new BookChapterModel([
             'title' => trim($title),
             'content' => $content,
-            'book_id' => 100
+            'book_id' => $book->id
         ]);
         $model->save();
     }
 
-    public function invoke($file) {
+    public function invoke($file, $book = null) {
+        if (!$file instanceof File) {
+            $file = new File($file);
+        }
+        if (!$file->exist()) {
+            return;
+        }
+        if (!$book instanceof BookModel) {
+            $book = BookModel::findOrDefault(intval($book), [
+                'name' => $file->getNameWithoutExtension()
+            ]);
+        }
+        if (empty($book)) {
+            return;
+        }
         $stream = new Stream($file);
         $title = '';
         $lines = [];
@@ -39,15 +56,18 @@ class Txt {
                 continue;
             }
             $i ++;
-            $this->save($title, $lines);
+            $this->save($book, $title, $lines);
             $title = $line;
             $lines = [];
         }
         if (!empty($title)) {
             $i ++;
-            $this->save($title, $lines);
+            $this->save($book, $title, $lines);
         }
         Log::notice(sprintf('成功导入%s章', $i));
         $stream->close();
+        $ids = BookChapterModel::where('book_id', $book->id)->pluck('id');
+        $book->size = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
+        $book->save();
     }
 }
