@@ -158,6 +158,14 @@ class BookModel extends Model {
         return sprintf('%s字', $this->__attributes['size']);
     }
 
+    public function getMonthClickAttribute() {
+        return ceil($this->click_count / 12);
+    }
+
+    public function getWeekClickAttribute() {
+        return ceil($this->click_count / 40);
+    }
+
     /**
      * 判断小说是否已存在
      * @return bool

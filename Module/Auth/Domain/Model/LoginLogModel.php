@@ -41,12 +41,13 @@ class LoginLogModel extends Model {
 		);
 	}
 
-	/**
-	 * 纪录登录记录
-	 * @param string $user 登录邮箱
-	 * @param bool $status 成功或失败
-	 * @param int $mode 页面登录或其他
-	 * @return LoginLogModel
+    /**
+     * 纪录登录记录
+     * @param string $user 登录邮箱
+     * @param bool $status 成功或失败
+     * @param int $mode 页面登录或其他
+     * @return LoginLogModel
+     * @throws \Exception
      */
 	public static function addLoginLog($user, $status = false, $mode = 1) {
 		return static::create([

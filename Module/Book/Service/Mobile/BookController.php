@@ -31,6 +31,7 @@ class BookController extends Controller {
 
     public function readAction($id) {
         $chapter = BookChapterModel::find($id);
+        BookModel::where('id', $chapter->book_id)->updateOne('click_count');
         $book = BookModel::find($chapter->book_id);
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
