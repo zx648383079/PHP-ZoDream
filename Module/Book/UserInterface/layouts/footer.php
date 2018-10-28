@@ -2,7 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerJsFile('@jquery.min.js');
+$this->registerJsFile('@jquery.min.js')
+    ->registerJsFile('@jquery.lazyload.min.js')
+    ->registerJsFile('@book.min.js');
 ?>
     <div class="box-container ft" style="position:relative">
         <div class="center">

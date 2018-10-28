@@ -43,7 +43,7 @@ $this->extend('layouts/header', ['nav_index' => 99]);
                       <?php endif;?>
                   </div>
               </div>
-              <div class="words">0</div>
+              <div class="words"><?=$item->format_size?></div>
               <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
               <div class="abover"><span><?=$item->status?></span></div>
           </li>
@@ -66,7 +66,7 @@ $this->extend('layouts/header', ['nav_index' => 99]);
                             <span><?=$item->book_count?>/<?=$item->size?></span></li>
                         <li class="first_con">
                             <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                    <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                    <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                             <div class="a_l">
                                 <div><span>作品数:</span><?=$item->book_count?></div>
                                 <div><span>总字数:</span><?=$item->size?></div>
@@ -95,7 +95,7 @@ $this->extend('layouts/header', ['nav_index' => 99]);
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -122,7 +122,7 @@ $this->extend('layouts/header', ['nav_index' => 99]);
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>

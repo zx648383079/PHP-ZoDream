@@ -70,7 +70,7 @@ $this->extend('layouts/header');
                           <span><?=$item->book_count?>/<?=$item->size?></span></li>
                       <li class="first_con">
                           <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                  <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                  <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                           <div class="a_l">
                               <div><span>作品数:</span><?=$item->book_count?></div>
                               <div><span>总字数:</span><?=$item->size?></div>
@@ -104,7 +104,7 @@ $this->extend('layouts/header');
                 <div class="t"><a href="<?=$item->url?>" target="_blank" title="<?=$item->name?>在线阅读txt下载"><?=$item->name?></a>
                     <span>（<?=$item->size?>字-<?=$item->status?>）</span></div>
                 <div class="pic"><a href="<?=$item->url?>" target="_blank" title="<?=$item->name?>在线阅读txt下载">
-                        <img src="<?=$item->cover?>" alt="<?=$item->name?>在线阅读txt下载"></a></div>
+                        <img src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>在线阅读txt下载"></a></div>
                 <div class="a_l">
                     <div class="a"><span>作者:</span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>新书"><?=$item->author->name?></a></div>
                     <div class="l"><span>类型:</span><a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->name?>小说"><?=$item->category->name?></a></div>
@@ -128,7 +128,7 @@ $this->extend('layouts/header');
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div class="a_l">
                                 <div class="a"><span>作者:</span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a></div>

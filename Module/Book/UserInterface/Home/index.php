@@ -32,7 +32,7 @@ $this->extend('layouts/header');
     <?php if($book):?>
         <div class="u">
             <div class="pic"><a href="<?=$book->url?>" title="<?=$book->name?>" target="_blank">
-                    <img class="lazy" src="<?=$book->cover?>" alt="<?=$book->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                    <img class="lazy" src="<?=$book->cover?>" alt="<?=$book->name?>" ></a></div>
             <div class="title">
                 <h2><a href="<?=$book->url?>" title="<?=$book->name?>" target="_blank"><?=$book->name?></a></h2>
                 <span>作者：<a href="<?=$book->author->url?>" target="_blank" title="<?=$book->author->name?>作品"><?=$book->author->name?></a>&nbsp;&nbsp;类型：
@@ -49,7 +49,6 @@ $this->extend('layouts/header');
 
       <div class="d">
         <div class="n_p_box">
-          <div></div>
           <input type="button" title="上一页" value="上一页" class="active" />
           <input type="button" title="下一页" value="下一页" />
         </div>
@@ -102,7 +101,7 @@ $this->extend('layouts/header');
             <div class="bw_box">
                 <div class="t"><a href="<?=$item->url?>" target="_blank" title="<?=$item->name?>在线阅读txt下载"><?=$item->name?></a><span>（推荐：<?=$item->recommend_count?>）</span></div>
                 <div class="pic"><a href="<?=$item->url?>" target="_blank" title="<?=$item->name?>在线阅读txt下载">
-                        <img src="<?=$item->cover?>" alt="<?=$item->name?>在线阅读txt下载"></a></div>
+                        <img src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>在线阅读txt下载"></a></div>
                 <div class="a_l">
                     <div class="a"><span>作者:</span><a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>新书"><?=$item->author->name?></a></div>
                     <div class="l"><span>类型:</span><a href="<?=$item->category->url?>" target="_blank" title="<?=$item->category->name?>小说"><?=$item->category->name?></a></div>
@@ -119,14 +118,16 @@ $this->extend('layouts/header');
         <div class="head">
           <h2>本周点击榜</h2>
         </div>
-        <ul>
+        <ul class="book-list">
             <?php foreach ($week_click_book as $key => $item):?>
                 <?php if ($key < 1):?>
-                    <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                    <li>
+                    <span class="top-<?=$key?>"><?=$key + 1?></span>
+                    <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -135,7 +136,9 @@ $this->extend('layouts/header');
                         </div>
                     </li>
                 <?php else: ?>
-                    <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                    <li>
+                    <span class="top-<?=$key?>"><?=$key + 1?></span>    
+                    <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                         <span><?=$item->click_count?></span></li>
                 <?php endif;?>
             <?php endforeach;?>
@@ -144,14 +147,16 @@ $this->extend('layouts/header');
 				<div class="head">
 				  <h2>本周推荐榜</h2>
 				</div>
-				<ul>
+				<ul class="book-list">
                     <?php foreach ($week_recommend_book as $key => $item):?>
                         <?php if ($key < 1):?>
-                            <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                            <li>
+                            <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                            <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                                 <span><?=$item->click_count?></span></li>
                             <li class="first_con">
                                 <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                        <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                        <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                                 <div class="a_l">
                                     <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                                     <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -160,7 +165,9 @@ $this->extend('layouts/header');
                                 </div>
                             </li>
                         <?php else: ?>
-                            <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                            <li>
+                                <span class="top-<?=$key?>"><?=$key + 1?></span>   
+                                <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                                 <span><?=$item->click_count?></span></li>
                         <?php endif;?>
                     <?php endforeach;?>
@@ -185,7 +192,7 @@ $this->extend('layouts/header');
               <?php foreach ($best_recommend_book as $key => $item):?>
               <?php if ($key < 6): ?>
                   <li><a href="<?=$item->url?>" class="p" title="类型：<?=$item->category->name?>，作者：<?=$item->author->name?>，总点击：<?=$item->click_count?>" target="_blank">
-                          <img class="lazy" src="<?=$item->cover?>" alt="" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"> </a>
+                          <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="" > </a>
                       <a href="<?=$item->url?>" class="t" title="类型：<?=$item->category->name?>，作者：<?=$item->author->name?>，总点击：<?=$item->click_count?>" target="_blank"><?=$item->name?></a></li>
                   <?php endif;?>
               <?php endforeach;?>
@@ -210,7 +217,7 @@ $this->extend('layouts/header');
               <?php foreach ($best_recommend_book as $key => $item):?>
                 <?php if ($key > 5): ?>
                   <li><a href="<?=$item->url?>" class="p" title="类型：<?=$item->category->name?>，作者：<?=$item->author->name?>，总点击：<?=$item->click_count?>" target="_blank">
-                          <img class="lazy" src="<?=$item->cover?>" alt="" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"> </a>
+                          <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="" > </a>
                       <a href="<?=$item->url?>" class="t" title="类型：<?=$item->category->name?>，作者：<?=$item->author->name?>，总点击：<?=$item->click_count?>" target="_blank"><?=$item->name?></a></li>
                   <?php endif;?>
               <?php endforeach;?>
@@ -237,14 +244,16 @@ $this->extend('layouts/header');
         <div class="head">
           <h2>月度点击榜</h2>
         </div>
-        <ul>
+        <ul class="book-list">
             <?php foreach ($month_click_book as $key => $item):?>
                 <?php if ($key < 1):?>
-                    <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                    <li>
+                    <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                    <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="#" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -253,7 +262,9 @@ $this->extend('layouts/header');
                         </div>
                     </li>
                 <?php else: ?>
-                    <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                    <li>
+                    <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                    <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                         <span><?=$item->click_count?></span></li>
                 <?php endif;?>
             <?php endforeach;?>
@@ -263,14 +274,16 @@ $this->extend('layouts/header');
         <div class="head">
           <h2>月度推荐榜</h2>
         </div>
-        <ul>
+        <ul class="book-list">
             <?php foreach ($month_recommend_book as $key => $item):?>
                 <?php if ($key < 1):?>
-                    <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                    <li>
+                    <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                    <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -279,7 +292,9 @@ $this->extend('layouts/header');
                         </div>
                     </li>
                 <?php else: ?>
-                    <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                    <li>
+                    <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                    <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                         <span><?=$item->click_count?></span></li>
                 <?php endif;?>
             <?php endforeach;?>
@@ -303,9 +318,11 @@ $this->extend('layouts/header');
         <h2>总点击榜</h2>
       </div>
       <div class="ul_h"> <span class="p">排序</span> <span class="s">类型<em>&#160;/&#160;</em>书名</span> <span class="d">点击数</span> </div>
-      <ul>
-          <?php foreach ($click_bang as $item):?>
-              <li>[<a class="r" href="<?=$item->category->url?>" title="<?=$item->category->name?>小说" target="_blank"><?=$item->category->real_name?></a>]&nbsp;
+      <ul class="book-list">
+          <?php foreach ($click_bang as $key => $item):?>
+              <li>
+                <span class="top-<?=$key?>"><?=$key + 1?></span>
+                [<a class="r" href="<?=$item->category->url?>" title="<?=$item->category->name?>小说" target="_blank"><?=$item->category->real_name?></a>]&nbsp;
                   <a href="<?=$item->url?>" class="t" title="<?=$item->name?>作者：<?=$item->author->name?>" target="_blank"><?=$item->name?></a><span>(<?=$item->click_count?>)</span></li>
           <?php endforeach;?>
       </ul>
@@ -315,10 +332,12 @@ $this->extend('layouts/header');
         <h2>总字数榜</h2>
       </div>
       <div class="ul_h"> <span class="p">排序</span> <span class="s">类型<em>&#160;/&#160;</em>书名</span> <span class="d">总字数</span> </div>
-      <ul>
-          <?php foreach ($size_bang as $item):?>
-              <li>[<a class="r" href="<?=$item->category->url?>" title="<?=$item->category->name?>小说" target="_blank"><?=$item->category->real_name?></a>]&nbsp;
-                  <a href="<?=$item->url?>" class="t" title="<?=$item->name?>作者：<?=$item->author->name?>" target="_blank"><?=$item->name?></a><span>(<?=$item->size?>)</span></li>
+      <ul class="book-list">
+          <?php foreach ($size_bang as $key => $item):?>
+              <li>
+              <span class="top-<?=$key?>"><?=$key + 1?></span>
+              [<a class="r" href="<?=$item->category->url?>" title="<?=$item->category->name?>小说" target="_blank"><?=$item->category->real_name?></a>]&nbsp;
+                  <a href="<?=$item->url?>" class="t" title="<?=$item->name?>作者：<?=$item->author->name?>" target="_blank"><?=$item->name?></a><span>(<?=$item->format_size?>)</span></li>
           <?php endforeach;?>
       </ul>
     </div>
@@ -327,9 +346,11 @@ $this->extend('layouts/header');
         <h2>总推荐榜</h2>
       </div>
       <div class="ul_h"> <span class="p">排序</span> <span class="s">类型<em>&#160;/&#160;</em>书名</span> <span class="d">推荐数</span> </div>
-      <ul>
-          <?php foreach ($recommend_bang as $item):?>
-              <li>[<a class="r" href="<?=$item->category->url?>" title="<?=$item->category->name?>小说" target="_blank"><?=$item->category->real_name?></a>]&nbsp;
+      <ul class="book-list">
+          <?php foreach ($recommend_bang as $key => $item):?>
+              <li>
+              <span class="top-<?=$key?>"><?=$key + 1?></span>
+              [<a class="r" href="<?=$item->category->url?>" title="<?=$item->category->name?>小说" target="_blank"><?=$item->category->real_name?></a>]&nbsp;
                   <a href="<?=$item->url?>" class="t" title="<?=$item->name?>作者：<?=$item->author->name?>" target="_blank"><?=$item->name?></a><span>(<?=$item->recommend_count?>)</span></li>
           <?php endforeach;?>
       </ul>
@@ -357,7 +378,7 @@ $this->extend('layouts/header');
                           <a href="<?=$item->last_chapter->url?>" title="<?=$item->last_chapter->title?>" target="_blank"><?=$item->last_chapter->title?></a>
                       </div>
                   </div>
-                  <div class="words"><?=$item->size?></div>
+                  <div class="words"><?=$item->format_size?></div>
                   <div class="author">
                       <a href="#" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a>
                   </div><div class="abover"><span><?=$item->status?></span>
@@ -375,7 +396,7 @@ $this->extend('layouts/header');
                             <span><?=$item->book_count?>/<?=$item->size?></span></li>
                         <li class="first_con">
                             <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                    <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                    <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                             <div class="a_l">
                                 <div><span>作品数:</span><?=$item->book_count?></div>
                                 <div><span>总字数:</span><?=$item->size?></div>
@@ -400,7 +421,7 @@ $this->extend('layouts/header');
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -426,7 +447,7 @@ $this->extend('layouts/header');
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>

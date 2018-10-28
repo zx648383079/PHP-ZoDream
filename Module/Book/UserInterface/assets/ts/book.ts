@@ -104,5 +104,29 @@ $(function() {
     $(window).scroll(function() {
         $(".chapter-sidebar .go-top").toggle($(this).scrollTop() > 100);
     });
-    
+    $(".n_p_box input").click(function(){
+        $(".n_p_box input").removeClass("active");
+        $(this).addClass("active");
+        $(".con_box .box").toggle();
+        $(".n_p_box div").toggleClass("n");
+    });
+    $(".tab .head a").hover(function () {
+        $(this).addClass("active").siblings().removeClass("active");
+        $(".tab .box").hide();
+        var showBOX = $(this).attr("showBOX");
+        $("." + showBOX).show();
+    });
+    $(".topList .tit li").hover(function() {
+        $(this).addClass("Li_Mover").siblings().removeClass("Li_Mover");
+        let con_list = $(this).closest('.topList').find('.con');
+        con_list.removeClass("Li_Mover").eq(2- $(this).index()).addClass("Li_Mover");
+    });
+    $(".topList .book-list li").hover(function() {
+        $(this).addClass("Li_Mover").siblings().removeClass("Li_Mover");
+    });
+    if ($.fn.lazyload) {
+        $("img.lazy").lazyload({
+            callback: 'img'
+        });
+    }
 });

@@ -21,7 +21,7 @@ $this->extend('layouts/header');
           <h2>其他热门小说</h2>
           <div class="a_box HOT_BOX">
               <?php foreach ($hot_book as $item) : ?>
-                  <li><a href="<?=$item->url?>"><?=$item->name?></a></li>
+                  <a href="<?=$item->url?>"><?=$item->name?></a>
               <?php endforeach;?>
                       
           </div>
@@ -51,8 +51,8 @@ $this->extend('layouts/header');
 			 <p>简介：<br/><?=$book->description?></p>
         </div>
         <div class="read_btn">
-          <div class="btn2" style="width:328px"><a href="javascript:;" class="sc" title="收藏本书" style="margin-right:2px">加入收藏夹</a>
-              <a href="<?=$book->download_url?>" class="txt" title="<?=$book->name?>txt下载" target="_blank"><?=$book->name?>txt下载</a></div>
+          <div class="btn2" style="width:328px"><a href="javascript:;" class="sc" title="收藏本书">加入收藏夹</a>
+              <a href="<?=$book->download_url?>" class="txt" title="<?=$book->name?>txt下载" target="_blank">TXT 下载</a></div>
         </div>
         <div class="vote"><?=$book->author->name?>的<a href="<?=$cat->url?>"><?=$cat->real_name?></a>作品<?=$book->name?>
             最新章节已经更新，本站提供<a href="<?=$book->url?>" title="<?=$book->name?>最新章节"><?=$book->name?>最新章节</a>全文免费在线阅读，
@@ -64,36 +64,44 @@ $this->extend('layouts/header');
       <div class="r_box tab">
         <div class="head"> <a class="l active" showBOX="BOX1">同类推荐</a> <a class="r" showBOX="BOX2">作者其他作品</a> </div>
         <div class="box BOX1" style="display:block;">
-          <ul>
+          <ul class="book-list">
               <?php foreach ($like_book as $key => $item):?>
               <?php if ($key < 1):?>
-                      <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a><span>
+                      <li>
+                      <span class="top-<?=$key?>"><?=$key + 1?></span>     
+                      <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a><span>
                               <a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></span></li>
                       <li class="first_con"><div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                  <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                  <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                           <div class="info"><p><a href="<?=$item->url?>" target="_blank">简介： <?=$item->description?></a></p>
                           </div>
                       </li>
               <?php else: ?>
-                      <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                      <li>
+                      <span class="top-<?=$key?>"><?=$key + 1?></span>     
+                      <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                           <span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></span></li>
                 <?php endif;?>
               <?php endforeach;?>
           </ul>
         </div>
         <div class="box BOX2" style="display:none;">
-          <ul>
+          <ul class="book-list">
               <?php foreach ($author_book as $key => $item):?>
                   <?php if ($key < 1):?>
-                      <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a><span>
+                      <li>
+                      <span class="top-<?=$key?>"><?=$key + 1?></span>     
+                      <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a><span>
                               <a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->name?></a></span></li>
                       <li class="first_con"><div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                  <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                  <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                           <div class="info"><p><a href="<?=$item->url?>" target="_blank">简介： <?=$item->description?></a></p>
                           </div>
                       </li>
                   <?php else: ?>
-                      <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                      <li>
+                      <span class="top-<?=$key?>"><?=$key + 1?></span>     
+                      <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                           <span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->name?></a></span></li>
                   <?php endif;?>
               <?php endforeach;?>

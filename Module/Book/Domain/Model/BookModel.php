@@ -151,6 +151,13 @@ class BookModel extends Model {
         return Time::format($this->__attributes['updated_at'], 'm-d H:i');
     }
 
+    public function getFormatSizeAttribute() {
+        if ($this->__attributes['size'] > 10000) {
+            return sprintf('%.2f万字', $this->__attributes['size'] / 10000);
+        }
+        return sprintf('%s字', $this->__attributes['size']);
+    }
+
     /**
      * 判断小说是否已存在
      * @return bool

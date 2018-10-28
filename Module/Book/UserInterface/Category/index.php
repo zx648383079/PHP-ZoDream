@@ -1,9 +1,36 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use ZoDream\Helpers\Str;
 /** @var $this View */
-$this->title = 'ZoDream';
-$this->extend('layouts/header', ['nav_index' => $cat->id]);
+$this->title = $cat->name;
+
+$js = <<<JS
+var zomm_tab = $(".zoom-tab .zoom-info"),
+zoom = $(".zoom").zoom({
+    item: 'img',
+    maxWidth: .5,
+    maxHeight: .7,
+    space: .3,
+    onchange: function (i) { 
+        zomm_tab.eq(i).addClass('active').siblings().removeClass("active");
+    }
+}),
+is_hover = false;
+zoom.element.mouseover(function () { 
+    is_hover = true;
+}).mouseout(function () { 
+    is_hover = false;
+});;
+setInterval(function () {
+    if (!is_hover) {
+        zoom.next();
+    }
+}, 2000);
+JS;
+$this->registerJsFile('@jquery.zoom.min.js')
+    ->registerJs($js, View::JQUERY_READY)
+    ->extend('layouts/header', ['nav_index' => $cat->id]);
 ?>
 
 <div class="clear"></div>
@@ -16,42 +43,25 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
   <div class="Con lm_new">
     <div class="Left">
       <div class="h_pic_box">
-          <div class="pic" id="h_pic">
-              <?php foreach ($cat_book as $key => $item):?>
-            <div id="pic<?=$key?>" onmouseout="mmplay()" onmouseover="mmstop()">
-              <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                  <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" width="210" height="280" /></a>
-              <span><a href="<?=$item->url?>" title="<?=$item->name?>-<?=$item->author->name?>作品" target="_blank"><?=$item->name?></a>
-              </span></div>
-              <?php endforeach;?>
-        </div>
+            <div class="zoom">
+                <div class="zoom-box">
+                    <?php foreach($cat_book as $item):?>
+                    <img src="<?=$item->cover?>" alt="<?=$item->name?>">
+                    <?php endforeach;?>
+                </div>
+            </div>
+            <div class="zoom-tab">
+            <?php foreach($cat_book as $item):?>
+                <div class="zoom-info">
+                    <h3>
+                        <a href="<?=$item->url?>"><?=$item->name?></a>
+                    </h3>
+                    <p><?=Str::substr($item->description, 0, 40, '...')?></p>
+                    <a class="read-btn" href="<?=$item->url?>">书籍详情</a>
+                </div>
+            <?php endforeach;?>
+            </div>
       </div>
-      <script type="text/javascript">
-	  document.getElementById("tabpic0").className="active";
-	  document.getElementById("pic0").style.display="block";
-	  var cateimgs=document.getElementById("h_pic").getElementsByTagName("div");
-      var a=0;
-      var b=cateimgs.length;
-      var time=3000;
-      function showpic(id)
-      {
-          a=id;
-          clearTimeout(mytime);
-          for (i=0;i<b;i++)
-          {
-              document.getElementById("tabpic"+i).className="";
-              document.getElementById("pic"+i).style.display="none";
-              document.getElementById("word"+i).style.display="none";
-          }
-          document.getElementById("tabpic"+id).className="active";
-          document.getElementById("pic"+id).style.display="block";
-          document.getElementById("word"+id).style.display="block";
-          mytime=setTimeout("showpic("+(id==(b-1)? 0:id+1)+")", time);
-      }
-      mytime=setTimeout("showpic(1)", time);
-      function mmstop(){clearTimeout(mytime);}
-      function mmplay(){mytime=setTimeout("showpic("+a+")", time);}
-      </script>
       <div class="new_box">
         <div class="u">
           <div class="head">
@@ -88,14 +98,16 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
       <div class="r_box tab">
         <div class="head"> <a class="l active" showBOX="BOX1">月推荐榜</a> <a class="r" showBOX="BOX2">月排行榜</a> </div>
         <div class="box BOX1" style="display:block;">
-			<ul>
+			<ul class="book-list">
                 <?php foreach ($recommend_bang as $key => $item):?>
                     <?php if ($key < 1):?>
-                        <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                        <li>
+                        <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                        <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                             <span><?=$item->click_count?></span></li>
                         <li class="first_con">
                             <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                    <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                    <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                             <div class="a_l"><div class="a">
                                     <span>作者:</span>
                                     <a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a>
@@ -105,21 +117,25 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                         </li>
 
                     <?php else: ?>
-                        <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                        <li>
+                        <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                        <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                             <span><?=$item->click_count?></span></li>
                     <?php endif;?>
                 <?php endforeach;?>
             </ul>
         </div>
         <div class="box BOX2" style="display:none;">
-			<ul>
+			<ul class="book-list">
                 <?php foreach ($click_bang as $key => $item):?>
                     <?php if ($key < 1):?>
-                        <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                        <li>
+                        <span class="top-<?=$key?>"><?=$key + 1?></span>       
+                        <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                             <span><?=$item->click_count?></span></li>
                         <li class="first_con">
                             <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                    <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                    <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                             <div class="a_l"><div class="a">
                                     <span>作者:</span>
                                     <a href="<?=$item->author->url?>" target="_blank" title="<?=$item->author->name?>作品"><?=$item->author->name?></a>
@@ -129,7 +145,9 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                         </li>
 
                     <?php else: ?>
-                        <li><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
+                        <li>
+                        <span class="top-<?=$key?>"><?=$key + 1?></span>   
+                            <a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a>
                             <span><?=$item->click_count?></span></li>
                     <?php endif;?>
                 <?php endforeach;?>
@@ -182,7 +200,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                             <span><?=$item->book_count?>/<?=$item->size?></span></li>
                         <li class="first_con">
                             <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                    <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                    <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                             <div class="a_l">
                                 <div><span>作品数:</span><?=$item->book_count?></div>
                                 <div><span>总字数:</span><?=$item->size?></div>
@@ -208,7 +226,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
@@ -234,7 +252,7 @@ $this->extend('layouts/header', ['nav_index' => $cat->id]);
                         <span><?=$item->click_count?></span></li>
                     <li class="first_con">
                         <div class="pic"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank">
-                                <img class="lazy" src="<?=$item->cover?>" alt="<?=$item->name?>" style="display: inline; background: transparent url(&quot;/images/loading.gif&quot;) no-repeat scroll center center;"></a></div>
+                                <img class="lazy" src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>" ></a></div>
                         <div class="a_l">
                             <div><span>作者:</span><a href="<?=$item->author->url?>" title="<?=$item->author->name?>小说作品" target="_blank"><?=$item->author->name?></a></div>
                             <div><span>类型:</span><a href="<?=$item->category->url?>" title="<?=$item->category->real_name?>小说" target="_blank"><?=$item->category->real_name?></a></div>
