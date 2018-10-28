@@ -2,6 +2,7 @@
 namespace Module\Document\Service;
 
 use Module\Document\Domain\Model\ApiModel;
+use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
 
 class ProjectController extends Controller {

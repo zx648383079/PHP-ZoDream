@@ -20,8 +20,10 @@ $this->title = '项目:'.$project->name;
     <p class="text-muted"><label>更新时间：</label><?=$project->updated_at?></p>
 
     <p class="text-muted"><label>项目描述：</label><span style="word-break:break-all"><?=$project->description?></span></p>
+    <?php if($project->type == 1):?>
     <p class="text-muted"><label>环境域名：</label>
-    </p><div class="table-responsive">
+    </p>
+    <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead>
             <tr>
@@ -48,5 +50,5 @@ $this->title = '项目:'.$project->name;
         </table>
 
     </div>
-    <p></p>
+    <?php endif;?>
 </div>

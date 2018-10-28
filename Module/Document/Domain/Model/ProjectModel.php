@@ -66,6 +66,9 @@ class ProjectModel extends Model {
     }
 
     public function setEnvironmentAttribute($data) {
+        if ($this->type != self::TYPE_API) {
+            return;
+        }
         if (!is_array($data)) {
             $this->__attributes['environment'] = $data;
             return;
