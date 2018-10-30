@@ -4,8 +4,7 @@ namespace Module\Blog\Domain\Model;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Database\Query\Query;
-
-
+use Zodream\Helpers\Time;
 
 
 /**
@@ -100,7 +99,14 @@ class BlogModel extends Model {
 	    return static::where('id', '>', $this->id)->orderBy('id asc')->select('id, title, description, created_at')->one();
     }
 
-	public static function getNew() {
+    /**
+     * @return string|void
+     */
+    public function getCreatedAtAttribute() {
+        return Time::isTimeAgo($this->getAttributeValue('created_at'), 2678400);
+    }
+
+    public static function getNew() {
 	    return static::orderBy('create_at desc')->select('id, title, description, created_at')->limit(5)->all();
     }
 
