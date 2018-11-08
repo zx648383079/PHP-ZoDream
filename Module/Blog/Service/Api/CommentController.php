@@ -1,72 +1,60 @@
 <?php
-namespace Module\Blog\Service;
+namespace Module\Blog\Service\Api;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
-use Module\ModuleController;
+use Zodream\Route\Controller\RestController;
 
 
-
-class CommentController extends ModuleController {
+class CommentController extends RestController {
 
     protected function rules() {
         return [
             'index' => '*',
             'save' => '*',
-            'more' => '*',
             '*' => '@',
         ];
     }
 
-    public function indexAction($blog_id) {
-        $hot_comments = CommentModel::where([
-            'blog_id' => intval($blog_id),
-            'parent_id' => 0,
-        ])->where('agree', '>', 0)->orderBy('agree desc')->limit(4)->all();
-        return $this->show(compact('hot_comments', 'blog_id'));
-    }
-
-    public function moreAction($blog_id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+    public function indexAction($blog_id, $parent_id = 0, $is_hot = false, $sort = 'created_at', $order = 'desc') {
         $comment_list = CommentModel::with('replies')
             ->where([
             'blog_id' => intval($blog_id),
             'parent_id' => intval($parent_id)
-        ])->orderBy($sort, $order)->page();
-        if ($parent_id > 0) {
-            return $this->show('rely', compact('comment_list', 'parent_id'));
-        }
-        return $this->show(compact('comment_list'));
+            ])->when($is_hot, function ($query) {
+                $query->where('agree', '>', 0)->orderBy('agree desc');
+            })->orderBy($sort, $order)->page();
+        return $this->renderPage($comment_list);
     }
 
     public function saveAction() {
         $data = app('request')->get('name,email,url,content,parent_id,blog_id');
         if (!BlogModel::canComment($data['blog_id'])) {
-            return $this->jsonFailure('不允许评论！');
+            return $this->renderFailure('不允许评论！');
         }
         if (!auth()->guest()) {
             $data['user_id'] = auth()->id();
             $data['name'] = auth()->user()->name;
         }
         $data['parent_id'] = intval($data['parent_id']);
-
         $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->orderBy('position desc')->one();
         $data['position'] = empty($last) ? 1 : ($last->position + 1);
-        $model = CommentModel::create($data);
-        if (empty($model)) {
-            return $this->jsonFailure('评论失败！');
+        $comment = CommentModel::create($data);
+        if (empty($comment)) {
+            return $this->renderFailure('评论失败！');
         }
         BlogModel::where('id', $data['blog_id'])->updateOne('comment_count');
-        return $this->jsonSuccess($model);
+        return $this->render($comment->toArray());
     }
 
     public function disagreeAction($id) {
         $id = intval($id);
         if (!CommentModel::canAgree($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+            return $this->renderFailure('一个用户只能操作一次！');
         }
-        $model = CommentModel::find($id);
-        $model->agreeThis(false);
-        return $this->jsonSuccess($model->disagree);
+        $comment = CommentModel::find($id);
+        $comment->agreeThis(false);
+        return $this->render($comment->toArray());
     }
 
     public function agreeAction($id) {
@@ -74,16 +62,12 @@ class CommentController extends ModuleController {
         if (!CommentModel::canAgree($id)) {
             return $this->jsonFailure('一个用户只能操作一次！');
         }
-        $model = CommentModel::find($id);
-        $model->agreeThis();
-        return $this->jsonSuccess($model->agree);
+        $comment = CommentModel::find($id);
+        $comment->agreeThis();
+        return $this->render($comment->toArray());
     }
 
     public function reportAction($id) {
 
-    }
-
-    public function logAction() {
-        CommentModel::alias('c');
     }
 }

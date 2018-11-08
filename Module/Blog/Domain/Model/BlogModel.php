@@ -141,4 +141,22 @@ class BlogModel extends Model {
                 'action' => BlogLogModel::ACTION_RECOMMEND
             ])->count() < 1;
     }
+
+    /**
+     * 推荐
+     * @return bool
+     * @throws \Exception
+     */
+    public function recommendThis() {
+        $this->recommend++;
+        if (!$this->save()) {
+            return false;
+        }
+        return !!BlogLogModel::create([
+            'type' => BlogLogModel::TYPE_BLOG,
+            'action' => BlogLogModel::ACTION_RECOMMEND,
+            'id_value' => $this->id,
+            'user_id' => auth()->id()
+        ]);
+    }
 }

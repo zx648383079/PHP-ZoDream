@@ -137,4 +137,27 @@ class CommentModel extends Model {
             'action' => ['in', [BlogLogModel::ACTION_AGREE, BlogLogModel::ACTION_DISAGREE]]
         ])->count() < 1;
     }
+
+    /**
+     * 是否赞同此评论
+     * @param bool $isAgree
+     * @return bool
+     * @throws \Exception
+     */
+    public function agreeThis($isAgree = true) {
+        if ($isAgree) {
+            $this->agree ++;
+        } else {
+            $this->disagree ++;
+        }
+        if (!$this->save()) {
+            return false;
+        }
+        return !!BlogLogModel::create([
+            'type' => BlogLogModel::TYPE_COMMENT,
+            'action' => $isAgree ? BlogLogModel::ACTION_AGREE : BlogLogModel::ACTION_DISAGREE,
+            'id_value' => $this->id,
+            'user_id' => auth()->id()
+        ]);
+    }
 }
