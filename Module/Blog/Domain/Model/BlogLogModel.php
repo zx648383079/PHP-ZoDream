@@ -15,6 +15,7 @@ class BlogLogModel extends Model {
 
     const TYPE_BLOG = 0;
     const TYPE_COMMENT = 1;
+    const TYPE_BLOG_MICRO = 2;
 
     const ACTION_RECOMMEND = 0;
     const ACTION_AGREE = 1;

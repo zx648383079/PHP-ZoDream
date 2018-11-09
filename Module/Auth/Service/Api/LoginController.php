@@ -17,7 +17,8 @@ class LoginController extends RestController {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
             return $this->render([
-                'token' => auth()->createToken($user)
+                'token' => auth()->createToken($user),
+                'user' => $user->toArray()
             ]);
         }
         return $this->renderFailure($user->getFirstError());
