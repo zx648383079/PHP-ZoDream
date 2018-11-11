@@ -1,7 +1,6 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
-use Zodream\Html\Page;
 /**
  * Class ContentModel
  * @package Domain\Model\CMS

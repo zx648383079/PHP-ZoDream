@@ -1,5 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Model;
+use Module\CMS\Domain\Fields\BaseField;
+use Zodream\Helpers\Str;
 
 /**
  * Class ContentModel
@@ -66,16 +68,18 @@ class ModelFieldModel extends BaseModel {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'field' => 'Field',
+            'name' => '名称',
+            'field' => '字段名',
             'model_id' => 'Model Id',
-            'type' => 'Type',
-            'length' => 'Length',
-            'position' => 'Position',
+            'type' => '类型',
+            'is_main' => '主表',
+            'length' => '长度',
+            'position' => '排序',
             'form_type' => 'Form Type',
-            'match' => 'Match',
-            'tip_message' => 'Tip Message',
-            'error_message' => 'Error Message',
+            'is_required' => '是否必填',
+            'match' => '匹配规则',
+            'tip_message' => '提示信息',
+            'error_message' => '错误提示',
             'setting' => 'Setting',
         ];
     }
@@ -111,5 +115,20 @@ class ModelFieldModel extends BaseModel {
 
     public function toInput($value = null) {
         return '';
+    }
+
+    /**
+     * @param $type
+     * @return BaseField
+     * @throws \Exception
+     */
+    public static function newField($type) {
+        $class = 'Module\CMS\Domain\Fields\\'.Str::studly($type);
+        if (class_exists($class)) {
+            return new $class;
+        }
+        throw new \Exception(
+            __('Field not exist!')
+        );
     }
 }

@@ -18,7 +18,7 @@ use Zodream\Html\Page;
  * @property integer $cat_id
  * @property integer $brand_id
  * @property string $name
- * @property string $sign
+ * @property string $series_number
  * @property string $keywords
  * @property string $thumb
  * @property string $description
@@ -27,15 +27,21 @@ use Zodream\Html\Page;
  * @property float $price
  * @property float $market_price
  * @property integer $stock
- * @property integer $is_show
+ * @property float $weight
+ * @property integer $shipping_id
  * @property integer $is_best
  * @property integer $is_hot
  * @property integer $is_new
+ * @property integer $status
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
  */
 class GoodsModel extends Model {
+
+    const STATUS_SALE = 10;
+    const STATUS_OFF = 0;
+
     public static function tableName() {
         return 'shop_goods';
     }
@@ -45,7 +51,7 @@ class GoodsModel extends Model {
             'cat_id' => 'required|int',
             'brand_id' => 'required|int',
             'name' => 'required|string:0,100',
-            'sign' => 'required|string:0,100',
+            'series_number' => 'required|string:0,100',
             'keywords' => 'string:0,200',
             'thumb' => 'string:0,200',
             'description' => 'string:0,200',
@@ -54,10 +60,13 @@ class GoodsModel extends Model {
             'price' => '',
             'market_price' => '',
             'stock' => 'int',
-            'is_show' => 'int:0,9',
+            'weight' => '',
+            'shipping_id' => 'int',
+            'sales' => 'int',
             'is_best' => 'int:0,9',
             'is_hot' => 'int:0,9',
             'is_new' => 'int:0,9',
+            'status' => 'int:0,99',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -67,22 +76,24 @@ class GoodsModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'cat_id' => 'Cat Id',
-            'brand_id' => 'Brand Id',
-            'name' => 'Name',
-            'sign' => 'Sign',
-            'keywords' => 'Keywords',
-            'thumb' => 'Thumb',
-            'description' => 'Description',
-            'brief' => 'Brief',
-            'content' => 'Content',
-            'price' => 'Price',
-            'market_price' => 'Market Price',
-            'stock' => 'Stock',
-            'is_show' => 'Is Show',
-            'is_best' => 'Is Best',
-            'is_hot' => 'Is Hot',
-            'is_new' => 'Is New',
+            'cat_id' => '分类',
+            'brand_id' => '品牌',
+            'name' => '商品名',
+            'series_number' => '货号',
+            'keywords' => '关键字',
+            'thumb' => '缩略图',
+            'description' => '说明',
+            'brief' => '简介',
+            'content' => '内容',
+            'price' => '价格',
+            'market_price' => '市场价',
+            'weight' => '重量',
+            'shipping_id' => '配送方式',
+            'stock' => '库存',
+            'is_best' => '精品',
+            'is_hot' => '热门',
+            'is_new' => '最新',
+            'status' => '状态',
             'deleted_at' => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

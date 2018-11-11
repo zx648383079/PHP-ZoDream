@@ -214,7 +214,7 @@ class CreateShopTables extends Migration {
         });
         Schema::createTable(GoodsAttributeModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
-            $table->set('goods_id')->int()->notNull();
+            $table->set('goods_id')->int()->defaultVal(0);
             $table->set('attribute_id')->int()->notNull();
             $table->set('value')->varchar()->notNull();
             $table->set('price')->decimal(10, 2)->defaultVal(0)->comment('附加服务，多选不算在');
@@ -223,10 +223,11 @@ class CreateShopTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('goods_id')->int()->notNull();
             $table->set('price')->decimal(10, 2)->defaultVal(0);
+            $table->set('market_price')->decimal(10, 2)->defaultVal(0);
             $table->set('stock')->int()->defaultVal(1);
-            $table->set('thumb')->varchar(200)->defaultVal('');
+            $table->set('weight')->float(8, 3)->defaultVal(0);
+            $table->set('series_number')->varchar(50)->defaultVal('');
             $table->set('attributes')->varchar(100)->defaultVal('');
-            $table->set('attributes_value')->varchar(200)->defaultVal('');
         });
     }
 
@@ -237,13 +238,21 @@ class CreateShopTables extends Migration {
         Schema::createTable(ShippingModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
+            $table->set('code')->varchar(30)->notNull();
+            $table->set('method')->tinyint(2)->defaultVal(0)->comment('计费方式');
+            $table->set('icon')->varchar(100)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->set('position')->tinyint(2)->defaultVal(50);
             $table->timestamps();
         });
         Schema::createTable(ShippingGroupModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(30)->notNull();
             $table->set('shipping_id')->int()->notNull();
-            $table->set('price')->int()->notNull();
+            $table->set('first_step')->float(10, 3)->defaultVal(0);
+            $table->set('first_fee')->decimal(10, 2)->defaultVal(0);
+            $table->set('additional')->float(10, 3)->defaultVal(0);
+            $table->set('additional_fee')->decimal(10, 2)->defaultVal(0);
+            $table->set('free_step')->float(10, 3)->defaultVal(0);
         });
         Schema::createTable(ShippingRegionModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
@@ -315,11 +324,13 @@ class CreateShopTables extends Migration {
             $table->set('price')->decimal(8, 2)->defaultVal(0);
             $table->set('market_price')->decimal(8, 2)->defaultVal(0);
             $table->set('stock')->int()->defaultVal(1);
-            $table->set('sales')->int()->defaultVal(0)->defaultVal('销量');
-            $table->set('is_show')->bool()->defaultVal(1);
+            $table->set('weight')->float(8, 3)->defaultVal(0);
+            $table->set('shipping_id')->int(10)->defaultVal(0)->comment('配送方式');
+            $table->set('sales')->int()->defaultVal(0)->comment('销量');
             $table->set('is_best')->bool()->defaultVal(0);
             $table->set('is_hot')->bool()->defaultVal(0);
             $table->set('is_new')->bool()->defaultVal(0);
+            $table->set('status')->tinyint(2)->defaultVal(10);
             $table->softDeletes();
             $table->timestamps();
         });

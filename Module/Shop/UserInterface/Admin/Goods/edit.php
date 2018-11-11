@@ -4,13 +4,11 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑商品';
+$url = $this->url('./admin/'); 
 $js = <<<JS
-    var ue = UE.getEditor('container');
+    bindGoods('{$url}');
 JS;
-
-$this->registerJsFile('/assets/ueditor/ueditor.config.js')
-    ->registerJsFile('/assets/ueditor/ueditor.all.js')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
@@ -23,6 +21,12 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
             <div class="zd-tab-item">
                 详情
             </div>
+            <div class="zd-tab-item">
+                其他
+            </div>
+            <div class="zd-tab-item">
+                属性
+            </div>
         </div>
         <div class="zd-tab-body">
             <div class="zd-tab-item active">
@@ -32,24 +36,6 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
                 <?=Form::select('brand_id', [$brand_list], true)?>
                 <?=Form::text('price', true)?>
                 <?=Form::text('market_price')?>
-                <?=Form::text('stock')?>
-                <?=Form::text('keywords')?>
-                <?=Form::textarea('description')?>
-                <div class="input-group">
-                    <label>
-                        <input value="1" name="is_best" type="checkbox" <?=$model->is_best || $model->id < 1 ? 'checked': ''?>> 精品
-                    </label>
-                </div>
-                <div class="input-group">
-                    <label>
-                        <input value="1" name="is_hot" type="checkbox" <?=$model->is_hot || $model->id < 1 ? 'checked': ''?>> 热门
-                    </label>
-                </div>
-                <div class="input-group">
-                    <label>
-                        <input value="1" name="is_new" type="checkbox" <?=$model->is_new || $model->id < 1 ? 'checked': ''?>> 最新
-                    </label>
-                </div>
                 <?=Form::file('thumb')?>
             </div>
             <div class="zd-tab-item">
@@ -57,9 +43,94 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
                     <?=$model->content?>
                 </script>
             </div>
+            <div class="zd-tab-item">
+                <?=Form::text('weight')?>
+                <?=Form::text('stock')?>
+                <?=Form::text('keywords')?>
+                <?=Form::textarea('description')?>
+                <?=Form::checkbox('is_best')?>
+                <?=Form::checkbox('is_hot')?>
+                <?=Form::checkbox('is_new')?>
+                <?=Form::radio('status', [10 => '上架', 0 => '下架'])?>
+            </div>
+            <div class="zd-tab-item">
+                <?=Form::select('attribute_group_id', [$group_list])?>
+                <div class="attribute-box">
+                    <div class="attr-box"></div>
+                    <div class="product-box">
+                        <hr/>
+                        <div class="form-horizontal batch-box">
+                            <label class="am-form-label">批量设置</label>
+                            <div class="input-group">
+                                <input type="text" data-type="series_number" placeholder="商家编码">
+                            </div>
+                            <div class="input-group">
+                                <input type="number" data-type="price" placeholder="销售价" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                            </div>
+                            <div class="input-group">
+                                <input type="number" data-type="market_price" placeholder="划线价" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                            </div>
+                            <div class="input-group">
+                                <input type="number" data-type="stock" placeholder="库存数量" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                            </div>
+                            <div class="input-group">
+                                <input type="number" data-type="weight" placeholder="重量" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                            </div>
+                            <button type="button" class="btn">确定</button>
+                        </div>
+                        <table class="product-table">
+
+                        </table>
+                    </div>
+                    <input type="hidden" name="product" value="">
+                </div>
+            </div>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-success">确认保存</button>
+    <button type="button" class="btn btn-success btn-save">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>
+
+
+<script id="tpl_spec_table" type="text/template">
+    <tbody>
+    <tr>
+        {{ each attr_list }}
+        <th>{{ $value.name }}</th>
+        {{ /each }}
+        <th>商家编码</th>
+        <th>销售价</th>
+        <th>划线价</th>
+        <th>库存</th>
+        <th>重量(kg)</th>
+    </tr>
+    {{ each product_list item }}
+    <tr data-index="{{ $index }}" data-sku-id="{{ item.spec_sku_id }}">
+        {{ each item.rows td itemKey }}
+        <td class="td-spec-value am-text-middle" rowspan="{{ td.rowspan }}">
+            {{ td.spec_value }}
+        </td>
+        {{ /each }}
+        <td>
+            <input type="text" name="series_number" value="{{ item.form.series_number }}">
+        </td>
+        <td>
+            <input type="number" name="price" value="{{ item.form.price }}"
+                   required>
+        </td>
+        <td>
+            <input type="number" name="market_price" value="{{ item.form.market_price }}">
+        </td>
+        <td>
+            <input type="number" name="stock_num" value="{{ item.form.stock }}" 
+                   required>
+        </td>
+        <td>
+            <input type="number" name="weight" value="{{ item.form.weight }}"
+                   required>
+        </td>
+    </tr>
+    {{ /each }}
+    </tbody>
+</script>

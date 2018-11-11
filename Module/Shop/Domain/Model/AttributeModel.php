@@ -37,13 +37,13 @@ class AttributeModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'group_id' => 'Group Id',
-            'type' => 'Type',
-            'search_type' => 'Search Type',
-            'input_type' => 'Input Type',
-            'default_value' => 'Default Value',
-            'position' => 'Position',
+            'name' => '名称',
+            'group_id' => '分组',
+            'type' => '类型',
+            'search_type' => '搜索类型',
+            'input_type' => '输入类型',
+            'default_value' => '默认值',
+            'position' => '排序',
         ];
     }
 

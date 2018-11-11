@@ -37,11 +37,11 @@ class PaymentModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
+            'name' => '名称',
             'code' => 'Code',
-            'icon' => 'Icon',
-            'description' => 'Description',
-            'settings' => 'Settings',
+            'icon' => '图标',
+            'description' => '介绍',
+            'settings' => '配置',
         ];
     }
 

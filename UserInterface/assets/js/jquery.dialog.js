@@ -87,7 +87,6 @@ var Eve = /** @class */ (function () {
         return this.options.hasOwnProperty('on' + event);
     };
     Eve.prototype.trigger = function (event) {
-        var _a;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -97,6 +96,7 @@ var Eve = /** @class */ (function () {
             return;
         }
         return (_a = this.options[realEvent]).call.apply(_a, [this].concat(args));
+        var _a;
     };
     return Eve;
 }());
@@ -465,6 +465,9 @@ var DialogCore = /** @class */ (function (_super) {
     };
     DialogCore.prototype.find = function (name) {
         return this.box.find(name);
+    };
+    DialogCore.prototype.isElement = function (content) {
+        return typeof content == 'object' && (content instanceof $ || content instanceof HTMLDivElement);
     };
     return DialogCore;
 }(Box));
@@ -1333,6 +1336,9 @@ var DialogContent = /** @class */ (function (_super) {
         }
         this.createCore().createContent()
             .appendParent().setProperty().bindEvent();
+        if (this.isElement(this.options.content)) {
+            this.box.find('.dialog-body').empty().append(this.options.content);
+        }
         if (this.status == DialogStatus.show) {
             this.showBox();
         }
@@ -1364,8 +1370,18 @@ var DialogContent = /** @class */ (function (_super) {
      * 绑定事件
      */
     DialogContent.prototype.bindEvent = function () {
+        var that = this;
         this.box.click(function (e) {
             e.stopPropagation();
+        }).on('dialog-done', function (event, data, cb) {
+            if (that.hasEvent('done')) {
+                that.trigger('done', data, cb);
+                return;
+            }
+            cb(that);
+            that.close();
+        }).on('dialog-async', function (event, cb) {
+            cb(that);
         });
         this.onClick(".dialog-yes", function () {
             if (this.hasEvent('done')) {
@@ -1373,8 +1389,7 @@ var DialogContent = /** @class */ (function (_super) {
                 return;
             }
             this.close();
-        });
-        this.onClick(".dialog-close", function () {
+        }).onClick(".dialog-close", function () {
             this.close();
             if (this.hasEvent('cancel')) {
                 this.trigger('cancel');
@@ -1383,7 +1398,7 @@ var DialogContent = /** @class */ (function (_super) {
         return this;
     };
     DialogContent.prototype.getContentHtml = function () {
-        var content = this.options.content;
+        var content = this.isElement(this.options.content) ? '' : this.options.content;
         if (typeof content == 'object') {
             content = JSON.stringify(content);
         }
@@ -1417,6 +1432,7 @@ var DialogContent = /** @class */ (function (_super) {
         this.box.on('click', tag, function (e) {
             callback.call(instance, $(this));
         });
+        return this;
     };
     DialogContent.prototype.showBox = function () {
         if (this.isLoading) {
@@ -1554,6 +1570,10 @@ var DialogBox = /** @class */ (function (_super) {
     DialogBox.prototype.resize = function () {
         this.setProperty();
         this.trigger('resize');
+    };
+    DialogBox.prototype.showCenter = function () {
+        var x = Math.max(($(window).width() - this.box.width()) / 2, 0), y = Math.max(($(window).height() / this.box.height()) / 2, 0);
+        return this.css({ left: x + "px", top: y + "px" }).show();
     };
     DialogBox.prototype.getDefaultOption = function () {
         return new DefaultDialogBoxOption();

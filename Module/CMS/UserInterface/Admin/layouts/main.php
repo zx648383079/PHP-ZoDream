@@ -56,6 +56,7 @@ $this->registerCssFile([
                 'fa fa-link'
             ]
         ],
+        true
     ],
     [
         '内容管理',

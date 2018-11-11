@@ -11,11 +11,13 @@ use Domain\Model\Model;
 
 /**
  * Class PaymentModel
- * @package Domain\Model\Shopping
  * @property integer $id
- * @property string $name
  * @property integer $shipping_id
- * @property integer $price
+ * @property float $first_step
+ * @property float $first_fee
+ * @property float $additional
+ * @property float $additional_fee
+ * @property float $free_step
  */
 class ShippingGroupModel extends Model {
     public static function tableName() {
@@ -24,18 +26,24 @@ class ShippingGroupModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:0,30',
             'shipping_id' => 'required|int',
-            'price' => 'required|int',
+            'first_step' => '',
+            'first_fee' => '',
+            'additional' => '',
+            'additional_fee' => '',
+            'free_step' => '',
         ];
     }
 
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
             'shipping_id' => 'Shipping Id',
-            'price' => 'Price',
+            'first_step' => '首件/首重',
+            'first_fee' => '运费',
+            'additional' => '续件/续重',
+            'additional_fee' => '续费',
+            'free_step' => '免费标准',
         ];
     }
 

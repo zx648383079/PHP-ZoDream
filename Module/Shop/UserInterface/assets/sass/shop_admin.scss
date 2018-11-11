@@ -1,0 +1,236 @@
+//colors
+$color_alabaster_approx: #fbfbfb;
+$red: red;
+$white: #fff;
+$color_celeste_approx: #ccc;
+
+.place-div {
+	label {
+		font-weight: 400;
+		font-size: 1.4rem;
+	}
+	input[type=checkbox] {
+		margin-right: .3rem;
+	}
+	.checkbtn {
+		background-color: $color_alabaster_approx;
+		text-align: right;
+		img {
+			height: 10px;
+			margin-left: 3px;
+		}
+		.ri {
+			border-right: none;
+		}
+		a {
+			height: 30px;
+			line-height: 30px;
+			display: inline-block;
+			width: 60px;
+			text-align: center;
+		}
+	}
+	.smallplace {
+		.ratio {
+			color: $red;
+		}
+		label {
+			padding-right: 10px;
+			text-align: left;
+			width: auto;
+			float: left;
+			cursor: pointer;
+		}
+		.citys {
+			width: auto;
+			background-color: $white;
+			position: absolute;
+			top: 35px;
+			border: 1px solid $color_celeste_approx;
+			z-index: 100;
+			visibility: hidden;
+			.row-div {
+				min-width: 250px;
+				padding: 10px;
+				//Instead of the line below you could use @include box-sizing($bs)
+				box-sizing: border-box;
+				label span {
+					max-width: 175px;
+					white-space: nowrap;
+					vertical-align: middle;
+					font-size: 1.4rem;
+				}
+			}
+			> i.jt {
+				width: 0;
+				height: 0;
+				border-left: 8px solid transparent;
+				border-right: 8px solid transparent;
+				border-bottom: 10px solid $color_celeste_approx;
+				position: absolute;
+				top: -10px;
+				left: 20px;
+				i {
+					width: 0;
+					height: 0;
+					border-left: 8px solid transparent;
+					border-right: 8px solid transparent;
+					border-bottom: 10px solid $white;
+					position: absolute;
+					top: 2px;
+					left: -8px;
+				}
+			}
+		}
+		p {
+			float: left;
+			width: auto;
+			margin: 2px 0;
+		}
+		> div {
+			float: left;
+			width: 170px;
+			margin: 0;
+			padding-bottom: 10px;
+            padding-top: 5px;
+            position: relative;
+		}
+		.place-tooltips:hover .citys {
+			visibility: visible;
+		}
+	}
+}
+.show-place-div {
+	margin-left: 85px;
+	font-size: 15px;
+	.smallplace {
+		label {
+			min-width: 105px;
+			width: auto;
+		}
+		input {
+			margin-left: 0;
+		}
+		.citys .row-div p {
+			margin: 5px 0 10px;
+		}
+	}
+}
+
+.clearfloat {
+    zoom: 1; 
+    &:after {
+        display: block;
+        clear: both;
+        content: "";
+        visibility: hidden;
+        height: 0; 
+    }
+}
+
+.product-box {
+    .input-group {
+        input[type="text"],
+        input[type="number"], {
+            min-width: 0;
+            width: 100px;
+        }
+    }
+    input[type="text"],
+    input[type="number"], {
+        min-width: 0;
+        width: 100px;
+    }
+}
+
+
+
+.form-table {
+    .input-group {
+        .add-box {
+            display: inline-block;
+            input {
+                min-width: 0;
+                width: 100px;
+            }
+            .btn {
+                margin: 0;
+            }
+        }
+    }
+    .attr-box {
+        .input-group {
+            input {
+                min-width: 0;
+            }
+        }
+        .check-label {
+            margin-right: 8px;
+            position: relative;
+            label {
+                padding-right: 0;
+            }
+            input {
+                width: 60px;
+                text-align: center;
+                background: rgba($color: #fff, $alpha: .3);
+                border: none;
+                border-bottom: 1px solid;
+                color: #fff;
+            }
+            .fa-remove {
+                position: absolute;
+                display: block;
+                cursor: pointer;
+                text-align: center;
+                background: #ababab;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+                top: -9px;
+                right: -9px;
+            }
+            &.attr-block {
+                .fa-remove {
+                    top: 0;
+                    right: 0px;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+}
+
+
+.attr-block {
+    display: block;
+}
+
+.product-table,
+.regional-table {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    td,
+    th {
+        border-left: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+    }
+}
+
+.regional-table {
+    input {
+        display: block;
+        width: 100%;
+        padding: 6px 5px;
+        line-height: 1.42857;
+        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        border: 0;
+        border-bottom: 1px solid #c2cad8;
+        color: #555;
+        box-shadow: none;
+        font-size: 14px;
+    }
+}

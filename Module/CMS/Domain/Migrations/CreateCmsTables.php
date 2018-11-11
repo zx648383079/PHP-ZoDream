@@ -23,6 +23,7 @@ class CreateCmsTables extends Migration {
             $table->set('length')->tinyint(3);
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('form_type')->tinyint(3)->defaultVal(0);
+            $table->set('is_main')->bool()->defaultVal(0);
             $table->set('is_required')->bool()->defaultVal(1);
             $table->set('is_default')->bool()->defaultVal(0);
             $table->set('match')->varchar();

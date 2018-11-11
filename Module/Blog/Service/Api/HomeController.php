@@ -13,7 +13,7 @@ class HomeController extends RestController {
         ];
     }
 
-    public function indexAction($id = 0, $sort = 'new', $category = null, $keywords = null) {
+    public function indexAction($id = 0, $sort = 'new', $category = null, $keywords = null, $per_page = 20) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
@@ -37,7 +37,7 @@ class HomeController extends RestController {
             })->when(!empty($keywords), function ($query) {
                 BlogModel::search($query, ['title']);
             })
-            ->page();
+            ->page($per_page);
         return $this->renderPage($blog_list);
     }
 

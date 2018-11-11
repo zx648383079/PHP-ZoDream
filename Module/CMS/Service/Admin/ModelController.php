@@ -78,4 +78,10 @@ class ModelController extends Controller {
         ]);
     }
 
+    public function optionAction($type, $id = 0) {
+        $this->layout = false;
+        $model = ModelFieldModel::findOrNew($id);
+        $field = ModelFieldModel::newField($type);
+        return $this->showContent($field->options($model));
+    }
 }

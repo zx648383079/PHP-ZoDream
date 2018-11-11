@@ -29,7 +29,7 @@ class AttributeGroupModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
+            'name' => '名称',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
