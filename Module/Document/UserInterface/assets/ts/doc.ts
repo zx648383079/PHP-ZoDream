@@ -129,7 +129,7 @@ function importField(url: string) {
     Dialog.form({
         content: {
             type: 'textarea',
-            placeholder: '允许json和表单格式数据',
+            placeholder: '允许xml、json和表单格式数据',
             style: 'width: 500px;height:300px'
         }
     }, '自动配数据').on('done', function() {
