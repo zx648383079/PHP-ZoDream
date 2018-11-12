@@ -42,8 +42,10 @@ footer {
   .app-wrapper .search-container {
     display: none; }
   .app-wrapper.search-mode {
-    transform-origin: 50vw 50vh;
-    transform: perspective(1000px) translate3d(0, 50vh, 0) rotate3d(1, 0, 0, 30deg);
+    -webkit-transform-origin: 50vw 50vh;
+            transform-origin: 50vw 50vh;
+    -webkit-transform: perspective(1000px) translate3d(0, 50vh, 0) rotate3d(1, 0, 0, 30deg);
+            transform: perspective(1000px) translate3d(0, 50vh, 0) rotate3d(1, 0, 0, 30deg);
     pointer-events: none;
     max-width: 1920px;
     margin: 0 auto;

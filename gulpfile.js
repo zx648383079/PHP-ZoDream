@@ -5,21 +5,50 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
+    //@import "bourbon";
+    bourbon    = require("bourbon").includePaths,
+    // @import "neat";
+    neat       = require("bourbon-neat").includePaths,
+    autoprefixer = require('gulp-autoprefixer'),
     ts = require("gulp-typescript"),
     tslint = require("gulp-tslint"),
     tsProject = ts.createProject('tsconfig.json'),
-    moduleRoot = 'Module/Shop/',
-    //'../zodream/gzo/src/',
+    moduleRoot = '',
     jsRoot = moduleRoot + 'UserInterface/assets/js/',
     tsRoot = moduleRoot + 'UserInterface/assets/ts/',
-    jsDist = 'html/assets/js',
     cssRoot = moduleRoot + 'UserInterface/assets/sass/',
+    jsDist = 'html/assets/js',
+    moudule = undefined,
     cssDist = 'html/assets/css';
+
+if (process.argv && process.argv.length > 2) {
+    moudule = process.argv[2];
+    // 暂不考虑大小写转化
+    switch (moudule) {
+        case 'gzo':
+            moduleRoot = '../zodream/gzo/src/';
+            break;
+        case 'debugger':
+            moduleRoot = '../zodream/debugger/src/';
+            break;
+        default:
+            moduleRoot = 'Module/'+ moudule +'/';
+            break;
+    }
+    jsRoot = moduleRoot + 'UserInterface/assets/js/';
+    tsRoot = moduleRoot + 'UserInterface/assets/ts/';
+    cssRoot = moduleRoot + 'UserInterface/assets/sass/';
+}
+
 
 function sassTask() {
     return gulp.src(cssRoot + "*.scss")
         .pipe(sourcemaps.init())
-        .pipe(sass())
+        .pipe(sass({
+            sourcemaps: true,
+            includePaths: [bourbon, neat]  // 引入其他的
+        }))
+        .pipe(autoprefixer())
         .pipe(sourcemaps.write('./'))
         // .pipe(minCss())
         // .pipe(rename({suffix:'.min'}))
@@ -61,8 +90,6 @@ exports.jsTask = jsTask;
 exports.tslintTask = tslintTask;
 exports.tsTask = tsTask;
 exports.cssTask = cssTask;
-
 var build = gulp.series(gulp.parallel(sassTask, cssTask, tslintTask, tsTask, jsTask));
-
-gulp.task('build', build);
+gulp.task(moudule || 'i', build);
 gulp.task('default', build);

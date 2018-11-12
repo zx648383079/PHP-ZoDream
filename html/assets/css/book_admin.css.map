@@ -1,1 +1,1 @@
-{"version":3,"file":"book_admin.css","sources":["book_admin.scss"],"sourcesContent":[".search {\r\n    .form-horizontal {\r\n        display: inline-block;\r\n    }\r\n}"],"names":[],"mappings":"AAAA,AACI,OADG,CACH,gBAAgB,CAAC;EACb,OAAO,EAAE,YAAY,GACxB"}
+{"version":3,"sources":["book_admin.scss"],"names":[],"mappings":"AAAA;EAEQ,sBAAqB,EACxB","file":"book_admin.css","sourcesContent":[".search {\r\n    .form-horizontal {\r\n        display: inline-block;\r\n    }\r\n}"]}
