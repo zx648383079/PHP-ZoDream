@@ -4,6 +4,9 @@ namespace Module\Document\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Document\Domain\MockRule;
+use Zodream\Helpers\Arr;
+use Zodream\Helpers\Json;
+use Zodream\Helpers\Xml;
 
 /**
  * Class FieldModel
@@ -33,11 +36,14 @@ class FieldModel extends Model {
         'json'   => '字符串(json)',
         'number' => '数字(number)',
         'float'  => '浮点型(float)',
+        'double' => '双精度浮点型(double)',
         'boolean'=> '布尔型(boolean)',
         'array'  => '数组(array)',
         'object' => '对象(object)',
         'null'   => '对象(null)',
     ];
+
+    public $children = [];
 
     public static function tableName() {
         return 'doc_field';
@@ -115,6 +121,23 @@ class FieldModel extends Model {
         return $mock->$type($rule, $value);
     }
 
+    public function save() {
+        parent::save();
+        if ($this->id < 0) {
+            return false;
+        }
+        if (empty($this->children)) {
+            return true;
+        }
+        foreach ($this->children as $item) {
+            $item->api_id = $this->api_id;
+            $item->parent_id = $this->id;
+            $item->kind = $this->kind;
+            $item->save();
+        }
+        return true;
+    }
+
     /**
      * 获取响应字段默认值数组
      * @param int $api_id
@@ -166,5 +189,100 @@ class FieldModel extends Model {
         }
         return $data;
 
+    }
+
+    /**
+     * @param string $content
+     * @param int $kind
+     * @return static[]
+     */
+    public static function parseContent($content, $kind = self::KIND_REQUEST) {
+        if ($kind == self::KIND_HEADER) {
+            return self::parseHeader($content);
+        }
+        if (substr($content, 0, 1) == '{') {
+            $args = Json::decode($content);
+        } elseif (substr($content, 0, 1) == '<') {
+            $args = Xml::specialDecode($content);
+        } else {
+            $args = [];
+            parse_str($content, $args);
+        }
+        $data = [];
+        foreach ($args as $key => $item) {
+            $model = new static([
+                'name' => $key,
+                'title' => $key,
+                'type' => 'string',
+                'kind' => $kind,
+                'default_value' => is_array($item) || strlen($item) > 30 ? '' : $item,
+                'is_required' => !empty($item)
+            ]);
+            self::parseChildren($item, $model);
+            $data[] = $model;
+        }
+    }
+
+    public static function parseChildren($content, FieldModel $model) {
+        if (is_null($content)) {
+            $model->type = 'null';
+        }
+        if (is_bool($content)) {
+            $model->type = 'boolean';
+            return;
+        }
+        if (is_float($content)) {
+            $model->type = 'float';
+            return;
+        }
+        if (is_double($content)) {
+            $model->type = 'double';
+            return;
+        }
+        if (is_numeric($content)) {
+            $model->type = strpos($content, '.') === false ? 'number' : 'float';
+            return;
+        }
+        if (!is_array($content)) {
+            return;
+        }
+        $model->default_value = '';
+        $model->type = Arr::isAssoc($content) ? 'object' : 'array';
+        $data = $model->type == 'array' ? reset($content) : $content;
+        foreach ($data as $key => $item) {
+            $child = new static([
+                'name' => $key,
+                'title' => $key,
+                'type' => 'string',
+                'default_value' => is_array($item) || strlen($item) > 30 ? '' : $item,
+                'is_required' => !empty($item)
+            ]);
+            self::parseChildren($item, $child);
+            $model->children[] = $child;
+        }
+    }
+
+    public static function parseHeader($content) {
+        $data = [];
+        foreach (explode("\n", $content) as $line) {
+            if (strpos($line, ':') === false) {
+                continue;
+            }
+            list($key, $value) = explode(':', $line, 2);
+            $key = trim($key);
+            if (empty($key)) {
+                continue;
+            }
+            $value = trim($value);
+            $data[] = new static([
+                'name' => $key,
+                'title' => $key,
+                'default_value' => $value,
+                'type' => 'string',
+                'kind' => self::KIND_HEADER,
+                'is_required' => !empty($value)
+            ]);
+        }
+        return $data;
     }
 }

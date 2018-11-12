@@ -61,7 +61,8 @@ $this->registerJs($js, View::JQUERY_READY);
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 3, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-fw fa-plus"></i>添加参数</a>
+                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 3, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 3, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
@@ -117,7 +118,8 @@ $this->registerJs($js, View::JQUERY_READY);
                             </div>
 
                             <div class="form-group">
-                            <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 1, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-fw fa-plus"></i>添加参数</a>
+                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 1, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 1, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
@@ -169,19 +171,16 @@ $this->registerJs($js, View::JQUERY_READY);
                                         <?php if(in_array($item->type, ['array', 'object'])):?>
                                         <a href="javascript:;" onclick="addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id])?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
                                         <?php endif;?>
-
-
                                     </td>
-
                                 </tr>
                                 <?php endforeach;?>
-
                                 </tbody>
                             </table>
                             </div>
 
                             <div class="form-group">
-                            <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-fw fa-plus"></i>添加参数</a>
+                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 2, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->

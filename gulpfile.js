@@ -18,13 +18,19 @@ var gulp = require('gulp'),
     tsRoot = moduleRoot + 'UserInterface/assets/ts/',
     cssRoot = moduleRoot + 'UserInterface/assets/sass/',
     jsDist = 'html/assets/js',
-    moudule = undefined,
-    cssDist = 'html/assets/css';
+    mo = undefined,
+    cssDist = 'html/assets/css',
+    maps = {
+        doc: 'Document',
+        wx: 'WeChat',
+        open: 'OpenPlatform',
+        tpl: 'Template'
+    };
 
 if (process.argv && process.argv.length > 2) {
-    moudule = process.argv[2];
+    mo = process.argv[2];
     // 暂不考虑大小写转化
-    switch (moudule) {
+    switch (mo) {
         case 'gzo':
             moduleRoot = '../zodream/gzo/src/';
             break;
@@ -32,7 +38,7 @@ if (process.argv && process.argv.length > 2) {
             moduleRoot = '../zodream/debugger/src/';
             break;
         default:
-            moduleRoot = 'Module/'+ moudule +'/';
+            moduleRoot = 'Module/'+ (maps.hasOwnProperty(mo) ? maps[mo] : mo) +'/';
             break;
     }
     jsRoot = moduleRoot + 'UserInterface/assets/js/';
@@ -91,5 +97,5 @@ exports.tslintTask = tslintTask;
 exports.tsTask = tsTask;
 exports.cssTask = cssTask;
 var build = gulp.series(gulp.parallel(sassTask, cssTask, tslintTask, tsTask, jsTask));
-gulp.task(moudule || 'i', build);
+gulp.task(mo || 'i', build);
 gulp.task('default', build);

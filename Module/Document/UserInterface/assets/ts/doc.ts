@@ -125,6 +125,22 @@ function editField(ele: any, url: string) {
     });
 }
 
+function importField(url: string) {
+    Dialog.form({
+        content: {
+            type: 'textarea',
+            placeholder: '允许json和表单格式数据',
+            style: 'width: 500px;height:300px'
+        }
+    }, '自动配数据').on('done', function() {
+        let that = this;
+        postJson(url, this.data, function(data) {
+            parseAjax(data);
+            this.close();
+        });
+    });
+}
+
 function refreshMock(url: string) {
     postJson(url, function(data) {
         if (data.code != 200) {

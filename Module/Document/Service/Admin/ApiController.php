@@ -163,5 +163,14 @@ class ApiController extends Controller {
         return $this->jsonSuccess();
     }
 
-
+    public function importFieldAction($content, $kind = 1, $api_id = 0) {
+        $data = FieldModel::parseContent($content, $kind);
+        foreach ($data as $model) {
+            $model->api_id = $api_id;
+            $model->save();
+        }
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
 }
