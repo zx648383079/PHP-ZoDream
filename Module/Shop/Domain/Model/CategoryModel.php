@@ -15,8 +15,11 @@ use Domain\Model\Model;
  * @property string $name
  * @property string $keywords
  * @property string $description
+ * @property string $icon
  * @property integer $parent_id
  * @property integer $position
+ * @property string $banner
+ * @property string $app_banner
  */
 class CategoryModel extends Model {
     public static function tableName() {
@@ -28,8 +31,11 @@ class CategoryModel extends Model {
             'name' => 'required|string:0,100',
             'keywords' => 'string:0,200',
             'description' => 'string:0,200',
+            'icon' => 'string:0,200',
             'parent_id' => 'int',
             'position' => 'int:0,999',
+            'banner' => 'string:0,200',
+            'app_banner' => 'string:0,200',
         ];
     }
 
@@ -39,8 +45,11 @@ class CategoryModel extends Model {
             'name' => 'Name',
             'keywords' => 'Keywords',
             'description' => 'Description',
+            'icon' => 'Icon',
             'parent_id' => 'Parent Id',
             'position' => 'Position',
+            'banner' => 'Banner',
+            'app_banner' => 'App Banner',
         ];
     }
 
@@ -64,10 +73,10 @@ class CategoryModel extends Model {
     }
 
     /**
-     * @param BaseGoodsModel $goods
+     * @param GoodsModel $goods
      * @return bool
      */
-    public function isChildGoods(BaseGoodsModel $goods) {
+    public function isChildGoods(GoodsModel $goods) {
         return $this->isChildById($goods->category_id);
     }
 }

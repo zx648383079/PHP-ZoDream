@@ -15,6 +15,8 @@ use Module\Shop\Domain\Model\CollectModel;
 use Module\Shop\Domain\Model\CommentImageModel;
 use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
+use Module\Shop\Domain\Model\GoodsGalleryModel;
+use Module\Shop\Domain\Model\GoodsIssue;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\InvoiceModel;
 use Module\Shop\Domain\Model\NavigationModel;
@@ -292,7 +294,9 @@ class CreateShopTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('分类名');
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('description')->varchar(200)->comment('关键字');
-            $table->set('thumb')->varchar(200);
+            $table->set('icon')->varchar(200);
+            $table->set('banner')->varchar(200);
+            $table->set('app_banner')->varchar(200);
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
         });
@@ -308,6 +312,7 @@ class CreateShopTables extends Migration {
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('description')->varchar(200)->comment('关键字');
             $table->set('logo')->varchar(200)->comment('LOGO');
+            $table->set('app_logo')->varchar(200)->comment('LOGO');
             $table->set('url')->varchar(200)->comment('官网');
         });
         Schema::createTable(GoodsModel::tableName(), function (Table $table) {
@@ -318,6 +323,7 @@ class CreateShopTables extends Migration {
             $table->set('series_number')->varchar(100)->notNull();
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('thumb')->varchar(200)->comment('缩略图');
+            $table->set('picture')->varchar(200)->comment('主图');
             $table->set('description')->varchar(200)->comment('关键字');
             $table->set('brief')->varchar(200)->comment('简介');
             $table->set('content')->text()->notNull()->comment('内容');
@@ -341,6 +347,17 @@ class CreateShopTables extends Migration {
             $table->set('goods_id')->int()->notNull();
             $table->set('number')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
+        });
+        Schema::createTable(GoodsIssue::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('question')->varchar()->notNull();
+            $table->set('answer')->varchar()->defaultVal('');
+        });
+        Schema::createTable(GoodsGalleryModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('image')->varchar()->notNull();
         });
     }
 

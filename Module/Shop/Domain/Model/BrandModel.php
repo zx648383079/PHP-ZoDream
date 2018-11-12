@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property string $keywords
  * @property string $description
  * @property string $logo
+ * @property string $app_logo
  * @property string $url
  */
 class BrandModel extends Model {
@@ -24,6 +25,7 @@ class BrandModel extends Model {
             'keywords' => 'string:0,200',
             'description' => 'string:0,200',
             'logo' => 'string:0,200',
+            'app_logo' => 'string:0,200',
             'url' => 'string:0,200',
         ];
     }
@@ -35,6 +37,7 @@ class BrandModel extends Model {
             'keywords' => 'Keywords',
             'description' => 'Description',
             'logo' => 'Logo',
+            'app_logo' => 'App Logo',
             'url' => 'Url',
         ];
     }

@@ -21,6 +21,7 @@ use Zodream\Html\Page;
  * @property string $series_number
  * @property string $keywords
  * @property string $thumb
+ * @property string $picture
  * @property string $description
  * @property string $brief
  * @property string $content
@@ -54,6 +55,7 @@ class GoodsModel extends Model {
             'series_number' => 'required|string:0,100',
             'keywords' => 'string:0,200',
             'thumb' => 'string:0,200',
+            'picture' => 'required|string:0,200',
             'description' => 'string:0,200',
             'brief' => 'string:0,200',
             'content' => 'required',
@@ -82,6 +84,7 @@ class GoodsModel extends Model {
             'series_number' => '货号',
             'keywords' => '关键字',
             'thumb' => '缩略图',
+            'picture' => '主图',
             'description' => '说明',
             'brief' => '简介',
             'content' => '内容',

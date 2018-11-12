@@ -1,2 +1,178 @@
+a {
+  text-decoration: none; }
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.container {
+  width: 1090px;
+  margin: 0 auto; }
+
+header .header-top {
+  position: relative;
+  height: 36px;
+  line-height: 36px;
+  background-color: #333;
+  z-index: 4;
+  color: #ccc; }
+  header .header-top .top-left {
+    float: left; }
+    header .header-top .top-left > a {
+      float: left; }
+  header .header-top .top-right {
+    float: right; }
+  header .header-top a {
+    color: #ccc; }
+    header .header-top a:hover {
+      color: #fff; }
+  header .header-top .top-item {
+    display: inline-block;
+    margin-left: 10px;
+    position: relative; }
+    header .header-top .top-item::before {
+      content: '';
+      display: inline-block;
+      height: 16px;
+      border-left: 1px solid #5c5c5c;
+      vertical-align: middle;
+      margin-right: 10px; }
+    header .header-top .top-item:first-child a:nth-child(2) {
+      margin-left: 20px; }
+    header .header-top .top-item:first-child::before {
+      border: none; }
+  header .header-top .top-notice {
+    float: left;
+    height: 36px;
+    overflow: hidden;
+    position: relative;
+    padding-left: 26px;
+    margin-left: 30px; }
+    header .header-top .top-notice .fa {
+      position: absolute;
+      top: 10px;
+      left: 0; }
+    header .header-top .top-notice a,
+    header .header-top .top-notice .fa {
+      color: #b4a078; }
+
+header .header-main {
+  position: relative;
+  height: 204px; }
+  header .header-main .header-logo {
+    text-align: center; }
+  header .header-main .header-nav {
+    line-height: 1;
+    font-weight: 700;
+    position: absolute;
+    height: 30px;
+    bottom: 21px;
+    width: 100%; }
+    header .header-main .header-nav li {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 0 24px; }
+    header .header-main .header-nav .nav-dropdown {
+      display: none;
+      position: absolute;
+      top: 21px;
+      padding-top: 30px;
+      background-color: transparent;
+      padding: 20px 40px 30px;
+      background: #fff;
+      box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1); }
+    header .header-main .header-nav .nav-column {
+      margin-right: 34px;
+      display: inline-block; }
+    header .header-main .header-nav .nav-title {
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 36px;
+      border-bottom: 1px solid #ddd; }
+    header .header-main .header-nav .nav-item {
+      margin-bottom: 4px;
+      font-weight: 400;
+      line-height: 50px; }
+      header .header-main .header-nav .nav-item img {
+        height: 50px;
+        width: 50px;
+        border: 0;
+        vertical-align: top; }
+      header .header-main .header-nav .nav-item span {
+        display: inline-block;
+        width: 84px;
+        max-width: 84px;
+        max-height: 48px;
+        margin-left: 6px;
+        font-size: 14px;
+        vertical-align: middle;
+        line-height: 1.2;
+        overflow: hidden; }
+
+footer .footer-top {
+  padding-top: 60px;
+  padding-bottom: 34px;
+  background-color: #fff;
+  border-top: 1px solid #e8e8e8; }
+  footer .footer-top .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; }
+
+footer .footer-main {
+  height: 204px;
+  padding-top: 37px;
+  background-color: #414141; }
+  footer .footer-main .top-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: 30px; }
+    footer .footer-main .top-grid .top-item {
+      color: #fff;
+      font-size: 18px;
+      line-height: 51px;
+      display: inline-block;
+      vertical-align: middle; }
+      footer .footer-main .top-grid .top-item i {
+        margin-right: 17px; }
+  footer .footer-main .footer-info {
+    text-align: center;
+    color: #999;
+    position: relative; }
+    footer .footer-main .footer-info .nav-list a {
+      color: #999; }
+
+footer .footer-hr {
+  height: 1px;
+  margin-bottom: 27px;
+  background-color: #4f4f4f;
+  border: 0; }
+
+.app-down-guide {
+  width: 100%;
+  height: 120px;
+  position: fixed;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 99; }
+  .app-down-guide .content {
+    width: 1090px;
+    height: 90px;
+    margin: 15px auto;
+    background: #ffff;
+    position: relative; }
+    .app-down-guide .content .fa-close {
+      position: absolute;
+      height: 22px;
+      width: 22px;
+      border-radius: 50%;
+      top: -11px;
+      right: -11px;
+      cursor: pointer;
+      background: #ffff;
+      text-align: center;
+      line-height: 21px; }
 
 /*# sourceMappingURL=shop.css.map */
