@@ -10,5 +10,12 @@ class Controller extends ModuleController {
     public $layout = 'main';
     
     public function prepare() {
+
+    }
+
+    public function sendWithShare() {
+        $categories_tree = CategoryModel::cacheTree();
+        $this->send(compact('categories_tree'));
+        return $this;
     }
 }

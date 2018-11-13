@@ -77,23 +77,38 @@ $this->registerCssFile([
                 <div class="header-logo">
                     <img src="http://yanxuan.nosdn.127.net/3db3a7a0bae656df51581fa14f4061d9.gif" alt="">
                 </div>
+                
                 <ul class="header-nav">
                     <li>
                         <a href="">首页</a>
                     </li>
+                    <?php foreach($categories_tree as $item):?>
                     <li>
-                        <a href="">居家</a>
+                        <a href=""><?=$item['name']?></a>
                         <div class="nav-dropdown">
+                            <?php if(isset($item['children'])):foreach($item['children'] as $column):?>
                             <div class="nav-column">
-                                <div class="nav-title">床品</div>
+                                <div class="nav-title"><?=$column['name']?></div>
+                                <?php if(isset($column['children'])):foreach($column['children'] as $child):?>
                                 <div class="nav-item">
                                     <img src="https://yanxuan.nosdn.127.net/785a1507ce654746875063805c6c4235.png" alt="">
-                                    <span>床品件套</span>
+                                    <span><?=$child['name']?></span>
                                 </div>
+                                <?php endforeach;endif;?>
                             </div>
+                            <?php endforeach;endif;?>
                         </div>
                     </li>
+                    <?php endforeach;?>
                 </ul>
+                <div class="header-search">
+                    <input type="text" placeholder="  搜索">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="header-cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <i class="cart-num">0</i>
+                </div>
             </div>
         </div>
    </header>

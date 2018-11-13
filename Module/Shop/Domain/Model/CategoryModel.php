@@ -7,6 +7,7 @@ namespace Module\Shop\Domain\Model;
  * Time: 11:23
  */
 use Domain\Model\Model;
+use Zodream\Html\Tree;
 
 /**
  * Class CategoryModel
@@ -78,5 +79,20 @@ class CategoryModel extends Model {
      */
     public function isChildGoods(GoodsModel $goods) {
         return $this->isChildById($goods->category_id);
+    }
+
+
+    /**
+     * @return Tree
+     */
+    public static function tree() {
+        return new Tree(static::query()->asArray()->all());
+    }
+
+
+    public static function cacheTree() {
+        return cache()->getOrSet('shop_category_tree', function () {
+            return self::tree()->makeIdTree();
+        });
     }
 }
