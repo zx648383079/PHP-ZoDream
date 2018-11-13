@@ -1,13 +1,16 @@
 $width: 1090px;
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
 a {
     text-decoration: none;
 }
 
 ul,
 li {
-    margin: 0;
-    padding: 0;
     list-style: none;
 }
 
@@ -87,7 +90,6 @@ header {
         .header-nav {
             line-height: 1;
             font-weight: 700;
-            position: absolute;
             height: 30px;
             bottom: 21px;
             width: 100%;
@@ -152,6 +154,40 @@ footer {
         .container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            .top-item {
+                text-align: center;
+                color: #333;
+                padding: 0 37px;
+                height: 204px;
+                h4 {
+                    font-size: 16px;
+                    font-weight: 400;
+                    margin-bottom: 28px;
+                    line-height: 1;
+                }
+                a {
+                    display: inline-block;
+                    width: 80px;
+                    height: 100px;
+                    font-size: 14px;
+                    background-color: #fff;
+                    padding-top: 25px;
+                    text-align: center;
+                    border: 1px solid #E8E8E8;
+                    i {
+                        font-size: 30px;
+                    }
+                    p {
+                        margin-top: 10px;
+                    }
+                    &:hover {
+                        color: #b4a078;
+                    }
+                }
+                &:not(:first-of-type) {
+                    border-left: 1px solid #e9e9e9;
+                }
+            }
         }
     }
     .footer-main {
@@ -168,8 +204,19 @@ footer {
                 line-height: 51px;
                 display: inline-block;
                 vertical-align: middle;
+                text-align: center;
                 i {
                     margin-right: 17px;
+                    font-size: 35px;
+                    display: inline-block;
+                    width: 50px;
+                    height: 50px;
+                    border: 2px solid #fff;
+                    border-radius: 50%;
+                    padding-top: 6px;
+                }
+                span {
+                    vertical-align: super;
                 }
             }
         }
@@ -207,7 +254,6 @@ footer {
         width: $width;
         height: 90px;
         margin: 15px auto;
-        background: #ffff;
         position: relative;
         .fa-close {
             position: absolute;
@@ -220,6 +266,120 @@ footer {
             background: #ffff;
             text-align: center;
             line-height: 21px;
+        }
+    }
+}
+
+/** 登录页 **/
+.page-box {
+    background: #fff;
+    .login-box {
+        .box-tab {
+            margin-top: 32px;
+            .tab-item {
+                display: none;
+                &.active {
+                    display: block;
+                }
+            }
+        }
+    }
+    .register-box {
+        display: none;
+    }
+    .box-main {
+        margin: 0 32px;
+        .box-header {
+            padding: 30px 0 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            text-align: center;
+            a {
+                color: #333;
+                &:first-child {
+                    border-right: 1px solid #e8e8e8;
+                }
+                &.active {
+                    color: #999;
+                    &:hover {
+                        color: #B4A078;
+                    }
+                }
+            }
+        }
+        .btn {
+            width: 100%;
+            margin: 40px 0 11px;
+            background: #b4a078;
+            height: 48px;
+            line-height: 48px;
+            border-radius: 2px;
+        }
+        .input-hr {
+            height: 15px;
+            line-height: 16px;
+            font-size: 12px;
+        }
+        .input-group {
+            height: 36px;
+            border: 1px solid #e8e8e8;
+            border-radius: 2px;
+            position: relative;
+            .fa {
+                position: absolute;
+                display: block;
+                left: 7px;
+                top: 7px;
+                height: 24px;
+                line-height: 24px;
+                width: 22px;
+                font-size: 20px;
+                border-right: 1px solid #e8e8e8;
+            }
+            input {
+                height: 34px;
+                width: 100%;
+                line-height: 34px;
+                padding-left: 44px;
+                font-size: 14px;
+                background: #fff;
+                color: #333;
+                border: 0;
+                font-weight: normal;
+            }
+        }
+    }
+    .box-footer {
+        height: 60px;
+        background: #F5F3EF;
+        padding-right: 25px;
+        .login-oauth-box {
+            margin: 0 0 0 32px;
+            padding-top: 8px;
+            height: 50px;
+            font-size: 30px;
+            float: left;
+            a {
+                margin: 0 4px;
+                color: #999;
+                &:hover {
+                    color: #B4A078;
+                }
+            }
+        }
+    }
+}
+
+.login-page {
+    width: 100%;
+    height: 600px;
+    background: center no-repeat;
+    .container {
+        position: relative;
+        .page-box {
+            float: right;
+            margin-top: 83px;
+            width: 386px;
         }
     }
 }

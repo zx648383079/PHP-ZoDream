@@ -103,15 +103,24 @@ $this->registerCssFile([
             <div class="container">
                 <div class="top-item">
                     <h4>客户服务</h4>
-
+                    <a>
+                        <i class="fa fa-headphones"></i>
+                        <p>在线客服</p>
+                    </a>
+                    <a>
+                        <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                        <p>用户反馈</p>
+                    </a>
                 </div>
                 <div class="top-item">
-                        <h4>客户服务</h4>
-                        
+                    <h4>何为严选</h4>
+                    <p>
+                        网易原创生活类电商品牌，秉承网易一贯的严谨态度，我们深入世界各地，从源头全程严格把控商品生产环节，力求帮消费者甄选到优质的商品
+                    </p>
                 </div>
                 <div class="top-item">
-                    <h4>客户服务</h4>
-                    
+                    <h4>扫码关注公众号</h4>
+                    <img src="/assets/images/wx.jpg" alt="自在test" width="104" height="104">
                 </div>
             </div>
         </div>
@@ -119,16 +128,16 @@ $this->registerCssFile([
             <div class="container">
                 <div class="top-grid">
                     <div class="top-item">
-                        <i class="fa fa-info"></i>
+                        <i class="fa fa-recycle"></i>
                         <span>30天无忧退换货</span>
                     </div>
                     <div class="top-item">
-                        <i class="fa fa-info"></i>
-                        <span>30天无忧退换货</span>
+                        <i class="fa fa-rocket"></i>
+                        <span>满88免邮费</span>
                     </div>
                     <div class="top-item">
-                        <i class="fa fa-info"></i>
-                        <span>30天无忧退换货</span>
+                        <i class="fa fa-shield"></i>
+                        <span>永久品质保证</span>
                     </div>
                 </div>
                 <div class="footer-hr"></div>
