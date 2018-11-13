@@ -44,7 +44,9 @@ Temporary Items
 
 # config
 Service/config/
-data/
+/data/*
+
+!/data/languages/
 
 # composer
 vendor/

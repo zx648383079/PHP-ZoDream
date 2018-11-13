@@ -31,11 +31,11 @@ class ArticleCategoryModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
-            'parent_id' => 'Parent Id',
-            'position' => 'Position',
+            'name' => '名称',
+            'keywords' => '关键字',
+            'description' => '说明',
+            'parent_id' => '上级',
+            'position' => '排序',
         ];
     }
 }

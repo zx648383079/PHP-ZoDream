@@ -33,10 +33,10 @@ class AdPositionModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'width' => 'Width',
-            'height' => 'Height',
-            'template' => 'Template',
+            'name' => '名称',
+            'width' => '宽',
+            'height' => '高',
+            'template' => '模板',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

@@ -33,12 +33,12 @@ class BrandModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
+            'name' => '名称',
+            'keywords' => '关键字',
+            'description' => '简介',
             'logo' => 'Logo',
             'app_logo' => 'App Logo',
-            'url' => 'Url',
+            'url' => '官网',
         ];
     }
 }

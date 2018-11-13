@@ -42,12 +42,12 @@ class CategoryModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
-            'icon' => 'Icon',
-            'parent_id' => 'Parent Id',
-            'position' => 'Position',
+            'name' => '名称',
+            'keywords' => '关键字',
+            'description' => '简介',
+            'icon' => '图标',
+            'parent_id' => '上级',
+            'position' => '排序',
             'banner' => 'Banner',
             'app_banner' => 'App Banner',
         ];

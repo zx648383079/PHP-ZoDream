@@ -45,13 +45,13 @@ class AdModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'position_id' => 'Position Id',
-            'type' => 'Type',
-            'url' => 'Url',
-            'content' => 'Content',
-            'start_at' => 'Start At',
-            'end_at' => 'End At',
+            'name' => '广告名',
+            'position_id' => '广告位',
+            'type' => '类型呢',
+            'url' => '链接',
+            'content' => '内容',
+            'start_at' => '开始时间',
+            'end_at' => '结束时间',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -78,9 +78,10 @@ class AdModel extends Model {
     /**
      * @param integer $id
      * @return AdModel
+     * @throws \Exception
      */
     public static function getAd($id) {
-        return '';
+        return static::find($id);
     }
 
     /**
@@ -88,7 +89,7 @@ class AdModel extends Model {
      * @return AdModel[]
      */
     public static function getAds($id) {
-        return [];
+        return static::where('position_id', $id)->all();
     }
 
     public function __toString() {
