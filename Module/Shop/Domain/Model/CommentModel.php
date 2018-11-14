@@ -8,6 +8,7 @@ namespace Module\Shop\Domain\Model;
  * Time: 19:07
  */
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserModel;
 
 /**
  * Class GoodsModel
@@ -50,5 +51,13 @@ class CommentModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserModel::class, 'id', 'user_id');
+    }
+
+    public function goods() {
+        return $this->hasOne(GoodsModel::class, 'id', 'item_id');
     }
 }

@@ -80,11 +80,11 @@ $this->registerCssFile([
                 
                 <ul class="header-nav">
                     <li>
-                        <a href="">首页</a>
+                        <a href="<?=$this->url('./')?>">首页</a>
                     </li>
                     <?php foreach($categories_tree as $item):?>
                     <li>
-                        <a href=""><?=$item['name']?></a>
+                        <a href="<?=$this->url('./category', ['id' => $item['id']])?>"><?=$item['name']?></a>
                         <div class="nav-dropdown">
                             <?php if(isset($item['children'])):foreach($item['children'] as $column):?>
                             <div class="nav-column">

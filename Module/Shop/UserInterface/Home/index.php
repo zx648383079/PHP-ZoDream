@@ -6,12 +6,12 @@ $this->title = 'ZoDream Shop';
 $js = <<<JS
 var silder = $(".banner .slider").slider({
     width: 1,
-    height: 420
+    height: 420,
 });
 $(".slider-goods").slider({
     width: 266,
     height: 344,
-    hasPoint: false
+    haspoint: false
 });
 JS;
 $this->registerCssFile('@slider.css')
@@ -20,7 +20,7 @@ $this->registerCssFile('@slider.css')
 ?>
 
 <div class="banner">
-    <div class="slider" data-height="420" data-animationMode="fade">
+    <div class="slider" data-height="420" data-auto="true">
         <div class="slider-previous">&lt;</div>
        <div class="slider-box">
            <ul>
@@ -112,7 +112,79 @@ $this->registerCssFile('@slider.css')
     </div>
 </div>
 
+ <?php foreach($categories_tree as $item):?>
+<div class="floor category-floor">
+    <div class="container">
+        <div class="floor-header">
+            <h3><?=$item['name']?></h3>
 
+            <div class="header-right">
+                <?php if(isset($item['children'])):
+                    $i = 0;
+                    foreach($item['children'] as $column):?>
+                <?php if($i ++ > 0):?>
+                <b class="spilt">/</b>
+                <?php endif;?>
+                <span><?=$column['name']?></span>
+                <?php endforeach;endif;?>
+                <a href="">查看更多 &gt;</a>
+            </div>
+            
+        </div>
+        <div class="category-banner">
+            <img src="<?=$item['banner']?>" alt="">
+        </div>
+        <div class="goods-list">
+            <?php foreach($category_goods as $goods):?>
+            <a href="" class="goods-item">
+                <div class="thumb">
+                    <img src="<?=$goods->thumb?>" alt="">
+                </div>
+                <div class="name"><?=$goods->name?></div>
+                <div class="price"><?=$goods->price?></div>
+            </a>
+            <?php endforeach;?>
+        </div>
+    </div>
+</div>
+<?php endforeach;?>
+
+<div class="floor floor-out comment-floor">
+    <div class="container">
+        <div class="floor-header">
+            <h3>大家都在说</h3>
+            <small>生活，没有统一标准</small>
+        </div>
+        <div class="slider slider-goods" data-height="392" data-width="367">
+            <div class="slider-previous">&lt;</div>
+            <div class="slider-box">
+                <ul>
+                    <?php foreach($comment_goods as $item):?>
+                    <li class="goods-item">
+                        <div class="thumb">
+                            <img src="<?=$item->goods->thumb?>" alt="">
+                        </div>
+                        <div class="comment-item">
+                            <div class="item-top">
+                                <span><?=$item->user->name?></span>
+                                <span><?=$item->created_at?></span>
+                            </div>
+                            <div class="item-middle">
+                                <span class="name"><?=$item->goods->name?></span>
+                                <span class="price"><?=$item->goods->price?></span>
+                            </div>
+                            <div class="item-content">
+                                <?=$item->content?>
+                            </div>
+                        </div>
+                    </li>
+                    <?php endforeach;?>
+                </ul>
+            </div>
+            <div class="slider-next">&gt;</div>
+        </div>
+    </div>
+</div>
 
 
 
