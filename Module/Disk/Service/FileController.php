@@ -4,13 +4,50 @@ namespace Module\Disk\Service;
 use Module\Disk\Domain\FFmpeg;
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
+use Zodream\Image\QrCode;
 use Zodream\Service\Factory;
 
 class FileController extends Controller {
 
     public function indexAction($id) {
-        $disk = DiskModel::auth()->where('id', $id)->one();
-        return $this->show(compact('disk'));
+        $disk = DiskModel::findOneByAuth($id);
+        $name = 'index';
+        switch ($disk->file->type) {
+            case FileModel::TYPE_APP:
+                $name = 'app';
+                break;
+            case FileModel::TYPE_VIDEO:
+                $name = 'video';
+                break;
+            default:
+                break;
+        }
+        return $this->show($name, compact('disk'));
+    }
+
+    public function plistAction($id) {
+        $file = FileModel::find($id);
+        if (empty($file)
+            || $file->extension != 'ipa') {
+            return $this->redirect('./');
+        }
+        $app = $this->diskFolder->file($file->location);
+
+    }
+
+    public function qrAction($id) {
+        $file = FileModel::find($id);
+        if (empty($file)) {
+            return $this->redirect('./');
+        }
+        $url = $file->download_url;
+        if ($file->extension == 'ipa') {
+            $url = 'itms-services://?action=download-manifest&url='
+                .urlencode(url('./file/plist', ['id' => $id]));
+        }
+        $image = new QrCode();
+        $image->encode($url);
+        return app('response')->image($image);
     }
 
     public function m3u8Action($id) {
@@ -60,7 +97,7 @@ class FileController extends Controller {
         if (strpos($action, '.ts')) {
             return $this->tsAction($action);
         }
-        return $this->runMethodNotProcess($action, $vars);
+        return parent::invokeMethod($action, $vars);
     }
 
     public function tsAction($name) {

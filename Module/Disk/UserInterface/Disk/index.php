@@ -19,7 +19,7 @@ $this->registerJs($js)
 <div id="content">
     <div class="row page-header">
         <div class="col-md-4 zd_new">
-            <div class="dropdown" v-show="!category">
+            <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button">
                     <span class="fa fa-upload"></span>
                     上传
@@ -29,7 +29,7 @@ $this->registerJs($js)
                     <li><a href="#" class="uploadFolder">上传文件夹</a></li>
                 </ul>
             </div>
-            <button v-show="!category" class="btn btn-default" data-type="create">
+            <button class="btn btn-default" data-type="create">
                 <span class="fa fa-plus"></span>新建文件夹</button>
         </div>
         <div class="actions">

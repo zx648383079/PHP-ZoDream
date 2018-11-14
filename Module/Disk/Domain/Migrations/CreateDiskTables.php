@@ -34,6 +34,8 @@ class CreateDiskTables extends Migration {
             $table->set('extension')->varchar(20);
             $table->set('md5')->varchar(32)->notNull();
             $table->set('location')->varchar('200')->notNull();
+            $table->set('thumb')->varchar('200')->defaultVal('')
+                ->comment('预览图');
             $table->set('size')->int(10)->defaultVal(0);
             $table->timestamps();
         });

@@ -56,11 +56,17 @@ $this->registerCssFile([
                 'fa fa-file-sound-o'
             ],
             [
+                'APP',
+                './disk#type/7',
+                'fa fa-dropbox'
+            ],
+            [
                 '其他',
                 './disk#type/6',
                 'fa fa-file-zip-o'
             ],
-        ]
+        ],
+        true
     ],
     [
         '我的分享',

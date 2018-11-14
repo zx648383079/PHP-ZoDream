@@ -84,6 +84,7 @@ class CategoryModel extends Model {
 
     /**
      * @return Tree
+     * @throws \Exception
      */
     public static function tree() {
         return new Tree(static::query()->asArray()->all());

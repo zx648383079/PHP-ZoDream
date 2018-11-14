@@ -263,7 +263,8 @@ class DiskController extends Controller {
         if ($file['type'] == FileModel::TYPE_MUSIC) {
             return url('./file/music', ['id' => $file['id']]);
         }
-        if ($file['type'] == FileModel::TYPE_VIDEO) {
+        if ($file['type'] == FileModel::TYPE_VIDEO
+            || $file['type'] == FileModel::TYPE_APP) {
             return url('./file', ['id' => $file['id']]);
         }
         return '';

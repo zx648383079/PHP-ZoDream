@@ -13,8 +13,10 @@ use Zodream\Database\Model\Model;
  * @property string $md5 唯一的MD5值
  * @property string $location 服务器路径
  * @property integer $size 文件大小 字节
+ * @property string $thumb 预览图
  * @property string $created_at 上传时间
  * @property integer $updated_at
+ * @property string $download_url
  * @property integer $type
  */
 class FileModel extends Model {
@@ -25,6 +27,7 @@ class FileModel extends Model {
     const TYPE_BT = 4;
     const TYPE_MUSIC = 5;
     const TYPE_ZIP = 6;
+    const TYPE_APP = 7;
     const TYPE_UNKNOW = 0;
 
     public static $extensionMaps = [
@@ -45,6 +48,9 @@ class FileModel extends Model {
         ],
         self::TYPE_ZIP => [
             'rar', 'zip', '7z'
+        ],
+        self::TYPE_APP => [
+            'ipa', 'apk', 'appx'
         ]
     ];
 
@@ -59,6 +65,7 @@ class FileModel extends Model {
             'md5' => 'required|string:0,32',
             'location' => 'required|string:0,200',
             'size' => 'int',
+            'thumb' => 'string',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -71,6 +78,7 @@ class FileModel extends Model {
             'extension' => 'Extension',
             'md5' => 'Md5',
             'location' => 'Location',
+            'thumb' => 'string',
             'size' => 'Size',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -101,6 +109,8 @@ class FileModel extends Model {
                 return $query->whereIn('extension', self::$extensionMaps[self::TYPE_BT]);
             case self::TYPE_ZIP:
                 return $query->whereIn('extension', self::$extensionMaps[self::TYPE_ZIP]);
+            case self::TYPE_APP:
+                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_APP]);
             default:
                 return $query;
         }
@@ -117,5 +127,9 @@ class FileModel extends Model {
 
     public function getTypeAttribute() {
         return static::getType($this->extension);
+    }
+
+    public function getDownloadUrlAttribute() {
+        return url('./download', ['id' => $this->id]);
     }
 }

@@ -302,7 +302,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                     this.getList();
                     return;
                 }
-                if (item.type == 3) {
+                if (item.type == 3 || item.type == 7) {
                     window.open(item.url, "_blank");
                     return;
                 }

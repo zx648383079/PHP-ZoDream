@@ -26,9 +26,6 @@ use Zodream\Database\Model\Query;
  */
 class DiskModel extends Model {
 
-
-
-
     public static function tableName() {
         return 'disk';
     }
@@ -304,5 +301,14 @@ class DiskModel extends Model {
     public function getDeletedAtAttribute() {
         $val = $this->getAttributeSource('deleted_at');
         return empty($val) ? '' : Time::format($val);
+    }
+
+    /**
+     * @param $id
+     * @return DiskModel
+     * @throws \Exception
+     */
+    public static function findOneByAuth($id) {
+        return static::auth()->where('id', $id)->one();
     }
 }
