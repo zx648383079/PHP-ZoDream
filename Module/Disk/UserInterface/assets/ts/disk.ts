@@ -63,7 +63,7 @@ function require_disk(baseUrl: string, md5Url: string) {
     let share = new Vue({
         el: "#shareModal",
         data: {
-            modeType: "public",
+            modeType: 0,
             users: [],
             selectUsers: [],
             role: null,
@@ -90,6 +90,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                     if (data.code != 200) {
                         return;
                     }
+                    this.modeType == 0;
                     share.result = data.data.url;
                     if (data.data.mode == 1) {
                         share.result += ' 密码：' + data.data.password;
@@ -559,6 +560,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         }
     });
     vue.load(window.location.hash);
+    $(vue.$el).show();
 
     $(".disk-menu a").click(function () {
         vue.load($(this).attr("href"));

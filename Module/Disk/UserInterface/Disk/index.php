@@ -16,7 +16,7 @@ $this->registerJs($js)
     ->registerJsFile('@APlayer.min.js');
 ?>
 
-<div id="content">
+<div id="content" style="display:none;">
     <div class="row page-header">
         <div class="col-md-4 zd_new">
             <div class="dropdown">
@@ -246,12 +246,12 @@ $this->registerJs($js)
     </div>
     <div class="dialog-body zd-tab">
         <ul class="zd-tab-head">
-            <li class="zd-tab-item active" v-on:click="modeType = 0">链接分享</li>
-            <li class="zd-tab-item" v-on:click="modeType = 2">分享给好友</li>
+            <li class="zd-tab-item" v-bind:class="{active: modeType < 1}" v-on:click="modeType = 0">链接分享</li>
+            <li class="zd-tab-item" v-bind:class="{active: modeType == 2}" v-on:click="modeType = 2">分享给好友</li>
         </ul>
 
         <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+            <div class="zd-tab-item" v-bind:class="{active: modeType < 1}">
                 <div class="row" v-if="result">
                     <input type="text" class="form-control" readonly v-model="result">
                 </div>
@@ -272,7 +272,7 @@ $this->registerJs($js)
                     </div>
                 </div>
             </div>
-            <div class="zd-tab-item">
+            <div class="zd-tab-item" v-bind:class="{active: modeType == 2}">
                 <div class="row">
                     <div class="col-md-5">
                         <ul class="zd_listbox" id="users">

@@ -11,35 +11,45 @@ use Module\Disk\Domain\Model\ShareUserModel;
 use Zodream\Service\Factory;
 
 class ShareController extends Controller {
+
+    protected function rules() {
+        return [
+            '*' => '*'
+        ];
+    }
     
     public function indexAction($id) {
         $model = ShareModel::find($id);
         if (empty($model)) {
             return static::noFound();
         }
-        if (auth()->id() != $model->user_id
-            &&  $model->mode != 'public') {
-            if ($model->mode == 'protected') {
-                if (app('request')->isPost()) {
-                    Factory::session()->set('sharePassword', app('request')->get('password'));
-                }
-                if (Factory::session('sharePassword') != $model->password) {
-                    return $this->show('password');
-                }
-            } elseif (auth()->guest()) {
-                return $this->show('error');
-            } elseif ($model->mode == 'private') {
-                $user = auth()->id();
-                $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => $user])->count();
-                if ($count < 0) {
-                    return $this->show('error');
-                }
-            } else {
-
-            }
+        if (auth()->id() == $model->user_id) {
+            $user = auth()->user();
+            return $this->show(compact('model', 'user'));
         }
         $user = UserModel::find($model->user_id);
-        return $this->show('index', compact('model', 'user'));
+        if ($model->mode == 'public') {
+            return $this->show(compact('model', 'user'));
+        }
+        if ($model->mode == 'protected') {
+            if (app('request')->isPost()) {
+                Factory::session()->set('sharePassword', app('request')->get('password'));
+            }
+            if (Factory::session('sharePassword') != $model->password) {
+                return $this->show('password', compact('model', 'user'));
+            }
+            return $this->show(compact('model', 'user'));
+        }
+        if (auth()->guest()) {
+            return $this->redirectWithAuth();
+        }
+        if ($model->mode == 'private') {
+            $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => auth()->id()])->count();
+            if ($count < 0) {
+                return $this->redirect('./');
+            }
+        }
+        return $this->show(compact('model', 'user'));
     }
 
     public function allAction() {
