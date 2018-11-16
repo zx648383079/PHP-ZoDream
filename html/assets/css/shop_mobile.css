@@ -152,6 +152,9 @@ footer,
 .has-footer {
   margin-bottom: 3.125rem; }
 
+.banner .slider .slider-point li span {
+  display: none; }
+
 .goods-list {
   position: relative;
   display: block;

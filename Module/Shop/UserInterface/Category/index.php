@@ -7,6 +7,16 @@ $this->title = 'ZoDream';
 
 <div class="category-page">
     <div class="container">
+
+        <ul class="path">
+            <li>
+                <a href="<?=$this->url('./')?>">首页</a>
+            </li>
+            <li>
+                <?=$category->name?>
+            </li>
+        </ul>
+
         <div class="banner">
             <img src="<?=$category->banner?>" alt="">
         </div>

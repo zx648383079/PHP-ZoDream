@@ -330,6 +330,12 @@ header {
 .category-page {
   background: #f5f5f5;
   padding-bottom: 80px; }
+  .category-page .path {
+    font-size: 12px;
+    color: #333;
+    line-height: 1;
+    padding-top: 20px;
+    padding-bottom: 20px; }
 
 .goods-area {
   padding: 0 40px;
