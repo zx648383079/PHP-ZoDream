@@ -13,7 +13,7 @@ $this->title = 'ZoDream Disk';
         <a href="<?=$this->url('/share', ['id' => $item['id']])?>"><?=$item['title']?></a>
         </h4>
         <p class="list-group-item-text">
-            分享时间:<?=$this->ago($item['created_at'])?>
+            分享时间:<?=$item['created_at']?>
             <?php if (auth()->id() == $item['user_id']):?>
             <a href="#">取消分享</a>
             <?php endif;?>

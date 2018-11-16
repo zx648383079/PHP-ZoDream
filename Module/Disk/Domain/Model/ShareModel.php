@@ -1,6 +1,7 @@
 <?php
 namespace Module\Disk\Domain\Model;
 
+use Module\Auth\Domain\Model\UserModel;
 use Zodream\Database\Model\Model;
 
 
@@ -64,5 +65,8 @@ class ShareModel extends Model {
         return $query->where('user_id', auth()->id());
     }
 
+    public function user() {
+        return $this->hasOne(UserModel::class, 'id', 'user_id');
+    }
 
 }

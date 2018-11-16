@@ -43,6 +43,8 @@ class GoodsModel extends Model {
     const STATUS_SALE = 10;
     const STATUS_OFF = 0;
 
+    const THUMB_MODE = ['id', 'name', 'thumb', 'price'];
+
     public static function tableName() {
         return 'shop_goods';
     }

@@ -8,7 +8,7 @@ class CategoryController extends Controller {
 
     public function indexAction($id) {
         $category = CategoryModel::find($id);
-        $goods_list = GoodsModel::limit(7)->select('id', 'name', 'thumb', 'price')->all();
+        $goods_list = GoodsModel::limit(7)->select(GoodsModel::THUMB_MODE)->all();
         return $this->sendWithShare()->show(compact('category', 'goods_list'));
     }
 }

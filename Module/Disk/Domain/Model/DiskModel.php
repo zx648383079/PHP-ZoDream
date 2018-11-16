@@ -1,8 +1,8 @@
 <?php
 namespace Module\Disk\Domain\Model;
 
+use Domain\Model\Model;
 use Zodream\Database\Command;
-use Zodream\Database\Model\Model;
 
 use Zodream\Helpers\Time;
 use Zodream\Database\Model\Query;

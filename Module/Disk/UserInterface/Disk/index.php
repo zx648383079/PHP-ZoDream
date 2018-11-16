@@ -276,7 +276,7 @@ $this->registerJs($js)
                 <div class="row">
                     <div class="col-md-5">
                         <ul class="zd_listbox" id="users">
-                            <li v-for="item in users" v-on:click="item.select = !item.select" v-bind:class="{'select': item.select}">{{item.username}}</li>
+                            <li v-for="item in users" v-on:click="item.select = !item.select" v-bind:class="{'selected': item.select}">{{item.name}}</li>
                         </ul>
                     </div>
                     <div class="col-md-2" style="padding-top: 90px;">
@@ -286,7 +286,7 @@ $this->registerJs($js)
                     <div class="col-md-5">
                         <input class="form-control" v-on:keyup.enter="getUser" v-model="name" type="text" placeholder="请输入姓名回车键添加">
                         <ul class="zd_listbox" id="selectUsers" style="height: 190px">
-                            <li v-for="item in selectUsers" v-on:click="item.select = !item.select" v-bind:class="{'select': item.select}">{{item.username}}</li>
+                            <li v-for="item in selectUsers" v-on:click="item.select = !item.select" v-bind:class="{'selected': item.select}">{{item.name}}</li>
                         </ul>
                     </div>
                 </div>

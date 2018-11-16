@@ -153,7 +153,7 @@ function require_disk(baseUrl: string, md5Url: string) {
             }
         }
     });
-    //share.getUsers();
+    share.getUsers();
     $(".zd_role_tree li").click(function (event) {
         $(".zd_role_tree li").removeClass("active");
         $(this).addClass("active");
@@ -562,7 +562,7 @@ function require_disk(baseUrl: string, md5Url: string) {
     vue.load(window.location.hash);
     $(vue.$el).show();
 
-    $(".disk-menu a").click(function () {
+    $(".navbar a").click(function () {
         vue.load($(this).attr("href"));
     });
 

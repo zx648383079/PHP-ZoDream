@@ -93,7 +93,7 @@ class ShareController extends Controller {
 
     public function meAction() {
         $user = auth()->id();
-        $models = ShareUserModel::alisa('su')
+        $models = ShareUserModel::query()->alias('su')
             ->leftJoin('share s', ['su.share_id' => 's.id'])
             ->leftJoin('user u', ['u.id' => 's.user_id'])
             ->where(['su.user_id' => $user])
@@ -105,7 +105,7 @@ class ShareController extends Controller {
 
 
     public function myListAction() {
-        $models = ShareModel::alisa('s')
+        $models = ShareModel::alias('s')
 //            ->leftJoin('disk d', 's.disk_id', 'd.id')
 //            ->leftJoin('disk_file f', 'd.file_id', 'f.id')
             ->where('s.user_id', auth()->id())

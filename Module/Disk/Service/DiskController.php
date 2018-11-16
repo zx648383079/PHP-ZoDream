@@ -1,6 +1,7 @@
 <?php
 namespace Module\Disk\Service;
 
+use Module\Auth\Domain\Model\UserModel;
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Model\ShareFileModel;
@@ -257,6 +258,13 @@ class DiskController extends Controller {
             $item->copyTo($disk);
         }
         return $this->jsonSuccess('成功');
+    }
+
+    public function usersAction($name = null) {
+        $data = UserModel::where('id', '<>', auth()->id())->when(!empty($name), function ($query) {
+            DiskModel::search($query, 'name', false, 'name');
+        })->get('name', 'id');
+        return $this->jsonSuccess($data);
     }
 
     public function getUrl($file) {
