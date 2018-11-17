@@ -21,6 +21,7 @@ use Zodream\Service\Factory;
  * @property integer $goods_id
  * @property integer $number
  * @property float $price
+ * @property float $total
  * @property GoodsModel $goods
  */
 class CartModel extends Model {

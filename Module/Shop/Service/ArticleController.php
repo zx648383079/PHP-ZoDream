@@ -8,16 +8,16 @@ class ArticleController extends Controller {
 
     public function indexAction($id = null) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail');
+            return $this->runMethodNotProcess('detail', compact('id'));
         }
         return $this->show();
     }
 
     public function detailAction($id) {
         $article = ArticleModel::find($id);
-        $cat = $article->category;
-        $cat_list = ArticleCategoryModel::where('parent_id', $cat->parent_id)->all();
-        return $this->show(compact('article', 'cat', 'cat_list'));
+        $category = $article->category;
+        $cat_list = ArticleCategoryModel::where('parent_id', $category->parent_id)->all();
+        return $this->sendWithShare()->show(compact('article', 'category', 'cat_list'));
     }
 
     public function categoryAction($id) {

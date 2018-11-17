@@ -330,6 +330,7 @@ class CreateShopTables extends Migration {
             $table->set('price')->decimal(8, 2)->defaultVal(0);
             $table->set('market_price')->decimal(8, 2)->defaultVal(0);
             $table->set('stock')->int()->defaultVal(1);
+            $table->set('attribute_group_id')->int()->defaultVal(0);
             $table->set('weight')->float(8, 3)->defaultVal(0);
             $table->set('shipping_id')->int(10)->defaultVal(0)->comment('配送方式');
             $table->set('sales')->int()->defaultVal(0)->comment('销量');

@@ -65,6 +65,15 @@ $(function() {
         }
         input.val(amount).trigger('change');
     });
+    $(".tab-box .tab-header .tab-item").click(function() {
+        let $this = $(this);
+        $this.addClass("active").siblings().removeClass("active");
+        $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
+    });
+    $(".header-nav>li").mouseenter(function() {
+        $(".header-nav .nav-dropdown").hide();
+        $(this).find('.nav-dropdown').show();
+    });
 });
 function bindCart(baseUrl: string) {
     $('.number-box input').change(function() {

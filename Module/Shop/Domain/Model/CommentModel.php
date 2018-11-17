@@ -60,4 +60,8 @@ class CommentModel extends Model {
     public function goods() {
         return $this->hasOne(GoodsModel::class, 'id', 'item_id');
     }
+
+    public function images() {
+        return $this->hasMany(CommentImageModel::class, 'comment_id', 'id');
+    }
 }

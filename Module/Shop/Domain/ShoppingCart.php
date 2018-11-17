@@ -1,11 +1,10 @@
 <?php
-namespace Domain;
+namespace Module\Shop\Domain;
 
-use Domain\Model\Shopping\CartModel;
-use Domain\Model\Shopping\GoodsModel;
+use Module\Shop\Domain\Model\CartModel;
+use Module\Shop\Domain\Model\GoodsModel;
 use Traversable;
-use Zodream\Infrastructure\ObjectExpand\JsonExpand;
-use Zodream\Service\Factory;
+use Zodream\Helpers\Json;
 use IteratorAggregate;
 use Zodream\Infrastructure\Interfaces\JsonAble;
 use Zodream\Infrastructure\Interfaces\ArrayAble;
@@ -23,7 +22,13 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     protected $goodsMap = [];
 
     public function __construct() {
-        $this->setGoods(CartModel::findAll(['user_id' => Factory::user()->getId()]));
+        $this->loadFromDb();
+    }
+
+    protected function loadFromDb() {
+        $this->setGoods(CartModel::with('goods')
+            //->where('user_id', auth()->id())
+            ->all());
     }
 
     /**
@@ -109,10 +114,8 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     protected function goodsToCart(GoodsModel $goods) {
         $model = new CartModel();
         $model->goods_id = $goods->id;
-        $model->name = $goods->name;
-        $model->thumb = $goods->thumb;
         $model->price = $goods->price;
-        $model->user_id = Factory::user()->getId();
+        $model->user_id = auth()->id();
         return $model;
     }
 
@@ -176,7 +179,7 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     public function getTotal() {
         $total = 0;
         foreach ($this->getCarts() as $item) {
-            $total += $item->getTotal();
+            $total += $item->total;
         }
         return $total;
     }
@@ -209,6 +212,6 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
      * @return string
      */
     public function toJson($options = 0) {
-        return JsonExpand::encode($this->getCarts());
+        return Json::encode($this->getCarts());
     }
 }

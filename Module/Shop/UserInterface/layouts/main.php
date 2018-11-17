@@ -108,6 +108,36 @@ $this->registerCssFile([
                 <div class="header-cart">
                     <i class="fa fa-shopping-cart"></i>
                     <i class="cart-num">0</i>
+
+                    <div class="cart-dialog">
+                        <div class="dialog-body">
+                            <?php foreach($cart as $item):?>
+                            <div class="cart-item">
+                                <div class="thumb">
+                                    <img src="<?=$item->goods->thumb?>" alt="">
+                                </div>
+                                <div>
+                                    <div class="name"><?=$item->goods->name?></div>
+                                    <span class="attr">雾白 </span>
+                                    <span class="count">x <?=$item->number?></span>
+                                </div>
+                                <div class="price">
+                                    <?=$item->total?>
+                                </div>
+                                <div>
+                                    <i class="fa fa-remove"></i>
+                                </div>
+                            </div>
+                            <?php endforeach;?>
+                        </div>
+                        <div class="dialog-footer">
+                            <div class="total">
+                                <span>商品合计:</span>
+                                <span>￥0.00</span>
+                            </div>
+                            <a href="<?=$this->url('./cart')?>" class="btn">去购物车结算</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

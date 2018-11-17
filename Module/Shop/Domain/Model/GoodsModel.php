@@ -9,6 +9,7 @@ namespace Module\Shop\Domain\Model;
  */
 use Domain\Model\Model;
 
+use Zodream\Database\Relation;
 use Zodream\Html\Page;
 
 /**
@@ -28,6 +29,7 @@ use Zodream\Html\Page;
  * @property float $price
  * @property float $market_price
  * @property integer $stock
+ * @property integer $attribute_group_id
  * @property float $weight
  * @property integer $shipping_id
  * @property integer $is_best
@@ -64,6 +66,7 @@ class GoodsModel extends Model {
             'price' => '',
             'market_price' => '',
             'stock' => 'int',
+            'attribute_group_id' => 'int',
             'weight' => '',
             'shipping_id' => 'int',
             'sales' => 'int',
@@ -91,6 +94,7 @@ class GoodsModel extends Model {
             'brief' => '简介',
             'content' => '内容',
             'price' => '价格',
+            'attribute_group_id' => '类型',
             'market_price' => '市场价',
             'weight' => '重量',
             'shipping_id' => '配送方式',
@@ -113,8 +117,6 @@ class GoodsModel extends Model {
     public function brand() {
         return $this->hasOne(BrandModel::class, 'id', 'brand_id');
     }
-
-
 
     /**
      * @return array
@@ -145,5 +147,11 @@ class GoodsModel extends Model {
      */
     public function final_price(int $amount = 1): float {
         return $this->price;
+    }
+
+    public static function getAttr(GoodsModel $goods) {
+        $data = Relation::parse([
+
+        ], 'attr')->getResults($goods);
     }
 }
