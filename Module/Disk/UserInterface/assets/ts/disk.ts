@@ -997,7 +997,7 @@ function require_my_share(baseUrl: string) {
                         return;
                     }
                     vue.removeItem(ids);
-                })
+                });
             },
             removeItem: function (ids) {
                 for (let i = this.files.length - 1; i >= 0; i --) {
@@ -1166,4 +1166,314 @@ function require_trash(baseUrl: string) {
         }
     });
     vue.getList();
+}
+
+function require_share(baseUri: string, shareId: number) {
+       /* ---------------*/
+    // 主界面数据
+    let dataCache = {},
+        downloadFile = function (url) {
+            let download: any = $(".downloadFrame");
+            if (download.length < 1) {
+                download = document.createElement("iframe");
+                download.className = "downloadFrame";
+                document.body.appendChild(download);
+                download = $(download);
+            }
+            download.attr("src", url);
+            download.hide();
+        },
+        folder = $("#folderModal").dialog();
+    let vue = new Vue({
+        el: "#content",
+        data: {
+            files: [],
+            checkCount: 0,
+            isAllChecked: false,
+            isList: true,
+            orderKey: null,
+            order: null,
+            offset: 0,
+            num: 20,
+            crumb: [
+                {id: 0, name: "全部文件"}
+            ]
+        },
+        computed: {
+            sortFiles: function() {
+                if (!this.orderKey) {
+                    return this.files;
+                }
+                return this.files.sort(sortBy(this.orderKey, this.order));
+            }
+        },
+        methods: {
+            // 获取数据
+            getList: function () {
+                this.checkCount = 0;
+                this.isAllChecked = false;
+                let parent = this.getParent();
+                let tag = this.getTag(parent);
+                let isMore = this.offset > 0 && (this.offset + this.num) > this.files.length;
+                if (dataCache.hasOwnProperty(tag) && !isMore) {
+                    this.addData(dataCache[tag]);
+                    return;
+                }
+                let loading = Dialog.loading();
+                $.getJSON(baseUri+ "share/list?id=" + parent +
+                    "&share=" + shareId+
+                    "&offset=" + this.offset +
+                    "&length=" + this.num, function (data) {
+                    if (data.code != 200) {
+                        return;
+                    }
+                    if (isMore) {
+                        Array.prototype.push.apply(dataCache[tag], data.data);
+                    } else {
+                        dataCache[tag] = data.data;
+                    }
+                    vue.addData(data.data, !isMore);
+                    loading.hide();
+                });
+            },
+            getMore: function (num) {
+                if (num === void 0) {
+                    num = 20;
+                }
+                this.num = num;
+                this.getList();
+            },
+            // 根据ID 获取缓存中的标签
+            getTag: function (id) {
+                if (id === void 0) {
+                    id = this.getParent();
+                }
+                return id;
+            },
+            // 添加数据
+            addData: function (data, isNew) {
+                if (isNew === void 0) {
+                    isNew = true;
+                }
+                if (isNew) {
+                    this.files.splice(0);
+                }
+                for(var i in data) {
+                    var item = data[i];
+                    item.checked = false;
+                    this.files.push(item);
+                }
+                this.offset = this.files.length;
+            },
+            // 排序
+            setOrder: function (key) {
+                if (key != this.orderKey) {
+                    this.orderKey = key;
+                    this.order = 1;
+                    return;
+                }
+                this.order *= -1;
+            },
+            setList: function (isList) {
+                this.isList = isList;
+            },
+            checkAll: function () {
+                var length = this.files.length;
+                if (this.isAllChecked) {
+                    this.isAllChecked = false;
+                    this.checkCount = 0;
+                } else {
+                    this.isAllChecked = true;
+                    this.checkCount = length;
+                }
+                for (var i = 0; i < length; i++) {
+                    this.files[i].checked = this.isAllChecked;
+                }
+            },
+            enter: function (item) {
+              if (item.is_dir != 1) {
+                  this.check(item);
+                  return;
+              }
+                this.crumb.push(item);
+                this.offset = 0;
+                this.getList();
+            },
+            top: function () {
+               this.crumb.pop();
+                this.offset = 0;
+                this.getList();
+            },
+            level: function (item) {
+                if (item.id == 0) {
+                    this.crumb.splice(1);
+                } else {
+                    for (var i = 1, length = this.crumb.length; i < length; i ++) {
+                        if (item.id == this.crumb[i].id) {
+                            this.crumb.splice(i + 1);
+                            break;
+                        }
+                    }
+                }
+                this.offset = 0;
+                this.getList();
+            },
+            refresh: function () {
+                this.deleteCache();
+                this.getList();
+            },
+            check: function (item) {
+                item.checked = !item.checked;
+                if (!item.checked) {
+                    this.isAllChecked = false;
+                    this.checkCount --;
+                    return;
+                }
+                this.checkCount ++;
+                for (var i = 0, length = this.files.length; i < length; i++) {
+                    if (!this.files[i].checked) {
+                        return;
+                    }
+                }
+                this.isAllChecked = true;
+            },
+            // 删除缓存
+            deleteCache: function (index, id) {
+                if (typeof index == "object") {
+                    id = index;
+                    index = -1;
+                }
+                if (index < 0 || index === void 0) {
+                    index = this.getParent();
+                }
+                var tag = this.getTag(index);
+                if (!dataCache.hasOwnProperty(tag)) {
+                    return;
+                }
+                if (id === void 0) {
+                    delete dataCache[tag];
+                    return;
+                }
+                for (var i = dataCache[tag].length - 1; i >= 0; i -- ) {
+                    var item = dataCache[tag][i];
+                    if (id instanceof Array) {
+                        for (var j = id.length - 1; j >= 0; j -- ) {
+                            if (item.id == id[j]) {
+                                dataCache[tag].splice(i, 1);
+                                id.splice(j, i);
+                            }
+                        }
+                    } else if (typeof id  == "object") {
+                        if (id.id == item.id) {
+                            dataCache[tag].splice(i, 1);
+                            return;
+                        }
+                    }
+                    else if (item.id == id) {
+                        dataCache[tag].splice(i, 1);
+                        return;
+                    }
+
+                }
+            },
+            getParent: function () {
+                return this.crumb[this.crumb.length - 1].id;
+            },
+            getParentItem: function () {
+                return this.crumb[this.crumb.length - 1];
+            },
+            cancel: function () {
+                postJson(baseUri + "share/cancel", {
+                    id: [shareId]
+                }, function (data) {
+                    if (data.code == 200) {
+                        window.location.href = baseUri;
+                    }
+                });
+            },
+            download: function (item) {
+                if (item.is_dir == 1) {
+                    alert("暂不支持文件夹下载！");
+                    return;
+                }
+                downloadFile(baseUri + 'download?id=' + item.id);
+            },
+            downloadAll: function () {
+                alert("暂不支持多文件下载!");
+            },
+            save: function (item) {
+                folder.show();
+                fileIds = [item.id];
+                moveMode = 1;
+            },
+            saveAll: function () {
+                folder.show();
+                fileIds = [];
+                moveMode = 1;
+                for (var i = this.files.length - 1; i >= 0; i --) {
+                    if (this.files[i].checked) {
+                        fileIds.push(this.files[i].id);
+                    }
+                }
+            }
+        }
+    });
+    vue.getList();
+
+    /* -------------------------------------------   */
+    // 模态框事件
+    /* ----------------------------------------------------------*/
+    // 文件移动或复制
+    var fileIds = [], moveMode = 0, fileParent = 0;
+    $(".zd_tree").on("click", ".zd_tree_item", function (event) {
+        event.stopPropagation();
+        $(".zd_tree li").removeClass("active");
+        var father = $(this);
+        var parent = father.parent();
+        fileParent = parent.attr("data-id");
+        parent.addClass("active")
+        if (father.hasClass("empty")) {
+            return;
+        }
+        if (parent.hasClass("open")) {
+            parent.removeClass("open")
+            return;
+        }
+        parent.addClass("open");
+        if (parent.find("ul").length > 0) {
+            return;
+        }
+        $.getJSON(baseUri + "disk/folder?id=" + fileParent, function (data) {
+            if (data.code != 200) {
+                return;
+            }
+            if (data.data.length < 1) {
+                father.addClass("empty");
+                return;
+            }
+            var html = "";
+            var padding = parseInt(father.css("padding-left")) + 30 + "px";
+            $(data.data).each(function (index, item) {
+                html += '<li data-id="'+item.id
+                    +'"><div class="zd_tree_item" style="padding-left: '+padding
+                    +'"><span></span><span></span><span>'+item.name
+                    +'</span></div></li>';
+            });
+            parent.append('<ul>'+html+'</ul>');
+        });
+    });
+
+    folder.on('done', function () {
+        folder.hide();
+        if (fileIds.length < 1) {
+            return;
+        }
+        postJson(baseUri + "share/save", {
+            id: shareId,
+            file: fileIds,
+            parent: fileParent,
+        }, function (data) {
+            parseAjax(data);
+        })
+    });
 }

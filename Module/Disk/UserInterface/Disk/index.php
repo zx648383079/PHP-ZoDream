@@ -90,7 +90,7 @@ $this->registerJs($js)
                     分享
                 </button>
                 <button v-on:click="downloadAll" class="btn btn-default">
-                    <i class="fa fa-download-alt"></i>
+                    <i class="fa fa-download"></i>
                     下载
                 </button>
                 <button v-on:click="deleteAll" class="btn btn-default">
@@ -102,7 +102,7 @@ $this->registerJs($js)
                     复制到
                 </button>
                 <button v-on:click="copyAll" class="btn btn-default">
-                    <i class="fa fa-move"></i>
+                    <i class="fa fa-arrows"></i>
                     移动到
                 </button>
                 <button v-on:click="rename" class="btn btn-default">
@@ -135,7 +135,7 @@ $this->registerJs($js)
                     <div class="row-tools">
                         <span v-on:click.stop="share(item)" class="fa fa-share"></span>
                         <span v-on:click.stop="download(item)" class="fa fa-download"></span>
-                        <span v-on:click.stop="move(item)" class="fa fa-move"></span>
+                        <span v-on:click.stop="move(item)" class="fa fa-arrows"></span>
                         <span v-on:click.stop="copy(item)" class="fa fa-copy"></span>
                         <span v-on:click.stop="rename(item)" class="fa fa-pencil"></span>
                         <span v-on:click.stop="deleteItem(item)" class="fa fa-trash"></span>

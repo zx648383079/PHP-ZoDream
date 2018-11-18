@@ -100,27 +100,74 @@ class DiskModel extends Model {
     }
 
     public function copyTo(DiskModel $disk) {
-        if ($this->parent_id = $disk->id) {
+        if ($disk->file_id > 0) {
             return false;
         }
-        if ($disk->left_id > $this->left_id
-            && $disk->right_id < $this->right_id) {
-            // 目标为子节点无法移动
+        if ($this->user_id == $disk->user_id && (
+                $this->parent_id = $disk->id  // 目标为父节点
+                || $disk->left_id > $this->left_id && $disk->right_id < $this->right_id // 目标为子节点无法移动
+            ) ) {
             return false;
         }
         // 先空出位置
         $diff = $this->right_id - $this->left_id + 1;
-        self::where('user_id', $disk->user_id)
-            ->where('left_id', '>=', $disk->right_id)
-            ->updateOne('left_id', $diff);
-        self::where('user_id', $disk->user_id)
-            ->where('right_id', '>=', $disk->right_id)
-            ->updateOne('right_id', $diff);
+//        self::where('user_id', $disk->user_id)
+//            ->where('left_id', '>=', $disk->right_id)
+//            ->updateOne('left_id', $diff);
+//        $disk->left_id += $diff;
+        // 起始的左值
+        $left = $disk->left_id < $this->right_id ? $disk->right_id : $disk->left_id + 1;
+        if ($disk->left_id < $disk->right_id) {
+            // 排除临时创造的错误值
+            self::where('user_id', $disk->user_id)
+                ->where('right_id', '>=', $disk->right_id)
+                ->updateOne('right_id', $diff);
+            $disk->right_id += $diff;
+        } else {
+            // 假的就更新左值方便下一次用
+            $disk->left_id = $left + $diff + 1;
+        }
+        if ($this->file_id > 0) {
+            DiskModel::create([
+                'name' => $this->name,
+                'file_id' => $this->file_id,
+                'user_id' => $disk->user_id,
+                'left_id' => $left,
+                'right_id' => $left + 1,
+                'parent_id' => $disk->id,
+            ]);
+            return true;
+        }
         // 复制开始
-        $real_diff = $disk->right_id - $this->left_id;
+        $real_diff = $left - $this->left_id;
+        // parent_id 不对
         $sql = sprintf('INSET INTO %s (name, file_id, user_id, left_id, right_id, parent_id, updated_at, created_at) SELECT name, file_id, %s, left_id + %s, right_id + %s, if(parent_id=%s,%s,parent_id) as pid, updated_at, created_at FROM %s WHERE user_id = %s AND left_id >= %s AND right_id <= %s AND deleted_at = 0',
             self::tableName(), $disk->user_id, $real_diff, $real_diff, $this->parent_id, $disk->id, self::tableName(), $this->user_id, $this->left_id, $this->right_id);
-        return Command::getInstance()->execute($sql);
+        Command::getInstance()->execute($sql);
+        // 修复 parent_id
+        $data = DiskModel::where('left_id', '>', $left)->where('right_id', '<', $left + $diff + 1)->select('id', 'left_id', 'right_id', 'parent_id')
+            ->orderBy('left_id', 'asc')->asArray()->all();
+        $parent_map = [];
+        $map = [];
+        foreach ($data as $item) {
+            $map[$item['left_id']] = $item['id'];
+            $map[$item['right_id']] = $item['id'];
+            if ($item['parent_id'] == $disk->id) {
+                continue;
+            }
+            if (isset($parent_map[$item['parent_id']])) {
+                DiskModel::where('id', $item['id'])->update([
+                    'parent_id' => $parent_map[$item['parent_id']]
+                ]);
+                continue;
+            }
+            $parent_id = $map[$item['left_id'] - 1];
+            $parent_map[$item['parent_id']] = $parent_id;
+            DiskModel::where('id', $item['id'])->update([
+                'parent_id' => $parent_id
+            ]);
+        }
+        return true;
     }
 
     public function deleteThis() {
@@ -284,6 +331,7 @@ class DiskModel extends Model {
      * 后面追加
      * @param DiskModel $model
      * @return bool|int
+     * @throws \Exception
      */
     public function append(DiskModel $model) {
         return $this->addLastChild($model);
@@ -304,11 +352,45 @@ class DiskModel extends Model {
     }
 
     /**
+     * 是否包含在内
+     * @param DiskModel[] $files
+     * @return bool
+     */
+    public function isIn($files) {
+        foreach ((array)$files as $file) {
+            if ($this->id == $file->id ||
+                ($this->left_id > $file->left_id && $this->right_id < $file->right_id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param $id
-     * @return DiskModel
+     * @return array|bool
      * @throws \Exception
      */
     public static function findOneByAuth($id) {
         return static::auth()->where('id', $id)->one();
+    }
+
+    /**
+     * @param DiskModel[] $files
+     * @param DiskModel $disk
+     * @throws \Exception
+     */
+    public static function saveDiskTo(array $files, $disk) {
+        if (empty($disk)) {
+            $disk = new static([
+                'id' => 0,
+                'parent_id' => -1,
+                'left_id' => static::where('user_id', auth()->id())->max('right_id'),
+                'user_id' => auth()->id()
+            ]);
+        }
+        foreach ($files as $file) {
+            $file->copyTo($disk);
+        }
     }
 }

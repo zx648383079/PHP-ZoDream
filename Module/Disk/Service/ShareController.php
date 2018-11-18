@@ -12,6 +12,8 @@ use Zodream\Service\Factory;
 
 class ShareController extends Controller {
 
+    const PASSWORD_KEY = 'share_password';
+
     protected function rules() {
         return [
             '*' => '*'
@@ -19,6 +21,9 @@ class ShareController extends Controller {
     }
     
     public function indexAction($id) {
+        if (app('request')->isPost()) {
+            Factory::session()->set(self::PASSWORD_KEY, app('request')->get('password'));
+        }
         $model = ShareModel::find($id);
         if (empty($model)) {
             return static::noFound();
@@ -28,28 +33,16 @@ class ShareController extends Controller {
             return $this->show(compact('model', 'user'));
         }
         $user = UserModel::find($model->user_id);
-        if ($model->mode == 'public') {
+        if ($this->canView($model)) {
             return $this->show(compact('model', 'user'));
         }
         if ($model->mode == 'protected') {
-            if (app('request')->isPost()) {
-                Factory::session()->set('sharePassword', app('request')->get('password'));
-            }
-            if (Factory::session('sharePassword') != $model->password) {
-                return $this->show('password', compact('model', 'user'));
-            }
-            return $this->show(compact('model', 'user'));
+            return $this->show('password', compact('model', 'user'));
         }
         if (auth()->guest()) {
             return $this->redirectWithAuth();
         }
-        if ($model->mode == 'private') {
-            $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => auth()->id()])->count();
-            if ($count < 0) {
-                return $this->redirect('./');
-            }
-        }
-        return $this->show(compact('model', 'user'));
+        return $this->redirect('./');
     }
 
     public function allAction() {
@@ -66,7 +59,7 @@ class ShareController extends Controller {
 
     public function listAction($share, $id = 0, $offset = 0, $length = 20) {
         $model = ShareModel::find($share);
-        if (empty($model)) {
+        if (empty($model) || !$this->canView($model)) {
             return $this->jsonFailure('分享不存在！');
         }
         if (empty($id)) {
@@ -120,6 +113,45 @@ class ShareController extends Controller {
         if (empty($row)) {
             return $this->jsonFailure('服务器错误!');
         }
-        return $this->jsonSuccess();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function saveAction($id, $file, $parent = 0) {
+        $model = ShareModel::find($id);
+        if (!$this->canView($model)) {
+            return  $this->jsonFailure('无法保存分享!');
+        }
+        if (auth()->id() == $model->user_id) {
+            return  $this->jsonFailure('自己分享的不能保存!');
+        }
+        $disk = null;
+        if ($parent > 0 && !($disk = DiskModel::find($parent))) {
+            return $this->jsonFailure('保存的文件夹不存在！');
+        }
+        $files = $model->getFile($file);
+        DiskModel::saveDiskTo($files, $disk);
+        return $this->jsonSuccess(null, '保存成功！');
+    }
+
+    protected function canView(ShareModel $model) {
+        if (auth()->id() == $model->user_id) {
+            return true;
+        }
+        if ($model->mode == 'public') {
+            return true;
+        }
+        if ($model->mode == 'protected') {
+            return Factory::session(self::PASSWORD_KEY) == $model->password;
+        }
+        if (auth()->guest()) {
+            return false;
+        }
+        if ($model->mode == 'private') {
+            $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => auth()->id()])->count();
+            return $count > 0;
+        }
+        return true;
     }
 }

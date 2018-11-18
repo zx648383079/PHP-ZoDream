@@ -69,4 +69,14 @@ class ShareModel extends Model {
         return $this->hasOne(UserModel::class, 'id', 'user_id');
     }
 
+    public function getFile($id = null) {
+        $shareFiles = DiskModel::whereIn('id', ShareFileModel::where('share_id', $this->id)->pluck('disk_id'))->all();
+        if (empty($id)) {
+            return $shareFiles;
+        }
+        $files = DiskModel::whereIn('id', (array)$id)->all();
+        return array_filter($files, function (DiskModel $file) use ($shareFiles) {
+            return $file->isIn($shareFiles);
+        });
+    }
 }
