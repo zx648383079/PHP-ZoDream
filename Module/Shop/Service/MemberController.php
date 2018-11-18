@@ -8,6 +8,6 @@ class MemberController extends Controller {
     }
 
     public function loginAction() {
-        return $this->show();
+        return $this->sendWithShare()->show();
     }
 }

@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = $article->title;
 ?>
 <div class="article-page">
-    <div class="container">
+    <div class="container side-box">
         <ul class="path">
             <li>
                 <a href="<?=$this->url('./')?>">首页</a>

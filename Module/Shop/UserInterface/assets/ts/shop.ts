@@ -39,7 +39,9 @@ function mapCheckedItem(cb: (JQuery) => any) {
 function refreshCart() {
 
 }
-
+function search(keywords: string) {
+    window.location.href = $(".header-search").data('url') + '?keywords='+ keywords;
+}
 $(function() {
     $(".check-box").click(function() {
         $(this).toggleClass('active').trigger('change');
@@ -74,7 +76,29 @@ $(function() {
         $(".header-nav .nav-dropdown").hide();
         $(this).find('.nav-dropdown').show();
     });
+    $(".header-cart").mouseover(function() {
+        $(this).find('.cart-dialog').show();
+    }).mouseout(function() {
+        $(this).find('.cart-dialog').hide();
+    });
+    $(".header-search").mouseover(function() {
+        $(this).addClass('expanded');
+    }).mouseout(function() {
+        $(this).removeClass('expanded');
+    });
+    let searchInput = $(".header-search input").keydown(function(e) {
+        if (e.keyCode == 13) {
+            search($(this).val());
+        }
+    });
+    $(".header-search .fa-search").click(function() {
+        search(searchInput.val());
+    });
+    $(window).scroll(function() {
+        $(".header-main").toggleClass('top-fixed', $(this).scrollTop() > 180);
+    })
 });
+
 function bindCart(baseUrl: string) {
     $('.number-box input').change(function() {
         let _this = $(this),
