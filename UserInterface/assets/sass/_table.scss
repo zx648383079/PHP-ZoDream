@@ -51,7 +51,7 @@ table {
         }
         .sort-desc {
             &::after {
-                font: normal normal normal 14px/1 FontAwesome;
+                font-family: "Font Awesome 5 Free";
                 font-size: inherit;
                 text-rendering: auto;
                 -webkit-font-smoothing: antialiased;
@@ -60,7 +60,7 @@ table {
         }
         .sort-asc {
             &::after {
-                font: normal normal normal 14px/1 FontAwesome;
+                font-family: "Font Awesome 5 Free";
                 font-size: inherit;
                 text-rendering: auto;
                 -webkit-font-smoothing: antialiased;

@@ -726,13 +726,13 @@ table {
     border-bottom: 1px solid #555;
     height: 30px; }
   table thead .sort-desc::after {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     content: "\f15e"; }
   table thead .sort-asc::after {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -769,7 +769,7 @@ table {
         content: "\f14a";
         color: #ff77ff; }
     .form-ico .input-group .checkbox label::before {
-      font: normal normal normal 14px/1 FontAwesome;
+      font-family: "Font Awesome 5 Free";
       font-size: inherit;
       text-rendering: auto;
       -webkit-font-smoothing: antialiased;
@@ -802,7 +802,7 @@ table {
       content: "\f14a";
       color: #ff77ff; }
   .checkbox label::before {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -879,7 +879,7 @@ table {
   color: #a7a7a7; }
   .check-label label::before,
   .radio-label label::before {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     content: "\f111";
     position: absolute;
     left: 8px;
@@ -889,7 +889,7 @@ i.checkbox {
   text-align: center;
   line-height: 30px; }
   i.checkbox::before {
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;

@@ -9,6 +9,17 @@ use Zodream\Service\Factory;
 use Zodream\Route\RouteCompiler;
 use Zodream\Database\Relation;
 use Module\Document\Domain\Model\ProjectModel;
+use Zodream\Http\Http;
+use Zodream\Helpers\Str;
+
+$a = new ReflectionClass(ProjectModel::class);
+$b = $a->getDocComment();
+preg_match_all('/\@property\s+([a-z]+)\s+\$([a-z\d_]+)/i', $b, $matches, PREG_SET_ORDER);
+$matches = array_column($matches, 1, 2);
+dd($matches);
+
+
+die();
 
 $data = [
     'id' => 1,

@@ -40,4 +40,9 @@ class CreateTradeTables extends Migration {
             $table->timestamps();
         });
     }
+
+    public function down() {
+        Schema::dropTable(TradeModel::tableName());
+        Schema::dropTable(RefundModel::tableName());
+    }
 }

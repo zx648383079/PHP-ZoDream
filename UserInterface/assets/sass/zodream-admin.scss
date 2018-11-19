@@ -74,7 +74,7 @@ footer {
     display: inline-block;
     .sidebar-container-toggle {
         display: none;
-        font: normal normal normal 14px/1 FontAwesome;
+        font-family: "Font Awesome 5 Free";
         font-size: inherit;
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
@@ -124,7 +124,7 @@ footer {
         height: 26px;
         width: 26px;
         &::before {
-            font: normal normal normal 14px/1 FontAwesome;
+            font-family: "Font Awesome 5 Free";
             font-size: 14px;
             font-size: inherit;
             text-rendering: auto;

@@ -62,7 +62,7 @@
             width: 300px;
             text-align: center;
             .qr-box {
-                .fa-refresh {
+                .fa-sync {
                     position: absolute;
                     top: 106px;
                     left: 129px;
@@ -98,7 +98,7 @@
             }
             &.qr_expired {
                 .qr-box {
-                    .fa-refresh {
+                    .fa-sync {
                         display: block;
                     }
                 }

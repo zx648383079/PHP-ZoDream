@@ -7,7 +7,7 @@ Vue.filter('time', function (value) {
     }
     let date = new Date();
     date.setTime(parseInt(value) * 1000);
-    return date.toLocaleString();
+    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '+date.getHours() + ':' + date.getMinutes();
 });
 Vue.filter('size', function (value) {
     if (!value) {
@@ -571,15 +571,21 @@ function require_disk(baseUrl: string, md5Url: string) {
     /* ------------------------------------------------*/
     // 新建文件夹
     $("[data-type=create]").click(function () {
+        let is_loading = false;
         let box = Dialog.form({
             name: '名称'
         }, '新建文件夹').on('done', function() {
+            if (is_loading) {
+                return;
+            }
+            is_loading = true;
             postJson(baseUrl + 'disk/create', {
                 name: this.data.name,
                 parent_id: vue.getParent()
             }, function (data) {
                 if (data.code != 200) {
-                    parseAjax(data)
+                    parseAjax(data);
+                    is_loading = false;
                     return;
                 }
                 box.close();

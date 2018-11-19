@@ -46,7 +46,7 @@
       left: 300px;
       width: 300px;
       text-align: center; }
-      .login-box .login-form .login-qr-box .qr-box .fa-refresh {
+      .login-box .login-form .login-qr-box .qr-box .fa-sync {
         position: absolute;
         top: 106px;
         left: 129px;
@@ -73,7 +73,7 @@
         display: block; }
       .login-box .login-form .login-qr-box.waiting_confirm .qr-box {
         display: none; }
-      .login-box .login-form .login-qr-box.qr_expired .qr-box .fa-refresh {
+      .login-box .login-form .login-qr-box.qr_expired .qr-box .fa-sync {
         display: block; }
       .login-box .login-form .login-qr-box.qr_reject .failure-box {
         display: block; }

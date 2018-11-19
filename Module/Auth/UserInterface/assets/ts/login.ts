@@ -70,7 +70,7 @@ function bindLogin(baseUrl: string) {
             refreshQr();
         }
     });
-    qr_box.find(".fa-refresh").click(function() {
+    qr_box.find(".fa-sync").click(function() {
         refreshQr();
     });
     qr_box.find(".btn").click(function() {

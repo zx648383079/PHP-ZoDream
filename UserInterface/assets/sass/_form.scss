@@ -43,7 +43,7 @@
             }
             label {
                 &::before {
-                    font: normal normal normal 14px/1 FontAwesome;
+                    font-family: "Font Awesome 5 Free";
                     font-size: inherit;
                     text-rendering: auto;
                     -webkit-font-smoothing: antialiased;
@@ -88,7 +88,7 @@
     }
     label {
         &::before {
-            font: normal normal normal 14px/1 FontAwesome;
+            font-family: "Font Awesome 5 Free";
             font-size: inherit;
             text-rendering: auto;
             -webkit-font-smoothing: antialiased;
@@ -176,7 +176,7 @@
         background-color: #eaeaea;
         color: #a7a7a7;
         &::before {
-            font: normal normal normal 14px/1 FontAwesome;
+            font-family: "Font Awesome 5 Free";
             content: "\f111";
             position: absolute;
             left: 8px;
@@ -190,7 +190,7 @@ i {
         text-align: center;
         line-height: $lineHeight;
         &::before {
-            font: normal normal normal 14px/1 FontAwesome;
+            font-family: "Font Awesome 5 Free";
             font-size: inherit;
             text-rendering: auto;
             -webkit-font-smoothing: antialiased;

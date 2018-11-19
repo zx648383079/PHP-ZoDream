@@ -65,11 +65,15 @@ class ShareController extends Controller {
         if (empty($id)) {
             $data = ShareFileModel::alias('s')
                 ->leftJoin('disk d', 's.disk_id = d.id')
-                ->where(['s.share_id' => $model->id])
-                ->select('d.*')->limit($length)->offset($offset)->asArray()->all();
+                ->left('disk_file f', 'd.file_id', 'f.id')
+                ->where('s.share_id', $model->id)
+                ->select('d.*', 'f.extension', 'f.size')
+                ->limit($length)->offset($offset)->asArray()->all();
             return $this->jsonSuccess($data);
         }
-        $data = DiskModel::where(['parent_id' => $id])
+        $data = DiskModel::alias('d')
+            ->where('d.parent_id', $id)
+            ->select('d.*', 'f.extension', 'f.size')
             ->limit($length)->offset($offset)->asArray()->all();
         return $this->jsonSuccess($data);
     }

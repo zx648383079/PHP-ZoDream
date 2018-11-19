@@ -131,6 +131,9 @@ class DiskController extends Controller {
         $model->created_at = $model->updated_at = time();
         $model->user_id = auth()->id();
         $model->file_id = 0;
+        if ($model->isSameName()) {
+            return $this->jsonFailure('文件已重名');
+        }
         if (!$model->addAsLast()) {
             return $this->jsonFailure($model->getFirstError());
         }
@@ -145,6 +148,9 @@ class DiskController extends Controller {
         }
         $model->name = $data['name'];
         $model->updated_at = time();
+        if ($model->isSameName()) {
+            return $this->jsonFailure('文件已重名');
+        }
         if (!$model->save()) {
             return $this->jsonFailure('修改失败！');
         }

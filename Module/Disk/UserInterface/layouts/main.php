@@ -27,8 +27,8 @@ $this->registerCssFile([
     ],
     [
         '全部文件',
-        false,
-        'fa fa-files-o',
+        './disk',
+        'fa fa-folder-open',
         [
             [
                 '图片',
@@ -38,12 +38,12 @@ $this->registerCssFile([
             [
                 '文档',
                 './disk#type/2',
-                'fa fa-file-word-o'
+                'fa fa-file-word'
             ],
             [
                 '视频',
                 './disk#type/3',
-                'fa fa-file-video-o'
+                'fa fa-file-video'
             ],
             [
                 '种子',
@@ -53,17 +53,17 @@ $this->registerCssFile([
             [
                 '音乐',
                 './disk#type/5',
-                'fa fa-file-sound-o'
+                'fa fa-music'
             ],
             [
                 'APP',
                 './disk#type/7',
-                'fa fa-dropbox'
+                'fa fa-boxes'
             ],
             [
                 '其他',
                 './disk#type/6',
-                'fa fa-file-zip-o'
+                'fa fa-file-archive'
             ],
         ],
         true

@@ -582,6 +582,9 @@
     -ms-transform: perspective(100px) rotateX(0) rotateY(0);
     -o-transform: perspective(100px) rotateX(0) rotateY(0); } }
 
+.fa.fa-close::before {
+  content: "\f00d"; }
+
 .dialog-bg {
   position: fixed;
   top: 0;

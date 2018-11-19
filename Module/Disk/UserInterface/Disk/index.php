@@ -33,7 +33,7 @@ $this->registerJs($js)
                 <span class="fa fa-plus"></span>新建文件夹</button>
         </div>
         <div class="actions">
-            <button class="btn" v-on:click="refresh"><span class="fa fa-refresh"></span></button>
+            <button class="btn" v-on:click="refresh"><span class="fa fa-sync"></span></button>
             <button class="btn" v-bind:class="{'active': isList}" v-on:click="setList(true)"><span class="fa fa-th-list"></span></button>
             <button class="btn" v-bind:class="{'active': !isList}" v-on:click="setList(false)"><span class="fa fa-th-large"></span></button>
         </div>
@@ -52,39 +52,39 @@ $this->registerJs($js)
         </div>
     </div>
     <div class="table-header">
-        <div v-show="isList && checkCount < 1" class="row">
-            <div class="col-md-1">
+        <div v-show="isList && checkCount < 1" class="file-row">
+            <div>
                 <span class="checkbox" v-on:click="checkAll" v-bind:class="{'checked': isAllChecked}"></span>
             </div>
-            <div class="col-md-6"  v-on:click="setOrder('name')">
+            <div v-on:click="setOrder('name')">
                 <span>文件名</span>
                 <span v-show="orderKey == 'name' && order > 0" class="fa fa-long-arrow-up"></span>
                 <span v-show="orderKey == 'name' && order < 0" class="fa fa-long-arrow-down"></span>
             </div>
-            <div class="col-md-2" v-on:click="setOrder('size')">
+            <div v-on:click="setOrder('size')">
                 <span>大小</span>
                 <span v-show="orderKey == 'size' && order > 0" class="fa fa-long-arrow-up"></span>
                 <span v-show="orderKey == 'size' && order < 0" class="fa fa-long-arrow-down"></span>
             </div>
-            <div class="col-md-3" v-on:click="setOrder('update_at')">
+            <div v-on:click="setOrder('update_at')">
                 <span>修改时间</span>
                 <span v-show="orderKey == 'update_at' && order > 0" class="fa fa-long-arrow-up"></span>
                 <span v-show="orderKey == 'update_at' && order < 0" class="fa fa-long-arrow-down"></span>
             </div>
         </div>
-        <div v-show="!isList && checkCount < 1" class="row">
-            <div class="col-md-1">
+        <div v-show="!isList && checkCount < 1" class="file-edit-row">
+            <div>
                 <span class="checkbox" v-on:click="checkAll" v-bind:class="{'checked': isAllChecked}"></span>
             </div>
         </div>
-        <div v-show="checkCount > 0" class="row">
-            <div class="col-md-1">
+        <div v-show="checkCount > 0" class="file-edit-row">
+            <div>
                 <span class="checkbox" v-on:click="checkAll" v-bind:class="{'checked': isAllChecked}"></span>
             </div>
-            <div class="col-md-3" style="font-size: 16px">
+            <div style="font-size: 16px">
                 已选中 {{ checkCount }} 个文件/文件夹
             </div>
-            <div class="col-md-8">
+            <div>
                 <button v-on:click="shareAll" class="btn btn-default">
                     <i class="fa fa-share"></i>
                     分享
@@ -102,11 +102,11 @@ $this->registerJs($js)
                     复制到
                 </button>
                 <button v-on:click="copyAll" class="btn btn-default">
-                    <i class="fa fa-arrows"></i>
+                    <i class="fa fa-arrows-alt"></i>
                     移动到
                 </button>
                 <button v-on:click="rename" class="btn btn-default">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-edit"></i>
                     重命名
                 </button>
             </div>
@@ -114,11 +114,11 @@ $this->registerJs($js)
     </div> <!-- END HEADER -->
     <div class="table-body">
         <div v-show="isList" class="zd_list">
-            <div v-for="item in sortFiles " v-on:click="check(item)" class="row">
-                <div class="col-md-1">
+            <div v-for="item in sortFiles " v-on:click="check(item)" class="file-row">
+                <div>
                     <span class="checkbox" v-bind:class="{'checked': item.checked}"></span>
                 </div>
-                <div v-on:click.stop="enter(item)" class="col-md-6" v-bind:class="{'row-editable': item.is_edit}">
+                <div v-on:click.stop="enter(item)" v-bind:class="{'row-editable': item.is_edit}">
                     <span class="fa" v-bind:class="{'fa-folder': item.file_id < 1, 'fa-file': item.file_id > 0}"></span>
                     <span class="row-name">{{item.name}}</span>
                     <div class="row-edit">
@@ -127,17 +127,17 @@ $this->registerJs($js)
                         <i class="fa fa-close" v-on:click.stop="closeEdit(item)"></i>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div>
                     <span>{{item.size | size}}</span>
                 </div>
-                <div class="col-md-3">
+                <div>
                     <span class="hover-hide">{{item.updated_at | time}}</span>
                     <div class="row-tools">
                         <span v-on:click.stop="share(item)" class="fa fa-share"></span>
                         <span v-on:click.stop="download(item)" class="fa fa-download"></span>
-                        <span v-on:click.stop="move(item)" class="fa fa-arrows"></span>
+                        <span v-on:click.stop="move(item)" class="fa fa-arrows-alt"></span>
                         <span v-on:click.stop="copy(item)" class="fa fa-copy"></span>
-                        <span v-on:click.stop="rename(item)" class="fa fa-pencil"></span>
+                        <span v-on:click.stop="rename(item)" class="fa fa-edit"></span>
                         <span v-on:click.stop="deleteItem(item)" class="fa fa-trash"></span>
                     </div>
                 </div>

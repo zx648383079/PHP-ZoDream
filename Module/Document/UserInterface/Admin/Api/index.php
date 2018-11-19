@@ -219,7 +219,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <div class="col-lg-12">
         <div class="zd-panel panel-default">
             <div class="zd-panel-head">
-                返回示例<a role="button" href="javascript:refreshMock('<?=$this->url('./admin/api/mock', ['id' => $api->id])?>');" class="btn fa fa-refresh" title="刷新数据" ></a>
+                返回示例<a role="button" href="javascript:refreshMock('<?=$this->url('./admin/api/mock', ['id' => $api->id])?>');" class="btn fa fa-sync" title="刷新数据" ></a>
             </div>
             <div class="zd-panel-body">
                 <div class="json-box">

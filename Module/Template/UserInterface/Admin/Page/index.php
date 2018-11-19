@@ -45,7 +45,7 @@ $this->registerCssFile('@template.css')
         </li>
         <li>
             <a data-type="ajax" href="<?=$this->url('./admin/weight/install')?>">
-                <i class="fa fa-refresh"></i>
+                <i class="fa fa-sync"></i>
                 <span>刷新</span>
             </a>
         </li>

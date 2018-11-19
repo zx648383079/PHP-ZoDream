@@ -20,34 +20,34 @@ $this->registerJs($js);
         </div>
     </div>
     <div class="table-header">
-        <div v-show="checkCount < 1" class="row">
-            <div class="col-md-1">
+        <div v-show="checkCount < 1" class="file-row">
+            <div>
                 <span class="checkbox" v-on:click="checkAll" v-bind:class="{'checked': isAllChecked}"></span>
             </div>
-            <div class="col-md-6"  v-on:click="setOrder('name')">
+            <div v-on:click="setOrder('name')">
                 <span>文件名</span>
                 <span v-show="orderKey == 'name' && order > 0" class="fa fa-long-arrow-up"></span>
                 <span v-show="orderKey == 'name' && order < 0" class="fa fa-long-arrow-down"></span>
             </div>
-            <div class="col-md-2" v-on:click="setOrder('size')">
+            <div v-on:click="setOrder('size')">
                 <span>大小</span>
                 <span v-show="orderKey == 'size' && order > 0" class="fa fa-long-arrow-up"></span>
                 <span v-show="orderKey == 'size' && order < 0" class="fa fa-long-arrow-down"></span>
             </div>
-            <div class="col-md-3" v-on:click="setOrder('delete_at')">
+            <div v-on:click="setOrder('delete_at')">
                 <span>删除时间</span>
                 <span v-show="orderKey == 'delete_at' && order > 0" class="fa fa-long-arrow-up"></span>
                 <span v-show="orderKey == 'delete_at' && order < 0" class="fa fa-long-arrow-down"></span>
             </div>
         </div>
-        <div v-show="checkCount > 0" class="row">
-            <div class="col-md-1">
+        <div v-show="checkCount > 0" class="file-edit-row">
+            <div>
                 <span class="checkbox" v-on:click="checkAll" v-bind:class="{'checked': isAllChecked}"></span>
             </div>
-            <div class="col-md-3" style="font-size: 16px">
+            <div>
                 已选中 {{ checkCount }} 个文件/文件夹
             </div>
-            <div class="col-md-8">
+            <div>
                 <button v-on:click="reset(0)" class="btn btn-default">
                     <i class="fa fa-reply" aria-hidden="true"></i>
                     还原
@@ -61,18 +61,18 @@ $this->registerJs($js);
     </div> <!-- END HEADER -->
     <div class="table-body">
         <div class="zd_list">
-            <div v-for="item in sortFiles" v-on:click="check(item)" class="row">
-                <div class="col-md-1">
+            <div v-for="item in sortFiles" v-on:click="check(item)" class="file-row">
+                <div>
                     <span class="checkbox" v-bind:class="{'checked': item.checked}"></span>
                 </div>
-                <div v-on:click.stop="enter(item)" class="col-md-6">
+                <div v-on:click.stop="enter(item)">
                     <span class="fa" v-bind:class="{'fa-folder': item.file_id < 1, 'fa-file': item.file_id > 0}"></span>
                     <span>{{item.name}}</span>
                 </div>
-                <div class="col-md-2">
+                <div>
                     <span>{{item.size | size}}</span>
                 </div>
-                <div class="col-md-3">
+                <div>
                     <span class="hover-hide">{{item.deleted_at | time}}</span>
                     <div class="row-tools">
                         <i v-on:click.stop="reset(item)" class="fa fa-reply" aria-hidden="true"></i>

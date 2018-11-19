@@ -43,7 +43,7 @@ $this->extend('layouts/header')
                 <div class="login-qr-box">
                     <div class="qr-box">
                         <img lazy-src="<?=$this->url('./qr')?>" alt="">
-                        <i class="fa fa-refresh"></i>
+                        <i class="fa fa-sync"></i>
                     </div>
                     <div class="scan-box">
                         <i class="fa fa-check-circle"></i>
@@ -54,7 +54,7 @@ $this->extend('layouts/header')
                         <p>登陆成功</p>
                     </div>
                     <div class="failure-box">
-                        <i class="fa fa-refresh"></i>
+                        <i class="fa fa-sync"></i>
                         <p>登陆失败</p>
                     </div>
                     <button type="button" class="btn">返回登录</button>

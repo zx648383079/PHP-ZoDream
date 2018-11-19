@@ -33,7 +33,7 @@
 }
 
 .page-header {
-    height: 30px;
+    height: 35px;
     background: transparent;
 
     .actions {
@@ -56,19 +56,19 @@
 
 .checkbox {
     display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: inherit;
+    font-style: normal;
+    font-variant: normal;
     text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
     text-align: center;
-
     &:before {
-        content: "\f096";
+        content: "\f0c8";
     }
 
     &.checked {
         &:before {
-            content: "\f046";
+            content: "\f14a";
         }
     }
 }
@@ -84,11 +84,14 @@
 
     .btn {
         padding: 0 10px;
+        vertical-align: top;
+        height: 40px;
     }
 }
 
 .table-body {
-    .row {
+    .file-row,
+    .share-file-row {
         line-height: 30px;
 
         .row-tools {
@@ -136,6 +139,9 @@
 }
 
 .grid-box {
+    .row {
+        margin: 0;
+    }
     .col-md-2 {
         box-sizing: border-box;
 
@@ -300,15 +306,16 @@
                 {
                 display: inline-block;
                 width: 20px;
-                font: normal normal normal 14px/1 FontAwesome;
+                font-family: "Font Awesome 5 Free";
                 font-size: inherit;
                 text-rendering: auto;
-                -webkit-font-smoothing: antialiased;
+                font-style: normal;
+                font-variant: normal;
             }
 
             &:first-child {
                 &:before {
-                    content: "\f054";
+                    content: "\f067";
                 }
             }
 
@@ -341,7 +348,7 @@
                 >span {
                     &:first-child {
                         &:before {
-                            content: "\f078";
+                            content: "\f068";
                         }
                     }
 
@@ -480,7 +487,7 @@
             &:first-child,
             &:nth-child(2) {
                 display: inline-block;
-                font: normal normal normal 14px/1 FontAwesome;
+                font-family: "Font Awesome 5 Free";
                 font-size: inherit;
                 text-rendering: auto;
             }
@@ -560,4 +567,18 @@
     .user-box {
         text-align: center;
     }
+}
+
+.file-row {
+    display: grid;
+    grid-template-columns:40px  1fr 100px 180px;
+}
+.file-edit-row {
+    display: grid;
+    grid-template-columns:40px  200px 1fr;
+}
+
+.share-file-row {
+    display: grid;
+    grid-template-columns:40px  1fr 180px 64px 64px 64px;
 }

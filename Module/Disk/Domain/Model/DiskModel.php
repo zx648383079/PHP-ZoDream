@@ -366,6 +366,13 @@ class DiskModel extends Model {
         return false;
     }
 
+    public function isSameName() {
+        $count = static::where('id', '<>', $this->id)
+            ->where('user_id', auth()->id())
+            ->where('parent_id', $this->parent_id)->where('name', $this->name)->count();
+        return $count > 0;
+    }
+
     /**
      * @param $id
      * @return array|bool

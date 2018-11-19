@@ -20,7 +20,7 @@
     background: rgba(0, 0, 0, 0.4); }
 
 .page-header {
-  height: 30px;
+  height: 35px;
   background: transparent; }
   .page-header .actions {
     right: 20px; }
@@ -36,15 +36,16 @@
 
 .checkbox {
   display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
+  font-family: "Font Awesome 5 Free";
   font-size: inherit;
+  font-style: normal;
+  font-variant: normal;
   text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
   text-align: center; }
   .checkbox:before {
-    content: "\f096"; }
+    content: "\f0c8"; }
   .checkbox.checked:before {
-    content: "\f046"; }
+    content: "\f14a"; }
 
 .table-header {
   background: #333;
@@ -53,30 +54,45 @@
   .table-header span {
     line-height: 40px; }
   .table-header .btn {
-    padding: 0 10px; }
+    padding: 0 10px;
+    vertical-align: top;
+    height: 40px; }
 
-.table-body .row {
+.table-body .file-row,
+.table-body .share-file-row {
   line-height: 30px; }
-  .table-body .row .row-tools {
+  .table-body .file-row .row-tools,
+  .table-body .share-file-row .row-tools {
     display: none; }
-  .table-body .row .share_time .hover-hide {
+  .table-body .file-row .share_time .hover-hide,
+  .table-body .share-file-row .share_time .hover-hide {
     font-size: 12px; }
-  .table-body .row:hover {
+  .table-body .file-row:hover,
+  .table-body .share-file-row:hover {
     background: rgba(0, 0, 0, 0.1); }
-    .table-body .row:hover .row-tools {
+    .table-body .file-row:hover .row-tools,
+    .table-body .share-file-row:hover .row-tools {
       display: block; }
-    .table-body .row:hover .hover-hide {
+    .table-body .file-row:hover .hover-hide,
+    .table-body .share-file-row:hover .hover-hide {
       display: none; }
-  .table-body .row .row-edit {
+  .table-body .file-row .row-edit,
+  .table-body .share-file-row .row-edit {
     display: none;
     width: 80%; }
-    .table-body .row .row-edit input {
+    .table-body .file-row .row-edit input,
+    .table-body .share-file-row .row-edit input {
       height: 30px;
       width: 80%; }
-  .table-body .row .row-editable .row-name {
+  .table-body .file-row .row-editable .row-name,
+  .table-body .share-file-row .row-editable .row-name {
     display: none; }
-  .table-body .row .row-editable .row-edit {
+  .table-body .file-row .row-editable .row-edit,
+  .table-body .share-file-row .row-editable .row-edit {
     display: inline-block; }
+
+.grid-box .row {
+  margin: 0; }
 
 .grid-box .col-md-2 {
   box-sizing: border-box; }
@@ -178,10 +194,11 @@
     .tree-box .tree-item > span:first-child, .tree-box .tree-item > span:nth-child(2) {
       display: inline-block;
       width: 20px;
-      font: normal normal normal 14px/1 FontAwesome;
+      font-family: "Font Awesome 5 Free";
       font-size: inherit;
       text-rendering: auto;
-      -webkit-font-smoothing: antialiased; }
+      font-style: normal;
+      font-variant: normal; }
     .tree-box .tree-item > span:first-child:before {
       content: "\f054"; }
     .tree-box .tree-item > span:nth-child(2):before {
@@ -276,7 +293,7 @@
   vertical-align: middle; }
   .zd_tree .zd_tree_item > span:first-child, .zd_tree .zd_tree_item > span:nth-child(2) {
     display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: "Font Awesome 5 Free";
     font-size: inherit;
     text-rendering: auto; }
 
@@ -319,5 +336,17 @@
   grid-template-columns: 1fr 98px; }
   .share-page .user-box {
     text-align: center; }
+
+.file-row {
+  display: grid;
+  grid-template-columns: 40px  1fr 100px 180px; }
+
+.file-edit-row {
+  display: grid;
+  grid-template-columns: 40px  200px 1fr; }
+
+.share-file-row {
+  display: grid;
+  grid-template-columns: 40px  1fr 180px 64px 64px 64px; }
 
 /*# sourceMappingURL=disk.css.map */
