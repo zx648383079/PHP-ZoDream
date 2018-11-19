@@ -776,7 +776,7 @@ table {
       content: "\f0c8";
       position: absolute;
       left: 10px;
-      top: 7px; }
+      top: 0; }
 
 .btn {
   padding: 0 30px;
@@ -809,7 +809,7 @@ table {
     content: "\f0c8";
     position: absolute;
     left: 10px;
-    top: 7px; }
+    top: 0; }
 
 .check-toggle input[type=checkbox] {
   display: none; }

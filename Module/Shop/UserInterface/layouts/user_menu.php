@@ -12,7 +12,7 @@ use Zodream\Template\View;
             <li class="active"><a>个人中心</a></li>
             <li><a>消息通知</a></li>
             <li><a>帐号信息</a></li>
-            <li><a>地址管理</a></li>
+            <li><a href="<?=$this->url('./address')?>">地址管理</a></li>
             <li><a>帐号安全 </a></li>
             <li><a>我的积分</a></li>
             <li><a>我的收藏</a></li>
@@ -25,7 +25,7 @@ use Zodream\Template\View;
         交易管理
         </div>
         <ul>
-            <li><a>订单管理</a></li>
+            <li><a href="<?=$this->url('./order')?>">订单管理</a></li>
             <li><a>我的红包</a></li>
             <li><a>优惠券（0）</a></li>
             <li><a>礼品卡</a></li>
