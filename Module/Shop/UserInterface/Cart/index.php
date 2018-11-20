@@ -85,7 +85,7 @@ $this->registerCssFile('@slider.css')
                 <div class="tip">已满足免邮条件></div>
             </div>
             <div class="checkout">
-                <a href="">下单</a>
+                <a href="<?=$this->url('./cashier')?>">下单</a>
             </div>
         </div>
 

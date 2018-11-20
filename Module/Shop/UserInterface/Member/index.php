@@ -45,6 +45,28 @@ $this->header_tpl = './user_header';
                     <div>¥0.00</div>
                 </div>
             </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span>未完成订单（1）</span>
+                    <a href="">查看全部订单</a>
+                </div>
+                <div class="panel-body">
+                    <div class="order-item">
+                        <div>
+                            <img src="" alt="">
+                        </div>
+                        <div>包裹1</div>
+                        <div>待付款</div>
+                        <div>11</div>
+                        <div>
+                            <a href="" class="btn">付款</a>
+                            <a href="">查看详情</a>
+                            <a href="">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
