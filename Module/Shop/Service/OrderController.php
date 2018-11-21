@@ -23,7 +23,7 @@ class OrderController extends Controller {
     public function detailAction($id) {
         $order = OrderModel::find($id);
         $goods_list = OrderGoodsModel::where('order_id', $id)->all();
-        return $this->show(compact('order', 'goods_list'));
+        return $this->sendWithShare()->show(compact('order', 'goods_list'));
     }
 
     public function payAction($id) {

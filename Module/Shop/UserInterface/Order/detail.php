@@ -10,7 +10,78 @@ $this->title = 'ZoDream';
             <?php $this->extend('layouts/user_menu');?>
         </div>
         <div>
-            
+            <div class="panel">
+               <div class="panel-header order-item-header">
+                    <span class="time">下单时间：2018-11-20 22:13:25</span>
+                    <span class="number">订单号：69365568</span>
+               </div>
+                <div class="panel-body">
+                    <div class="order-item">
+                        <div>
+                            <img src="http://yanxuan.nosdn.127.net/9014a75315685c0ecccece8583fdba68.png?imageView&thumbnail=100x100&quality=95" alt="">
+                        </div>
+                        <div class="name">男式都市运动外套</div>
+                        <div class="status">
+                            <span>未付款</span>
+                            <a href="">再次购买</a>
+                        </div>
+                        <div class="price">
+                            ¥329.00
+                            <p>（含运费：¥0.00元）</p>
+                        </div>
+                        <div class="actions">
+                            <a href="" class="btn">付款</a>
+                            <a href="<?=$this->url('./order/detail', ['id' => 1])?>">查看详情</a>
+                            <a href="">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+           </div>
+           <div class="panel">
+               <div class="panel-header">
+                    <span class="time">包裹 1已取消</span>
+                    
+                    <a href="" class="btn">再次购买</a>
+               </div>
+                <div class="panel-body">
+                    <div class="order-item">
+                        <div>
+                        商品信息
+                        </div>
+                        <div>
+                        单价
+                        </div>
+                        <div>
+                        数量
+                        </div>
+                        <div>
+                        小计
+                        </div>
+                        <div>
+                        实付
+                        </div>
+                    </div>
+                    <div class="order-item">
+                        <div>
+                            <img src="http://yanxuan.nosdn.127.net/9014a75315685c0ecccece8583fdba68.png?imageView&thumbnail=100x100&quality=95" alt="">
+                        </div>
+                        <div class="name">男式都市运动外套</div>
+                        <div class="status">
+                            <span>未付款</span>
+                            <a href="">再次购买</a>
+                        </div>
+                        <div class="price">
+                            ¥329.00
+                            <p>（含运费：¥0.00元）</p>
+                        </div>
+                        <div class="actions">
+                            <a href="" class="btn">付款</a>
+                            <a href="<?=$this->url('./order/detail', ['id' => 1])?>">查看详情</a>
+                            <a href="">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+           </div>
         </div>
     </div>
 </div>

@@ -29,7 +29,7 @@ use Zodream\Template\View;
                     <a href="<?=$this->url('./member/login')?>">注册</a>
                 </div>
                 <div class="top-item">
-                    我的订单
+                    <a href="<?=$this->url('./order')?>">我的订单</a>
                 </div>
                 <div class="top-item">
                     会员

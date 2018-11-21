@@ -1155,6 +1155,61 @@ header {
   .address-box .header a {
     float: right; }
 
+.order-search {
+  display: grid;
+  grid-template-columns: 1fr 290px;
+  margin-bottom: 14px; }
+  .order-search .search-box {
+    margin-top: 10px;
+    font-size: 13px; }
+    .order-search .search-box input {
+      width: 240px;
+      height: 28px;
+      border: 1px solid #ddd;
+      display: inline-block;
+      float: left;
+      padding-left: 12px; }
+    .order-search .search-box button {
+      width: 51px;
+      height: 28px;
+      margin-left: -1px;
+      border: 1px solid #ddd;
+      border-radius: 0;
+      display: inline-block;
+      float: left; }
+
+.order-tab {
+  border-bottom: 2px solid #eaeaea;
+  display: inline-block; }
+  .order-tab a {
+    display: inline-block;
+    padding: 10px 0;
+    height: 40px;
+    font-weight: 900;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: -2px;
+    width: 110px;
+    text-align: center; }
+    .order-tab a.active {
+      border-bottom: 2px solid #b4a078; }
+
+.order-item-header {
+  display: grid;
+  grid-template-columns: 300px 1fr 40px; }
+
+.order-item {
+  display: grid;
+  grid-template-columns: 100px 1fr 130px 130px 130px;
+  padding: 20px 0;
+  text-align: center; }
+  .order-item .name {
+    margin-top: 20px;
+    text-align: left; }
+  .order-item .status a,
+  .order-item .actions a {
+    display: block; }
+
 .cashier-page .container {
   margin: 0 40px; }
 
