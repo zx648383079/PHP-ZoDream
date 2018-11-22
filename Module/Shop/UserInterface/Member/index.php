@@ -46,7 +46,7 @@ $this->header_tpl = './user_header';
                 </div>
             </div>
 
-            <div class="panel">
+            <div class="panel un-order-box">
                 <div class="panel-header">
                     <span>未完成订单（1）</span>
                     <a href="">查看全部订单</a>
@@ -54,7 +54,7 @@ $this->header_tpl = './user_header';
                 <div class="panel-body">
                     <div class="order-item">
                         <div>
-                            <img src="" alt="">
+                            <img src="http://yanxuan.nosdn.127.net/9014a75315685c0ecccece8583fdba68.png?imageView&thumbnail=100x100&quality=95" alt="">
                         </div>
                         <div>包裹1</div>
                         <div>待付款</div>

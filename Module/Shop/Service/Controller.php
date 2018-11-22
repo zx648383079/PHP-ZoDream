@@ -20,6 +20,6 @@ class Controller extends ModuleController {
     }
 
     public function redirectWithAuth() {
-        return $this->redirect('./member/login', ['redirect_uri' => url()->full()]);
+        return $this->redirect(['./member/login', 'redirect_uri' => url()->full()]);
     }
 }
