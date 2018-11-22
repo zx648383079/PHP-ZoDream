@@ -10,6 +10,11 @@ class MemberController extends Controller {
         return $this->show(compact('user'));
     }
 
+
+    public function loginAction() {
+        return $this->show();
+    }
+
     public function profileAction() {
         $user = auth()->user();
         return $this->show(compact('user'));

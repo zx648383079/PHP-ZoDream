@@ -17,4 +17,9 @@ class Controller extends ModuleController {
     protected function getUrl($path, $args = []) {
         return url('./mobile/'.$path, $args);
     }
+
+
+    public function redirectWithAuth() {
+        return $this->redirect('./mobile/member/login', ['redirect_uri' => url()->full()]);
+    }
 }

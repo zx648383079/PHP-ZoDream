@@ -36,10 +36,10 @@ $this->title = 'ZoDream 登录';
                 </div>
                 <div class="box-footer">
                     <div class="login-oauth-box">
-                        <a href="<?=$this->url('./oauth', ['type' => 'qq'])?>"><i class="fa fa-qq"></i></a>
-                        <a href="<?=$this->url('./oauth', ['type' => 'wechat'])?>"><i class="fa fa-wechat"></i></a>
-                        <a href="<?=$this->url('./oauth', ['type' => 'weibo'])?>"><i class="fa fa-weibo"></i></a>
-                        <a href="<?=$this->url('./oauth', ['type' => 'github'])?>"><i class="fa fa-github"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'qq'])?>"><i class="fab fa-qq"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'wechat'])?>"><i class="fab fa-weixin"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'weibo'])?>"><i class="fab fa-weibo"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'github'])?>"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>

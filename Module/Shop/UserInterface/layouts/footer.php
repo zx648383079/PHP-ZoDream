@@ -9,11 +9,11 @@ use Zodream\Template\View;
             <div class="top-item">
                 <h4>客户服务</h4>
                 <a>
-                    <i class="fa fa-headphones"></i>
+                    <i class="fa fa-headset"></i>
                     <p>在线客服</p>
                 </a>
                 <a>
-                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                    <i class="fa fa-comment-dots" aria-hidden="true"></i>
                     <p>用户反馈</p>
                 </a>
             </div>
@@ -41,7 +41,7 @@ use Zodream\Template\View;
                     <span>满88免邮费</span>
                 </div>
                 <div class="top-item">
-                    <i class="fa fa-shield"></i>
+                    <i class="fa fa-shield-alt"></i>
                     <span>永久品质保证</span>
                 </div>
             </div>

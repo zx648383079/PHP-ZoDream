@@ -30,7 +30,7 @@ $this->registerCssFile([
     [
         '消息管理',
         false,
-        'fa fa-comments-o',
+        'fa fa-comments',
         [
             [
                 '关注回复',
@@ -72,7 +72,7 @@ $this->registerCssFile([
             [
                 '视频',
                 ['./admin/media', 'type' => 'video'],
-                'fa fa-gear',
+                'fa fa-video',
             ]
         ]
     ],

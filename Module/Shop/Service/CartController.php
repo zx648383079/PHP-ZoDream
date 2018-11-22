@@ -10,7 +10,4 @@ class CartController extends Controller {
         return $this->sendWithShare()->show(compact('like_goods'));
     }
 
-    public function checkoutAction() {
-        return $this->show();
-    }
 }

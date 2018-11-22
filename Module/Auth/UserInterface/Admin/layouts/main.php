@@ -107,7 +107,7 @@ $this->registerCssFile([
             [
                 '退出登陆',
                 './logout',
-                'fa fa-sign-out'
+                'fa fa-sign-out-alt'
             ]
         ],
         true

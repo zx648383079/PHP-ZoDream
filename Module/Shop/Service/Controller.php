@@ -18,4 +18,8 @@ class Controller extends ModuleController {
         $this->send(compact('categories_tree', 'cart'));
         return $this;
     }
+
+    public function redirectWithAuth() {
+        return $this->redirect('./member/login', ['redirect_uri' => url()->full()]);
+    }
 }

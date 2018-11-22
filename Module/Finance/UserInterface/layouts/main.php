@@ -30,7 +30,7 @@ $this->registerCssFile([
     [
         '资金',
         false,
-        'fa fa-money',
+        'fa fa-money-bill',
         [
             [
                 '总资本',
@@ -62,7 +62,7 @@ $this->registerCssFile([
             [
                 '月收支',
                 './income',
-                'fa fa-exchange'
+                'fa fa-exchange-alt'
             ],
             [
                 '月流水',
