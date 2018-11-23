@@ -26,8 +26,8 @@ use Zodream\Template\View;
         </div>
         <ul>
             <li><a href="<?=$this->url('./order')?>">订单管理</a></li>
-            <li><a>我的红包</a></li>
-            <li><a>优惠券（0）</a></li>
+            <li><a href="<?=$this->url('./bonus')?>">我的红包</a></li>
+            <li><a href="<?=$this->url('./coupon')?>">优惠券（0）</a></li>
             <li><a>礼品卡</a></li>
             <li><a>优先购</a></li>
             <li><a>我的众筹</a></li>
