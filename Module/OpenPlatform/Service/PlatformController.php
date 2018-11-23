@@ -33,6 +33,7 @@ class PlatformController extends Controller {
                 ->where('id', $id)->one();
         } else {
             $model = new PlatformModel();
+            $model->user_id = auth()->id();
             $model->generateNewId();
         }
         if (empty($model)) {

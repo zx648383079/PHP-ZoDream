@@ -4,6 +4,10 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '应用';
+$js = <<<JS
+bindEdit();
+JS;
+$this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './platform/save')?>
@@ -11,9 +15,12 @@ $this->title = '应用';
     <?=Form::select('type', $model->type_list, true)?>
     <?=Form::text('domain')?>
     <?php if ($model->id):?>
-        <?=Form::text('appid', ['readonly' => true])?>
-        <?=Form::text('secret', ['readonly' => true])?>
+        <?=Form::text('appid')->readonly(true)?>
+        <?=Form::text('secret')->readonly(true)->size(40)?>
         <?=Form::select('sign_type', $model->sign_type_list, true)?>
+        <?=Form::textarea('sign_key')?>
+        <?=Form::select('encrypt_type', $model->encrypt_type_list, true)?>
+        <?=Form::textarea('public_key')?>
     <?php endif;?>
 
     <button type="submit" class="btn btn-success">确认保存</button>

@@ -1,1 +1,1 @@
-{"version":3,"file":"open.css","sources":["open.scss"],"sourcesContent":["\r\n.page-footer {\r\n    text-align: center;\r\n}"],"names":[],"mappings":"AACA,AAAA,YAAY,CAAC;EACT,UAAU,EAAE,MAAM,GACrB"}
+{"version":3,"sources":["open.scss"],"names":[],"mappings":"AACA;EACI,mBAAkB,EACrB","file":"open.css","sourcesContent":["\r\n.page-footer {\r\n    text-align: center;\r\n}"]}

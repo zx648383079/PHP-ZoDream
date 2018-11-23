@@ -101,6 +101,10 @@ class UserModel extends BaseModel {
 	    return $this->sex_list[$this->sex];
     }
 
+    public function getAvatarAttribute() {
+	    return url()->asset($this->getAttributeSource('avatar'));
+    }
+
 	public function setPassword($password) {
 		$this->password = Hash::make($password);
 	}

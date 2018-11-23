@@ -14,6 +14,8 @@ use Domain\Model\Model;
  * @property string $appid
  * @property string $secret
  * @property integer $sign_type
+ * @property string $sign_key
+ * @property integer $encrypt_type
  * @property string $public_key
  * @property integer $status
  * @property integer $created_at
@@ -30,8 +32,13 @@ class PlatformModel extends Model {
         '不签名',
         'MD5',
         'HMAC',
+    ];
+
+    public $encrypt_type_list = [
+        '不加密',
         'RSA',
-        'RSA2'
+        'RSA2',
+        'DES'
     ];
 
     public static function tableName() {
@@ -48,6 +55,8 @@ class PlatformModel extends Model {
             'appid' => 'required|string:0,12',
             'secret' => 'required|string:0,32',
             'sign_type' => 'int:0,9',
+            'sign_key' => 'string:0,32',
+            'encrypt_type' => 'int:0,9',
             'public_key' => '',
             'status' => 'int:0,9',
             'created_at' => 'int',
@@ -59,22 +68,24 @@ class PlatformModel extends Model {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',
-            'name' => 'Name',
-            'type' => 'Type',
-            'domain' => 'Domain',
-            'appid' => 'Appid',
+            'name' => '名称',
+            'type' => '类型',
+            'domain' => '域名',
+            'appid' => 'App Id',
             'secret' => 'Secret',
-            'sign_type' => 'Sign Type',
-            'public_key' => 'Public Key',
-            'status' => 'Status',
+            'sign_type' => '签名方式',
+            'sign_key' => '签名密钥',
+            'encrypt_type' => '加密方式',
+            'public_key' => '加密公钥',
+            'status' => '状态',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
     public function generateNewId() {
-        $this->appid = time();
-        $this->secret = '';
+        $this->appid = '1'.time();
+        $this->secret = md5(uniqid(md5(microtime(true)),true));
     }
 
     public function sign(array $data) {

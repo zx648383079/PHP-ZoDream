@@ -6,11 +6,14 @@ use Zodream\Html\Dark\Layout;
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@prism.css',
+    '@dialog.css',
     '@zodream.css',
     '@zodream-admin.css',
     '@open.css'
 ])->registerJsFile([
     '@jquery.min.js',
+    '@jquery.pjax.min.js',
+    '@jquery.dialog.min.js',
     '@main.min.js',
     '@open.min.js'
 ]);

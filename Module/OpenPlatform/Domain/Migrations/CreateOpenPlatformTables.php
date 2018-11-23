@@ -19,7 +19,9 @@ class CreateOpenPlatformTables extends Migration {
            $table->set('domain')->varchar(50)->notNull();
            $table->set('appid')->char(12)->unique()->notNull();
            $table->set('secret')->char(32)->notNull();
-           $table->set('sign_type')->tinyint(1)->defaultVal(0)->comment('加密方式');
+           $table->set('sign_type')->tinyint(1)->defaultVal(0)->comment('签名方式');
+           $table->set('sign_key')->varchar(32)->comment('签名密钥');
+           $table->set('encrypt_type')->tinyint(1)->defaultVal(0)->comment('加密方式');
            $table->set('public_key')->text()->comment('密钥');
            $table->set('status')->bool()->defaultVal(0);
            $table->timestamps();
