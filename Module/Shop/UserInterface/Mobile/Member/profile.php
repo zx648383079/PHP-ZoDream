@@ -51,7 +51,7 @@ $this->extend('../layouts/header');
         
     </div>
 
-    <a class="btn del-btn" href="<?=$this->url('./mobile/article')?>">
+    <a class="btn del-btn" href="<?=$this->url('./mobile/member/login')?>">
         退出
     </a>
 </div>

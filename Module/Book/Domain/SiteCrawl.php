@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain;
 
+use Module\Book\Domain\Spiders\Sixth;
 use Module\Book\Domain\Spiders\XBiQuGe;
 use Module\Book\Domain\Spiders\BiQuGe;
 use Module\Book\Domain\Spiders\BiQuGeLu;
@@ -27,7 +28,8 @@ class SiteCrawl {
         'www.haohunhun.com' => Hun::class,
         'www.biquge.info' => IBiQuGe::class,
         'www.shuge.la' => SBiQuGe::class,
-        'www.booktxt.net' => IBiQuGe::class
+        'www.booktxt.net' => IBiQuGe::class,
+        'www.16book.org' => Sixth::class
     ];
 
     /**

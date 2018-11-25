@@ -32,7 +32,9 @@ $this->title = 'ZoDream';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
+                <td>
+                    <a href="<?=$this->url('./goods', ['id' => $item->id])?>" target="_blank"><?=$item->name?></a>
+                </td>
                 <td>
                     <?php if ($item->category):?>
                         <a href="<?=$this->url('./admin/goods', ['cat_id' => $item->cat_id])?>">

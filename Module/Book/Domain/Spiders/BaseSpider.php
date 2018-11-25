@@ -76,7 +76,14 @@ abstract class BaseSpider {
         }
         if (empty($this->start)) {
             $this->debug(sprintf('《%s》 已存在书库', $book->name));
-            return null;
+            if (!app('request')->isCli()) {
+                return null;
+            }
+            echo '是否继续(Y/N):';
+            $arg = app('request')->read();
+            if (strtolower($arg) != 'y') {
+                return null;
+            }
         }
         return BookModel::where('name', $book->name)->one();
     }

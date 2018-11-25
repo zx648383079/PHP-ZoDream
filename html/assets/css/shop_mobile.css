@@ -1,3 +1,6 @@
+body {
+  background-color: #f4f4f4; }
+
 a {
   text-decoration: none; }
 
@@ -12,26 +15,49 @@ header,
     font-size: 1.875rem;
     margin-left: 0.625rem;
     float: left; }
-  header .search,
-  .header .search {
-    height: 1.875rem;
-    width: 90%;
-    margin: 0.1875rem auto 0; }
-    header .search .fa,
-    .header .search .fa {
+  header .search-box,
+  .header .search-box {
+    padding: 5px;
+    line-height: 36px;
+    display: grid;
+    grid-template-columns: 1fr 54px; }
+    header .search-box form,
+    .header .search-box form {
+      position: relative; }
+    header .search-box .fa,
+    .header .search-box .fa {
       position: absolute;
-      margin-top: 0.625rem;
-      margin-left: 0.3125rem;
-      z-index: 99; }
-    header .search input,
-    .header .search input {
+      top: 10px;
+      z-index: 99;
+      color: #666; }
+      header .search-box .fa.fa-search,
+      .header .search-box .fa.fa-search {
+        left: 5px; }
+      header .search-box .fa.fa-times-circle,
+      .header .search-box .fa.fa-times-circle {
+        right: 5px; }
+    header .search-box input,
+    .header .search-box input {
       margin-top: 0.125rem;
       width: 100%;
       font-size: 1.25rem;
-      border: 1px solid #333;
-      padding: 0.25rem 0 0.25rem 1.25rem;
+      padding: 4px 29px;
       box-sizing: border-box;
-      background: transparent; }
+      background-color: #f4f4f4;
+      border: 0; }
+    header .search-box .cancel-btn,
+    .header .search-box .cancel-btn {
+      color: #fff; }
+    header .search-box .home-btn,
+    .header .search-box .home-btn {
+      font-size: 28px; }
+      header .search-box .home-btn .fa,
+      .header .search-box .home-btn .fa {
+        position: static;
+        color: #fff; }
+    header .search-box.under-search,
+    .header .search-box.under-search {
+      grid-template-columns: 54px 1fr; }
 
 .top {
   position: fixed;
@@ -71,6 +97,29 @@ header,
     padding: 0 0.3125rem; }
     .top .top-tab a.active {
       color: #f00; }
+  .top .search-entry {
+    background-color: #ededed;
+    border-radius: 2px;
+    font-size: 15px;
+    color: #666;
+    line-height: 36px;
+    height: 35px;
+    overflow: hidden;
+    display: block;
+    margin: 5px; }
+  .top.top-search-box {
+    display: grid;
+    grid-template-columns: 110px 1fr 54px;
+    padding: 5px 0; }
+    .top.top-search-box .logo img {
+      max-width: 100%;
+      max-height: 33px;
+      vertical-align: middle; }
+    .top.top-search-box .search-entry {
+      margin: 0; }
+    .top.top-search-box a {
+      line-height: 36px;
+      color: #fff; }
 
 .checkout-footer,
 .cart-footer,
@@ -169,6 +218,8 @@ footer,
     width: 50%;
     max-width: 50%;
     box-sizing: border-box; }
+    .goods-list .item-view .item-img img {
+      width: 100%; }
     .goods-list .item-view .item-title {
       display: block;
       width: 100%;
@@ -232,6 +283,34 @@ footer,
       height: 5rem;
       vertical-align: top;
       overflow: hidden; }
+
+.search-tip-box {
+  display: block;
+  padding-left: 10px;
+  background-color: #fff;
+  display: none; }
+  .search-tip-box li {
+    height: 30px;
+    line-height: 30px; }
+    .search-tip-box li:not(:last-of-type) {
+      border-bottom: 1px solid #ccc; }
+
+.search-recommend-box .panel {
+  padding: 0 10px 10px;
+  background-color: #fff;
+  margin-bottom: 5px; }
+  .search-recommend-box .panel .panel-header {
+    height: 30px;
+    line-height: 30px; }
+    .search-recommend-box .panel .panel-header .fa {
+      float: right;
+      margin-top: 8px; }
+  .search-recommend-box .panel .panel-body a {
+    border: 1px solid #999;
+    border-radius: 2px;
+    color: #333;
+    padding: 0 2px;
+    line-height: 16px; }
 
 .menu-box {
   position: relative;
@@ -297,7 +376,7 @@ footer,
       background-color: #ffffff; }
 
 .check-box::before {
-  content: "\f10c"; }
+  content: "\f111"; }
 
 .check-box.active::before {
   content: "\f058"; }

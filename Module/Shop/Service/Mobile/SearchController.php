@@ -6,6 +6,9 @@ use Module\Shop\Domain\Model\GoodsModel;
 class SearchController extends Controller {
 
     public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0) {
+        if (empty($keywords) && $cat_id < 1 && $brand_id < 1) {
+            return $this->runMethodNotProcess('empty');
+        }
         $goods_list = GoodsModel::when(!empty($keywords), function ($query) {
             $query->where(function ($query) {
                 GoodsModel::search($query, 'name');
@@ -16,5 +19,9 @@ class SearchController extends Controller {
             $query->where('brand_id', intval($brand_id));
         })->page();
         return $this->show(compact('goods_list', 'keywords'));
+    }
+
+    public function emptyAction() {
+        return $this->show();
     }
 }

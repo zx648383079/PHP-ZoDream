@@ -3,6 +3,8 @@ namespace Module\Shop\Service\Admin;
 
 
 use Module\Shop\Domain\Model\BrandModel;
+use Module\Shop\Domain\Model\GoodsModel;
+use Zodream\Database\Command;
 
 class BrandController extends Controller {
 
@@ -34,6 +36,17 @@ class BrandController extends Controller {
         BrandModel::where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => $this->getUrl('brand')
+        ]);
+    }
+
+    public function refreshAction() {
+        BrandModel::refreshPk(function ($old_id, $new_id) {
+            GoodsModel::where('brand_id', $old_id)->update([
+                'brand_id' => $new_id
+            ]);
+        });
+        return $this->jsonSuccess([
+            'refresh' => true
         ]);
     }
 }

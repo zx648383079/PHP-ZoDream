@@ -12,7 +12,7 @@ JS;
 $this->registerCssFile('@slider.css')
     ->registerJsFile('@jquery.slider.min.js')
     ->registerJs($js, View::JQUERY_READY)
-    ->extend('../layouts/search');
+    ->extend('../layouts/search_home');
 ?>
 
 <div class="has-header">

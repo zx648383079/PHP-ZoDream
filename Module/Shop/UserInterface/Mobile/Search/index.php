@@ -3,8 +3,9 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '搜索';
-$this->extend('../layouts/search');
+$this->extend('../layouts/search_back');
 ?>
+
 
 <div class="has-header">
 
@@ -26,5 +27,3 @@ $this->extend('../layouts/search');
     </div>
 
 </div>
-
-<?php $this->extend('../layouts/navbar');?>

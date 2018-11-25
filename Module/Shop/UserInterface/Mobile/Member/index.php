@@ -32,7 +32,7 @@ $this->extend('../layouts/header', compact('header_btn'));
             <i class="fa fa-comments" aria-hidden="true"></i>
             消息
         </a><a href="" class="item">
-            <i class="fa fa-shield" aria-hidden="true"></i>
+            <i class="fa fa-shield-alt" aria-hidden="true"></i>
             安全
         </a><a href="<?=$this->url('./mobile/member/profile')?>" class="item">
             <i class="fa fa-cog" aria-hidden="true"></i>
@@ -41,16 +41,16 @@ $this->extend('../layouts/header', compact('header_btn'));
     </div>
     <div class="menu-large">
         <a href="" class="item">
-            <i class="fa fa-dollar" aria-hidden="true"></i>
+            <i class="fa fa-money-bill" aria-hidden="true"></i>
             待付款
         </a><a href="" class="item">
             <i class="fa fa-truck" aria-hidden="true"></i>
             待收货
         </a><a href="" class="item">
-            <i class="fa fa-comment-o" aria-hidden="true"></i>
+            <i class="fa fa-comment" aria-hidden="true"></i>
             待评价
         </a><a href="" class="item">
-            <i class="fa fa-exchange" aria-hidden="true"></i>
+            <i class="fa fa-exchange-alt" aria-hidden="true"></i>
            退换货
         </a>
     </div>

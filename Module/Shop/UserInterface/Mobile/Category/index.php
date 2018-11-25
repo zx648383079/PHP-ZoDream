@@ -7,8 +7,6 @@ $this->extend('../layouts/search');
 ?>
 
 <div class="has-header">
-
-
     <div class="category-menu">
         <?php foreach($cat_list as $item):?>
         <div class="menu-item"><?=$item->name?></div>

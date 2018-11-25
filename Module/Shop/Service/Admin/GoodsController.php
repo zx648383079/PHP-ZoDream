@@ -5,9 +5,15 @@ namespace Module\Shop\Service\Admin;
 use Module\Shop\Domain\Model\AttributeGroupModel;
 use Module\Shop\Domain\Model\AttributeModel;
 use Module\Shop\Domain\Model\BrandModel;
+use Module\Shop\Domain\Model\CartModel;
 use Module\Shop\Domain\Model\CategoryModel;
+use Module\Shop\Domain\Model\CollectModel;
+use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
+use Module\Shop\Domain\Model\GoodsGalleryModel;
+use Module\Shop\Domain\Model\GoodsIssue;
 use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\ProductModel;
 use Zodream\Helpers\Json;
 
@@ -23,7 +29,7 @@ class GoodsController extends Controller {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($brand_id), function ($query) use ($brand_id) {
                 $query->where('brand_id', intval($brand_id));
-            })->page();
+            })->orderBy('id', 'desc')->page();
         $cat_list = CategoryModel::select('id', 'name')->all();
         $brand_list = BrandModel::select('id', 'name')->all();
         return $this->show(compact('model_list', 'cat_list', 'brand_list'));
@@ -107,5 +113,38 @@ class GoodsController extends Controller {
             GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $attribute_id)->where('value', $value)->delete();
         }
         return $this->jsonSuccess();
+    }
+
+    public function refreshAction() {
+        set_time_limit(0);
+        GoodsModel::refreshPk(function ($old_id, $new_id) {
+            GoodsAttributeModel::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            GoodsGalleryModel::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            GoodsIssue::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            ProductModel::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            CartModel::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            OrderGoodsModel::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            CollectModel::where('goods_id', $old_id)->update([
+                'goods_id' => $new_id
+            ]);
+            CommentModel::where('item_type', 0)->where('item_id', $old_id)->update([
+                'item_id' => $new_id
+            ]);
+        });
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
     }
 }

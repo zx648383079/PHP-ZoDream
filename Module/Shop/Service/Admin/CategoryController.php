@@ -3,11 +3,12 @@ namespace Module\Shop\Service\Admin;
 
 
 use Module\Shop\Domain\Model\CategoryModel;
+use Module\Shop\Domain\Model\GoodsModel;
 
 class CategoryController extends Controller {
 
     public function indexAction() {
-        $model_list = CategoryModel::page();
+        $model_list = CategoryModel::tree()->makeTreeForHtml();
         return $this->show(compact('model_list'));
     }
 
@@ -35,6 +36,20 @@ class CategoryController extends Controller {
         CategoryModel::where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => $this->getUrl('category')
+        ]);
+    }
+
+    public function refreshAction() {
+        CategoryModel::refreshPk(function ($old_id, $new_id) {
+            CategoryModel::where('parent_id', $old_id)->update([
+                'parent_id' => $new_id
+            ]);
+            GoodsModel::where('cat_id', $old_id)->update([
+                'cat_id' => $new_id
+            ]);
+        });
+        return $this->jsonSuccess([
+            'refresh' => true
         ]);
     }
 }

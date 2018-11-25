@@ -102,6 +102,9 @@
     visibility: hidden;
     height: 0; }
 
+.tree-item {
+  text-align: left; }
+
 .product-box .input-group input[type="text"],
 .product-box .input-group input[type="number"] {
   min-width: 0;

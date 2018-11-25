@@ -1,8 +1,6 @@
 <header class="top">
-    <div class="search">
-        <form action="<?=$this->url('./mobile/search')?>">
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <input type="text" name="keywords" value="<?=$this->keywords?>" placeholder="搜索">
-        </form>
-    </div>
+    <a class="search-entry" href="<?=$this->url('./mobile/search')?>">
+        <i class="fa fa-search"></i>
+        <span>搜索商品, 共19304款好物</span>
+    </a>
 </header>
