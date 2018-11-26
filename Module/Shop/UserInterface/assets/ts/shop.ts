@@ -76,6 +76,9 @@ $(function() {
         $(".header-nav .nav-dropdown").hide();
         $(this).find('.nav-dropdown').show();
     });
+    $(".header-nav").mouseleave(function() {
+        $(this).find('.nav-dropdown').hide();
+    });
     $(".header-cart").mouseover(function() {
         $(this).find('.cart-dialog').show();
     }).mouseout(function() {
@@ -96,7 +99,7 @@ $(function() {
     });
     $(window).scroll(function() {
         $(".header-main").toggleClass('top-fixed', $(this).scrollTop() > 180);
-    })
+    }).trigger('scroll');
 });
 
 function bindCart(baseUrl: string) {

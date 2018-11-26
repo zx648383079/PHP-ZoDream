@@ -141,15 +141,17 @@ header {
     background-color: #fff;
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2); }
     header .header-main .container {
-      position: relative; }
+      position: relative;
+      height: 100%; }
     header .header-main .header-logo {
       text-align: center; }
     header .header-main .header-nav {
       line-height: 1;
       font-weight: 700;
-      height: 30px;
+      height: 51px;
       width: 100%;
-      position: relative; }
+      position: absolute;
+      bottom: 0px; }
       header .header-main .header-nav li {
         display: inline-block;
         margin-top: 6px;
@@ -160,7 +162,7 @@ header {
       header .header-main .header-nav .nav-dropdown {
         display: none;
         position: absolute;
-        top: 61px;
+        top: 50px;
         padding-top: 30px;
         background-color: transparent;
         padding: 20px 40px 30px;
@@ -343,6 +345,8 @@ header {
         position: relative;
         margin-top: 16px;
         top: 0; }
+      header .header-main.top-fixed .header-nav .nav-dropdown {
+        top: 43px; }
       header .header-main.top-fixed .header-cart {
         right: -10px; }
       header .header-main.top-fixed .header-search {

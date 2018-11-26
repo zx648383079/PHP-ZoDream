@@ -174,6 +174,7 @@ header {
         box-shadow: 0 0 3px 0 rgba(0,0,0,.2);
         .container {
             position: relative;
+            height: 100%;
         }
         .header-logo {
             text-align: center;
@@ -181,9 +182,10 @@ header {
         .header-nav {
             line-height: 1;
             font-weight: 700;
-            height: 30px;
+            height: 51px;
             width: 100%;
-            position: relative;
+            position: absolute;
+            bottom: 0px;
             li {
                 display: inline-block;
                 margin-top: 6px;
@@ -199,7 +201,7 @@ header {
             .nav-dropdown {
                 display: none;
                 position: absolute;
-                top: 61px;
+                top: 50px;
                 padding-top: 30px;
                 background-color: transparent;
                 padding: 20px 40px 30px;
@@ -415,6 +417,11 @@ header {
                 position: relative;
                 margin-top: 16px;
                 top: 0;
+            }
+            .header-nav {
+                .nav-dropdown {
+                    top: 43px;
+                }
             }
             .header-cart {
                 right: -10px;
