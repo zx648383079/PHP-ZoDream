@@ -30,7 +30,7 @@ $this->title = '商品详情';
         <div class="goods-header">
             <h1 class="goods-name"><?=$goods->name?></h1>
             <div class="goods-collect <?=$goods->is_collect ? 'active' : ''?>" onclick="collectGoods('<?=$goods->id?>', this)">
-                <i class="fa fa-like"></i>
+                <i class="like-icon"></i>
                 收藏
             </div>
         </div>
@@ -47,16 +47,33 @@ $this->title = '商品详情';
         </div>
         <?php foreach($comment_list as $item):?>
         <div class="comment-item">
-            <div class="item-img">
-                <a href="<?=$this->url('./mobile/goods', ['id' => $item->id])?>"><img src="<?=$item->thumb?>" alt=""></a>
+            <div class="item-header">
+                <div class="avatar">
+                    <img src="<?=$item->user->avatar?>" alt="">
+                </div>
+                <div class="name"><?=$item->user->name?></div>
+                <div class="score">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
             </div>
-            <div class="item-title">
-                <?=$item->name?>
+            <div class="time">
+                <span><?=$item->created_at?> </span>
+                <div class="attr">
+                规格:雾白
+                </div>
             </div>
-            <div class="item-actions">
-                <span class="item-price"><?=$item->price?></span>
-                <span>加入购物车</span>
-            </div>
+            <div class="content"><?=$item->content?></div>
+            <ul class="image-box">
+                <?php foreach($item->images as $img):?>
+                <li>
+                    <img src="<?=$img->image?>" alt="">
+                </li>
+                <?php endforeach;?>
+            </ul>
         </div>
         <?php endforeach;?>
         <a href="" class="comment-more">查看更多</a>
@@ -75,7 +92,7 @@ $this->title = '商品详情';
                 </div>
                 <div class="item-actions">
                     <span class="item-price"><?=$item->price?></span>
-                    <span>加入购物车</span>
+                    
                 </div>
             </div>
             <?php endforeach;?>

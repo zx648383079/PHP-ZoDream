@@ -12,8 +12,8 @@ $this->extend('../layouts/header');
     <div class="profile-box">
         <div class="line-item avatar-item">
             <span>头像</span>
-            <span>
-                <img src="" alt="">
+            <span class="avatar">
+                <img src="/assets/images/avatar/1.png" alt="">
             </span>
             <i class="fa fa-chevron-right"></i>
         </div>

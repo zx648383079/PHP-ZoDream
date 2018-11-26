@@ -12,7 +12,8 @@ class MemberController extends Controller {
 
 
     public function loginAction() {
-        return $this->show();
+        $redirect_uri = app('request')->get('redirect_uri');
+        return $this->show(compact('redirect_uri'));
     }
 
     public function profileAction() {

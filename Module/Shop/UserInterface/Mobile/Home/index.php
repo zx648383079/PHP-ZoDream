@@ -15,7 +15,7 @@ $this->registerCssFile('@slider.css')
     ->extend('../layouts/search_home');
 ?>
 
-<div class="has-header">
+<div class="has-header has-footer">
 
     <div class="banner">
         <div class="slider">
