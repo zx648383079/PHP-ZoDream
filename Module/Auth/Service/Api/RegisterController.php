@@ -20,10 +20,9 @@ class RegisterController extends RestController {
                 ->get('email,fullName:name,password,confirmPassword:rePassword,terms:agree'))
             && $model->signUp()) {
             $user = auth()->user();
-            return $this->render([
-                'token' => auth()->createToken($user),
-                'user' => $user->toArray()
-            ]);
+            return $this->render(array_merge($user->toArray(), [
+                'token' => auth()->createToken($user)
+            ]));
         }
         return $this->renderFailure($model->getFirstError());
     }

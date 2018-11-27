@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\ModuleController;
+use Zodream\Route\Controller\RestController;
 
-class Controller extends ModuleController {
+class Controller extends RestController {
 
 }

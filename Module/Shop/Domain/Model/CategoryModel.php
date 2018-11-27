@@ -7,6 +7,7 @@ namespace Module\Shop\Domain\Model;
  * Time: 11:23
  */
 use Domain\Model\Model;
+use Zodream\Helpers\Arr;
 use Zodream\Html\Tree;
 
 /**
@@ -87,13 +88,19 @@ class CategoryModel extends Model {
      * @throws \Exception
      */
     public static function tree() {
-        return new Tree(static::query()->asArray()->all());
+        return new Tree(static::query()->all());
     }
 
 
     public static function cacheTree() {
         return cache()->getOrSet('shop_category_tree', function () {
             return self::tree()->makeIdTree();
+        });
+    }
+
+    public static function cacheLevel() {
+        return cache()->getOrSet('shop_category_level', function () {
+            return self::tree()->makeTreeForHtml();
         });
     }
 }

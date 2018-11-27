@@ -1,9 +1,12 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Module\Shop\Domain\Model\Scene\Goods;
+
 class GoodsController extends Controller {
 
     public function indexAction() {
-        return $this->jsonSuccess('api version v1');
+        $page = Goods::page();
+        return $this->renderPage($page);
     }
 }
