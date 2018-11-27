@@ -118,6 +118,10 @@ class GoodsModel extends Model {
         return $this->hasOne(BrandModel::class, 'id', 'brand_id');
     }
 
+    public function getThumbAttribute() {
+        return url()->asset($this->getAttributeSource('thumb'));
+    }
+
     /**
      * @return array
      */

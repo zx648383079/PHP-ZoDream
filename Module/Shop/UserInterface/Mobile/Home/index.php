@@ -21,9 +21,9 @@ $this->registerCssFile('@slider.css')
         <div class="slider">
             <div class="slider-box">
                 <ul>
-                    <li><img src="https://yanxuan.nosdn.127.net/08c22f34ed0445208c8bbf80cb769d06.jpg?imageView&quality=75&thumbnail=750x0" width="100%" alt=""></li>
-                    <li><img src="https://yanxuan.nosdn.127.net/8271dce9c32d58eb8598c1408acf6132.jpg?imageView&quality=75&thumbnail=750x0" width="100%" alt=""></li>
-                    <li><img src="https://yanxuan.nosdn.127.net/3693d1b5948a2072fdf3524668e11993.jpg?imageView&quality=75&thumbnail=750x0" width="100%" alt=""></li>
+                    <?php foreach($banners as $item):?>
+                    <li><img src="<?=$item['content']?>" width="100%" alt=""></li>
+                    <?php endforeach;?>
                 </ul>
             </div>
         </div>
