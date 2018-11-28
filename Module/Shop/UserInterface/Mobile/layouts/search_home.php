@@ -6,5 +6,11 @@
         <i class="fa fa-search"></i>
         <span>搜索商品, 共19304款好物</span>
     </a>
-    <a href="<?=$this->url('./member/login')?>">登录</a>
+    <?php if(auth()->guest()):?>
+        <a href="<?=$this->url('./mobile/member/login')?>">登录</a>
+    <?php else:?>
+        <a href="<?=$this->url('./mobile/member/message')?>">
+            <i class="fa fa-comment-dots"></i>
+        </a>
+    <?php endif;?>
 </header>

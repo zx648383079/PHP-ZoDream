@@ -11,9 +11,9 @@ use Zodream\Template\View;
                     <i class="fa fa-home"></i>
                     首页
                 </a>
-                <a href="">
+                <!-- <a href="">
                     好的生活，没那么贵
-                </a>
+                </a> -->
                 <div class="top-notice">
                     <i class="fa fa-volume-up"></i>
                     <ul class="notice-list">
@@ -29,7 +29,8 @@ use Zodream\Template\View;
             </div>
             <div class="top-right">
                 <div class="top-item">
-                    <a href="<?=$this->url('./member/login')?>">12222</a>
+                    <a href="<?=$this->url('./member')?>"><?=auth()->user()->name?></a>
+                    <a href="<?=$this->url('/auth/logout', ['redirect_uri' => $this->url('./')])?>">退出</a>
                 </div>
                 <div class="top-item">
                     我的订单

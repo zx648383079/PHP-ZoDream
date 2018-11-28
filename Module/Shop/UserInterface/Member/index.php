@@ -15,9 +15,9 @@ $this->header_tpl = './user_header';
             <div class="user-box">
                 <div class="user-info">
                     <div class="avatar">
-                        <img src="http://yanxuan.nosdn.127.net/c3a03895c73694d922310c76e4915cdb.png?imageView&thumbnail=76x76&quality=95" alt="">
+                        <img src="<?=$user->avatar?>" alt="">
                     </div>
-                    <div>111111</div>
+                    <div><?=$user->name?></div>
                     <div class="grade-box">
                         <a href="">成长值 >></a>
                         <div class="progress">

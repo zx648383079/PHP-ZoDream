@@ -11,8 +11,8 @@ $this->extend('../layouts/header_main');
         <div class="logo">
             <img src="/assets/images/wap_logo.png" alt="">
         </div>
-        <a href="" class="btn">手机号登录</a>
-        <a href="" class="btn btn-none">邮箱登录</a>
+        <a href="javascript:goPhoneLogin();" class="btn">手机号登录</a>
+        <a href="javascript:goEmailLogin();" class="btn btn-none">邮箱登录</a>
         <a href="">手机号快捷注册</a>
 
         <div class="login-oauth-box">
@@ -56,17 +56,20 @@ $this->extend('../layouts/header_main');
             <a href="" class="btn btn-none">其他登录方式</a>
         </div>
         <div class="email-password hide">
-            <div class="input-box">
-                <input type="text">
-            </div>
-            <div class="input-box">
-                <input type="password">
-            </div>
-            <div class="unlogin">
-                <a href="">注册账号</a>
-                <a href="">忘记密码</a>
-            </div>
-            <button>登录</button>
+            <form data-type="ajax" action="<?= $this->url('/auth/login') ?>" method="POST">
+                <div class="input-box">
+                    <input type="email" name="email" required autocomplete="off" placeholder="请输入账号">
+                </div>
+                <div class="input-box">
+                    <input type="password" name="password" required autocomplete="off" placeholder="请输入密码">
+                </div>
+                <div class="unlogin">
+                    <a href="">注册账号</a>
+                    <a href="">忘记密码</a>
+                </div>
+                <button>登录</button>
+                <input type="hidden" name="redirect_uri" value="<?= $redirect_uri ?>">
+            </form>
             <a href="" class="btn btn-none">其他登录方式</a>
         </div>
     </div>

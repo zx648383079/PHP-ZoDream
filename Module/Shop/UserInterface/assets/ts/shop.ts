@@ -136,3 +136,15 @@ function bindCart(baseUrl: string) {
         refreshCart();
     })
 }
+
+function goPhoneLogin() {
+    $(".login-type-box").hide();
+    $(".login-box").removeClass('hide');
+}
+
+function goEmailLogin() {
+    $(".login-type-box").hide();
+    $(".login-box").removeClass('hide');
+    $(".login-box .email-password").removeClass('hide');
+    $(".login-box .phone-code,.login-box .phone-password").addClass('hide');
+}

@@ -18,6 +18,6 @@ class Goods extends GoodsModel {
     }
 
     public static function query() {
-        return parent::query()->select(['id', 'name', 'thumb', 'price', 'market_price']);
+        return parent::query()->select(self::THUMB_MODE);
     }
 }

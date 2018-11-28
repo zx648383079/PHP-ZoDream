@@ -4,10 +4,15 @@ namespace Module\Shop\Service;
 class MemberController extends Controller {
 
     public function indexAction() {
-        return $this->show();
+        $user = auth()->user();
+        return $this->show(compact('user'));
     }
 
     public function loginAction() {
-        return $this->sendWithShare()->show();
+        $redirect_uri = app('request')->get('redirect_uri');
+        if (empty($redirect_uri)) {
+            $redirect_uri = url('./');
+        }
+        return $this->sendWithShare()->show(compact('redirect_uri'));
     }
 }

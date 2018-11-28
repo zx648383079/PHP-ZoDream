@@ -15,15 +15,19 @@ $this->title = 'ZoDream 登录';
                     </div>
                     <div class="box-tab">
                         <div class="tab-item active">
-                            <div class="input-group">
-                                <input type="email" name="email" placeholder="请输入账号" required autocomplete="off">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </div>
-                            <div class="input-hr"></div>
-                            <div class="input-group">
-                                <input type="password" name="password" placeholder="请输入密码" required autocomplete="off">
-                                <i class="fa fa-lock" aria-hidden="true" ></i>
-                            </div>
+                            <form data-type="ajax" action="<?= $this->url('/auth/login') ?>" method="POST">
+                                <div class="input-group">
+                                    <input type="email" name="email" placeholder="请输入账号" required autocomplete="off">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                </div>
+                                <div class="input-hr"></div>
+                                <div class="input-group">
+                                    <input type="password" name="password" placeholder="请输入密码" required autocomplete="off">
+                                    <i class="fa fa-lock" aria-hidden="true" ></i>
+                                </div>
+                                <button class="btn">登录</button>
+                                <input type="hidden" name="redirect_uri" value="<?= $redirect_uri ?>">
+                            </form>
                         </div>
                         <div class="tab-item">
                             
@@ -32,14 +36,14 @@ $this->title = 'ZoDream 登录';
                             
                         </div>
                     </div>
-                    <button class="btn">登录</button>
+                    
                 </div>
                 <div class="box-footer">
                     <div class="login-oauth-box">
-                        <a href="<?=$this->url('./oauth', ['type' => 'qq'])?>"><i class="fab fa-qq"></i></a>
-                        <a href="<?=$this->url('./oauth', ['type' => 'wechat'])?>"><i class="fab fa-weixin"></i></a>
-                        <a href="<?=$this->url('./oauth', ['type' => 'weibo'])?>"><i class="fab fa-weibo"></i></a>
-                        <a href="<?=$this->url('./oauth', ['type' => 'github'])?>"><i class="fab fa-github"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-qq"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'wechat', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-weixin"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'weibo', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-weibo"></i></a>
+                        <a href="<?=$this->url('./oauth', ['type' => 'github', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
             </div>

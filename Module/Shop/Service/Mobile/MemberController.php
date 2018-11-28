@@ -13,6 +13,9 @@ class MemberController extends Controller {
 
     public function loginAction() {
         $redirect_uri = app('request')->get('redirect_uri');
+        if (empty($redirect_uri)) {
+            $redirect_uri = url('./mobile');
+        }
         return $this->show(compact('redirect_uri'));
     }
 

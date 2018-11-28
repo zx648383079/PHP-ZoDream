@@ -13,23 +13,23 @@ $this->extend('../layouts/header');
         <div class="line-item avatar-item">
             <span>头像</span>
             <span class="avatar">
-                <img src="/assets/images/avatar/1.png" alt="">
+                <img src="<?=$user->avatar?>" alt="">
             </span>
             <i class="fa fa-chevron-right"></i>
         </div>
         <div class="line-item">
             <span>昵称</span>
-            <span>昵称</span>
+            <span><?=$user->name?></span>
             <i class="fa fa-chevron-right"></i>
         </div>
         <div class="line-item">
             <span>性别</span>
-            <span>昵称</span>
+            <span><?=$user->sex?></span>
             <i class="fa fa-chevron-right"></i>
         </div>
         <div class="line-item">
             <span>生日</span>
-            <span>昵称</span>
+            <span><?=$user->birthday?></span>
             <i class="fa fa-chevron-right"></i>
         </div>
     </div>
@@ -51,7 +51,7 @@ $this->extend('../layouts/header');
         
     </div>
 
-    <a class="btn del-btn" href="<?=$this->url('./mobile/member/login')?>">
+    <a class="btn del-btn" href="<?=$this->url('/auth/logout', ['redirect_uri' => $this->url('./mobile')])?>">
         退出
     </a>
 </div>

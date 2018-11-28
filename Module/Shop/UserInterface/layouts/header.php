@@ -25,8 +25,13 @@ use Zodream\Template\View;
             </div>
             <div class="top-right">
                 <div class="top-item">
+                    <?php if(auth()->guest()):?>
                     <a href="<?=$this->url('./member/login')?>">登录</a>
                     <a href="<?=$this->url('./member/login')?>">注册</a>
+                    <?php else:?>
+                    <a href="<?=$this->url('./member')?>"><?=auth()->user()->name?></a>
+                    <a href="<?=$this->url('/auth/logout', ['redirect_uri' => $this->url('./')])?>">退出</a>
+                    <?php endif;?>
                 </div>
                 <div class="top-item">
                     <a href="<?=$this->url('./order')?>">我的订单</a>

@@ -10,6 +10,7 @@ class LogoutController extends ModuleController {
         if (!auth()->guest()) {
             auth()->user()->logout();
         }
-        return $this->redirect('/');
+        $redirect_uri = app('request')->get('redirect_uri');
+        return $this->redirect(empty($redirect_uri) ? '/' : $redirect_uri);
     }
 }

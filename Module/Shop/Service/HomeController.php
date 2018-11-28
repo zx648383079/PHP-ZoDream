@@ -8,6 +8,9 @@ use Module\Shop\Domain\Model\GoodsModel;
 class HomeController extends Controller {
 
     public function indexAction() {
+        if (app('request')->isMobile()) {
+            return $this->redirect('./mobile');
+        }
         $new_goods = GoodsModel::limit(7)->select(GoodsModel::THUMB_MODE)->all();
         $best_goods = $new_goods;
         $category_goods = array_slice($best_goods, 0, 4);
