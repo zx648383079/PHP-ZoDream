@@ -14,10 +14,12 @@ class CreateTaskTables extends Migration {
             $table->setComment('任务系统');
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
+            $table->set('parent_id')->int()->defaultVal(0);
             $table->set('name')->varchar(100)->notNull();
-            $table->set('description')->varchar()->notNull();
+            $table->set('description')->varchar()->defaultVal('');
             $table->set('status')->tinyint(1)->defaultVal(0);
-            $table->set('time_length')->varchar()->notNull();
+            $table->set('every_time')->int(1)->defaultVal(0)->comment('每次计划时间');
+            $table->set('time_length')->int()->defaultVal(0)->comment('总时间');
             $table->timestamps();
         });
         Schema::createTable(TaskLogModel::tableName(), function (Table $table) {

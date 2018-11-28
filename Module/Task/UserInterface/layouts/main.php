@@ -28,7 +28,7 @@ $this->registerCssFile([
     [
         '任务管理',
         false,
-        'fa fa-time',
+        'fa fa-business-time',
         [
             [
                 '任务列表',

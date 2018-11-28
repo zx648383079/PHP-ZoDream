@@ -1,0 +1,60 @@
+.panel {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    .panel-header {
+        line-height: 40px;
+        border-bottom: 1px solid #ccc;
+        text-align: center;
+    }
+    .panel-body {
+        padding: 10px;
+        .task-item {
+            display: grid;
+            grid-template-columns: 1fr 150px 120px;
+            text-align: center;
+            line-height: 40px;
+            .name {
+                text-align: left;
+                padding-left: 10px;
+            }
+            .actions {
+                font-size: 30px;
+                a {
+                    color: #333;
+                }
+                .fa-pause-circle {
+                    display: none;
+                }
+                .fa-play-circle {
+                    display: inline-block;
+                } 
+            }
+            .desc {
+                grid-column: 1/5;
+                display: none;
+            }
+            &.active {
+                .name,
+                .time,
+                .actions {
+                    background-color: rgba(#f00, .3);
+                    .fa-play-circle {
+                        display: none;
+                    }
+                    .fa-pause-circle {
+                        display: inline-block;
+                    }
+                }
+                .desc {
+                    display: block;
+                }
+            }
+            &:hover {
+                background-color: rgba(#333, .1);
+                .time {
+                    background-color: rgba(#f00, .1);
+                }
+            }
+        }
+    }
+}

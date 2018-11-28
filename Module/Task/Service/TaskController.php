@@ -52,4 +52,49 @@ class TaskController extends Controller {
         $log = $model->makeNewRun();
         return $this->jsonSuccess($model, $log);
     }
+
+    public function playAction($id) {
+        $model = TaskModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('任务错误');
+        }
+        if ($model->status == TaskModel::STATUS_COMPETE) {
+            return $this->jsonFailure('任务已结束');
+        }
+        if ($model->status == TaskModel::STATUS_RUNNING) {
+            return $this->jsonSuccess($model);
+        }
+        $log = $model->makeNewRun();
+        return $this->jsonSuccess($model);
+    }
+
+    public function pauseAction($id) {
+        $model = TaskModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('任务错误');
+        }
+        if ($model->status == TaskModel::STATUS_COMPETE) {
+            return $this->jsonFailure('任务已结束');
+        }
+        if ($model->status == TaskModel::STATUS_RUNNING) {
+            $model->makeEnd();
+        }
+        return $this->jsonSuccess($model);
+    }
+
+    public function stopAction($id) {
+        $model = TaskModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('任务错误');
+        }
+        if ($model->status == TaskModel::STATUS_COMPETE) {
+            return $this->jsonSuccess($model->toArray());
+        }
+        if ($model->status == TaskModel::STATUS_RUNNING) {
+            $model->makeEnd();
+        }
+        $model->status = TaskModel::STATUS_COMPETE;
+        $model->save();
+        return $this->jsonSuccess($model->toArray());
+    }
 }

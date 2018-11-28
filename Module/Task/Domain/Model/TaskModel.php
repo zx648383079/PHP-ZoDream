@@ -8,18 +8,23 @@ use Domain\Model\Model;
  * @package Module\Task\Domain\Model
  * @property integer $id
  * @property integer $user_id
+ * @property integer $parent_id
  * @property string $name
  * @property string $description
  * @property integer $status
- * @property string $time_length
+ * @property integer $every_time
+ * @property integer $time_length
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $start_at
  */
 class TaskModel extends Model {
 
     const STATUS_NONE = 0;
     const STATUS_RUNNING = 1;
     const STATUS_COMPETE = 2;
+
+    protected $append = ['start_at'];
 
     public static function tableName() {
         return 'task';
@@ -28,10 +33,12 @@ class TaskModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'required|int',
+            'parent_id' => 'int',
             'name' => 'required|string:0,100',
-            'description' => 'required|string:0,255',
+            'description' => 'string:0,255',
             'status' => 'int:0,9',
-            'time_length' => 'required|string:0,255',
+            'every_time' => 'int',
+            'time_length' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -41,9 +48,11 @@ class TaskModel extends Model {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',
-            'name' => 'Name',
-            'description' => 'Description',
+            'parent_id' => 'Parent Id',
+            'name' => '名称',
+            'description' => '说明',
             'status' => 'Status',
+            'every_time' => 'Every Time',
             'time_length' => 'Time Length',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -58,6 +67,10 @@ class TaskModel extends Model {
         return $this->time_length + $log->time;
     }
 
+    public function getStartAtAttribute() {
+        return $this->getAttributeSource('updated_at');
+    }
+
     public function makeEnd() {
         $log = TaskLogModel::findRunning($this->id);
         $log->end_at = time();
@@ -68,10 +81,11 @@ class TaskModel extends Model {
 
     public function makeNewRun() {
         $this->status = self::STATUS_RUNNING;
+        $this->updated_at = time();
         $log = TaskLogModel::create([
            'user_id' => auth()->id(),
            'task_id' => $this->id,
-           'created_at' => time()
+           'created_at' => $this->start_at
         ]);
         if ($log && $this->save()) {
             return $log;
