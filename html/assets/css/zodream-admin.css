@@ -67,9 +67,9 @@ footer {
   .sidebar-container .sidebar-container-toggle {
     display: none;
     font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased; }
+    text-rendering: auto; }
     .sidebar-container .sidebar-container-toggle::before {
       content: "\f0c9"; }
 
