@@ -1,0 +1,45 @@
+.converter-box {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr; }
+  .converter-box .input-box textarea,
+  .converter-box .output-box textarea {
+    padding: 5px 10px;
+    line-height: 30px;
+    font-size: 14px;
+    border: 1px solid #c6cede;
+    height: 300px;
+    width: 100%;
+    overflow: auto;
+    outline: none;
+    resize: none; }
+  .converter-box .actions {
+    padding-top: 85px; }
+    .converter-box .actions button {
+      line-height: 30px;
+      background-color: #55a7e3;
+      color: #fff;
+      border: none;
+      display: block;
+      margin-bottom: 10px;
+      width: 100%; }
+    .converter-box .actions select {
+      width: 100%;
+      height: 30px;
+      outline: none;
+      margin-bottom: 10px;
+      -webkit-appearance: none;
+         -moz-appearance: none;
+              appearance: none;
+      border-left: none;
+      border-right: none; }
+
+.converter-tip {
+  background-color: #fff;
+  margin-top: 20px;
+  padding: 10px; }
+  .converter-tip p {
+    line-height: 28px;
+    color: #777;
+    text-indent: 28px; }
+
+/*# sourceMappingURL=tool.css.map */
