@@ -2,6 +2,7 @@
 namespace Module\OpenPlatform\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Output\RestResponse;
 
 /**
  * Class PlatformModel
@@ -93,6 +94,44 @@ class PlatformModel extends Model {
     }
 
     public function verify(array $data, $sign) {
+        return true;
+    }
+
+    public function encrypt($data) {
+        return '';
+    }
+
+    public function decrypt($data) {
+        return [];
+    }
+
+    public function ready(RestResponse $response) {
+        $data = $response->getData();
+        if ($this->encrypt_type > 0) {
+            $data['encrypt'] = $this->encrypt($response->text());
+            $data['encrypt_type'] = $this->encrypt_type_list[$this->encrypt_type];
+        }
+        $data['appid'] = $this->appid;
+        $data['timestamp'] = date('Y-m-d H:i:s');
+        if ($this->sign_type > 0) {
+            $data['sign_type'] = $this->sign_type_list[$this->sign_type];
+            $data['sign'] = $this->sign($data);
+        }
+        return $response->setData($data);
+    }
+
+    public function verifyRest() {
+        if (!$this->verify($_POST, app('request')->get('sign'))) {
+            return false;
+        }
+        if ($this->encrypt_type < 1) {
+            return true;
+        }
+        $data = $this->decrypt(app('request')->get('encrypt'));
+        if (empty($data)) {
+            return false;
+        }
+        app('request')->append($data);
         return true;
     }
 }
