@@ -882,8 +882,9 @@ table {
     font-family: "Font Awesome 5 Free";
     content: "\f111";
     position: absolute;
+    font-weight: 900;
     left: 8px;
-    top: 6px; }
+    top: 1px; }
 
 i.checkbox {
   text-align: center;

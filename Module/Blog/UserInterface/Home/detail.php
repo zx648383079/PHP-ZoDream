@@ -99,7 +99,7 @@ $this->extend('layouts/header', [
     <div class="info">
         <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></span>
         <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></span>
-        <span class="time"><i class="fa fa-calendar-check-o"></i><b><?=$blog->created_at?></b></span>
+        <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>
         <span class="type">
             <a href="<?=$blog->source_url?>">
@@ -114,7 +114,7 @@ $this->extend('layouts/header', [
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
         <span class="click"><i class="fa fa-eye"></i><b><?=$blog->click_count?></b></span>
-        <span class="agree recommend-blog"><i class="fa fa-thumbs-o-up"></i><b><?=$blog->recommend?></b></span>
+        <span class="agree recommend-blog"><i class="fas fa-thumbs-up"></i><b><?=$blog->recommend?></b></span>
     </div>
 </div>
 <div id="comments" class="book-footer comment">

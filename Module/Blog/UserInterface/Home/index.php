@@ -139,7 +139,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
                 <span class="author"><i class="fa fa-edit"></i><b><?=$item->user->name?></b></span>
                 <span class="category"><i class="fa fa-bookmark"></i><b><?=$item->term->name?></b></span>
                 <span class="comment"><i class="fa fa-comments"></i><b><?=$item->comment_count?></b></span>
-                <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$item->recommend?></b></span>
+                <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item->recommend?></b></span>
                 <span class="click"><i class="fa fa-eye"></i><b><?=$item->click_count?></b></span>
             </dd>
         </dl>

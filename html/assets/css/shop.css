@@ -156,7 +156,7 @@ header {
         display: inline-block;
         margin-top: 6px;
         padding: 0 24px; }
-        header .header-main .header-nav li:hover a, header .header-main .header-nav li.active a {
+        header .header-main .header-nav li:hover > a, header .header-main .header-nav li.active > a {
           border-bottom: 3px solid #b4a078;
           padding-bottom: 5px; }
       header .header-main .header-nav .nav-dropdown {
@@ -672,7 +672,8 @@ header {
       font-size: 20px;
       font-weight: 700;
       line-height: 20px;
-      margin-bottom: 7px; }
+      margin-bottom: 7px;
+      padding-right: 60px; }
     .goods-page .info-box .intro .desc {
       width: 300px;
       font-size: 14px;
@@ -733,7 +734,8 @@ header {
       font-size: 18px;
       color: #b4a078;
       border: 1px solid #b4a078;
-      background-color: #f5f3ef; }
+      background-color: #f5f3ef;
+      text-align: center; }
       .goods-page .info-box .actions .btn.btn-primary {
         color: #fff;
         border: 1px solid #b4a078;
@@ -788,7 +790,8 @@ header {
   grid-template-columns: 1fr 300px;
   grid-gap: 40px; }
   .goods-page .detail-box .tab-box .content-box img {
-    width: 100%; }
+    width: 100%;
+    display: inherit; }
   .goods-page .detail-box .panel {
     height: auto;
     margin: 0; }

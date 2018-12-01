@@ -91,7 +91,7 @@ $this->registerCssFile('@slider.css')
                     <a href="" class="btn">
                     立即购买
                     </a>
-                    <a href="" class="btn btn-primary">
+                    <a href="javascript:addToCart('<?=$goods->id?>');" class="btn btn-primary">
                         <i class="fa fa-shopping-cart"></i>
                         加入购物车
                     </a>

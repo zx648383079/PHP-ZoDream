@@ -421,18 +421,29 @@ footer,
   text-align: center;
   border: none; }
 
-.cart-box .goods-list .goods-item {
-  position: relative; }
-  .cart-box .goods-list .goods-item .check-box {
-    font-size: 1.875rem;
-    width: 3.125rem;
-    text-align: center;
+.cart-box .goods-list {
+  display: block; }
+  .cart-box .goods-list .goods-item {
     position: relative;
-    top: -2.1875rem; }
-  .cart-box .goods-list .goods-item .number-box {
-    position: absolute;
-    right: 0;
-    bottom: 0; }
+    background-color: #fff; }
+    .cart-box .goods-list .goods-item .check-box {
+      font-size: 1rem;
+      width: 2rem;
+      text-align: center;
+      position: relative;
+      top: -2rem; }
+    .cart-box .goods-list .goods-item .number-box {
+      position: absolute;
+      right: 0;
+      bottom: 0; }
+    .cart-box .goods-list .goods-item .goods-info {
+      width: calc(100% - 8rem); }
+      .cart-box .goods-list .goods-item .goods-info h4 {
+        overflow: hidden;
+        height: 2.7rem; }
+
+.cart-box .cart-item {
+  margin-bottom: 10px; }
 
 .cart-footer {
   bottom: 3rem;
@@ -638,6 +649,110 @@ footer,
   .tab-box.goods-content img {
     max-width: 100%;
     display: block; }
+
+.cart-dialog {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 110;
+  background-color: rgba(0, 0, 0, 0.7); }
+  .cart-dialog .dialog-body {
+    position: absolute;
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+    width: 100%;
+    min-height: 375px;
+    max-height: 475px;
+    bottom: 0;
+    background-color: #fff;
+    transition: transform 0.2s cubic-bezier(0, 0, 0.25, 1), -webkit-transform 0.2s cubic-bezier(0, 0, 0.25, 1); }
+  .cart-dialog .dialog-footer {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    background-color: #fff;
+    width: 100%; }
+    .cart-dialog .dialog-footer .dailog-yes {
+      height: 50px;
+      line-height: 50px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      background-color: #e4393c;
+      display: block;
+      width: 100%;
+      flex: 1; }
+  .cart-dialog .dialog-header {
+    height: 70px;
+    padding: 0 0 10px 110px;
+    background-color: #fff;
+    position: relative;
+    line-height: 46px;
+    font-size: 16px;
+    color: #333; }
+    .cart-dialog .dialog-header img {
+      position: absolute;
+      left: 10px;
+      top: -20px;
+      border-radius: 2px;
+      width: 90px;
+      height: 90px; }
+    .cart-dialog .dialog-header .price {
+      display: inline-block;
+      height: 40px;
+      line-height: 40px;
+      color: #e4393c;
+      font-size: 10px; }
+    .cart-dialog .dialog-header .selected-property {
+      word-break: break-all;
+      font-size: 12px;
+      color: #333;
+      line-height: 1.4em;
+      padding-right: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    .cart-dialog .dialog-header .dialog-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px; }
+  .cart-dialog .property-box .number-box {
+    float: right; }
+  .cart-dialog .property-box .group .group-header {
+    font-size: 12px;
+    color: #999;
+    margin: 0 10px;
+    height: 40px;
+    line-height: 40px; }
+  .cart-dialog .property-box .group .group-body {
+    overflow: hidden;
+    margin-bottom: 3px; }
+    .cart-dialog .property-box .group .group-body span {
+      display: inline-block;
+      padding: 0 10px;
+      min-width: 20px;
+      max-width: 270px;
+      overflow: hidden;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      margin-left: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      color: #333;
+      background-color: #f7f7f7;
+      font-size: 14px; }
+      .cart-dialog .property-box .group .group-body span.active {
+        background-color: #e4393c;
+        color: #fff; }
+  .cart-dialog .property-box .count-box {
+    padding: 0 10px; }
+    .cart-dialog .property-box .count-box span {
+      font-size: 12px;
+      color: #999; }
 
 .user-header {
   position: relative;

@@ -52,6 +52,8 @@ $this->title = 'ZoDream';
                 </a>
                 <?php endforeach;?>
             </div>
+            <?=$goods_list->getLink()?>
         </div>
+
     </div>
 </div>

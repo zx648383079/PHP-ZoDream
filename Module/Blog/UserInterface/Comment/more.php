@@ -12,8 +12,8 @@
         <span class="report">举报</span>
     </div>
     <div class="actions">
-        <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$item['agree']?></b></span>
-        <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b><?=$item['disagree']?></b></span>
+        <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item['agree']?></b></span>
+        <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$item['disagree']?></b></span>
 
     </div>
     <div class="comments <?=$item->replies ? '' : 'reply-hide' ?>">
@@ -32,8 +32,8 @@
                         <span class="report">举报</span>
                     </div>
                     <div class="actions">
-                        <span class="agree"><i class="fa fa-thumbs-o-up"></i><b><?=$reply['agree']?></b></span>
-                        <span class="disagree"><i class="fa fa-thumbs-o-down"></i><b><?=$reply['disagree']?></b></span>
+                        <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$reply['agree']?></b></span>
+                        <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$reply['disagree']?></b></span>
                     </div>
                 </div>
             <?php endforeach;?>

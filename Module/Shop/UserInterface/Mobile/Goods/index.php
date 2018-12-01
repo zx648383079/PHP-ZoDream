@@ -131,3 +131,37 @@ $this->title = '商品详情';
         立即购买
     </a>
 </footer>
+
+<div class="cart-dialog">
+    <div class="dialog-body">
+        <div class="dialog-header">
+            <img src="<?=$goods->thumb?>" alt="">
+            <p class="price"><?=$goods->price?></p>
+            <p class="selected-property">111</p>
+            <i class="fa fa-times dialog-close"></i>
+        </div>
+        <div class="property-box">
+            <div class="group">
+                <div class="group-header">类型</div>
+                <div class="group-body">
+                    <span class="active">11111</span>
+                    <span>11111</span>
+                    <span>11111</span>
+                    <span>11111</span>
+                </div>
+            </div>
+
+            <div class="count-box">
+                <span>数量</span>
+                <div class="number-box">
+                    <i class="fa fa-minus"></i>
+                    <input type="text" class="number-input" value="1">
+                    <i class="fa fa-plus"></i>
+                </div>
+            </div>
+        </div>
+        <div class="dialog-footer">
+            <a href="" class="dailog-yes">确认</a>
+        </div>
+    </div>
+</div>

@@ -21,14 +21,18 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
      */
     protected $goodsMap = [];
 
+    protected $booted = false;
+
     public function __construct() {
         $this->loadFromDb();
     }
 
     protected function loadFromDb() {
+        $this->booted = false;
         $this->setGoods(CartModel::with('goods')
-            //->where('user_id', auth()->id())
+            ->where('user_id', auth()->id())
             ->all());
+        $this->booted = true;
     }
 
     /**
@@ -44,15 +48,23 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function addCart(CartModel $cart) {
-        if ($this->hasCart($cart->id)) {
-            $this->data[$cart->id]->number += $cart->number;
-            return $this;
+        if (!$this->hasCart($cart->id)) {
+            return $this->addNewGoods($cart);
         }
+        $this->data[$cart->id]->number += $cart->number;
+        $cart->save();
+        return $this;
+    }
+
+    protected function addNewGoods(CartModel $cart) {
         $this->data[$cart->id] = $cart;
         if (!array_key_exists($cart->goods_id, $this->goodsMap)) {
             $this->goodsMap[$cart->goods_id] = [];
         }
         $this->goodsMap[$cart->goods_id][$cart->price] = $cart;
+        if ($this->booted) {
+            $cart->save();
+        }
         return $this;
     }
 
@@ -143,6 +155,7 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
         }
         unset($this->data[$cart->id]);
         unset($this->goodsMap[$cart->goods_id][$cart->price]);
+        $cart->delete();
         return $this;
     }
 

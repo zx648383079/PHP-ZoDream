@@ -128,7 +128,11 @@ class GoodsModel extends Model {
     }
 
     public function getThumbAttribute() {
-        return url()->asset($this->getAttributeSource('thumb'));
+        $thumb = $this->getAttributeSource('thumb');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
     }
 
     /**

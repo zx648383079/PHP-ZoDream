@@ -7,8 +7,8 @@ namespace Module\Shop\Domain\Model;
  * Time: 11:23
  */
 use Domain\Model\Model;
-use Zodream\Helpers\Arr;
 use Zodream\Html\Tree;
+use Zodream\Helpers\Tree as TreeHelper;
 
 /**
  * Class CategoryModel
@@ -22,6 +22,7 @@ use Zodream\Html\Tree;
  * @property integer $position
  * @property string $banner
  * @property string $app_banner
+ * @property array $children
  */
 class CategoryModel extends Model {
     public static function tableName() {
@@ -58,8 +59,14 @@ class CategoryModel extends Model {
     /**
      * @return array
      */
-    public function getChildren() {
-        return [];
+    public function getChildrenAttribute() {
+        return TreeHelper::getTreeChild(static::cacheLevel(), $this->id);
+    }
+
+    public function getFamily() {
+        $data = $this->children;
+        $data[] = $this->id;
+        return $data;
     }
 
     /**
@@ -71,7 +78,7 @@ class CategoryModel extends Model {
     }
 
     public function isChildById($id) {
-        return in_array($id, $this->getChildren());
+        return in_array($id, $this->children);
     }
 
     /**
@@ -79,7 +86,7 @@ class CategoryModel extends Model {
      * @return bool
      */
     public function isChildGoods(GoodsModel $goods) {
-        return $this->isChildById($goods->category_id);
+        return $this->isChildById($goods->cat_id);
     }
 
 

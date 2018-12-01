@@ -71,11 +71,13 @@ use Zodream\Template\View;
                     <div class="nav-dropdown">
                         <?php if(isset($item['children'])):foreach($item['children'] as $column):?>
                         <div class="nav-column">
-                            <div class="nav-title"><?=$column['name']?></div>
+                            <div class="nav-title">
+                                <a href="<?=$this->url('./category', ['id' => $column['id']])?>"><?=$column['name']?></a>
+                            </div>
                             <?php if(isset($column['children'])):foreach($column['children'] as $child):?>
                             <div class="nav-item">
                                 <img src="https://yanxuan.nosdn.127.net/785a1507ce654746875063805c6c4235.png" alt="">
-                                <span><?=$child['name']?></span>
+                                <span><a href="<?=$this->url('./category', ['id' => $child['id']])?>"><?=$child['name']?></a></span>
                             </div>
                             <?php endforeach;endif;?>
                         </div>

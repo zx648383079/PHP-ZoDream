@@ -523,21 +523,33 @@ footer,
 
 .cart-box {
     .goods-list {
+        display: block;
         .goods-item {
             position: relative;
+            background-color: #fff;
             .check-box {
-                font-size: 1.875rem;
-                width: 3.125rem;
+                font-size: 1rem;
+                width: 2rem;
                 text-align: center;
                 position: relative;
-                top: -2.1875rem;
+                top: -2rem;
             }
             .number-box {
                 position: absolute;
                 right: 0;
                 bottom: 0;
             }
+            .goods-info {
+                width: calc(100% - 8rem);
+                h4 {
+                    overflow: hidden;
+                    height: 2.7rem;
+                }
+            }
         }
+    }
+    .cart-item {
+        margin-bottom: 10px;
     }
 }
 
@@ -796,6 +808,129 @@ footer,
     img {
         max-width: 100%;
         display: block;
+    }
+}
+
+.cart-dialog {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 110;
+    background-color: rgba(0,0,0,.7);
+    .dialog-body {
+        position: absolute;
+        transform: translate3d(0,0,0);
+        width: 100%;
+        min-height: 375px;
+        max-height: 475px;
+        bottom: 0;
+        background-color: #fff;
+        transition: transform .2s cubic-bezier(0,0,.25,1),-webkit-transform .2s cubic-bezier(0,0,.25,1);
+    }
+    .dialog-footer {
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        background-color: #fff;
+        width: 100%;
+        .dailog-yes {
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            background-color: #e4393c;
+            display: block;
+            width: 100%;
+            flex: 1;
+        }
+    }
+    .dialog-header {
+        height: 70px;
+        padding: 0 0 10px 110px;
+        background-color: #fff;
+        position: relative;
+        line-height: 46px;
+        font-size: 16px;
+        color: #333;
+        img {
+            position: absolute;
+            left: 10px;
+            top: -20px;
+            border-radius: 2px;
+            width: 90px;
+            height: 90px;
+        }
+        .price {
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            color: #e4393c;
+            font-size: 10px;
+        }
+        .selected-property {
+            word-break: break-all;
+            font-size: 12px;
+            color: #333;
+            line-height: 1.4em;
+            padding-right: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .dialog-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+        }
+    }
+    .property-box {
+        .number-box {
+            float: right;
+        }
+        .group {
+            .group-header {
+                font-size: 12px;
+                color: #999;
+                margin: 0 10px;
+                height: 40px;
+                line-height: 40px;
+            }
+            .group-body {
+                overflow: hidden;
+                margin-bottom: 3px;
+                span {
+                    display: inline-block;
+                    padding: 0 10px;
+                    min-width: 20px;
+                    max-width: 270px;
+                    overflow: hidden;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    margin-left: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 4px;
+                    color: #333;
+                    background-color: #f7f7f7;
+                    font-size: 14px;
+                    &.active {
+                        background-color: #e4393c;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .count-box {
+            padding: 0 10px;
+            span {
+                font-size: 12px;
+                color: #999;
+            }
+        }
     }
 }
 

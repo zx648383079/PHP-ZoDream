@@ -192,7 +192,7 @@ header {
                 padding: 0 24px;
                 &:hover,
                 &.active {
-                    a {
+                    >a {
                         border-bottom: 3px solid #b4a078;
                         padding-bottom: 5px;
                     }
@@ -845,6 +845,7 @@ header {
                 font-weight: 700;
                 line-height: 20px;
                 margin-bottom: 7px;
+                padding-right: 60px;
             }
             .desc {
                 width: 300px;
@@ -917,6 +918,7 @@ header {
                 color: #b4a078;
                 border: 1px solid #b4a078;
                 background-color: #f5f3ef;
+                text-align: center;
                 &.btn-primary {
                     color: #fff;
                     border: 1px solid #b4a078;
@@ -985,6 +987,7 @@ header {
             .content-box {
                 img {
                     width: 100%;
+                    display: inherit;
                 }
             }
             

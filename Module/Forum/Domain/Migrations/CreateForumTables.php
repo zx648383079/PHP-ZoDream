@@ -34,7 +34,7 @@ class CreateForumTables extends Migration {
         });
         Schema::createTable(ThreadPostModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
-            $table->set('content')->varchar(255)->notNull();
+            $table->set('content')->mediumtext()->notNull();
             $table->set('thread_id')->int()->notNull();
             $table->set('user_id')->int()->notNull()->comment('用户');
             $table->set('ip')->varchar(120)->notNull();

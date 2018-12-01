@@ -23,12 +23,7 @@ $this->registerCssFile([
     <?=$this->header();?>
 </head>
 <body>
-
-
-
-<footer class="page-footer">
-    <a href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
-</footer>
+<?=$content?>
 <?=$this->footer()?>
 </body>
 </html>
