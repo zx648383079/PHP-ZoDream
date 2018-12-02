@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain;
 
+use Module\Book\Domain\Spiders\BiQuGeC;
 use Module\Book\Domain\Spiders\Sixth;
 use Module\Book\Domain\Spiders\XBiQuGe;
 use Module\Book\Domain\Spiders\BiQuGe;
@@ -21,6 +22,7 @@ class SiteCrawl {
     static $maps = [
         'www.qu.la' => BiQuGe::class,
         'www.biquge5200.cc' => CBiQuGe::class,
+        'www.biquge.cc' => BiQuGeC::class,
         'www.biquge.lu' => BiQuGeLu::class,
         'www.biquge.cm' => MBiQuGe::class,
         'www.xxbiquge.com' => XBiQuGe::class,

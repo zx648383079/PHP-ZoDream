@@ -110,4 +110,10 @@ class CategoryModel extends Model {
             return self::tree()->makeTreeForHtml();
         });
     }
+
+    public static function getChildrenWithParent($id) {
+        $data = TreeHelper::getTreeChild(static::cacheLevel(), $id);
+        $data[] = $id;
+        return $data;
+    }
 }

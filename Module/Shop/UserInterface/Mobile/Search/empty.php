@@ -14,8 +14,9 @@ $this->extend('../layouts/search_empty');
                 <i class="fa fa-trash"></i>
             </div>
             <div class="panel-body">
-                <a href="">111</a>
-                <a href="">111111111</a>
+                <?php foreach($history_list as $item):?>
+                <a href="<?=$this->url('./mobile/search', ['keywords' => $item])?>"><?=$item?></a>
+                <?php endforeach;?>
             </div>
         </div>
         <div class="panel">
@@ -23,8 +24,9 @@ $this->extend('../layouts/search_empty');
                 <span>热门搜索</span>
             </div>
             <div class="panel-body">
-                <a href="">111</a>
-                <a href="">111111111</a>
+                <?php foreach($hot_list as $item):?>
+                <a href="<?=$this->url('./mobile/search', ['keywords' => $item])?>"><?=$item?></a>
+                <?php endforeach;?>
             </div>
         </div>
     </div>

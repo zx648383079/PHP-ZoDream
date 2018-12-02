@@ -89,6 +89,32 @@ $(function() {
     }).mouseout(function() {
         $(this).removeClass('expanded');
     });
+    $('img.lazy').lazyload({callback: 'img'});
+    $(".more-load").lazyload({
+        mode: 1,
+        callback: function(moreEle: JQuery) {
+            if (moreEle.data('is_loading')) {
+                return;
+            }
+            moreEle.data('is_loading', true);
+            let page: number = parseInt(moreEle.data('page') || '0') + 1;
+            let url = moreEle.data('url');
+            let target = moreEle.data('target');
+            $.getJSON(url, {
+                page: page
+            }, function (data) {
+                moreEle.data('is_loading', false)
+                if (data.code != 200) {
+                    return;
+                }
+                $(target).append(data.data.html);
+                moreEle.data('page', page);
+                if (!data.data.has_more) {
+                    moreEle.remove();
+                }
+            });
+        }
+    });
     let searchInput = $(".header-search input").keydown(function(e) {
         if (e.keyCode == 13) {
             search($(this).val());
