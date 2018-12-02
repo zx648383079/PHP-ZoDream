@@ -49,7 +49,9 @@ $this->title = 'ZoDream';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
+                <td>
+                    <a href="<?=$this->url('./book', ['id' => $item->id])?>"><?=$item->name?></a>
+                </td>
                 <td>
                     <?php if ($item->category):?>
                         <a href="<?=$this->url('./admin/book', ['cat_id' => $item->cat_id])?>">

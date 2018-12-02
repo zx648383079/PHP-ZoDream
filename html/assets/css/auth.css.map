@@ -1,1 +1,1 @@
-{"version":3,"file":"auth.css","sources":["auth.scss"],"sourcesContent":[".search {\r\n  .form-horizontal {\r\n    display: inline-block;\r\n  }\r\n}"],"names":[],"mappings":"AAAA,AACE,OADK,CACL,gBAAgB,CAAC;EACf,OAAO,EAAE,YAAY,GACtB"}
+{"version":3,"sources":["auth.scss"],"names":[],"mappings":"AAAA;EAEI,sBAAqB,EACtB","file":"auth.css","sourcesContent":[".search {\r\n  .form-horizontal {\r\n    display: inline-block;\r\n  }\r\n}"]}

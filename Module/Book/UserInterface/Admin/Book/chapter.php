@@ -30,7 +30,9 @@ $this->title = $book->name;
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=Str::substr($item->title, 0, 20)?></td>
+                <td>
+                    <a href="<?=$this->url('./book/read', ['id' => $item->id])?>"><?=Str::substr($item->title, 0, 20)?></a>
+                </td>
                 <td>
                 </td>
                 <td>

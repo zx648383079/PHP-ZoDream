@@ -12,6 +12,7 @@ $(function() {
         let _this = $(this),
             loading = Dialog.loading();
         postJson(_this.attr('action'), _this.serialize(), function(data) {
+            loading.close();
             parseAjax(data);
         });
         return false;

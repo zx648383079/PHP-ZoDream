@@ -7,6 +7,9 @@ use Module\Book\Domain\Model\BookModel;
 class CategoryController extends Controller {
 
     public function indexAction($id) {
+        if (app('request')->isMobile()) {
+            return $this->redirect(['./mobile/category', 'id' => $id]);
+        }
         $cat = BookCategoryModel::find($id);
         $hot_book = BookModel::ofClassify()->where('cat_id', $id)->orderBy('click_count', 'desc')->limit(6)->all();
         $book = BookModel::ofClassify()->where('cat_id', $id)->orderBy('created_at', 'desc')->one();
