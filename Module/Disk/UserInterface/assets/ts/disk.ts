@@ -90,7 +90,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                     if (data.code != 200) {
                         return;
                     }
-                    this.modeType == 0;
+                    this.modeType = 0;
                     share.result = data.data.url;
                     if (data.data.mode == 1) {
                         share.result += ' 密码：' + data.data.password;

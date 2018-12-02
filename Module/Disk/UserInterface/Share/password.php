@@ -6,8 +6,18 @@ $this->title = '验证分享密码';
 ?>
 
 <div class="password-box">
-    <form action="" method="post">
-        <input type="text" name="password" placeholder="请输入密码">
+    <div class="box-header">
+        <div class="avatar">
+            <img src="<?=$user->avatar?>" alt="">
+        </div>
+        <div class="name">
+            <strong><?=$user->name?></strong>
+            给您加密分享了文件
+        </div>
+    </div>
+    <form class="box-body" action="<?=$this->url()?>" method="post">
+        <p>请输入提取码：</p>
+        <input type="text" name="password" placeholder="请输入提取码">
         <button>确定</button>
     </form>
 </div>

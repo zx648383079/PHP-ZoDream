@@ -200,7 +200,7 @@
       font-style: normal;
       font-variant: normal; }
     .tree-box .tree-item > span:first-child:before {
-      content: "\f054"; }
+      content: "\f067"; }
     .tree-box .tree-item > span:nth-child(2):before {
       content: "\f07b"; }
   .tree-box .tree-item:hover {
@@ -214,7 +214,7 @@
   .tree-box li.open > ul {
     display: block; }
   .tree-box li.open > .tree-item > span:first-child:before {
-    content: "\f078"; }
+    content: "\f068"; }
   .tree-box li.open > .tree-item > span:nth-child(2):before {
     content: "\f07c"; }
   .tree-box li.open > .tree-item.empty > span:first-child:before {
@@ -348,5 +348,43 @@
 .share-file-row {
   display: grid;
   grid-template-columns: 40px  1fr 180px 64px 64px 64px; }
+
+.password-box {
+  max-width: 320px;
+  margin: 20px auto;
+  background: #fff; }
+  .password-box .box-header {
+    position: relative;
+    padding-left: 74px;
+    background-color: #333;
+    color: #fff;
+    line-height: 60px; }
+    .password-box .box-header .avatar {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      left: 20px;
+      top: 8px; }
+      .password-box .box-header .avatar img {
+        width: 100%;
+        height: 100%; }
+    .password-box .box-header .name strong {
+      margin-right: 10px; }
+  .password-box .box-body {
+    padding: 20px 20px 40px; }
+    .password-box .box-body button {
+      height: 30px;
+      width: 80px;
+      background: #333;
+      color: #fff;
+      border: 0;
+      outline: 0; }
+    .password-box .box-body input {
+      height: 30px;
+      border: 0;
+      outline: 0;
+      background: #f4f4f4;
+      padding: 0 10px; }
 
 /*# sourceMappingURL=disk.css.map */

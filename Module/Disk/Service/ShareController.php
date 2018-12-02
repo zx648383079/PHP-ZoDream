@@ -36,7 +36,7 @@ class ShareController extends Controller {
         if ($this->canView($model)) {
             return $this->show(compact('model', 'user'));
         }
-        if ($model->mode == 'protected') {
+        if ($model->mode == ShareModel::SHARE_PROTECTED) {
             return $this->show('password', compact('model', 'user'));
         }
         if (auth()->guest()) {
@@ -143,16 +143,16 @@ class ShareController extends Controller {
         if (auth()->id() == $model->user_id) {
             return true;
         }
-        if ($model->mode == 'public') {
+        if ($model->mode == ShareModel::SHARE_PUBLIC) {
             return true;
         }
-        if ($model->mode == 'protected') {
+        if ($model->mode == ShareModel::SHARE_PROTECTED) {
             return Factory::session(self::PASSWORD_KEY) == $model->password;
         }
         if (auth()->guest()) {
             return false;
         }
-        if ($model->mode == 'private') {
+        if ($model->mode == ShareModel::SHARE_PRIVATE) {
             $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => auth()->id()])->count();
             return $count > 0;
         }
