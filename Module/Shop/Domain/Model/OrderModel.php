@@ -139,7 +139,9 @@ class OrderModel extends Model {
         $this->pay_fee = $this->payment->getFee();
         $this->user_id = auth()->id();
         $this->series_number = self::generateSeriesNumber();
-        $this->save();
+        if (!$this->save()) {
+            return false;
+        }
         foreach ($carts as $item) {
             OrderGoodsModel::addCartGoods($this->id, $item);
         }
@@ -157,19 +159,31 @@ class OrderModel extends Model {
     }
 
     public function setAddress(AddressModel $address) {
+        if (empty($address)) {
+            return false;
+        }
         $this->setRelation('address', OrderAddressModel::converter($address));
+        return true;
     }
 
     public function setPayment(PaymentModel $payment) {
+        if (empty($payment)) {
+            return false;
+        }
         $this->payment_id = $payment->id;
         $this->payment_name = $payment->name;
         $this->setRelation('payment', $payment);
+        return true;
     }
 
     public function setShipping(ShippingModel $shipping) {
+        if (empty($shipping)) {
+            return false;
+        }
         $this->shipping_id = $shipping->id;
         $this->shipping_name = $shipping->name;
         $this->setRelation('shipping', $shipping);
+        return true;
     }
 
     /**

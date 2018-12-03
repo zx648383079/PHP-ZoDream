@@ -30,9 +30,9 @@ class GoodsController extends Controller {
             })->when(!empty($brand_id), function ($query) use ($brand_id) {
                 $query->where('brand_id', intval($brand_id));
             })->orderBy('id', 'desc')->page();
-        $cat_list = CategoryModel::select('id', 'name')->all();
+        $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $brand_list = BrandModel::select('id', 'name')->all();
-        return $this->show(compact('model_list', 'cat_list', 'brand_list'));
+        return $this->show(compact('model_list', 'cat_list', 'brand_list', 'keywords', 'cat_id', 'brand_id'));
     }
 
     public function createAction() {
@@ -41,7 +41,7 @@ class GoodsController extends Controller {
 
     public function editAction($id) {
         $model = GoodsModel::findOrNew($id);
-        $cat_list = CategoryModel::select('id', 'name')->all();
+        $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $brand_list = BrandModel::select('id', 'name')->all();
         $group_list = AttributeGroupModel::all();
         return $this->show(compact('model', 'cat_list', 'brand_list', 'group_list'));

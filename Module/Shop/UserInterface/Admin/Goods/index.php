@@ -9,7 +9,30 @@ $this->title = '商品列表';
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label class="sr-only" for="keywords">标题</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题">
+            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题" value="<?=$keywords?>">
+        </div>
+        <div class="input-group">
+            <label>分类</label>
+            <select name="cat_id">
+                <option value="">请选择</option>
+                <?php foreach($cat_list as $item):?>
+                <option value="<?=$item['id']?>" <?=$cat_id == $item['id'] ? 'selected': '' ?>>
+                    <?php if($item['level'] > 0):?>
+                        ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
+                    <?php endif;?>
+                    <?=$item['name']?>
+                </option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>品牌</label>
+            <select name="brand_id">
+                <option value="">请选择</option>
+                <?php foreach($brand_list as $item):?>
+                <option value="<?=$item->id?>" <?=$brand_id == $item['id'] ? 'selected': '' ?>><?=$item->name?></option>
+                <?php endforeach;?>
+            </select>
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>

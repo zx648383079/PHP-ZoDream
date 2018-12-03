@@ -27,7 +27,7 @@ class OrderAddressModel extends Model {
             'region_name' => 'required|int',
             'tel' => 'required|string:0,11',
             'address' => 'required|string:0,255',
-            'best_time' => 'required|string:0,255',
+            'best_time' => 'string:0,255',
         ];
     }
 

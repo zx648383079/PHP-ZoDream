@@ -15,23 +15,53 @@ use Module\Shop\Module;
  */
 class CashierController extends Controller {
 
-    public function indexAction() {
+    public function indexAction($cart = null) {
         $goods_list = Module::cart()->getCarts();
+        if (!empty($cart)) {
+            $cart_ids = explode('-', $cart);
+            $goods_list = array_filter($goods_list, function ($item) use ($cart_ids) {
+               return in_array($item['id'], $cart_ids);
+            });
+        }
+        if (empty($goods_list)) {
+            return $this->redirectWithMessage('./mobile', '请选择结算的商品');
+        }
         $address = AddressModel::where('user_id', auth()->id())->one();
         $order = OrderModel::preview($goods_list);
         $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
         $payment_list = PaymentModel::all();
-        return $this->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list'));
+        return $this->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list', 'cart'));
     }
 
 
-    public function checkoutAction() {
-        $goods_list = $this->getGoodsList();
+    public function checkoutAction($address, $shipping, $payment, $cart = null) {
+        $goods_list = Module::cart()->getCarts();
+        if (!empty($cart)) {
+            $cart_ids = explode('-', $cart);
+            $goods_list = array_filter($goods_list, function ($item) use ($cart_ids) {
+                return in_array($item['id'], $cart_ids);
+            });
+        }
+        if (empty($goods_list)) {
+            return $this->jsonFailure('请选择结算的商品');
+        }
         $order = OrderModel::preview($goods_list);
-        $order->setPayment(PaymentModel::one());
-        $order->setShipping(ShippingModel::one());
-        $order->createOrder();
-        return $this->redirect($this->getUrl('cashier/pay', ['id' => $order->id]));
+        if (!$order->setAddress(AddressModel::find($address))) {
+            return $this->jsonFailure('请选择收货地址');
+        }
+        if (!$order->setPayment(PaymentModel::find($payment))) {
+            return $this->jsonFailure('请选择支付方式');
+        }
+        if (!$order->setShipping(ShippingModel::find($shipping))) {
+            return $this->jsonFailure('请选择配送方式');
+        }
+        if (!$order->createOrder()) {
+            return $this->jsonFailure('操作失败，请重试');
+        }
+        Module::cart()->removeCart(...$goods_list);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('cashier/pay', ['id' => $order->id])
+        ]);
     }
 
     public function payAction($id) {

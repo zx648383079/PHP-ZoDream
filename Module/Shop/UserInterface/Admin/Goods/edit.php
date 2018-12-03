@@ -32,7 +32,19 @@ $this->registerJs($js);
             <div class="zd-tab-item active">
                 <?=Form::text('name', true)?>
                 <?=Form::text('series_number')?>
-                <?=Form::select('cat_id', [$cat_list], true)?>
+                <div class="input-group">
+                    <label>分类</label>
+                    <select name="cat_id" required>
+                        <?php foreach($cat_list as $item):?>
+                        <option value="<?=$item['id']?>" <?=$model->cat_id == $item['id'] ? 'selected': '' ?>>
+                            <?php if($item['level'] > 0):?>
+                                ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
+                            <?php endif;?>
+                            <?=$item['name']?>
+                        </option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
                 <?=Form::select('brand_id', [$brand_list], true)?>
                 <?=Form::text('price', true)?>
                 <?=Form::text('market_price')?>

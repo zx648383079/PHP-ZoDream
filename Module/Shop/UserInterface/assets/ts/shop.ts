@@ -67,6 +67,44 @@ $(function() {
         }
         input.val(amount).trigger('change');
     });
+    $(".cart-footer .btn").click(function(e) {
+        e.preventDefault();
+        let ids = [];
+        mapCheckedItem(function(item) {
+            ids.push(item.data('id'));
+        });
+        if (ids.length < 1) {
+            Dialog.tip('请选择结算的商品');
+            return;
+        }
+        window.location.href = $(this).attr('href') + '?cart=' + ids.join('-');
+    });
+    $(".checkout-footer .btn").click(function(e) {
+        e.preventDefault();
+        let form = $(this).closest('form'),
+            is_check = true;
+        $.each(form.serializeArray(), function() {
+            if (this.name == 'address' && parseInt(this.value) < 1) {
+                Dialog.tip('请选择收货地址');
+                is_check = false;
+                return false;
+            }
+            if (this.name == 'shipping' && parseInt(this.value) < 1) {
+                Dialog.tip('请选择配送方式');
+                is_check = false;
+                return false;
+            }
+            if (this.name == 'payment' && parseInt(this.value) < 1) {
+                Dialog.tip('请选择支付方式');
+                is_check = false;
+                return false;
+            }
+        });
+        if (!is_check) {
+            return;
+        }
+        ajaxForm(form.attr('action'), form.serialize());
+    });
     $(".tab-box .tab-header .tab-item").click(function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");

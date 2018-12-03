@@ -7,7 +7,7 @@ $this->title = '订单详情';
 $this->extend('../layouts/header');
 ?>
 
-<div class="has-header">
+<div class="has-header order-box">
     <div class="order-header">
         <?=$order->status?>
     </div>
@@ -16,7 +16,7 @@ $this->extend('../layouts/header');
     </div>
     <div class="address-box">
         <p>
-            <h4><?=$address->name?></h4>
+            <span class="name"><?=$address->name?></span>
             <span><?=$address->tel?></span>
         </p>
         <p><?=$address->region_name?> <?=$address->address?></p>
@@ -37,15 +37,15 @@ $this->extend('../layouts/header');
             <?php endforeach;?>
         </div>
         <div class="order-amount">
-            <p>共 2 件 合计：<?=$order->goods_amount?></p>
-            <p><span>订单号</span> <span><?=$order->id?></span> </p>
-            <p><span>下单时间</span> <span><?=$order->created_at?></span> </p>
-            <p><span>支付时间</span> <span><?=$order->paid_at?></span> </p>
-            <p><span>完成时间</span> <span><?=$order->updated_at?></span> </p>
+            <p class="text-right">共 2 件 合计：<?=$order->goods_amount?></p>
+            <p class="line-item"><span>订单号</span> <span><?=$order->id?></span> </p>
+            <p class="line-item"><span>下单时间</span> <span><?=$order->created_at?></span> </p>
+            <p class="line-item"><span>支付时间</span> <span><?=$order->paid_at?></span> </p>
+            <p class="line-item"><span>完成时间</span> <span><?=$order->updated_at?></span> </p>
             
-            <p><span>商品总价</span> <span><?=$order->goods_amount?></span> </p>
-            <p><span>运费</span> <span><?=$order->shipping_fee?></span> </p>
-            <p><span>订单总价</span> <span><?=$order->order_amount?></span> </p>
+            <p class="line-item"><span>商品总价</span> <span><?=$order->goods_amount?></span> </p>
+            <p class="line-item"><span>运费</span> <span><?=$order->shipping_fee?></span> </p>
+            <p class="line-item"><span>订单总价</span> <span><?=$order->order_amount?></span> </p>
         </div>
         <div class="order-footer">
             <div class="order-actions">

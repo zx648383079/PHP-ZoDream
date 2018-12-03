@@ -38,6 +38,7 @@ class RegionModel extends Model {
 
     /**
      * @return Tree
+     * @throws \Exception
      */
 	public static function tree() {
         return new Tree(static::query()->select('id', 'name', 'parent_id')->asArray()->all());
@@ -53,6 +54,12 @@ class RegionModel extends Model {
         });
     }
 
+    /**
+     * 请导入以下文件
+     * @url https://github.com/modood/Administrative-divisions-of-China  dist/pcas.json
+     * @param File $file
+     * @throws \Exception
+     */
     public static function import(File $file) {
 	    $data = Json::decode($file->read());
 	    $args = [];

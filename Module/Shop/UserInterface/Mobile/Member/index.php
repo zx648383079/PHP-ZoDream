@@ -19,7 +19,13 @@ $this->extend('../layouts/header', compact('header_btn'));
             <img src="<?=$user ? $user->avatar : '/assets/images/avatar/1.png'?>">
         </div>
         <div class="name">
-            欢迎您，<a href="<?=$this->url('./mobile/member/profile')?>"><?=$user ? $user->name : '请登陆'?></a>~
+            欢迎您，
+            <?php if($user):?>
+            <a href="<?=$this->url('./mobile/member/profile')?>"><?=$user->name?></a>
+            <?php else:?>
+            <a href="<?=$this->url('./mobile/member/login')?>">请登陆</a>
+            <?php endif;?>
+            ~
         </div>
     </div>
     <div class="menu-grid"><a href="<?=$this->url('./mobile/order')?>" class="item">

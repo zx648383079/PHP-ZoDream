@@ -1171,10 +1171,21 @@ footer,
                 float: right;
             }
         }
-        .order-amount,
-        .order-footer {
+        .order-amount {
             text-align: right;
         }
+    }
+    .order-footer {
+        text-align: right;
+    }
+    @include lineItem();
+    .line-item {
+        span:nth-child(2) {
+            margin-right: 0;
+        }
+    }
+    .text-right {
+        text-align: right;
     }
 }
 

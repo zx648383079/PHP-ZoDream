@@ -946,8 +946,28 @@ footer,
 .order-box .order-item .order-header .status {
   float: right; }
 
-.order-box .order-item .order-amount,
-.order-box .order-item .order-footer {
+.order-box .order-item .order-amount {
+  text-align: right; }
+
+.order-box .order-footer {
+  text-align: right; }
+
+.order-box .line-item {
+  position: relative;
+  line-height: 1.875rem;
+  border-bottom: 1px solid #f6f6f9; }
+  .order-box .line-item .fa {
+    position: absolute;
+    right: 0.3125rem;
+    top: 0.4375rem; }
+  .order-box .line-item span:nth-child(2) {
+    float: right;
+    margin-right: 1.25rem; }
+
+.order-box .line-item span:nth-child(2) {
+  margin-right: 0; }
+
+.order-box .text-right {
   text-align: right; }
 
 .login-type-box,

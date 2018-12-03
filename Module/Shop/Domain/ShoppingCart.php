@@ -147,7 +147,10 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function removeGoods(GoodsModel $goods) {
-        return $this->removeGoodsId($goods->id, $goods->price);
+        foreach (func_get_args() as $goods) {
+            $this->removeGoodsId($goods->id, $goods->price);
+        }
+        return $this;
     }
 
     public function removeGoodsId($goodsId, $price = null) {
@@ -165,20 +168,25 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function removeCart(CartModel $cart) {
-        if (!$this->hasCart($cart->id)) {
-            return $this;
+        foreach (func_get_args() as $cart) {
+            if (!$this->hasCart($cart->id)) {
+                continue;
+            }
+            unset($this->data[$cart->id]);
+            unset($this->goodsMap[$cart->goods_id][(string)$cart->price]);
+            $cart->delete();
         }
-        unset($this->data[$cart->id]);
-        unset($this->goodsMap[$cart->goods_id][(string)$cart->price]);
-        $cart->delete();
         return $this;
     }
 
     public function removeCartId($cartId) {
-        if (!$this->hasCart($cartId)) {
-            return $this;
+        foreach (func_get_args() as $id) {
+            if (!$this->hasCart($id)) {
+                continue;
+            }
+            $this->removeCart($this->data[$id]);
         }
-        return $this->removeCart($this->data[$cartId]);
+        return $this;
     }
 
     public function removeAll() {
