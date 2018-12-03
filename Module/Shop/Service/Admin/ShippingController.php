@@ -15,7 +15,7 @@ class ShippingController extends Controller {
     }
 
     public function editAction($id) {
-        $model = ShippingModel::findOrNew($id);
+        $model = ShippingModel::findOrDefault($id, ['position' => 60]);
         $shipping_list = ShippingModel::shippingList();
         return $this->show(compact('model', 'shipping_list'));
     }

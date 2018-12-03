@@ -13,9 +13,9 @@ class AddressController extends Controller {
         ];
     }
 
-    public function indexAction() {
+    public function indexAction($selected = 0) {
         $model_list = AddressModel::with('region')->page();
-        return $this->show(compact('model_list'));
+        return $this->show(compact('model_list', 'selected'));
     }
 
     public function createAction() {

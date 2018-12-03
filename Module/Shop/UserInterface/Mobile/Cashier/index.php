@@ -19,8 +19,10 @@ $this->extend('../layouts/header')
     <div class="address-box">
         <i class="fa fa-map-marker"></i>
         <p>
-            <span class="name"><?=$address->name?></span>
-            <span class="tel"><?=$address->tel?></span>
+            <a href="<?=$this->url('./mobile/address', ['selected' => $address->id])?>">
+                <span class="name"><?=$address->name?></span>
+                <span class="tel"><?=$address->tel?></span>
+            </a>
         </p>
         <p><?=$address->region->full_name?> <?=$address->address?></p>
         <i class="fa fa-chevron-right"></i>
@@ -28,7 +30,9 @@ $this->extend('../layouts/header')
     <?php else:?>
     <div class="address-box empty-address">
         <i class="fa fa-map-marker"></i>
-        <h3>请选择地址</h3>
+        <h3>
+            <a href="<?=$this->url('./mobile/address')?>">请选择地址</a>
+        </h3>
         <i class="fa fa-chevron-right"></i>
     </div>
     <?php endif;?>

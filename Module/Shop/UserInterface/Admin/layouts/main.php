@@ -168,12 +168,12 @@ $this->registerCssFile([
     [
         '商城设置',
         false,
-        'fa fa-briefcase',
+        'fa fa-cogs',
         [
             [
                 '基本设置',
                 './admin/setting',
-                'fa fa-gear'
+                'fa fa-cog'
             ],
             [
                 '支付列表',

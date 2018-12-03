@@ -28,6 +28,8 @@ class CashierController extends Controller {
     public function checkoutAction() {
         $goods_list = $this->getGoodsList();
         $order = OrderModel::preview($goods_list);
+        $order->setPayment(PaymentModel::one());
+        $order->setShipping(ShippingModel::one());
         $order->createOrder();
         return $this->redirect($this->getUrl('cashier/pay', ['id' => $order->id]));
     }

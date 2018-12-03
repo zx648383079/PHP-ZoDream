@@ -4,7 +4,9 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '支付';
 
-$this->extend('../layouts/header');
+$this->extend('../layouts/header', [
+    'header_back' => $this->url('./mobile/order/detail', ['id' => $order->id])
+]);
 ?>
 
 <div class="has-header checkout-box">

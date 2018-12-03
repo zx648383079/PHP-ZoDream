@@ -16,10 +16,10 @@ $this->extend('../layouts/header');
     </div>
     <div class="address-box">
         <p>
-            <h4><?=$item->name?></h4>
-            <span><?=$item->tel?></span>
+            <h4><?=$address->name?></h4>
+            <span><?=$address->tel?></span>
         </p>
-        <p><?=$item->region->full_name?> <?=$item->address?></p>
+        <p><?=$address->region_name?> <?=$address->address?></p>
     </div>
 
     <div class="goods-list">

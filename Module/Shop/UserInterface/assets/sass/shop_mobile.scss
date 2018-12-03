@@ -605,7 +605,7 @@ footer,
 
 .checkout-box {
     .address-box {
-        padding: 0 3.75rem;
+        padding: 0 2rem 0 3.75rem;
         position: relative;
         border-bottom: 0.0625rem solid;
         .fa {
@@ -656,6 +656,7 @@ footer,
     border-top: 0.0625rem solid #ff77ff;
     .btn {
         margin: 0 0 0 0.3125rem;
+        line-height: 2.5rem;
     }
 }
 
@@ -1132,6 +1133,19 @@ footer,
                 background: #f00;
                 color: #fff;
                 padding: 0.125rem 0.4375rem;
+            }
+        }
+        &.selected {
+            .address-first {
+                background-color: transparent;
+                color: #f00;
+                &::before {
+                    font-family: "Font Awesome 5 Free";
+                    font-style: normal;
+                    font-size: 26px;
+                    font-weight: 900;
+                    content: "\f058";
+                }
             }
         }
     }

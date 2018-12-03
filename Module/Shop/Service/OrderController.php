@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service;
 
+use Module\Shop\Domain\Model\OrderAddressModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 
@@ -23,7 +24,8 @@ class OrderController extends Controller {
     public function detailAction($id) {
         $order = OrderModel::find($id);
         $goods_list = OrderGoodsModel::where('order_id', $id)->all();
-        return $this->sendWithShare()->show(compact('order', 'goods_list'));
+        $address = OrderAddressModel::where('order_id', $id)->one();
+        return $this->sendWithShare()->show(compact('order', 'goods_list', 'address'));
     }
 
     public function payAction($id) {

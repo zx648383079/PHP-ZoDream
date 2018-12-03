@@ -130,7 +130,9 @@ class CreateShopTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('status')->int()->defaultVal(0);
             $table->set('payment_id')->int()->defaultVal(0);
+            $table->set('payment_name')->varchar(30)->defaultVal(0);
             $table->set('shipping_id')->int()->defaultVal(0);
+            $table->set('shipping_name')->varchar(30)->defaultVal(0);
             $table->set('goods_amount')->decimal(8, 2)->defaultVal(0);
             $table->set('order_amount')->decimal(8, 2)->defaultVal(0);
             $table->set('discount')->decimal(8, 2)->defaultVal(0);
@@ -161,6 +163,7 @@ class CreateShopTables extends Migration {
             $table->set('order_id')->int()->notNull();
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
+            $table->set('region_name')->int()->notNull();
             $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
             $table->set('best_time')->varchar()->notNull();

@@ -488,7 +488,7 @@ footer,
         right: 0; }
 
 .checkout-box .address-box {
-  padding: 0 3.75rem;
+  padding: 0 2rem 0 3.75rem;
   position: relative;
   border-bottom: 0.0625rem solid; }
   .checkout-box .address-box .fa {
@@ -536,7 +536,8 @@ footer,
   text-align: right;
   border-top: 0.0625rem solid #ff77ff; }
   .checkout-footer .btn {
-    margin: 0 0 0 0.3125rem; }
+    margin: 0 0 0 0.3125rem;
+    line-height: 2.5rem; }
 
 .goods-gallary-box img {
   height: 22.5rem;
@@ -924,6 +925,15 @@ footer,
       background: #f00;
       color: #fff;
       padding: 0.125rem 0.4375rem; }
+  .address-list .address-item.selected .address-first {
+    background-color: transparent;
+    color: #f00; }
+    .address-list .address-item.selected .address-first::before {
+      font-family: "Font Awesome 5 Free";
+      font-style: normal;
+      font-size: 26px;
+      font-weight: 900;
+      content: "\f058"; }
 
 .order-header a {
   display: inline-block;

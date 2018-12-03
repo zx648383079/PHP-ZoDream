@@ -13,10 +13,13 @@ use Domain\Model\Model;
 /**
  * Class OrderModel
  * @property integer $id
+ * @property string $series_number
  * @property integer $user_id
  * @property integer $status
  * @property integer $payment_id
+ * @property string $payment_name
  * @property integer $shipping_id
+ * @property string $shipping_name
  * @property float $goods_amount
  * @property float $order_amount
  * @property float $discount
@@ -26,6 +29,7 @@ use Domain\Model\Model;
  * @property integer $updated_at
  * @property PaymentModel $payment
  * @property ShippingModel $shipping
+ * @property OrderAddressModel $address
  */
 class OrderModel extends Model {
 
@@ -54,10 +58,13 @@ class OrderModel extends Model {
 
     protected function rules() {
         return [
+            'series_number' => 'required|string:0,100',
             'user_id' => 'required|int',
             'status' => 'int',
             'payment_id' => 'int',
+            'payment_name' => 'string:0,30',
             'shipping_id' => 'int',
+            'shipping_name' => 'string:0,30',
             'goods_amount' => '',
             'order_amount' => '',
             'discount' => '',
@@ -71,10 +78,13 @@ class OrderModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
+            'series_number' => 'Series Number',
             'user_id' => 'User Id',
             'status' => 'Status',
             'payment_id' => 'Payment Id',
+            'payment_name' => 'Payment Name',
             'shipping_id' => 'Shipping Id',
+            'shipping_name' => 'Shipping Name',
             'goods_amount' => 'Goods Amount',
             'order_amount' => 'Order Amount',
             'discount' => 'Discount',
@@ -109,6 +119,10 @@ class OrderModel extends Model {
         return $this->hasOne(PaymentModel::class, 'id', 'payment_id');
     }
 
+    public function address() {
+        return $this->hasOne(OrderAddressModel::class, 'order_id', 'id');
+    }
+
     public function shipping() {
         return $this->hasOne(ShippingModel::class, 'id', 'shipping_id');
     }
@@ -117,16 +131,20 @@ class OrderModel extends Model {
         $carts = CartModel::getAllGoods();
         $total = 0;
         foreach ($carts as $item) {
-            $total += $item->getTotal();
+            $total += $item->getTotalAttribute();
         }
         $this->goods_amount = $total;
+        $this->order_amount = $total;
         $this->shipping_fee = $this->shipping->getFee();
         $this->pay_fee = $this->payment->getFee();
         $this->user_id = auth()->id();
+        $this->series_number = self::generateSeriesNumber();
         $this->save();
         foreach ($carts as $item) {
             OrderGoodsModel::addCartGoods($this->id, $item);
         }
+        $this->address->order_id = $this->id;
+        $this->address->save();
         return true;
     }
 
@@ -139,16 +157,18 @@ class OrderModel extends Model {
     }
 
     public function setAddress(AddressModel $address) {
-
+        $this->setRelation('address', OrderAddressModel::converter($address));
     }
 
     public function setPayment(PaymentModel $payment) {
         $this->payment_id = $payment->id;
+        $this->payment_name = $payment->name;
         $this->setRelation('payment', $payment);
     }
 
     public function setShipping(ShippingModel $shipping) {
         $this->shipping_id = $shipping->id;
+        $this->shipping_name = $shipping->name;
         $this->setRelation('shipping', $shipping);
     }
 
@@ -165,5 +185,9 @@ class OrderModel extends Model {
         $model->goods_amount = $total;
         $model->order_amount = $total;
         return $model;
+    }
+
+    public static function generateSeriesNumber() {
+        return time();
     }
 }

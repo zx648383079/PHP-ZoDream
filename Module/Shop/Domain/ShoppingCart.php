@@ -191,6 +191,14 @@ class ShoppingCart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     /**
+     * @param callable $cb
+     * @return array
+     */
+    public function filter(callable $cb) {
+        return array_filter($this->data, $cb);
+    }
+
+    /**
      * @return CartModel[]
      */
     public function getCarts() {

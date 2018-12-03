@@ -10,7 +10,7 @@ use Domain\Model\Model;
  * @property integer $order_id
  * @property integer $goods_id
  * @property string $name
- * @property string $sign
+ * @property string $series_number
  * @property string $thumb
  * @property integer $number
  * @property float $price
@@ -25,7 +25,7 @@ class OrderGoodsModel extends Model {
             'order_id' => 'required|int',
             'goods_id' => 'required|int',
             'name' => 'required|string:0,100',
-            'sign' => 'required|string:0,100',
+            'series_number' => 'required|string:0,100',
             'thumb' => 'string:0,200',
             'number' => 'int',
             'price' => '',
@@ -38,12 +38,13 @@ class OrderGoodsModel extends Model {
             'order_id' => 'Order Id',
             'goods_id' => 'Goods Id',
             'name' => 'Name',
-            'sign' => 'Sign',
+            'series_number' => 'Series Number',
             'thumb' => 'Thumb',
             'number' => 'Number',
             'price' => 'Price',
         ];
     }
+
 
 
     /**
@@ -66,7 +67,7 @@ class OrderGoodsModel extends Model {
         $model->order_id = $orderId;
         $model->name = $goods->name;
         $model->thumb = $goods->thumb;
-        $model->sign = $goods->sign;
+        $model->series_number = $goods->series_number;
         $model->price = $goods->price;
         $model->number = $number;
         $model->save();
@@ -88,7 +89,7 @@ class OrderGoodsModel extends Model {
         $model->goods_id = $cart->goods_id;
         $model->order_id = $orderId;
         $model->name = $cart->goods->name;
-        $model->sign = $cart->goods->sign;
+        $model->series_number = $cart->goods->series_number;
         $model->thumb = $cart->goods->thumb;
         $model->price = $cart->price;
         $model->number = $number;

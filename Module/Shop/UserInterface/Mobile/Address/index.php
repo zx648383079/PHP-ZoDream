@@ -24,7 +24,7 @@ $this->extend('../layouts/header', compact('header_btn'))
     <div class="swipe-box address-list">
         <?php foreach($model_list as $item):?>
         <div class="swipe-row">
-            <div class="swipe-content address-item">
+            <div class="swipe-content address-item<?=$selected == $item->id ? ' selected' : ''?>">
                 <div class="address-first">
                     <span><?=$item->name?></span>
                 </div>
