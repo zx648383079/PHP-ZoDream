@@ -10,7 +10,8 @@ class ArticleController extends Controller {
         if ($id > 0) {
             return $this->runMethodNotProcess('detail');
         }
-        return $this->show();
+        $model_list = ArticleModel::page();
+        return $this->show(compact('model_list'));
     }
 
     public function detailAction($id) {

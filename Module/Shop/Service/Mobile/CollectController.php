@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Model\CollectGoodsModel;
+use Module\Shop\Domain\Model\CollectModel;
 
 class CollectController extends Controller {
 
@@ -12,29 +12,29 @@ class CollectController extends Controller {
     }
 
     public function indexAction() {
-        $goods_list = CollectGoodsModel::with('goods')->page();
+        $goods_list = CollectModel::with('goods')->page();
         return $this->show(compact('goods_list'));
     }
 
     public function addAction($id) {
-        if (!CollectGoodsModel::exist($id)) {
-            CollectGoodsModel::add($id);
+        if (!CollectModel::exist($id)) {
+            CollectModel::add($id);
         }
         return $this->jsonSuccess();
     }
 
     public function deleteAction($id) {
-        CollectGoodsModel::remove($id);
+        CollectModel::remove($id);
         return $this->jsonSuccess();
     }
 
     public function toggleAction($id) {
         $id = intval($id);
-        if (CollectGoodsModel::exist($id)) {
-            CollectGoodsModel::remove($id);
+        if (CollectModel::exist($id)) {
+            CollectModel::remove($id);
             return $this->jsonSuccess(false);
         }
-        CollectGoodsModel::add($id);
+        CollectModel::add($id);
         return $this->jsonSuccess(true);
     }
 }
