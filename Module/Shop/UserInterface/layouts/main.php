@@ -10,6 +10,7 @@ $this->registerCssFile([
 ])->registerJsFile([
     '@jquery.min.js',
     '@jquery.dialog.min.js',
+    '@jquery.lazyload.min.js',
     '@main.min.js',
     '@shop.min.js'
 ]);

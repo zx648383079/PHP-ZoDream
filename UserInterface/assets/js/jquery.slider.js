@@ -19,11 +19,11 @@ var Eve = /** @class */ (function () {
         return this.options.hasOwnProperty('on' + event);
     };
     Eve.prototype.trigger = function (event) {
-        var _a;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
+        var _a;
         var realEvent = 'on' + event;
         if (!this.hasEvent(event)) {
             return;
@@ -221,7 +221,7 @@ var SliderItem = /** @class */ (function (_super) {
         return this.element.width() * reltive;
     };
     SliderItem.prototype._setTime = function () {
-        this._time = (this._getOption('spaceTime') + this._getOption('animationTime')) / 16;
+        this._time = (this._getOption('spacetime') + this._getOption('animationtime')) / 16;
     };
     /**
      * 添加跳转点
@@ -326,7 +326,7 @@ var SliderItem = /** @class */ (function (_super) {
             index = 0;
         }
         var instance = this;
-        var time = this._getOption('animationTime');
+        var time = this._getOption('animationtime');
         this._data.forEach(function (point, i) {
             if (i == index) {
                 point.elements[0].animate({ opacity: 1 }, time, 'swing', function () {
@@ -473,4 +473,3 @@ var SliderDefaultOptions = /** @class */ (function () {
         return new Slider(this, options);
     };
 })(jQuery);
-
