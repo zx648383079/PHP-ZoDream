@@ -7,6 +7,7 @@ use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
 use Module\Shop\Domain\Model\ShippingModel;
+use Module\Shop\Module;
 
 /**
  * 收银员
@@ -15,10 +16,10 @@ use Module\Shop\Domain\Model\ShippingModel;
 class CashierController extends Controller {
 
     public function indexAction() {
-        $goods_list = $this->getGoodsList();
+        $goods_list = Module::cart()->getCarts();
         $address = AddressModel::where('user_id', auth()->id())->one();
         $order = OrderModel::preview($goods_list);
-        $shipping_list = ShippingModel::getByAddress($address);
+        $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
         $payment_list = PaymentModel::all();
         return $this->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list'));
     }

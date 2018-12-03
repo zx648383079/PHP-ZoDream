@@ -881,3 +881,13 @@ function bindShipping(baseUri: string) {
     BASE_URI = baseUri;
     let shipping = new Delivery($('.regional-table'));
 }
+$(function() {
+    $(document).on('click', '[data-type=toggle]', function() {
+        let that = $(this);
+        postJson(that.data('url'), function(data) {
+            if (data.code == 200) {
+                that.toggleClass('active');
+            }
+        });
+    });
+});

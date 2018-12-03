@@ -72,6 +72,14 @@ class GoodsController extends Controller {
         ]);
     }
 
+    public function toggleAction($id, $name) {
+        if ($id < 1 || !in_array($name, ['is_best', 'is_hot', 'is_new'])) {
+            return $this->jsonFailure('信息错误！');
+        }
+        GoodsModel::where('id', $id)->updateBool($name);
+        return $this->jsonSuccess();
+    }
+
     public function attributeAction($group_id, $goods_id = 0) {
         $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position asc')->orderBy('type asc')->asArray()->all();
         foreach ($attr_list as &$item) {

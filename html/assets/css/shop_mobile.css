@@ -464,10 +464,12 @@ footer,
 
 .checkout-box .goods-list,
 .order-box .goods-list {
-  text-align: left; }
+  text-align: left;
+  display: block; }
   .checkout-box .goods-list .goods-item,
   .order-box .goods-list .goods-item {
-    position: relative; }
+    position: relative;
+    background-color: #fff; }
     .checkout-box .goods-list .goods-item .goods-img,
     .order-box .goods-list .goods-item .goods-img {
       display: inline-block; }

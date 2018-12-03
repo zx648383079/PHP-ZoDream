@@ -85,6 +85,10 @@ class OrderModel extends Model {
         ];
     }
 
+    public function user() {
+        return $this->hasOne(config('auth.model'), 'id', 'user_id');
+    }
+
     public function goods() {
         return $this->hasMany(OrderGoodsModel::class,  'order_id', 'id');
     }
@@ -156,7 +160,7 @@ class OrderModel extends Model {
         $model = new static;
         $total = 0;
         foreach ($goods_list as $item) {
-            $total += $item->getTotal();
+            $total += $item->getTotalAttribute();
         }
         $model->goods_amount = $total;
         $model->order_amount = $total;

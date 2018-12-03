@@ -1,3 +1,6 @@
+.search .form-horizontal {
+  display: inline-block; }
+
 .place-div label {
   font-weight: 400;
   font-size: 1.4rem; }
@@ -182,5 +185,22 @@
   color: #555;
   box-shadow: none;
   font-size: 14px; }
+
+.toggle-box {
+  cursor: pointer; }
+  .toggle-box .fa::before {
+    content: "\f00d"; }
+  .toggle-box.active {
+    color: #f00; }
+    .toggle-box.active .fa::before {
+      content: "\f00c"; }
+
+@media screen and (max-width: 769px) {
+  .auto-hide {
+    display: none; }
+  table .btn,
+  .table .btn {
+    padding: 0 10px;
+    margin: 0; } }
 
 /*# sourceMappingURL=shop_admin.css.map */

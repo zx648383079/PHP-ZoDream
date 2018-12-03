@@ -4,6 +4,12 @@ $red: red;
 $white: #fff;
 $color_celeste_approx: #ccc;
 
+.search {
+    .form-horizontal {
+        display: inline-block;
+    }
+}
+
 .place-div {
 	label {
 		font-weight: 400;
@@ -237,4 +243,34 @@ $color_celeste_approx: #ccc;
         box-shadow: none;
         font-size: 14px;
     }
+}
+
+.toggle-box {
+	cursor: pointer;
+	.fa {
+		&::before {
+			content: "\f00d";
+		}
+	}
+	&.active {
+		color: #f00;
+		.fa {
+			&::before {
+				content: "\f00c";
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 769px) {
+	.auto-hide {
+		display: none;
+	}
+	table,
+	.table {
+		.btn {
+			padding: 0 10px;
+			margin: 0;
+		}
+	}
 }

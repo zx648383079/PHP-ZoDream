@@ -579,8 +579,10 @@ footer,
 .order-box {
     .goods-list {
         text-align: left;
+        display: block;
         .goods-item {
             position: relative;
+            background-color: #fff;
             .goods-img {
                 display: inline-block;
                 img {
