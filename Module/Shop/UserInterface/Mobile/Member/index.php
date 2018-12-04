@@ -28,19 +28,24 @@ $this->extend('../layouts/header', compact('header_btn'));
             ~
         </div>
     </div>
-    <div class="menu-grid"><a href="<?=$this->url('./mobile/order')?>" class="item">
+    <div class="menu-grid">
+        <a href="<?=$this->url('./mobile/order')?>" class="item">
             <i class="fa fa-users" aria-hidden="true"></i>
             订单
-        </a><a href="<?=$this->url('./mobile/collect')?>" class="item">
+        </a>
+        <a href="<?=$this->url('./mobile/collect')?>" class="item">
             <i class="fa fa-bookmark" aria-hidden="true"></i>
             关注
-        </a><a href="<?=$this->url('./mobile/message')?>" class="item">
+        </a>
+        <a href="<?=$this->url('./mobile/message')?>" class="item">
             <i class="fa fa-comments" aria-hidden="true"></i>
             消息
-        </a><a href="" class="item">
+        </a>
+        <a href="" class="item">
             <i class="fa fa-shield-alt" aria-hidden="true"></i>
             安全
-        </a><a href="<?=$this->url('./mobile/member/profile')?>" class="item">
+        </a>
+        <a href="<?=$this->url('./mobile/member/profile')?>" class="item">
             <i class="fa fa-cog" aria-hidden="true"></i>
             设置
         </a>
@@ -48,16 +53,20 @@ $this->extend('../layouts/header', compact('header_btn'));
     <div class="menu-large">
         <a href="" class="item">
             <i class="fa fa-money-bill" aria-hidden="true"></i>
-            待付款
-        </a><a href="" class="item">
+            <span>待付款</span>
+            <i class="tip">10</i>
+        </a>
+        <a href="" class="item">
             <i class="fa fa-truck" aria-hidden="true"></i>
-            待收货
-        </a><a href="" class="item">
+            <span>待收货</span>
+        </a>
+        <a href="" class="item">
             <i class="fa fa-comment" aria-hidden="true"></i>
-            待评价
-        </a><a href="" class="item">
+            <span>待评价</span>
+        </a>
+        <a href="" class="item">
             <i class="fa fa-exchange-alt" aria-hidden="true"></i>
-           退换货
+           <span>退换货</span>
         </a>
     </div>
 

@@ -49,7 +49,7 @@ class Module extends BaseModule {
     protected function invokeWithPlatform($module, $uris): RestResponse {
         app()->instance('app::class', Api::class);
         app()->register('auth', JWTAuth::class);
-        $platform = PlatformModel::find(app('request')->get('appid'));
+        $platform = PlatformModel::findByAppId(app('request')->get('appid'));
         if (empty($platform)) {
             return RestResponse::createWithAuto([
                 'code' => 404,

@@ -1,4 +1,4 @@
-<footer>
+<footer class="tab-bar">
     <a href="<?=$this->url('./mobile')?>" class="active">
         <i class="fa fa-home" aria-hidden="true"></i>
         首页

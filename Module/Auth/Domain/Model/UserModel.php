@@ -43,6 +43,8 @@ class UserModel extends BaseModel {
         '女'
     ];
 
+    protected $hidden = ['password'];
+
 	public static function tableName() {
         return 'user';
     }

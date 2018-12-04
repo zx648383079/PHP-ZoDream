@@ -38,22 +38,71 @@ $this->registerCssFile('@slider.css')
         <?php endforeach;?>
     </div>
 
-    <div class="goods-list">
-        <?php foreach($hot_list as $item):?>
-        <div class="item-view">
-            <div class="item-img">
-                <a href="<?=$this->url('./mobile/goods', ['id' => $item->id])?>"><img src="<?=$item->thumb?>" alt=""></a>
+    <?php if(!empty($new_list)):?>
+    <div class="home-panel">
+        <div class="panel-header">最新商品</div>
+        <div class="goods-list">
+            <?php foreach($new_list as $item):?>
+            <div class="item-view">
+                <div class="item-img">
+                    <a href="<?=$this->url('./mobile/goods', ['id' => $item->id])?>"><img src="<?=$item->thumb?>" alt=""></a>
+                </div>
+                <div class="item-title">
+                    <?=$item->name?>
+                </div>
+                <div class="item-actions">
+                    <span class="item-price"><?=$item->price?></span>
+                    <span>加入购物车</span>
+                </div>
             </div>
-            <div class="item-title">
-                <?=$item->name?>
-            </div>
-            <div class="item-actions">
-                <span class="item-price"><?=$item->price?></span>
-                <span>加入购物车</span>
-            </div>
+            <?php endforeach;?>
         </div>
-        <?php endforeach;?>
     </div>
+    <?php endif;?>
+
+    <?php if(!empty($hot_list)):?>
+    <div class="home-panel">
+        <div class="panel-header">热门商品</div>
+        <div class="goods-list">
+            <?php foreach($hot_list as $item):?>
+            <div class="item-view">
+                <div class="item-img">
+                    <a href="<?=$this->url('./mobile/goods', ['id' => $item->id])?>"><img src="<?=$item->thumb?>" alt=""></a>
+                </div>
+                <div class="item-title">
+                    <?=$item->name?>
+                </div>
+                <div class="item-actions">
+                    <span class="item-price"><?=$item->price?></span>
+                    <span>加入购物车</span>
+                </div>
+            </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+    <?php endif;?>
+
+    <?php if(!empty($best_list)):?>
+    <div class="home-panel">
+        <div class="panel-header">推荐商品</div>
+        <div class="goods-list">
+            <?php foreach($best_list as $item):?>
+            <div class="item-view">
+                <div class="item-img">
+                    <a href="<?=$this->url('./mobile/goods', ['id' => $item->id])?>"><img src="<?=$item->thumb?>" alt=""></a>
+                </div>
+                <div class="item-title">
+                    <?=$item->name?>
+                </div>
+                <div class="item-actions">
+                    <span class="item-price"><?=$item->price?></span>
+                    <span>加入购物车</span>
+                </div>
+            </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+    <?php endif;?>
 
 </div>
 

@@ -17,6 +17,7 @@ class OAuthModel extends Model {
 
     const TYPE_QQ = 'qq';
     const TYPE_WX = 'wx';
+    const TYPE_WX_MINI = 'wx_mini'; // 微信小程序
     const TYPE_WEIBO = 'weibo';
     const TYPE_TAOBAO = 'taobao';
     const TYPE_ALIPAY = 'alipay';

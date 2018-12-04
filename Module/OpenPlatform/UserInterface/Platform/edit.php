@@ -18,7 +18,7 @@ $this->registerJs($js);
         <?=Form::text('appid')->readonly(true)?>
         <?=Form::text('secret')->readonly(true)->size(40)?>
         <?=Form::select('sign_type', $model->sign_type_list, true)?>
-        <?=Form::textarea('sign_key')?>
+        <?=Form::textarea('sign_key')->tip('请输入签名密钥或签名组成字段请用“+”链接,例如：appid+timestamp+secret')?>
         <?=Form::select('encrypt_type', $model->encrypt_type_list, true)?>
         <?=Form::textarea('public_key')?>
     <?php endif;?>

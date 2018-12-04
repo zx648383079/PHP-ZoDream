@@ -2,6 +2,8 @@
 namespace Module\OpenPlatform\Domain\Model;
 
 use Domain\Model\Model;
+use Module\OpenPlatform\Domain\Hmac;
+use Zodream\Helpers\Arr;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 
 /**
@@ -90,11 +92,43 @@ class PlatformModel extends Model {
     }
 
     public function sign(array $data) {
+        if ($this->sign_type < 1) {
+            return '';
+        }
+        $content = $this->getSignContent($data);
+        if ($this->sign_type == 1) {
+            return md5($content);
+        }
         return '';
     }
 
+    protected function getSignContent(array $data) {
+        $data['appid'] = $this->appid;
+        $data['secret'] = $this->secret;
+        if (!strpos($this->sign_key, '+') > 0) {
+            ksort($data);
+            return implode('', array_keys($data)).$this->sign_key;
+        }
+        $args = [];
+        foreach (explode('+', $this->sign_key) as $key) {
+            if (empty($key)) {
+                $args[] = '+';
+                continue;
+            }
+            if (isset($data[$key])) {
+                $args[] = $data[$key];
+                continue;
+            }
+            $args[] = app('request')->get($key);
+        }
+        return implode('', $args);
+    }
+
     public function verify(array $data, $sign) {
-        return true;
+        if ($this->sign_type < 1) {
+            return true;
+        }
+        return $this->sign($data) == $sign;
     }
 
     public function encrypt($data) {
@@ -107,14 +141,17 @@ class PlatformModel extends Model {
 
     public function ready(RestResponse $response) {
         $data = $response->getData();
+        if (!Arr::isAssoc($data)) {
+            $data = compact('data');
+        }
         if ($this->encrypt_type > 0) {
             $data['encrypt'] = $this->encrypt($response->text());
-            $data['encrypt_type'] = $this->encrypt_type_list[$this->encrypt_type];
+            //$data['encrypt_type'] = $this->encrypt_type_list[$this->encrypt_type];
         }
         $data['appid'] = $this->appid;
         $data['timestamp'] = date('Y-m-d H:i:s');
         if ($this->sign_type > 0) {
-            $data['sign_type'] = $this->sign_type_list[$this->sign_type];
+            //$data['sign_type'] = $this->sign_type_list[$this->sign_type];
             $data['sign'] = $this->sign($data);
         }
         return $response->setData($data);
@@ -133,5 +170,13 @@ class PlatformModel extends Model {
         }
         app('request')->append($data);
         return true;
+    }
+
+    /**
+     * @param $id
+     * @return PlatformModel
+     */
+    public static function findByAppId($id) {
+        return static::where('appid', $id)->first();
     }
 }
