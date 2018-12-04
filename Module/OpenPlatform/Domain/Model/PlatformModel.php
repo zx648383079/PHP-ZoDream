@@ -3,6 +3,7 @@ namespace Module\OpenPlatform\Domain\Model;
 
 use Domain\Model\Model;
 use Module\OpenPlatform\Domain\Hmac;
+use Zodream\Database\Model\UserModel;
 use Zodream\Helpers\Arr;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 
@@ -170,6 +171,34 @@ class PlatformModel extends Model {
         }
         app('request')->append($data);
         return true;
+    }
+
+    /**
+     * 生成并保存token
+     * @param UserModel $user
+     * @return string
+     * @throws \Exception
+     */
+    public function generateToken(UserModel $user) {
+        $token = auth()->createToken($user);
+        UserTokenModel::create([
+            'user_id' => $user->getIdentity(),
+            'platform_id' => $this->id,
+            'token' => $token,
+            'expired_at' => time() + 20160
+        ]);
+        return $token;
+    }
+
+    /**
+     * 验证token
+     * @param $token
+     * @return bool
+     */
+    public function verifyToken($token) {
+        $count = static::where('platform_id', $this->id)
+            ->where('token', $token)->where('expired_at', '>', time())->count();
+        return $count > 0;
     }
 
     /**

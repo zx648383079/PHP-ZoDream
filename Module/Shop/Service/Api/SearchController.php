@@ -1,6 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Module\Shop\Domain\Model\GoodsModel;
+
 class SearchController extends Controller {
 
     public function indexAction() {
@@ -11,5 +13,12 @@ class SearchController extends Controller {
         return $this->render([
             '女装', '童装', '玩具'
         ]);
+    }
+
+    public function tipsAction($keywords) {
+        $data = GoodsModel::when(!empty($keywords), function ($query) {
+                GoodsModel::search($query, 'name');
+            })->limit(10)->pluck('name');
+        return $this->render($data);
     }
 }
