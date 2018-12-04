@@ -4,7 +4,7 @@
  * @param data 
  * @param callback 
  */
-let postJson = function(url: string, data: any, callback?: (data: any)=>any) {
+function postJson(url: string, data: any, callback?: (data: any)=>any) {
     if (typeof data == 'function') {
         callback = data;
         data = {};
@@ -24,7 +24,7 @@ function ajaxForm(url, data, callback?: (data: any)=>any) {
  * 转化请求响应结果
  * @param data 
  */
-let parseAjax = function(data) {
+function parseAjax(data) {
     if (data.code != 200) {
         Dialog.tip(data.errors || '操作执行失败！');
         return;
@@ -32,11 +32,19 @@ let parseAjax = function(data) {
     Dialog.tip(data.messages || '操作执行完成！');
     if (data.data && data.data.refresh) {
         setTimeout(() => {
+            if (typeof parseAjaxUri == 'function') {
+                parseAjaxUri(window.location.href);
+                return;
+            }
             window.location.reload();
         }, 500);
     }
     if (data.data && data.data.url) {
         setTimeout(() => {
+            if (typeof parseAjaxUri == 'function') {
+                parseAjaxUri(data.data.url);
+                return;
+            }
             window.location.href = data.data.url;
         }, 500);
     }

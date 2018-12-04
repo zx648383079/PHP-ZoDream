@@ -15,7 +15,7 @@ if(isset($project_list)) {
         [
             '项目列表',
             false,
-            'fa fa-money',
+            'fa fa-money-bill',
             [
 
             ],
