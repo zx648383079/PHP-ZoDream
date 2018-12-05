@@ -309,7 +309,10 @@ footer,
     border-bottom: 1px solid #666;
     border-top: 1px solid #666;
     line-height: 40px;
-    text-align: center; }
+    text-align: center;
+    background-color: #fff; }
+  .home-panel .goods-list {
+    margin-top: 0; }
 
 .swipe-box {
   overflow: hidden; }

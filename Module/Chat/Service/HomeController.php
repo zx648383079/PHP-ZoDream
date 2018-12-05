@@ -1,20 +1,11 @@
 <?php
 namespace Module\Chat\Service;
 
-
 use Module\Chat\Domain\Model\FriendGroupModel;
-use Module\ModuleController;
 
-
-class HomeController extends ModuleController {
+class HomeController extends Controller {
 
     public $layout = 'main';
-
-    protected function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
 
     public function indexAction() {
         $user = auth()->user();

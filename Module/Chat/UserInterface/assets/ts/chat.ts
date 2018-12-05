@@ -70,6 +70,17 @@ abstract class ChatBaseBox {
         return this;
     }
 
+    /**
+     * center
+     */
+    public center() {
+        this.box.css({
+            left: Math.max(0, ($(window).width() - this.box.outerWidth())/ 2) + "px", 
+            top: Math.max(0, ($(window).height() - this.box.outerHeight())/ 2) + "px"
+        });
+        return this;
+    }
+
     public hide() {
         this.box.hide();
     }
@@ -544,7 +555,7 @@ class ChatUserBox extends ChatBaseBox {
         });
 
         this.box.on('click', '.dialog-header .fa-plus', function() {
-            _this.parent.searchBox.show();
+            _this.parent.searchBox.center().show();
         });
         this.box.on('click', '.dialog-tab .dialog-tab-header .dialog-tab-item', function() {
             let $this = $(this);
@@ -588,6 +599,32 @@ class ChatRoom {
         this.searchBox = new ChatSearchBox(this.target.find('.dialog-search-box'), this);
         this.chatBox = new ChatMessageBox(this.target.find('.dialog-chat-room'), this);
     }
+
+    /**
+     * toggleMode
+     */
+    public toggleMode() {
+        if (this.target.hasClass('dialog-fixed')) {
+            return this.page();
+        }
+        return this.fixed();
+    }
+
+    /**
+     * fixed
+     */
+    public fixed() {
+        this.target.addClass('dialog-fixed').removeClass('dialog-chat-page');
+        return this;
+    }
+
+    /**
+     * page
+     */
+    public page() {
+        this.target.removeClass('dialog-fixed').addClass('dialog-chat-page');
+        return this;
+    }
 }
 
 const USER_MENU: Array<ChatMenuItem> = [
@@ -605,13 +642,13 @@ const USER_MENU: Array<ChatMenuItem> = [
     },
 ];
 
-let room = new ChatRoom($('.dialog-chat-page')),
-    fixed_room = new ChatRoom($('.dialog-fixed'));
 
-
-
-$(function() {
+function registerChat(baseUri: string) {
+    let room = new ChatRoom($('.dialog-chat'));
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
     });
-});
+    $('#toggle-btn').click(function() {
+        room.toggleMode();
+    });
+}

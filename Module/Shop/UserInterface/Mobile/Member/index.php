@@ -4,11 +4,13 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '个人中心';
 
-$header_btn = <<<HTML
+if (!auth()->guest()) {
+    $header_btn = <<<HTML
 <a class="right" href="/auth/logout">
     <i class="fa fa-sign-out-alt"></i>
 </a>
 HTML;
+}
 
 $this->extend('../layouts/header', compact('header_btn'));
 ?>

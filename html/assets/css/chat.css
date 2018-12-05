@@ -37,7 +37,8 @@ body {
 .dialog-chat .dialog-box {
   background: #fff;
   position: absolute;
-  display: none; }
+  display: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); }
   .dialog-chat .dialog-box .dialog-header {
     position: relative; }
     .dialog-chat .dialog-box .dialog-header .dialog-action {
@@ -145,10 +146,8 @@ body {
       transition: all 0.3s ease-in-out;
       border-radius: 0rem; }
     .dialog-chat .dialog-chat-room .dialog-message-box::-webkit-scrollbar-track {
-      -webkit-border-radius: 0rem;
       border-radius: 0rem; }
     .dialog-chat .dialog-chat-room .dialog-message-box::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 0rem;
       border-radius: 0rem;
       background: rgba(0, 0, 0, 0.5); }
       .dialog-chat .dialog-chat-room .dialog-message-box::-webkit-scrollbar-thumb:hover {
@@ -219,7 +218,8 @@ body {
       text-align: center; }
   .dialog-chat .dialog-chat-room .dialog-message-text {
     height: 5rem;
-    overflow-y: auto; }
+    overflow-y: auto;
+    outline: none; }
     .dialog-chat .dialog-chat-room .dialog-message-text::-webkit-scrollbar {
       height: 0.375rem;
       width: 0.375rem;
@@ -228,10 +228,8 @@ body {
       transition: all 0.3s ease-in-out;
       border-radius: 0rem; }
     .dialog-chat .dialog-chat-room .dialog-message-text::-webkit-scrollbar-track {
-      -webkit-border-radius: 0rem;
       border-radius: 0rem; }
     .dialog-chat .dialog-chat-room .dialog-message-text::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 0rem;
       border-radius: 0rem;
       background: rgba(0, 0, 0, 0.5); }
       .dialog-chat .dialog-chat-room .dialog-message-text::-webkit-scrollbar-thumb:hover {
@@ -244,7 +242,9 @@ body {
     text-align: right; }
     .dialog-chat .dialog-chat-room .dailog-message-action button {
       width: 6.25rem;
-      line-height: 1.875rem; }
+      line-height: 2.25rem;
+      background-color: #7676;
+      border: 0; }
 
 .dialog-chat .dialog-search-box {
   width: 31.25rem; }
@@ -347,7 +347,8 @@ body {
   margin: 0 auto; }
   .dialog-chat.dialog-chat-page .dialog-chat-box,
   .dialog-chat.dialog-chat-page .dialog-chat-room {
-    display: block; }
+    display: block;
+    box-shadow: none; }
   .dialog-chat.dialog-chat-page .dialog-chat-box {
     width: 15.625rem; }
     .dialog-chat.dialog-chat-page .dialog-chat-box .dialog-header .dialog-action .fa-minus,
@@ -364,10 +365,8 @@ body {
         transition: all 0.3s ease-in-out;
         border-radius: 0rem; }
       .dialog-chat.dialog-chat-page .dialog-chat-box .dialog-tab .dialog-tab-box .dialog-tab-item::-webkit-scrollbar-track {
-        -webkit-border-radius: 0rem;
         border-radius: 0rem; }
       .dialog-chat.dialog-chat-page .dialog-chat-box .dialog-tab .dialog-tab-box .dialog-tab-item::-webkit-scrollbar-thumb {
-        -webkit-border-radius: 0rem;
         border-radius: 0rem;
         background: rgba(0, 0, 0, 0.5); }
         .dialog-chat.dialog-chat-page .dialog-chat-box .dialog-tab .dialog-tab-box .dialog-tab-item::-webkit-scrollbar-thumb:hover {

@@ -3,11 +3,18 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream Chat';
+$url = $this->url('./');
+$js = <<<JS
+registerChat('{$url}')
+JS;
+$this->registerJs($js);
 ?>
 
-<div class="dialog-chat dialog-chat-page">
+<button id="toggle-btn">切换悬浮/固定</button>
+
+<div class="dialog-chat dialog-fixed">
     <!-- 会员列表 -->
-    <div class="dialog-box dialog-chat-box">
+    <div class="dialog-box dialog-chat-box dialog-min" style="display: block">
         <div class="dialog-header">
             <div class="dialog-action">
                 <i class="fa fa-plus"></i>
@@ -83,191 +90,6 @@ $this->title = 'ZoDream Chat';
                         </div>
                     </div>
                     <?php endforeach;?>
-                    
-
-                </div>
-                <div class="dialog-tab-item">
-                    <div class="dialog-user">
-                        <div class="dialog-user-avatar">
-                            <img src="./image/avatar.jpg" alt="">
-                        </div>
-                        <div class="dialog-user-info">
-                            <p>
-                                <span class="name">12</span>
-                                <span class="time">2m ago</span>
-                            </p>
-                            <p>
-                                <span class="content">121312312323</span>
-                                <span class="count">1</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="dialog-menu">
-            <ul>
-                <li>
-                    <i class="fa fa-eye"></i>
-                    查看资料</li>
-                <li>
-                    <i class="fa fa-bookmark"></i>
-                    移动好友</li>
-                <li>
-                    <i class="fa fa-trash"></i>
-                    删除好友</li>
-            </ul>
-        </div>
-    </div>
-    <!-- 聊天室 -->
-    <div class="dialog-box dialog-chat-room">
-        <div class="dialog-header">
-            <div class="dialog-title">与 xx 聊天中</div>
-            <div class="dialog-action">
-                <i class="fa fa-minus"></i>
-                <i class="fa fa-close"></i>
-            </div>
-        </div>
-        <div class="dialog-message-box">
-            <p class="message-more">加载更多</p>
-            <div class="message-left">
-                <img class="avatar" src="./image/avatar.jpg">
-                <div class="content">
-                    1312323213213123g754513333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
-                </div>
-            </div>
-            <p class="message-line">2M ago</p>
-            <div class="message-right">
-                <img class="avatar" src="<?=$user->avatar?>">
-                <div class="content">
-                    1312323213213123
-                </div>
-            </div>
-            <p class="message-line">2M ago</p>
-            <div class="message-right">
-                <img class="avatar" src="<?=$user->avatar?>">
-                <div class="content">
-                    1312323213213123
-                </div>
-            </div>
-            <p class="message-tip">对方已下线</p>
-        </div>
-        <div class="dialog-message-tools">
-            <i class="fa fa-smile-o"></i>
-            <i class="fa fa-picture-o"></i>
-            <i class="fa fa-camera"></i>
-            <i class="fa fa-video-camera"></i>
-            <i class="fa fa-file"></i>
-            <i class="fa fa-gift"></i>
-        </div>
-        <div class="dialog-message-editor">
-            <div class="dialog-message-text" contenteditable="true">
-
-            </div>
-            <div class="dailog-message-action">
-                <button>发送</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="dialog-chat dialog-fixed">
-    <!-- 会员列表 -->
-    <div class="dialog-box dialog-chat-box dialog-min" style="display: block">
-        <div class="dialog-header">
-            <div class="dialog-action">
-                <i class="fa fa-plus"></i>
-                <i class="fa fa-minus"></i>
-                <i class="fa fa-close"></i>
-            </div>
-        </div>
-        <div class="dialog-info">
-            <div class="dialog-info-avatar">
-                <img src="./image/avatar.jpg" alt="">
-            </div>
-            <div class="dialog-info-name">
-                <h3>123</h3>
-                <p>......</p>
-            </div>
-            <div class="dialog-message-count">
-                99
-            </div>
-        </div>
-        <div class="dialog-tab">
-            <div class="dialog-tab-header">
-                <div class="dialog-tab-item active">
-                    <i class="fa fa-comment"></i>
-                </div><div class="dialog-tab-item">
-                    <i class="fa fa-user"></i>
-                </div><div class="dialog-tab-item">
-                    <i class="fa fa-comments"></i>
-                </div>
-            </div>
-            <div class="dialog-tab-box">
-                <div class="dialog-tab-item active">
-                    <div class="dialog-user">
-                        <div class="dialog-user-avatar">
-                            <img src="./image/avatar.jpg" alt="">
-                        </div>
-                        <div class="dialog-user-info">
-                            <p>
-                                <span class="name">12</span>
-                                <span class="time">2m ago</span>
-                            </p>
-                            <p>
-                                <span class="content">121312312323</span>
-                                <span class="count">1</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="dialog-tab-item">
-                    <div class="dialog-panel expanded">
-                        <div class="dialog-panel-header">
-                            <i class="dialog-panel-icon"></i>
-                            <span>my friends (1 / 29)</span>
-                        </div>
-                        <div class="dialog-panel-box">
-                            <div class="dialog-user">
-                                <div class="dialog-user-avatar">
-                                    <img src="./image/avatar.jpg" alt="">
-                                </div>
-                                <div class="dialog-user-info">
-                                    <p>
-                                        <span class="name">12</span>
-                                        <span class="time">2m ago</span>
-                                    </p>
-                                    <p>
-                                        <span class="content">121312312323</span>
-                                        <span class="count">1</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dialog-panel">
-                        <div class="dialog-panel-header">
-                            <i class="fa fa-chevron-right"></i>
-                            <span>my friends (1 / 29)</span>
-                        </div>
-                        <div class="dialog-panel-box">
-                            <div class="dialog-user">
-                                <div class="dialog-user-avatar">
-                                    <img src="./image/avatar.jpg" alt="">
-                                </div>
-                                <div class="dialog-user-info">
-                                    <p>
-                                        <span class="name">12</span>
-                                        <span class="time">2m ago</span>
-                                    </p>
-                                    <p>
-                                        <span class="content">121312312323</span>
-                                        <span class="count">1</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="dialog-tab-item">
                     <div class="dialog-user">
@@ -336,10 +158,10 @@ $this->title = 'ZoDream Chat';
             <p class="message-tip">对方已下线</p>
         </div>
         <div class="dialog-message-tools">
-            <i class="fa fa-smile-o"></i>
-            <i class="fa fa-picture-o"></i>
+            <i class="fa fa-smile"></i>
+            <i class="fa fa-image"></i>
             <i class="fa fa-camera"></i>
-            <i class="fa fa-video-camera"></i>
+            <i class="fa fa-video"></i>
             <i class="fa fa-file"></i>
             <i class="fa fa-gift"></i>
         </div>

@@ -80,6 +80,7 @@ body {
         background: #fff;
         position: absolute;
         display: none;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         .dialog-header {
             position: relative;
             .dialog-action {
@@ -316,13 +317,16 @@ body {
         .dialog-message-text {
             height: 5rem;
             overflow-y: auto;
+            outline: none;
             @include scrollbar();
         }
         .dailog-message-action {
             text-align: right;
             button {
                 width: 6.25rem;
-                line-height: 1.875rem;
+                line-height: 2.25rem;
+                background-color: #7676;
+                border: 0;
             }
         }
     }
@@ -454,6 +458,7 @@ body {
         .dialog-chat-box,
         .dialog-chat-room {
             display: block;
+            box-shadow: none;
         }
         .dialog-chat-box {
             width: 15.625rem;
