@@ -6,7 +6,7 @@ $this->title = '个人中心';
 
 $header_btn = <<<HTML
 <a class="right" href="/auth/logout">
-    <i class="fa fa-sign-out"></i>
+    <i class="fa fa-sign-out-alt"></i>
 </a>
 HTML;
 

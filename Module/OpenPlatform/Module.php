@@ -43,10 +43,10 @@ class Module extends BaseModule {
     /**
      * @param $module
      * @param $uris
-     * @return RestResponse
+     * @return RestResponse|mixed
      * @throws \Exception
      */
-    protected function invokeWithPlatform($module, $uris): RestResponse {
+    protected function invokeWithPlatform($module, $uris) {
         app()->instance('app::class', Api::class);
         app()->register('auth', JWTAuth::class);
         $platform = PlatformModel::findByAppId(app('request')->get('appid'));
@@ -64,6 +64,9 @@ class Module extends BaseModule {
         }
         app()->instance('platform', $platform);
         $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');
-        return $platform->ready($data);
+        if ($data instanceof RestResponse) {
+            return $platform->ready($data);
+        }
+        return $data;
     }
 }
