@@ -46,6 +46,12 @@ class HomeController extends ModuleController {
         return $this->jsonSuccess($count > 0);
     }
 
+    /**
+     * @route login
+     * @method GET,POST
+     * @return \Zodream\Infrastructure\Http\Response
+     * @throws \Exception
+     */
     public function loginAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
