@@ -520,9 +520,16 @@ footer,
 }
 
 .category-page {
-    display: grid;
-    grid-template-columns: 90px 1fr;
+    position: relative;
+    padding-left: 90px;
     .category-menu {
+        overflow-y: auto;
+        position: fixed;
+        width: 90px;
+        z-index: 3;
+        left: 0;
+        bottom: 48px;
+        top: 44px;
         display: block;
         box-sizing: border-box;
         border-right: #e2e2e2 0.0625rem solid;
