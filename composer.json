@@ -1,7 +1,7 @@
 {
   "name" : "ZoDream",
-  "description": "ZoDream PPHP Framework",
-  "version" : "3.0",
+  "description": "ZoDream PHP Framework",
+  "version" : "4.0",
   "homepage": "https://zodream.cn",
   "license": "MIT",
   "require" : {
