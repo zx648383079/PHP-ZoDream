@@ -53,7 +53,7 @@ $this->extend('layouts/header', [
 <div class="book-title book-mobile-inline">
     <ul class="book-nav">
         <li class="book-navicon">
-            <i class="fa fa-navicon"></i>
+            <i class="fa fa-bars"></i>
         </li>
         <li class="book-back"><a href="<?=$this->url('blog')?>">返回</a></li>
         <?php if ($blog->previous):?>

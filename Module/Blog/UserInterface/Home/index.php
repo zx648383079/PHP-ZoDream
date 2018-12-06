@@ -58,7 +58,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     <div class="book-title">
         <ul class="book-nav">
             <li class="book-navicon">
-                <i class="fa fa-navicon"></i>
+                <i class="fa fa-bars"></i>
             </li>
             <li>
                 <a href="<?=$this->url('/')?>">首页</a>
