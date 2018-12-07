@@ -114,6 +114,9 @@ $(function() {
         $(".header-nav .nav-dropdown").hide();
         $(this).find('.nav-dropdown').show();
     });
+    $(".scroll-nav .nav-arrow").click(function() {
+        $(this).closest('.scroll-nav').toggleClass('unfold');
+    });
     $(".header-nav").mouseleave(function() {
         $(this).find('.nav-dropdown').hide();
     });

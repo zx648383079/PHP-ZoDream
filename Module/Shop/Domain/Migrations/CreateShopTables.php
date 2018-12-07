@@ -14,6 +14,8 @@ use Module\Shop\Domain\Model\CategoryModel;
 use Module\Shop\Domain\Model\CollectModel;
 use Module\Shop\Domain\Model\CommentImageModel;
 use Module\Shop\Domain\Model\CommentModel;
+use Module\Shop\Domain\Model\CouponLogModel;
+use Module\Shop\Domain\Model\CouponModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
 use Module\Shop\Domain\Model\GoodsGalleryModel;
 use Module\Shop\Domain\Model\GoodsIssue;
@@ -55,6 +57,31 @@ class CreateShopTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
+            $table->timestamps();
+        });
+        Schema::createTable(CouponModel::tableName(), function(Table $table) {
+            $table->setComment('优惠券');
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('thumb')->varchar()->defaultVal('');
+            $table->set('type')->tinyint(2)->defaultVal(0)->comment('优惠类型');
+            $table->set('rule')->tinyint(2)->defaultVal(0)->comment('使用的商品');
+            $table->set('rule_value')->tinyint(2)->defaultVal(0)->comment('使用的商品');
+            $table->set('min_money')->decimal(8, 2)->defaultVal(0)->comment('满多少可用');
+            $table->set('money')->decimal(8, 2)->defaultVal(0)->comment('几折或优惠金额');
+            $table->set('send_type')->int()->defaultVal(0)->comment('发放类型');
+            $table->set('send_value')->int()->defaultVal(0)->comment('发放条件或数量');
+            $table->set('every_amount')->int()->defaultVal(0)->comment('每个用户能领取数量');
+            $table->timestamps();
+        });
+        Schema::createTable(CouponLogModel::tableName(), function(Table $table) {
+            $table->setComment('优惠券记录');
+            $table->set('id')->pk()->ai();
+            $table->set('coupon_id')->int()->notNull();
+            $table->set('serial_number')->varchar(30)->defaultVal('');
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('order_id')->int()->defaultVal(0);
+            $table->timestamp('used_at');
             $table->timestamps();
         });
         Schema::createTable(InvoiceModel::tableName(), function(Table $table) {

@@ -12,6 +12,66 @@ a {
     display: none;
 }
 
+.scroll-nav {
+    position: relative;
+    height: 45px;
+    background-color: #fff;
+    z-index: 10;
+    ul {
+        padding-right: 35px;
+        font-size: 0;
+        font-family: none;
+        white-space: nowrap;
+        overflow: hidden;
+        overflow-x: auto;
+        background-color: #fff;
+    }
+    li {
+        width: 3.75rem;
+        text-align: center;
+        font-size: 13px;
+        display: inline-block;
+        vertical-align: top;
+        a {
+            display: inline-block;
+            height: 45px;
+            line-height: 45px;
+            color: #333;
+        }
+        &.active {
+            a {
+                color: #e4393c;
+                border-bottom: 2px solid #e4393c;
+            }
+        }
+    }
+    .nav-arrow {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 35px;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        background: #fff;
+        &::before {
+            content: "\f107";
+        }
+    }
+    &.unfold {
+        ul {
+            padding-right: 0;
+            white-space: normal;
+            padding-right: 30px;
+        }
+        .nav-arrow {
+            &::before {
+                content: "\f106";
+            }
+        }
+    }
+}
+
 header,
 .header {
     width: 100%;
@@ -1374,4 +1434,137 @@ footer,
     text-align: center;
     line-height: 30px;
     color: #767676;
+}
+
+.coupon-item {
+    display: grid;
+    grid-template-columns: 75px 1fr 75px;
+    height: 114px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    .thumb {
+        padding-top: 20px;
+        img {
+            width: 75px;
+            height: 75px;
+        }
+    }
+    .info {
+        position: relative;
+        padding-top: 10px;
+        .discount {
+            position: absolute;
+            left: 0;
+            bottom: 7px;
+            dd {
+                font-size: 18px;
+                color: #7eacf4;
+                margin-bottom: -5px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            dt {
+                font-size: 12px;
+                color: #7eacf4;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+        .price {
+            color: #7eacf4;
+            font-size: 14px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            font-family: font_helvetica;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            em {
+                display: inline-block;
+                vertical-align: -2px;
+                margin-right: 6px;
+                font-size: 30px;
+                font-style: normal;
+            }
+        }
+    }
+    .action {
+        background-color: #7eacf4;
+        text-align: center;
+        i {
+            color: #fff;
+            font-size: 12px;
+            font-style: normal;
+        }
+        .status-icon {
+            margin: 20px 14px 0;
+            padding: 9px 0;
+            display: block;
+            font-size: 12px;
+            box-sizing: border-box;
+            border: 2px solid #fff;
+            color: #fff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+    }
+}
+
+.tab-header {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row nowrap;
+    line-height: 40px;
+    background-color: #fff;
+    .tab-item {
+        &.active {
+            border-bottom: 2px solid #b4282d;
+            color: #b4282d;
+        }
+    }
+}
+
+.my-coupon-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    height: 114px;
+    background-color: #fff;
+    margin: 5px 0;
+    .price {
+        background-color: #b4282d;
+        color: #fff;
+        text-align: center;
+        padding: 30px 0 0;
+        em {
+            font-style: normal;
+            font-size: 30px;
+        }
+    }
+    .info {
+        padding-top: 10px;
+        position: relative;
+        .time {
+            position: absolute;
+            bottom: 35px;
+            line-height: 20px;
+            width: 100%;
+            font-size: 12px;
+            a {
+                color: #f00;
+                border: 1px solid #f00;
+                border-radius: 5px;
+                padding: 0 3px;
+                float: right;
+            }
+        }
+    }
+    &.expired {
+        .price {
+            background-color: #999;
+        }
+    }
 }
