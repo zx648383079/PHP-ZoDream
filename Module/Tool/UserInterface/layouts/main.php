@@ -11,10 +11,12 @@ $this->registerCssFile([
         '@dialog.css',
         '@tool.css'
     ])->registerJsFile([
+        'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.8.10-beta1/beautifier.min.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
+        '@html.parser.min.js',
         '@main.min.js',
         '@tool.min.js'
     ]);
@@ -78,22 +80,22 @@ $this->registerCssFile([
          [
              [
                  'HTML',
-                 './',
+                 './home/html',
                  'fa fa-list'
              ],
              [
                 'JS',
-                './',
+                './home/js',
                 'fa fa-list'
             ],
             [
                 'CSS',
-                './',
+                './home/css',
                 'fa fa-list'
             ],
             [
                 'JSON',
-                './',
+                './home/json',
                 'fa fa-list'
             ],
          ],

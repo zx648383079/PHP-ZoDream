@@ -16,6 +16,18 @@ class HomeController extends Controller {
         return $this->show();
     }
 
+    public function htmlAction() {
+        return $this->show();
+    }
+
+    public function jsAction() {
+        return $this->show();
+    }
+
+    public function cssAction() {
+        return $this->show();
+    }
+
     public function md5Action() {
         return $this->show();
     }

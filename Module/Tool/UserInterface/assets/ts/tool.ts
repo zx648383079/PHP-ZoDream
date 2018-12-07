@@ -16,6 +16,18 @@ function converter(content: string, type: string): string| number {
         case 'strtotime': 
             result = new Date(content).getTime();
             break;
+        case 'htmltowxml': 
+            result = this.HTMLtoWXML(content);
+            break;
+        case 'htmlbeautify':
+            result = html_beautify(content);
+            break;
+        case 'jsbeautify': 
+            result = js_beautify(content);
+            break;
+        case 'cssbeautify': 
+            result = css_beautify(content);
+            break;
         case 'date': 
             result = new Date(parseInt(content) * 1000).toLocaleString();
             break;
