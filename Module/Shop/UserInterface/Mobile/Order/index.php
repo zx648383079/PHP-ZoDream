@@ -8,7 +8,7 @@ $this->extend('../layouts/header');
 ?>
 
 <div class="has-header">
-    <div class="order-header">
+    <div class="tab-bar order-header">
         <a href="" class="active">全部</a>
         <a href="">待支付</a>
         <a href="">待发货</a>
@@ -22,7 +22,7 @@ $this->extend('../layouts/header');
         <div class="order-item">
             <div class="order-header">
                 <span><?=$order->id?></span>
-                <span class="status"><?=$order->status?></span>
+                <span class="status"><?=$order->status_label?></span>
             </div>
             <div class="goods-list">
                 <?php foreach($order->goods as $goods):?>
@@ -43,7 +43,7 @@ $this->extend('../layouts/header');
             </div>
             <div class="order-footer">
                 <div class="order-actions">
-                    <a href="">支付</a>
+                    <a href="<?=$this->url('./mobile/cashier/pay', ['id' => $order->id])?>">支付</a>
                     <a href="<?=$this->url('./mobile/order/detail', ['id' => $order->id])?>">详情</a>
                     <a href="">确认收货</a>
                     <a href="">评价</a>

@@ -3,10 +3,10 @@ namespace Module\Shop\Domain\Model;
 
 use Domain\Model\Model;
 
-class InvoiceModel extends Model {
+class InvoiceTitleModel extends Model {
 
 	public static function tableName() {
-        return 'shop_invoice';
+        return 'shop_invoice_title';
     }
 
 }

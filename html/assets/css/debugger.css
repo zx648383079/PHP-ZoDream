@@ -49,10 +49,8 @@
       transition: all 0.3s ease-in-out;
       border-radius: 0px; }
     .debugger-bar .bar-info::-webkit-scrollbar-track {
-      -webkit-border-radius: 0px;
       border-radius: 0px; }
     .debugger-bar .bar-info::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 0px;
       border-radius: 0px;
       background: rgba(0, 0, 0, 0.5); }
       .debugger-bar .bar-info::-webkit-scrollbar-thumb:hover {

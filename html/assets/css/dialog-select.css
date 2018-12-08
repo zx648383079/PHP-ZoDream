@@ -21,7 +21,7 @@
   left: 0;
   width: 100%;
   display: none;
-  z-index: 998;
+  z-index: 920;
   background: #fff; }
   .dialog.dialog-select .dialog-header {
     position: relative;
@@ -30,7 +30,7 @@
     text-align: center;
     background: #fff;
     border-bottom: 1px solid #ccc;
-    z-index: 999; }
+    z-index: 921; }
     .dialog.dialog-select .dialog-header .dialog-close {
       position: absolute;
       left: 15px;

@@ -6,7 +6,7 @@ $this->title = '商品详情';
 ?>
 
 <header class="top">
-    <a class="back">
+    <a href="javascript:history.back(-1);" class="back">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
     <div class="top-tab">
@@ -15,9 +15,6 @@ $this->title = '商品详情';
         <a href="">评价</a>
         <a href="">推荐</a>
     </div>
-    <!-- <a class="btn" href="login.html">
-        退出
-    </a> -->
 </header>
 
 <div class="has-header has-footer">

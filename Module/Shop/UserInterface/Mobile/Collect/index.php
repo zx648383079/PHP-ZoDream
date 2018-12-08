@@ -12,7 +12,7 @@ $this->extend('../layouts/header')
     ->registerJs($js);
 ?>
 
-<div class="has-header">
+<div class="has-header collect-page">
     <div class="swipe-box goods-list">
         <?php foreach($goods_list as $item):?>
         <div class="swipe-row">
@@ -32,5 +32,3 @@ $this->extend('../layouts/header')
         <?php endforeach;?>
     </div>
 </div>
-
-<?php $this->extend('../layouts/navbar');?>

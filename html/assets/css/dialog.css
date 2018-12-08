@@ -592,19 +592,19 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 998;
+  z-index: 910;
   display: none; }
   .dialog-bg.dialog-bg-private {
     position: absolute;
-    z-index: 988;
+    z-index: 900;
     display: block; }
 
 .dialog {
   position: fixed;
-  z-index: 999; }
+  z-index: 920; }
   .dialog.dialog-private {
     position: absolute;
-    z-index: 989; }
+    z-index: 919; }
   .dialog.dialog-tip, .dialog.dialog-pop {
     background: rgba(0, 0, 0, 0.6);
     color: #fff;

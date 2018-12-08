@@ -11,7 +11,6 @@ if (!auth()->guest()) {
 </a>
 HTML;
 }
-
 $this->extend('../layouts/header', compact('header_btn'));
 ?>
 
@@ -43,7 +42,7 @@ $this->extend('../layouts/header', compact('header_btn'));
             <i class="fa fa-comments" aria-hidden="true"></i>
             消息
         </a>
-        <a href="" class="item">
+        <a href="<?=$this->url('./mobile/account/center')?>" class="item">
             <i class="fa fa-shield-alt" aria-hidden="true"></i>
             安全
         </a>
@@ -53,33 +52,33 @@ $this->extend('../layouts/header', compact('header_btn'));
         </a>
     </div>
     <div class="menu-large">
-        <a href="" class="item">
+        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
             <i class="fa fa-money-bill" aria-hidden="true"></i>
             <span>待付款</span>
             <i class="tip">10</i>
         </a>
-        <a href="" class="item">
+        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
             <i class="fa fa-truck" aria-hidden="true"></i>
             <span>待收货</span>
         </a>
-        <a href="" class="item">
+        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
             <i class="fa fa-comment" aria-hidden="true"></i>
             <span>待评价</span>
         </a>
-        <a href="" class="item">
+        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
             <i class="fa fa-exchange-alt" aria-hidden="true"></i>
            <span>退换货</span>
         </a>
     </div>
 
     <div class="menu-panel">
-        <a href="<?=$this->url('./mobile/address')?>" class="panel-header">
+        <a href="<?=$this->url('./mobile/account')?>" class="panel-header">
             <i class="fa fa-briefcase" aria-hidden="true"></i>
             我的钱包
             <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </a>
         <div class="panel-body">
-            <a href="" class="item">
+            <a href="<?=$this->url('./mobile/account')?>" class="item">
                 <span class="menu-item-icon">0
                 </span>
                 余额
@@ -91,7 +90,7 @@ $this->extend('../layouts/header', compact('header_btn'));
                 <span class="menu-item-icon">0
                 </span>
                 红包
-            </a><a href="" class="item">
+            </a><a href="<?=$this->url('./mobile/coupon/my')?>" class="item">
                 <span class="menu-item-icon">0
                 </span>
                 优惠券

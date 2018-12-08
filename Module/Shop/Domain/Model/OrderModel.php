@@ -103,6 +103,10 @@ class OrderModel extends Model {
         return $this->hasMany(OrderGoodsModel::class,  'order_id', 'id');
     }
 
+    public function getStatusLabelAttribute() {
+        return '待付款';
+    }
+
     /**
      * @param OrderGoodsModel[] $allGoods
      * @return float

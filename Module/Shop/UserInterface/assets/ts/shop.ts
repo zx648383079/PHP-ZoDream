@@ -215,3 +215,23 @@ function goEmailLogin() {
     $(".login-box .email-password").removeClass('hide');
     $(".login-box .phone-code,.login-box .phone-password").addClass('hide');
 }
+
+function bindStore() {
+    let $window = $(window),
+        page = $('.store-page'),
+        beforeScrollTop = $window.scrollTop();
+    $window.scroll(function() {
+        let scrollTop = $window.scrollTop(),
+            isUp = scrollTop - beforeScrollTop < 0;
+        beforeScrollTop = scrollTop;
+        if (scrollTop < 183) {
+            page.removeClass('min').removeClass('min-up');
+            return;
+        }
+        if (isUp) {
+            page.addClass('min-up').removeClass('min');
+            return;
+        }
+        page.addClass('min').removeClass('min-up')
+    });
+}

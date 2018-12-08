@@ -2,22 +2,24 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '订单详情';
+$this->title = '';
 
 $this->extend('../layouts/header');
 ?>
 
 <div class="has-header order-box">
-    <div class="order-header">
-        <?=$order->status?>
+    <div class="status-header">
+        <i class="fa fa-money-bill"></i>
+        <?=$order->status_label?>
     </div>
     <div class="shipping-box">
         <?=$order->shipping_status?>
     </div>
     <div class="address-box">
+        <i class="fa fa-map-marker"></i>
         <p>
             <span class="name"><?=$address->name?></span>
-            <span><?=$address->tel?></span>
+            <span class="tel"><?=$address->tel?></span>
         </p>
         <p><?=$address->region_name?> <?=$address->address?></p>
     </div>
