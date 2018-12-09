@@ -501,6 +501,14 @@ interface INode {
             const attr = parseNodeAttr(json.attr, ['for']);
             return `<label${attr}>${child}</label>`;
         }
+        if (json.tag == 'style') {
+            const attr = parseNodeAttr(json.attr, ['type', 'lang', 'scoped']);
+            return `<style${attr}>${child}</style>`;
+        }
+        if (json.tag == 'script') {
+            const attr = parseNodeAttr(json.attr, ['type', 'lang', 'src']);
+            return `<script${attr}>${child}</script>`;
+        }
         if (json.tag == 'textarea') {
             json.attr.vlaue = child;
             const attr = parseNodeAttr(json.attr, input_allow_attrs);
