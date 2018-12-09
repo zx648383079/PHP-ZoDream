@@ -3,11 +3,15 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'HTML 美化';
+$js = <<<JS
+registerEditor('text/html');
+JS;
+$this->registerJs($js);
 ?>
 
 <div class="converter-box">
     <div class="input-box">
-        <textarea name="" placeholder="请输入内容"></textarea>
+        <textarea id="input" name="" placeholder="请输入内容"></textarea>
     </div>
     <div class="actions">
         <button data-type="htmlbeautify">美化</button>
@@ -15,6 +19,6 @@ $this->title = 'HTML 美化';
         <button data-type="clear">清空</button>
     </div>
     <div class="output-box">
-        <textarea name="" placeholder="输出结果"></textarea>
+        <textarea id="output" name="" placeholder="输出结果"></textarea>
     </div>
 </div>

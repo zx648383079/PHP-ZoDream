@@ -6,12 +6,17 @@ use Zodream\Html\Dark\Layout;
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',
+        '@codemirror.css',
         '@zodream.css',
         '@zodream-admin.css',
         '@dialog.css',
         '@tool.css'
     ])->registerJsFile([
-        'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.8.10-beta1/beautifier.min.js',
+        '@codemirror.js',
+        '@css.js',
+        '@xml.js',
+        '@htmlmixed.js',
+        '@javascript.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
