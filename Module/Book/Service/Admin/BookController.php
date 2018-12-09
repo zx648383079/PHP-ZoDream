@@ -9,7 +9,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 
 class BookController extends Controller {
-    public function indexAction($keywords = null, $cat_id = null, $author_id = null) {
+    public function indexAction($keywords = null, $cat_id = null, $author_id = null, $classify = null) {
         $model_list = BookModel::with('category', 'author')
             //->withCount('chapter')
             ->when(!empty($keywords), function ($query) {
@@ -18,6 +18,8 @@ class BookController extends Controller {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($author_id), function ($query) use ($author_id) {
                 $query->where('author_id', intval($author_id));
+            })->when(is_numeric($classify), function ($query) use ($classify) {
+                $query->where('classify', intval($classify));
             })->orderBy('id', 'desc')->page();
         $cat_list = BookCategoryModel::select('id', 'name')->all();
         $author_list = BookAuthorModel::select('id', 'name')->all();

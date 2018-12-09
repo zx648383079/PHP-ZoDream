@@ -21,8 +21,11 @@ use Module\Shop\Domain\Model\GoodsGalleryModel;
 use Module\Shop\Domain\Model\GoodsIssue;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\InvoiceModel;
+use Module\Shop\Domain\Model\InvoiceTitleModel;
 use Module\Shop\Domain\Model\NavigationModel;
+use Module\Shop\Domain\Model\OrderActivityModel;
 use Module\Shop\Domain\Model\OrderAddressModel;
+use Module\Shop\Domain\Model\OrderCouponModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
@@ -85,15 +88,32 @@ class CreateShopTables extends Migration {
             $table->timestamps();
         });
         Schema::createTable(InvoiceModel::tableName(), function(Table $table) {
-            $table->setComment('用户发票');
+            $table->setComment('开票记录');
             $table->set('id')->pk()->ai();
+            $table->set('title_type')->tinyint(1)->defaultVal(0)->comment('发票抬头类型');
             $table->set('type')->tinyint(1)->defaultVal(0)->comment('发票类型');
-            $table->set('name')->varchar(100)->notNull()->comment('抬头');
-            $table->set('tax_no')->varchar(20)->notNull()->comment('税号');
-            $table->set('tel')->char(11)->notNull()->comment('公司电话');
-            $table->set('bank')->varchar(100)->notNull()->comment('开户行');
-            $table->set('account')->varchar(60)->notNull()->comment('银行账号');
-            $table->set('address')->varchar()->notNull()->comment('注册地址');
+            $table->set('title')->varchar(100)->notNull()->comment('抬头');
+            $table->set('tax_no')->varchar(20)->notNull()->comment('税务登记号');
+            $table->set('tel')->char(11)->notNull()->comment('注册场所电话');
+            $table->set('bank')->varchar(100)->notNull()->comment('开户银行');
+            $table->set('account')->varchar(60)->notNull()->comment('基本开户账号');
+            $table->set('address')->varchar()->notNull()->comment('注册场所地址');
+            $table->set('user_id')->int()->notNull();
+            $table->set('money')->decimal(10, 2)->defaultVal(0)->comment('开票金额');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('开票状态');
+            $table->timestamps();
+        });
+        Schema::createTable(InvoiceTitleModel::tableName(), function(Table $table) {
+            $table->setComment('用户发票抬头');
+            $table->set('id')->pk()->ai();
+            $table->set('title_type')->tinyint(1)->defaultVal(0)->comment('发票抬头类型');
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('发票类型');
+            $table->set('title')->varchar(100)->notNull()->comment('抬头');
+            $table->set('tax_no')->varchar(20)->notNull()->comment('税务登记号');
+            $table->set('tel')->char(11)->notNull()->comment('注册场所电话');
+            $table->set('bank')->varchar(100)->notNull()->comment('开户银行');
+            $table->set('account')->varchar(60)->notNull()->comment('基本开户账号');
+            $table->set('address')->varchar()->notNull()->comment('注册场所地址');
             $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });
@@ -159,6 +179,7 @@ class CreateShopTables extends Migration {
             $table->set('payment_id')->int()->defaultVal(0);
             $table->set('payment_name')->varchar(30)->defaultVal(0);
             $table->set('shipping_id')->int()->defaultVal(0);
+            $table->set('invoice_id')->int()->defaultVal(0)->comment('发票');
             $table->set('shipping_name')->varchar(30)->defaultVal(0);
             $table->set('goods_amount')->decimal(8, 2)->defaultVal(0);
             $table->set('order_amount')->decimal(8, 2)->defaultVal(0);
@@ -194,6 +215,22 @@ class CreateShopTables extends Migration {
             $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
             $table->set('best_time')->varchar()->defaultVal('');
+        });
+        Schema::createTable(OrderCouponModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('order_id')->int()->notNull();
+            $table->set('coupon_id')->int()->notNull();
+            $table->set('name')->varchar()->defaultVal('');
+            $table->set('type')->varchar()->defaultVal('');
+        });
+        Schema::createTable(OrderActivityModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('order_id')->int()->notNull();
+            $table->set('product_id')->int()->defaultVal(0);
+            $table->set('type')->int()->notNull();
+            $table->set('amount')->decimal(8, 2)->defaultVal(0);
+            $table->set('tag')->varchar()->defaultVal('');
+            $table->set('name')->varchar()->defaultVal('');
         });
     }
 

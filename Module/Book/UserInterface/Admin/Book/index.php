@@ -28,6 +28,18 @@ $this->title = 'ZoDream';
                     <?php endforeach;?>
                 </select>
             </div>
+            <div class="input-group">
+                <label>分级</label>
+                <select name="classify">
+                    <option value="">请选择</option>
+                    <?php foreach([
+                                      '无分级',
+                                      '成人级',
+                                  ] as $key => $item):?>
+                        <option value="<?=$key?>"><?=$item?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/book/create')?>">新增小说</a>
