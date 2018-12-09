@@ -104,3 +104,118 @@ function registerEditor(mode: string) {
         editor2.setValue($(this).val());
     });
 }
+
+enum BLOCK_TYPE {
+    NONE,
+    TAG,
+    ATTR,
+    ATTR_VALUE,
+    END_TAG
+}
+
+function getAttr(html: string = '<br class="777"/>') {
+    let node = {
+        tag: undefined,
+        attr: {}
+    }, code: string, status: BLOCK_TYPE = BLOCK_TYPE.NONE, pos: number = 0, name: string, value: string, endTag: string,
+        isTag = function(tag, start) {
+            if (['br'].indexOf(tag) >= 0) {
+                return true;
+            }
+            return html.indexOf('</' + tag + '>', start) > 0;
+        },
+        getTag = function() {
+            let tag = '',
+                po = pos;
+            while (po < html.length) {
+                code = html.charAt(po ++);
+                if (code == ' ' || code == '/' || code == '>') {
+                    return isTag(tag, po) ? tag : false;
+                }
+                tag += code;
+            }
+            return false;
+        }
+    while (pos < html.length) {
+        code = html.charAt(pos ++);
+        if (code == '<' && status == BLOCK_TYPE.NONE) {
+            if (html.charAt(pos) == '/') {
+                status = BLOCK_TYPE.END_TAG;
+            }
+            let tag = getTag();
+            if (tag) {
+                node.tag = tag;
+                pos += tag.length;
+                status = BLOCK_TYPE.TAG;
+                continue;
+            }
+            continue;
+        }
+        if (code == '>' && (status == BLOCK_TYPE.TAG || status == BLOCK_TYPE.ATTR || status == BLOCK_TYPE.END_TAG)) {
+            status = BLOCK_TYPE.NONE;
+            continue;
+        }
+        if (code == '/' && status == BLOCK_TYPE.TAG) {
+            if (html.charAt(pos) == '>') {
+                status = BLOCK_TYPE.NONE;
+                pos ++;
+                continue;
+            }
+        }
+        if (code == ' ' && status == BLOCK_TYPE.TAG) {
+            status = BLOCK_TYPE.ATTR;
+            name = '';
+            value = '';
+            continue;
+        }
+        if (code == ' ' && status == BLOCK_TYPE.ATTR) {
+            status = BLOCK_TYPE.ATTR;
+            node.attr[name] = true;
+            name = '';
+            continue;
+        }
+        if (!endTag && code == ' ' && status == BLOCK_TYPE.ATTR_VALUE) {
+            status = BLOCK_TYPE.ATTR;
+            node.attr[name] = value;
+            name = '';
+            value = '';
+            continue;
+        }
+        if (!endTag && code == '/' && status == BLOCK_TYPE.ATTR_VALUE) {
+            if (html.charAt(pos) == '>') {
+                status = BLOCK_TYPE.NONE;
+                node.attr[name] = value;
+                name = '';
+                value = '';
+                pos ++;
+                continue;
+            }
+        }
+        if (code == '=' && status == BLOCK_TYPE.ATTR) {
+            code = html.charAt(pos);
+            status = BLOCK_TYPE.ATTR_VALUE;
+            if (code == '\'' || code == '"') {
+                endTag = code;
+                pos ++;
+                continue;
+            }
+            endTag = undefined;
+            continue;
+        }
+        if (endTag && code == endTag && status == BLOCK_TYPE.ATTR_VALUE) {
+            status = BLOCK_TYPE.TAG;
+            node.attr[name] = value;
+            name = '';
+            value = '';
+            continue;
+        }
+        if (status == BLOCK_TYPE.ATTR) {
+            name += code;
+            continue;
+        }
+        if (status == BLOCK_TYPE.ATTR_VALUE) {
+            value += code;
+        }
+    }
+    //console.log(node);
+}

@@ -5,6 +5,7 @@ use Zodream\Template\View;
 $this->title = 'HTML 美化';
 $js = <<<JS
 registerEditor('text/html');
+getAttr();
 JS;
 $this->registerJs($js);
 ?>
