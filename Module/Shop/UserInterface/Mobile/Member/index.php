@@ -110,7 +110,7 @@ $this->extend('../layouts/header', compact('header_btn'));
         </a>
         <a href="<?=$this->url('./mobile/affiliate')?>">
             <i class="fa fa-share" aria-hidden="true"></i>
-            我的分享
+            我的推荐
         </a>
         <a href="<?=$this->url('./mobile/article')?>">
             <i class="fa fa-gift" aria-hidden="true"></i>

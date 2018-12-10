@@ -17,6 +17,22 @@ class AffiliateController extends Controller {
         return $this->show();
     }
 
+    public function orderAction() {
+        return $this->show();
+    }
+
+    public function userAction() {
+        return $this->show();
+    }
+
+    public function shareAction() {
+        return $this->show();
+    }
+
+    public function ruleAction() {
+        return $this->show();
+    }
+
     public function qrAction() {
         $image = new QrCode();
         $image->encode($this->getUrl('', ['u' => auth()->id()]));
