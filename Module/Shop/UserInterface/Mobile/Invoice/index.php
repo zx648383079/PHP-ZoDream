@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '发票管理';
 
-$this->extend('../layouts/header', compact('header_btn'));
+$this->extend('../layouts/header');
 ?>
 <div class="has-header">
     <div class="account-header">
