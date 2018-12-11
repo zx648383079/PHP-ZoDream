@@ -1,26 +1,26 @@
-interface ChatMenuItem {
+interface IMenu {
     name?: string,
     text?: string,
     icon?: string,
     toggle?: (target: JQuery, menu: ChatMenu)=>boolean,
     onclick?: (menuItem: JQuery, target: JQuery, menu: ChatMenu) => void,
-    children?: Array<ChatMenuItem>
+    children?: Array<IMenu>
 }
 
-interface ChatGroupItem {
+interface IGroup {
     name: string,
     count: number,
     online_count: number,
-    users: Array<ChatUserItem>
+    users: Array<IUser>
 }
 
-interface ChatUserItem {
+interface IUser {
     id: number,
     name: string,
     avatar: string,
     brief: string,
     new_count?: number,
-    last_message?: ChatMessageItem
+    last_message?: IMessage
 }
 
 enum ChatType {
@@ -30,12 +30,24 @@ enum ChatType {
     TIME
 }
 
-interface ChatMessageItem {
+interface IMessage {
     type: ChatType
     content?: string,
     time?: number,
-    user?: ChatUserItem
+    user?: IUser
 }
+
+const EVENT_REFRESH_USERS = 'refresh_users',
+    EVENT_REFRESH_GROUPS = 'refresh_groups',
+    EVENT_GROUP_USERS = 'refresh_group_users',
+    EVENT_USER_GROUPS = 'user_groups',
+    EVENT_USER_INFO = 'user_info',
+    EVENT_GROUP_INFO = 'group_info',
+    EVENT_SEARCH_USERS = 'search_users',
+    EVENT_SEARCH_GROUPS = 'search_groups',
+    EVENT_ADD_USER = 'add_user',
+    EVENT_SEND_MESSAGE = 'send_message',
+    EVENT_GET_MESSAGE = 'get_message';
 
 abstract class ChatBaseBox {
     private cache_element: any = {};
@@ -91,8 +103,8 @@ class ChatMenu extends ChatBaseBox {
      *
      */
     constructor(
-        private box: JQuery,
-        private menus: Array<ChatMenuItem> = []
+        public box: JQuery,
+        private menus: Array<IMenu> = []
     ) {
         super();
         this.bindEvent();
@@ -111,7 +123,7 @@ class ChatMenu extends ChatBaseBox {
 
     public clickLi(li: JQuery) {
         let name = li.attr('data-name'),
-            menu: ChatMenuItem;
+            menu: IMenu;
         if (name && this.menuMap.hasOwnProperty(name)) {
             menu = this.menuMap[name];
             if (menu && menu.onclick && menu.onclick(li, this.target, this) === false) {
@@ -124,7 +136,7 @@ class ChatMenu extends ChatBaseBox {
         this.trigger('click', li, menu, this.target);
     }
 
-    public addMenu(menu: ChatMenuItem | any) {
+    public addMenu(menu: IMenu | any) {
         this.menus.push(menu);
         return this;
     }
@@ -151,7 +163,7 @@ class ChatMenu extends ChatBaseBox {
         this.box.html(html);
     }
 
-    private getMenuHtml(menus: Array<ChatMenuItem>): string {
+    private getMenuHtml(menus: Array<IMenu>): string {
         let html = '';
         menus.forEach(menu => {
             html += this.getMenuItemHtml(menu);
@@ -159,7 +171,7 @@ class ChatMenu extends ChatBaseBox {
         return '<ul>'+ html + '</ul>';
     }
 
-    private getMenuItemHtml(menu: ChatMenuItem): string {
+    private getMenuItemHtml(menu: IMenu): string {
         let name = (menu.text || menu.name),
             html = '<li data-name="'+  name
         +'"><span><i class="fa fa-'+menu.icon+'"></i>' + (menu.text || menu.name),
@@ -171,7 +183,7 @@ class ChatMenu extends ChatBaseBox {
         return html + '</span></li>';
     }
 
-    private cleanMenuList(menus?: Array<ChatMenuItem>): Array<ChatMenuItem> {
+    private cleanMenuList(menus?: Array<IMenu>): Array<IMenu> {
         if (!menus || menus.length == 0) {
             return null;
         }
@@ -197,7 +209,31 @@ class ChatAddUserBox extends ChatBaseBox {
         private parent: ChatRoom
     ) {
         super();
+        this.bindEvent();
     }
+
+    private _user: IUser;
+
+    private _groups: IGroup[];
+
+    public bindEvent() {
+        let _this = this;
+        this.box.on('click', '.dialog-add-action .dialog-yes', function() {
+            _this.parent.trigger(EVENT_ADD_USER, _this._user, _this.box.find('select').val(), _this);
+        });
+    }
+
+    public showWithUser(user: IUser) {
+        this.parent.trigger(EVENT_USER_GROUPS, this);
+        this._user = user;
+        this.refresh();
+        this.show();
+    }
+
+    public refresh() {
+
+    }
+    
 }
 
 class ChatUserInfoBox extends ChatBaseBox {
@@ -224,10 +260,19 @@ class ChatSearchBox extends ChatBaseBox {
         this.bindEvent();
     }
 
-    private users: Array<ChatUserItem> = [];
+    private _is_search_user: boolean = true;
+
+    private _users: Array<IUser> = [];
+
+    
+    public set users(v : IUser[]) {
+        this._users = v;
+        this.render();
+    }
+    
 
     private render() {
-        let tpl = `<div class="dialog-info">
+        let tpl = `<div class="dialog-info" data-id="{3}">
         <div class="dialog-info-avatar">
             <img src="{0}" alt="">
         </div>
@@ -237,8 +282,8 @@ class ChatSearchBox extends ChatBaseBox {
         </div>
     </div>`,
         html = '';
-        this.users.forEach(user => {
-            html += ZUtils.str.format(tpl, user.avatar, user.name, user.brief);
+        this._users.forEach(user => {
+            html += ZUtils.str.format(tpl, user.avatar, user.name, user.brief, user.id);
         });
         this.find('.dialog-search-list').html(html);
     }
@@ -249,12 +294,27 @@ class ChatSearchBox extends ChatBaseBox {
     public bindEvent() {
         let _this = this;
         this.box.on('click', '.dialog-search-list .dialog-info', function() {
-            _this.parent.addBox.show();
-        });
-        this.box.on('click', '.dialog-tab-header .dialog-tab-item', function() {
+            let user = _this.getUser($(this).data('id'));
+            _this.parent.addBox.showWithUser(user);
+        })
+        .on('click', '.dialog-tab-header .dialog-tab-item', function() {
             let $this = $(this);
             $this.addClass('active').siblings().removeClass('active');
+            _this._is_search_user = $this.index() < 1;
+        }).on('keyup', '.dialog-search input', function() {
+            _this.parent.trigger(_this._is_search_user 
+                ? EVENT_SEARCH_USERS : EVENT_SEARCH_GROUPS, 
+                $(this).val(), _this);
         });
+    }
+
+    public getUser(id: number): IUser {
+        for (let i = 0; i < this._users.length; i++) {
+            if (this._users[i].id == id) {
+                return this._users[i];
+            }
+        }
+        return null;
     }
 
 }
@@ -319,8 +379,8 @@ class ChatMessageBox extends ChatBaseBox {
     constructor(
         public box: JQuery,
         private parent: ChatRoom,
-        private send?: ChatUserItem,
-        public revice?: ChatUserItem
+        private send?: IUser,
+        public revice?: IUser
     ) {
         super();
         this.refresh();
@@ -329,7 +389,7 @@ class ChatMessageBox extends ChatBaseBox {
 
     public editor: ChatEditor;
 
-    private messages: Array<ChatMessageItem> = [];
+    private messages: Array<IMessage> = [];
 
     public refresh() {
         this.editor = new ChatEditor(this.find('.dialog-message-text'), this);
@@ -353,12 +413,12 @@ class ChatMessageBox extends ChatBaseBox {
         this.find('.dialog-title').html('与 '+ this.revice.name +' 聊天中');
     }
 
-    public addMessage(message: ChatMessageItem) {
+    public addMessage(message: IMessage) {
         this.messages.push(message);
         this.renderMessage();
     }
 
-    public prependMessage(messages: Array<ChatMessageItem>) {
+    public prependMessage(messages: Array<IMessage>) {
         this.messages = messages.concat(this.messages);
         this.renderMessage();
     }
@@ -372,7 +432,7 @@ class ChatMessageBox extends ChatBaseBox {
         this.find('.dialog-message-box').html(html);
     }
 
-    private renderMessageItem(item: ChatMessageItem) {
+    private renderMessageItem(item: IMessage) {
         switch (item.type) {
             case ChatType.MORE:
                 return '<p class="message-more">加载更多</p>';
@@ -400,8 +460,8 @@ class ChatMessageBox extends ChatBaseBox {
     </div>`, item.user.avatar, item.content);
     }
 
-    private cleanMessage(): Array<ChatMessageItem> {
-        let messages: Array<ChatMessageItem> = [
+    private cleanMessage(): Array<IMessage> {
+        let messages: Array<IMessage> = [
             {
                 type: ChatType.MORE
             }
@@ -435,17 +495,29 @@ class ChatUserBox extends ChatBaseBox {
         this.bindEvent();
     }
 
-    private user: ChatUserItem;
-    private last_friends: Array<ChatUserItem>;
-    private friends: Array<ChatGroupItem>;
-    private groups: Array<ChatUserItem>;
+    private user: IUser;
+    private _last_friends: Array<IUser>;
+    private _friends: Array<IGroup>;
+    private _groups: Array<IUser>;
     public menu: ChatMenu;
+
+    public set friends(args: Array<IGroup>) {
+        this._friends = args;
+        this.renderFriends();
+    }
+
+    public set groups(args: Array<IUser>) {
+        this._groups = args;
+        this.renderGroup();
+    }
 
     public refresh() {
         this.menu = new ChatMenu(this.find('.dialog-menu'), USER_MENU);
+        this.parent.trigger(EVENT_REFRESH_USERS, this);
+        this.parent.trigger(EVENT_REFRESH_GROUPS, this);
     }
 
-    private renderGroup() {
+    public renderGroup() {
         let tpl = `<div class="dialog-user">
         <div class="dialog-user-avatar">
             <img src="{0}" alt="">
@@ -460,13 +532,13 @@ class ChatUserBox extends ChatBaseBox {
         </div>
     </div>`,
         html = '';
-        this.groups.forEach(group => {
+        this._groups.forEach(group => {
             html += ZUtils.str.format(tpl, group.avatar, group.name, group.brief);
         });
         this.find('.dialog-tab-box .dialog-tab-item').eq(2).html(html);
     }
 
-    private renderFriends() {
+    public renderFriends() {
         let panel = `
         <div class="dialog-panel expanded">
         <div class="dialog-panel-header">
@@ -492,7 +564,7 @@ class ChatUserBox extends ChatBaseBox {
             </div>
         </div>`,
         html = '';
-        this.friends.forEach(group => {
+        this._friends.forEach(group => {
             let groupHtml = '';
             group.users.forEach(user => {
                 groupHtml += ZUtils.str.format(tpl, user.avatar, user.name, user.brief);
@@ -519,7 +591,7 @@ class ChatUserBox extends ChatBaseBox {
         </div>
     </div>`,
         html = '';
-        this.last_friends.forEach(user => {
+        this._last_friends.forEach(user => {
             html += ZUtils.str.format(tpl, user.avatar, user.name, user.last_message.time, user.last_message.content, user.new_count);
         });
         this.find('.dialog-tab-box .dialog-tab-item').eq(0).html(html);
@@ -548,33 +620,29 @@ class ChatUserBox extends ChatBaseBox {
             if ($(this).hasClass('dialog-min')) {
                 $(this).removeClass('dialog-min');
             }
-        });
-        this.box.on('click', '.dialog-header .fa-minus', function(e) {
+        }).on('click', '.dialog-header .fa-minus', function(e) {
             e.stopPropagation();
             _this.box.addClass('dialog-min');
-        });
-
-        this.box.on('click', '.dialog-header .fa-plus', function() {
+        }).on('click', '.dialog-header .fa-plus', function() {
             _this.parent.searchBox.center().show();
-        });
-        this.box.on('click', '.dialog-tab .dialog-tab-header .dialog-tab-item', function() {
+        }).on('click', '.dialog-tab .dialog-tab-header .dialog-tab-item', function() {
             let $this = $(this);
             $this.addClass('active').siblings().removeClass('active');
             $this.closest('.dialog-tab').find('.dialog-tab-box .dialog-tab-item').eq($this.index()).addClass('active').siblings().removeClass('active');
-        });
-        this.box.on('click', '.dialog-panel .dialog-panel-header', function() {
+        }).on('click', '.dialog-panel .dialog-panel-header', function() {
             $(this).closest('.dialog-panel').toggleClass('expanded');
-        });
-        this.box.on('click', '.dialog-tab .dialog-user', function() {
+        }).on('click', '.dialog-tab .dialog-user', function() {
             $(this).closest('.dialog-chat').find('.dialog-chat-room').show();
-        });
-        this.box.on('contextmenu', '.dialog-tab .dialog-user', function(event) {
+        }).on('contextmenu', '.dialog-tab .dialog-user', function(event) {
             _this.menu.showPosition(event.clientX, event.clientY, $(this));
             return false;
         });
         this.menu.on('click', function() {
             console.log(arguments);
             _this.parent.userBox.show();
+        });
+        this.parent.on(EVENT_USER_GROUPS, (box: ChatAddUserBox) => {
+
         });
     }
 }
@@ -583,7 +651,7 @@ class ChatRoom {
     constructor(
         public target: JQuery
     ) {
-        this.refresh();
+        
     }
 
     public mainBox: ChatUserBox;
@@ -591,8 +659,25 @@ class ChatRoom {
     public userBox: ChatUserInfoBox;
     public searchBox: ChatSearchBox;
     public chatBox: ChatMessageBox;
+    private _events: {[event: string]: Function} = {};
 
-    public refresh() {
+    public on(event: string, callback: Function): this {
+        this._events[event] = callback;
+        return this;
+    }
+
+    public hasEvent(event: string): boolean {
+        return this._events.hasOwnProperty(event);
+    }
+
+    public trigger(event: string, ... args: any[]) {
+        if (!this.hasEvent(event)) {
+            return;
+        }
+        return this._events[event].call(this, ...args);
+    }
+
+    public init() {
         this.mainBox = new ChatUserBox(this.target.find('.dialog-chat-box'), this);
         this.addBox = new ChatAddUserBox(this.target.find('.dialog-add-box'), this);
         this.userBox = new ChatUserInfoBox(this.target.find('.dialog-user-box'), this);
@@ -627,7 +712,7 @@ class ChatRoom {
     }
 }
 
-const USER_MENU: Array<ChatMenuItem> = [
+const USER_MENU: Array<IMenu> = [
     {
         icon: 'eye',
         text: '查看资料'
@@ -645,6 +730,32 @@ const USER_MENU: Array<ChatMenuItem> = [
 
 function registerChat(baseUri: string) {
     let room = new ChatRoom($('.dialog-chat'));
+    room.on(EVENT_REFRESH_USERS, (box: ChatUserBox) => {
+        postJson(baseUri + 'friend', function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.friends = data.data;
+        });
+    }).on(EVENT_REFRESH_GROUPS, (box: ChatUserBox) => {
+        postJson(baseUri + 'group', function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.groups = data.data;
+        });
+    }).on(EVENT_SEARCH_USERS, (keywords: string, box: ChatSearchBox) => {
+        postJson(baseUri + 'friend/search', {
+            keywords: keywords
+        }, function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.users = data.data;
+        });
+    }).init();
+    
+    
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
     });
