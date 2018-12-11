@@ -2,9 +2,10 @@
 namespace Module\Template\Domain\Themes;
 
 
-use Module\Template\Domain\Pages\BasePage;
+use Module\Template\Domain\Pages\Page;
+use Module\Template\Domain\Weights\Node;
 
-class BaseTheme {
+class Theme {
 
     const TYPE_HTML = 0;
     const TYPE_WX = 1;
@@ -16,12 +17,20 @@ class BaseTheme {
     const TYPE_UWP = 7;
 
     /**
-     * @var BasePage[]
+     * @var Page[]
      */
-    protected $page_list = [];
+    public $page_list = [];
 
 
     public function generate($type = self::TYPE_HTML) {
         return '';
+    }
+
+    public function hasNodeParser(Node $node) {
+        return false;
+    }
+
+    public function generateNode(Node $node, $type) {
+        return $node->generate($type);
     }
 }
