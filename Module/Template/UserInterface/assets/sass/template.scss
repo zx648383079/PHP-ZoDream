@@ -56,7 +56,9 @@ $sizes: (320: 568,
 
             >li {
                 border-bottom: 1px solid #767766;
-                padding: 0 5px;
+                padding: 0 5px 0 30px;
+                position: relative;
+                cursor: pointer;
 
                 &:hover {
                     color: #fff;
@@ -65,6 +67,9 @@ $sizes: (320: 568,
 
                 i {
                     margin-right: 1rem;
+                    position: absolute;
+                    left: 10px;
+                    line-height: 30px;
                 }
             }
         }
@@ -80,6 +85,7 @@ $sizes: (320: 568,
             text-align: center;
             text-decoration: none;
             color: #fff;
+
             span {
                 display: block;
                 font-size: 0.7rem;
@@ -101,6 +107,7 @@ $sizes: (320: 568,
 .top-nav {
     background: #767766;
     color: #fff;
+
     .navbar {
         font-size: 1.5rem;
     }
@@ -145,6 +152,7 @@ $sizes: (320: 568,
                 background: #fff;
                 box-sizing: border-box;
                 border: 1px dotted #7e8;
+
                 .weight-preview {
                     display: none;
                 }
@@ -176,10 +184,12 @@ $sizes: (320: 568,
                         display: block;
                     }
                 }
+
                 &.weight-loading {
                     .weight-view {
                         text-align: center;
                         background: rgba(0, 0, 0, .1);
+
                         img {
                             height: 80px;
                         }
@@ -229,6 +239,7 @@ $sizes: (320: 568,
     top: 0;
     width: 15rem;
     bottom: 0;
+
     >.panel {
         background: #fff;
         border: 1px solid #7e8;
@@ -238,23 +249,28 @@ $sizes: (320: 568,
         right: 0;
         bottom: 0;
         z-index: 100;
+
         >.head {
-          background: #7e8;
-          color: #fff;
-          font-size: 1.5rem;
-          line-height: 2rem;
-          .fa-close {
-            float: right;
-          }
+            background: #7e8;
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 2rem;
+
+            .fa-close {
+                float: right;
+            }
         }
+
         >.body {
-          //position: relative;
-          overflow-y: auto;
-          .grid {
-            z-index: 100;
-          }
+            //position: relative;
+            overflow-y: auto;
+
+            .grid {
+                z-index: 100;
+            }
         }
-      }
+    }
+
     &.min {
         display: none;
     }
