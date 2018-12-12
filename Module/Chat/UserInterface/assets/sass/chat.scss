@@ -79,6 +79,7 @@ body {
     .dialog-box {
         background: #fff;
         position: absolute;
+        z-index: 666;
         display: none;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         .dialog-header {

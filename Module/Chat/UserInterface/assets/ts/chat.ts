@@ -417,6 +417,11 @@ class ChatMessageBox extends ChatBaseBox {
         let _this = this;
         this.box.on('click', '.fa-smile-o', function() {
             _this.editor.insertHtmlAtCaret('<img src="./image/avatar.jpg" alt="">');
+        }).on('click', '.dailog-message-action button', function() {
+            _this.parent.trigger(EVENT_SEND_MESSAGE, _this.editor.text(), _this.revice, _this);
+        });
+        $(window).resize(function() {
+            _this.center();
         });
     }
 
@@ -428,12 +433,12 @@ class ChatMessageBox extends ChatBaseBox {
     }
 
     public addMessage(message: IMessage) {
-        this.messages.push(message);
+        this._messages.push(message);
         this.renderMessage();
     }
 
     public prependMessage(messages: Array<IMessage>) {
-        this.messages = messages.concat(this.messages);
+        this._messages = messages.concat(this._messages);
         this.renderMessage();
     }
 
@@ -475,7 +480,7 @@ class ChatMessageBox extends ChatBaseBox {
     }
 
     private cleanMessage(): Array<IMessage> {
-        if (!this.messages || this.messages.length < 1) {
+        if (!this._messages || this._messages.length < 1) {
             return [];
         }
         let messages: Array<IMessage> = [
@@ -484,7 +489,7 @@ class ChatMessageBox extends ChatBaseBox {
                 }
             ],
             lastTime: number = 0;
-        this.messages.forEach(item => {
+        this._messages.forEach(item => {
             if (item.time - lastTime > 200) {
                 lastTime = item.time;
                 messages.push({
@@ -492,6 +497,7 @@ class ChatMessageBox extends ChatBaseBox {
                     type: ChatType.TIME
                 });
             }
+            messages.push(item);
         });
         return messages;
     }
@@ -541,15 +547,23 @@ class ChatUserBox extends ChatBaseBox {
         private parent: ChatRoom
     ) {
         super();
-        this.refresh();
+        this.menu = new ChatMenu(this.find('.dialog-menu'), USER_MENU);
         this.bindEvent();
     }
 
-    private user: IUser;
+    private _user: IUser;
     private _last_friends: Array<IUser> = [];
     private _friends: Array<IGroup>;
     private _groups: Array<IUser>;
     public menu: ChatMenu;
+
+    
+    public set user(v : IUser) {
+        this._user = v;
+        this.renderUser();
+        this.refresh();
+    }
+    
 
     public set friends(args: Array<IGroup>) {
         this._friends = args;
@@ -576,7 +590,6 @@ class ChatUserBox extends ChatBaseBox {
     }
 
     public refresh() {
-        this.menu = new ChatMenu(this.find('.dialog-menu'), USER_MENU);
         this.parent.trigger(EVENT_REFRESH_USERS, this);
         this.parent.trigger(EVENT_REFRESH_GROUPS, this);
     }
@@ -672,13 +685,13 @@ class ChatUserBox extends ChatBaseBox {
     <div class="dialog-message-count">
     {3}
     </div>`;
-        this.find('.dialog-info').html(ChatUserBox.format(tpl, this.user.avatar, this.user.name, this.user.brief, this.user.new_count));
+        this.find('.dialog-info').html(ChatUserBox.format(tpl, this._user.avatar, this._user.name, this._user.brief, this._user.new_count));
     }
 
     public bindEvent() {
         let _this = this;
         $(document).click(function() {
-            _this.menu.hide();
+            _this.menu && _this.menu.hide();
         });
         this.box.click(function() {
             if ($(this).hasClass('dialog-min')) {
@@ -698,7 +711,7 @@ class ChatUserBox extends ChatBaseBox {
         }).on('click', '.dialog-tab .dialog-user', function() {
             _this.parent.chatBox.showWithUser(_this.getUser($(this).data('id')));
         }).on('contextmenu', '.dialog-tab .dialog-user', function(event) {
-            _this.menu.showPosition(event.clientX, event.clientY, $(this));
+            _this.menu && _this.menu.showPosition(event.clientX, event.clientY, $(this));
             return false;
         });
         this.menu.on('click', function(menuLi: JQuery, menu: IMenu, userItem: JQuery) {
@@ -748,12 +761,13 @@ class ChatRoom {
         return this._events[event].call(this, ...args);
     }
 
-    public init() {
+    public init(user: IUser) {
         this.mainBox = new ChatUserBox(this.target.find('.dialog-chat-box'), this);
         this.addBox = new ChatAddUserBox(this.target.find('.dialog-add-box'), this);
         this.userBox = new ChatUserInfoBox(this.target.find('.dialog-user-box'), this);
         this.searchBox = new ChatSearchBox(this.target.find('.dialog-search-box'), this);
-        this.chatBox = new ChatMessageBox(this.target.find('.dialog-chat-room'), this);
+        this.chatBox = new ChatMessageBox(this.target.find('.dialog-chat-room'), this, user);
+        this.mainBox.user = user;
     }
 
     /**
@@ -799,7 +813,7 @@ const USER_MENU: Array<IMenu> = [
 ];
 
 const TEST_USER: IUser = {
-        id: 1,
+        id: 2,
         name: '123123',
         brief: '12313',
         avatar: '/assets/images/avatar/14.png',
@@ -810,11 +824,19 @@ const TEST_USER: IUser = {
             type: ChatType.MESSAGE
         }
     },
+    TEST_SEND: IUser = {
+        id: 1,
+        name: 'admin',
+        brief: '1111',
+        avatar: '/assets/images/avatar/1.png',
+        new_count: 1,
+    },
     TEST_GROUP: IGroup = {
-        name: '12321',
-        count: 1,
-        online_count: 0,
+        name: '我的好友',
+        count: 2,
+        online_count: 1,
         users: [
+            TEST_SEND,
             TEST_USER
         ]
     },
@@ -853,7 +875,7 @@ function registerChat(baseUri: string) {
         });
     }).on(EVENT_GET_MESSAGE, (user: IUser, page: number, per_page: number, box: ChatMessageBox) => {
         postJson(baseUri + 'friend/message', {
-            user_id: user.id,
+            user: user.id,
             page: page,
             per_page: per_page,
         }, function(data) {
@@ -862,8 +884,21 @@ function registerChat(baseUri: string) {
             }
             box.messages = [TEST_MESSAGE];//data.data.data;
         });
-    }).init();
-    
+    }).on(EVENT_SEND_MESSAGE, (content: string, user: IUser, box: ChatMessageBox) => {
+        postJson(baseUri + 'friend/send_message', {
+            user: user.id,
+            content: content
+        }, function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.addMessage({
+                content: content,
+                type: ChatType.MESSAGE,
+                user: TEST_SEND
+            });//data.data.data;
+        });
+    }).init(TEST_SEND);
     
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();

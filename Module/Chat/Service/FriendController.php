@@ -22,7 +22,20 @@ class FriendController extends Controller {
     }
 
     public function messageAction($user) {
-        $data = MessageModel::where('user_id', $user)->page();
+        $data = MessageModel::where(function($query) use ($user) {
+            $query->where('user_id', $user)->where('receive_id', auth()->id());
+        })->orWhere(function($query) use ($user) {
+            $query->where('receive_id', $user)->where('user_id', auth()->id());
+        })->page();
+        return $this->jsonSuccess($data);
+    }
+
+    public function sendMessageAction($user, $content) {
+        $data = MessageModel::create([
+            'receive_id' => $user,
+            'content' => $content,
+            'user_id' => auth()->id()
+        ]);
         return $this->jsonSuccess($data);
     }
 }
