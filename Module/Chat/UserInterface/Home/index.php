@@ -46,67 +46,10 @@ $this->registerJs($js);
             </div>
             <div class="dialog-tab-box">
                 <div class="dialog-tab-item active">
-                    <div class="dialog-user">
-                        <div class="dialog-user-avatar">
-                            <img src="./image/avatar.jpg" alt="">
-                        </div>
-                        <div class="dialog-user-info">
-                            <p>
-                                <span class="name">12</span>
-                                <span class="time">2m ago</span>
-                            </p>
-                            <p>
-                                <span class="content">121312312323</span>
-                                <span class="count">1</span>
-                            </p>
-                        </div>
-                    </div>
                 </div>
                 <div class="dialog-tab-item">
-                    <?php foreach($group_list as $item):?>
-                    <div class="dialog-panel expanded">
-                        <div class="dialog-panel-header">
-                            <i class="dialog-panel-icon"></i>
-                            <span><?=$item->name?> (<?=$item->online_count?> / <?=$item->count?>)</span>
-                        </div>
-                        <div class="dialog-panel-box">
-                            <?php foreach($item->friends as $friend):?>
-                            <div class="dialog-user">
-                                <div class="dialog-user-avatar">
-                                    <img src="./image/avatar.jpg" alt="">
-                                </div>
-                                <div class="dialog-user-info">
-                                    <p>
-                                        <span class="name">12</span>
-                                        <span class="time">2m ago</span>
-                                    </p>
-                                    <p>
-                                        <span class="content">121312312323</span>
-                                        <span class="count">1</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <?php endforeach;?>
-                        </div>
-                    </div>
-                    <?php endforeach;?>
                 </div>
                 <div class="dialog-tab-item">
-                    <div class="dialog-user">
-                        <div class="dialog-user-avatar">
-                            <img src="./image/avatar.jpg" alt="">
-                        </div>
-                        <div class="dialog-user-info">
-                            <p>
-                                <span class="name">12</span>
-                                <span class="time">2m ago</span>
-                            </p>
-                            <p>
-                                <span class="content">121312312323</span>
-                                <span class="count">1</span>
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -134,28 +77,7 @@ $this->registerJs($js);
             </div>
         </div>
         <div class="dialog-message-box">
-            <p class="message-more">加载更多</p>
-            <div class="message-left">
-                <img class="avatar" src="./image/avatar.jpg">
-                <div class="content">
-                    1312323213213123g754513333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
-                </div>
-            </div>
-            <p class="message-line">2M ago</p>
-            <div class="message-right">
-                <img class="avatar" src="./image/avatar.jpg">
-                <div class="content">
-                    1312323213213123
-                </div>
-            </div>
-            <p class="message-line">2M ago</p>
-            <div class="message-right">
-                <img class="avatar" src="./image/avatar.jpg">
-                <div class="content">
-                    1312323213213123
-                </div>
-            </div>
-            <p class="message-tip">对方已下线</p>
+            
         </div>
         <div class="dialog-message-tools">
             <i class="fa fa-smile"></i>
@@ -190,15 +112,6 @@ $this->registerJs($js);
             <i class="fa fa-search"></i>
         </div>
         <div class="dialog-search-list">
-            <div class="dialog-info">
-                <div class="dialog-info-avatar">
-                    <img src="./image/avatar.jpg" alt="">
-                </div>
-                <div class="dialog-info-name">
-                    <h3>123</h3>
-                    <p>......</p>
-                </div>
-            </div>
         </div>
     </div>
     <!-- 查看会员信息 -->
@@ -211,9 +124,9 @@ $this->registerJs($js);
         <div class="dialog-user-avatar">
             <img src="./image/avatar.jpg" alt="">
         </div>
-        <h3>1231</h3>
+        <h3 class="user-name">1231</h3>
         <div class="dialog-user-info">
-            <p>123123</p>
+            <p class="user-brief">123123</p>
             <p>123123</p>
             <p>123123</p>
         </div>
@@ -228,13 +141,13 @@ $this->registerJs($js);
         <div class="dialog-user-avatar">
             <img src="./image/avatar.jpg" alt="">
         </div>
-        <h3>1231</h3>
-        <p>留言</p>
+        <h3 class="user-name">1231</h3>
+        <p class="user-brief">留言</p>
         <div class="dialog-add-action">
             <select name="" id="">
                 <option value="">选择分组</option>
             </select>
-            <button>同意</button>
+            <button class="dialog-yes">同意</button>
             <button>拒绝</button>
         </div>
     </div>

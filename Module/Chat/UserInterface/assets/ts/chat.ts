@@ -8,9 +8,10 @@ interface IMenu {
 }
 
 interface IGroup {
+    id?: number,
     name: string,
-    count: number,
-    online_count: number,
+    count?: number,
+    online_count?: number,
     users: Array<IUser>
 }
 
@@ -93,17 +94,25 @@ class ChatMenu extends ChatBaseBox {
      */
     constructor(
         public box: JQuery,
-        private menus: Array<IMenu> = []
+        menus: IMenu[]
     ) {
         super();
         this.bindEvent();
+        this.menus = menus;
     }
 
 
-    private menuMap: any;
+    private _menuMap: {[name: string]: IMenu};
     private target: JQuery;
-
+    private _menus: Array<IMenu> = [];
     private _events: {[event: string]: Function} = {};
+
+    
+    public set menus(v : IMenu[]) {
+        this._menus = v;
+        this.refresh();
+    }
+    
 
     public on(event: string, callback: Function): this {
         this._events[event] = callback;
@@ -123,16 +132,18 @@ class ChatMenu extends ChatBaseBox {
 
     public bindEvent() {
         let _this = this;
-        this.box.on('click', 'li', function() {
-            _this.clickLi($(this));
+        this.box.on('click', 'li', function(e) {
+            if (_this.clickLi($(this)) === false) {
+                e.stopPropagation();
+            }
         });
     }
 
     public clickLi(li: JQuery) {
         let name = li.attr('data-name'),
             menu: IMenu;
-        if (name && this.menuMap.hasOwnProperty(name)) {
-            menu = this.menuMap[name];
+        if (name && this._menuMap.hasOwnProperty(name)) {
+            menu = this._menuMap[name];
             if (menu && menu.onclick && menu.onclick(li, this.target, this) === false) {
                 return;
             }
@@ -140,20 +151,25 @@ class ChatMenu extends ChatBaseBox {
         if (name && this.hasEvent(name) && this.trigger(name, li, menu, this.target, this) === false) {
             return;
         }
-        this.trigger('click', li, menu, this.target);
+        return this.trigger('click', li, menu, this.target);
     }
 
     public addMenu(menu: IMenu | any) {
-        this.menus.push(menu);
+        this._menus.push(menu);
+        this.refresh();
         return this;
     }
 
     public showPosition(x: number, y: number, target?: JQuery) {
         this.refresh();
+        let width = $(window).width(),
+            boxWidth = this.box.outerWidth();
+        x = Math.max(0, Math.min(x, width - boxWidth));
+        y = Math.max(0, Math.min(y, $(window).height() - this.box.outerHeight()));
         this.box.css({
             'left': x + 'px',
             'top': y + 'px'
-        }).show();
+        }).toggleClass('menu-left', width - x + 80 < 2 * boxWidth ).show();
         this.target = target;
         return this;
     }
@@ -164,10 +180,21 @@ class ChatMenu extends ChatBaseBox {
     }
 
     public refresh() {
-        this.menuMap = {};
-        let menus = this.cleanMenuList(this.menus),
+        this._menuMap = {};
+        let menus = this.cleanMenuList(this._menus),
             html = menus ? this.getMenuHtml(menus) : '';
         this.box.html(html);
+    }
+
+    /**
+     * setChildrenMenu
+     */
+    public setChildrenMenu(name: string, menus: IMenu[]) {
+        if (!this._menuMap.hasOwnProperty(name)) {
+            return;
+        }
+        this._menuMap[name].children = menus;
+        this.refresh();
     }
 
     private getMenuHtml(menus: Array<IMenu>): string {
@@ -179,11 +206,11 @@ class ChatMenu extends ChatBaseBox {
     }
 
     private getMenuItemHtml(menu: IMenu): string {
-        let name = (menu.text || menu.name),
+        let name = (menu.name || menu.text),
             html = '<li data-name="'+  name
-        +'"><span><i class="fa fa-'+menu.icon+'"></i>' + (menu.text || menu.name),
+        +'"><span>' + (menu.icon ? '<i class="fa fa-'+menu.icon+'"></i>': '') + (menu.text || menu.name),
             menus = this.cleanMenuList(menu.children);
-        this.menuMap[name] = menu;
+        this._menuMap[name] = menu;
         if (menus && menus.length > 0) {
             return html + '<i class="fa fa-chevron-right"></i></span>' + this.getMenuHtml(menus) + '</li>';
         }
@@ -223,10 +250,15 @@ class ChatAddUserBox extends ChatBaseBox {
 
     private _groups: IGroup[];
 
+    public set groups(args: IGroup[]) {
+        this._groups = args;
+        this.renderGroup();
+    }
+
     public bindEvent() {
         let _this = this;
         this.box.on('click', '.dialog-add-action .dialog-yes', function() {
-            _this.parent.trigger(EVENT_ADD_USER, _this._user, _this.box.find('select').val(), _this);
+            _this.parent.trigger(EVENT_ADD_USER, _this._user, _this.find('select').val(), _this);
         });
     }
 
@@ -238,7 +270,20 @@ class ChatAddUserBox extends ChatBaseBox {
     }
 
     public refresh() {
+        this.find('.dialog-user-avatar img').attr('src', this._user.avatar);
+        this.find('.user-name').text(this._user.name);
+        this.find('.user-breif').text(this._user.brief);
+    }
 
+    /**
+     * renderGroup
+     */
+    public renderGroup() {
+        let html = '<option value="">选择分组</option>';
+        this._groups.forEach(item => {
+            html += '<option value="'+ item.id +'">'+ item.name +'</option>';
+        });
+        this.find('select').html(html);
     }
     
 }
@@ -253,6 +298,30 @@ class ChatUserInfoBox extends ChatBaseBox {
     ) {
         super();
     }
+
+    private _user: IUser;
+
+    
+    public set user(v : IUser) {
+        this._user = v;
+        this.refresh();
+    }
+    
+
+    /**
+     * showWithUser
+     */
+    public showWithUser(user: IUser) {
+        this.user = user;
+        this.center().show();
+    }
+
+    public refresh() {
+        this.find('.dialog-user-avatar img').attr('src', this._user.avatar);
+        this.find('.user-name').text(this._user.name);
+        this.find('.user-breif').text(this._user.brief);
+    }
+
 }
 
 class ChatSearchBox extends ChatBaseBox {
@@ -421,6 +490,7 @@ class ChatMessageBox extends ChatBaseBox {
             _this.parent.trigger(EVENT_SEND_MESSAGE, _this.editor.text(), _this.revice, _this);
         });
         $(window).resize(function() {
+            _this.box.toggleClass('dialog-min', $(window).width() < 500);
             _this.center();
         });
     }
@@ -576,6 +646,7 @@ class ChatUserBox extends ChatBaseBox {
             });
         });
         this.renderLastFriends();
+        this.refreshMenu();
     }
 
     public set groups(args: Array<IUser>) {
@@ -668,10 +739,14 @@ class ChatUserBox extends ChatBaseBox {
         </div>
     </div>`,
         html = '';
+        this._user.new_count = 0;
         this._last_friends.forEach(user => {
-            html += ChatUserBox.format(tpl, user.avatar, user.name, ChatMessageBox.date(user.last_message.time), user.last_message.content, user.new_count || 0, user.id);
+            let count = user.new_count || 0;
+            this._user.new_count += count;
+            html += ChatUserBox.format(tpl, user.avatar, user.name, ChatMessageBox.date(user.last_message.time), user.last_message.content, count, user.id);
         });
         this.find('.dialog-tab-box .dialog-tab-item').eq(0).html(html);
+        this.renderUser();
     }
 
     private renderUser() {
@@ -715,11 +790,24 @@ class ChatUserBox extends ChatBaseBox {
             return false;
         });
         this.menu.on('click', function(menuLi: JQuery, menu: IMenu, userItem: JQuery) {
-            _this.parent.userBox.show();
+            if (menu.name == 'view') {
+                _this.parent.userBox.showWithUser(_this.getUser(userItem.data('id')));
+            }
         });
         this.parent.on(EVENT_USER_GROUPS, (box: ChatAddUserBox) => {
-
+            box.groups = _this._friends;
         });
+    }
+
+    private refreshMenu() {
+        let menus = [];
+        this._friends.forEach(item => {
+            menus.push({
+                name: 'group-' + item.id,
+                text: item.name
+            });
+        });
+        this.menu.setChildrenMenu('move', menus);
     }
 
     public getUser(id: number): IUser {
@@ -799,14 +887,17 @@ class ChatRoom {
 
 const USER_MENU: Array<IMenu> = [
     {
+        name: 'view',
         icon: 'eye',
         text: '查看资料'
     },
     {
+        name: 'move',
         icon: 'bookmark',
-        text: '移动好友'
+        text: '移动好友',
     },
     {
+        name: 'remove',
         icon: 'trash',
         text: '删除好友'
     },
@@ -832,6 +923,7 @@ const TEST_USER: IUser = {
         new_count: 1,
     },
     TEST_GROUP: IGroup = {
+        id: 1,
         name: '我的好友',
         count: 2,
         online_count: 1,
@@ -897,6 +989,16 @@ function registerChat(baseUri: string) {
                 type: ChatType.MESSAGE,
                 user: TEST_SEND
             });//data.data.data;
+        });
+    }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
+        postJson(baseUri + 'friend/apply', {
+            user: user.id,
+            group: group
+        }, function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.hide();
         });
     }).init(TEST_SEND);
     

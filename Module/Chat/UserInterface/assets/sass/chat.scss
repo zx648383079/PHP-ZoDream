@@ -74,6 +74,15 @@ body {
             }
         }
     }
+    &.menu-left {
+        ul {
+            li {
+                ul {
+                    left: -9.375rem;
+                }
+            }
+        }
+    }
 }
 .dialog-chat {
     .dialog-box {
@@ -330,6 +339,54 @@ body {
                 line-height: 2.25rem;
                 background-color: #7676;
                 border: 0;
+            }
+        }
+        &.dialog-min {
+            width: 20rem;
+            .dialog-message-tools {
+                display: none;
+            }
+            .dialog-message-box {
+                height: 16rem;
+                .message-left, 
+                .message-right {
+                    .avatar {
+                        display: none;
+                    }
+                }
+                .message-left {
+                    .content {
+                        margin-left: 12px;
+                        &::before {
+                            left: 0;
+                        }
+                    }
+                }
+                .message-right {
+                    .content {
+                        margin-right: 12px;
+                        &::before {
+                            right: 0;
+                        }
+                    }
+                }
+            }
+            .dialog-message-editor {
+                border-top: 1px solid #ccc;
+                position: relative;
+                .dialog-message-text {
+                    height: 3rem;
+                    margin-right: 4rem;
+                }
+                .dailog-message-action {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    button {
+                        width: 4rem;
+                        height: 3rem;
+                    }
+                }
             }
         }
     }
