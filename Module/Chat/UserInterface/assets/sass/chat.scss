@@ -132,10 +132,10 @@ body {
                 cursor: pointer;
                 .dialog-panel-icon {
                     display: inline-block;
-                    font: normal normal normal 0.875rem/1 FontAwesome;
+                    font: normal normal normal 0.875rem/1 "Font Awesome 5 Free";
                     font-size: inherit;
                     text-rendering: auto;
-                    -webkit-font-smoothing: antialiased;
+                    font-weight: 700;
                     &:before {
                         content: "\f054";
                     }
@@ -213,6 +213,8 @@ body {
                 .time {
                     position: absolute;
                     right: 0;
+                    font-size: 12px;
+                    bottom: 10px;
                 }
                 .count {
                     position: absolute;

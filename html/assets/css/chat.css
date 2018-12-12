@@ -65,10 +65,10 @@ body {
     cursor: pointer; }
     .dialog-chat .dialog-box .dialog-panel .dialog-panel-header .dialog-panel-icon {
       display: inline-block;
-      font: normal normal normal 0.875rem/1 FontAwesome;
+      font: normal normal normal 0.875rem/1 "Font Awesome 5 Free";
       font-size: inherit;
       text-rendering: auto;
-      -webkit-font-smoothing: antialiased; }
+      font-weight: 700; }
       .dialog-chat .dialog-box .dialog-panel .dialog-panel-header .dialog-panel-icon:before {
         content: "\f054"; }
   .dialog-chat .dialog-box .dialog-panel .dialog-panel-box {
@@ -118,7 +118,9 @@ body {
         margin: 0; }
       .dialog-chat .dialog-chat-box .dialog-user .dialog-user-info .time {
         position: absolute;
-        right: 0; }
+        right: 0;
+        font-size: 12px;
+        bottom: 10px; }
       .dialog-chat .dialog-chat-box .dialog-user .dialog-user-info .count {
         position: absolute;
         right: 0;
