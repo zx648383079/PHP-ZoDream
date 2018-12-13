@@ -742,6 +742,11 @@ footer,
     color: #B4282D;
     font-weight: 700;
     font-size: 20px; }
+  .goods-info .promote-line {
+    display: grid;
+    grid-template-columns: 50px 1fr 35px;
+    border-top: 1px solid #ddd;
+    line-height: 40px; }
 
 .comment-box {
   background-color: #fff;
@@ -825,6 +830,40 @@ footer,
   .tab-box.goods-content img {
     max-width: 100%;
     display: block; }
+
+.activity-box {
+  display: grid;
+  grid-template: 50px / 80px 1fr 120px;
+  background-color: #ff553f;
+  color: #fff; }
+  .activity-box .price {
+    font-size: 26px;
+    text-align: center;
+    padding-top: 7px; }
+    .activity-box .price em {
+      font-size: 12px;
+      font-style: normal; }
+  .activity-box .info .old-price {
+    color: #ccc;
+    -webkit-text-decoration: line-through solid #999;
+            text-decoration: line-through solid #999; }
+  .activity-box .info .time-block {
+    vertical-align: middle;
+    line-height: 15px;
+    font-size: 10px; }
+  .activity-box .countdown {
+    text-align: center;
+    background-color: #f7f7f7;
+    padding-top: 7px; }
+    .activity-box .countdown .text {
+      color: #333;
+      font-size: 10px; }
+    .activity-box .countdown .time {
+      color: #e93b3d;
+      font-size: 12px; }
+      .activity-box .countdown .time span {
+        background-color: #fff;
+        border: 1px solid #ccc; }
 
 .cart-dialog {
   display: none;

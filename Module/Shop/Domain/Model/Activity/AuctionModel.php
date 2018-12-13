@@ -1,12 +1,8 @@
 <?php
-namespace Module\Shop\Auction\Domain\Model;
+namespace Module\Shop\Domain\Model\Activity;
 
 
 use Domain\Model\Model;
-use Domain\Model\Shopping\GoodsModel;
-use Module\Auction\Domain\Mode\AuctionInterface;
-use Module\Auction\Domain\Mode\CommonAuction;
-use Module\Auction\Domain\Mode\DutchAuction;
 
 /**
  * 拍卖

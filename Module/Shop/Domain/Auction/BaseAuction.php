@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Auction\Domain\Mode;
+namespace Module\Shop\Domain\Auction;
 
 use Domain\Model\Auth\UserModel;
 use Module\Auction\Domain\Model\AuctionLogModel;

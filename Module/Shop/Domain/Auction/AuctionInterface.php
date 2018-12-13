@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Auction\Domain\Mode;
+namespace Module\Shop\Domain\Auction;
 /**
  * 拍卖方式的接口
  * @package Module\Auction\Infrastructure

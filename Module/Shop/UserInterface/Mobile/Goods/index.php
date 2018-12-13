@@ -23,6 +23,27 @@ $this->title = '商品详情';
         <img src="<?=$goods->thumb?>" alt="">
     </div>
 
+    <div class="activity-box">
+        <div class="price">
+            <em>￥</em>
+            <?=$goods->price?>
+        </div>
+        <div class="info">
+            <p class="old-price">$1122</p>
+            <span class="time-block"><i class="fa fa-clock"></i>秒杀</span>
+        </div>
+        <div class="countdown">
+            <p class="text">距秒杀结束还剩</p>
+            <p class="time">
+                <span>01</span>
+                :
+                <span>01</span>
+                :
+                <span>01</span>
+            </p>
+        </div>
+    </div>
+
     <div class="goods-info">
         <div class="goods-header">
             <h1 class="goods-name"><?=$goods->name?></h1>
@@ -32,6 +53,28 @@ $this->title = '商品详情';
             </div>
         </div>
         <div class="goods-price"><?=$goods->price?></div>
+
+        <div class="promote-line">
+            <div>支付</div>
+            <div>
+            11111
+            </div>
+            <div>...</div>
+        </div>
+        <div class="promote-line">
+            <div>领券</div>
+            <div>
+            11111
+            </div>
+            <div>...</div>
+        </div>
+        <div class="promote-line">
+            <div>促销</div>
+            <div>
+            11111
+            </div>
+            <div>...</div>
+        </div>
     </div>
 
     <div class="comment-box">

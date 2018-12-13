@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Auction\Domain\Mode;
+namespace Module\Shop\Domain\Auction;
 
 use Module\Auction\Domain\Model\AuctionModel;
 

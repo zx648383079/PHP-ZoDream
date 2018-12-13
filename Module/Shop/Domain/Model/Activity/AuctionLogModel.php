@@ -1,9 +1,9 @@
 <?php
-namespace Module\Shop\Auction\Domain\Model;
+namespace Module\Shop\Domain\Model\Activity;
 
 
 use Domain\Model\Model;
-use Module\Auction\Domain\Mode\AuctionInterface;
+use Module\Shop\Domain\Auction\AuctionInterface;
 
 /**
  * 拍卖

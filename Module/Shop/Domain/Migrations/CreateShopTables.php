@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Migrations;
 
+use Module\Shop\Domain\Model\Activity\ActivityModel;
 use Module\Shop\Domain\Model\AddressModel;
 use Module\Shop\Domain\Model\Advertisement\AdModel;
 use Module\Shop\Domain\Model\Advertisement\AdPositionModel;
@@ -150,6 +151,8 @@ class CreateShopTables extends Migration {
         });
         $this->createShipping();
         $this->createWarehouse();
+
+        $this->createActivity();
     }
 
     /**
@@ -465,6 +468,21 @@ class CreateShopTables extends Migration {
             $table->set('width')->varchar(20)->notNull();
             $table->set('height')->varchar(20)->notNull();
             $table->set('template')->varchar()->notNull();
+            $table->timestamps();
+        });
+    }
+
+    protected function createActivity() {
+        Schema::createTable(ActivityModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(40)->notNull();
+            $table->set('thumb')->varchar(200)->defaultVal('');
+            $table->set('type')->tinyint(2)->defaultVal(ActivityModel::TYPE_AUCTION);
+            $table->set('scope_type')->tinyint(1)->defaultVal(0)->comment('商品范围类型');
+            $table->set('scope')->text()->notNull()->comment('商品范围值');
+            $table->set('configure')->text()->notNull()->comment('其他配置信息');
+            $table->timestamp('start_at');
+            $table->timestamp('end_at');
             $table->timestamps();
         });
     }
