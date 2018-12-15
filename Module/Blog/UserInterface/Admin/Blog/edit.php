@@ -38,11 +38,7 @@ $this->registerJs($js);
                 <?=Form::text('source_url')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
-                <div class="input-group">
-                    <label>
-                        <input value="1" name="comment_status" type="checkbox" <?=$model->comment_status || $model->id < 1 ? 'checked': ''?>> 是否允许评论
-                    </label>
-                </div>
+                <?=Form::checkbox('comment_status')?>
             </div>
             <div class="zd-tab-item">
                 <script id="container" style="height: 400px" name="content" type="text/plain" required>

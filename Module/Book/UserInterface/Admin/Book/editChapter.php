@@ -4,6 +4,10 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑章节';
+$js = <<<JS
+bindChapter();
+JS;
+$this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
@@ -22,14 +26,14 @@ $this->title = '编辑章节';
                 <?=Form::text('title', true)?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
-                <div class="input-group">
-                    <label>
-                        <input value="1" name="comment_status" type="checkbox" <?=$model->comment_status || $model->id < 1 ? 'checked': ''?>> 是否允许评论
-                    </label>
-                </div>
             </div>
             <div class="zd-tab-item">
-                <textarea name="content" style="width: 100%;min-height: 500px"><?=$model->body ? $model->body->content : ''?></textarea>
+                <textarea id="content-box" name="content" style="width: 100%;min-height: 500px"><?=$model->body ? $model->body->content : ''?></textarea>
+                <div class="length-box">
+                    已输入
+                    <span>0</span>
+                    个字符
+                </div>
             </div>
         </div>
     </div>

@@ -42,7 +42,8 @@ class Sixth extends BaseSpider {
             'cover' => '',
             'description' => '',
             'author_id' => 1,
-            'cat_id' => 1
+            'cat_id' => 1,
+            'classify' => 1
         ]);
     }
 

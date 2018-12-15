@@ -12,7 +12,6 @@ $this->title = '小说';
     <?=Form::select('author_id', [$author_list], true)?>
     <?=Form::select('classify', $model->classify_list, true)?>
     <?=Form::file('cover')?>
-    <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>
 
     <button type="submit" class="btn btn-success">确认保存</button>
