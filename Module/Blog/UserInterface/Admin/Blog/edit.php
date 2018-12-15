@@ -25,8 +25,7 @@ $this->registerJs($js);
         <div class="zd-tab-head">
             <div class="zd-tab-item active">
                 基本
-            </div>
-            <div class="zd-tab-item">
+            </div><div class="zd-tab-item">
                 详情
             </div>
         </div>

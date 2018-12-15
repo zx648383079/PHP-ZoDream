@@ -121,6 +121,7 @@ class BookController extends Controller {
         foreach ($ids as $id) {
             $ids = BookChapterModel::where('book_id', $id)->pluck('id');
             $length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
+            //$length = BookChapterModel::where('book_id', $id)->sum('words_count');
             BookModel::where('id', $id)
                 ->update([
                     'size' => $length

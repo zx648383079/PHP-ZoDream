@@ -91,6 +91,7 @@ class BookChapterModel extends Model {
 
     public function save() {
         $is_new = $this->isNewRecord;
+        //$this->words_count = max(0, min($this->words_count, mb_strlen($this->content)));
         $row = parent::save();
         if (!$row) {
             return $row;

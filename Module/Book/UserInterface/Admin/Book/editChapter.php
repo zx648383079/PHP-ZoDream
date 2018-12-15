@@ -16,8 +16,7 @@ $this->registerJs($js);
         <div class="zd-tab-head">
             <div class="zd-tab-item active">
                 基本
-            </div>
-            <div class="zd-tab-item">
+            </div><div class="zd-tab-item">
                 详情
             </div>
         </div>
@@ -28,11 +27,12 @@ $this->registerJs($js);
                 <?=Form::textarea('description')?>
             </div>
             <div class="zd-tab-item">
-                <textarea id="content-box" name="content" style="width: 100%;min-height: 500px"><?=$model->body ? $model->body->content : ''?></textarea>
+                <textarea id="content-box" name="content"><?=$model->body ? $model->body->content : ''?></textarea>
                 <div class="length-box">
                     已输入
                     <span>0</span>
                     个字符
+                    <input type="hidden" name="words_count" value="<?=$model->words_count?>">
                 </div>
             </div>
         </div>
