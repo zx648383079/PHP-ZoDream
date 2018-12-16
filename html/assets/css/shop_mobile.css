@@ -524,6 +524,10 @@ footer,
       .category-page .category-menu .menu-item.active {
         border-left: #55595f 0.25rem solid;
         background-color: #fff; }
+  .category-page .category-main > .item {
+    display: none; }
+    .category-page .category-main > .item.active {
+      display: block; }
   .category-page .goods-list {
     margin-top: 0; }
   .category-page .header {
@@ -532,6 +536,23 @@ footer,
     padding-left: 10px; }
   .category-page .banner img {
     width: 100%; }
+
+.tree-grid .tree-item {
+  list-style: none; }
+  .tree-grid .tree-item a {
+    line-height: 40px;
+    background-color: #fff;
+    padding-left: 10px;
+    display: block;
+    border-top: 1px solid #ccc; }
+
+.tree-grid .tree-item-chidren {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; }
+  .tree-grid .tree-item-chidren .tree-item a {
+    text-align: center; }
+    .tree-grid .tree-item-chidren .tree-item a:not(:nth-child(3n - 1)), .tree-grid .tree-item-chidren .tree-item a:not(:last-child) {
+      border-right: 1px solid #ccc; }
 
 .check-box::before {
   content: "\f111"; }
@@ -549,6 +570,15 @@ footer,
   width: 3.125rem;
   text-align: center;
   border: none; }
+
+.cart-box .cart-group-item {
+  margin: 5px 0;
+  background-color: #fff; }
+  .cart-box .cart-group-item .group-header {
+    line-height: 30px;
+    padding: 0 13px; }
+  .cart-box .cart-group-item .goods-list {
+    margin-top: 0; }
 
 .cart-box .goods-list {
   display: block; }

@@ -195,11 +195,21 @@ function bindCart(baseUrl: string) {
             }
         });
     });
+    $(".cart-group-item .group-header .check-box").change(function() {
+        let $this = $(this);
+        $this.closest('.cart-group-item').find('.cart-item .check-box').toggleClass('active', $this.hasClass('active'));
+        refreshCart();
+    });
     $(".cart-item .check-box").change(function() {
+        let $this = $(this);
+        if (!$this.hasClass('active')) {
+            $this.closest('.cart-group-item').find('.group-header .check-box').removeClass('active');
+            $(".cart-footer .check-box").removeClass('active');
+        }
         refreshCart();
     });
     $(".cart-footer .check-box").change(function() {
-        $(".cart-item .check-box").toggleClass('active', $(this).hasClass('active'));
+        $(".cart-group-item .check-box").toggleClass('active', $(this).hasClass('active'));
         refreshCart();
     })
 }
@@ -234,4 +244,19 @@ function bindStore() {
         }
         page.addClass('min').removeClass('min-up')
     });
+}
+
+function bindCategory() {
+    $(".category-menu .menu-item").click(function() {
+        let $this = $(this);
+        $this.addClass('active').siblings().removeClass('active');
+        let box = $(".category-main .item").eq($this.index());
+        box.addClass('active').siblings().removeClass('active');
+        if (box.hasClass('lazy-loading')) {
+            box.removeClass('lazy-loading');
+            $.get(box.data('url'), function(html) {
+                box.html(html);
+            });
+        }
+    }).eq(0).trigger('click');
 }

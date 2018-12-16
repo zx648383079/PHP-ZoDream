@@ -9,6 +9,9 @@ namespace Module\Shop\Domain\Model;
  */
 use Domain\Model\Model;
 
+use Module\Shop\Domain\Cart\ICartItem;
+use Module\Shop\Domain\Cart\Item;
+use Module\Shop\Domain\Model\Activity\ActivityModel;
 use Zodream\Infrastructure\Cookie;
 
 use Zodream\Service\Factory;
@@ -23,8 +26,13 @@ use Zodream\Service\Factory;
  * @property float $price
  * @property float $total
  * @property GoodsModel $goods
+ * @property ProductModel $product
+ * @property ActivityModel $activity
  */
-class CartModel extends Model {
+class CartModel extends Model implements ICartItem {
+
+    use Item;
+
     public static function tableName() {
         return 'shop_cart';
     }

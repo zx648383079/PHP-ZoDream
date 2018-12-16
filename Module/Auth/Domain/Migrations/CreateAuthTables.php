@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Migrations;
 
 use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\LoginLogModel;
@@ -47,9 +48,19 @@ class CreateAuthTables extends Migration {
         Schema::createTable(LoginLogModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('ip')->varchar(120)->notNull();
-            $table->set('user')->varchar(100);
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('user')->varchar(100)->comment('登陆账户');
             $table->set('status')->bool()->defaultVal(0);
             $table->set('mode')->varchar(20);
+            $table->timestamp('created_at');
+        });
+        Schema::createTable(ActionLogModel::tableName(), function(Table $table) {
+            $table->setComment('操作记录 ');
+            $table->set('id')->pk()->ai();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('action')->varchar(30)->notNull();
+            $table->set('remark')->varchar()->defaultVal('');
             $table->timestamp('created_at');
         });
         Schema::createTable(UserMetaModel::tableName(), function(Table $table) {

@@ -9,8 +9,8 @@ use Module\Shop\Module;
 class CartController extends Controller {
 
     public function indexAction() {
-        $goods_list = Module::cart();
-        return $this->show(compact('goods_list'));
+        $cart = Module::cart();
+        return $this->show(compact('cart'));
     }
 
     public function addAction($goods, $amount = 1) {
@@ -23,16 +23,12 @@ class CartController extends Controller {
     }
 
     public function updateAction($id, $amount) {
-        $cart = Module::cart()->getCart($id);
-        if (!$cart->goods->canBuy($amount)) {
-            return $this->jsonFailure('库存不足');
-        }
-        Module::cart()->addGoods($cart->goods, $amount);
+        Module::cart()->update($id, $amount);
         return $this->jsonSuccess();
     }
 
     public function deleteAction($id) {
-        Module::cart()->removeCartId($id);
+        Module::cart()->remove($id);
         return $this->jsonSuccess();
     }
 }

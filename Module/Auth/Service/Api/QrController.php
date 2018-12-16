@@ -3,6 +3,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\Route\Controller\RestController;
 
@@ -30,12 +31,11 @@ class QrController extends RestController {
     }
 
 
-
     /**
      * @param $token
      * @param bool $confirm
      * @param bool $reject
-     * @return Response
+     * @return RestResponse
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {

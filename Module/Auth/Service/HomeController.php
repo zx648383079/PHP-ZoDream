@@ -55,11 +55,13 @@ class HomeController extends ModuleController {
     public function loginAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
+            $user->logLogin();
             $redirect_uri = app('request')->get('redirect_uri');
             return $this->jsonSuccess([
                 'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
             ], '登录成功！');
         }
+        $user->logLogin(false);
         return $this->jsonFailure($user->getFirstError());
     }
 

@@ -11,11 +11,7 @@ $this->title = '个人资料';
 <?=Form::open($model, './admin/account/update')?>
     <?=Form::text('name', true)?>
     <?=Form::email('email', true)?>
-    <?=Form::radio('sex', [
-            '未知',
-            '女',
-            '男'
-    ])?>
+    <?=Form::radio('sex', $model->sex_list)?>
     <?=Form::file('avatar')?>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>

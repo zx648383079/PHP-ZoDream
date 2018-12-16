@@ -61,12 +61,6 @@ class UserModel extends BaseModel {
 	
 	public $oldPassword = false;
 
-	public function init() {
-	    $this->on(static::AFTER_LOGIN, function() {
-	        LoginLogModel::addLoginLog($this->name, true);
-        });
-    }
-
     protected function rules() {
         return [
             'name' => 'required|string:0,100',
@@ -104,7 +98,11 @@ class UserModel extends BaseModel {
     }
 
     public function getAvatarAttribute() {
-	    return url()->asset($this->getAttributeSource('avatar'));
+        $avatar = $this->getAttributeSource('avatar');
+        if (empty($avatar)) {
+            return null;
+        }
+	    return url()->asset($avatar);
     }
 
 	public function setPassword($password) {
@@ -117,6 +115,40 @@ class UserModel extends BaseModel {
 
 	public function validateAgree() {
 	    return !empty($this->agree);
+    }
+
+    public function validateCode() {
+        if ($this->code === false) {
+            return true;
+        }
+        $code = Factory::session()->get('code');
+        if (empty($code) || $this->code != $code) {
+            $this->setError('code', '验证码错误！');
+            return false;
+        }
+        return true;
+    }
+
+    public function validateRePassword() {
+        if ($this->rePassword === false) {
+            return true;
+        }
+        if (empty($this->rePassword) || $this->rePassword != $this->password) {
+            $this->setError('rePassword', '两次密码不一致！');
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 更改为手动记录状态
+     * @param bool $status
+     * @param string $model
+     * @return LoginLogModel
+     * @throws \Exception
+     */
+    public function logLogin($status = true, $model = LoginLogModel::MODE_WEB) {
+        return LoginLogModel::addLoginLog($this->email, $this->id, $status, $model);
     }
 
     public static function validateEmail($email) {
@@ -167,29 +199,5 @@ class UserModel extends BaseModel {
 	public static function findByEmail($email) {
 		return static::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
 	}
-
-	public function validateCode() {
-		if ($this->code === false) {
-			return true;
-		}
-		$code = Factory::session()->get('code');
-		if (empty($code) || $this->code != $code) {
-			$this->setError('code', '验证码错误！');
-			return false;
-		}
-		return true;
-	}
-	
-	public function validateRePassword() {
-		if ($this->rePassword === false) {
-			return true;
-		}
-		if (empty($this->rePassword) || $this->rePassword != $this->password) {
-			$this->setError('rePassword', '两次密码不一致！');
-			return false;
-		}
-		return true;
-	}
-
 
 }

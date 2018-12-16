@@ -105,6 +105,16 @@ $this->registerCssFile([
                 'fa fa-key'
             ],
             [
+                '登陆记录',
+                './admin/account/login_log',
+                'fa fa-calendar-alt'
+            ],
+            [
+                '操作记录',
+                './admin/account/log',
+                'fa fa-calendar'
+            ],
+            [
                 '退出登陆',
                 './logout',
                 'fa fa-sign-out-alt'

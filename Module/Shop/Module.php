@@ -1,16 +1,14 @@
 <?php
 namespace Module\Shop;
 
+use Module\Shop\Domain\Cart\Cart;
 use Module\Shop\Domain\Migrations\CreateShopTables;
-use Module\Shop\Domain\ShoppingCart;
 use Zodream\Route\Controller\Module as BaseModule;
-use Zodream\Service\Factory;
-use Zodream\Template\Engine\ParserCompiler;
 
 class Module extends BaseModule {
 
     public function boot() {
-        app()->register(ShoppingCart::class);
+        app()->register('cart', Cart::class);
     }
 
     public function getMigration() {
@@ -18,10 +16,10 @@ class Module extends BaseModule {
     }
 
     /**
-     * @return ShoppingCart
+     * @return Cart
      * @throws \Exception
      */
     public static function cart() {
-        return app(ShoppingCart::class);
+        return app('cart');
     }
 }

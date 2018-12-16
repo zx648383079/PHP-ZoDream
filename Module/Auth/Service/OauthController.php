@@ -42,6 +42,7 @@ class OauthController extends ModuleController {
             $type);
         if (!empty($user)) {
             $user->login();
+            $user->logLogin(true, $type);
             return $this->redirect($redirect_uri);
         }
         if (empty($auth->info())) {
@@ -72,6 +73,7 @@ class OauthController extends ModuleController {
         ]);
         OAuthModel::bindUser($user, $auth->identity, $type);
         $user->login();
+        $user->logLogin(true, $type);
         return $this->redirect($redirect_uri);
     }
 

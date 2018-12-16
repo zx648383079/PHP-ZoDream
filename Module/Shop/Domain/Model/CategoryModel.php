@@ -111,6 +111,31 @@ class CategoryModel extends Model {
         });
     }
 
+    /**
+     * 获取子代树
+     * @param $id
+     * @param bool $data
+     * @return array
+     */
+    public static function getChildrenItem($id, $data = true) {
+        if ($data === true) {
+            $data = self::cacheTree();
+        }
+        if (isset($data[$id])) {
+            return isset($data[$id]['children']) ? $data[$id]['children'] : [];
+        }
+        foreach ($data as $item) {
+            if (!isset($item['children'])) {
+                continue;
+            }
+            $args = self::getChildrenItem($id, $item['children']);
+            if (is_array($args)) {
+                return $args;
+            }
+        }
+        return false;
+    }
+
     public static function getChildrenWithParent($id) {
         $data = TreeHelper::getTreeChild(static::cacheLevel(), $id);
         $data[] = $id;

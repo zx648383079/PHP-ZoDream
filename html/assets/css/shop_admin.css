@@ -195,12 +195,4 @@
     .toggle-box.active .fa::before {
       content: "\f00c"; }
 
-@media screen and (max-width: 769px) {
-  .auto-hide {
-    display: none; }
-  table .btn,
-  .table .btn {
-    padding: 0 10px;
-    margin: 0; } }
-
 /*# sourceMappingURL=shop_admin.css.map */

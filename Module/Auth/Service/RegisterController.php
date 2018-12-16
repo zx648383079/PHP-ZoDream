@@ -20,6 +20,7 @@ class RegisterController extends ModuleController {
     public function postAction() {
         $model = new UserModel();
         if ($model->load() && $model->signUp()) {
+            $model->logLogin();
             return $this->jsonSuccess([
                 'url' => url('/')
             ]);

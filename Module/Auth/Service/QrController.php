@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Service;
 
+use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
@@ -36,6 +37,7 @@ class QrController extends ModuleController {
             && $model->status == LoginQrModel::STATUS_SUCCESS) {
             $user = UserModel::findIdentity($model->user_id);
             $user->login();
+            $user->logLogin(true, LoginLogModel::MODE_QR);
             return $this->jsonSuccess([
                 'url' => url('/')
             ], '登陆成功');

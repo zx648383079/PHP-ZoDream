@@ -2,6 +2,8 @@
 namespace Module\Auth\Service\Admin;
 
 
+use Module\Auth\Domain\Model\ActionLogModel;
+use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 
 
@@ -12,10 +14,27 @@ class AccountController extends Controller {
         return $this->show(compact('model'));
     }
 
+    public function loginLogAction($keywords = null) {
+        $model_list = LoginLogModel::where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) {
+                LoginLogModel::search($query, 'ip');
+            })
+            ->orderBy('id desc')->page();
+        return $this->show(compact('model_list'));
+    }
+
+    public function logAction($keywords = null) {
+        $model_list = ActionLogModel::where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) {
+                LoginLogModel::search($query, 'ip');
+            })
+            ->orderBy('id desc')->page();
+        return $this->show(compact('model_list'));
+    }
+
     public function passwordAction() {
         return $this->show();
     }
-
 
     public function updateAction() {
         /** @var UserModel $model */

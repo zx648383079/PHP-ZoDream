@@ -18,11 +18,7 @@ $this->registerCssFile('@select2.min.css')
 <?=Form::open($model, './admin/user/save')?>
     <?=Form::text('name', true)?>
     <?=Form::email('email', true)?>
-    <?=Form::radio('sex', [
-            '未知',
-            '女',
-            '男'
-    ])?>
+    <?=Form::radio('sex', $model->sex_list)?>
     <?=Form::file('avatar')?>
     <?= Form::password('password', '', '新密码', '输入新密码', !!$model->id) ?>
     <?= Form::password('confirm_password', '', '确认密码', '确认密码', !!$model->id) ?>
