@@ -34,8 +34,7 @@ $this->title = $book->name;
                     <a href="<?=$this->url('./book/read', ['id' => $item->id])?>"><?=Str::substr($item->title, 0, 20)?></a>
                 </td>
                 <td>
-                </td>
-                <td>
+                    <?=$item->size?>
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">

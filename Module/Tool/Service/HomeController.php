@@ -47,4 +47,8 @@ class HomeController extends Controller {
     public function unicodeAction() {
         return $this->show();
     }
+
+    public function asciiAction() {
+        return $this->show();
+    }
 }

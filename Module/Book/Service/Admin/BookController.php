@@ -9,7 +9,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 
 class BookController extends Controller {
-    public function indexAction($keywords = null, $cat_id = null, $author_id = null, $classify = null) {
+    public function indexAction($keywords = null, $cat_id = null, $author_id = null, $classify = 0) {
         $model_list = BookModel::with('category', 'author')
             //->withCount('chapter')
             ->when(!empty($keywords), function ($query) {
@@ -119,9 +119,9 @@ class BookController extends Controller {
     protected function refreshBookSize() {
         $ids = BookModel::pluck('id');
         foreach ($ids as $id) {
-            $ids = BookChapterModel::where('book_id', $id)->pluck('id');
-            $length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
-            //$length = BookChapterModel::where('book_id', $id)->sum('words_count');
+            //$ids = BookChapterModel::where('book_id', $id)->pluck('id');
+            //$length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
+            $length = BookChapterModel::where('book_id', $id)->sum('size');
             BookModel::where('id', $id)
                 ->update([
                     'size' => $length

@@ -4,6 +4,19 @@ function htmlFormat(html: string): string {
     return window.exports.beautifier.html(html, { indent_size: 4, space_in_empty_paren: true});
 }
 
+function asciiEncode(content: string): string {
+    let val = [];
+    for (let i = 0; i < content.length; i++) {
+        val.push(content.charAt(i)+":" + content.charCodeAt(i));
+    }
+    return val.join("\n");
+}
+function asciiDecode(content: string): string {
+    return content.replace(/(\d+)/g, function(m, i) {
+        return String.fromCharCode(parseInt(m));
+    })
+}
+
 function converter(content: string, type: string): string| number {
     let result: string| number = '';
     switch (type) {
@@ -12,6 +25,12 @@ function converter(content: string, type: string): string| number {
             break;
         case 'urldecode':
             result = decodeURIComponent(content);
+            break;
+        case 'ascii_encode':
+            result = asciiEncode(content);
+            break;
+        case 'ascii_decode':
+            result = asciiDecode(content);
             break;
         case 'unicode':
             result = escape(content).toLocaleLowerCase().replace(/%u/gi,'\\u');

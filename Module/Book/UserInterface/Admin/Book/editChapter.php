@@ -23,8 +23,7 @@ $this->registerJs($js);
         <div class="zd-tab-body">
             <div class="zd-tab-item active">
                 <?=Form::text('title', true)?>
-                <?=Form::text('keywords')?>
-                <?=Form::textarea('description')?>
+                <?=Form::text('source')?>
             </div>
             <div class="zd-tab-item">
                 <textarea id="content-box" name="content"><?=$model->body ? $model->body->content : ''?></textarea>
@@ -32,7 +31,7 @@ $this->registerJs($js);
                     已输入
                     <span>0</span>
                     个字符
-                    <input type="hidden" name="words_count" value="<?=$model->words_count?>">
+                    <input type="hidden" name="size" value="<?=$model->size?>">
                 </div>
             </div>
         </div>

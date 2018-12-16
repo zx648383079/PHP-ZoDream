@@ -74,7 +74,7 @@ class Scheduler {
     /**
      * Get the queued jobs.
      *
-     * @return array
+     * @return Job[]
      */
     public function getQueuedJobs()
     {
@@ -103,8 +103,7 @@ class Scheduler {
      * @param  string  $id      Optional custom identifier
      * @return Job
      */
-    public function php($script, $bin = null, $args = [], $id = null)
-    {
+    public function php($script, $bin = null, $args = [], $id = null) {
         if (! is_string($script)) {
             throw new InvalidArgumentException('The script should be a valid path to a file.');
         }
@@ -119,6 +118,18 @@ class Scheduler {
         }
         $this->queueJob($job->configure($this->config));
         return $job;
+    }
+
+    /**
+     * 执行php 语句
+     * @param $script
+     * @param null $bin
+     * @param array $args
+     * @param null $id
+     * @return Job
+     */
+    public function phpRaw($script, $bin = null, $args = [], $id = null) {
+        return $this->php(sprintf('-r %s', escapeshellarg($script)), $bin, $args, $id);
     }
     /**
      * Queue a raw shell command.

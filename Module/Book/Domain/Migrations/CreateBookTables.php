@@ -25,9 +25,9 @@ class CreateBookTables extends Migration {
             $table->set('user_id')->int()->defaultVal(0);
             $table->set('classify')->tinyint(2)->defaultVal(0)->comment('小说分级');
             $table->set('cat_id')->tinyint(3)->defaultVal(0)->comment('分类');
-            $table->set('size')->int()->defaultVal(0)->comment('总字数');
+            $table->set('size')->int()->unsigned()->defaultVal(0)->comment('总字数');
             $table->set('click_count')->int()->defaultVal(0)->comment('点击数');
-            $table->set('recommend_count')->int()
+            $table->set('recommend_count')->int()->unsigned()
                 ->defaultVal(0)->comment('点击数');
             $table->timestamp('over_at')->comment('完本日期');
             $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
@@ -42,6 +42,7 @@ class CreateBookTables extends Migration {
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('position')->tinyint(4)->defaultVal(99);
+            $table->set('size')->int()->unsigned()->defaultVal(0)->comment('字数');
             $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
             $table->softDeletes();
             $table->timestamps();

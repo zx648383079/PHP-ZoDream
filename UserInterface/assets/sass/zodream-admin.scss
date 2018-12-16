@@ -227,4 +227,14 @@ footer {
         margin-left: 0;
         width: 100%;
     }
+    .auto-hide {
+        display: none;
+    }
+    table,
+    .table {
+        .btn {
+            padding: 0 10px;
+            margin: 0;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Schedule\Domain;
 
+use Cron\CronExpression;
 use DateTime;
 use Exception;
 use InvalidArgumentException;
@@ -41,7 +42,7 @@ class Job {
     /**
      * Job schedule time.
      *
-     * @var Cron\CronExpression
+     * @var CronExpression
      */
     private $executionTime;
     /**
@@ -190,17 +191,15 @@ class Job {
         $this->runInBackground = false;
         return $this;
     }
+
     /**
      * Check if the Job can run in background.
      *
      * @return bool
+     * @throws Exception
      */
-    public function canRunInBackground()
-    {
-        if (is_callable($this->command) || $this->runInBackground === false) {
-            return false;
-        }
-        return true;
+    public function canRunInBackground() {
+        return app('request')->isLinux() && !is_callable($this->command) && $this->runInBackground === false;
     }
     /**
      * This will prevent the Job from overlapping.

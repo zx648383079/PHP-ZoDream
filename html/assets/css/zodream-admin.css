@@ -184,6 +184,12 @@ footer {
           content: "\f00d"; }
   .main-container {
     margin-left: 0;
-    width: 100%; } }
+    width: 100%; }
+  .auto-hide {
+    display: none; }
+  table .btn,
+  .table .btn {
+    padding: 0 10px;
+    margin: 0; } }
 
 /*# sourceMappingURL=zodream-admin.css.map */

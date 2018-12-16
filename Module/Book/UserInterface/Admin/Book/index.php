@@ -31,7 +31,6 @@ $this->title = 'ZoDream';
             <div class="input-group">
                 <label>分级</label>
                 <select name="classify">
-                    <option value="">请选择</option>
                     <?php foreach([
                                       '无分级',
                                       '成人级',
@@ -83,7 +82,7 @@ $this->title = 'ZoDream';
                     <?php endif;?>
                 </td>
                 <td>
-                    <?=$this->chapter_count?>
+                    <?=$item->format_size?>
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">

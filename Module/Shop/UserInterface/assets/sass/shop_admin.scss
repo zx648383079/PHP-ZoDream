@@ -262,15 +262,3 @@ $color_celeste_approx: #ccc;
 	}
 }
 
-@media screen and (max-width: 769px) {
-	.auto-hide {
-		display: none;
-	}
-	table,
-	.table {
-		.btn {
-			padding: 0 10px;
-			margin: 0;
-		}
-	}
-}

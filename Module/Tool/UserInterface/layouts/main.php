@@ -53,6 +53,11 @@ $this->registerCssFile([
                 './home/base64',
                 'fa fa-list'
             ],
+            [
+                'ascii',
+                './home/ascii',
+                'fa fa-list'
+            ],
          ],
          true
      ],
