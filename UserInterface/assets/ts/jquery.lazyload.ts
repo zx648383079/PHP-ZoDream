@@ -37,6 +37,10 @@ class LazyItem {
        if (this.mode == LazyMode.once && this._lastHeight != undefined) {
            return false;
        }
+       if (this.element.parent().length < 1) {
+           // 判断元素是否被移除
+           return false;
+       }
        if (typeof this.diff == 'function') {
            return this.diff.call(this, height, bottom);
        }

@@ -14,8 +14,22 @@ class NoteController extends ModuleController {
 
 	}
 
+    public function saveAction() {
+        $model = new NoteModel();
+        $model->user_id = auth()->id();
+        if ($model->load() && $model->save()) {
+            return $this->jsonSuccess([
+                'refresh' => true
+            ]);
+        }
+        return $this->jsonFailure($model->getFirstError());
+    }
+
     public function deleteAction($id) {
         NoteModel::where('id', $id)->delete();
+        if (app('request')->isAjax()) {
+            return $this->jsonSuccess();
+        }
         return $this->redirect('./');
 	}
 

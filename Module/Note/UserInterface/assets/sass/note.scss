@@ -1,3 +1,4 @@
+$shadow: rgba(33,33,33,.7);
 .flex-box {
     display: flex;
     flex-flow: column wrap;
@@ -13,7 +14,7 @@
         background: #ffc;
         display: block;
         position: relative;
-        box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+        box-shadow: 3px 3px 4px $shadow;
         margin: 20px 10px auto;
         &::before {
             content: " ";
@@ -21,12 +22,12 @@
             left: calc(50% - 10px);
             width: 20px;
             height: 20px;
-            background: #ffc;
+            background-color: #ffc;
             top: 0px;
             display: block;
             border: 5px solid #767;
             border-radius: 50%;
-            box-shadow: 2px 2px 3px rgba(33, 33, 33, 0.7);
+            box-shadow: 2px 2px 3px $shadow;
         }
         .item-content {
             display: flex;
@@ -39,8 +40,45 @@
             color: #686868;
             box-sizing: border-box;
             border: 1px solid #ccc;
+            word-break: break-all;
+        }
+        .fa-times {
+            display: none;
+            position: absolute;
+            border: 3px solid;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            right: -10px;
+            background-color: #fff;
+            top: -10px;
+            text-decoration: none;
+            color: #f00;
+            line-height: 15px;
+        }
+        .item-time {
+            color: #ccc;
+            font-size: 12px;
+            span {
+                &:last-child {
+                    float: right;
+                }
+            }
+        }
+        &:hover {
+            box-shadow: 5px 5px 7px $shadow;
+            &::before {
+                box-shadow: none;
+            }
+            .fa-times {
+                display: block;
+            }
         }
         &.new-item {
+            &::before {
+                background-color: #f00;
+            }
             .item-content {
                 padding: 0;
             }
@@ -55,7 +93,15 @@
                 font-size: 16px;
                 line-height: 20px;
             }
-            
+            .item-action {
+                padding: 5px 5px 0;
+                height: 20px;
+                color: #777;
+                .fa-check {
+                    float: right;
+                    color: green;
+                }
+            }
         }
     }
 }
@@ -82,4 +128,9 @@
             font-size: 20px;
         }
     }
+}
+.more-load {
+    text-align: center;
+    line-height: 30px;
+    color: #ccc;
 }

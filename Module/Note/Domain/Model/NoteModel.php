@@ -3,6 +3,7 @@ namespace Module\Note\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Support\Html;
 
 /**
@@ -41,10 +42,14 @@ class NoteModel extends Model {
     }
 
     public function getHtmlAttribute() {
-	    $args = explode("\n", str_replace(' ', '&nbsp;', $this->content));
+	    $args = explode("\n", str_replace(["\t", ' '], ['    ', '&nbsp;'], $this->content));
 	    return implode('', array_map(function ($item) {
 	        return Html::p($item);
         }, $args));
+    }
+
+    public function getDateAttribute() {
+        return Time::isTimeAgo($this->getAttributeSource('created_at'), 30 * 86400);
     }
 
 }

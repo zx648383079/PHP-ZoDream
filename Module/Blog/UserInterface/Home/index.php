@@ -68,7 +68,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
             <li>关于</li>
             <li class="book-search">
                 <form>
-                    <input type="text" name="keywords" value="<?=$keywords?>">
+                    <input type="text" name="keywords" value="<?=$this->text($keywords)?>">
                     <i class="fa fa-search"></i>
                     <ul class="search-tip">
                     </ul>
