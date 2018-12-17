@@ -1,0 +1,85 @@
+.flex-box {
+    display: flex;
+    flex-flow: column wrap;
+    width: 100%;
+    flex-direction: row;
+    height: auto;
+    .item {
+        box-sizing: border-box;
+        padding: 10px;
+        max-width: 300px;
+        counter-increment: item-counter;
+        text-decoration: none;
+        background: #ffc;
+        display: block;
+        position: relative;
+        box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+        margin: 20px 10px auto;
+        &::before {
+            content: " ";
+            position: absolute;
+            left: calc(50% - 10px);
+            width: 20px;
+            height: 20px;
+            background: #ffc;
+            top: 0px;
+            display: block;
+            border: 5px solid #767;
+            border-radius: 50%;
+            box-shadow: 2px 2px 3px rgba(33, 33, 33, 0.7);
+        }
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            height: auto;
+            font-size: 20px;
+            color: #686868;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+        &.new-item {
+            .item-content {
+                padding: 0;
+            }
+            textarea {
+                padding: 10px;
+                width: 280px;
+                background: transparent;
+                border: none;
+                resize: none;
+                height: 200px;
+                outline: 0;
+                font-size: 16px;
+                line-height: 20px;
+            }
+            
+        }
+    }
+}
+
+.search-box {
+    width: 320px;
+    margin: 30px auto;
+    line-height: 40px;
+    .search-input {
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+        display: grid;
+        grid-template: 40px / 40px 1fr;
+        input {
+            height: 40px;
+            border: none;
+            outline: 0;
+            font-size: 20px;
+        }
+        button {
+            background: transparent;
+            border: none;
+            width: 40px;
+            font-size: 20px;
+        }
+    }
+}
