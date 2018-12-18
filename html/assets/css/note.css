@@ -14,7 +14,9 @@
     display: block;
     position: relative;
     box-shadow: 3px 3px 4px rgba(33, 33, 33, 0.7);
-    margin: 20px 10px auto; }
+    margin: 20px 10px auto;
+    -webkit-transform-origin: 50% 0;
+            transform-origin: 50% 0; }
     .flex-box .item::before {
       content: " ";
       position: absolute;

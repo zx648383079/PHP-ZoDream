@@ -47,6 +47,16 @@ function bindNewNote(baseUri: string) {
     });
 }
 $(function() {
+    let initAlpha: number;
+    window.addEventListener('deviceorientation', e => {
+        if (!e.alpha) {
+            return;
+        }
+        if (typeof initAlpha == 'undefined' || Math.abs(e.gamma) > 45) {
+            initAlpha = e.alpha; // 设置初始方向
+        }
+        $('.flex-box .item').css('transform', 'rotate(' + (e.alpha - initAlpha) + 'deg)');
+    });
     $(".more-load").lazyload({
         mode: 1,
         callback: function(moreEle: JQuery) {

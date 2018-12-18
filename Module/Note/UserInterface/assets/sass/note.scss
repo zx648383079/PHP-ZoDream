@@ -16,6 +16,7 @@ $shadow: rgba(33,33,33,.7);
         position: relative;
         box-shadow: 3px 3px 4px $shadow;
         margin: 20px 10px auto;
+        transform-origin: 50% 0;
         &::before {
             content: " ";
             position: absolute;
