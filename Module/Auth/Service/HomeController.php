@@ -55,7 +55,7 @@ class HomeController extends ModuleController {
     public function loginAction() {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            $user->logLogin();
+            auth()->user()->logLogin();
             $redirect_uri = app('request')->get('redirect_uri');
             return $this->jsonSuccess([
                 'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)

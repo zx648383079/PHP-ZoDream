@@ -56,8 +56,8 @@ function sassTask() {
         }))
         .pipe(autoprefixer())
         .pipe(sourcemaps.write('./'))
-        // .pipe(minCss())
-        // .pipe(rename({suffix:'.min'}))
+        //.pipe(minCss())
+        //.pipe(rename({suffix:'.min'}))
         .pipe(gulp.dest(cssDist));
 }
 

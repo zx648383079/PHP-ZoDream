@@ -16,7 +16,10 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction($sort = 'new', $category = null, $keywords = null) {
+    public function indexAction($sort = 'new', $category = null, $keywords = null, $id = 0) {
+        if ($id > 0) {
+            return $this->runMethodNotProcess('detail', compact('id'));
+        }
         $blog_list  = BlogModel::with('term', 'user')
             ->select('id', 'title', 'description',
                 'created_at', 'comment_count',
@@ -55,6 +58,9 @@ class HomeController extends ModuleController {
 
     public function detailAction($id) {
         $id = intval($id);
+        if ($id < 1) {
+            return $this->redirect('./');
+        }
         BlogModel::where('id', $id)->updateOne('click_count');
         $blog = BlogModel::find($id);
         if (empty($blog)) {

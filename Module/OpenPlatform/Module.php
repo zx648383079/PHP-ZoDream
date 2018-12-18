@@ -16,6 +16,7 @@ class Module extends BaseModule {
     }
 
     public function invokeRoute($path) {
+        config()->set('app.rewrite', false); // 禁用重写
         $path = trim($path, '/');
         if (empty($path)) {
             return;

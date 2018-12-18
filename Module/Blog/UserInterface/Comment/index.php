@@ -39,7 +39,7 @@ use Zodream\Template\View;
     <div class="title">
         发表评论
     </div>
-    <form id="comment-form" method="post" action="<?=$this->url('./comment/save')?>">
+    <form id="comment-form" method="post" action="<?=$this->url('./comment/save', false)?>">
         <input type="hidden" name="blog_id" value="<?=$blog_id?>">
         <input type="hidden" name="parent_id">
         <?php if (auth()->guest()):?>
@@ -78,7 +78,9 @@ use Zodream\Template\View;
 
 <script>
 function getMoreComments(page) {
-    $.get('<?=$this->url(['./comment/more', 'blog_id' => $blog_id])?>&page=' + page, function (html) {
+    $.get('<?=$this->url(['./comment/more', 'blog_id' => $blog_id])?>', {
+        page: page
+    }, function (html) {
         if (page < 2) {
             $("#comment-box").html(html);
         } else {

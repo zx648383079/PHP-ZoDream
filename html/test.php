@@ -19,6 +19,8 @@ use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
 
+dd(url()->enRewrite('blog', []));
+
 $goods = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\zd.jpg');
 $qr = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\wx.jpg');
 

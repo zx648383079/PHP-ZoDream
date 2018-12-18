@@ -12,7 +12,7 @@ $this->extend('layouts/header')
 ?>
     <section class="container">
         <div class="login-box">
-            <form class="form-ico login-form" action="<?= $this->url('./home/login') ?>" method="POST">
+            <form class="form-ico login-form" action="<?= $this->url('./home/login', false) ?>" method="POST">
                 <div class="input-box">
                     <div class="input-group">
                         <input type="email" name="email" placeholder="请输入账号" required autocomplete="off">
@@ -62,10 +62,10 @@ $this->extend('layouts/header')
             </form>
             <div class="login-oauth-box">
                 <div class="box-title">第三方登录</div>
-                <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-qq"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'wechat', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-weixin"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'weibo', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-weibo"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'github', 'redirect_uri' => $redirect_uri])?>"><i class="fab fa-github"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-qq"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'wechat', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-weixin"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'weibo', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-weibo"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'github', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-github"></i></a>
             </div>
         </div>
     </section>

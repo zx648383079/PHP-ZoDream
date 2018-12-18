@@ -6,7 +6,7 @@ $this->extend('layouts/header');
 ?>
     <section class="container">
         <div class="login-box">
-            <form class="form-ico" action="<?= $this->url('./qr/authorize') ?>" method="POST">
+            <form class="form-ico" action="<?= $this->url('./qr/authorize', false) ?>" method="POST">
                 <div class="avatar">
                     <img src="<?=$user ? $user->avatar : '/assets/images/avatar/1.png'?>">
                 </div>

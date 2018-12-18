@@ -61,7 +61,7 @@ class LoginLogModel extends Model {
 		return static::create([
             'ip' => app('request')->ip(),
             'user' => $user,
-            'user_id' => $user_id,
+            'user_id' => intval($user_id),
             'status' => $status,
             'mode' => $mode,
             'created_at' => time()

@@ -88,7 +88,7 @@ class BlogModel extends Model {
     }
 
 	public function getUrlAttribute() {
-	    return url('./detail', ['id' => $this->id]);
+	    return url('./', ['id' => $this->id]);
     }
 
 	public function getPreviousAttribute() {
