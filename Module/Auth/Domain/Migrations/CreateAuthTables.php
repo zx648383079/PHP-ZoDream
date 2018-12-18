@@ -49,9 +49,9 @@ class CreateAuthTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('ip')->varchar(120)->notNull();
             $table->set('user_id')->int()->defaultVal(0);
-            $table->set('user')->varchar(100)->comment('登陆账户');
+            $table->set('user')->varchar(100)->notNull()->comment('登陆账户');
             $table->set('status')->bool()->defaultVal(0);
-            $table->set('mode')->varchar(20);
+            $table->set('mode')->varchar(20)->defaultVal(LoginLogModel::MODE_WEB);
             $table->timestamp('created_at');
         });
         Schema::createTable(ActionLogModel::tableName(), function(Table $table) {
