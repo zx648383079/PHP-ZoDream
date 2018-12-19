@@ -44,7 +44,8 @@ function bindBlogPage(baseUri: string) {
         callback: function(item: JQuery) {
             item.removeClass('fade-pre-item').addClass('fade-item');
         }
-    })
+    });
+    
 }
 
 function bindBlog(baseUri: string, id: number) {

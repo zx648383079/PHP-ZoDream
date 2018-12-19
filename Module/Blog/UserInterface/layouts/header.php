@@ -2,9 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@animate.min.css')
-    ->registerCssFile('@blog.css');
+$this->registerCssFile([
+    '@font-awesome.min.css',
+    '@animate.min.css',
+    '@blog.css']);
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -18,4 +19,4 @@ $this->registerCssFile('@font-awesome.min.css')
         <?=$this->header()?>
     </head>
 <body>
-<div class="book-skin">
+<div id="book-page" class="book-skin">

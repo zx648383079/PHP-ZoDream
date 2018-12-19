@@ -116,10 +116,11 @@
           .book-skin .book-body .book-sort a.active:after {
             border-top-color: #af5d0d; }
     .book-skin .book-body .book-item {
-      padding: 5px;
+      margin: 0 -15px;
+      padding: 5px 20px;
       -webkit-animation-duration: 1.5s;
               animation-duration: 1.5s;
-      border-bottom: 1px solid #af5d0d; }
+      transition: box-shadow 1s; }
       .book-skin .book-body .book-item dt {
         font-size: 20px;
         font-weight: 600; }
@@ -139,6 +140,10 @@
           margin-left: 10px; }
       .book-skin .book-body .book-item:hover dd, .book-skin .book-body .book-item:nth-child(2) dd, .book-skin .book-body .book-item:nth-child(3) dd, .book-skin .book-body .book-item:nth-child(4) dd {
         display: block; }
+      .book-skin .book-body .book-item:hover {
+        box-shadow: rgba(33, 33, 33, 0.7) 0 0 10px; }
+      .book-skin .book-body .book-item:not(:last-child) {
+        border-bottom: 1px solid #af5d0d; }
       .book-skin .book-body .book-item.fade-pre-item {
         visibility: hidden; }
       .book-skin .book-body .book-item.fade-item {
@@ -261,7 +266,6 @@
       list-style: none;
       width: 150px;
       line-height: 30px;
-      border-bottom: 1px solid #af5d0d;
       padding-left: 20px;
       box-sizing: border-box; }
       .book-skin .book-sidebar .book-chapter li .fa,
@@ -281,6 +285,9 @@
       .book-skin .book-sidebar .book-chapter li:hover,
       .book-skin .book-sidebar .book-new li:hover {
         width: 175px; }
+      .book-skin .book-sidebar .book-chapter li:not(:last-child),
+      .book-skin .book-sidebar .book-new li:not(:last-child) {
+        border-bottom: 1px solid #af5d0d; }
     .book-skin .book-sidebar .book-new {
       margin-top: 50px; }
       .book-skin .book-sidebar .book-new h3 {
@@ -428,17 +435,20 @@
   .book-skin .book-body {
     margin-right: 0;
     padding: 30px 8px; }
-    .book-skin .book-body .book-item dd {
-      display: block; }
-      .book-skin .book-body .book-item dd .author,
-      .book-skin .book-body .book-item dd .category,
-      .book-skin .book-body .book-item dd .comment,
-      .book-skin .book-body .book-item dd .agree,
-      .book-skin .book-body .book-item dd .click {
-        font-size: 12px; }
-    .book-skin .book-body .book-item .book-time {
-      font-size: 12px;
-      width: 70px; }
+    .book-skin .book-body .book-item {
+      margin: 0 -8px;
+      padding: 5px 13px; }
+      .book-skin .book-body .book-item dd {
+        display: block; }
+        .book-skin .book-body .book-item dd .author,
+        .book-skin .book-body .book-item dd .category,
+        .book-skin .book-body .book-item dd .comment,
+        .book-skin .book-body .book-item dd .agree,
+        .book-skin .book-body .book-item dd .click {
+          font-size: 12px; }
+      .book-skin .book-body .book-item .book-time {
+        font-size: 12px;
+        width: 70px; }
     .book-skin .book-body .info,
     .book-skin .book-body .tools {
       font-size: 12px; }
@@ -514,6 +524,8 @@
     position: static;
     width: 100%; }
     .book-skin.book-collapsed .book-sidebar .book-chapter {
-      display: block; } }
+      display: block; }
+  .book-comment-form .form-table .form-group label {
+    width: 100px; } }
 
 /*# sourceMappingURL=blog.css.map */

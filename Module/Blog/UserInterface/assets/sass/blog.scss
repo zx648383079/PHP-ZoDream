@@ -1,6 +1,7 @@
 $defaultColor: #f9cfa6;
 $hoverColor: #d39357;
 $activeColor: #af5d0d;
+$shadow: rgba(33,33,33,.7);
 @mixin active() {
     background: $activeColor;
     color: #fff;
@@ -161,9 +162,10 @@ $activeColor: #af5d0d;
             }
         }
         .book-item {
-            padding: 5px;
+            margin: 0 -15px;
+            padding: 5px 20px;
             animation-duration: 1.5s;
-            border-bottom: 1px solid $activeColor;
+            transition: box-shadow 1s;
             dt {
                 font-size: 20px;
                 font-weight: 600;
@@ -194,6 +196,12 @@ $activeColor: #af5d0d;
                 dd {
                     display: block;
                 }
+            }
+            &:hover {
+                box-shadow: $shadow 0 0 10px ;
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid $activeColor;
             }
             &.fade-pre-item {
                 visibility: hidden;
@@ -367,7 +375,6 @@ $activeColor: #af5d0d;
                 list-style: none;
                 width: 150px;
                 line-height: 30px;
-                border-bottom: 1px solid $activeColor;
                 padding-left: 20px;
                 box-sizing: border-box;
                 .fa {
@@ -385,6 +392,9 @@ $activeColor: #af5d0d;
                 }
                 &:hover {
                     width: 175px;
+                }
+                &:not(:last-child) {
+                    border-bottom: 1px solid $activeColor;
                 }
             }
         }
@@ -590,6 +600,8 @@ $activeColor: #af5d0d;
             margin-right: 0;
             padding: 30px 8px;
             .book-item {
+                margin: 0 -8px;
+                padding: 5px 13px;
                 dd {
                     display: block;
                     .author,
@@ -730,6 +742,16 @@ $activeColor: #af5d0d;
                 width: 100%;
                 .book-chapter {
                     display: block;
+                }
+            }
+        }
+    }
+
+    .book-comment-form {
+        .form-table {
+            .form-group {
+                label {
+                    width: 100px;
                 }
             }
         }
