@@ -1,3 +1,8 @@
+<?php
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+?>
 <?php foreach ($comment_list as $reply) :?>
 <div class="comment-item" data-id="<?=$parent_id?>">
     <div class="info">

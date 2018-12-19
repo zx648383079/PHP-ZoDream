@@ -1,43 +1,12 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Helpers\Str;
 /** @var $this View */
 $this->title = $blog->title;
-$url = (string)$this->url(['./comment', 'blog_id' => $blog->id]);
-$recommendUrl = (string)$this->url(['./recommend', 'id' => $blog->id]);
+$url = $this->url('./', false);
 $js = <<<JS
-    uParse('#content',{rootPath:'/assets/ueditor'});
-    SyntaxHighlighter.all();
-    $.get('{$url}', function(html) {
-      $(".book-footer").html(html);
-    });
-    $(".recommend-blog").click(function() {
-      var that = $(this).find('b');
-      $.getJSON('{$recommendUrl}', function(data) {
-        if (data.code == 200) {
-            that.text(data.data);
-            return;
-        }
-        Dialog.tip(data.message);
-      })
-    });
-    $(".book-navicon").click(function() {
-        $('.book-skin').toggleClass("book-collapsed");
-    });
-    var side = $("#content").sideNav({
-        target: '.book-side-nav',
-        contentLength: 20
-    }), 
-    checkSize = function() { 
-        if (side.headers.length < 1) {
-            return;
-        }
-        side.box.toggle($(window).width() > 767);
-    };
-    checkSize();
-    $(window).resize(function () {
-        checkSize();
-    });
+bindBlog('{$url}', '{$blog->id}');
 JS;
 
 $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');

@@ -1,6 +1,6 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
-
 /** @var $this View */
 ?>
 <?php if (!empty($hot_comments)): ?>
@@ -77,44 +77,5 @@ use Zodream\Template\View;
 </div>
 
 <script>
-function getMoreComments(page) {
-    $.get('<?=$this->url(['./comment/more', 'blog_id' => $blog_id])?>', {
-        page: page
-    }, function (html) {
-        if (page < 2) {
-            $("#comment-box").html(html);
-        } else {
-            $("#comment-box").append(html);
-        }
-    });
-}
-$(document).ready(function () {
-    $(".comment-item .expand").click(function() {
-        $(this).parent().parent().toggleClass("active");
-    });
-    $(".book-comments").on('click', '*[data-type=reply]', function() {
-        $(this).parent().append($(".book-comment-form"));
-        $(".book-comment-form .title").text("回复评论");
-        $(".book-comment-form .btn-submit").text("回复");
-        $(".book-comment-form input[name=parent_id]").val($(this).parents('.comment-item').attr('data-id'));
-    });
-    $(".book-comment-form .btn-cancel").click(function() {
-        $(".hot-comments").after($(".book-comment-form"));
-        $(".book-comment-form .title").text("发表评论");
-        $(".book-comment-form .btn-submit").text("评论");
-        $(".book-comment-form input[name=parent_id]").val(0);
-    });
-    $("#comment-form").submit(function () {
-        $.post($(this).attr('action'), $(this).serialize(), function (data) {
-            if (data.code == 200) {
-                window.location.reload();
-                return;
-            }
-            alert(data.message);
-        }, 'json');
-        return false;
-    });
-    var page = 1;
-    getMoreComments(page);
-});
+bindBlogComment('<?=$this->url('./', false)?>', '<?=$blog_id?>');
 </script>

@@ -1,49 +1,11 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '我的博客';
-$url = $this->url('./home/suggest');
+$url = $this->url('./', false);
 $js = <<<JS
-$(".book-nav").click(function() {
-    $(this).toggleClass("hover");
-});
-$(".book-search").focus(function() {
-    $(this).addClass("focus");
-}).blur(function() {
-    $(this).removeClass("focus");
-});
-$(".book-search .fa-search").click(function() {
-    var form = $(".book-search");
-    if (form.hasClass('focus')) {
-        $(".book-search form").submit();
-        return;
-    }
-    form.addClass("focus");
-});
-$(".book-navicon").click(function() {
-    $('.book-skin').toggleClass("book-collapsed");
-});
-$(".book-search [name=keywords]").keypress(function() {
-    var keywords = $(this).val();
-    if (!keywords) {
-        return;
-    }
-    $.getJSON('{$url}?keywords=' + keywords, function(data) {
-      if (data.code != 200) {
-          return;
-      }
-      var html = '';
-      $.each(data.data, function(i, item) {
-        html += '<li>'+item+'</li>'
-      });
-      $(".book-search .search-tip").html(html);
-    });
-});
-$(".book-search .search-tip").on('click', 'li', function() {
-  $(".book-search [name=keywords]").val($(this).text());
-  $(".book-search form").submit();
-});
-
+bindBlogPage('{$url}');
 JS;
 $data = [];
 if (!empty($term)) {
@@ -64,7 +26,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
                 <a href="<?=$this->url('/')?>">首页</a>
             </li>
             <li class="active">
-                <a href="<?=$this->url('/blog')?>">博客</a></li>
+                <a href="<?=$this->url('./')?>">博客</a></li>
             <li>关于</li>
             <li class="book-search">
                 <form>

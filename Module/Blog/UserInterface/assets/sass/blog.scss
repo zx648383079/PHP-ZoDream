@@ -161,8 +161,9 @@ $activeColor: #af5d0d;
             }
         }
         .book-item {
-            border-bottom: 1px solid $activeColor;
             padding: 5px;
+            animation-duration: 1.5s;
+            border-bottom: 1px solid $activeColor;
             dt {
                 font-size: 20px;
                 font-weight: 600;
@@ -186,17 +187,22 @@ $activeColor: #af5d0d;
                     margin-left: 10px;
                 }
             }
-            &:hover {
-                dd {
-                    display: block;
-                }
-            }
+            &:hover,
             &:nth-child(2),
             &:nth-child(3),
             &:nth-child(4) {
                 dd {
                     display: block;
                 }
+            }
+            &.fade-pre-item {
+                visibility: hidden;
+            }
+            &.fade-item {
+                animation-name: fadeInLeft;
+                background: $defaultColor;
+                border-bottom: none;
+                visibility: visible;
             }
         }
         .info {

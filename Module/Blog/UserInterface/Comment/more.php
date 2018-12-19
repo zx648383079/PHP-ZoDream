@@ -1,3 +1,8 @@
+<?php
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+?>
 <?php foreach ($comment_list as $item) :?>
 <div class="comment-item"  data-id="<?=$item->id?>">
     <div class="info">
@@ -41,3 +46,6 @@
     </div>
 </div>
 <?php endforeach;?>
+<?php if($comment_list->hasMore()):?>
+   <div class="load-more" data-page="<?=$comment_list->getIndex() + 1?>">加载更多</div>
+<?php endif;?>
