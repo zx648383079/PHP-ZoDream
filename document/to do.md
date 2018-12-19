@@ -48,6 +48,7 @@ unload事件在页面正在卸载时触发
 ## online state（网络状态）
 ```js
 window.addEventListener('online',onlineHandler)
+
 window.addEventListener('offline',offlineHandler)
 ```
 
@@ -207,3 +208,40 @@ gulp.task('default', build);
 ```bash
 gulp test
 ```
+
+
+
+
+# Ueditor 与textarea切换 及 与pjax 结合
+
+页面代码
+
+```html
+<textarea id="container"></textarea>
+```
+
+## Ueditor 与textarea切换
+
+1.把textarea变为编辑器
+```js
+var ue = UE.getEditor('container');
+```
+
+2.把编辑器还原为textarea
+```js
+ue.destroy();
+document.getElementById('container').style.width = '100%';
+```
+需要注意还原后textarea宽度无法还原，需要重新设置
+
+## Ueditor 与 pjax 结合
+
+把 `ueditor.config.js` `ueditor.all.js` 放到公共部分
+
+在加载的部分初始化编辑器，这里如果多次进入就会出现编辑器不显示，这是因为UE 会默认缓存第一次初始化的结果，因此只需要在初始化之前执行删除缓存即可
+```js
+UE.delEditor('container');
+var ue = UE.getEditor('container');
+```
+
+这样就能正常显示了

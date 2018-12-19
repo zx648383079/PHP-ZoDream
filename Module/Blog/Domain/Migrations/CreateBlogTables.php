@@ -23,10 +23,11 @@ class CreateBlogTables extends Migration {
             $table->set('description')->varchar();
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
+            $table->set('edit_type')->tinyint(1)->defaultVal(BlogModel::EDIT_HTML)->comment('编辑器类型');
             $table->set('content')->text();
             $table->set('user_id')->int(10);
             $table->set('term_id')->int(10);
-            $table->set('type')->bool()->defaultVal(0)->comment('原创或转载');
+            $table->set('type')->bool()->defaultVal(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
             $table->set('source_url')->varchar(100)->comment('原文链接');
             $table->set('recommend')->int(10)->defaultVal(0);
             $table->set('comment_count')->int(10)->defaultVal(0);

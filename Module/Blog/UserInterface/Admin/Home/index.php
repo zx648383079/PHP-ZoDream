@@ -6,4 +6,4 @@ use Zodream\Template\View;
 $this->title = '欢迎使用博客管理平台';
 ?>
 
-    <h2>欢迎使用博客管理平台 ！</h2>
+<h2>欢迎使用博客管理平台 ！</h2>

@@ -48,11 +48,13 @@ function bindBlogPage(baseUri: string) {
     
 }
 
-function bindBlog(baseUri: string, id: number) {
-    uParse('#content', {
-        rootPath: '/assets/ueditor'
-    });
-    SyntaxHighlighter.all();
+function bindBlog(baseUri: string, id: number, type: number) {
+    if (type != 1) {
+        uParse('#content', {
+            rootPath: '/assets/ueditor'
+        });
+        SyntaxHighlighter.all();
+    }
     $.get(baseUri + 'comment', {
         blog_id: id
     }, function (html) {

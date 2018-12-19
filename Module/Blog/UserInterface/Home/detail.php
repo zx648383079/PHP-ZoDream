@@ -6,18 +6,20 @@ use Zodream\Helpers\Str;
 $this->title = $blog->title;
 $url = $this->url('./', false);
 $js = <<<JS
-bindBlog('{$url}', '{$blog->id}');
+bindBlog('{$url}', '{$blog->id}', {$blog->edit_type});
 JS;
 
-$this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css');
+if ($blog->edit_type < 1) {
+    $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css')
+        ->registerJsFile('ueditor/ueditor.parse.min.js')
+        ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
+}
 $this->extend('layouts/header', [
         'keywords' => $blog->keywords,
         'description' => $blog->description,
     ])
     ->registerJsFile('@jquery.sideNav.min.js')
-    ->registerJs($js, View::JQUERY_READY)
-    ->registerJsFile('ueditor/ueditor.parse.min.js')
-    ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
+    ->registerJs($js, View::JQUERY_READY);
 ?>
 <div class="book-title book-mobile-inline">
     <ul class="book-nav">
@@ -78,7 +80,7 @@ $this->extend('layouts/header', [
         <?php endif;?>
     </div>
     <div id="content" class="content">
-        <?=$blog->content?>
+        <?=$blog->edit_type == 1 ? (new Parsedown())->text($blog->content) : $blog->content?>
     </div>
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>

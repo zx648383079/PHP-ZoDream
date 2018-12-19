@@ -6,14 +6,9 @@ use Zodream\Html\Dark\Form;
 
 $this->title = $model->id > 0 ? '编辑' : '新增'. '文章';
 $configs = app('request')->isMobile() ?
-    ',{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '';
+    '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '';
 $js = <<<JS
-    var ue = UE.getEditor('container'{$configs});
-    $(function () {
-        $("select[name=type]").change(function () { 
-            $("#source-box").toggle($(this).val() == 1);
-        });
-    });
+bindEdit({$configs});
 JS;
 
 $this->registerJs($js);
@@ -33,16 +28,15 @@ $this->registerJs($js);
             <div class="zd-tab-item active">
                 <?=Form::text('title', true)?>
                 <?=Form::select('term_id', [$term_list], true)?>
-                <?=Form::select('type', ['原创', '转载'], true)?>
+                <?=Form::select('edit_type', ['Ueditor', 'MarkDown'])?>
+                <?=Form::select('type', ['原创', '转载'])?>
                 <?=Form::text('source_url')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
                 <?=Form::checkbox('comment_status')?>
             </div>
             <div class="zd-tab-item">
-                <script id="container" style="height: 400px" name="content" type="text/plain" required>
-                    <?=$model->content?>
-                </script>
+                <textarea id="editor-container" style="height: 400px;" name="content" required><?=$model->content?></textarea>
             </div>
         </div>
     </div>

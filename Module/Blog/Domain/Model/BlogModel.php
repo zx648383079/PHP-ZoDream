@@ -14,6 +14,7 @@ use Zodream\Helpers\Time;
  * @property string $description
  * @property string $keywords
  * @property string $thumb
+ * @property integer $edit_type
  * @property string $content
  * @property integer $user_id
  * @property integer $term_id
@@ -28,6 +29,13 @@ use Zodream\Helpers\Time;
  * @property integer $updated_at
 */
 class BlogModel extends Model {
+
+    const TYPE_ORIGINAL = 0; // 原创
+    const TYPE_REPRINT = 1; // 转载
+
+    const EDIT_HTML = 0;
+    const EDIT_MARKDOWN = 1; // markdown
+
 	public static function tableName() {
         return 'blog';
     }
@@ -38,6 +46,7 @@ class BlogModel extends Model {
             'description' => 'string:0,255',
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
+            'edit_type' => 'int:0,9',
             'content' => '',
             'user_id' => 'int',
             'term_id' => 'int',
@@ -60,6 +69,7 @@ class BlogModel extends Model {
             'description' => '说明',
             'keywords' => '关键字',
             'thumb' => '图片',
+            'edit_type' => '编辑器',
             'content' => '内容',
             'user_id' => 'User Id',
             'term_id' => '分类',
