@@ -79,7 +79,7 @@ $this->extend('layouts/header', [
         </span>
         <?php endif;?>
     </div>
-    <div id="content" class="content">
+    <div id="content" class="content style-type-<?=$blog->edit_type?>">
         <?=$blog->edit_type == 1 ? (new Parsedown())->text($blog->content) : $blog->content?>
     </div>
     <div class="tools">
