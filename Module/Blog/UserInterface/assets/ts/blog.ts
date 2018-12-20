@@ -55,11 +55,14 @@ function bindBlog(baseUri: string, id: number, type: number) {
         });
         SyntaxHighlighter.all();
     }
-    $.get(baseUri + 'comment', {
-        blog_id: id
-    }, function (html) {
-        $(".book-footer").html(html);
-    });
+    let commentBox = $(".book-footer");
+    if (commentBox.length > 0) {
+        $.get(baseUri + 'comment', {
+            blog_id: id
+        }, function (html) {
+            commentBox.html(html);
+        });
+    }
     $(".recommend-blog").click(function () {
         let that = $(this).find('b');
         $.getJSON(baseUri + 'recommend', {

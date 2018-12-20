@@ -36,7 +36,8 @@ class BlogController extends Controller {
     public function saveAction() {
         $model = new BlogModel();
         $model->user_id = auth()->id();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        $model->comment_status = 0;
+        if ($model->load(null, ['user_id']) && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('blog')
             ]);

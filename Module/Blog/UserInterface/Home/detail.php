@@ -68,8 +68,12 @@ $this->extend('layouts/header', [
         <img src="/assets/images/forkme.png" alt="Fork Me On Github">
     </a>
     <div class="info">
+        <?php if($blog->user):?>
         <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></span>
+        <?php endif;?>
+        <?php if($blog->term):?>
         <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></span>
+        <?php endif;?>
         <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>
         <span class="type">
@@ -88,8 +92,11 @@ $this->extend('layouts/header', [
         <span class="agree recommend-blog"><i class="fas fa-thumbs-up"></i><b><?=$blog->recommend?></b></span>
     </div>
 </div>
+
+<?php if($blog->comment_status > 0):?>
 <div id="comments" class="book-footer comment">
     
 </div>
+<?php endif;?>
 
 <?php $this->extend('layouts/footer');?>
