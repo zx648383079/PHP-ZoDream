@@ -19,7 +19,31 @@ use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
 
-dd(url()->enRewrite('blog', []));
+app('page')->node('feedback', ['limit' => 12]);
+// app('page')->feedback(['limit' => 12]);
+    $page = new Page();
+        $page->loadNodes();
+            $page->register('feedback', Feedback::class);
+    $page->__call('feedback', $attrs);
+        $page->node('feedback', $attrs);
+            $feedback = new Feedback();
+                $page->on('feedback_list', function () {return $data;});
+            $feedback->attr($attrs);
+            if (!$page->isAsync())
+                $feedback->render();
+                    $data = $page->trigger('feedback_list');
+                    return $feedback->renderHtml($data);
+                return;
+            return this;
+        return;
+    return;
+
+
+
+
+
+
+dd();
 
 $goods = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\zd.jpg');
 $qr = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\wx.jpg');
