@@ -1,51 +1,33 @@
 <?php
 namespace Module\Template\Domain\Weights;
 
+use Module\Template\Domain\Pages\IPage;
 
-use Module\Template\Domain\Pages\Page;
-
-class Node {
-
+class Node implements INode {
     /**
-     * @var Page
+     * @var IPage
      */
-    public $page;
+    protected $page;
 
-    public $tag;
-
-    /**
-     * @var Node[]
-     */
-    public $children = [];
-
-    public $content;
-
-    public $attributes = [];
-
-    public function generate($type) {
-        if ($this->page->theme->hasNodeParser($this)) {
-            return $this->page->theme->generateNode($this, $type);
-        }
-        return sprintf('<%s %s>%s</%s>', $this->tag, $this->generateAttribute($type), $this->generateContent($type), $this->tag);
+    public function __construct(IPage $page) {
+        $this->page = $page;
+        $this->registerAsync();
     }
 
-    public function generateAttribute($type) {
-        $args = [];
-        foreach ($this->attributes as $key => $attribute) {
-            $args[] = sprintf('%s="%s"', $key, is_array($attribute)
-                ? implode(' ', $attribute) : $attribute);
-        }
-        return implode(' ', $args);
+    protected function registerAsync() {
+
     }
 
-
-    public function generateContent($type) {
-        if (!empty($this->content)) {
-            return $this->content;
-        }
-        return implode('', array_map(function (Node $item) use ($type) {
-            return $item->generate($type);
-        }, $this->children));
+    public function attr($key, $value = null) {
+        // TODO: Implement attr() method.
     }
 
+    public function render($type = null) {
+
+        return '';
+    }
+
+    public function __toString() {
+        return $this->render();
+    }
 }

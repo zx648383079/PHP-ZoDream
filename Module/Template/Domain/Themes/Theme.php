@@ -4,6 +4,7 @@ namespace Module\Template\Domain\Themes;
 
 use Module\Template\Domain\Pages\Page;
 use Module\Template\Domain\Weights\Node;
+use Module\Template\Domain\Weights\PageNode;
 
 class Theme {
 
@@ -26,11 +27,11 @@ class Theme {
         return '';
     }
 
-    public function hasNodeParser(Node $node) {
+    public function hasNodeParser(PageNode $node) {
         return false;
     }
 
-    public function generateNode(Node $node, $type) {
+    public function generateNode(PageNode $node, $type) {
         return $node->generate($type);
     }
 }

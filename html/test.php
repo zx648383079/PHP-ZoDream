@@ -29,15 +29,15 @@ app('page')->node('feedback', ['limit' => 12]);
             $feedback = new Feedback();
                 $page->on('feedback_list', function () {return $data;});
             $feedback->attr($attrs);
-            if (!$page->isAsync())
-                $feedback->render();
-                    $data = $page->trigger('feedback_list');
-                    return $feedback->renderHtml($data);
-                return;
             return this;
         return;
     return;
 
+$feedback->__toString()
+    $feedback->render();
+        $data = $page->trigger('feedback_list');
+        return $feedback->renderHtml($data);
+    return;
 
 
 
