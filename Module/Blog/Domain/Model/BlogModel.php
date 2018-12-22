@@ -136,13 +136,22 @@ class BlogModel extends Model {
             ->orderBy('created_at desc')->limit(5)->all();
     }
 
+    /**
+     * 是否允许评论
+     * @param $id
+     * @return bool
+     */
     public static function canComment($id) {
-        return static::where([
-                'comment_status' => 0,
-                'id' => $id,
-            ])->count() > 0;
+        return static::where('comment_status', 1)
+                ->where('id', $id)->count() > 0;
     }
 
+    /**
+     * 是否能推荐
+     * @param $id
+     * @return bool
+     * @throws \Exception
+     */
     public static function canRecommend($id) {
         return BlogLogModel::where([
                 'user_id' => auth()->id(),

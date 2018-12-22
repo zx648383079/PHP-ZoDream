@@ -2,7 +2,6 @@
 namespace Module;
 
 use Module\Auth\Domain\Model\UserModel;
-
 use Zodream\Route\Controller\ModuleController as BaseController;
 
 abstract class ModuleController extends BaseController {

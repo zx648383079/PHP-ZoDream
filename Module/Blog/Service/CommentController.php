@@ -5,8 +5,6 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\ModuleController;
 
-
-
 class CommentController extends ModuleController {
 
     protected function rules() {
@@ -27,6 +25,7 @@ class CommentController extends ModuleController {
     }
 
     public function moreAction($blog_id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+        list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
         $comment_list = CommentModel::with('replies')
             ->where([
             'blog_id' => intval($blog_id),
@@ -60,6 +59,9 @@ class CommentController extends ModuleController {
     }
 
     public function disagreeAction($id) {
+        if (!app('request')->isAjax()) {
+            return $this->redirect('./');
+        }
         $id = intval($id);
         if (!CommentModel::canAgree($id)) {
             return $this->jsonFailure('一个用户只能操作一次！');
@@ -70,6 +72,9 @@ class CommentController extends ModuleController {
     }
 
     public function agreeAction($id) {
+        if (!app('request')->isAjax()) {
+            return $this->redirect('./');
+        }
         $id = intval($id);
         if (!CommentModel::canAgree($id)) {
             return $this->jsonFailure('一个用户只能操作一次！');

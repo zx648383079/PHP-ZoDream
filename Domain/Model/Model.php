@@ -49,6 +49,29 @@ abstract class Model extends BaseModel {
     }
 
     /**
+     * 过滤sort order
+     * @param $sort
+     * @param $order
+     * @param array $sort_list
+     * @param string $default_order
+     * @return array
+     */
+    public static function checkSortOrder($sort, $order,
+                                          array $sort_list, $default_order = 'desc') {
+        if (is_bool($order)) {
+            $order = $order ? 'desc' : 'asc';
+        } elseif (is_numeric($order)) {
+            $order = $order > 0 ? 'desc' : 'asc';
+        } elseif (!in_array(strtolower($order), ['desc', 'asc'])) {
+            $order = $default_order;
+        }
+        if (!in_array($sort, $sort_list)) {
+            $sort = reset($sort_list);
+        }
+        return [$sort, $order];
+    }
+
+    /**
      * 更新自增字段
      * @param callable $cb
      * @param string $key

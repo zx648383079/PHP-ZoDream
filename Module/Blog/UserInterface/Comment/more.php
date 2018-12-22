@@ -6,12 +6,16 @@ use Zodream\Template\View;
 <?php foreach ($comment_list as $item) :?>
 <div class="comment-item"  data-id="<?=$item->id?>">
     <div class="info">
-        <span class="user"><?=htmlspecialchars($item['name'])?></span>
+        <?php if($item->url):?>
+        <a href="<?=$this->url($item->url)?>" class="user" target="_blank" rel="noopener noreferrer"><?=$this->text($item['name'])?></a>
+        <?php else:?>
+        <span class="user"><?=$this->text($item['name'])?></span>
+        <?php endif;?>
         <span class="time"><?=$item['created_at']?></span>
         <span class="floor"><?=$item->position?>楼</span>
     </div>
     <div class="content">
-        <p><?=htmlspecialchars($item['content'])?></p>
+        <p><?=$this->text($item['content'])?></p>
         <span>&nbsp;</span>
         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
         <span class="report">举报</span>
@@ -26,12 +30,12 @@ use Zodream\Template\View;
             <?php foreach ($item->replies as $reply) :?>
                 <div class="comment-item" data-id="<?=$item->id?>">
                     <div class="info">
-                        <span class="user"><?=htmlspecialchars($reply['name'])?></span>
+                        <span class="user"><?=$this->text($reply['name'])?></span>
                         <span class="time"><?=$reply['created_at']?></span>
                         <span class="floor"><?=$reply->position?>#</span>
                     </div>
                     <div class="content">
-                        <p><?=htmlspecialchars($reply['content'])?></p>
+                        <p><?=$this->text($reply['content'])?></p>
                         <span>&nbsp;</span>
                         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
                         <span class="report">举报</span>

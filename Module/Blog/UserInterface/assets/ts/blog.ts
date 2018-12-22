@@ -96,30 +96,77 @@ function bindBlog(baseUri: string, id: number, type: number) {
 
 function bindBlogComment(baseUri: string, id: number) {
     let box = $("#comment-box"),
-        getMoreComments = function (page: number) {
-        $.get(baseUri + 'comment/more', {
-            blog_id: id,
-            page: page
-        }, function (html) {
-            page ++;
-            if (page < 2) {
-                box.html(html);
-            } else {
-                box.append(html);
-            }
-        });
+        sort_order = true,
+        getMoreComments = function (page: number, target: JQuery = box) {
+            $.get(baseUri + 'comment/more', {
+                blog_id: id,
+                page: page,
+                order: sort_order ? 'desc' : 'asc',
+            }, function (html) {
+                if (page < 2) {
+                    target.html(html);
+                } else {
+                    target.append(html);
+                }
+            });
     }
     $(".comment-item .expand").click(function() {
         $(this).parent().parent().toggleClass("active");
     });
-    $(".book-comments").on('click', '*[data-type=reply]', function() {
+    let all_box = $(".book-comments").on('click', '*[data-type=reply]', function() {
         $(this).parent().append($(".book-comment-form"));
         $(".book-comment-form .title").text("回复评论");
         $(".book-comment-form .btn-submit").text("回复");
         $(".book-comment-form input[name=parent_id]").val($(this).parents('.comment-item').attr('data-id'));
+    }).on('click', '.order span', function() {
+        let $this = $(this);
+        if ($this.hasClass('active')) {
+            return;
+        }
+        $this.addClass('active').siblings().removeClass('active');
+        sort_order = $this.index() < 1;
+        getMoreComments(1);
+    }).on('click', '.actions .agree', function() {
+        let $this = $(this),
+            id = $this.closest('.comment-item').data('id');
+        $.getJSON(baseUri + 'comment/agree', {
+            id: id
+        }, function(data: IResponse) {
+            if (data.code == 302) {
+                window.location.href = data.url;
+                return;
+            }
+            if (data.code != 200) {
+                alert(data.errors);
+                return;
+            }
+            $this.find('b').text(data.data);
+        });
+    }).on('click', '.actions .disagree', function() {
+        let $this = $(this),
+            id = $this.closest('.comment-item').data('id');
+        $.getJSON(baseUri + 'comment/disagree', {
+            id: id
+        }, function(data: IResponse) {
+            if (data.code == 302) {
+                window.location.href = data.url;
+                return;
+            }
+            if (data.code != 200) {
+                alert(data.errors);
+                return;
+            }
+            $this.find('b').text(data.data);
+        });
     });
     $(".book-comment-form .btn-cancel").click(function() {
-        $(".hot-comments").after($(".book-comment-form"));
+        let hot_box = $(".hot-comments");
+        if (hot_box.length > 0) {
+            hot_box.after($(".book-comment-form"));
+        } else {
+            all_box.before($(".book-comment-form"));
+        }
+        
         $(".book-comment-form .title").text("发表评论");
         $(".book-comment-form .btn-submit").text("评论");
         $(".book-comment-form input[name=parent_id]").val(0);

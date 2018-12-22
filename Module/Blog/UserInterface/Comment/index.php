@@ -11,12 +11,12 @@ use Zodream\Template\View;
     <?php foreach ($hot_comments as $item) :?>
     <div class="comment-item" data-id="<?=$item->id?>">
         <div class="info">
-            <span class="user"><?=$item['name']?></span>
+            <span class="user"><?=$this->text($item['name'])?></span>
             <span class="time"><?=$item['created_at']?></span>
             <span class="floor"><?=$item->position?>楼</span>
         </div>
         <div class="content">
-            <p><?=$item['content']?></p>
+            <p><?=$this->text($item['content'])?></p>
             <?php if ($item->reply_count > 0):?>
             <span class="expand">展开（<?=$item->reply_count?>）</span>
             <?php endif;?>

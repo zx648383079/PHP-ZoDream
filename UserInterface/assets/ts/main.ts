@@ -1,17 +1,25 @@
+interface IResponse {
+    code: number,
+    status: string,
+    errors?: string|Array<any>,
+    messages?: string|Array<any>,
+    data?: any,
+    url?: string,
+}
 /**
  * post 提交
  * @param url 
  * @param data 
  * @param callback 
  */
-function postJson(url: string, data: any, callback?: (data: any)=>any) {
+function postJson(url: string, data: any, callback?: (data: IResponse)=>any) {
     if (typeof data == 'function') {
         callback = data;
         data = {};
     }
     $.post(url, data, callback, 'json');
 };
-function ajaxForm(url, data, callback?: (data: any)=>any) {
+function ajaxForm(url, data, callback?: (data: IResponse)=>any) {
     postJson(url, data, function(data) {
         if (callback) {
             callback(data);
@@ -24,7 +32,11 @@ function ajaxForm(url, data, callback?: (data: any)=>any) {
  * 转化请求响应结果
  * @param data 
  */
-function parseAjax(data) {
+function parseAjax(data: IResponse) {
+    if (data.code == 302) {
+        window.location.href = data.url;
+        return;
+    }
     if (data.code != 200) {
         Dialog.tip(data.errors || '操作执行失败！');
         return;
