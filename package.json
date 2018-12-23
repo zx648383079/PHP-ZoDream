@@ -4,6 +4,8 @@
   "description": "zodream.cn",
   "main": "index.js",
   "scripts": {
+    "build": "gulp",
+    "prov": "gulp --prov",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

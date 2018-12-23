@@ -1,0 +1,40 @@
+$defaultColor: transparent;
+$bg: #9e1622;
+$hoverColor: #959f25;
+$activeColor: #638828;
+$shadow: rgba(33,33,33,.7);
+$white: #fff;
+$acolor: #f4cf98;
+$lesscolor: #c7b590;
+
+body {
+    background-color: $bg;
+    background-image: url('../images/sd_bg.png');
+    background-attachment: fixed;
+    background-repeat:no-repeat;
+    background-position: 0 50vh;
+    background-size: 100% auto;
+}
+
+.book-skin {
+    .book-title {
+        a,
+        li {
+            color: $acolor;
+        }
+    }
+    .book-footer {
+        .book-pager {
+            li {
+                background-color: $bg;
+            }
+        }
+    }
+}
+
+#christmas-box {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    pointer-events: none;
+}

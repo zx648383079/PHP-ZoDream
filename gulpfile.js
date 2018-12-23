@@ -19,6 +19,7 @@ var gulp = require('gulp'),
     cssRoot = moduleRoot + 'UserInterface/assets/sass/',
     jsDist = 'html/assets/js',
     mo = undefined,
+    mode = 'dev',
     cssDist = 'html/assets/css',
     maps = {
         doc: 'Document',
@@ -26,28 +27,58 @@ var gulp = require('gulp'),
         open: 'OpenPlatform',
         tpl: 'Template'
     };
-
-if (process.argv && process.argv.length > 2) {
-    mo = process.argv[2];
-    // 暂不考虑大小写转化
-    switch (mo) {
-        case 'gzo':
-            moduleRoot = '../zodream/gzo/src/';
-            break;
-        case 'debugger':
-            moduleRoot = '../zodream/debugger/src/';
-            break;
-        default:
-            moduleRoot = 'Module/'+ (maps.hasOwnProperty(mo) ? maps[mo] : mo) +'/';
-            break;
+if (process.argv) {
+    if (process.argv.indexOf('--prov') > 0 || process.argv.indexOf('--prov=') > 0) {
+        mode = 'prov';
     }
-    jsRoot = moduleRoot + 'UserInterface/assets/js/';
-    tsRoot = moduleRoot + 'UserInterface/assets/ts/';
-    cssRoot = moduleRoot + 'UserInterface/assets/sass/';
+    mo = get_env();
+    if (mo) {
+        // 暂不考虑大小写转化
+        switch (mo) {
+            case 'gzo':
+                moduleRoot = '../zodream/gzo/src/';
+                break;
+            case 'debugger':
+                moduleRoot = '../zodream/debugger/src/';
+                break;
+            default:
+                moduleRoot = 'Module/'+ (maps.hasOwnProperty(mo) ? maps[mo] : mo) +'/';
+                break;
+        }
+        jsRoot = moduleRoot + 'UserInterface/assets/js/';
+        tsRoot = moduleRoot + 'UserInterface/assets/ts/';
+        cssRoot = moduleRoot + 'UserInterface/assets/sass/';
+    }
 }
 
+function get_env() {
+    if (process.argv.length < 3) {
+        return undefined;
+    }
+    if (process.argv[2].indexOf('--') < 0) {
+        return process.argv[2];
+    }
+    if (process.argv[2].indexOf('=') < 0) {
+        return process.argv.length > 3 ? process.argv[3] : undefined;
+    }
+    var args = process.argv[2].split('=');
+    if (args[0] == '--prov') {
+        mode = 'prov';
+    }
+    return args[1];
+}
 
 function sassTask() {
+    if (mode == 'prov') {
+        return gulp.src(cssRoot + "*.scss")
+            .pipe(sass({
+                sourcemaps: false,
+                includePaths: [bourbon, neat]  // 引入其他的
+            }))
+            .pipe(autoprefixer())
+            .pipe(minCss())
+            .pipe(gulp.dest(cssDist));
+    }
     return gulp.src(cssRoot + "*.scss")
         .pipe(sourcemaps.init())
         .pipe(sass({

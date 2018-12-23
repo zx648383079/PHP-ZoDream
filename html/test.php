@@ -19,27 +19,6 @@ use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
 
-app('page')->node('feedback', ['limit' => 12]);
-// app('page')->feedback(['limit' => 12]);
-    $page = new Page();
-        $page->loadNodes();
-            $page->register('feedback', Feedback::class);
-    $page->__call('feedback', $attrs);
-        $page->node('feedback', $attrs);
-            $feedback = new Feedback();
-                $page->on('feedback_list', function () {return $data;});
-            $feedback->attr($attrs);
-            return this;
-        return;
-    return;
-
-$feedback->__toString()
-    $feedback->render();
-        $data = $page->trigger('feedback_list');
-        return $feedback->renderHtml($data);
-    return;
-
-
 
 
 

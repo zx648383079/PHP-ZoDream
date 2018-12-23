@@ -23,11 +23,12 @@ use Zodream\Template\View;
             <span>&nbsp;</span>
             <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
             <span class="report">举报</span>
+            <div class="actions">
+                <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item['agree']?></b></span>
+                <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$item['disagree']?></b></span>
+            </div>
         </div>
-        <div class="actions">
-            <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item['agree']?></b></span>
-            <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$item['disagree']?></b></span>
-        </div>
+        
         <div class="comments">
 
         </div>

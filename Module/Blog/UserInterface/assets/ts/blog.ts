@@ -1,24 +1,24 @@
 function bindBlogPage(baseUri: string) {
-    $(".book-nav").click(function () {
-        $(this).toggleClass("hover");
+    $('.book-nav').click(function () {
+        $(this).toggleClass('hover');
     });
-    $(".book-search").focus(function () {
-        $(this).addClass("focus");
+    $('.book-search').focus(function () {
+        $(this).addClass('focus');
     }).blur(function () {
-        $(this).removeClass("focus");
+        $(this).removeClass('focus');
     });
-    $(".book-search .fa-search").click(function () {
-        let form = $(".book-search");
+    $('.book-search .fa-search').click(function () {
+        let form = $('.book-search');
         if (form.hasClass('focus')) {
-            $(".book-search form").submit();
+            $('.book-search form').submit();
             return;
         }
-        form.addClass("focus");
+        form.addClass('focus');
     });
-    $(".book-navicon").click(function () {
-        $('.book-skin').toggleClass("book-collapsed");
+    $('.book-navicon').click(function () {
+        $('.book-skin').toggleClass('book-collapsed');
     });
-    $(".book-search [name=keywords]").keypress(function () {
+    $('.book-search [name=keywords]').keypress(function () {
         let keywords = $(this).val();
         if (!keywords) {
             return;
@@ -31,12 +31,12 @@ function bindBlogPage(baseUri: string) {
             $.each(data.data, function (i, item) {
                 html += '<li>' + item + '</li>'
             });
-            $(".book-search .search-tip").html(html);
+            $('.book-search .search-tip').html(html);
         });
     });
-    $(".book-search .search-tip").on('click', 'li', function () {
-        $(".book-search [name=keywords]").val($(this).text());
-        $(".book-search form").submit();
+    $('.book-search .search-tip').on('click', 'li', function () {
+        $('.book-search [name=keywords]').val($(this).text());
+        $('.book-search form').submit();
     });
     $('.book-body .book-item').addClass('fade-pre-item').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
         $(this).removeClass('fade-item');
@@ -55,7 +55,7 @@ function bindBlog(baseUri: string, id: number, type: number) {
         });
         SyntaxHighlighter.all();
     }
-    let commentBox = $(".book-footer");
+    let commentBox = $('.book-footer');
     if (commentBox.length > 0) {
         $.get(baseUri + 'comment', {
             blog_id: id
@@ -63,7 +63,7 @@ function bindBlog(baseUri: string, id: number, type: number) {
             commentBox.html(html);
         });
     }
-    $(".recommend-blog").click(function () {
+    $('.recommend-blog').click(function () {
         let that = $(this).find('b');
         $.getJSON(baseUri + 'recommend', {
             blog_id: id
@@ -75,12 +75,19 @@ function bindBlog(baseUri: string, id: number, type: number) {
             Dialog.tip(data.message);
         })
     });
-    $(".book-navicon").click(function () {
-        $('.book-skin').toggleClass("book-collapsed");
+    $('.book-navicon').click(function () {
+        $('.book-skin').toggleClass('book-collapsed');
     });
-    let side = $("#content").sideNav({
+    let side = $('#content').sideNav({
             target: '.book-side-nav',
-            contentLength: 20
+            contentLength: 20,
+            maxLength: 8,
+            maxFixedTop: function(box: JQuery, scrollTop: number) {
+                if (commentBox.length < 1) {
+                    return true;
+                }
+                return scrollTop + $(window).height() - box.height() < commentBox.offset().top;
+            }
         }),
         checkSize = function () {
             if (side.headers.length < 1) {
@@ -95,7 +102,7 @@ function bindBlog(baseUri: string, id: number, type: number) {
 }
 
 function bindBlogComment(baseUri: string, id: number) {
-    let box = $("#comment-box"),
+    let box = $('#comment-box'),
         sort_order = true,
         getMoreComments = function (page: number, target: JQuery = box) {
             $.get(baseUri + 'comment/more', {
@@ -110,14 +117,16 @@ function bindBlogComment(baseUri: string, id: number) {
                 }
             });
     }
-    $(".comment-item .expand").click(function() {
-        $(this).parent().parent().toggleClass("active");
+    $('.comment-item .expand').click(function() {
+        $(this).parent().parent().toggleClass('active');
     });
-    let all_box = $(".book-comments").on('click', '*[data-type=reply]', function() {
-        $(this).parent().append($(".book-comment-form"));
-        $(".book-comment-form .title").text("回复评论");
-        $(".book-comment-form .btn-submit").text("回复");
-        $(".book-comment-form input[name=parent_id]").val($(this).parents('.comment-item').attr('data-id'));
+    let all_box = $('.book-comments').on('click', '*[data-type=reply]', function() {
+        let $this = $(this),
+            form_box = $('.book-comment-form');
+        $this.parent().append(form_box);
+        form_box.find('.title').text('回复评论');
+        form_box.find('.btn-submit').text('回复');
+        form_box.find('input[name=parent_id]').val($this.parents('.comment-item').attr('data-id'));
     }).on('click', '.order span', function() {
         let $this = $(this);
         if ($this.hasClass('active')) {
@@ -159,22 +168,25 @@ function bindBlogComment(baseUri: string, id: number) {
             $this.find('b').text(data.data);
         });
     });
-    $(".book-comment-form .btn-cancel").click(function() {
-        let hot_box = $(".hot-comments");
+    $('.book-comment-form .btn-cancel').click(function() {
+        let form_box = $(this).closest('.book-comment-form'),
+            hot_box = $('.hot-comments');
         if (hot_box.length > 0) {
-            hot_box.after($(".book-comment-form"));
+            hot_box.after(form_box);
         } else {
-            all_box.before($(".book-comment-form"));
+            all_box.before(form_box);
         }
-        
-        $(".book-comment-form .title").text("发表评论");
-        $(".book-comment-form .btn-submit").text("评论");
-        $(".book-comment-form input[name=parent_id]").val(0);
+        form_box.find('textarea').val('');
+        form_box.find('.title').text('发表评论');
+        form_box.find('.btn-submit').text('评论');
+        form_box.find('input[name=parent_id]').val(0);
     });
-    $("#comment-form").submit(function () {
-        $.post($(this).attr('action'), $(this).serialize(), function (data) {
+    $('#comment-form').submit(function () {
+        let $this = $(this);
+        $.post($this.attr('action'), $this.serialize(), function (data) {
             if (data.code == 200) {
-                window.location.reload();
+                //window.location.reload();
+                $this.find('.btn-cancel').trigger('click');
                 return;
             }
             alert(data.message);
@@ -188,3 +200,20 @@ function bindBlogComment(baseUri: string, id: number) {
     });
     getMoreComments(1);
 }
+
+$(function() {
+    new MainStage('christmas-box');
+
+    let box = $('body'),
+        reset_bg = function() {
+            let width = $window.width();
+
+        box.css({
+            'background-position-y': $window.height() - width * .8 + 'px'
+        });
+    },
+    $window = $(window).resize(function() {
+        reset_bg();
+    });
+    reset_bg();
+});

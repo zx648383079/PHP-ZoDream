@@ -17,7 +17,8 @@ class BlogController extends Controller {
             })->when(!empty($term_id), function ($query) use ($term_id) {
                 $query->where('term_id', intval($term_id));
             })->orderBy('id', 'desc')->select('id', 'title', 'term_id', 'comment_count', 'recommend')->page();
-        return $this->show(compact('blog_list'));
+        $term_list = TermModel::select('id', 'name')->all();
+        return $this->show(compact('blog_list', 'term_list'));
     }
 
     public function createAction() {

@@ -1,5 +1,12 @@
 <?php
-/** @var $this Zodream\Template\View */
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+$this->registerCssFile([
+    '@font-awesome.min.css',
+    '@animate.min.css',
+    '@zodream.css',
+    '@blog.css']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,8 +19,6 @@
     <meta name="Description" content="<?=$this->get('description', '本站首先是为zodream框架演示及文档站，其次才是开发中个人博客')?>" />
     <meta name="author" content="ZoDream" />
     <link rel="icon" href="/assets/images/favicon.png">
-    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/css/zodream.css">
     <?=$this->header()?>
 </head>
 <body>
