@@ -6,6 +6,7 @@ namespace Module\Shop\Service\Admin;
 class SettingController extends Controller {
 
     public function indexAction() {
-        return $this->show();
+        $group_list = [];
+        return $this->show(compact('group_list'));
     }
 }
