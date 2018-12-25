@@ -28,8 +28,8 @@ var gulp = require('gulp'),
         tpl: 'Template'
     };
 if (process.argv) {
-    if (process.argv.indexOf('--prov') > 0 || process.argv.indexOf('--prov=') > 0) {
-        mode = 'prov';
+    if (process.argv.indexOf('--prod') > 0 || process.argv.indexOf('--prod=') > 0) {
+        mode = 'prod';
     }
     mo = get_env();
     if (mo) {
@@ -62,14 +62,14 @@ function get_env() {
         return process.argv.length > 3 ? process.argv[3] : undefined;
     }
     var args = process.argv[2].split('=');
-    if (args[0] == '--prov') {
-        mode = 'prov';
+    if (args[0] == '--prod') {
+        mode = 'prod';
     }
     return args[1];
 }
 
 function sassTask() {
-    if (mode == 'prov') {
+    if (mode == 'prod') {
         return gulp.src(cssRoot + "*.scss")
             .pipe(sass({
                 sourcemaps: false,

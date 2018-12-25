@@ -202,18 +202,18 @@ function bindBlogComment(baseUri: string, id: number) {
 }
 
 $(function() {
-    new MainStage('christmas-box');
+    // 关闭圣诞特效
+    // new MainStage('christmas-box');
+    // let box = $('body'),
+    //     reset_bg = function() {
+    //         let width = $window.width();
 
-    let box = $('body'),
-        reset_bg = function() {
-            let width = $window.width();
-
-        box.css({
-            'background-position-y': $window.height() - width * .8 + 'px'
-        });
-    },
-    $window = $(window).resize(function() {
-        reset_bg();
-    });
-    reset_bg();
+    //     box.css({
+    //         'background-position-y': $window.height() - width * .8 + 'px'
+    //     });
+    // },
+    // $window = $(window).resize(function() {
+    //     reset_bg();
+    // });
+    // reset_bg();
 });

@@ -6,7 +6,7 @@ $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
     '@zodream.css',
-    '@blog.css']);
+    '@home.css']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,3 +22,8 @@ $this->registerCssFile([
     <?=$this->header()?>
 </head>
 <body>
+<header>
+    <div class="container">
+        <?=$this->node('nav-bar')?>
+    </div>
+</header>

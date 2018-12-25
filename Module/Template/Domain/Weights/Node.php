@@ -8,6 +8,7 @@ class Node implements INode {
      * @var IPage
      */
     protected $page;
+    protected $attributes = [];
 
     public function __construct(IPage $page) {
         $this->page = $page;
@@ -19,7 +20,12 @@ class Node implements INode {
     }
 
     public function attr($key, $value = null) {
-        // TODO: Implement attr() method.
+        if (!is_array($key)) {
+            $this->attributes[$key] = $value;
+            return $this;
+        }
+        $this->attributes = array_merge($this->attributes, $key);
+        return $this;
     }
 
     public function render($type = null) {

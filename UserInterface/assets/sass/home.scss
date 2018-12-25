@@ -1,0 +1,44 @@
+.container {
+    margin: 0 auto;
+    max-width: 800px;
+}
+header,
+footer {
+    background-color: #333;
+    color: #fff;
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+    ul,
+    li {
+        list-style: none;
+    }
+}
+footer {
+    padding: 20px 0;
+    .copyright {
+        text-align: center;
+    }
+}
+.friend-link {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 100px 1fr;
+    >div:first-child {
+        border-right: 5px solid #fff;
+        text-align: center;
+    }
+}
+
+.nav-bar {
+    li {
+        line-height: 60px;
+        height: 60px;
+        display: inline-block;
+        padding: 0 20px;
+        &:hover {
+            border-bottom: 3px solid #fff;
+        }
+    }
+}

@@ -4,14 +4,16 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->registerJsFile([
     '@jquery.min.js',
-    '@jquery.lazyload.min.js',
-    '@christmas.min.js',
-    '@blog.min.js']);
+    '@jquery.lazyload.min.js']);
 ?>
-    <div class="footer text-center">
-        <a href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
-    </div>
-    <canvas id="christmas-box"></canvas>
+    <footer>
+        <div class="container">
+            <?=$this->node('friend-link')?>
+            <div class="copyright">
+                <a href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
+            </div>
+        </div>
+    </footer>
     <?=$this->footer()?>
 </body>
 </html>
