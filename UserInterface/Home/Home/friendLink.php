@@ -8,7 +8,9 @@ $this->extend('layouts/header');
 ?>
 
 <div class="container">
-    <?=$this->node('friend-link')?>
+    <div class="friend-box">
+        <?=$this->node('friend-link')?>
+    </div>
 </div>
 
 <?php $this->extend('layouts/footer')?>

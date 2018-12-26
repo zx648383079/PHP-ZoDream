@@ -116,8 +116,8 @@ class BlogModel extends Model {
         return Time::isTimeAgo($this->getAttributeValue('created_at'), 2678400);
     }
 
-    public static function getNew() {
-	    return static::orderBy('created_at desc')->select('id, title, description, created_at')->limit(5)->all();
+    public static function getNew($limit = 5) {
+	    return static::orderBy('created_at desc')->select('id, title, description, created_at')->limit($limit ?? 5)->all();
     }
 
     public static function getHot() {

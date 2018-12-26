@@ -20,12 +20,15 @@ class Node implements INode {
     }
 
     public function attr($key, $value = null) {
-        if (!is_array($key)) {
+        if (is_array($key)) {
+            $this->attributes = array_merge($this->attributes, $key);
+            return $this;
+        }
+        if (!is_null($value)) {
             $this->attributes[$key] = $value;
             return $this;
         }
-        $this->attributes = array_merge($this->attributes, $key);
-        return $this;
+        return isset($this->attributes[$key]) ? $this->attributes[$key] : null;
     }
 
     public function render($type = null) {

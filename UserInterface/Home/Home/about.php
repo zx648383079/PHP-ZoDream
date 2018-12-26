@@ -9,7 +9,7 @@ $this->extend('layouts/header');
 ?>
 
 <div class="container">
-    <div class="about">
+    <div class="about-box">
         <div class="about-top heading">
             <h1>关于本站</h1>
         </div>
@@ -20,7 +20,7 @@ $this->extend('layouts/header');
         </div>
     </div>
 
-    <div class="contact">
+    <div class="contact-box">
         <div class="heading">
             <h2>意见反馈</h2>
             <p>本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。</p>

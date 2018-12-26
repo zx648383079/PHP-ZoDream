@@ -7,7 +7,7 @@ use Module\Template\Domain\Weights\Node;
 class BlogPanel extends Node {
 
     public function render($type = null) {
-        $data = BlogModel::getNew();
+        $data = BlogModel::getNew($this->attr('limit'));
         return implode('', array_map(function (BlogModel $item) {
             return sprintf('<div class="list-item"><a class="name" href="%s">%s</a><div class="time">%s</div></div>',
                 url('blog', ['id' => $item->id]), $item->title, $item->created_at);
