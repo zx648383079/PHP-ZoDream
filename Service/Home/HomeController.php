@@ -5,15 +5,15 @@ use Domain\Model\FeedbackModel;
 
 class HomeController extends Controller {
     public function indexAction() {
-        return $this->show('index', array(
-            'title' => '首页'
-        ));
+        return $this->show();
     }
 
     public function aboutAction() {
-        return $this->show('about', array(
-            'title' => '关于'
-        ));
+        return $this->show();
+    }
+
+    public function friendLinkAction() {
+        return $this->show();
     }
 
     public function feedbackAction() {

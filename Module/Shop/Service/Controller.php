@@ -3,7 +3,7 @@ namespace Module\Shop\Service;
 
 use Module\ModuleController;
 use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\ShoppingCart;
+use Module\Shop\Module;
 
 class Controller extends ModuleController {
     public $layout = 'main';
@@ -14,7 +14,7 @@ class Controller extends ModuleController {
 
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();
-        $cart = new ShoppingCart();
+        $cart = Module::cart();
         $this->send(compact('categories_tree', 'cart'));
         return $this;
     }

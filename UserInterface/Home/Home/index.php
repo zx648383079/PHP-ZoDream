@@ -1,7 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Template\View */
-
+use Zodream\Template\View;
+/** @var $this View */
+$this->title = '首页';
 $this->extend('layouts/header');
 ?>
 
@@ -10,10 +11,10 @@ $this->extend('layouts/header');
         <a href="<?=$this->url('blog')?>">
             博客
         </a>
-        <a href="">
+        <a href="<?=$this->url('doc')?>">
             文档
         </a>
-        <a href="">
+        <a href="<?=$this->url('finance')?>">
             记账
         </a>
         <a href="<?=$this->url('tool')?>">

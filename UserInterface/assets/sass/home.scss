@@ -101,3 +101,125 @@ footer {
         }
     }
 }
+
+
+
+.btn-show {
+    background: transparent;
+	display: inline-block;
+	vertical-align: middle;
+	transform: translateZ(0);
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+	backface-visibility: hidden;
+	position: relative;
+	transition-property: color;
+    transition-duration: 0.3s;
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #333;
+        transform: scaleX(0);
+        transform-origin: 50%;
+        transition-property: transform;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-out;
+    }
+    &:hover, 
+    &:focus, 
+    &:active {
+        color: white;
+    }
+    &:hover:before, 
+    &:focus:before, 
+    &:active:before {
+        transform: scaleX(1);
+    }
+}
+
+
+.contact {
+    padding: 20px;
+    .heading {
+        p {
+            color: rgb(179, 177, 177);
+            font-size: 15px;
+            margin: 1.2% 0px;
+            font-family: 'Play-Regular';
+            line-height: 1.6em;
+        }
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        width: 100%;
+        padding: 12px 12px;
+        border: 1px solid #BDBCBC;
+        font-size: 15px;
+        margin-bottom: 1.5em;
+        color: #808080;
+        outline: none;
+        font-weight: 400;
+        font-family: 'Play-Regular';
+    }
+    textarea {
+        resize: none;
+        height: 192px;
+    }
+    button {
+        width: 100px;
+        border: 1px solid #333;
+        border-radius: 0;
+    }
+}
+
+.about,
+.contact {
+    background-color: #fff;
+    padding: 20px;
+}
+
+.about {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+.contact {
+    margin-bottom: 50px;
+}
+
+.about-top {
+    text-align: center;
+}
+
+.about-bottom {
+    h4 {
+        color: rgb(34, 34, 34);
+        font-size: 1.2em;
+        margin: 2.1% 0px 0px;
+        line-height: 1.3em;
+        font-family: 'Play-Regular';
+    }
+    p {
+        color: rgb(179, 177, 177);
+        font-size: 15px;
+        margin: 5px 0px 0px;
+        font-family: 'Play-Regular';
+        line-height: 1.6em;
+    }
+}
+
+.heading {
+    h3, 
+    h1, 
+    h2 {
+        color: #333;
+        font-size: 2.1em;
+        font-weight: 500;
+        margin: 0;
+        text-transform: uppercase;
+    }
+}
