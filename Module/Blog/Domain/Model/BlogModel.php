@@ -117,7 +117,7 @@ class BlogModel extends Model {
     }
 
     public static function getNew() {
-	    return static::orderBy('create_at desc')->select('id, title, description, created_at')->limit(5)->all();
+	    return static::orderBy('created_at desc')->select('id, title, description, created_at')->limit(5)->all();
     }
 
     public static function getHot() {

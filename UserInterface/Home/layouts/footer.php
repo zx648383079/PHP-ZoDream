@@ -15,5 +15,14 @@ $this->registerJsFile([
         </div>
     </footer>
     <?=$this->footer()?>
+    <script>
+    $(function () {
+        var footer = $('footer'),
+            diff = $(window).height() - footer.offset().top - footer.height();
+        if (diff > 0) {
+            footer.css('margin-top', diff + 'px');
+        }
+    });
+    </script>
 </body>
 </html>

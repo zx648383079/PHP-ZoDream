@@ -39,7 +39,9 @@ class Page implements IPage {
     public function instance($name): INode {
         $name = Str::studly($name);
         if (!isset($this->node_list[$name])) {
-            throw new Exception('node not register');
+            throw new Exception(
+                sprintf('"%s" node not register', $name)
+            );
         }
         $node = $this->node_list[$name];
         if (!isset($this->node_instance[$node])) {

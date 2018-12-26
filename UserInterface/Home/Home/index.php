@@ -5,36 +5,31 @@ defined('APP_DIR') or exit();
 $this->extend('layouts/header');
 ?>
 
-<div class="metro-grid">
-    <div class="item hover-left">
+<div class="container">
+    <div class="metro-grid">
         <a href="<?=$this->url('blog')?>">
-            <div class="font-gird">
-                <img src="/assets/images/blog.png" alt="">
-                <p>博客</p>
-            </div>
-            <div class="back-grid">
-                <h3>简介</h3>
-                <div class="item-content">
-                    本博客只为记录学习及工作。<br/>
-                    具体功能正在开发中。。。
-                </div>
-            </div>
+            博客
+        </a>
+        <a href="">
+            文档
+        </a>
+        <a href="">
+            记账
+        </a>
+        <a href="<?=$this->url('tool')?>">
+            工具
         </a>
     </div>
-    <div class="item hover-right">
-        <a href="<?=$this->url('tool')?>">
-            <div class="font-gird">
-                <img src="/assets/images/tool.png" alt="">
-                <p>工具</p>
-            </div>
-            <div class="back-grid">
-                <h3>简介</h3>
-                <div class="item-content">
-                    只为方便服务。。。
-                </div>
-            </div>
-        </a>
+
+    <div class="panel">
+        <div class="panel-header">
+            最新博客
+        </div>
+        <div class="panel-body">
+            <?=$this->node('blog-panel', ['limit' => 6])?>
+        </div>
     </div>
 </div>
+
 
 <?php $this->extend('layouts/footer')?>
