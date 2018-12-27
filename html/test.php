@@ -20,18 +20,25 @@ use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
 
 
-$p = (new \Zodream\Infrastructure\Pipeline\MiddlewareProcessor())
-    ->process(1, function ($p, $next) {
+$client = new \Module\RPC\Domain\Client('http://zodream.localhost/rpc/server');
+$data = $client->invoke([
+    'a' => 11,
+    'b' => 122
+]);
+dd($data);
 
-        return $next($p * 2);
-    }, function ($p, $next) {
-        $p = $next($p);
-        return $p . '3';
-    }, function ($p, $next) {
-        return $next($p . '这是');
-    });
-
-dd($p);
+//$p = (new \Zodream\Infrastructure\Pipeline\MiddlewareProcessor())
+//    ->process(1, function ($p, $next) {
+//
+//        return $next($p * 2);
+//    }, function ($p, $next) {
+//        $p = $next($p);
+//        return $p . '3';
+//    }, function ($p, $next) {
+//        return $next($p . '这是');
+//    });
+//
+//dd($p);
 
 $goods = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\zd.jpg');
 $qr = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\wx.jpg');

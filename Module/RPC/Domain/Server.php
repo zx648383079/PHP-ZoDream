@@ -1,5 +1,6 @@
 <?php
 namespace Module\RPC\Domain;
+use Zodream\Helpers\Json;
 
 /**
  * Class Server
@@ -26,6 +27,54 @@ class Server {
         'params' => [],
         'id' => 0
     ];
+
+    public function handle() {
+        try {
+            $request = $this->validate();
+            if (!isset($request[0])) {
+                return $this->invoke($request);
+            }
+            return array_map(function ($item) {
+                return $this->invoke($item);
+            }, $request);
+        } catch (JsonRPCException $ex) {
+            return $this->jsonFailure($ex->getCode());
+        }
+        return true;
+    }
+
+    public function invoke($request) {
+        $this->request = $request;
+        // TODO
+        return $this->jsonSuccess(1);
+    }
+
+
+    public function validate() {
+        if (!app('request')->isPost()) {
+            throw new JsonRPCException('', -32600);
+        }
+        $request = Json::decode(app('request')->input());
+        if (empty($request)) {
+            throw new JsonRPCException('', -32700);
+        }
+        if (!isset($request[0])) {
+            $this->validateRequest($request);
+            return $request;
+        }
+        foreach ($request as $item) {
+            $this->validateRequest($item);
+        }
+        return $request;
+    }
+
+    protected function validateRequest(array $request) {
+        if (!isset($request['jsonrpc']) ||
+            !isset($request['id']) ||
+            !isset($request['method'])) {
+            throw new JsonRPCException('', -32600);
+        }
+    }
 
     public function json($data) {
         $args = [
