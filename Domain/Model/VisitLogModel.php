@@ -130,7 +130,7 @@ class VisitLogModel extends Model {
 			'select' => 'ip, MAX(create_at) as create_at, referer',
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 15
 		])->all();
 	}
@@ -145,7 +145,7 @@ class VisitLogModel extends Model {
 			'select' => 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp',
 			'where' => $where,
 			'group' => '1,2,3',
-			'order' => '1,2,3',
+			'orderBy' => '1,2,3',
 			'limit' => 30
 		])->all();
 	}
@@ -160,7 +160,7 @@ class VisitLogModel extends Model {
 			'select' => 'url, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
 	}
@@ -175,7 +175,7 @@ class VisitLogModel extends Model {
 			'select' => 'ip, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
 	}
@@ -190,7 +190,7 @@ class VisitLogModel extends Model {
 			'select' => 'browser, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
 	}
@@ -205,7 +205,7 @@ class VisitLogModel extends Model {
 			'select' => 'os, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
 	}
@@ -220,7 +220,7 @@ class VisitLogModel extends Model {
 			'select' => 'RIGHT(ip,INSTR(REVERSE(ip),\".\")-1) as country, COUNT(*) as count',
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
 	}
@@ -241,7 +241,7 @@ class VisitLogModel extends Model {
 		$data = static::select('referer,COUNT(*) as count')->load([
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
 		$args = [];
@@ -297,7 +297,7 @@ class VisitLogModel extends Model {
 		$args = static::select('referer,COUNT(*) as count')->load([
 			'where' => $where,
 			'group' => 1,
-			'order' => '2 DESC',
+			'orderBy' => '2 DESC',
 			'limit' => 20
 		])->all();
 		$urls = static::where('url')->load([
@@ -336,7 +336,7 @@ class VisitLogModel extends Model {
 		$args = static::select($type.'(create_at) as d, COUNT(*) as c')->load([
 			'where' => $where,
 			'group' => 1,
-			'order' => 1
+			'orderBy' => 1
 		])->all();
 		$max = 0;
 		foreach ($args as $item) {
@@ -352,7 +352,7 @@ class VisitLogModel extends Model {
 		$uvs = $ips = static::select($type.'(create_at) as d, session')->load([
 			'where' => $where,
 			'group' => '1,2',
-			'order' => 1
+			'orderBy' => 1
 		])->all();
 		foreach ($uvs as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {
@@ -364,7 +364,7 @@ class VisitLogModel extends Model {
 		$ips = static::select($type.'(create_at) as d, ip')->load([
 			'where' => $where,
 			'group' => '1,2',
-			'order' => 1
+			'orderBy' => 1
 		])->all();
 		foreach ($ips as $item) {
 			if (!array_key_exists($item['d'], $flowCount)) {

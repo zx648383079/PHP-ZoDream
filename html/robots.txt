@@ -3,3 +3,4 @@ Allow:/blog
 Allow:/tool
 Disallow: /admin.php
 Disallow: /*/admin
+Sitemap: https://zodream.cn/sitemap.xml

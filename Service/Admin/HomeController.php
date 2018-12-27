@@ -4,6 +4,8 @@ namespace Service\Admin;
  * 后台首页
  */
 use Domain\Model\VisitLogModel;
+use Infrastructure\SiteMap;
+use Module\Blog\Domain\Model\BlogModel;
 
 
 class HomeController extends Controller {
@@ -31,4 +33,15 @@ class HomeController extends Controller {
 			'search' => $search
 		));
 	}
+
+	public function sitemapAction() {
+	    $host = 'https://zodream.cn/';
+	    $map = new SiteMap();
+	    $map->add($host, time());
+	    $blog_list = BlogModel::orderBy('id', 'desc')->get('id', 'updated_at');
+	    foreach ($blog_list as $item) {
+	        $map->add(sprintf('%sblog/id/%s.html', $host, $item->id), $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+        }
+        $map->toXml();
+    }
 }

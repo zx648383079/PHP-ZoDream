@@ -19,42 +19,6 @@ use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
 
-
-$client = new \Module\RPC\Domain\Client('http://zodream.localhost/rpc/server');
-$data = $client->invoke([
-    'a' => 11,
-    'b' => 122
-]);
-dd($data);
-
-//$p = (new \Zodream\Infrastructure\Pipeline\MiddlewareProcessor())
-//    ->process(1, function ($p, $next) {
-//
-//        return $next($p * 2);
-//    }, function ($p, $next) {
-//        $p = $next($p);
-//        return $p . '3';
-//    }, function ($p, $next) {
-//        return $next($p . '这是');
-//    });
-//
-//dd($p);
-
-$goods = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\zd.jpg');
-$qr = new File('D:\Documents\Github\PHP-ZoDream\html\assets\images\wx.jpg');
-
-$font = 'D:\Documents\Github\PHP-ZoDream\data\fonts\msyh.ttc';
-
-$img = new Canvas();
-$img->create(402, 712);
-$img->setBackground('#fff')
-    ->addImage(new Image($goods), new Box(0, 60, 402, 402))
-    ->addImage(new Image($qr), new Box(18, 590, 106, 106))
-    ->addText(new Text('请长按识别二维码', 18, 560, [155, 143, 128], $font, 12))
-    ->addText(new Text('微信支付购买', 18, 576, [155, 143, 128], $font, 12))
-    ->addText(new Text('kiwigo', 300, 560, '#000', $font, 16))
-    ->addText(new Text('￥', 278, 640, '#f00', $font, 12))
-    ->addText(new Text('123.00', 290, 640, '#f00', $font, 25))
-    ->addText(new Text('测试商品', 300, 670, '#000', $font, 12))
-;
-app('response')->image($img)->send();
+$map = new \Infrastructure\SiteMap();
+$map->add('http://zodream.cn', time());
+$map->toXml();

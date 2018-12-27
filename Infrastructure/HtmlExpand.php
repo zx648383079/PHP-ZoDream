@@ -1,7 +1,9 @@
 <?php
 namespace Infrastructure;
 
-use Zodream\Infrastructure\ObjectExpand\StringExpand;
+
+use Zodream\Helpers\Str;
+
 class HtmlExpand {
 	public static function getImage($content, $default = '/assets/home/images/default.jpg') {
 		$match = array();
@@ -21,7 +23,7 @@ class HtmlExpand {
 	
 	public static function shortString($content, $length = 100) {
 		$content = preg_replace('/(\<.+?\>)|(\&nbsp;)+/', '', htmlspecialchars_decode($content));
-		return StringExpand::subString($content, 0, $length);
+		return Str::subString($content, 0, $length);
 	}
 
 	public static function getMenu(array $data) {
