@@ -18,7 +18,6 @@ PRIMARY KEY (`id`))
 ENGINE = InnoDB DEFAULT CHARSET=UTF8;
  */
 use Zodream\Helpers\Time;
-
 use Zodream\Service\Factory;
 
 
@@ -34,6 +33,16 @@ use Zodream\Service\Factory;
  * @property string $url
  * @property string $referer
  * @property string $agent
+ *
+ * @property string $country
+ * @property string $region
+ * @property string $city
+ *
+ * @property integer $user_id
+ * @property string $user_name
+ * @property string $latitude
+ * @property string $longitude
+ *
  * @property string $create_at
  */
 class VisitLogModel extends Model {
@@ -129,7 +138,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'ip, MAX(create_at) as create_at, referer',
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 15
 		])->all();
@@ -144,7 +153,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp',
 			'where' => $where,
-			'group' => '1,2,3',
+			'groupBy' => '1,2,3',
 			'orderBy' => '1,2,3',
 			'limit' => 30
 		])->all();
@@ -159,7 +168,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'url, COUNT(*) as count',
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
@@ -174,7 +183,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'ip, COUNT(*) as count',
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
@@ -189,7 +198,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'browser, COUNT(*) as count',
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
@@ -204,7 +213,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'os, COUNT(*) as count',
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
@@ -219,7 +228,7 @@ class VisitLogModel extends Model {
 		return static::find()->load([
 			'select' => 'RIGHT(ip,INSTR(REVERSE(ip),\".\")-1) as country, COUNT(*) as count',
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
@@ -240,7 +249,7 @@ class VisitLogModel extends Model {
 		$where[] = "(INSTR(referer,'?q=') OR INSTR(referer, '?wd=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
 		$data = static::select('referer,COUNT(*) as count')->load([
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 30
 		])->all();
@@ -293,10 +302,10 @@ class VisitLogModel extends Model {
 			$where = (array)$where;
 		}
 		$allUrls = static::where($where)->select('url')->all();
-		$where[] = 'referer NOT LIKE "%'.Url::getHost().'%"';
+		$where[] = 'referer NOT LIKE "%'.url()->getHost().'%"';
 		$args = static::select('referer,COUNT(*) as count')->load([
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => '2 DESC',
 			'limit' => 20
 		])->all();
@@ -335,7 +344,7 @@ class VisitLogModel extends Model {
 		}
 		$args = static::select($type.'(create_at) as d, COUNT(*) as c')->load([
 			'where' => $where,
-			'group' => 1,
+			'groupBy' => 1,
 			'orderBy' => 1
 		])->all();
 		$max = 0;
@@ -351,7 +360,7 @@ class VisitLogModel extends Model {
 
 		$uvs = $ips = static::select($type.'(create_at) as d, session')->load([
 			'where' => $where,
-			'group' => '1,2',
+			'groupBy' => '1,2',
 			'orderBy' => 1
 		])->all();
 		foreach ($uvs as $item) {
@@ -363,7 +372,7 @@ class VisitLogModel extends Model {
 
 		$ips = static::select($type.'(create_at) as d, ip')->load([
 			'where' => $where,
-			'group' => '1,2',
+			'groupBy' => '1,2',
 			'orderBy' => 1
 		])->all();
 		foreach ($ips as $item) {

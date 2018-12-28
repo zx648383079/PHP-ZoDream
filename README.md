@@ -28,12 +28,13 @@ PHP开发
 | [模板生成系统](https://github.com/zodream/gzo)                                           | 可视化便捷操作开放模块，适用于代码生成                                                       | 已完成1.0                                                      | 本地使用                          |
 | [用户管理系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Auth)       | 暂时只完成第三方登录、本地登录、注册功能，权限控制待开发                                     | 已完成1.0                                                      | [demo](http://zodream.cn/auth)    |
 | [CMS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/CMS)             | 内容管理系统                                                                                 | 开发中                                                         | 未上线                            |
-| [CAS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Cas)             | 基于cas的单点登录                                                                            | 开发中                                                         | 未上线                            |
+| [CAS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Cas)             | 基于cas的单点登录                                                                            | 已完成1.0                                                         | 未上线                            |
+| [RPC模块](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/RPC)             | json rpc                                                                            | 开发中                                                         | 未上线                            |
 | [聊天系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Chat)           | 聊天室                                                                                       | 待开发                                                         | 未上线                            |
 | [BBS论坛系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Forum)       | BBS论坛系统                                                                                  | 待开发                                                         | 未上线                            |
-| [任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)       | 计划任务系统                                                                                 | 待开发                                                         | 未上线                            |
+| [任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)       | 计划任务系统                                                                                 | 已完成1.0                                                         | 未上线                            |
 | [商城系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Shop)           | 商城系统，包括手机PC端，计划angular化及开发APP（安卓、UWP、IOS）、小程序                                                                                    | 开发中                                                         | 未上线                            |
-| [LOG查看系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/LogView)     | LOG查看系统，主要实现对iis日志的读取显示，可以标记，并根据标记进行推断整理，进行可疑访问查找 | 开发中                                                         | 未上线                            |
+| [LOG查看系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/LogView)     | LOG查看系统，主要实现对iis日志的读取显示，可以标记，并根据标记进行推断整理，进行可疑访问查找 | 已完成1.0                                                         | 未上线                            |
 | [可视化编辑系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Template) | 可视化拖拽编辑系统系统                                                                       | 待开发                                                         | 未上线                            |
 
 
@@ -42,5 +43,5 @@ PHP开发
 官网：http://zodream.cn
 
 
-更新时间：2018/5/18
+更新时间：2018/12/28
 

@@ -3,8 +3,10 @@ namespace Infrastructure;
 
 use Zodream\Helpers\Time;
 use Zodream\Service\Factory;
+use IteratorAggregate;
+use ArrayIterator;
 
-class SiteMap {
+class SiteMap implements IteratorAggregate {
 
     const CHANGE_FREQUENCY_ALWAYS = 'always';
     const CHANGE_FREQUENCY_HOURLY = 'hourly';
@@ -69,5 +71,9 @@ class SiteMap {
         }
         $xml[] = '</urlset>';
         return  implode(PHP_EOL, $xml);
+    }
+
+    public function getIterator() {
+        return new ArrayIterator($this->data);
     }
 }
