@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Helpers\Str;
 /** @var $this View */
 
 $this->title = '文章列表';
@@ -42,7 +43,7 @@ $this->title = '文章列表';
             <td><?=$item->id?></td>
             <td>
             [<?=$item->type == 1 ? '转载' : '原创'?>]
-            <?=$item->title?></td>
+            <?=Str::substr($item->title, 0, 20, true)?></td>
             <td>
                 <?php if ($item->term):?>
                     <a href="<?=$this->url('./admin/blog', ['term_id' => $item->term_id])?>">

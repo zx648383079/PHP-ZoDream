@@ -1,25 +1,9 @@
 <?php
-namespace Domain\Model;
-/**
- * 访客记录
-CREATE TABLE IF NOT EXISTS `zd_visit_log` (
-`id` INT NOT NULL AUTO_INCREMENT,
-`ip` VARCHAR(20) NOT NULL COMMENT 'IP地址',
-`browser` VARCHAR(45) NULL COMMENT '浏览器',
-`browser_version` VARCHAR(45) NULL COMMENT '浏览器版本',
-`os` VARCHAR(45) NULL COMMENT '操作系统',
-`os_version` VARCHAR(45) NULL COMMENT '操作系统版本',
-`session` VARCHAR(45) NULL COMMENT '会话标识',
-`url` TEXT NULL COMMENT '请求网址',
-`referer` VARCHAR(200) NULL COMMENT '来路',
-`agent` VARCHAR(255) NULL COMMENT '代理',
-`create_at` DATETIME NULL COMMENT '发生时间',
-PRIMARY KEY (`id`))
-ENGINE = InnoDB DEFAULT CHARSET=UTF8;
- */
+namespace Module\Auth\Domain\Model;
+
+use Domain\Model\Model;
 use Zodream\Helpers\Time;
 use Zodream\Service\Factory;
-
 
 /**
  * Class VisitLogModel
@@ -29,7 +13,6 @@ use Zodream\Service\Factory;
  * @property string $browser_version
  * @property string $os
  * @property string $os_version
- * @property string $session
  * @property string $url
  * @property string $referer
  * @property string $agent
@@ -52,35 +35,47 @@ class VisitLogModel extends Model {
     }
 
     protected function rules() {
-		return array (
-			'ip' => 'required|string:3-20',
-			'browser' => 'string:3-45',
-			'browser_version' => 'string:3-45',
-			'os' => 'string:3-45',
-			'os_version' => 'string:3-45',
-			'session' => 'string:3-45',
-			'url' => '',
-			'referer' => 'string:3-200',
-			'agent' => 'string:3-255',
-			'create_at' => '',
-		);
-	}
+        return [
+            'ip' => 'required|string:0,120',
+            'browser' => 'string:0,40',
+            'browser_version' => 'string:0,20',
+            'os' => 'string:0,20',
+            'os_version' => 'string:0,20',
+            'url' => 'string:0,45',
+            'referer' => 'string:0,45',
+            'agent' => 'string:0,255',
+            'country' => 'string:0,45',
+            'region' => 'string:0,45',
+            'city' => 'string:0,45',
+            'user_id' => 'int',
+            'user_name' => 'string:0,30',
+            'latitude' => 'string:0,30',
+            'longitude' => 'string:0,30',
+            'created_at' => 'int',
+        ];
+    }
 
-	protected function labels() {
-		return array (
-			'id' => 'Id',
-			'ip' => 'Ip',
-			'browser' => 'Browser',
-			'browser_version' => 'Browser Version',
-			'os' => 'Os',
-			'os_version' => 'Os Version',
-			'session' => 'Session',
-			'url' => 'Url',
-			'referer' => 'Referer',
-			'agent' => 'Agent',
-			'create_at' => 'Create At',
-		);
-	}
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'ip' => 'Ip',
+            'browser' => 'Browser',
+            'browser_version' => 'Browser Version',
+            'os' => 'Os',
+            'os_version' => 'Os Version',
+            'url' => 'Url',
+            'referer' => 'Referer',
+            'agent' => 'Agent',
+            'country' => 'Country',
+            'region' => 'Region',
+            'city' => 'City',
+            'user_id' => 'User Id',
+            'user_name' => 'User Name',
+            'latitude' => 'Latitude',
+            'longitude' => 'Longitude',
+            'created_at' => 'Created At',
+        ];
+    }
 
 	public static function addLog() {
 		$os = app('request')->os();

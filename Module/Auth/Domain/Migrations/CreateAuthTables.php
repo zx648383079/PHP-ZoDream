@@ -14,6 +14,7 @@ use Module\Auth\Domain\Model\RolePermissionModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserRoleModel;
+use Module\Auth\Domain\Model\VisitLogModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
@@ -45,24 +46,7 @@ class CreateAuthTables extends Migration {
             $table->set('data')->text();
             $table->timestamp('created_at');
         });
-        Schema::createTable(LoginLogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('user_id')->int()->defaultVal(0);
-            $table->set('user')->varchar(100)->notNull()->comment('登陆账户');
-            $table->set('status')->bool()->defaultVal(0);
-            $table->set('mode')->varchar(20)->defaultVal(LoginLogModel::MODE_WEB);
-            $table->timestamp('created_at');
-        });
-        Schema::createTable(ActionLogModel::tableName(), function(Table $table) {
-            $table->setComment('操作记录 ');
-            $table->set('id')->pk()->ai();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('user_id')->int()->notNull();
-            $table->set('action')->varchar(30)->notNull();
-            $table->set('remark')->varchar()->defaultVal('');
-            $table->timestamp('created_at');
-        });
+
         Schema::createTable(UserMetaModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
@@ -77,16 +61,7 @@ class CreateAuthTables extends Migration {
             $table->timestamp('expired_at');
             $table->timestamps();
         });
-        Schema::createTable(AccountLogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('user_id')->int()->unsigned()->defaultVal(0);
-            $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
-            $table->set('item_id')->int()->defaultVal(0);
-            $table->set('money')->int()->notNull();
-            $table->set('status')->tinyint(1)->defaultVal(0);
-            $table->set('remark')->varchar()->notNull();
-            $table->timestamps();
-        });
+        $this->createLog();
         $this->createRole();
         $this->createBulletin();
     }
@@ -102,6 +77,9 @@ class CreateAuthTables extends Migration {
         Schema::dropTable(LoginLogModel::tableName());
         Schema::dropTable(UserMetaModel::tableName());
         Schema::dropTable(LoginQrModel::tableName());
+        Schema::dropTable(AccountLogModel::tableName());
+        Schema::dropTable(VisitLogModel::tableName());
+        Schema::dropTable(ActionLogModel::tableName());
     }
 
     public function createRole(): void {
@@ -144,6 +122,57 @@ class CreateAuthTables extends Migration {
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->timestamps();
+        });
+    }
+
+    public function createLog() {
+        Schema::createTable(AccountLogModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->unsigned()->defaultVal(0);
+            $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
+            $table->set('item_id')->int()->defaultVal(0);
+            $table->set('money')->int()->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('remark')->varchar()->notNull();
+            $table->timestamps();
+        });
+        Schema::createTable(LoginLogModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('user')->varchar(100)->notNull()->comment('登陆账户');
+            $table->set('status')->bool()->defaultVal(0);
+            $table->set('mode')->varchar(20)->defaultVal(LoginLogModel::MODE_WEB);
+            $table->timestamp('created_at');
+        });
+        Schema::createTable(ActionLogModel::tableName(), function (Table $table) {
+            $table->setComment('操作记录 ');
+            $table->set('id')->pk()->ai();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('action')->varchar(30)->notNull();
+            $table->set('remark')->varchar()->defaultVal('');
+            $table->timestamp('created_at');
+        });
+        Schema::createTable(VisitLogModel::tableName(), function (Table $table) {
+            $table->setComment('访问记录 ');
+            $table->set('id')->pk()->ai();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('browser')->varchar(40)->defaultVal('')->comment('浏览器');
+            $table->set('browser_version')->varchar(20)->defaultVal('')->comment('浏览器版本');
+            $table->set('os')->varchar(20)->defaultVal('')->comment('操作系统');
+            $table->set('os_version')->varchar(20)->defaultVal('')->comment('操作系统版本');
+            $table->set('url')->varchar(255)->defaultVal('')->comment('请求网址');
+            $table->set('referer')->varchar(255)->defaultVal('')->comment('来路');
+            $table->set('agent')->varchar(255)->defaultVal('')->comment('代理');
+            $table->set('country')->varchar(45)->defaultVal('');
+            $table->set('region')->varchar(45)->defaultVal('');
+            $table->set('city')->varchar(45)->defaultVal('');
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('user_name')->varchar(30)->defaultVal('');
+            $table->set('latitude')->varchar(30)->defaultVal('')->comment('纬度');
+            $table->set('longitude')->varchar(30)->defaultVal('')->comment('经度');
+            $table->timestamp('created_at');
         });
     }
 }
