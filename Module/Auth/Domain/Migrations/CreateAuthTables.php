@@ -41,7 +41,8 @@ class CreateAuthTables extends Migration {
         Schema::createTable(OAuthModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
-            $table->set('vendor')->varchar(20)->defaultVal('qq');
+            $table->set('nickname')->varchar(30)->defaultVal('')->comment('昵称');
+            $table->set('vendor')->varchar(20)->defaultVal(OAuthModel::TYPE_QQ);
             $table->set('identity')->varchar(100)->notNull();
             $table->set('data')->text();
             $table->timestamp('created_at');

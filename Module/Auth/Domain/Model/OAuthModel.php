@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * @package Domain\Model\Auth
  * @property integer $id
  * @property integer $user_id
+ * @property string $nickname
  * @property string $vendor
  * @property string $identity
  * @property string $data
@@ -29,6 +30,7 @@ class OAuthModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'required|int',
+            'nickname' => 'string:0,30',
             'vendor' => 'string:0,30',
             'identity' => 'string:0,100',
             'data' => '',
@@ -40,7 +42,8 @@ class OAuthModel extends Model {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',
-            'vendor' => 'Vendor',
+            'nickname' => '昵称',
+            'vendor' => '平台',
             'identity' => 'Identity',
             'data' => 'Data',
             'created_at' => 'Created At',
@@ -57,15 +60,17 @@ class OAuthModel extends Model {
      * @param UserModel $user
      * @param $identifier
      * @param string $type
+     * @param string $nickname
      * @return OAuthModel
      */
     public static function bindUser(UserModel $user,
                                     $identifier,
-                                    $type = self::TYPE_QQ) {
+                                    $type = self::TYPE_QQ, $nickname = '') {
         return static::create([
             'user_id' => $user->id,
             'vendor' => $type,
-            'identity' => $identifier
+            'identity' => $identifier,
+            'nickname' => $nickname
         ]);
     }
 
@@ -88,17 +93,17 @@ class OAuthModel extends Model {
     /**
      * 根据第三方授权令牌或联合令牌登录
      * @param string $openid
-     * @param string $unionid
+     * @param string $unionId
      * @param string $type
      * @return UserModel|bool
      */
-    public static function findOrUpdateUser($openid,
-                                            $unionid,
+    public static function findUserWithUnion($openid,
+                                            $unionId,
                                             $type = self::TYPE_QQ) {
         $user = static::findUser($openid, $type);
         if (!empty($user)) {
             return $user;
         }
-        return static::findUser($unionid, $type);
+        return static::findUser($unionId, $type);
     }
 }

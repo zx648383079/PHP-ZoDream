@@ -3,3 +3,11 @@
     display: inline-block;
   }
 }
+
+.connect-item {
+  display: grid;
+  grid-template-columns: 8fr 2fr;
+  line-height: 40px;
+  background-color: #fff;
+  padding: 0 0 0 20px;
+}

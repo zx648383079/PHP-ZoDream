@@ -50,7 +50,7 @@ class OauthController extends ModuleController {
         }
         if (!auth()->guest()) {
             $user = auth()->user();
-            OAuthModel::bindUser($user, $auth->identity, $type);
+            OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
             return $this->redirect($redirect_uri);
         }
         $rnd = Str::random(3);
@@ -71,7 +71,7 @@ class OauthController extends ModuleController {
             'sex' => $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
             'avatar' => $auth->avatar
         ]);
-        OAuthModel::bindUser($user, $auth->identity, $type);
+        OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
         $user->login();
         $user->logLogin(true, $type);
         return $this->redirect($redirect_uri);

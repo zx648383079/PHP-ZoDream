@@ -1,1 +1,110 @@
-.login-box{max-width:300px;margin:20vh auto 40vh;overflow:hidden}.login-box .login-form{position:relative;transition:all .5s}.login-box .login-form .input-box{padding-top:70px}.login-box .login-form .input-group input[type=email],.login-box .login-form .input-group input[type=password],.login-box .login-form .input-group input[type=text]{border:none;outline:0;border-bottom:1px solid #767676}.login-box .login-form .input-group .fa{transition:all .5s}.login-box .login-form .input-group.input-focus input{padding-left:0;padding-right:30px;border-bottom:2px solid #000}.login-box .login-form .input-group.input-focus .fa{left:280px;color:#767676}.login-box .login-form .btn{background:#333;color:#fff;width:100%;margin:0}.login-box .login-form .btn:hover{background:#000}.login-box .login-form a{color:#333;text-decoration:none}.login-box .login-form .find-link{float:right}.login-box .login-form .other-box{line-height:30px}.login-box .login-form .other-box .fa{float:right;line-height:30px;margin-right:10px}.login-box .login-form .login-qr-box{position:absolute;top:0;left:300px;width:300px;text-align:center}.login-box .login-form .login-qr-box .qr-box .fa-sync{position:absolute;top:106px;left:129px;font-size:50px;color:red;display:none}.login-box .login-form .login-qr-box .failure-box,.login-box .login-form .login-qr-box .scan-box,.login-box .login-form .login-qr-box .success-box{display:none;min-height:250px}.login-box .login-form .login-qr-box .failure-box .fa,.login-box .login-form .login-qr-box .scan-box .fa,.login-box .login-form .login-qr-box .success-box .fa{font-size:80px;margin:80px 30px 20px}.login-box .login-form .login-qr-box .failure-box{position:absolute;top:0;width:100%;background:rgba(0,0,0,.4);color:#fff}.login-box .login-form .login-qr-box.waiting_confirm .scan-box{display:block}.login-box .login-form .login-qr-box.waiting_confirm .qr-box{display:none}.login-box .login-form .login-qr-box.qr_expired .qr-box .fa-sync{display:block}.login-box .login-form .login-qr-box.qr_reject .failure-box{display:block}.login-box .login-form .login-qr-box.qr_success .qr-box{display:none}.login-box .login-form .login-qr-box.qr_success .success-box{display:block}.login-box .login-oauth-box{text-align:center;margin-top:20px}.login-box .login-oauth-box .box-title{border-bottom:1px solid #767676}.login-box .login-oauth-box a{font-size:30px;color:#333;margin:5px}.login-box.slided .login-form{-webkit-transform:translate(-300px,0);transform:translate(-300px,0);min-height:300px}.footer{background:#000;color:#fff;font-weight:400;font-size:14px;padding:32px 20px;position:relative;text-align:center}.footer a{color:#fff;text-decoration:none}
+.login-box {
+  max-width: 300px;
+  margin: 20vh auto 40vh;
+  overflow: hidden; }
+  .login-box .login-form {
+    position: relative;
+    transition: all .5s; }
+    .login-box .login-form .input-box {
+      padding-top: 70px; }
+    .login-box .login-form .input-group input[type="text"],
+    .login-box .login-form .input-group input[type="email"],
+    .login-box .login-form .input-group input[type="password"] {
+      border: none;
+      outline: none;
+      border-bottom: 1px solid #767676; }
+    .login-box .login-form .input-group .fa {
+      transition: all .5s; }
+    .login-box .login-form .input-group.input-focus input {
+      padding-left: 0;
+      padding-right: 30px;
+      border-bottom: 2px solid #000; }
+    .login-box .login-form .input-group.input-focus .fa {
+      left: 280px;
+      color: #767676; }
+    .login-box .login-form .btn {
+      background: #333;
+      color: #fff;
+      width: 100%;
+      margin: 0; }
+      .login-box .login-form .btn:hover {
+        background: #000; }
+    .login-box .login-form a {
+      color: #333;
+      text-decoration: none; }
+    .login-box .login-form .find-link {
+      float: right; }
+    .login-box .login-form .other-box {
+      line-height: 30px; }
+      .login-box .login-form .other-box .fa {
+        float: right;
+        line-height: 30px;
+        margin-right: 10px; }
+    .login-box .login-form .login-qr-box {
+      position: absolute;
+      top: 0;
+      left: 300px;
+      width: 300px;
+      text-align: center; }
+      .login-box .login-form .login-qr-box .qr-box .fa-sync {
+        position: absolute;
+        top: 106px;
+        left: 129px;
+        font-size: 50px;
+        color: #f00;
+        display: none; }
+      .login-box .login-form .login-qr-box .scan-box,
+      .login-box .login-form .login-qr-box .success-box,
+      .login-box .login-form .login-qr-box .failure-box {
+        display: none;
+        min-height: 250px; }
+        .login-box .login-form .login-qr-box .scan-box .fa,
+        .login-box .login-form .login-qr-box .success-box .fa,
+        .login-box .login-form .login-qr-box .failure-box .fa {
+          font-size: 80px;
+          margin: 80px 30px 20px; }
+      .login-box .login-form .login-qr-box .failure-box {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff; }
+      .login-box .login-form .login-qr-box.waiting_confirm .scan-box {
+        display: block; }
+      .login-box .login-form .login-qr-box.waiting_confirm .qr-box {
+        display: none; }
+      .login-box .login-form .login-qr-box.qr_expired .qr-box .fa-sync {
+        display: block; }
+      .login-box .login-form .login-qr-box.qr_reject .failure-box {
+        display: block; }
+      .login-box .login-form .login-qr-box.qr_success .qr-box {
+        display: none; }
+      .login-box .login-form .login-qr-box.qr_success .success-box {
+        display: block; }
+  .login-box .login-oauth-box {
+    text-align: center;
+    margin-top: 20px; }
+    .login-box .login-oauth-box .box-title {
+      border-bottom: 1px solid #767676; }
+    .login-box .login-oauth-box a {
+      font-size: 30px;
+      color: #333;
+      margin: 5px; }
+  .login-box.slided .login-form {
+    -webkit-transform: translate(-300px, 0);
+            transform: translate(-300px, 0);
+    min-height: 300px; }
+
+.footer {
+  background: #000;
+  color: #fff;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 32px 20px;
+  position: relative;
+  text-align: center; }
+  .footer a {
+    color: #fff;
+    text-decoration: none; }
+
+/*# sourceMappingURL=login.css.map */

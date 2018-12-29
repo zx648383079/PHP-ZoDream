@@ -4,6 +4,7 @@ namespace Module\Auth\Service\Admin;
 
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 
 
@@ -12,6 +13,23 @@ class AccountController extends Controller {
     public function indexAction() {
         $model = auth()->user();
         return $this->show(compact('model'));
+    }
+
+    public function connectAction() {
+        $model_list = OAuthModel::where('user_id', auth()->id())
+            ->get('id', 'vendor', 'nickname', 'created_at');
+        return $this->show(compact('model_list'));
+    }
+
+    public function deleteConnectAction($id) {
+        if (empty($id) || $id < 1) {
+            return $this->jsonFailure('请选择解绑的平台');
+        }
+        OAuthModel::where('user_id', auth()->id())
+            ->where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
     }
 
     public function loginLogAction($keywords = null) {

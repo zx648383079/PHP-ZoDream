@@ -100,6 +100,11 @@ $this->registerCssFile([
                 'fa fa-info-circle'
             ],
             [
+                '账号关联',
+                './admin/account/connect',
+                'fa fa-link'
+            ],
+            [
                 '更改密码',
                 './admin/account/password',
                 'fa fa-key'
