@@ -42,7 +42,7 @@ $this->registerCssFile([
             ],
             [
                 '生成SiteMap',
-                './sitmap',
+                './sitemap',
                 'fa fa-map'
             ]
         ],
