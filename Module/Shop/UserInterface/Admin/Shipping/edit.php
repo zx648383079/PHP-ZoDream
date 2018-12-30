@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '配送方式';
-$url = $this->url('./admin/'); 
+$url = $this->url('./admin'); 
 $js = <<<JS
 bindShipping('{$url}');
 JS;
