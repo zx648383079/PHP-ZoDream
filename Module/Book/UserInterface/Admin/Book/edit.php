@@ -11,6 +11,7 @@ $this->title = '小说';
     <?=Form::select('cat_id', [$cat_list, 'real_name'], true)?>
     <?=Form::select('author_id', [$author_list], true)?>
     <?=Form::select('classify', $model->classify_list, true)?>
+    <?=Form::text('source')?>
     <?=Form::file('cover')?>
     <?=Form::textarea('description')?>
 
