@@ -65,7 +65,9 @@ $this->extend('../layouts/header');
 				<table>
 					<tr>
 						<td width="50%">
+							<?php if($book->first_chapter):?>
 							<a class="read start" href="<?=$book->first_chapter->wap_url?>">从头开始阅读</a>
+							<?php endif;?>
 						</td>
 						<td width="5">&nbsp;</td>
 						<td width="50%">

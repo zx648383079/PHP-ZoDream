@@ -47,7 +47,9 @@ $this->extend('layouts/header');
               <div class="praisesBTN"><a href="javascript:;" title="推荐本书！"><font id="cms_praises"><?=$book->recommend_count?></font> 推荐本书！</a></div>
           </div>
         <div class="words">
+            <?php if($book->last_chapter):?>
             最新章节：<a href="<?=$book->last_chapter->url?>"><?=$book->last_chapter->title?></a>（<?=$book->last_chapter->created_at?>）
+            <?php endif;?>
 			 <p><?=$book->author->name?>的<a href="<?=$book->category->url?>" target='_blank' title="<?=$book->category->real_name?>小说" >
                      <?=$book->category->real_name?>小说</a>作品《<a href="<?=$book->url?>" title="<?=$book->name?>"><?=$book->name?></a>》最新章节已经更新，作者<?=$book->author->name?>在这本作品上倾注了非常多的精力和时间，本站提供
                  <a href="<?=$book->url?>" title="<?=$book->name?>txt下载"><?=$book->name?>txt下载</a>，如果您喜欢这本作品，可以在这里免费下载。<br/>声明：<br/>1、请勿用于商业用途，否则后果非常严重，本站无力承担。<br/>

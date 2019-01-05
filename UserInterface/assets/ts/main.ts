@@ -176,13 +176,15 @@ $(function() {
         $(this).closest('.sidebar-container').toggleClass('expand');
     });
     $('.sidebar-container li a').click(function() {
-        let box = $(this).closest('li');
+        let $this = $(this),
+            box = $this.closest('li');
         if (box.find('ul').length > 0) {
             box.toggleClass('expand');
             return;
         }
         $('.sidebar-container li').removeClass('active');
         box.addClass('active');
+        $this.closest('.sidebar-container').removeClass('expand');
     });
     let autoRedirct = function() {
         let ele = $(".autoRedirct");

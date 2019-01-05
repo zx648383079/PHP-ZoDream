@@ -39,9 +39,14 @@ $this->extend('layouts/header');
                     [<a href="<?=$book->category->url?>" target="_blank" title="<?=$book->category->name?>"><?=$book->category->name?></a>]</span>
             </div>
             <div class="info">
-                <p>最新章节：<a href="<?=$book->last_chapter->url?>" title="<?=$book->last_chapter->title?>" target="_blank"><?=$book->last_chapter->title?></a>
+                <p>最新章节：
+                    <?php if($book->last_chapter):?>
+                    <a href="<?=$book->last_chapter->url?>" title="<?=$book->last_chapter->title?>" target="_blank"><?=$book->last_chapter->title?></a>
                     <br>
                     <?=$book->last_chapter->description?>
+                    <?php else:?>
+                    无最新章节
+                    <?php endif;?>
                 </p>
             </div>
         </div>
@@ -375,7 +380,9 @@ $this->extend('layouts/header');
                       </div>
                       <div class="n">
                           [<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>]
+                          <?php if($item->last_chapter):?>
                           <a href="<?=$item->last_chapter->url?>" title="<?=$item->last_chapter->title?>" target="_blank"><?=$item->last_chapter->title?></a>
+                          <?php endif;?>
                       </div>
                   </div>
                   <div class="words"><?=$item->format_size?></div>

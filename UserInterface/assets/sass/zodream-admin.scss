@@ -1,5 +1,13 @@
+$bg: #333;
+$back: #000;
+$white: #fff;
+$mainBg: #f4f4f4;
+$tipBg: #F5FAFF;
+$tipFg: #666;
+$shadow: rgba(0, 0, 0, 0.8);
+
 body {
-    background: #333;
+    background: $bg;
 }
 
 a {
@@ -8,18 +16,18 @@ a {
 
 footer,
 header {
-    background: #000;
-    color: #fff; 
+    background: $back;
+    color: $white; 
     a {
-        color: #fff;
+        color: $white;
         text-decoration: none;
     }
 }
 .btn,
 .zd-tab .zd-tab-head .zd-tab-item.active,
 .zd-tab .zd-tab-head .zd-tab-item:hover {
-    background: #333;
-    color: #fff;
+    background: $bg;
+    color: $white;
 }
 
 header {
@@ -88,7 +96,7 @@ footer {
     width: calc(100% - 208px);
     position: relative;
     vertical-align: baseline;
-    background-color: #f4f4f4;
+    background-color: $mainBg;
     flex-grow: unset;
     display: inline-block;
     top: 0;
@@ -98,13 +106,13 @@ footer {
 }
 
 .page-tip {
-    border: 1px dashed #333;
+    border: 1px dashed $bg;
     padding: 10px;
     border-radius: 5px;
-    background-color: #F5FAFF;
+    background-color: $tipBg;
     position: relative;
     .blue {
-        color: #333;
+        color: $bg;
     }
     ul {
         width: 100%;
@@ -113,7 +121,7 @@ footer {
             padding-left: 10px;
             list-style: inside;
             a {
-                color: #666;
+                color: $tipFg;
             }
         }
     }
@@ -169,8 +177,8 @@ footer {
     .actions {
         right: 20px;
         button {
-            background: #000;
-            color: #fff;
+            background: $back;
+            color: $white;
             line-height: 30px;
             padding: 0 8px;
             margin: 0;
@@ -204,16 +212,16 @@ footer {
             left: 10px;
             bottom: 10px;
             font-size: 24px;
-            background: #333;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            background: $bg;
+            box-shadow: 0 0 20px $shadow;
             transition: all .3s;
             padding: 4px 6px;
-            color: #fff;
+            color: $white;
             z-index: 199;
         }
         &.expand {
             left: 0;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px $shadow;
             .sidebar-container-toggle {
                 box-shadow: none;
                 left: 5px;

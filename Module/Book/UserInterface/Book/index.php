@@ -47,7 +47,9 @@ $this->extend('layouts/header');
           <div class="praisesBTN"><a href="javascript:;" title="推荐本书！"><font id="cms_praises"><?=$book->recommend_count?></font> 推荐本书！</a></div>
         </div>
         <div class="words">
+            <?php if($book->last_chapter):?>
             最新章节：<a href="<?=$book->last_chapter->url?>"><?=$book->last_chapter->title?></a>
+            <?php endif;?>
 			 <p>简介：<br/><?=$book->description?></p>
         </div>
         <div class="read_btn">

@@ -178,7 +178,9 @@ $this->registerJsFile('@jquery.zoom.min.js')
                       </div>
                       <div class="n">
                           [<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>]
+                          <?php if($item->last_chapter):?>
                           <a href="<?=$item->last_chapter->url?>" title="<?=$item->last_chapter->title?>" target="_blank"><?=$item->last_chapter->title?></a>
+                          <?php endif;?>
                       </div>
                   </div>
                   <div class="words"><?=$item->size?></div>
