@@ -4,3 +4,17 @@
         background: transparent;
     }
 }
+
+.cmd-box {
+    overflow-y: auto;
+    height: 300px;
+    border: 1px solid #777;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: rgba(100, 100, 100, .3) 0 0 10px inset;
+    p {
+        line-height: 25px;
+        color: #333;
+        word-break: break-all;
+    }
+}

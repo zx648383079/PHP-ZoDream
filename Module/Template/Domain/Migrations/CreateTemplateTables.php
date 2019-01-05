@@ -1,6 +1,7 @@
 <?php
 namespace Module\Template\Domain\Migrations;
 
+use Module\Template\Domain\Model\FeedbackModel;
 use Module\Template\Domain\Model\OptionModel;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
@@ -76,6 +77,16 @@ class CreateTemplateTables extends Migration {
             $table->set('value')->text();
             $table->set('position')->tinyint(4)->defaultVal(99);
         });
+        Schema::createTable(FeedbackModel::tableName(), function(Table $table) {
+            $table->setComment('留言');
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(20)->notNull();
+            $table->set('email')->varchar(50)->defaultVal('');
+            $table->set('phone')->varchar(30)->defaultVal('');
+            $table->set('content')->varchar()->defaultVal('');
+            $table->set('status')->bool()->defaultVal(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -88,5 +99,6 @@ class CreateTemplateTables extends Migration {
         Schema::dropTable(PageWeightModel::tableName());
         Schema::dropTable(WeightModel::tableName());
         Schema::dropTable(OptionModel::tableName());
+        Schema::dropTable(FeedbackModel::tableName());
     }
 }

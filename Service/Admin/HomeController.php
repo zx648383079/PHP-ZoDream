@@ -34,7 +34,7 @@ class HomeController extends Controller {
             }
         });
         $map->toXml();
-        return $this->show();
+        return $this->show(compact('map'));
     }
 
     public function cacheAction() {

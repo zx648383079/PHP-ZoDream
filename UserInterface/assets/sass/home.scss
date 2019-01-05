@@ -233,3 +233,18 @@ footer {
         }
     }
 }
+
+.friend-apply {
+    text-align: right;
+    .btn {
+        border: 1px solid #333;
+        background-color: #fff;
+    }
+}
+
+.apply-dialog {
+    input {
+        height: 30px;
+        width: 300px;
+    }
+}

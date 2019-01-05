@@ -1,3 +1,15 @@
+function renderCMD(lines: string[]) {
+    let i = 0,
+        box = $('.cmd-box'),
+        handle = setInterval(function() {
+            if (i >= lines.length) {
+                clearInterval(handle);
+                return;
+            }
+            box.append('<p>'+ lines[i++] +'</p>').scrollTop(box[0].scrollHeight);
+        }, 500);
+}
+
 $(document).ready(function() {
     $(".zd-tab .zd-tab-head .zd-tab-item").click(function() {
         let $this = $(this);
