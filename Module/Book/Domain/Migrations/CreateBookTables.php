@@ -84,6 +84,9 @@ class CreateBookTables extends Migration {
     }
 
     public function seed() {
+        if (BookCategoryModel::query()->count() > 0) {
+            return;
+        }
         BookCategoryModel::query()->insert([
             ['name' => '玄幻·奇幻'],
             ['name' => '仙侠·武侠'],

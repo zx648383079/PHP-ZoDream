@@ -8,12 +8,14 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@zodream-admin.css',
+        '@select2.min.css',
         '@dialog.css',
         '@auth.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
+        '@select2.min.js',
         '@jquery.upload.min.js',
         '@main.min.js',
         '@auth.min.js'

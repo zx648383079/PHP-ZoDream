@@ -8,12 +8,12 @@ use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\OAuthModel;
-use Module\Auth\Domain\Model\PermissionModel;
-use Module\Auth\Domain\Model\RoleModel;
-use Module\Auth\Domain\Model\RolePermissionModel;
+use Module\Auth\Domain\Model\RBAC\PermissionModel;
+use Module\Auth\Domain\Model\RBAC\RoleModel;
+use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
-use Module\Auth\Domain\Model\UserRoleModel;
+use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\VisitLogModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -81,6 +81,16 @@ class CreateAuthTables extends Migration {
         Schema::dropTable(AccountLogModel::tableName());
         Schema::dropTable(VisitLogModel::tableName());
         Schema::dropTable(ActionLogModel::tableName());
+    }
+
+    public function seed() {
+        if (RoleModel::query()->count() > 0) {
+            return;
+        }
+        RoleModel::create([
+           'name' => 'administrator',
+           'display_name' => '超级管理员'
+        ]);
     }
 
     public function createRole(): void {

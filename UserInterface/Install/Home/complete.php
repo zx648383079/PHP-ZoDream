@@ -1,13 +1,14 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Template\View */
-$this->extend('layouts/header');
+use Zodream\Template\View;
+/** @var $this View */
 ?>
-
-<div class="main">
-<h1>完成</h1>
-<p>成功完成相关设置，请尽情享受。。。</p>
-<a class="btn btn-primary" href="<?=$this->url('/');?>">进入首页</a>
+<div class="page-header">
+    完成
 </div>
-
-<?php $this->extend('layouts/footer');?>
+<div class="page-body">
+    <p>成功完成相关设置，请尽情享受。。。</p>
+</div>
+<div class="page-footer">
+    <a class="btn btn-primary" href="<?=$this->url('/');?>">进入首页</a>
+</div>

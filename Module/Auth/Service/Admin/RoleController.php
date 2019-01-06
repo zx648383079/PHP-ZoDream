@@ -1,10 +1,10 @@
 <?php
 namespace Module\Auth\Service\Admin;
 
-use Module\Auth\Domain\Model\PermissionModel;
-use Module\Auth\Domain\Model\RoleModel;
-use Module\Auth\Domain\Model\RolePermissionModel;
-use Module\Auth\Domain\Model\UserRoleModel;
+use Module\Auth\Domain\Model\RBAC\PermissionModel;
+use Module\Auth\Domain\Model\RBAC\RoleModel;
+use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
+use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 
 class RoleController extends Controller {
 

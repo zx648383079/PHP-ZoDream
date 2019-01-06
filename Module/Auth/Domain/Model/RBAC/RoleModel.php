@@ -1,5 +1,5 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Model\RBAC;
 
 
 use Domain\Model\Model;

@@ -10,9 +10,7 @@ $js = <<<JS
 $('#perm-box').select2();
 JS;
 
-$this->registerCssFile('@select2.min.css')
-    ->registerJsFile('@select2.min.js')
-    ->registerJs($js, View::JQUERY_READY);
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <h1><?=$this->title?></h1>

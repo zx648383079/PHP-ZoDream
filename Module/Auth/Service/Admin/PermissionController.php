@@ -2,7 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 
-use Module\Auth\Domain\Model\PermissionModel;
+use Module\Auth\Domain\Model\RBAC\PermissionModel;
 
 class PermissionController extends Controller {
 
