@@ -18,7 +18,18 @@ use Zodream\Disk\File;
 use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
+$str = '我';
+$timer = new \Zodream\Debugger\Domain\Timer();
 
-$map = new \Infrastructure\SiteMap();
-$map->add('http://zodream.cn', time());
-$map->toXml();
+$timer->record('start...');
+for ($i = 0; $i < 100; $i ++) {
+    $a = in_array($str, ['/', 'a']);
+}
+$timer->record('[]');
+
+for ($i = 0; $i < 100; $i ++) {
+    $a = $str == '/' || $str == 'a';
+}
+$timer->record('==');
+
+dd($timer->getTimes());

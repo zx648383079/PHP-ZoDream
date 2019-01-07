@@ -6,6 +6,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\ModuleController;
+use Zodream\Service\Factory;
 
 class HomeController extends ModuleController {
 
@@ -94,5 +95,9 @@ class HomeController extends ModuleController {
            BlogModel::search($query, 'title');
         })->limit(4)->pluck('title', 'id');
         return $this->jsonSuccess($data);
+    }
+
+    public function findLayoutFile() {
+        return Factory::root()->file('UserInterface/Home/layouts/main.php');
     }
 }

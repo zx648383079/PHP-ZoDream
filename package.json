@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/zx648383079/PHP-ZoDream#readme",
   "dependencies": {
-    "@types/jquery": "^3.3.28",
+    "@types/jquery": "^3.3.29",
     "bourbon": "^5.1.0",
     "bourbon-neat": "^1.9.1",
     "gulp": "github:gulpjs/gulp#v4.0.0-alpha.3",

@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '首页';
-$this->extend('layouts/header');
 ?>
 
 <div class="container">
@@ -31,6 +30,3 @@ $this->extend('layouts/header');
         </div>
     </div>
 </div>
-
-
-<?php $this->extend('layouts/footer')?>

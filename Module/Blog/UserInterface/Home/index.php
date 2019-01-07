@@ -22,12 +22,8 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
         <li class="book-navicon">
             <i class="fa fa-bars"></i>
         </li>
-        <li>
-            <a href="<?=$this->url('/')?>">首页</a>
-        </li>
         <li class="active">
             <a href="<?=$this->url('./')?>">博客</a></li>
-        <li>关于</li>
         <li class="book-search">
             <form>
                 <input type="text" name="keywords" value="<?=$this->text($keywords)?>">

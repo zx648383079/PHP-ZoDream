@@ -17,8 +17,7 @@ $(".friend-apply .btn").click(function () {
 JS;
 $this->registerCssFile('@dialog.css')
     ->registerJsFile('@jquery.dialog.min.js')
-    ->registerJs($js, View::JQUERY_READY)
-    ->extend('layouts/header');
+    ->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="container">
@@ -59,5 +58,3 @@ $this->registerCssFile('@dialog.css')
     </div>
     
 </div>
-
-<?php $this->extend('layouts/footer')?>

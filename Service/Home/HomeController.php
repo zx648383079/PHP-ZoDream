@@ -29,18 +29,7 @@ class HomeController extends Controller {
         return $this->show();
     }
 
-    public function feedbackAction() {
-        $model = new FeedbackModel();
-        if ($model->load() && $model->save()) {
-            return $this->json([
-                'code' => 0,
-                'msg' => '感谢您的反馈！'
-            ]);
-        }
-        return $this->json([
-            'code' => 1,
-            'msg' => '验证失败，请重试',
-            'errors' => $model->getError()
-        ]);
+    public function errorAction() {
+        return $this->show('/404');
     }
 }
