@@ -60,7 +60,7 @@ if(isset($project_list)) {
             }
         }
         $children[] = [
-            '新建接口',
+            $project->type == 1 ? '新建接口' : '新建文档',
             [$baseUri.'/create', 'project_id' => $project->id, 'parent_id' => $item['id']],
             'fa fa-plus'
         ];

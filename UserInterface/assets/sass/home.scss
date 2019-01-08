@@ -68,6 +68,11 @@ footer {
         background-color: #fff;
         margin: 8px;
         box-shadow: rgba(#333, .7) 0 0 10px;
+        &.unknow {
+            img {
+                height: 20px;
+            }
+        }
     }
 }
 
@@ -259,6 +264,16 @@ footer {
         text-align: center;
         img {
             max-width: 100%;
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .metro-grid {
+        a {
+            &.unknow {
+                display: none;
+            }
         }
     }
 }

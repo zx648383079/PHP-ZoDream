@@ -13,11 +13,18 @@ $this->title = '首页';
         <a href="<?=$this->url('doc')?>">
             文档
         </a>
-        <a href="<?=$this->url('finance')?>">
-            记账
-        </a>
         <a href="<?=$this->url('tool')?>">
             工具
+        </a>
+        <a class="unknow" href="<?=$this->url('')?>">
+            <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">
+            待定
+        </a>
+        <a class="unknow" href="<?=$this->url('')?>">
+            待定
+        </a>
+        <a class="unknow" href="<?=$this->url('')?>">
+            待定
         </a>
     </div>
 

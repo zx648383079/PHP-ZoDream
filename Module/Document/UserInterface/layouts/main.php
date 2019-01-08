@@ -50,7 +50,10 @@ if(isset($project_list)) {
                 $children[] = [
                     $child['name'],
                     [$baseUri, 'id' => $child['id']],
-                    'fa fa-file'
+                    'fa fa-file',
+                    null,
+                    false,
+                    isset($current_id) && $child['id'] == $current_id
                 ];
             }
         }
