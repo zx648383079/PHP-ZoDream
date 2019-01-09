@@ -30,6 +30,7 @@ class HomeController extends Controller {
     }
 
     public function errorAction() {
+        app('response')->setStatusCode(404);
         return $this->show('/404');
     }
 }

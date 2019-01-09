@@ -3,6 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '首页';
+$this->set([
+    'keywords' => 'zodream,开发博客,个人博客,zodream文档',
+    'description' => 'zodream 开发博客及框架演示和文档。'
+]);
 ?>
 
 <div class="container">

@@ -4,6 +4,10 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '友情链接';
+$this->set([
+    'keywords' => '友情链接,友链',
+    'description' => '申请前请收录本站，接受新站，拒绝一切非法网站。'
+]);
 
 $js = <<<JS
 var dialog = $('.apply-dialog').dialog();

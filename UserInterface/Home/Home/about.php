@@ -4,6 +4,10 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '关于';
+$this->set([
+    'keywords' => '关于',
+    'description' => '本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。'
+]);
 ?>
 
 <div class="container">
@@ -13,8 +17,7 @@ $this->title = '关于';
         </div>
         <div class="about-bottom">
             <h4>本站是基于 zodream 框架开发的展示站。</h4>
-            <p>zodream, PHP 轻量级框架，主要代码来源为工作积累。本站及其框架保持永久更新。
-            </p>
+            <p>zodream, PHP 轻量级框架，主要代码来源为工作积累。本站及其框架保持永久更新。</p>
         </div>
     </div>
 

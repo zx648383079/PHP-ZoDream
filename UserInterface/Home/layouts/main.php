@@ -2,6 +2,15 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+
+$js = <<<JS
+var footer = $('footer'),
+    diff = $(window).height() - footer.offset().top - footer.height();
+if (diff > 0) {
+    footer.css('margin-top', diff + 'px');
+}
+JS;
+
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
@@ -10,7 +19,7 @@ $this->registerCssFile([
 ])->registerJsFile([
     '@jquery.min.js',
     '@jquery.lazyload.min.js'
-]);
+])->registerJs($js, View::JQUERY_READY);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">
@@ -19,8 +28,8 @@ $this->registerCssFile([
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width, initial-scale=1">
         <title><?=$this->title?>-zodream</title>
-        <meta name="Keywords" content="<?=$this->get('keywords', 'zodream,开发博客,个人博客,zodream文档')?>" />
-        <meta name="Description" content="<?=$this->get('description', 'zodream 开发博客及框架演示和文档')?>" />
+        <meta name="Keywords" content="<?=$this->get('keywords')?>" />
+        <meta name="Description" content="<?=$this->get('description')?>" />
         <meta name="author" content="zodream" />
         <link rel="icon" href="/assets/images/favicon.png">
        <?=$this->header();?>
@@ -41,14 +50,5 @@ $this->registerCssFile([
             </div>
         </footer>
         <?=$this->footer()?>
-        <script>
-        $(function () {
-            var footer = $('footer'),
-                diff = $(window).height() - footer.offset().top - footer.height();
-            if (diff > 0) {
-                footer.css('margin-top', diff + 'px');
-            }
-        });
-        </script>
    </body>
 </html>
