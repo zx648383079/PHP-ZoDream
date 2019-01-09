@@ -29,7 +29,7 @@ class HomeController extends Controller {
         return $this->show();
     }
 
-    public function errorAction() {
+    public function notFoundAction() {
         app('response')->setStatusCode(404);
         return $this->show('/404');
     }
