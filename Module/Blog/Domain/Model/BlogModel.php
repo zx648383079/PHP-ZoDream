@@ -14,6 +14,7 @@ use Zodream\Helpers\Time;
  * @property string $description
  * @property string $keywords
  * @property string $thumb
+ * @property string $language
  * @property integer $edit_type
  * @property string $content
  * @property integer $user_id
@@ -46,6 +47,7 @@ class BlogModel extends Model {
             'description' => 'string:0,255',
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
+            'language' => 'string:0,20',
             'edit_type' => 'int:0,9',
             'content' => '',
             'user_id' => 'int',
@@ -69,6 +71,7 @@ class BlogModel extends Model {
             'description' => '说明',
             'keywords' => '关键字',
             'thumb' => '图片',
+            'language' => '语言',
             'edit_type' => '编辑器',
             'content' => '内容',
             'user_id' => 'User Id',

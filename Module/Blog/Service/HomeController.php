@@ -17,16 +17,19 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction($sort = 'new', $category = null, $keywords = null, $id = 0) {
+    public function indexAction($sort = 'new', $category = null, $keywords = null, $user = null, $language = null, $id = 0) {
         if ($id > 0) {
             return $this->runMethodNotProcess('detail', compact('id'));
         }
         $blog_list  = BlogModel::with('term', 'user')
             ->select('id', 'title', 'description',
-                'created_at', 'comment_count',
+                'created_at', 'comment_count', 'language',
                 'click_count', 'recommend', 'user_id', 'term_id')
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('term_id', intval($category));
+            })
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', intval($user));
             })
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
@@ -39,7 +42,9 @@ class HomeController extends ModuleController {
                     return $query->orderBy('comment_count', 'desc');
                 }
             })->when(!empty($keywords), function ($query) {
-                BlogModel::search($query, ['title']);
+                BlogModel::search($query, ['title', 'language']);
+            })->when(!empty($language), function ($query) use ($language) {
+                $query->where('language', $language);
             })
             ->page();
         $cat_list = TermModel::all();

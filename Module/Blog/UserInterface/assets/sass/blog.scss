@@ -189,7 +189,8 @@ $acolor: #333;
                 }
                 .author,
                 .comment,
-                .category {
+                .category,
+                .language {
                     margin-right: 20px;
                 }
                 .agree,
@@ -225,7 +226,8 @@ $acolor: #333;
         .info {
             border-bottom: 1px dotted $activeColor;
             line-height: 40px;
-            span {
+            span,
+            a {
                 margin-right: 20px;
             }
         }

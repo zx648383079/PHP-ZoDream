@@ -94,8 +94,13 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
             <span class="book-time"><?=$item->created_at?></span></dt>
         <dd>
             <p><?=$item->description?></p>
-            <span class="author"><i class="fa fa-edit"></i><b><?=$item->user->name?></b></span>
-            <span class="category"><i class="fa fa-bookmark"></i><b><?=$item->term->name?></b></span>
+            <a class="author" href="<?=$this->url('./', ['user' => $item->user_id])?>"><i class="fa fa-edit"></i><b><?=$item->user->name?></b></a>
+            <?php if($item->term):?>
+            <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=$item->term->name?></b></a>
+            <?php endif;?>
+            <?php if(!empty($item->language)):?>
+            <a class="language" href="<?=$this->url('./', ['language' => $item->language], false)?>"><i class="fa fa-code"></i><b><?=$item->language?></b></a>
+            <?php endif;?>
             <span class="comment"><i class="fa fa-comments"></i><b><?=$item->comment_count?></b></span>
             <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item->recommend?></b></span>
             <span class="click"><i class="fa fa-eye"></i><b><?=$item->click_count?></b></span>

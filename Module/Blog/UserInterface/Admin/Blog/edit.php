@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
-
+$lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 'Go', 'C#', 'ASP.NET', '.NET Core', 'Python', 'C', 'C++', 'Java', 'Kotlin', 'Swift', 'Objective-C'];
 $this->title = $model->id > 0 ? '编辑' : '新增'. '文章';
 $configs = app('request')->isMobile() ?
     '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '';
@@ -28,6 +28,7 @@ $this->registerJs($js);
             <div class="zd-tab-item active">
                 <?=Form::text('title', true)?>
                 <?=Form::select('term_id', [$term_list], true)?>
+                <?=Form::select('language', array_merge(['' => '请选择'], array_combine($lang_list, $lang_list)))?>
                 <?=Form::select('edit_type', ['Ueditor', 'MarkDown'])?>
                 <?=Form::select('type', ['原创', '转载'])?>
                 <?=Form::text('source_url')?>

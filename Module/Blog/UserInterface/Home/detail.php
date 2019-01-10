@@ -69,10 +69,13 @@ $this->extend('layouts/header', [
     </a>
     <div class="info">
         <?php if($blog->user):?>
-        <span class="author"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></span>
+        <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></a>
         <?php endif;?>
         <?php if($blog->term):?>
-        <span class="category"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></span>
+        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></a>
+        <?php endif;?>
+        <?php if(!empty($blog->language)):?>
+        <a class="language" href="<?=$this->url('./', ['language' => $blog->language], false)?>"><i class="fa fa-code"></i><b><?=$blog->language?></b></a>
         <?php endif;?>
         <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>
