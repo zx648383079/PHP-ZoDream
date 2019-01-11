@@ -1,2 +1,106 @@
+.forum-group {
+  background-color: #fff;
+  margin: 10px 0; }
+  .forum-group .group-header {
+    line-height: 50px;
+    border-bottom: 1px solid #333;
+    padding: 0 20px; }
+  .forum-group .group-body {
+    display: flex;
+    align-items: baseline;
+    justify-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between; }
+    .forum-group .group-body .forum-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      height: 100px;
+      width: 300px;
+      transition: all 1s;
+      border-bottom: 1px dotted;
+      margin: 5px; }
+      .forum-group .group-body .forum-item .thumb {
+        width: 80px;
+        height: 80px; }
+        .forum-group .group-body .forum-item .thumb img {
+          max-width: 100%;
+          height: 100px; }
+      .forum-group .group-body .forum-item .info {
+        color: #888; }
+        .forum-group .group-body .forum-item .info .name {
+          line-height: 30px;
+          color: #333;
+          font-weight: 700; }
+      .forum-group .group-body .forum-item:hover {
+        box-shadow: rgba(51, 51, 51, 0.7) 0 0 10px; }
+
+.thread-list .thread-item {
+  border-bottom: 1px solid;
+  display: grid;
+  grid-template-columns: 1fr 105px 60px 105px; }
+  .thread-list .thread-item .name {
+    line-height: 40px; }
+  .thread-list .thread-item .time em,
+  .thread-list .thread-item .count em,
+  .thread-list .thread-item .reply em {
+    display: block;
+    font-style: normal; }
+  .thread-list .thread-item:hover {
+    background-color: rgba(51, 51, 51, 0.2); }
+
+.thread-box .thread-title,
+.thread-box .post-item {
+  display: grid;
+  grid-template-columns: 160px 1fr; }
+  .thread-box .thread-title .count,
+  .thread-box .thread-title .post-user,
+  .thread-box .post-item .count,
+  .thread-box .post-item .post-user {
+    background-color: #E5EDF2; }
+  .thread-box .thread-title .title,
+  .thread-box .thread-title .post-content,
+  .thread-box .post-item .title,
+  .thread-box .post-item .post-content {
+    background-color: #fff; }
+
+.thread-box .thread-title {
+  border-bottom: 4px solid #f4f4f4;
+  line-height: 40px; }
+  .thread-box .thread-title .count {
+    text-align: center; }
+  .thread-box .thread-title .title {
+    padding-left: 20px; }
+
+.thread-box .post-item {
+  border-bottom: 4px solid #f4f4f4; }
+  .thread-box .post-item .post-user {
+    text-align: center; }
+    .thread-box .post-item .post-user .avatar img {
+      width: 120px; }
+  .thread-box .post-item .post-content .header,
+  .thread-box .post-item .post-user .name {
+    line-height: 30px;
+    border-bottom: 1px dotted #ccc; }
+  .thread-box .post-item .post-content {
+    position: relative;
+    padding-bottom: 30px; }
+    .thread-box .post-item .post-content .header .action {
+      float: right; }
+    .thread-box .post-item .post-content .last-time {
+      text-align: right;
+      color: #888; }
+    .thread-box .post-item .post-content .footer {
+      border-top: 1px dotted #888;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      line-height: 30px; }
+  .thread-box .post-item.post-new .post-content textarea {
+    width: 100%;
+    height: 200px;
+    resize: none; }
+  .thread-box .post-item.post-new .post-content .btn {
+    background-color: #333;
+    color: #fff; }
 
 /*# sourceMappingURL=forum.css.map */
