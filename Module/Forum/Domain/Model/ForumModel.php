@@ -2,6 +2,8 @@
 namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Html\Tree;
+
 /**
 * Class ForumModel
  * @property integer $id
@@ -40,22 +42,24 @@ class ForumModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'thumb' => 'Thumb',
-            'description' => 'Description',
-            'parent_id' => 'Parent Id',
+            'name' => '名称',
+            'thumb' => '图片',
+            'description' => '简介',
+            'parent_id' => '上级',
             'thread_count' => 'Thread Count',
             'post_count' => 'Post Count',
             'type' => 'Type',
-            'position' => 'Position',
+            'position' => '排序',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-
-
     public function children() {
 	    return $this->hasMany(static::class, 'parent_id', 'id');
+    }
+
+    public static function tree() {
+        return new Tree(static::query()->all());
     }
 }

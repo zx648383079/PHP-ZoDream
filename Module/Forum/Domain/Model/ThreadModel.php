@@ -42,4 +42,8 @@ class ThreadModel extends Model {
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function forum() {
+	    return $this->hasOne(ForumModel::class, 'id', 'forum_id');
+    }
 }

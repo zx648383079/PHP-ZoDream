@@ -8,19 +8,20 @@ $this->registerCssFile('@forum.css')
 ?>
 
 <div class="container">
+    <?php foreach($forum_list as $group):?>
     <div class="forum-group">
         <div class="group-header">
-            1111
+            <?=$group['name']?>
         </div>
         <div class="group-body">
-            <?php foreach(range(1, 10) as $item):?>
+            <?php foreach($group['children'] as $item):?>
             <div class="forum-item">
                 <div class="thumb">
                     <img src="<?=$this->asset('images/zd.jpg')?>" alt="">
                 </div>
                 <div class="info">
                     <div class="name">
-                        <a href="<?=$this->url('./forum', ['id' => $item])?>">123123123</a>
+                        <a href="<?=$this->url('./forum', ['id' => $item->id])?>"><?=$item['name']?></a>
                         <span>(1)</span>
                     </div>
                     <div class="count">主题：，帖数：</div>
@@ -33,4 +34,5 @@ $this->registerCssFile('@forum.css')
             <?php endforeach;?>
         </div>
     </div>
+    <?php endforeach;?>
 </div>

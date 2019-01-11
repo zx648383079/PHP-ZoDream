@@ -20,11 +20,11 @@ $this->set([
         <a href="<?=$this->url('tool')?>">
             工具
         </a>
-        <a class="unknow" href="<?=$this->url('')?>">
-            <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">
-            待定
+        <a class="unknow" href="<?=$this->url('forum')?>">
+            圈子
         </a>
         <a class="unknow" href="<?=$this->url('')?>">
+            <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">
             待定
         </a>
         <a class="unknow" href="<?=$this->url('')?>">
