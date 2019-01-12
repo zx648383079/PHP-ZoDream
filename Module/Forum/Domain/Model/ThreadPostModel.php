@@ -2,6 +2,8 @@
 namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserModel;
+
 /**
 * Class ThreadPostModel
  * @property integer $id
@@ -9,7 +11,7 @@ use Domain\Model\Model;
  * @property integer $thread_id
  * @property integer $user_id
  * @property string $ip
- * @property integer $is_first
+ * @property integer $grade
  * @property integer $created_at
  * @property integer $updated_at
 */
@@ -24,7 +26,7 @@ class ThreadPostModel extends Model {
             'thread_id' => 'required|int',
             'user_id' => 'required|int',
             'ip' => 'required|string:0,120',
-            'is_first' => 'int:0,9',
+            'grade' => 'int:0,999999',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -37,10 +39,14 @@ class ThreadPostModel extends Model {
             'thread_id' => 'Thread Id',
             'user_id' => 'User Id',
             'ip' => 'Ip',
-            'is_first' => 'Is First',
+            'grade' => '层级',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserModel::class, 'id', 'user_id');
     }
 
 }

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '论坛';
 $this->registerCssFile('@forum.css')
     ->registerJsFile('@forum.min.js');
 ?>
@@ -11,7 +11,7 @@ $this->registerCssFile('@forum.css')
     <?php foreach($forum_list as $group):?>
     <div class="forum-group">
         <div class="group-header">
-            <?=$group['name']?>
+            <a href="<?=$this->url('./forum', ['id' => $group->id])?>"><?=$group['name']?></a>
         </div>
         <div class="group-body">
             <?php foreach($group['children'] as $item):?>

@@ -10,7 +10,7 @@ class ForumController extends Controller {
     public function indexAction($id) {
         $forum = ForumModel::find($id);
         $forum_list = ForumModel::where('parent_id', $id)->all();
-        $thread_list = ThreadModel::where('forum_id', $id)->page();
+        $thread_list = ThreadModel::with('user')->where('forum_id', $id)->orderBy('id', 'desc')->page();
         return $this->show(compact('forum_list', 'forum', 'thread_list'));
     }
 }

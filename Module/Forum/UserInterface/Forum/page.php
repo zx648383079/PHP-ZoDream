@@ -6,18 +6,18 @@ $this->registerCssFile('@forum.css')
     ->registerJsFile('@forum.min.js');
 ?>
 
-<?php foreach(range(1, 20) as $item):?>
+<?php foreach($thread_list as $item):?>
     <div class="thread-item">
         <div class="name">
             <i class="fa fa-file"></i>
             [
             <a href="">求助</a>
             ]
-            <a href="<?=$this->url('./thread', ['id' => $item])?>">123313213213</a>
+            <a href="<?=$this->url('./thread', ['id' => $item->id])?>"><?=$item->title?></a>
         </div>
         <div class="time">
-            <em>admin</em>
-            <em>1分钟</em>
+            <em><?=$item->user->name?></em>
+            <em><?=$item->updated_at?></em>
         </div>
         <div class="count">
             <em>1</em>
@@ -29,3 +29,6 @@ $this->registerCssFile('@forum.css')
         </div>
     </div>
 <?php endforeach;?>
+<div class="paging-box">
+    <?=$thread_list->getLink()?>
+</div>

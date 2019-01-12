@@ -38,7 +38,8 @@ class CreateForumTables extends Migration {
             $table->set('thread_id')->int()->notNull();
             $table->set('user_id')->int()->notNull()->comment('用户');
             $table->set('ip')->varchar(120)->notNull();
-            $table->set('is_first')->bool()->defaultVal(0);
+            $table->set('grade')->smallInt(6)
+                ->defaultVal(0)->comment('回复的层级');
             $table->timestamps();
         });
     }
