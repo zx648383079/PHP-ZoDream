@@ -17,6 +17,12 @@ function asciiDecode(content: string): string {
     })
 }
 
+function unicodeDecode(content: string) {
+    var div = document.createElement('div');
+    div.innerHTML = content;
+    return div.innerHTML;
+}
+
 function converter(content: string, type: string): string| number {
     let result: string| number = '';
     switch (type) {
@@ -36,7 +42,11 @@ function converter(content: string, type: string): string| number {
             result = escape(content).toLocaleLowerCase().replace(/%u/gi,'\\u');
             break;
         case 'deunicode':
-            result = unescape(content.replace(/\\u/gi,'%u'));
+            if (/&#\d+;/.test(content)) {
+                result = unicodeDecode(content);
+                break;
+            }
+            result = unescape(content.replace(/\\u/gi, '%u'));
             break;
         case 'strtotime': 
             result = new Date(content).getTime();

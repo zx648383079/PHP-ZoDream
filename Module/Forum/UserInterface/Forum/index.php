@@ -15,7 +15,7 @@ $this->registerCssFile([
 ?>
 
 <div class="container">
-<div class="forum-group">
+    <div class="forum-group">
         <div class="group-header">
             <?=$forum->name?>
         </div>
@@ -45,6 +45,7 @@ $this->registerCssFile([
         <?php $this->extend('./page');?>
     </div>
 
+    <?php if($forum->parent_id > 0):?>
     <div class="thread-new-box">
         <div class="header">快速发帖</div>
         <form data-type="ajax" action="<?=$this->url('./thread/create')?>" method="post">
@@ -61,4 +62,5 @@ $this->registerCssFile([
             </div>
         </form>
     </div>
+    <?php endif;?>
 </div>
