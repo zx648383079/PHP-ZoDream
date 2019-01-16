@@ -214,7 +214,7 @@ class CreateShopTables extends Migration {
             $table->set('order_id')->int()->notNull();
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
-            $table->set('region_name')->int()->notNull();
+            $table->set('region_name')->varchar()->notNull();
             $table->set('tel')->char(11)->notNull();
             $table->set('address')->varchar()->notNull();
             $table->set('best_time')->varchar()->defaultVal('');

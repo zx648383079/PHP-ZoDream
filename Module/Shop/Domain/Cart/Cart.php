@@ -37,7 +37,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
 
     protected function loadFromDb() {
         $this->booted = false;
-        $this->setGoods(CartModel::with('goods')
+        $this->setGoods(auth()->guest() ? [] : CartModel::with('goods')
             ->where('user_id', auth()->id())
             ->all());
         $this->booted = true;
@@ -80,11 +80,25 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         return null;
     }
 
-    public function remove($id) {
-        foreach ($this->groups as $group) {
-            if ($this->groups->remove($id)) {
-                return true;
+    public function remove($ids) {
+        if (func_num_args() > 1) {
+            $ids = func_get_args();
+        }
+        foreach ($ids as $item) {
+            $this->removeId(is_numeric($item) ? $item : $item->id);
+        }
+        return $this;
+    }
+
+    public function removeId($id) {
+        foreach ($this->groups as $key => $group) {
+            if (!$group->remove($id)) {
+                continue;
             }
+            if ($group->isEmpty()) {
+                unset($this->groups[$key]);
+            }
+            return true;
         }
         return false;
     }
@@ -97,8 +111,41 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         return $total;
     }
 
+    public function count() {
+        $total = 0;
+        foreach ($this->groups as $group) {
+            $total += $group->count();
+        }
+        return $total;
+    }
+
     public function all() {
         return $this->groups;
+    }
+
+    public function filter(callable $cb) {
+        $data = [];
+        foreach ($this->groups as $group) {
+            foreach ($group as $item) {
+                if ($cb($item) === true) {
+                    $data[] = $item;
+                }
+            }
+        }
+        return $data;
+//        $cart = clone $this;
+//        return $cart->setGoods($data);
+    }
+
+    public function isEmpty() {
+        return empty($this->groups);
+    }
+
+    public function save() {
+        foreach ($this->groups as $group) {
+            $group->save();
+        }
+        return $this;
     }
 
     public function getIterator() {

@@ -67,45 +67,46 @@
   .debugger-bar.expanded .bar-info {
     display: block; }
 
-.debugger-blue-screen .bs-header {
-  background: #CD1818;
-  color: white;
-  font-size: 13pt;
-  padding: 30px 25px; }
-
-.debugger-blue-screen .panel {
-  position: relative;
-  background: #fff; }
-  .debugger-blue-screen .panel .panel-header {
-    line-height: 30px;
-    background: #af5d0d;
-    border-bottom: 1px solid #af5d0d;
-    padding: 0 25px;
-    color: #fff; }
-    .debugger-blue-screen .panel .panel-header .name {
+.debugger-blue-screen {
+  word-break: break-all; }
+  .debugger-blue-screen .bs-header {
+    background: #CD1818;
+    color: white;
+    font-size: 13pt;
+    padding: 30px 25px; }
+  .debugger-blue-screen .panel {
+    position: relative;
+    background: #fff; }
+    .debugger-blue-screen .panel .panel-header {
       line-height: 30px;
-      font-size: 20px; }
-  .debugger-blue-screen .panel .panel-body {
-    display: none;
-    box-sizing: border-box;
-    padding: 0 25px;
-    border-bottom: 1px solid #f9cfa6; }
-    .debugger-blue-screen .panel .panel-body .panel .panel-header {
-      background: #f9cfa6;
-      color: #333; }
-    .debugger-blue-screen .panel .panel-body .highlight {
-      background: #CD1818;
+      background: #af5d0d;
+      border-bottom: 1px solid #af5d0d;
+      padding: 0 25px;
       color: #fff; }
-  .debugger-blue-screen .panel .func-val {
-    color: #f00;
-    display: inline-block;
-    max-width: 200px;
-    height: 30px;
-    line-height: 30px;
-    overflow: hidden;
-    text-overflow: ellipsis; }
-  .debugger-blue-screen .panel.expanded > .panel-body {
-    display: block; }
+      .debugger-blue-screen .panel .panel-header .name {
+        line-height: 30px;
+        font-size: 20px; }
+    .debugger-blue-screen .panel .panel-body {
+      display: none;
+      box-sizing: border-box;
+      padding: 0 25px;
+      border-bottom: 1px solid #f9cfa6; }
+      .debugger-blue-screen .panel .panel-body .panel .panel-header {
+        background: #f9cfa6;
+        color: #333; }
+      .debugger-blue-screen .panel .panel-body .highlight {
+        background: #CD1818;
+        color: #fff; }
+    .debugger-blue-screen .panel .func-val {
+      color: #f00;
+      display: inline-block;
+      max-width: 200px;
+      height: 30px;
+      line-height: 30px;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    .debugger-blue-screen .panel.expanded > .panel-body {
+      display: block; }
 
 .debugger-error {
   height: 100vh;

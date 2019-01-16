@@ -18,7 +18,7 @@ class CartController extends Controller {
         if (!$goods->canBuy($amount)) {
             return $this->jsonFailure('库存不足');
         }
-        Module::cart()->addGoods($goods, $amount);
+        Module::cart()->add(CartModel::fromGoods($goods, $amount))->save();
         return $this->jsonSuccess(null, '加入购物车成功！');
     }
 

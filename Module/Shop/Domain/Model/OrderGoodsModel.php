@@ -75,7 +75,7 @@ class OrderGoodsModel extends Model {
     }
 
     /**
-     * 从购物车中转入，并删除购物车中商品
+     * 从购物车中转入
      * @param integer $orderId
      * @param CartModel $cart
      * @param integer $number
@@ -94,9 +94,6 @@ class OrderGoodsModel extends Model {
         $model->price = $cart->price;
         $model->number = $number;
         $model->save();
-        // 删除购物车中的商品
-        $cart->number -= $number;
-        $cart->save();
         return $model;
     }
 }

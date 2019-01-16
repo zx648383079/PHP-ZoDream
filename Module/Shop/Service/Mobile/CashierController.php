@@ -15,14 +15,11 @@ use Module\Shop\Module;
  */
 class CashierController extends Controller {
 
-    public function indexAction($cart = null) {
-        $goods_list = Module::cart()->getCarts();
-        if (!empty($cart)) {
-            $cart_ids = explode('-', $cart);
-            $goods_list = array_filter($goods_list, function ($item) use ($cart_ids) {
-               return in_array($item['id'], $cart_ids);
-            });
-        }
+    public function indexAction($cart = '') {
+        $cart_ids = explode('-', $cart);
+        $goods_list = Module::cart()->filter(function ($item) use ($cart_ids) {
+            return in_array($item['id'], $cart_ids);
+        });
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./mobile', '请选择结算的商品');
         }
@@ -34,14 +31,11 @@ class CashierController extends Controller {
     }
 
 
-    public function checkoutAction($address, $shipping, $payment, $cart = null) {
-        $goods_list = Module::cart()->getCarts();
-        if (!empty($cart)) {
-            $cart_ids = explode('-', $cart);
-            $goods_list = array_filter($goods_list, function ($item) use ($cart_ids) {
-                return in_array($item['id'], $cart_ids);
-            });
-        }
+    public function checkoutAction($address, $shipping, $payment, $cart = '') {
+        $cart_ids = explode('-', $cart);
+        $goods_list = Module::cart()->filter(function ($item) use ($cart_ids) {
+            return in_array($item['id'], $cart_ids);
+        });
         if (empty($goods_list)) {
             return $this->jsonFailure('请选择结算的商品');
         }
@@ -58,7 +52,7 @@ class CashierController extends Controller {
         if (!$order->createOrder()) {
             return $this->jsonFailure('操作失败，请重试');
         }
-        Module::cart()->removeCart(...$goods_list);
+        Module::cart()->remove(...$goods_list);
         return $this->jsonSuccess([
             'url' => $this->getUrl('cashier/pay', ['id' => $order->id])
         ]);

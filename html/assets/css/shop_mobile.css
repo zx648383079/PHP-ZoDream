@@ -623,6 +623,17 @@ footer,
       color: #fff;
       line-height: 2rem; }
 
+.empty-cart-box {
+  text-align: center;
+  margin-top: 30vh;
+  line-height: 50px; }
+  .empty-cart-box p {
+    font-size: 30px;
+    color: #ccc; }
+  .empty-cart-box .btn {
+    background-color: transparent;
+    border: 1px solid; }
+
 .checkout-box .address-box,
 .order-box .address-box {
   padding: 0 2rem 0 3.75rem;

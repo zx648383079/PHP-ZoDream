@@ -329,6 +329,7 @@ header {
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
+                            width: 160px;
                         }
                         .count,
                         .attr {
@@ -349,7 +350,7 @@ header {
                             margin-top: 14px;
                             line-height: 11px;
                         }
-                        .fa-remove {
+                        .fa-times {
                             margin-top: 14px;
                             font-size: 16px;
                             word-spacing: normal;

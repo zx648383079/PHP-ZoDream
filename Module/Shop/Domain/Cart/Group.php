@@ -78,12 +78,30 @@ class Group implements \IteratorAggregate, ArrayAble {
         return $total + $this->shippingFee();
     }
 
+    public function count() {
+        $total = 0;
+        foreach ($this->items as $item) {
+            $total += $item->amount();
+        }
+        return $total;
+    }
+
     public function shippingFee() {
         return 0;
     }
 
     public function all() {
         return $this->items;
+    }
+    public function isEmpty() {
+        return empty($this->items);
+    }
+
+    public function save() {
+        foreach ($this->items as $item) {
+            $item->save();
+        }
+        return $this;
     }
 
     public function getIterator() {

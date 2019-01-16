@@ -13,5 +13,9 @@ interface ICartItem {
 
     public function total();
 
+    public function amount();
+
     public function updateAmount(int $amount);
+
+    public function save();
 }

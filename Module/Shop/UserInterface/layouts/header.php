@@ -110,8 +110,8 @@ use Zodream\Template\View;
                                 <div class="price">
                                     <?=$item->total?>
                                 </div>
-                                <div>
-                                    <i class="fa fa-remove"></i>
+                                <div class="action">
+                                    <i class="fa fa-times"></i>
                                 </div>
                             </div>
                             <?php endforeach;?>
@@ -120,7 +120,7 @@ use Zodream\Template\View;
                     <div class="dialog-footer">
                         <div class="total">
                             <span>商品合计:</span>
-                            <span>￥0.00</span>
+                            <span><?=$cart->total()?></span>
                         </div>
                         <a href="<?=$this->url('./cart')?>" class="btn">去购物车结算</a>
                     </div>

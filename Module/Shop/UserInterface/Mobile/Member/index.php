@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '个人中心';
-
+$header_btn = '';
 if (!auth()->guest()) {
     $header_btn = <<<HTML
 <a class="right" href="/auth/logout">

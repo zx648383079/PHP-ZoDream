@@ -785,6 +785,21 @@ footer,
     }
 }
 
+
+.empty-cart-box {
+    text-align: center;
+    margin-top: 30vh;
+    line-height: 50px;
+    p {
+        font-size: 30px;
+        color: #ccc;
+    }
+    .btn {
+        background-color: transparent;
+        border: 1px solid;
+    }
+}
+
 .checkout-box,
 .order-box {
     .address-box {

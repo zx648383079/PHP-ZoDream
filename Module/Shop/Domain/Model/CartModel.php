@@ -118,32 +118,19 @@ class CartModel extends Model implements ICartItem {
         return parent::save();
     }
 
-    /**
-     * 获取session_ip
-     * @return string
-     */
-    public static function getSessionIp() {
-        $ip = app('request')->ip();
-        $session_ip = app('request')->cookie('session_id_ip');
-        if (!empty($session_ip)) {
-            return $session_ip;
-        }
-        $session_ip = $ip . '_' . Factory::session()->id();
-        Cookie::forever('session_id_ip', $session_ip, '/');
-        return $session_ip;
-    }
 
     public static function addGoods(GoodsModel $goods, $amount = 1) {
-        return static::create([
+        $model = self::fromGoods($goods, $amount);
+        return $model->save() ? $model : false;
+    }
+    
+    public static function fromGoods(GoodsModel $goods, $amount = 1) {
+        return new static([
             'user_id' => auth()->id(),
             'goods_id' => $goods->id,
             'number' => $amount,
             'price' => $goods->final_price($amount)
         ]);
-    }
-    
-    public static function fromGoods(GoodsModel $goods) {
-        return new static();
     }
 
     public static function clearAll() {

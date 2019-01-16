@@ -274,7 +274,8 @@ header {
               padding: 12px 0 11px;
               white-space: nowrap;
               overflow: hidden;
-              text-overflow: ellipsis; }
+              text-overflow: ellipsis;
+              width: 160px; }
             header .header-main .header-cart .cart-dialog .dialog-body .cart-item .count,
             header .header-main .header-cart .cart-dialog .dialog-body .cart-item .attr {
               color: #999;
@@ -291,7 +292,7 @@ header {
               color: #b62628;
               margin-top: 14px;
               line-height: 11px; }
-            header .header-main .header-cart .cart-dialog .dialog-body .cart-item .fa-remove {
+            header .header-main .header-cart .cart-dialog .dialog-body .cart-item .fa-times {
               margin-top: 14px;
               font-size: 16px;
               word-spacing: normal;
