@@ -28,7 +28,15 @@ class WeightController extends Controller {
             'parent_id' => $parent_id
         ]);
         $data = $model->toArray();
-        $data['html'] = (new Page(PageModel::find($page_id)))
+        $data['html'] = (new Page(PageModel::find($page_id), true))
+            ->renderWeight($model);
+        return $this->jsonSuccess($data);
+    }
+
+    public function refreshAction($id) {
+        $model = PageWeightModel::find($id);
+        $data = $model->toArray();
+        $data['html'] = (new Page(PageModel::find($model->page_id), true))
             ->renderWeight($model);
         return $this->jsonSuccess($data);
     }

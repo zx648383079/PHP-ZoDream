@@ -76,6 +76,7 @@ $this->registerCssFile('@template.css')
                                     <p class="title"><?=$item->name?></p>
                                 </div>
                                 <div class="weight-action">
+                                    <a class="refresh">刷新</a>
                                     <?php if ($item->editable):?>
                                     <a class="edit">编辑</a>
                                     <?php endif;?>

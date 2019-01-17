@@ -21,6 +21,7 @@ class CreateTemplateTables extends Migration {
         Schema::createTable(SiteModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
+            $table->set('user_id')->int()->notNull();
             $table->set('title')->varchar(200)->defaultVal('New Page');
             $table->set('keywords')->varchar(255);
             $table->set('thumb')->varchar(255);

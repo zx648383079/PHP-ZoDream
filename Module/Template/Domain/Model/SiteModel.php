@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * @package Module\Template\Domain\Model
  * @property integer $id
  * @property string $name
+ * @property integer $user_id
  * @property string $title
  * @property string $keywords
  * @property string $thumb
@@ -24,6 +25,7 @@ class SiteModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,100',
+            'user_id' => 'required|int',
             'title' => 'string:0,200',
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
@@ -38,6 +40,7 @@ class SiteModel extends Model {
         return [
             'id' => 'Id',
             'name' => 'Name',
+            'user_id' => 'User Id',
             'title' => 'Title',
             'keywords' => 'Keywords',
             'thumb' => 'Thumb',

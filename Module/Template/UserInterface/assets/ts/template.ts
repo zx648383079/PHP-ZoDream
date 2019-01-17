@@ -1,5 +1,6 @@
 const DEL_URI = 'weight/destroy',
     NEW_URI = 'weight/create',
+    REFRESH_URI = 'weight/refresh',
     EDIT_URI = 'weight/save',
     SETTING_URI = 'weight/setting',
     SAVE_SETTING_URI = 'weight/save_setting',
@@ -83,7 +84,7 @@ class Weight {
      * html
      */
     public html(html?: string) {
-        return this.box.find('.weight-view').html(html);
+        return this.box.replaceWith(html);
     }
 
     /**
@@ -146,18 +147,39 @@ class Page {
         }).on("click", ".weight-action .edit", function(e) {
             e.stopPropagation();
             that.setWeight($(this).parents('.weight-edit-grid'));
+        }).on("click", ".weight-action .refresh", function(e) {
+            e.stopPropagation();
+            that.refreshWeight($(this).closest('.weight-edit-grid'));
         });
         this.weightBox.bindDrag();
     }
 
-    public setWeight(element: JQuery): Weight {
+    /**
+     * refreshWeight
+     */
+    public refreshWeight(element: JQuery) {
+        let id = element.attr('data-id'),
+            weight = this.setWeight(element, false).toggleLoading(true);
+        this.post(REFRESH_URI, {
+            id: id
+        }, function(data) {
+            weight.toggleLoading(false);
+            if (data.code == 200) {
+                weight.html(data.data.html);
+            }
+        });
+    }
+
+    public setWeight(element: JQuery, withEdit: boolean = true): Weight {
         if (this.weight) {
             this.weight.toggle(false);
         }
         this.weight = new Weight(element);
         this.weight.toggle(true);
-        this.weightBox.toggle(true);
-        this.propertyBox.toggle(true);
+        if (withEdit) {
+            this.weightBox.toggle(true);
+            this.propertyBox.toggle(true);
+        }
         return this.weight;
     }
 
@@ -181,7 +203,6 @@ class Page {
         }, function(data) {
             weight.toggleLoading(false);
             if (data.code == 200) {
-                element.attr('data-id', data.data.id);
                 weight.html(data.data.html);
             }
         });

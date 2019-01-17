@@ -84,6 +84,7 @@ class Weight {
         return <<<HTML
 <div class="weight-edit-grid" data-type="weight" data-id="{$this->model->id}">
     <div class="weight-action">
+        <a class="refresh">刷新</a>
         {$editHtml}
         <a class="drag">拖拽</a>
         <a class="del">删除</a>

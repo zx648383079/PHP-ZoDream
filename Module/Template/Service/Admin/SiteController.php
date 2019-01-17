@@ -8,6 +8,9 @@ class SiteController extends Controller {
 
     public function indexAction($id = 0) {
         $site = SiteModel::findOrDefault($id, ['name' => 'new site', 'title' => 'New Site', 'thumb' => '']);
+        if ($site->id > 0 && $site->user_id != auth()->id()) {
+            return $this->redirect('./admin');
+        }
         $page_list = [];
         if ($site->id > 0) {
             $page_list = PageModel::where('site_id', $site->id)->orderBy('position asc')->orderBy('id asc')->all();
@@ -20,7 +23,8 @@ class SiteController extends Controller {
         $site = SiteModel::create([
             'name' => 'new_site',
             'title' => 'New Site',
-            'thumb' => '/assets/images/blog.png'
+            'thumb' => '/assets/images/blog.png',
+            'user_id' => auth()->id()
         ]);
         return $this->jsonSuccess([
             'url' => $this->getUrl('site', ['id' => $site->id])
@@ -28,7 +32,9 @@ class SiteController extends Controller {
     }
 
     public function saveAction() {
-        $model = new SiteModel();
+        $model = new SiteModel([
+            'user_id' => auth()->id()
+        ]);
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('site', ['id' => $model->id])

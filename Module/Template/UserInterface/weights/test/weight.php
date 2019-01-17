@@ -10,9 +10,8 @@ class TestWeight extends BaseWeight {
      * @param PageWeightModel $model
      * @return mixed
      * @throws Exception
-     * @throws \Zodream\Disk\FileException
      */
     public function render(PageWeightModel $model){
-        return $this->page->getFactory()->render('view', compact('model'));
+        return $this->show('view', compact('model'));
     }
 }
