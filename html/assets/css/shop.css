@@ -1307,8 +1307,11 @@ header {
 .has-bottom-border {
   border-bottom: 1px dashed #ddd; }
 
-.cashier-page .container {
-  margin: 0 40px; }
+.cashier-page .container .panel {
+  margin: 40px 0; }
+  .cashier-page .container .panel .panel-header,
+  .cashier-page .container .panel .panel-body {
+    padding: 0 20px; }
 
 .cashier-page .address-view {
   display: grid;

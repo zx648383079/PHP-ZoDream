@@ -3,7 +3,6 @@ namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Model\CartModel;
 use Module\Shop\Domain\Model\GoodsModel;
-use Module\Shop\Domain\ShoppingCart;
 use Module\Shop\Module;
 
 class CartController extends Controller {

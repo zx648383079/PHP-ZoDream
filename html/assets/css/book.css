@@ -588,7 +588,8 @@ object {
 .box-container.no_h .Con {
   border-top: 1px solid #dedddd; }
   .box-container.no_h .Con.jj_pl {
-    background: #f6f3ec; }
+    background: #f6f3ec;
+    display: block; }
 
 .Con .Left {
   float: left;

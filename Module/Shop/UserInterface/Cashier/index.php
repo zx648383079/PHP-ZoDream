@@ -11,7 +11,7 @@ $this->title = 'ZoDream';
             <div class="panel-header">
             收货信息
             </div>
-            <div class="pannel-body">
+            <div class="panel-body">
                 <div class="address-view">
                     <div>
                         <div>

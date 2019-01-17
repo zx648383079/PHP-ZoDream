@@ -1660,7 +1660,14 @@ header {
 
 .cashier-page {
     .container {
-        margin: 0 40px;
+        .panel {
+            margin: 40px 0;
+            .panel-header,
+            .panel-body {
+                padding: 0 20px;
+            }
+        }
+        
     }
     .address-view {
         display: grid;
