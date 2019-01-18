@@ -407,6 +407,14 @@ class ChatEditor {
         return this.box.html();
     }
 
+    /**
+     * clear
+     */
+    public clear() {
+        this.box.html('');
+        return this;
+    }
+
     public text(): string {
         return this.box.text();
     }
@@ -963,7 +971,7 @@ function registerChat(baseUri: string) {
             if (data.code != 200) {
                 return;
             }
-            box.users = [TEST_USER];//data.data.data;
+            box.users = data.data.data;
         });
     }).on(EVENT_GET_MESSAGE, (user: IUser, page: number, per_page: number, box: ChatMessageBox) => {
         postJson(baseUri + 'friend/message', {
@@ -974,7 +982,7 @@ function registerChat(baseUri: string) {
             if (data.code != 200) {
                 return;
             }
-            box.messages = [TEST_MESSAGE];//data.data.data;
+            box.messages = data.data.data;
         });
     }).on(EVENT_SEND_MESSAGE, (content: string, user: IUser, box: ChatMessageBox) => {
         postJson(baseUri + 'friend/send_message', {
@@ -989,6 +997,7 @@ function registerChat(baseUri: string) {
                 type: ChatType.MESSAGE,
                 user: TEST_SEND
             });//data.data.data;
+            box.editor.clear();
         });
     }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
         postJson(baseUri + 'friend/apply', {

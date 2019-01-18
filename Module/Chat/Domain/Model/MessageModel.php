@@ -2,6 +2,7 @@
 namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\Scene\User;
 
 /**
  * Class FriendModel
@@ -28,6 +29,8 @@ class MessageModel extends Model {
     const STATUS_NONE = 0;
     const STATUS_READ = 1;  //已读
     const STATUS_RECEIVED = 2; // 接受
+
+    protected $append = ['user', 'receive'];
 
     public static function tableName() {
         return 'chat_message';
@@ -60,6 +63,14 @@ class MessageModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function receive() {
+        return $this->hasOne(User::class, 'id', 'receive_id');
     }
 
 }

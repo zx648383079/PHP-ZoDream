@@ -15,14 +15,18 @@ class FriendController extends Controller {
     }
 
     public function searchAction($keywords = null) {
+        $groups = FriendGroupModel::where('user_id', auth()->id())->pluck('id');
+        $exclude = empty($groups) ? [] : FriendModel::whereIn('group_id', $groups)
+            ->pluck('user_id');
+        $exclude[] = auth()->id();
         $data = UserModel::when(!empty($keywords), function ($query) {
             FriendModel::search($query, 'name');
-        })->page();
+        })->whereNotIn('id', $exclude)->page();
         return $this->jsonSuccess($data);
     }
 
     public function messageAction($user) {
-        $data = MessageModel::where(function($query) use ($user) {
+        $data = MessageModel::with('user', 'receive')->where(function($query) use ($user) {
             $query->where('user_id', $user)->where('receive_id', auth()->id());
         })->orWhere(function($query) use ($user) {
             $query->where('receive_id', $user)->where('user_id', auth()->id());

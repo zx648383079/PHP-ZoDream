@@ -18,18 +18,10 @@ use Zodream\Disk\File;
 use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
-$str = '我';
-$timer = new \Zodream\Debugger\Domain\Timer();
 
-$timer->record('start...');
-for ($i = 0; $i < 100; $i ++) {
-    $a = in_array($str, ['/', 'a']);
-}
-$timer->record('[]');
+$redis_handle = new Redis();
+$redis_handle->connect('127.0.0.1', 6479, 10); //端口需要与config.xml配置保持一致
+$redis_handle->select(0);
 
-for ($i = 0; $i < 100; $i ++) {
-    $a = $str == '/' || $str == 'a';
-}
-$timer->record('==');
-
-dd($timer->getTimes());
+$result = $redis_handle->rawCommand('cutforsearch', '我来到北京清华大学', 1);
+print_r($result);
