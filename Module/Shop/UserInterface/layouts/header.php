@@ -92,7 +92,7 @@ use Zodream\Template\View;
             </div>
             <div class="header-cart">
                 <i class="fa fa-shopping-cart"></i>
-                <i class="cart-num">0</i>
+                <i class="cart-num"><?=$cart->count()?></i>
 
                 <div class="cart-dialog">
                     <div class="dialog-body">

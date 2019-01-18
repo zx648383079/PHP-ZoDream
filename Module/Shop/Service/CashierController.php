@@ -60,6 +60,6 @@ class CashierController extends Controller {
 
     public function payAction($id) {
         $order = OrderModel::find($id);
-        return $this->show(compact('order'));
+        return $this->sendWithShare()->show(compact('order'));
     }
 }
