@@ -9,6 +9,7 @@ use Zodream\Helpers\Time;
 * Class ThreadModel
  * @property integer $id
  * @property integer $forum_id
+ * @property integer $classify_id
  * @property string $title
  * @property integer $user_id
  * @property integer $view_count
@@ -24,6 +25,7 @@ class ThreadModel extends Model {
     protected function rules() {
         return [
             'forum_id' => 'required|int',
+            'classify_id' => 'int',
             'title' => 'required|string:0,200',
             'user_id' => 'required|int',
             'view_count' => 'int',
@@ -37,6 +39,7 @@ class ThreadModel extends Model {
         return [
             'id' => 'Id',
             'forum_id' => 'Forum Id',
+            'classify_id' => 'Classify Id',
             'title' => 'Title',
             'user_id' => 'User Id',
             'view_count' => 'View Count',
@@ -48,6 +51,10 @@ class ThreadModel extends Model {
 
     public function forum() {
 	    return $this->hasOne(ForumModel::class, 'id', 'forum_id');
+    }
+
+    public function classify() {
+        return $this->hasOne(ForumClassifyModel::class, 'id', 'classify_id');
     }
 
     public function user() {

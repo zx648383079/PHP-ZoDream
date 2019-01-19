@@ -50,8 +50,11 @@ $this->registerCssFile([
         <div class="header">快速发帖</div>
         <form data-type="ajax" action="<?=$this->url('./thread/create')?>" method="post">
             <div class="title">
-                <select name="type_id">
+                <select name="classify_id">
                     <option value="0">选择主题分类</option>
+                    <?php foreach($classify_list as $item):?>
+                    <option value="<?=$item->id?>"><?=$item->name?></option>
+                    <?php endforeach;?>
                 </select>
                 <input type="text" name="title" required>
             </div>

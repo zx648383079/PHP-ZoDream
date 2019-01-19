@@ -15,7 +15,7 @@ class ThreadController extends Controller {
         return $this->show(compact('thread', 'post_list'));
     }
 
-    public function createAction($title, $content, $forum_id) {
+    public function createAction($title, $content, $forum_id, $classify_id = 0) {
         if (empty($title)) {
             return $this->jsonFailure('标题不能为空');
         }
@@ -26,7 +26,8 @@ class ThreadController extends Controller {
         $thread = ThreadModel::create([
             'title' => $title,
             'forum_id' => $forum_id,
-            'user_id' => auth()->id()
+            'classify_id' => intval($classify_id),
+            'user_id' => auth()->id(),
         ]);
         if (empty($thread)) {
             return $this->jsonFailure('发帖失败');

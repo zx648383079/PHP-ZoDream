@@ -10,9 +10,11 @@ $this->registerCssFile('@forum.css')
     <div class="thread-item">
         <div class="name">
             <i class="fa fa-file"></i>
+            <?php if($item->classify):?>
             [
-            <a href="">求助</a>
+            <a href="<?=$this->url('./forum', ['id' => $item->forum_id, 'classify' => $item->classify_id])?>"><?=$item->classify->name?></a>
             ]
+            <?php endif;?>
             <a href="<?=$this->url('./thread', ['id' => $item->id])?>"><?=$item->title?></a>
         </div>
         <div class="time">

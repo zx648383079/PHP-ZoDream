@@ -1,6 +1,7 @@
 <?php
 namespace Module\Forum\Domain\Migrations;
 
+use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
@@ -23,9 +24,17 @@ class CreateForumTables extends Migration {
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->timestamps();
         });
+        Schema::createTable(ForumClassifyModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(20)->notNull();
+            $table->set('icon')->varchar(100)->defaultVal('');
+            $table->set('forum_id')->int()->defaultVal(0);
+            $table->set('position')->tinyint(3)->defaultVal(99);
+        });
         Schema::createTable(ThreadModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('forum_id')->int()->notNull();
+            $table->set('classify_id')->int()->defaultVal(0);
             $table->set('title')->varchar(200)->notNull()->comment('主题');
             $table->set('user_id')->int()->notNull()->comment('发送用户');
             $table->set('view_count')->int()->defaultVal(0)->comment('查看数');
