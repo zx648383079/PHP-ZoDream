@@ -320,27 +320,39 @@ body {
         margin: 0; }
 
 .dialog-chat .dialog-user-box,
-.dialog-chat .dialog-add-box {
+.dialog-chat .dialog-add-box,
+.dialog-chat .dialog-apply-box {
   width: 18.75rem;
   text-align: center; }
   .dialog-chat .dialog-user-box .dialog-user-avatar,
-  .dialog-chat .dialog-add-box .dialog-user-avatar {
+  .dialog-chat .dialog-add-box .dialog-user-avatar,
+  .dialog-chat .dialog-apply-box .dialog-user-avatar {
     padding: 0.5rem; }
     .dialog-chat .dialog-user-box .dialog-user-avatar img,
-    .dialog-chat .dialog-add-box .dialog-user-avatar img {
+    .dialog-chat .dialog-add-box .dialog-user-avatar img,
+    .dialog-chat .dialog-apply-box .dialog-user-avatar img {
       width: 6.25rem;
       border-radius: 50%; }
+  .dialog-chat .dialog-user-box .dialog-add-action textarea,
+  .dialog-chat .dialog-add-box .dialog-add-action textarea,
+  .dialog-chat .dialog-apply-box .dialog-add-action textarea {
+    width: 100%;
+    resize: none;
+    height: 100px; }
   .dialog-chat .dialog-user-box .dialog-add-action select,
-  .dialog-chat .dialog-add-box .dialog-add-action select {
+  .dialog-chat .dialog-add-box .dialog-add-action select,
+  .dialog-chat .dialog-apply-box .dialog-add-action select {
     display: block;
     width: 100%;
     height: 1.875rem; }
   .dialog-chat .dialog-user-box .dialog-add-action button,
-  .dialog-chat .dialog-add-box .dialog-add-action button {
+  .dialog-chat .dialog-add-box .dialog-add-action button,
+  .dialog-chat .dialog-apply-box .dialog-add-action button {
     width: 50%;
     line-height: 1.875rem; }
   .dialog-chat .dialog-user-box p,
-  .dialog-chat .dialog-add-box p {
+  .dialog-chat .dialog-add-box p,
+  .dialog-chat .dialog-apply-box p {
     margin: 0; }
 
 .dialog-chat.dialog-fixed .dialog-chat-box {

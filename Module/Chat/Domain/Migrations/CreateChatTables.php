@@ -1,6 +1,7 @@
 <?php
 namespace Module\Chat\Domain\Migrations;
 
+use Module\Chat\Domain\Model\ApplyModel;
 use Module\Chat\Domain\Model\FriendGroupModel;
 use Module\Chat\Domain\Model\MessageModel;
 use Module\Chat\Domain\Model\FriendModel;
@@ -18,6 +19,15 @@ class CreateChatTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('备注');
             $table->set('group_id')->int()->notNull()->comment('分组');
             $table->set('user_id')->int()->notNull()->comment('用户');
+            $table->timestamps();
+        });
+        Schema::createTable(ApplyModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('group_id')->int()->notNull()->comment('目标分组');
+            $table->set('user_id')->int()->notNull()->comment('目标用户');
+            $table->set('remark')->varchar()->defaultVal('');
+            $table->set('apply_user')->int()->notNull()->comment('申请人');
+            $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamps();
         });
         Schema::createTable(FriendGroupModel::tableName(), function(Table $table) {

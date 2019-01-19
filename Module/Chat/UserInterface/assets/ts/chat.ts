@@ -47,6 +47,7 @@ const EVENT_REFRESH_USERS = 'refresh_users',
     EVENT_SEARCH_USERS = 'search_users',
     EVENT_SEARCH_GROUPS = 'search_groups',
     EVENT_ADD_USER = 'add_user',
+    EVENT_APPLY_USER = 'apply_user',
     EVENT_SEND_MESSAGE = 'send_message',
     EVENT_GET_MESSAGE = 'get_message';
 
@@ -240,13 +241,13 @@ class ChatAddUserBox extends ChatBaseBox {
      */
     constructor(
         public box: JQuery,
-        private parent: ChatRoom
+        protected parent: ChatRoom
     ) {
         super();
         this.bindEvent();
     }
 
-    private _user: IUser;
+    protected _user: IUser;
 
     private _groups: IGroup[];
 
@@ -284,6 +285,26 @@ class ChatAddUserBox extends ChatBaseBox {
             html += '<option value="'+ item.id +'">'+ item.name +'</option>';
         });
         this.find('select').html(html);
+    }
+    
+}
+
+class ChatApplyBox extends ChatAddUserBox {
+    /**
+     *
+     */
+    constructor(
+        public box: JQuery,
+        protected parent: ChatRoom
+    ) {
+        super(box, parent);
+    }
+
+    public bindEvent() {
+        let _this = this;
+        this.box.on('click', '.dialog-add-action .dialog-yes', function() {
+            _this.parent.trigger(EVENT_APPLY_USER, _this._user, _this.find('select').val(), this.find('textarea'), _this);
+        });
     }
     
 }
@@ -371,7 +392,7 @@ class ChatSearchBox extends ChatBaseBox {
         let _this = this;
         this.box.on('click', '.dialog-search-list .dialog-info', function() {
             let user = _this.getUser($(this).data('id'));
-            _this.parent.addBox.showWithUser(user);
+            _this.parent.applyBox.showWithUser(user);
         })
         .on('click', '.dialog-tab-header .dialog-tab-item', function() {
             let $this = $(this);
@@ -836,6 +857,7 @@ class ChatRoom {
 
     public mainBox: ChatUserBox;
     public addBox: ChatAddUserBox;
+    public applyBox: ChatApplyBox;
     public userBox: ChatUserInfoBox;
     public searchBox: ChatSearchBox;
     public chatBox: ChatMessageBox;
@@ -860,6 +882,7 @@ class ChatRoom {
     public init(user: IUser) {
         this.mainBox = new ChatUserBox(this.target.find('.dialog-chat-box'), this);
         this.addBox = new ChatAddUserBox(this.target.find('.dialog-add-box'), this);
+        this.applyBox = new ChatApplyBox(this.target.find('.dialog-apply-box'), this);
         this.userBox = new ChatUserInfoBox(this.target.find('.dialog-user-box'), this);
         this.searchBox = new ChatSearchBox(this.target.find('.dialog-search-box'), this);
         this.chatBox = new ChatMessageBox(this.target.find('.dialog-chat-room'), this, user);
@@ -999,8 +1022,19 @@ function registerChat(baseUri: string) {
             });//data.data.data;
             box.editor.clear();
         });
-    }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
+    }).on(EVENT_APPLY_USER, (user: IUser, group: number, remark: string, box: ChatApplyBox) => {
         postJson(baseUri + 'friend/apply', {
+            user: user.id,
+            group: group,
+            remark: remark
+        }, function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.hide();
+        });
+    }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
+        postJson(baseUri + 'friend/agree', {
             user: user.id,
             group: group
         }, function(data) {

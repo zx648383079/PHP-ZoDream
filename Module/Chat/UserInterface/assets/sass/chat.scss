@@ -442,7 +442,8 @@ body {
         }
     }
     .dialog-user-box ,
-    .dialog-add-box {
+    .dialog-add-box,
+    .dialog-apply-box {
         width: 18.75rem;
         text-align: center;
         .dialog-user-avatar {
@@ -453,6 +454,11 @@ body {
             }
         }
         .dialog-add-action {
+            textarea {
+                width: 100%;
+                resize: none;
+                height: 100px;
+            }
             select {
                 display: block;
                 width: 100%;

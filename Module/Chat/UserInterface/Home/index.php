@@ -131,6 +131,25 @@ $this->registerJs($js);
             <p>123123</p>
         </div>
     </div>
+    <!-- 申请好友 -->
+    <div class="dialog-box dialog-apply-box">
+        <div class="dialog-header">
+            <div class="dialog-action">
+                <i class="fa fa-close"></i>
+            </div>
+        </div>
+        <div class="dialog-user-avatar">
+            <img src="./image/avatar.jpg" alt="">
+        </div>
+        <h3 class="user-name">1231</h3>
+        <div class="dialog-add-action">
+            <textarea name="" placeholder="我是123123"></textarea>
+            <select name="" id="">
+                <option value="">选择分组</option>
+            </select>
+            <button class="dialog-yes">申请</button>
+        </div>
+    </div>
     <!-- 添加为好友 -->
     <div class="dialog-box dialog-add-box">
         <div class="dialog-header">
