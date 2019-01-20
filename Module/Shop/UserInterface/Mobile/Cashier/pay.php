@@ -21,7 +21,7 @@ $this->extend('../layouts/header', [
     </div>
     <div class="payment-item active">
         <div class="icon">
-            <img src="http://zodream.localhost/assets/images/avatar/18.png" alt="">
+            <img src="/assets/images/avatar/18.png" alt="">
         </div>
         <div class="name">支付宝</div>
         <div class="status">

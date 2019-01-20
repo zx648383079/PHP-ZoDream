@@ -8,18 +8,20 @@ $this->title = 'ZoDream';
     <div class="container">
         <div>选择付款方式</div>
         <div>
-            <span>交易号：20181120221326YXMPDD1617491246</span>
-            <span>实付:111</span>
+            <span>交易号：<?=$order->id?></span>
+            <span>实付:<?=$order->order_amount?></span>
         </div>
         <div class="panel">
             <div class="panel-header">
             支付方式
             </div>
-            <div class="pannel-body">
-                <div class="payment-item">
-                    <input type="checkbox" name="" id="">
-                    <img src="" alt="">
-                </div>
+            <div class="pannel-body payment-box">
+                <?php foreach($payment_list as $item):?>
+                    <span class="radio-label">
+                        <input type="radio" id="payment<?=$item->id?>" name="payment" value="<?=$item->id?>">
+                        <label for="payment<?=$item->id?>"><?=$item->name?></label>
+                    </span>
+                <?php endforeach;?>
             </div>
         </div>
         <a href="" class="btn">立即付款</a>

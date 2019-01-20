@@ -1,3 +1,4 @@
+const CHECKED_CHANGE = 'cart_checked_change';
 function addToCart(id: number, amount: number = 1) {
     postJson('cart/add?goods=' + id + '&amount=' + amount, function(data) {
         parseAjax(data);
@@ -37,14 +38,20 @@ function mapCheckedItem(cb: (JQuery) => any) {
 }
 
 function refreshCart() {
-
+    let count = 0,
+        total = 0;
+    mapCheckedItem(item => {
+        count ++;
+    });
+    $(".cart-footer .cart-checked-count").text(count);
+    
 }
 function search(keywords: string) {
     window.location.href = $(".header-search").data('url') + '?keywords='+ keywords;
 }
 $(function() {
     $(".check-box").click(function() {
-        $(this).toggleClass('active').trigger('change');
+        $(this).toggleClass('active').trigger(CHECKED_CHANGE);
     });
     $(".toggle-box").click(function() {
         $(this).toggleClass('active').trigger('change');
@@ -195,23 +202,39 @@ function bindCart(baseUrl: string) {
             }
         });
     });
-    $(".cart-group-item .group-header .check-box").change(function() {
-        let $this = $(this);
-        $this.closest('.cart-group-item').find('.cart-item .check-box').toggleClass('active', $this.hasClass('active'));
-        refreshCart();
-    });
-    $(".cart-item .check-box").change(function() {
-        let $this = $(this);
-        if (!$this.hasClass('active')) {
-            $this.closest('.cart-group-item').find('.group-header .check-box').removeClass('active');
-            $(".cart-footer .check-box").removeClass('active');
+    $(".cart-group-item .group-header .check-box").on(CHECKED_CHANGE, function() {
+        let $this = $(this),
+            checked = $this.hasClass('active');
+        togglecChecked(checked, $this.closest('.cart-group-item').find('.cart-item .check-box'));
+        if (!checked) {
+            togglecChecked(checked, checkAll);
         }
         refreshCart();
     });
-    $(".cart-footer .check-box").change(function() {
-        $(".cart-group-item .check-box").toggleClass('active', $(this).hasClass('active'));
+    $(".cart-item .check-box").on(CHECKED_CHANGE, function() {
+        let $this = $(this);
+        if (!$this.hasClass('active')) {
+            togglecChecked(false, checkAll, $this.closest('.cart-group-item').find('.group-header .check-box'));
+        }
+        refreshCart();
+    });
+    let checkAll = $(".cart-footer .check-box, .cart-header .check-box").on(CHECKED_CHANGE, function() {
+        togglecChecked($(this).hasClass('active'), $(".cart-group-item .check-box"), checkAll)
         refreshCart();
     })
+}
+
+function togglecChecked(checked: boolean, ...args: JQuery[]) {
+    args.forEach(items => {
+        items.each(function() {
+            let item = $(this);
+            item.toggleClass('active', checked);
+            if (!item.is('input')) {
+                return;
+            }
+            this.checked = checked;
+        });
+    });
 }
 
 function goPhoneLogin() {

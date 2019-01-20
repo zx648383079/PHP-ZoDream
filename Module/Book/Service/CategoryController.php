@@ -25,6 +25,6 @@ class CategoryController extends Controller {
         $new_book = BookModel::ofClassify()->where('cat_id', $id)->where('size < 50000')->orderBy('created_at', 'desc')->orderBy('click_count', 'desc')->limit(10)->all();
         $over_book = BookModel::ofClassify()->where('cat_id', $id)->where('over_at > 0')->orderBy('click_count', 'desc')->limit(10)->all();
         $hot_author = [];
-        return $this->show(compact('book_list', 'cat', 'cat_book', 'book',  'new_book', 'hot_book', 'over_book', 'click_bang', 'size_bang', 'recommend_bang', 'hot_author'));
+        return $this->show(compact('book_list', 'cat', 'cat_book', 'book',  'new_book', 'hot_book', 'over_book', 'click_bang',  'recommend_bang', 'hot_author'));
     }
 }

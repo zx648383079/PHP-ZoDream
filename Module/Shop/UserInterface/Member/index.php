@@ -60,9 +60,9 @@ $this->header_tpl = './user_header';
                         <div>待付款</div>
                         <div>11</div>
                         <div>
-                            <a href="" class="btn">付款</a>
-                            <a href="">查看详情</a>
-                            <a href="">取消订单</a>
+                            <p><a href="" class="btn">付款</a></p>
+                            <p><a href="">查看详情</a></p>
+                            <p><a href="">取消订单</a></p>
                         </div>
                     </div>
                 </div>

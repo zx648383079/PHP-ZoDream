@@ -50,8 +50,8 @@ class OrderGoodsModel extends Model {
     /**
      * @return float
      */
-    public function getTotal() {
-        return bcmul($this->price, $this->number);
+    public function getTotalAttribute() {
+        return $this->price * $this->number;
     }
 
     /**

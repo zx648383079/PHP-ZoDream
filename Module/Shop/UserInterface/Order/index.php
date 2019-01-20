@@ -25,36 +25,40 @@ $this->title = 'ZoDream';
                    <button>搜索</button>
                </div>
            </div>
+           <?php foreach($order_list as $order):?>
            <div class="panel">
                <div class="panel-header order-item-header">
-                    <span class="time">下单时间：2018-11-20 22:13:25</span>
-                    <span class="number">订单号：69365568</span>
+                    <span class="time">下单时间：<?=$order->created_at?></span>
+                    <span class="number">订单号：<?=$order->id?></span>
                     <a href="">
                         <i class="fa fa-trash"></i>
                     </a>
                </div>
                 <div class="panel-body">
+                    <?php foreach($order->goods as $goods):?>
                     <div class="order-item">
-                        <div>
-                            <img src="http://yanxuan.nosdn.127.net/9014a75315685c0ecccece8583fdba68.png?imageView&thumbnail=100x100&quality=95" alt="">
+                        <div class="goods-img">
+                            <img src="<?=$goods->thumb?>" alt="">
                         </div>
-                        <div class="name">男式都市运动外套</div>
+                        <div class="name"><?=$goods->name?></div>
                         <div class="status">
-                            <span>未付款</span>
+                            <span><?=$order->status_label?></span>
                             <a href="">再次购买</a>
                         </div>
                         <div class="price">
-                            ¥329.00
+                            <?=$goods->price?>
                             <p>（含运费：¥0.00元）</p>
                         </div>
                         <div class="actions">
-                            <a href="" class="btn">付款</a>
+                            <a href="<?=$this->url('./cashier/pay', ['id' => $order->id])?>" class="btn">付款</a>
                             <a href="<?=$this->url('./order/detail', ['id' => 1])?>">查看详情</a>
                             <a href="">取消订单</a>
                         </div>
                     </div>
+                    <?php endforeach;?>
                 </div>
            </div>
+           <?php endforeach;?>
         </div>
     </div>
 </div>

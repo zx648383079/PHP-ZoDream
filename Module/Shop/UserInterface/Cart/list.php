@@ -2,11 +2,17 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$url = $this->url('./');
+
+$js = <<<JS
+bindCart('{$url}');
+JS;
+$this->registerJs($js);
 ?>
 <div class="cart-header">
     <div class="chkbox">
-        <input type="checkbox" checked="" >
-        <span >全选</span>
+        <input type="checkbox" class="check-box">
+        <span>全选</span>
     </div>
     <div>商品信息</div>
     <div>单价</div>
@@ -16,14 +22,14 @@ use Zodream\Template\View;
 </div>
 
 <?php foreach($cart as $group):?>
-<div class="cart-group">
-    <div class="promotion-wrap">
+<div class="cart-group-item">
+    <div class="group-header">
     <?=$group->getName()?>
     </div>
     <?php foreach($group as $item):?>
     <div class="cart-item" data-id="<?=$item->id?>">
         <div class="chk">
-            <input type="checkbox">
+            <input type="checkbox" class="check-box">
         </div>
         <div class="thumb">
             <img src="<?=$item->goods->thumb?>" alt="">
@@ -56,9 +62,9 @@ use Zodream\Template\View;
 
 <div class="cart-footer">
     <div class="chkbox">
-        <input type="checkbox">
+        <input type="checkbox" class="check-box">
         <span>
-            <span>已选（</span><span>2</span>
+            <span>已选（</span><span class="cart-checked-count">0</span>
             <span>）</span>
         </span>
         <a>批量删除</a>
@@ -76,6 +82,6 @@ use Zodream\Template\View;
         <div class="tip">已满足免邮条件></div>
     </div>
     <div class="checkout">
-        <a href="<?=$this->url('./cashier')?>">下单</a>
+        <a href="<?=$this->url('./cashier')?>" class="btn">下单</a>
     </div>
 </div>
