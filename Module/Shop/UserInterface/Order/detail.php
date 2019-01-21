@@ -13,7 +13,7 @@ $this->title = 'ZoDream';
             <div class="panel">
                <div class="panel-header order-item-header">
                     <span class="time">下单时间：<?=$order->created_at?></span>
-                    <span class="number">订单号：<?=$order->id?></span>
+                    <span class="number">订单号：<?=$order->series_number?></span>
                </div>
                 <div class="panel-body">
                     <div class="order-address">

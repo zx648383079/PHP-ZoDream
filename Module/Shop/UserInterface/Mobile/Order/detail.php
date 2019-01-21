@@ -40,7 +40,7 @@ $this->extend('../layouts/header');
         </div>
         <div class="order-amount">
             <p class="text-right">共 2 件 合计：<?=$order->goods_amount?></p>
-            <p class="line-item"><span>订单号</span> <span><?=$order->id?></span> </p>
+            <p class="line-item"><span>订单号</span> <span><?=$order->series_number?></span> </p>
             <p class="line-item"><span>下单时间</span> <span><?=$order->created_at?></span> </p>
             <p class="line-item"><span>支付时间</span> <span><?=$order->paid_at?></span> </p>
             <p class="line-item"><span>完成时间</span> <span><?=$order->updated_at?></span> </p>

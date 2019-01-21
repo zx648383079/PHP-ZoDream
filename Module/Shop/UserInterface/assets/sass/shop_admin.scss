@@ -262,3 +262,70 @@ $color_celeste_approx: #ccc;
 	}
 }
 
+.progress-bar {
+	width: 80%;
+    height: 50px;
+    position: relative;
+	margin: 30px 0 0 100px;
+	div {
+		width: 100%;
+		height: 10px;
+		position: absolute;
+		top:50%;
+		left: 0;
+		margin-top:-20px;
+		border:1px solid #ddd;
+		background: #ccc;
+		span {
+			position: absolute;
+			display: inline-block;
+			background: green;
+			height: 10px;
+			width: 25%;
+		}
+	}
+	>span {
+		position: absolute;
+		top:0;
+		margin-top: -10px;
+		width: 40px;
+		height: 40px;
+		border:2px solid #ddd;
+		border-radius: 50%;
+		background:#ccc;
+		margin-left: -20px;
+		color:#333;
+		font-size: 12px;
+		line-height: 35px;
+		i {
+			color: #000;
+			font-style: normal;
+			width: 120px;
+			position: absolute;
+			left: -40px;
+		}
+		&:nth-child(1){
+			left: 0%;
+		}
+		&:nth-child(2){
+			left: 0%;
+		}
+		&:nth-child(3){
+			left: 25%;
+		}
+		&:nth-child(4){
+			left: 50%;
+		}
+		&:nth-child(5){
+			left: 75%;
+		}
+		&:nth-child(6){
+			left: 100%;
+		}
+		&.active {
+			background:green;
+			color: #fff;
+		}
+	}
+}
+

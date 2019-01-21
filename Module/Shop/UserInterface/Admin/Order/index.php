@@ -12,7 +12,6 @@ $this->title = '订单列表';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/order/create')?>">新增订单</a>
 </div>
 
 <table class="table  table-hover">
@@ -34,11 +33,11 @@ $this->title = '订单列表';
             <?=$item->goods_amount?>
             </td>
             <td>
-                <?=$item->status?>
+                <?=$item->status_label?>
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/order/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/order/info', ['id' => $item->id])?>">查看</a>
                     <?php if($item->status <= 10):?>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/order/delete', ['id' => $item->id])?>">删除</a>
                     <?php endif;?>

@@ -21,7 +21,7 @@ $this->extend('../layouts/header');
         <?php foreach($order_list as $order):?>
         <div class="order-item">
             <div class="order-header">
-                <span><?=$order->id?></span>
+                <span><?=$order->series_number?></span>
                 <span class="status"><?=$order->status_label?></span>
             </div>
             <div class="goods-list">
