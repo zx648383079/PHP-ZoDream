@@ -4,9 +4,10 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '个人中心';
 $header_btn = '';
+$logout_url = $this->url('/auth/logout', ['redirect_uri' => $this->url('./mobile')]);
 if (!auth()->guest()) {
     $header_btn = <<<HTML
-<a class="right" href="/auth/logout">
+<a class="right" href="{$logout_url}">
     <i class="fa fa-sign-out-alt"></i>
 </a>
 HTML;
