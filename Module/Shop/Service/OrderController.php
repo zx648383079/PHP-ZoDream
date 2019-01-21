@@ -17,6 +17,7 @@ class OrderController extends Controller {
     public function indexAction() {
         $order_list = OrderModel::with('goods')
             ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
             ->page();
         return $this->sendWithShare()->show(compact('order_list'));
     }

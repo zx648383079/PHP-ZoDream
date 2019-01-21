@@ -9,7 +9,8 @@ use Module\Auth\Domain\Model\UserModel;
 class OrderController extends Controller {
 
     public function indexAction() {
-        $model_list = OrderModel::with('user')->page();
+        $model_list = OrderModel::with('user')
+            ->orderBy('created_at', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 

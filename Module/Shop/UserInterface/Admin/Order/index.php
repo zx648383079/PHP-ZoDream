@@ -21,6 +21,7 @@ $this->title = '订单列表';
         <th>会员</th>
         <th>金额</th>
         <th>状态</th>
+        <th>下单时间</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -34,6 +35,9 @@ $this->title = '订单列表';
             </td>
             <td>
                 <?=$item->status_label?>
+            </td>
+            <td>
+                <?=$item->created_at?>
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
