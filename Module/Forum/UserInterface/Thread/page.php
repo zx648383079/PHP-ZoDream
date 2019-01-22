@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Forum\Domain\Parsers\Parser;
 /** @var $this View */
 $this->registerCssFile('@forum.css')
     ->registerJsFile('@forum.min.js');
@@ -25,7 +26,7 @@ $this->registerCssFile('@forum.css')
             </div>
             <div class="last-time">最后编辑于 <?=$item->updated_at?></div>
             <div class="content">
-                <?=$item->content?>
+                <?=Parser::converter($item)?>
             </div>
             <div class="action">
                 
@@ -47,7 +48,7 @@ $this->registerCssFile('@forum.css')
                 </div>
             </div>
             <div class="content">
-                <?=$item->content?>
+                <?=Parser::converter($item)?>
             </div>
             <div class="footer">
                 <a href="">回复</a>

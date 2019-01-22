@@ -48,9 +48,12 @@ $this->title = '订单详情';
                 <p>积分抵扣：-10</p>
             </div>
         </div>
+        <div class="text-center">
+            <a href="" class="btn">我要发货</a>
+        </div>
     </div>
 </div>
-<table>
+<table class="table-hover">
     <thead>
         <tr>
             <th>商品名称</th>
@@ -99,103 +102,131 @@ $this->title = '订单详情';
 
 <div class="row">
     <div class="col-md-6">
-        <p class="lead">备注信息：</p>
-        <div>
-            <textarea name=""></textarea>
+        <div class="panel">
+            <div class="panel-header">
+            <i class="fa fa-bookmark"></i>    
+            买家备注</div>
+            <div class="panel-body">
+                <?=$order->remark?>
+            </div>
         </div>
-        <button class="btn">保存</button>
+        <div class="panel">
+            <div class="panel-header">
+            <i class="fa fa-edit"></i>    
+            备注信息</div>
+            <div class="panel-body">
+                <div class="remark-box">
+                    <textarea name=""></textarea>
+                </div>
+                <button class="btn">保存</button>
+            </div>
+        </div>
     </div>
     <div class="col-md-6">
-        <p class="lead">收货信息：</p>
-            <div class="table-responsive">
-            <table class="table">
-                <tbody>
-                <tr>
-                    <th style="width:30%">会员用户名:</th>
-                    <td><?=$user->name?></td>
-                </tr>
-                <tr>
-                    <th>收货人:</th>
-                    <td><?=$address->name?></td>
-                </tr>
-                <tr>
-                    <th>收货人手机:</th>
-                    <td><?=$address->tel?></td>
-                </tr>
-                <tr>
-                    <th>所在地:</th>
-                    <td><?=$address->region_name?></td>
-                </tr>
-                <tr>
-                    <th>收货地址:</th>
-                    <td><?=$address->address?></td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="panel">
+            <div class="panel-header">
+                <i class="fa fa-map-marked"></i>
+                收货信息
+            </div>
+            <div class="panel-body">
+                <table class="table-left">
+                    <tbody>
+                    <tr>
+                        <th style="width:30%">会员用户名:</th>
+                        <td><?=$user->name?></td>
+                    </tr>
+                    <tr>
+                        <th>收货人:</th>
+                        <td><?=$address->name?></td>
+                    </tr>
+                    <tr>
+                        <th>收货人手机:</th>
+                        <td><?=$address->tel?></td>
+                    </tr>
+                    <tr>
+                        <th>所在地:</th>
+                        <td><?=$address->region_name?></td>
+                    </tr>
+                    <tr>
+                        <th>收货地址:</th>
+                        <td><?=$address->address?></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
-        <p class="lead">配送信息：</p>
-        <div class="table-responsive">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th style="width:50%">物流公司:</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>配送单号:</th>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="panel">
+            <div class="panel-header">
+            <i class="fa fa-box"></i>    
+            配送信息</div>
+            <div class="panel-body">
+                <table class="table-left">
+                    <tbody>
+                        <tr>
+                            <th style="width:50%">物流公司:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>配送单号:</th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+       
     </div>
     <div class="col-md-6">
-      <p class="lead">发票信息：</p>
-      <div class="table-responsive">
-        <table class="table">
-          <tbody>
-            <tr>
-              <th style="width:50%">发票类型:</th>
-              <td>普通发票</td>
-            </tr>
-            <tr>
-              <th>发票抬头:</th>
-              <td>个人</td>
-            </tr>
-            <tr>
-              <th>发票内容:</th>
-              <td>由商家直接开具</td>
-            </tr>
-            <tr>
-              <th>公司名:</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>公司登记号:</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>公司地址:</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>公司电话:</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>银行开户名:</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>银行账号:</th>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="panel">
+            <div class="panel-header">
+            <i class="fa fa-file"></i>    
+            发票信息</div>
+            <div class="panel-body">
+                <table class="table-left">
+                    <tbody>
+                        <tr>
+                            <th style="width:50%">发票类型:</th>
+                            <td>普通发票</td>
+                        </tr>
+                        <tr>
+                            <th>发票抬头:</th>
+                            <td>个人</td>
+                        </tr>
+                        <tr>
+                            <th>发票内容:</th>
+                            <td>由商家直接开具</td>
+                        </tr>
+                        <tr>
+                            <th>公司名:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>公司登记号:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>公司地址:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>公司电话:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>银行开户名:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>银行账号:</th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

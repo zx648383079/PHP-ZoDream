@@ -250,4 +250,27 @@
       background: green;
       color: #fff; }
 
+.pull-right {
+  float: right; }
+
+.panel {
+  margin-top: 20px; }
+  .panel .panel-header {
+    line-height: 40px;
+    background-color: #fff;
+    padding: 0 10px; }
+  .panel .panel-body {
+    padding: 10px; }
+
+.text-right {
+  text-align: right; }
+
+.table-left td,
+.table-left th {
+  text-align: left; }
+
+.remark-box textarea {
+  width: 100%;
+  min-height: 100px; }
+
 /*# sourceMappingURL=shop_admin.css.map */

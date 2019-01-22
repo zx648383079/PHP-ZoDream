@@ -18,5 +18,3 @@ use Zodream\Disk\File;
 use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
-
-dd((new RouteCompiler())->getAllRoute());

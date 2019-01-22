@@ -84,12 +84,17 @@
   .thread-box .post-item .post-content {
     position: relative;
     padding-bottom: 30px; }
-    .thread-box .post-item .post-content .header .action {
-      float: right; }
+    .thread-box .post-item .post-content .header {
+      padding: 0 20px; }
+      .thread-box .post-item .post-content .header .action {
+        float: right; }
+    .thread-box .post-item .post-content .content {
+      padding: 0 20px; }
     .thread-box .post-item .post-content .last-time {
       text-align: right;
       color: #888; }
     .thread-box .post-item .post-content .footer {
+      padding: 0 20px;
       border-top: 1px dotted #888;
       position: absolute;
       width: 100%;
@@ -121,5 +126,26 @@
   .thread-new-box .btn {
     background-color: #333;
     color: #fff; }
+
+.hide-locked-node,
+.hide-open-node {
+  overflow: hidden;
+  margin: 10px 0;
+  padding: 8px 8px 8px 24px;
+  border: 1px dashed #FF9A9A;
+  background: #FBF1E1;
+  font-size: 12px;
+  zoom: 1; }
+
+.file-down-node {
+  margin: 10px 0;
+  padding: 8px 8px 8px 24px;
+  line-height: 30px;
+  color: #aaa; }
+  .file-down-node p:first-child {
+    color: #333;
+    font-weight: 500; }
+  .file-down-node a {
+    text-decoration: underline; }
 
 /*# sourceMappingURL=forum.css.map */

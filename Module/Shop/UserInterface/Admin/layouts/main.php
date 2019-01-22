@@ -65,10 +65,20 @@ $this->registerCssFile([
     [
         '营销管理',
         false,
-        'fa fa-briefcase',
+        'fa fa-bullhorn',
         [
             [
                 '优惠券',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '组合',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '返现',
                 './admin/order',
                 'fa fa-list'
             ],
@@ -78,7 +88,12 @@ $this->registerCssFile([
                 'fa fa-list'
             ],
             [
-                '拼团',
+                '团购',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '砍价',
                 './admin/order',
                 'fa fa-list'
             ],
@@ -88,7 +103,12 @@ $this->registerCssFile([
                 'fa fa-list'
             ],
             [
-                '刮刮卡',
+                '抽奖',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '试用',
                 './admin/order',
                 'fa fa-list'
             ],
@@ -97,7 +117,7 @@ $this->registerCssFile([
     [
         '订单管理',
         false,
-        'fa fa-briefcase',
+        'fa fa-cubes',
         [
             [
                 '订单列表',
@@ -141,7 +161,7 @@ $this->registerCssFile([
     [
         '广告管理',
         false,
-        'fa fa-book',
+        'fa fa-ad',
         [
             [
                 '广告列表',

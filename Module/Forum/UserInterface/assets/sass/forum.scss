@@ -109,15 +109,20 @@
             position: relative;
             padding-bottom: 30px;
             .header {
+                padding: 0 20px;
                 .action {
                     float: right;
                 }
+            }
+            .content {
+                padding: 0 20px;
             }
             .last-time {
                 text-align: right;
                 color: #888;
             }
             .footer {
+                padding: 0 20px;
                 border-top: 1px dotted #888;
                 position: absolute;
                 width: 100%;
@@ -165,5 +170,37 @@
     .btn {
         background-color: #333;
         color: #fff;
+    }
+}
+
+.hide-locked-node,
+.hide-open-node {
+    overflow: hidden;
+    margin: 10px 0;
+    padding: 8px 8px 8px 24px;
+    border: 1px dashed #FF9A9A;
+    background: #FBF1E1;
+    font-size: 12px;
+    zoom: 1;
+}
+.hide-open-node {
+    margin: 10px 0;
+    padding: 8px 8px 8px 24px;
+    border: 1px dashed #FF9A9A;
+    background: #FBF1E1;
+}
+.file-down-node {
+    margin: 10px 0;
+    padding: 8px 8px 8px 24px;
+    line-height: 30px;
+    color: #aaa;
+    p {
+        &:first-child {
+            color: #333;
+            font-weight: 500;
+        }
+    }
+    a {
+        text-decoration:underline;
     }
 }
