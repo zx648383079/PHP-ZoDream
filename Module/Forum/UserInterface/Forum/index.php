@@ -45,7 +45,7 @@ $this->registerCssFile([
         <?php $this->extend('./page');?>
     </div>
 
-    <?php if($forum->parent_id > 0):?>
+    <?php if(!auth()->guest() && $forum->parent_id > 0):?>
     <div class="thread-new-box">
         <div class="header">快速发帖</div>
         <form data-type="ajax" action="<?=$this->url('./thread/create')?>" method="post">

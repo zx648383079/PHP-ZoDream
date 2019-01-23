@@ -180,14 +180,19 @@
     padding: 8px 8px 8px 24px;
     border: 1px dashed #FF9A9A;
     background: #FBF1E1;
-    font-size: 12px;
     zoom: 1;
 }
+.hide-locked-node {
+    font-size: 12px;
+}
 .hide-open-node {
-    margin: 10px 0;
-    padding: 8px 8px 8px 24px;
-    border: 1px dashed #FF9A9A;
-    background: #FBF1E1;
+    background-color: transparent;
+    >.node-tip {
+        margin-bottom: 10px;
+        color: #F66;
+        font-size: 12px;
+        text-align: center;       
+    }
 }
 .file-down-node {
     margin: 10px 0;

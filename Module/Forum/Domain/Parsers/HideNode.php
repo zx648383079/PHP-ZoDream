@@ -17,7 +17,8 @@ class HideNode extends Node {
         }
         $content = $this->attr('content');
         return <<<HTML
-<div class="hide-toggle-node">
+<div class="hide-open-node">
+    <div class="node-tip">本帖隐藏的内容</div>
     {$content}
 </div>
 HTML;
@@ -25,9 +26,11 @@ HTML;
 
     private function hideHtml() {
         $name = auth()->guest() ? '游客' : auth()->user()->name;
+        $url = auth()->guest() ? url('/auth', ['redirect_uri' => url()->to()])
+            : 'javascript:;';
         return <<<HTML
 <div class="hide-locked-node">
-    <i class="fa fa-lock"></i> {$name}，如果您要查看本帖隐藏内容请<a href="">回复</a>
+    <i class="fa fa-lock"></i> {$name}，如果您要查看本帖隐藏内容请<a href="{$url}">回复</a>
 </div>
 HTML;
 
