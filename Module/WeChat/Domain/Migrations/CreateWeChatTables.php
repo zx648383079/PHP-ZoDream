@@ -110,7 +110,9 @@ class CreateWeChatTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
             $table->set('openid')->varchar(50)->notNull()->comment('微信ID');
-            $table->set('status')->bool()->notNull()->comment('关注状态');
+            $table->set('status')->bool()->defaultVal(FansModel::STATUS_SUBSCRIBED)
+                ->comment('关注状态');
+            $table->set('is_back')->bool()->defaultVal(0)->comment('是否是黑名单');
             $table->timestamps();
         });
     }

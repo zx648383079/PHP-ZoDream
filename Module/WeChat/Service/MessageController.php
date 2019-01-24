@@ -1,6 +1,7 @@
 <?php
 namespace Module\WeChat\Service;
 
+use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -24,12 +25,13 @@ class MessageController extends Controller {
             $this->model->save();
             $message->valid();
         }
-        return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe],
-            function(Message $message, MessageResponse $response) {
+        return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe], function(Message $message, MessageResponse $response) {
+                $this->subscribe($message->getFrom());
                 $this->parseResponse($this->getEventReply(EventEnum::Subscribe, $response));
             })->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
                 $this->parseResponse($this->getMessageReply($message->content), $response);
             })->on(EventEnum::UnSubscribe, function(Message $message, MessageResponse $response) {
+                $this->unsubscribe($message->getFrom());
                 $this->parseResponse($this->getEventReply(EventEnum::UnSubscribe, $response));
             })->on(EventEnum::Click, function(Message $message, MessageResponse $response) {
                 if (!empty($message->eventKey) && strpos($message->eventKey, 'menu_') === 0) {
@@ -103,5 +105,26 @@ class MessageController extends Controller {
 
     public function throwErrorMethod($action) {
         return $this->indexAction($action);
+    }
+
+    private function subscribe($openid) {
+        $model = FansModel::where('openid', $openid)
+            ->where('wid', $this->model->id)->first();
+        if (empty($model)) {
+            $model = new FansModel([
+                'openid' => $openid,
+                'wid' => $this->model->id
+            ]);
+        }
+        $model->status = FansModel::STATUS_SUBSCRIBED;
+        $model->save() && $model->updateUser(true);
+    }
+
+    private function unsubscribe($openid) {
+        FansModel::where('openid', $openid)
+            ->where('wid', $this->model->id)->update([
+                'status' => FansModel::STATUS_UNSUBSCRIBED,
+                'updated_at' => time()
+            ]);
     }
 }

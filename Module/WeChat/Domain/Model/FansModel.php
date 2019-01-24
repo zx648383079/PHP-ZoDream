@@ -11,6 +11,7 @@ use Zodream\ThirdParty\WeChat\User;
  * @property integer $wid
  * @property string $openid
  * @property integer $status
+ * @property integer $is_back
  * @property integer $created_at
  * @property integer $updated_at
  * @property WeChatModel $wechat
@@ -33,8 +34,7 @@ class FansModel extends Model {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'wechat_fans';
     }
 
@@ -43,6 +43,7 @@ class FansModel extends Model {
             'wid' => 'required|int',
             'openid' => 'required|string:0,50',
             'status' => 'required|int:0,9',
+            'is_back' => 'required|int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -54,6 +55,7 @@ class FansModel extends Model {
             'wid' => '所属微信公众号ID',
             'openid' => '微信ID',
             'status' => '关注状态',
+            'is_back' => '是否是黑名单',
             'created_at' => '关注时间',
             'updated_at' => '修改时间',
         ];

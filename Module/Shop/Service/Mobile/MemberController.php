@@ -5,6 +5,15 @@ namespace Module\Shop\Service\Mobile;
 
 class MemberController extends Controller {
 
+    protected function rules()
+    {
+        return [
+            'index' => '*',
+            'login' => '*',
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $user = auth()->user();
         return $this->show(compact('user'));

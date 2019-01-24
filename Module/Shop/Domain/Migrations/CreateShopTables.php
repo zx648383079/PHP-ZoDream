@@ -418,6 +418,8 @@ class CreateShopTables extends Migration {
             $table->set('goods_id')->int()->notNull();
             $table->set('number')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
+            $table->set('is_checked')->bool()->defaultVal(0)->comment('是否选中');
+            $table->set('selected_activity')->int()->defaultVal(0)->comment('选择的活动');
         });
         Schema::createTable(GoodsIssue::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
