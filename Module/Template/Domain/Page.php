@@ -164,6 +164,10 @@ HTML;
 
     public function render() {
         $this->boot();
+        if ($this->isEditMode) {
+            $this->getFactory()
+                ->registerCssFile('@template.css');
+        }
         return $this->getFactory()->render($this->page->template, [
             'keywords' => $this->page->keywords,
             'description' => $this->page->description,

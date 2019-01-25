@@ -10,10 +10,15 @@ class PageController extends Controller {
 
     public function indexAction($id = 0, $site_id = 0, $type = 0) {
         $model = PageModel::findOrDefault($id, ['site_id' => $site_id, 'type' => $type, 'template' => 'index']);
-        $page = new Page($model, true);
         $style_list = [];
         $weight_list = WeightModel::groupByType();
-        return $this->show(compact('page', 'model', 'style_list', 'weight_list'));
+        return $this->show(compact('model', 'style_list', 'weight_list'));
+    }
+
+    public function templateAction($id = 0, $edit = false) {
+        $model = PageModel::find($id);
+        $page = new Page($model, !empty($edit) && $edit !== 'false');
+        return $this->show(compact('model', 'page'));
     }
 
     public function createAction($site_id, $type = 0) {

@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Module\Template\Domain\Page;
 
 $base_url = $this->url('./admin/');
-$id = $page->getPage('id');
+$id = $model->id;
 $js = <<<JS
 bindPage('{$id}', '{$base_url}');
 JS;
@@ -96,9 +96,9 @@ $this->registerCssFile('@template.css')
         </div>
     </div>
     <div id="mainMobile" class="<?= $model->type > 0 ? 'mobile-320':''?>">
-        <div id="mainGrid">
-            <?=$page->template()?>
-        </div>
+        <iframe id="mainGrid" src="<?=$this->url('./admin/page/template', ['id' => $model->id, 'edit' => true])?>">
+            
+        </iframe>
     </div>
     <div id="property" class="right fixed">
         <div class="panel">
