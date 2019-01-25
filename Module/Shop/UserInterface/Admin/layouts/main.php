@@ -69,47 +69,47 @@ $this->registerCssFile([
         [
             [
                 '优惠券',
-                './admin/order',
+                './admin/coupon',
                 'fa fa-list'
             ],
             [
                 '组合',
-                './admin/order',
+                './admin/activity/mix',
                 'fa fa-list'
             ],
             [
                 '返现',
-                './admin/order',
+                './admin/activity/cashback',
                 'fa fa-list'
             ],
             [
                 '满减/满送',
-                './admin/order',
+                './admin/activity/discount',
                 'fa fa-list'
             ],
             [
                 '团购',
-                './admin/order',
+                './admin/activity/group_buy',
                 'fa fa-list'
             ],
             [
                 '砍价',
-                './admin/order',
+                './admin/activity/bargain',
                 'fa fa-list'
             ],
             [
                 '限时秒杀',
-                './admin/order',
+                './admin/activity/seckill',
                 'fa fa-list'
             ],
             [
                 '抽奖',
-                './admin/order',
+                './admin/activity/lottery',
                 'fa fa-list'
             ],
             [
                 '试用',
-                './admin/order',
+                './admin/activity/free_tial',
                 'fa fa-list'
             ],
         ]
