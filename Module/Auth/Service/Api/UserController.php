@@ -13,7 +13,7 @@ class UserController extends RestController {
     }
 
     public function indexAction() {
-
+        return $this->render(auth()->user());
     }
 
 
