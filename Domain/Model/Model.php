@@ -94,4 +94,5 @@ abstract class Model extends BaseModel {
         Command::getInstance()->execute(sprintf('ALTER TABLE %s AUTO_INCREMENT = %s;',
             Command::getInstance()->addPrefix(static::tableName()), $i));
     }
+
 }

@@ -12,7 +12,7 @@ class GoodsController extends Controller {
                                 $keywords = null,
                                 $per_page = 20, $sort = null, $order = null) {
         if ($id > 0) {
-            return $this->render(GoodsModel::find($id));
+            return $this->infoAction($id);
         }
         $page = Goods::sortBy($sort, $order)
             ->when(!empty($keywords), function ($query) {
@@ -23,6 +23,10 @@ class GoodsController extends Controller {
                 $query->where('brand_id', intval($brand));
             })->page($per_page);
         return $this->renderPage($page);
+    }
+
+    public function infoAction($id) {
+        return $this->render(GoodsModel::find($id));
     }
 
     public function homeAction() {

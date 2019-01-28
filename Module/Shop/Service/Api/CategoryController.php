@@ -7,9 +7,13 @@ class CategoryController extends Controller {
 
     public function indexAction($id = 0, $parent = 0) {
         if ($id > 0) {
-            return $this->render(CategoryModel::find(intval($id)));
+            return $this->infoAction($id);
         }
         return $this->render(CategoryModel::where('parent_id', intval($parent))->all());
+    }
+
+    public function infoAction($id) {
+        return $this->render(CategoryModel::find(intval($id)));
     }
 
     public function levelAction() {

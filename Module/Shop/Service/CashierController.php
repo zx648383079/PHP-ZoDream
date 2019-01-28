@@ -40,7 +40,7 @@ class CashierController extends Controller {
             return $this->jsonFailure('请选择结算的商品');
         }
         $order = OrderModel::preview($goods_list);
-        if (!$order->setAddress(AddressModel::find($address))) {
+        if (!$order->setAddress(AddressModel::findWithAuth($address))) {
             return $this->jsonFailure('请选择收货地址');
         }
         if (!$order->setPayment(PaymentModel::find($payment))) {

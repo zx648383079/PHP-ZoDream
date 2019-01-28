@@ -10,8 +10,7 @@ class OrderController extends Controller {
                                 $keywords = null,
                                 $per_page = 20, $sort = null, $order = null) {
         if ($id > 0) {
-            return $this->render(OrderModel::with('goods')->where('user_id', auth()->id())
-                ->where('id', $id)->first());
+            return $this->infoAction($id);
         }
         $order_list = OrderModel::with('goods')
             ->where('user_id', auth()->id())
@@ -20,9 +19,20 @@ class OrderController extends Controller {
         return $this->renderPage($order_list);
     }
 
+    public function infoAction($id) {
+        return $this->render(OrderModel::with('goods')->where('user_id', auth()->id())
+            ->where('id', $id)->first());
+    }
+
     public function countAction() {
+        $data = OrderModel::where('user_id', auth()->id())->groupBy('status')->asArray()
+            ->get('status, COUNT(*) AS count');
         return $this->render([
-            'unpay'
+            'unpay' => 0,
+            'unshipping' => 0,
+            'unconfirm' => 0,
+            'uncomment' => 0,
+            'finish' => 0
         ]);
     }
 }
