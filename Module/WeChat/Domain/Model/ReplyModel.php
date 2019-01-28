@@ -65,4 +65,10 @@ class ReplyModel extends EditorModel {
         ];
     }
 
+    public static function cacheReply($wid) {
+        return  cache()->getOrSet('wx_reply_'. $wid, function () use ($wid) {
+
+        });
+    }
+
 }
