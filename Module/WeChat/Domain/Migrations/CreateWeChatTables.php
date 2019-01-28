@@ -30,7 +30,7 @@ class CreateWeChatTables extends Migration {
             $table->setComment('微信回复');
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
-            $table->set('event')->varchar(20)->notNull()->comment('时间');
+            $table->set('event')->varchar(20)->notNull()->comment('事件');
             $table->set('keywords')->varchar(60)->comment('关键词');
             $table->set('match')->bool()->notNull()->defaultVal(0)->comment('关键词匹配模式');
             $table->set('content')->text()->notNull()->comment('微信返回数据');

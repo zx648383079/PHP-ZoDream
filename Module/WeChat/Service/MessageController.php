@@ -5,6 +5,7 @@ use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\Database\DB;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 use Zodream\ThirdParty\WeChat\MessageResponse;
@@ -25,22 +26,32 @@ class MessageController extends Controller {
             $this->model->save();
             $message->valid();
         }
-        return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe], function(Message $message, MessageResponse $response) {
-                $this->subscribe($message->getFrom());
-                $this->parseResponse($this->getEventReply(EventEnum::Subscribe, $response));
-            })->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
-                $this->parseResponse($this->getMessageReply($message->content), $response);
-            })->on(EventEnum::UnSubscribe, function(Message $message, MessageResponse $response) {
-                $this->unsubscribe($message->getFrom());
-                $this->parseResponse($this->getEventReply(EventEnum::UnSubscribe, $response));
-            })->on(EventEnum::Click, function(Message $message, MessageResponse $response) {
-                if (!empty($message->eventKey) && strpos($message->eventKey, 'menu_') === 0) {
-                    $this->parseMenuResponse(substr($message->eventKey, 5), $response);
-                }
-            })->run()->sendContent();
+        return $this->bindEvent($message)->run()->sendContent();
     }
 
     /**
+     * 绑定事件
+     * @param Message $message
+     * @return Message
+     */
+    protected function bindEvent(Message $message) {
+        return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe], function(Message $message, MessageResponse $response) {
+            $this->subscribe($message->getFrom());
+            $this->parseResponse($this->getEventReply(EventEnum::Subscribe), $response);
+        })->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
+            $this->parseResponse($this->getMessageReply($message->content), $response);
+        })->on(EventEnum::UnSubscribe, function(Message $message, MessageResponse $response) {
+            $this->unsubscribe($message->getFrom());
+            $this->parseResponse($this->getEventReply(EventEnum::UnSubscribe), $response);
+        })->on(EventEnum::Click, function(Message $message, MessageResponse $response) {
+            if (!empty($message->eventKey) && strpos($message->eventKey, 'menu_') === 0) {
+                $this->parseMenuResponse(substr($message->eventKey, 5), $response);
+            }
+        });
+    }
+
+    /**
+     * 获取消息回复
      * @param $content
      * @return ReplyModel
      */
@@ -48,13 +59,13 @@ class MessageController extends Controller {
         $model = ReplyModel::where('event', EventEnum::Message)
             ->where('keywords', $content)
             ->where('wid', $this->model->id)
-            ->orderBy('match', 'desc')->first();
+            ->orderBy('`match`', 'desc')->first();
         if (!empty($model)) {
             return $model;
         }
         $model_list = ReplyModel::where('event', EventEnum::Message)
             ->where('wid', $this->model->id)
-            ->where('match', 0)->all();
+            ->where('`match`', 0)->all();
         foreach ($model_list as $item) {
             if (strpos($content, $item->keywords) !== false) {
                 return $item;
@@ -63,6 +74,13 @@ class MessageController extends Controller {
         return null;
     }
 
+    /***
+     * 转化菜单回复
+     * @param $id
+     * @param MessageResponse $response
+     * @return MessageResponse
+     * @throws \Exception
+     */
     protected function parseMenuResponse($id, MessageResponse $response) {
         $model = MenuModel::find($id);
         if (empty($model)) {
@@ -81,17 +99,25 @@ class MessageController extends Controller {
             ->where('wid', $this->model->id)->first();
     }
 
+    /**
+     * 转化响应
+     * @param $reply
+     * @param MessageResponse $response
+     * @return MessageResponse
+     */
     protected function parseResponse($reply, MessageResponse $response) {
         $reply = $this->parseReply($reply);
-        if ($reply->type === ReplyModel::TYPE_TEXT) {
+        $type = intval($reply->type);
+        if ($type === ReplyModel::TYPE_TEXT) {
             return $response->setText($reply->content);
         }
-        if ($reply->type === ReplyModel::TYPE_URL) {
+        if ($type === ReplyModel::TYPE_URL) {
             return $response->setText($reply->content);
         }
     }
 
     /**
+     * 转化回复
      * @param $model
      * @return ReplyModel|MenuModel
      */
