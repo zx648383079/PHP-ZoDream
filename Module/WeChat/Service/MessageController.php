@@ -99,7 +99,11 @@ class MessageController extends Controller {
         if (!empty($model)) {
             return $model;
         }
-        return $this->getEventReply('default');
+        $model = $this->getEventReply('default');
+        return empty($model) ? new ReplyModel([
+            'type' => ReplyModel::TYPE_TEXT,
+            'content' => '默认回复'
+        ]) : $model;
     }
 
 

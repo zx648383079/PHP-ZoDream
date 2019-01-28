@@ -2,6 +2,7 @@
 namespace Service\Home;
 
 use Module\Template\Domain\Model\FeedbackModel;
+use Zodream\Service\Factory;
 
 class HomeController extends Controller {
     public function indexAction() {
@@ -30,6 +31,7 @@ class HomeController extends Controller {
     }
 
     public function notFoundAction() {
+        Factory::view()->setDirectory(Factory::root()->directory('UserInterface/Home'));
         app('response')->setStatusCode(404);
         return $this->show('/404');
     }
