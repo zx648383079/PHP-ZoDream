@@ -10,7 +10,7 @@ use Module\WeChat\Domain\Model\WeChatModel;
  */
 class CheckInScene extends BaseScene implements SceneInterface {
 
-    public function enter($openid, WeChatModel $model) {
+    public function enter() {
         return new ReplyModel([
             'type' => ReplyModel::TYPE_TEXT,
             'content' => '签到成功，已签到1天'

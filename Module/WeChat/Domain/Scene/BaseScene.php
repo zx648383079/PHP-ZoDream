@@ -1,21 +1,21 @@
 <?php
 namespace Module\WeChat\Domain\Scene;
 
-use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Module;
 
 abstract class BaseScene implements SceneInterface {
-
-    public function enter($openid, WeChatModel $model) {
-        // TODO: Implement enter() method.
-    }
 
     abstract public function process($content);
 
     public function leave() {
-
+        Module::reply()->removeScene();
     }
 
-    public function __invoke($content, $openid, WeChatModel $model) {
+    public function save() {
+        Module::reply()->saveScene($this);
+    }
+
+    public function __invoke($content) {
         return $this->process($content);
     }
 

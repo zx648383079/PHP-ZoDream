@@ -128,4 +128,9 @@ class ReplyModel extends EditorModel {
         return $id > 0 ? static::where('wid', $wid)->where('id', $id)->first() : null;
     }
 
+    public static function findWithEvent($event, $wid) {
+        return static::where('event', $event)
+            ->where('wid', $wid)->first();
+    }
+
 }
