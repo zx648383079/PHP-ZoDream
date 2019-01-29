@@ -2,12 +2,14 @@
 
 function bindTab(typeId: number| string) {
     let typeInput = $(".wx-editor .type-input");
-    $(".wx-editor .zd-tab-head .zd-tab-item").click(function() {
+    $('.wx-editor .zd-tab-head .zd-tab-item').click(function() {
         typeInput.val($(this).attr('data-id'));
     }).each((i, item) => {
         let that = $(item);
-        if (that.attr('data-id') == typeId) {
-            that.trigger('click');
+        if (that.data('id') == typeId) {
+            typeInput.val(typeId);
+            that.addClass('active');
+            $('.wx-editor .zd-tab-body .zd-tab-item').eq(i).addClass('active');
         }
     });
 }

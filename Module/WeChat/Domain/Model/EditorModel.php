@@ -3,6 +3,8 @@ namespace Module\WeChat\Domain\Model;
 
 
 use Domain\Model\Model;
+use Module\WeChat\Domain\Scene\BindingScene;
+use Module\WeChat\Domain\Scene\CheckInScene;
 
 /**
  * Class EditorModel
@@ -19,8 +21,14 @@ abstract class EditorModel extends Model {
     const TYPE_EVENT = 4;
     const TYPE_URL = 5;
     const TYPE_MINI = 6;
+    const TYPE_SCENE = 7;
 
     protected $editor = [];
+
+    public static $scene_list = [
+        BindingScene::class => '账号绑定',
+        CheckInScene::class => '每日签到',
+    ];
 
     public static $type_list = [
         self::TYPE_TEXT => '文本',
@@ -29,7 +37,8 @@ abstract class EditorModel extends Model {
         self::TYPE_TEMPLATE => '模板消息',
         self::TYPE_EVENT => '事件',
         self::TYPE_URL => '网址',
-        self::TYPE_MINI => '小程序'
+        self::TYPE_MINI => '小程序',
+        self::TYPE_SCENE => '场景'
     ];
 
     protected $type_map = [
@@ -55,7 +64,10 @@ abstract class EditorModel extends Model {
         self::TYPE_MINI => [
             'min_appid' => 'content',
             'min_path' => 'pages'
-        ]
+        ],
+        self::TYPE_SCENE => [
+            'scene' => 'content'
+        ],
     ];
 
     public function setEditor() {

@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\WeChat\Domain\Model\ReplyModel;
 /** @var $this View */
 $this->title = '消息管理';
 ?>
@@ -21,6 +22,7 @@ $this->title = '消息管理';
             <tr>
                 <td>ID</td>
                 <td>事件</td>
+                <td>响应类型</td>
                 <td>关键字</td>
                 <td>操作</td>
             </tr>
@@ -31,6 +33,9 @@ $this->title = '消息管理';
                 <td><?=$item->id?></td>
                 <td>
                     <?=$event_list[$item->event]?>
+                </td>
+                <td>
+                    <?=ReplyModel::$type_list[$item->type]?>
                 </td>
                 <td>
                     <?=$item->keywords?></td>

@@ -38,11 +38,11 @@ $this->registerJs($js, View::JQUERY_READY);
             <div class="input-group">
                 <label>匹配方式</label>
                 <label for="match_0">
-                    <input type="radio" id="match_0" name="match" value="0" <?=0 == $model->event ? 'checked' : ''?>>
+                    <input type="radio" id="match_0" name="match" value="0" <?=0 == $model->match ? 'checked' : ''?>>
                     部分匹配
                 </label>
                 <label for="match_1">
-                    <input type="radio" id="match_1" name="match" value="1" <?=1 == $model->event ? 'checked' : ''?>>
+                    <input type="radio" id="match_1" name="match" value="1" <?=1 == $model->match ? 'checked' : ''?>>
                     完全匹配
                 </label>
             </div>

@@ -24,7 +24,7 @@ class ReplyController extends Controller {
         $reply_list = ReplyModel::where('wid', $this->weChatId())
             ->when(!empty($event), function ($query) use ($event) {
             $query->where('event', $event);
-        })->page();
+        })->orderBy('id', 'desc')->page();
         $event_list = $this->event_list;
         return $this->show(compact('reply_list', 'event_list'));
     }
@@ -46,12 +46,13 @@ class ReplyController extends Controller {
         if ($model->event != EventEnum::Message) {
             $model->keywords = null;
         }
-        if ($model->setEditor()->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('reply')
-            ]);
+        if (!$model->setEditor()->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonFailure($model->getFirstError());
+        ReplyModel::cacheReply($model->wid, true);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('reply')
+        ]);
     }
 
     public function deleteAction($id) {

@@ -10,9 +10,10 @@ if (!isset($tab_id)) {
     $tab_id = true;
 }
 if (!is_array($tab_id)) {
-    $tab_id = $tab_id ? [0, 1, 2, 3] : [1, 2, 3, 4, 5, 6];
+    $tab_id = $tab_id ? [0, 1, 2, 3, 7] : [1, 2, 3, 4, 5, 6, 7];
 }
 $type_id = $model->getEditor('type');
+$scene = $model->getEditor('scene');
 $this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id : $tab_id[0]));
 ?>
 <div class="zd-tab wx-editor">
@@ -104,7 +105,7 @@ $this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id
         <div class="zd-tab-item form-inline">
             <div class="input-group">
                 <label for="editor_event">参数</label>
-                <input type="text" id="editor_url" name="editor[event]" value="<?=$model->getEditor('event')?>" placeholder="示例：参数" size="100">
+                <input type="text" id="editor_event" name="editor[event]" value="<?=$model->getEditor('event')?>" placeholder="示例：参数" size="100">
             </div>
         </div>
         <?php endif;?>
@@ -131,6 +132,23 @@ $this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id
                 <input type="text" id="module1" name="editor[min_url]" value="<?=$model->getEditor('min_url')?>" placeholder="老版微信不支持小程序时替代网址" size="100">
             </div>
         </div>
+        <?php endif;?>
+        <?php if(in_array(ReplyModel::TYPE_SCENE, $tab_id)):?>
+            <div class="zd-tab-item form-inline">
+                <div class="input-group">
+                    <label for="editor_event">场景</label>
+                    <select id="editor_scene" name="editor[scene]">
+                        <option value="">请选择</option>
+                        <?php foreach(ReplyModel::$scene_list as $key => $item):?>
+                        <?php if($key === $scene):?>
+                        <option value="<?=$key?>" selected><?=$item?></option>
+                        <?php else:?>
+                        <option value="<?=$key?>"><?=$item?></option>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
         <?php endif;?>
     </div>
     <input type="hidden" class="type-input" name="editor[type]" value="<?=$type_id?>">

@@ -5,7 +5,10 @@ use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Scene\SceneInterface;
 use Zodream\Database\DB;
+use Zodream\Infrastructure\Pipeline\InterruptibleProcessor;
+use Zodream\Infrastructure\Pipeline\PipelineBuilder;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 use Zodream\ThirdParty\WeChat\MessageResponse;
@@ -37,15 +40,17 @@ class MessageController extends Controller {
     protected function bindEvent(Message $message) {
         return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe], function(Message $message, MessageResponse $response) {
             $this->subscribe($message->getFrom());
-            $this->parseResponse($this->getEventReply(EventEnum::Subscribe), $response);
+            $this->parseResponse($this->getEventReply(EventEnum::Subscribe), $response, $message);
         })->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
-            $this->parseResponse($this->getMessageReply($message->content), $response);
+            $this->parseResponse($this->getMessageReply($message->content, $message->getFrom()),
+                $response, $message);
         })->on(EventEnum::UnSubscribe, function(Message $message, MessageResponse $response) {
             $this->unsubscribe($message->getFrom());
-            $this->parseResponse($this->getEventReply(EventEnum::UnSubscribe), $response);
+            $this->parseResponse($this->getEventReply(EventEnum::UnSubscribe),
+                $response, $message);
         })->on(EventEnum::Click, function(Message $message, MessageResponse $response) {
             if (!empty($message->eventKey) && strpos($message->eventKey, 'menu_') === 0) {
-                $this->parseMenuResponse(substr($message->eventKey, 5), $response);
+                $this->parseMenuResponse(substr($message->eventKey, 5), $response, $message);
             }
         });
     }
@@ -53,40 +58,58 @@ class MessageController extends Controller {
     /**
      * 获取消息回复
      * @param $content
+     * @param $openid
      * @return ReplyModel
      */
-    protected function getMessageReply($content) {
-        $model = ReplyModel::where('event', EventEnum::Message)
-            ->where('keywords', $content)
-            ->where('wid', $this->model->id)
-            ->orderBy('`match`', 'desc')->first();
-        if (!empty($model)) {
-            return $model;
-        }
-        $model_list = ReplyModel::where('event', EventEnum::Message)
-            ->where('wid', $this->model->id)
-            ->where('`match`', 0)->all();
-        foreach ($model_list as $item) {
-            if (strpos($content, $item->keywords) !== false) {
-                return $item;
-            }
-        }
-        return null;
+    protected function getMessageReply($content, $openid) {
+        // 先判断是否处在场景中
+        $pipeline = (new PipelineBuilder())
+            ->add(function ($content) use ($openid) {
+                $scene = $this->getScene($openid);
+                if (empty($scene)) {
+                    return $content;
+                }
+                $model = $scene($content, $openid, $this->model);
+                return $model instanceof ReplyModel ? $model : $content;
+            })->add(function ($content) {
+            return ReplyModel::findWithCache($this->model->id, $content);
+        })->build(new InterruptibleProcessor(function ($payload) {
+            return !$payload instanceof ReplyModel;
+        }));
+        return $pipeline($content);
+        //
+//        $model = ReplyModel::where('event', EventEnum::Message)
+//            ->where('keywords', $content)
+//            ->where('wid', $this->model->id)
+//            ->orderBy('`match`', 'desc')->first();
+//        if (!empty($model)) {
+//            return $model;
+//        }
+//        $model_list = ReplyModel::where('event', EventEnum::Message)
+//            ->where('wid', $this->model->id)
+//            ->where('`match`', 0)->all();
+//        foreach ($model_list as $item) {
+//            if (strpos($content, $item->keywords) !== false) {
+//                return $item;
+//            }
+//        }
+//        return null;
     }
 
     /***
      * 转化菜单回复
      * @param $id
      * @param MessageResponse $response
+     * @param Message $message
      * @return MessageResponse
      * @throws \Exception
      */
-    protected function parseMenuResponse($id, MessageResponse $response) {
+    protected function parseMenuResponse($id, MessageResponse $response, Message $message) {
         $model = MenuModel::find($id);
         if (empty($model)) {
-            return $this->parseResponse(null, $response);
+            return $this->parseResponse(null, $response, $message);
         }
-        return $this->parseResponse($model, $response);
+        return $this->parseResponse($model, $response, $message);
     }
 
     /**
@@ -103,9 +126,11 @@ class MessageController extends Controller {
      * 转化响应
      * @param $reply
      * @param MessageResponse $response
+     * @param Message $message
      * @return MessageResponse
+     * @throws \Exception
      */
-    protected function parseResponse($reply, MessageResponse $response) {
+    protected function parseResponse($reply, MessageResponse $response, Message $message) {
         $reply = $this->parseReply($reply);
         $type = intval($reply->type);
         if ($type === ReplyModel::TYPE_TEXT) {
@@ -113,6 +138,13 @@ class MessageController extends Controller {
         }
         if ($type === ReplyModel::TYPE_URL) {
             return $response->setText($reply->content);
+        }
+        if ($type === ReplyModel::TYPE_SCENE) {
+            $name = $reply->content;
+            /** @var SceneInterface $instance */
+            $instance = new $name;
+            return $this->parseResponse($instance->enter($message->getFrom(),
+                $this->model), $response, $message);
         }
     }
 
@@ -156,5 +188,15 @@ class MessageController extends Controller {
                 'status' => FansModel::STATUS_UNSUBSCRIBED,
                 'updated_at' => time()
             ]);
+    }
+
+    /**
+     * 获取当前的场景
+     * @param $openid
+     * @return SceneInterface
+     * @throws \Exception
+     */
+    private function getScene($openid) {
+        return cache()->get(sprintf('wx_scene_%s_%s', $this->model->id, $openid));
     }
 }
