@@ -74,6 +74,15 @@ class MessageReply {
     }
 
     /**
+     * 获取openid
+     * @return string
+     * @throws \Exception
+     */
+    public function getOpenId() {
+        return $this->message->getFrom();
+    }
+
+    /**
      * @return MessageResponse
      */
     public function getResponse(): MessageResponse {
@@ -179,7 +188,7 @@ class MessageReply {
 
 
     public function id() {
-        return sprintf('wx_scene_%s_%s', $this->model->id, $this->message->getFrom());
+        return sprintf('wx_scene_%s_%s', $this->model->id, $this->getOpenId());
     }
 
     /**

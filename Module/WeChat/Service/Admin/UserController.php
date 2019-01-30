@@ -17,7 +17,7 @@ class UserController extends Controller {
     public function indexAction($backlist = null) {
         $model_list = FansModel::with('user')->where('wid', $this->weChatId())
             ->when(!empty($backlist), function ($query) {
-                $query->where('is_back', 1);
+                $query->where('is_black', 1);
             })->page();
         return $this->show(compact('model_list'));
     }
@@ -64,6 +64,7 @@ class UserController extends Controller {
         $user = UserModel::findOrNew($fans->id);
         $user->set([
             'id' => $fans->id,
+            'openid' => $info['openid'],
             'nickname' => $info['nickname'],
             'sex' => $info['sex'],
             'city' => $info['city'],

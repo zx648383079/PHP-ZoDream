@@ -30,7 +30,7 @@ class MessageController extends Controller {
             return $message->getResponse();
         }
         $reply->setMessage($message, $message->getResponse());
-        return $reply->reply();
+        return $this->bindEvent($reply)->reply();
     }
 
     /**

@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * 微信公众号用户资料表
  * 从公众号中拉取的数据可以保存在此表
  * @property integer $id
+ * @property string $openid
  * @property string $nickname
  * @property integer $sex
  * @property string $city
@@ -31,6 +32,7 @@ class UserModel extends Model {
 
     protected function rules() {
         return [
+            'openid' => 'required|string:0,50',
             'nickname' => 'required|string:0,20',
             'sex' => 'required|int:0,9',
             'city' => 'required|string:0,40',
@@ -52,6 +54,7 @@ class UserModel extends Model {
     public function labels() {
         return [
             'id' => '粉丝ID',
+            'openid' => '微信ID',
             'nickname' => '昵称',
             'sex' => '性别',
             'city' => '所在城市',

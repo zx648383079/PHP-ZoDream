@@ -112,7 +112,7 @@ class CreateWeChatTables extends Migration {
             $table->set('openid')->varchar(50)->notNull()->comment('微信ID');
             $table->set('status')->bool()->defaultVal(FansModel::STATUS_SUBSCRIBED)
                 ->comment('关注状态');
-            $table->set('is_back')->bool()->defaultVal(0)->comment('是否是黑名单');
+            $table->set('is_black')->bool()->defaultVal(0)->comment('是否是黑名单');
             $table->timestamps();
         });
     }
@@ -123,6 +123,7 @@ class CreateWeChatTables extends Migration {
         // 公众号粉丝详情表
         Schema::createTable(UserModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai()->comment('粉丝ID');
+            $table->set('openid')->varchar(50)->notNull()->comment('微信ID');
             $table->set('nickname')->varchar(20)->notNull()->comment('昵称');
             $table->set('sex')->bool()->unsigned()->notNull()->defaultVal(0)->comment('性别');
             $table->set('city')->varchar(40)->notNull()->comment('所在城市');

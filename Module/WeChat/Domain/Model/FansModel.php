@@ -11,7 +11,7 @@ use Zodream\ThirdParty\WeChat\User;
  * @property integer $wid
  * @property string $openid
  * @property integer $status
- * @property integer $is_back
+ * @property integer $is_black
  * @property integer $created_at
  * @property integer $updated_at
  * @property WeChatModel $wechat
@@ -43,7 +43,7 @@ class FansModel extends Model {
             'wid' => 'required|int',
             'openid' => 'required|string:0,50',
             'status' => 'required|int:0,9',
-            'is_back' => 'required|int:0,9',
+            'is_black' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -55,7 +55,7 @@ class FansModel extends Model {
             'wid' => '所属微信公众号ID',
             'openid' => '微信ID',
             'status' => '关注状态',
-            'is_back' => '是否是黑名单',
+            'is_black' => '是否是黑名单',
             'created_at' => '关注时间',
             'updated_at' => '修改时间',
         ];
@@ -117,12 +117,13 @@ class FansModel extends Model {
     public function updateUser($force = false) {
         $user = $this->user;
         if (!$user || $force) {
-            $wechat = $this->wechat;
+            $model = $this->wechat;
             $user = new UserModel();
-            $data = $wechat->sdk(User::class)->userInfo($this->openid);
+            $data = $model->sdk(User::class)->userInfo($this->openid);
             if ($data) {
                 $user->set([
                     'id' => $this->id,
+                    'openid' => $this->openid,
                     'nickname' => $data['nickname'],
                     'sex' => $data['sex'],
                     'city' => $data['city'],
