@@ -18,14 +18,18 @@ abstract class BaseScene implements SceneInterface {
         Module::reply()->saveScene($this);
     }
 
-    public function setAttribute($key, $value = null) {
-        parent::setAttribute($key, $value);
+    public function set($key, $value = null) {
+        $this->setAttribute($key, $value);
         $this->save();
         return $this;
     }
 
     public function __invoke($content) {
         return $this->process($content);
+    }
+
+    public function __set($attribute, $value) {
+        $this->set($attribute, $value);
     }
 
 }

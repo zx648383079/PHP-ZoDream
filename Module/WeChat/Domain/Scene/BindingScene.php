@@ -27,6 +27,12 @@ class BindingScene extends BaseScene implements SceneInterface {
                 'content' => '您已被禁止进行绑定，请24小时后重试'
             ]);
         }
+        if (!$this->checkBinding()) {
+            return new ReplyModel([
+                'type' => ReplyModel::TYPE_TEXT,
+                'content' => '您已绑定了其他账号，如需继续，请先解绑'
+            ]);
+        }
         $this->save();
         return new ReplyModel([
             'type' => ReplyModel::TYPE_TEXT,
@@ -67,17 +73,17 @@ class BindingScene extends BaseScene implements SceneInterface {
         }
         $openid = Module::reply()->getOpenId();
         $nickname = WxUserModel::where('openid', $openid)->value('nickname');
-        OAuthModel::bindUser($user, $openid,
-            OAuthModel::TYPE_WX, $nickname);
+        $auth = OAuthModel::bindUser($user, $openid,
+            OAuthModel::TYPE_WX, $nickname.'');
         $this->leave();
         return new ReplyModel([
             'type' => ReplyModel::TYPE_TEXT,
-            'content' => '绑定成功'
+            'content' => empty($auth) ? '绑定失败，请重试' : '绑定成功'
         ]);
     }
 
     private function checkName($name) {
-        $user = UserModel::findByName($name);
+        $user = UserModel::findByEmail($name);
         if (empty($user)) {
             $this->failure ++;
             return new ReplyModel([
@@ -90,6 +96,16 @@ class BindingScene extends BaseScene implements SceneInterface {
             'type' => ReplyModel::TYPE_TEXT,
             'content' => '请输入密码'
         ]);
+    }
+
+    /**
+     * 判断是否已经绑定了其他账号
+     * @return bool
+     * @throws \Exception
+     */
+    private function checkBinding() {
+        $user = OAuthModel::findUser(Module::reply()->getOpenId(), OAuthModel::TYPE_WX);
+        return empty($user);
     }
 
     private function unbinding() {
@@ -115,7 +131,7 @@ class BindingScene extends BaseScene implements SceneInterface {
     }
 
     private function canEnter() {
-        return cache()->has($this->failureId());
+        return !cache()->has($this->failureId());
     }
 
     private function disableEnter() {
