@@ -31,6 +31,13 @@ class BindingScene extends BaseScene implements SceneInterface {
     }
 
     public function process($content) {
+        if (in_array($content, ['退出', 'exit'])) {
+            $this->leave();
+            return new ReplyModel([
+                'type' => ReplyModel::TYPE_TEXT,
+                'content' => '您已终止了绑定操作'
+            ]);
+        }
         if (empty($this->name)) {
             $this->name = $content;
             $this->save();

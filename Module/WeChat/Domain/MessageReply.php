@@ -7,10 +7,14 @@ use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Scene\SceneInterface;
 use Zodream\Infrastructure\Pipeline\InterruptibleProcessor;
 use Zodream\Infrastructure\Pipeline\PipelineBuilder;
+use Zodream\Infrastructure\Traits\EventTrait;
+use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 
 class MessageReply {
+
+    use EventTrait;
 
     /**
      * @var Message
@@ -39,10 +43,48 @@ class MessageReply {
     }
 
     /**
+     * 回复
+     * @return MessageResponse
+     */
+    public function reply() {
+        $this->on([EventEnum::ScanSubscribe, EventEnum::Subscribe],
+            function() {
+                $this->replyEvent(EventEnum::Subscribe);
+            })->on(EventEnum::Message,
+            function()  {
+                $this->replyMessage($this->message->content);
+            })->on(EventEnum::UnSubscribe,
+            function()  {
+                $this->replyEvent(EventEnum::UnSubscribe);
+            })->on(EventEnum::Click,
+            function(Message $message) {
+                if (!empty($message->eventKey)
+                    && strpos($message->eventKey, 'menu_') === 0) {
+                    $this->replyMenu(substr($message->eventKey, 5));
+                }
+            })->invoke($this->message->getEvent(), [$this->message, $this->response, $this]);
+        return $this->response;
+    }
+
+    /**
      * @return Message
      */
     public function getMessage(): Message {
         return $this->message;
+    }
+
+    /**
+     * @return MessageResponse
+     */
+    public function getResponse(): MessageResponse {
+        return $this->response;
+    }
+
+    /**
+     * @return WeChatModel
+     */
+    public function getModel(): WeChatModel {
+        return $this->model;
     }
 
     /**

@@ -1,12 +1,13 @@
 <?php
 namespace Module\WeChat\Service;
 
+use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Module;
+use Zodream\ThirdParty\WeChat\AccessToken;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
-use Zodream\ThirdParty\WeChat\MessageResponse;
 
 class MessageController extends Controller {
 
@@ -16,7 +17,7 @@ class MessageController extends Controller {
     protected $model;
 
     public function indexAction($id) {
-        Module::reply()->setModel($this->model = WeChatModel::find($id));
+        $reply = Module::reply()->setModel($this->model = WeChatModel::find($id));
         $message = $this->model->sdk(Message::class);
         if ($message->isValid()) {
             // 准备接入
@@ -25,31 +26,25 @@ class MessageController extends Controller {
             $message->valid();
         }
         // 可以通过ip 和 $this->model->original === $message->getTo() 验证真实性
-        return $this->bindEvent($message)->run();
+        if (!$message->verifyServer($this->model->original)) {
+            return $message->getResponse();
+        }
+        $reply->setMessage($message, $message->getResponse());
+        return $reply->reply();
     }
 
     /**
      * 绑定事件
-     * @param Message $message
-     * @return Message
+     * @param MessageReply $reply
+     * @return MessageReply
      */
-    protected function bindEvent(Message $message) {
-        return $message->on([EventEnum::ScanSubscribe, EventEnum::Subscribe],
-            function(Message $message, MessageResponse $response) {
+    protected function bindEvent(MessageReply $reply) {
+        return $reply->on([EventEnum::ScanSubscribe, EventEnum::Subscribe],
+            function(Message $message) {
                 $this->subscribe($message->getFrom());
-                Module::reply()->setMessage($message, $response)->replyEvent(EventEnum::Subscribe);
-        })->on(EventEnum::Message,
-            function(Message $message, MessageResponse $response)  {
-                Module::reply()->setMessage($message, $response)->replyMessage($message->content);
         })->on(EventEnum::UnSubscribe,
-            function(Message $message, MessageResponse $response)  {
+            function(Message $message)  {
                 $this->unsubscribe($message->getFrom());
-                Module::reply()->setMessage($message, $response)->replyEvent(EventEnum::UnSubscribe);
-        })->on(EventEnum::Click,
-            function(Message $message, MessageResponse $response) {
-                if (!empty($message->eventKey) && strpos($message->eventKey, 'menu_') === 0) {
-                    Module::reply()->setMessage($message, $response)->replyMenu(substr($message->eventKey, 5));
-                }
         });
     }
 
