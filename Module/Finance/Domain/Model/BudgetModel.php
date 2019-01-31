@@ -128,17 +128,23 @@ class BudgetModel extends Model {
     }
 
     public function getLogByWeek() {
-        $start_at = date('Y-01-01 00:00:00');
+        $month = date('m');
+        $start_at = sprintf('%s-01-01 00:00:00', date('Y') - ($month > 5 ? 0  : 1));
         $end_at = date('Y-12-31 00:00:00');
         $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%u', 'week')->pluck('money', 'week');
-        return self::getLinkUpLog($log_list, date('YW'));
+        return self::getLinkUpLog($log_list, date('YW'), function ($i) {
+            return ($i % 100 >= 53 ? ceil($i / 100) * 100 : $i) + 1;
+        });
     }
 
     public function getLogByMonth() {
-        $start_at = date('Y-01-01 00:00:00');
+        $month = date('m');
+        $start_at = sprintf('%s-01-01 00:00:00', date('Y') - ($month > 5 ? 1  : 2));
         $end_at = date('Y-12-31 00:00:00');
         $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%m', 'month')->pluck('money', 'month');
-        return self::getLinkUpLog($log_list, date('Ym'));
+        return self::getLinkUpLog($log_list, date('Ym'), function ($i) {
+            return ($i % 100 >= 12 ? ceil($i / 100) * 100 : $i) + 1;
+        });
     }
 
     public function getLogByYear() {
@@ -146,9 +152,14 @@ class BudgetModel extends Model {
         return self::getLinkUpLog($log_list, date('Y'));
     }
 
-    public static function getLinkUpLog($log_list, $max) {
+    public static function getLinkUpLog($log_list, $max, callable $next = null) {
         if (empty($log_list)) {
             return [];
+        }
+        if (empty($next)) {
+            $next = function ($i) {
+                return $i + 1;
+            };
         }
         $i = min(array_keys($log_list));
         $length = max(array_keys($log_list));
@@ -156,8 +167,9 @@ class BudgetModel extends Model {
             $length = $max;
         }
         $data = [];
-        for (; $i <= $length; $i++) {
+        for (; $i <= $length;) {
             $data[$i] = isset($log_list[$i]) ? abs($log_list[$i]) : 0;
+            $i = $next($i);
         }
         return $data;
     }
