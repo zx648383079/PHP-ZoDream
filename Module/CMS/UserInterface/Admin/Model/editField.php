@@ -17,6 +17,7 @@ $this->registerJs($js);
     <?=Form::text('name', true)?>
     <?=Form::text('field', true)?>
     <?=Form::radio('is_main', ['否', '是'])?>
+    <?php if($model->is_system < 1):?>
     <?=Form::select('type', $model->type_list)?>
     <div class="option-box">
 
@@ -27,6 +28,7 @@ $this->registerJs($js);
     <?=Form::text('tip_message')?>
     <?=Form::text('error_message')?>
     <?=Form::text('position')?>
+    <?php endif;?>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
     <input type="hidden" name="model_id" value="<?=$model->model_id?>">

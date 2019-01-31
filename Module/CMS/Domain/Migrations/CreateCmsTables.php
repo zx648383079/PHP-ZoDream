@@ -19,13 +19,16 @@ class CreateCmsTables extends Migration {
             $table->set('name')->varchar(100)->notNull();
             $table->set('field')->varchar(100)->notNull();
             $table->set('model_id')->int()->notNull();
-            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('type')->varchar(20)->defaultVal('text');
             $table->set('length')->tinyint(3);
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('form_type')->tinyint(3)->defaultVal(0);
             $table->set('is_main')->bool()->defaultVal(0);
             $table->set('is_required')->bool()->defaultVal(1);
             $table->set('is_default')->bool()->defaultVal(0);
+            $table->set('is_disable')->bool()->defaultVal(0)->comment('禁用/启用');
+            $table->set('is_system')->bool()->defaultVal(0)
+                ->comment('系统自带禁止删除');
             $table->set('match')->varchar();
             $table->set('tip_message')->varchar();
             $table->set('error_message')->varchar();

@@ -38,7 +38,7 @@ $this->registerCssFile([
     [
         '模块管理',
         false,
-        'fa fa-files-o',
+        'fa fa-cubes',
         [
             [
                 '栏目',
@@ -61,7 +61,7 @@ $this->registerCssFile([
     [
         '内容管理',
         false,
-        'fa fa-files-o',
+        'fa fa-file',
         $cat_menu
     ]
 ], 'ZoDream CMS Admin') ?>

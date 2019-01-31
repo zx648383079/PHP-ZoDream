@@ -27,11 +27,19 @@ $this->title = '模块字段列表';
                             <?=$item->field?>
                         </td>
                         <td>
-                            <?=$item->field?>
+                            <?=$item->type_list[$item->type]?>
                         </td>
                         <td>
                             <a class="btn btn-default" href="<?=$this->url('./admin/model/edit_field', ['id' => $item->id])?>">编辑</a>
+                            <?php if($item->is_disable > 0):?>
+                            <a class="btn btn-primary" data-type="ajax" href="<?=$this->url('./admin/model/toggle_field', ['id' => $item->id, 'name' => 'is_disable'])?>">启用</a>
+                            <?php else:?>
+                            <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/model/toggle_field', ['id' => $item->id, 'name' => 'is_disable'])?>" data-tip="确定禁用此字段，禁用后将不能进行插入及更新">禁用</a>
+                            <?php endif;?>
+                            
+                            <?php if($item->is_system < 1):?>
                             <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/model/delete_field', ['id' => $item->id])?>">删除</a>
+                            <?php endif;?>
                         </td>
                     </tr>
                 <?php endforeach?>

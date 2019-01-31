@@ -39,13 +39,13 @@ class ModelModel extends BaseModel {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'table' => 'Table',
-            'type' => 'Type',
-            'position' => 'Position',
-            'category_template' => 'Category Template',
-            'list_template' => 'List Template',
-            'show_template' => 'Show Template',
+            'name' => '名称',
+            'table' => '表名',
+            'type' => '类型',
+            'position' => '排序',
+            'category_template' => '分类模板',
+            'list_template' => '列表模板',
+            'show_template' => '详情模板',
             'setting' => 'Setting',
         ];
     }
@@ -66,19 +66,5 @@ class ModelModel extends BaseModel {
         return $data;
     }
 
-    public function getContentExtendTable() {
-        return new Table(static::getExtendTable($this->table));
-    }
 
-    public function getContentExtendQuery() {
-        return (new Query())->from(static::getExtendTable($this->table));
-    }
-
-
-    public function createTable() {
-        $table = $this->getContentExtendTable();
-        $table->set('id')->int(10)->pk()->ai();
-        $table->set('content')->mediumtext();
-        return $table->create();
-    }
 }

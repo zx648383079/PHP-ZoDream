@@ -21,8 +21,13 @@ $this->title = 'ZoDream';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
-                <td><?=$item->goods_count?></td>
+                <td>
+                    <?php if($item['level'] > 0):?>
+                    <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
+                    <?php endif;?>
+                    <a href="<?=$this->url('./admin/content', ['cat_id' => $item['id']])?>"><?=$item['name']?></a>
+                </td>
+                <td></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/goods', ['cat_id' => $item->id])?>">查看</a>

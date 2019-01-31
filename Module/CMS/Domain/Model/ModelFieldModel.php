@@ -4,16 +4,19 @@ use Module\CMS\Domain\Fields\BaseField;
 use Zodream\Helpers\Str;
 
 /**
- * Class ContentModel
- * @package Domain\Model\CMS
+ *
  * @property integer $id
  * @property string $name
  * @property string $field
  * @property integer $model_id
- * @property integer $type
+ * @property string $type
  * @property integer $length
  * @property integer $position
  * @property integer $form_type
+ * @property integer $is_main
+ * @property integer $is_required
+ * @property integer $is_default
+ * @property integer $is_system
  * @property string $match
  * @property string $tip_message
  * @property string $error_message
@@ -37,6 +40,8 @@ class ModelFieldModel extends BaseModel {
         'number' => '数字字段',
         'date' => '日期时间',
         'file' => '单文件',
+        'image' => '单图',
+        'images' => '多图',
         'files' => '多文件',
         'linkage' => '联动菜单'
     ];
@@ -54,10 +59,14 @@ class ModelFieldModel extends BaseModel {
             'name' => 'required|string:0,100',
             'field' => 'required|string:0,100',
             'model_id' => 'required|int',
-            'type' => 'int:0,9',
+            'type' => 'string:0,20',
             'length' => 'int:0,999',
             'position' => 'int:0,999',
             'form_type' => 'int:0,999',
+            'is_main' => 'int:0,9',
+            'is_required' => 'int:0,9',
+            'is_default' => 'int:0,9',
+            'is_system' => 'int:0,9',
             'match' => 'string:0,255',
             'tip_message' => 'string:0,255',
             'error_message' => 'string:0,255',
@@ -75,60 +84,18 @@ class ModelFieldModel extends BaseModel {
             'is_main' => '主表',
             'length' => '长度',
             'position' => '排序',
-            'form_type' => 'Form Type',
+            'form_type' => '表单类型',
             'is_required' => '是否必填',
+            'is_default' => '默认值',
+            'is_system' => '系统字段',
             'match' => '匹配规则',
             'tip_message' => '提示信息',
             'error_message' => '错误提示',
-            'setting' => 'Setting',
+            'setting' => '其他设置',
         ];
     }
 
     public function model() {
         return $this->hasOne(ModelModel::class, 'id', 'model_id');
-    }
-
-    public function insert() {
-        parent::insert();
-        $table = $this->model->getContentExtendTable();
-        $table->set($this->field)->comment($this->name);
-        return $table->alert();
-    }
-
-    public function update() {
-        parent::update();
-        $table = $this->model->getContentExtendTable();
-        $table->set($this->field)->setOldField($this->__oldAttributes['field'])->comment($this->name);
-        return $table->alert();
-    }
-
-    public function delete($where = null, $parameters = array()) {
-        parent::delete($where, $parameters);
-        $table = $this->model->getContentExtendTable();
-        $table->set($this->field);
-        return $table->dropColumn();
-    }
-
-    public function validateValue($value) {
-        return true;
-    }
-
-    public function toInput($value = null) {
-        return '';
-    }
-
-    /**
-     * @param $type
-     * @return BaseField
-     * @throws \Exception
-     */
-    public static function newField($type) {
-        $class = 'Module\CMS\Domain\Fields\\'.Str::studly($type);
-        if (class_exists($class)) {
-            return new $class;
-        }
-        throw new \Exception(
-            __('Field not exist!')
-        );
     }
 }

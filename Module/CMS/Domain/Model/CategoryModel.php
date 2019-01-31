@@ -1,6 +1,8 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
+use Zodream\Html\Tree;
+
 /**
  * Class ContentModel
  * @package Domain\Model\CMS
@@ -60,21 +62,21 @@ class CategoryModel extends BaseModel {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'title' => 'Title',
-            'type' => 'Type',
-            'model_id' => 'Model Id',
-            'parent_id' => 'Parent Id',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
-            'image' => 'Image',
-            'content' => 'Content',
-            'url' => 'Url',
-            'position' => 'Position',
-            'is_menu' => 'Is Menu',
-            'category_template' => 'Category Template',
-            'list_template' => 'List Template',
-            'show_template' => 'Show Template',
+            'name' => '目录名',
+            'title' => '名称',
+            'type' => '类型',
+            'model_id' => '模型',
+            'parent_id' => '上级',
+            'keywords' => '关键词',
+            'description' => '简介',
+            'image' => '图片',
+            'content' => '内容',
+            'url' => '链接',
+            'position' => '排序',
+            'is_menu' => '导航栏',
+            'category_template' => '分类模板',
+            'list_template' => '列表模板',
+            'show_template' => '详情模板',
             'setting' => 'Setting',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -87,5 +89,13 @@ class CategoryModel extends BaseModel {
 
     public function getUrl() {
         return $this->url;
+    }
+
+    /**
+     * @return Tree
+     * @throws \Exception
+     */
+    public static function tree() {
+        return new Tree(static::query()->all());
     }
 }

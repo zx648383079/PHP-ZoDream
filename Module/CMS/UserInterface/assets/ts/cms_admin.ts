@@ -1,9 +1,3 @@
-// $(function() {
-//     $('.left-catelog .left-catelog-toggle').click(function() {
-//         $(this).parents('.left-catelog').toggleClass('expand');
-//     });
-// });
-
 function bindField(baseUri: string) {
     $("#type").change(function() {
         $.get(baseUri, {
@@ -13,4 +7,8 @@ function bindField(baseUri: string) {
             $(".option-box").html(html);
         });
     }).trigger('change');
+}
+
+function bindCat(baseUri: string) {
+    
 }

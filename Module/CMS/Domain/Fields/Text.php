@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
 
 class Text extends BaseField {
@@ -54,5 +55,10 @@ class Text extends BaseField {
     public function output($value)
     {
         // TODO: Implement output() method.
+    }
+
+    public function converterField(Column $column, ModelFieldModel $field)
+    {
+        // TODO: Implement converterField() method.
     }
 }

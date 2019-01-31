@@ -3,9 +3,11 @@ namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Zodream\Database\Schema\Column;
 
 abstract class BaseField {
 
+    abstract public function converterField(Column $column, ModelFieldModel $field);
 
     abstract public function options(ModelFieldModel $field);
 
