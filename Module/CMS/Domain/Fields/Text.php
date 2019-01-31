@@ -8,9 +8,7 @@ use Zodream\Html\Dark\Theme;
 
 class Text extends BaseField {
 
-    public function options(ModelFieldModel $field)
-    {
-
+    public function options(ModelFieldModel $field) {
         return implode('', [
             Theme::text('setting[option][width]', '', '宽度'),
             Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
@@ -22,43 +20,14 @@ class Text extends BaseField {
         ]);
     }
 
-    public function add($name, $options)
-    {
-        // TODO: Implement add() method.
-    }
 
-    public function edit($name, $options)
-    {
-        // TODO: Implement edit() method.
-    }
 
-    public function drop($name)
-    {
-        // TODO: Implement drop() method.
-    }
-
-    public function set(ModelFieldModel $field)
-    {
-        // TODO: Implement set() method.
-    }
-
-    public function get($name, ContentModel $model)
-    {
-        // TODO: Implement get() method.
-    }
-
-    public function input()
-    {
-        // TODO: Implement input() method.
-    }
-
-    public function output($value)
-    {
-        // TODO: Implement output() method.
-    }
-
-    public function converterField(Column $column, ModelFieldModel $field)
-    {
+    public function converterField(Column $column, ModelFieldModel $field) {
         // TODO: Implement converterField() method.
+    }
+
+    public function toInput($value, ModelFieldModel $field) {
+        return Theme::text($field->field, $value, $field->name, null,
+            $field->is_required > 0);
     }
 }

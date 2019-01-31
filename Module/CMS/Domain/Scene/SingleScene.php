@@ -1,8 +1,8 @@
 <?php
 namespace Module\CMS\Domain\Scene;
 
-
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Zodream\Database\DB;
 use Zodream\Database\Schema\Table;
 
 class SingleScene extends BaseScene {
@@ -122,26 +122,65 @@ class SingleScene extends BaseScene {
         return $table->dropColumn();
     }
 
-    public function insert(array $data) {
-        // TODO: Implement insert() method.
+    public function insert(array $data, array $field_list) {
+        list($main, $extend) = $this->filterInput($data, $field_list);
+        $main['updated_at'] = $main['created_at'] = time();
+        $main['cat_id'] = intval($data['cat_id']);
+        $id = DB::table($this->getMainTable())->insert($main);
+        $extend['id'] = $id;
+        DB::table($this->getExtendTable())->insert($extend);
     }
 
-    public function update($id, array $data)
-    {
-        // TODO: Implement update() method.
+    public function update($id, array $data, array $field_list) {
+        list($main, $extend) = $this->filterInput($data, $field_list);
+        $main['updated_at'] = time();
+        DB::table($this->getMainTable())
+            ->where('id', $id)->update($main);
+        if (!empty($extend)) {
+            DB::table($this->getExtendTable())
+                ->where('id', $id)->update($extend);
+        }
     }
 
-    public function remove($id)
-    {
-        // TODO: Implement remove() method.
+    public function remove($id) {
+        DB::table($this->getMainTable())
+            ->where('id', $id)->delete();
+        DB::table($this->getExtendTable())
+            ->where('id', $id)->delete();
     }
 
-    public function search($keywords, $page = 1, $per_page = 20, $fields = null)
-    {
-        // TODO: Implement search() method.
+    /**
+     * @param $keywords
+     * @param $cat_id
+     * @param int $page
+     * @param int $per_page
+     * @param null $fields
+     * @return \Zodream\Html\Page
+     * @throws \Exception
+     */
+    public function search($keywords, $cat_id, $page = 1, $per_page = 20, $fields = null) {
+        if (empty($fields)) {
+            $fields = '*';
+        }
+        return DB::table($this->getMainTable())->when(!empty($keywords), function ($query) use ($keywords) {
+            $query->where('title', 'like', '%'.$keywords.'%');
+        })->when($cat_id > 0, function ($query) use ($cat_id) {
+            $query->where('cat_id', $cat_id);
+        })->select($fields)->page($per_page);
     }
 
     public function find($id) {
-        // TODO: Implement find() method.
+        if ($id < 1) {
+            return [];
+        }
+        $data = DB::table($this->getMainTable())
+            ->where('id', $id)->one();
+        if (empty($data)) {
+            return [];
+        }
+        $extend = DB::table($this->getExtendTable())->where('id', $id)
+            ->one();
+        // 主表数据更重要
+        return array_merge((array)$extend, $data);
     }
 }

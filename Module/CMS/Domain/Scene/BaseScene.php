@@ -23,6 +23,34 @@ abstract class BaseScene implements SceneInterface {
     }
 
 
+    public function toInput(ModelFieldModel $field, array $data) {
+        if ($field->is_disable > 0) {
+            return null;
+        }
+        return self::newField($field->type)->toInput(isset($data[$field->field])
+            ? $data[$field->field] : '', $field);
+    }
+
+    /**
+     * @param array $data
+     * @param ModelFieldModel[] $field_list
+     * @return array [main, extend]
+     * @throws \Exception
+     */
+    public function filterInput(array $data, array $field_list) {
+        $extend = $main = [];
+        foreach ($field_list as $field) {
+            $value = static::newField($field->type)->filterInput(isset($data[$field->field]) ? $data[$field->field]
+                : null, $field);
+            if ($field->is_main > 0) {
+                $main[$field->field] = $value;
+                continue;
+            }
+            $extend[$field->field] = $value;
+        }
+        return [$main, $extend];
+    }
+
     /**
      * @param $type
      * @return BaseField

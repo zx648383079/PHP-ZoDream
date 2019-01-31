@@ -1,0 +1,15 @@
+<?php
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+$this->title = '填写表单';
+?>
+<form data-type="ajax" action="<?=$this->url('./form/save')?>" method="post" class="form-table" role="form">
+    <?php foreach($field_list as $item):?>
+        <?=$scene->toInput($item)?>
+    <?php endforeach;?>
+    
+    <button type="submit" class="btn btn-success">确认提交</button>
+    <a class="btn btn-danger" href="javascript:history.go(-1);">取消提交</a>
+    <input type="hidden" name="id" value="<?=$model->id?>">
+</form>

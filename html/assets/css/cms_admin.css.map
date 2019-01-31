@@ -1,1 +1,1 @@
-{"version":3,"names":[],"mappings":"","sources":["cms_admin.scss"],"sourcesContent":[""],"file":"cms_admin.css"}
+{"version":3,"sources":["cms_admin.scss"],"names":[],"mappings":"AAAA;EAEQ,sBAAqB,EACxB","file":"cms_admin.css","sourcesContent":[".search {\r\n    .form-horizontal {\r\n        display: inline-block;\r\n    }\r\n}\r\n"]}

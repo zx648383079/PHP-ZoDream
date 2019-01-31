@@ -5,6 +5,7 @@ use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
+use Zodream\Service\Factory;
 
 class Editor extends BaseField {
 
@@ -17,42 +18,47 @@ class Editor extends BaseField {
         ]);
     }
 
-    public function add($name, $options)
-    {
-        // TODO: Implement add() method.
-    }
-
-    public function edit($name, $options)
-    {
-        // TODO: Implement edit() method.
-    }
-
-    public function drop($name)
-    {
-        // TODO: Implement drop() method.
-    }
-
-    public function set(ModelFieldModel $field)
-    {
-        // TODO: Implement set() method.
-    }
-
-    public function get($name, ContentModel $model)
-    {
-        // TODO: Implement get() method.
-    }
-
-    public function input()
-    {
-        // TODO: Implement input() method.
-    }
-
-    public function output($value)
-    {
-        // TODO: Implement output() method.
-    }
 
     public function converterField(Column $column, ModelFieldModel $field) {
         return $column->mediumtext()->comment($field->name);
+    }
+
+    public function toInput($value, ModelFieldModel $field) {
+        $options = $this->getEditorOptions();
+        $id = 'editor_'.$field->id;
+        $js = <<<JS
+var ue = UE.getEditor('{$id}', {$options});
+JS;
+        Factory::view()->registerJsFile('/assets/ueditor/ueditor.config.js')
+            ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
+        return <<<HTML
+<script id="{$id}" style="height: 400px" name="{$field->field}" type="text/plain">
+    {$value}
+</script>
+HTML;
+
+    }
+
+    private function getEditorOptions($mode = 0) {
+        if ($mode < 1) {
+            return '{}';
+        }
+        return json_encode([
+            'toolbars' => [
+                [
+                    'fullscreen',
+                    'source',
+                    'undo',
+                    'redo',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'customstyle',
+                    'link',
+                    'simpleupload',
+                    'insertvideo',
+                ]
+            ]
+        ]);
     }
 }

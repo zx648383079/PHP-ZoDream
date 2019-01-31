@@ -27,12 +27,14 @@ $this->title = 'ZoDream';
         <tbody>
         <?php foreach($model_list as $item):?>
             <tr>
-                <td><?=$item->id?></td>
-                <td><?=$item->title?></td>
+                <td><?=$item['id']?></td>
                 <td>
-                    <?php if ($item->category):?>
-                        <a href="<?=$this->url('./admin/content', ['cat_id' => $item->cat_id])?>">
-                            <?=$item->category->name?>
+                    <a href="<?=$this->url('./content', ['cat_id' => $item['cat_id'], 'id' => $item['id']])?>" target="_blank"><?=$item['title']?></a>
+                </td>
+                <td>
+                    <?php if ($cat):?>
+                        <a href="<?=$this->url('./admin/content', ['cat_id' => $cat->id])?>">
+                            <?=$cat->name?>
                         </a>
                     <?php else:?>
                     [未分类]
@@ -40,8 +42,8 @@ $this->title = 'ZoDream';
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/content/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/content/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id']])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/content/delete', ['id' => $item['id'], 'cat_id' => $item['cat_id']])?>">删除</a>
                     </div>
                 </td>
             </tr>

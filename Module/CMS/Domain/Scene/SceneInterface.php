@@ -50,13 +50,13 @@ interface SceneInterface {
      */
     public function removeField(ModelFieldModel $field);
 
-    public function insert(array $data);
+    public function insert(array $data, array $field_list);
 
-    public function update($id, array $data);
+    public function update($id, array $data, array $field_list);
 
     public function remove($id);
 
-    public function search($keywords, $page = 1, $per_page = 20, $fields = null);
+    public function search($keywords, $cat_id, $page = 1, $per_page = 20, $fields = null);
 
     public function find($id);
 
