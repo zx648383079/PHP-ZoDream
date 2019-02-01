@@ -124,7 +124,18 @@ class BudgetModel extends Model {
         $start_at = date('Y-m-01 00:00:00');
         $end_at = date('Y-m-31 00:00:00');
         $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate()->pluck('money', 'day');
-        return self::getLinkUpLog($log_list, date('Ymd'));
+        return self::getLinkUpLog($log_list, date('Ymd'), function ($i) {
+            $y = floor($i / 10000);
+            $m = floor($i % 10000 / 100);
+            $d = $i % 100;
+            if ($d < 28) {
+                return $i + 1;
+            }
+            if (date('t', strtotime(sprintf('%s-%s-1', $y, $m))) > $d) {
+                return $i + 1;
+            }
+            return $m > 11 ? ($y + 1) * 10000 + 101 : ($y * 10000 + ($m + 1) * 100 + 1);
+        });
     }
 
     public function getLogByWeek() {
