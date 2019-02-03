@@ -74,20 +74,26 @@ class OAuthModel extends Model {
         ]);
     }
 
+    public static function findUserId($identifier,
+                                      $type = self::TYPE_QQ) {
+        return (int)static::where('vendor', $type)
+            ->where('identity', $identifier)->value('user_id');
+    }
+
     /**
      * 根据第三方授权令牌登录
      * @param string $identifier
      * @param string $type
      * @return bool|UserModel
+     * @throws \Exception
      */
     public static function findUser($identifier,
                                     $type = self::TYPE_QQ) {
-        $model = static::where('vendor', $type)
-            ->where('identity', $identifier)->one();
-        if (empty($model)) {
-            return false;
+        $user_id = static::findUserId($identifier, $type);
+        if ($user_id < 1) {
+            return null;
         }
-        return $model->user;
+        return UserModel::find($user_id);
     }
 
     /**

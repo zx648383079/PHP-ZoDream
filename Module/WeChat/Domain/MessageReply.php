@@ -1,6 +1,8 @@
 <?php
 namespace Module\WeChat\Domain;
 
+use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -30,6 +32,9 @@ class MessageReply {
      * @var WeChatModel
      */
     protected $model;
+
+    private $user = -1;
+    private $user_id = -1;
 
     public function setModel(WeChatModel $model) {
         $this->model = $model;
@@ -80,6 +85,32 @@ class MessageReply {
      */
     public function getOpenId() {
         return $this->message->getFrom();
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function getUserId(): int {
+        if ($this->user_id === -1) {
+            $this->user_id = OAuthModel::findUserId($this->getOpenId(), OAuthModel::TYPE_WX);
+        }
+        return $this->user_id;
+    }
+
+    /**
+     * @return UserModel
+     * @throws \Exception
+     */
+    public function getUser() {
+        if ($this->user !== -1) {
+            return $this->user;
+        }
+        $user_id = $this->getOpenId();
+        if ($user_id < 1) {
+            return null;
+        }
+        return UserModel::find($user_id);
     }
 
     /**

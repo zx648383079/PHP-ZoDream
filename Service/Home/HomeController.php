@@ -1,7 +1,8 @@
 <?php
 namespace Service\Home;
 
-use Module\Template\Domain\Model\FeedbackModel;
+use Module\Template\Domain\Model\Base\FeedbackModel;
+use Module\Template\Domain\Model\Base\FriendLinkModel;
 use Zodream\Service\Factory;
 
 class HomeController extends Controller {
@@ -20,11 +21,12 @@ class HomeController extends Controller {
     }
 
     public function friendLinkAction() {
-        if (app('request')->isPost() && app('request')->has('url')) {
-            FeedbackModel::create([
+        if (app('request')->isPost()
+            && app('request')->has('url')) {
+            FriendLinkModel::create([
                 'name' =>  app('request')->get('name'),
-                'email' =>  app('request')->get('url'),
-                'content' =>  app('request')->get('brief'),
+                'url' =>  app('request')->get('url'),
+                'brief' =>  app('request')->get('brief'),
             ]);
         }
         return $this->show();

@@ -1,5 +1,5 @@
 <?php
-namespace Module\Template\Domain\Model;
+namespace Module\Template\Domain\Model\Base;
 
 use Domain\Model\Model;
 use Zodream\Database\Command;
@@ -19,7 +19,7 @@ use Zodream\Database\Command;
 */
 class OptionModel extends Model {
 	public static function tableName() {
-        return 'option';
+        return 'base_option';
     }
 
     protected function rules() {

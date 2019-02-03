@@ -1,5 +1,5 @@
 <?php
-namespace Module\Template\Domain\Model;
+namespace Module\Template\Domain\Model\Base;
 
 
 use Domain\Model\Model;
@@ -18,7 +18,7 @@ use Domain\Model\Model;
  */
 class FeedbackModel extends Model {
     public static function tableName() {
-        return 'feedback';
+        return 'base_feedback';
     }
 
     protected function rules() {

@@ -104,8 +104,7 @@ class BindingScene extends BaseScene implements SceneInterface {
      * @throws \Exception
      */
     private function checkBinding() {
-        $user = OAuthModel::findUser(Module::reply()->getOpenId(), OAuthModel::TYPE_WX);
-        return empty($user);
+        return Module::reply()->getUserId() < 1;
     }
 
     private function unbinding() {
