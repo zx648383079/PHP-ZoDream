@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property float $budget
  * @property float $spent
  * @property integer $cycle
+ * @property integer $user_id
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -33,6 +34,7 @@ class BudgetModel extends Model {
             'budget' => '',
             'spent' => '',
             'cycle' => 'int:0,9',
+            'user_id' => 'required|int',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -46,10 +48,15 @@ class BudgetModel extends Model {
             'budget' => '预算',
             'spent' => '已花费',
             'cycle' => '周期',
+            'user_id' => 'User Id',
             'deleted_at' => '删除时间',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    public function scopeAuth($query) {
+        return $query->where('user_id', auth()->id());
     }
 
     /**
@@ -77,7 +84,7 @@ class BudgetModel extends Model {
         if ($this->updated_at >= strtotime($start_at) && $this->updated_at <= strtotime($end_at)) {
             return $this->spent;
         }
-        $this->spent = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)
+        $this->spent = LogModel::time($start_at, $end_at)->where('user_id', $this->user_id)->where('budget_id', $this->id)
             ->where('type', LogModel::TYPE_EXPENDITURE)->sum('money');
         $this->save();
         return $this->spent;
@@ -123,7 +130,7 @@ class BudgetModel extends Model {
     public function getLogByDay() {
         $start_at = date('Y-m-01 00:00:00');
         $end_at = date('Y-m-31 00:00:00');
-        $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate()->pluck('money', 'day');
+        $log_list = LogModel::time($start_at, $end_at)->where('user_id', $this->user_id)->where('budget_id', $this->id)->sumByDate()->pluck('money', 'day');
         return self::getLinkUpLog($log_list, date('Ymd'), function ($i) {
             $y = floor($i / 10000);
             $m = floor($i % 10000 / 100);
@@ -142,7 +149,7 @@ class BudgetModel extends Model {
         $month = date('m');
         $start_at = sprintf('%s-01-01 00:00:00', date('Y') - ($month > 5 ? 0  : 1));
         $end_at = date('Y-12-31 00:00:00');
-        $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%u', 'week')->pluck('money', 'week');
+        $log_list = LogModel::time($start_at, $end_at)->where('user_id', $this->user_id)->where('budget_id', $this->id)->sumByDate('%Y%u', 'week')->pluck('money', 'week');
         return self::getLinkUpLog($log_list, date('YW'), function ($i) {
             return ($i % 100 >= 53 ? ceil($i / 100) * 100 : $i) + 1;
         });
@@ -152,14 +159,14 @@ class BudgetModel extends Model {
         $month = date('m');
         $start_at = sprintf('%s-01-01 00:00:00', date('Y') - ($month > 5 ? 1  : 2));
         $end_at = date('Y-12-31 00:00:00');
-        $log_list = LogModel::time($start_at, $end_at)->where('budget_id', $this->id)->sumByDate('%Y%m', 'month')->pluck('money', 'month');
+        $log_list = LogModel::time($start_at, $end_at)->where('user_id', $this->user_id)->where('budget_id', $this->id)->sumByDate('%Y%m', 'month')->pluck('money', 'month');
         return self::getLinkUpLog($log_list, date('Ym'), function ($i) {
             return ($i % 100 >= 12 ? ceil($i / 100) * 100 : $i) + 1;
         });
     }
 
     public function getLogByYear() {
-        $log_list = LogModel::sumByDate('%Y', 'year')->where('budget_id', $this->id)->pluck('money', 'year');
+        $log_list = LogModel::sumByDate('%Y', 'year')->where('user_id', $this->user_id)->where('budget_id', $this->id)->pluck('money', 'year');
         return self::getLinkUpLog($log_list, date('Y'));
     }
 

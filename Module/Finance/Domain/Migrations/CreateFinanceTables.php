@@ -28,6 +28,7 @@ class CreateFinanceTables extends Migration {
                 ->defaultVal(0)->comment('冻结金额');
             $table->set('status')->bool()->defaultVal('1')->comment('1 正常 0 删除');
             $table->set('remark')->text()->comment('备注');
+            $table->set('user_id')->int()->notNull();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -47,6 +48,7 @@ class CreateFinanceTables extends Migration {
             $table->softDeletes()->comment('1 正常 0 删除');
             $table->set('color')->bool()->defaultVal(1)->comment('1 红色（赚） 0 绿（亏）');
             $table->set('remark')->text()->comment('备注');
+            $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });
         Schema::createTable(FinancialProductModel::tableName(), function(Table $table) {
@@ -55,26 +57,29 @@ class CreateFinanceTables extends Migration {
             $table->set('name')->varchar(50)->notNull();
             $table->set('status')->bool()->defaultVal('1')->comment('1 正常 0 删除');
             $table->set('remark')->text()->comment('备注');
+            $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });
         Schema::createTable(LogModel::tableName(), function(Table $table) {
             $table->setComment('资金变动记录');
             $table->set('id')->pk()->ai();
             $table->set('type')->bool()->defaultVal('0')->comment('1 收入  0 支出');
-            $table->set('money')->decimal(10, 2)->comment('金额');
-            $table->set('frozen_money')->decimal(10, 2)->comment('冻结金额');
+            $table->set('money')->decimal(10, 2)->defaultVal(0)->comment('金额');
+            $table->set('frozen_money')->decimal(10, 2)->defaultVal(0)->comment('冻结金额');
             $table->set('account_id')->int()->notNull()->comment('资金账户');
             $table->set('channel_id')->int()->defaultVal(0)->comment('支出时填写消费渠道');
             $table->set('project_id')->int()->defaultVal(0)->comment('收入时填写理财项目');
             $table->set('budget_id')->int()->defaultVal(0)->comment('支出时选择预算');
             $table->set('remark')->text()->comment('备注');
             $table->set('happened_at')->dateTime()->notNull()->comment('发生时间');
+            $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });
         Schema::createTable(ConsumptionChannelModel::tableName(), function(Table $table) {
             $table->setComment('消费渠道');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(50)->notNull()->comment('消费渠道名称');
+            $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });
         Schema::createTable(BudgetModel::tableName(), function(Table $table) {
@@ -84,6 +89,7 @@ class CreateFinanceTables extends Migration {
             $table->set('budget')->decimal(10, 2)->notNull()->defaultVal(0)->comment('预算');
             $table->set('spent')->decimal(10, 2)->defaultVal(0)->comment('花费');
             $table->set('cycle')->tinyint(1)->defaultVal(0)->comment('周期');
+            $table->set('user_id')->int()->notNull();
             $table->softDeletes();
             $table->timestamps();
         });

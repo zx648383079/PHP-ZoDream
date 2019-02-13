@@ -79,7 +79,7 @@ class CheckInModel extends Model {
      */
     public static function checkIn($user_id, $method = 0) {
         $last = static::where('user_id', $user_id)->orderBy('created_at', 'desc')->one();
-        if ($last && $last->created_at > strtotime(date('Y-m-d 00:00:00'))) {
+        if ($last && $last->getAttributeValue('created_at') > strtotime(date('Y-m-d 00:00:00'))) {
             return false;
         }
         $running = 1;
@@ -92,7 +92,7 @@ class CheckInModel extends Model {
            'method' => $method,
            'ip' => app('request')->ip(),
            'running' => $running,
-            'created' => time()
+            'created_at' => time()
         ]);
     }
 
@@ -125,7 +125,7 @@ class CheckInModel extends Model {
             'method' => $method,
             'ip' => app('request')->ip(),
             'running' => $running,
-            'created' => $end_at
+            'created_at' => $end_at
         ]);
         if (empty($model)) {
             return false;
@@ -134,7 +134,7 @@ class CheckInModel extends Model {
         $first = static::where('user_id', $user_id)
             ->where('created_at', '>', $end_at)
             ->orderBy('created_at', 'asc')->one();
-        if (empty($first) || $first->created_at - $end_at > 86400) {
+        if (empty($first) || $first->getAttributeValue('created_at') - $end_at > 86400) {
             return $model;
         }
         $last = static::where('user_id', $user_id)
@@ -142,8 +142,8 @@ class CheckInModel extends Model {
             ->where('running', 1)
             ->orderBy('created_at', 'asc')->one();
         static::query()->where('user_id', $user_id)
-            ->where('created_at', '>=', $first->created_at)
-            ->where('created_at', '<', $last->created_at)
+            ->where('created_at', '>=', $first->getAttributeValue('created_at'))
+            ->where('created_at', '<', $last->getAttributeValue('created_at'))
             ->updateOne('running', $running);
     }
 

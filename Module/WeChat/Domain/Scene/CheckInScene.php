@@ -16,7 +16,7 @@ class CheckInScene extends BaseScene implements SceneInterface {
         $model = CheckInModel::checkIn($user_id, CheckInModel::METHOD_WX);
         return new ReplyModel([
             'type' => ReplyModel::TYPE_TEXT,
-            'content' => empty($model) ? '签到失败' : sprintf('签到成功，已连续签到%s天', $model->running)
+            'content' => empty($model) ? '今日已签到' : sprintf('签到成功，已连续签到%s天', $model->running)
         ]);
     }
 

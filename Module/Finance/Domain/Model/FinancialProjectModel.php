@@ -22,6 +22,7 @@ use Domain\Model\Model;
  * @property integer $deleted_at
  * @property integer $color
  * @property string $remark
+ * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -47,6 +48,7 @@ class FinancialProjectModel extends Model {
             'deleted_at' => 'int',
             'color' => 'int:0,9',
             'remark' => '',
+            'user_id' => 'required|int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -69,9 +71,14 @@ class FinancialProjectModel extends Model {
             'deleted_at' => '删除时间',
             'color' => '盈亏',
             'remark' => '备注',
+            'user_id' => 'User Id',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    public function scopeAuth($query) {
+        return $query->where('user_id', auth()->id());
     }
 
 
@@ -81,7 +88,7 @@ class FinancialProjectModel extends Model {
 
     public function getWeekIncome() {
         $data = [0, 0, 0, 0, 0, 0, 0];
-        $log_list = LogModel::week(time())->where('project_id', $this->id)->all();
+        $log_list = LogModel::auth()->week(time())->where('project_id', $this->id)->all();
         foreach ($log_list as $item) {
             $day = date('w', strtotime($item->happened_at));
             if ($day < 1) {

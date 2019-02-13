@@ -11,18 +11,18 @@ use Module\Finance\Domain\Model\MoneyAccountModel;
 class MoneyController extends Controller {
 
     public function indexAction() {
-        $account_list = MoneyAccountModel::all();
+        $account_list = MoneyAccountModel::auth()->all();
         $total = 0;
         foreach ($account_list as $item) {
             $total += $item->total;
         }
-        $product_list = FinancialProductModel::all();
-        $project_list = FinancialProjectModel::select('name', 'money')->all();
+        $product_list = FinancialProductModel::auth()->all();
+        $project_list = FinancialProjectModel::auth()->select('name', 'money')->all();
         return $this->show(compact('account_list', 'total', 'product_list', 'project_list'));
     }
 
     public function accountAction() {
-        $account_list = MoneyAccountModel::orderBy('id', 'desc')->all();
+        $account_list = MoneyAccountModel::auth()->orderBy('id', 'desc')->all();
         return $this->show(compact('account_list'));
     }
 
@@ -37,7 +37,7 @@ class MoneyController extends Controller {
 
     public function saveAccountAction() {
         $model = new MoneyAccountModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => url('./money/account')
             ]);
@@ -46,14 +46,14 @@ class MoneyController extends Controller {
     }
 
     public function changeAccountAction($id) {
-        MoneyAccountModel::where('id', $id)->updateBool('status');
+        MoneyAccountModel::auth()->where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
             'url' => url('./money/account')
         ]);
     }
 
     public function deleteAccountAction($id) {
-        MoneyAccountModel::where('id', $id)->update([
+        MoneyAccountModel::auth()->where('id', $id)->update([
             'deleted_at' => time()
         ]);
         return $this->jsonSuccess([
@@ -62,7 +62,7 @@ class MoneyController extends Controller {
     }
 
     public function projectAction() {
-        $model_list = FinancialProjectModel::with('product')->orderBy('id', 'desc')->all();
+        $model_list = FinancialProjectModel::auth()->with('product')->orderBy('id', 'desc')->all();
         return $this->show(compact('model_list'));
     }
 
@@ -72,14 +72,14 @@ class MoneyController extends Controller {
 
     public function editProjectAction($id) {
         $model = FinancialProjectModel::findOrNew($id);
-        $product_list = FinancialProductModel::all();
-        $account_list = MoneyAccountModel::all();
+        $product_list = FinancialProductModel::auth()->all();
+        $account_list = MoneyAccountModel::auth()->all();
         return $this->show('create_project', compact('model', 'product_list', 'account_list'));
     }
 
     public function saveProjectAction() {
         $model = new FinancialProjectModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => url('./money/project')
             ]);
@@ -88,7 +88,7 @@ class MoneyController extends Controller {
     }
 
     public function deleteProjectAction($id) {
-        FinancialProjectModel::where('id', $id)->delete();
+        FinancialProjectModel::auth()->where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./money/project')
         ]);
@@ -106,6 +106,7 @@ class MoneyController extends Controller {
         $model->account_id = $project->account_id;
         $model->project_id = $project->id;
         $model->type = LogModel::TYPE_INCOME;
+        $model->user_id = auth()->id();
         $model->happened_at = date('Y-m-d H:i:s');
         $model->remark = sprintf('理财项目 %s 收益', $project->name);
         if ($model->save()) {
@@ -117,7 +118,7 @@ class MoneyController extends Controller {
     }
 
     public function productAction() {
-        $model_list = FinancialProductModel::orderBy('id', 'desc')->all();
+        $model_list = FinancialProductModel::auth()->orderBy('id', 'desc')->all();
         return $this->show(compact('model_list'));
     }
 
@@ -132,7 +133,7 @@ class MoneyController extends Controller {
 
     public function saveProductAction() {
         $model = new FinancialProductModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => url('./money/product')
             ]);
@@ -141,14 +142,14 @@ class MoneyController extends Controller {
     }
 
     public function deleteProductAction($id) {
-        FinancialProductModel::where('id', $id)->delete();
+        FinancialProductModel::auth()->where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./money/product')
         ]);
     }
 
     public function changeProductAction($id) {
-        FinancialProductModel::where('id', $id)->updateBool('status');
+        FinancialProductModel::auth()->where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
             'url' => url('./money/product')
         ]);

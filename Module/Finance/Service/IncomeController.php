@@ -17,9 +17,9 @@ class IncomeController extends Controller {
             $month = date('Y-m');
         }
         $time = strtotime($month);
-        $income_list = LogModel::month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', 'desc')->all();
-        $expenditure_list = LogModel::month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', 'desc')->all();
-        $log_list = LogModel::month($time)->orderBy('happened_at', 'desc')->all();
+        $income_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', 'desc')->all();
+        $expenditure_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', 'desc')->all();
+        $log_list = LogModel::auth()->month($time)->orderBy('happened_at', 'desc')->all();
         $day_length = date('t', $time);
         $income_days = LogModel::getMonthLogs($income_list, $day_length);
         $expenditure_days = LogModel::getMonthLogs($expenditure_list, $day_length);
@@ -27,7 +27,7 @@ class IncomeController extends Controller {
     }
 
     public function logAction($type = null) {
-        $log_list = LogModel::when(is_numeric($type), function ($query) use ($type) {
+        $log_list = LogModel::auth()->when(is_numeric($type), function ($query) use ($type) {
             $query->where('type', intval($type));
         })->orderBy('happened_at', 'desc')->page();
         return $this->show(compact('log_list'));
@@ -39,6 +39,9 @@ class IncomeController extends Controller {
 
     public function editLogAction($id) {
         $model = LogModel::findOrNew($id);
+        if (empty($model->id)) {
+            $model->money = $model->frozen_money = 0;
+        }
         if (app('request')->has('clone_id')) {
             $model = LogModel::findOrNew(intval(app('request')->get('clone_id')));
             $model->id = null;
@@ -50,16 +53,16 @@ class IncomeController extends Controller {
         if (empty($model->happened_at)) {
             $model->happened_at = Time::format();
         }
-        $channel_list = ConsumptionChannelModel::all();
-        $account_list = MoneyAccountModel::all();
-        $project_list = FinancialProjectModel::all();
-        $budget_list = BudgetModel::where('deleted_at', 0)->all();
+        $channel_list = ConsumptionChannelModel::auth()->all();
+        $account_list = MoneyAccountModel::auth()->all();
+        $project_list = FinancialProjectModel::auth()->all();
+        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->all();
         return $this->show('create_log', compact('model', 'channel_list', 'account_list', 'project_list', 'budget_list'));
     }
 
     public function saveLogAction() {
         $model = new LogModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
+        if (!$model->load() || !$model->set('user_id', auth()->id())->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
         if ($model->budget_id > 0) {
@@ -78,13 +81,13 @@ class IncomeController extends Controller {
     }
 
     public function channelAction(){
-        $model_list = ConsumptionChannelModel::orderBy('id', 'desc')->all();
+        $model_list = ConsumptionChannelModel::auth()->orderBy('id', 'desc')->all();
         return $this->show(compact('model_list'));
     }
 
     public function saveChannelAction() {
         $model = new ConsumptionChannelModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => url('./income/channel')
             ]);

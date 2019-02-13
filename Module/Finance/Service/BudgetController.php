@@ -8,7 +8,7 @@ class BudgetController extends Controller {
 
 
     public function indexAction() {
-        $model_list = BudgetModel::where('deleted_at', 0)->orderBy('id', 'desc')->page();
+        $model_list = BudgetModel::auth()->where('deleted_at', 0)->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 
@@ -23,7 +23,8 @@ class BudgetController extends Controller {
 
     public function saveAction() {
         $model = new BudgetModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load() && $model->set('user_id', auth()->id())
+                ->autoIsNew()->save()) {
             $model->refreshSpent();
             return $this->jsonSuccess([
                 'url' => url('./budget')
@@ -33,7 +34,7 @@ class BudgetController extends Controller {
     }
 
     public function deleteAction($id) {
-        BudgetModel::where('id', $id)->update([
+        BudgetModel::auth()->where('id', $id)->update([
             'deleted_at' => time()
         ]);
         return $this->jsonSuccess([

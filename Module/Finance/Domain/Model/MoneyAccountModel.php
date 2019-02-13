@@ -13,6 +13,7 @@ use Domain\Model\Model;
  * @property float $frozen_money
  * @property boolean $status
  * @property string $remark
+ * @property integer $user_id
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -30,6 +31,7 @@ class MoneyAccountModel extends Model {
             'status' => 'int:0,9',
             'frozen_money' => 'numeric',
             'remark' => '',
+            'user_id' => 'required|int',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -44,10 +46,15 @@ class MoneyAccountModel extends Model {
             'status' => '状态',
             'frozen_money' => '冻结资金',
             'remark' => '备注',
+            'user_id' => 'User Id',
             'deleted_at' => '删除时间',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    public function scopeAuth($query) {
+        return $query->where('user_id', auth()->id());
     }
 
     public function getTotalAttribute() {

@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * @package Module\Finance\Domain\Model
  * @property integer $id
  * @property string $name
+ * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -19,6 +20,7 @@ class ConsumptionChannelModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,50',
+            'user_id' => 'required|int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -28,9 +30,14 @@ class ConsumptionChannelModel extends Model {
         return [
             'id' => 'Id',
             'name' => '渠道名',
+            'user_id' => 'User Id',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+
+    public function scopeAuth($query) {
+        return $query->where('user_id', auth()->id());
     }
 
 }
