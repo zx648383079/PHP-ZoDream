@@ -3,13 +3,16 @@ namespace Module\Auth\Service\Admin;
 
 
 use Module\Auth\Domain\Model\OAuthModel;
-use Module\Auth\Domain\Model\RoleModel;
+use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
 
-
-use Zodream\Validate\Validator;
-
 class UserController extends Controller {
+
+    protected function rules() {
+        return [
+            '*' => 'administrator'
+        ];
+    }
 
     public function indexAction($keywords = null) {
         $user_list = UserModel::where('id', '!=', auth()->id())

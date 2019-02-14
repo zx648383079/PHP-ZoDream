@@ -8,6 +8,12 @@ use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 
 class RoleController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => 'administrator'
+        ];
+    }
+
     public function indexAction($keywords = null) {
         $role_list = RoleModel::when(!empty($keywords), function ($query) {
             RoleModel::search($query, 'name');

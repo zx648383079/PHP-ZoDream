@@ -2,8 +2,9 @@
 namespace Module\Auth\Domain\Model\Concerns;
 
 
-use Module\Auth\Domain\Model\RoleModel;
-use Module\Auth\Domain\Model\UserRoleModel;
+use Module\Auth\Domain\Model\RBAC\RoleModel;
+use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Zodream\Database\Relation;
 use Zodream\Helpers\Str;
 
 trait UserRoleTrait {
@@ -17,7 +18,12 @@ trait UserRoleTrait {
     public function cachedRoles() {
         $cacheKey = 'auth_roles_for_user_'.$this->id;
         return cache()->getOrSet($cacheKey, function () {
-            return $this->roles()->get();
+                $ids = $this->role_ids;
+                if (empty($ids)) {
+                    return [];
+                }
+                return RoleModel::whereIn('id', $ids)->get();
+//            return $this->roles()->get();
         }, 60);
     }
 
@@ -197,6 +203,14 @@ trait UserRoleTrait {
         } else {
             return [$validateAll, ['roles' => $checkedRoles, 'permissions' => $checkedPermissions]];
         }
+    }
+
+    /**
+     * 是否是管理员
+     * @return bool
+     */
+    public function isAdministrator() {
+        return $this->hasRole('administrator');
     }
 
 }

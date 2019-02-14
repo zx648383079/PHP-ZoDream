@@ -6,6 +6,12 @@ use Module\Auth\Domain\Model\RBAC\PermissionModel;
 
 class PermissionController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => 'administrator'
+        ];
+    }
+
     public function indexAction($keywords = null) {
         $permission_list = PermissionModel::when(!empty($keywords), function ($query) {
             PermissionModel::search($query, 'name');

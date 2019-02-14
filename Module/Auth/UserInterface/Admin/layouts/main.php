@@ -20,6 +20,7 @@ $this->registerCssFile([
         '@main.min.js',
         '@auth.min.js'
     ]);
+
 ?>
 
 
@@ -30,7 +31,7 @@ $this->registerCssFile([
         'fa fa-home',
     ],
     [
-       '用户管理',
+        '用户管理',
         false,
         'fa fa-users',
         [
@@ -45,7 +46,9 @@ $this->registerCssFile([
                 'fa fa-plus'
             ]
         ],
-        true
+        true,
+        false,
+        auth()->user()->isAdministrator()
     ],
     [
         '权限管理',
@@ -72,7 +75,10 @@ $this->registerCssFile([
                 './admin/permission/create',
                 'fa fa-plus'
             ]
-        ]
+        ],
+        false,
+        false,
+        auth()->user()->isAdministrator()
     ],
     [
         '消息管理',
