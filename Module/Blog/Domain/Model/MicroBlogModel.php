@@ -21,6 +21,31 @@ class MicroBlogModel extends Model {
         return 'blog_micro';
     }
 
+    protected function rules() {
+        return [
+            'content' => 'required|string:0,140',
+            'user_id' => 'int',
+            'recommend' => 'int',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'content' => 'Content',
+            'user_id' => 'User Id',
+            'recommend' => 'Recommend',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserModel::class, 'id', 'user_id');
+    }
+
     /**
      * 不允许频繁发布
      * @return bool

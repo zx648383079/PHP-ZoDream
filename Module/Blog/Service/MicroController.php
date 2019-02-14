@@ -4,6 +4,7 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\MicroBlogModel;
 use Module\ModuleController;
+use Zodream\Service\Factory;
 
 class MicroController extends ModuleController {
 
@@ -54,5 +55,16 @@ class MicroController extends ModuleController {
         $model = MicroBlogModel::find($id);
         $model->recommendThis();
         return $this->jsonSuccess($model->recommend);
+    }
+
+    public function commentAction($id) {
+        return $this->show();
+    }
+
+    public function findLayoutFile() {
+        if ($this->action !== 'index') {
+            return false;
+        }
+        return Factory::root()->file('UserInterface/Home/layouts/main.php');
     }
 }
