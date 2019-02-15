@@ -26,8 +26,8 @@ class CreateSmsTables extends Migration {
         Schema::createTable(SmsLogModel::tableName(), function (Table $table) {
             $table->setComment('短信发送记录');
             $table->set('id')->pk()->ai();
-            $table->set('signature_id')->int()->comment('签名');
-            $table->set('template_id')->int()->comment('模板内容');
+            $table->set('signature_id')->int()->defaultVal(0)->comment('签名');
+            $table->set('template_id')->int()->defaultVal(0)->comment('模板内容');
             $table->set('mobile')->varchar(20)->comment('接受手机号');
             $table->set('content')->varchar('255')->comment('发送的内容');
             $table->set('status')->tinyint(1)->notNull()->defaultVal(0)->comment('发送状态');

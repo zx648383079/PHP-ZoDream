@@ -7,4 +7,6 @@ class SmsLogModel extends Model {
     public static function tableName() {
         return 'sms_log';
     }
+
+
 }
