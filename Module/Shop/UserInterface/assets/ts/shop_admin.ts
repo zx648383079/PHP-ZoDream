@@ -881,6 +881,15 @@ function bindShipping(baseUri: string) {
     BASE_URI = baseUri;
     let shipping = new Delivery($('.regional-table'));
 }
+
+function bindEditAd() {
+    let groups = $(".type-group .input-group");
+    $("#type").change(function() {
+        groups.eq(parseInt($(this).val()) % 2).show().siblings().hide();
+    }).trigger('change');
+}
+
+
 $(function() {
     $(document).on('click', '[data-type=toggle]', function() {
         let that = $(this);

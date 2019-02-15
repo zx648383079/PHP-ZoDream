@@ -3,7 +3,7 @@ namespace Module\Shop\Service\Admin;
 
 
 
-use Module\Template\Domain\Model\OptionModel;
+use Module\Template\Domain\Model\Base\OptionModel;
 
 class SettingController extends Controller {
 

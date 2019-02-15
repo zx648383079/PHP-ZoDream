@@ -31,7 +31,11 @@ class AdController extends Controller {
 
     public function saveAction() {
         $model = new AdModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        $model->load();
+        if ($model->type % 2 > 0) {
+            $model->content = app('request')->get('content_url');
+        }
+        if ($model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('ad')
             ]);

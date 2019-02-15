@@ -30,7 +30,7 @@ $this->registerJsFile('/assets/ueditor/ueditor.config.js')
         </div>
         <div class="zd-tab-body">
             <div class="zd-tab-item active">
-                <?=Form::text('name', true)?>
+                <?=Form::text('title', true)?>
                 <?=Form::select('cat_id', [$cat_list], true)?>
                 <?=Form::file('thumb')?>
                 <?=Form::text('keywords')?>

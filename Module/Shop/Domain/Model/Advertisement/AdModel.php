@@ -24,6 +24,13 @@ class AdModel extends Model {
     const HTML = 2;
     const VIDEO = 3;
 
+    public $type_list = [
+        self::TEXT => '文本',
+        self::IMG => '图片',
+        self::HTML => '代码',
+        self::VIDEO => '视频',
+    ];
+
     public static function tableName() {
         return 'shop_ad';
     }
@@ -47,7 +54,7 @@ class AdModel extends Model {
             'id' => 'Id',
             'name' => '广告名',
             'position_id' => '广告位',
-            'type' => '类型呢',
+            'type' => '类型',
             'url' => '链接',
             'content' => '内容',
             'start_at' => '开始时间',

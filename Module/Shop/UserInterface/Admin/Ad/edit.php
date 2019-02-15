@@ -4,13 +4,22 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '广告';
+$js = <<<JS
+bindEditAd();
+JS;
+$this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './admin/ad/save_position')?>
     <?=Form::text('name', true)?>
     <?=Form::select('position_id', [$position_list])?>
-    <?=Form::text('type', $model->type_list)?>
-    <?=Form::file('content')?>
+    <?=Form::select('type', $model->type_list)?>
+
+    <div class="type-group">
+        <?=Form::textarea('content')?>
+        <?=Form::file('content')->name('content_url')?>
+    </div>
+
     <?=Form::text('url')?>
     <?=Form::text('start_at', true)?>
     <?=Form::text('end_at', true)?>
