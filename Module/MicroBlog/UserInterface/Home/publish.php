@@ -6,7 +6,7 @@ use Zodream\Template\View;
 
 <div class="micro-publish">
     <div class="title">有什么新鲜事想告诉大家?</div>
-    <form action="<?=$this->url('./micro/create')?>" method="post">
+    <form action="<?=$this->url('./create')?>" method="post">
         <div class="input">
             <textarea name="content" required></textarea>
         </div>

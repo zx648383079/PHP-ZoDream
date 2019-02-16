@@ -1,31 +1,31 @@
 <?php
-namespace Module\Blog\Domain\Model;
+namespace Module\MicroBlog\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserModel;
-use Zodream\Database\Query\Query;
-use Zodream\Helpers\Time;
 
 
 /**
 * Class MicroBlogModel
  * @property integer $id
- * @property string $content
  * @property integer $user_id
+ * @property string $content
  * @property integer $recommend
+ * @property string $source
  * @property integer $created_at
  * @property integer $updated_at
 */
 class MicroBlogModel extends Model {
 	public static function tableName() {
-        return 'blog_micro';
+        return 'micro_blog';
     }
 
     protected function rules() {
         return [
-            'content' => 'required|string:0,140',
             'user_id' => 'int',
+            'content' => 'required|string:0,140',
             'recommend' => 'int',
+            'source' => 'string:0,30',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -34,9 +34,10 @@ class MicroBlogModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'content' => 'Content',
             'user_id' => 'User Id',
+            'content' => 'Content',
             'recommend' => 'Recommend',
+            'source' => 'Source',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -56,13 +57,13 @@ class MicroBlogModel extends Model {
 	    return !$time || $time < time() - 300;
     }
 
-    public static function canRecommend($id) {
-        return BlogLogModel::where([
+    public static function isRecommended($id) {
+        return LogModel::where([
                 'user_id' => auth()->id(),
-                'type' => BlogLogModel::TYPE_BLOG_MICRO,
+                'type' => LogModel::TYPE_MICRO_BLOG,
                 'id_value' => $id,
-                'action' => BlogLogModel::ACTION_RECOMMEND
-            ])->count() < 1;
+                'action' => LogModel::ACTION_RECOMMEND
+            ])->count() > 1;
     }
 
     /**
@@ -75,9 +76,9 @@ class MicroBlogModel extends Model {
         if (!$this->save()) {
             return false;
         }
-        return !!BlogLogModel::create([
-            'type' => BlogLogModel::TYPE_BLOG_MICRO,
-            'action' => BlogLogModel::ACTION_RECOMMEND,
+        return !!LogModel::create([
+            'type' => LogModel::TYPE_MICRO_BLOG,
+            'action' => LogModel::ACTION_RECOMMEND,
             'id_value' => $this->id,
             'user_id' => auth()->id()
         ]);

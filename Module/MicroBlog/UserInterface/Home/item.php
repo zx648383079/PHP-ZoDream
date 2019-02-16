@@ -11,7 +11,7 @@ use Zodream\Template\View;
         </div>
         <div>
             <div class="name"><?=$blog->user->name?></div>
-            <p><span class="time"><?=$blog->created_at?></span> <span class="from">来自web</span></p>
+            <p><span class="time"><?=$blog->created_at?></span> <span class="from">来自<?=$blog->source ?: 'web'?></span></p>
             <div class="content">
                 <?=$blog->content?>
             </div>

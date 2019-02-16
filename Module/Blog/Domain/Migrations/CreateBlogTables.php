@@ -4,7 +4,6 @@ namespace Module\Blog\Domain\Migrations;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
-use Module\Blog\Domain\Model\MicroBlogModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -35,13 +34,6 @@ class CreateBlogTables extends Migration {
             $table->set('click_count')->int(10)->defaultVal(0);
             $table->set('comment_status')->tinyint(1)->defaultVal(0);
             $table->softDeletes();
-            $table->timestamps();
-        });
-        Schema::createTable(MicroBlogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('content')->varchar(140)->notNull();
-            $table->set('user_id')->int(10);
-            $table->set('recommend')->int(10)->defaultVal(0);
             $table->timestamps();
         });
         Schema::createTable(TermModel::tableName(), function(Table $table) {
@@ -86,7 +78,6 @@ class CreateBlogTables extends Migration {
      */
     public function down() {
         Schema::dropTable(BlogModel::tableName());
-        Schema::dropTable(MicroBlogModel::tableName());
         Schema::dropTable(TermModel::tableName());
         Schema::dropTable(CommentModel::tableName());
         Schema::dropTable(BlogLogModel::tableName());

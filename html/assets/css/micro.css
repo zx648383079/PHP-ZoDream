@@ -1,0 +1,92 @@
+.micro-skin {
+  max-width: 640px;
+  margin: 0 auto; }
+  .micro-skin .micro-publish {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px; }
+    .micro-skin .micro-publish .input textarea {
+      width: 100%;
+      height: 80px;
+      resize: none; }
+    .micro-skin .micro-publish .actions {
+      position: relative;
+      text-align: right; }
+      .micro-skin .micro-publish .actions .tools {
+        float: left; }
+  .micro-skin .micro-item {
+    background-color: #fff;
+    margin-bottom: 20px; }
+    .micro-skin .micro-item .body {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      grid-gap: 10px; }
+      .micro-skin .micro-item .body .avatar img {
+        width: 50px;
+        height: 50px; }
+      .micro-skin .micro-item .body .name {
+        font-weight: 700px;
+        color: #000;
+        font-size: 20px; }
+      .micro-skin .micro-item .body .time,
+      .micro-skin .micro-item .body .from {
+        color: #777;
+        font-size: 12px; }
+    .micro-skin .micro-item .ations {
+      display: flex;
+      justify-content: space-around;
+      flex-flow: row nowrap;
+      line-height: 40px;
+      border-top: 1px solid;
+      border-bottom: 1px solid; }
+      .micro-skin .micro-item .ations a {
+        display: inline-block;
+        text-align: center;
+        width: 25%; }
+        .micro-skin .micro-item .ations a:not(:last-child) {
+          border-right: 1px solid #333; }
+        .micro-skin .micro-item .ations a.active {
+          color: #f00; }
+  .micro-skin .comment-box {
+    padding: 10px 20px 0;
+    background-color: #f7f0f0;
+    display: none; }
+    .micro-skin .comment-box .comment-publish {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      grid-gap: 10px; }
+      .micro-skin .comment-box .comment-publish .avatar img {
+        width: 30px;
+        height: 30px; }
+      .micro-skin .comment-box .comment-publish .input textarea {
+        width: 100%;
+        height: 30px;
+        resize: none; }
+      .micro-skin .comment-box .comment-publish .actions {
+        text-align: right; }
+        .micro-skin .comment-box .comment-publish .actions .tools {
+          float: left; }
+    .micro-skin .comment-box .comment-item {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      grid-gap: 10px;
+      padding: 10px; }
+      .micro-skin .comment-box .comment-item .avatar img {
+        width: 30px;
+        height: 30px; }
+      .micro-skin .comment-box .comment-item .text a {
+        color: #eb7350; }
+      .micro-skin .comment-box .comment-item .actions .time {
+        color: #777;
+        font-size: 12px; }
+      .micro-skin .comment-box .comment-item .actions .tools {
+        float: right; }
+        .micro-skin .comment-box .comment-item .actions .tools a {
+          padding: 0 10px; }
+          .micro-skin .comment-box .comment-item .actions .tools a:not(:last-child) {
+            border-right: 1px solid #333; }
+      .micro-skin .comment-box .comment-item:not(:last-child) {
+        border-bottom: 1px solid #333; }
+
+/*# sourceMappingURL=micro.css.map */

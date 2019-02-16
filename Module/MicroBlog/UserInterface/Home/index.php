@@ -10,10 +10,10 @@ JS;
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
-    '@blog.css'])
+    '@micro.css'])
     ->registerJsFile([
         '@jquery.min.js',
-        '@blog.min.js'
+        '@micro.min.js'
     ])
     ->registerJs($js, View::JQUERY_READY);
 ?>

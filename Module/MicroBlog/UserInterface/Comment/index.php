@@ -20,21 +20,4 @@ use Zodream\Template\View;
         </div>
     </div>
 </div>
-<div class="comment-item">
-    <div class="avatar">
-        <img src="/assets/images/avatar/2.png" alt="">
-    </div>
-    <div>
-        <div class="text">
-            <a href="">123123</a>：
-            12312312
-        </div>
-        <div class="actions">
-            <span class="time">2分钟前</span>
-            <div class="tools">
-                <a href="">回复</a>
-                <a href="">赞</a>
-            </div>
-        </div>
-    </div>
-</div>
+<?php $this->extend('./more');?>

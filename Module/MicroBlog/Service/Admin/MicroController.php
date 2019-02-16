@@ -1,7 +1,7 @@
 <?php
-namespace Module\Blog\Service\Admin;
+namespace Module\MicroBlog\Service\Admin;
 
-use Module\Blog\Domain\Model\MicroBlogModel;
+use Module\MicroBlog\Domain\Model\MicroBlogModel;
 
 class MicroController extends Controller {
 

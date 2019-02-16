@@ -1,5 +1,5 @@
 <?php
-namespace Module\Blog\Domain\Model;
+namespace Module\MicroBlog\Domain\Model;
 
 use Domain\Model\Model;
 /**
@@ -11,9 +11,9 @@ use Domain\Model\Model;
  * @property integer $action
  * @property integer $created_at
  */
-class BlogLogModel extends Model {
+class LogModel extends Model {
 
-    const TYPE_BLOG = 0;
+    const TYPE_MICRO_BLOG = 0;
     const TYPE_COMMENT = 1;
 
     const ACTION_RECOMMEND = 0;
@@ -22,7 +22,7 @@ class BlogLogModel extends Model {
 
 
 	public static function tableName() {
-        return 'blog_log';
+        return 'micro_log';
     }
 
 

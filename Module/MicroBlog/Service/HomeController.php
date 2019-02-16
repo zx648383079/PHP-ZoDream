@@ -1,12 +1,11 @@
 <?php
-namespace Module\Blog\Service;
+namespace Module\MicroBlog\Service;
 
-
-use Module\Blog\Domain\Model\MicroBlogModel;
+use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\ModuleController;
 use Zodream\Service\Factory;
 
-class MicroController extends ModuleController {
+class HomeController extends ModuleController {
 
     protected function rules() {
         return [
@@ -41,7 +40,7 @@ class MicroController extends ModuleController {
         $model->content = app('request')->get('content');
         if ($model->save()) {
             return $this->jsonSuccess([
-                'url' => url('./micro')
+                'url' => url('./')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -55,10 +54,6 @@ class MicroController extends ModuleController {
         $model = MicroBlogModel::find($id);
         $model->recommendThis();
         return $this->jsonSuccess($model->recommend);
-    }
-
-    public function commentAction($id) {
-        return $this->show();
     }
 
     public function findLayoutFile() {
