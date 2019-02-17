@@ -9,10 +9,6 @@ class TermController extends RestController {
 
     public function indexAction() {
         $term_list = TermModel::all();
-        return $this->render([
-            'results' => array_map(function (TermModel $item) {
-                return $item->toArray();
-            }, $term_list)
-        ]);
+        return $this->render($term_list);
     }
 }

@@ -98,6 +98,14 @@ class BookModel extends Model {
         return $this->hasOne(BookAuthorModel::className(), 'id', 'author_id');
     }
 
+    public function getCoverAttribute() {
+        $cover = $this->getAttributeSource('cover');
+        if (empty($cover)) {
+            $cover = '/assets/images/book_default.jpg';
+        }
+        return url()->asset($cover);
+    }
+
     /**
      * 小说分级，未登录自动屏蔽有分级的
      * @param $query
@@ -108,13 +116,6 @@ class BookModel extends Model {
         }
     }
 
-    public function getCoverAttribute() {
-        $cover = $this->getAttributeValue('cover');
-        if (!empty($cover)) {
-            return $cover;
-        }
-        return '/assets/images/book_default.jpg';
-    }
 
     public function getUrlAttribute() {
         return url('./book', ['id' => $this->id]);
