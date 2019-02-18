@@ -2,6 +2,7 @@
 namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Model\Scene\Book;
 use Zodream\Route\Controller\RestController;
 
 class HomeController extends RestController {
@@ -11,7 +12,7 @@ class HomeController extends RestController {
         if ($id > 0) {
             return $this->detailAction($id);
         }
-        $book_list  = BookModel::ofClassify()->when(!empty($keywords), function ($query) {
+        $book_list  = Book::with('category', 'author')->ofClassify()->when(!empty($keywords), function ($query) {
                 BookModel::search($query, ['name']);
             })
             ->when($category > 0, function ($query) use ($category) {

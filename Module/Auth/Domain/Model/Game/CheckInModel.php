@@ -79,11 +79,13 @@ class CheckInModel extends Model {
      */
     public static function checkIn($user_id, $method = 0) {
         $last = static::where('user_id', $user_id)->orderBy('created_at', 'desc')->one();
-        if ($last && $last->getAttributeValue('created_at') > strtotime(date('Y-m-d 00:00:00'))) {
+        $today = strtotime(date('Y-m-d 00:00:00'));
+        if ($last && $last->getAttributeValue('created_at') > $today) {
             return false;
         }
         $running = 1;
-        if (!empty($last)) {
+        if (!empty($last) &&
+            $last->getAttributeValue('created_at') > $today - 86400) {
             $running = $last->running + 1;
         }
         return static::create([
