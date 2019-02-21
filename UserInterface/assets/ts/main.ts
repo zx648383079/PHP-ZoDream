@@ -129,7 +129,9 @@ $(function() {
         let successTip = $this.attr('data-success') || '提交成功！';
         let errorTip = $this.attr('data-error') || '提交失败！';
         let callback = $this.attr('data-callback');
+        let loading = Dialog.loading();
         postJson($this.attr('href'), function(data) {
+            loading.close();
             if (data.code == 200 && !data.msg) {
                 data.msg = successTip;
             }

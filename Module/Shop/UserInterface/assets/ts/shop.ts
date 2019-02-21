@@ -288,7 +288,12 @@ function bindCartDialog(goodsId: number) {
     let cartDialog = $('.cart-dialog').on('click', '.dailog-yes', function(e) {
         e.preventDefault();
         let amount = parseInt(cartDialog.find('.number-box .number-input').val()+'');
-        addToCart(goodsId, amount);
+        if (cartDialog.data('step') == 'buy') {
+            buyGoods(goodsId, amount);
+        } else {
+            addToCart(goodsId, amount);
+        }
+        cartDialog.hide();
     }).on('click', '.dialog-close', function(e) {
         e.preventDefault();
         cartDialog.hide();
@@ -299,9 +304,9 @@ function bindCartDialog(goodsId: number) {
     });
     $(document).on('click', '[data-action=cart]', function(e) {
         e.preventDefault();
-        cartDialog.show();
+        cartDialog.show().data('step', 'cart');
     }).on('click', '[data-action=buy]', function(e) {
         e.preventDefault();
-        cartDialog.show();
+        cartDialog.show().data('step', 'buy');
     });
 }
