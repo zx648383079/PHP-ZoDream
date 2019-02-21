@@ -27,7 +27,7 @@ $this->registerJsFile('@jquery.min.js')
                 </a>
             </li>
             <li class="do-setting">
-                <i class="fa fa-gear"></i>
+                <i class="fa fa-cog"></i>
                 <span>设置</span>
             </li>
             <li class="go-top">

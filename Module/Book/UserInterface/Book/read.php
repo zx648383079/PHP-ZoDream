@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = $chapter->title;
+$this->title = sprintf('%s-%s', $chapter->title, $book->name);
 $this->body_class = 'theme-0 width-800';
 $this->extend('layouts/header2');
 ?>
