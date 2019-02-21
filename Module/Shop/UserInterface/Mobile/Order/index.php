@@ -11,10 +11,9 @@ $this->extend('../layouts/header');
     <div class="tab-bar order-header">
         <a href="" class="active">全部</a>
         <a href="">待支付</a>
-        <a href="">待发货</a>
         <a href="">待收货</a>
-        <a href="">待评价</a>
         <a href="">已完成</a>
+        <a href="">已取消</a>
     </div>
 
     <div class="order-box">

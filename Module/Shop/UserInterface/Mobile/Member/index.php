@@ -62,11 +62,11 @@ $this->extend('../layouts/header', compact('header_btn'));
             <i class="fa fa-truck" aria-hidden="true"></i>
             <span>待收货</span>
         </a>
-        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
+        <a href="<?=$this->url('./mobile/comment')?>" class="item">
             <i class="fa fa-comment" aria-hidden="true"></i>
             <span>待评价</span>
         </a>
-        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
+        <a href="<?=$this->url('./mobile/refund', ['status' => ''])?>" class="item">
             <i class="fa fa-exchange-alt" aria-hidden="true"></i>
            <span>退换货</span>
         </a>

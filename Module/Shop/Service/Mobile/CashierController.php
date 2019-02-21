@@ -3,7 +3,6 @@ namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Model\AddressModel;
 use Module\Shop\Domain\Model\CartModel;
-use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
 use Module\Shop\Domain\Model\ShippingModel;

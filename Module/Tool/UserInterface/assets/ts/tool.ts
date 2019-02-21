@@ -108,10 +108,11 @@ $(function() {
                 outputBox.val(data.data.result);
             });
         }
-        if (type == 'date') {
-            inputBox.val(Math.floor(new Date().getTime() / 1000));
+        let val = inputBox.val() + '';
+        if (type == 'date' && val.length < 10) {
+            inputBox.val(val = Math.floor(new Date().getTime() / 1000) + '');
         }
-        outputBox.val(converter(inputBox.val() + '', type)).trigger('change');
+        outputBox.val(converter(val, type)).trigger('change');
     });
 });
 

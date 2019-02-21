@@ -147,7 +147,7 @@ class OrderModel extends Model {
             return false;
         }
         foreach ($carts as $item) {
-            OrderGoodsModel::addCartGoods($this->id, $item);
+            OrderGoodsModel::addCartGoods($this, $item);
         }
         $this->address->order_id = $this->id;
         $this->address->save();

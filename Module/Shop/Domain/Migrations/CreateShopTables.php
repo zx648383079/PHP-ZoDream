@@ -30,6 +30,7 @@ use Module\Shop\Domain\Model\OrderCouponModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Model\OrderRefundModel;
 use Module\Shop\Domain\Model\PaymentModel;
 use Module\Shop\Domain\Model\ProductAttributeModel;
 use Module\Shop\Domain\Model\ProductModel;
@@ -195,11 +196,16 @@ class CreateShopTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('order_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
+            $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
             $table->set('series_number')->varchar(100)->notNull();
             $table->set('thumb')->varchar(200)->comment('缩略图');
             $table->set('number')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
+            $table->set('refund_id')->int()->defaultVal(0);
+            $table->set('status')->int()->defaultVal(0);
+            $table->set('after_sale_status')->int()->defaultVal(0);
+            $table->set('comment_id')->int()->defaultVal(0)->comment('评论id');
         });
         Schema::createTable(OrderLogModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
@@ -234,6 +240,27 @@ class CreateShopTables extends Migration {
             $table->set('amount')->decimal(8, 2)->defaultVal(0);
             $table->set('tag')->varchar()->defaultVal('');
             $table->set('name')->varchar()->defaultVal('');
+        });
+        Schema::createTable(OrderRefundModel::tableName(), function (Table $table) {
+            $table->setComment('订单售后服务');
+            $table->set('id')->pk()->ai();
+            $table->set('order_id')->int()->notNull();
+            $table->set('order_goods_id')->int()->defaultVal(0);
+            $table->set('goods_id')->int()->notNull();
+            $table->set('product_id')->int()->defaultVal(0);
+            $table->set('title')->varchar()->notNull();
+            $table->set('amount')->int()->defaultVal(1)->comment('数量');
+            $table->set('type')->tinyint(2)->defaultVal(0);
+            $table->set('status')->tinyint(2)->defaultVal(0);
+            $table->set('reason')->varchar()->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->set('evidence')->varchar()->defaultVal('')->comment('证据,json格式');
+            $table->set('explanation')->varchar()->defaultVal('')->comment('平台回复');
+            $table->set('money')->decimal(10, 2)->defaultVal(0);
+            $table->set('order_price')->decimal(10, 2)->defaultVal(0);
+            $table->set('freight')->tinyint(2)
+                ->defaultVal(0)->comment('退款方式');
+            $table->timestamps();
         });
     }
 
