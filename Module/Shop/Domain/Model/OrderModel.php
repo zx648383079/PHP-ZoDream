@@ -33,20 +33,13 @@ use Domain\Model\Model;
  */
 class OrderModel extends Model {
 
-    const ORDER_UNCONFIRMED = 0;
-    const ORDER_CONFIRMED = 1;
-    const ORDER_CANCELED = 2;
-    const ORDER_INVALID = 3;
-    const ORDER_RETURNED = 4;
-
-    const SHIPPING_UNSHIPPED = 0; //未发货
-    const SHIPPING_SHIPPED = 1;  //已发货
-    const SHIPPING_RECEIVED = 2; //已签收
-    const SHIPPING_PREPARING = 3; //备货中
-
-    const PAY_UNPAYED = 0;   //未支付
-    const PAY_PAYING = 1;    //支付中
-    const PAY_PAYED = 2;     //支付完成
+    const STATUS_CANCEL = 0;
+    const STATUS_INVALID = 1;
+    const STATUS_UNPAY = 10;
+    const STATUS_PAID_UNSHIP = 20;
+    const STATUS_SHIPPED = 40;
+    const STATUS_RECEIVED = 60;
+    const STATUS_FINISH = 80;
 
     const TYPE_NONE = 0; //普通订单
     const TYPE_AUCTION = 1; //拍卖订单
@@ -95,6 +88,10 @@ class OrderModel extends Model {
         ];
     }
 
+    public function scopeAuth($query) {
+        return $query->where('user_id', auth()->id());
+    }
+
     public function user() {
         return $this->hasOne(config('auth.model'), 'id', 'user_id');
     }
@@ -137,6 +134,7 @@ class OrderModel extends Model {
         foreach ($carts as $item) {
             $total += $item->getTotalAttribute();
         }
+        $this->status = self::STATUS_UNPAY;
         $this->goods_amount = $total;
         $this->order_amount = $total;
         $this->shipping_fee = $this->shipping->getFee();
@@ -207,5 +205,23 @@ class OrderModel extends Model {
 
     public static function generateSeriesNumber() {
         return time();
+    }
+
+    public static function getSubtotal() {
+        if (auth()->guest()) {
+            return [
+                'unpay' => 0,
+                'shipped' => 0,
+                'uncomment' => 0,
+                'refunding' => 0
+            ];
+        }
+        return [
+            'unpay' => static::auth()->where('status', self::STATUS_UNPAY)->count(),
+            'shipped' => static::auth()->where('status', self::STATUS_SHIPPED)->count(),
+            'uncomment' => OrderGoodsModel::auth()->where('status', self::STATUS_RECEIVED)->count(),
+            'refunding' => OrderRefundModel::auth()
+                ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count()
+        ];
     }
 }

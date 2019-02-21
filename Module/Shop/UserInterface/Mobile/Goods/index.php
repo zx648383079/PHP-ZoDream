@@ -3,6 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '商品详情';
+$js = <<<JS
+bindCartDialog({$goods->id});
+JS;
+$this->registerJs($js);
 ?>
 
 <header class="top">
@@ -164,10 +168,10 @@ $this->title = '商品详情';
         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         购物车
     </a>
-    <a class="btn btn-orange" href="javascript:addToCart('<?=$goods->id?>');">
+    <a class="btn btn-orange" data-action="cart" href="javascript:;">
         加入购物车
     </a>
-    <a class="btn" href="<?=$this->url('./mobile/user')?>">
+    <a class="btn" data-action="buy" href="javascript:;">
         立即购买
     </a>
 </footer>

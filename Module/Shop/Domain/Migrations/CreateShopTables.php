@@ -244,6 +244,7 @@ class CreateShopTables extends Migration {
         Schema::createTable(OrderRefundModel::tableName(), function (Table $table) {
             $table->setComment('订单售后服务');
             $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
             $table->set('order_id')->int()->notNull();
             $table->set('order_goods_id')->int()->defaultVal(0);
             $table->set('goods_id')->int()->notNull();

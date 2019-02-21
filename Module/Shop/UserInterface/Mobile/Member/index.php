@@ -56,19 +56,30 @@ $this->extend('../layouts/header', compact('header_btn'));
         <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
             <i class="fa fa-money-bill" aria-hidden="true"></i>
             <span>待付款</span>
-            <i class="tip">10</i>
+            <?php if(isset($order_subtotal['unpay']) && $order_subtotal['unpay'] > 0):?>
+            <i class="tip"><?=$order_subtotal['unpay']?></i>
+            <?php endif;?>
         </a>
         <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
             <i class="fa fa-truck" aria-hidden="true"></i>
             <span>待收货</span>
+            <?php if(isset($order_subtotal['shipped']) && $order_subtotal['shipped'] > 0):?>
+            <i class="tip"><?=$order_subtotal['shipped']?></i>
+            <?php endif;?>
         </a>
         <a href="<?=$this->url('./mobile/comment')?>" class="item">
             <i class="fa fa-comment" aria-hidden="true"></i>
             <span>待评价</span>
+            <?php if(isset($order_subtotal['uncomment']) && $order_subtotal['uncomment'] > 0):?>
+            <i class="tip"><?=$order_subtotal['uncomment']?></i>
+            <?php endif;?>
         </a>
         <a href="<?=$this->url('./mobile/refund', ['status' => ''])?>" class="item">
             <i class="fa fa-exchange-alt" aria-hidden="true"></i>
            <span>退换货</span>
+           <?php if(isset($order_subtotal['refunding']) && $order_subtotal['refunding'] > 0):?>
+            <i class="tip"><?=$order_subtotal['refunding']?></i>
+            <?php endif;?>
         </a>
     </div>
 

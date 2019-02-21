@@ -3,10 +3,11 @@ namespace Module\Shop\Service\Mobile;
 
 
 
+use Module\Shop\Domain\Model\OrderModel;
+
 class MemberController extends Controller {
 
-    protected function rules()
-    {
+    protected function rules() {
         return [
             'index' => '*',
             'login' => '*',
@@ -16,7 +17,8 @@ class MemberController extends Controller {
 
     public function indexAction() {
         $user = auth()->user();
-        return $this->show(compact('user'));
+        $order_subtotal = OrderModel::getSubtotal();
+        return $this->show(compact('user', 'order_subtotal'));
     }
 
 

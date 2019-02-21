@@ -61,6 +61,10 @@ class OrderGoodsModel extends Model {
     }
 
 
+    public function scopeAuth($query) {
+        return $query->where('user_id', auth()->id());
+    }
+
 
     /**
      * @return float

@@ -10,6 +10,6 @@
     </a>
     <a href="<?=$this->url('./mobile/cart')?>" class="top-cart">
         <i class="fa fa-shopping-cart"></i>
-        <i class="tip">1</i>
+        <!-- <i class="tip">1</i> -->
     </a>
 </header>

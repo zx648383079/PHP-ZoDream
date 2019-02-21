@@ -8,7 +8,8 @@ class CategoryController extends Controller {
 
     public function indexAction() {
         $cat_list = CategoryModel::where('parent_id', 0)->all();
-        return $this->show(compact('cat_list'));
+        $goods_count = GoodsModel::query()->count();
+        return $this->show(compact('cat_list', 'goods_count'));
     }
 
     public function childrenAction($id) {

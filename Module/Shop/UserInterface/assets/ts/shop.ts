@@ -283,3 +283,25 @@ function bindCategory() {
         }
     }).eq(0).trigger('click');
 }
+
+function bindCartDialog(goodsId: number) {
+    let cartDialog = $('.cart-dialog').on('click', '.dailog-yes', function(e) {
+        e.preventDefault();
+        let amount = parseInt(cartDialog.find('.number-box .number-input').val()+'');
+        addToCart(goodsId, amount);
+    }).on('click', '.dialog-close', function(e) {
+        e.preventDefault();
+        cartDialog.hide();
+    }).click(function(e) {
+        if (e.pageY < cartDialog.find('.dialog-body').offset().top) {
+            cartDialog.hide();
+        }
+    });
+    $(document).on('click', '[data-action=cart]', function(e) {
+        e.preventDefault();
+        cartDialog.show();
+    }).on('click', '[data-action=buy]', function(e) {
+        e.preventDefault();
+        cartDialog.show();
+    });
+}
