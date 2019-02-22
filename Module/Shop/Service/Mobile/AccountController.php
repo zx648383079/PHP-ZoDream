@@ -4,6 +4,12 @@ namespace Module\Shop\Service\Mobile;
 
 class AccountController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         return $this->show();
     }

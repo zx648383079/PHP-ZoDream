@@ -89,5 +89,6 @@ $this->extend('../layouts/header')
         </div>
         <input type="hidden" name="address" value="<?=$address ? $address->id : ''?>">
         <input type="hidden" name="cart" value="<?=$cart?>">
+        <input type="hidden" name="type" value="<?=$type?>">
     <?=Form::close()?>
 </div>

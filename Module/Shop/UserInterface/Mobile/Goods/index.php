@@ -14,74 +14,75 @@ $this->registerJs($js);
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
     <div class="top-tab">
-        <a href="" class="active">商品</a>
-        <a href="">详情</a>
-        <a href="">评价</a>
-        <a href="">推荐</a>
+        <a href="#info" class="active">商品</a>
+        <a href="#detail">详情</a>
+        <a href="#comments">评价</a>
+        <a href="#recommend">推荐</a>
     </div>
 </header>
 
 <div class="has-header has-footer">
 
-    <div class="goods-gallary-box">
-        <img src="<?=$goods->thumb?>" alt="">
+    <div id="info">
+        <div class="goods-gallary-box">
+            <img src="<?=$goods->thumb?>" alt="">
+        </div>
+
+        <div class="activity-box">
+            <div class="price">
+                <em>￥</em><?=$goods->price?>
+            </div>
+            <div class="info">
+                <p class="old-price">$1122</p>
+                <span class="time-block"><i class="fa fa-clock"></i>秒杀</span>
+            </div>
+            <div class="countdown">
+                <p class="text">距秒杀结束还剩</p>
+                <p class="time">
+                    <span>01</span>
+                    :
+                    <span>01</span>
+                    :
+                    <span>01</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="goods-info">
+            <div class="goods-header">
+                <h1 class="goods-name"><?=$goods->name?></h1>
+                <div class="goods-collect <?=$goods->is_collect ? 'active' : ''?>" onclick="collectGoods('<?=$goods->id?>', this)">
+                    <i class="like-icon"></i>
+                    收藏
+                </div>
+            </div>
+            <div class="goods-price"><?=$goods->price?></div>
+
+            <div class="promote-line">
+                <div>支付</div>
+                <div>
+                11111
+                </div>
+                <div>...</div>
+            </div>
+            <div class="promote-line">
+                <div>领券</div>
+                <div>
+                11111
+                </div>
+                <div>...</div>
+            </div>
+            <div class="promote-line">
+                <div>促销</div>
+                <div>
+                11111
+                </div>
+                <div>...</div>
+            </div>
+        </div>
     </div>
 
-    <div class="activity-box">
-        <div class="price">
-            <em>￥</em>
-            <?=$goods->price?>
-        </div>
-        <div class="info">
-            <p class="old-price">$1122</p>
-            <span class="time-block"><i class="fa fa-clock"></i>秒杀</span>
-        </div>
-        <div class="countdown">
-            <p class="text">距秒杀结束还剩</p>
-            <p class="time">
-                <span>01</span>
-                :
-                <span>01</span>
-                :
-                <span>01</span>
-            </p>
-        </div>
-    </div>
-
-    <div class="goods-info">
-        <div class="goods-header">
-            <h1 class="goods-name"><?=$goods->name?></h1>
-            <div class="goods-collect <?=$goods->is_collect ? 'active' : ''?>" onclick="collectGoods('<?=$goods->id?>', this)">
-                <i class="like-icon"></i>
-                收藏
-            </div>
-        </div>
-        <div class="goods-price"><?=$goods->price?></div>
-
-        <div class="promote-line">
-            <div>支付</div>
-            <div>
-            11111
-            </div>
-            <div>...</div>
-        </div>
-        <div class="promote-line">
-            <div>领券</div>
-            <div>
-            11111
-            </div>
-            <div>...</div>
-        </div>
-        <div class="promote-line">
-            <div>促销</div>
-            <div>
-            11111
-            </div>
-            <div>...</div>
-        </div>
-    </div>
-
-    <div class="comment-box">
+    <div id="comments" class="comment-box">
         <div class="comment-header">
             评价
             <i class="fa fa-angle-right"></i>
@@ -123,7 +124,7 @@ $this->registerJs($js);
         <a href="" class="comment-more">查看更多</a>
     </div>
 
-    <div class="recomment-box">
+    <div id="recommend" class="recomment-box">
         <div class="recommend-header">推荐</div>
         <div class="goods-list">
             <?php foreach($goods_list as $item):?>
@@ -144,7 +145,7 @@ $this->registerJs($js);
         <div class="clearfix"></div>
     </div>
 
-    <div class="tab-box goods-content">
+    <div id="detail" class="tab-box goods-content">
         <div class="tab-header"><div class="tab-item active">商品介绍</div><div class="tab-item">规格参数</div><div class="tab-item">售后保障</div></div>
         <div class="tab-body">
             <div class="tab-item active"><?=$item->content?></div>

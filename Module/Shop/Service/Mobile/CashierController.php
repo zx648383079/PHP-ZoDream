@@ -3,10 +3,12 @@ namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Model\AddressModel;
 use Module\Shop\Domain\Model\CartModel;
+use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
 use Module\Shop\Domain\Model\ShippingModel;
 use Module\Shop\Module;
+use Zodream\Helpers\Json;
 
 /**
  * 收银员
@@ -14,11 +16,8 @@ use Module\Shop\Module;
  */
 class CashierController extends Controller {
 
-    public function indexAction($cart = '') {
-        $cart_ids = explode('-', $cart);
-        $goods_list = Module::cart()->filter(function ($item) use ($cart_ids) {
-            return in_array($item['id'], $cart_ids);
-        });
+    public function indexAction($cart = '', $type = 0) {
+        $goods_list = $this->getGoodsList($cart, $type);
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./mobile', '请选择结算的商品');
         }
@@ -26,15 +25,12 @@ class CashierController extends Controller {
         $order = OrderModel::preview($goods_list);
         $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
         $payment_list = PaymentModel::all();
-        return $this->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list', 'cart'));
+        return $this->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list', 'cart', 'type'));
     }
 
 
-    public function checkoutAction($address, $shipping, $payment, $cart = '') {
-        $cart_ids = explode('-', $cart);
-        $goods_list = Module::cart()->filter(function ($item) use ($cart_ids) {
-            return in_array($item['id'], $cart_ids);
-        });
+    public function checkoutAction($address, $shipping, $payment, $cart = '', $type = 0) {
+        $goods_list = $this->getGoodsList($cart, $type);
         if (empty($goods_list)) {
             return $this->jsonFailure('请选择结算的商品');
         }
@@ -64,9 +60,34 @@ class CashierController extends Controller {
 
 
     /**
+     * @param string $cart
+     * @param int $type
      * @return CartModel[]
+     * @throws \Exception
      */
-    protected function getGoodsList() {
-        return CartModel::getAllGoods();
+    protected function getGoodsList($cart = '', $type = 0) {
+        if ($type < 1) {
+            $cart_ids = explode('-', $cart);
+            return Module::cart()->filter(function ($item) use ($cart_ids) {
+                return in_array($item['id'], $cart_ids);
+            });
+        }
+        if (empty($cart)) {
+            return [];
+        }
+        $cart = Json::decode($cart);
+        $data = [];
+        foreach ($cart as $item) {
+            if (!isset($item['goods'])) {
+                continue;
+            }
+            $goods = GoodsModel::find($item['goods']);
+            if (empty($goods)) {
+                continue;
+            }
+            $data[] = CartModel::fromGoods($goods,
+                max(1, isset($item['amount']) ? intval($item['amount']) : 1));
+        }
+        return $data;
     }
 }

@@ -6,7 +6,12 @@ function addToCart(id: number, amount: number = 1) {
 }
 
 function buyGoods(id: number, amount: number = 1) {
-    
+    window.location.href = 'cashier?type=1&cart='+ JSON.stringify([
+        {
+            goods: id,
+            amount: amount
+        }
+    ]);
 }
 
 function collectGoods(id: number, target?: any) {
@@ -308,5 +313,17 @@ function bindCartDialog(goodsId: number) {
     }).on('click', '[data-action=buy]', function(e) {
         e.preventDefault();
         cartDialog.show().data('step', 'buy');
+    });
+    $(window).scroll(function() {
+        let top = $(this).scrollTop();
+        $('.top-tab a').removeClass('active').each(function() {
+            let item = $(this), 
+                target = $(item.attr('href')),
+                y = target.offset().top;
+            if (y <= top && top < y + target.height()) {
+                item.addClass('active');
+                return false;
+            }
+        });
     });
 }

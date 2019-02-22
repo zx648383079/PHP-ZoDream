@@ -125,12 +125,14 @@ class CartModel extends Model implements ICartItem {
     }
     
     public static function fromGoods(GoodsModel $goods, $amount = 1) {
-        return new static([
+        $model = new static([
             'user_id' => auth()->id(),
             'goods_id' => $goods->id,
             'number' => $amount,
             'price' => $goods->final_price($amount)
         ]);
+        $model->setRelation('goods', $goods);
+        return $model;
     }
 
     public static function clearAll() {
