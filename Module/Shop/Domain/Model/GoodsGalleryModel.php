@@ -29,4 +29,29 @@ class GoodsGalleryModel extends Model {
         ];
     }
 
+    public static function batchSave($data, $id) {
+        if (empty($data)) {
+            return;
+        }
+        $exist = static::where('goods_id', $id)->pluck('image');
+        $diff = empty($exist) ? $data : array_diff($data, $exist);
+        if (!empty($diff)) {
+            $diff = array_map(function ($item) use ($id) {
+                return [
+                    'goods_id' => $id,
+                    'image' => $item,
+                ];
+            }, $diff);
+            static::query()->insert($diff);
+        }
+        if (empty($exist)) {
+            return;
+        }
+        $del = array_diff($exist, $data);
+        if (empty($del)) {
+            return;
+        }
+        static::where('goods_id', $id)->whereIn('image', $del)->delete();
+    }
+
 }

@@ -19,6 +19,9 @@ $this->registerJs($js);
                 基本
             </div>
             <div class="zd-tab-item">
+                图片
+            </div>
+            <div class="zd-tab-item">
                 详情
             </div>
             <div class="zd-tab-item">
@@ -48,7 +51,22 @@ $this->registerJs($js);
                 <?=Form::select('brand_id', [$brand_list], true)?>
                 <?=Form::text('price', true)?>
                 <?=Form::text('market_price')?>
+            </div>
+            <div class="zd-tab-item">
                 <?=Form::file('thumb')?>
+                <?=Form::file('picture')?>
+                <div class="multi-image-box">
+                    <?php foreach($gallery_list as $item):?>
+                    <div class="image-item">
+                        <img src="<?=$item->image?>" alt="">
+                        <input type="hidden" name="gallery[]" value="<?=$item->image?>">
+                        <i class="fa fa-times"></i>
+                    </div>
+                    <?php endforeach;?>
+                    <div class="add-item">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </div>
             </div>
             <div class="zd-tab-item">
                 <script id="container" style="height: 400px" name="content" type="text/plain" required>

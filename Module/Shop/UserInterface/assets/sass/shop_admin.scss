@@ -362,3 +362,50 @@ $color_celeste_approx: #ccc;
 		min-height: 100px;
 	}
 }
+
+.multi-image-box {
+	border: 1px dotted;
+	padding: 5px;
+	.image-item {
+		display: inline-block;
+		position: relative;
+		background-color: #fff;
+		.fa {
+			position: absolute;
+			top: 0;
+			right: 0;
+			background: rgba(#333, .2);
+			border-radius: 50%;
+			display: block;
+			width: 20px;
+			height: 20px;
+			text-align: center;
+			line-height: 20px;
+		}
+		img {
+			width: 120px;
+			height: 120px;
+		}
+		&:hover {
+			border: 1px solid rgb(240, 143, 143);
+		}
+	}
+	.add-item {
+		display: inline-block;
+		width: 120px;
+		height: 120px;
+		border: 1px solid rgb(106, 241, 101);
+		text-align: center;
+		font-size: 80px;
+		vertical-align: top;
+	}
+}
+
+table {
+	.goods-info {
+		text-align: left;
+		.thumb {
+			float: left;
+		}
+	}
+}

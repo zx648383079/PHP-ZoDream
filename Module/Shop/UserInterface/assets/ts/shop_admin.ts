@@ -407,6 +407,19 @@ function bindGoods(baseUri: string) {
         $("input[name=product]").val(JSON.stringify(attr.productList));
         $(this).closest('form').submit();
     });
+    $('.multi-image-box .add-item').upload({
+        grid: '.multi-image-box',
+        url: '/ueditor.php?action=uploadimage',
+        name: 'upfile',
+        multiple: true,
+        isAppend: false,
+        allowMultiple: true,
+        removeTag: '.fa-times',
+        template: '<div class="image-item"><img src="{url}" alt=""><input type="hidden" name="gallery[]" value="{url}"><i class="fa fa-times"></i></div>',
+        onafter: function(data) {
+            return data.state == 'SUCCESS' ? data : false;
+        }
+    });
 }
 
 ///

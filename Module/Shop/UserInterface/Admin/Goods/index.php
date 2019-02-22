@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Theme;
+use Zodream\Helpers\Str;
 /** @var $this View */
 $this->title = '商品列表';
 ?>
@@ -57,7 +58,13 @@ $this->title = '商品列表';
         <tr>
             <td><?=$item->id?></td>
             <td>
-                <a href="<?=$this->url('./goods', ['id' => $item->id])?>" target="_blank"><?=$item->name?></a>
+                <div class="goods-info">
+                    <div class="thumb">
+                        <img src="<?=$item->thumb?>" alt="" width="60" height="60">
+                    </div>
+                    <a href="<?=$this->url('./goods', ['id' => $item->id])?>" target="_blank">
+                    <?=Str::substr($item->name, 0, 20, true)?></a>
+                </div>
             </td>
             <td class="auto-hide">
                 <?php if ($item->category):?>

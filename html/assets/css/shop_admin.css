@@ -273,4 +273,41 @@
   width: 100%;
   min-height: 100px; }
 
+.multi-image-box {
+  border: 1px dotted;
+  padding: 5px; }
+  .multi-image-box .image-item {
+    display: inline-block;
+    position: relative;
+    background-color: #fff; }
+    .multi-image-box .image-item .fa {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: rgba(51, 51, 51, 0.2);
+      border-radius: 50%;
+      display: block;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px; }
+    .multi-image-box .image-item img {
+      width: 120px;
+      height: 120px; }
+    .multi-image-box .image-item:hover {
+      border: 1px solid #f08f8f; }
+  .multi-image-box .add-item {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #6af165;
+    text-align: center;
+    font-size: 80px;
+    vertical-align: top; }
+
+table .goods-info {
+  text-align: left; }
+  table .goods-info .thumb {
+    float: left; }
+
 /*# sourceMappingURL=shop_admin.css.map */

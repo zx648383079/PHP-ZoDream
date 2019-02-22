@@ -44,10 +44,11 @@ class GoodsController extends Controller {
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $brand_list = BrandModel::select('id', 'name')->all();
         $group_list = AttributeGroupModel::all();
-        return $this->show(compact('model', 'cat_list', 'brand_list', 'group_list'));
+        $gallery_list = GoodsGalleryModel::where('goods_id', $id)->all();
+        return $this->show(compact('model', 'cat_list', 'brand_list', 'group_list', 'gallery_list'));
     }
 
-    public function saveAction($id, $product = null) {
+    public function saveAction($id, $product = null, $gallery = null) {
         $model = new GoodsModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
@@ -59,6 +60,9 @@ class GoodsController extends Controller {
         }
         if (!empty($product)) {
             ProductModel::batchSave(is_array($product) ? $product : Json::decode($product), $model->id);
+        }
+        if (!empty($gallery)) {
+            GoodsGalleryModel::batchSave($gallery, $model->id);
         }
         return $this->jsonSuccess([
             'url' => $this->getUrl('goods')
