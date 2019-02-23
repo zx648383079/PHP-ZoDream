@@ -280,7 +280,7 @@ class Uploader {
      * @return string
      */
     private function getFilePath() {
-        return APP_DIR . '/html/'. ltrim($this->fullName, '/');
+        return public_path($this->fullName)->getFullName();
     }
 
     /**

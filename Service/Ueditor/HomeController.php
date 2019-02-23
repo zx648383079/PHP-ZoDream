@@ -53,7 +53,7 @@ class HomeController extends Controller {
 		$end = $start + $size;
 
 		/* 获取文件列表 */
-		$path = APP_DIR . (substr($path, 0, 1) == '/' ? '':'/') . $path;
+		$path = public_path($path)->getFullName();
 		$files = Environment::getfiles($path, $allowFiles);
 		if (!count($files)) {
 			return $this->jsonReturn(array(

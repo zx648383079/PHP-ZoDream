@@ -102,8 +102,11 @@ $(function() {
             url: '/ueditor.php?action=uploadimage',
             name: 'upfile',
             template: '{url}',
-            onafter: function(data) {
-                return data.state == 'SUCCESS' ? data : false;
+            onafter: function(data: any, element: JQuery) {
+                if (data.state == 'SUCCESS') {
+                    element.prev('input').val(data.url);
+                }
+                return false;
             }
         });
     }

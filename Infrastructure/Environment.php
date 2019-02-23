@@ -173,7 +173,7 @@ class Environment {
 			} else {
 				if (preg_match('/\.('.$allowFiles.')$/i', $file)) {
 					$files[] = array(
-						'url'=> substr($path2, strlen(APP_DIR)),
+						'url'=> substr($path2, strlen(public_path())),
 						'mtime'=> filemtime($path2)
 					);
 				}

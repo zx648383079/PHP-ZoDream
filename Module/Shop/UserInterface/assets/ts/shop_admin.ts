@@ -398,6 +398,7 @@ class Attribute {
 
 function bindGoods(baseUri: string) {
     BASE_URI = baseUri;
+    UE.delEditor('container');
     let ue = UE.getEditor('container'),
         attr = new Attribute($(".attribute-box"));
     $("#attribute_group_id").change(function() {
