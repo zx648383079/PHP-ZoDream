@@ -12,13 +12,12 @@ class HomeController extends RestController {
         if ($id > 0) {
             return $this->detailAction($id);
         }
-        $book_list  = Book::with('category', 'author')->ofClassify()->when(!empty($keywords), function ($query) {
+        $book_list  = Book::with('category', 'author')->ofClassify()
+            ->when(!empty($keywords), function ($query) {
                 BookModel::search($query, ['name']);
             })
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
-            })->when(!empty($keywords), function ($query) {
-                BlogModel::search($query, ['title']);
             })
             ->page($per_page);
         return $this->renderPage($book_list);
@@ -26,11 +25,18 @@ class HomeController extends RestController {
 
     public function detailAction($id) {
         $id = intval($id);
-        $book = BookModel::find($id);
+        $book = Book::with('category', 'author')->where('id', $id)->first();
         if (empty($book)) {
             return $this->renderFailure('id 错误！');
         }
         return $this->render($book->toArray());
+    }
+
+    public function suggestAction($keywords) {
+        $data = BookModel::when(!empty($keywords), function ($query) {
+            BookModel::search($query, 'name');
+        })->limit(4)->pluck('name');
+        return $this->render(compact('data'));
     }
 
 }
