@@ -32,11 +32,16 @@ class HomeController extends RestController {
         return $this->render($book->toArray());
     }
 
+    public function hotAction() {
+        $data = BookModel::limit(4)->pluck('name');
+        return $this->render($data);
+    }
+
     public function suggestAction($keywords) {
         $data = BookModel::when(!empty($keywords), function ($query) {
             BookModel::search($query, 'name');
         })->limit(4)->pluck('name');
-        return $this->render(compact('data'));
+        return $this->render($data);
     }
 
 }
