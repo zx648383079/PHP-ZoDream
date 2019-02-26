@@ -6,7 +6,7 @@ use Zodream\Html\Form;
 $this->title = '结算';
 
 $js = <<<JS
-$('select').select();
+bindMobileCashier();
 JS;
 
 $this->extend('../layouts/header')
@@ -79,16 +79,18 @@ $this->extend('../layouts/header')
         </div>
 
         <div class="checkout-amount">
-            <p class="line-item"><span>商品总价</span> <span><?=$order->goods_amount?></span> </p>
-            <p class="line-item"><span>运费</span> <span><?=$order->shipping_fee?></span> </p>
-            <p class="line-item"><span>订单总价</span> <span><?=$order->order_amount?></span> </p>
+            <p class="line-item"><span>商品总价</span> <span data-key="goods_amount"><?=$order->goods_amount?></span> </p>
+            <p class="line-item"><span>+运费</span> <span data-key="shipping_fee"><?=$order->shipping_fee?></span> </p>
+            <p class="line-item"><span>+支付手续费</span> <span data-key="pay_fee"><?=$order->pay_fee?></span> </p>
+            <p class="line-item"><span>-优惠</span> <span data-key="discount"><?=$order->discount?></span> </p>
+            <p class="line-item"><span>订单总价</span> <span data-key="order_amount"><?=$order->order_amount?></span> </p>
         </div>
         <div class="checkout-footer">
-            <span><?=$order->order_amount?></span>
+            <span data-key="order_amount"><?=$order->order_amount?></span>
             <a href="<?=$this->url('./mobile/cashier/checkout')?>" class="btn">立即支付</a>
         </div>
         <input type="hidden" name="address" value="<?=$address ? $address->id : ''?>">
-        <input type="hidden" name="cart" value="<?=$cart?>">
+        <input type="hidden" name="cart" value="<?=$this->text($cart)?>">
         <input type="hidden" name="type" value="<?=$type?>">
     <?=Form::close()?>
 </div>

@@ -1248,6 +1248,8 @@ footer,
       font-size: 26px;
       font-weight: 900;
       content: "\f058"; }
+    .address-list .address-item.selected .address-first span {
+      display: none; }
 
 .order-box .order-item {
   background-color: #fff; }

@@ -327,3 +327,19 @@ function bindCartDialog(goodsId: number) {
         });
     });
 }
+
+function bindMobileCashier() {
+    let form = $('form');
+    $('select').change(function() {
+        ajaxForm(form.attr('action').replace('checkout', 'preview'), form.serialize(), function(data) {
+            if (data.code != 200) {
+                return parseAjax(data);
+            }
+            $.each(data.data, function(key: string, item) {
+                if (typeof item != 'object') {
+                    form.find('*[data-key=' + key + ']').html(item);
+                }
+            });
+        });
+    }).select();
+}

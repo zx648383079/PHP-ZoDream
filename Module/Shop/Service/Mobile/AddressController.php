@@ -24,7 +24,7 @@ class AddressController extends Controller {
 
     public function editAction($id) {
         $model = AddressModel::findOrNew($id);
-        return $this->show(compact('model', 'cat_list'));
+        return $this->show(compact('model'));
     }
 
     public function saveAction() {
