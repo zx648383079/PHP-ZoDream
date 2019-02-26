@@ -53,6 +53,24 @@ class CashierController extends Controller {
         ]);
     }
 
+    public function previewAction($address, $shipping = 0, $payment = 0, $cart = '', $type = 0) {
+        $goods_list = $this->getGoodsList($cart, $type);
+        if (empty($goods_list)) {
+            return $this->jsonFailure('请选择结算的商品');
+        }
+        $order = OrderModel::preview($goods_list);
+        if (!$order->setAddress(AddressModel::findWithAuth($address))) {
+            return $this->jsonFailure('请选择收货地址');
+        }
+        if ($payment > 0 && !$order->setPayment(PaymentModel::find($payment))) {
+            return $this->jsonFailure('请选择支付方式');
+        }
+        if ($shipping > 0 && !$order->setShipping(ShippingModel::find($shipping))) {
+            return $this->jsonFailure('请选择配送方式');
+        }
+        return $this->jsonSuccess($order->toArray());
+    }
+
     public function payAction($id) {
         $order = OrderModel::find($id);
         return $this->show(compact('order'));

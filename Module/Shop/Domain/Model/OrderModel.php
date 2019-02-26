@@ -104,18 +104,6 @@ class OrderModel extends Model {
         return '待付款';
     }
 
-    /**
-     * @param OrderGoodsModel[] $allGoods
-     * @return float
-     */
-    public function getGoodsAmount(array $allGoods) {
-        $total = 0;
-        foreach ($allGoods as $item) {
-            $total += $item->getTotal();
-        }
-        return $total;
-    }
-
     public function payment() {
         return $this->hasOne(PaymentModel::class, 'id', 'payment_id');
     }
@@ -128,36 +116,12 @@ class OrderModel extends Model {
         return $this->hasOne(ShippingModel::class, 'id', 'shipping_id');
     }
 
-    public function createOrder() {
-        $carts = CartModel::getAllGoods();
-        $total = 0;
-        foreach ($carts as $item) {
-            $total += $item->getTotalAttribute();
-        }
-        $this->status = self::STATUS_UNPAY;
-        $this->goods_amount = $total;
-        $this->order_amount = $total;
-        $this->shipping_fee = $this->shipping->getFee();
-        $this->pay_fee = $this->payment->getFee();
-        $this->user_id = auth()->id();
-        $this->series_number = self::generateSeriesNumber();
-        if (!$this->save()) {
-            return false;
-        }
-        foreach ($carts as $item) {
-            OrderGoodsModel::addCartGoods($this, $item);
-        }
-        $this->address->order_id = $this->id;
-        $this->address->save();
-        return true;
-    }
-
     public function pay() {
         $this->payment->pay($this);
     }
 
-    public function addGoods($goods) {
-
+    public function getTotalAttribute() {
+        return $this->goods_amount + $this->pay_fee + $this->shipping_fee - $this->discount;
     }
 
     public function setAddress(AddressModel $address) {
@@ -175,6 +139,8 @@ class OrderModel extends Model {
         $this->payment_id = $payment->id;
         $this->payment_name = $payment->name;
         $this->setRelation('payment', $payment);
+        $this->pay_fee = $payment->getFee();
+        $this->order_amount = $this->getTotalAttribute();
         return true;
     }
 
@@ -185,6 +151,24 @@ class OrderModel extends Model {
         $this->shipping_id = $shipping->id;
         $this->shipping_name = $shipping->name;
         $this->setRelation('shipping', $shipping);
+        $this->shipping_fee = $shipping->getFee();
+        $this->order_amount = $this->getTotalAttribute();
+        return true;
+    }
+
+    public function createOrder() {
+        $this->status = self::STATUS_UNPAY;
+        $this->order_amount = $this->getTotalAttribute();
+        $this->user_id = auth()->id();
+        $this->series_number = self::generateSeriesNumber();
+        if (!$this->save()) {
+            return false;
+        }
+        foreach ($this->goods as $item) {
+            OrderGoodsModel::addCartGoods($this, $item);
+        }
+        $this->address->order_id = $this->id;
+        $this->address->save();
         return true;
     }
 
@@ -199,7 +183,8 @@ class OrderModel extends Model {
             $total += $item->getTotalAttribute();
         }
         $model->goods_amount = $total;
-        $model->order_amount = $total;
+        $model->setRelation('goods', $goods_list);
+        $model->order_amount = $model->getTotalAttribute();
         return $model;
     }
 
