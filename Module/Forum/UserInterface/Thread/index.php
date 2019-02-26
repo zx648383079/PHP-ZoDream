@@ -22,9 +22,11 @@ $this->registerCssFile([
                 <span>回复：0</span>
             </div>
             <div class="title">
+                <?php if($thread->classify):?>
                 [
-                    <a href="">求助</a>
+                    <a href=""><?=$thread->classify->name?></a>
                 ]
+                <?php endif;?>
                 <?=$thread->title?>
             </div>
         </div>
