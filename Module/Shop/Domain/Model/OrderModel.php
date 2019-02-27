@@ -33,10 +33,10 @@ use Domain\Model\Model;
  */
 class OrderModel extends Model {
 
-    const STATUS_CANCEL = 0;
-    const STATUS_INVALID = 1;
-    const STATUS_UNPAY = 10;
-    const STATUS_PAID_UNSHIP = 20;
+    const STATUS_CANCEL = 1;
+    const STATUS_INVALID = 2;
+    const STATUS_UN_PAY = 10;
+    const STATUS_PAID_UN_SHIP = 20;
     const STATUS_SHIPPED = 40;
     const STATUS_RECEIVED = 60;
     const STATUS_FINISH = 80;
@@ -44,6 +44,16 @@ class OrderModel extends Model {
     const TYPE_NONE = 0; //普通订单
     const TYPE_AUCTION = 1; //拍卖订单
     const TYPE_PRESELL = 2; //预售订单
+
+    public $status_list = [
+        self::STATUS_UN_PAY => '待支付',
+        self::STATUS_SHIPPED => '待收货',
+        self::STATUS_FINISH => '已完成',
+        self::STATUS_CANCEL => '已取消',
+        self::STATUS_INVALID => '已失效',
+        self::STATUS_PAID_UN_SHIP => '待发货',
+        self::STATUS_RECEIVED => '待评价'
+    ];
 
     public static function tableName() {
         return 'shop_order';
@@ -101,7 +111,7 @@ class OrderModel extends Model {
     }
 
     public function getStatusLabelAttribute() {
-        return '待付款';
+        return $this->status_list[$this->status];
     }
 
     public function payment() {
@@ -202,7 +212,7 @@ class OrderModel extends Model {
             ];
         }
         return [
-            'unpay' => static::auth()->where('status', self::STATUS_UNPAY)->count(),
+            'unpay' => static::auth()->where('status', self::STATUS_UN_PAY)->count(),
             'shipped' => static::auth()->where('status', self::STATUS_SHIPPED)->count(),
             'uncomment' => OrderGoodsModel::auth()->where('status', self::STATUS_RECEIVED)->count(),
             'refunding' => OrderRefundModel::auth()

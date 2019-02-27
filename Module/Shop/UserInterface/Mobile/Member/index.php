@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Shop\Domain\Model\OrderModel;
 /** @var $this View */
 $this->title = '个人中心';
 $header_btn = '';
@@ -53,14 +54,14 @@ $this->extend('../layouts/header', compact('header_btn'));
         </a>
     </div>
     <div class="menu-large">
-        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
+        <a href="<?=$this->url('./mobile/order', ['status' => OrderModel::STATUS_UN_PAY])?>" class="item">
             <i class="fa fa-money-bill" aria-hidden="true"></i>
             <span>待付款</span>
             <?php if(isset($order_subtotal['unpay']) && $order_subtotal['unpay'] > 0):?>
             <i class="tip"><?=$order_subtotal['unpay']?></i>
             <?php endif;?>
         </a>
-        <a href="<?=$this->url('./mobile/order', ['status' => ''])?>" class="item">
+        <a href="<?=$this->url('./mobile/order', ['status' => OrderModel::STATUS_SHIPPED])?>" class="item">
             <i class="fa fa-truck" aria-hidden="true"></i>
             <span>待收货</span>
             <?php if(isset($order_subtotal['shipped']) && $order_subtotal['shipped'] > 0):?>

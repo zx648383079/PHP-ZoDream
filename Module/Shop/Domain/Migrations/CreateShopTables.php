@@ -32,7 +32,6 @@ use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\OrderRefundModel;
 use Module\Shop\Domain\Model\PaymentModel;
-use Module\Shop\Domain\Model\ProductAttributeModel;
 use Module\Shop\Domain\Model\ProductModel;
 use Module\Shop\Domain\Model\RegionModel;
 use Module\Shop\Domain\Model\ShippingGroupModel;

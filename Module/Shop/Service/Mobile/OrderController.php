@@ -14,12 +14,15 @@ class OrderController extends Controller {
         ];
     }
 
-    public function indexAction() {
+    public function indexAction($status = 0) {
         $order_list = OrderModel::with('goods')
             ->where('user_id', auth()->id())
+            ->when($status > 0, function ($query) use ($status) {
+                $query->where('status', intval($status));
+            })
             ->orderBy('created_at', 'desc')
             ->page();
-        return $this->show(compact('order_list'));
+        return $this->show(compact('order_list', 'status'));
     }
 
     public function detailAction($id) {
@@ -29,8 +32,31 @@ class OrderController extends Controller {
         return $this->show(compact('order', 'goods_list', 'address'));
     }
 
-    public function payAction($id) {
+    public function receiveAction($id) {
         $order = OrderModel::find($id);
-        $order->pay();
+        if ($order->status != OrderModel::STATUS_SHIPPED) {
+            return $this->jsonFailure('签收失败！');
+        }
+        $order->status = OrderModel::STATUS_RECEIVED;
+        $order->save() && OrderGoodsModel::where('order_id', $id)->update([
+            'status' => $order->status
+        ]);
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function cancelAction($id) {
+        $order = OrderModel::find($id);
+        if (!in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
+            return $this->jsonFailure('取消失败！');
+        }
+        $order->status = OrderModel::STATUS_CANCEL;
+        $order->save() && OrderGoodsModel::where('order_id', $id)->update([
+           'status' => $order->status
+        ]);
+        return $this->jsonSuccess([
+           'refresh' => true
+        ]);
     }
 }
