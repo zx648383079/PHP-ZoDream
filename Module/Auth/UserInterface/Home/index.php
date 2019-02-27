@@ -63,10 +63,13 @@ $this->extend('layouts/header')
             </form>
             <div class="login-oauth-box">
                 <div class="box-title">第三方登录</div>
-                <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-qq"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'wechat', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-weixin"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'weibo', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-weibo"></i></a>
-                <a href="<?=$this->url('./oauth', ['type' => 'github', 'redirect_uri' => $redirect_uri], false)?>"><i class="fab fa-github"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri], false)?>" title="QQ登录"><i class="fab fa-qq"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'wechat', 'redirect_uri' => $redirect_uri], false)?>" title="微信登录"><i class="fab fa-weixin"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'weibo', 'redirect_uri' => $redirect_uri], false)?>" title="微博登录"><i class="fab fa-weibo"></i></a>
+                <a href="<?=$this->url('./oauth', ['type' => 'github', 'redirect_uri' => $redirect_uri], false)?>" title="GITHUB登录"><i class="fab fa-github"></i></a>
+                <a class="login-webauth" href="javascript:;" title="生物识别">
+                    <i class="fa fa-fingerprint"></i>
+                </a>
             </div>
         </div>
     </section>

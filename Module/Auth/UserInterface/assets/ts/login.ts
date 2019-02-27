@@ -77,4 +77,22 @@ function bindLogin(baseUrl: string) {
     qr_box.find(".btn").click(function() {
         $(".login-box").removeClass('slided');
     });
+    let credentialCreationOptionsLogin = {
+        mediation: 'required',
+        publicKey: {
+            userVerification: 'required',
+            challenge: new Uint8Array(16),
+            timeout: 60 * 1000,
+        },
+    };
+    $('.login-webauth').click(function() {
+        if (!navigator.credentials) {
+            return;
+        }
+        navigator.credentials.get(credentialCreationOptionsLogin)
+        .then((credentials) => {
+            console.log(credentials);
+        })
+        .catch(console.error);
+    }).toggle(!!navigator.credentials);
 }
