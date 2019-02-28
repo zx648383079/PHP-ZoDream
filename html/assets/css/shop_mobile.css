@@ -752,10 +752,13 @@ footer,
 
 .checkout-footer {
   text-align: right;
-  border-top: 0.0625rem solid #ff77ff; }
+  border-top: 0.0625rem solid #d22222;
+  background-color: #fff; }
   .checkout-footer .btn {
     margin: 0 0 0 0.3125rem;
-    line-height: 2.5rem; }
+    line-height: 2.5rem;
+    background-color: #d22222;
+    color: #fff; }
 
 .goods-gallary-box img {
   height: 22.5rem;
@@ -785,7 +788,7 @@ footer,
         .goods-info .goods-header .goods-collect .like-icon::before {
           content: "\f004"; }
       .goods-info .goods-header .goods-collect.active .like-icon {
-        color: #f00; }
+        color: #d22222; }
   .goods-info .goods-price {
     color: #B4282D;
     font-weight: 700;

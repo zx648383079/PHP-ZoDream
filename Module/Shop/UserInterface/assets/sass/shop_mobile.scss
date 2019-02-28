@@ -916,10 +916,13 @@ footer,
 
 .checkout-footer {
     text-align: right;
-    border-top: 0.0625rem solid #ff77ff;
+    border-top: 0.0625rem solid $red;
+    background-color: $white;
     .btn {
         margin: 0 0 0 0.3125rem;
         line-height: 2.5rem;
+        background-color: $red;
+        color: $white;
     }
 }
 
@@ -958,7 +961,7 @@ footer,
             }
             &.active {
                 .like-icon {
-                    color: #f00;
+                    color: $red
                 }
             }
         }

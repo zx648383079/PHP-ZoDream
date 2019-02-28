@@ -10,7 +10,7 @@ $this->title = '订单详情';
         <span></span>
     </div>
     <span class="active">待付款
-        <i>2018-01-12 18:12:12</i>
+        <i><?=$order->created_at?> </i>
     </span>
     <span class="active">待发货
         <i>2018-01-12 18:12:12</i>

@@ -167,7 +167,7 @@ class OrderModel extends Model {
     }
 
     public function createOrder() {
-        $this->status = self::STATUS_UNPAY;
+        $this->status = self::STATUS_UN_PAY;
         $this->order_amount = $this->getTotalAttribute();
         $this->user_id = auth()->id();
         $this->series_number = self::generateSeriesNumber();

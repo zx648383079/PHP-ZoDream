@@ -15,7 +15,7 @@ $this->extend('../layouts/header')
     ->registerJs($js);
 ?>
 
-<div class="has-header checkout-box">
+<div class="has-header has-footer checkout-box">
     <?=Form::open('./mobile/cashier/checkout')?>
         <?php if($address):?>
         <div class="address-box">
