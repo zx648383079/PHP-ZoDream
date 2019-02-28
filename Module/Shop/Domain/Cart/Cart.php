@@ -81,7 +81,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function remove($ids) {
-        if (func_num_args() > 1) {
+        if (!is_array($ids)) {
             $ids = func_get_args();
         }
         foreach ($ids as $item) {
