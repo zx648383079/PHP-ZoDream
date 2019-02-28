@@ -59,8 +59,11 @@ $this->extend('../layouts/header', [
                     <?php if($order->status == OrderModel::STATUS_RECEIVED):?>
                     <a href="<?=$this->url('./mobile/comment')?>">评价</a>
                     <?php endif;?>
-                    <?php if(in_array($order->status, [OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH])):?>
+                    <?php if(in_array($order->status, [OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED])):?>
                     <a href="">退换货</a>
+                    <?php endif;?>
+                    <?php if(in_array($order->status, [OrderModel::STATUS_FINISH])):?>
+                    <a href="">售后</a>
                     <?php endif;?>
                     <?php if(in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])):?>
                     <a data-type="del" data-tip="确认取消此订单？" href="<?=$this->url('./mobile/order/cancel', ['id' => $order->id])?>">取消</a>

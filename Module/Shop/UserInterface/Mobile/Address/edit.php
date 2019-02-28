@@ -5,8 +5,8 @@ use Zodream\Template\View;
 $this->title = '编辑地址';
 
 $header_btn = <<<HTML
-<a class="btn" href="javascript:$('form').submit();">
-    保存
+<a class="right" href="javascript:$('form').submit();">
+    <i class="fa fa-check"></i>
 </a>
 HTML;
 $url = $this->url('./region/tree');

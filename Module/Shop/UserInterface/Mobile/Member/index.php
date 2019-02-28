@@ -5,6 +5,7 @@ use Module\Shop\Domain\Model\OrderModel;
 /** @var $this View */
 $this->title = '个人中心';
 $header_btn = '';
+$header_back = $this->url('./mobile');
 $logout_url = $this->url('/auth/logout', ['redirect_uri' => $this->url('./mobile')]);
 if (!auth()->guest()) {
     $header_btn = <<<HTML
@@ -13,7 +14,11 @@ if (!auth()->guest()) {
 </a>
 HTML;
 }
-$this->extend('../layouts/header', compact('header_btn'));
+$js = <<<JS
+bindMemberCenter();
+JS;
+$this->registerJs($js);
+$this->extend('../layouts/header', compact('header_btn', 'header_back'));
 ?>
 
 <div class="has-header has-footer">

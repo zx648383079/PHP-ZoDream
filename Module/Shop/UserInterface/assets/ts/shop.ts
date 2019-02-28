@@ -343,3 +343,48 @@ function bindMobileCashier() {
         });
     }).select();
 }
+
+function bindComment() {
+    $('.comment-star i').click(function() {
+        let $this = $(this),
+            star = $this.index() + 1,
+            box = $this.closest('.comment-star');
+        box.find('input').val(star);
+        box.find('i').each(function() {
+            $(this).toggleClass('active', $(this).index() < star);
+        });
+    });
+    $('.comment-form-item').submit(function() {
+        let form = $(this);
+        ajaxForm(form.attr('action'), form.serialize(), function(data) {
+            if (data.code != 200) {
+                return parseAjax(data);
+            }
+            if ($('.comment-form-item').length > 1) {
+                form.remove();
+                Dialog.tip('已提交评价');
+                return;
+            }
+            return parseAjax(data);
+        });
+        return false;
+    });
+    $('.multi-image-box .add-item').upload({
+        url: '/ueditor.php?action=uploadimage',
+        name: 'upfile',
+        multiple: true,
+        isAppend: false,
+        allowMultiple: true,
+        removeTag: '.fa-times',
+        template: '<div class="image-item"><img src="{url}" alt=""><input type="hidden" name="images[]" value="{url}"><i class="fa fa-times"></i></div>',
+        onafter: function(data) {
+            return data.state == 'SUCCESS' ? data : false;
+        }
+    });
+}
+
+function bindMemberCenter() {
+    $(window).scroll(function() {
+        $('header.top').toggleClass('fixed', $(window).scrollTop() < 176);
+    });
+}

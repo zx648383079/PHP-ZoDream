@@ -248,6 +248,9 @@ header,
             }
         }
     }
+    &.fixed {
+        position: absolute;
+    }
 }
 
 .checkout-footer,
@@ -852,6 +855,7 @@ footer,
 }
 .checkout-box,
 .order-box,
+.comment-list-box,
 .collect-page {
     .goods-list {
         text-align: left;
@@ -2047,6 +2051,98 @@ footer,
     >div:first-child {
         border-right: $hr;
     }
+}
+
+.comment-list-box {
+    .comment-btn {
+        border: 1px solid;
+        padding: 0 10px;
+        line-height: 20px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+.comment-form-item {
+    position: relative;
+    .goods-img {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        img {
+            width: 70px;
+            height: 70px;
+        }
+    }
+    .comment-star {
+        margin-left: 100px;
+        padding: 40px 0;
+        .fa {
+            font-size: 20px;
+            &.active {
+                color: $red;
+            }
+        }
+    }
+    .comment-input {
+        textarea {
+            width: 100%;
+            resize: none;
+            height: 100px;
+        }
+    }
+    .input-radio {
+        line-height: 1.875rem;
+        position: relative;
+        .fa {
+            position: absolute;
+            right: 0.625rem;
+            font-size: 1.5625rem;
+            top: 0.125rem;
+        }
+    }
+    .btn {
+        background-color: $red;
+        color: $white;
+        width: 80%;
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+.multi-image-box {
+	border: 1px dotted;
+	padding: 5px;
+	.image-item {
+		display: inline-block;
+		position: relative;
+		background-color: #fff;
+		.fa {
+			position: absolute;
+			top: 0;
+			right: 0;
+			background: rgba(#333, .2);
+			border-radius: 50%;
+			display: block;
+			width: 20px;
+			height: 20px;
+			text-align: center;
+			line-height: 20px;
+		}
+		img {
+			width: 60px;
+			height: 60px;
+		}
+	}
+	.add-item {
+		display: inline-block;
+		width: 60px;
+		height: 60px;
+		text-align: center;
+		font-size: 40px;
+		vertical-align: top;
+	}
 }
 
 .dialog.dialog-content {
