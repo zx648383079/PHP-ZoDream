@@ -195,6 +195,33 @@
     .toggle-box.active .fa::before {
       content: "\f00c"; }
 
+.order-item {
+  margin-bottom: 20px; }
+  .order-item .item-header {
+    line-height: 40px; }
+    .order-item .item-header span {
+      margin-right: 20px; }
+  .order-item .item-body {
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: 1fr 120px 200px 120px; }
+    .order-item .item-body .goods-item {
+      display: grid;
+      grid-template-columns: 70px 1fr; }
+      .order-item .item-body .goods-item .goods-img img {
+        width: 70px;
+        height: 70px; }
+  .order-item .item-subtotal,
+  .order-item .item-actions,
+  .order-item .item-user {
+    padding-top: 10px; }
+  .order-item .item-actions {
+    text-align: center; }
+    .order-item .item-actions a {
+      display: block; }
+      .order-item .item-actions a.btn-danger {
+        color: #f00; }
+
 .progress-bar {
   width: 80%;
   height: 50px;

@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Shop\Domain\Model\OrderModel;
 /** @var $this View */
 $this->title = '订单详情';
 ?>
@@ -40,7 +41,9 @@ $this->title = '订单详情';
             </div>
             <div class="col-md-3">
                 <p>是否需要发票：否</p>
+                <?php if($address):?>
                 <p>联系方式：<?=$address->tel?></p>
+                <?php endif;?>
             </div>
             <div class="col-md-3">
                 <p>优惠信息</p>
@@ -48,9 +51,11 @@ $this->title = '订单详情';
                 <p>积分抵扣：-10</p>
             </div>
         </div>
+        <?php if($order->status == OrderModel::STATUS_PAID_UN_SHIP):?>
         <div class="text-center">
-            <a href="" class="btn">我要发货</a>
+            <a href="<?=$this->url('./admin/order/shipping', ['id' => $order->id])?>" class="btn">我要发货</a>
         </div>
+        <?php endif;?>
     </div>
 </div>
 <table class="table-hover">
@@ -102,6 +107,7 @@ $this->title = '订单详情';
 
 <div class="row">
     <div class="col-md-6">
+        <?php if($order->remark):?>
         <div class="panel">
             <div class="panel-header">
             <i class="fa fa-bookmark"></i>    
@@ -110,6 +116,7 @@ $this->title = '订单详情';
                 <?=$order->remark?>
             </div>
         </div>
+        <?php endif;?>
         <div class="panel">
             <div class="panel-header">
             <i class="fa fa-edit"></i>    
@@ -122,6 +129,7 @@ $this->title = '订单详情';
             </div>
         </div>
     </div>
+    
     <div class="col-md-6">
         <div class="panel">
             <div class="panel-header">
@@ -135,6 +143,7 @@ $this->title = '订单详情';
                         <th style="width:30%">会员用户名:</th>
                         <td><?=$user->name?></td>
                     </tr>
+                    <?php if($address):?>
                     <tr>
                         <th>收货人:</th>
                         <td><?=$address->name?></td>
@@ -151,13 +160,16 @@ $this->title = '订单详情';
                         <th>收货地址:</th>
                         <td><?=$address->address?></td>
                     </tr>
+                    <?php endif;?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    
 </div>
 <div class="row">
+<?php if(in_array($order->status, [OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH])):?>
     <div class="col-md-6">
         <div class="panel">
             <div class="panel-header">
@@ -178,8 +190,8 @@ $this->title = '订单详情';
                 </table>
             </div>
         </div>
-       
     </div>
+    <?php endif;?>
     <div class="col-md-6">
         <div class="panel">
             <div class="panel-header">

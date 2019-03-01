@@ -262,6 +262,49 @@ $color_celeste_approx: #ccc;
 	}
 }
 
+.order-item {
+	margin-bottom: 20px;
+	.item-header {
+		line-height: 40px;
+		span {
+			margin-right: 20px;
+		}
+	}
+	.item-body {
+		background-color: #fff;
+		display: grid;
+		grid-template-columns: 1fr 120px 200px 120px;
+		.goods-item {
+			display: grid;
+			grid-template-columns: 70px 1fr;
+			.goods-img {
+				img {
+					width: 70px;
+					height: 70px;
+				}
+			}
+		}
+	}
+	.item-subtotal,
+	.item-actions,
+	.item-user {
+		padding-top: 10px;
+	}
+	.item-actions {
+		text-align: center;
+		a {
+			display: block;
+			&.btn-danger {
+				color: #f00;
+			}
+		}
+	}
+}
+
+.order-box {
+
+}
+
 .progress-bar {
 	width: 80%;
     height: 50px;

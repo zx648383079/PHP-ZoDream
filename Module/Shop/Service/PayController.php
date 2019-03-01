@@ -1,13 +1,30 @@
 <?php
 namespace Module\Shop\Service;
 
+use Module\Shop\Domain\Model\OrderLogModel;
+use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Model\PayLogModel;
+
 class PayController extends Controller {
 
-    public function indexAction() {
-        return $this->show();
+    public function indexAction($order, $payment) {
+        $order = OrderModel::find($order);
+        if ($order->status != OrderModel::STATUS_UN_PAY) {
+            return;
+        }
+        PayLogModel::create([
+            'type' => PayLogModel::TYPE_ORDER,
+            'payment_id' => $payment,
+            'user_id' => auth()->id(),
+            'data' => $order->id,
+            'status' => PayLogModel::STATUS_NONE,
+            'amount' => $order->order_amount,
+        ]);
     }
 
     public function notifyAction() {
-
+        $id = intval(app('request')->get('id'));
+        $log = PayLogModel::find($id);
+        $log && $log->pay();
     }
 }

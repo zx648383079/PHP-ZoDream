@@ -3,6 +3,7 @@ namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Model\OrderAddressModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
+use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
 
 
@@ -37,10 +38,9 @@ class OrderController extends Controller {
         if ($order->status != OrderModel::STATUS_SHIPPED) {
             return $this->jsonFailure('签收失败！');
         }
-        $order->status = OrderModel::STATUS_RECEIVED;
-        $order->save() && OrderGoodsModel::where('order_id', $id)->update([
-            'status' => $order->status
-        ]);
+        if (!OrderLogModel::receive($order)) {
+            return $this->jsonFailure('签收失败！');
+        }
         return $this->jsonSuccess([
             'refresh' => true
         ]);
@@ -51,10 +51,9 @@ class OrderController extends Controller {
         if (!in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
             return $this->jsonFailure('取消失败！');
         }
-        $order->status = OrderModel::STATUS_CANCEL;
-        $order->save() && OrderGoodsModel::where('order_id', $id)->update([
-           'status' => $order->status
-        ]);
+        if (!OrderLogModel::cancel($order)) {
+            return $this->jsonFailure('取消失败！');
+        }
         return $this->jsonSuccess([
            'refresh' => true
         ]);

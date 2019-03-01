@@ -73,7 +73,20 @@ class CashierController extends Controller {
 
     public function payAction($id) {
         $order = OrderModel::find($id);
-        return $this->show(compact('order'));
+        if ($order->status != OrderModel::STATUS_UN_PAY) {
+            return $this->redirectWithMessage($this->getUrl('order'), '不能支付此订单');
+        }
+        $data = PaymentModel::all();
+        $payment = null;
+        $payment_list = [];
+        foreach ($data as $item) {
+            if ($item->id == $order->payment_id) {
+                $payment = $item;
+                continue;
+            }
+            $payment_list[] = $item;
+        }
+        return $this->show(compact('order', 'payment', 'payment_list'));
     }
 
 

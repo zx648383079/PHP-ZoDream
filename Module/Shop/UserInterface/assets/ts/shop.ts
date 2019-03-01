@@ -388,3 +388,13 @@ function bindMemberCenter() {
         $('header.top').toggleClass('fixed', $(window).scrollTop() < 176);
     });
 }
+
+function bindPay() {
+    let paymentInput = $('input[name=payment]'),
+        payments = $('.payment-item').click(function() {
+        let $this = $(this);
+        payments.removeClass('active');
+        $this.addClass('active');
+        paymentInput.val($this.data('id'));
+    });
+}

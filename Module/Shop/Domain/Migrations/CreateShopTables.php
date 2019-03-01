@@ -23,6 +23,8 @@ use Module\Shop\Domain\Model\GoodsIssue;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\InvoiceModel;
 use Module\Shop\Domain\Model\InvoiceTitleModel;
+use Module\Shop\Domain\Model\Logistics\DeliveryGoodsModel;
+use Module\Shop\Domain\Model\Logistics\DeliveryModel;
 use Module\Shop\Domain\Model\NavigationModel;
 use Module\Shop\Domain\Model\OrderActivityModel;
 use Module\Shop\Domain\Model\OrderAddressModel;
@@ -31,6 +33,7 @@ use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\OrderRefundModel;
+use Module\Shop\Domain\Model\PayLogModel;
 use Module\Shop\Domain\Model\PaymentModel;
 use Module\Shop\Domain\Model\ProductModel;
 use Module\Shop\Domain\Model\RegionModel;
@@ -135,14 +138,8 @@ class CreateShopTables extends Migration {
 
         $this->createGoods();
         $this->createOrder();
-        Schema::createTable(PaymentModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(30)->notNull();
-            $table->set('code')->varchar(30)->notNull();
-            $table->set('icon')->varchar(100)->defaultVal('');
-            $table->set('description')->varchar()->defaultVal('');
-            $table->set('settings')->text();
-        });
+        $this->createLogistics();
+        $this->createPay();
         Schema::createTable(RegionModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
@@ -189,6 +186,10 @@ class CreateShopTables extends Migration {
             $table->set('discount')->decimal(8, 2)->defaultVal(0);
             $table->set('shipping_fee')->decimal(8, 2)->defaultVal(0);
             $table->set('pay_fee')->decimal(8, 2)->defaultVal(0);
+            $table->timestamp('pay_at')->comment('支付时间');
+            $table->timestamp('shipping_at')->comment('发货时间');
+            $table->timestamp('receive_at')->comment('签收时间');
+            $table->timestamp('finish_at')->comment('完成时间');
             $table->timestamps();
         });
         Schema::createTable(OrderGoodsModel::tableName(), function (Table $table) {
@@ -261,6 +262,38 @@ class CreateShopTables extends Migration {
             $table->set('freight')->tinyint(2)
                 ->defaultVal(0)->comment('退款方式');
             $table->timestamps();
+        });
+    }
+
+    /**
+     * 物流发货
+     */
+    public function createLogistics(): void {
+        Schema::createTable(DeliveryModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('order_id')->int()->notNull();
+            $table->set('status')->int()->defaultVal(0);
+            $table->set('shipping_id')->int()->defaultVal(0);
+            $table->set('shipping_name')->varchar(30)->defaultVal(0);
+            $table->set('shipping_fee')->decimal(8, 2)->defaultVal(0);
+            $table->set('logistics_number')->varchar(30)->defaultVal('')->comment('物流单号');
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('region_id')->int()->notNull();
+            $table->set('region_name')->varchar()->notNull();
+            $table->set('tel')->char(11)->notNull();
+            $table->set('address')->varchar()->notNull();
+            $table->set('best_time')->varchar()->defaultVal('');
+            $table->timestamps();
+        });
+        Schema::createTable(DeliveryGoodsModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('delivery_id')->int()->notNull();
+            $table->set('order_goods_id')->int()->notNull();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('name')->varchar(100)->notNull()->comment('商品名');
+            $table->set('series_number')->varchar(100)->notNull();
+            $table->set('number')->int()->defaultVal(1);
         });
     }
 
@@ -512,6 +545,27 @@ class CreateShopTables extends Migration {
             $table->set('configure')->text()->notNull()->comment('其他配置信息');
             $table->timestamp('start_at');
             $table->timestamp('end_at');
+            $table->timestamps();
+        });
+    }
+
+    private function createPay(): void {
+        Schema::createTable(PaymentModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('code')->varchar(30)->notNull();
+            $table->set('icon')->varchar(100)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->set('settings')->text();
+        });
+        Schema::createTable(PayLogModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('payment_id')->int()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('user_id')->int()->notNull();
+            $table->set('data')->varchar()->defaultVal('')->comment('可以接受多个订单号');
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('amount')->decimal(10, 2)->defaultVal(0);
             $table->timestamps();
         });
     }

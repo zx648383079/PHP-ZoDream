@@ -5,6 +5,7 @@ namespace Module\Shop\Service\Mobile;
 use Module\Shop\Domain\Model\CommentImageModel;
 use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
+use Module\Shop\Domain\Model\OrderLogModel;
 use Module\Shop\Domain\Model\OrderModel;
 
 class CommentController extends Controller {
@@ -75,11 +76,7 @@ class CommentController extends Controller {
             ->where('comment_id', 0)
             ->where('status', OrderModel::STATUS_RECEIVED)->count();
         if ($count < 1) {
-            OrderModel::where('id', $goods->order_id)
-                ->update([
-                   'status' =>  OrderModel::STATUS_FINISH,
-                    'updated_at' => time()
-                ]);
+            OrderLogModel::finish(OrderModel::find($goods->order_id));
         }
         return $this->jsonSuccess([
             'url' => $this->getUrl('comment')

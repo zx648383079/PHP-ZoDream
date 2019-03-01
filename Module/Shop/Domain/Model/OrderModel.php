@@ -25,6 +25,10 @@ use Domain\Model\Model;
  * @property float $discount
  * @property float $shipping_fee
  * @property float $pay_fee
+ * @property integer $pay_at
+ * @property integer $shipping_at
+ * @property integer $receive_at
+ * @property integer $finish_at
  * @property integer $created_at
  * @property integer $updated_at
  * @property PaymentModel $payment
@@ -73,6 +77,10 @@ class OrderModel extends Model {
             'discount' => '',
             'shipping_fee' => '',
             'pay_fee' => '',
+            'pay_at' => 'int',
+            'shipping_at' => 'int',
+            'receive_at' => 'int',
+            'finish_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -84,15 +92,19 @@ class OrderModel extends Model {
             'series_number' => 'Series Number',
             'user_id' => 'User Id',
             'status' => 'Status',
-            'payment_id' => 'Payment Id',
+            'payment_id' => '支付方式',
             'payment_name' => 'Payment Name',
-            'shipping_id' => 'Shipping Id',
+            'shipping_id' => '配送方式',
             'shipping_name' => 'Shipping Name',
             'goods_amount' => 'Goods Amount',
             'order_amount' => 'Order Amount',
             'discount' => 'Discount',
             'shipping_fee' => 'Shipping Fee',
             'pay_fee' => 'Pay Fee',
+            'pay_at' => 'Pay At',
+            'shipping_at' => 'Shipping At',
+            'receive_at' => 'Receive At',
+            'finish_at' => 'Finish At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
