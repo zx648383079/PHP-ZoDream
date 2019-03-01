@@ -811,6 +811,11 @@ footer,
       position: absolute;
       right: 0;
       font-size: 28px; }
+  .comment-box .comment-subtotal {
+    line-height: 40px;
+    padding-left: 10px; }
+    .comment-box .comment-subtotal .score {
+      display: inline-block; }
   .comment-box .comment-stats {
     padding: 10px; }
     .comment-box .comment-stats a {
@@ -1286,6 +1291,10 @@ footer,
 
 .order-box .order-footer {
   text-align: right; }
+  .order-box .order-footer .order-actions {
+    line-height: 30px; }
+    .order-box .order-footer .order-actions a {
+      padding: 0 5px; }
 
 .order-box .line-item {
   position: relative;

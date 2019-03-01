@@ -7,7 +7,9 @@ $status_list = [
     0 => '待评价',
     1 => '已评价',
 ];
-$this->extend('../layouts/header');
+$this->extend('../layouts/header', [
+    'header_back' => $this->url('./mobile/member')
+]);
 ?>
 <div class="has-header">
     <div class="tab-bar order-header">

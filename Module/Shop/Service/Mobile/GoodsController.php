@@ -19,4 +19,17 @@ class GoodsController extends Controller {
         $price = $goods->getPrice($amount);
         return $this->jsonSuccess($price);
     }
+
+    public function commentAction($id) {
+        /** @var Page $goods_list */
+        $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
+            ->where('item_id', $id)->page();
+        if (app('request')->isAjax()) {
+            return $this->jsonSuccess([
+                'html' => $this->renderHtml('page', compact('comment_list', 'id')),
+                'has_more' => $goods_list->hasMore()
+            ]);
+        }
+        return $this->show(compact('comment_list', 'id'));
+    }
 }

@@ -53,7 +53,7 @@ $this->registerJs($js)
         <?php endif;?>
 
         <div class="fixed-footer">
-            <button class="btn" type="button">立即支付</button> 
+            <button class="btn">立即支付</button> 
         </div>
         <input type="hidden" name="order" value="<?=$order->id?>">
         <input type="hidden" name="payment" value="<?=$order->payment_id?>">

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Shop\Domain\Model\OrderModel;
 /** @var $this View */
-$this->title = '';
+$this->title = '订单详情';
 
 $this->extend('../layouts/header', [
     'header_back' => $this->url('./mobile/order')
@@ -45,8 +45,18 @@ $this->extend('../layouts/header', [
             <p class="text-right">共 <?=count($goods_list)?> 件 合计：<?=$order->goods_amount?></p>
             <p class="line-item"><span>订单号</span> <span><?=$order->series_number?></span> </p>
             <p class="line-item"><span>下单时间</span> <span><?=$order->created_at?></span> </p>
-            <p class="line-item"><span>支付时间</span> <span><?=$order->paid_at?></span> </p>
-            <p class="line-item"><span>完成时间</span> <span><?=$order->updated_at?></span> </p>
+            <?php if($order->pay_at > 0):?>
+            <p class="line-item"><span>支付时间</span> <span><?=$this->time($order->pay_at)?></span> </p>
+            <?php endif;?>
+            <?php if($order->shipping_at > 0):?>
+            <p class="line-item"><span>发货时间</span> <span><?=$this->time($order->shipping_at)?></span> </p>
+            <?php endif;?>
+            <?php if($order->receive_at > 0):?>
+            <p class="line-item"><span>签收时间</span> <span><?=$this->time($order->receive_at)?></span> </p>
+            <?php endif;?>
+            <?php if($order->finish_at > 0):?>
+            <p class="line-item"><span>完成时间</span> <span><?=$this->time($order->finish_at)?></span> </p>
+            <?php endif;?>
             <hr>
             <p class="line-item"><span>商品总价</span> <span><?=$order->goods_amount?></span> </p>
             <p class="line-item"><span>+运费</span> <span><?=$order->shipping_fee?></span> </p>

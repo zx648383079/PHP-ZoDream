@@ -166,10 +166,39 @@ class GoodsModel extends Model {
         return $this->price;
     }
 
-    public static function getAttr(GoodsModel $goods) {
-        $data = Relation::parse([
+    public function getPropertiesAttribute() {
+        if ($this->attribute_group_id < 1) {
+            return [];
+        }
+        $attr_list = AttributeModel::where('group_id', $this->attribute_group_id)
+            ->where('type', '>', 0)->orderBy('position asc')->orderBy('type asc')->get('id', 'name');
+        if (empty($attr_list)) {
+            return [];
+        }
+        return Relation::create($attr_list, [
+            'attr_items' => [
+                'query' => GoodsAttributeModel::where('goods_id', $this->id),
+                'link' => ['id', 'attribute_id'],
+            ]
+        ]);
+    }
 
-        ], 'attr')->getResults($goods);
+    public function getStaticPropertiesAttribute() {
+        if ($this->attribute_group_id < 1) {
+            return [];
+        }
+        $attr_list = AttributeModel::where('group_id', $this->attribute_group_id)
+            ->where('type', 0)->orderBy('position asc')->orderBy('type asc')->get('id', 'name');
+        if (empty($attr_list)) {
+            return [];
+        }
+        return Relation::create($attr_list, [
+            'attr_item' => [
+                'query' => GoodsAttributeModel::where('goods_id', $this->id),
+                'link' => ['id', 'attribute_id'],
+                'type' => Relation::TYPE_ONE
+            ]
+        ]);
     }
 
     /**

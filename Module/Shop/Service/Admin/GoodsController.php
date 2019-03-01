@@ -11,7 +11,7 @@ use Module\Shop\Domain\Model\CollectModel;
 use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
 use Module\Shop\Domain\Model\GoodsGalleryModel;
-use Module\Shop\Domain\Model\GoodsIssue;
+use Module\Shop\Domain\Model\GoodsIssueModel;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\ProductModel;
@@ -136,7 +136,7 @@ class GoodsController extends Controller {
             GoodsGalleryModel::where('goods_id', $old_id)->update([
                 'goods_id' => $new_id
             ]);
-            GoodsIssue::where('goods_id', $old_id)->update([
+            GoodsIssueModel::where('goods_id', $old_id)->update([
                 'goods_id' => $new_id
             ]);
             ProductModel::where('goods_id', $old_id)->update([

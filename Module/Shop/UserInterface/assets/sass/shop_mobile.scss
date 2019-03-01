@@ -993,6 +993,13 @@ footer,
             font-size: 28px;
         }
     }
+    .comment-subtotal {
+        line-height: 40px;
+        padding-left: 10px;
+        .score {
+            display: inline-block;
+        }
+    }
     .comment-stats {
         padding: 10px;
         a {
@@ -1567,6 +1574,12 @@ footer,
     }
     .order-footer {
         text-align: right;
+        .order-actions {
+            line-height: 30px;
+            a {
+                padding: 0 5px;
+            }
+        }
     }
     @include lineItem();
     .line-item {

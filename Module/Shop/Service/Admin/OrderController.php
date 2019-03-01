@@ -22,7 +22,8 @@ class OrderController extends Controller {
         $goods_list = OrderGoodsModel::where('order_id', $id)->all();
         $address = OrderAddressModel::where('order_id', $id)->one();
         $user = UserModel::find($order->user_id);
-        return $this->show(compact('order', 'goods_list', 'address', 'user'));
+        $delivery = DeliveryModel::where('order_id', $id)->first();
+        return $this->show(compact('order', 'goods_list', 'address', 'user', 'delivery'));
     }
 
     public function shippingAction($id) {

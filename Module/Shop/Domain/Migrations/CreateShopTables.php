@@ -19,7 +19,7 @@ use Module\Shop\Domain\Model\CouponLogModel;
 use Module\Shop\Domain\Model\CouponModel;
 use Module\Shop\Domain\Model\GoodsAttributeModel;
 use Module\Shop\Domain\Model\GoodsGalleryModel;
-use Module\Shop\Domain\Model\GoodsIssue;
+use Module\Shop\Domain\Model\GoodsIssueModel;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\InvoiceModel;
 use Module\Shop\Domain\Model\InvoiceTitleModel;
@@ -481,7 +481,7 @@ class CreateShopTables extends Migration {
             $table->set('is_checked')->bool()->defaultVal(0)->comment('是否选中');
             $table->set('selected_activity')->int()->defaultVal(0)->comment('选择的活动');
         });
-        Schema::createTable(GoodsIssue::tableName(), function (Table $table) {
+        Schema::createTable(GoodsIssueModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('goods_id')->int()->notNull();
             $table->set('question')->varchar()->notNull();

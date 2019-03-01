@@ -4,14 +4,14 @@ namespace Module\Shop\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class GoodsIssue
+ * Class GoodsIssueModel
  * @package Module\Shop\Domain\Model
  * @property integer $id
  * @property integer $goods_id
  * @property string $question
  * @property string $answer
  */
-class GoodsIssue extends Model {
+class GoodsIssueModel extends Model {
     public static function tableName() {
         return 'shop_goods_issue';
     }

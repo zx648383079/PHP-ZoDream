@@ -73,6 +73,10 @@ class OrderGoodsModel extends Model {
         return $this->price * $this->number;
     }
 
+    public function getStatusLabelAttribute() {
+        return OrderModel::$status_list[$this->status];
+    }
+
     /**
      * 一步购买
      * @param OrderModel $order

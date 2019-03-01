@@ -4,21 +4,48 @@ use Zodream\Template\View;
 use Module\Shop\Domain\Model\OrderModel;
 /** @var $this View */
 $this->title = '订单详情';
+$status_list = [
+    [
+        '待付款',
+        [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP, OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH],
+        $order->created_at
+    ],
+    [
+        '待发货',
+        [OrderModel::STATUS_PAID_UN_SHIP, OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH],
+        $order->pay_at
+    ],
+    [
+        '待收货',
+        [OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH],
+        $order->shipping_at
+    ],
+    [
+        '待评价',
+        [OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH],
+        $order->receive_at
+    ],
+    [
+        '已完成',
+        [OrderModel::STATUS_FINISH],
+        $order->finish_at
+    ]
+];
 ?>
 <h1><?=$this->title?></h1>
 <div class="progress-bar">
     <div>
         <span></span>
     </div>
-    <span class="active">待付款
-        <i><?=$order->created_at?> </i>
+    <?php foreach($status_list as $item):?>
+    <?php if(in_array($order->status, $item[1])):?>
+    <span class="active"><?=$item[0]?>
+        <i><?=is_numeric($item[2]) ? $this->time($item[2]) : $item[2]?> </i>
     </span>
-    <span class="active">待发货
-        <i>2018-01-12 18:12:12</i>
-    </span>
-    <span>待收货</span>
-    <span>待评价</span>
-    <span>已完成</span>
+    <?php else:?>
+    <span><?=$item[0]?></span>
+    <?php endif;?>
+    <?php endforeach;?>
 </div>
 <div class="panel">
     <div class="panel-header">
@@ -89,7 +116,7 @@ $this->title = '订单详情';
                 <span class="text-red"><?=$goods->total?></span>
             </td>
             <td>
-                等待买家付款
+                <?=$goods->status_label?>
             </td>
             <td>
                 未申请售后
@@ -180,11 +207,11 @@ $this->title = '订单详情';
                     <tbody>
                         <tr>
                             <th style="width:50%">物流公司:</th>
-                            <td></td>
+                            <td><?=$delivery->shipping_name?></td>
                         </tr>
                         <tr>
                             <th>配送单号:</th>
-                            <td></td>
+                            <td><?=$delivery->logistics_number?></td>
                         </tr>
                     </tbody>
                 </table>

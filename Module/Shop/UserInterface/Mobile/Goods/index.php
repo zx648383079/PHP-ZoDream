@@ -87,41 +87,15 @@ $this->registerJs($js);
             评价
             <i class="fa fa-angle-right"></i>
         </div>
+        <?php if(empty($comment_list)):?>
+        <a class="comment-more">暂无评价</a>
+        <?php else:?>
         <div class="comment-stats">
             <a href="">好评（2000）</a>
         </div>
-        <?php foreach($comment_list as $item):?>
-        <div class="comment-item">
-            <div class="item-header">
-                <div class="avatar">
-                    <img src="<?=$item->user->avatar?>" alt="">
-                </div>
-                <div class="name"><?=$item->user->name?></div>
-                <div class="score">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                </div>
-            </div>
-            <div class="time">
-                <span><?=$item->created_at?> </span>
-                <div class="attr">
-                规格:雾白
-                </div>
-            </div>
-            <div class="content"><?=$item->content?></div>
-            <ul class="image-box">
-                <?php foreach($item->images as $img):?>
-                <li>
-                    <img src="<?=$img->image?>" alt="">
-                </li>
-                <?php endforeach;?>
-            </ul>
-        </div>
-        <?php endforeach;?>
-        <a href="" class="comment-more">查看更多</a>
+        <?php $this->extend('./page');?>
+        <a href="<?=$this->url('./mobile/goods/comment', ['id' => $goods->id])?>" class="comment-more">查看更多</a>
+        <?php endif;?>
     </div>
 
     <div id="recommend" class="recomment-box">
@@ -149,7 +123,16 @@ $this->registerJs($js);
         <div class="tab-header"><div class="tab-item active">商品介绍</div><div class="tab-item">规格参数</div><div class="tab-item">售后保障</div></div>
         <div class="tab-body">
             <div class="tab-item active"><?=$item->content?></div>
-            <div class="tab-item">规格参数</div>
+            <div class="tab-item">
+                <div class="static-properties-box">
+                    <?php foreach($goods->static_properties as $item):?>
+                    <dl>
+                        <dt><?=$item->name?></dt>
+                        <dd><?=$item->attr_item->value?></dd>
+                    </dl>
+                    <?php endforeach;?>
+                </div>
+            </div>
             <div class="tab-item">售后保障</div>
         </div>
     </div>
@@ -186,15 +169,16 @@ $this->registerJs($js);
             <i class="fa fa-times dialog-close"></i>
         </div>
         <div class="property-box">
+            <?php foreach($goods->properties as $item):?>
             <div class="group">
-                <div class="group-header">类型</div>
+                <div class="group-header"><?=$item->name?></div>
                 <div class="group-body">
-                    <span class="active">11111</span>
-                    <span>11111</span>
-                    <span>11111</span>
-                    <span>11111</span>
+                    <?php foreach($item->attr_items as $attr):?>
+                    <span><?=$attr->value?></span>
+                    <?php endforeach;?>
                 </div>
             </div>
+            <?php endforeach;?>
 
             <div class="count-box">
                 <span>数量</span>

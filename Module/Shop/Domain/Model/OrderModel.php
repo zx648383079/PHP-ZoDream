@@ -49,7 +49,7 @@ class OrderModel extends Model {
     const TYPE_AUCTION = 1; //拍卖订单
     const TYPE_PRESELL = 2; //预售订单
 
-    public $status_list = [
+    public static $status_list = [
         self::STATUS_UN_PAY => '待支付',
         self::STATUS_SHIPPED => '待收货',
         self::STATUS_FINISH => '已完成',
@@ -107,6 +107,7 @@ class OrderModel extends Model {
             'finish_at' => 'Finish At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'logistics_number' => '物流单号'
         ];
     }
 
@@ -123,7 +124,7 @@ class OrderModel extends Model {
     }
 
     public function getStatusLabelAttribute() {
-        return $this->status_list[$this->status];
+        return self::$status_list[$this->status];
     }
 
     public function payment() {
