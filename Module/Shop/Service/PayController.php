@@ -12,7 +12,7 @@ class PayController extends Controller {
         if ($order->status != OrderModel::STATUS_UN_PAY) {
             return;
         }
-        PayLogModel::create([
+        $log = PayLogModel::create([
             'type' => PayLogModel::TYPE_ORDER,
             'payment_id' => $payment,
             'user_id' => auth()->id(),
@@ -20,6 +20,7 @@ class PayController extends Controller {
             'status' => PayLogModel::STATUS_NONE,
             'amount' => $order->order_amount,
         ]);
+        dd($log);
     }
 
     public function notifyAction() {
