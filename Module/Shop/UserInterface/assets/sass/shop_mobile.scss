@@ -1097,6 +1097,22 @@ footer,
     }
 }
 
+.static-properties-box {
+    display: table;
+    width: 100%;
+    dl {
+        display: table-row;
+        dt,
+        dd {
+            display: table-cell;
+            line-height: 30px;
+        }
+        dt {
+            font-size: 700;
+        }
+    }
+}
+
 .activity-box {
     display: grid;
     grid-template: 50px / 80px 1fr 120px;
@@ -1201,7 +1217,8 @@ footer,
             color: #e4393c;
             font-size: 10px;
         }
-        .selected-property {
+        .selected-property,
+        .stock {
             word-break: break-all;
             font-size: 12px;
             color: #333;
@@ -1218,6 +1235,9 @@ footer,
         }
     }
     .property-box {
+        margin-bottom: 50px;
+        overflow-y: auto;
+        max-height: 60vh;
         .number-box {
             float: right;
         }
@@ -1247,9 +1267,15 @@ footer,
                     color: #333;
                     background-color: #f7f7f7;
                     font-size: 14px;
+                    cursor: pointer;
                     &.active {
                         background-color: #e4393c;
                         color: $white;
+                    }
+                    &.disable {
+                        background-color: #bbb;
+                        color: #fff;
+                        cursor: not-allowed;
                     }
                 }
             }

@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Shop\Domain\Model\AttributeModel;
 /** @var $this View */
 $this->title = '属性';
 ?>
@@ -27,8 +28,8 @@ $this->title = '属性';
                 <td><?=$item->id?></td>
                 <td><?=$item->name?></td>
                 <td><?=$item->group->name?></td>
-                <td><?=$item->type?></td>
-                <td><?=$item->input_type?></td>
+                <td><?=AttributeModel::$type_list[$item->type]?></td>
+                <td><?=['手工录入', '列表选择'][$item->input_type]?></td>
                 <td><?=$item->default_value?></td>
                 <td><?=$item->position?></td>
                 <td>

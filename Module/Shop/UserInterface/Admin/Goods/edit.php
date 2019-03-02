@@ -4,9 +4,10 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑商品';
-$url = $this->url('./admin/'); 
+$url = $this->url('./admin/');
+$id = intval($model->id);
 $js = <<<JS
-    bindGoods('{$url}');
+    bindGoods('{$url}', {$id});
 JS;
 $this->registerJs($js);
 ?>
@@ -136,7 +137,7 @@ $this->registerJs($js);
         <th>重量(kg)</th>
     </tr>
     {{ each product_list item }}
-    <tr data-index="{{ $index }}" data-sku-id="{{ item.spec_sku_id }}">
+    <tr data-index="{{ $index }}" data-sku-id="{{ item.form.id }}">
         {{ each item.rows td itemKey }}
         <td class="td-spec-value am-text-middle" rowspan="{{ td.rowspan }}">
             {{ td.spec_value }}
@@ -153,7 +154,7 @@ $this->registerJs($js);
             <input type="number" name="market_price" value="{{ item.form.market_price }}">
         </td>
         <td>
-            <input type="number" name="stock_num" value="{{ item.form.stock }}" 
+            <input type="number" name="stock" value="{{ item.form.stock }}" 
                    required>
         </td>
         <td>

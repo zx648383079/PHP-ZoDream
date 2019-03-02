@@ -887,6 +887,18 @@ footer,
     max-width: 100%;
     display: block; }
 
+.static-properties-box {
+  display: table;
+  width: 100%; }
+  .static-properties-box dl {
+    display: table-row; }
+    .static-properties-box dl dt,
+    .static-properties-box dl dd {
+      display: table-cell;
+      line-height: 30px; }
+    .static-properties-box dl dt {
+      font-size: 700; }
+
 .activity-box {
   display: grid;
   grid-template: 50px / 80px 1fr 120px;
@@ -977,7 +989,8 @@ footer,
       line-height: 40px;
       color: #e4393c;
       font-size: 10px; }
-    .cart-dialog .dialog-header .selected-property {
+    .cart-dialog .dialog-header .selected-property,
+    .cart-dialog .dialog-header .stock {
       word-break: break-all;
       font-size: 12px;
       color: #333;
@@ -990,40 +1003,49 @@ footer,
       top: 0;
       right: 0;
       padding: 10px; }
-  .cart-dialog .property-box .number-box {
-    float: right; }
-  .cart-dialog .property-box .group .group-header {
-    font-size: 12px;
-    color: #999;
-    margin: 0 10px;
-    height: 40px;
-    line-height: 40px; }
-  .cart-dialog .property-box .group .group-body {
-    overflow: hidden;
-    margin-bottom: 3px; }
-    .cart-dialog .property-box .group .group-body span {
-      display: inline-block;
-      padding: 0 10px;
-      min-width: 20px;
-      max-width: 270px;
-      overflow: hidden;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      margin-left: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      color: #333;
-      background-color: #f7f7f7;
-      font-size: 14px; }
-      .cart-dialog .property-box .group .group-body span.active {
-        background-color: #e4393c;
-        color: #fff; }
-  .cart-dialog .property-box .count-box {
-    padding: 0 10px; }
-    .cart-dialog .property-box .count-box span {
+  .cart-dialog .property-box {
+    margin-bottom: 50px;
+    overflow-y: auto;
+    max-height: 60vh; }
+    .cart-dialog .property-box .number-box {
+      float: right; }
+    .cart-dialog .property-box .group .group-header {
       font-size: 12px;
-      color: #999; }
+      color: #999;
+      margin: 0 10px;
+      height: 40px;
+      line-height: 40px; }
+    .cart-dialog .property-box .group .group-body {
+      overflow: hidden;
+      margin-bottom: 3px; }
+      .cart-dialog .property-box .group .group-body span {
+        display: inline-block;
+        padding: 0 10px;
+        min-width: 20px;
+        max-width: 270px;
+        overflow: hidden;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        color: #333;
+        background-color: #f7f7f7;
+        font-size: 14px;
+        cursor: pointer; }
+        .cart-dialog .property-box .group .group-body span.active {
+          background-color: #e4393c;
+          color: #fff; }
+        .cart-dialog .property-box .group .group-body span.disable {
+          background-color: #bbb;
+          color: #fff;
+          cursor: not-allowed; }
+    .cart-dialog .property-box .count-box {
+      padding: 0 10px; }
+      .cart-dialog .property-box .count-box span {
+        font-size: 12px;
+        color: #999; }
 
 .user-header {
   position: relative;

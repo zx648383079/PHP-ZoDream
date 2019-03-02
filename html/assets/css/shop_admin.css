@@ -142,6 +142,8 @@
     border-bottom: 1px solid;
     color: #fff; }
   .form-table .attr-box .check-label .fa-remove {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     position: absolute;
     display: block;
     cursor: pointer;
@@ -153,6 +155,8 @@
     line-height: 20px;
     top: -9px;
     right: -9px; }
+    .form-table .attr-box .check-label .fa-remove::before {
+      content: "\f00d"; }
   .form-table .attr-box .check-label.attr-block .fa-remove {
     top: 0;
     right: 0px;

@@ -165,16 +165,17 @@ $this->registerJs($js);
         <div class="dialog-header">
             <img src="<?=$goods->thumb?>" alt="">
             <p class="price"><?=$goods->price?></p>
-            <p class="selected-property">111</p>
+            <p class="stock">库存：<?=$goods->stock?></p>
+            <p class="selected-property"></p>
             <i class="fa fa-times dialog-close"></i>
         </div>
         <div class="property-box">
             <?php foreach($goods->properties as $item):?>
-            <div class="group">
+            <div class="group<?=$item->type == 2 ? ' multi-group' : ''?>">
                 <div class="group-header"><?=$item->name?></div>
                 <div class="group-body">
                     <?php foreach($item->attr_items as $attr):?>
-                    <span><?=$attr->value?></span>
+                    <span data-value="<?=sprintf('%s:%s', $item->id, $attr->id)?>"><?=$attr->value?></span>
                     <?php endforeach;?>
                 </div>
             </div>

@@ -1,15 +1,20 @@
 const CHECKED_CHANGE = 'cart_checked_change';
-function addToCart(id: number, amount: number = 1) {
-    postJson('cart/add?goods=' + id + '&amount=' + amount, function(data) {
+function addToCart(id: number, amount: number = 1, properties?: string[]) {
+    postJson('cart/add', {
+        goods: id,
+        amount: amount,
+        properties: JSON.stringify(properties)
+    }, function(data) {
         parseAjax(data);
     });
 }
 
-function buyGoods(id: number, amount: number = 1) {
+function buyGoods(id: number, amount: number = 1, properties?: string[]) {
     window.location.href = 'cashier?type=1&cart='+ JSON.stringify([
         {
             goods: id,
-            amount: amount
+            amount: amount,
+            properties: properties
         }
     ]);
 }
@@ -290,18 +295,67 @@ function bindCategory() {
 }
 
 function bindCartDialog(goodsId: number) {
-    let cartDialog = $('.cart-dialog').on('click', '.dailog-yes', function(e) {
+    let cartSelectedProperty = $('.selected-property'),
+        mapSelectedProperties = function(cb: (JQuery) => void) {
+            cartDialog.find('.group .group-body .active').each(function() {
+                cb && cb($(this));
+            });
+        },
+        refreshProduct = function() {
+            let amount = parseInt(cartDialog.find('.number-box .number-input').val()+''), properties = getSelectedProperties();
+            postJson('goods/price', {
+                id: goodsId,
+                amount: amount,
+                properties: JSON.stringify(properties)
+            }, function(data) {
+                if (data.code != 200) {
+                    parseAjax(data);
+                    return;
+                }
+                cartDialog.find('.price').html(data.data.price);
+                cartDialog.find('.stock').html('库存：' + data.data.stock);
+            });
+        },
+        getSelectedProperties = function() {
+            let data = [];
+            mapSelectedProperties(function(item: JQuery) {
+                data.push(item.data('value'));
+            });
+            return data;
+        },
+        refreshSelected = function() {
+            let text = [];
+            mapSelectedProperties(function(item: JQuery) {
+                text.push(item.text());
+            });
+            cartSelectedProperty.text(text.length > 0 ? '已选：' +text.join(' '): '');
+        },
+        cartDialog = $('.cart-dialog').on('click', '.dailog-yes', function(e) {
         e.preventDefault();
-        let amount = parseInt(cartDialog.find('.number-box .number-input').val()+'');
+        let amount = parseInt(cartDialog.find('.number-box .number-input').val()+''), properties = getSelectedProperties();
         if (cartDialog.data('step') == 'buy') {
-            buyGoods(goodsId, amount);
+            buyGoods(goodsId, amount, properties);
         } else {
-            addToCart(goodsId, amount);
+            addToCart(goodsId, amount, properties);
         }
         cartDialog.hide();
     }).on('click', '.dialog-close', function(e) {
         e.preventDefault();
         cartDialog.hide();
+    }).on('click', '.group .group-body span', function() {
+        let $this = $(this);
+        if ($this.hasClass('disable')) {
+            return;
+        }
+        if ($this.closest('.multi-group').length > 0) {
+            $this.toggleClass('active');
+        } else{
+            $this.addClass('active').siblings().removeClass('active');
+        }
+        refreshSelected();
+        refreshProduct();
+    }).on('change', '.number-box .number-input', function() {
+        refreshProduct();
     }).click(function(e) {
         if (e.pageY < cartDialog.find('.dialog-body').offset().top) {
             cartDialog.hide();

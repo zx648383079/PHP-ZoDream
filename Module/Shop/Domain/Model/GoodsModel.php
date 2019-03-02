@@ -40,6 +40,8 @@ use Zodream\Html\Page;
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
+ * @property AttributeModel[] $static_properties
+ * @property AttributeModel[] $properties
  */
 class GoodsModel extends Model {
 
@@ -160,10 +162,18 @@ class GoodsModel extends Model {
     /**
      * 获取最终的单价
      * @param int $amount
+     * @param null $properties
      * @return float|int
      */
-    public function final_price(int $amount = 1): float {
-        return $this->price;
+    public function final_price(int $amount = 1, $properties = null): float {
+        if (empty($properties)) {
+            return $this->price;
+        }
+        $box = AttributeModel::getProductAndPriceWithProperties($properties, $this->id);
+        if (empty($box['product'])) {
+            return $this->price + $box['properties_price'];
+        }
+        return $box['product']->price + $box['properties_price'];
     }
 
     public function getPropertiesAttribute() {
@@ -171,16 +181,19 @@ class GoodsModel extends Model {
             return [];
         }
         $attr_list = AttributeModel::where('group_id', $this->attribute_group_id)
-            ->where('type', '>', 0)->orderBy('position asc')->orderBy('type asc')->get('id', 'name');
+            ->where('type', '>', 0)->orderBy('position asc')->orderBy('type asc')
+            ->get('id', 'name', 'type');
         if (empty($attr_list)) {
             return [];
         }
-        return Relation::create($attr_list, [
+        return array_filter(Relation::create($attr_list, [
             'attr_items' => [
                 'query' => GoodsAttributeModel::where('goods_id', $this->id),
                 'link' => ['id', 'attribute_id'],
             ]
-        ]);
+        ]), function ($item) {
+            return empty($item->attr_items);
+        });
     }
 
     public function getStaticPropertiesAttribute() {
@@ -192,13 +205,15 @@ class GoodsModel extends Model {
         if (empty($attr_list)) {
             return [];
         }
-        return Relation::create($attr_list, [
+        return array_filter(Relation::create($attr_list, [
             'attr_item' => [
                 'query' => GoodsAttributeModel::where('goods_id', $this->id),
                 'link' => ['id', 'attribute_id'],
                 'type' => Relation::TYPE_ONE
             ]
-        ]);
+        ]), function ($item) {
+            return empty($item->attr_item);
+        });
     }
 
     /**

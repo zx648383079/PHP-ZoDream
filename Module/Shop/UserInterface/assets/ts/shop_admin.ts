@@ -52,8 +52,11 @@ class Attribute {
                 group_id = box.attr('data-id'),
                 attr_id = $(this).closest('.check-label').data('id');
             that.deleteAttrById(group_id, attr_id);
-        }).on('propertychange change', 'input[type=text]', function() {
+        }).on('propertychange change', 'input[type=text],select', function() {
             let $this = $(this);
+            if ($this.closest('.add-box').length > 0) {
+                return;
+            }
             that.editAttr($this.attr('name'), $this.val());
         });
         this.element.on('click', '.batch-box .btn', function() {
@@ -90,6 +93,7 @@ class Attribute {
         data[name] = value;
         postJson(BASE_URI + 'goods/edit_attribute', data, function(data) {
             if (data.code != 200) {
+                parseAjax(data);
                 return;
             }
             that.setAttr(data.data);
@@ -260,14 +264,14 @@ class Attribute {
         let html = '';
         if (item.input_type == 1) {
             item.default_value.forEach((value, i) => {
-                let attr = this.getAttrId(value, item.attr_items),
+                let attr = this.getAttrItem(value, item.attr_items),
                     id = attr ? attr.id : '';
                 html += '<span class="check-label attr-block" data-id="'+id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+id+'][checked]" value="1" '+ (id ? 'checked' : '') +'><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+id+'][value]" value="'+ value +'" readonly><input type="text" name="attr['+item.id+']['+id+'][price]" value="'+ (attr ? attr.price : '') +'" placeholder="价格"></label></span>';
             });
             return html;
         }
         item.attr_items.forEach((attr, i) => {
-            html += '<span class="check-label attr-block" data-id="'+attr.id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+attr.id+'][checked]" value="1" checked><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+attr.id+'][value]" value="'+ attr.value +'"><input type="text" name="attr['+item.id+']['+attr.id+'][price]" value="'+ attr.price +'" placeholder="价格"></label><i class="fa fa-remove"></i></span>';
+            html += '<span class="check-label attr-block" data-id="'+attr.id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+attr.id+'][checked]" value="1" checked><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+attr.id+'][value]" value="'+ attr.value +'"><input type="text" name="attr['+item.id+']['+attr.id+'][price]" value="'+ (attr.price ? attr.price : 0) +'" placeholder="价格"></label><i class="fa fa-remove"></i></span>';
         });
         return html + '<div class="add-box attr-block"><input type="text"><input type="text" placeholder="价格"><button type="button" class="btn">添加</button></div>';
     }
@@ -310,7 +314,18 @@ class Attribute {
             id = item.attr_items[0].id;
             value = item.attr_items[0].value;
         }
+        if (item.input_type == 1) {
+            return '<select class="form-control" name="attr['+item.id+']['+id+'][value]">'+ this.getSelectAttrHtml(item.default_value, value) +'</select>';
+        }
         return '<input type="text" class="form-control" name="attr['+item.id+']['+id+'][value]" value="'+ value +'">';
+    }
+
+    private getSelectAttrHtml(data: string[], selected: string): string {
+        var html = '';
+        $.each(data, function() {
+            html += '<option value="'+ this +'"'+ (this == selected ? 'selected' : '') +'>'+ this +'</option>';
+        });
+        return html;
     }
 
     public refreshByGroup(id: number) {
@@ -388,7 +403,7 @@ class Attribute {
                 let overlap = this.productList.filter(function (val) {
                     return val.attributes === spec_list[i].attributes;
                 });
-                if (overlap.length > 0) spec_list[i].form = overlap[0].form;
+                if (overlap.length > 0) spec_list[i].form = overlap[0].hasOwnProperty('form') ? overlap[0].form : overlap[0];
             }
         }
         this.productList = spec_list;
@@ -396,11 +411,11 @@ class Attribute {
     }
 }
 
-function bindGoods(baseUri: string) {
+function bindGoods(baseUri: string, goodsId: number) {
     BASE_URI = baseUri;
     UE.delEditor('container');
     let ue = UE.getEditor('container'),
-        attr = new Attribute($(".attribute-box"));
+        attr = new Attribute($(".attribute-box"), goodsId);
     $("#attribute_group_id").change(function() {
         attr.refreshByGroup(parseInt($(this).val() + ''));
     }).trigger('change');

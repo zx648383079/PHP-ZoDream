@@ -189,6 +189,8 @@ $color_celeste_approx: #ccc;
                 color: #fff;
             }
             .fa-remove {
+				font-family: "Font Awesome 5 Free";
+				font-weight: 900;
                 position: absolute;
                 display: block;
                 cursor: pointer;
@@ -199,7 +201,10 @@ $color_celeste_approx: #ccc;
                 height: 20px;
                 line-height: 20px;
                 top: -9px;
-                right: -9px;
+				right: -9px;
+				&::before {
+					content: "\f00d";
+				}
             }
             &.attr-block {
                 .fa-remove {

@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Model;
 
 
 use Domain\Model\Model;
+use function Matrix\inverse;
 
 /**
  * Class ProductModel
@@ -51,6 +52,11 @@ class ProductModel extends Model {
         return implode(',', $data);
     }
 
+    /**
+     * @param array $data
+     * @param $goods_id
+     * @return static
+     */
     public static function findByAttribute(array $data, $goods_id) {
         sort($data);
         $attributes = implode('_', $data);
@@ -63,15 +69,32 @@ class ProductModel extends Model {
             if (empty($model)) {
                 $model = new static();
             }
-            $model->goods_id = $goods_id;
-            if (empty($item['form'])) {
+            if (self::isEmptyForm($item['form'])) {
                 !$model->isNewRecord && $model->delete();
                 continue;
             }
-            if ($model->load($item['form'])) {
+            $model->attributes = $item['attributes'];
+            $model->goods_id = $goods_id;
+            if (!$model->load($item['form'])) {
                 continue;
             }
+            $model->price = floatval($model->price);
+            $model->market_price = floatval($model->market_price);
+            $model->stock = intval($model->stock);
             $model->save();
+        }
+        return true;
+    }
+
+    private static function isEmptyForm($data) {
+        if (empty($data)) {
+            return true;
+        }
+        $maps = ['price', 'market_price', 'stock', 'series_number'];
+        foreach ($maps as $key) {
+            if (isset($data[$key]) && $data[$key] !== '') {
+                return false;
+            }
         }
         return true;
     }

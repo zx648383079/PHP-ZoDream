@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
+use Module\Shop\Domain\Model\AttributeModel;
 use Module\Shop\Domain\Model\CommentModel;
 use Module\Shop\Domain\Model\GoodsModel;
 
@@ -14,10 +15,15 @@ class GoodsController extends Controller {
         return $this->show(compact('goods', 'goods_list', 'comment_list'));
     }
 
-    public function priceAction($id, $amount = 1) {
+    public function priceAction($id, $amount = 1, $properties = null) {
         $goods = GoodsModel::find($id);
-        $price = $goods->getPrice($amount);
-        return $this->jsonSuccess($price);
+        $price = $goods->final_price($amount, $properties);
+        $box = AttributeModel::getProductAndPriceWithProperties($properties, $id);
+        return $this->jsonSuccess([
+            'price' => $price,
+            'total' => $price * $amount,
+            'stock' => !empty($box['product']) ? $box['product']->stock : $goods->stock
+        ]);
     }
 
     public function commentAction($id) {
