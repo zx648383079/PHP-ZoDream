@@ -14,7 +14,7 @@ class HomeController extends RestController {
         }
         $book_list  = Book::with('category', 'author')->ofClassify()
             ->when(!empty($keywords), function ($query) {
-                BookModel::search($query, ['name']);
+                BookModel::search($query, 'name');
             })
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
