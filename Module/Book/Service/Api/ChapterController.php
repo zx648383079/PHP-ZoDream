@@ -24,6 +24,8 @@ class ChapterController extends RestController {
         }
         $data = $chapter->toArray();
         $data['content'] = $chapter->body->content;
+        $data['previous'] = $chapter->previous;
+        $data['next'] = $chapter->next;
         return $this->render($data);
     }
 }
