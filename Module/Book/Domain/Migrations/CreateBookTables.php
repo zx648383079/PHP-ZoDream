@@ -88,12 +88,18 @@ class CreateBookTables extends Migration {
             return;
         }
         BookCategoryModel::query()->insert([
-            ['name' => '玄幻·奇幻'],
-            ['name' => '仙侠·武侠'],
-            ['name' => '都市·言情'],
-            ['name' => '穿越·历史'],
-            ['name' => '科幻·灵异'],
-            ['name' => '同人·网游'],
+            ['name' => '玄幻'],
+            ['name' => '奇幻'],
+            ['name' => '仙侠'],
+            ['name' => '武侠'],
+            ['name' => '都市'],
+            ['name' => '言情'],
+            ['name' => '穿越'],
+            ['name' => '历史'],
+            ['name' => '科幻'],
+            ['name' => '灵异'],
+            ['name' => '同人'],
+            ['name' => '网游'],
         ]);
         BookAuthorModel::query()->insert([
            ['name' => '未知']

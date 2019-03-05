@@ -9,12 +9,15 @@ class HomeController extends RestController {
 
 
     public function indexAction($id = 0, $category = null, $keywords = null, $per_page = 20) {
-        if ($id > 0) {
+        if (!is_array($id) && $id > 0) {
             return $this->detailAction($id);
         }
         $book_list  = Book::with('category', 'author')->ofClassify()
             ->when(!empty($keywords), function ($query) {
                 BookModel::search($query, 'name');
+            })
+            ->when(is_array($id), function ($query) use ($id) {
+                $query->whereIn('id', $id);
             })
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
