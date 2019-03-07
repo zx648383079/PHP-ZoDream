@@ -32,7 +32,11 @@ class HomeController extends RestController {
         if (empty($book)) {
             return $this->renderFailure('id 错误！');
         }
-        return $this->render($book->toArray());
+        $data = $book->toArray();
+        $data['chapter_count'] = $book->chapter_count;
+        $data['first_chapter'] = $book->first_chapter;
+        $data['last_chapter'] = $book->last_chapter;
+        return $this->render($data);
     }
 
     public function hotAction() {

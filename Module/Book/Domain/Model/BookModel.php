@@ -148,6 +148,10 @@ class BookModel extends Model {
         return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', 'desc')->one();
     }
 
+    public function getChapterCountAttribute() {
+        return BookChapterModel::where('book_id', $this->id)->count();
+    }
+
     public function getLastAtAttribute() {
         return Time::format($this->__attributes['updated_at'], 'm-d H:i');
     }
