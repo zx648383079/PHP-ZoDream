@@ -19,4 +19,11 @@
   width: 100%;
   min-height: 500px; }
 
+.book-item {
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: 1fr 80px;
+  margin-bottom: 20px;
+  padding: 10px; }
+
 /*# sourceMappingURL=book_admin.css.map */

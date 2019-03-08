@@ -141,5 +141,10 @@ class BookController extends Controller {
         }
     }
 
+    public function importAction() {
+        return $this->show();
+    }
+
+
 
 }

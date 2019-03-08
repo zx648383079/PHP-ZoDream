@@ -4,6 +4,7 @@ namespace Module\Book\Service;
 
 use Module\Book\Domain\SiteCrawl;
 use Module\Book\Domain\Spiders\Txt;
+use Module\Book\Domain\Spiders\ZhiShuShenQi;
 use Zodream\Spider\Support\Uri;
 
 class SpiderController extends Controller {
@@ -14,6 +15,8 @@ class SpiderController extends Controller {
 
     protected function rules() {
         return [
+            'search' => '@',
+            'async' => '@',
             '*' => 'cli'
         ];
     }
@@ -64,4 +67,11 @@ class SpiderController extends Controller {
         return $this->showContent('爬虫执行完成！');
     }
 
+    public function searchAction($keywords) {
+        return $this->jsonSuccess((new ZhiShuShenQi())->search($keywords));
+    }
+
+    public function asyncAction() {
+
+    }
 }

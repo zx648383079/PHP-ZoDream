@@ -40,3 +40,39 @@ function bindChapter() {
     });
     showLength();
 }
+
+function bindImport(baseUri: string) {
+    let box = $('.book-box'),
+        items = [];
+    $('.search form').submit(function() {
+        postJson(baseUri + 'spider/search', $(this).serialize(), function(data) {
+            if (data.code != 200) {
+                parseAjax(data);
+                return;
+            }
+            items = data.data;
+            let html = '';
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                html += '<div class="book-item" data-index="' 
+                + i +'"><div class="info"><p>'+ item.name +'('+ item.author +')</p><p>总字数： '+ item.size 
+                +'</p> <p>最新章节： '
+                + item.last_chapter +'</p></div><div class="actions"><a href="javascript:;">同步</a></div></div>'
+            }
+            box.html(html);
+        });
+        return false;
+    });
+    box.on('click', '.book-item .actions a', function(e) {
+        e.preventDefault();
+        let index = $(this).closest('.book-item').data('index');
+        let book = items[index];
+        if (!book) {
+            Dialog.tip('书籍不存在');
+            return;
+        }
+        postJson(baseUri + 'spider/async', book, function(data) {
+            parseAjax(data); 
+        });
+    });
+}

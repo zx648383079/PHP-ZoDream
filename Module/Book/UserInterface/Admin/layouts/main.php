@@ -39,6 +39,11 @@ $this->registerCssFile([
                  '新建小说',
                  './admin/book/create',
                  'fa fa-plus'
+             ],
+             [
+                '同步小说',
+                './admin/book/import',
+                'fa fa-retweet'
              ]
          ],
          true
