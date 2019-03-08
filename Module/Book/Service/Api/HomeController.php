@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Service\Api;
 
+use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\Scene\Book;
 use Zodream\Route\Controller\RestController;
@@ -8,11 +9,11 @@ use Zodream\Route\Controller\RestController;
 class HomeController extends RestController {
 
 
-    public function indexAction($id = 0, $category = null, $keywords = null, $per_page = 20) {
+    public function indexAction($id = 0, $category = null, $keywords = null, $top = null, $page = 1, $per_page = 20) {
         if (!is_array($id) && $id > 0) {
             return $this->detailAction($id);
         }
-        $book_list  = Book::with('category', 'author')->ofClassify()
+        $query = Book::with('category', 'author')->ofClassify()
             ->when(!empty($keywords), function ($query) {
                 BookModel::search($query, 'name');
             })
@@ -21,8 +22,11 @@ class HomeController extends RestController {
             })
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
-            })
-            ->page($per_page);
+            });
+
+        $book_list = !empty($top) ?
+            BookLogModel::getPage($query, $top, $page, $per_page)
+            : $query->page($per_page);
         return $this->renderPage($book_list);
     }
 

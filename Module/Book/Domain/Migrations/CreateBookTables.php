@@ -7,6 +7,7 @@ use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookHistoryModel;
+use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -73,6 +74,13 @@ class CreateBookTables extends Migration {
             $table->set('chapter_id')->int()->notNull();
             $table->timestamps();
         });
+        Schema::createTable(BookLogModel::tableName(), function(Table $table) {
+            $table->setComment('小说点击统计');
+            $table->set('id')->pk()->ai();
+            $table->set('book_id')->int()->notNull();
+            $table->set('hits')->int()->defaultVal(0);
+            $table->set('created_at')->date()->notNull();
+        });
     }
 
     public function down() {
@@ -81,6 +89,7 @@ class CreateBookTables extends Migration {
         Schema::dropTable(BookChapterBodyModel::tableName());
         Schema::dropTable(BookChapterModel::tableName());
         Schema::dropTable(BookAuthorModel::tableName());
+        Schema::dropTable(BookLogModel::tableName());
     }
 
     public function seed() {

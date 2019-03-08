@@ -5,6 +5,7 @@ use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookHistoryModel;
+use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Setting;
 use Zodream\Disk\File;
@@ -45,7 +46,7 @@ class BookController extends Controller {
             return $this->redirect(['./mobile/book/read', 'id' => $id]);
         }
         $chapter = BookChapterModel::find($id);
-        BookModel::where('id', $chapter->book_id)->updateOne('click_count');
+        BookLogModel::logBook($chapter->book_id);
         $book = BookModel::find($chapter->book_id);
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
