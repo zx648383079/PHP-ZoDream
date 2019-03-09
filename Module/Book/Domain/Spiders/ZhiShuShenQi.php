@@ -90,14 +90,17 @@ class ZhiShuShenQi {
         if (empty($last_chapter)) {
             return $this->asyncChapters($model, $chapters);
         }
+        $count = $model->chapter_count;
         for ($i = count($chapters) - 1; $i >= 0; $i --) {
             if (strlen($last_chapter['title']) > strlen($chapters[$i]['title'])) {
-                if (strpos($last_chapter['title'], $chapters[$i]['title']) >= 0) {
+                if (strpos($last_chapter['title'], $chapters[$i]['title']) >= 0 &&
+                    abs($i - $count) < 15) {
                     return $this->asyncChapters($model, $chapters, $i + 1);
                 }
                 continue;
             }
-            if (strpos($chapters[$i]['title'], $last_chapter['title']) >= 0) {
+            if (strpos($chapters[$i]['title'], $last_chapter['title']) >= 0 &&
+                abs($i - $count) < 15) {
                 return $this->asyncChapters($model, $chapters, $i + 1);
             }
         }
