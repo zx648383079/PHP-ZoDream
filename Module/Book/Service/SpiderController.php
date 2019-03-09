@@ -2,9 +2,11 @@
 namespace Module\Book\Service;
 
 
+use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\SiteCrawl;
 use Module\Book\Domain\Spiders\Txt;
 use Module\Book\Domain\Spiders\ZhiShuShenQi;
+use Zodream\Infrastructure\Error\Exception;
 use Zodream\Spider\Support\Uri;
 
 class SpiderController extends Controller {
@@ -71,7 +73,18 @@ class SpiderController extends Controller {
         return $this->jsonSuccess((new ZhiShuShenQi())->search($keywords));
     }
 
-    public function asyncAction() {
-
+    public function asyncAction($id, $name, $description = null, $size = 0) {
+        set_time_limit(0);
+        $spider = new ZhiShuShenQi();
+        try {
+            $spider->async($id, $name, $description, $size);
+        } catch (Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess();
     }
+
+
+
+
 }

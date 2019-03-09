@@ -26,5 +26,16 @@
     grid-template-columns: 1fr 80px;
     margin-bottom: 20px;
     padding: 10px;
-
+    .actions {
+        text-align: center;
+        background-color: #5cb85c;
+        color: #fff;
+        margin: -10px;
+        display: flex;
+        justify-content:center;
+        align-items:Center;
+        a {
+            color: #fff;
+        }
+    }
 }

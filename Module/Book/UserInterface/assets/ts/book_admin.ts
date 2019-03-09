@@ -71,7 +71,9 @@ function bindImport(baseUri: string) {
             Dialog.tip('书籍不存在');
             return;
         }
+        let loading = Dialog.loading();
         postJson(baseUri + 'spider/async', book, function(data) {
+            loading.close();
             parseAjax(data); 
         });
     });
