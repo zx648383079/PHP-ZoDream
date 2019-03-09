@@ -1,7 +1,16 @@
 #!/usr/bin/env php
 <?php
 use Zodream\Service\Console;
+use Zodream\Route\Router;
 
 require_once __DIR__.'/Service/Bootstrap.php';
 $app = new Console(APP_DIR);
+app(Router::class)
+    ->group([
+        'namespace' => 'Service\Install'
+    ], function ($router) {
+        $router->any('i', 'HomeController@initAction');
+        $router->any('init', 'HomeController@initAction');
+        $router->any('install', 'HomeController@initAction');
+    });
 $app->autoResponse();
