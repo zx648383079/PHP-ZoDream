@@ -34,17 +34,12 @@ class BiQuGeLu extends BaseSpider {
     /**
      * @param Html $html
      * @param Uri $uri
-     * @return BookModel
+     * @return array
      */
     public function getBook(Html $html, Uri $uri) {
-        return new BookModel([
+        return [
             'name' => $html->find('.info h2', 0)->text,
-            'cover' => '/assets/images/book_default.jpg',
-            'description' => '',//$html->find('#intro', 0)->text,
-            'author_id' => 1,//BookAuthorModel::findOrNewByName(end($author))->id,
-            'cat_id' => 1,
-            'classify' => 1
-        ]);
+        ];
     }
 
     /**
@@ -75,27 +70,30 @@ class BiQuGeLu extends BaseSpider {
         foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;
             $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$key.'.html');
-            $data[] = [$chapterUri, $name];
+            $data[] = [
+                'title' => $name,
+                'url' => $chapterUri->encode()
+            ];
         }
         return $data;
     }
 
     /**
      * @param $html
-     * @return BookChapterModel
+     * @return array
      */
     public function getChapter(Html $html) {
         if ($html->isEmpty()) {
-            return null;
+            return [];
         }
         $content = $html->find('#content', 0);
         if (empty($content)) {
-            return null;
+            return [];
         }
         /// html 转文本还有问题
-        return new BookChapterModel([
+        return [
             'title' => $html->find('.content h1', 0)->text,
             'content' => self::toText($content->html)
-        ]);
+        ];
     }
 }

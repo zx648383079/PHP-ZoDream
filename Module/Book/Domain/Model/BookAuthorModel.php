@@ -64,4 +64,8 @@ class BookAuthorModel extends Model {
             'name' => $name
         ]);
     }
+
+    public static function findIdByName($name) {
+        return static::findOrNewByName($name)->id;
+    }
 }

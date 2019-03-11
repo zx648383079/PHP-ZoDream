@@ -21,3 +21,11 @@ $this->registerJs($js);
 
 <div class="book-box">
 </div>
+
+<div class="dialog dialog-progress">
+    <div class="dialog-header">同步进度</div>
+    <div class="dialog-body">
+        <progress value="0" max="100"></progress>
+        <span>0/0</span>
+    </div>
+</div>

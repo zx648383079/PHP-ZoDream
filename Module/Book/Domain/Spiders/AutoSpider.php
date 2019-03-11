@@ -27,7 +27,7 @@ class AutoSpider extends BaseSpider {
 
     /**
      * @param $html
-     * @return BookModel
+     * @return array
      */
     public function getBook(Html $html, Uri $uri) {
         // TODO: Implement getBook() method.
@@ -36,7 +36,7 @@ class AutoSpider extends BaseSpider {
     /**
      * @param Html $html
      * @param Uri $baseUri
-     * @return Uri[]
+     * @return array
      */
     public function getCatalog(Html $html, Uri $baseUri) {
         // TODO: Implement getCatalog() method.
@@ -44,7 +44,7 @@ class AutoSpider extends BaseSpider {
 
     /**
      * @param $html
-     * @return BookChapterModel
+     * @return array
      */
     public function getChapter(Html $html) {
         // TODO: Implement getChapter() method.

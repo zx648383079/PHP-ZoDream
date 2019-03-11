@@ -28,7 +28,7 @@ class Sixth extends BaseSpider {
     /**
      * @param Html $html
      * @param Uri $uri
-     * @return BookModel
+     * @return array
      */
     public function getBook(Html $html, Uri $uri) {
         //$author = $html->find('#info p', 0)->text;
@@ -37,14 +37,9 @@ class Sixth extends BaseSpider {
 //        if (!empty($path)) {
 //            $path = (clone $uri)->setPath($path)->encode();
 //        }
-        return new BookModel([
+        return [
             'name' => $html->find('#bookname', 0)->find('h1', 0)->text,
-            'cover' => '',
-            'description' => '',
-            'author_id' => 1,
-            'cat_id' => 1,
-            'classify' => 1
-        ]);
+        ];
     }
 
     /**
@@ -65,33 +60,36 @@ class Sixth extends BaseSpider {
         foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;
             $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$key.'.html');
-            $data[] = [$chapterUri, $name];
+            $data[] = [
+                'title' => $name,
+                'url' => $chapterUri->encode()
+            ];
         }
         return $data;
     }
 
     /**
      * @param $html
-     * @return BookChapterModel
+     * @return array
      */
     public function getChapter(Html $html) {
         if ($html->isEmpty()) {
-            return null;
+            return [];
         }
         try {
             $content = $html->find('#content', 0);
         } catch (Exception $exception) {
-            return null;
+            return [];
         }
         if (empty($content)) {
-            return null;
+            return [];
         }
         /// html 转文本还有问题
         $text = self::toText($content->html);
         //$encoding = mb_detect_encoding($text, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
-        return new BookChapterModel([
+        return [
             'title' => $html->find('#main h1', 0)->text,
             'content' => $text
-        ]);
+        ];
     }
 }

@@ -39,3 +39,15 @@
         }
     }
 }
+
+.dialog-progress {
+    top: 50vh;
+    width: 50%;
+    display: none;
+    background-color: #fff;
+    .dialog-body {
+        progress {
+            width: 88%;
+        }
+    }
+}

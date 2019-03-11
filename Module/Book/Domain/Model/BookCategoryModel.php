@@ -66,4 +66,27 @@ class BookCategoryModel extends Model {
     public function getBestRecommendBookAttribute() {
         return $this->best_recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->limit(5)->all();
     }
+
+    /**
+     * 新建
+     * @param $name
+     * @return static
+     */
+    public static function findOrNewByName($name) {
+        $name = trim($name);
+        if (empty($name)) {
+            return static::orderBy('id', 'asc')->first();
+        }
+        $model = static::where('name', $name)->one();
+        if (!empty($model)) {
+            return $model;
+        }
+        return static::create([
+            'name' => $name
+        ]);
+    }
+
+    public static function findIdByName($name) {
+        return static::findOrNewByName($name)->id;
+    }
 }

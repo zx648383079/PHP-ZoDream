@@ -34,23 +34,20 @@ class BiQuGe extends BaseSpider {
     /**
      * @param Html $html
      * @param Uri $uri
-     * @return BookModel
+     * @return array
      */
     public function getBook(Html $html, Uri $uri) {
         $author = $html->find('#info p', 0)->text;
-        $author = explode('：', $author, 2);
+        $author = explode('：', $author, 2)[1];
         $path = $html->find('#fmimg img', 0)->src;
         if (!empty($path)) {
             $path = (clone $uri)->setPath($path)->encode();
         }
-        return new BookModel([
+        return [
             'name' => $html->find('#info h1', 0)->text,
             'cover' => $path,
-            'description' => '',//$html->find('#intro', 0)->text,
-            'author_id' => 1,//BookAuthorModel::findOrNewByName(end($author))->id,
-            'cat_id' => 1,
-            'classify' => 1
-        ]);
+            'author' => $author
+        ];
     }
 
     /**
@@ -81,27 +78,30 @@ class BiQuGe extends BaseSpider {
         foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;
             $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$key.'.html');
-            $data[] = [$chapterUri, $name];
+            $data[] = [
+                'title' => $name,
+                'url' => $chapterUri->encode()
+            ];
         }
         return $data;
     }
 
     /**
      * @param $html
-     * @return BookChapterModel
+     * @return array
      */
     public function getChapter(Html $html) {
         if ($html->isEmpty()) {
-            return null;
+            return [];
         }
         $content = $html->find('#content', 0);
         if (empty($content)) {
-            return null;
+            return [];
         }
         /// html 转文本还有问题
-        return new BookChapterModel([
+        return [
             'title' => $html->find('.bookname h1', 0)->text,
             'content' => self::toText($content->html)
-        ]);
+        ];
     }
 }

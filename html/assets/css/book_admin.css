@@ -36,4 +36,12 @@
     .book-item .actions a {
       color: #fff; }
 
+.dialog-progress {
+  top: 50vh;
+  width: 50%;
+  display: none;
+  background-color: #fff; }
+  .dialog-progress .dialog-body progress {
+    width: 88%; }
+
 /*# sourceMappingURL=book_admin.css.map */

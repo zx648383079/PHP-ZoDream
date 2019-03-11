@@ -43,7 +43,17 @@ function bindChapter() {
 
 function bindImport(baseUri: string) {
     let box = $('.book-box'),
-        items = [];
+        items = [],
+        progress = $('.dialog-progress'),
+        loopStep = function (data: any) {
+            if (data.code == 200 && typeof data.data == 'object' && data.data.key) {
+                progress.show().find('progress').val(data.data.next * 100 / data.data.count).next('span').text(data.data.next + '/' + data.data.count);
+                postJson(baseUri + 'spider/async', data.data, loopStep);
+                return;
+            }
+            progress.hide();
+            parseAjax(data);
+        }
     $('.search form').submit(function() {
         postJson(baseUri + 'spider/search', $(this).serialize(), function(data) {
             if (data.code != 200) {
@@ -71,10 +81,6 @@ function bindImport(baseUri: string) {
             Dialog.tip('书籍不存在');
             return;
         }
-        let loading = Dialog.loading();
-        postJson(baseUri + 'spider/async', book, function(data) {
-            loading.close();
-            parseAjax(data); 
-        });
+        postJson(baseUri + 'spider/async', book, loopStep);
     });
 }

@@ -6,8 +6,10 @@ use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\SiteCrawl;
 use Module\Book\Domain\Spiders\Txt;
 use Module\Book\Domain\Spiders\ZhiShuShenQi;
+use PhpParser\Node\Expr\Empty_;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Spider\Support\Uri;
+use Zodream\Validate\Validator;
 
 class SpiderController extends Controller {
 
@@ -70,14 +72,45 @@ class SpiderController extends Controller {
     }
 
     public function searchAction($keywords) {
-        return $this->jsonSuccess((new ZhiShuShenQi())->search($keywords));
+        if (empty($keywords)) {
+            return $this->jsonFailure('请输入搜索内容');
+        }
+        if (!Validator::url()->validate($keywords)) {
+            return $this->jsonSuccess((new ZhiShuShenQi())->search($keywords));
+        }
+        $spider = SiteCrawl::getSpider(new Uri($keywords));
+        if (empty($spider)) {
+            return $this->jsonFailure('爬虫不存在');
+        }
+        $book = $spider->book($keywords);
+        if (empty($book)) {
+            return $this->jsonFailure('爬取失败');
+        }
+        $book['url'] = $keywords;
+        return $this->jsonSuccess([$book]);
     }
 
-    public function asyncAction($id, $name, $description = null, $size = 0) {
+    public function asyncAction() {
         set_time_limit(0);
-        $spider = new ZhiShuShenQi();
+        $book = $_POST;
         try {
-            $spider->async($id, $name, $description, $size);
+            if (isset($_POST['next'])) {
+                return $this->jsonSuccess(
+                    SiteCrawl::loopStep($_POST['key'], intval($_POST['next'])));
+            }
+            if (isset($book['url'])) {
+                $spider = SiteCrawl::getSpider(new Uri($book['url']));
+                $data = SiteCrawl::async($spider, $book);
+            } else {
+                $data = SiteCrawl::async(new ZhiShuShenQi(), $book);
+            }
+            $key = 'book_spider_async_'.time();
+            cache()->set($key, $data, 3600);
+            return $this->jsonSuccess([
+                'next' => $data[3],
+                'count' => count($data[2]),
+                'key' => $key
+            ]);
         } catch (Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }

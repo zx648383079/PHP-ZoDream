@@ -36,7 +36,7 @@ class Hun extends BaseSpider {
     /**
      * @param Html $html
      * @param Uri $uri
-     * @return BookModel
+     * @return array
      */
     public function getBook(Html $html, Uri $uri) {
         //$author = $html->find('#info p', 0)->text;
@@ -45,14 +45,9 @@ class Hun extends BaseSpider {
 //        if (!empty($path)) {
 //            $path = (clone $uri)->setPath($path)->encode();
 //        }
-        return new BookModel([
+        return [
             'name' => $html->matchValue('#class="novel_name">(.+?)\</h1\>#', 1),//$html->find('#wp', 0)->find('h1', 0)->text,
-            'cover' => '',
-            'description' => '',
-            'author_id' => 1,
-            'cat_id' => 1,
-            'classify' => 1
-        ]);
+        ];
     }
 
     /**
@@ -73,29 +68,32 @@ class Hun extends BaseSpider {
         foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;
             $chapterUri->setPath(trim($baseUri->getPath(), '/').'/'.$key.'.html');
-            $data[] = [$chapterUri, $name];
+            $data[] = [
+                'title' => $name,
+                'url' => $chapterUri->encode()
+            ];
         }
         return $data;
     }
 
     /**
      * @param $html
-     * @return BookChapterModel
+     * @return array
      */
     public function getChapter(Html $html) {
         if ($html->isEmpty()) {
-            return null;
+            return [];
         }
         $content = $html->matchValue('#id="novel_content"\>([\s\S]+?)\</div\>#', 1);
         if (empty($content)) {
-            return null;
+            return [];
         }
         /// html 转文本还有问题
         $text = self::toText($content);
         //$encoding = mb_detect_encoding($content, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
-        return new BookChapterModel([
+        return [
             'title' => $html->matchValue('#class="novel_title"\>(.+)\</h1\>#', 1),
             'content' => $text
-        ]);
+        ];
     }
 }

@@ -2,15 +2,18 @@
 namespace Module\Book\Domain\Spiders;
 
 use Domain\Model\Model;
+use Module\Book\Domain\Model\BookAuthorModel;
+use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 
+use Module\Book\Domain\SiteCrawl;
 use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 
-abstract class BaseSpider {
+abstract class BaseSpider implements GetBookInterface {
 
     protected $start = null;
 
@@ -25,10 +28,22 @@ abstract class BaseSpider {
         return $this;
     }
 
-    public function invoke(Uri $uri, callable $next = null) {
+    public function invoke($uri, callable $next = null) {
+        if (!$uri instanceof Uri) {
+            $uri = new Uri($uri);
+        }
         if ($this->isContentPage($uri)) {
             $html = $this->decode(Spider::url($uri));
             $chapter = $this->getChapter($html);
+            if (empty($chapter)) {
+                return false;
+            }
+            if (is_array($chapter)) {
+                $chapter = BookChapterModel::create([
+                    'title' => $chapter['title'],
+                    'content' => $chapter['content']
+                ]);
+            }
             if ($chapter instanceof Model) {
                 $chapter->save();
             }
@@ -48,6 +63,9 @@ abstract class BaseSpider {
      */
     public function invokeHtml(Html $html, Uri $uri, callable $next) {
         $book = $this->getBook($html, $uri);
+        if (empty($book)) {
+            return;
+        }
         $book = $this->getRealBook($book);
         if (empty($book)) {
             return;
@@ -69,7 +87,10 @@ abstract class BaseSpider {
         return false;
     }
 
-    protected function getRealBook(BookModel $book) {
+    protected function getRealBook($book) {
+        if (is_array($book)) {
+            $book = SiteCrawl::createBook($book);
+        }
         if (!$book->isExist()) {
             $book->save();
             return $book;
@@ -79,8 +100,7 @@ abstract class BaseSpider {
             if (!app('request')->isCli()) {
                 return null;
             }
-            echo '是否继续(Y/N):';
-            $arg = app('request')->read();
+            $arg = app('request')->read('', '是否继续(Y/N):');
             if (strtolower($arg) != 'y') {
                 return null;
             }
@@ -106,22 +126,36 @@ abstract class BaseSpider {
 
     /**
      * @param $html
-     * @return BookModel
+     * @return array
      */
     abstract public function getBook(Html $html, Uri $uri);
 
     /**
      * @param Html $html
      * @param Uri $baseUri
-     * @return Uri[]
+     * @return array
      */
     abstract public function getCatalog(Html $html, Uri $baseUri);
 
     /**
      * @param $html
-     * @return BookChapterModel
+     * @return array
      */
     abstract public function getChapter(Html $html);
+
+    public function book(string $uri): array {
+        $uri = new Uri($uri);
+        $html = $this->decode(Spider::url($uri));
+        $data = $this->getBook($html, $uri);
+        $data['chapters'] = $this->getCatalog($html, $uri);
+        return $data;
+    }
+
+    public function chapter(string $uri): array {
+        $html = $this->decode(Spider::url($uri));
+        return $this->getChapter($html);
+    }
+
 
     public static function toText($html) {
         $html = Html::toText($html);
@@ -157,7 +191,8 @@ abstract class BaseSpider {
             if (!isset($chapters[$i])) {
                 break;
             }
-            list($url, $title) = $chapters[$i];
+            $title = $chapters[$i]['title'];
+            $url = $chapters[$i]['url'];
             /** @var BookChapterModel $chapter */
             $chapter = call_user_func($next, $url);
             if (!empty($chapter)) {
