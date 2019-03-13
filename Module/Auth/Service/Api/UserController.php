@@ -8,7 +8,7 @@ class UserController extends RestController {
 
     protected function rules() {
         return [
-            'index' => ['POST'],
+            'index' => '@'
         ];
     }
 
