@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Model\CategoryModel;
+use Module\Shop\Domain\Model\Scene\Goods;
 
 class CategoryController extends Controller {
 
@@ -13,7 +14,20 @@ class CategoryController extends Controller {
     }
 
     public function infoAction($id) {
-        return $this->render(CategoryModel::find(intval($id)));
+        $model = CategoryModel::find(intval($id));
+        $data = $model->toArray();
+        $extra = app('request')->get('extra');
+        if (!empty($extra)) {
+            $extra = explode(',', $extra);
+            if (in_array('goods_list', $extra)) {
+                $data['goods_list'] = Goods::whereIn('cat_id', $model->children)
+                    ->where('is_best', 1)->all();
+            }
+            if (in_array('children', $extra)) {
+                $data['children'] = $this->formatCategory(CategoryModel::getChildrenItem($id));
+            }
+        }
+        return $this->render($data);
     }
 
     public function levelAction() {
@@ -22,5 +36,17 @@ class CategoryController extends Controller {
 
     public function treeAction() {
         return $this->render(CategoryModel::cacheTree());
+    }
+
+    private function formatCategory(array $data) {
+        if (empty($data)) {
+            return $data;
+        }
+        return array_map(function ($item) {
+            if (isset($item['children'])) {
+                $item['children'] = $this->formatCategory($item['children']);
+            }
+            return $item;
+        }, array_values($data));
     }
 }
