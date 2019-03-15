@@ -22,6 +22,9 @@ use Module\Auth\Domain\Model\UserModel;
  *
  */
 class CommentModel extends Model {
+
+    protected $append = ['user', 'images'];
+
     public static function tableName() {
         return 'shop_comment';
     }

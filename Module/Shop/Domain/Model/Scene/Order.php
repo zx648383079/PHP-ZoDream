@@ -5,5 +5,5 @@ use Module\Shop\Domain\Model\OrderModel;
 
 class Order extends OrderModel {
 
-    protected $append = ['goods'];
+    protected $append = ['goods', 'status_label'];
 }

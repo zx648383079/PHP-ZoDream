@@ -24,11 +24,9 @@ class OrderController extends Controller {
     }
 
     public function infoAction($id) {
-        $order = OrderModel::where('id', $id)->where('user_id', auth()->id())->first();
-        $goods_list = OrderGoodsModel::with('goods')->where('order_id', $id)->all();
+        $order = Order::where('id', $id)->where('user_id', auth()->id())->first();
         $address = OrderAddressModel::where('order_id', $id)->one();
         $data = $order->toArray();
-        $data['goods_list'] = $goods_list;
         $data['address'] = $address;
         return $this->render($data);
     }

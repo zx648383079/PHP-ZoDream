@@ -23,8 +23,6 @@ use Module\Shop\Domain\Model\Scene\Goods;
  */
 class OrderGoodsModel extends Model {
 
-    protected $append = ['goods'];
-
     public static function tableName() {
         return 'shop_order_goods';
     }

@@ -7,9 +7,10 @@ class CommentController extends Controller {
 
     public function indexAction($item_id, $item_type = 0) {
         $data = CommentModel::with('user', 'images')
-            ->where('item_type', $item_type)->where('item_id', $item_id)
+            ->where('item_type', $item_type)
+            ->where('item_id', $item_id)
             ->orderBy('id', 'desc')->page();
-        return $this->render($data);
+        return $this->renderPage($data);
     }
 
     public function createAction() {
@@ -39,9 +40,11 @@ class CommentController extends Controller {
             'middle' => 0,
             'bad' => 0
         ];
+        $total = 0;
         foreach ($data as $item) {
+            $total += $item['count'] * $item['rank'];
             $args['total'] += $item['count'];
-            if ($item['rank'] > 3) {
+            if ($item['rank'] > 7) {
                 $args['good'] += $item['count'];
                 continue;
             }
@@ -51,6 +54,8 @@ class CommentController extends Controller {
             }
             $args['middle'] += $item['count'];
         }
+        $args['avg'] = round($total / $args['total'], 1);
+        $args['favorable_rate'] = ceil($args['good'] * 100 / $args['total']);
         $args['tags'] = [
             [
                 'label' => '好评',
@@ -65,6 +70,9 @@ class CommentController extends Controller {
                 'count' => $args['bad']
             ],
         ];
+        $args['tags'] = array_filter($args['tags'], function ($item) {
+            return $item['count'] > 0;
+        });
         $args['comments'] = CommentModel::with('user', 'images')->where('item_type', $item_type)->where('item_id', $item_id)
             ->orderBy('id', 'desc')->limit(2)->get();
         return $this->render($args);
