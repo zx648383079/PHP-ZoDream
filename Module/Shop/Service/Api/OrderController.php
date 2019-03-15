@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Api;
 use Module\Shop\Domain\Model\OrderAddressModel;
 use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Model\Scene\Order;
 
 class OrderController extends Controller {
 
@@ -12,7 +13,7 @@ class OrderController extends Controller {
         if ($id > 0) {
             return $this->infoAction($id);
         }
-        $order_list = OrderModel::with('goods')
+        $order_list = Order::with('goods')
             ->where('user_id', auth()->id())
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', intval($status));

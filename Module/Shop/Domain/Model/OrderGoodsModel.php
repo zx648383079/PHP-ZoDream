@@ -2,6 +2,7 @@
 namespace Module\Shop\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Shop\Domain\Model\Scene\Goods;
 
 
 /**
@@ -13,7 +14,7 @@ use Domain\Model\Model;
  * @property string $name
  * @property string $series_number
  * @property string $thumb
- * @property integer $number
+ * @property integer $amount
  * @property float $price
  * @property integer $refund_id
  * @property integer $status
@@ -21,6 +22,9 @@ use Domain\Model\Model;
  * @property integer $comment_id
  */
 class OrderGoodsModel extends Model {
+
+    protected $append = ['goods'];
+
     public static function tableName() {
         return 'shop_order_goods';
     }
@@ -33,7 +37,7 @@ class OrderGoodsModel extends Model {
             'name' => 'required|string:0,100',
             'series_number' => 'required|string:0,100',
             'thumb' => 'string:0,200',
-            'number' => 'int',
+            'amount' => 'int',
             'price' => '',
             'refund_id' => 'int',
             'status' => 'int',
@@ -51,13 +55,17 @@ class OrderGoodsModel extends Model {
             'name' => 'Name',
             'series_number' => 'Series Number',
             'thumb' => 'Thumb',
-            'number' => 'Number',
+            'amount' => 'Number',
             'price' => 'Price',
             'refund_id' => 'Refund Id',
             'status' => 'Status',
             'after_sale_status' => 'After Sale Status',
             'comment_id' => 'Comment Id',
         ];
+    }
+
+    public function goods() {
+        return $this->hasOne(Goods::class, 'id', 'goods_id');
     }
 
 
@@ -70,7 +78,7 @@ class OrderGoodsModel extends Model {
      * @return float
      */
     public function getTotalAttribute() {
-        return $this->price * $this->number;
+        return $this->price * $this->amount;
     }
 
     public function getStatusLabelAttribute() {
@@ -81,10 +89,10 @@ class OrderGoodsModel extends Model {
      * 一步购买
      * @param OrderModel $order
      * @param GoodsModel $goods
-     * @param integer $number
+     * @param integer $amount
      * @return static
      */
-    public static function addGoods(OrderModel $order, GoodsModel $goods, $number) {
+    public static function addGoods(OrderModel $order, GoodsModel $goods, $amount) {
         $model = new static();
         $model->goods_id = $goods->id;
         $model->status = $order->status;
@@ -94,7 +102,7 @@ class OrderGoodsModel extends Model {
         $model->thumb = $goods->thumb;
         $model->series_number = $goods->series_number;
         $model->price = $goods->price;
-        $model->number = $number;
+        $model->amount = $amount;
         $model->save();
         return $model;
     }
@@ -103,13 +111,13 @@ class OrderGoodsModel extends Model {
      * 从购物车中转入
      * @param OrderModel $order
      * @param CartModel $cart
-     * @param integer $number
+     * @param integer $amount
      * @return static
      * @throws \Exception
      */
-    public static function addCartGoods(OrderModel $order, CartModel $cart, $number = null) {
-        if (empty($number)) {
-            $number = $cart->number;
+    public static function addCartGoods(OrderModel $order, CartModel $cart, $amount = 0) {
+        if (empty($amount)) {
+            $amount = $cart->amount;
         }
         $model = new static();
         $model->status = $order->status;
@@ -120,7 +128,7 @@ class OrderGoodsModel extends Model {
         $model->series_number = $cart->goods->series_number;
         $model->thumb = $cart->goods->thumb;
         $model->price = $cart->price;
-        $model->number = $number;
+        $model->amount = $amount;
         $model->save();
         return $model;
     }

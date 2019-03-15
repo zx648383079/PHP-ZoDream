@@ -1,6 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Module\Shop\Domain\Model\CartModel;
+use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Module;
 
 class CartController extends Controller {
@@ -12,7 +14,7 @@ class CartController extends Controller {
 
     public function addAction($goods, $amount = 1) {
         $goods = GoodsModel::find($goods);
-        if (!$goods->canBuy($amount)) {
+        if (!$goods || !$goods->canBuy($amount)) {
             return $this->renderFailure('库存不足');
         }
         Module::cart()->add(CartModel::fromGoods($goods, $amount))->save();

@@ -56,7 +56,7 @@ class GoodsModel extends Model {
     const SORT_HOT = 5;
 
 
-    const THUMB_MODE = ['id', 'name', 'thumb', 'price'];
+    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price'];
 
     public static function tableName() {
         return 'shop_goods';

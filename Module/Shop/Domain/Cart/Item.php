@@ -16,7 +16,7 @@ trait Item  {
     }
 
     public function mergeItem(ICartItem $item) {
-        $this->number += $item->amount();
+        $this->amount += $item->amount();
         return $this;
     }
 
@@ -25,6 +25,6 @@ trait Item  {
     }
 
     public function amount() {
-        return $this->number;
+        return $this->amount;
     }
 }

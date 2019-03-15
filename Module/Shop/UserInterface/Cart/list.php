@@ -44,7 +44,7 @@ $this->registerJs($js);
         <div>
             <div class="number-box">
                     <i class="fa fa-minus"></i>
-                    <input type="text" class="number-input" value="<?=$item->number?>">
+                    <input type="text" class="number-input" value="<?=$item->amount?>">
                     <i class="fa fa-plus"></i>
                 </div>
         </div>

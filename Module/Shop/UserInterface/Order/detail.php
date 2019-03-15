@@ -86,7 +86,7 @@ $this->title = 'ZoDream';
                             </div>
                         </div> 
                         <div><?=$goods->price?></div>
-                        <div><?=$goods->number?></div>
+                        <div><?=$goods->amount?></div>
                         <div><?=$goods->total?></div>
                         <div><?=$goods->total?></div>
                     </div>

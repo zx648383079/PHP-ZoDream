@@ -11,7 +11,7 @@ class Goods extends GoodsModel {
 
     protected $append = ['shop'];
 
-    protected $visible = ['id', 'name', 'thumb', 'price', 'market_price', 'shop'];
+    protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'shop'];
 
     public function getShopAttribute() {
         return config('app.name');

@@ -200,7 +200,7 @@ class CreateShopTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
             $table->set('series_number')->varchar(100)->notNull();
             $table->set('thumb')->varchar(200)->comment('缩略图');
-            $table->set('number')->int()->defaultVal(1);
+            $table->set('amount')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
             $table->set('refund_id')->int()->defaultVal(0);
             $table->set('status')->int()->defaultVal(0);
@@ -476,7 +476,7 @@ class CreateShopTables extends Migration {
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
-            $table->set('number')->int()->defaultVal(1);
+            $table->set('amount')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
             $table->set('is_checked')->bool()->defaultVal(0)->comment('是否选中');
             $table->set('selected_activity')->int()->defaultVal(0)->comment('选择的活动');

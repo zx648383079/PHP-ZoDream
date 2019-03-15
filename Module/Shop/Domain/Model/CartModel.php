@@ -12,6 +12,7 @@ use Domain\Model\Model;
 use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Item;
 use Module\Shop\Domain\Model\Activity\ActivityModel;
+use Module\Shop\Domain\Model\Scene\Goods;
 use Zodream\Infrastructure\Cookie;
 
 use Zodream\Service\Factory;
@@ -22,7 +23,7 @@ use Zodream\Service\Factory;
  * @property integer $type
  * @property integer $user_id
  * @property integer $goods_id
- * @property integer $number
+ * @property integer $amount
  * @property float $price
  * @property float $total
  * @property GoodsModel $goods
@@ -33,6 +34,8 @@ class CartModel extends Model implements ICartItem {
 
     use Item;
 
+    protected $append = ['goods'];
+
     public static function tableName() {
         return 'shop_cart';
     }
@@ -42,7 +45,7 @@ class CartModel extends Model implements ICartItem {
             'type' => 'int:0,9',
             'user_id' => 'required|int',
             'goods_id' => 'required|int',
-            'number' => 'int',
+            'amount' => 'int',
             'price' => '',
         ];
     }
@@ -53,17 +56,17 @@ class CartModel extends Model implements ICartItem {
             'type' => 'Type',
             'user_id' => 'User Id',
             'goods_id' => 'Goods Id',
-            'number' => 'Number',
+            'amount' => '数量',
             'price' => 'Price',
         ];
     }
 
     public function goods() {
-        return $this->hasOne(GoodsModel::class, 'id', 'goods_id');
+        return $this->hasOne(Goods::class, 'id', 'goods_id');
     }
 
     public function getTotalAttribute() {
-        return bcmul($this->number, $this->price);
+        return $this->amount * $this->price;
     }
 
     public function getSavingAttribute() {
@@ -106,13 +109,13 @@ class CartModel extends Model implements ICartItem {
         if ($amount < 1) {
             return $this->delete();
         }
-        $this->number = $amount;
+        $this->amount = $amount;
         $this->price = $this->goods->final_price($amount);
         return $this->save();
     }
 
     public function save() {
-        if ($this->number <= 0) {
+        if ($this->amount <= 0) {
             return $this->delete();
         }
         return parent::save();
@@ -128,7 +131,7 @@ class CartModel extends Model implements ICartItem {
         $model = new static([
             'user_id' => auth()->id(),
             'goods_id' => $goods->id,
-            'number' => $amount,
+            'amount' => $amount,
             'price' => $goods->final_price($amount)
         ]);
         $model->setRelation('goods', $goods);

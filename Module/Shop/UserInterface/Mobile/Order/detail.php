@@ -36,7 +36,7 @@ $this->extend('../layouts/header', [
                 <div class="goods-info">
                     <h4><?=$goods->name?></h4>
                     <span class="price"><?=$goods->price?></span>
-                    <span class="amount"> x <?=$goods->number?></span>
+                    <span class="amount"> x <?=$goods->amount?></span>
                 </div>
             </div>
             <?php endforeach;?>

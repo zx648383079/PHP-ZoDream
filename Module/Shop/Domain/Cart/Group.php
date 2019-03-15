@@ -105,10 +105,13 @@ class Group implements \IteratorAggregate, ArrayAble {
     }
 
     public function getIterator() {
-        return new ArrayIterator($this->toArray());
+        return new ArrayIterator($this->all());
     }
 
     public function toArray() {
-        return $this->all();
+        return [
+            'name' => $this->name,
+            'goods_list' => $this->all()
+        ];
     }
 }

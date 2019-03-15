@@ -33,7 +33,7 @@ $this->registerJsFile('@jquery.swipeAction.min.js')
                         <span><?=$item->price?></span>
                         <div class="number-box">
                             <i class="fa fa-minus"></i>
-                            <input type="text" name="" value="<?=$item->number?>" min="1">
+                            <input type="text" name="" value="<?=$item->amount?>" min="1">
                             <i class="fa fa-plus"></i>
                         </div>
                     </div>
