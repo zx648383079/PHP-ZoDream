@@ -15,7 +15,7 @@ use Module\Auth\Domain\Model\UserModel;
  * @package Domain\Model\Shopping
  * @property integer $id
  * @property string $content
- * @property integer $star
+ * @property integer $rank
  * @property integer $user_id
  * @property integer $goods_id
  * @property integer $create_at

@@ -1,38 +1,38 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Module\Shop\Domain\Model\OrderAddressModel;
+use Module\Shop\Domain\Model\OrderGoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 
 class OrderController extends Controller {
 
     public function indexAction($id = 0,
-                                $status = null,
-                                $keywords = null,
-                                $per_page = 20, $sort = null, $order = null) {
+                                $status = 0) {
         if ($id > 0) {
             return $this->infoAction($id);
         }
         $order_list = OrderModel::with('goods')
             ->where('user_id', auth()->id())
+            ->when($status > 0, function ($query) use ($status) {
+                $query->where('status', intval($status));
+            })
             ->orderBy('created_at', 'desc')
             ->page();
         return $this->renderPage($order_list);
     }
 
     public function infoAction($id) {
-        return $this->render(OrderModel::with('goods')->where('user_id', auth()->id())
-            ->where('id', $id)->first());
+        $order = OrderModel::where('id', $id)->where('user_id', auth()->id())->first();
+        $goods_list = OrderGoodsModel::with('goods')->where('order_id', $id)->all();
+        $address = OrderAddressModel::where('order_id', $id)->one();
+        $data = $order->toArray();
+        $data['goods_list'] = $goods_list;
+        $data['address'] = $address;
+        return $this->render($data);
     }
 
     public function countAction() {
-        $data = OrderModel::where('user_id', auth()->id())->groupBy('status')->asArray()
-            ->get('status, COUNT(*) AS count');
-        return $this->render([
-            'unpay' => 0,
-            'unshipping' => 0,
-            'unconfirm' => 0,
-            'uncomment' => 0,
-            'finish' => 0
-        ]);
+        return $this->render(OrderModel::getSubtotal());
     }
 }

@@ -218,18 +218,37 @@ class OrderModel extends Model {
     public static function getSubtotal() {
         if (auth()->guest()) {
             return [
-                'unpay' => 0,
+                'un_pay' => 0,
                 'shipped' => 0,
+                'finish' => 0,
+                'cancel' => 0,
+                'invalid' => 0,
+                'paid_un_ship' => 0,
+                'received' => 0,
                 'uncomment' => 0,
                 'refunding' => 0
             ];
         }
-        return [
-            'unpay' => static::auth()->where('status', self::STATUS_UN_PAY)->count(),
-            'shipped' => static::auth()->where('status', self::STATUS_SHIPPED)->count(),
-            'uncomment' => OrderGoodsModel::auth()->where('status', self::STATUS_RECEIVED)->count(),
-            'refunding' => OrderRefundModel::auth()
-                ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count()
+        $data = static::where('user_id', auth()->id())->groupBy('status')->asArray()
+            ->get('status, COUNT(*) AS count');
+        $data = array_column($data, 'count', 'status');
+        $args = [
+            'un_pay' => self::STATUS_UN_PAY,
+            'shipped' => self::STATUS_SHIPPED,
+            'finish' => self::STATUS_FINISH,
+            'cancel' => self::STATUS_CANCEL,
+            'invalid' => self::STATUS_INVALID,
+            'paid_un_ship' => self::STATUS_PAID_UN_SHIP,
+            'received' => self::STATUS_RECEIVED
         ];
+        foreach ($args as $key => $status) {
+            $args[$key] = isset($data[$status])
+                ? intval($data[$status]) : 0;
+        }
+        $args['uncomment'] = OrderGoodsModel::auth()
+            ->where('status', self::STATUS_RECEIVED)->count();
+        $args['refunding'] = OrderRefundModel::auth()
+            ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count();
+        return $args;
     }
 }

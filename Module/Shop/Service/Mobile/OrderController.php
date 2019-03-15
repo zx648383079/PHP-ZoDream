@@ -27,7 +27,7 @@ class OrderController extends Controller {
     }
 
     public function detailAction($id) {
-        $order = OrderModel::find($id);
+        $order = OrderModel::where('id', $id)->where('user_id', auth()->id())->first();
         $goods_list = OrderGoodsModel::where('order_id', $id)->all();
         $address = OrderAddressModel::where('order_id', $id)->one();
         return $this->show(compact('order', 'goods_list', 'address'));

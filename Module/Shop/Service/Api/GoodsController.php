@@ -1,6 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Module\Shop\Domain\Model\BrandModel;
+use Module\Shop\Domain\Model\CategoryModel;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\Scene\Goods;
 
@@ -26,7 +28,20 @@ class GoodsController extends Controller {
     }
 
     public function infoAction($id) {
-        return $this->render(GoodsModel::find($id));
+        $goods = GoodsModel::find($id);
+        if (empty($goods)) {
+            return $this->renderFailure('商品错误！');
+        }
+        $data = $goods->toArray();
+        $data['properties'] = $goods->properties;
+        $data['static_properties'] = $goods->static_properties;
+        $data['is_collect'] = $goods->is_collect;
+        return $this->render($data);
+    }
+
+    public function recommendAction($id) {
+        $goods_list = Goods::where('is_best', 1)->limit(3)->all();
+        return $this->render($goods_list);
     }
 
     public function homeAction() {
@@ -34,5 +49,13 @@ class GoodsController extends Controller {
         $new_products = Goods::where('is_new', 1)->all();
         $best_products = Goods::where('is_best', 1)->all();
         return $this->render(compact('hot_products', 'new_products', 'best_products'));
+    }
+
+    public function countAction() {
+        return $this->render([
+           'category' => CategoryModel::query()->count(),
+           'brand' => BrandModel::query()->count(),
+           'goods' => GoodsModel::query()->count()
+        ]);
     }
 }

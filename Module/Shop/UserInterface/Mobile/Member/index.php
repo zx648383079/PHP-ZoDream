@@ -62,8 +62,8 @@ $this->extend('../layouts/header', compact('header_btn', 'header_back'));
         <a href="<?=$this->url('./mobile/order', ['status' => OrderModel::STATUS_UN_PAY])?>" class="item">
             <i class="fa fa-money-bill" aria-hidden="true"></i>
             <span>待付款</span>
-            <?php if(isset($order_subtotal['unpay']) && $order_subtotal['unpay'] > 0):?>
-            <i class="tip"><?=$order_subtotal['unpay']?></i>
+            <?php if(isset($order_subtotal['un_pay']) && $order_subtotal['un_pay'] > 0):?>
+            <i class="tip"><?=$order_subtotal['un_pay']?></i>
             <?php endif;?>
         </a>
         <a href="<?=$this->url('./mobile/order', ['status' => OrderModel::STATUS_SHIPPED])?>" class="item">

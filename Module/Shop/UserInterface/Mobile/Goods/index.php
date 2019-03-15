@@ -122,7 +122,7 @@ $this->registerJs($js);
     <div id="detail" class="tab-box goods-content">
         <div class="tab-header"><div class="tab-item active">商品介绍</div><div class="tab-item">规格参数</div><div class="tab-item">售后保障</div></div>
         <div class="tab-body">
-            <div class="tab-item active"><?=$item->content?></div>
+            <div class="tab-item active"><?=$goods->content?></div>
             <div class="tab-item">
                 <div class="static-properties-box">
                     <?php foreach($goods->static_properties as $item):?>
