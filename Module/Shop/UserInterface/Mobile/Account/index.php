@@ -36,6 +36,11 @@ $this->extend('../layouts/header', compact('header_btn'))
             提现
             <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </a>
+        <a href="<?=$this->url('./mobile/account/card')?>">
+            <i class="fa fa-credit-card" aria-hidden="true"></i>
+            银行卡
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </a>
         <a href="<?=$this->url('./mobile/invoice')?>">
             <i class="fa fa-bookmark" aria-hidden="true"></i>
             发票管理
