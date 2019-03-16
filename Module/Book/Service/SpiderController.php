@@ -87,6 +87,7 @@ class SpiderController extends Controller {
             return $this->jsonFailure('爬取失败');
         }
         $book['url'] = $keywords;
+        unset($book['chapters']);
         return $this->jsonSuccess([$book]);
     }
 

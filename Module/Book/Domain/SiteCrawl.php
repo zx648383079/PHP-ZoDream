@@ -7,6 +7,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Spiders\BiQuGeC;
 use Module\Book\Domain\Spiders\GetBookInterface;
+use Module\Book\Domain\Spiders\Qb;
 use Module\Book\Domain\Spiders\Sixth;
 use Module\Book\Domain\Spiders\XBiQuGe;
 use Module\Book\Domain\Spiders\BiQuGe;
@@ -38,7 +39,8 @@ class SiteCrawl {
         'www.biquge.info' => IBiQuGe::class,
         'www.shuge.la' => SBiQuGe::class,
         'www.booktxt.net' => IBiQuGe::class,
-        'www.16book.org' => Sixth::class
+        'www.16book.org' => Sixth::class,
+        'www.qb5200.tw' => Qb::class
     ];
 
     /**

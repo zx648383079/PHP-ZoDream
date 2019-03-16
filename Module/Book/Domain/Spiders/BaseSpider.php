@@ -39,7 +39,7 @@ abstract class BaseSpider implements GetBookInterface {
                 return false;
             }
             if (is_array($chapter)) {
-                $chapter = BookChapterModel::create([
+                $chapter = new BookChapterModel([
                     'title' => $chapter['title'],
                     'content' => $chapter['content']
                 ]);
@@ -144,11 +144,13 @@ abstract class BaseSpider implements GetBookInterface {
     abstract public function getChapter(Html $html);
 
     public function book(string $uri): array {
-        $uri = new Uri($uri);
-        $html = $this->decode(Spider::url($uri));
-        $data = $this->getBook($html, $uri);
-        $data['chapters'] = $this->getCatalog($html, $uri);
-        return $data;
+        return cache()->getOrSet('book_spider_book_'.$uri, function () use ($uri) {
+            $uri = new Uri($uri);
+            $html = $this->decode(Spider::url($uri));
+            $data = $this->getBook($html, $uri);
+            $data['chapters'] = $this->getCatalog($html, $uri);
+            return $data;
+        }, 600);
     }
 
     public function chapter(string $uri): array {
