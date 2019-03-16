@@ -54,8 +54,9 @@ class CommentController extends Controller {
             }
             $args['middle'] += $item['count'];
         }
-        $args['avg'] = round($total / $args['total'], 1);
-        $args['favorable_rate'] = ceil($args['good'] * 100 / $args['total']);
+        $args['avg'] = $args['total'] > 0 ? round($total / $args['total'], 1) : 10;
+        $args['favorable_rate'] = $args['total'] > 0 ?
+            ceil($args['good'] * 100 / $args['total']) : 100;
         $args['tags'] = [
             [
                 'label' => '好评',
