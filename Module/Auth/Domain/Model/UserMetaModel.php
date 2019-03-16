@@ -35,23 +35,35 @@ class UserMetaModel extends Model {
         ];
     }
 
+    public static function getVal($key) {
+        return self::where('user_id', auth()->id())->where('name', $key)->value('content');
+    }
+
+    public static function updateVal($key, $value) {
+        self::where('user_id', auth()->id())->where('name', $key)
+            ->update([
+                'content' => is_array($value) ? serialize($value) : $value
+            ]);
+    }
+
+    public static function insertVal($key, $value) {
+        static::create([
+            'user_id' => auth()->id(),
+            'name' => $key,
+            'content' => is_array($value) ? serialize($value) : $value
+        ]);
+    }
+
     public static function getArr($key) {
-        $value = self::where('user_id', auth()->id())->where('name', $key)->value('content');
+        $value = static::getVal($key);
         return empty($value) ? [] : unserialize($value);
     }
 
     public static function updateArr($key, array $value) {
-        self::where('user_id', auth()->id())->where('name', $key)
-            ->update([
-                'content' => serialize($value)
-            ]);
+        static::updateVal($key, $value);
     }
 
     public static function insertArr($key, array $value) {
-        static::create([
-            'user_id' => auth()->id(),
-            'name' => $key,
-            'content' => serialize($value)
-        ]);
+        static::insertVal($key, $value);
     }
 }

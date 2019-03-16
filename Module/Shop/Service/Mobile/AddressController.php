@@ -44,4 +44,9 @@ class AddressController extends Controller {
             'url' => $this->getUrl('address')
         ]);
     }
+
+    public function defaultAction($id) {
+        AddressModel::defaultId($id);
+        return $this->jsonSuccess(true);
+    }
 }

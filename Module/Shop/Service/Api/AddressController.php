@@ -58,4 +58,9 @@ class AddressController extends Controller {
         Address::where('user_id', auth()->id())->where('id', $id)->delete();
         return $this->render('');
     }
+
+    public function defaultAction($id) {
+        Address::defaultId($id);
+        return $this->render(['data' => true]);
+    }
 }

@@ -2,6 +2,8 @@
 namespace Module\Shop\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserMetaModel;
+
 /**
  * Class AddressModel
  * @property integer $id
@@ -50,6 +52,23 @@ class AddressModel extends Model {
 
     public function region() {
 	    return $this->hasOne(RegionModel::class, 'id', 'region_id');
+    }
+
+    public function getIsDefaultAttribute() {
+	    return static::defaultId() == $this->id;
+    }
+
+    public static function defaultId($val = 0) {
+	    static $id = -1;
+	    $key = 'address_id';
+	    if ($id < 0) {
+	        $id = intval(UserMetaModel::getVal($key));
+        }
+        if ($val > 0) {
+	        $id > 0 ? UserMetaModel::updateVal($key, $val) : UserMetaModel::insertVal($key, $val);
+	        $id = $val;
+        }
+        return $id;
     }
 
 //	public function save() {
