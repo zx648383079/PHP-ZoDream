@@ -16,7 +16,7 @@ class CashierController extends Controller {
         return $this->render(ShippingModel::getByAddress($address));
     }
 
-    public function paymentAction($goods, $shipping) {
+    public function paymentAction($goods = [], $shipping = []) {
         return $this->render(PaymentModel::all());
     }
 

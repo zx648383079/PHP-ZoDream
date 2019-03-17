@@ -11,6 +11,6 @@ class RegionController extends Controller {
     }
 
     public function treeAction() {
-        return $this->render(RegionModel::cacheTree());
+        return $this->render(['data' => RegionModel::cacheTree()]);
     }
 }
