@@ -122,5 +122,7 @@ class RegionModel extends Model {
             'parent_id',
             'full_name'
         ], $args);
+	    cache()->delete('shop_region_tree');
+	    static::cacheTree();
     }
 }
