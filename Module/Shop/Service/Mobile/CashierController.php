@@ -6,6 +6,7 @@ use Module\Shop\Domain\Model\CartModel;
 use Module\Shop\Domain\Model\GoodsModel;
 use Module\Shop\Domain\Model\OrderModel;
 use Module\Shop\Domain\Model\PaymentModel;
+use Module\Shop\Domain\Model\Scene\Goods;
 use Module\Shop\Domain\Model\ShippingModel;
 use Module\Shop\Module;
 use Zodream\Helpers\Json;
@@ -47,7 +48,9 @@ class CashierController extends Controller {
         if (!$order->createOrder()) {
             return $this->jsonFailure('操作失败，请重试');
         }
-        Module::cart()->remove(...$goods_list);
+        if ($type < 1) {
+            Module::cart()->remove(...$goods_list);
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('cashier/pay', ['id' => $order->id])
         ]);
