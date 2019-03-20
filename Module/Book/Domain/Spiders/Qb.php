@@ -13,6 +13,8 @@ class Qb extends BaseSpider {
 
     protected $matchContent = '#^/?xiaoshuo/\d+/\d+/\d+\.html$#i';
 
+    protected $sort = true;
+
     protected $matchList = '#<a[^<>]+href="/xiaoshuo/\d+/\d+/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
 
     /**
@@ -75,6 +77,9 @@ class Qb extends BaseSpider {
             }
             $uris[$match[2]] = $match[3];
         });
+        if ($this->sort) {
+            ksort($uris);
+        }
         $data = [];
         foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;

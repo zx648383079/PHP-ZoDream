@@ -4,6 +4,7 @@ namespace Module\Book\Service;
 
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\SiteCrawl;
+use Module\Book\Domain\SpiderProgress;
 use Module\Book\Domain\Spiders\Txt;
 use Module\Book\Domain\Spiders\ZhiShuShenQi;
 use PhpParser\Node\Expr\Empty_;
@@ -93,32 +94,33 @@ class SpiderController extends Controller {
 
     public function asyncAction() {
         set_time_limit(0);
-        $book = $_POST;
         try {
-            if (isset($_POST['next'])) {
-                return $this->jsonSuccess(
-                    SiteCrawl::loopStep($_POST['key'], intval($_POST['next'])));
+            $progress = $this->getProgress();
+            if (empty($progress)) {
+                return $this->jsonFailure('不能存在进程');
             }
-            if (isset($book['url'])) {
-                $spider = SiteCrawl::getSpider(new Uri($book['url']));
-                $data = SiteCrawl::async($spider, $book);
-            } else {
-                $data = SiteCrawl::async(new ZhiShuShenQi(), $book);
-            }
-            $key = 'book_spider_async_'.time();
-            cache()->set($key, $data, 3600);
-            return $this->jsonSuccess([
-                'next' => $data[3],
-                'count' => count($data[2]),
-                'key' => $key
-            ]);
+            return $this->jsonSuccess($progress());
         } catch (Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess();
     }
 
-
+    private function getProgress() {
+        if (isset($_POST['key'])) {
+            return cache($_POST['key']);
+        }
+        $book = $_POST;
+        if (isset($book['url'])) {
+            $spider = SiteCrawl::getSpider(new Uri($book['url']));
+        } else {
+            $spider = new ZhiShuShenQi();
+        }
+        return new SpiderProgress([
+            'book' => $book,
+            'spider' => $spider
+        ]);
+    }
 
 
 }

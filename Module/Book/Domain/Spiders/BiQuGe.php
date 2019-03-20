@@ -13,6 +13,8 @@ class BiQuGe extends BaseSpider {
 
     protected $matchContent = '#^/?book/\d+/\d+\.html$#i';
 
+    protected $sort = true;
+
     protected $matchList = '#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
 
     /**
@@ -74,6 +76,9 @@ class BiQuGe extends BaseSpider {
             }
             $uris[$match[2]] = $match[3];
         });
+        if ($this->sort) {
+            ksort($uris);
+        }
         $data = [];
         foreach ($uris as $key => $name) {
             $chapterUri = clone $baseUri;
