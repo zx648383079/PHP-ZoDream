@@ -58,6 +58,10 @@ class AddressModel extends Model {
 	    return static::defaultId() == $this->id;
     }
 
+    public function getHideTelAttribute() {
+        return substr_replace($this->getAttributeValue('tel'), '****', 3, 4);
+    }
+
     public static function defaultId($val = 0) {
 	    static $id = -1;
 	    $key = 'address_id';

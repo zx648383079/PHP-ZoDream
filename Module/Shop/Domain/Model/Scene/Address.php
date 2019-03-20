@@ -17,4 +17,8 @@ use Module\Shop\Domain\Model\AddressModel;
 class Address extends AddressModel {
 
     protected $append = ['region', 'is_default'];
+
+    public function getTelAttribute() {
+        return $this->hide_tel;
+    }
 }

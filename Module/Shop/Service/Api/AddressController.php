@@ -20,7 +20,7 @@ class AddressController extends Controller {
         return $this->render($address);
     }
 
-    public function createAction() {
+    public function createAction($is_default = false) {
         $data = app('request')->validate([
             'name' => '',
             'region_id' => 'int',
@@ -29,13 +29,16 @@ class AddressController extends Controller {
         ]);
         $address = new Address($data);
         $address->user_id = auth()->id();
-        if ($address->save()) {
-            return $this->render($address);
+        if (!$address->save()) {
+            return $this->renderFailure($address->getFirstError());
         }
-        return $this->renderFailure($address->getFirstError());
+        if ($is_default) {
+            Address::defaultId($address->id);
+        }
+        return $this->render($address);
     }
 
-    public function updateAction() {
+    public function updateAction($is_default = false) {
         $data = app('request')->validate([
             'id' => 'int',
             'name' => '',
@@ -47,16 +50,22 @@ class AddressController extends Controller {
         if (empty($address)) {
             return $this->renderFailure('id error');
         }
-        $address->set($data);
-        if ($address->save()) {
-            return $this->render($address);
+        if (isset($data['tel']) && strpos($data['tel'], '****') > 0) {
+            unset($data['tel']);
         }
-        return $this->renderFailure($address->getFirstError());
+        $address->set($data);
+        if (!$address->save()) {
+            return $this->renderFailure($address->getFirstError());
+        }
+        if ($is_default) {
+            Address::defaultId($address->id);
+        }
+        return $this->render($address);
     }
 
     public function deleteAction($id) {
         Address::where('user_id', auth()->id())->where('id', $id)->delete();
-        return $this->render('');
+        return $this->render(['data' => true]);
     }
 
     public function defaultAction($id) {
