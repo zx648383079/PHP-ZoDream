@@ -38,84 +38,32 @@ class OrderLogModel extends Model {
         ];
     }
 
-    public static function pay(OrderModel $order) {
-        $order->status = OrderModel::STATUS_PAID_UN_SHIP;
+    public static function pay(OrderModel $order, $remark = '订单支付') {
         $order->pay_at = time();
-        if (!$order->save()) {
-            return false;
-        }
-        OrderGoodsModel::where('order_id', $order->id)->update([
-            'status' => $order->status
-        ]);
-        static::create([
-            'order_id' => $order->id,
-            'user_id' => $order->user_id,
-            'status' => $order->status,
-            'remark' => '订单支付',
-            'created_at' => time(),
-        ]);
-        return true;
+        return static::changeStatue($order, OrderModel::STATUS_PAID_UN_SHIP, $remark);;
     }
 
-    public static function shipping(OrderModel $order) {
-        $order->status = OrderModel::STATUS_SHIPPED;
+    public static function shipping(OrderModel $order, $remark = '订单发货') {
         $order->shipping_at = time();
-        if (!$order->save()) {
-            return false;
-        }
-        OrderGoodsModel::where('order_id', $order->id)->update([
-            'status' => $order->status
-        ]);
-        static::create([
-            'order_id' => $order->id,
-            'user_id' => $order->user_id,
-            'status' => $order->status,
-            'remark' => '订单发货',
-            'created_at' => time(),
-        ]);
-        return true;
+        return static::changeStatue($order, OrderModel::STATUS_SHIPPED, $remark);;
     }
 
-    public static function receive(OrderModel $order) {
-        $order->status = OrderModel::STATUS_RECEIVED;
+    public static function receive(OrderModel $order, $remark = '订单签收') {
         $order->receive_at = time();
-        if (!$order->save()) {
-            return false;
-        }
-        OrderGoodsModel::where('order_id', $order->id)->update([
-            'status' => $order->status
-        ]);
-        static::create([
-            'order_id' => $order->id,
-            'user_id' => $order->user_id,
-            'status' => $order->status,
-            'remark' => '订单签收',
-            'created_at' => time(),
-        ]);
-        return true;
+        return static::changeStatue($order, OrderModel::STATUS_RECEIVED, $remark);;
     }
 
-    public static function finish(OrderModel $order) {
-        $order->status = OrderModel::STATUS_FINISH;
+    public static function finish(OrderModel $order, $remark = '订单完成') {
         $order->finish_at = time();
-        if (!$order->save()) {
-            return false;
-        }
-        OrderGoodsModel::where('order_id', $order->id)->update([
-            'status' => $order->status
-        ]);
-        static::create([
-            'order_id' => $order->id,
-            'user_id' => $order->user_id,
-            'status' => $order->status,
-            'remark' => '订单完成',
-            'created_at' => time(),
-        ]);
-        return true;
+        return static::changeStatue($order, OrderModel::STATUS_FINISH, $remark);;
     }
 
-    public static function cancel(OrderModel $order) {
-        $order->status = OrderModel::STATUS_CANCEL;
+    public static function cancel(OrderModel $order, $remark = '订单取消') {
+        return static::changeStatue($order, OrderModel::STATUS_CANCEL, $remark);
+    }
+
+    public static function changeStatue(OrderModel $order, $status, $remark) {
+        $order->status = $status;
         if (!$order->save()) {
             return false;
         }
@@ -124,9 +72,9 @@ class OrderLogModel extends Model {
         ]);
         static::create([
             'order_id' => $order->id,
-            'user_id' => $order->user_id,
+            'user_id' => auth()->guest() ? $order->user_id : auth()->id(),
             'status' => $order->status,
-            'remark' => '订单取消',
+            'remark' => $remark,
             'created_at' => time(),
         ]);
         return true;

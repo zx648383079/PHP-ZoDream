@@ -47,6 +47,16 @@ class OrderController extends Controller {
                 return $this->jsonFailure('发货失败');
             }
         }
+        if ($operate == 'pay') {
+            if (!OrderLogModel::pay($order, app('request')->get('remark'))) {
+                return $this->jsonFailure('支付失败');
+            }
+        }
+        if ($operate == 'cancel') {
+            if (!OrderLogModel::cancel($order, app('request')->get('remark'))) {
+                return $this->jsonFailure('取消失败');
+            }
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('order/info', ['id' => $id])
         ]);

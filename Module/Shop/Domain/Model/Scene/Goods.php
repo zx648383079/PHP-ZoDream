@@ -9,13 +9,11 @@ use Module\Shop\Domain\Model\GoodsModel;
  */
 class Goods extends GoodsModel {
 
-    protected $append = ['shop'];
+
 
     protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'shop'];
 
-    public function getShopAttribute() {
-        return config('app.name');
-    }
+
 
     public static function query() {
         return parent::query()->select(self::THUMB_MODE);

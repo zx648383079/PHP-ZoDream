@@ -58,6 +58,8 @@ class GoodsModel extends Model {
 
     const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price'];
 
+    protected $append = ['shop'];
+
     public static function tableName() {
         return 'shop_goods';
     }
@@ -127,6 +129,10 @@ class GoodsModel extends Model {
 
     public function brand() {
         return $this->hasOne(BrandModel::class, 'id', 'brand_id');
+    }
+
+    public function getShopAttribute() {
+        return config('app.name');
     }
 
     public function getThumbAttribute() {

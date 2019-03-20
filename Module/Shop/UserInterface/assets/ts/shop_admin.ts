@@ -918,6 +918,19 @@ function bindEditAd() {
     }).trigger('change');
 }
 
+function bindOperate() {
+    $('button[data-operate]').click(function() {
+        if (!$('*[name="remark"]').val()) {
+            Dialog.tip('备注必填');
+            return;
+        }
+        let that = $(this);
+        let box = that.closest('form');
+        box.find('input[name=operate]').val(that.data('operate'));
+        box.submit();
+    });
+}
+
 
 $(function() {
     $(document).on('click', '[data-type=toggle]', function() {

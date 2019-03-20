@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Shop\Domain\Model\OrderModel;
+use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '订单详情';
 $status_list = [
@@ -31,6 +32,10 @@ $status_list = [
         $order->finish_at
     ]
 ];
+$js = <<<JS
+bindOperate();
+JS;
+$this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <div class="progress-bar">
@@ -149,10 +154,17 @@ $status_list = [
             <i class="fa fa-edit"></i>    
             备注信息</div>
             <div class="panel-body">
-                <div class="remark-box">
-                    <textarea name=""></textarea>
-                </div>
-                <button class="btn">保存</button>
+            <?=Form::open($order, './admin/order/save')?>
+                    <div class="remark-box">
+                        <textarea name="remark" required></textarea>
+                    </div>
+                    <button type="button" class="btn" data-operate="remark">保存</button>
+                    <?php if($order->status == OrderModel::STATUS_UN_PAY):?>
+                    <button type="button" class="btn btn-danger" data-operate="pay">支付</button>
+                    <?php endif;?>
+                    <button type="button" class="btn btn-danger" data-operate="cancel">取消</button>
+                    <input type="hidden" name="operate" valuue="remark">
+            <?= Form::close('id') ?>
             </div>
         </div>
     </div>
