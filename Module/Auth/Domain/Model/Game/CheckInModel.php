@@ -53,6 +53,22 @@ class CheckInModel extends Model {
         ];
     }
 
+    public function scopeMonth($query, $time) {
+        return $this->scopeTime($query, date('Y-m-01 00:00:00', $time), date('Y-m-31 23:59:59', $time));
+    }
+
+    public function scopeToday($query) {
+        return $this->scopeTime($query, date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59'));
+    }
+
+    public function scopeTime($query, $start_at, $end_at) {
+        if (!is_numeric($start_at)) {
+            $start_at = strtotime($start_at);
+            $end_at = strtotime($end_at);
+        }
+        return $query->where('created_at', '>=', $start_at)->where('created_at', '<=', $end_at);
+    }
+
 
     /**
      * 是否能签到
@@ -63,9 +79,7 @@ class CheckInModel extends Model {
         if ($user_id < 1) {
             return false;
         }
-        $count = static::where('user_id', $user_id)
-            ->where('created_at', '>=', strtotime(date('Y-m-d 00:00:00')))
-            ->where('created_at', '<=', strtotime(date('Y-m-d 23:59:59')))
+        $count = static::today()->where('user_id', $user_id)
             ->count();
         return $count < 1;
     }
@@ -107,9 +121,7 @@ class CheckInModel extends Model {
     public static function reCheckIn($user_id, $date, $method = 0) {
         $start_at = strtotime(date($date.' 00:00:00'));
         $end_at = strtotime(date($date.' 23:59:59'));
-        $count = static::where('user_id', $user_id)
-            ->where('created_at', '>=', $start_at)
-            ->where('created_at', '<=', $end_at)
+        $count = static::time($start_at, $end_at)->where('user_id', $user_id)
             ->count();
         if ($count > 0) {
             return false;
@@ -152,6 +164,5 @@ class CheckInModel extends Model {
     public static function countByUser($user_id) {
         return static::where('user_id', $user_id)->count();
     }
-
 
 }
