@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain;
 
+use Module\Book\Domain\Spiders\AutoSpider;
 use Module\Book\Domain\Spiders\BiQuGeC;
 use Module\Book\Domain\Spiders\Qb;
 use Module\Book\Domain\Spiders\Sixth;
@@ -155,7 +156,7 @@ class SiteCrawl {
     public static function getSpider($host) {
         $host = $host instanceof Uri ? $host->getHost() : $host;
         if (!isset(self::$maps[$host])) {
-            return false;
+            return new AutoSpider();
         }
         $class = self::$maps[$host];
         return new $class;

@@ -13,7 +13,7 @@ use Domain\Model\Model;
  * @property integer $goods_id
  * @property string $name
  * @property string $series_number
- * @property integer $number
+ * @property integer $amount
  */
 class DeliveryGoodsModel extends Model {
     public static function tableName() {
@@ -27,7 +27,7 @@ class DeliveryGoodsModel extends Model {
             'goods_id' => 'required|int',
             'name' => 'required|string:0,100',
             'series_number' => 'required|string:0,100',
-            'number' => 'int',
+            'amount' => 'int',
         ];
     }
 
@@ -39,7 +39,7 @@ class DeliveryGoodsModel extends Model {
             'goods_id' => 'Goods Id',
             'name' => 'Name',
             'series_number' => 'Series Number',
-            'number' => 'Number',
+            'amount' => 'Amount',
         ];
     }
 

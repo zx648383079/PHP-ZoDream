@@ -293,7 +293,7 @@ class CreateShopTables extends Migration {
             $table->set('goods_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
             $table->set('series_number')->varchar(100)->notNull();
-            $table->set('number')->int()->defaultVal(1);
+            $table->set('amount')->int()->defaultVal(1);
         });
     }
 

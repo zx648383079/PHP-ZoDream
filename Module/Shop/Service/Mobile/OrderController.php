@@ -34,8 +34,8 @@ class OrderController extends Controller {
     }
 
     public function receiveAction($id) {
-        $order = OrderModel::find($id);
-        if ($order->status != OrderModel::STATUS_SHIPPED) {
+        $order = OrderModel::findWithAuth($id);
+        if (!$order || $order->status != OrderModel::STATUS_SHIPPED) {
             return $this->jsonFailure('签收失败！');
         }
         if (!OrderLogModel::receive($order)) {
@@ -47,8 +47,8 @@ class OrderController extends Controller {
     }
 
     public function cancelAction($id) {
-        $order = OrderModel::find($id);
-        if (!in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
+        $order = OrderModel::findWithAuth($id);
+        if (!$order || !in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
             return $this->jsonFailure('取消失败！');
         }
         if (!OrderLogModel::cancel($order)) {

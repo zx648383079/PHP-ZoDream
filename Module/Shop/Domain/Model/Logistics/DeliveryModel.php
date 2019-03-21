@@ -113,7 +113,7 @@ class DeliveryModel extends Model {
                 'goods_id' => $goods->goods_id,
                 'name' => $goods->name,
                 'series_number' => $goods->series_number,
-                'number' => $goods->number,
+                'amount' => $goods->amount,
             ]);
         }
         return true;
