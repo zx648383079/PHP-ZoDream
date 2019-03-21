@@ -20,6 +20,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class ArticleModel extends Model {
+
+    protected $append = ['category'];
+
+    const THUMB_MODE = ['id', 'title', 'thumb', 'cat_id', 'created_at', 'updated_at'];
+
     public static function tableName() {
         return 'shop_article';
     }

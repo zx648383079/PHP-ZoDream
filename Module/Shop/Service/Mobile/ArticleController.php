@@ -8,9 +8,9 @@ class ArticleController extends Controller {
 
     public function indexAction($id = null) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail');
+            return $this->runMethodNotProcess('detail', compact('id'));
         }
-        $model_list = ArticleModel::page();
+        $model_list = ArticleCategoryModel::where('parent_id', 0)->page();
         return $this->show(compact('model_list'));
     }
 

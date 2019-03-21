@@ -56,7 +56,7 @@ class GoodsModel extends Model {
     const SORT_HOT = 5;
 
 
-    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price'];
+    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'cat_id', 'brand_id'];
 
     protected $append = ['shop'];
 

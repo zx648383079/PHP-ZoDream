@@ -9,7 +9,7 @@ $this->extend('../layouts/header');
 
 <div class="has-header">
     <div class="article-box">
-        <?php foreach($model_list as $item):?>
+        <?php foreach($article_list as $item):?>
         <dl class="article-item">
             <dt><a href="http://zodream.localhost/blog/detail?id=16">CentOs 7 安装apche php mysql</a>
                 <span class="book-time">2018-06-20 12:47:23</span></dt>
