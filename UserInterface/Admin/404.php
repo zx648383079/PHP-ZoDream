@@ -1,8 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
-$this->registerCssFile('zodream/error.css');
-$this->extend('layout/header');
+$this->registerCssFile('@error.css');
 ?>
 
 <div class="container">
@@ -15,4 +14,3 @@ $this->extend('layout/header');
 	</div>
 </div>
 
-<?php $this->extend('layout/footer');?>

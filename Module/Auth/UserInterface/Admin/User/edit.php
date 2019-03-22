@@ -12,6 +12,7 @@ JS;
 $this->registerCssFile('@select2.min.css')
     ->registerJsFile('@select2.min.js')
     ->registerJs($js, View::JQUERY_READY);
+$passwordTip = $model->id ? '新密码' : '密码';
 ?>
 
 <h1><?=$this->title?></h1>
@@ -20,8 +21,8 @@ $this->registerCssFile('@select2.min.css')
     <?=Form::email('email', true)?>
     <?=Form::radio('sex', $model->sex_list)?>
     <?=Form::file('avatar')?>
-    <?= Form::password('password', '', '新密码', '输入新密码', !!$model->id) ?>
-    <?= Form::password('confirm_password', '', '确认密码', '确认密码', !!$model->id) ?>
+    <?= Form::password('password', '', '输入'.$passwordTip, $passwordTip) ?>
+    <?= Form::password('confirm_password', '', '输入确认密码', '确认密码') ?>
 
     <div class="input-group">
         <label>角色</label>

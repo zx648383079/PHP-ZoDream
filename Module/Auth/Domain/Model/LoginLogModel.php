@@ -30,7 +30,7 @@ class LoginLogModel extends Model {
             'ip' => 'required|string:0,120',
             'user_id' => 'int',
             'user' => 'string:0,100',
-            'status' => 'int:0,9',
+            'status' => 'int:0-9',
             'mode' => 'string:0,20',
             'created_at' => 'int',
         ];
@@ -62,7 +62,7 @@ class LoginLogModel extends Model {
             'ip' => app('request')->ip(),
             'user' => $user,
             'user_id' => intval($user_id),
-            'status' => $status,
+            'status' => $status ? 1 : 0,
             'mode' => $mode,
             'created_at' => time()
         ]);

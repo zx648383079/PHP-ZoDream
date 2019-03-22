@@ -3,7 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
-$this->title = '文章列表';
+$this->title = '文章分类列表';
+$canDo = auth()->user()->isAdministrator();
 ?>
 
 <div class="search">
@@ -26,11 +27,14 @@ $this->title = '文章列表';
             <td><?=$item->name?></td>
             <td><?=$item->blog_count?></td>
             <td>
+                <?php if($canDo):?>
                 <div class="btn-group  btn-group-xs">
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/blog', ['term_id' => $item->id])?>">查看</a>
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/term/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/term/delete', ['id' => $item->id])?>">删除</a>
                 </div>
+                <?php endif;?>
+                
             </td>
         </tr>
     <?php endforeach; ?>

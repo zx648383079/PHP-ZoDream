@@ -13,10 +13,13 @@ class GoodsController extends Controller {
                                 $brand = 0,
                                 $keywords = null,
                                 $per_page = 20, $sort = null, $order = null) {
-        if ($id > 0) {
+        if (!is_array($id) && $id > 0) {
             return $this->infoAction($id);
         }
         $page = Goods::sortBy($sort, $order)
+            ->when(!empty($id), function ($query) use ($id) {
+                $query->whereIn('id', array_map('intval', $id));
+            })
             ->when(!empty($keywords), function ($query) {
                 GoodsModel::search($query, 'name');
             })->when($category > 0, function ($query) use ($category) {
