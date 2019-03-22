@@ -16,7 +16,7 @@ class RefundController extends Controller {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->whereIn('status', [OrderModel::STATUS_PAID_UN_SHIP,
                 OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH])
-            ->where('after_sale_status', $status)->page();
+            ->where('after_sale_status', $status)->orderBy('id', 'desc')->page();
         return $this->renderPage($goods_list);
     }
 
