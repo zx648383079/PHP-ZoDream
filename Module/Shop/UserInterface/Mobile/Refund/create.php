@@ -8,7 +8,7 @@ $this->extend('../layouts/header');
 ?>
 
 <div class="has-header">
-    <?=Form::open($model, './mobile/refund/save')?>
+    <?=Form::open(null, './mobile/refund/save')?>
         <?=Form::radio('退款类型', ['仅退款', '退货退款'])?>
         <?=Form::text('退款金额', true)?>
         <?=Form::text('退款说明', true)?>

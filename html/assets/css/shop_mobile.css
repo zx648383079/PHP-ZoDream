@@ -716,6 +716,34 @@ footer,
       margin-bottom: 0;
       position: relative; }
 
+.refund-box .goods-item {
+  position: relative;
+  background-color: #fff;
+  display: grid;
+  grid-template: 70px / 80px 1fr;
+  padding: 5px;
+  margin-bottom: 10px; }
+  .refund-box .goods-item .goods-img {
+    display: inline-block; }
+    .refund-box .goods-item .goods-img img {
+      width: 70px;
+      height: 70px; }
+  .refund-box .goods-item .goods-info {
+    display: inline-block;
+    height: 5rem;
+    vertical-align: top;
+    overflow: hidden;
+    margin-bottom: 0;
+    position: relative; }
+    .refund-box .goods-item .goods-info .action {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      line-height: 30px;
+      border: 1px solid #d22222;
+      padding: 0 10px;
+      border-radius: 10px; }
+
 .checkout-box .money-header {
   padding: 20px;
   text-align: center;

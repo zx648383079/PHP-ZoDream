@@ -13,7 +13,7 @@ $this->extend('../layouts/header');
         <a href="">记录</a>
     </div>
 
-    <div class="order-box">
+    <div class="refund-box">
         <?php foreach($goods_list as $goods):?>
         <div class="goods-item">
             <div class="goods-img">
@@ -21,8 +21,8 @@ $this->extend('../layouts/header');
             </div>
             <div class="goods-info">
                 <h4><?=$goods->name?></h4>
-                <span class="amount"> x <?=$goods->number?></span>
-                <a href="">申请售后</a>
+                <span class="amount"> x <?=$goods->amount?></span>
+                <a class="action" href="<?=$this->url('./mobile/refund/create', ['goods' => $goods->id])?>">申请售后</a>
             </div>
         </div>
         <?php endforeach;?>

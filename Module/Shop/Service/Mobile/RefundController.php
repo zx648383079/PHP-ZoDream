@@ -18,7 +18,7 @@ class RefundController extends Controller {
         return $this->show(compact('goods_list'));
     }
 
-    public function createAction($order, $goods = 0) {
+    public function createAction($order = 0, $goods = 0) {
         return $this->show();
     }
 }
