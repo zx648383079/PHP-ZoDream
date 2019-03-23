@@ -1,17 +1,13 @@
 <?php
 namespace Module\Auth\Service;
 
-use Carbon\Carbon;
-use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
-
+use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Zodream\Helpers\Str;
-
+use Zodream\Infrastructure\Cookie;
 use Zodream\Module\OAuth\Domain\Client;
-use Zodream\Service\Factory;
-
 use Zodream\ThirdParty\OAuth\BaseOAuth;
 
 class OauthController extends ModuleController {
@@ -22,36 +18,32 @@ class OauthController extends ModuleController {
         ];
     }
 
-    public function indexAction($type = 'qq') {
+    public function indexAction($type = 'qq', $redirect_uri = '') {
         $auth = $this->getOAuth($type);
-        session()->set('redirect_uri', app('request')->get('redirect_uri'));
+        if (!empty($redirect_uri)) {
+            session()->set('redirect_uri', $redirect_uri);
+        }
         return $this->redirect($auth->login());
     }
 
     public function callbackAction($type = 'qq') {
         $auth = $this->getOAuth($type);
         if (!$auth->callback()) {
-            return $this->redirectWithMessage('/', '授权回调失败！');
-        }
-        $redirect_uri = session('redirect_uri');
-        if (empty($redirect_uri)) {
-            $redirect_uri = '/';
+            return $this->failureCallback('授权回调失败！');
         }
         $user = OAuthModel::findUser(
             $auth->identity,
             $type);
         if (!empty($user)) {
-            $user->login();
-            $user->logLogin(true, $type);
-            return $this->redirect($redirect_uri);
+            return $this->successCallback($user, $type);
         }
         if (empty($auth->info())) {
-            return $this->redirectWithMessage('/', '获取用户信息失败');
+            return $this->failureCallback('获取用户信息失败');
         }
         if (!auth()->guest()) {
             $user = auth()->user();
             OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
-            return $this->redirect($redirect_uri);
+            return $this->successCallback($user);
         }
         $rnd = Str::random(3);
         $email = sprintf('%s_%s@zodream.cn', $type, $rnd);
@@ -71,9 +63,48 @@ class OauthController extends ModuleController {
             'sex' => $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
             'avatar' => $auth->avatar
         ]);
+        if (empty($user)) {
+            return $this->failureCallback('系统错误！');
+        }
         OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
-        $user->login();
-        $user->logLogin(true, $type);
+        return $this->successCallback($user, $type);
+    }
+
+    protected function failureCallback($error) {
+        $redirect_uri = session('redirect_uri');
+        /** @var PlatformModel $platform */
+        $platform = session('platform');
+        if (empty($platform) || empty($redirect_uri)) {
+            return $this->redirectWithMessage('/', $error);
+        }
+        $domain = parse_url($redirect_uri, PHP_URL_HOST);
+        if ($domain === 'localhost') {
+            $domain = false;
+        }
+        Cookie::set($platform->getCookieTokenKey(), json_encode([
+            'code' => 400,
+            'error' => $error
+        ]), 600, null, $domain, false);
+        return $this->redirect($redirect_uri);
+    }
+
+    protected function successCallback(UserModel $user, $type) {
+        $redirect_uri = session('redirect_uri');
+        /** @var PlatformModel $platform */
+        $platform = session('platform');
+        if (empty($platform) || empty($redirect_uri)) {
+            $user->login();
+            $user->logLogin(true, $type);
+            return $this->redirect($redirect_uri ? $redirect_uri : '/');
+        }
+        $domain = parse_url($redirect_uri, PHP_URL_HOST);
+        if ($domain === 'localhost') {
+            $domain = false;
+        }
+        Cookie::set($platform->getCookieTokenKey(), json_encode([
+            'code' => 200,
+            'token' => $platform->generateToken($user)
+        ]), 600, null, $domain, false);
         return $this->redirect($redirect_uri);
     }
 

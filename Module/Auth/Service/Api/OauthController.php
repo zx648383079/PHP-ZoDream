@@ -6,11 +6,14 @@ use Module\Auth\Domain\Model\UserModel;
 use Zodream\Helpers\Str;
 use Zodream\Route\Controller\RestController;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
+use Module\Auth\Service\OauthController as BaseController;
 
 class OauthController extends RestController {
 
-    public function indexAction($type = 'qq') {
-
+    public function indexAction($type = 'qq', $redirect_uri = '') {
+        url()->setModulePath(config()->getModulePath(self::class));
+        session(['platform' => app('platform')]);
+        return (new BaseController())->indexAction($type, $redirect_uri);
     }
 
     public function miniAction($code, $nickname, $avatar = '', $gender = 2) {

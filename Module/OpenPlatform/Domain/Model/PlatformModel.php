@@ -92,6 +92,10 @@ class PlatformModel extends Model {
         $this->secret = md5(uniqid(md5(microtime(true)),true));
     }
 
+    public function getCookieTokenKey() {
+        return $this->appid.'token';
+    }
+
     public function sign(array $data) {
         if ($this->sign_type < 1) {
             return '';
