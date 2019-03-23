@@ -15,8 +15,8 @@ $this->registerCssFile([
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
-        'ueditor/ueditor.config.js',
-        'ueditor/ueditor.all.js',
+        // 'ueditor/ueditor.config.js',
+        // 'ueditor/ueditor.all.js',
         '@template-web.js',
         '@main.min.js',
         '@shop_admin.min.js'

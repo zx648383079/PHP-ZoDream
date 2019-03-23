@@ -413,9 +413,8 @@ class Attribute {
 
 function bindGoods(baseUri: string, goodsId: number) {
     BASE_URI = baseUri;
-    UE.delEditor('container');
-    let ue = UE.getEditor('container'),
-        attr = new Attribute($(".attribute-box"), goodsId);
+    bindEdit();
+    let attr = new Attribute($(".attribute-box"), goodsId);
     $("#attribute_group_id").change(function() {
         attr.refreshByGroup(parseInt($(this).val() + ''));
     }).trigger('change');
@@ -931,6 +930,14 @@ function bindOperate() {
     });
 }
 
+function bindEdit() {
+    $.when(
+        $.getScript('/assets/ueditor/ueditor.config.js'), 
+        $.getScript('/assets/ueditor/ueditor.all.js')).then(function() {
+            UE.delEditor('container');
+            UE.getEditor('container');
+    });
+}
 
 $(function() {
     $(document).on('click', '[data-type=toggle]', function() {

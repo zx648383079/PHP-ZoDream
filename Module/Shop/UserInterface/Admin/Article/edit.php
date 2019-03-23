@@ -5,7 +5,7 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '分类';
 $js = <<<JS
-    var ue = UE.getEditor('container');
+    bindEdit();
     $(function () {
         $("select[name=type]").change(function () { 
             $("#source-box").toggle($(this).val() == 1);
@@ -13,9 +13,7 @@ $js = <<<JS
     });
 JS;
 
-$this->registerJsFile('/assets/ueditor/ueditor.config.js')
-    ->registerJsFile('/assets/ueditor/ueditor.all.js')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './admin/article/save')?>
