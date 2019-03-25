@@ -2,18 +2,19 @@
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Zodream\Html\Page;
 
 interface SceneInterface {
 
     /**
      * 获取主表
-     * @return mixed
+     * @return string
      */
     public function getMainTable();
 
     /**
      * 获取附表（不参与搜索）
-     * @return mixed
+     * @return string
      */
     public function getExtendTable();
 
@@ -56,6 +57,14 @@ interface SceneInterface {
 
     public function remove($id);
 
+    /**
+     * @param $keywords
+     * @param $cat_id
+     * @param int $page
+     * @param int $per_page
+     * @param null $fields
+     * @return Page
+     */
     public function search($keywords, $cat_id, $page = 1, $per_page = 20, $fields = null);
 
     public function find($id);

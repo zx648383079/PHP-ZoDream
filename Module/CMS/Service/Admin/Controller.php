@@ -16,8 +16,8 @@ class Controller extends ModuleController {
     }
 
     public function prepare() {
-        $cat_list = CategoryModel::select('id', 'name', 'parent_id')->all();
-        $this->send(compact('cat_list'));
+        $cat_menu = CategoryModel::select('id', 'name', 'parent_id')->all();
+        $this->send(compact('cat_menu'));
     }
 
     protected function getUrl($path, $args = []) {

@@ -2,6 +2,7 @@
 namespace Module\Tool\Service;
 
 
+use Zodream\Helpers\PinYin;
 use Zodream\Infrastructure\Security\Hash;
 
 class ConverterController extends Controller {
@@ -26,6 +27,9 @@ class ConverterController extends Controller {
         }
         if ($type == 'base64_decode') {
             return base64_decode($content);
+        }
+        if ($type == 'pinyin') {
+            return PinYin::encode($content, 'all');
         }
     }
 }

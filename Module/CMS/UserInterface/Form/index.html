@@ -1,9 +1,5 @@
-<?php
-defined('APP_DIR') or exit();
-use Zodream\Template\View;
-/** @var $this View */
-$this->title = '填写表单';
-?>
+{layout:main}
+{ this.title = 填写表单 }
 <form data-type="ajax" action="<?=$this->url('./form/save')?>" method="post" class="form-table" role="form">
     <?php foreach($field_list as $item):?>
         <?=$scene->toInput($item)?>

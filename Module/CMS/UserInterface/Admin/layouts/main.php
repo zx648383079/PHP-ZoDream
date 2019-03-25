@@ -4,9 +4,9 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
 
-$cat_menu = [];
-foreach ($cat_list as $item) {
-    $cat_menu[] = [
+$menus = [];
+foreach ($cat_menu as $item) {
+    $menus[] = [
         $item->name,
         ['./admin/content', 'cat_id' => $item->id],
         'fa fa-image'
@@ -62,6 +62,6 @@ $this->registerCssFile([
         '内容管理',
         false,
         'fa fa-file',
-        $cat_menu
+        $menus
     ]
 ], 'ZoDream CMS Admin') ?>
