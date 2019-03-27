@@ -3,7 +3,7 @@
 <ul>
     {for:$page,$item}
     <li>
-        <a href="{url:./content?category=$cat.id&id=$item.id}">{$item.title}</a>
+        <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
     </li>
     {/for}
 </ul>
