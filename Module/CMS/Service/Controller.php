@@ -9,8 +9,14 @@ use Zodream\Template\Engine\ParserCompiler;
 class Controller extends ModuleController {
 
     public function prepare() {
+        $engine = new ParserCompiler();
+        $engine->registerFunc('channel', '')
+            ->registerFunc('channels', '')
+            ->registerFunc('contents', '')
+            ->registerFunc('content', '')
+            ->registerFunc('option', '');
         Factory::view()
-            ->setEngine(ParserCompiler::class)
+            ->setEngine($engine)
             ->setConfigs([
             'suffix' => '.html'
         ]);
