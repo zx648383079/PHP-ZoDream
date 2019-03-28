@@ -8,15 +8,20 @@ class CategoryController extends Controller {
 
     public function indexAction($id) {
         $cat = CategoryModel::find($id);
-        return $this->show($cat->category_template ?: $cat->model->category_template  ?: null,
-            compact('cat'));
+        $page = null;
+        if ($cat->type < 1) {
+            $scene = Module::scene()->setModel($cat->model);
+            $page = $scene->search(null, $id);
+        }
+        return $this->show($cat->category_template,
+            compact('cat', 'page'));
     }
 
     public function listAction($id, $keywords = null) {
         $cat = CategoryModel::find($id);
         $scene = Module::scene()->setModel($cat->model);
         $page = $scene->search($keywords, $id);
-        return $this->show($cat->list_template ?: $cat->model->list_template  ?: null,
+        return $this->show($cat->list_template,
             compact('cat', 'page'));
     }
 }

@@ -5,14 +5,14 @@ use Zodream\Template\View;
 $this->title = 'ZoDream';
 ?>
    <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/category/create')?>">新增分类</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/category/create')?>">新增栏目</a>
     </div>
 
     <table class="table  table-bordered well">
         <thead>
         <tr>
             <th>ID</th>
-            <th>分类名</th>
+            <th>栏目名</th>
             <th>统计</th>
             <th>操作</th>
         </tr>
@@ -25,12 +25,14 @@ $this->title = 'ZoDream';
                     <?php if($item['level'] > 0):?>
                     <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
                     <?php endif;?>
-                    <a href="<?=$this->url('./admin/content', ['cat_id' => $item['id']])?>"><?=$item['name']?></a>
+                    <a href="<?=$this->url('./category', ['id' => $item['id']])?>"><?=$item['title']?></a>
                 </td>
                 <td></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
+                        <?php if($item['type'] < 1):?>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/content', ['cat_id' => $item['id']])?>">查看</a>
+                        <?php endif;?>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/category/edit', ['id' => $item['id']])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/category/delete', ['id' => $item['id']])?>">删除</a>
                     </div>

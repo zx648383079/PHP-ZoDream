@@ -10,7 +10,7 @@ class ContentController extends Controller {
         $cat = CategoryModel::find($category);
         $scene = Module::scene()->setModel($cat->model);
         $data = $scene->find($id);
-        return $this->show($cat->show_template ?: $cat->show_template ?: null,
+        return $this->show($cat->show_template,
             compact('cat', 'data'));
     }
 }

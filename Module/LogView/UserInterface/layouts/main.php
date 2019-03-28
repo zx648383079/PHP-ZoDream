@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
-
+$this->content = $content;
 $file_menu = [];
 
 if (isset($file_list)) {

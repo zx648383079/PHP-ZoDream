@@ -1,0 +1,38 @@
+{layout:main}
+<div class="banner-bg" style="background:url({$cat.image}); height: 140px;">
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="path">
+                    当前位置: 
+                <ul><li><a href="">首页</a></li><li><a href="">{$cat.title}</a></li>
+                </ul>
+            </div>
+            <div id="content-list">
+                    {for:$page,$item}
+                <div class="item">
+                    <div class="thumb">
+                        <img src="{$item.thumb}" alt="">
+                    </div>
+                    <div class="info">
+                        <div class="title">
+                                <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
+                        </div>
+                        <div class="desc">
+                                {$item.description}
+                        </div>
+                        <div class="tags">
+                            <span><i class="fa fa-calendar-alt"></i>{$item.created_at|date}</span>
+                        </div>
+                    </div>
+                </div>
+                {/for}
+            </div>
+        </div>
+        <div class="col-md-3">
+            
+        </div>
+    </div>
+</div>

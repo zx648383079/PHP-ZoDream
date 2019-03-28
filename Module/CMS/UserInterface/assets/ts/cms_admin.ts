@@ -42,9 +42,9 @@ function bindEditModel() {
         if (!val) {
             return;
         }
-        valIfEmpty($('#category_template'), val + '.html');
-        valIfEmpty($('#list_template'), val + '_list.html');
-        valIfEmpty($('#show_template'), val + '_detail.html');
+        valIfEmpty($('#category_template'), val + '');
+        valIfEmpty($('#list_template'), val + '_list');
+        valIfEmpty($('#show_template'), val + '_detail');
     });
     $('#name').blur(function() {
         pinyinIfEmpty(table, $(this).val());

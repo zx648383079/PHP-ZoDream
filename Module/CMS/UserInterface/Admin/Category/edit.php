@@ -38,7 +38,7 @@ $this->registerJs($js);
                             <?php if($item['level'] > 0):?>
                                 ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
                             <?php endif;?>
-                            <?=$item['name']?>
+                            <?=$item['title']?>
                         </option>
                         <?php endforeach;?>
                     </select>

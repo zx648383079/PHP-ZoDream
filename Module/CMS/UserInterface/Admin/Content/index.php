@@ -34,7 +34,7 @@ $this->title = 'ZoDream';
                 <td>
                     <?php if ($cat):?>
                         <a href="<?=$this->url('./admin/content', ['cat_id' => $cat->id])?>">
-                            <?=$cat->name?>
+                            <?=$cat->title?>
                         </a>
                     <?php else:?>
                     [未分类]

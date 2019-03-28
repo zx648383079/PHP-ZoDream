@@ -1,1 +1,76 @@
 {layout:main}
+<div class="banner">
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="tab-box">
+                <div class="tab-header">
+                    <div class="tab-item acrive">公司介绍</div>
+                </div>
+                <div class="tab-boy">
+                    {contents:category=1 num=1>
+                        <p><img class="alignleft size-full wp-image-28" src="{content.thumb}" alt="{content.Title}" width="117" height="117" /></p>
+                        <p>{content.description}</p>
+                    {/contents}
+                </div>
+            </div>
+            <div class="tab-box">
+                <div class="tab-header">
+                    <div class="tab-item acrive">联系我们</div>
+                </div>
+                <div class="tab-boy">
+                    <h3>{option:company}</h3>
+                    <ul>
+                        <li>地址：{option:'address'}</li>
+                        <li>总机：{option:'tel'}</li>
+                        <li>电邮：{option:'email'}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="tab-box">
+                <div class="tab-header">
+                    <div class="tab-item acrive">新闻动态</div>
+                    <div class="tab-item">通知公告</div>
+                </div>
+                <div class="tab-boy">
+                    <div class="tab-item acrive">
+                        <ul>
+                            {contents:category=4 num=10>
+                                <li> 
+                                    <a target="_blank"  title="{content.title}">
+                                        <em></em>
+                                        {content.title}<span>{content.created_at|date}</span></a> 
+                                  </li>
+                            {/contents}
+                        </ul>
+                    </div>
+                    <div class="tab-item">
+                        <ul>
+                            {contents:category=6 num=10>
+                                <li> 
+                                    <a target="_blank"  title="{content.title}">
+                                        <em></em>
+                                        {content.title}<span>{content.created_at|date}</span></a> 
+                                </li>
+                            {/contents}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="tab-box">
+                <div class="tab-header">
+                    <div class="tab-item acrive">公司相册</div>
+                </div>
+                <div class="tab-boy">
+                    asdsafa
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,16 +3,15 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
-
+$this->content = $content;
 $menus = [];
 foreach ($cat_menu as $item) {
     $menus[] = [
-        $item->name,
+        $item->title,
         ['./admin/content', 'cat_id' => $item->id],
         'fa fa-image'
     ];
 }
-
 
 $this->registerCssFile([
         '@font-awesome.min.css',

@@ -16,7 +16,7 @@ class Controller extends ModuleController {
     }
 
     public function prepare() {
-        $cat_menu = CategoryModel::select('id', 'name', 'parent_id')->all();
+        $cat_menu = CategoryModel::select('id', 'title', 'parent_id')->where('type', 0)->all();
         $this->send(compact('cat_menu'));
     }
 

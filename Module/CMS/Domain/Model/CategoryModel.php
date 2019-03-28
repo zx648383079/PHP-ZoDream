@@ -91,6 +91,39 @@ class CategoryModel extends BaseModel {
         return $this->url;
     }
 
+    public function getCategoryTemplateAttribute() {
+        $tpl = $this->getAttributeValue('category_template');
+        if (!empty($tpl)) {
+            return $tpl;
+        }
+        if ($this->type < 1 && $this->model) {
+            return $this->model->category_template;
+        }
+        return null;
+    }
+
+    public function getListTemplateAttribute() {
+        $tpl = $this->getAttributeValue('list_template');
+        if (!empty($tpl)) {
+            return $tpl;
+        }
+        if ($this->type < 1 && $this->model) {
+            return $this->model->list_template;
+        }
+        return null;
+    }
+
+    public function getShowTemplateAttribute() {
+        $tpl = $this->getAttributeValue('show_template');
+        if (!empty($tpl)) {
+            return $tpl;
+        }
+        if ($this->type < 1 && $this->model) {
+            return $this->model->show_template;
+        }
+        return null;
+    }
+
     /**
      * @return Tree
      * @throws \Exception
@@ -98,4 +131,5 @@ class CategoryModel extends BaseModel {
     public static function tree() {
         return new Tree(static::query()->all());
     }
+
 }
