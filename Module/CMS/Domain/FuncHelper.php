@@ -76,8 +76,8 @@ class FuncHelper {
         return static::getOrSet(__FUNCTION__,
             sprintf('%s-%s-%s-%s-%s', $category, $keywords, $page, $per_page, $fields),
             function () use ($category, $keywords, $page, $per_page, $fields) {
-            $cat = FuncHelper::channel($category, true);
-            if (empty($cat)) {
+            $cat = static::channel($category, true);
+            if (empty($cat) || !$cat->model) {
                 return new Page(0);
             }
             $scene = Module::scene()->setModel($cat->model);

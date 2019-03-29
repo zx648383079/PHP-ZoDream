@@ -2,8 +2,6 @@
 namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
-use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Module;
 
 class CategoryController extends Controller {
 

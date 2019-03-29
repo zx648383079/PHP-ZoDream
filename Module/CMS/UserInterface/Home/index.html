@@ -7,20 +7,22 @@
         <div class="col-md-4">
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item acrive">公司介绍</div>
+                    <div class="tab-item active">公司介绍</div>
                 </div>
-                <div class="tab-boy">
+                <div class="tab-body thumb-box">
                     {contents:category=1 num=1}
-                        <p><img class="alignleft size-full wp-image-28" src="{$content.thumb}" alt="{$content.title}" width="117" height="117" /></p>
+                        <p>
+                            <img src="{$content.thumb}" alt="{$content.title}" width="117" height="117" />
+                        </p>
                         <p>{$content.description}</p>
                     {/contents}
                 </div>
             </div>
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item acrive">联系我们</div>
+                    <div class="tab-item active">联系我们</div>
                 </div>
-                <div class="tab-boy">
+                <div class="tab-body">
                     <h3>{option:company}</h3>
                     <ul>
                         <li>地址：{option:'address'}</li>
@@ -33,12 +35,12 @@
         <div class="col-md-5">
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item acrive">新闻动态</div>
+                    <div class="tab-item active">新闻动态</div>
                     <div class="tab-item">通知公告</div>
                 </div>
-                <div class="tab-boy">
-                    <div class="tab-item acrive">
-                        <ul>
+                <div class="tab-body">
+                    <div class="tab-item active">
+                        <ul class="list-box">
                             {contents:category=4 num=10}
                                 <li> 
                                     <a target="_blank"  title="{$content.title}">
@@ -49,10 +51,10 @@
                         </ul>
                     </div>
                     <div class="tab-item">
-                        <ul>
+                        <ul class="list-box">
                             {contents:category=6 num=10}
                                 <li> 
-                                    <a target="_blank"  title="{$content.title}">
+                                    <a  href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
                                         {$content.title}<span>{this.time:$content.created_at}</span></a>
                                 </li>
@@ -65,9 +67,9 @@
         <div class="col-md-3">
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item acrive">公司相册</div>
+                    <div class="tab-item active">公司相册</div>
                 </div>
-                <div class="tab-boy">
+                <div class="tab-body">
                     asdsafa
                 </div>
             </div>
