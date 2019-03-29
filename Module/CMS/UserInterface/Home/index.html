@@ -10,9 +10,9 @@
                     <div class="tab-item acrive">公司介绍</div>
                 </div>
                 <div class="tab-boy">
-                    {contents:category=1 num=1>
-                        <p><img class="alignleft size-full wp-image-28" src="{content.thumb}" alt="{content.Title}" width="117" height="117" /></p>
-                        <p>{content.description}</p>
+                    {contents:category=1 num=1}
+                        <p><img class="alignleft size-full wp-image-28" src="{$content.thumb}" alt="{$content.title}" width="117" height="117" /></p>
+                        <p>{$content.description}</p>
                     {/contents}
                 </div>
             </div>
@@ -39,22 +39,22 @@
                 <div class="tab-boy">
                     <div class="tab-item acrive">
                         <ul>
-                            {contents:category=4 num=10>
+                            {contents:category=4 num=10}
                                 <li> 
-                                    <a target="_blank"  title="{content.title}">
+                                    <a target="_blank"  title="{$content.title}">
                                         <em></em>
-                                        {content.title}<span>{content.created_at|date}</span></a> 
+                                        {$content.title}<span>{this.time:$content.created_at}</span></a>
                                   </li>
                             {/contents}
                         </ul>
                     </div>
                     <div class="tab-item">
                         <ul>
-                            {contents:category=6 num=10>
+                            {contents:category=6 num=10}
                                 <li> 
-                                    <a target="_blank"  title="{content.title}">
+                                    <a target="_blank"  title="{$content.title}">
                                         <em></em>
-                                        {content.title}<span>{content.created_at|date}</span></a> 
+                                        {$content.title}<span>{this.time:$content.created_at}</span></a>
                                 </li>
                             {/contents}
                         </ul>
