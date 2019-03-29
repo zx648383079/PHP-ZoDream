@@ -49,7 +49,7 @@ class CategoryModel extends BaseModel {
             'content' => '',
             'url' => 'string:0,100',
             'position' => 'int:0,999',
-            'is_menu' => 'int:0,9',
+            'groups' => '',
             'category_template' => 'string:0,20',
             'list_template' => 'string:0,20',
             'show_template' => 'string:0,20',
@@ -73,7 +73,7 @@ class CategoryModel extends BaseModel {
             'content' => '内容',
             'url' => '链接',
             'position' => '排序',
-            'is_menu' => '导航栏',
+            'groups' => '分组',
             'category_template' => '分类模板',
             'list_template' => '列表模板',
             'show_template' => '详情模板',
@@ -89,6 +89,10 @@ class CategoryModel extends BaseModel {
 
     public function getUrl() {
         return $this->url;
+    }
+
+    public function setGroupsAttribute($value) {
+        $this->__attributes['groups'] = is_array($value) ? implode(',', $value) : $value;
     }
 
     public function getCategoryTemplateAttribute() {

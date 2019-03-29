@@ -32,21 +32,22 @@ class LinkageController extends Controller {
     public function deleteAction($id) {
         LinkageModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('model')
+            'url' => $this->getUrl('linkage')
         ]);
     }
 
     public function dataAction($id, $parent_id = 0) {
         $model = LinkageModel::find($id);
-        $model_list = LinkageDataModel::where('model_id', $id)->where('parent_id', $parent_id)->all();
+        $model_list = LinkageDataModel::where('linkage_id', $id)->where('parent_id', $parent_id)->all();
         return $this->show(compact('model_list', 'model', 'parent_id'));
     }
 
-    public function createFieldAction() {
-        return $this->runMethodNotProcess('editField', ['id' => null]);
+    public function createDataAction($linkage_id, $parent_id = null) {
+        $id = 0;
+        return $this->runMethodNotProcess('editData', compact('id', 'linkage_id', 'parent_id'));
     }
 
-    public function editFieldAction($id, $linkage_id = null, $parent_id = null) {
+    public function editDataAction($id, $linkage_id = null, $parent_id = null) {
         $model = LinkageDataModel::findOrNew($id);
         if (!$model->position) {
             $model->position = 99;
@@ -60,21 +61,21 @@ class LinkageController extends Controller {
         return $this->show(compact('model'));
     }
 
-    public function saveFieldAction() {
+    public function saveDataAction() {
         $model = new LinkageDataModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
         return $this->jsonSuccess([
-            'url' => $this->getUrl('model/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
+            'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
         ]);
     }
 
-    public function deleteFieldAction($id) {
+    public function deleteDataAction($id) {
         $model = LinkageDataModel::find($id);
         $model->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('model/field', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
+            'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
         ]);
     }
 

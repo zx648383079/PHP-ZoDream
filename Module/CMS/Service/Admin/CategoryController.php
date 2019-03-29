@@ -2,6 +2,7 @@
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
 
 class CategoryController extends Controller {
@@ -20,6 +21,7 @@ class CategoryController extends Controller {
             $model->position = 99;
         }
         $model_list = ModelModel::select('name', 'id')->all();
+        $group_list = GroupModel::where('type', 0)->all();
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         if (!empty($id)) {
             $excludes = [$id];
@@ -34,7 +36,7 @@ class CategoryController extends Controller {
                 return true;
             });
         }
-        return $this->show(compact('model', 'model_list', 'cat_list'));
+        return $this->show(compact('model', 'model_list', 'cat_list', 'group_list'));
     }
 
     public function saveAction($id) {

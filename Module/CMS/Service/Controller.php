@@ -15,7 +15,7 @@ class Controller extends ModuleController {
             ->setConfigs([
             'suffix' => '.html'
         ]);
-        $categories_tree = CategoryModel::tree()->makeIdTree();
+        $categories_tree = FuncHelper::channels(['tree' => true]);
         $this->send(compact('categories_tree'));
     }
 }

@@ -1,26 +1,26 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
-use Domain\Model\Model;
-
 /**
- * Class LinkageModel
- * @package Module\CMS\Domain\Model
+ * Class GroupModel
  * @property integer $id
  * @property string $name
  * @property integer $type
- * @property string $code
+ * @property string $description
  */
-class LinkageModel extends Model {
+class GroupModel extends BaseModel {
+    const TYPE_CATEGORY = 0;
+    const TYPE_CONTENT = 1;
+
     public static function tableName() {
-        return 'cms_linkage';
+        return 'cms_group';
     }
 
     protected function rules() {
         return [
-            'name' => 'required|string:0,100',
-            'type' => 'required|int:0,9',
-            'code' => 'required|string:0,20',
+            'name' => 'required|string:0,20',
+            'type' => 'int:0,9',
+            'description' => 'string:0,255',
         ];
     }
 
@@ -29,7 +29,8 @@ class LinkageModel extends Model {
             'id' => 'Id',
             'name' => '名称',
             'type' => '类型',
-            'code' => 'Code',
+            'description' => '简介',
         ];
     }
+
 }

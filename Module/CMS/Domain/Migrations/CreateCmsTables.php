@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Migrations;
 
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ContentModel;
+use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -57,12 +58,18 @@ class CreateCmsTables extends Migration {
             $table->set('content')->text();
             $table->set('url')->varchar(100);
             $table->set('position')->tinyint(3)->defaultVal(99);
-            $table->set('is_menu')->bool()->defaultVal(0);
+            $table->set('groups')->varchar()->defaultVal('');
             $table->set('category_template')->varchar(20);
             $table->set('list_template')->varchar(20);
             $table->set('show_template')->varchar(20);
             $table->set('setting')->text();
             $table->timestamps();
+        });
+        Schema::createTable(GroupModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(20)->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('description')->varchar();
         });
         Schema::createTable(ContentModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
@@ -83,6 +90,7 @@ class CreateCmsTables extends Migration {
         });
         Schema::createTable(LinkageDataModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
+            $table->set('linkage_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull();
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
@@ -93,6 +101,7 @@ class CreateCmsTables extends Migration {
         Schema::dropTable(ModelModel::tableName());
         Schema::dropTable(ModelFieldModel::tableName());
         Schema::dropTable(CategoryModel::tableName());
+        Schema::dropTable(GroupModel::tableName());
         Schema::dropTable(ContentModel::tableName());
         Schema::dropTable(LinkageModel::tableName());
         Schema::dropTable(LinkageDataModel::tableName());

@@ -46,6 +46,7 @@ $this->registerJs($js);
                 <?=Form::file('image')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
+                <?=Form::checkbox('groups', [$group_list, 'name', 'name'])->value(explode(',', $model->groups))?>
                 <?=Form::text('position')?>
             </div>
             <div class="zd-tab-item">

@@ -50,6 +50,11 @@ $this->registerCssFile([
                 'fa fa-image'
             ],
             [
+                '分组',
+                './admin/group',
+                'fa fa-image'
+            ],
+            [
                 '联动',
                 './admin/linkage',
                 'fa fa-link'

@@ -55,10 +55,17 @@ class FuncHelper {
                 function () use ($data) {
                     return (new Tree($data))->makeIdTree();
                 });
-        } elseif (isset($params['id'])) {
+        }
+        if (isset($params['id'])) {
             $ids = array_map('intval', explode(',', $params['id']));
             $data = array_filter($data, function ($item) use ($ids) {
                 return in_array($item['id'], $ids);
+            });
+        }
+        if (isset($params['group'])) {
+            $data = array_filter($data, function ($item) use ($params) {
+                $groups = is_array($item['groups']) ? $item['groups'] : explode(',', $item['groups']);
+                return in_array($params['group'], $groups);
             });
         }
         return $data;
