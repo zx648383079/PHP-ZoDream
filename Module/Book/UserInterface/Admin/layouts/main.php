@@ -82,4 +82,4 @@ $this->registerCssFile([
              ]
          ],
      ],
-], 'ZoDream 书城管理平台') ?>
+], $content, 'ZoDream 书城管理平台') ?>

@@ -43,4 +43,4 @@ $this->registerCssFile([
         ],
         true
     ]
-], 'ZoDream Open Platform') ?>
+], $content, 'ZoDream Open Platform') ?>

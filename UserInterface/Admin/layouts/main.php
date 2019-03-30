@@ -48,4 +48,4 @@ $this->registerCssFile([
         ],
         true
     ]
-], 'ZoDream Admin') ?>
+], $content, 'ZoDream Admin') ?>

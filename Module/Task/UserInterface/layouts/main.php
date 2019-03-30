@@ -43,4 +43,4 @@ $this->registerCssFile([
         ],
         true
     ]
-], 'ZoDream Task') ?>
+], $content, 'ZoDream Task') ?>

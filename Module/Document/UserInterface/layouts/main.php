@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
-$this->content = $content;
 $menus = [];
 if(isset($project_list)) {
     $menus = [
@@ -84,4 +83,4 @@ $this->registerCssFile([
     ]);
 ?>
 
-<?= Layout::main($this, $menus, 'ZoDream Document') ?>
+<?= Layout::main($this, $menus, $content, 'ZoDream Document') ?>

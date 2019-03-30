@@ -43,4 +43,4 @@ $this->registerCssFile([
         './admin/comment',
         'fa fa-comment',
     ],
-], 'ZoDream 微博客管理平台') ?>
+], $content, 'ZoDream 微博客管理平台') ?>

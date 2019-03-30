@@ -217,4 +217,4 @@ $this->registerCssFile([
             ],
         ],
     ]
-], 'ZoDream Shop Admin') ?>
+], $content, 'ZoDream Shop Admin') ?>

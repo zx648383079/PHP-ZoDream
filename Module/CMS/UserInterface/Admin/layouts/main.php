@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
-$this->content = $content;
 $menus = [];
 foreach ($cat_menu as $item) {
     $menus[] = [
@@ -69,4 +68,4 @@ $this->registerCssFile([
         'fa fa-book',
         $menus
     ]
-], 'ZoDream CMS Admin') ?>
+], $content, 'ZoDream CMS Admin') ?>
