@@ -3,6 +3,7 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
+use Zodream\Html\Tree;
 
 class LinkageController extends Controller {
     public function indexAction() {
@@ -77,6 +78,15 @@ class LinkageController extends Controller {
         return $this->jsonSuccess([
             'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
         ]);
+    }
+
+    public function treeAction($id) {
+        $data = cache()->getOrSet('cms_linkage_tree_'.$id, function () use ($id) {
+            $tree = new Tree(LinkageDataModel::query()->where('linkage_id', $id)
+                ->select('id', 'name', 'parent_id')->asArray()->all());
+            return $tree->makeIdTree();
+        }, 60);
+        return $this->jsonSuccess($data);
     }
 
 }

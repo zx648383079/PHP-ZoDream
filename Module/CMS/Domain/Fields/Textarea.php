@@ -19,8 +19,7 @@ class Textarea extends BaseField {
         ]);
     }
 
-    public function converterField(Column $column, ModelFieldModel $field)
-    {
+    public function converterField(Column $column, ModelFieldModel $field) {
         // TODO: Implement converterField() method.
     }
 

@@ -65,8 +65,9 @@ class ModelController extends Controller {
         return $this->show(compact('model_list', 'model'));
     }
 
-    public function createFieldAction() {
-        return $this->runMethodNotProcess('editField', ['id' => null]);
+    public function createFieldAction($model_id) {
+        $id = null;
+        return $this->runMethodNotProcess('editField', compact('id', 'model_id'));
     }
 
     public function editFieldAction($id, $model_id = null) {

@@ -6,12 +6,13 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
 
-class Image extends BaseField {
+class Files extends BaseField {
 
     public function options(ModelFieldModel $field) {
         return implode('', [
             Theme::text('setting[option][allow]', '*', '允许格式'),
-            Theme::text('setting[option][length]', '2M', '允许大小'),
+            Theme::text('setting[option][length]', '2M', '允许单个大小'),
+            Theme::text('setting[option][count]', '*', '允许数量'),
         ]);
     }
 

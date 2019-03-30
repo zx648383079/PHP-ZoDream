@@ -29,7 +29,10 @@ class ContentController extends Controller {
      */
     public function editAction($id, $cat_id) {
         $cat = CategoryModel::find($cat_id);
-        $field_list = ModelFieldModel::where('model_id', $cat->model_id)->all();
+        $field_list = ModelFieldModel::where('model_id', $cat->model_id)->orderBy([
+            'position' => 'asc',
+            'id' => 'asc'
+        ])->all();
         $scene = Module::scene()->setModel($cat->model);
         $data = $id > 0 ? $scene->find($id) : [];
         return $this->show(compact('id', 'cat_id', 'cat', 'scene', 'data', 'field_list'));

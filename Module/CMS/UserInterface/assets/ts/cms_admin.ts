@@ -1,4 +1,8 @@
 function bindField(baseUri: string) {
+    let field = $('#field');
+    $('#name').blur(function() {
+        pinyinIfEmpty(field, $(this).val());
+    });
     $("#type").change(function() {
         $.get(baseUri, {
             id: $("[name=id]").val(),

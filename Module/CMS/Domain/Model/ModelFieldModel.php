@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Model;
 use Module\CMS\Domain\Fields\BaseField;
+use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 
 /**
@@ -43,7 +44,9 @@ class ModelFieldModel extends BaseModel {
         'image' => '单图',
         'images' => '多图',
         'files' => '多文件',
-        'linkage' => '联动菜单'
+        'linkage' => '联动菜单',
+        'location' => '定位',
+        'map' => '地图',
     ];
 
     public $match_list = [
@@ -93,6 +96,33 @@ class ModelFieldModel extends BaseModel {
             'error_message' => '错误提示',
             'setting' => '其他设置',
         ];
+    }
+
+    public function getSettingAttribute() {
+        $setting = $this->getAttributeValue('setting');
+        return empty($setting) ? [] : Json::decode($setting);
+    }
+
+    public function setSettingAttribute($value) {
+        $this->__attributes['setting'] = is_array($value) ? Json::encode($value) : '';
+    }
+
+    public function setting(...$keys) {
+        $data = $this->setting;
+        foreach ($keys as $key) {
+            if (empty($key)) {
+                return $data;
+            }
+            if (empty($data) || !is_array($data)) {
+                return null;
+            }
+            if (isset($data[$key]) || array_key_exists($key, $data)) {
+                $data = $data[$key];
+                continue;
+            }
+            return null;
+        }
+        return $data;
     }
 
     public function model() {

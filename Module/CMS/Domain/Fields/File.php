@@ -6,7 +6,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
 
-class Image extends BaseField {
+class File extends BaseField {
 
     public function options(ModelFieldModel $field) {
         return implode('', [
