@@ -16,7 +16,10 @@ class Controller extends ModuleController {
     }
 
     public function prepare() {
-        $cat_menu = CategoryModel::select('id', 'title', 'parent_id')->where('type', 0)->all();
+        $cat_menu = CategoryModel::tree()->makeTreeForHtml();
+        $cat_menu = array_filter($cat_menu, function ($item) {
+            return $item['type'] < 1;
+        });
         $this->send(compact('cat_menu'));
     }
 
