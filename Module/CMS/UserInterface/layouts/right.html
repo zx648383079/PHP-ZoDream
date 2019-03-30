@@ -1,0 +1,17 @@
+<div class="right-box">
+    <div class="panel">
+        <div class="header">
+            热门新闻
+        </div>
+        <div class="body">
+           <ul>
+                {contents:category=6 num=10}
+                <li> 
+                    <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" title="{$content.title}">
+                        {$content.title}</a>
+                    </li>
+                {/contents}
+           </ul>
+        </div>
+    </div>
+</div>

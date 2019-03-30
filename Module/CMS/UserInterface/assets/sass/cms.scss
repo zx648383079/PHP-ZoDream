@@ -75,6 +75,9 @@ footer {
     padding: 10px;
     ul {
         display: inline-block;
+        li::after {
+            padding-left: 10px;
+        }
     }
 }
 
@@ -186,6 +189,23 @@ footer {
             background: #8BBEE4;
             border-radius: 50%;
             margin-right: 10px;
+        }
+    }
+}
+
+.right-box {
+    margin-top: 20px;
+    .panel {
+        .header {
+            font-size: 18px;
+            border-bottom: 1px solid #dcdcdc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        ul {
+            li {
+                margin-bottom: 10px;
+            }
         }
     }
 }

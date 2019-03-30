@@ -165,6 +165,10 @@ class SingleScene extends BaseScene {
         return DB::table($this->getMainTable())->when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('title', 'like', '%'.$keywords.'%');
         })->when($cat_id > 0, function ($query) use ($cat_id) {
+            if (is_array($cat_id)) {
+                $query->whereIn('cat_id', $cat_id);
+                return;
+            }
             $query->where('cat_id', $cat_id);
         })->select($fields)->page($per_page);
     }

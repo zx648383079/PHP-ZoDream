@@ -27,7 +27,7 @@
                             <a href="{url:./}">首页</a>
                         </li>
                         {for:$categories_tree,$item}
-                        <li>
+                        <li class="{channelActive:$item.id}">
                             <a href="{url:./category?id=:$item.id}">{$item.title}</a>
                         </li>
                         {/for}

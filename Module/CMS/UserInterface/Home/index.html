@@ -43,7 +43,7 @@
                         <ul class="list-box">
                             {contents:category=4 num=10}
                                 <li> 
-                                    <a target="_blank"  title="{$content.title}">
+                                    <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
                                         {$content.title}<span>{this.time:$content.created_at}</span></a>
                                   </li>
@@ -54,7 +54,7 @@
                         <ul class="list-box">
                             {contents:category=6 num=10}
                                 <li> 
-                                    <a  href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
+                                    <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
                                         {$content.title}<span>{this.time:$content.created_at}</span></a>
                                 </li>

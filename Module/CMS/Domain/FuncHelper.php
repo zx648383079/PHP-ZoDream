@@ -7,6 +7,7 @@ use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
 use Zodream\Template\Engine\ParserCompiler;
+use Zodream\Helpers\Tree as TreeHelper;
 
 class FuncHelper {
 
@@ -46,12 +47,22 @@ class FuncHelper {
                 static::setChannel(...$data);
                 return $data;
             });
+        if (isset($params['children'])) {
+            return TreeHelper::getTreeChild($data, intval($params['children']));
+        }
+        if (isset($params['group'])) {
+            $data = array_filter($data, function ($item) use ($params) {
+                $groups = is_array($item['groups']) ? $item['groups'] : explode(',', $item['groups']);
+                return in_array($params['group'], $groups);
+            });
+        }
         if (isset($params['parent'])) {
             $data = array_filter($data, function ($item) use ($params) {
                 return $item['parent_id'] == $params['parent'];
             });
         } elseif (isset($params['tree'])) {
-            $data = static::getOrSet(__FUNCTION__, 'tree',
+            $data = static::getOrSet(__FUNCTION__,
+                sprintf('tree-%s', isset($params['group']) ? $params['group'] : ''),
                 function () use ($data) {
                     return (new Tree($data))->makeIdTree();
                 });
@@ -60,12 +71,6 @@ class FuncHelper {
             $ids = array_map('intval', explode(',', $params['id']));
             $data = array_filter($data, function ($item) use ($ids) {
                 return in_array($item['id'], $ids);
-            });
-        }
-        if (isset($params['group'])) {
-            $data = array_filter($data, function ($item) use ($params) {
-                $groups = is_array($item['groups']) ? $item['groups'] : explode(',', $item['groups']);
-                return in_array($params['group'], $groups);
             });
         }
         return $data;
@@ -83,12 +88,14 @@ class FuncHelper {
         return static::getOrSet(__FUNCTION__,
             sprintf('%s-%s-%s-%s-%s', $category, $keywords, $page, $per_page, $fields),
             function () use ($category, $keywords, $page, $per_page, $fields) {
+            $children = static::channels(['children' => $category]);
             $cat = static::channel($category, true);
             if (empty($cat) || !$cat->model) {
                 return new Page(0);
             }
+            $children[] = $category;
             $scene = Module::scene()->setModel($cat->model);
-            return $scene->search($keywords, $category, $page, $per_page, $fields);
+            return $scene->search($keywords, $children, $page, $per_page, $fields);
         });
     }
 
@@ -156,6 +163,13 @@ class FuncHelper {
         return isset($data[$name]) ? $data[$name] : null;
     }
 
+    public static function channelActive($id) {
+        if (intval($id) === intval(static::$current['channel'])) {
+            return ' active';
+        }
+        return '';
+    }
+
     protected static function getVal(array $data, $columns, $default = null) {
         foreach ((array)$columns as $column) {
             if (!empty($column) && isset($data[$column])) {
@@ -167,6 +181,7 @@ class FuncHelper {
 
     public static function register(ParserCompiler $compiler) {
         $compiler->registerFunc('channel', '\Module\CMS\Domain\FuncHelper::channel')
+            ->registerFunc('channelActive', '\Module\CMS\Domain\FuncHelper::channelActive')
             ->registerFunc('channels', function ($params = null) {
                 if ($params === -1) {
                     return '<?php endforeach; ?>';
