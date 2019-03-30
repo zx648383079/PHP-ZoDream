@@ -152,13 +152,14 @@ class SingleScene extends BaseScene {
     /**
      * @param $keywords
      * @param $cat_id
+     * @param null $order
      * @param int $page
      * @param int $per_page
      * @param null $fields
      * @return \Zodream\Html\Page
      * @throws \Exception
      */
-    public function search($keywords, $cat_id, $page = 1, $per_page = 20, $fields = null) {
+    public function search($keywords, $cat_id, $order = null, $page = 1, $per_page = 20, $fields = null) {
         if (empty($fields)) {
             $fields = '*';
         }
@@ -170,7 +171,10 @@ class SingleScene extends BaseScene {
                 return;
             }
             $query->where('cat_id', $cat_id);
-        })->select($fields)->page($per_page);
+        })->select($fields)
+            ->when(!empty($order), function ($query) use ($order) {
+            $query->orderBy($order);
+        })->page($per_page);
     }
 
     public function find($id) {

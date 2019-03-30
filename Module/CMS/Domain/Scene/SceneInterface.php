@@ -60,12 +60,13 @@ interface SceneInterface {
     /**
      * @param $keywords
      * @param $cat_id
+     * @param null $order
      * @param int $page
      * @param int $per_page
      * @param null $fields
      * @return Page
      */
-    public function search($keywords, $cat_id, $page = 1, $per_page = 20, $fields = null);
+    public function search($keywords, $cat_id, $order = null, $page = 1, $per_page = 20, $fields = null);
 
     public function find($id);
 

@@ -84,10 +84,14 @@ class FuncHelper {
         $keywords = static::getVal($params, ['keywords', 'keyword', 'query']);
         $page = intval(static::getVal($params, ['page']));
         $fields = static::getVal($params, ['fields']);
+        $order = static::getVal($params, ['order', 'orderBy'], 'updated_at desc');
+        if ($order === 'hot') {
+            $order = 'view_count desc';
+        }
         $per_page = static::getVal($params, ['per_page', 'size', 'num', 'limit'], 20);
         return static::getOrSet(__FUNCTION__,
-            sprintf('%s-%s-%s-%s-%s', $category, $keywords, $page, $per_page, $fields),
-            function () use ($category, $keywords, $page, $per_page, $fields) {
+            sprintf('%s-%s-%s-%s-%s-%s', $category, $keywords, $page, $per_page, $fields, $order),
+            function () use ($category, $keywords, $page, $per_page, $fields, $order) {
             $children = static::channels(['children' => $category]);
             $cat = static::channel($category, true);
             if (empty($cat) || !$cat->model) {
@@ -95,7 +99,7 @@ class FuncHelper {
             }
             $children[] = $category;
             $scene = Module::scene()->setModel($cat->model);
-            return $scene->search($keywords, $children, $page, $per_page, $fields);
+            return $scene->search($keywords, $children, $order, $page, $per_page, $fields);
         });
     }
 

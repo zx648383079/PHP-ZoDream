@@ -24,7 +24,7 @@ abstract class BaseScene implements SceneInterface {
 
 
     public function toInput(ModelFieldModel $field, array $data) {
-        if ($field->is_disable > 0) {
+        if ($field->is_system > 0) {
             return null;
         }
         return self::newField($field->type)->toInput(isset($data[$field->field])
@@ -38,6 +38,9 @@ abstract class BaseScene implements SceneInterface {
      * @throws \Exception
      */
     public function filterInput(array $data, array $field_list) {
+        if (empty($field_list)) {
+            return [$data, []];
+        }
         $extend = $main = [];
         foreach ($field_list as $field) {
             $value = static::newField($field->type)->filterInput(isset($data[$field->field]) ? $data[$field->field]
