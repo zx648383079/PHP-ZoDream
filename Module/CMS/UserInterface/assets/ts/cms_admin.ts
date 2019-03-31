@@ -37,7 +37,7 @@ function pinyinIfEmpty(ele: JQuery, val: string) {
         if (data.code != 200) {
             return;
         }
-        ele.val(data.data.result.replace(/\s/g, '')).trigger('blur');
+        ele.val(data.data.result.replace(/\s/g, '').toLowerCase()).trigger('blur');
     });
 }
 

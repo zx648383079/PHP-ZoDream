@@ -20,7 +20,7 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class CouponModel extends Model {
+class  CouponModel extends Model {
 
     const TYPE_MONEY = 0;  // 优惠
     const TYPE_DISCOUNT = 1; // 折扣

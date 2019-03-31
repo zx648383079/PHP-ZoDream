@@ -38,6 +38,7 @@ header {
         li {
             list-style: none;
             display: inline-block;
+            position: relative;
             a {
                 display: inline-block;
                 height: 40px;
@@ -51,6 +52,34 @@ header {
                 background-color: rgb(255, 0, 0);
                 a {
                     color: #fff;
+                }
+            }
+            .sub-menu {
+                position: absolute;
+                width: 100%;
+                display: none;
+                z-index: 9999;
+                background: #FFF;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                border-top: 2px solid #f00;
+                li {
+                    display: block;
+                    width: 100%;
+                    border-bottom: 1px solid #dcdcdc;
+                    position: relative;
+                    z-index: 9999;
+                    a {
+                        margin: 0;
+                    }
+                }
+            }
+            &:hover {
+                background-color: rgba($color: #f00, $alpha: .3);
+                >a {
+                    color: #fff;
+                }
+                .sub-menu {
+                    display: block;
                 }
             }
         }

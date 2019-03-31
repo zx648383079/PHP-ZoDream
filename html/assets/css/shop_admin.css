@@ -341,4 +341,39 @@ table .goods-info {
   table .goods-info .thumb {
     float: left; }
 
+.option-box .input-group .fa-edit {
+  display: none; }
+
+.option-box .input-group:hover .fa-edit {
+  display: inline-block; }
+
+.dialog.dialog-box.option-dialog {
+  width: 300px; }
+  .dialog.dialog-box.option-dialog .dialog-footer .dialog-del {
+    background-color: #d9534f;
+    padding: 3px;
+    border: none;
+    margin-right: 5px;
+    width: 30%; }
+
+.column-item {
+  width: 300px;
+  display: inline-block;
+  position: relative;
+  height: 100px;
+  background-color: #fff;
+  margin: 10px; }
+  .column-item .icon {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding-top: 20px;
+    font-size: 40px; }
+  .column-item .content {
+    margin-left: 100px;
+    padding: 20px 10px; }
+
 /*# sourceMappingURL=shop_admin.css.map */

@@ -26,11 +26,21 @@
                         <li>
                             <a href="{url:./}">首页</a>
                         </li>
-                        {for:$categories_tree,$item}
-                        <li class="{channelActive:$item.id}">
-                            <a href="{url:./category?id=:$item.id}">{$item.title}</a>
+                        {channels:tree=1 group=nav}
+                        <li class="{channelActive:$channel.id,true}">
+                            <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
+                            {if:isset($channel.children)}
+                            <ul class="sub-menu">
+                                {for:$channel.children,$item}
+                                <li>
+                                    <a href="{url:./category?id=:$item.id}">{$item.title}</a>
+                                </li>
+                                {/for}
+                            </ul>
+                            {/if}
                         </li>
-                        {/for}
+                        
+                        {/channels}
                     </ul>
                 </div>
                 

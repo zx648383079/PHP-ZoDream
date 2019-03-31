@@ -939,6 +939,34 @@ function bindEdit() {
     });
 }
 
+function bindSetting(baseUri: string) {
+    $('.zd-tab-head .zd-tab-item').eq(0).trigger('click');
+    $("#field_type,#type").change(function() {
+        $(this).closest('.input-group').next('.group-property').toggle($(this).val() != 'group');
+    }).trigger('change');
+    let dialog = $('.option-dialog').dialog();
+    $('.option-box .input-group .fa-edit').click(function() {
+        $.getJSON(baseUri + '/setting/info', {id: $(this).data('id')}, function(data) {
+            if (data.code !== 200) {
+                return;
+            }
+            $.each(data.data, function(i) {
+                dialog.find('*[name="'+ i+'"]').val(this + '').trigger('change');
+            });
+            dialog.show();
+        });
+        
+    });
+    dialog.on('done', function() {
+        ajaxForm(baseUri + '/setting/update', dialog.find('form').serialize());
+    });
+    dialog.find('.dialog-del').click(function() {
+        postJson(baseUri+'/setting/delete', {id: dialog.find('[name=id]').val()}, function(data) {
+            parseAjax(data);
+        });
+    });
+}
+
 $(function() {
     $(document).on('click', '[data-type=toggle]', function() {
         let that = $(this);

@@ -32,7 +32,8 @@ header {
     float: right; }
     header .nav-bar li {
       list-style: none;
-      display: inline-block; }
+      display: inline-block;
+      position: relative; }
       header .nav-bar li a {
         display: inline-block;
         height: 40px;
@@ -45,6 +46,28 @@ header {
         background-color: red; }
         header .nav-bar li.active a {
           color: #fff; }
+      header .nav-bar li .sub-menu {
+        position: absolute;
+        width: 100%;
+        display: none;
+        z-index: 9999;
+        background: #FFF;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-top: 2px solid #f00; }
+        header .nav-bar li .sub-menu li {
+          display: block;
+          width: 100%;
+          border-bottom: 1px solid #dcdcdc;
+          position: relative;
+          z-index: 9999; }
+          header .nav-bar li .sub-menu li a {
+            margin: 0; }
+      header .nav-bar li:hover {
+        background-color: rgba(255, 0, 0, 0.3); }
+        header .nav-bar li:hover > a {
+          color: #fff; }
+        header .nav-bar li:hover .sub-menu {
+          display: block; }
 
 footer {
   margin-top: 30px;

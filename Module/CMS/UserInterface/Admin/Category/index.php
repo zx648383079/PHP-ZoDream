@@ -13,6 +13,7 @@ $this->title = 'ZoDream';
         <tr>
             <th>ID</th>
             <th>栏目名</th>
+            <th>分组</th>
             <th>统计</th>
             <th>操作</th>
         </tr>
@@ -27,6 +28,7 @@ $this->title = 'ZoDream';
                     <?php endif;?>
                     <a href="<?=$this->url('./category', ['id' => $item['id']])?>"><?=$item['title']?></a>
                 </td>
+                <td><?=$item['groups']?></td>
                 <td></td>
                 <td>
                     <div class="btn-group  btn-group-xs">

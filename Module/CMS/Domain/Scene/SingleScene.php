@@ -28,6 +28,7 @@ class SingleScene extends BaseScene {
                 'model_id' => $this->model->id,
                 'is_main' => 1,
                 'is_system' => 1,
+                'is_required' => 1,
                 'type' => 'text'
             ],
             [
@@ -36,6 +37,7 @@ class SingleScene extends BaseScene {
                 'model_id' => $this->model->id,
                 'is_main' => 1,
                 'is_system' => 1,
+                'is_required' => 0,
                 'type' => 'text'
             ],
             [
@@ -44,6 +46,7 @@ class SingleScene extends BaseScene {
                 'model_id' => $this->model->id,
                 'is_main' => 1,
                 'is_system' => 1,
+                'is_required' => 0,
                 'type' => 'textarea'
             ],
             [
@@ -52,6 +55,7 @@ class SingleScene extends BaseScene {
                 'model_id' => $this->model->id,
                 'is_main' => 1,
                 'is_system' => 1,
+                'is_required' => 0,
                 'type' => 'image'
             ],
         ]);

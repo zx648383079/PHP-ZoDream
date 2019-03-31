@@ -24,7 +24,7 @@ abstract class BaseScene implements SceneInterface {
 
 
     public function toInput(ModelFieldModel $field, array $data) {
-        if ($field->is_system > 0) {
+        if ($field->is_disable > 0) {
             return null;
         }
         return self::newField($field->type)->toInput(isset($data[$field->field])

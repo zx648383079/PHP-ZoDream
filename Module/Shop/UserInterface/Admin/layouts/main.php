@@ -68,8 +68,13 @@ $this->registerCssFile([
         'fa fa-bullhorn',
         [
             [
+                '营销中心',
+                './admin/activity/home',
+                'fa fa-list'
+            ],
+            [
                 '优惠券',
-                './admin/coupon',
+                './admin/activity/coupon',
                 'fa fa-list'
             ],
             [
@@ -79,7 +84,7 @@ $this->registerCssFile([
             ],
             [
                 '返现',
-                './admin/activity/cashback',
+                './admin/activity/cash_back',
                 'fa fa-list'
             ],
             [
@@ -109,7 +114,7 @@ $this->registerCssFile([
             ],
             [
                 '试用',
-                './admin/activity/free_tial',
+                './admin/activity/free_trial',
                 'fa fa-list'
             ],
         ]

@@ -1,6 +1,26 @@
 {layout:main}
-<div class="banner">
-
+{@slider.css}
+{@jquery.slider.min.js}
+{>js}
+var silder = $(".banner .slider").slider({
+    width: 1,
+    height: 420,
+});
+var silder = $(".photo .slider").slider({
+    width: 1,
+    height: 420,
+});
+{/>}
+<div class="banner">        
+    <div class="slider" data-height="420" data-auto="true">
+        <div class="slider-box">
+            <ul>
+                {contents:category=8 num=4}
+                <li><img src="{$content.thumb}" width="100%" alt=""></li>
+                {/contents}
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="container">
     <div class="row">
@@ -69,8 +89,16 @@
                 <div class="tab-header">
                     <div class="tab-item active">公司相册</div>
                 </div>
-                <div class="tab-body">
-                    asdsafa
+                <div class="tab-body photo">
+                        <div class="slider" data-height="420" data-auto="true">
+                            <div class="slider-box">
+                                <ul>
+                                    {contents:category=9 num=4}
+                                    <li><img src="{$content.thumb}" width="100%" alt=""></li>
+                                    {/contents}
+                                </ul>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

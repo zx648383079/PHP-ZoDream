@@ -20,6 +20,31 @@ class SettingController extends Controller {
         ]);
     }
 
+    public function infoAction($id) {
+        return $this->jsonSuccess(OptionModel::find($id));
+    }
+
+    public function updateAction($id) {
+        $model = OptionModel::find($id);
+        $model->load();
+        if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
+            return $this->jsonFailure('名称重复');
+        }
+        if ($model->save()) {
+            return $this->jsonSuccess([
+                'refresh' => true
+            ]);
+        }
+        return $this->jsonFailure($model->getFirstError());
+    }
+
+    public function deleteAction($id) {
+        OptionModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
     private function saveNewOption() {
         $data = app('request')->get('field');
         if (empty($data) || !is_array($data) || !isset($data['name'])) {

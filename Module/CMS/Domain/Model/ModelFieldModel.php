@@ -18,6 +18,7 @@ use Zodream\Helpers\Str;
  * @property integer $is_required
  * @property integer $is_default
  * @property integer $is_system
+ * @property integer $is_disable
  * @property string $match
  * @property string $tip_message
  * @property string $error_message
@@ -69,6 +70,7 @@ class ModelFieldModel extends BaseModel {
             'is_main' => 'int:0,9',
             'is_required' => 'int:0,9',
             'is_default' => 'int:0,9',
+            'is_disable' => 'int:0,9',
             'is_system' => 'int:0,9',
             'match' => 'string:0,255',
             'tip_message' => 'string:0,255',
