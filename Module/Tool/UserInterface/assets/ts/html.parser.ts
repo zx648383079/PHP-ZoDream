@@ -548,7 +548,7 @@ interface INode {
             if (node.attr && ['reset', 'submit'].indexOf(node.attr.type) >= 0) {
                 attr += ' form-type='+ q(node.attr.type);
             }
-            return; `<button type="default"${attr}>${node.text}</button>`;
+            return `<button type="default"${attr}>${node.text}</button>`;
         }
 
         function parseInput(node: INode) {
