@@ -47,8 +47,12 @@ class FuncHelper {
                 static::setChannel(...$data);
                 return $data;
             });
+        if (empty($params)) {
+            return $data;
+        }
         if (isset($params['children'])) {
-            return TreeHelper::getTreeChild($data, intval($params['children']));
+            return TreeHelper::getTreeChild($data, is_numeric($params['children']) ? $params['children']
+                : static::getChannelId($params['children']));
         }
         if (isset($params['group'])) {
             $data = array_filter($data, function ($item) use ($params) {
@@ -57,6 +61,8 @@ class FuncHelper {
             });
         }
         if (isset($params['parent'])) {
+            $params['parent'] = is_numeric($params['parent']) ? $params['parent']
+                : static::getChannelId($params['parent']);
             $data = array_filter($data, function ($item) use ($params) {
                 return $item['parent_id'] == $params['parent'];
             });
@@ -78,6 +84,9 @@ class FuncHelper {
 
     public static function contents(array $params = null) {
         $category = static::getVal($params, ['category', 'cat_id', 'cat', 'channel']);
+        if (!empty($category) && !is_numeric($category)) {
+            $category = static::getChannelId($category);
+        }
         if (empty($category)) {
             $category = static::$current['channel'];
         }
@@ -101,6 +110,16 @@ class FuncHelper {
             $scene = Module::scene()->setModel($cat->model);
             return $scene->search($keywords, $children, $order, $page, $per_page, $fields);
         });
+    }
+
+    protected static function getChannelId($val, $key = 'name') {
+        $data = static::channels();
+        foreach ($data as $item) {
+            if ($item[$key] === $val) {
+                return $item['id'];
+            }
+        }
+        return 0;
     }
 
     protected static function setChannel(...$data) {
