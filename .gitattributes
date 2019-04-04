@@ -18,7 +18,4 @@
 
 *.html linguist-language=PHP
 
-html/assets/js linguist-generated=true
-html/assets/editor linguist-generated=true
-html/assets/ueditor linguist-generated=true
-html/assets/css linguist-generated=true
+html/assets/* linguist-generated=true
