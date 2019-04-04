@@ -26,9 +26,9 @@ $this->set([
         <a href="<?=$this->url('shop')?>">
             商城(DEMO)
         </a>
-        <a class="unknow" href="<?=$this->url('')?>">
+        <a class="unknow" href="<?=$this->url('cms')?>">
             <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">
-            待定
+            CMS(DEMO)
         </a>
     </div>
 
