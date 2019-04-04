@@ -15,3 +15,10 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+*.html linguist-language=PHP
+
+html/assets/js linguist-generated=true
+html/assets/editor linguist-generated=true
+html/assets/ueditor linguist-generated=true
+html/assets/css linguist-generated=true
