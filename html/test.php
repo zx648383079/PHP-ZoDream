@@ -11,7 +11,7 @@ use Zodream\Database\Relation;
 use Module\Document\Domain\Model\ProjectModel;
 use Zodream\Http\Http;
 use Zodream\Helpers\Str;
-use Module\Shop\Domain\Model\RegionModel;
+use Module\Shop\Domain\Models\RegionModel;
 use Zodream\Image\Canvas;
 use Zodream\Image\Image;
 use Zodream\Disk\File;

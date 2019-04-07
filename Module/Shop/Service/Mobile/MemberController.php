@@ -3,7 +3,7 @@ namespace Module\Shop\Service\Mobile;
 
 
 
-use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Models\OrderModel;
 
 class MemberController extends Controller {
 

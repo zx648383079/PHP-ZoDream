@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\Advertisement\AdModel;
+use Module\Shop\Domain\Models\Advertisement\AdModel;
 
 class AdController extends Controller {
 

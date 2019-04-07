@@ -1,9 +1,9 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Model\AttributeModel;
-use Module\Shop\Domain\Model\CommentModel;
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\AttributeModel;
+use Module\Shop\Domain\Models\CommentModel;
+use Module\Shop\Domain\Models\GoodsModel;
 
 class GoodsController extends Controller {
 

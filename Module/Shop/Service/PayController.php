@@ -1,9 +1,9 @@
 <?php
 namespace Module\Shop\Service;
 
-use Module\Shop\Domain\Model\OrderLogModel;
-use Module\Shop\Domain\Model\OrderModel;
-use Module\Shop\Domain\Model\PayLogModel;
+use Module\Shop\Domain\Models\OrderLogModel;
+use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Models\PayLogModel;
 
 class PayController extends Controller {
 

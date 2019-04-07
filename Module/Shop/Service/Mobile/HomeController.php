@@ -1,9 +1,9 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Model\Advertisement\AdModel;
-use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\Advertisement\AdModel;
+use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\GoodsModel;
 
 class HomeController extends Controller {
 

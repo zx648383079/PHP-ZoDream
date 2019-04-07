@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Cart;
 
-use Module\Shop\Domain\Model\CartModel;
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\GoodsModel;
 use Traversable;
 use Zodream\Helpers\Json;
 use IteratorAggregate;

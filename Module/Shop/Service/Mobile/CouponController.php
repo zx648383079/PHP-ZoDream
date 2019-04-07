@@ -2,8 +2,8 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\CouponModel;
+use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\CouponModel;
 
 class CouponController extends Controller {
 

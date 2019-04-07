@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Model\CollectModel;
+use Module\Shop\Domain\Models\CollectModel;
 
 class CollectController extends Controller {
 

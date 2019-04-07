@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
-use Module\Shop\Domain\Model\PaymentModel;
-use Module\Shop\Domain\Model\ShippingModel;
+use Module\Shop\Domain\Models\PaymentModel;
+use Module\Shop\Domain\Models\ShippingModel;
 
 class PaymentController extends Controller {
 

@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\GoodsModel;
 
 class SearchController extends Controller {
 

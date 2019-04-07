@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
-use Module\Shop\Domain\Model\RegionModel;
+use Module\Shop\Domain\Models\RegionModel;
 
 class RegionController extends Controller {
 

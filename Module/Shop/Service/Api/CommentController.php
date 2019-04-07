@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\CommentModel;
+use Module\Shop\Domain\Models\CommentModel;
 
 class CommentController extends Controller {
 

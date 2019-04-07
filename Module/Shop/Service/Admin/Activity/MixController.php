@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Admin\Activity;
 
 use Module\Shop\Service\Admin\Controller;
-use Module\Shop\Domain\Model\CouponModel;
+use Module\Shop\Domain\Models\CouponModel;
 
 class MixController extends Controller {
 

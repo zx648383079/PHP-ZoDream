@@ -1,13 +1,13 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
-use Module\Shop\Domain\Model\Logistics\DeliveryModel;
-use Module\Shop\Domain\Model\OrderLogModel;
-use Module\Shop\Domain\Model\OrderModel;
-use Module\Shop\Domain\Model\OrderAddressModel;
-use Module\Shop\Domain\Model\OrderGoodsModel;
+use Module\Shop\Domain\Models\Logistics\DeliveryModel;
+use Module\Shop\Domain\Models\OrderLogModel;
+use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Models\OrderAddressModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Auth\Domain\Model\UserModel;
-use Module\Shop\Domain\Model\ShippingModel;
+use Module\Shop\Domain\Models\ShippingModel;
 
 class OrderController extends Controller {
 

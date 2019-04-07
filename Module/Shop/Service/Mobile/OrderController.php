@@ -1,10 +1,10 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Model\OrderAddressModel;
-use Module\Shop\Domain\Model\OrderGoodsModel;
-use Module\Shop\Domain\Model\OrderLogModel;
-use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Models\OrderAddressModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
+use Module\Shop\Domain\Models\OrderLogModel;
+use Module\Shop\Domain\Models\OrderModel;
 
 
 class OrderController extends Controller {

@@ -2,7 +2,7 @@
 namespace Module\Shop\Service;
 
 use Module\ModuleController;
-use Module\Shop\Domain\Model\CategoryModel;
+use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Module;
 
 class Controller extends ModuleController {

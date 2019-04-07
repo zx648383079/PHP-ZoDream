@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Model\AddressModel;
+use Module\Shop\Domain\Models\AddressModel;
 
 
 class AddressController extends Controller {

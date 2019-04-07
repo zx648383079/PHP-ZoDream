@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Api;
 
 
-use Module\Shop\Domain\Model\Scene\Address;
+use Module\Shop\Domain\Models\Scene\Address;
 
 class AddressController extends Controller {
 

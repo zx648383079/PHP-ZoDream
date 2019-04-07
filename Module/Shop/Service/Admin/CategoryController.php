@@ -2,8 +2,8 @@
 namespace Module\Shop\Service\Admin;
 
 
-use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\GoodsModel;
 
 class CategoryController extends Controller {
 

@@ -2,8 +2,8 @@
 namespace Module\Shop\Service\Mobile;
 
 use Module\ModuleController;
-use Module\Shop\Domain\Model\ArticleModel;
-use Module\Shop\Domain\Model\CategoryModel;
+use Module\Shop\Domain\Models\ArticleModel;
+use Module\Shop\Domain\Models\CategoryModel;
 
 
 class Controller extends ModuleController {

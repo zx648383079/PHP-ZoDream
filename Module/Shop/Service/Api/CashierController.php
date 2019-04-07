@@ -1,14 +1,14 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\AddressModel;
-use Module\Shop\Domain\Model\CartModel;
-use Module\Shop\Domain\Model\GoodsModel;
-use Module\Shop\Domain\Model\OrderModel;
-use Module\Shop\Domain\Model\PaymentModel;
-use Module\Shop\Domain\Model\Scene\Goods;
-use Module\Shop\Domain\Model\Scene\Order;
-use Module\Shop\Domain\Model\ShippingModel;
+use Module\Shop\Domain\Models\AddressModel;
+use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Models\PaymentModel;
+use Module\Shop\Domain\Models\Scene\Goods;
+use Module\Shop\Domain\Models\Scene\Order;
+use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Module;
 
 class CashierController extends Controller {

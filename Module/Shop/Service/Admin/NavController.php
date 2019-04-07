@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
-use Module\Shop\Domain\Model\NavigationModel;
+use Module\Shop\Domain\Models\NavigationModel;
 
 class NavController extends Controller {
 

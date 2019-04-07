@@ -2,11 +2,11 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Model\CommentImageModel;
-use Module\Shop\Domain\Model\CommentModel;
-use Module\Shop\Domain\Model\OrderGoodsModel;
-use Module\Shop\Domain\Model\OrderLogModel;
-use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Models\CommentImageModel;
+use Module\Shop\Domain\Models\CommentModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
+use Module\Shop\Domain\Models\OrderLogModel;
+use Module\Shop\Domain\Models\OrderModel;
 
 class CommentController extends Controller {
 

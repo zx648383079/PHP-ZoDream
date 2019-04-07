@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Models\OrderModel;
 /** @var $this View */
 $this->title = '订单列表';
 ?>

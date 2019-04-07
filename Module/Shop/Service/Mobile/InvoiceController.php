@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Model\InvoiceTitleModel;
+use Module\Shop\Domain\Models\InvoiceTitleModel;
 
 class InvoiceController extends Controller {
 

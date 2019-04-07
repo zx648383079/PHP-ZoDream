@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\GoodsModel;
 
 class StoreController extends Controller {
 

@@ -2,8 +2,8 @@
 namespace Module\Shop\Service\Admin;
 
 
-use Module\Shop\Domain\Model\BrandModel;
-use Module\Shop\Domain\Model\GoodsModel;
+use Module\Shop\Domain\Models\BrandModel;
+use Module\Shop\Domain\Models\GoodsModel;
 use Zodream\Database\Command;
 
 class BrandController extends Controller {

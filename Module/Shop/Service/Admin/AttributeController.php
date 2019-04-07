@@ -2,8 +2,8 @@
 namespace Module\Shop\Service\Admin;
 
 
-use Module\Shop\Domain\Model\AttributeGroupModel;
-use Module\Shop\Domain\Model\AttributeModel;
+use Module\Shop\Domain\Models\AttributeGroupModel;
+use Module\Shop\Domain\Models\AttributeModel;
 
 class AttributeController extends Controller {
 

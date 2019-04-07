@@ -2,7 +2,7 @@
 namespace Module\Shop\Domain\Cart;
 
 
-use Module\Shop\Domain\Model\ShippingModel;
+use Module\Shop\Domain\Models\ShippingModel;
 use Zodream\Infrastructure\Interfaces\ArrayAble;
 use ArrayIterator;
 

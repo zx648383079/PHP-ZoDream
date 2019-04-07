@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
-use Module\Shop\Domain\Model\AttributeModel;
+use Module\Shop\Domain\Models\AttributeModel;
 /** @var $this View */
 $this->title = '属性';
 ?>

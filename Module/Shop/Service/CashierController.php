@@ -1,13 +1,13 @@
 <?php
 namespace Module\Shop\Service;
 
-use Module\Shop\Domain\Model\AddressModel;
-use Module\Shop\Domain\Model\CartModel;
-use Module\Shop\Domain\Model\GoodsModel;
-use Module\Shop\Domain\Model\OrderGoodsModel;
-use Module\Shop\Domain\Model\OrderModel;
-use Module\Shop\Domain\Model\PaymentModel;
-use Module\Shop\Domain\Model\ShippingModel;
+use Module\Shop\Domain\Models\AddressModel;
+use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
+use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Models\PaymentModel;
+use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Module;
 use Zodream\Helpers\Json;
 

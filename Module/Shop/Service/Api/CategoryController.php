@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\Scene\Goods;
+use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\Scene\Goods;
 
 class CategoryController extends Controller {
 

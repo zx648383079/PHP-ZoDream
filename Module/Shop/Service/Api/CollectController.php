@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\CollectModel;
-use Module\Shop\Domain\Model\Scene\Collect;
+use Module\Shop\Domain\Models\CollectModel;
+use Module\Shop\Domain\Models\Scene\Collect;
 
 class CollectController extends Controller {
 

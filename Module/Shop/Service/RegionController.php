@@ -1,7 +1,7 @@
 <?php
 namespace Module\Shop\Service;
 
-use Module\Shop\Domain\Model\RegionModel;
+use Module\Shop\Domain\Models\RegionModel;
 use Zodream\Disk\File;
 use Zodream\Service\Factory;
 

@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\OrderGoodsModel;
-use Module\Shop\Domain\Model\OrderModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
+use Module\Shop\Domain\Models\OrderModel;
 
 class RefundController extends Controller {
 

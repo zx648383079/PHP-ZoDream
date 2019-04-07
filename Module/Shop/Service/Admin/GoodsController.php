@@ -2,19 +2,19 @@
 namespace Module\Shop\Service\Admin;
 
 
-use Module\Shop\Domain\Model\AttributeGroupModel;
-use Module\Shop\Domain\Model\AttributeModel;
-use Module\Shop\Domain\Model\BrandModel;
-use Module\Shop\Domain\Model\CartModel;
-use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\CollectModel;
-use Module\Shop\Domain\Model\CommentModel;
-use Module\Shop\Domain\Model\GoodsAttributeModel;
-use Module\Shop\Domain\Model\GoodsGalleryModel;
-use Module\Shop\Domain\Model\GoodsIssueModel;
-use Module\Shop\Domain\Model\GoodsModel;
-use Module\Shop\Domain\Model\OrderGoodsModel;
-use Module\Shop\Domain\Model\ProductModel;
+use Module\Shop\Domain\Models\AttributeGroupModel;
+use Module\Shop\Domain\Models\AttributeModel;
+use Module\Shop\Domain\Models\BrandModel;
+use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\CollectModel;
+use Module\Shop\Domain\Models\CommentModel;
+use Module\Shop\Domain\Models\GoodsAttributeModel;
+use Module\Shop\Domain\Models\GoodsGalleryModel;
+use Module\Shop\Domain\Models\GoodsIssueModel;
+use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
+use Module\Shop\Domain\Models\ProductModel;
 use Zodream\Helpers\Json;
 
 class GoodsController extends Controller {

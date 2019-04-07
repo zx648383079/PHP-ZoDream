@@ -1,10 +1,10 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Model\BrandModel;
-use Module\Shop\Domain\Model\CategoryModel;
-use Module\Shop\Domain\Model\GoodsModel;
-use Module\Shop\Domain\Model\Scene\Goods;
+use Module\Shop\Domain\Models\BrandModel;
+use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Models\Scene\Goods;
 
 class GoodsController extends Controller {
 

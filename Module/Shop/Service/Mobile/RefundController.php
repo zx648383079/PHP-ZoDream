@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Model\OrderGoodsModel;
+use Module\Shop\Domain\Models\OrderGoodsModel;
 
 class RefundController extends Controller {
 

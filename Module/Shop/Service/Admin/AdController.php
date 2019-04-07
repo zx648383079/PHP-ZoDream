@@ -2,8 +2,8 @@
 namespace Module\Shop\Service\Admin;
 
 
-use Module\Shop\Domain\Model\Advertisement\AdModel;
-use Module\Shop\Domain\Model\Advertisement\AdPositionModel;
+use Module\Shop\Domain\Models\Advertisement\AdModel;
+use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
 
 class AdController extends Controller {
 
