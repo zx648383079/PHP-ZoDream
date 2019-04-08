@@ -100,6 +100,11 @@ $this->registerCssFile([
                 'fa fa-list'
             ],
             [
+                '拍卖',
+                './admin/activity/auction',
+                'fa fa-list'
+            ],
+            [
                 '砍价',
                 './admin/activity/bargain',
                 'fa fa-list'
