@@ -79,6 +79,9 @@ class AutoSpider extends BaseSpider {
                 break;
             }
         }
+        if ($index < 0) {
+            $index = 0;
+        }
         $tag = $tags[$index];
         if (strpos($tag['tag'], 'a') !== false) {
             return $this->getChapters($tag['index'], $tags[$index + 1]['index'], $html);

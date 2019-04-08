@@ -9,6 +9,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 
 use Module\Book\Domain\SiteCrawl;
+use Module\Book\Domain\SpiderProgress;
 use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
@@ -89,7 +90,7 @@ abstract class BaseSpider implements GetBookInterface {
 
     protected function getRealBook($book) {
         if (is_array($book)) {
-            $book = SiteCrawl::createBook($book);
+            $book = SpiderProgress::createBook($book);
         }
         if (!$book->isExist()) {
             $book->save();
