@@ -23,15 +23,15 @@ class CouponController extends Controller {
     public function saveAction() {
         $model = new CouponModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('coupon'), '保存成功！');
+            return $this->redirectWithMessage($this->getUrl('activity/coupon'), '保存成功！');
         }
-        return $this->redirectWithMessage($this->getUrl('coupon'), $model->getFirstError());
+        return $this->redirectWithMessage($this->getUrl('activity/coupon'), $model->getFirstError());
     }
 
     public function deleteAction($id) {
         CouponModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('coupon')
+            'url' => $this->getUrl('activity/coupon')
         ]);
     }
 
