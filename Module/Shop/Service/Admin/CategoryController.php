@@ -65,4 +65,9 @@ class CategoryController extends Controller {
             'refresh' => true
         ]);
     }
+
+    public function dialogAction() {
+        $model_list = CategoryModel::tree()->makeTreeForHtml();
+        return $this->show(compact('model_list'));
+    }
 }

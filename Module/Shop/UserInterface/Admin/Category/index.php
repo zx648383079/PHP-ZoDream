@@ -23,7 +23,7 @@ $this->title = '分类列表';
             <td><?=$item['id']?></td>
             <td class="tree-item">
                 <?php if($item['level'] > 0):?>
-                <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
+                <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?></span>
                 <?php endif;?>
                 <a href="<?=$this->url('./admin/goods', ['cat_id' => $item['id']])?>"><?=$item['name']?></a>
             </td>

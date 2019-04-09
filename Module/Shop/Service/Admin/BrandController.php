@@ -49,4 +49,9 @@ class BrandController extends Controller {
             'refresh' => true
         ]);
     }
+
+    public function dialogAction() {
+        $model_list = BrandModel::page();
+        return $this->show(compact('model_list'));
+    }
 }
