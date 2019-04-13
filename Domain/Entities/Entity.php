@@ -1,6 +1,8 @@
 <?php
 namespace Domain\Entities;
 
-class Entity {
+use Domain\Model\Model;
+
+class Entity extends Model {
 
 }

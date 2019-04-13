@@ -1,7 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Models;
 
-use Domain\Model\Model;
+
+use Module\Shop\Domain\Entities\CouponEntity;
 
 /**
  * Class CouponModel
@@ -20,7 +21,7 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class  CouponModel extends Model {
+class CouponModel extends CouponEntity {
 
     const TYPE_MONEY = 0;  // 优惠
     const TYPE_DISCOUNT = 1; // 折扣
@@ -38,43 +39,23 @@ class  CouponModel extends Model {
     const SEND_USER = 4;    // 按用户
 
 
-    public static function tableName() {
-        return 'shop_coupon';
+    public function getThumbAttribute() {
+        $thumb = $this->getAttributeSource('thumb');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
     }
 
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,30',
-            'thumb' => 'string:0,255',
-            'type' => 'int:0,99',
-            'rule' => 'int:0,99',
-            'rule_value' => 'int:0,99',
-            'min_money' => '',
-            'money' => '',
-            'send_type' => 'int',
-            'send_value' => 'int',
-            'every_amount' => 'int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
+    public function getReceivedAttribute() {
+        return CouponLogModel::where('coupon_id', $this->id)->count();
     }
 
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => 'Name',
-            'thumb' => 'Thumb',
-            'type' => 'Type',
-            'rule' => 'Rule',
-            'rule_value' => 'Rule Value',
-            'min_money' => 'Min Money',
-            'money' => 'Money',
-            'send_type' => 'Send Type',
-            'send_value' => 'Send Value',
-            'every_amount' => 'Every Amount',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
+    public function getCanReceiveAttribute() {
+        if (auth()->guest()) {
+            return true;
+        }
+        return CouponLogModel::where('coupon_id', $this->id)->where('user_id', auth()->id())
+                ->count() < 1;
     }
-
 }

@@ -46,4 +46,8 @@ class CouponLogModel extends Model {
         ];
     }
 
+    public function coupon() {
+        return $this->hasOne(CouponModel::className(), 'id', 'coupon_id');
+    }
+
 }

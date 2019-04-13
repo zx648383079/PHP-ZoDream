@@ -51,17 +51,31 @@ class CouponEntity extends Entity {
             'thumb' => '优惠券图片',
             'type' => '优惠券类型',
             'rule' => '使用规则',
-            'rule_value' => 'Rule Value',
+            'rule_value' => '使用范围',
             'min_money' => '使用门槛',
             'money' => '面值',
             'send_type' => '发放类型',
-            'send_value' => 'Send Value',
+            'send_value' => '发送数量',
             'every_amount' => '每人限领',
             'start_at' => '有效期',
-            'end_at' => 'Created At',
+            'end_at' => 'End At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function setStartAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->__attributes['start_at'] = $value;
+    }
+
+    public function setEndAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->__attributes['end_at'] = $value;
     }
 
 }

@@ -25,7 +25,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Form::text('money')?>
     <?=Form::select('send_type', ['前台领取', '购买商品', '订单金额', '签到', '按用户'])?>
     <div>
-        <?=Form::text('total_amount')?>
+        <?=Form::text('send_value')?>
     </div>
     <?=Form::text('every_amount')?>
     <div class="input-group">
