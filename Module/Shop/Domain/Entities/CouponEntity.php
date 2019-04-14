@@ -3,6 +3,23 @@ namespace Module\Shop\Domain\Entities;
 
 use Domain\Entities\Entity;
 
+/**
+ * Class CouponEntity
+ * @package Module\Shop\Domain\Entities
+ * @property integer $id
+ * @property string $name
+ * @property string $thumb
+ * @property integer $type
+ * @property integer $rule
+ * @property integer $rule_value
+ * @property float $min_money
+ * @property float $money
+ * @property integer $send_type
+ * @property integer $send_value
+ * @property integer $every_amount
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
 class CouponEntity extends Entity {
 
     const TYPE_MONEY = 0;  // 优惠

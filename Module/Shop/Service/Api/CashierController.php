@@ -9,6 +9,7 @@ use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Models\Scene\Goods;
 use Module\Shop\Domain\Models\Scene\Order;
 use Module\Shop\Domain\Models\ShippingModel;
+use Module\Shop\Domain\Repositories\CouponRepository;
 use Module\Shop\Module;
 
 class CashierController extends Controller {
@@ -24,6 +25,12 @@ class CashierController extends Controller {
 
     public function paymentAction($goods = [], $shipping = []) {
         return $this->render(PaymentModel::all());
+    }
+
+    public function couponAction($goods = [], $type = 0) {
+        $goods_list = $this->getGoodsList($goods, $type);
+        $coupon_list = CouponRepository::getMyUseGoods($goods_list);
+        return $this->render($coupon_list);
     }
 
     public function previewAction(

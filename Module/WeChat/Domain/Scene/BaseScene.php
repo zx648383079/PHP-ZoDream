@@ -24,6 +24,12 @@ abstract class BaseScene implements SceneInterface {
         return $this;
     }
 
+    public function clear() {
+        $this->clearAttribute();
+        $this->save();
+        return $this;
+    }
+
     public function __invoke($content) {
         return $this->process($content);
     }

@@ -27,7 +27,7 @@ class MessageController extends Controller {
         }
         // 可以通过ip 和 $this->model->original === $message->getTo() 验证真实性
         if (!$message->verifyServer($this->model->original)) {
-            return $message->getResponse();
+            //return $message->getResponse();
         }
         $reply->setMessage($message, $message->getResponse());
         return $this->bindEvent($reply)->reply();

@@ -11,6 +11,12 @@ use Module\Shop\Domain\Models\Scene\Order;
 
 class OrderController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction($id = 0,
                                 $status = 0) {
         if ($id > 0) {

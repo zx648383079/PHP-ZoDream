@@ -107,6 +107,13 @@ class CreateShopTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('money')->decimal(10, 2)->defaultVal(0)->comment('开票金额');
             $table->set('status')->tinyint(1)->defaultVal(0)->comment('开票状态');
+            $table->set('invoice_type')->bool()->defaultVal(0)->comment('电子发票/纸质发票');
+            $table->set('receiver_email')->varchar(100)->defaultVal('');
+            $table->set('receiver_name')->varchar(100)->defaultVal('');
+            $table->set('receiver_tel')->varchar(100)->defaultVal('');
+            $table->set('receiver_region_id')->int()->defaultVal(0);
+            $table->set('receiver_region_name')->varchar()->defaultVal('');
+            $table->set('receiver_address')->varchar()->defaultVal('');
             $table->timestamps();
         });
         Schema::createTable(InvoiceTitleModel::tableName(), function(Table $table) {

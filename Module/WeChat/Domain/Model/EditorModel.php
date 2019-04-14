@@ -5,6 +5,7 @@ namespace Module\WeChat\Domain\Model;
 use Domain\Model\Model;
 use Module\WeChat\Domain\Scene\BindingScene;
 use Module\WeChat\Domain\Scene\CheckInScene;
+use Module\WeChat\Domain\Scene\ZaJinHuaScene;
 
 /**
  * Class EditorModel
@@ -28,6 +29,7 @@ abstract class EditorModel extends Model {
     public static $scene_list = [
         BindingScene::class => '账号绑定',
         CheckInScene::class => '每日签到',
+        ZaJinHuaScene::class => '炸金花',
     ];
 
     public static $type_list = [

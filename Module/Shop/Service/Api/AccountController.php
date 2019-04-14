@@ -53,4 +53,13 @@ class AccountController extends Controller {
             ->get('id', 'vendor', 'nickname', 'created_at');
         return $this->render($model_list);
     }
+
+    public function subtotalAction() {
+        return $this->render([
+           'money' => 0,
+           'integral' => 0,
+           'bonus' => 0,
+           'coupon' => 0
+        ]);
+    }
 }

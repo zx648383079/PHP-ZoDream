@@ -141,4 +141,10 @@ class CategoryModel extends Model {
         $data[] = $id;
         return $data;
     }
+
+    public static function getParentWidthSelf($id) {
+        $data = TreeHelper::getTreeParent(static::cacheLevel(), $id);
+        $data[] = $id;
+        return $data;
+    }
 }
