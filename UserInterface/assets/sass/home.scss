@@ -62,15 +62,39 @@ footer {
     a {
         display: block;
         line-height: 80px;
+        height: 80px;
         width: 300px;
         font-size: 30px;
         text-align: center;
         background-color: #fff;
         margin: 8px;
         box-shadow: rgba(#333, .7) 0 0 10px;
+        position: relative;
+        overflow: hidden;
         &.unknow {
             img {
                 height: 20px;
+            }
+        }
+        .desc {
+            font-size: 20px;
+            line-height: 40px;
+            position: absolute;
+            bottom: -40px;
+            text-align: center;
+            width: 100%;
+            color: #af5d0d;
+        }
+        .name,
+        .desc {
+           transition: all 1s;  
+        }
+        &:hover {
+            .name {
+                transform: scale(.6) translateY(-30px);
+            }
+            .desc {
+                bottom: 0;
             }
         }
     }

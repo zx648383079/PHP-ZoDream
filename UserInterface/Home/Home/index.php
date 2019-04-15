@@ -24,7 +24,8 @@ $this->set([
             圈子(DEMO)
         </a>
         <a href="<?=$this->url('shop')?>">
-            商城(DEMO)
+            <div class="name">商城(DEMO)</div>
+            <p class="desc">商品来源于淘宝联盟</p>
         </a>
         <a class="unknow" href="<?=$this->url('cms')?>">
             <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">

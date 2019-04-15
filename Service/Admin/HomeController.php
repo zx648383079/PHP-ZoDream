@@ -26,6 +26,8 @@ class HomeController extends Controller {
 	public function sitemapAction() {
 	    $map = new SiteMap();
 	    $map->add(url('/'), time());
+        $modules = config('modules');
+
 	    app(Router::class)->module('blog', function () use ($map) {
             $blog_list = BlogModel::orderBy('id', 'desc')->get('id', 'updated_at');
             foreach ($blog_list as $item) {

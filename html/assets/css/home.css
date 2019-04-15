@@ -53,14 +53,33 @@ footer {
   .metro-grid a {
     display: block;
     line-height: 80px;
+    height: 80px;
     width: 300px;
     font-size: 30px;
     text-align: center;
     background-color: #fff;
     margin: 8px;
-    box-shadow: rgba(51, 51, 51, 0.7) 0 0 10px; }
+    box-shadow: rgba(51, 51, 51, 0.7) 0 0 10px;
+    position: relative;
+    overflow: hidden; }
     .metro-grid a.unknow img {
       height: 20px; }
+    .metro-grid a .desc {
+      font-size: 20px;
+      line-height: 40px;
+      position: absolute;
+      bottom: -40px;
+      text-align: center;
+      width: 100%;
+      color: #af5d0d; }
+    .metro-grid a .name,
+    .metro-grid a .desc {
+      transition: all 1s; }
+    .metro-grid a:hover .name {
+      -webkit-transform: scale(0.6) translateY(-30px);
+              transform: scale(0.6) translateY(-30px); }
+    .metro-grid a:hover .desc {
+      bottom: 0; }
 
 .panel {
   background-color: #fff;
