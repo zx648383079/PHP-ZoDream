@@ -20,6 +20,7 @@ use Domain\Model\Model;
 class AccountLogModel extends Model {
 
     const TYPE_DEFAULT = 99;
+    const TYPE_CHECK_IN = 30;
 
     public static function tableName() {
         return 'account_log';
@@ -52,12 +53,31 @@ class AccountLogModel extends Model {
         ];
     }
 
-    public static function log() {
+    public static function log($user_id, $type, $item_id, $money, $remark, $status = 0) {
 
+        return static::create(
+            compact('user_id', 'type', 'item_id', 'money', 'remark', 'status'));
     }
 
-    public static function change() {
-
+    public static function change($user_id, $type, $item_id, $money, $remark, $status = 0) {
+        if (empty($user_id)) {
+            $user_id = auth()->id();
+        }
+        $old_money = UserModel::query()->where('user_id', $user_id)
+            ->value('money');
+        $new_money = floatval($old_money) + $money;
+        if ($new_money < 0) {
+            return false;
+        }
+        UserModel::query()->where('user_id', $user_id)->update([
+            'money' => $new_money
+        ]);
+        static::log($user_id, $type, $item_id, $money, $remark, $status);
+        if (auth()->id() === $user_id) {
+            // 自动更新当前用户信息
+            auth()->user()->moeny = $new_money;
+        }
+        return true;
     }
 
     public static function isBought($id, $type = self::TYPE_DEFAULT) {

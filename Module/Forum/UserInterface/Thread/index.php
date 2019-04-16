@@ -15,6 +15,24 @@ $this->registerCssFile([
 ?>
 
 <div class="container">
+    <ul class="path">
+        <li>
+            <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li>
+            <a href="<?=$this->url('./')?>">圈子首页</a>
+        </li>
+        <?php foreach($path as $item):?>
+        <li>
+            <a href="<?=$this->url('./forum', ['id' => $item->id])?>"><?=$item->name?></a>
+        </li>
+        <?php endforeach;?>
+        <li class="active">
+            <a href="<?=$this->url('./thread', ['id' => $thread->id])?>"><?=$thread->title?></a>
+        </li>
+    </ul>
+</div>
+
+<div class="container">
     <div class="thread-box">
         <div class="thread-title">
             <div class="count">

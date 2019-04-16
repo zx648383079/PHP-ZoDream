@@ -2,6 +2,7 @@
 namespace Module\Forum\Service;
 
 
+use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 
@@ -9,10 +10,16 @@ class ThreadController extends Controller {
 
     public function indexAction($id) {
         $thread = ThreadModel::find($id);
+        if (empty($thread)) {
+            return $this->redirectWithMessage('./');
+        }
+        $forum = ForumModel::findById($thread->forum_id);
+        $path = ForumModel::findPath($thread->forum_id);
+        $path[] = $forum;
         $post_list = ThreadPostModel::with('user')->where('thread_id', $id)
             ->orderBy('grade', 'asc')
             ->orderBy('created_at', 'asc')->page();
-        return $this->show(compact('thread', 'post_list'));
+        return $this->show(compact('thread', 'path', 'post_list'));
     }
 
     public function createAction($title, $content, $forum_id, $classify_id = 0) {

@@ -6,6 +6,7 @@ use Module\CMS\Module;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
+use Zodream\Infrastructure\Support\Html;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Helpers\Tree as TreeHelper;
 
@@ -112,6 +113,55 @@ class FuncHelper {
         });
     }
 
+    /**
+     * 获取分页内容
+     * @param array|null $params
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function contentPage(array $params = null) {
+        if (empty($params)) {
+            $params = [];
+        }
+        $params['page'] = max(intval(app('request')->get('page')), 1);
+        if (!isset($params['per_page'])) {
+            $params['per_page'] = intval(app('request')->get('per_page', 20));
+        }
+        return static::contents($params);
+    }
+
+    public static function location() {
+        $path = static::getOrSet(__FUNCTION__, function () {
+            $path = TreeHelper::getTreeParent(static::channels(), static::$current['channel']);
+            $path[] = static::$current['channel'];
+            return $path;
+        });
+        return implode('', array_map(function ($id) {
+            return Html::a(static::channel($id, 'name'),
+                static::channel($id, 'url'));
+        }, $path));
+    }
+
+    public static function previous($name = null) {
+        $data = static::getOrSet(__FUNCTION__, function () {
+            $cat = static::channel(static::$current['channel'], true);
+            $scene = Module::scene()->setModel($cat->model);
+            return $scene->query()->where('id', '<', static::$current['content'])
+                ->orderBy('id', 'desc')->first();
+        });
+        return static::getContentValue($name, $data, static::$current['channel']);
+    }
+
+    public static function next() {
+        $data = static::getOrSet(__FUNCTION__, function () {
+            $cat = static::channel(static::$current['channel'], true);
+            $scene = Module::scene()->setModel($cat->model);
+            return $scene->query()->where('id', '>', static::$current['content'])
+                ->orderBy('id', 'asc')->first();
+        });
+        return static::getContentValue($name, $data, static::$current['channel']);
+    }
+
     protected static function getChannelId($val, $key = 'name') {
         $data = static::channels();
         foreach ($data as $item) {
@@ -135,6 +185,7 @@ class FuncHelper {
      * @param $id
      * @param null $name
      * @return CategoryModel|string
+     * @throws \Exception
      */
     public static function channel($id, $name = null) {
         if (is_array($id)) {
@@ -144,6 +195,9 @@ class FuncHelper {
         $id = intval($id);
         if ($id < 1) {
             return null;
+        }
+        if ($name === 'url') {
+            return url('./category', ['id' => $id]);
         }
         $data = static::getOrSet(__FUNCTION__, $id, function () use ($id) {
             return CategoryModel::find($id);
@@ -159,6 +213,7 @@ class FuncHelper {
      * @param null|string $name
      * @param integer $category
      * @return array|string
+     * @throws \Exception
      */
     public static function content($id, $name = null, $category = null) {
         if (is_array($id)) {
@@ -180,8 +235,25 @@ class FuncHelper {
                 $scene = Module::scene()->setModel($cat->model);
             return $scene->find($id);
         });
+        return self::getContentValue($name, $category, $data);
+    }
+
+    /**
+     * @param $name
+     * @param $category
+     * @param $data
+     * @return null|string|mixed
+     * @throws \Exception
+     */
+    protected static function getContentValue($name, $data, $category) {
+        if (empty($data)) {
+            return null;
+        }
         if ($name === true) {
             return $data;
+        }
+        if ($name === 'url') {
+            return url('./content', ['id' => $data['id'], 'category' => $category]);
         }
         return isset($data[$name]) ? $data[$name] : null;
     }
@@ -225,6 +297,16 @@ class FuncHelper {
                 static::$index[] = $box;
                 return sprintf('<?php %s=\Module\CMS\Domain\FuncHelper::contents(%s); foreach(%s as $%s):?>', $box, $params, $box, $item);
             }, true)
+            ->registerFunc('contentPage', function ($params = null) {
+                if ($params === -1) {
+                    return '<?php endforeach; ?>';
+                }
+                $i = count(static::$index);
+                $box = '$_contents_page_'.$i;
+                $item = 'content';
+                static::$index[] = $box;
+                return sprintf('<?php %s=\Module\CMS\Domain\FuncHelper::contentPage(%s); foreach(%s as $%s):?>', $box, $params, $box, $item);
+            }, true)
             ->registerFunc('pager', function ($index = 0) {
                 if ($index < 1) {
                     $index = count(static::$index) + $index;
@@ -236,6 +318,9 @@ class FuncHelper {
                 return sprintf('<?=%s->getLink()?>', $tag);
             })
             ->registerFunc('content', '\Module\CMS\Domain\FuncHelper::content')
+            ->registerFunc('location', '\Module\CMS\Domain\FuncHelper::location')
+            ->registerFunc('previous', '\Module\CMS\Domain\FuncHelper::previous')
+            ->registerFunc('next', '\Module\CMS\Domain\FuncHelper::next')
             ->registerFunc('option', '\Module\CMS\Domain\FuncHelper::option');
         return $compiler;
     }

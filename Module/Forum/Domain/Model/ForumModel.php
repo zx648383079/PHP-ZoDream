@@ -3,6 +3,7 @@ namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Html\Tree;
+use Zodream\Helpers\Tree as TreeHelper;
 
 /**
 * Class ForumModel
@@ -60,6 +61,60 @@ class ForumModel extends Model {
     }
 
     public static function tree() {
-        return new Tree(static::query()->all());
+        return new Tree(static::cacheAll());
+    }
+
+    /**
+     * @return static[]
+     * @throws \Exception
+     */
+    public static function cacheAll() {
+	    static $data;
+	    if (!empty($data)) {
+	        return $data;
+        }
+        return $data = static::query()->all();
+    }
+
+    public static function findById($id) {
+	    foreach (static::cacheAll() as $item) {
+	        if ($item->id == $id) {
+	            return $item;
+            }
+        }
+        return null;
+    }
+
+    public static function getAllChildrenId($id) {
+        $data = TreeHelper::getTreeChild(static::cacheAll(), $id);
+        $data[] = $id;
+        return $data;
+    }
+
+    public static function findChildren($id) {
+        $data = [];
+        foreach (static::cacheAll() as $item) {
+            if ($item->parent_id == $id) {
+                $data[] = $item;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * @param $id
+     * @return static[]
+     * @throws \Exception
+     */
+    public static function findPath($id) {
+        $path = TreeHelper::getTreeParent(static::cacheAll(), $id);
+        $data = [];
+        foreach ($path as $id) {
+            $item = static::findById($id);
+            if (!empty($item)) {
+                $data[] = $item;
+            }
+        }
+        return $data;
     }
 }

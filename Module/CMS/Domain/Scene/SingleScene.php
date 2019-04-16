@@ -130,26 +130,26 @@ class SingleScene extends BaseScene {
         list($main, $extend) = $this->filterInput($data, $field_list);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
-        $id = DB::table($this->getMainTable())->insert($main);
+        $id = $this->query()->insert($main);
         $extend['id'] = $id;
-        DB::table($this->getExtendTable())->insert($extend);
+        $this->extendQuery()->insert($extend);
     }
 
     public function update($id, array $data, array $field_list) {
         list($main, $extend) = $this->filterInput($data, $field_list);
         $main['updated_at'] = time();
-        DB::table($this->getMainTable())
+        $this->query()
             ->where('id', $id)->update($main);
         if (!empty($extend)) {
-            DB::table($this->getExtendTable())
+            $this->extendQuery()
                 ->where('id', $id)->update($extend);
         }
     }
 
     public function remove($id) {
-        DB::table($this->getMainTable())
+        $this->query()
             ->where('id', $id)->delete();
-        DB::table($this->getExtendTable())
+        $this->extendQuery()
             ->where('id', $id)->delete();
     }
 
@@ -167,7 +167,7 @@ class SingleScene extends BaseScene {
         if (empty($fields)) {
             $fields = '*';
         }
-        return DB::table($this->getMainTable())->when(!empty($keywords), function ($query) use ($keywords) {
+        return $this->query()->when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('title', 'like', '%'.$keywords.'%');
         })->when($cat_id > 0, function ($query) use ($cat_id) {
             if (is_array($cat_id)) {
@@ -185,7 +185,7 @@ class SingleScene extends BaseScene {
         if ($id < 1) {
             return [];
         }
-        $data = DB::table($this->getMainTable())
+        $data = $this->query()
             ->where('id', $id)->one();
         if (empty($data)) {
             return [];
@@ -194,5 +194,13 @@ class SingleScene extends BaseScene {
             ->one();
         // 主表数据更重要
         return array_merge((array)$extend, $data);
+    }
+
+    public function query() {
+        return DB::table($this->getMainTable());
+    }
+
+    public function extendQuery() {
+        return DB::table($this->getExtendTable());
     }
 }

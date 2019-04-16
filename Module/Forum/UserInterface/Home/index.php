@@ -8,6 +8,16 @@ $this->registerCssFile('@forum.css')
 ?>
 
 <div class="container">
+    <ul class="path">
+        <li>
+            <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li class="active">
+            圈子首页
+        </li>
+    </ul>
+</div>
+
+<div class="container">
     <?php foreach($forum_list as $group):?>
     <div class="forum-group">
         <div class="group-header">

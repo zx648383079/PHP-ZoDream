@@ -2,6 +2,7 @@
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Zodream\Database\Query\Builder;
 use Zodream\Html\Page;
 
 interface SceneInterface {
@@ -69,6 +70,14 @@ interface SceneInterface {
     public function search($keywords, $cat_id, $order = null, $page = 1, $per_page = 20, $fields = null);
 
     public function find($id);
+
+    /**
+     * @return Builder
+     */
+    public function query();
+
+    public function extendQuery();
+
 
 
 
