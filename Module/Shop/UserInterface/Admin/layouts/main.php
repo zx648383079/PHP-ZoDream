@@ -208,6 +208,11 @@ $this->registerCssFile([
                 'fa fa-cog'
             ],
             [
+                '签到设置',
+                './admin/setting/checkin',
+                'fa fa-calendar-check'
+            ],
+            [
                 '支付列表',
                 './admin/payment',
                 'fa fa-list'

@@ -376,4 +376,20 @@ table .goods-info {
     margin-left: 100px;
     padding: 20px 10px; }
 
+.plus-table {
+  width: auto; }
+  .plus-table td input[type="text"] {
+    min-width: 60px !important;
+    width: 60px;
+    text-align: center; }
+  .plus-table td .fa-times {
+    display: block;
+    width: 30px;
+    line-height: 30px; }
+  .plus-table tfoot {
+    background-color: #fff; }
+    .plus-table tfoot .fa {
+      display: block;
+      line-height: 30px; }
+
 /*# sourceMappingURL=shop_admin.css.map */

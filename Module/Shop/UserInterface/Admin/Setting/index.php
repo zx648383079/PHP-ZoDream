@@ -60,6 +60,7 @@ $this->registerJs($js, View::JQUERY_READY);
                    <?=Theme::checkbox(sprintf('option[%s]', $item['id']), $item['default_value'], $item['value'], $item['name'])->setLabel($item['label'])?>
                    <?php elseif ($item['type'] == 'file' || $item['type'] == 'image'):?>
                    <?=Theme::file(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?php elseif ($item['type'] == 'hide'):?>
                    <?php else:?>
                    <?=Theme::text(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
                    <?php endif;?>
@@ -68,7 +69,7 @@ $this->registerJs($js, View::JQUERY_READY);
             <?php endforeach;?>
             <div class="zd-tab-item">
                 <?=Theme::text('field[name]', '', '名称(必填)')?>
-                <?=Theme::select('field[type]', ['group' => '分组', 'text' => '文本', 'textarea' => '多行文本', 'select' => '下拉选择', 'radio' => '单选', 'checkbox' => '多选', 'bool' => '开关', 'image' => '图片', 'file' => '文件'], 'group', '类型')?>
+                <?=Theme::select('field[type]', ['group' => '分组', 'text' => '文本', 'textarea' => '多行文本', 'select' => '下拉选择', 'radio' => '单选', 'checkbox' => '多选', 'bool' => '开关', 'image' => '图片', 'file' => '文件', 'hide' => '隐藏'], 'group', '类型')?>
                 <div class="group-property">
                     <?=Theme::select('field[parent_id]', [$group_list], '', '分组')?>
                     <?=Theme::text('field[code]', '', '别名(必填)')?>

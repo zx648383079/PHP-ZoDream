@@ -967,6 +967,27 @@ function bindSetting(baseUri: string) {
     });
 }
 
+function bindCheckIn() {
+    let box = $('.plus-table').on('click', '.fa-times', function() {
+        if (box.find('tbody tr').length === 1) {
+            return;
+        }
+        $(this).closest('tr').remove();
+    }).on('click', '.fa-plus', function() {
+        box.find('tbody').append(`<tr>
+        <td>
+            <input type="text" name="option[checkin][day][]">
+        </td>
+        <td>
+            <input type="text" name="option[checkin][plus][]">
+        </td>
+        <td>
+            <i class="fa fa-times"></i>
+        </td>
+    </tr>`);
+    });
+}
+
 $(function() {
     $(document).on('click', '[data-type=toggle]', function() {
         let that = $(this);

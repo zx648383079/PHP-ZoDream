@@ -3,6 +3,9 @@ namespace Module\Auth\Domain\Model\Game;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Template\Domain\Model\Base\OptionModel;
+use Zodream\Helpers\Json;
 
 /**
  * Class CheckInModel
@@ -102,14 +105,40 @@ class CheckInModel extends Model {
             $last->getAttributeValue('created_at') > $today - 86400) {
             $running = $last->running + 1;
         }
-        return static::create([
-           'user_id' => $user_id,
-           'type' => 0,
-           'method' => $method,
-           'ip' => app('request')->ip(),
-           'running' => $running,
+        $model = static::create([
+            'user_id' => $user_id,
+            'type' => 0,
+            'method' => $method,
+            'ip' => app('request')->ip(),
+            'running' => $running,
+            'money' => static::getCheckInMoney($running),
             'created_at' => time()
         ]);
+        if ($model && $model->money > 0) {
+            AccountLogModel::change($user_id,
+                AccountLogModel::TYPE_CHECK_IN, 0,
+                $model->money, sprintf('连续签到%s天', $running), 1);
+        }
+        return $model;
+    }
+
+    public static function getCheckInMoney($day) {
+        $data = OptionModel::findCode('checkin');
+        if (empty($data)) {
+            return 0;
+        }
+        $data = Json::decode($data);
+        $money = $data['basic'];
+        if ($data['loop'] > 0) {
+            $day %= $data['loop'];
+            if ($day === 0) {
+                $day = $data['loop'];
+            }
+        }
+        if (isset($data['plus'][$day])) {
+            $money += $data['plus'][$day];
+        }
+        return $money;
     }
 
     /**

@@ -4,11 +4,12 @@ namespace Module\Shop\Service\Admin;
 
 
 use Module\Template\Domain\Model\Base\OptionModel;
+use Zodream\Helpers\Json;
 
 class SettingController extends Controller {
 
     public function indexAction() {
-        $group_list = OptionModel::where('parent_id', 0)->orderBy('position', 'asc', 'id', 'asc')->all();
+        $group_list = OptionModel::where('parent_id', 0)->where('type', '!=', 'hide')->orderBy('position', 'asc', 'id', 'asc')->all();
         return $this->show(compact('group_list'));
     }
 
@@ -79,5 +80,51 @@ class SettingController extends Controller {
         foreach ($data as $id => $value) {
             OptionModel::where('id', $id)->update(compact('value'));
         }
+    }
+
+    public function checkinAction() {
+        if (app('request')->isPost()) {
+            $data = app('request')->get('option.checkin');
+            $plus = [];
+            foreach ($data['day'] as $i => $item) {
+                if (!isset($data['plus'][$i]) || intval($data['plus'][$i]) <= 0 || intval($item) <= 0) {
+                    continue;
+                }
+                $plus[intval($item)] = intval($data['plus'][$i]);
+            }
+            ksort($plus);
+            $value = Json::encode([
+                'basic' => intval($data['basic']),
+                'loop' => intval($data['loop']),
+                'plus' => $plus
+            ]);
+            if (OptionModel::findCode('checkin')) {
+                OptionModel::where('code', 'checkin')->update(compact('value'));
+            } else {
+                OptionModel::create([
+                    'name' => '签到',
+                    'code' => 'checkin',
+                    'parent_id' => '0',
+                    'type' => 'hide',
+                    'visibility' => 0,
+                    'default_value' => '',
+                    'value' => $value,
+                ]);
+            }
+            return $this->jsonSuccess([
+                'refresh' => true
+            ]);
+        }
+        $data = OptionModel::findCode('checkin');
+        if (empty($data)) {
+            $data = [
+                'basic' => 1,
+                'loop' => 0,
+                'plus' => []
+            ];
+        } else {
+            $data = Json::decode($data);
+        }
+        return $this->show(compact('data'));
     }
 }
