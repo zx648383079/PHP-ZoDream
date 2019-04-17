@@ -93,38 +93,20 @@ class SettingController extends Controller {
                 $plus[intval($item)] = intval($data['plus'][$i]);
             }
             ksort($plus);
-            $value = Json::encode([
+            OptionModel::insertOrUpdate('checkin', Json::encode([
                 'basic' => intval($data['basic']),
                 'loop' => intval($data['loop']),
                 'plus' => $plus
-            ]);
-            if (OptionModel::findCode('checkin')) {
-                OptionModel::where('code', 'checkin')->update(compact('value'));
-            } else {
-                OptionModel::create([
-                    'name' => '签到',
-                    'code' => 'checkin',
-                    'parent_id' => '0',
-                    'type' => 'hide',
-                    'visibility' => 0,
-                    'default_value' => '',
-                    'value' => $value,
-                ]);
-            }
+            ]), '签到');
             return $this->jsonSuccess([
                 'refresh' => true
             ]);
         }
-        $data = OptionModel::findCode('checkin');
-        if (empty($data)) {
-            $data = [
-                'basic' => 1,
-                'loop' => 0,
-                'plus' => []
-            ];
-        } else {
-            $data = Json::decode($data);
-        }
+        $data = OptionModel::findCodeJson('checkin', [
+            'basic' => 1,
+            'loop' => 0,
+            'plus' => []
+        ]);
         return $this->show(compact('data'));
     }
 }

@@ -6,27 +6,30 @@ use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Module;
 
 /**
- * 每日签到
+ * 查询用户信息
  * @package Module\WeChat\Domain\Scene
  */
-class CheckInScene extends BaseScene implements SceneInterface {
+class BalanceScene extends BaseScene implements SceneInterface {
 
     public function enter() {
-        $user_id = Module::reply()->getUserId();
-        if ($user_id < 1) {
+        $user = Module::reply()->getUser();
+        if (empty($user)) {
             return new ReplyModel([
                 'type' => ReplyModel::TYPE_TEXT,
                 'content' => '请先绑定账户'
             ]);
         }
-        $model = CheckInModel::checkIn($user_id, CheckInModel::METHOD_WX);
-        return new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
-            'content' => empty($model) ? '今日已签到' : sprintf('签到成功，已连续签到%s天', $model->running)
-        ]);
+        return static::balance();
     }
 
     public function process($content) {
         return;
+    }
+
+    public static function balance() {
+        return new ReplyModel([
+            'type' => ReplyModel::TYPE_TEXT,
+            'content' => sprintf('您的账户余额为 %s', Module::reply()->getUser()->money)
+        ]);
     }
 }

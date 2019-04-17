@@ -21,6 +21,7 @@ class AccountLogModel extends Model {
 
     const TYPE_DEFAULT = 99;
     const TYPE_CHECK_IN = 30;
+    const TYPE_GAME = 40;
 
     public static function tableName() {
         return 'account_log';

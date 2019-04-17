@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Theme;
 use Zodream\Helpers\Str;
 /** @var $this View */
-$this->title = '商品列表';
+$this->title = '商品回收站列表';
 ?>
 <div class="search">
     <form class="form-horizontal" role="form">
@@ -37,8 +37,8 @@ $this->title = '商品列表';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/goods/create')?>">新增商品</a>
-    <a class="btn pull-right" href="<?=$this->url('./admin/goods/trash')?>">回收站</a>
+    <a class="btn btn-success pull-right" data-type="del" data-tip="确认全部删除？" href="<?=$this->url('./admin/goods/clear')?>">全部清空</a>
+    <a class="btn btn-success pull-right" data-type="del" data-tip="确认全部还原？" href="<?=$this->url('./admin/goods/restore')?>">全部还原</a>
 </div>
 
 <table class="table table-hover">
@@ -98,8 +98,8 @@ $this->title = '商品列表';
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/goods/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/goods/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" data-type="del" data-tip="确认还原此商品？" href="<?=$this->url('./admin/goods/restore', ['id' => $item->id])?>">还原</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/goods/delete', ['id' => $item->id, 'trash' => true])?>">删除</a>
                 </div>
             </td>
         </tr>

@@ -3,6 +3,7 @@ namespace Module\Template\Domain\Model\Base;
 
 use Domain\Model\Model;
 use Zodream\Database\Command;
+use Zodream\Helpers\Json;
 
 
 /**
@@ -61,4 +62,46 @@ class OptionModel extends Model {
 	public static function findCode($code) {
 		return static::where('code', $code)->value('value');
 	}
+
+    /**
+     * 获取设置并解码
+     * @param string $code
+     * @param array $default
+     * @return array
+     */
+    public static function findCodeJson($code, $default = []) {
+        $value = static::findCode($code);
+        if (empty($value)) {
+            return $default;
+        }
+        return Json::decode($value);
+    }
+
+    /**
+     * 更新或插入设置
+     * @param string $code
+     * @param static $value
+     * @param callable|string $name
+     * @return integer
+     * @throws \Exception
+     */
+	public static function insertOrUpdate($code, $value, $name) {
+        $id = static::where('code', $code)->value('id');
+        if (!empty($id)) {
+            return static::where('code', $code)->value($value);
+        }
+        $data = is_callable($name) ? call_user_func($name) : [
+            'name' => $name,
+        ];
+        $data = array_merge([
+            'name' => $code,
+            'code' => $code,
+            'parent_id' => '0',
+            'type' => 'hide',
+            'visibility' => 0,
+            'default_value' => '',
+            'value' => $value,
+        ], $data);
+        return static::query()->insert($data);
+    }
 }

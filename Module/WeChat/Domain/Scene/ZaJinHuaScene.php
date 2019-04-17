@@ -1,7 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Scene;
 
-use Module\Auth\Domain\Model\Game\CheckInModel;
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\WeChat\Domain\Game\ZaJinHua;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Module;
@@ -18,11 +18,20 @@ use Module\WeChat\Module;
 class ZaJinHuaScene extends BaseScene implements SceneInterface {
 
     public function enter() {
+        if (Module::reply()->getUserId() < 1) {
+            return new ReplyModel([
+                'type' => ReplyModel::TYPE_TEXT,
+                'content' => '请先绑定账户'
+            ]);
+        }
         $this->save();
         return $this->beginTip();
     }
 
     public function process($content) {
+        if ($content == '余额') {
+            return BalanceScene::balance();
+        }
         if (in_array($content, ['退出', 'exit'])) {
             $this->leave();
             return new ReplyModel([
@@ -46,6 +55,12 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
             $user *= 2;
         }
         if (in_array($content, ['跟', '跟注'])) {
+            if (!$this->changeMoney($user, '跟注')) {
+                return new ReplyModel([
+                    'type' => ReplyModel::TYPE_TEXT,
+                    'content' => '您的账户余额不足，请重新选择'
+                ]);
+            }
             $this->pool += $system + $user;
             return $this->playTip();
         }
@@ -59,6 +74,12 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
             ]);
         }
         if (in_array($content, ['比牌', '开', '开牌'])) {
+            if (!$this->changeMoney($user * 2, '开牌')) {
+                return new ReplyModel([
+                    'type' => ReplyModel::TYPE_TEXT,
+                    'content' => '您的账户余额不足，请重新选择'
+                ]);
+            }
             $this->pool += $user * 2;
             return $this->end();
         }
@@ -75,6 +96,12 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
                 'content' => sprintf('请输入您要加注的金额：(必须大于%d)', $user)
             ]);
         }
+        if (!$this->changeMoney($money, '加注')) {
+            return new ReplyModel([
+                'type' => ReplyModel::TYPE_TEXT,
+                'content' => '您的账户余额不足，请重新选择'
+            ]);
+        }
         $this->min = $this->see ? $money / 2 : $money;
         $this->pool += $money + $this->min;
         return $this->playTip();
@@ -85,6 +112,7 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
         $tip = '您输了，请再接再厉';
         if (!$game->compare($this->system, $this->user)) {
             $tip = sprintf('恭喜，您获得了%s', $this->pool);
+            $this->changeMoney($this->pool, '获胜');
         }
         $tip = sprintf('%s！您的牌为: %s，庄家的牌为：%s', $tip,
             implode('', $this->user), implode('', $this->system));
@@ -107,6 +135,12 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
         $money = intval($content);
         if ($money <= 0) {
             return $this->beginTip();
+        }
+        if (!$this->changeMoney($this->pool, '加入底注')) {
+            return new ReplyModel([
+                'type' => ReplyModel::TYPE_TEXT,
+                'content' => '您的账户余额不足，请重新选择'
+            ]);
         }
         $game = new ZaJinHua();
         list($system, $user) = $game->assign($game->get());
@@ -133,5 +167,10 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
             'type' => ReplyModel::TYPE_TEXT,
             'content' => '请输入底注：500/1000/2000'
         ]);
+    }
+
+    protected function changeMoney($money, $remark) {
+        return AccountLogModel::change(Module::reply()->getUserId(),
+            AccountLogModel::TYPE_GAME, 0, $money, '【炸金花】'.$remark, 1);
     }
 }

@@ -19,7 +19,7 @@ use Zodream\Helpers\Json;
 
 class GoodsController extends Controller {
 
-    public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0) {
+    public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0, $trash = false) {
         $model_list = GoodsModel::with('category', 'brand')
             ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
@@ -29,10 +29,18 @@ class GoodsController extends Controller {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($brand_id), function ($query) use ($brand_id) {
                 $query->where('brand_id', intval($brand_id));
+            })->when($trash, function ($query) {
+                $query->where('deleted_at', '>', 0);
+            }, function ($query) {
+                $query->where('deleted_at', 0);
             })->orderBy('id', 'desc')->page();
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $brand_list = BrandModel::select('id', 'name')->all();
         return $this->show(compact('model_list', 'cat_list', 'brand_list', 'keywords', 'cat_id', 'brand_id'));
+    }
+
+    public function trashAction($keywords = null, $cat_id = 0, $brand_id = 0) {
+        return $this->indexAction($keywords, $cat_id, $brand_id, true);
     }
 
     public function createAction() {
@@ -69,8 +77,33 @@ class GoodsController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
-        GoodsModel::where('id', $id)->delete();
+    public function deleteAction($id, $trash = false) {
+        if ($trash) {
+            GoodsModel::where('deleted_at', '>', 0)
+                ->where('id', $id)->delete();
+        } else {
+            GoodsModel::where('id', $id)->update([
+                'deleted_at' => time()
+            ]);
+        }
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('goods')
+        ]);
+    }
+
+    public function clearAction() {
+        GoodsModel::where('deleted_at', '>', 0)->delete();
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('goods')
+        ]);
+    }
+
+    public function restoreAction($id = 0) {
+        GoodsModel::where('deleted_at', '>', 0)->when($id > 0, function ($query) use ($id) {
+            $query->where('id', intval($id));
+        })->update([
+            'deleted_at' => 0
+        ]);
         return $this->jsonSuccess([
             'url' => $this->getUrl('goods')
         ]);

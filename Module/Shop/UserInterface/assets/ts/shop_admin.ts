@@ -967,6 +967,18 @@ function bindSetting(baseUri: string) {
     });
 }
 
+function bindDatePicker(start: string = 'start_at', end: string = 'end_at', format: string = 'yyyy-mm-dd') {
+    let startBox = $('[name='+ start +']').datetimer({
+        format
+    });
+    if (end) {
+        $('[name='+ end +']').datetimer({
+            format,
+            min: startBox
+        });
+    }
+}
+
 function bindCheckIn() {
     let box = $('.plus-table').on('click', '.fa-times', function() {
         if (box.find('tbody tr').length === 1) {

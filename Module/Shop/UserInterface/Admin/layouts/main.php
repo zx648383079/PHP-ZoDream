@@ -198,6 +198,18 @@ $this->registerCssFile([
         ],
     ],
     [
+        '插件',
+        false,
+        'fa fa-plug',
+        [
+            [
+                '淘宝客',
+                './admin/plugin/tbk',
+                'fa fa-list'
+            ],
+        ],
+    ],
+    [
         '商城设置',
         false,
         'fa fa-cogs',
