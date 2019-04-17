@@ -39,11 +39,11 @@ class MenuModel extends EditorModel {
         return [
             'id' => 'Id',
             'wid' => 'Wid',
-            'name' => 'Name',
+            'name' => '菜单名',
             'type' => 'Type',
             'content' => 'Content',
             'pages' => 'Pages',
-            'parent_id' => 'Parent Id',
+            'parent_id' => '上级菜单',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

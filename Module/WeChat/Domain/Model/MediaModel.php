@@ -9,11 +9,17 @@ use Domain\Model\Model;
  * @property integer $id
  * @property integer $wid
  * @property string $type
+ * @property integer $material_type
  * @property string $title
+ * @property integer $thumb
+ * @property integer $show_cover
+ * @property integer $open_comment
+ * @property integer $only_comment
  * @property string $content
  * @property integer $parent_id
  * @property string $media_id
- * @property string $result
+ * @property string $url
+ * @property integer $expired_at
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -45,11 +51,11 @@ class MediaModel extends Model {
     /**
      * 临时素材
      */
-    const MATERIAL_TEMPORARY = 'tomporary';
+    const MATERIAL_TEMPORARY = 0;
     /**
      * 永久素材
      */
-    const MATERIAL_PERMANENT = 'permanent';
+    const MATERIAL_PERMANENT = 1;
     /**
      * 素材类型
      * @var array
@@ -60,14 +66,7 @@ class MediaModel extends Model {
         self::TYPE_VOICE => '语音',
         self::TYPE_VIDEO => '视频',
     ];
-    /**
-     * 素材统称
-     * @var array
-     */
-    public static $mediaTypes = [
-        self::TYPE_MEDIA => '媒体素材',
-        self::TYPE_NEWS => '图文素材'
-    ];
+
     /**
      * 素材类别
      * @var array
@@ -88,11 +87,17 @@ class MediaModel extends Model {
         return [
             'wid' => 'required|int',
             'type' => 'required|string:0,10',
+            'material_type' => 'int:0,9',
             'title' => 'string:0,200',
+            'thumb' => 'int',
+            'show_cover' => 'int:0,9',
+            'open_comment' => 'int:0,9',
+            'only_comment' => 'int:0,9',
             'content' => '',
             'parent_id' => 'int',
             'media_id' => 'required|string:0,100',
-            'result' => 'required',
+            'url' => 'string:0,255',
+            'expired_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -102,14 +107,21 @@ class MediaModel extends Model {
         return [
             'id' => 'Id',
             'wid' => 'Wid',
-            'type' => 'Type',
-            'title' => 'Title',
+            'type' => '类型',
+            'material_type' => '素材类别',
+            'title' => '素材标题',
+            'thumb' => '封面',
+            'show_cover' => '显示封面',
+            'open_comment' => '评论',
+            'only_comment' => '评论人',
             'content' => 'Content',
             'parent_id' => 'Parent Id',
             'media_id' => 'Media Id',
-            'result' => 'Result',
+            'url' => 'Url',
+            'expired_at' => 'Expired At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
+
 }

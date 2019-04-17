@@ -163,11 +163,18 @@ class CreateWeChatTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
             $table->set('type')->varchar(10)->notNull()->comment('素材类型');
+            $table->set('material_type')->bool()->defaultVal(MediaModel::MATERIAL_PERMANENT)
+                ->comment('素材类别:永久/临时');
             $table->set('title')->varchar(200)->comment('素材标题');
+            $table->set('thumb')->int()->defaultVal(0)->comment('图文的封面');
+            $table->set('show_cover')->bool()->defaultVal(0)->comment('显示图文的封面');
+            $table->set('open_comment')->bool()->defaultVal(0)->comment('图文是否可以评论');
+            $table->set('only_comment')->bool()->defaultVal(0)->comment('图文可以评论的人');
             $table->set('content')->text()->comment('素材内容');
             $table->set('parent_id')->int()->comment('图文父id');
             $table->set('media_id')->varchar(100)->notNull()->comment('素材ID');
-            $table->set('result')->text()->notNull()->comment('微信返回数据');
+            $table->set('url')->varchar()->defaultVal('')->comment('图片的url');
+            $table->timestamp('expired_at')->comment('临时素材的过期时间');
             $table->timestamps();
         });
     }

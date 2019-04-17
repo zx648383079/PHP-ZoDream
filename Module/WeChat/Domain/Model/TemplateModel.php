@@ -49,10 +49,10 @@ class TemplateModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'type' => 'Type',
-            'category' => 'Category',
-            'name' => 'Name',
-            'content' => 'Content',
+            'type' => '类型',
+            'category' => '分类',
+            'name' => '名称',
+            'content' => '内容',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

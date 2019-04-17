@@ -1,46 +1,130 @@
-.tab-box .tab-header {
-  margin: 0;
-  padding: 0; }
-  .tab-box .tab-header > li {
+.page-action {
+  text-align: right; }
+  .page-action a {
     display: inline-block;
-    width: 20%;
-    line-height: 30px;
-    text-align: center;
-    box-sizing: border-box; }
-    .tab-box .tab-header > li.active {
-      border-bottom: 3px solid #767676; }
+    padding: 5px 10px;
+    background: #97CCFE;
+    min-width: 100px;
+    text-align: center; }
 
-.tab-box .tab-body > div {
-  display: none; }
-  .tab-box .tab-body > div.active {
-    display: block; }
-  .tab-box .tab-body > div .editor-box {
-    width: 100%;
-    height: 300px;
+#table-box select {
+  height: auto;
+  display: block;
+  min-width: 200px; }
+
+.wx-editor .zd-tab-head .zd-tab-item {
+  width: 80px; }
+
+.wx-editor textarea {
+  width: 100%;
+  height: 100px; }
+
+.form-inline .input-group select {
+  min-width: 120px; }
+
+.form-inline .input-group .file-input {
+  display: inline-block; }
+  .form-inline .input-group .file-input button {
+    background: #97CCFE;
+    min-width: 70px;
+    padding: 0 30px;
+    border: none;
+    display: inline-block;
+    height: 30px; }
+
+table .active {
+  background: #f00;
+  color: #fff;
+  padding: 0 10px;
+  display: inline-block;
+  line-height: 30px; }
+
+.tree .tree-item {
+  position: relative;
+  line-height: 30px; }
+  .tree .tree-item .tree-action {
+    float: right; }
+  .tree .tree-item .tree-children {
+    padding-left: 25px; }
+
+.wx-editor .media-box .upload-box {
+  text-align: center; }
+
+.wx-editor .media-box .input-group input {
+  width: 100%; }
+
+.wx-editor .media-box .input-group.inline-input-group select {
+  width: 20%; }
+
+.wx-editor .media-box .input-group.inline-input-group input {
+  width: 70%; }
+
+.wx-editor .media-box .media-grid {
+  max-height: 200px;
+  overflow-y: auto; }
+  .wx-editor .media-box .media-grid li {
+    list-style: none;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 80px;
+    height: 80px; }
+    .wx-editor .media-box .media-grid li img {
+      width: 100%;
+      height: 100%; }
+    .wx-editor .media-box .media-grid li.active, .wx-editor .media-box .media-grid li:hover {
+      border: 1px solid #97CCFE; }
+
+.wx-editor .media-box .media-list li {
+  list-style: none;
+  padding: 2px 10px;
+  border-bottom: 1px solid #97CCFE;
+  cursor: default; }
+  .wx-editor .media-box .media-list li.active, .wx-editor .media-box .media-list li:hover {
+    background: #97CCFE; }
+
+.wx-editor .zd-tab-head .zd-tab-item {
+  width: auto;
+  min-width: 80px; }
+
+.editor-box .editor-template-box {
+  width: 520px;
+  float: left;
+  height: 800px;
+  position: relative; }
+  .editor-box .editor-template-box .template-menu {
+    width: 80px; }
+    .editor-box .editor-template-box .template-menu li {
+      text-align: center;
+      line-height: 30px;
+      list-style: none;
+      cursor: pointer; }
+      .editor-box .editor-template-box .template-menu li.active {
+        background: #333;
+        color: #fff; }
+  .editor-box .editor-template-box .template-box {
+    overflow-x: hidden;
+    height: 800px;
+    width: 440px;
+    position: absolute;
+    top: 0;
+    left: 80px;
+    border: 4px solid #D8D8D8;
     overflow-y: auto;
-    overflow-x: hidden; }
-  .tab-box .tab-body > div .row {
-    height: 300px; }
-    .tab-box .tab-body > div .row .col-5 {
-      height: 300px;
-      width: 50%;
-      float: left;
-      border: 1px dotted #767676;
-      box-sizing: border-box; }
+    padding: 0 5px; }
+    .editor-box .editor-template-box .template-box .templdate-list li {
+      list-style: none outside none;
+      margin-top: 15px;
+      position: relative;
+      cursor: pointer;
+      overflow: visible;
+      min-height: 64px; }
+      .editor-box .editor-template-box .template-box .templdate-list li:hover {
+        box-shadow: #ef7060 0px 0px 5px 1px; }
 
-.list-box {
-  margin: 0;
-  padding: 0; }
-  .list-box > li {
-    width: 150px;
-    line-height: 30px;
-    display: inline-block;
-    overflow: hidden;
-    box-sizing: border-box; }
-    .list-box > li img {
-      max-width: 100%;
-      max-height: 120px; }
-    .list-box > li.selected {
-      border: 1px solid #767676; }
+.editor-box .editor {
+  width: 440px;
+  height: 800px;
+  float: left;
+  border: 4px dotted #D8D8D8; }
 
 /*# sourceMappingURL=wechat.css.map */

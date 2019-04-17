@@ -73,7 +73,12 @@ $this->registerCssFile([
                 '视频',
                 ['./admin/media', 'type' => 'video'],
                 'fa fa-video',
-            ]
+            ],
+            [
+                '图文模板管理',
+                ['./admin/template'],
+                'fa fa-list',
+            ],
         ]
     ],
     [

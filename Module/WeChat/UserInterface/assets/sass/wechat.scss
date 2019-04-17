@@ -127,6 +127,12 @@ table {
             }
         }
     }
+    .zd-tab-head {
+        .zd-tab-item {
+            width: auto;
+            min-width: 80px;
+        }
+    }
 }
 
 .editor-box {

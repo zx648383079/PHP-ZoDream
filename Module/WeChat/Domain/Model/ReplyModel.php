@@ -57,9 +57,10 @@ class ReplyModel extends EditorModel {
         return [
             'id' => 'ID',
             'wid' => '所属微信公众号ID',
-            'event' => 'Event',
-            'keywords' => 'Keywords',
-            'match' => 'Match',
+            'event' => '事件',
+            'event_name' => '事件名',
+            'keywords' => '关键字',
+            'match' => '匹配方式',
             'content' => 'Content',
             'type' => 'Type',
             'created_at' => 'Created At',
