@@ -218,13 +218,13 @@ class MessageReply {
         }
         $model_list = MediaModel::where('id', $reply->content)
             ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
-        $data = [];
         foreach ($model_list as $item) {
-
+            /** @var $item MediaModel */
+            $this->response->addNews($item->title, $item->title,
+                MediaModel::where('type', MediaModel::TYPE_IMAGE)
+                ->where('content', $item->thumb)->first()->url);
         }
-        return $this->response->setNews([
-            'item' => $data
-        ]);
+        return $this->response;
     }
 
     /**
