@@ -2,7 +2,9 @@
 namespace Module\WeChat\Domain\Model;
 
 use Domain\Model\Model;
-
+use Zodream\ThirdParty\WeChat\Media;
+use Zodream\ThirdParty\WeChat\NewsItem;
+use Exception;
 
 /**
  * 素材存储表
@@ -89,7 +91,7 @@ class MediaModel extends Model {
             'type' => 'required|string:0,10',
             'material_type' => 'int:0,9',
             'title' => 'string:0,200',
-            'thumb' => 'int',
+            'thumb' => 'string:0,200',
             'show_cover' => 'int:0,9',
             'open_comment' => 'int:0,9',
             'only_comment' => 'int:0,9',
@@ -123,5 +125,102 @@ class MediaModel extends Model {
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function getThumbMediaId(Media $api) {
+        $model = static::where('type', self::TYPE_IMAGE)
+            ->where('content', $this->thumb)->first();
+        if (!$model) {
+            $model = new static([
+                'title' => $this->title.'-封面',
+                'material_type' => self::MATERIAL_PERMANENT,
+                'type' => self::TYPE_IMAGE,
+                'content' => $this->thumb
+            ]);
+        }
+        if ($model->media_id) {
+            return $model->media_id;
+        }
+        $this->async($api);
+        return $model->media_id;
+    }
+
+    public function getContent(Media $api) {
+        $content = preg_replace('/src=["\']?([^\s"\'>]+)/', function ($match) use ($api) {
+            return str_replace($match[1], $this->getImgUrl($api, $match[1]), $match[0]);
+        }, $this->content);
+        return preg_replace('/url\(["\']?([^\s"\'>)]+)/', function ($match) use ($api) {
+            return str_replace($match[1], $this->getImgUrl($api, $match[1]), $match[0]);
+        }, $content);
+    }
+
+    public function getImgUrl(Media $api, $path) {
+        if (strpos($path, 'data:') >= 0) {
+            return $path;
+        }
+        if (strpos($path, 'qlogo.cn') > 0) {
+            return $path;
+        }
+        return $api->uploadImg($path);
+    }
+
+    public function async(Media $api) {
+        if ($this->media_id &&
+            ($this->material_type == self::MATERIAL_PERMANENT || $this->expired_at > time())) {
+            return true;
+        }
+        if ($this->type == self::TYPE_NEWS) {
+            return $this->asyncNews($api);
+        }
+        $file = public_path($this->content);
+        if ($this->material_type != self::MATERIAL_PERMANENT) {
+            $res = $api->uploadTemp($file, $this->type);
+        } else {
+            $res = $api->addMedia($file, $this->type);
+        }
+        if (isset($res['media_id'])) {
+            $this->media_id = $res['media_id'];
+        }
+        if ($res['url']) {
+            $this->url = $res['url'];
+        }
+        return true;
+    }
+
+    public function asyncNews(Media $api) {
+        if ($this->parent_id > 0) {
+            return false;
+        }
+        $news = new NewsItem();
+        $news->setArticle(static::converterNews($this, $api));
+        $child = static::where('parent_id', $this->id)->get();
+        foreach ($child as $item) {
+            $news->setArticle(static::converterNews($item, $api));
+        }
+        $media_id = $api->addNews($news);
+        if (empty($media_id)) {
+            return false;
+        }
+        $this->media_id = $media_id;
+        $this->save();
+        return true;
+    }
+
+    public static function converterNews(MediaModel $model, Media $api) {
+        $news = new NewsItem();
+        // 处理封面
+        $thumb = $model->getThumbMediaId($api);
+        if (empty($thumb)) {
+            throw new Exception('封面上传失败');
+        }
+        $news->setThumb($thumb);
+        // 处理内容图片路径
+        $news->setContent($model->getContent($api));
+        return $news->setTitle($model->title)
+            ->setShowCover($model->show_cover)
+            ->setOnlyFansCanComment($model->only_comment)
+            ->setNeedOpenComment($model->open_comment);
+    }
+
+
 
 }

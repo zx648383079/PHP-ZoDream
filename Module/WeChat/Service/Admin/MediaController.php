@@ -62,8 +62,9 @@ class MediaController extends Controller {
             ($model->material_type == MediaModel::MATERIAL_PERMANENT || $model->expired_at > time())) {
             return $this->jsonFailure('不能重复创建');
         }
-        if ($model->material_type == MediaModel::MATERIAL_PERMANENT) {
-
+        if (!$model->async(WeChatModel::find($this->weChatId())
+            ->sdk(Media::class))) {
+            return $this->jsonFailure('创建失败');
         }
         return $this->jsonSuccess([
             'refresh' => true

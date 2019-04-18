@@ -37,7 +37,7 @@ $this->title = '资源管理';
                 <td><?=$item->type?></td>
                 <td><?=$item->media_id ? '已同步' : '未同步'?></td>
                 <td>
-                    <?php if($item->media_id):?>
+                    <?php if(empty($item->media_id) && $item->parent_id < 1):?>
                     <a href="<?=$this->url('./admin/media/async', ['id' => $item->id])?>">同步</a>
                     <?php endif;?>
                     <a href="<?=$this->url('./admin/media/edit', ['id' => $item->id])?>">编辑</a>

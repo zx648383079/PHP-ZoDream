@@ -29,6 +29,7 @@ class SiteCrawl {
         'www.biquge.cc' => BiQuGeC::class,
         'www.biquge.lu' => BiQuGeLu::class,
         'www.biquge.cm' => MBiQuGe::class,
+        'www.xbiquge.la' => MBiQuGe::class,
         'www.xxbiquge.com' => XBiQuGe::class,
         'www.sjtxt.la' => Sj::class,
         'www.haohunhun.com' => Hun::class,
@@ -156,10 +157,10 @@ class SiteCrawl {
      */
     public static function getSpider($host) {
         $host = $host instanceof Uri ? $host->getHost() : $host;
-        if (!isset(self::$maps[$host])) {
-            return new AutoSpider();
+        if (isset(self::$maps[$host])) {
+            $class = self::$maps[$host];
+            return new $class;
         }
-        $class = self::$maps[$host];
-        return new $class;
+        return new AutoSpider();
     }
 }

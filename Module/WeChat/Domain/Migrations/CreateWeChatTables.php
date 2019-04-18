@@ -166,7 +166,7 @@ class CreateWeChatTables extends Migration {
             $table->set('material_type')->bool()->defaultVal(MediaModel::MATERIAL_PERMANENT)
                 ->comment('素材类别:永久/临时');
             $table->set('title')->varchar(200)->comment('素材标题');
-            $table->set('thumb')->int()->defaultVal(0)->comment('图文的封面');
+            $table->set('thumb')->varchar(200)->defaultVal('')->comment('图文的封面');
             $table->set('show_cover')->bool()->defaultVal(0)->comment('显示图文的封面');
             $table->set('open_comment')->bool()->defaultVal(0)->comment('图文是否可以评论');
             $table->set('only_comment')->bool()->defaultVal(0)->comment('图文可以评论的人');
