@@ -117,7 +117,7 @@ class MediaModel extends Model {
             'open_comment' => '评论',
             'only_comment' => '评论人',
             'content' => 'Content',
-            'parent_id' => 'Parent Id',
+            'parent_id' => '主素材',
             'media_id' => 'Media Id',
             'url' => 'Url',
             'expired_at' => 'Expired At',

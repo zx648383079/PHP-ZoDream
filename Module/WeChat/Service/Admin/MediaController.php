@@ -14,10 +14,16 @@ class MediaController extends Controller {
         ];
     }
 
-    public function indexAction($type = null) {
-        $model_list = MediaModel::when(!empty($type), function ($query) use ($type) {
+    public function indexAction($keywords = null, $type = null) {
+        $model_list = MediaModel::where('wid', $this->weChatId())
+            ->when(!empty($type), function ($query) use ($type) {
             $query->where('type', $type);
-        })->page();
+        })->when(!empty($keywords), function ($query) {
+            MediaModel::search($query, 'title');
+            })->page();
+        if (app('request')->isAjax()) {
+            return $this->jsonSuccess($model_list);
+        }
         return $this->show(compact('model_list', 'type'));
     }
 
@@ -30,7 +36,13 @@ class MediaController extends Controller {
         if ($id < 1) {
             $model->type = $type === 'media' ? '' : MediaModel::TYPE_NEWS;
         }
-        return $this->show($model->type === MediaModel::TYPE_NEWS ? 'edit'  : 'editMedia', compact('model'));
+        if ($model->type !== MediaModel::TYPE_NEWS) {
+            return $this->show('editMedia', compact('model'));
+        }
+        $model_list = MediaModel::where('wid', $this->weChatId())
+            ->where('id', '<>', intval($id))->where('parent_id', 0)
+            ->get('id, title');
+        return $this->show('edit', compact('model', 'model_list'));
     }
 
     public function saveAction() {

@@ -14,7 +14,7 @@ if (!is_array($tab_id)) {
 }
 $type_id = $model->getEditor('type');
 $scene = $model->getEditor('scene');
-$this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id : $tab_id[0]));
+$this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? $type_id : $tab_id[0], $this->url('./admin/')));
 ?>
 <div class="zd-tab wx-editor">
     <div class="zd-tab-head">
@@ -37,13 +37,16 @@ $this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id
             <div class="row">
                 <div class="col-xs-6">
                     <div class="upload-box">
+                        <?php if($model->getEditor('media_id')):?>
+                        <?=MediaModel::find($model->getEditor('media_id'))->title?>
+                        <?php else:?>
                         <img src="/assets/images/upload.png" alt="" >
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="col-xs-6">
                     <div class="input-group inline-input-group">
                         <select id="media_type">
-                            <option value="">请选择</option>
                             <?php foreach(MediaModel::$types as $key => $item):?>
                                <option value="<?=$key?>"><?=$item?></option>
                             <?php endforeach;?>
@@ -70,7 +73,11 @@ $this->registerJs(sprintf('bindTab(%s);', in_array($type_id, $tab_id) ? $type_id
             <div class="row">
                 <div class="col-xs-6">
                     <div class="upload-box">
+                        <?php if($model->getEditor('news_id')):?>
+                        <?=MediaModel::find($model->getEditor('news_id'))->title?>
+                        <?php else:?>
                         <img src="/assets/images/upload.png" alt="" >
+                        <?php endif;?>
                     </div>
                 </div>
                 <div class="col-xs-6">

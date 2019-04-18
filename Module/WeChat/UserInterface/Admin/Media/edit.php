@@ -20,6 +20,7 @@ $this->registerJs($js);
 
 <?=Form::open($model, './admin/media/save')?>
     <?=Form::text('title', true)?>
+    <?=Form::select('parent_id', [$model_list, 'id', 'title', ['无']])?>
     <?=Form::text('thumb', true)?>
     <?=Form::radio('show_cover', ['不显示', '显示'])?>
     <?=Form::radio('open_comment', ['不打开', '打开'])?>

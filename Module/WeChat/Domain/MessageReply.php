@@ -3,6 +3,7 @@ namespace Module\WeChat\Domain;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -199,6 +200,31 @@ class MessageReply {
             $instance = new $name();
             return $this->inputResponse($instance->enter());
         }
+        if ($type === ReplyModel::TYPE_MEDIA) {
+            $model = MediaModel::find($reply->content);
+            if (!$model->media_id) {
+                return $this->response->setText('内容有误');
+            }
+            if ($model->type === MediaModel::TYPE_IMAGE) {
+                return $this->response->setImage($model->media_id);
+            }
+            if ($model->type === MediaModel::TYPE_VIDEO) {
+                return $this->response->setVideo($model->media_id, $model->title);
+            }
+            if ($model->type === MediaModel::TYPE_VOICE) {
+                return $this->response->setVoice($model->media_id);
+            }
+            return $this->response->setText('内容有误');
+        }
+        $model_list = MediaModel::where('id', $reply->content)
+            ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
+        $data = [];
+        foreach ($model_list as $item) {
+
+        }
+        return $this->response->setNews([
+            'item' => $data
+        ]);
     }
 
     /**
