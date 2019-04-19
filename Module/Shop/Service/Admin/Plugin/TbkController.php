@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Admin\Plugin;
 
 
+use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Service\Admin\Controller;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\ThirdParty\ALi\TaoBaoKe;
@@ -19,11 +20,33 @@ class TbkController extends Controller {
     }
 
     public function importAction() {
-//        $data = [];
-//        if (!empty($keyword)) {
-//            $data = $this->getApi()->links($keyword, $page);
-//        }
-        return $this->show();
+        if (!app('request')->isPost()) {
+            return $this->show();
+        }
+        $adzone_id = app('request')->get('adzone_id');
+        $data = $this->getApi()->links(
+            $adzone_id,
+            app('request')->get('start_time'),
+            app('request')->get('end_time'));
+        if (empty($data)) {
+            return $this->jsonFailure('没有商品');
+        }
+        foreach ($data as $item) {
+            GoodsModel::create([
+                'cat_id' => 0,
+                'brand_id' => 0,
+                'name' => $item['title'],
+                'series_number' => sprintf('tbk_%s_%s', $adzone_id, $item['num_iid']),
+                'thumb' => $item['pic_url'],
+                'picture' => $item['pic_url'],
+                'brief' => sprintf('开始时间：%s 结束时间：%s', $item['start_time'], $item['end_time']),
+                'content' => $item['click_url'],
+                'price' => $item['zk_final_price'],
+                'market_price' => $item['reserve_price'],
+                'stock' => $item['total_amount'],
+            ]);
+        }
+        return $this->jsonSuccess($data);
     }
 
 
