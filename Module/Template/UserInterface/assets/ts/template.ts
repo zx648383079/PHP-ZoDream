@@ -152,6 +152,59 @@ class Page {
             that.refreshWeight($(this).closest('.weight-edit-grid'));
         });
         this.weightBox.bindDrag();
+        this.bindRule();
+    }
+
+    /**
+     * bindRule
+     */
+    public bindRule() {
+        let line: JQuery,
+            mode: number = 0;
+        let ruleBox = this.element.find('.rule-box').on('mousedown', '.rule-lines div', function(e) {
+            e.stopPropagation();
+            mode = 0;
+            line = $(this);
+        }).on('mousedown', '.top-rule', function() {
+            mode = 1;
+        }).on('mousemove', '.top-rule', function() {
+            if (mode === 1) {
+                line = $('<div class="h-line"></div>');
+                ruleBox.find('.rule-lines').append(line);
+                mode = 0;
+            }
+        }).on('mousedown', '.left-rule', function() {
+            mode = 2;
+        }).on('mousemove', '.left-rule', function() {
+            if (mode === 2) {
+                line = $('<div class="v-line"></div>');
+                ruleBox.find('.rule-lines').append(line);
+                mode = 0;
+            }
+        });
+        $(document).on('mousemove', function(e: any) {
+            if (!line) {
+                return;
+            }
+            if (line.hasClass('v-line')) {
+                line.css('left', e.clientX + 'px');
+                return;
+            }
+            let top = e.clientY - ruleBox.offset().top;
+            line.css('top', top + 'px');
+        }).on('mouseup', function() {
+            if (!line) {
+                return;
+            }
+            if (line.hasClass('v-line')) {
+                line.offset().left < 20 && line.remove();
+            } else {
+                (line.offset().top - ruleBox.offset().top) < 20 && line.remove();
+            }
+            line = undefined;
+            
+            
+        });
     }
 
     /**
@@ -211,6 +264,9 @@ class Page {
 
     public resize() {
         this.box.height($(window).height() - 57);
+        this.drawRule(this.element.find('.top-rule'), 20);
+        
+        this.drawRule(this.element.find('.left-rule'), 20);
     }
 
     public html(): string {
@@ -276,6 +332,49 @@ class Page {
         data['page_id'] = this.id;
         postJson(this.baseUri + path, data, cb);
         return this;
+    }
+
+    /**
+     * drawRule
+     */
+    public drawRule(box: JQuery, start: number, scale: number = 1) {
+        let width = box.width(), height = box.height();
+        let canvas: HTMLCanvasElement = box[0] as HTMLCanvasElement;
+        canvas.width = width;
+        canvas.height = height;
+        let context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        let direct = canvas.width > canvas.height; // true 横向
+        let length = direct ? canvas.width : canvas.height;
+        
+        for (let i = 0; i < length; i+= 10) {
+            let real = i - start;
+            let len = real % 50 === 0 ? 10 : 5; 
+            this.drawLine(context, direct,  i, len, len > 5 ? real.toString() : undefined);
+        }
+    }
+
+    private drawLine(context: CanvasRenderingContext2D, direct: boolean, i: number, length: number, tip?: string) {
+        if (direct) {
+            context.moveTo(i, 20 - length);
+            context.lineTo(i, 20);
+        } else {
+            context.moveTo(20 - length, i);
+            context.lineTo(20, i);
+        }
+        context.lineWidth = 1;
+        context.strokeStyle = "red";
+        context.stroke();
+        if (!tip) {
+            return;
+        }
+        context.font = '6px Microsoft YaHei';
+        if (direct) {
+            context.fillText(tip, i- 5, 10);
+        } else {
+            context.fillText(tip, 0, i + 3);
+        }
+        
     }
 }
 

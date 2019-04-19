@@ -124,6 +124,65 @@ $sizes: (320: 568,
     bottom: 0;
     top: 0;
     min-height: 500px;
+    background-color: #fcc;
+    padding: 20px 0 0 20px;
+    .rule-box {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        .top-rule {
+            top: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            height: 20px;
+            width: 100%;
+            background-color: #ccc;
+        }
+        .left-rule {
+            width: 20px;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            position: absolute;
+            height: 100%;
+            background-color: #ccc;
+        }
+        .rule-tools {
+            position: fixed;
+            bottom: 0;
+            line-height: 50px;
+            font-size: 30px;
+            background: #fff;
+            border: 1px solid #ccc;
+            left: 50%;
+            margin-left: -90px;
+            i {
+                cursor: pointer;
+            }
+        }
+        .rule-lines {
+            .h-line,
+            .v-line {
+                border-top: 1px dotted #47f;
+                border-right: 1px dotted #47f;
+                position: absolute;
+            }
+            .h-line {
+                cursor: n-resize;
+                width: 100%;
+                height: 1px;
+            }
+            .v-line {
+                cursor: ew-resize;
+                width: 1px;
+                top: 0;
+                bottom: 0;
+            }
+        }
+    }
 
     #mainGrid {
         width: 100%;
@@ -223,6 +282,8 @@ $sizes: (320: 568,
         @include size($width, $height)
     }
 }
+
+
 
 .ui-draggable-dragging {
 

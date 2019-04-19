@@ -99,6 +99,19 @@ $this->registerCssFile('@template.css')
         <iframe id="mainGrid" src="<?=$this->url('./admin/page/template', ['id' => $model->id, 'edit' => true])?>">
             
         </iframe>
+        <div class="rule-box">
+            <canvas class="top-rule"></canvas>
+            <canvas class="left-rule"></canvas>
+            <div class="rule-tools">
+                <i class="fa fa-plus-circle"></i>
+                <i class="fa fa-minus-circle"></i>
+                <i class="fa fa-expand-arrows-alt"></i>
+                <i class="fa fa-expand"></i>
+                <i class="fa fa-undo"></i>
+            </div>
+            <div class="rule-lines">
+            </div>
+        </div>
     </div>
     <div id="property" class="right fixed">
         <div class="panel">

@@ -61,7 +61,56 @@
   position: relative;
   bottom: 0;
   top: 0;
-  min-height: 500px; }
+  min-height: 500px;
+  background-color: #fcc;
+  padding: 20px 0 0 20px; }
+  #mainMobile .rule-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+    #mainMobile .rule-box .top-rule {
+      top: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+      height: 20px;
+      width: 100%;
+      background-color: #ccc; }
+    #mainMobile .rule-box .left-rule {
+      width: 20px;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      position: absolute;
+      height: 100%;
+      background-color: #ccc; }
+    #mainMobile .rule-box .rule-tools {
+      position: fixed;
+      bottom: 0;
+      line-height: 50px;
+      font-size: 30px;
+      background: #fff;
+      border: 1px solid #ccc;
+      left: 50%;
+      margin-left: -90px; }
+      #mainMobile .rule-box .rule-tools i {
+        cursor: pointer; }
+    #mainMobile .rule-box .rule-lines .h-line,
+    #mainMobile .rule-box .rule-lines .v-line {
+      border-top: 1px dotted #47f;
+      border-right: 1px dotted #47f;
+      position: absolute; }
+    #mainMobile .rule-box .rule-lines .h-line {
+      cursor: n-resize;
+      width: 100%;
+      height: 1px; }
+    #mainMobile .rule-box .rule-lines .v-line {
+      cursor: ew-resize;
+      width: 1px;
+      top: 0;
+      bottom: 0; }
   #mainMobile #mainGrid {
     width: 100%;
     height: 100%;
