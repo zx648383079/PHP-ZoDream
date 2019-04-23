@@ -165,9 +165,9 @@ footer {
     .sidebar-container .sidebar-container-toggle {
       display: block;
       position: fixed;
-      left: 10px;
-      bottom: 10px;
-      font-size: 24px;
+      left: .7rem;
+      bottom: .7rem;
+      font-size: 2rem;
       background: #333;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
       transition: all .3s;
@@ -179,7 +179,7 @@ footer {
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); }
       .sidebar-container.expand .sidebar-container-toggle {
         box-shadow: none;
-        left: 5px; }
+        left: .5rem; }
         .sidebar-container.expand .sidebar-container-toggle::before {
           content: "\f00d"; }
   .main-container {

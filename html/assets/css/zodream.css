@@ -1062,7 +1062,7 @@ i.checkbox {
     padding: 0; }
     .navbar ul li {
       list-style: none;
-      line-height: 30px;
+      line-height: 2.5rem;
       text-align: center; }
       .navbar ul li a {
         text-decoration: none;
@@ -1075,7 +1075,7 @@ i.checkbox {
         .navbar ul li a .fa {
           position: absolute;
           left: 10px;
-          top: 6px; }
+          top: .7rem; }
           .navbar ul li a .fa.image-icon {
             width: 21px;
             height: 21px;

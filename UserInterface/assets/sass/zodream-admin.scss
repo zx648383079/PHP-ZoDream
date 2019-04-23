@@ -209,9 +209,9 @@ footer {
         .sidebar-container-toggle {
             display: block;
             position: fixed;
-            left: 10px;
-            bottom: 10px;
-            font-size: 24px;
+            left: .7rem;
+            bottom: .7rem;
+            font-size: 2rem;
             background: $bg;
             box-shadow: 0 0 20px $shadow;
             transition: all .3s;
@@ -224,7 +224,7 @@ footer {
             box-shadow: 0 0 20px $shadow;
             .sidebar-container-toggle {
                 box-shadow: none;
-                left: 5px;
+                left: .5rem;
                 &::before {
                     content: "\f00d";
                 }
