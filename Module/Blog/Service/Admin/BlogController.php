@@ -2,6 +2,7 @@
 namespace Module\Blog\Service\Admin;
 
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 
 
@@ -31,19 +32,22 @@ class BlogController extends Controller {
             return $this->redirectWithMessage($this->getUrl('blog'), '博客不存在！');
         }
         $term_list = TermModel::select('id', 'name')->all();
-        return $this->show(compact('model', 'term_list'));
+        $tags = $model->isNewRecord ? [] : TagRelationshipModel::where('blog_id', $id)->pluck('tag_id');
+        return $this->show(compact('model', 'term_list', 'tags'));
     }
 
-    public function saveAction() {
-        $model = new BlogModel();
+    public function saveAction($id = null) {
+        $model = BlogModel::findOrNew($id);
         $model->user_id = auth()->id();
         $model->comment_status = 0;
-        if ($model->load(null, ['user_id']) && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('blog')
-            ]);
+        $isNew = $model->isNewRecord;
+        if (!$model->load(null, ['user_id']) || !$model->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonFailure($model->getFirstError());
+        TagRelationshipModel::bind($model->id, app('request')->get('tag'), $isNew);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('blog')
+        ]);
     }
 
     public function deleteAction($id) {

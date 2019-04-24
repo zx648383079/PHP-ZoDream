@@ -6,9 +6,11 @@ use Zodream\Html\Dark\Form;
 $lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 'Go', 'C#', 'ASP.NET', '.NET Core', 'Python', 'C', 'C++', 'Java', 'Kotlin', 'Swift', 'Objective-C'];
 $this->title = $model->id > 0 ? '编辑' : '新增'. '文章';
 $configs = app('request')->isMobile() ?
-    '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '';
+    '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '{}';
+$url = $this->url('./admin/');
+$tags = json_encode($tags);
 $js = <<<JS
-bindEdit({$configs});
+bindEdit({$configs}, '{$url}', {$tags});
 JS;
 
 $this->registerJs($js);
@@ -35,6 +37,13 @@ $this->registerJs($js);
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
                 <?=Form::checkbox('comment_status')?>
+                <div class="input-group">
+                    <label>标签</label>
+                    <div>
+                        <select name="tag[]" id="tag-box" multiple style="width: 100%">
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="zd-tab-item">
                 <textarea id="editor-container" style="height: 400px;" name="content" required><?=$model->content?></textarea>

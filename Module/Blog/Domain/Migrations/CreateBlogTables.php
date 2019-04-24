@@ -4,6 +4,8 @@ namespace Module\Blog\Domain\Migrations;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
+use Module\Blog\Domain\Model\TagModel;
+use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
@@ -69,6 +71,17 @@ class CreateBlogTables extends Migration {
             $table->set('action')->int(10)->notNull();
             $table->timestamp('created_at');
         });
+        Schema::createTable(TagModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(40)->notNull();
+            $table->set('description')->varchar();
+            $table->set('blog_count')->int()->defaultVal(0);
+        });
+        Schema::createTable(TagRelationshipModel::tableName(), function(Table $table) {
+            $table->set('tag_id')->int()->notNull();
+            $table->set('blog_id')->int()->notNull();
+            $table->set('position')->tinyint(3)->defaultVal(99);
+        });
     }
 
     /**
@@ -81,5 +94,7 @@ class CreateBlogTables extends Migration {
         Schema::dropTable(TermModel::tableName());
         Schema::dropTable(CommentModel::tableName());
         Schema::dropTable(BlogLogModel::tableName());
+        Schema::dropTable(TagModel::tableName());
+        Schema::dropTable(TagRelationshipModel::tableName());
     }
 }

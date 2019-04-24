@@ -4,6 +4,7 @@ namespace Module\Blog\Service;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
+use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\ModuleController;
 use Zodream\Service\Factory;
@@ -17,7 +18,7 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction($sort = 'new', $category = null, $keywords = null, $user = null, $language = null, $id = 0) {
+    public function indexAction($sort = 'new', $category = null, $keywords = null, $user = null, $language = null, $tag = null, $id = 0) {
         if ($id > 0) {
             return $this->runMethodNotProcess('detail', compact('id'));
         }
@@ -45,6 +46,8 @@ class HomeController extends ModuleController {
                 BlogModel::search($query, ['title', 'language']);
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
+            })->when(!empty($tag), function ($query) use ($tag) {
+                $query->whereIn('id', TagModel::getBlogByName($tag));
             })
             ->page();
         $cat_list = TermModel::all();

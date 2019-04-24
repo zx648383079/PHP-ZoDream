@@ -1,4 +1,4 @@
-function bindEdit(configs: any) {
+function bindEdit(configs: any, baseUri: string, tags = []) {
     let editor: any,
         box = $('#editor-container');
     UE.delEditor('editor-container');
@@ -17,4 +17,30 @@ function bindEdit(configs: any) {
         }
         editor = UE.getEditor('editor-container', configs);
     }).trigger('change');
+    $("#tag-box").select2({
+        ajax: {
+            url: baseUri + '/tag',
+            data: function (params) {
+                return {
+                    keywords: params.term,
+                    page: params.page || 1
+                };
+            },
+            processResults: function (data) {
+              data = data.data;
+              return {
+                results: data.data.map(item => {
+                    return {
+                        id: item.id,
+                        text: item.name,
+                        selected: tags.indexOf(item.id) >= 0
+                    }
+                }),
+                pagination: {
+                    more: data.paging.more
+                }
+              };
+            }
+          }
+    });
 }

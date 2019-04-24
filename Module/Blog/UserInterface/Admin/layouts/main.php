@@ -6,6 +6,7 @@ use Zodream\Html\Dark\Layout;
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',
+        '@select2.min.css',
         '@zodream.css',
         '@zodream-admin.css',
         '@dialog.css',
@@ -15,6 +16,7 @@ $this->registerCssFile([
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
+        '@select2.min.js',
         'ueditor/ueditor.config.js',
         'ueditor/ueditor.all.js',
         '@main.min.js',
@@ -60,7 +62,12 @@ $this->registerCssFile([
                  '新增分类',
                  './admin/term/create',
                  'fa fa-plus'
-             ]
+             ],
+             [
+                '标签列表',
+                './admin/tag',
+                'fa fa-list'
+            ],
          ],
          true
      ],
