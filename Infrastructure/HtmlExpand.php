@@ -1,10 +1,33 @@
 <?php
 namespace Infrastructure;
 
-
+use Service\Home\ToController;
 use Zodream\Helpers\Str;
+use Parsedown;
 
 class HtmlExpand {
+
+    public static function toUrl($url) {
+        return ToController::to($url);
+    }
+
+
+    public static function toHtml($content, $isMarkDown = false) {
+        if ($isMarkDown) {
+            $content = (new Parsedown())->text($content);
+        }
+        return preg_replace_callback('/<a[^\<\>]+?href="([^"<>\s]+)"/', function ($match) {
+            if (strpos($match[1], '//') === false) {
+                return $match[0];
+            }
+            if (strpos($match[1], url()->getHost()) !== false) {
+                return $match[0];
+            }
+            return str_replace($match[1], static::toUrl($match[1]), $match[0]);
+        }, $content);
+    }
+
+
 	public static function getImage($content, $default = '/assets/home/images/default.jpg') {
 		$match = array();
 		if (preg_match('/\<img[^<>]+src="([^"<>\s]+)"/i', $content, $match)) {
@@ -23,7 +46,7 @@ class HtmlExpand {
 	
 	public static function shortString($content, $length = 100) {
 		$content = preg_replace('/(\<.+?\>)|(\&nbsp;)+/', '', htmlspecialchars_decode($content));
-		return Str::subString($content, 0, $length);
+		return Str::substr($content, 0, $length);
 	}
 
 	public static function getMenu(array $data) {

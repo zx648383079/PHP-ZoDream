@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Zodream\Helpers\Str;
+use Infrastructure\HtmlExpand;
 /** @var $this View */
 $this->title = $blog->title;
 $url = $this->url('./', false);
@@ -80,14 +80,14 @@ $this->extend('layouts/header', [
         <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>
         <span class="type">
-            <a href="<?=$blog->source_url?>">
+            <a href="<?=HtmlExpand::toUrl($blog->source_url)?>">
                 <i class="fa fa-link"></i><b>转载</b>
             </a>
         </span>
         <?php endif;?>
     </div>
     <div id="content" class="content style-type-<?=$blog->edit_type?>">
-        <?=$blog->edit_type == 1 ? (new Parsedown())->text($blog->content) : $blog->content?>
+        <?=HtmlExpand::toHtml($blog->content, $blog->edit_type == 1)?>
     </div>
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
