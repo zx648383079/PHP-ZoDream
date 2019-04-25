@@ -18,7 +18,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <?= Form::select('parent_id', [$tree_list, [0 => '-- 顶级 --']])?>
 
     <div class="extent-box" <?=$model->parent_id < 1 ? ' style="display:none"' : ''?>>
-        <textarea id="editor-container" name="content" required><?=$model->content?></textarea>
+        <textarea id="editor-container" name="content"><?=$model->content?></textarea>
     </div>
 
 
