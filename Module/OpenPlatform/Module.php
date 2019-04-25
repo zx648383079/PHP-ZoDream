@@ -52,12 +52,14 @@ class Module extends BaseModule {
         app()->register('auth', JWTAuth::class);
         $platform = PlatformModel::findByAppId(app('request')->get('appid'));
         if (empty($platform)) {
+            app('response')->setStatusCode(404);
             return RestResponse::createWithAuto([
                 'code' => 404,
                 'message' => __('APP ID error')
             ]);
         }
         if (!$platform->verifyRest()) {
+            app('response')->setStatusCode(404);
             return RestResponse::createWithAuto([
                 'code' => 404,
                 'message' => __('sign or encrypt error')
