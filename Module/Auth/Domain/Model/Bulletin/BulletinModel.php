@@ -42,22 +42,23 @@ class BulletinModel extends Model {
         ];
     }
 
-	/**
-	 * SEND MESSAGE TO ANY USERS
-	 * 
-	 * @param array|string $user
-	 * @param string $title
-	 * @param string $content
-	 * @param int $type
-	 * @return bool|int
-	 */
+    /**
+     * SEND MESSAGE TO ANY USERS
+     *
+     * @param array|string $user
+     * @param string $title
+     * @param string $content
+     * @param int $type
+     * @return bool|int
+     * @throws \Exception
+     */
 	public static function message($user, $title, $content, $type = 0) {
 	    $bulletin = new static();
 	    $bulletin->title = $title;
 	    $bulletin->content = $content;
 	    $bulletin->type = $type;
 	    $bulletin->create_at = time();
-	    $bulletin->user_id = Factory::user()->getId();
+	    $bulletin->user_id = auth()->id();
 		if (!$bulletin->save()) {
 			return false;
 		}

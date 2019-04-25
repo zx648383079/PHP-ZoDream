@@ -5,6 +5,7 @@ namespace Module\Auth\Service\Admin;
 class BulletinController extends Controller {
 
     public function indexAction() {
+
         return $this->show();
     }
 

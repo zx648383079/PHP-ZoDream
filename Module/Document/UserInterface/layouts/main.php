@@ -44,16 +44,21 @@ if(isset($project_list)) {
     $baseUri = $project->type == 1 ? './api' : './page';
     foreach ($tree_list as $key => $item) {
         $children = [];
+        $has_active = false;
         if(isset($item['children'])) {
             foreach($item['children'] as $child) {
+                $is_active = isset($current_id) && $child['id'] == $current_id;
                 $children[] = [
                     $child['name'],
                     [$baseUri, 'id' => $child['id']],
                     'fa fa-file',
                     null,
                     false,
-                    isset($current_id) && $child['id'] == $current_id
+                    $is_active
                 ];
+                if ($is_active) {
+                    $has_active = true;
+                }
             }
         }
         $menus[] = [
@@ -61,7 +66,7 @@ if(isset($project_list)) {
             false,
             'fa fa-folder',
             $children,
-            $key < 1
+            (!isset($current_id) && $key < 1) || (isset($current_id) && $has_active)
         ];
     }
 }
