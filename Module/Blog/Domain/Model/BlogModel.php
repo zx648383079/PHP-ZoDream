@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Database\Query\Query;
 use Zodream\Helpers\Time;
@@ -117,6 +118,12 @@ class BlogModel extends Model {
      */
     public function getCreatedAtAttribute() {
         return Time::isTimeAgo($this->getAttributeValue('created_at'), 2678400);
+    }
+
+    public function toHtml() {
+        return cache()->getOrSet(sprintf('blog_%d_content', $this->id), function () {
+            return TagModel::replaceTag($this->id, HtmlExpand::toHtml($this->content, $this->edit_type == 1));
+        }, 3600);
     }
 
     public static function getNew($limit = 5) {

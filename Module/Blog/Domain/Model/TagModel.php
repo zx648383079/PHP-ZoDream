@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Support\Html;
 
 
 /**
@@ -44,6 +45,17 @@ class TagModel extends Model {
 	        return [];
         }
         return TagRelationshipModel::where('tag_id', $id)->pluck('blog_id');
+    }
+
+    public static function replaceTag($blog_id, $content) {
+        $tags = TagRelationshipModel::where('blog_id', $blog_id)->pluck('tag_id');
+        if (empty($tags)) {
+            return $content;
+        }
+        $tags = static::whereIn('id', $tags)->pluck('name');
+        return str_replace($tags, array_map(function ($tag) {
+            return Html::a($tag, ['./', 'tag' => $tag]);
+        }, $tags), $content);
     }
 
 }

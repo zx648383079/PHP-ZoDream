@@ -1,8 +1,9 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Infrastructure\HtmlExpand;
+use Module\Blog\Domain\Model\BlogModel;
 /** @var $this View */
+/** @var $blog BlogModel */
 $this->title = $blog->title;
 $url = $this->url('./', false);
 $js = <<<JS
@@ -87,7 +88,7 @@ $this->extend('layouts/header', [
         <?php endif;?>
     </div>
     <div id="content" class="content style-type-<?=$blog->edit_type?>">
-        <?=HtmlExpand::toHtml($blog->content, $blog->edit_type == 1)?>
+        <?=$blog->toHtml()?>
     </div>
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>

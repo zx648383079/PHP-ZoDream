@@ -78,6 +78,7 @@ function bindBlog(baseUri: string, id: number, type: number) {
     $('.book-navicon').click(function () {
         $('.book-skin').toggleClass('book-collapsed');
     });
+    let dynamicBox = $('.book-dynamic');
     let side = $('#content').sideNav({
             target: '.book-side-nav',
             contentLength: 20,
@@ -86,7 +87,19 @@ function bindBlog(baseUri: string, id: number, type: number) {
                 if (commentBox.length < 1) {
                     return true;
                 }
-                return scrollTop + $(window).height() - box.height() < commentBox.offset().top;
+                const fixed = scrollTop + $(window).height() - box.height() < commentBox.offset().top;
+                if (!fixed) {
+                    box.css('top', 'auto');
+                    return fixed;
+                }
+                let diff = dynamicBox.offset().top + dynamicBox.height() - scrollTop;
+                if (diff <= 0) {
+                    diff = 0;
+                } else {
+                    diff += 20;
+                }
+                box.css('top', diff + 'px');
+                return fixed;
             }
         }),
         checkSize = function () {
