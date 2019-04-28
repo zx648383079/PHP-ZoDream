@@ -292,6 +292,20 @@ footer {
     }
 }
 
+.dialog-cookie-tip {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: rgba(#333, .7) 0 0 10px;
+    padding: 40px 20px;
+    .dialog-footer {
+        text-align: right;
+    }
+}
+
 @media (max-width: 640px) {
     .metro-grid {
         a {

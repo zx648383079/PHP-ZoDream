@@ -1,0 +1,84 @@
+{
+    "name": "default",
+    "description": "默认主题",
+    "author": "zodream",
+    "cover": "assets/images/screenshot.png",
+    "script": [
+        {
+            "action": "copy",
+            "src": "assets",
+            "dist": "assets"
+        },
+        {
+            "action": "option",
+            "data": [
+                {
+                    "name": "主题",
+                    "code": "theme",
+                    "type": "text",
+                    "value": "default",
+                    "default": ""
+                },
+                {
+                    "name": "主题",
+                    "code": "theme",
+                    "type": "select",
+                    "value": "default",
+                    "items": [
+
+                    ]
+                }
+            ]
+        },
+        {
+            "action": "group",
+            "name": "nav"
+        },
+        {
+            "action": "model",
+            "name": "新闻",
+            "table": "news",
+            "fields": [
+                {
+                    "action": "disable",
+                    "field": "content"
+                },
+                {
+                    "name": "图片",
+                    "field": "image",
+                    "type": "file"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "一级分类",
+            "name": "first",
+            "type": "@model:news",
+            "content": "",
+            "group": "nav",
+            "children": [
+                {
+                    "title": "二级分类",
+                    "name": "second",
+                    "type": "@model:news",
+                    "content": "",
+                    "children": [
+                        {
+                            "action": "content",
+                            "title": "文章",
+                            "content": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "action": "content",
+            "type": "@channel:second",
+            "title": "文章",
+            "content": "",
+            "thumb": "assets/images/thumb.png"
+        }
+    ]
+}

@@ -274,6 +274,10 @@ class FuncHelper {
         return $default;
     }
 
+    public static function formAction($id) {
+        return url('./form/save', compact('id'));
+    }
+
     public static function register(ParserCompiler $compiler) {
         $compiler->registerFunc('channel', '\Module\CMS\Domain\FuncHelper::channel')
             ->registerFunc('channelActive', '\Module\CMS\Domain\FuncHelper::channelActive')
@@ -318,6 +322,7 @@ class FuncHelper {
                 return sprintf('<?=%s->getLink()?>', $tag);
             })
             ->registerFunc('content', '\Module\CMS\Domain\FuncHelper::content')
+            ->registerFunc('formAction', '\Module\CMS\Domain\FuncHelper::formAction')
             ->registerFunc('location', '\Module\CMS\Domain\FuncHelper::location')
             ->registerFunc('previous', '\Module\CMS\Domain\FuncHelper::previous')
             ->registerFunc('next', '\Module\CMS\Domain\FuncHelper::next')

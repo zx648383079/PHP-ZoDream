@@ -40,8 +40,8 @@ $this->registerCssFile([
                 <?=$this->node('nav-bar')?>
             </div>
         </header>
-   <?=$content?>
-    <footer>
+        <?=$content?>
+        <footer>
             <div class="container">
                 <?=$this->node('friend-link')?>
                 <div class="copyright">
@@ -49,6 +49,14 @@ $this->registerCssFile([
                 </div>
             </div>
         </footer>
+        <div class="dialog-cookie-tip">
+            <div class="dialog-body">
+                访问本站，表示您已同意使用Cookies，本站不会主动泄露您的隐私信息。
+            </div>
+            <div class="dialog-footer">
+                <button class="btn">OK</button>
+            </div>
+        </div>
         <?=$this->footer()?>
    </body>
 </html>

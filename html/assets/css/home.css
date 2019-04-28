@@ -235,6 +235,18 @@ footer {
     .page-not-found .content img {
       max-width: 100%; }
 
+.dialog-cookie-tip {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  box-shadow: rgba(51, 51, 51, 0.7) 0 0 10px;
+  padding: 40px 20px; }
+  .dialog-cookie-tip .dialog-footer {
+    text-align: right; }
+
 @media (max-width: 640px) {
   .metro-grid a.unknow {
     display: none; } }
