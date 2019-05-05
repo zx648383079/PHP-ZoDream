@@ -31,9 +31,7 @@ class OauthController extends ModuleController {
         if (!$auth->callback()) {
             return $this->failureCallback('授权回调失败！');
         }
-        $user = OAuthModel::findUser(
-            $auth->identity,
-            $type);
+        $user = $this->findUser($type, $auth);
         if (!empty($user)) {
             return $this->successCallback($user, $type);
         }
@@ -42,7 +40,7 @@ class OauthController extends ModuleController {
         }
         if (!auth()->guest()) {
             $user = auth()->user();
-            OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
+            $this->successBindUser($type, $user, $auth);
             return $this->successCallback($user);
         }
         $rnd = Str::random(3);
@@ -66,8 +64,29 @@ class OauthController extends ModuleController {
         if (empty($user)) {
             return $this->failureCallback('系统错误！');
         }
-        OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
+        $this->successBindUser($type, $user, $auth);
         return $this->successCallback($user, $type);
+    }
+
+    protected function findUser($type, $auth) {
+        if ($type == 'wechat' && $auth->unionid) {
+            return OAuthModel::findUserWithUnion($auth->openid, $auth->unionid, $type);
+        }
+        return OAuthModel::findUser(
+            $auth->identity,
+            $type);
+    }
+
+    /**
+     * @param $type
+     * @param $user
+     * @param $auth
+     */
+    protected function successBindUser($type, $user, $auth) {
+        OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
+        if ($type == 'wechat' && $auth->unionid) {
+            OAuthModel::bindUser($user, $auth->openid, $type, $auth->username);
+        }
     }
 
     protected function failureCallback($error) {
