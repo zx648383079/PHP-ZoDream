@@ -26,6 +26,7 @@ class SiteCrawl {
         'www.biquge5200.cc' => CBiQuGe::class,
         'www.biquge11.com' => CBiQuGe::class,
         'www.paoshu8.com' => CBiQuGe::class,
+        'www.biquge.biz' => CBiQuGe::class,
         'www.biquge.cc' => BiQuGeC::class,
         'www.biquge.lu' => BiQuGeLu::class,
         'www.biquge.cm' => MBiQuGe::class,
