@@ -54,6 +54,18 @@ class RegionModel extends Model {
         });
     }
 
+    public static function findIdByName($name) {
+        if (empty($name)) {
+            return 0;
+        }
+        $id = static::where('full_name', $name)->value('id');
+        if ($id > 0) {
+            return $id;
+        }
+        $region = explode(' ', $name);
+        return intval(static::where('name', end($region))->max('id'));
+    }
+
     /**
      * 请导入以下文件
      * @url https://github.com/modood/Administrative-divisions-of-China  dist/pcas.json

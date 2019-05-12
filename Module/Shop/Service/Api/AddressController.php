@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Api;
 
 
+use Module\Shop\Domain\Models\RegionModel;
 use Module\Shop\Domain\Models\Scene\Address;
 
 class AddressController extends Controller {
@@ -24,9 +25,13 @@ class AddressController extends Controller {
         $data = app('request')->validate([
             'name' => '',
             'region_id' => 'int',
+            'region_name' => '',
             'tel' => '',
             'address' => ''
         ]);
+        if ($data['region_id'] < 1 && !empty($data['region_name'])) {
+            $data['region_id'] = RegionModel::findIdByName($data['region_name']);
+        }
         $address = new Address($data);
         $address->user_id = auth()->id();
         if (!$address->save()) {
