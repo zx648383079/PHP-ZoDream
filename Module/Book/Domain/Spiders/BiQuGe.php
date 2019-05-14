@@ -40,7 +40,8 @@ class BiQuGe extends BaseSpider {
      */
     public function getBook(Html $html, Uri $uri) {
         $author = $html->find('#info p', 0)->text;
-        $author = explode('：', $author, 2)[1];
+        $author = str_replace('：', ':', $author);
+        $author = explode(':', $author, 2)[1];
         $path = $html->find('#fmimg img', 0)->src;
         if (!empty($path)) {
             $path = (clone $uri)->setPath($path)->encode();
