@@ -11,10 +11,11 @@ class Controller extends ModuleController {
 
     public function prepare() {
         Factory::view()
+            ->setDirectory(Factory::view()->getDirectory()->directory('default'))
             ->setEngine(FuncHelper::register(new ParserCompiler()))
             ->setConfigs([
-            'suffix' => '.html'
-        ]);
+                'suffix' => '.html'
+            ]);
         $categories_tree = FuncHelper::channels(['tree' => true]);
         $this->send(compact('categories_tree'));
     }
