@@ -40,6 +40,28 @@
             "table": "news",
             "fields": [
                 {
+                    "name": "作者",
+                    "field": "author",
+                    "type": "text"
+                },
+                {
+                    "name": "是否原创",
+                    "field": "is_new",
+                    "type": "swicth"
+                },
+                {
+                    "name": "源网址",
+                    "field": "source_url",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "图片",
+            "table": "images",
+            "fields": [
+                {
                     "action": "disable",
                     "field": "content"
                 },
@@ -51,17 +73,59 @@
             ]
         },
         {
+            "action": "model",
+            "name": "应用",
+            "table": "apps",
+            "fields": [
+                {
+                    "name": "使用说明",
+                    "field": "instruction",
+                    "type": "editor"
+                },
+                {
+                    "name": "wind",
+                    "field": "win",
+                    "type": "file"
+                },
+                {
+                    "name": "linux",
+                    "field": "linux",
+                    "type": "file"
+                },
+                {
+                    "name": "APK",
+                    "field": "apk",
+                    "type": "file"
+                },
+                {
+                    "name": "IPA",
+                    "field": "ipa",
+                    "type": "file"
+                },
+                {
+                    "name": "UWP",
+                    "field": "uwp",
+                    "type": "file"
+                },
+                {
+                    "name": "作者信息",
+                    "field": "author",
+                    "type": "textarea"
+                }
+            ]
+        },
+        {
             "action": "channel",
-            "title": "一级分类",
+            "title": "应用市场",
             "name": "first",
-            "type": "@model:news",
+            "type": "@model:apps",
             "content": "",
             "group": "nav",
             "children": [
                 {
-                    "title": "二级分类",
+                    "title": "实用工具",
                     "name": "second",
-                    "type": "@model:news",
+                    "type": "@model:apps",
                     "content": "",
                     "children": [
                         {
@@ -70,8 +134,49 @@
                             "content": ""
                         }
                     ]
+                },
+                {
+                    "title": "操作系统",
+                    "name": "second",
+                    "type": "@model:apps"
                 }
             ]
+        },
+        {
+            "action": "channel",
+            "title": "新闻动态",
+            "name": "first",
+            "type": "@model:news",
+            "content": "",
+            "group": "nav",
+            "children": [
+                {
+                    "title": "站点动态",
+                    "name": "second",
+                    "type": "@model:news"
+                },
+                {
+                    "title": "国内新闻",
+                    "name": "second",
+                    "type": "@model:news"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "通知公告",
+            "name": "first",
+            "type": "@model:news",
+            "content": "",
+            "group": "nav"
+        },
+        {
+            "action": "channel",
+            "title": "关于我们",
+            "name": "first",
+            "type": "page",
+            "content": "",
+            "group": "nav"
         },
         {
             "action": "content",
