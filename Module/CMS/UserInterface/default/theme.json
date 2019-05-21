@@ -152,13 +152,11 @@
             "children": [
                 {
                     "title": "站点动态",
-                    "name": "second",
-                    "type": "@model:news"
+                    "name": "second"
                 },
                 {
                     "title": "国内新闻",
-                    "name": "second",
-                    "type": "@model:news"
+                    "name": "second"
                 }
             ]
         },

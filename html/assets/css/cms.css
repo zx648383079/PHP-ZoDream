@@ -47,7 +47,7 @@ header {
         margin: 20px 0; }
       header .nav-bar li.active {
         background-color: red; }
-        header .nav-bar li.active a {
+        header .nav-bar li.active > a {
           color: #fff; }
       header .nav-bar li .sub-menu {
         position: absolute;
@@ -107,6 +107,22 @@ footer {
   #content .tags span {
     margin: 0 5px;
     color: #9baab6; }
+
+#content .header {
+  display: grid;
+  grid-template-columns: 200px 1fr; }
+  #content .header .thumb {
+    text-align: center; }
+    #content .header .thumb img {
+      width: 120px; }
+
+#content .links {
+  margin: 0 20px 30px; }
+  #content .links a {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #f00;
+    color: #fff; }
 
 #content-list .item {
   display: grid;
@@ -184,6 +200,31 @@ footer {
     margin-bottom: 10px; }
   .right-box .panel ul li {
     margin-bottom: 10px; }
+
+.tree-box li {
+  line-height: 40px;
+  padding: 0 10px; }
+
+.panel .panel-header {
+  line-height: 40px;
+  background-color: #fff;
+  padding: 0 10px;
+  border-bottom: 1px solid #f90; }
+  .panel .panel-header .more {
+    float: right; }
+
+.panel .panel-body .item {
+  display: grid;
+  grid-template-columns: 80px 1fr; }
+  .panel .panel-body .item .thumb img {
+    width: 100%;
+    height: 100%; }
+  .panel .panel-body .item .info .title {
+    line-height: 30px;
+    font-weight: 600;
+    color: #333; }
+  .panel .panel-body .item .info .desc {
+    color: #666; }
 
 @media (max-width: 1200px) {
   .container {

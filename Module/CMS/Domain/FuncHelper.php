@@ -131,14 +131,14 @@ class FuncHelper {
     }
 
     public static function location() {
-        $path = static::getOrSet(__FUNCTION__, function () {
+        $path = static::getOrSet(__FUNCTION__, __FUNCTION__, function () {
             $path = TreeHelper::getTreeParent(static::channels(), static::$current['channel']);
             $path[] = static::$current['channel'];
             return $path;
         });
         return implode('', array_map(function ($id) {
-            return Html::a(static::channel($id, 'name'),
-                static::channel($id, 'url'));
+            return Html::li(Html::a(static::channel($id, 'title'),
+                static::channel($id, 'url')));
         }, $path));
     }
 

@@ -33,6 +33,22 @@ class ThemeManager {
 
     }
 
+    protected function packModel() {
+
+    }
+
+    protected function packField() {
+
+    }
+
+    protected function packChannel() {
+
+    }
+
+    protected function packContent() {
+
+    }
+
     public function unpack() {
         $file = $this->src->file('theme.json');
         if (!$file->exist()) {
@@ -131,15 +147,16 @@ class ThemeManager {
     }
 
     protected function runActionChannel($data) {
-        if (!isset($data['type'])) {
+        $type = isset($data['type']) ? $data['type'] : null;
+        if (empty($type)) {
 
-        } elseif ($data['type'] === 'page') {
+        } elseif ($type === 'page') {
             $data['type'] = CategoryModel::TYPE_PAGE;
-        } elseif ($data['type'] === 'link') {
+        } elseif ($type === 'link') {
             $data['type'] = CategoryModel::TYPE_LINK;
         } else {
+            $data['model_id'] = $this->getCacheId($type);
             $data['type'] = CategoryModel::TYPE_CONTENT;
-            $data['model_id'] = $this->getCacheId($data['model']);
         }
         $children = isset($data['children']) ? $data['children'] : [];
         if (isset($data['setting']) && is_array($data['setting'])) {
@@ -155,6 +172,9 @@ class ThemeManager {
                 $item['cat_id'] = $model->id;
                 $this->runActionContent($item);
                 continue;
+            }
+            if (isset($item['type'])) {
+                $item['type'] = $type;
             }
             $item['parent_id'] = $model->id;
             $this->runActionChannel($item);

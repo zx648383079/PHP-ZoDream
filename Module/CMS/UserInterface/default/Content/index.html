@@ -12,35 +12,15 @@
                 </ul>
             </div>
             <div id="content">
-                <div class="header">
-                    <div class="thumb">
-                        <img src="{$data.thumb}" alt="{$data.title}">
-                    </div>
-                    <div class="info">
-                        <div class="title">
-                            {$$data.title}
-                        </div>
-                        <div class="desc">
-                            {$$data.description}
-                        </div>
-                    </div>
+                <div class="title">
+                    {$data.title}
                 </div>
                 <div class="tags">
-                    <span>更新时间：{this.time:$data.created_at}</span>
-                    <span>当前版本：v1</span>
+                    <span>时间：{this.time:$data.created_at}</span>
+                    <span>作者：admin</span>
                 </div>
-                <div class="tags">
-                    <a href="">安卓</a>
-                </div>
-                <div class="tab-box">
-                    <div class="tab-header">
-                        <div class="tab-item active">应用详情</div>
-                        <div class="tab-item">使用教程</div>
-                    </div>
-                    <div class="tab-body">
-                        <div class="tab-item active">{$data.content}</div>
-                        <div class="tab-item">使用教程</div>
-                    </div>
+                <div class="content">
+                    {$data.content}
                 </div>
             </div>
         </div>
