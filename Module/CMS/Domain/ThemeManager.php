@@ -7,6 +7,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
 use Module\Template\Domain\Model\Base\OptionModel;
+use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -26,27 +27,123 @@ class ThemeManager {
     protected $cache = [];
 
     public function pack() {
-
+        
     }
 
     protected function packOption() {
-
+        $data = [];
+        $args = OptionModel::query()->orderBy('parent_id', 'asc')->all();
+        foreach ($args as &$item) {
+            if ($item['parent_id'] < 1) {
+                unset($item['parent_id']);
+            } else {
+                $item['parent_id'] = $this->getCacheId($item['parent_id'], 'option');
+            }
+            $data[] = $item;
+            $this->setCache([
+                $item['id'] => '@option:'.$item['code']
+            ], 'option');
+        }
+        return [
+            'action' => 'option',
+            'data' => $data
+        ];
     }
 
     protected function packModel() {
+        $data = [];
+        $model_list = ModelModel::query()->asArray()->all();
+        foreach ($model_list as $item) {
+            $item['action'] = 'model';
+            $item['setting'] = Json::decode($item['setting']);
+            $item['fields'] = $this->packFields($item['id']);
+            $this->setCache([
+                $item['id'] => '@model:'.$item['table']
+            ], 'model');
+            unset($item['id']);
+            $data[] = $item;
 
+        }
+        return $data;
     }
 
-    protected function packField() {
-
+    protected function packFields($model_id) {
+        $data = [];
+        $fields = ModelFieldModel::query()->where('model_id', $model_id)->asArray()->all();
+        foreach ($fields as $item) {
+            $item['setting'] = Json::decode($item['setting']);
+            unset($item['model_id'], $item['id']);
+            if (!in_array($item['field'], ['title', 'keywords', 'description', 'thumb', 'content'])) {
+                $data[] = $item;
+                continue;
+            }
+            if ($item['is_disable'] > 0) {
+                $data[] = [
+                    'action' => 'disable',
+                    'field' => $item['field']
+                ];
+            }
+        }
+        return $data;
     }
 
-    protected function packChannel() {
+    protected function packChannel($parent_id = 0) {
+        $data = [];
+        $model_list = CategoryModel::query()->where('parent_id', $parent_id)
+            ->asArray()->all();
+        foreach ($model_list as $item) {
+            $item['action'] = 'channel';
+            $item['setting'] = Json::decode($item['setting']);
+            $children = $this->packChannel($item['id']);
+            if (!empty($children)) {
+                $item['children'] = $children;
+            }
+            $item['type'] = $this->packChannelType($item);
+            $this->setCache([
+                $item['id'] => '@channel:'.$item['table']
+            ], 'channel');
+            unset($item['model_id'], $item['parent_id'], $item['id']);
+            $data[] = $item;
 
+        }
+        return $data;
+    }
+
+    protected function packChannelType($item) {
+        if ($item['type'] === CategoryModel::TYPE_LINK) {
+            return 'link';
+        }
+        if ($item['type'] === CategoryModel::TYPE_PAGE) {
+            return 'page';
+        }
+        return $this->getCacheId($item['model_id'], 'model');
     }
 
     protected function packContent() {
-
+        $data = [];
+        $model_list = ModelModel::query()->all();
+        foreach ($model_list as $model) {
+            $scene = Module::scene()->setModel($model);
+            $args = $scene->query()->all();
+            $args = Relation::create($args, [
+                'extend' => [
+                    'query' => $scene->extendQuery(),
+                    'link' => [
+                        'id' => 'id'
+                    ]
+                ],
+            ]);
+            foreach ($args as $item) {
+                if (isset($item['extend']) && !empty($item['extend'])) {
+                    $item = array_merge($item['extend'], $item);
+                }
+                $item['cat_id'] = $this->getCacheId($item['cat_id'], 'channel');
+                unset($item['extend'], $item['id']);
+                $item['action'] = 'content';
+                $data[] = $item;
+            }
+        }
+        return $data;
     }
 
     public function unpack() {
