@@ -60,6 +60,12 @@ abstract class BaseScene implements SceneInterface {
      * @throws \Exception
      */
     public static function newField($type) {
+        $maps = [
+            'switch' => 'SwitchBox',
+        ];
+        if (isset($maps[$type])) {
+            $type = $maps[$type];
+        }
         $class = 'Module\CMS\Domain\Fields\\'.Str::studly($type);
         if (class_exists($class)) {
             return new $class;

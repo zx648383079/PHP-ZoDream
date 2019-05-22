@@ -65,6 +65,18 @@
         },
         {
             "action": "model",
+            "name": "主题",
+            "table": "themes",
+            "fields": [
+                {
+                    "name": "文件",
+                    "field": "file",
+                    "type": "file"
+                }
+            ]
+        },
+        {
+            "action": "model",
             "name": "应用",
             "table": "apps",
             "fields": [
@@ -110,21 +122,12 @@
             "title": "应用市场",
             "name": "app_market",
             "type": "@model:apps",
-            "content": "",
             "group": "nav",
             "children": [
                 {
                     "title": "实用工具",
                     "name": "app_tool",
                     "type": "@model:apps",
-                    "content": "",
-                    "children": [
-                        {
-                            "action": "content",
-                            "title": "文章",
-                            "content": ""
-                        }
-                    ]
                 },
                 {
                     "title": "操作系统",
@@ -135,29 +138,43 @@
         },
         {
             "action": "channel",
-            "title": "新闻动态",
-            "name": "news",
-            "type": "@model:news",
-            "content": "",
+            "title": "主题市场",
+            "name": "theme_market",
+            "type": "@model:themes",
             "group": "nav",
             "children": [
                 {
-                    "title": "站点动态",
-                    "name": "web_news"
+                    "title": "企业官网",
+                    "name": "company_theme",
+                    "type": "@model:themes"
                 },
                 {
-                    "title": "世界新闻",
-                    "name": "all_news"
+                    "title": "博客",
+                    "name": "blog_theme",
+                    "type": "@model:themes"
                 }
             ]
         },
         {
             "action": "channel",
-            "title": "通知公告",
-            "name": "notice",
+            "title": "新闻动态",
+            "name": "news",
             "type": "@model:news",
-            "content": "",
-            "group": "nav"
+            "group": "nav",
+            "children": [
+                {
+                    "title": "站点动态",
+                    "name": "web_news",
+                    "type": "@model:news",
+                    "group": "nav"
+                },
+                {
+                    "title": "全球新闻",
+                    "name": "all_news",
+                    "type": "@model:news",
+                    "group": "nav",
+                }
+            ]
         },
         {
             "action": "channel",
@@ -169,7 +186,7 @@
         },
         {
             "action": "content",
-            "type": "@channel:notice",
+            "type": "@channel:web_news",
             "title": "站点开启",
             "content": "",
             "thumb": "assets/images/thumb.png"

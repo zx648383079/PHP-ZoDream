@@ -33,6 +33,7 @@ class ModelFieldModel extends BaseModel {
         'editor' => '编辑器',
         'radio' => '单选按钮',
         'select' => '下拉选择',
+        'switch' => '开关',
         'checkbox' => '复选框',
         'color' => '颜色选取',
         'email' => '邮箱字段',

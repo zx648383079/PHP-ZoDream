@@ -5,7 +5,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
 
-class SwitchF extends BaseField {
+class SwitchBox extends BaseField {
 
     public function options(ModelFieldModel $field) {
         return implode('', [
