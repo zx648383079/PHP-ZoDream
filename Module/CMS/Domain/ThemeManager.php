@@ -9,6 +9,7 @@ use Module\CMS\Module;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
+use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Error\Exception;
@@ -27,13 +28,31 @@ class ThemeManager {
     protected $cache = [];
 
     public function pack() {
-        
+        $data = [
+            'name' => 'default',
+            'description' => '默认主题',
+            'author' => 'zodream',
+            'cover' => 'assets/images/screenshot.png',
+            'script' => [
+                [
+                    'action' => 'copy',
+                    'src' => 'assets',
+                    'dist' => 'assets'
+                ],
+            ]
+        ];
+        $data[] = $this->packOption();
+        $data['script'] = array_merge($data['script'], $this->packModel(), $this->packChannel(), $this->packContent());
+        $this->src->addFile('theme.json', Json::encode($data));
+        $zip = ZipStream::create($this->dist->file('theme.zip'));
+        $zip->addDirectory('theme', $this->src);
+        $zip->comment($data['description'])->close();
     }
 
     protected function packOption() {
         $data = [];
         $args = OptionModel::query()->orderBy('parent_id', 'asc')->all();
-        foreach ($args as &$item) {
+        foreach ($args as $item) {
             if ($item['parent_id'] < 1) {
                 unset($item['parent_id']);
             } else {
@@ -147,6 +166,9 @@ class ThemeManager {
     }
 
     public function unpack() {
+        $zip = new ZipStream($this->src->file('theme.zip'));
+        $zip->extractTo($this->src);
+        $this->src = $this->src->directory('theme');
         $file = $this->src->file('theme.json');
         if (!$file->exist()) {
             return;
@@ -310,9 +332,17 @@ class ThemeManager {
                 if (isset($item['default'])) {
                     $item['default_value'] = $item['default'];
                 }
+                if (isset($item['parent_id']) && !is_numeric($item['parent_id'])) {
+                    $item['parent_id'] = $this->getOptionParent($item['parent_id']);
+                }
                 return $item;
             });
         }
+    }
+
+    protected function getOptionParent($code) {
+        $code = substr($code, 8);
+        return intval(OptionModel::where('code', $code)->value('id'));
     }
 
 

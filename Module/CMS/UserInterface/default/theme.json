@@ -18,15 +18,6 @@
                     "type": "text",
                     "value": "default",
                     "default": ""
-                },
-                {
-                    "name": "主题",
-                    "code": "theme",
-                    "type": "select",
-                    "value": "default",
-                    "items": [
-
-                    ]
                 }
             ]
         },
@@ -117,14 +108,14 @@
         {
             "action": "channel",
             "title": "应用市场",
-            "name": "first",
+            "name": "app_market",
             "type": "@model:apps",
             "content": "",
             "group": "nav",
             "children": [
                 {
                     "title": "实用工具",
-                    "name": "second",
+                    "name": "app_tool",
                     "type": "@model:apps",
                     "content": "",
                     "children": [
@@ -137,7 +128,7 @@
                 },
                 {
                     "title": "操作系统",
-                    "name": "second",
+                    "name": "app_system",
                     "type": "@model:apps"
                 }
             ]
@@ -145,25 +136,25 @@
         {
             "action": "channel",
             "title": "新闻动态",
-            "name": "first",
+            "name": "news",
             "type": "@model:news",
             "content": "",
             "group": "nav",
             "children": [
                 {
                     "title": "站点动态",
-                    "name": "second"
+                    "name": "web_news"
                 },
                 {
-                    "title": "国内新闻",
-                    "name": "second"
+                    "title": "世界新闻",
+                    "name": "all_news"
                 }
             ]
         },
         {
             "action": "channel",
             "title": "通知公告",
-            "name": "first",
+            "name": "notice",
             "type": "@model:news",
             "content": "",
             "group": "nav"
@@ -171,15 +162,15 @@
         {
             "action": "channel",
             "title": "关于我们",
-            "name": "first",
+            "name": "about_us",
             "type": "page",
             "content": "",
             "group": "nav"
         },
         {
             "action": "content",
-            "type": "@channel:second",
-            "title": "文章",
+            "type": "@channel:notice",
+            "title": "站点开启",
             "content": "",
             "thumb": "assets/images/thumb.png"
         }
