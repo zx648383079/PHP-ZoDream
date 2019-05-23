@@ -4,7 +4,7 @@ namespace Module\CMS\Service;
 class HomeController extends Controller {
 
     public function indexAction() {
-
-        return $this->show();
+        $title = '首页';
+        return $this->show(compact('title'));
     }
 }
