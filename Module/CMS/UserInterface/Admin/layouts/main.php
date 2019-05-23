@@ -67,5 +67,22 @@ $this->registerCssFile([
         false,
         'fa fa-book',
         $menus
+    ],
+    [
+        '主题管理',
+        false,
+        'fa fa-drum',
+        [
+            [
+                '本地主题',
+                './admin/theme',
+                'fa fa-desktop'
+            ],
+            [
+                '主题市场',
+                './admin/theme/market',
+                'fa fa-shopping-bag'
+            ],
+        ]
     ]
 ], $content, 'ZoDream CMS Admin') ?>

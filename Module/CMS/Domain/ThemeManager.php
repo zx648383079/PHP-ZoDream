@@ -27,6 +27,12 @@ class ThemeManager {
 
     protected $cache = [];
 
+    public function __construct()
+    {
+        $this->src = new Directory(dirname(__DIR__).'/UserInterface');
+        $this->dist = public_path();
+    }
+
     public function pack() {
         $data = [
             'name' => 'default',

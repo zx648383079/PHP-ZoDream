@@ -5,6 +5,7 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\Scene\SingleScene;
+use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {
@@ -15,6 +16,18 @@ class Module extends BaseModule {
 
     public function getMigration() {
         return new CreateCmsTables();
+    }
+
+    public static function theme() {
+        static $theme;
+        if (is_string($theme)) {
+            return $theme;
+        }
+        $theme = OptionModel::findCode('theme');
+        if (!is_string($theme)) {
+            $theme = 'default';
+        }
+        return $theme;
     }
 
     /**
