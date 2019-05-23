@@ -58,10 +58,11 @@ class ThemeManager {
             } else {
                 $item['parent_id'] = $this->getCacheId($item['parent_id'], 'option');
             }
-            $data[] = $item;
             $this->setCache([
                 $item['id'] => '@option:'.$item['code']
             ], 'option');
+            unset($item['id']);
+            $data[] = $item;
         }
         return [
             'action' => 'option',
@@ -345,5 +346,24 @@ class ThemeManager {
         return intval(OptionModel::where('code', $code)->value('id'));
     }
 
-
+    public function getAllThemes() {
+        $data = [];
+        $this->src->map(function ($file) use (&$data) {
+            if (!$file instanceof Directory) {
+                return;
+            }
+            $json = $file->file('theme.json');
+            if (!$json->exist()) {
+                return;
+            }
+            $item = Json::decode($json->read());
+            $data[] = [
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'author' => $item['author'],
+                'cover' => $item['cover'],
+            ];
+        });
+        return $data;
+    }
 }
