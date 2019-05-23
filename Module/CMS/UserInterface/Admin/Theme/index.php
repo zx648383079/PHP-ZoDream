@@ -9,7 +9,7 @@ $this->title = '本地主题';
     <div class="panel-body">
         <div class="theme-item">
             <div class="thumb">
-                <img src="<?=$current['thumb']?>" alt="">
+                <img src="<?=$current['cover']?>" alt="">
             </div>
             <div class="name"><?=$current['name']?></div>
             <div class="desc"><?=$current['description']?></div>
@@ -23,7 +23,7 @@ $this->title = '本地主题';
         <?php foreach($themes as $item):?>
         <div class="theme-item">
             <div class="thumb">
-                <img src="<?=$item['thumb']?>" alt="">
+                <img src="<?=$item['cover']?>" alt="">
             </div>
             <div class="name"><?=$item['name']?></div>
             <div class="desc"><?=$item['description']?></div>

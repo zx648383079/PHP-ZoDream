@@ -15,7 +15,6 @@ class ThemeController extends Controller {
                 break;
             }
         }
-        dd($current, $themes);
         return $this->show(compact('themes', 'current'));
     }
 

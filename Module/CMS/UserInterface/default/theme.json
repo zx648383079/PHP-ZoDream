@@ -3,23 +3,20 @@
     "description": "默认主题",
     "author": "zodream",
     "cover": "assets/images/screenshot.png",
-    "script": [
-        {
+    "script": [{
             "action": "copy",
             "src": "assets",
             "dist": "assets"
         },
         {
             "action": "option",
-            "data": [
-                {
-                    "name": "主题",
-                    "code": "theme",
-                    "type": "text",
-                    "value": "default",
-                    "default": ""
-                }
-            ]
+            "data": [{
+                "name": "主题",
+                "code": "theme",
+                "type": "text",
+                "value": "default",
+                "default": ""
+            }]
         },
         {
             "action": "group",
@@ -29,8 +26,7 @@
             "action": "model",
             "name": "新闻",
             "table": "news",
-            "fields": [
-                {
+            "fields": [{
                     "name": "作者",
                     "field": "author",
                     "type": "text"
@@ -51,8 +47,7 @@
             "action": "model",
             "name": "图片",
             "table": "images",
-            "fields": [
-                {
+            "fields": [{
                     "action": "disable",
                     "field": "content"
                 },
@@ -67,20 +62,17 @@
             "action": "model",
             "name": "主题",
             "table": "themes",
-            "fields": [
-                {
-                    "name": "文件",
-                    "field": "file",
-                    "type": "file"
-                }
-            ]
+            "fields": [{
+                "name": "文件",
+                "field": "file",
+                "type": "file"
+            }]
         },
         {
             "action": "model",
             "name": "应用",
             "table": "apps",
-            "fields": [
-                {
+            "fields": [{
                     "name": "使用说明",
                     "field": "instruction",
                     "type": "editor"
@@ -123,11 +115,10 @@
             "name": "app_market",
             "type": "@model:apps",
             "group": "nav",
-            "children": [
-                {
+            "children": [{
                     "title": "实用工具",
                     "name": "app_tool",
-                    "type": "@model:apps",
+                    "type": "@model:apps"
                 },
                 {
                     "title": "操作系统",
@@ -142,8 +133,7 @@
             "name": "theme_market",
             "type": "@model:themes",
             "group": "nav",
-            "children": [
-                {
+            "children": [{
                     "title": "企业官网",
                     "name": "company_theme",
                     "type": "@model:themes"
@@ -161,8 +151,7 @@
             "name": "news",
             "type": "@model:news",
             "group": "nav",
-            "children": [
-                {
+            "children": [{
                     "title": "站点动态",
                     "name": "web_news",
                     "type": "@model:news",
@@ -172,7 +161,7 @@
                     "title": "全球新闻",
                     "name": "all_news",
                     "type": "@model:news",
-                    "group": "nav",
+                    "group": "nav"
                 }
             ]
         },
