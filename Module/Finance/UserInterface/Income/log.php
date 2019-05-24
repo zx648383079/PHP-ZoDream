@@ -14,6 +14,7 @@ $this->registerJs($js, View::JQUERY_READY);
 ?>
 
     <a class="btn btn-success" href="<?=$this->url('./income/add_log')?>">新增流水</a>
+    <a class="btn btn-success" href="<?=$this->url('./income/add_day_log')?>">一日三餐</a>
     <hr/>
 
     <div>
