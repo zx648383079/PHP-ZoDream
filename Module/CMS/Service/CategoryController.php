@@ -12,15 +12,17 @@ class CategoryController extends Controller {
         if ($cat->type < 1) {
             $page = FuncHelper::contents([]);
         }
+        $title = $cat['title'];
         return $this->show($cat->category_template,
-            compact('cat', 'page'));
+            compact('cat', 'page', 'title'));
     }
 
     public function listAction($id, $keywords = null) {
         FuncHelper::$current['channel'] = $id;
         $cat = FuncHelper::channel($id, true);
         $page = FuncHelper::contents(compact('keywords'));
+        $title = $cat['title'].'列表页';
         return $this->show($cat->list_template,
-            compact('cat', 'page'));
+            compact('cat', 'page',  'title'));
     }
 }

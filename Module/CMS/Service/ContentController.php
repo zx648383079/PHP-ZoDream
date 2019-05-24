@@ -14,7 +14,8 @@ class ContentController extends Controller {
         $data = $scene->find($id);
         $data['view_count'] ++;
         $scene->update($id, ['view_count' => $data['view_count']], []);
+        $title = $data['title'];
         return $this->show($cat->show_template,
-            compact('cat', 'data'));
+            compact('cat', 'data', 'title'));
     }
 }
