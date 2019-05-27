@@ -3,11 +3,17 @@ namespace Module\CMS\Domain;
 
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
+use Module\CMS\Domain\Model\LinkageDataModel;
+use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Module;
+use Module\Forum\Domain\Model\ForumModel;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Database\Relation;
+use Zodream\Database\Schema\Schema;
+use Zodream\Database\Schema\Table;
 use Zodream\Disk\Directory;
 use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Json;
@@ -175,7 +181,13 @@ class ThemeManager {
     public function unpack() {
         $zip = new ZipStream($this->src->file('theme.zip'));
         $zip->extractTo($this->src);
-        $this->src = $this->src->directory('theme');
+        $this->apply('theme');
+    }
+
+    public function apply($theme = null) {
+        if (!empty($theme)) {
+            $this->src = $this->src->directory($theme);
+        }
         $file = $this->src->file('theme.json');
         if (!$file->exist()) {
             return;
@@ -371,5 +383,27 @@ class ThemeManager {
             ];
         });
         return $data;
+    }
+
+    public static function clear() {
+        $model_list = ModelModel::query()->all();
+        foreach ($model_list as $model) {
+            $scene = Module::scene()->setModel($model);
+            Schema::dropTable($scene->getExtendTable());
+            if ($scene instanceof MultiScene) {
+                Schema::dropTable($scene->getMainTable());
+            }
+        }
+        foreach([
+                    ModelModel::tableName(),
+                    ModelFieldModel::tableName(),
+                    CategoryModel::tableName(),
+                    GroupModel::tableName(),
+                    LinkageModel::tableName(),
+                    LinkageDataModel::tableName(),
+                    ForumModel::tableName()
+                ] as $table) {
+            (new Table($table))->truncate();
+        }
     }
 }

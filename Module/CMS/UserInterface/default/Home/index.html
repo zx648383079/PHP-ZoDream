@@ -15,7 +15,7 @@ var silder = $(".photo .slider").slider({
     <div class="slider" data-height="420" data-auto="true">
         <div class="slider-box">
             <ul>
-                {contents:category=8 num=4}
+                {contents:category=banner num=4}
                 <li><img src="{$content.thumb}" width="100%" alt=""></li>
                 {/contents}
             </ul>
@@ -30,7 +30,7 @@ var silder = $(".photo .slider").slider({
                     <div class="tab-item active">公司介绍</div>
                 </div>
                 <div class="tab-body thumb-box">
-                    {contents:category=1 num=1}
+                    {contents:category=about_us num=1}
                         <p>
                             <img src="{$content.thumb}" alt="{$content.title}" width="117" height="117" />
                         </p>
@@ -61,7 +61,7 @@ var silder = $(".photo .slider").slider({
                 <div class="tab-body">
                     <div class="tab-item active">
                         <ul class="list-box">
-                            {contents:category=4 num=10}
+                            {contents:category=news num=10}
                                 <li> 
                                     <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
@@ -72,7 +72,7 @@ var silder = $(".photo .slider").slider({
                     </div>
                     <div class="tab-item">
                         <ul class="list-box">
-                            {contents:category=6 num=10}
+                            {contents:category=web_news num=10}
                                 <li> 
                                     <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
@@ -93,7 +93,7 @@ var silder = $(".photo .slider").slider({
                         <div class="slider" data-height="420" data-auto="true">
                             <div class="slider-box">
                                 <ul>
-                                    {contents:category=9 num=4}
+                                    {contents:category=about_us num=4}
                                     <li><img src="{$content.thumb}" width="100%" alt=""></li>
                                     {/contents}
                                 </ul>

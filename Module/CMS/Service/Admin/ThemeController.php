@@ -22,7 +22,12 @@ class ThemeController extends Controller {
         return $this->show();
     }
 
-    public function applyAction() {
+    public function applyAction($theme) {
+        ThemeManager::clear();
+        (new ThemeManager())->apply($theme);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('theme')
+        ]);
     }
 
     public function installAction() {
