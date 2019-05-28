@@ -13,7 +13,7 @@ class ThemeController extends Controller {
         foreach ($themes as $key => $item) {
             if ($item['name'] === $current) {
                 $current = $item;
-                unset($themes[$key]);
+                //unset($themes[$key]);
                 break;
             }
         }

@@ -34,7 +34,7 @@
                 {
                     "name": "是否原创",
                     "field": "is_new",
-                    "type": "swicth"
+                    "type": "switch"
                 },
                 {
                     "name": "源网址",

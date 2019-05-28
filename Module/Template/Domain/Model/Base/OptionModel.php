@@ -88,7 +88,7 @@ class OptionModel extends Model {
 	public static function insertOrUpdate($code, $value, $name) {
         $id = static::where('code', $code)->value('id');
         if (!empty($id)) {
-            return static::where('code', $code)->value($value);
+            return static::where('code', $code)->value('value');
         }
         $data = is_callable($name) ? call_user_func($name) : [
             'name' => $name,

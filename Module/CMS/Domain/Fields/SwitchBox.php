@@ -22,4 +22,8 @@ class SwitchBox extends BaseField {
     public function toInput($value, ModelFieldModel $field) {
         return Theme::checkbox($field->field, null, $value, $field->name);
     }
+
+    public function filterInput($value, ModelFieldModel $field) {
+        return intval($value) > 0 ? 1 : 0;
+    }
 }

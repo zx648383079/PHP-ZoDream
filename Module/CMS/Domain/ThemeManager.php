@@ -199,7 +199,7 @@ class ThemeManager {
             return;
         }
         $this->setCache(GroupModel::pluck('id', 'name'), 'group');
-        $this->setCache(ModelModel::pluck('id', 'table'), 'model');
+        $this->setCache(ModelModel::query()->pluck('id', 'table'), 'model');
         $this->setCache(CategoryModel::pluck('id', 'name'), 'channel');
         $configs = Json::decode($file->read());
         $this->runScript($configs['script']);
@@ -306,6 +306,9 @@ class ThemeManager {
         if (isset($data['setting']) && is_array($data['setting'])) {
             $data['setting'] = Json::encode($data['setting']);
         }
+        if (isset($data['group'])) {
+            $data['groups'] = implode(',', (array)$data['group']);
+        }
         $model = CategoryModel::create($data);
         if (!$model) {
             throw new Exception('数据错误');
@@ -326,7 +329,7 @@ class ThemeManager {
     }
 
     protected function runActionContent($data) {
-        if (!is_numeric($data['cat_id'])) {
+        if (isset($data['cat_id']) && !is_numeric($data['cat_id'])) {
             $data['cat_id'] = $this->getCacheId($data['cat_id']);
         } elseif (isset($data['type'])) {
             $data['cat_id'] = $this->getCacheId($data['type']);
@@ -349,7 +352,7 @@ class ThemeManager {
     }
 
     protected function runActionOption($data) {
-        foreach ($data as $item) {
+        foreach ($data['data'] as $item) {
             OptionModel::insertOrUpdate($item['code'], $item['value'], function () use ($item) {
                 if (isset($item['items'])) {
                     $item['default_value'] = implode("\n", $item['items']);
@@ -360,6 +363,7 @@ class ThemeManager {
                 if (isset($item['parent_id']) && !is_numeric($item['parent_id'])) {
                     $item['parent_id'] = $this->getOptionParent($item['parent_id']);
                 }
+                unset($item['default'], $item['items'], $item['id']);
                 return $item;
             });
         }
@@ -392,23 +396,29 @@ class ThemeManager {
     }
 
     public static function clear() {
+        $truncateTables = [
+            ModelModel::tableName(),
+            ModelFieldModel::tableName(),
+            CategoryModel::tableName(),
+            GroupModel::tableName(),
+            LinkageModel::tableName(),
+            LinkageDataModel::tableName(),
+            ForumModel::tableName()
+        ];
         $model_list = ModelModel::query()->all();
         foreach ($model_list as $model) {
             $scene = Module::scene()->setModel($model);
             Schema::dropTable($scene->getExtendTable());
             if ($scene instanceof MultiScene) {
                 Schema::dropTable($scene->getMainTable());
+                continue;
             }
+            if (in_array($scene->getMainTable(), $truncateTables)) {
+                continue;
+            }
+            $truncateTables[] = $scene->getMainTable();
         }
-        foreach([
-                    ModelModel::tableName(),
-                    ModelFieldModel::tableName(),
-                    CategoryModel::tableName(),
-                    GroupModel::tableName(),
-                    LinkageModel::tableName(),
-                    LinkageDataModel::tableName(),
-                    ForumModel::tableName()
-                ] as $table) {
+        foreach($truncateTables as $table) {
             (new Table($table))->truncate();
         }
     }

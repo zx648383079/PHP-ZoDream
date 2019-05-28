@@ -20,7 +20,13 @@ class Textarea extends BaseField {
     }
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        // TODO: Implement converterField() method.
+        $option = $field->setting('option');
+        $type = 'varchar';
+        if (!empty($option) && isset($option['type'])
+            && in_array($option['type'], ['char', 'varchar', 'text'])) {
+            $type = $option['type'];
+        }
+        $column->{$type}();
     }
 
     public function toInput($value, ModelFieldModel $field) {

@@ -4,6 +4,15 @@
     }
 }
 
+table {
+    .text-left {
+        text-align: left;
+    }
+    .text-right {
+        text-align: right;
+    }
+}
+
 .panel {
     .panel-header {
         line-height: 40px;

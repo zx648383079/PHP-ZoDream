@@ -22,7 +22,7 @@ $this->title = 'ZoDream';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item['id']?></td>
-                <td>
+                <td class="text-left">
                     <?php if($item['level'] > 0):?>
                     <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
                     <?php endif;?>
@@ -30,7 +30,7 @@ $this->title = 'ZoDream';
                 </td>
                 <td><?=$item['groups']?></td>
                 <td></td>
-                <td>
+                <td class="text-right">
                     <div class="btn-group  btn-group-xs">
                         <?php if($item['type'] < 1):?>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/content', ['cat_id' => $item['id']])?>">查看</a>

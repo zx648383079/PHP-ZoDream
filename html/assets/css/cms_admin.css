@@ -1,6 +1,12 @@
 .search .form-horizontal {
   display: inline-block; }
 
+table .text-left {
+  text-align: left; }
+
+table .text-right {
+  text-align: right; }
+
 .panel .panel-header {
   line-height: 40px;
   background-color: #fff;
