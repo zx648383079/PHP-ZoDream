@@ -152,7 +152,7 @@ class FuncHelper {
         return static::getContentValue($name, $data, static::$current['channel']);
     }
 
-    public static function next() {
+    public static function next($name = null) {
         $data = static::getOrSet(__FUNCTION__, function () {
             $cat = static::channel(static::$current['channel'], true);
             $scene = Module::scene()->setModel($cat->model);
@@ -258,8 +258,21 @@ class FuncHelper {
         return isset($data[$name]) ? $data[$name] : null;
     }
 
+    public static function isChildren($parent_id, $id) {
+        if ($parent_id === $id) {
+            return 0;
+        }
+        $children = static::channels(['children' => $parent_id]);
+        if (!empty($children) && in_array($id, $children)) {
+            return 1;
+        }
+        return -1;
+    }
+
     public static function channelActive($id) {
-        if (intval($id) === intval(static::$current['channel'])) {
+        $id = intval($id);
+        $current = intval(static::$current['channel']);
+        if (self::isChildren($id, $current) >= 0) {
             return ' active';
         }
         return '';
