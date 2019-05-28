@@ -33,10 +33,16 @@ class ThemeManager {
 
     protected $cache = [];
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->src = new Directory(dirname(__DIR__).'/UserInterface');
         $this->dist = public_path();
+    }
+
+    /**
+     * @return Directory
+     */
+    public function getSrc() {
+        return $this->src;
     }
 
     public function pack() {

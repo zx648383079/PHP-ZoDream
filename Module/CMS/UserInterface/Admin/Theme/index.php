@@ -9,7 +9,8 @@ $this->title = '本地主题';
     <div class="panel-body">
         <div class="theme-item">
             <div class="thumb">
-                <img src="<?=$current['cover']?>" alt="">
+                <img src="<?=$this->url('./admin/theme/cover',
+                    ['theme' => $current['name']])?>" alt="">
             </div>
             <div class="name"><?=$current['name']?></div>
             <div class="desc"><?=$current['description']?></div>
@@ -23,11 +24,13 @@ $this->title = '本地主题';
         <?php foreach($themes as $item):?>
         <div class="theme-item">
             <div class="thumb">
-                <img src="<?=$item['cover']?>" alt="">
+                <img src="<?=$this->url('./admin/theme/cover',
+                    ['theme' => $item['name']])?>" alt="">
             </div>
             <div class="name"><?=$item['name']?></div>
             <div class="desc"><?=$item['description']?></div>
-            <a href="" class="btn">使用</a>
+            <a data-type="del" data-tip="是否确定清空数据并使用此主题？" href="<?=$this->url('./admin/theme/apply',
+                ['theme' => $current['name']])?>" class="btn">使用</a>
         </div>
         <?php endforeach;?>
     </div>

@@ -3,6 +3,8 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\ThemeManager;
 use Module\CMS\Module;
+use Zodream\Helpers\Json;
+use Zodream\Image\ImageStatic;
 
 class ThemeController extends Controller {
     public function indexAction() {
@@ -31,5 +33,13 @@ class ThemeController extends Controller {
     }
 
     public function installAction() {
+    }
+
+    public function coverAction($theme) {
+        $manager = new ThemeManager();
+        $folder = $manager->getSrc()->directory($theme);
+        $data = $folder->file('theme.json')->read();
+        $data = Json::decode($data);
+        return app('response')->image(ImageStatic::make($folder->file($data['cover'])));
     }
 }

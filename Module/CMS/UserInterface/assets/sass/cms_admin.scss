@@ -3,3 +3,34 @@
         display: inline-block;
     }
 }
+
+.panel {
+    .panel-header {
+        line-height: 40px;
+        background-color: #fff;
+        padding: 0 10px;
+        border-bottom: 1px solid #f90;
+        .more {
+            float: right;
+        }
+    }
+    .panel-body {
+    }
+}
+
+.theme-item {
+    text-align: center;
+    display: inline-block;
+    .thumb {
+        img {
+            width: 200px;
+        }
+    }
+    .name {
+        line-height: 30px;
+        font-weight: 600;
+    }
+    .desc {
+        color: #aaa;
+    }
+}
