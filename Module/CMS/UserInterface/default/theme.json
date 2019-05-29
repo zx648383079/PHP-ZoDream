@@ -26,6 +26,9 @@
             "action": "model",
             "name": "新闻",
             "table": "news",
+            "category_template": "page",
+            "list_template": "list",
+            "show_template": "index",
             "fields": [{
                     "name": "作者",
                     "field": "author",
@@ -72,6 +75,9 @@
             "action": "model",
             "name": "应用",
             "table": "apps",
+            "category_template": "app",
+            "list_template": "app_list",
+            "show_template": "app",
             "fields": [{
                     "name": "使用说明",
                     "field": "instruction",
