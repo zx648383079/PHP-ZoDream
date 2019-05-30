@@ -1,0 +1,35 @@
+{layout:main}
+{this.title=$data.title}
+<div class="banner-bg" style="background:url({$cat.image}); height: 140px;">
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="path">
+                    当前位置: 
+                <ul><li><a href="">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div id="content">
+                <div class="title">
+                    {$data.title}
+                </div>
+                <div class="desc">
+                        {$data.description}
+                </div>
+                <div class="tags">
+                    <span>时间：{this.time:$data.created_at}</span>
+                    <span>作者：admin</span>
+                </div>
+                <div class="links">
+                    <a href="{$data.file}" target="_blank">下载</a>
+                    <a href="{$data.file}"  target="_blank">预览</a>
+                </div>
+                <div class="content">
+                    {$data.content}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

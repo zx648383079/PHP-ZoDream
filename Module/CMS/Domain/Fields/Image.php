@@ -18,7 +18,7 @@ class Image extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        // TODO: Implement converterField() method.
+        $column->varchar($field->length > 10 ? $field->length : 255)->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

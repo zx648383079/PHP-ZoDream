@@ -29,7 +29,7 @@ $this->title = 'ZoDream';
             <tr>
                 <td><?=$item['id']?></td>
                 <td>
-                    <a href="<?=$this->url('./content', ['cat_id' => $item['cat_id'], 'id' => $item['id']])?>" target="_blank"><?=$item['title']?></a>
+                    <a href="<?=$this->url('./content', ['category' => $item['cat_id'], 'id' => $item['id']])?>" target="_blank"><?=$item['title']?></a>
                 </td>
                 <td>
                     <?php if ($cat):?>

@@ -187,6 +187,47 @@ footer {
     }
 }
 
+.theme-list {
+    .item {
+        .thumb {
+            background-color: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+            margin-top: 30px;
+            padding: 10px;
+            img {
+                border-radius: 2px;
+                overflow: hidden;
+                width: 100%;
+            }
+        }
+        .title {
+            margin: 16px auto 10px;
+            width: 80%;
+            white-space: nowrap;
+            display: block;
+            overflow: hidden;
+            font-size: 18px;
+            text-overflow: ellipsis;
+            text-align: center;
+            &::after {
+                content: " ";
+                display: block;
+                height: 3px;
+                width: 40px;
+                background-color: #00b19d;
+                margin: 10px auto;
+            }
+        }
+        .desc {
+            color: #98a6ad;
+            max-height: 45px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+    }
+}
+
 .tab-box {
     .tab-header {
         border-bottom: 1px solid #ddd;

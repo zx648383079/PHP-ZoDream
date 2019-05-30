@@ -18,7 +18,7 @@ class File extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->varchar($field->length)->comment($field->name);
+        $column->varchar($field->length > 10 ? $field->length : 255)->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

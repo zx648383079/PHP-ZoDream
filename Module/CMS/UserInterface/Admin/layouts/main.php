@@ -63,10 +63,11 @@ $this->registerCssFile([
         true
     ],
     [
-        '内容管理',
-        false,
-        'fa fa-book',
-        $menus
+        'label' => '内容管理',
+        'url' => false,
+        'icon' => 'fa fa-book',
+        'children' => $menus,
+        'class' => 'text-left'
     ],
     [
         '主题管理',

@@ -30,7 +30,21 @@
                     <span>当前版本：v1</span>
                 </div>
                 <div class="links">
-                    <a href="">安卓</a>
+                    {if:$data.win}
+                    <a href="{$data.win}">EXE</a>
+                    {/if}
+                    {if:$data.linux}
+                    <a href="{$data.linux}">Linux</a>
+                    {/if}
+                    {if:$data.apk}
+                    <a href="{$data.apk}">安卓</a>
+                    {/if}
+                    {if:$data.ipa}
+                    <a href="{$data.ipa}">IOS</a>
+                    {/if}
+                    {if:$data.uwp}
+                    <a href="{$data.uwp}">UWP</a>
+                    {/if}
                 </div>
                 <div class="tab-box">
                     <div class="tab-header">

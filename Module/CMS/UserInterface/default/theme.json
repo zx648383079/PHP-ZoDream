@@ -65,6 +65,9 @@
             "action": "model",
             "name": "主题",
             "table": "themes",
+            "category_template": "theme",
+            "list_template": "theme_list",
+            "show_template": "theme",
             "fields": [{
                 "name": "文件",
                 "field": "file",

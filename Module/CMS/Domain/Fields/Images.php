@@ -19,7 +19,7 @@ class Images extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        // TODO: Implement converterField() method.
+        $column->text()->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

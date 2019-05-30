@@ -12,7 +12,7 @@ class ContentController extends Controller {
     public function indexAction($cat_id, $keywords = null) {
         $cat = CategoryModel::find($cat_id);
         $scene = Module::scene()->setModel($cat->model);
-        $model_list = $scene->search($keywords, $cat_id);
+        $model_list = $scene->search($keywords, $cat_id, 'id desc');
         return $this->show(compact('model_list', 'cat'));
     }
 

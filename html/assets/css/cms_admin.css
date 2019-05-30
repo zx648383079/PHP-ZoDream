@@ -7,6 +7,10 @@ table .text-left {
 table .text-right {
   text-align: right; }
 
+.navbar ul li.text-left ul a {
+  text-align: left;
+  padding-left: 40px; }
+
 .panel .panel-header {
   line-height: 40px;
   background-color: #fff;
