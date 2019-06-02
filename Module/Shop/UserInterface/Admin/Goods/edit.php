@@ -4,10 +4,10 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑商品';
-$url = $this->url('./admin/');
+$url = $this->url('./admin');
 $id = intval($model->id);
 $js = <<<JS
-    bindGoods('{$url}', {$id});
+    bindGoods('{$url}/', {$id});
 JS;
 $this->registerJs($js);
 ?>

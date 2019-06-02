@@ -5,6 +5,7 @@ use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\Scene\Goods;
+use Module\Shop\Domain\Repositories\GoodsRepository;
 
 class GoodsController extends Controller {
 
@@ -16,17 +17,7 @@ class GoodsController extends Controller {
         if (!is_array($id) && $id > 0) {
             return $this->infoAction($id);
         }
-        $page = Goods::sortBy($sort, $order)
-            ->when(!empty($id), function ($query) use ($id) {
-                $query->whereIn('id', array_map('intval', $id));
-            })
-            ->when(!empty($keywords), function ($query) {
-                GoodsModel::search($query, 'name');
-            })->when($category > 0, function ($query) use ($category) {
-                $query->where('cat_id', intval($category));
-            })->when($brand > 0, function ($query) use ($brand) {
-                $query->where('brand_id', intval($brand));
-            })->page($per_page);
+        $page = GoodsRepository::searchComplete(!is_array($id) ? [] : $id, $category, $brand, $keywords, $per_page, $sort, $order);
         return $this->renderPage($page);
     }
 
