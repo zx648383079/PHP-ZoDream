@@ -24,6 +24,7 @@ class HomeController extends Controller {
 	}
 
 	public function sitemapAction() {
+	    url()->useCustomScript();
 	    $map = new SiteMap();
 	    $map->add(url('/'), time());
         $modules = config('modules');
@@ -31,11 +32,12 @@ class HomeController extends Controller {
 	    app(Router::class)->module('blog', function () use ($map) {
             $blog_list = BlogModel::orderBy('id', 'desc')->get('id', 'updated_at');
             foreach ($blog_list as $item) {
-                $map->add(str_replace('admin.php/', '', $item->url),
+                $map->add($item->url,
                     $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
             }
         });
         $map->toXml();
+        url()->useCustomScript(false);
         return $this->show(compact('map'));
     }
 
