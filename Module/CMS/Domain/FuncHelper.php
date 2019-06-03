@@ -192,7 +192,9 @@ class FuncHelper {
             isset($id['name']) && $name = $id['name'];
             $id = $id['id'];
         }
-        $id = intval($id);
+        if (!is_numeric($id)) {
+            $id = static::getChannelId($id);
+        }
         if ($id < 1) {
             return null;
         }

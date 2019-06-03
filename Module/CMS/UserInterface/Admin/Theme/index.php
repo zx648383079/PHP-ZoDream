@@ -10,7 +10,7 @@ $this->title = '本地主题';
         <div class="theme-item">
             <div class="thumb">
                 <img src="<?=$this->url('./admin/theme/cover',
-                    ['theme' => $current['name']])?>" alt="">
+                    ['theme' => $current['name']], false)?>" alt="">
             </div>
             <div class="name"><?=$current['name']?></div>
             <div class="desc"><?=$current['description']?></div>
@@ -25,12 +25,12 @@ $this->title = '本地主题';
         <div class="theme-item">
             <div class="thumb">
                 <img src="<?=$this->url('./admin/theme/cover',
-                    ['theme' => $item['name']])?>" alt="">
+                    ['theme' => $item['name']], false)?>" alt="">
             </div>
             <div class="name"><?=$item['name']?></div>
             <div class="desc"><?=$item['description']?></div>
             <a data-type="del" data-tip="是否确定清空数据并使用此主题？" href="<?=$this->url('./admin/theme/apply',
-                ['theme' => $current['name']])?>" class="btn">使用</a>
+                ['theme' => $current['name']], false)?>" class="btn">使用</a>
         </div>
         <?php endforeach;?>
     </div>

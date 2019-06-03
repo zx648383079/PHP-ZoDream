@@ -123,6 +123,7 @@
             "title": "应用市场",
             "name": "app_market",
             "type": "@model:apps",
+            "image": "/assets/images/banner.jpg",
             "group": "nav",
             "children": [{
                     "title": "实用工具",
@@ -141,6 +142,7 @@
             "title": "主题市场",
             "name": "theme_market",
             "type": "@model:themes",
+            "image": "/assets/images/banner.jpg",
             "group": "nav",
             "children": [{
                     "title": "企业官网",
@@ -160,16 +162,19 @@
             "name": "news",
             "type": "@model:news",
             "group": "nav",
+            "image": "/assets/images/banner.jpg",
             "children": [{
                     "title": "站点动态",
                     "name": "web_news",
                     "type": "@model:news",
+                    "image": "/assets/images/banner.jpg",
                     "group": "nav"
                 },
                 {
                     "title": "全球新闻",
                     "name": "all_news",
                     "type": "@model:news",
+                    "image": "/assets/images/banner.jpg",
                     "group": "nav"
                 }
             ]
@@ -178,15 +183,30 @@
             "action": "channel",
             "title": "关于我们",
             "name": "about_us",
-            "type": "page",
+            "type": "@model:news",
             "content": "",
-            "group": "nav"
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg"
         },
         {
             "action": "channel",
             "title": "首页Banner",
             "name": "banner",
             "type": "@model:images"
+        },
+        {
+            "action": "channel",
+            "title": "站点相册",
+            "name": "photos",
+            "type": "@model:images"
+        },
+        {
+            "action": "content",
+            "type": "@channel:banner",
+            "title": "banner",
+            "thumb": "/assets/images/banner.jpg",
+            "image": "/assets/images/banner.jpg"
         },
         {
             "action": "content",

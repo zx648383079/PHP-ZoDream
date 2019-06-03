@@ -27,7 +27,7 @@ var silder = $(".photo .slider").slider({
         <div class="col-md-4">
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item active">公司介绍</div>
+                    <div class="tab-item active">{channel:about_us,title}</div>
                 </div>
                 <div class="tab-body thumb-box">
                     {contents:category=about_us num=1}
@@ -55,8 +55,8 @@ var silder = $(".photo .slider").slider({
         <div class="col-md-5">
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item active">新闻动态</div>
-                    <div class="tab-item">通知公告</div>
+                    <div class="tab-item active">{channel:news,title}</div>
+                    <div class="tab-item">{channel:web_news,title}</div>
                 </div>
                 <div class="tab-body">
                     <div class="tab-item active">
@@ -87,13 +87,13 @@ var silder = $(".photo .slider").slider({
         <div class="col-md-3">
             <div class="tab-box">
                 <div class="tab-header">
-                    <div class="tab-item active">公司相册</div>
+                    <div class="tab-item active">{channel:photos,title}</div>
                 </div>
                 <div class="tab-body photo">
                         <div class="slider" data-height="420" data-auto="true">
                             <div class="slider-box">
                                 <ul>
-                                    {contents:category=about_us num=4}
+                                    {contents:category=photos num=4}
                                     <li><img src="{$content.thumb}" width="100%" alt=""></li>
                                     {/contents}
                                 </ul>

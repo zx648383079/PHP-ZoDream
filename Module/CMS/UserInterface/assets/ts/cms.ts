@@ -3,5 +3,7 @@ $(function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
         $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
-    })
+    }).on('click', '.nav-bar .nav-toggle', function() {
+        $(this).closest('.nav-bar').toggleClass('open');
+    });
 });

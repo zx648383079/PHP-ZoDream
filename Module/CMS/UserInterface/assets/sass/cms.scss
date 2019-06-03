@@ -36,8 +36,33 @@ ol {
 header {
     color: #333;
     background-color: #fff;
+    .logo {
+        display: inline-block;
+        height: 60px;
+        line-height: 60px;
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        img {
+            height: 60px;
+        }
+    }
     .nav-bar {
         float: right;
+        .nav-toggle {
+            display: none;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: inherit;
+            text-rendering: auto;
+            line-height: 90px;
+            font-size: 2rem;
+            font-style: normal;
+            &::before {
+                content: "\f0c9";
+            }
+        }
         li {
             list-style: none;
             display: inline-block;
@@ -347,5 +372,44 @@ footer {
     .container {
         width: 100%;
     }
+}
 
+@media (max-width: 768px){
+    header {
+        .nav-bar {
+            >ul {
+                display: none;
+            }
+            .nav-toggle {
+                display: inline-block;
+            }
+            &.open {
+                float: none;
+                .nav-toggle {
+                    position: absolute;
+                    right: 10px;
+                    top: 0;
+                    &::before {
+                        content: "\f00d";
+                    }
+                }
+                >ul {
+                    display: block;
+                    >li {
+                        display: block;
+                        border-bottom: 1px #ccc dashed;
+                        >a {
+                            margin: 0;
+                        }
+                        .sub-menu {
+                            box-shadow: inset 0px 5px 5px -5px #000,
+                                        inset 0px -5px 5px -5px #000;
+                            display: block;
+                            position: static;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
