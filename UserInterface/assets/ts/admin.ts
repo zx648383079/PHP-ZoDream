@@ -7,7 +7,7 @@ function renderCMD(lines: string[]) {
                 return;
             }
             box.append('<p>'+ lines[i++] +'</p>').scrollTop(box[0].scrollHeight);
-        }, 500);
+        }, Math.floor(1 + Math.random() * 400));
 }
 
 $(document).ready(function() {
