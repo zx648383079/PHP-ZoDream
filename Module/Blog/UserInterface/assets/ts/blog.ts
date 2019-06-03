@@ -75,8 +75,9 @@ function bindBlog(baseUri: string, id: number, type: number) {
             Dialog.tip(data.message);
         })
     });
+    let bookSkin = $('.book-skin');
     $('.book-navicon').click(function () {
-        $('.book-skin').toggleClass('book-collapsed');
+        bookSkin.toggleClass('book-collapsed');
     });
     let dynamicBox = $('.book-dynamic');
     let side = $('#content').sideNav({
@@ -84,10 +85,8 @@ function bindBlog(baseUri: string, id: number, type: number) {
             contentLength: 20,
             maxLength: 8,
             maxFixedTop: function(box: JQuery, scrollTop: number) {
-                if (commentBox.length < 1) {
-                    return true;
-                }
-                const fixed = scrollTop + $(window).height() - box.height() < commentBox.offset().top;
+                let bottom = commentBox.length < 1 ? (bookSkin.offset().top + bookSkin.height()) : commentBox.offset().top;
+                const fixed = scrollTop + $(window).height() - box.height() < bottom;
                 if (!fixed) {
                     box.css('top', 'auto');
                     return fixed;
