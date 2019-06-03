@@ -7,7 +7,7 @@ $lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 
 $this->title = $model->id > 0 ? '编辑' : '新增'. '文章';
 $configs = app('request')->isMobile() ?
     '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '{}';
-$url = $this->url('./admin/');
+$url = $this->url('./admin', false);
 $tags = json_encode($tags);
 $js = <<<JS
 bindEdit({$configs}, '{$url}', {$tags});
