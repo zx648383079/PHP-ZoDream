@@ -30,6 +30,7 @@ class ModelFieldModel extends BaseModel {
     public $type_list = [
         'text' => '文本字段',
         'textarea' => '多行文本',
+        'markdown' => 'Markdown',
         'editor' => '编辑器',
         'radio' => '单选按钮',
         'select' => '下拉选择',

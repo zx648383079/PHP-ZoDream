@@ -1,8 +1,11 @@
 <?php
 namespace Module\CMS\Domain;
 
+use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Module;
+use Module\Document\Domain\Model\FieldModel;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
@@ -83,7 +86,7 @@ class FuncHelper {
         return $data;
     }
 
-    public static function contents(array $params = null) {
+    protected static function getCategoryId(array $params) {
         $category = static::getVal($params, ['category', 'cat_id', 'cat', 'channel']);
         if (!empty($category) && !is_numeric($category)) {
             $category = static::getChannelId($category);
@@ -91,6 +94,11 @@ class FuncHelper {
         if (empty($category)) {
             $category = static::$current['channel'];
         }
+        return $category;
+    }
+
+    public static function contents(array $params = null) {
+        $category = self::getCategoryId($params);
         $keywords = static::getVal($params, ['keywords', 'keyword', 'query']);
         $page = intval(static::getVal($params, ['page']));
         $fields = static::getVal($params, ['fields']);
@@ -179,6 +187,32 @@ class FuncHelper {
             }
             static::$cache['channel'][$item['id']] = $item;
         }
+    }
+
+    public static function field(array $params) {
+        $category = self::getCategoryId($params);
+        $field = static::getOrSet(__FUNCTION__,
+            sprintf('%s-%s', $category, $params['field']),
+            function () use ($category, $params) {
+                $cat = static::channel($category, true);
+                if (empty($cat) || $cat->model_id < 1) {
+                    return null;
+                }
+                return ModelFieldModel::where('model_id', $cat->model_id)
+                    ->where('field', $params['field'])->first();
+            });
+        if (empty($field)) {
+            return '';
+        }
+        if (!array_key_exists('name', $params)) {
+            return $field;
+        }
+        $name = empty($params['name']) ? 'name' : $params['name'];
+        return $field[$name];
+    }
+
+    public static function markdown($content) {
+        return HtmlExpand::toHtml($content, true);
     }
 
     /**
@@ -337,6 +371,8 @@ class FuncHelper {
                 return sprintf('<?=%s->getLink()?>', $tag);
             })
             ->registerFunc('content', '\Module\CMS\Domain\FuncHelper::content')
+            ->registerFunc('field', '\Module\CMS\Domain\FuncHelper::field')
+            ->registerFunc('markdown', '\Module\CMS\Domain\FuncHelper::markdown')
             ->registerFunc('formAction', '\Module\CMS\Domain\FuncHelper::formAction')
             ->registerFunc('location', '\Module\CMS\Domain\FuncHelper::location')
             ->registerFunc('previous', '\Module\CMS\Domain\FuncHelper::previous')
