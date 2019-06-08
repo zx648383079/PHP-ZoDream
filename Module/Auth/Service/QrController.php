@@ -19,7 +19,7 @@ class QrController extends ModuleController {
     public function indexAction() {
         $model = LoginQrModel::createNew();
         $image = new QrCode();
-        $image->encode(url('./qr/authorize', ['token' => $model->token]));
+        $image->encode(url('./qr/authorize', ['token' => $model->token], false));
         session()->set('login_qr', $model->id);
         return app('response')->image($image);
     }

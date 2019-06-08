@@ -3,6 +3,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Http\Uri;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\Route\Controller\RestController;
@@ -39,6 +40,10 @@ class QrController extends RestController {
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {
+        if (strpos($token, 'token=') > 0) {
+            $url = new Uri($token);
+            $token = $url->getData('token');
+        }
         $model = LoginQrModel::findByToken($token);
         if (empty($model) || $model->isExpired() ||
             !in_array($model->status, [LoginQrModel::STATUS_UN_SCAN, LoginQrModel::STATUS_UN_CONFIRM])) {
