@@ -19,11 +19,11 @@ class QrController extends RestController {
     /**
      * 验证token
      * @param $token
-     * @return Response
+     * @return RestResponse
      * @throws \Exception
      */
     public function indexAction($token) {
-        $model = LoginQrModel::findByToken($token);
+        $model = LoginQrModel::findIfToken($token);
         if (empty($model) || $model->isExpired() ||
             !in_array($model->status, [LoginQrModel::STATUS_UN_SCAN, LoginQrModel::STATUS_UN_CONFIRM])) {
             return $this->renderFailure('二维码已失效');
@@ -40,11 +40,7 @@ class QrController extends RestController {
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {
-        if (strpos($token, 'token=') > 0) {
-            $url = new Uri($token);
-            $token = $url->getData('token');
-        }
-        $model = LoginQrModel::findByToken($token);
+        $model = LoginQrModel::findIfToken($token);
         if (empty($model) || $model->isExpired() ||
             !in_array($model->status, [LoginQrModel::STATUS_UN_SCAN, LoginQrModel::STATUS_UN_CONFIRM])) {
             return $this->renderFailure('二维码已失效');

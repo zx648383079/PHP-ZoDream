@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Helpers\Str;
+use Zodream\Http\Uri;
 
 /**
  * Class LoginQrModel
@@ -13,6 +14,7 @@ use Zodream\Helpers\Str;
  * @property integer $expired_at
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $url
  */
 class LoginQrModel extends Model {
 
@@ -56,6 +58,10 @@ class LoginQrModel extends Model {
         return $this->expired_at < time();
     }
 
+    public function getUrlAttribute() {
+        return url('./qr/authorize', ['token' => $this->token], false);
+    }
+
     public static function generateToken() {
         return md5(Str::randomBytes(20).time());
     }
@@ -66,6 +72,14 @@ class LoginQrModel extends Model {
      */
     public static function findByToken($token) {
         return self::where('token', $token)->one();
+    }
+
+    public static function findIfToken($token) {
+        if (strpos($token, 'token=') > 0) {
+            $url = new Uri($token);
+            $token = $url->getData('token');
+        }
+        return static::findByToken($token);
     }
 
     public static function createNew() {

@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\CategoryModel;
-use Module\Shop\Domain\Models\Scene\Goods;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
 
 class CategoryController extends Controller {
 
@@ -20,7 +20,7 @@ class CategoryController extends Controller {
         if (!empty($extra)) {
             $extra = explode(',', $extra);
             if (in_array('goods_list', $extra)) {
-                $data['goods_list'] = Goods::whereIn('cat_id', $model->children)
+                $data['goods_list'] = GoodsSimpleModel::whereIn('cat_id', $model->children)
                     ->where('is_best', 1)->all();
             }
             if (in_array('children', $extra)) {

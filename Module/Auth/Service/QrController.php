@@ -19,7 +19,7 @@ class QrController extends ModuleController {
     public function indexAction() {
         $model = LoginQrModel::createNew();
         $image = new QrCode();
-        $image->encode(url('./qr/authorize', ['token' => $model->token], false));
+        $image->encode($model->url);
         session()->set('login_qr', $model->id);
         return app('response')->image($image);
     }
@@ -62,7 +62,7 @@ class QrController extends ModuleController {
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {
-        $model = LoginQrModel::findByToken($token);
+        $model = LoginQrModel::findIfToken($token);
         if (empty($model) || $model->isExpired() ||
             !in_array($model->status, [LoginQrModel::STATUS_UN_SCAN, LoginQrModel::STATUS_UN_CONFIRM])) {
             return $this->redirect('/');
