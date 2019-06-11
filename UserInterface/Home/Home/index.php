@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '首页';
 $this->set([
-    'keywords' => 'zodream,开发博客,个人博客,zodream文档',
+    'keywords' => 'zodream,开发博客,个人博客,ts,vue,php,uwp,angular',
     'description' => 'zodream 开发博客及框架演示和文档。'
 ]);
 ?>
