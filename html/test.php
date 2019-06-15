@@ -18,3 +18,17 @@ use Zodream\Disk\File;
 use Zodream\Image\Node\Box;
 use Zodream\Image\Node\Point;
 use Zodream\Image\Node\Text;
+
+$dir = new \Zodream\Disk\Directory('E:\Desktop\test');
+
+$spider = new \Module\Book\Domain\Spiders\AutoSpider();
+
+
+$dir->map(function ($file) use ($spider) {
+    if ($file instanceof File && $file->getExtension() === 'html') {
+        $content = $spider->getCleanContent($file->read());
+        $file->getDirectory()
+            ->addFile($file->getNameWithoutExtension().'.json',
+                \Zodream\Helpers\Json::encode($content));
+    }
+});

@@ -73,8 +73,9 @@ class AutoSpider extends BaseSpider {
         ];
     }
 
-    public function getContent(array $tags, $html) {
-        for ($index = count($tags) -1; $index >= 0; $index --) {
+    public function getContent(array $tags, $html)
+    {
+        for ($index = count($tags) - 1; $index >= 0; $index--) {
             if (isset($tags[$index]['center']) && $tags[$index]['center']) {
                 break;
             }
@@ -84,16 +85,51 @@ class AutoSpider extends BaseSpider {
         }
         $tag = $tags[$index];
         if (strpos($tag['tag'], 'a') !== false) {
-            return $this->getChapters($tag['index'], $tags[$index + 1]['index'], $html);
+            return $this->getChapters(
+                $this->getChaptersStart($tags, $index), $this->getChaptersEnd($tags, $index), $html);
         }
-        $content = substr($html, $tags[$index - 1]['index'],
-            $tags[$index + 1]['index'] - $tags[$index - 1]['index']);
+        $start = $this->getContentStart($tags, $index);
+        $content = substr($html, $start ,
+            $tags[$index + 1]['index'] - $start);
         $content = preg_replace('#^<.+?</[^<>]+?>#', '', $content);
         return Html::toText($content);
     }
 
+    protected function getContentStart(array $tags, $index) {
+        return $index >= 1 ? $tags[$index - 1]['index'] + 1 : 0;
+    }
+
+
+
+    protected function getChaptersEnd(array $tags, $index) {
+        $count = count($tags);
+        while ($index + 2 < $count) {
+            if ($tags[$index + 1]['count'] < 10 &&
+                $tags[$index + 2]['tag'] === $tags[$index]['tag']) {
+                $index += 2;
+                continue;
+            }
+            break;
+        }
+        return $index + 1 > $count ? -1 : ($tags[$index + 1]['index'] + 1);
+    }
+
+    protected function getChaptersStart(array $tags, $index) {
+        while ($index >= 2) {
+            if ($tags[$index - 1]['count'] < 10 &&
+                $tags[$index - 1]['tag'] !== 'dt' &&
+                $tags[$index - 2]['tag'] === $tags[$index]['tag']) {
+                $index -= 2;
+                continue;
+            }
+            break;
+        }
+        return $tags[$index]['index'];
+    }
+
     public function getChapters($start, $end, $html) {
-        $content = substr($html, $start, $end - $start);
+        $content = $end > 0 ? substr($html, $start, $end - $start)
+            : substr($html, $start);
         if (preg_match_all('#<a href="(.+?)">(.+?)</a>#i', $content, $matches, PREG_SET_ORDER)) {
             return array_map(function ($item) {
                 return [
@@ -103,6 +139,11 @@ class AutoSpider extends BaseSpider {
             }, $matches);
         }
         return [];
+    }
+
+    public function getCleanContent($html) {
+        $html = $this->cleanHtml($html);
+        return $this->getContent($this->getTagMaps($html), $html);
     }
 
     /**
@@ -131,16 +172,17 @@ class AutoSpider extends BaseSpider {
                 continue;
             }
             if ($tag !== false && ($char === '>' || $char == ' ')) {
-                $count = count($maps);
-                if ($count > 0 && $maps[$count - 1]['tag'] === $tag) {
-                    $maps[$count - 1]['count'] ++;
-                } else {
+                 // 不能先合并单个字符
+//                $count = count($maps);
+//                if ($count > 0 && $maps[$count - 1]['tag'] === $tag) {
+//                    $maps[$count - 1]['count'] ++;
+//                } else {
                     $maps[] = [
                         'tag' => $tag,
                         'count' => 1,
                         'index' => $i - strlen($tag) - 2
                     ];
-                }
+//                }
                 $tag = false;
                 continue;
             }
@@ -148,10 +190,55 @@ class AutoSpider extends BaseSpider {
                 $tag .= $char;
             }
         }
-        // 倒序合并多个空标签
+        return $this->compactTags($this->mergeTags($maps));
+
+    }
+
+    protected function getTitle($html) {
+        if (!preg_match(self::TITLE, $html, $match)) {
+            return '';
+        };
+        $title = str_replace(['_', '-'], ' ', $match[1]);
+        return $title;
+    }
+
+    protected function cleanHtml($html) {
+        $html = preg_replace('#<head>([\s\S]+?)</head>#', '', $html);
+        $html = preg_replace('/<!--[\s\S]*?-->/is', '', $html);
+        $html = preg_replace('/\s+/is', ' ', $html);
+        $html = preg_replace("#(\>)[\s\n\r]+(\</?\w+)#", '$1$2', $html);
+        $html = preg_replace('/\<style .*?\<\\/style\>/is', '', $html);
+        $html = preg_replace('/\<script.*?\<\/script>/is', '', $html);
+        return preg_replace_callback('#</?(\w+)([^\<\>]*)/?>#', function ($match) {
+            $replace = '';
+            if ($match[1] == 'img') {
+                $replace = $this->cleanAttribute($match, 'src');
+            } elseif ($match[1] == 'a') {
+                $replace = $this->cleanAttribute($match, 'href');
+            } elseif ($match[1] == 'br') {
+                return '<br>';
+            }
+            return str_replace($match[2], $replace, $match[0]);
+        }, $html);
+
+    }
+
+    protected function cleanAttribute($matches, $tag) {
+        if (preg_match('/'.$tag.'\s?=[\s"\']?(\S+)["\']/i', $matches[2], $match)) {
+            return sprintf(' %s="%s"', $tag, $match[1]);
+        }
+        return '';
+    }
+
+    /**
+     * 倒序合并多个空标签
+     * @param $maps
+     * @return array
+     */
+    protected function mergeTags(array $maps) {
         $data = [];
         $prev = false;
-        for ($i = count($maps) - 1; $i >= 0; $i --) {
+        for ($i = count($maps) - 1; $i >= 0; $i--) {
             $item = $maps[$i];
             if ($item['count'] > 1) {
                 if ($prev !== false) {
@@ -182,7 +269,7 @@ class AutoSpider extends BaseSpider {
                 continue;
             }
             $data[$count - 1]['index'] = $prev['index'];
-            $data[$count - 1]['count'] ++;
+            $data[$count - 1]['count']++;
             if (isset($prev['center']) && $prev['center']) {
                 $data[$count - 1]['center'] = true;
             }
@@ -194,38 +281,24 @@ class AutoSpider extends BaseSpider {
         return array_reverse($data);
     }
 
-    protected function getTitle($html) {
-        if (!preg_match(self::TITLE, $html, $match)) {
-            return '';
-        };
-        $title = str_replace(['_', '-'], ' ', $match[1]);
-        return $title;
-    }
-
-    protected function cleanHtml($html) {
-        $html = preg_replace('#<head>([\s\S]+?)</head>#', '', $html);
-        $html = preg_replace('/<!--[\s\S]*?-->/is', '', $html);
-        $html = preg_replace('/\s+/is', ' ', $html);
-        $html = preg_replace('/\<style .*?\<\\/style\>/is', '', $html);
-        $html = preg_replace('/\<script.*?\<\/script>/is', '', $html);
-        return preg_replace_callback('#</?(\w+)([^\<\>]*)/?>#', function ($match) {
-            $replace = '';
-            if ($match[1] == 'img') {
-                $replace = $this->cleanAttribute($match, 'src');
-            } elseif ($match[1] == 'a') {
-                $replace = $this->cleanAttribute($match, 'href');
-            } elseif ($match[1] == 'br') {
-                return '<br>';
+    /**
+     * 压缩合并单个标签
+     * @param array $maps
+     * @return array
+     */
+    protected function compactTags(array $maps) {
+        $i = count($maps);
+        while ($i > 1) {
+            $i --;
+            if ($maps[$i]['tag'] !== $maps[$i - 1]['tag']) {
+                continue;
             }
-            return str_replace($match[2], $replace, $match[0]);
-        }, $html);
-
-    }
-
-    protected function cleanAttribute($matches, $tag) {
-        if (preg_match('/'.$tag.'\s?=[\s"\']?(\S+)["\']/i', $matches[2], $match)) {
-            return sprintf(' %s="%s"', $tag, $match[1]);
+            $maps[$i - 1]['count'] += $maps[$i]['count'];
+            if (isset($maps[$i]['center']) && $maps[$i]['center']) {
+                $maps[$i - 1]['center'] = true;
+            }
+            unset($maps[$i]);
         }
-        return '';
+        return array_values($maps);
     }
 }
