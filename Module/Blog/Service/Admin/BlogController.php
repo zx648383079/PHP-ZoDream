@@ -44,7 +44,7 @@ class BlogController extends Controller {
         if (!$model->load(null, ['user_id']) || !$model->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
-        TagRelationshipModel::bind($model->id, app('request')->get('tag'), $isNew);
+        TagRelationshipModel::bind($model->id, app('request')->get('tag', []), $isNew);
         return $this->jsonSuccess([
             'url' => $this->getUrl('blog')
         ]);
