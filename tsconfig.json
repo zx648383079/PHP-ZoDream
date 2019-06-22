@@ -7,7 +7,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "typeRoots": [
+      "./typings",
+      "./node_modules/@types"
+    ],
   },
   "exclude": [
     "bower_components",

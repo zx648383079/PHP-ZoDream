@@ -1052,3 +1052,57 @@ function registerChat(baseUri: string) {
         room.toggleMode();
     });
 }
+
+function registerWsChat(baseUri: string) {
+    let room = new ChatRoom($('.dialog-chat'));
+    let socket = new Ws(baseUri);
+    socket.OnConnect(() => {
+
+    });
+    socket.OnDisconnect(() => {
+
+    });
+    socket.On('message', () => {
+
+    });
+
+    room.on(EVENT_REFRESH_USERS, (box: ChatUserBox) => {
+        socket.Emit(EVENT_REFRESH_USERS, true);
+    }).on(EVENT_REFRESH_GROUPS, (box: ChatUserBox) => {
+        socket.Emit(EVENT_REFRESH_GROUPS, true);
+    }).on(EVENT_SEARCH_USERS, (keywords: string, box: ChatSearchBox) => {
+        socket.Emit(EVENT_SEARCH_USERS, keywords);
+    }).on(EVENT_GET_MESSAGE, (user: IUser, page: number, per_page: number, box: ChatMessageBox) => {
+        socket.Emit(EVENT_GET_MESSAGE, {page, per_page, user: user.id});
+    }).on(EVENT_SEND_MESSAGE, (content: string, user: IUser, box: ChatMessageBox) => {
+        socket.Emit(EVENT_SEND_MESSAGE, {content, user: user.id});
+    }).on(EVENT_APPLY_USER, (user: IUser, group: number, remark: string, box: ChatApplyBox) => {
+        postJson(baseUri + 'friend/apply', {
+            user: user.id,
+            group: group,
+            remark: remark
+        }, function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.hide();
+        });
+    }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
+        postJson(baseUri + 'friend/agree', {
+            user: user.id,
+            group: group
+        }, function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.hide();
+        });
+    }).init(TEST_SEND);
+    
+    $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
+        $(this).closest('.dialog-box').hide();
+    });
+    $('#toggle-btn').click(function() {
+        room.toggleMode();
+    });
+}
