@@ -73,9 +73,9 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     <div class="book-sort">
         <?php foreach (['recommend' => 'Best', 'new' => 'New', 'hot' => 'Hot'] as $key => $item):?>
             <?php if ($key == $sort):?>
-                <a class="active" href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
+                <a class="active" href="<?=$this->url(['sort' => $key])?>"><?=__($item)?></a>
             <?php else:?>
-                <a href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
+                <a href="<?=$this->url(['sort' => $key])?>"><?=__($item)?></a>
             <?php endif;?>
         <?php endforeach;?>
     </div>
