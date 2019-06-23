@@ -2,12 +2,21 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Blog\Domain\Model\BlogModel;
+use Zodream\Helpers\Json;
 /** @var $this View */
 /** @var $blog BlogModel */
 $this->title = $blog->title;
 $url = $this->url('./', false);
+$lang = [
+    'side_title' => __('Catalog'),
+    'reply_btn' => __('Reply'),
+    'reply_title' => __('Reply Comment'),
+    'comment_btn' => __('Comment'),
+    'comment_title' => __('Leave A Comment')
+];
+$lang = Json::encode($lang);
 $js = <<<JS
-bindBlog('{$url}', '{$blog->id}', {$blog->edit_type});
+bindBlog('{$url}', '{$blog->id}', {$blog->edit_type}, {$lang});
 JS;
 
 if ($blog->edit_type < 1) {
@@ -27,7 +36,7 @@ $this->extend('layouts/header', [
         <li class="book-navicon">
             <i class="fa fa-bars"></i>
         </li>
-        <li class="book-back"><a href="<?=$this->url('blog')?>">返回</a></li>
+        <li class="book-back"><a href="<?=$this->url('blog')?>"><?=__('Back')?></a></li>
         <?php if ($blog->previous):?>
         <li><a href="<?=$blog->previous->url?>"><?=$blog->previous->title?></a></li>
         <?php endif;?>
@@ -43,7 +52,7 @@ $this->extend('layouts/header', [
         <ul>
             <?php foreach ($cat_list as $item): ?>
                 <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=__($item->name)?></a></li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -73,7 +82,7 @@ $this->extend('layouts/header', [
         <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></a>
         <?php endif;?>
         <?php if($blog->term):?>
-        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>"><i class="fa fa-bookmark"></i><b><?=$blog->term->name?></b></a>
+        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($blog->term->name)?></b></a>
         <?php endif;?>
         <?php if(!empty($blog->language)):?>
         <a class="language" href="<?=$this->url('./', ['language' => $blog->language], false)?>"><i class="fa fa-code"></i><b><?=$blog->language?></b></a>
@@ -82,7 +91,7 @@ $this->extend('layouts/header', [
         <?php if($blog->type == 1):?>
         <span class="type">
             <a href="<?=HtmlExpand::toUrl($blog->source_url)?>">
-                <i class="fa fa-link"></i><b>转载</b>
+                <i class="fa fa-link"></i><b><?=__('Reprint')?></b>
             </a>
         </span>
         <?php endif;?>

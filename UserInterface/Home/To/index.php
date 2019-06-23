@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="refresh" content="0.1;url=<?=$this->text($url)?>">
-    <title>加载中</title>
+    <title><?=__('loading...')?></title>
     <style>
     body {
         overflow: hidden;

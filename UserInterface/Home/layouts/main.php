@@ -22,7 +22,7 @@ $this->registerCssFile([
 ])->registerJs($js, View::JQUERY_READY);
 ?>
 <!DOCTYPE html>
-<html lang="<?=$this->get('language', 'zh-CN')?>">
+<html lang="<?=trans()->getLanguage()?>">
    <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,7 +51,7 @@ $this->registerCssFile([
         </footer>
         <div class="dialog-cookie-tip">
             <div class="dialog-body">
-                访问本站，表示您已同意使用Cookies，本站不会主动泄露您的隐私信息。
+                <?=__('cookie tip')?>
             </div>
             <div class="dialog-footer">
                 <button class="btn">OK</button>

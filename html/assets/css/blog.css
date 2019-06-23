@@ -452,7 +452,8 @@
   margin-top: 15px; }
   .book-comments .title .order {
     float: right;
-    font-size: 12px; }
+    font-size: 12px;
+    cursor: pointer; }
     .book-comments .title .order .active {
       color: #f00; }
 

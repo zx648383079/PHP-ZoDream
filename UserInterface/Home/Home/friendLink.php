@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
-$this->title = '友情链接';
+$this->title = __('friend link');
 $this->set([
     'keywords' => '友情链接,友链',
     'description' => '申请前请收录本站，接受新站，拒绝一切非法网站。'
@@ -30,35 +30,35 @@ $this->registerCssFile('@dialog.css')
     </div>
     
     <div class="friend-apply">
-        <p>申请前请收录本站，接受新站，拒绝一切非法网站。</p>
-        <a href="javascript:;" class="btn btn-show">申请互换友链</a>
+        <p><?=__('friend link tip')?></p>
+        <a href="javascript:;" class="btn btn-show"><?=__('Apply Excharge Link')?></a>
     </div>
 </div>
 
 <div class="dialog dialog-box apply-dialog" data-type="dialog">
     <div class="dialog-header">
-        <div class="dialog-title">申请互换友链</div>
+        <div class="dialog-title"><?=__('Apply Excharge Link')?></div>
         <i class="fa fa-close dialog-close"></i>
     </div>
     <div class="dialog-body">
         <form action="" method="post">
-            <div>*站点名:</div>
+            <div>*<?=__('Site Name')?>:</div>
             <div>
                 <input type="text" name="name" required>
             </div>
-            <div>*网址:</div>
+            <div>*<?=__('URL')?>:</div>
             <div>
                 <input type="text" name="url" required>
             </div>
-            <div>简介:</div>
+            <div><?=__('Site Description')?>:</div>
             <div>
                 <input type="text" name="brief">
             </div>
         </form>
     </div>
     <div class="dialog-footer">
-        <button type="button" class="dialog-yes">申请</button>
-        <button type="button" class="dialog-close">取消</button>
+        <button type="button" class="dialog-yes"><?=__('Apply')?></button>
+        <button type="button" class="dialog-close"><?=__('Cancel')?></button>
     </div>
     
 </div>

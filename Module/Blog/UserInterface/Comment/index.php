@@ -1,28 +1,37 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Helpers\Json;
 /** @var $this View */
+$lang = [
+    'side_title' => __('Catalog'),
+    'reply_btn' => __('Reply'),
+    'reply_title' => __('Reply Comment'),
+    'comment_btn' => __('Comment'),
+    'comment_title' => __('Leave A Comment')
+];
+$lang = Json::encode($lang);
 ?>
 <?php if (!empty($hot_comments)): ?>
 <div class="book-comments hot-comments">
     <div class="title">
-        热门评论
+        <?=__('Hottest Comments')?>
     </div>
     <?php foreach ($hot_comments as $item) :?>
     <div class="comment-item" data-id="<?=$item->id?>">
         <div class="info">
             <span class="user"><?=$this->text($item['name'])?></span>
             <span class="time"><?=$item['created_at']?></span>
-            <span class="floor"><?=$item->position?>楼</span>
+            <span class="floor"><?=$item->position?><?=__('floor')?></span>
         </div>
         <div class="content">
             <p><?=$this->text($item['content'])?></p>
             <?php if ($item->reply_count > 0):?>
-            <span class="expand">展开（<?=$item->reply_count?>）</span>
+            <span class="expand"><?=__('Expand ({count})', ['count' => $item->reply_count])?></span>
             <?php endif;?>
             <span>&nbsp;</span>
             <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
-            <span class="report">举报</span>
+            <span class="report"><?=__('Report')?></span>
             <div class="actions">
                 <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item['agree']?></b></span>
                 <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$item['disagree']?></b></span>
@@ -38,7 +47,7 @@ use Zodream\Template\View;
 <?php endif;?>
 <div class="book-comment-form">
     <div class="title">
-        发表评论
+        <?=__('Leave A Comment')?>
     </div>
     <form id="comment-form" method="post" action="<?=$this->url('./comment/save', false)?>">
         <input type="hidden" name="blog_id" value="<?=$blog_id?>">
@@ -46,30 +55,30 @@ use Zodream\Template\View;
         <?php if (auth()->guest()):?>
         <div class="form-table">
             <div class="form-group">
-                <label>姓名</label>
-                <input type="text" name="name" placeholder="请输入姓名">
+                <label><?=__('Nick Name')?></label>
+                <input type="text" name="name" placeholder="<?=__('Please input your nick name')?>">
             </div>
             <div class="form-group">
-                <label>邮箱</label>
-                <input type="email" name="email" placeholder="请输入邮箱">
+                <label><?=__('Email')?></label>
+                <input type="email" name="email" placeholder="<?=__('Please input your email')?>">
             </div>
             <div class="form-group">
-                <label>网址</label>
-                <input type="url" name="url" placeholder="请输入网址">
+                <label><?=__('URL')?></label>
+                <input type="url" name="url" placeholder="<?=__('Please input your URL')?>">
             </div>
         </div>
         <?php endif; ?>
-        <textarea name="content" placeholder="请输入评论内容"></textarea>
-        <button class="btn-submit">评论</button>
-        <button type="button" class="btn-cancel">取消</button>
+        <textarea name="content" placeholder="<?=__('Please input the content')?>"></textarea>
+        <button class="btn-submit"><?=__('Comment')?></button>
+        <button type="button" class="btn-cancel"><?=__('Cancel')?></button>
     </form>
 </div>
 <div class="book-comments">
     <div class="title">
-        全部评论
+        <?=__('All Comments')?>
         <div class="order">
-            <span class="active">最新</span>
-            <span>最早</span>
+            <span class="active"><?=__('New')?></span>
+            <span><?=__('Old')?></span>
         </div>
     </div>
     <div id="comment-box">
@@ -78,5 +87,5 @@ use Zodream\Template\View;
 </div>
 
 <script>
-bindBlogComment('<?=$this->url('./', false)?>', '<?=$blog_id?>');
+bindBlogComment('<?=$this->url('./', false)?>', '<?=$blog_id?>', <?=$lang?>);
 </script>

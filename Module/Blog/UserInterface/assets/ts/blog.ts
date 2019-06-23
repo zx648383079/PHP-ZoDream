@@ -48,7 +48,7 @@ function bindBlogPage(baseUri: string) {
     
 }
 
-function bindBlog(baseUri: string, id: number, type: number) {
+function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
     if (type != 1) {
         uParse('#content', {
             rootPath: '/assets/ueditor'
@@ -84,6 +84,7 @@ function bindBlog(baseUri: string, id: number, type: number) {
             target: '.book-side-nav',
             contentLength: 20,
             maxLength: 8,
+            title: langs['side_title'],
             maxFixedTop: function(box: JQuery, scrollTop: number) {
                 let bottom = commentBox.length < 1 ? (bookSkin.offset().top + bookSkin.height()) : commentBox.offset().top;
                 const fixed = scrollTop + $(window).height() - box.height() < bottom;
@@ -113,7 +114,7 @@ function bindBlog(baseUri: string, id: number, type: number) {
     });
 }
 
-function bindBlogComment(baseUri: string, id: number) {
+function bindBlogComment(baseUri: string, id: number, langs = {}) {
     let box = $('#comment-box'),
         sort_order = true,
         getMoreComments = function (page: number, target: JQuery = box) {
@@ -136,8 +137,8 @@ function bindBlogComment(baseUri: string, id: number) {
         let $this = $(this),
             form_box = $('.book-comment-form');
         $this.parent().append(form_box);
-        form_box.find('.title').text('回复评论');
-        form_box.find('.btn-submit').text('回复');
+        form_box.find('.title').text(langs['reply_title']);
+        form_box.find('.btn-submit').text(langs['reply_btn']);
         form_box.find('input[name=parent_id]').val($this.parents('.comment-item').attr('data-id'));
     }).on('click', '.order span', function() {
         let $this = $(this);
@@ -189,8 +190,8 @@ function bindBlogComment(baseUri: string, id: number) {
             all_box.before(form_box);
         }
         form_box.find('textarea').val('');
-        form_box.find('.title').text('发表评论');
-        form_box.find('.btn-submit').text('评论');
+        form_box.find('.title').text(langs['comment_title']);
+        form_box.find('.btn-submit').text(langs['comment_btn']);
         form_box.find('input[name=parent_id]').val(0);
     });
     $('#comment-form').submit(function () {

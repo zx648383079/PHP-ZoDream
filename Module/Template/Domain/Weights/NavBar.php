@@ -9,19 +9,19 @@ class NavBar extends Node implements INode {
         $this->page->on(self::KEY, function () {
            return [
                 [
-                    'name' => '首页',
+                    'name' => 'home',
                     'url' => '/'
                 ],
                [
-                   'name' => '博客',
+                   'name' => 'blog',
                    'url' => 'blog'
                ],
                [
-                   'name' => '友情链接',
+                   'name' => 'friend link',
                    'url' => 'friend_link'
                ],
                [
-                   'name' => '关于',
+                   'name' => 'about',
                    'url' => 'about'
                ],
            ];
@@ -31,7 +31,7 @@ class NavBar extends Node implements INode {
     public function render($type = null) {
         $data = $this->page->trigger(self::KEY);
         return sprintf('<div class="nav-bar"><ul>%s</ul></div>', implode('', array_map(function ($item) {
-            return sprintf('<li><a href="%s">%s</a></li>', url($item['url']), $item['name']);
+            return sprintf('<li><a href="%s">%s</a></li>', url($item['url']), __($item['name']));
         }, $data)));
     }
 }

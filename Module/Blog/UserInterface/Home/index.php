@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '我的博客';
+$this->title = __('blog');
 $url = $this->url('./', false);
 $js = <<<JS
 bindBlogPage('{$url}');
@@ -23,7 +23,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
             <i class="fa fa-bars"></i>
         </li>
         <li class="active">
-            <a href="<?=$this->url('./')?>">博客</a></li>
+            <a href="<?=$this->url('./')?>"><?=__('blog')?></a></li>
         <li class="book-search">
             <form>
                 <input type="text" name="keywords" value="<?=$this->text($keywords)?>">
@@ -45,7 +45,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
         </ul>
     </div>
     <div class="book-new">
-        <h3>最新文章</h3>
+        <h3><?=__('Latest Blog')?></h3>
         <ul>
             <?php foreach ($new_list as $item): ?>
                 <li>
@@ -55,10 +55,10 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     </div>
     <?php if(!empty($comment_list)):?>
     <div class="book-dynamic">
-        <h3>最新留言</h3>
+        <h3><?=__('Latest Comment')?></h3>
         <?php foreach ($comment_list as $item): ?>
         <dl>
-            <dt><a href="<?=$item->blog->url?>#comments"><?=$item->user_name?></a> 评论了 《<a href="<?=$item->blog->url?>"><?=$item->blog->title?></a>》</dt>
+            <dt><a href="<?=$item->blog->url?>#comments"><?=$item->user_name?></a> <?=__('Commented')?> 《<a href="<?=$item->blog->url?>"><?=$item->blog->title?></a>》</dt>
             <dd>
                 <p><?=$item->content?></p>
                 <span class="book-time"><?=$item->created_at?></span>
@@ -71,7 +71,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
 
 <div class="book-body">
     <div class="book-sort">
-        <?php foreach (['recommend' => '推荐', 'new' => '最新', 'hot' => '最热'] as $key => $item):?>
+        <?php foreach (['recommend' => 'Best', 'new' => 'New', 'hot' => 'Hot'] as $key => $item):?>
             <?php if ($key == $sort):?>
                 <a class="active" href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
             <?php else:?>
@@ -83,7 +83,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     <div class="book-term">
         <div class="term-info">
             <img src="<?=$term->thumb?>" alt="<?=$term->name?>">
-            <h3><?=$term->name?></h3>
+            <h3><?=__($term->name)?></h3>
         </div>
         <div class="term-desc"><?=$term->description?></div>
     </div>

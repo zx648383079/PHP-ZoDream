@@ -12,13 +12,13 @@ use Zodream\Template\View;
         <span class="user"><?=$this->text($item['name'])?></span>
         <?php endif;?>
         <span class="time"><?=$item['created_at']?></span>
-        <span class="floor"><?=$item->position?>楼</span>
+        <span class="floor"><?=$item->position?><?=__('floor')?></span>
     </div>
     <div class="content">
         <p><?=$this->text($item['content'])?></p>
         <span>&nbsp;</span>
         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
-        <span class="report">举报</span>
+        <span class="report"><?=__('Report')?></span>
         <div class="actions">
             <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item['agree']?></b></span>
             <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$item['disagree']?></b></span>
@@ -38,7 +38,7 @@ use Zodream\Template\View;
                         <p><?=$this->text($reply['content'])?></p>
                         <span>&nbsp;</span>
                         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
-                        <span class="report">举报</span>
+                        <span class="report"><?=__('Report')?></span>
                         <div class="actions">
                             <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$reply['agree']?></b></span>
                             <span class="disagree"><i class="fas fa-thumbs-down"></i><b><?=$reply['disagree']?></b></span>
@@ -52,5 +52,5 @@ use Zodream\Template\View;
 </div>
 <?php endforeach;?>
 <?php if($comment_list->hasMore()):?>
-   <div class="load-more" data-page="<?=$comment_list->getIndex() + 1?>">加载更多</div>
+   <div class="load-more" data-page="<?=$comment_list->getIndex() + 1?>"><?=__('Load More')?></div>
 <?php endif;?>
