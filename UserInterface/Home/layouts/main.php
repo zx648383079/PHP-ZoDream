@@ -27,7 +27,7 @@ $this->registerCssFile([
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width, initial-scale=1">
-        <title><?=$this->title?>-zodream</title>
+        <title><?=$this->title?>-<?=__('site title')?></title>
         <meta name="Keywords" content="<?=$this->get('keywords')?>" />
         <meta name="Description" content="<?=$this->get('description')?>" />
         <meta name="author" content="zodream" />
