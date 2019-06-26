@@ -441,6 +441,25 @@ body {
             }
         }
     }
+    .dialog-apply-log-box {
+        width: 18.75rem;
+        .dialog-apply-list {
+            .dialog-info {
+                display: grid;
+                grid-template-columns: 70px 1fr 50px;
+                .dialog-info-avatar {
+                    img {
+                        width: 3.75rem;
+                        border-radius: 50%;
+                    }
+                }
+                .dialog-info-name {
+                }
+                .dialog-action {
+                }
+            }
+        }
+    }
     .dialog-user-box ,
     .dialog-add-box,
     .dialog-apply-box {

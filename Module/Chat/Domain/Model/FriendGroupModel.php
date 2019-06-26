@@ -33,7 +33,7 @@ class FriendGroupModel extends Model {
         ];
     }
 
-    public function friends() {
+    public function users() {
         return $this->hasMany(FriendModel::class, 'group_id')
             ->where('user_id', auth()->id());
     }

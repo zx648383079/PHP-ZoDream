@@ -170,4 +170,27 @@ $this->registerJs($js);
             <button>拒绝</button>
         </div>
     </div>
+    <div class="dialog-box dialog-apply-log-box">
+        <div class="dialog-header">
+            <div class="dialog-title">验证消息</div>
+            <div class="dialog-action">
+                <i class="fa fa-close"></i>
+            </div>
+        </div>
+        <div class="dialog-apply-list">
+            <div class="dialog-info" data-id="2">
+                <div class="dialog-info-avatar">
+                    <img src="http://zodream.localhost/assets/images/avatar/18.png" alt="">
+                </div>
+                <div class="dialog-info-name">
+                    <h3>1606282309</h3>
+                    <p>附加消息：123</p>
+                </div>
+                <div class="dialog-action">
+                    <button>同意</button>
+                    <button>忽略</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
