@@ -190,6 +190,12 @@ footer {
     }
 }
 
+.full-theme {
+    .container {
+        width: 100%;
+    }
+}
+
 @media (max-width: 1200px){
     .container {
         width: 100%;
@@ -243,6 +249,19 @@ footer {
         .btn {
             padding: 0 10px;
             margin: 0;
+        }
+    }
+    .full-theme {
+        .main-container {
+            transition: all .3s;
+        }
+        .sidebar-container {
+            &.expand {
+                box-shadow: none;
+                &+.main-container {
+                    transform: translateX(208px);
+                }
+            }
         }
     }
 }
