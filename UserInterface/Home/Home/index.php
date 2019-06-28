@@ -4,8 +4,8 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('home');
 $this->set([
-    'keywords' => 'zodream,开发博客,个人博客,ts,vue,php,uwp,angular',
-    'description' => 'zodream 开发博客及框架演示和文档。'
+    'keywords' => __('site keywords'),
+    'description' => __('site description')
 ]);
 ?>
 

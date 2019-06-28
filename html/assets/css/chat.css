@@ -319,6 +319,15 @@ body {
       .dialog-chat .dialog-search-box .dialog-search-list .dialog-info .dialog-info-name * {
         margin: 0; }
 
+.dialog-chat .dialog-apply-log-box {
+  width: 18.75rem; }
+  .dialog-chat .dialog-apply-log-box .dialog-apply-list .dialog-info {
+    display: grid;
+    grid-template-columns: 70px 1fr 50px; }
+    .dialog-chat .dialog-apply-log-box .dialog-apply-list .dialog-info .dialog-info-avatar img {
+      width: 3.75rem;
+      border-radius: 50%; }
+
 .dialog-chat .dialog-user-box,
 .dialog-chat .dialog-add-box,
 .dialog-chat .dialog-apply-box {

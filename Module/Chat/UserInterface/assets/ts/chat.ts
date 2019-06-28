@@ -24,6 +24,12 @@ interface IUser {
     last_message?: IMessage
 }
 
+interface IApplyLog {
+    id: number,
+    remark: string,
+    user: IUser
+}
+
 enum ChatType {
     MESSAGE,
     MORE,
@@ -46,6 +52,7 @@ const EVENT_REFRESH_USERS = 'refresh_users',
     EVENT_GROUP_INFO = 'group_info',
     EVENT_SEARCH_USERS = 'search_users',
     EVENT_SEARCH_GROUPS = 'search_groups',
+    EVENT_APPLY_USERS = 'apply_users',
     EVENT_ADD_USER = 'add_user',
     EVENT_APPLY_USER = 'apply_user',
     EVENT_SEND_MESSAGE = 'send_message',
@@ -263,9 +270,9 @@ class ChatAddUserBox extends ChatBaseBox {
         });
     }
 
-    public showWithUser(user: IUser) {
+    public showWithUser(user: IApplyLog) {
         this.parent.trigger(EVENT_USER_GROUPS, this);
-        this._user = user;
+        this._user = user.user;
         this.refresh();
         this.center().show();
     }
@@ -303,7 +310,7 @@ class ChatApplyBox extends ChatAddUserBox {
     public bindEvent() {
         let _this = this;
         this.box.on('click', '.dialog-add-action .dialog-yes', function() {
-            _this.parent.trigger(EVENT_APPLY_USER, _this._user, _this.find('select').val(), this.find('textarea'), _this);
+            _this.parent.trigger(EVENT_APPLY_USER, _this._user, _this.find('select').val(), _this.find('textarea').val(), _this);
         });
     }
     
@@ -327,6 +334,10 @@ class ChatUserInfoBox extends ChatBaseBox {
         this._user = v;
         this.refresh();
     }
+
+    public get user(): IUser {
+        return this._user;
+    }
     
 
     /**
@@ -341,6 +352,75 @@ class ChatUserInfoBox extends ChatBaseBox {
         this.find('.dialog-user-avatar img').attr('src', this._user.avatar);
         this.find('.user-name').text(this._user.name);
         this.find('.user-breif').text(this._user.brief);
+    }
+
+}
+
+class ChatApplyLogBox extends ChatBaseBox {
+    /**
+     *
+     */
+    constructor(
+        public box: JQuery,
+        private parent: ChatRoom
+    ) {
+        super();
+        this.bindEvent();
+    }
+
+    private _users: Array<IApplyLog> = [];
+
+    
+    public set users(v : IApplyLog[]) {
+        this._users = v;
+        this.render();
+    }
+
+    public showWithRefresh() {
+        this.parent.trigger(EVENT_APPLY_USERS, this);
+        this.show();
+    }
+    
+
+    private render() {
+        let tpl = `<div class="dialog-info" data-id="{0}">
+        <div class="dialog-info-avatar">
+            <img src="{1}" alt="">
+        </div>
+        <div class="dialog-info-name">
+            <h3>{2}</h3>
+            <p>附加消息：{3}</p>
+        </div>
+        <div class="dialog-action">
+            <button>同意</button>
+            <button>忽略</button>
+        </div>
+    </div>`,
+        html = '';
+        this._users.forEach(user => {
+            html += ChatSearchBox.format(tpl, user.id, user.user.avatar, user.user.name, user.remark || '');
+        });
+        this.find('.dialog-apply-list').html(html);
+    }
+
+    /**
+     * bindEvent
+     */
+    public bindEvent() {
+        let _this = this;
+        this.box.on('click', '.dialog-apply-list .dialog-info', function() {
+            let user = _this.getUser($(this).data('id'));
+            _this.parent.addBox.showWithUser(user);
+        });
+    }
+
+    public getUser(id: number): IApplyLog {
+        for (let i = 0; i < this._users.length; i++) {
+            if (this._users[i].id == id) {
+                return this._users[i];
+            }
+        }
+        return null;
     }
 
 }
@@ -380,7 +460,7 @@ class ChatSearchBox extends ChatBaseBox {
     </div>`,
         html = '';
         this._users.forEach(user => {
-            html += ChatSearchBox.format(tpl, user.avatar, user.name, user.brief, user.id);
+            html += ChatSearchBox.format(tpl, user.avatar, user.name, user.brief || '', user.id);
         });
         this.find('.dialog-search-list').html(html);
     }
@@ -519,6 +599,10 @@ class ChatMessageBox extends ChatBaseBox {
             _this.parent.trigger(EVENT_SEND_MESSAGE, _this.editor.text(), _this.revice, _this);
         });
         $(window).resize(function() {
+            if (!_this.parent.isFixed()) {
+                _this.box.removeAttr('style');
+                return;
+            }
             _this.box.toggleClass('dialog-min', $(window).width() < 500);
             _this.center();
         });
@@ -607,7 +691,10 @@ class ChatMessageBox extends ChatBaseBox {
     public showWithUser(user: IUser) {
         this.revice = user;
         this.renderTitle();
-        this.center().show();
+        if (this.parent.isFixed()) {
+            this.center();
+        }
+        this.show();
         this.messages = [];
         this.parent.trigger(EVENT_GET_MESSAGE, user, 1, 10, this);
     }
@@ -661,6 +748,10 @@ class ChatUserBox extends ChatBaseBox {
         this._user = v;
         this.renderUser();
         this.refresh();
+    }
+
+    public get user(): IUser {
+        return this._user;
     }
     
 
@@ -727,7 +818,7 @@ class ChatUserBox extends ChatBaseBox {
         </div>
     </div>
         `,
-            tpl = `<div class="dialog-user">
+            tpl = `<div class="dialog-user" data-id="{3}">
             <div class="dialog-user-avatar">
                 <img src="{0}" alt="">
             </div>
@@ -744,7 +835,7 @@ class ChatUserBox extends ChatBaseBox {
         this._friends.forEach(group => {
             let groupHtml = '';
             group.users.forEach(user => {
-                groupHtml += ChatUserBox.format(tpl, user.avatar, user.name, user.brief);
+                groupHtml += ChatUserBox.format(tpl, user.avatar, user.name, user.brief || '', user.id);
             });
             html += ChatUserBox.format(panel, group.name, group.online_count, group.count, groupHtml);
         });
@@ -813,7 +904,11 @@ class ChatUserBox extends ChatBaseBox {
         }).on('click', '.dialog-panel .dialog-panel-header', function() {
             $(this).closest('.dialog-panel').toggleClass('expanded');
         }).on('click', '.dialog-tab .dialog-user', function() {
-            _this.parent.chatBox.showWithUser(_this.getUser($(this).data('id')));
+            let id = $(this).data('id');
+            if (id == _this._user.id) {
+                return;
+            }
+            _this.parent.chatBox.showWithUser(_this.getUser(id));
         }).on('contextmenu', '.dialog-tab .dialog-user', function(event) {
             _this.menu && _this.menu.showPosition(event.clientX, event.clientY, $(this));
             return false;
@@ -861,6 +956,7 @@ class ChatRoom {
     public userBox: ChatUserInfoBox;
     public searchBox: ChatSearchBox;
     public chatBox: ChatMessageBox;
+    public applyLogBox: ChatApplyLogBox;
     private _events: {[event: string]: Function} = {};
 
     public on(event: string, callback: Function): this {
@@ -880,20 +976,35 @@ class ChatRoom {
     }
 
     public init(user: IUser) {
-        this.mainBox = new ChatUserBox(this.target.find('.dialog-chat-box'), this);
-        this.addBox = new ChatAddUserBox(this.target.find('.dialog-add-box'), this);
-        this.applyBox = new ChatApplyBox(this.target.find('.dialog-apply-box'), this);
-        this.userBox = new ChatUserInfoBox(this.target.find('.dialog-user-box'), this);
-        this.searchBox = new ChatSearchBox(this.target.find('.dialog-search-box'), this);
-        this.chatBox = new ChatMessageBox(this.target.find('.dialog-chat-room'), this, user);
+        this.mainBox = new ChatUserBox(this.find('.dialog-chat-box'), this);
+        this.addBox = new ChatAddUserBox(this.find('.dialog-add-box'), this);
+        this.applyBox = new ChatApplyBox(this.find('.dialog-apply-box'), this);
+        this.userBox = new ChatUserInfoBox(this.find('.dialog-user-box'), this);
+        this.applyLogBox = new ChatApplyLogBox(this.find('.dialog-apply-log-box'), this);
+        this.searchBox = new ChatSearchBox(this.find('.dialog-search-box'), this);
+        this.chatBox = new ChatMessageBox(this.find('.dialog-chat-room'), this, user);
         this.mainBox.user = user;
+    }
+
+    /**
+     * find
+     */
+    public find(tag: string): JQuery {
+        return this.target.find(tag);
+    }
+
+    /**
+     * isFixed
+     */
+    public isFixed() {
+        return this.target.hasClass('dialog-fixed');
     }
 
     /**
      * toggleMode
      */
     public toggleMode() {
-        if (this.target.hasClass('dialog-fixed')) {
+        if (this.isFixed()) {
             return this.page();
         }
         return this.fixed();
@@ -904,6 +1015,7 @@ class ChatRoom {
      */
     public fixed() {
         this.target.addClass('dialog-fixed').removeClass('dialog-chat-page');
+        this.chatBox.center();
         return this;
     }
 
@@ -912,6 +1024,7 @@ class ChatRoom {
      */
     public page() {
         this.target.removeClass('dialog-fixed').addClass('dialog-chat-page');
+        this.chatBox.box.removeAttr('style');
         return this;
     }
 }
@@ -934,43 +1047,6 @@ const USER_MENU: Array<IMenu> = [
     },
 ];
 
-const TEST_USER: IUser = {
-        id: 2,
-        name: '123123',
-        brief: '12313',
-        avatar: '/assets/images/avatar/14.png',
-        new_count: 1,
-        last_message: {
-            content: '123123',
-            time: 1510601234,
-            type: ChatType.MESSAGE
-        }
-    },
-    TEST_SEND: IUser = {
-        id: 1,
-        name: 'admin',
-        brief: '1111',
-        avatar: '/assets/images/avatar/1.png',
-        new_count: 1,
-    },
-    TEST_GROUP: IGroup = {
-        id: 1,
-        name: '我的好友',
-        count: 2,
-        online_count: 1,
-        users: [
-            TEST_SEND,
-            TEST_USER
-        ]
-    },
-    TEST_MESSAGE: IMessage = {
-        content: '123123',
-        time: 1510601234,
-        type: ChatType.MESSAGE,
-        user: TEST_USER
-    };
-
-
 function registerChat(baseUri: string) {
     let room = new ChatRoom($('.dialog-chat'));
     room.on(EVENT_REFRESH_USERS, (box: ChatUserBox) => {
@@ -978,14 +1054,14 @@ function registerChat(baseUri: string) {
             if (data.code != 200) {
                 return;
             }
-            box.friends = [TEST_GROUP];//data.data;
+            box.friends = data.data;
         });
     }).on(EVENT_REFRESH_GROUPS, (box: ChatUserBox) => {
         postJson(baseUri + 'group', function(data) {
             if (data.code != 200) {
                 return;
             }
-            box.groups = [TEST_USER]//data.data;
+            box.groups = data.data;
         });
     }).on(EVENT_SEARCH_USERS, (keywords: string, box: ChatSearchBox) => {
         postJson(baseUri + 'friend/search', {
@@ -1018,7 +1094,7 @@ function registerChat(baseUri: string) {
             box.addMessage({
                 content: content,
                 type: ChatType.MESSAGE,
-                user: TEST_SEND
+                user: room.mainBox.user
             });//data.data.data;
             box.editor.clear();
         });
@@ -1036,6 +1112,7 @@ function registerChat(baseUri: string) {
     }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
         postJson(baseUri + 'friend/agree', {
             user: user.id,
+            name: user.name,
             group: group
         }, function(data) {
             if (data.code != 200) {
@@ -1043,7 +1120,20 @@ function registerChat(baseUri: string) {
             }
             box.hide();
         });
-    }).init(TEST_SEND);
+    }).on(EVENT_APPLY_USERS, (box: ChatApplyLogBox) => {
+        postJson(baseUri + 'friend/apply_log', function(data) {
+            if (data.code != 200) {
+                return;
+            }
+            box.users = data.data;
+        });
+    });
+    postJson(baseUri + 'user', function(data) {
+        if (data.code === 200) {
+            room.init(data.data);
+            loopPing();
+        }
+    });
     
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
@@ -1051,6 +1141,22 @@ function registerChat(baseUri: string) {
     $('#toggle-btn').click(function() {
         room.toggleMode();
     });
+    let handle;
+    let lastTime;
+    let loopPing = function() {
+        postJson(baseUri + 'message/ping', {
+            time: lastTime || 0
+        }, function(data) {
+            if (data.code === 200) {
+                room.mainBox.user.new_count = data.data.message;
+                if (data.data.apply > 0) {
+                    room.applyLogBox.showWithRefresh();
+                }
+                lastTime = data.data.time;
+            }
+            handle = setTimeout(loopPing, 3000);
+        })
+    }
 }
 
 function registerWsChat(baseUri: string) {
@@ -1097,7 +1203,7 @@ function registerWsChat(baseUri: string) {
             }
             box.hide();
         });
-    }).init(TEST_SEND);
+    });
     
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
