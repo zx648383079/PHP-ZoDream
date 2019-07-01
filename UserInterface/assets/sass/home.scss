@@ -1,3 +1,4 @@
+@import "scrollbar";
 body {
     background-color: #f4f4f4;
 }
@@ -48,6 +49,9 @@ footer {
         &:hover {
             border-bottom: 3px solid #fff;
         }
+    }
+    .nav-bar-toggle {
+        display: none;
     }
 }
 
@@ -126,6 +130,28 @@ footer {
             }
             &:hover {
                 box-shadow: rgba(#333, .7) 0 0 10px;  
+            }
+        }
+        &.scoll-box {
+            max-height: 300px;
+            overflow-y: auto;
+            @include scrollbar();
+            .more {
+                text-align: center;
+                line-height: 30px;
+                display: block;
+            }
+        }
+        .note-item {
+            border-bottom: rgba(0,0,0,0.1) solid 1px;
+            box-sizing: border-box;
+            padding: 10px;
+            counter-increment: item-counter;
+            text-decoration: none;
+            .item-time {
+                color: #ccc;
+                font-size: 14px;
+                text-align: right;
             }
         }
     }
@@ -311,6 +337,39 @@ footer {
         a {
             &.unknow {
                 display: none;
+            }
+        }
+    }
+    .nav-bar {
+        .nav-bar-toggle {
+            padding: 15px 20px;
+            display: inline-block;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: inherit;
+            text-rendering: auto;
+            font-size: 30px;
+            &::before {
+                content: "\f0c9";
+            }
+        }
+        ul {
+            display: none;
+            background-color: #767676;
+            li {
+                display: block;
+                line-height: 40px;
+                height: 40px;
+            }
+        }
+        &.open {
+            ul {
+                display: block;
+            }
+            .nav-bar-toggle {
+                &::before {
+                    content: "\f00d";
+                }
             }
         }
     }

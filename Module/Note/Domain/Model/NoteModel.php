@@ -52,4 +52,8 @@ class NoteModel extends Model {
         return Time::isTimeAgo($this->getAttributeSource('created_at'), 30 * 86400);
     }
 
+    public static function getNew($limit) {
+        return static::orderBy('created_at desc')->limit($limit ?? 5)->all();
+    }
+
 }

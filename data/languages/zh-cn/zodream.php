@@ -44,6 +44,8 @@ return [
     'Shop' => '商城',
     'shop tip' => '商品来源于淘宝联盟',
     'Latest Blog' => '最新博客',
+    'Latest Note' => '便签',
+    'View More...' => '查看更多',
     'Latest Comment' => '最新评论',
     'Best' => '推荐',
     'New' => '最新',
