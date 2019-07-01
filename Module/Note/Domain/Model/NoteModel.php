@@ -42,7 +42,7 @@ class NoteModel extends Model {
     }
 
     public function getHtmlAttribute() {
-	    $args = explode("\n", str_replace(["\t", ' '], ['    ', '&nbsp;'], $this->content));
+	    $args = explode("\n", str_replace(["\t", ' '], ['    ', '&nbsp;'], strip_tags($this->content)));
 	    return implode('', array_map(function ($item) {
 	        return Html::p($item);
         }, $args));

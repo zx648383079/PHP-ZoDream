@@ -10,7 +10,7 @@ class NotePanel extends Node {
         $data = NoteModel::getNew($this->attr('limit'));
         return implode('', array_map(function (NoteModel $item) {
             return sprintf('<div class="note-item"><p>%s</p><div class="item-time">%s</div></div>',
-                $item->content, $item->date);
+                $item->html, $item->date);
         }, $data));
     }
 }
