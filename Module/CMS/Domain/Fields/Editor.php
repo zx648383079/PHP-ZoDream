@@ -32,6 +32,7 @@ JS;
         Factory::view()->registerJsFile('/assets/ueditor/ueditor.config.js')
             ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
         return <<<HTML
+<div>{$field->name}</div>
 <script id="{$id}" style="height: 400px" name="{$field->field}" type="text/plain">
     {$value}
 </script>

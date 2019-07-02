@@ -27,23 +27,23 @@
                 </div>
                 <div class="tags">
                     <span>更新时间：{this.time:$data.created_at}</span>
-                    <span>当前版本：v1</span>
+                    <span>当前版本：{$data.version}</span>
                 </div>
                 <div class="links">
                     {if:$data.win}
-                    <a href="{$data.win}">EXE</a>
+                    <a href="{redirect:$data.win}">EXE</a>
                     {/if}
                     {if:$data.linux}
-                    <a href="{$data.linux}">Linux</a>
+                    <a href="{redirect:$data.linux}">Linux</a>
                     {/if}
                     {if:$data.apk}
-                    <a href="{$data.apk}">安卓</a>
+                    <a href="{redirect:$data.apk}">安卓</a>
                     {/if}
                     {if:$data.ipa}
-                    <a href="{$data.ipa}">IOS</a>
+                    <a href="{redirect:$data.ipa}">IOS</a>
                     {/if}
                     {if:$data.uwp}
-                    <a href="{$data.uwp}">UWP</a>
+                    <a href="{redirect:$data.uwp}">UWP</a>
                     {/if}
                 </div>
                 <div class="tab-box">
@@ -64,7 +64,7 @@
                     开发者简介
                 </div>
                 <div class="panel-body">
-                    
+                    {markdown:$data.author}
                 </div>
             </div>
         </div>

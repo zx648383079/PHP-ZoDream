@@ -377,7 +377,8 @@ class FuncHelper {
             ->registerFunc('location', '\Module\CMS\Domain\FuncHelper::location')
             ->registerFunc('previous', '\Module\CMS\Domain\FuncHelper::previous')
             ->registerFunc('next', '\Module\CMS\Domain\FuncHelper::next')
-            ->registerFunc('option', '\Module\CMS\Domain\FuncHelper::option');
+            ->registerFunc('option', '\Module\CMS\Domain\FuncHelper::option')
+            ->registerFunc('redirect', '\Infrastructure\HtmlExpand::toUrl');
         return $compiler;
     }
 }

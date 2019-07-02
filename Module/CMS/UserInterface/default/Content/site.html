@@ -1,0 +1,52 @@
+{layout:main}
+{this.title=$data.title}
+<div class="banner-bg" style="background:url({$cat.image}); height: 140px;">
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="path">
+                    当前位置: 
+                <ul><li><a href="">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div id="content">
+                <div class="tab-box">
+                    <div class="tab-header">
+                        <div class="tab-item active">网站详情</div>
+                    </div>
+                    <div class="tab-body row">
+                        <div class="col-md-8">
+                            <div class="title">
+                                {$data.title}
+                            </div>
+                            <div class="desc">
+                                    {$data.description}
+                            </div>
+                            <div class="tags">
+                                <span>收藏时间：{this.time:$data.created_at}</span>
+                            </div>
+                            <div class="links">
+                                网址：{$data.uri}<a href="{redirect:$data.uri}"  target="_blank">进入网站</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumb">
+                                    <img src="{$data.thumb}" alt="" width="100%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-box">
+                    <div class="tab-header">
+                        <div class="tab-item active">网站介绍</div>
+                    </div>
+                    <div class="tab-body content">
+                        {$data.content}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

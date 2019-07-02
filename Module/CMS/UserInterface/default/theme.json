@@ -81,40 +81,83 @@
             "category_template": "app",
             "list_template": "app_list",
             "show_template": "app",
-            "fields": [{
-                    "name": "使用说明",
-                    "field": "instruction",
-                    "type": "editor"
-                },
+            "fields": [
                 {
                     "name": "wind",
                     "field": "win",
-                    "type": "file"
+                    "type": "file",
+                    "is_required": false
                 },
                 {
                     "name": "linux",
                     "field": "linux",
-                    "type": "file"
+                    "type": "file",
+                    "is_required": false
                 },
                 {
                     "name": "APK",
                     "field": "apk",
-                    "type": "file"
+                    "type": "file",
+                    "is_required": false
                 },
                 {
                     "name": "IPA",
                     "field": "ipa",
-                    "type": "file"
+                    "type": "file",
+                    "is_required": false
                 },
                 {
                     "name": "UWP",
                     "field": "uwp",
-                    "type": "file"
+                    "type": "file",
+                    "is_required": false
+                },
+                {
+                    "name": "当前版本",
+                    "field": "version",
+                    "type": "text"
                 },
                 {
                     "name": "作者信息",
                     "field": "author",
                     "type": "textarea"
+                },
+                {
+                    "name": "使用说明",
+                    "field": "instruction",
+                    "type": "editor"
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "站点",
+            "table": "sites",
+            "category_template": "site",
+            "list_template": "site_list",
+            "show_template": "site",
+            "fields": [{
+                "name": "网址",
+                "field": "uri",
+                "type": "text"
+            }]
+        },
+        {
+            "action": "channel",
+            "title": "网址导航",
+            "name": "navigation",
+            "type": "@model:sites",
+            "image": "/assets/images/banner.jpg",
+            "group": "nav",
+            "children": [{
+                    "title": "在线工具",
+                    "name": "online_tool",
+                    "type": "@model:sites"
+                },
+                {
+                    "title": "论坛",
+                    "name": "bbs",
+                    "type": "@model:sites"
                 }
             ]
         },

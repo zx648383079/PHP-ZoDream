@@ -32,6 +32,13 @@ class ThemeController extends Controller {
         ]);
     }
 
+    public function backAction() {
+        (new ThemeManager())->pack();
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('theme')
+        ]);
+    }
+
     public function installAction() {
     }
 

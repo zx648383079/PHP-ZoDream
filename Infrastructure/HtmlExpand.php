@@ -8,6 +8,12 @@ use Parsedown;
 class HtmlExpand {
 
     public static function toUrl($url) {
+        if (strpos($url, '//') === false) {
+            return $url;
+        }
+        if (strpos($url, url()->getHost()) !== false) {
+            return $url;
+        }
         return ToController::to($url);
     }
 
