@@ -25,79 +25,243 @@ use Zodream\Image\Node\BorderNode;
 use Zodream\Image\Node\LineNode;
 use Zodream\Image\Node\RectNode;
 
-$str = <<<TEXT
 
-
-
-[padding=10 background=#fff width=470]
-[img width=450 height=450]aaa
-[size=20 padding=10,0 bold]sbfajahaa
-[color=#ccc size=12]sdfsssdfdafsdaasfs
-[img width=100 height=100 center]iadfasdsad
-[size=10 color=#ccc center]123131231
-TEXT;
-$box = BoxNode::parse($str);
-
-dd($box);
-$img = __DIR__.'/assets/images/banner.jpg';
-$font = __DIR__.'/../data/fonts/msyh.ttc';
-$box = BoxNode::create([
-    'padding' => 10,
-    'background' => 'white',
-    'width' => 470
-])->append(
-    ImgNode::create($img, [
-        'width' => '100%',
-        'height' => '100%'
-    ]),
-    TextNode::create('sbfajahaa', [
-        'size' => 20,
-        'letterSpace' => 20,
-        'padding' => [
-            10,
-            0,
+$data = [
+    [
+        '商品管理',
+        false,
+        'fa fa-briefcase',
+        [
+            [
+                '商品列表',
+                './admin/goods',
+                'fa fa-list'
+            ],
+            [
+                '新建商品',
+                './admin/goods/create',
+                'fa fa-plus'
+            ],
+            [
+                '分类列表',
+                './admin/category',
+                'fa fa-list'
+            ],
+            [
+                '品牌列表',
+                './admin/brand',
+                'fa fa-list'
+            ],
+            [
+                '商品类型',
+                './admin/attribute/group',
+                'fa fa-list'
+            ],
         ],
-        'bold' => true,
-        'font' => $font
-    ]),
-    TextNode::create('1234avccg', [
-        'size' => 12,
-        'font' => $font,
-        'letterSpace' => 4,
-        'lineSpace' => 4,
-        'color' => '#ccc'
-    ]),
-    ImgNode::create($img, [
-        'width' => '100',
-        'height' => '100',
-        'center' => true
-    ]),
-    TextNode::create('sbfajahaa', [
-        'size' => 12,
-        'color' => '#ccc',
-        'letterSpace' => 4,
-        'lineSpace' => 4,
-        'wrap' => false,
-        'font' => $font,
-        'center' => true
-    ]),
-    BorderNode::create([
-        'size' => 1,
-        'fixed' => true,
-        'margin' => 10
-    ]),
-    LineNode::create(10, 10, 10, 100, [
-        'size' => 1,
-        'fixed' => true,
-        'color' => 'black'
-    ]),
-    RectNode::create([
-        'points' => [
-            [0, 0],
-            [200, 0],
-            [0, 200],
+        true
+    ],
+    [
+        '营销管理',
+        false,
+        'fa fa-bullhorn',
+        [
+            [
+                '营销中心',
+                './admin/activity/home',
+                'fa fa-list'
+            ],
+            [
+                '优惠券',
+                './admin/activity/coupon',
+                'fa fa-list'
+            ],
+            [
+                '组合',
+                './admin/activity/mix',
+                'fa fa-list'
+            ],
+            [
+                '返现',
+                './admin/activity/cash_back',
+                'fa fa-list'
+            ],
+            [
+                '满减/满送',
+                './admin/activity/discount',
+                'fa fa-list'
+            ],
+            [
+                '团购',
+                './admin/activity/group_buy',
+                'fa fa-list'
+            ],
+            [
+                '拍卖',
+                './admin/activity/auction',
+                'fa fa-list'
+            ],
+            [
+                '砍价',
+                './admin/activity/bargain',
+                'fa fa-list'
+            ],
+            [
+                '限时秒杀',
+                './admin/activity/seckill',
+                'fa fa-list'
+            ],
+            [
+                '抽奖',
+                './admin/activity/lottery',
+                'fa fa-list'
+            ],
+            [
+                '试用',
+                './admin/activity/free_trial',
+                'fa fa-list'
+            ],
+        ]
+    ],
+    [
+        '订单管理',
+        false,
+        'fa fa-cubes',
+        [
+            [
+                '订单列表',
+                './admin/order',
+                'fa fa-list'
+            ],
+            [
+                '新建订单',
+                './admin/order/create',
+                'fa fa-plus'
+            ],
         ],
-        'color' => 'black'
-    ])
-);
-$box->draw()->show();
+    ],
+    [
+        '文章管理',
+        false,
+        'fa fa-book',
+        [
+            [
+                '文章列表',
+                './admin/article',
+                'fa fa-list'
+            ],
+            [
+                '新建文章',
+                './admin/article/create',
+                'fa fa-plus'
+            ],
+            [
+                '分类列表',
+                './admin/article/category',
+                'fa fa-list'
+            ],
+            [
+                '新建分类',
+                './admin/article/create_category',
+                'fa fa-plus'
+            ],
+        ],
+    ],
+    [
+        '广告管理',
+        false,
+        'fa fa-ad',
+        [
+            [
+                '广告列表',
+                './admin/ad',
+                'fa fa-list'
+            ],
+            [
+                '新建广告',
+                './admin/ad/create',
+                'fa fa-plus'
+            ],
+            [
+                '广告位列表',
+                './admin/ad/position',
+                'fa fa-list'
+            ],
+            [
+                '新建广告位',
+                './admin/ad/create_position',
+                'fa fa-plus'
+            ],
+        ],
+    ],
+    [
+        '插件',
+        false,
+        'fa fa-plug',
+        [
+            [
+                '淘宝客',
+                './admin/plugin/tbk',
+                'fa fa-list'
+            ],
+        ],
+    ],
+    [
+        '商城设置',
+        false,
+        'fa fa-cogs',
+        [
+            [
+                '基本设置',
+                './admin/setting',
+                'fa fa-cog'
+            ],
+            [
+                '签到设置',
+                './admin/setting/checkin',
+                'fa fa-calendar-check'
+            ],
+            [
+                '支付列表',
+                './admin/payment',
+                'fa fa-list'
+            ],
+            [
+                '新建支付',
+                './admin/payment/create',
+                'fa fa-plus'
+            ],
+            [
+                '配送列表',
+                './admin/shipping',
+                'fa fa-list'
+            ],
+            [
+                '新建配送',
+                './admin/shipping/create',
+                'fa fa-plus'
+            ],
+        ],
+    ]
+];
+
+function format(array $item) {
+    $arg = [
+        'name' => $item[0],
+        'icon' => $item[2]
+    ];
+    $arg = sprintf('name: \'%s\', icon: \'%s\'', $item[0], $item[2]);
+    if ($item[1] !== false) {
+        $arg .= sprintf(', url: \'%s\'', $item[1]);
+    }
+    if (isset($item[3]) && is_array($item[3])) {
+        $arg .= sprintf(', children: %s', formatArr($item[3]));
+    }
+    return sprintf('{%s}', $arg);
+}
+
+function formatArr(array $data) {
+    $data = array_map('format', $data);
+    return sprintf('[%s]', implode(',', $data));
+}
+
+echo formatArr($data);
