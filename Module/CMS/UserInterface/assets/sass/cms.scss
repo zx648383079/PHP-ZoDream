@@ -125,6 +125,29 @@ footer {
     }
 }
 
+.banner-bg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 140px;
+}
+
+.slider {
+    .slider-box {
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .slider-point {
+        li {
+            cursor: pointer;
+            span {
+                display: none;
+            }
+        }
+    }
+}
+
 .path {
     margin-top: 20px;
     margin-bottom: 20px;

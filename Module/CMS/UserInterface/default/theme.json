@@ -147,18 +147,18 @@
             "title": "网址导航",
             "name": "navigation",
             "type": "@model:sites",
-            "image": "/assets/images/site.jpg",
+            "image": "/assets/images/site1.jpg",
             "group": "nav",
             "children": [{
                     "title": "在线工具",
                     "name": "online_tool",
                     "type": "@model:sites",
-                    "image": "/assets/images/site.jpg"
+                    "image": "/assets/images/site1.jpg"
                 },
                 {
                     "title": "论坛",
                     "name": "bbs",
-                    "image": "/assets/images/site.jpg",
+                    "image": "/assets/images/site1.jpg",
                     "type": "@model:sites"
                 }
             ]
@@ -168,18 +168,18 @@
             "title": "应用市场",
             "name": "app_market",
             "type": "@model:apps",
-            "image": "/assets/images/app.jpg",
+            "image": "/assets/images/app1.jpg",
             "group": "nav",
             "children": [{
                     "title": "实用工具",
                     "name": "app_tool",
-                    "image": "/assets/images/app.jpg",
+                    "image": "/assets/images/app1.jpg",
                     "type": "@model:apps"
                 },
                 {
                     "title": "操作系统",
                     "name": "app_system",
-                    "image": "/assets/images/app.jpg",
+                    "image": "/assets/images/app1.jpg",
                     "type": "@model:apps"
                 }
             ]
@@ -189,18 +189,18 @@
             "title": "主题市场",
             "name": "theme_market",
             "type": "@model:themes",
-            "image": "/assets/images/theme.jpg",
+            "image": "/assets/images/theme1.jpg",
             "group": "nav",
             "children": [{
                     "title": "企业官网",
                     "name": "company_theme",
-                    "image": "/assets/images/theme.jpg",
+                    "image": "/assets/images/theme1.jpg",
                     "type": "@model:themes"
                 },
                 {
                     "title": "博客",
                     "name": "blog_theme",
-                    "image": "/assets/images/theme.jpg",
+                    "image": "/assets/images/theme1.jpg",
                     "type": "@model:themes"
                 }
             ]
@@ -256,6 +256,27 @@
             "title": "banner",
             "thumb": "/assets/images/banner.jpg",
             "image": "/assets/images/banner.jpg"
+        },
+        {
+            "action": "content",
+            "type": "@channel:banner",
+            "title": "banner1",
+            "thumb": "/assets/images/app.jpg",
+            "image": "/assets/images/app.jpg"
+        },
+        {
+            "action": "content",
+            "type": "@channel:banner",
+            "title": "banner2",
+            "thumb": "/assets/images/site.jpg",
+            "image": "/assets/images/site.jpg"
+        },
+        {
+            "action": "content",
+            "type": "@channel:banner",
+            "title": "banner3",
+            "thumb": "/assets/images/theme.jpg",
+            "image": "/assets/images/theme.jpg"
         },
         {
             "action": "content",
