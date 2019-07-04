@@ -89,7 +89,7 @@ class ModelFieldModel extends BaseModel {
             'model_id' => 'Model Id',
             'type' => '类型',
             'is_main' => '主表',
-            'length' => '长度',
+            'length' => '字段长度',
             'position' => '排序',
             'form_type' => '表单类型',
             'is_required' => '是否必填',
