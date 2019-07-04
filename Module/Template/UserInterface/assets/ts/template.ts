@@ -51,6 +51,8 @@ class Panel {
             },
             stop: function(event, target) {
                 that.page.body.removeClass("hover");
+                console.log(arguments);
+                
                 let ele = target.helper,
                     row = ele.closest('.weight-row');
                 if (!row || row.length < 1) {
@@ -109,7 +111,9 @@ class Page {
     ) {
         this.box = $("#page-box");
         this.element = $('#mainMobile');
-        this.body = $('#mainGrid');
+        this.bodyBox = $('#mainGrid');
+        this.body = this.bodyBox.contents().find('body') as JQuery;
+        
         this.weightBox = new Panel('#weight', this),
         this.propertyBox = new Panel('#property', this);
         this._init();
@@ -118,6 +122,8 @@ class Page {
     public box: JQuery;
 
     public element: JQuery;
+
+    public bodyBox: JQuery;
 
     public body: JQuery;
 
@@ -267,10 +273,12 @@ class Page {
         this.drawRule(this.element.find('.top-rule'), 20);
         
         this.drawRule(this.element.find('.left-rule'), 20);
+        this.bodyBox.width(this.element.width() - 10);
+        this.bodyBox.height(this.element.height());
     }
 
     public html(): string {
-        return $.htmlClean($("#mainGrid").html(), {
+        return $.htmlClean(this.body.html(), {
             format: true,
             allowedAttributes: [
                 ["id"],

@@ -18,6 +18,7 @@ class PageController extends Controller {
     public function templateAction($id = 0, $edit = false) {
         $model = PageModel::find($id);
         $page = new Page($model, !empty($edit) && $edit !== 'false');
+        app('debugger')->setShowBar(false);
         return $this->show(compact('model', 'page'));
     }
 
