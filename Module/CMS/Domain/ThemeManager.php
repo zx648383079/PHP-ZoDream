@@ -46,6 +46,8 @@ class ThemeManager {
     }
 
     public function pack() {
+        $this->src = $this->src->directory('default_'.time());
+        $this->src->create();
         $data = [
             'name' => 'default',
             'description' => '默认主题',
@@ -63,7 +65,7 @@ class ThemeManager {
         $data['script'] = array_merge($data['script'], $this->packModel(), $this->packChannel(), $this->packContent());
         $this->src->addFile('theme.json', Json::encode($data));
         $zip = ZipStream::create($this->dist->file('theme.zip'));
-        $zip->addDirectory('theme', $this->src);
+        $zip->addDirectory($data['name'], $this->src);
         $zip->comment($data['description'])->close();
     }
 
@@ -138,7 +140,7 @@ class ThemeManager {
             }
             $item['type'] = $this->packChannelType($item);
             $this->setCache([
-                $item['id'] => '@channel:'.$item['table']
+                $item['id'] => '@channel:'.$item['name']
             ], 'channel');
             unset($item['model_id'], $item['parent_id'], $item['id']);
             $data[] = $item;

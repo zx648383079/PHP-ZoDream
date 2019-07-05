@@ -14,6 +14,7 @@ $this->title = '本地主题';
             </div>
             <div class="name"><?=$current['name']?></div>
             <div class="desc"><?=$current['description']?></div>
+            <a data-type="del" data-tip="是否确定备份此主题？" href="<?=$this->url('./admin/theme/back', false)?>" class="btn">备份</a>
         </div>
     </div>
 </div>
