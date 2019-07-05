@@ -47,7 +47,6 @@ class ThemeManager {
 
     public function pack() {
         $this->src = $this->src->directory('default_'.time());
-        $this->src->create();
         $data = [
             'name' => 'default',
             'description' => '默认主题',
@@ -63,6 +62,7 @@ class ThemeManager {
         ];
         $data[] = $this->packOption();
         $data['script'] = array_merge($data['script'], $this->packModel(), $this->packChannel(), $this->packContent());
+        $this->src->create();
         $this->src->addFile('theme.json', Json::encode($data));
         $zip = ZipStream::create($this->dist->file('theme.zip'));
         $zip->addDirectory($data['name'], $this->src);
@@ -164,13 +164,18 @@ class ThemeManager {
         $model_list = ModelModel::query()->all();
         foreach ($model_list as $model) {
             $scene = Module::scene()->setModel($model);
-            $args = $scene->query()->all();
+            $cats = CategoryModel::where('model_id', $model->id)->pluck('id');
+            if (empty($cats)) {
+                continue;
+            }
+            $args = $scene->query()->whereIn('cat_id', $cats)->all();
             $args = Relation::create($args, [
                 'extend' => [
                     'query' => $scene->extendQuery(),
                     'link' => [
                         'id' => 'id'
-                    ]
+                    ],
+                    'type' => Relation::TYPE_ONE
                 ],
             ]);
             foreach ($args as $item) {

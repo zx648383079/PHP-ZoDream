@@ -133,7 +133,7 @@ class CategoryModel extends BaseModel {
      * @throws \Exception
      */
     public static function tree() {
-        return new Tree(static::query()->all());
+        return new Tree(static::query()->orderBy('position', 'asc')->all());
     }
 
 }

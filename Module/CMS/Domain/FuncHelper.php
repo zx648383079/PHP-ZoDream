@@ -47,7 +47,7 @@ class FuncHelper {
     public static function channels(array $params = null) {
         $data = static::getOrSet(__FUNCTION__, 'all',
             function () {
-                $data = CategoryModel::query()->all();
+                $data = CategoryModel::query()->orderBy('position', 'asc')->all();
                 static::setChannel(...$data);
                 return $data;
             });
