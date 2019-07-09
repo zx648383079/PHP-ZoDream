@@ -59,10 +59,28 @@ class FriendController extends Controller {
         if ($group < 1) {
             $group = FriendGroupModel::where('user_id', 0)->value('id');
         }
+        $apply = ApplyModel::where('user_id', auth()->id())
+            ->where('apply_user', $user)->where('status', 0)
+            ->orderBy('id', 'desc')->first();
+        if (empty($apply)) {
+            return $this->jsonFailure('无申请记录');
+        }
+        ApplyModel::where('user_id', auth()->id())
+            ->where('apply_user', $user)->where('status', 0)->update([
+                'status' => 1,
+                'updated_at' => time()
+            ]);
         FriendModel::create([
             'name' => $name,
             'group_id' => $group,
             'user_id' => $user,
+            'belong_id' => auth()->id()
+        ]);
+        FriendModel::create([
+            'name' => auth()->user()->name,
+            'group_id' => $apply->group_id,
+            'user_id' => $apply->user_id,
+            'belong_id' => $user
         ]);
         return $this->jsonSuccess();
     }
@@ -93,5 +111,18 @@ class FriendController extends Controller {
             $data[$key]['user'] = $item->user;
         }
         return $this->jsonSuccess($data);
+    }
+
+    public function deleteAction($user) {
+        FriendModel::where('user_id', $user)->where('belong_id', auth()->id())->delete();
+        FriendModel::where('belong_id', $user)->where('user_id', auth()->id())->delete();
+        return $this->jsonSuccess();
+    }
+
+    public function moveAction($user, $group) {
+        FriendModel::where('user_id', $user)->where('belong_id', auth()->id())->update([
+            'group_id' => $group
+        ]);
+        return $this->jsonSuccess();
     }
 }

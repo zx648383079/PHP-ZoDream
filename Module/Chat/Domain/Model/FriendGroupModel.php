@@ -35,12 +35,12 @@ class FriendGroupModel extends Model {
 
     public function users() {
         return $this->hasMany(FriendModel::class, 'group_id')
-            ->where('user_id', auth()->id());
+            ->where('belong_id', auth()->id());
     }
 
 
     public function getCountAttribute() {
-        return count($this->friends);
+        return count($this->users);
     }
 
     public function getOnlineCountAttribute() {

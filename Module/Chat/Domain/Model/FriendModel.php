@@ -11,6 +11,7 @@ use Zodream\Service\Factory;
  * @property string $name
  * @property integer $group_id
  * @property integer $user_id
+ * @property integer $belong_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -24,6 +25,7 @@ class FriendModel extends Model {
             'name' => 'required|string:0,100',
             'group_id' => 'required|int',
             'user_id' => 'required|int',
+            'belong_id' => 'required|int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -35,6 +37,7 @@ class FriendModel extends Model {
             'name' => 'Name',
             'group_id' => 'Group Id',
             'user_id' => 'User Id',
+            'belong_id' => 'Belong Id',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

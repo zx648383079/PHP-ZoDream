@@ -19,6 +19,7 @@ class CreateChatTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('备注');
             $table->set('group_id')->int()->notNull()->comment('分组');
             $table->set('user_id')->int()->notNull()->comment('用户');
+            $table->set('belong_id')->int()->notNull()->comment('归属');
             $table->timestamps();
         });
         Schema::createTable(ApplyModel::tableName(), function(Table $table) {

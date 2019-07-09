@@ -620,6 +620,14 @@ class ChatMessageBox extends ChatBaseBox {
         this.renderMessage();
     }
 
+    /**
+     * appendMessage
+     */
+    public appendMessage(messages: Array<IMessage>) {
+        this._messages = this._messages.concat(messages);
+        this.renderMessage();
+    }
+
     public prependMessage(messages: Array<IMessage>) {
         this._messages = messages.concat(this._messages);
         this.renderMessage();
@@ -1145,18 +1153,37 @@ function registerChat(baseUri: string) {
     let lastTime;
     let loopPing = function() {
         postJson(baseUri + 'message/ping', {
-            time: lastTime || 0
+            time: lastTime || 0,
+            user: room.chatBox.revice ? room.chatBox.revice.id : 0
         }, function(data) {
             if (data.code === 200) {
-                room.mainBox.user.new_count = data.data.message;
-                if (data.data.apply > 0) {
-                    room.applyLogBox.showWithRefresh();
+                const args = data.data;
+                doEvent('message_count', args.message);
+                if (args.apply > 0) {
+                    doEvent('apply');
+                }
+                if (args.messages && args.messages.length > 0) {
+                    doEvent('message', args.messages);
                 }
                 lastTime = data.data.time;
             }
             handle = setTimeout(loopPing, 3000);
         })
-    }
+    }, doEvent = function(event: string, data?: any) {
+        if (event === 'message_count') {
+            room.mainBox.user.new_count = data;
+            return;
+        }
+        if (event === 'apply') {
+            room.applyLogBox.showWithRefresh();
+            return;
+        }
+        if (event === 'message') {
+            room.chatBox.appendMessage(data);
+            return;
+        }
+    };
+
 }
 
 function registerWsChat(baseUri: string) {
