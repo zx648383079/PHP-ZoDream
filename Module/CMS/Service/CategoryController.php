@@ -6,8 +6,11 @@ use Module\CMS\Domain\FuncHelper;
 class CategoryController extends Controller {
 
     public function indexAction($id) {
-        FuncHelper::$current['channel'] = $id;
+        FuncHelper::$current['channel'] = intval($id);
         $cat = FuncHelper::channel($id, true);
+        if (empty($cat)) {
+            return $this->redirect('./');
+        }
         $page = null;
         if ($cat->type < 1) {
             $page = FuncHelper::contents([]);
