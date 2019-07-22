@@ -35,7 +35,7 @@ abstract class BaseSpider implements GetBookInterface {
         }
         if ($this->isContentPage($uri)) {
             $html = $this->decode(Spider::url($uri));
-            $chapter = $this->getChapter($html);
+            $chapter = $this->getChapter($html, $uri);
             if (empty($chapter)) {
                 return false;
             }
@@ -82,6 +82,10 @@ abstract class BaseSpider implements GetBookInterface {
             return true;
         }
         if ($num == $this->start) {
+            $this->isNewChapter = true;
+            return true;
+        }
+        if (preg_match('#([^/\.]+)\.[a-z]+$#', $num, $match) && $match[1] === $this->start) {
             $this->isNewChapter = true;
             return true;
         }
@@ -139,10 +143,11 @@ abstract class BaseSpider implements GetBookInterface {
     abstract public function getCatalog(Html $html, Uri $baseUri);
 
     /**
-     * @param $html
+     * @param Html $html
+     * @param Uri|null $uri
      * @return array
      */
-    abstract public function getChapter(Html $html);
+    abstract public function getChapter(Html $html, Uri $uri = null);
 
     public function book(string $uri): array {
         return cache()->getOrSet('book_spider_book_'.$uri, function () use ($uri) {

@@ -11,13 +11,16 @@ use Zodream\Spider\Support\Uri;
 class AutoSpider extends BaseSpider {
 
     const TITLE = '#<title>(.+?)</title>#i';
+    private $isFirst = true;
 
     /**
      * @param Uri $uri
      * @return boolean
      */
     public function isCatalogPage(Uri $uri) {
-        // TODO: Implement isCatalogPage() method.
+        $first = $this->isFirst;
+        $this->isFirst = false;
+        return $first;
     }
 
     /**
@@ -25,7 +28,23 @@ class AutoSpider extends BaseSpider {
      * @return boolean
      */
     public function isContentPage(Uri $uri) {
-        // TODO: Implement isContentPage() method.
+        return !$this->isFirst;
+    }
+
+    public function decode(Html $html) {
+        $charset = $html->matchValue('/<meta[^\<]*charset=([^<]*)[\"\']/', 1);
+        if (empty($charset)) {
+            return $html;
+        }
+        if (stripos($charset, 'utf') !== false) {
+            return $html;
+        }
+        $encode = 'GB2312, GBK, ASCII, BIG5';
+        if (stripos($charset, 'gbk') !== false) {
+            $encode = 'GBK';
+        }
+        $html->setHtml(mb_convert_encoding($html->getHtml(), 'utf-8', $encode));
+        return $html;
     }
 
     /**
@@ -49,27 +68,48 @@ class AutoSpider extends BaseSpider {
         $html = $this->cleanHtml($html->getHtml());
         $tags = $this->getTagMaps($html);
         $data = $this->getContent($tags, $html);
-        return array_map(function ($item) use ($baseUri) {
+        $args = [];
+        foreach ($data as $item) {
+            if (!$this->isNewChapter($item['url'])) {
+                continue;
+            }
             $chapterUri = clone $baseUri;
-            $item['url'] = $chapterUri->setPath(strpos($item['url'], '/') === 0 ? $item['url'] :
-                (trim($baseUri->getPath(), '/').'/'.trim($item['url'], '/')))
-                ->encode();
-            return $item;
-        }, $data);
+            $item['url'] = $this->getAbsoluteUri($item['url'], $chapterUri);
+            $args[] = $item;
+        }
+        return $args;
+    }
+
+    protected function getAbsoluteUri($url, Uri $baseUri) {
+        if (strpos($url, '//') !== false) {
+            return $url;
+        }
+        if (strpos($url, '/') === 0) {
+            return $baseUri->setPath($url)->encode();
+        }
+        return $baseUri->setPath(
+            (trim($baseUri->getPath(), '/').'/'.trim($url, '/')))
+            ->encode();
     }
 
     /**
-     * @param $html
+     * @param Html $html
+     * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html) {
+    public function getChapter(Html $html, Uri $uri = null) {
         $html = $html->getHtml();
         $title = $this->getTitle($html);
         $html = $this->cleanHtml($html);
         $tags = $this->getTagMaps($html);
+        $content = $this->getContent($tags, $html);
+        if (is_array($content)) {
+            $this->debug(sprintf('提取章节《%s》失败', $title));
+            $content = $uri->encode();
+        }
         return [
             'title' => $title,
-            'content' => $this->getContent($tags, $html)
+            'content' => $content
         ];
     }
 
@@ -83,6 +123,9 @@ class AutoSpider extends BaseSpider {
         if ($index < 0) {
             $index = 0;
         }
+        if (empty($tags)) {
+            return [];
+        }
         $tag = $tags[$index];
         if (strpos($tag['tag'], 'a') !== false) {
             return $this->getChapters(
@@ -90,7 +133,7 @@ class AutoSpider extends BaseSpider {
         }
         $start = $this->getContentStart($tags, $index);
         $content = substr($html, $start ,
-            $tags[$index + 1]['index'] - $start);
+            $tags[$index + 1]['index'] - $start + 1);
         $content = preg_replace('#^<.+?</[^<>]+?>#', '', $content);
         return Html::toText($content);
     }

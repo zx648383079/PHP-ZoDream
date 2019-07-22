@@ -84,10 +84,11 @@ class BiQuGeLu extends BaseSpider {
     }
 
     /**
-     * @param $html
+     * @param Html $html
+     * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html) {
+    public function getChapter(Html $html, Uri $uri = null) {
         if ($html->isEmpty()) {
             return [];
         }
