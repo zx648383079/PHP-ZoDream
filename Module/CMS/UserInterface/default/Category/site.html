@@ -1,32 +1,94 @@
 {layout:main}
-<div class="banner-bg" style="background-image:url({$cat.image});">
-
-</div>
 <div class="container">
-    <div class="row">
+    <div class="row site-bg" style="background-image:url({$cat.image});">
         <div class="col-md-12">
-            <div class="path">
-                    当前位置: 
-                <ul><li><a href="{url:./}">首页</a></li>{location:}
-                </ul>
-            </div>
-            <div class="row theme-list">
-                {for:$page,$item}
-                <div class="col-md-3 item">
-                    <div class="thumb">
-                        <img src="{$item.thumb}" alt="">
-                    </div>
-                    <div class="info">
-                        <div class="title">
-                                <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
+            <div class="search-box">
+                <div class="search-input">
+                    <span class="search-icon"></span>
+                    <input type="text" placeholder="请输入关键字，按回车 / Enter 搜索">
+                    <button class="search-btn">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-tips">
+                    <ul>
+                        <li>
+                            <span>1</span>
+                            213123
+                        </li>
+                    </ul>
+                </div>
+                <div class="search-engine">
+                    <div class="search-engine-header">
+                        <span class="title">选择您的默认搜索引擎：</span>
+                        <div class="search-engine-tool">
+                            搜索热词： 
+                            <span class="toggle-box"></span>
                         </div>
-                        <div class="desc">
-                                {$item.description}
+                    </div>
+                    <ul class="search-engine-body">
+                        <li>
+                            <span></span>
+                            百度
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel self-box">
+                <div class="panel-header">
+                    <span>你的导航</span>
+
+                    <div class="custom-btn">
+                        <i class="fa fa-cog"></i>
+                        自定义
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="group-item">
+                        <div class="group-name">分组</div>
+                        <div>
+                            <a href="" class="site-item">百度</a>
                         </div>
                     </div>
                 </div>
-                {/for}
             </div>
         </div>
+    </div>
+
+    <div class="panel site-panel">
+        <div class="panel-header">
+            <i class="fa fa-video"></i>
+            <span>你的导航</span>
+        </div>
+        <div class="panel-body">
+            <a href="" class="site-item">
+                <div class="item-name">
+                    <img src="https://webjike.com/upload/images/2018/3/12477e879c32ff6.jpg" alt="">
+                    百度
+                </div>
+                <div class="item-desc">12312312312312</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row theme-list">
+        {for:$page,$item}
+        <div class="col-md-3 item">
+            <div class="thumb">
+                <img src="{$item.thumb}" alt="">
+            </div>
+            <div class="info">
+                <div class="title">
+                        <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
+                </div>
+                <div class="desc">
+                        {$item.description}
+                </div>
+            </div>
+        </div>
+        {/for}
     </div>
 </div>
