@@ -148,6 +148,7 @@ footer {
             padding: 10px;
             counter-increment: item-counter;
             text-decoration: none;
+            word-break: break-all;
             .item-time {
                 color: #ccc;
                 font-size: 14px;

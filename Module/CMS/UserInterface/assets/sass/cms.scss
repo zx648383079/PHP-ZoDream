@@ -487,11 +487,29 @@ footer {
         transition: all 0.3s;
         z-index: 999;
         .search-engine-header {
-
+            .search-engine-tool {
+                float: right;
+            }
         }
         .search-engine-body {
             li {
                 display: inline-block;
+                width: 122px;
+                margin: 0 15px 15px 0;
+                line-height: 30px;
+                font-size: 14px;
+                padding: 5px 10px 5px 10px;
+                background: #f9f9f9;
+                color: #999;
+                cursor: pointer;
+                span {
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 15px;
+                    float: left;
+                    margin-right: 5px;
+                    margin-top: 2.5px;
+                }
             }
         }
     }
@@ -522,11 +540,53 @@ footer {
         white-space: nowrap;
         transition: all 0.3s ease;
         width: 120px;
+        .fa {
+            display: none;
+        }
         &:hover {
             color: #FFF;
             font-size: 16px;
             font-weight: bold;
             background: #6b7184;
+        }
+    }
+    .panel-footer {
+        background: #6b7184;
+        height: 0;
+        line-height: 35px;
+        text-align: center;
+        overflow: hidden;
+        transition: all .2s;
+        .btn {
+            display: inline-block;
+            margin: 30px 15px;
+            padding: 0 20px;
+            color: rgba(255, 255, 255, 0.60);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            background-color: transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all .2s;
+            &:hover {
+                color: #6b7184;
+                border-color: #fff;
+                background: #fff
+            }
+            &.panel-close {
+                color: #6b7184;
+                border-color: #fff;
+                background: #fff;
+            }
+        }
+    }
+    &.edit-mode {
+        .panel-footer {
+            height: 100px;
+        }
+        .site-item {
+            .fa {
+                display: inline-block;
+            }
         }
     }
 }
@@ -537,6 +597,7 @@ footer {
         width: 230px;
         padding: 10px 10px;
         border-radius: 5px;
+        background-color: #fafafa;
         .item-name {
             height: 30px;
             font-size: 12px;
@@ -552,9 +613,19 @@ footer {
             height: 30px;
             border-radius: 50%;
             margin-right: 10px;
+            vertical-align: middle;
+        }
+        .item-desc {
+            color: #A1A7B7;
         }
         &:hover {
             background: #6b7184;
+            .item-name {
+                color: #fff;
+            }
+            .item-desc {
+                color: #c0c8dc;
+            }
         }
     }
 }

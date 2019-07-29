@@ -378,8 +378,25 @@ footer {
     box-shadow: 0px 5px 20px 0px #d8d7d7;
     transition: all 0.3s;
     z-index: 999; }
+    .search-box .search-engine .search-engine-header .search-engine-tool {
+      float: right; }
     .search-box .search-engine .search-engine-body li {
-      display: inline-block; }
+      display: inline-block;
+      width: 122px;
+      margin: 0 15px 15px 0;
+      line-height: 30px;
+      font-size: 14px;
+      padding: 5px 10px 5px 10px;
+      background: #f9f9f9;
+      color: #999;
+      cursor: pointer; }
+      .search-box .search-engine .search-engine-body li span {
+        width: 25px;
+        height: 25px;
+        border-radius: 15px;
+        float: left;
+        margin-right: 5px;
+        margin-top: 2.5px; }
 
 .self-box {
   background-color: #fff; }
@@ -403,17 +420,49 @@ footer {
     white-space: nowrap;
     transition: all 0.3s ease;
     width: 120px; }
+    .self-box .site-item .fa {
+      display: none; }
     .self-box .site-item:hover {
       color: #FFF;
       font-size: 16px;
       font-weight: bold;
       background: #6b7184; }
+  .self-box .panel-footer {
+    background: #6b7184;
+    height: 0;
+    line-height: 35px;
+    text-align: center;
+    overflow: hidden;
+    transition: all .2s; }
+    .self-box .panel-footer .btn {
+      display: inline-block;
+      margin: 30px 15px;
+      padding: 0 20px;
+      color: rgba(255, 255, 255, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      background-color: transparent;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all .2s; }
+      .self-box .panel-footer .btn:hover {
+        color: #6b7184;
+        border-color: #fff;
+        background: #fff; }
+      .self-box .panel-footer .btn.panel-close {
+        color: #6b7184;
+        border-color: #fff;
+        background: #fff; }
+  .self-box.edit-mode .panel-footer {
+    height: 100px; }
+  .self-box.edit-mode .site-item .fa {
+    display: inline-block; }
 
 .site-panel .site-item {
   display: inline-block;
   width: 230px;
   padding: 10px 10px;
-  border-radius: 5px; }
+  border-radius: 5px;
+  background-color: #fafafa; }
   .site-panel .site-item .item-name {
     height: 30px;
     font-size: 12px;
@@ -427,9 +476,16 @@ footer {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin-right: 10px; }
+    margin-right: 10px;
+    vertical-align: middle; }
+  .site-panel .site-item .item-desc {
+    color: #A1A7B7; }
   .site-panel .site-item:hover {
     background: #6b7184; }
+    .site-panel .site-item:hover .item-name {
+      color: #fff; }
+    .site-panel .site-item:hover .item-desc {
+      color: #c0c8dc; }
 
 @media (max-width: 1200px) {
   .container {

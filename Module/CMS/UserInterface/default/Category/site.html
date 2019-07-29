@@ -1,4 +1,7 @@
 {layout:main}
+{>js}
+bindNavigation();
+{/>}
 <div class="container">
     <div class="row site-bg" style="background-image:url({$cat.image});">
         <div class="col-md-12">
@@ -28,7 +31,7 @@
                     </div>
                     <ul class="search-engine-body">
                         <li>
-                            <span></span>
+                            <span style="background: url(https://webjike.com/images/search_icon.png) -80px 0px"></span>
                             百度
                         </li>
                     </ul>
@@ -50,9 +53,19 @@
                     <div class="group-item">
                         <div class="group-name">分组</div>
                         <div>
-                            <a href="" class="site-item">百度</a>
+                            <a href="" class="site-item">
+                                <i class="fa fa-times"></i>
+                                百度
+                                <i class="fa fa-edit"></i>
+                            </a>
                         </div>
                     </div>
+                </div>
+                <div class="panel-footer">
+                    <a href="javascript:;" class="btn">本 地 保 存</a>
+                    <a href="javascript:;" class="btn">云 端 保 存</a>
+                    <a href="javascript:;" class="btn">恢 复 默 认</a>
+                    <a href="javascript:;" class="btn panel-close">关 闭 面 板</a>
                 </div>
             </div>
         </div>
