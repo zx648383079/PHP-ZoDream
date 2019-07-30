@@ -67,7 +67,8 @@ $this->registerCssFile([
         'url' => false,
         'icon' => 'fa fa-book',
         'children' => $menus,
-        'class' => 'text-left'
+        'class' => 'text-left',
+        'expand' => url()->hasUri('content')
     ],
     [
         '主题管理',
