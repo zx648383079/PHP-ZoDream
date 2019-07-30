@@ -35,3 +35,14 @@ function (Scheduler $scheduler) {
 }
 
 ```
+
+### 配置异步队列
+
+```php
+'queue' => [
+    'driver' => \Zodream\Infrastructure\Queue\DatabaseQueue::class,
+    'table' => 'jobs',
+    'failer' => \Zodream\Infrastructure\Queue\Failed\DatabaseFailedJobProvider::class,
+    'fail_table' => 'failed_jobs',
+]
+```
