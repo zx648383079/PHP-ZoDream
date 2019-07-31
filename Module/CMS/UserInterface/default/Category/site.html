@@ -70,38 +70,23 @@ bindNavigation();
             </div>
         </div>
     </div>
-
+    {channels:parent=$cat.id}
     <div class="panel site-panel">
         <div class="panel-header">
             <i class="fa fa-video"></i>
-            <span>你的导航</span>
+            <span>{$channel.title}</span>
         </div>
         <div class="panel-body">
+            {contents:category=$channel.id num=8}
             <a href="" class="site-item">
                 <div class="item-name">
-                    <img src="https://webjike.com/upload/images/2018/3/12477e879c32ff6.jpg" alt="">
-                    百度
+                    <img src="{$content.thumb}" alt="{$content.title}">
+                    {$content.title}
                 </div>
-                <div class="item-desc">12312312312312</div>
+                <div class="item-desc">{$content.description}</div>
             </a>
+            {/contents}
         </div>
     </div>
-
-    <div class="row theme-list">
-        {for:$page,$item}
-        <div class="col-md-3 item">
-            <div class="thumb">
-                <img src="{$item.thumb}" alt="">
-            </div>
-            <div class="info">
-                <div class="title">
-                        <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
-                </div>
-                <div class="desc">
-                        {$item.description}
-                </div>
-            </div>
-        </div>
-        {/for}
-    </div>
+    {/channels}
 </div>

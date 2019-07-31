@@ -487,6 +487,22 @@ footer {
     .site-panel .site-item:hover .item-desc {
       color: #c0c8dc; }
 
+.left-bar .site-header {
+  padding: 11px 0px;
+  border-bottom: none;
+  margin: 0 25px;
+  padding-top: 15px; }
+
+.left-bar .site-menu {
+  border-top: 1px solid #f2f2f2; }
+  .left-bar .site-menu a {
+    display: block;
+    height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    color: #6b7184;
+    padding-left: 38px; }
+
 @media (max-width: 1200px) {
   .container {
     width: 100%; } }
