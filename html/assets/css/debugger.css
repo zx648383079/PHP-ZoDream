@@ -107,13 +107,16 @@
       text-overflow: ellipsis; }
     .debugger-blue-screen .panel .func-val-box {
       line-height: 30px;
-      background-color: #c9c9c9; }
+      background-color: #f9cfa6; }
       .debugger-blue-screen .panel .func-val-box label {
         display: inline-block;
         min-width: 100px;
         text-align: right; }
       .debugger-blue-screen .panel .func-val-box code {
-        color: red; }
+        background: rgba(127, 127, 127, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        display: block;
+        overflow: auto; }
     .debugger-blue-screen .panel.expanded > .panel-body {
       display: block; }
 
