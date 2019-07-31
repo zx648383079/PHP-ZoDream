@@ -105,6 +105,15 @@
       line-height: 30px;
       overflow: hidden;
       text-overflow: ellipsis; }
+    .debugger-blue-screen .panel .func-val-box {
+      line-height: 30px;
+      background-color: #c9c9c9; }
+      .debugger-blue-screen .panel .func-val-box label {
+        display: inline-block;
+        min-width: 100px;
+        text-align: right; }
+      .debugger-blue-screen .panel .func-val-box code {
+        color: red; }
     .debugger-blue-screen .panel.expanded > .panel-body {
       display: block; }
 
