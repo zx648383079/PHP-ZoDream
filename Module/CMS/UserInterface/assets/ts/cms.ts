@@ -133,12 +133,12 @@ interface IGroup {
 
 class Navigation {
     constructor(
-        public box: JQuery
+        public box: JQuery,
+        public groups: IGroup[] = []
     ) {
+        this.refresh();
         this.bindEvent();
     }
-
-    public groups: IGroup[] = [];
 
     /**
      * bindEvent
@@ -163,6 +163,9 @@ class Navigation {
 
     private getHtml() {
         let html = '';
+        if (this.groups && this.groups.length < 1) {
+            return html;
+        }
         this.groups.forEach(group => {
             let ul = '';
             group.items.forEach(item => {
