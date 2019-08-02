@@ -378,8 +378,10 @@ footer {
     box-shadow: 0px 5px 20px 0px #d8d7d7;
     transition: all 0.3s;
     z-index: 999; }
-    .search-box .search-engine .search-engine-header .search-engine-tool {
-      float: right; }
+    .search-box .search-engine .search-engine-header {
+      padding-right: 10px; }
+      .search-box .search-engine .search-engine-header .search-engine-tool {
+        float: right; }
     .search-box .search-engine .search-engine-body li {
       display: inline-block;
       width: 122px;
@@ -397,6 +399,22 @@ footer {
         float: left;
         margin-right: 5px;
         margin-top: 2.5px; }
+  .search-box .toggle-box {
+    font-family: "Font Awesome 5 Free";
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-weight: 900;
+    vertical-align: text-bottom;
+    font-size: 20px; }
+    .search-box .toggle-box::before {
+      content: "\f204"; }
+    .search-box .toggle-box.checked::before {
+      content: "\f205";
+      color: #5cb85c; }
 
 .self-box {
   background-color: #fff; }
@@ -530,6 +548,10 @@ footer {
         header .nav-bar.open > ul > li .sub-menu {
           box-shadow: inset 0px 5px 5px -5px #000, inset 0px -5px 5px -5px #000;
           display: block;
-          position: static; } }
+          position: static; }
+  .search-box {
+    width: 100%; }
+  .site-bg {
+    padding-top: 10px; } }
 
 /*# sourceMappingURL=cms.css.map */

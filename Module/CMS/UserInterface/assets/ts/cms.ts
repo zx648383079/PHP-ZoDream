@@ -16,6 +16,8 @@ class Search {
 
     private engine = 0;
 
+    private showTip = true;
+
     public readonly SEARCH_ENGINE: IEngine[] = [
         {
             name: '百度',
@@ -42,8 +44,16 @@ class Search {
 
     public bindEvent() {
         let that = this;
+        let isEngine = false;
         const engineBox = this.box.find(".search-engine");
-        this.box.on('mouseover', '.search-icon', function() {
+        engineBox.click(function(e) {
+            e.stopPropagation();
+        }).on('click', '.toggle-box', function(e) {
+            $(this).toggleClass('checked');
+            that.showTip = $(this).hasClass('checked');
+        });
+        this.box.on('click', '.search-icon', function(e) {
+            e.stopPropagation();
             engineBox.show();
         }).on('keyup', '.search-input input', function(e: KeyboardEvent) {
             const keywords = $(this).val() as string;
@@ -51,12 +61,18 @@ class Search {
                 that.tapSearch(keywords);
                 return;
             }
-            that.refreshTip(keywords);
+            if (that.showTip) {
+                that.refreshTip(keywords);
+            }
         }).on('click', '.search-engine .search-engine-body li', function() {
             that.changeEngine($(this).index());
             engineBox.hide();
         }).on('click', '.search-tips li', function() {
             that.tapSearch($(this).text().replace(/^\d+/, ''));
+        });
+        $(document).click(function() {
+            that.box.find('.search-tips').hide();
+            engineBox.hide();
         });
     }
 

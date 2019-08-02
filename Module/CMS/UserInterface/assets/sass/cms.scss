@@ -487,6 +487,7 @@ footer {
         transition: all 0.3s;
         z-index: 999;
         .search-engine-header {
+            padding-right: 10px;
             .search-engine-tool {
                 float: right;
             }
@@ -510,6 +511,27 @@ footer {
                     margin-right: 5px;
                     margin-top: 2.5px;
                 }
+            }
+        }
+    }
+    .toggle-box {
+        font-family: "Font Awesome 5 Free";
+        -webkit-font-smoothing: antialiased;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        line-height: 1;
+        font-weight: 900;
+        vertical-align: text-bottom;
+        font-size: 20px;
+        &::before {
+            content: "\f204";
+        }
+        &.checked {
+            &::before {
+                content: "\f205";
+                color: #5cb85c;
             }
         }
     }
@@ -694,5 +716,11 @@ footer {
                 }
             }
         }
+    }
+    .search-box {
+        width: 100%;
+    }
+    .site-bg {
+        padding-top: 10px;
     }
 }
