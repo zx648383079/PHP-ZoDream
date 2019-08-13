@@ -1,8 +1,7 @@
 <?php
-namespace Module\Book\Service\Admin;
+namespace Module\Exam\Service\Admin;
 
 use Module\ModuleController;
-
 
 class Controller extends ModuleController {
 

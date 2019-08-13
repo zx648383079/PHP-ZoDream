@@ -21,7 +21,7 @@ $this->extend('layouts/header');
                 </div>
                 <div class="input-group">
                     <input type="password" name="rePassword" placeholder="请确认密码" required>
-                    <i class="fa fa-circle-o" aria-hidden="true"></i>
+                    <i class="fa fa-redo" aria-hidden="true"></i>
                 </div>
 
                 <div class="input-group">

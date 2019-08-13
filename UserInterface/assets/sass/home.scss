@@ -11,6 +11,8 @@ a {
 .container {
     margin: 0 auto;
     max-width: 1200px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 header,
 footer {
@@ -22,6 +24,12 @@ footer {
     ul,
     li {
         list-style: none;
+    }
+}
+header {
+    .container {
+        padding-right: 0;
+        padding-left: 0;
     }
 }
 footer {

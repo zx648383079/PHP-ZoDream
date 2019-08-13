@@ -1,1 +1,25 @@
-.page-header{padding:10px 20px;background-color:#333;color:#fff}.page-body{overflow-y:auto;height:60vh;border:1px solid #777;padding:5px;box-shadow:rgba(100,100,100,.3) 0 0 10px inset}.page-body ol{margin-left:20px}.page-body code{background-color:rgba(100,100,100,.3);padding:5px}.page-footer{text-align:right;padding:5px}.page-footer .btn{background-color:#333;color:#fff}
+.page-header {
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff; }
+
+.page-body {
+  overflow-y: auto;
+  height: 60vh;
+  border: 1px solid #777;
+  padding: 5px;
+  box-shadow: rgba(100, 100, 100, 0.3) 0 0 10px inset; }
+  .page-body ol {
+    margin-left: 20px; }
+  .page-body code {
+    background-color: rgba(100, 100, 100, 0.3);
+    padding: 5px; }
+
+.page-footer {
+  text-align: right;
+  padding: 5px; }
+  .page-footer .btn {
+    background-color: #333;
+    color: #fff; }
+
+/*# sourceMappingURL=install.css.map */
