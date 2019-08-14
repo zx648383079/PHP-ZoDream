@@ -326,7 +326,7 @@ footer {
       color: #999;
       border: none;
       outline: none;
-      padding-left: 45px;
+      padding: 0 45px;
       border: 1px solid #e6e6e6; }
     .search-box .search-input .search-btn {
       position: absolute;

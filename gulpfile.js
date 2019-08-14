@@ -33,8 +33,13 @@ if (process.argv) {
     }
     mo = get_env();
     if (mo) {
+        var prefix = '';
+        var modu = mo;
+        if (mo.indexOf('-') > 0) {
+            [modu, prefix] = mo.split('-');
+        }
         // 暂不考虑大小写转化
-        switch (mo) {
+        switch (modu) {
             case 'gzo':
                 moduleRoot = '../zodream/gzo/src/';
                 break;
@@ -42,12 +47,16 @@ if (process.argv) {
                 moduleRoot = '../zodream/debugger/src/';
                 break;
             default:
-                moduleRoot = 'Module/'+ (maps.hasOwnProperty(mo) ? maps[mo] : mo) +'/';
+                moduleRoot = 'Module/'+ (maps.hasOwnProperty(modu) ? maps[modu] : modu) +'/';
                 break;
         }
-        jsRoot = moduleRoot + 'UserInterface/assets/js/';
-        tsRoot = moduleRoot + 'UserInterface/assets/ts/';
-        cssRoot = moduleRoot + 'UserInterface/assets/sass/';
+        if (prefix && prefix.length > 0) {
+            prefix += '/';
+        }
+        var baseRoot = moduleRoot + 'UserInterface/' + prefix;
+        jsRoot = baseRoot + 'assets/js/';
+        tsRoot = baseRoot + 'assets/ts/';
+        cssRoot = baseRoot + 'assets/sass/';
     }
 }
 

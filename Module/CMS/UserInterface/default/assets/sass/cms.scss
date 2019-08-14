@@ -56,7 +56,7 @@ header {
             font-weight: 900;
             font-size: inherit;
             text-rendering: auto;
-            line-height: 90px;
+            line-height: 80px;
             font-size: 2rem;
             font-style: normal;
             &::before {
@@ -425,7 +425,7 @@ footer {
             color: #999;
             border: none;
             outline: none;
-            padding-left: 45px;
+            padding: 0 45px;
             border: 1px solid #e6e6e6;
         }
         .search-btn {

@@ -23,6 +23,10 @@ class Module extends BaseModule {
         if (is_string($theme)) {
             return $theme;
         }
+        $preview = app('request')->get('preview');
+        if (!empty($preview)) {
+            return $preview;
+        }
         $theme = OptionModel::findCode('theme');
         if (!is_string($theme)) {
             $theme = 'default';

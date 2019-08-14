@@ -378,6 +378,7 @@ class FuncHelper {
             ->registerFunc('previous', '\Module\CMS\Domain\FuncHelper::previous')
             ->registerFunc('next', '\Module\CMS\Domain\FuncHelper::next')
             ->registerFunc('option', '\Module\CMS\Domain\FuncHelper::option')
+            ->registerFunc('url', '<?= $this->url(%s, isset($_GET[\'preview\']) ? [\'preview\' => $_GET[\'preview\']] : []) ?>')
             ->registerFunc('redirect', '\Infrastructure\HtmlExpand::toUrl');
         return $compiler;
     }

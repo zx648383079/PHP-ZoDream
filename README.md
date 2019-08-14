@@ -11,6 +11,22 @@ PHP开发
 
     提取分模块开放
 
+### 资源文件编译说明
+
+```cmd
+
+npm i
+
+gulp // 编译主目录  UserInterface/assets
+
+gulp Blog  // 编译博客  Module/Blog/UserInterface/assets
+
+gulp --prod  // 编译主目录并进行代码压缩   UserInterface/assets
+
+gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface/default/assets
+
+```
+
 # 目录
 
 
