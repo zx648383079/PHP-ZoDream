@@ -169,6 +169,7 @@ HTML;
                 ->registerCssFile('@template.css');
         }
         return $this->getFactory()->render($this->page->template, [
+            'title' => $this->page->title,
             'keywords' => $this->page->keywords,
             'description' => $this->page->description,
         ]);

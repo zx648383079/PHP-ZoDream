@@ -52,7 +52,7 @@ $this->registerCssFile('@template.css')
     </ul>
 </nav>
 <div id="page-box">
-    <div id="weight" class="left fixed">
+    <div id="weight" class="left">
         <div class="panel">
             <div class="head">
                 <span class="title">部件</span>
@@ -113,7 +113,7 @@ $this->registerCssFile('@template.css')
             </div>
         </div>
     </div>
-    <div id="property" class="right fixed">
+    <div id="property" class="right">
         <div class="panel">
             <div class="head">
                 <span class="title">属性</span>
