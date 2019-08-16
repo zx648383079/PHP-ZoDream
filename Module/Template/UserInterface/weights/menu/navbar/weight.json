@@ -1,0 +1,12 @@
+{
+  "name": "navbar",
+  "thumb": "./thumb.png",
+  "keywords": "导航栏",
+  "description": "导航栏",
+  "author": "zz",
+  "since": "2017-12-12",
+  "version": "v1.0",
+  "copyright": "@zz",
+  "email": "123@12.com",
+  "editable": false
+}
