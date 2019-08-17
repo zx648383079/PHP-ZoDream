@@ -17,7 +17,9 @@
                 </div>
                 <div class="tags">
                     <span>时间：{this.time:$data.created_at}</span>
-                    <span>作者：admin</span>
+                    <span>作者：
+                        <a href="{redirect:$data.source_url}" target="_blank" rel="noopener noreferrer">{$data.author}</a>
+                    </span>
                 </div>
                 <div class="content">
                     {$data.content}

@@ -1,4 +1,7 @@
 {layout:main}
+{>js}
+bindTheme();
+{/>}
 <div class="banner-bg" style="background-image:url({$cat.image});">
 
 </div>
@@ -12,19 +15,25 @@
             </div>
             <div class="row theme-list">
                 {for:$page,$item}
-                <div class="col-md-3 item">
-                    <div class="thumb">
-                        <img src="{$item.thumb}" alt="">
-                    </div>
-                    <div class="info">
-                        <div class="title">
-                                <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
+                <div class="col-xs-6 col-sm-4 col-md-4">
+                    <div class="item">
+                        <div class="thumb">
+                            <a href="{url:./content?category=:$cat.id:&id=:$item.id}">
+                                <img src="{$item.thumb}" alt="">
+                            </a>
+                            <a href="{url:./content?category=:$cat.id:&id=:$item.id}" class="fa fa-search"></a>
                         </div>
-                        <div class="desc">
-                                {$item.description}
+                        <div class="info">
+                            <div class="title">
+                                    <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
+                            </div>
+                            <div class="desc">
+                                    {$item.description}
+                            </div>
                         </div>
                     </div>
                 </div>
+                
                 {/for}
             </div>
         </div>

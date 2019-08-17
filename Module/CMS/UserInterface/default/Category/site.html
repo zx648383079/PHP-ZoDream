@@ -78,12 +78,12 @@ bindNavigation();
         </div>
         <div class="panel-body">
             {contents:category=$channel.id num=8}
-            <a href="" class="site-item">
+            <a href="{url:./content?category=:$channel.id:&id=:$content.id}" class="site-item">
                 <div class="item-name">
                     <img src="{$content.thumb}" alt="{$content.title}">
                     {$content.title}
                 </div>
-                <div class="item-desc">{$content.description}</div>
+                <div class="item-desc">{this.text:$content.description,20}</div>
             </a>
             {/contents}
         </div>

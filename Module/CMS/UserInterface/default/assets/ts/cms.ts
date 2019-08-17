@@ -207,6 +207,20 @@ function bindNavigation() {
         navigate = new Navigation($('.self-box'));
 }
 
+function bindTheme() {
+    $('.theme-list .item').mouseenter(function() {
+        let img = $(this).find('.thumb img');
+        let height = img.closest('.thumb').innerHeight();
+        let h = img.height();
+        if (h <= height) {
+            return;
+        }
+        img.css('top', (height - h) + 'px');
+    }).mouseleave(function() {
+        $(this).find('.thumb img').css('top', 0);
+    });
+}
+
 $(function() {
     $(document).on('click', ".tab-box .tab-header .tab-item", function() {
         let $this = $(this);
