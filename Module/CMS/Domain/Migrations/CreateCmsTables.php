@@ -94,6 +94,7 @@ class CreateCmsTables extends Migration {
             $table->set('name')->varchar(100)->notNull();
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
+            $table->set('full_name')->varchar(200)->notNull();
         });
     }
 

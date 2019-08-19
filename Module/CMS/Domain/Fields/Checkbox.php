@@ -22,4 +22,9 @@ class Checkbox extends BaseField {
     public function toInput($value, ModelFieldModel $field) {
         return Theme::checkbox($field->field, self::textToItems($field->setting('option', 'items')), $value, $field->name);
     }
+
+    public function toText($value, ModelFieldModel $field) {
+        $items = self::textToItems($field->setting('option', 'items'));
+        return array_key_exists($value, $items) ? $items[$value] : null;
+    }
 }

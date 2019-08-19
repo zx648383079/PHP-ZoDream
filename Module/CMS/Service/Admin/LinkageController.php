@@ -40,7 +40,8 @@ class LinkageController extends Controller {
     public function dataAction($id, $parent_id = 0) {
         $model = LinkageModel::find($id);
         $model_list = LinkageDataModel::where('linkage_id', $id)->where('parent_id', $parent_id)->all();
-        return $this->show(compact('model_list', 'model', 'parent_id'));
+        $parent = $parent_id > 0 ? LinkageDataModel::find($id) : null;
+        return $this->show(compact('model_list', 'model', 'parent_id', 'parent'));
     }
 
     public function createDataAction($linkage_id, $parent_id = null) {
@@ -64,7 +65,7 @@ class LinkageController extends Controller {
 
     public function saveDataAction() {
         $model = new LinkageDataModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
+        if (!$model->load() || !$model->autoIsNew()->createFullName()->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
         return $this->jsonSuccess([

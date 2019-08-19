@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Fields;
 
+use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
@@ -45,5 +46,9 @@ JS;
 </div>
 HTML;
 
+    }
+
+    public function toText($value, ModelFieldModel $field) {
+        return LinkageDataModel::where('id', $value)->value('full_name');
     }
 }

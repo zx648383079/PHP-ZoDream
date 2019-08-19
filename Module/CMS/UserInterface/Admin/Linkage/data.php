@@ -5,6 +5,11 @@ use Zodream\Template\View;
 $this->title = '联动项列表';
 ?>
 
+<?php if($parent):?>
+<a class="btn btn-success" href="<?=$this->url('./admin/linkage/data', ['id' => $model->id, 'parent_id' => $parent->parent_id])?>">上一级</a>
+<?php else:?>
+<a class="btn btn-success" href="<?=$this->url('./admin/linkage')?>">返回联动菜单</a>
+<?php endif;?>
 <a class="btn btn-success" href="<?=$this->url('./admin/linkage/create_data', ['linkage_id' => $model->id, 'parent_id' => $parent_id])?>">新增联动项</a>
 <hr/>
 

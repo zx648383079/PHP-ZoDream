@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Fields;
 
+use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
@@ -24,5 +25,9 @@ class Markdown extends BaseField {
     public function toInput($value, ModelFieldModel $field) {
         return Theme::textarea($field->field, $value, $field->name, null,
             $field->is_required > 0);
+    }
+
+    public function toText($value, ModelFieldModel $field) {
+        return HtmlExpand::toHtml($value, true);
     }
 }
