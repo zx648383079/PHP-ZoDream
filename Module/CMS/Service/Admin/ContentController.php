@@ -48,6 +48,9 @@ class ContentController extends Controller {
         } else {
             $scene->insert($data, $field_list);
         }
+        if ($scene->hasError()) {
+            return $this->jsonFailure($scene->getFirstError());
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('content', ['cat_id' => $cat_id])
         ]);

@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\DB;
+use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class SingleScene extends BaseScene {
@@ -19,6 +20,7 @@ class SingleScene extends BaseScene {
     /**
      * 初始化建立表
      * @return mixed
+     * @throws \Exception
      */
     public function initTable() {
         ModelFieldModel::query()->insert([
@@ -67,11 +69,11 @@ class SingleScene extends BaseScene {
             'is_system' => 1,
             'type' => 'editor',
         ]);
-        $table = new Table($this->getExtendTable());
-        $table->set('id')->int(10)->pk()->ai();
-        static::converterTableField($table->set('content'), $content);
-        return $table->setComment($this->model->name)
-            ->create();
+        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($content) {
+            $table->set('id')->int(10)->pk()->ai();
+            static::converterTableField($table->set('content'), $content);
+            $table->setComment($this->model->name);
+        });
     }
 
     /**
@@ -79,8 +81,7 @@ class SingleScene extends BaseScene {
      * @return mixed
      */
     public function removeTable() {
-        $table = new Table($this->getExtendTable());
-        return $table->drop();
+        return Schema::dropTable($this->getExtendTable());
     }
 
     /**
@@ -127,15 +128,26 @@ class SingleScene extends BaseScene {
     }
 
     public function insert(array $data, array $field_list) {
+        $count = $this->query()
+            ->where('title', $data['title'])->count();
+        if ($count > 0) {
+            return $this->setError('title', '标题重复');
+        }
         list($main, $extend) = $this->filterInput($data, $field_list);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
         $id = $this->query()->insert($main);
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);
+        return true;
     }
 
     public function update($id, array $data, array $field_list) {
+        $count = $this->query()->where('id', '<>', $id)
+            ->where('title', $data['title'])->count();
+        if ($count > 0) {
+            return $this->setError('title', '标题重复');
+        }
         list($main, $extend) = $this->filterInput($data, $field_list);
         $main['updated_at'] = time();
         $this->query()
@@ -144,6 +156,7 @@ class SingleScene extends BaseScene {
             $this->extendQuery()
                 ->where('id', $id)->update($extend);
         }
+        return true;
     }
 
     public function remove($id) {
@@ -190,7 +203,7 @@ class SingleScene extends BaseScene {
         if (empty($data)) {
             return [];
         }
-        $extend = DB::table($this->getExtendTable())->where('id', $id)
+        $extend = $this->extendQuery()->where('id', $id)
             ->one();
         // 主表数据更重要
         return array_merge((array)$extend, $data);

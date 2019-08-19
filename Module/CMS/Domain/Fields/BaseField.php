@@ -16,6 +16,10 @@ abstract class BaseField {
         return $value.'';
     }
 
+    public function toText($value, ModelFieldModel $field) {
+        return $value;
+    }
+
     public static function textToItems($text) {
         if (empty($text)) {
             return [];

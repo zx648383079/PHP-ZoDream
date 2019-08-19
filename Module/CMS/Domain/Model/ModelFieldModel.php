@@ -50,6 +50,7 @@ class ModelFieldModel extends BaseModel {
         'linkage' => '联动菜单',
         'location' => '定位',
         'map' => '地图',
+        'model' => '关联实体模型',
     ];
 
     public $match_list = [

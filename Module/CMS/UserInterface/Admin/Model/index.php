@@ -15,6 +15,7 @@ $this->title = '模块列表';
             <tr>
                 <td>名称</td>
                 <td>表名</td>
+                <td>类型</td>
                 <td>操作</td>
             </tr>
             </thead>
@@ -24,6 +25,9 @@ $this->title = '模块列表';
                     <td><?=$item->name?></td>
                     <td>
                         <?=$item->table?>
+                    </td>
+                    <td>
+                        <?=$item->type > 0 ? '表单' : '实体'?>
                     </td>
                     <td>
                         <a class="btn btn-default" href="<?=$this->url('./admin/model/field', ['id' => $item->id])?>">模块字段</a>

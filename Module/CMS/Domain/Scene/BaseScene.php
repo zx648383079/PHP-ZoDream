@@ -6,8 +6,11 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Helpers\Str;
+use Zodream\Infrastructure\Traits\ErrorTrait;
 
 abstract class BaseScene implements SceneInterface {
+
+    use ErrorTrait;
 
     protected $site = 1;
 
