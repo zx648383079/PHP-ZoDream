@@ -52,22 +52,22 @@ interface SceneInterface {
      */
     public function removeField(ModelFieldModel $field);
 
-    public function insert(array $data, array $field_list);
+    public function insert(array $data);
 
-    public function update($id, array $data, array $field_list);
+    public function update($id, array $data);
 
     public function remove($id);
 
     /**
      * @param $keywords
-     * @param $cat_id
+     * @param $params
      * @param null $order
      * @param int $page
      * @param int $per_page
      * @param null $fields
      * @return Page
      */
-    public function search($keywords, $cat_id, $order = null, $page = 1, $per_page = 20, $fields = null);
+    public function search($keywords, $params = [], $order = null, $page = 1, $per_page = 20, $fields = null);
 
     public function find($id);
 

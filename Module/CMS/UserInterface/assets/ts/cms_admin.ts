@@ -11,6 +11,25 @@ function bindField(baseUri: string) {
             $(".option-box").html(html);
         });
     }).trigger('change');
+    $('.add-box button').click(function() {
+        let input = $(this).prev(),
+            val = input.val().toString().trim();
+        if (val.length < 1) {
+            return;
+        }
+        input.val('');
+        let box = $(this).closest('.tab-group');
+        let num = box.find('.radio-label').length;
+        box.find('[name="tab_name"]').removeAttr('checked');
+        let addBox = $(this).closest('.add-box');
+        addBox.before(`<span class="radio-label">
+        <input type="radio" id="tab_name${num}" name="tab_name" value="${val}" checked>
+        <label for="tab_name${num}">${val}</label>
+    </span>`);
+        if (num >= 4) {
+            addBox.remove();
+        }
+    });
 }
 
 function bindCat(baseUri: string) {

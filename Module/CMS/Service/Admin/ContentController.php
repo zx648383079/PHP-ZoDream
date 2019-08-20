@@ -12,7 +12,7 @@ class ContentController extends Controller {
     public function indexAction($cat_id, $keywords = null) {
         $cat = CategoryModel::find($cat_id);
         $scene = Module::scene()->setModel($cat->model);
-        $model_list = $scene->search($keywords, $cat_id, 'id desc');
+        $model_list = $scene->search($keywords, compact('cat_id'), 'id desc');
         return $this->show(compact('model_list', 'cat', 'keywords'));
     }
 
@@ -29,24 +29,20 @@ class ContentController extends Controller {
      */
     public function editAction($id, $cat_id) {
         $cat = CategoryModel::find($cat_id);
-        $field_list = ModelFieldModel::where('model_id', $cat->model_id)->orderBy([
-            'position' => 'asc',
-            'id' => 'asc'
-        ])->all();
         $scene = Module::scene()->setModel($cat->model);
         $data = $id > 0 ? $scene->find($id) : [];
-        return $this->show(compact('id', 'cat_id', 'cat', 'scene', 'data', 'field_list'));
+        $tab_list = ModelFieldModel::tabGroups($cat->model_id);
+        return $this->show(compact('id', 'cat_id', 'cat', 'scene', 'data', 'tab_list'));
     }
 
     public function saveAction($id, $cat_id) {
         $cat = CategoryModel::find($cat_id);
-        $field_list = ModelFieldModel::where('model_id', $cat->model_id)->all();
         $scene = Module::scene()->setModel($cat->model);
         $data = app('request')->get();
         if ($id > 0) {
-            $scene->update($id, $data, $field_list);
+            $scene->update($id, $data);
         } else {
-            $scene->insert($data, $field_list);
+            $scene->insert($data);
         }
         if ($scene->hasError()) {
             return $this->jsonFailure($scene->getFirstError());

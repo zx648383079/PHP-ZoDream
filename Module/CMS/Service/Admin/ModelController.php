@@ -78,7 +78,11 @@ class ModelController extends Controller {
         if (!$model->model_id) {
             $model->model_id = $model_id;
         }
-        return $this->show(compact('model'));
+        $tab_list = ModelFieldModel::tabItems($model->model_id);
+        if (empty($model->tab_name) || !in_array($model->tab_name, $tab_list)) {
+            $model->tab_name = $tab_list[$model->is_main > 0? 0 : 1];
+        }
+        return $this->show(compact('model', 'tab_list'));
     }
 
     public function saveFieldAction($id = 0) {

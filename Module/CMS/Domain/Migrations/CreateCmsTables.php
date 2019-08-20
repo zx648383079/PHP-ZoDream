@@ -21,7 +21,7 @@ class CreateCmsTables extends Migration {
             $table->set('field')->varchar(100)->notNull();
             $table->set('model_id')->int()->notNull();
             $table->set('type')->varchar(20)->defaultVal('text');
-            $table->set('length')->tinyint(3);
+            $table->set('length')->varchar(10);
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('form_type')->tinyint(3)->defaultVal(0);
             $table->set('is_main')->bool()->defaultVal(0);
@@ -32,6 +32,7 @@ class CreateCmsTables extends Migration {
             $table->set('match')->varchar();
             $table->set('tip_message')->varchar();
             $table->set('error_message')->varchar();
+            $table->set('tab_name')->varchar(4)->defaultVal('')->comment('编辑组名');
             $table->set('setting')->text();
         });
         Schema::createTable(ModelModel::tableName(), function (Table $table) {
@@ -75,6 +76,7 @@ class CreateCmsTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
+            $table->set('model_id')->int()->notNull();
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
             $table->set('description')->varchar();

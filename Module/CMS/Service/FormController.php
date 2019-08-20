@@ -19,10 +19,9 @@ class FormController extends Controller {
         if (empty($model) || $model->type < 1) {
             return $this->jsonFailure('表单数据错误');
         }
-        $field_list = ModelFieldModel::where('model_id', $model->id)->all();
         $scene = Module::scene()->setModel($model);
         $data = app('request')->get();
-        $scene->insert($data, $field_list);
+        $scene->insert($data);
         return $this->jsonSuccess([
             'url' => './'
         ]);

@@ -117,7 +117,9 @@ class FuncHelper {
             }
             $children[] = $category;
             $scene = Module::scene()->setModel($cat->model);
-            return $scene->search($keywords, $children, $order, $page, $per_page, $fields);
+            return $scene->search($keywords, [
+                'cat_id' => $children
+            ], $order, $page, $per_page, $fields);
         });
     }
 
@@ -189,6 +191,35 @@ class FuncHelper {
         }
     }
 
+    /***
+     * 获取字段集合
+     * @param $model_id
+     * @return mixed
+     */
+    public static function fieldList($model_id) {
+        return static::getOrSet(__FUNCTION__,
+            $model_id,
+            function () use ($model_id) {
+                return ModelFieldModel::where('model_id', $model_id)->all();
+            });
+    }
+
+    /**
+     * 获取摸一个字段
+     * @param $model_id
+     * @param $field
+     * @return bool
+     */
+    public static function getField($model_id, $field) {
+        $field_list = static::fieldList($model_id);
+        foreach ($field_list as $item) {
+            if ($item['field'] == $field) {
+                return $item;
+            }
+        }
+        return false;
+    }
+
     public static function field(array $params) {
         $category = self::getCategoryId($params);
         $field = static::getOrSet(__FUNCTION__,
@@ -198,8 +229,7 @@ class FuncHelper {
                 if (empty($cat) || $cat->model_id < 1) {
                     return null;
                 }
-                return ModelFieldModel::where('model_id', $cat->model_id)
-                    ->where('field', $params['field'])->first();
+                return static::getField($cat->model_id, $params['field']);
             });
         if (empty($field)) {
             return '';

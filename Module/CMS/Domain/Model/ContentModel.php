@@ -7,6 +7,7 @@ namespace Module\CMS\Domain\Model;
  * @property integer $id
  * @property string $title
  * @property integer $cat_id
+ * @property integer $model_id
  * @property string $keywords
  * @property string $thumb
  * @property string $description
@@ -28,6 +29,7 @@ class ContentModel extends BaseModel {
         return [
             'title' => 'required|string:0,100',
             'cat_id' => 'required|int',
+            'model_id' => 'required|int',
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
             'description' => 'string:0,255',
@@ -43,6 +45,7 @@ class ContentModel extends BaseModel {
             'id' => 'Id',
             'title' => 'Title',
             'cat_id' => 'Category Id',
+            'model_id' => 'Model Id',
             'keywords' => 'Keywords',
             'thumb' => 'Thumb',
             'description' => 'Description',

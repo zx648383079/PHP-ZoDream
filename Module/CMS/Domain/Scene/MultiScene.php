@@ -82,6 +82,7 @@ class MultiScene extends BaseScene {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
+            $table->set('model_id')->int()->notNull();
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
             $table->set('description')->varchar();
@@ -171,6 +172,7 @@ class MultiScene extends BaseScene {
         list($main, $extend) = $this->filterInput($data, $field_list);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
+        $main['model_id'] = $this->model->id;
         $id = $this->query()->insert($main);
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);
@@ -185,6 +187,7 @@ class MultiScene extends BaseScene {
         }
         list($main, $extend) = $this->filterInput($data, $field_list);
         $main['updated_at'] = time();
+        $main['model_id'] = $this->model->id;
         $this->query()
             ->where('id', $id)->update($main);
         if (!empty($extend)) {
@@ -201,18 +204,22 @@ class MultiScene extends BaseScene {
             ->where('id', $id)->delete();
     }
 
-    public function search($keywords, $cat_id, $order = null, $page = 1, $per_page = 20, $fields = null) {
+    /**
+     * @param $keywords
+     * @param array $params
+     * @param null $order
+     * @param int $page
+     * @param int $per_page
+     * @param null $fields
+     * @return \Zodream\Html\Page
+     * @throws \Exception
+     */
+    public function search($keywords, $params = [], $order = null, $page = 1, $per_page = 20, $fields = null) {
         if (empty($fields)) {
             $fields = '*';
         }
-        return $this->query()->when(!empty($keywords), function ($query) use ($keywords) {
+        return $this->addWhere($this->query(), $params)->when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('title', 'like', '%'.$keywords.'%');
-        })->when($cat_id > 0, function ($query) use ($cat_id) {
-            if (is_array($cat_id)) {
-                $query->whereIn('cat_id', $cat_id);
-                return;
-            }
-            $query->where('cat_id', $cat_id);
         })->select($fields)
             ->when(!empty($order), function ($query) use ($order) {
                 $query->orderBy($order);

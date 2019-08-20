@@ -13,6 +13,15 @@ foreach ($cat_menu as $item) {
     ];
 }
 
+$form_menu = [];
+foreach ($form_list as $item) {
+    $form_menu[] = [
+        $item['name'],
+        ['./admin/form', 'id' => $item['id']],
+        'fa fa-paint-brush'
+    ];
+}
+
 $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
@@ -69,6 +78,14 @@ $this->registerCssFile([
         'children' => $menus,
         'class' => 'text-left',
         'expand' => url()->hasUri('content')
+    ],
+    [
+        'label' => '表单管理',
+        'url' => false,
+        'icon' => 'fa fa-book',
+        'children' => $form_menu,
+        'class' => 'text-left',
+        'expand' => url()->hasUri('form')
     ],
     [
         '主题管理',

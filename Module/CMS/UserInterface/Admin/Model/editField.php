@@ -27,6 +27,23 @@ $this->registerJs($js);
     <?=Form::text('match')?>
     <?=Form::text('tip_message')?>
     <?=Form::text('error_message')?>
+    <div class="input-group">
+        <label>编辑组</label>
+        <div class="tab-group">
+            <?php foreach($tab_list as $key => $item):?>
+            <span class="radio-label">
+                <input type="radio" id="tab_name<?=$key?>" name="tab_name" value="<?=$item?>" <?=$item == $model->tab_name ? 'checked' : ''?>>
+                <label for="tab_name<?=$key?>"><?=$item?></label>
+            </span>
+            <?php endforeach;?>
+            <?php if(count($tab_list) < 5):?>
+               <div class="add-box">
+                   <input type="text">
+                   <button type="button">添加</button>
+               </div>
+            <?php endif;?>
+        </div>
+    </div>
     <?=Form::text('position')?>
     <?php endif;?>
     <button type="submit" class="btn btn-success">确认保存</button>

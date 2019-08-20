@@ -92,7 +92,7 @@ class SingleScene extends BaseScene {
      */
     public function addField(ModelFieldModel $field) {
         if ($field->is_system > 0) {
-            return;
+            return true;
         }
         $table = new Table($this->getExtendTable());
         static::converterTableField($table->set($field->field), $field);
@@ -107,7 +107,7 @@ class SingleScene extends BaseScene {
      */
     public function updateField(ModelFieldModel $field) {
         if ($field->is_system > 0) {
-            return;
+            return true;
         }
         $table = new Table($this->getExtendTable());
         static::converterTableField($table->set($field->field)
@@ -127,29 +127,31 @@ class SingleScene extends BaseScene {
         return $table->dropColumn();
     }
 
-    public function insert(array $data, array $field_list) {
+    public function insert(array $data) {
         $count = $this->query()
             ->where('title', $data['title'])->count();
         if ($count > 0) {
             return $this->setError('title', '标题重复');
         }
-        list($main, $extend) = $this->filterInput($data, $field_list);
+        list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
+        $main['model_id'] = $this->model->id;
         $id = $this->query()->insert($main);
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);
         return true;
     }
 
-    public function update($id, array $data, array $field_list) {
+    public function update($id, array $data) {
         $count = $this->query()->where('id', '<>', $id)
             ->where('title', $data['title'])->count();
         if ($count > 0) {
             return $this->setError('title', '标题重复');
         }
-        list($main, $extend) = $this->filterInput($data, $field_list);
+        list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = time();
+        $main['model_id'] = $this->model->id;
         $this->query()
             ->where('id', $id)->update($main);
         if (!empty($extend)) {
@@ -168,7 +170,7 @@ class SingleScene extends BaseScene {
 
     /**
      * @param $keywords
-     * @param $cat_id
+     * @param $params
      * @param null $order
      * @param int $page
      * @param int $per_page
@@ -176,18 +178,12 @@ class SingleScene extends BaseScene {
      * @return \Zodream\Html\Page
      * @throws \Exception
      */
-    public function search($keywords, $cat_id, $order = null, $page = 1, $per_page = 20, $fields = null) {
+    public function search($keywords, $params = [], $order = null, $page = 1, $per_page = 20, $fields = null) {
         if (empty($fields)) {
             $fields = '*';
         }
-        return $this->query()->when(!empty($keywords), function ($query) use ($keywords) {
+        return $this->addWhere($this->query(), $params)->when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('title', 'like', '%'.$keywords.'%');
-        })->when($cat_id > 0, function ($query) use ($cat_id) {
-            if (is_array($cat_id)) {
-                $query->whereIn('cat_id', $cat_id);
-                return;
-            }
-            $query->where('cat_id', $cat_id);
         })->select($fields)
             ->when(!empty($order), function ($query) use ($order) {
             $query->orderBy($order);
