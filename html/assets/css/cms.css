@@ -453,8 +453,11 @@ footer {
 
 .self-box {
   background-color: #fff; }
-  .self-box .custom-btn {
+  .self-box .custom-btn,
+  .self-box .add-btn {
     float: right; }
+  .self-box .add-btn {
+    display: none; }
   .self-box .group-item {
     display: grid;
     grid-template-columns: 70px 1fr;
@@ -505,10 +508,16 @@ footer {
         color: #6b7184;
         border-color: #fff;
         background: #fff; }
+  .self-box.edit-mode .add-btn {
+    display: block; }
   .self-box.edit-mode .panel-footer {
     height: 100px; }
   .self-box.edit-mode .site-item .fa {
     display: inline-block; }
+
+#add-box .dialog-body {
+  width: 400px;
+  height: 300px; }
 
 .site-panel .site-item {
   display: inline-block;

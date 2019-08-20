@@ -77,6 +77,7 @@ class CreateCmsTables extends Migration {
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
             $table->set('model_id')->int()->notNull();
+            $table->set('user_id')->int()->defaultVal(0);
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
             $table->set('description')->varchar();

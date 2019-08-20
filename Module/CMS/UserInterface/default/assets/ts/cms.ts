@@ -154,12 +154,16 @@ class Navigation {
     ) {
         this.refresh();
         this.bindEvent();
+        this.dialog = $('#add-box').dialog();
     }
+
+    public dialog: any;
 
     /**
      * bindEvent
      */
     public bindEvent() {
+        let that = this;
         this.box.on('click', '.custom-btn', function() {
             let box = $(this).closest('.self-box');
             box.toggleClass('edit-mode');
@@ -167,6 +171,8 @@ class Navigation {
             $(this).closest('.self-box').removeClass('edit-mode');
         }).on('hover', '.site-item', function() {
             let box = $(this).closest('.self-box');
+        }).on('click', '.add-btn', function() {
+            that.dialog.show();
         });
     }
 

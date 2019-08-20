@@ -1,4 +1,6 @@
 {layout:main}
+{css href=@dialog.css}
+{js src=@jquery.dialog.min.js}
 {>js}
 bindNavigation();
 {/>}
@@ -15,10 +17,6 @@ bindNavigation();
                 </div>
                 <div class="search-tips">
                     <ul>
-                        <li>
-                            <span>1</span>
-                            213123
-                        </li>
                     </ul>
                 </div>
                 <div class="search-engine">
@@ -47,6 +45,10 @@ bindNavigation();
                     <div class="custom-btn">
                         <i class="fa fa-cog"></i>
                         自定义
+                    </div>
+                    <div class="add-btn">
+                        <i class="fa fa-plus"></i>
+                        添加
                     </div>
                 </div>
                 <div class="panel-body">
@@ -89,4 +91,37 @@ bindNavigation();
         </div>
     </div>
     {/channels}
+</div>
+
+<div id="add-box" class="dialog dialog-box" data-type="dialog">
+    <div class="dialog-header">
+        <div class="dialog-title">修改导航</div><i class="fa fa-close dialog-close"></i>
+    </div>
+    <div class="dialog-body form-table">
+        <div class="input-group">
+            <label for="group">分组</label>
+            <div>
+                <select id="group" name="group">
+                    <option>分组</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group">
+                <label for="name">名称</label>
+                <div>
+                    <input type="text" id="name" class="form-control " name="name" value="" placeholder="请输入 名称" required="">
+                </div>
+            </div>
+        <div class="input-group">
+                <label for="link">链接</label>
+                <div>
+                    <input type="text" id="link" class="form-control " name="link" value="新闻" placeholder="请输入 网址" required="">
+                </div>
+            </div>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="dialog-yes">确认</button>
+        <button type="button"
+            class="dialog-close">取消</button>
+    </div>
 </div>

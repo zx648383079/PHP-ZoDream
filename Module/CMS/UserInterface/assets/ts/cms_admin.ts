@@ -78,4 +78,17 @@ function bindEditModel() {
     $('#name').blur(function() {
         pinyinIfEmpty(table, $(this).val());
     });
+    let type0 = $("#type0").click(function() {
+        $(".content-box").hide();
+        $(".form-box").show();
+    });
+    let type1 = $("#type1").click(function() {
+        $(".content-box").show();
+        $(".form-box").hide();
+    });
+    if (type0.is(':checked')) {
+        type0.trigger('click');
+    } else {
+        type1.trigger('click');
+    }
 }

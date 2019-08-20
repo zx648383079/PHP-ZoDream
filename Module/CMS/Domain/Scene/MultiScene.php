@@ -83,6 +83,7 @@ class MultiScene extends BaseScene {
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
             $table->set('model_id')->int()->notNull();
+            $table->set('user_id')->int()->defaultVal(0);
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
             $table->set('description')->varchar();
@@ -173,6 +174,7 @@ class MultiScene extends BaseScene {
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
         $main['model_id'] = $this->model->id;
+        $main['user_id'] = auth()->id();
         $id = $this->query()->insert($main);
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);

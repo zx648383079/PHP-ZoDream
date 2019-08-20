@@ -16,9 +16,14 @@ $this->registerJs($js);
     <?=Form::radio('type', [1 => '表单', 0 => '实体'])?>
     <?=Form::text('name', true)?>
     <?=Form::text('table', true)->readonly($model->id > 0)?>
-    <?=Form::text('category_template', true)?>
-    <?=Form::text('list_template', true)?>
-    <?=Form::text('show_template', true)?>
+    <div class="content-box">
+        <?=Form::text('category_template', true)?>
+        <?=Form::text('list_template', true)?>
+        <?=Form::text('show_template', true)?>
+    </div>
+    <div class="form-box">
+        <?=Form::checkbox('is_show')?>
+    </div>
     <?=Form::text('position')?>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>

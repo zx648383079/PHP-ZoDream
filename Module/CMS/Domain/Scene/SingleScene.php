@@ -137,6 +137,7 @@ class SingleScene extends BaseScene {
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
         $main['model_id'] = $this->model->id;
+        $main['user_id'] = auth()->id();
         $id = $this->query()->insert($main);
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);
