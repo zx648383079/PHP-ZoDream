@@ -19,7 +19,7 @@ class ContentController extends Controller {
             return $this->redirect('./');
         }
         $data['view_count'] ++;
-        $scene->update($id, ['view_count' => $data['view_count']], []);
+        $scene->update($id, ['view_count' => $data['view_count']]);
         $title = $data['title'];
         return $this->show($cat->show_template,
             compact('cat', 'data', 'title'));

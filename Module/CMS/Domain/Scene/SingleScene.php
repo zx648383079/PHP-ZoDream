@@ -145,12 +145,14 @@ class SingleScene extends BaseScene {
     }
 
     public function update($id, array $data) {
-        $count = $this->query()->where('id', '<>', $id)
-            ->where('title', $data['title'])->count();
-        if ($count > 0) {
-            return $this->setError('title', '标题重复');
+        if (isset($data['title'])) {
+            $count = $this->query()->where('id', '<>', $id)
+                ->where('title', $data['title'])->count();
+            if ($count > 0) {
+                return $this->setError('title', '标题重复');
+            }
         }
-        list($main, $extend) = $this->filterInput($data);
+        list($main, $extend) = $this->filterInput($data, false);
         $main['updated_at'] = time();
         $main['model_id'] = $this->model->id;
         $this->query()

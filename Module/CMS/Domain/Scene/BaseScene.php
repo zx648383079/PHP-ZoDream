@@ -111,16 +111,20 @@ abstract class BaseScene implements SceneInterface {
 
     /**
      * @param array $data
+     * @param bool $isNew
      * @return array [main, extend]
      * @throws \Exception
      */
-    public function filterInput(array $data) {
+    public function filterInput(array $data, $isNew = true) {
         $field_list = $this->fieldList();
         if (empty($field_list)) {
             return [[], []];
         }
         $extend = $main = [];
         foreach ($field_list as $field) {
+            if (!$isNew && !array_key_exists($field->field, $data)) {
+                continue;
+            }
             $value = static::newField($field->type)->filterInput(isset($data[$field->field]) ? $data[$field->field]
                 : null, $field);
             if ($field->is_main > 0) {

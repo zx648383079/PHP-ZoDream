@@ -591,6 +591,13 @@ footer {
     color: #6b7184;
     padding-left: 38px; }
 
+.game-panel .panel-body .item {
+  display: inline-block;
+  width: 150px;
+  text-align: center; }
+  .game-panel .panel-body .item .title {
+    line-height: 30px; }
+
 @media (max-width: 1200px) {
   .container {
     width: 100%; } }

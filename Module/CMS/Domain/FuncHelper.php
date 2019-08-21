@@ -103,6 +103,9 @@ class FuncHelper {
         $page = intval(static::getVal($params, ['page']));
         $fields = static::getVal($params, ['fields']);
         $order = static::getVal($params, ['order', 'orderBy'], 'updated_at desc');
+        if (strpos($order, '_') > 0) {
+            $order = preg_replace('/_(desc|asc)/i', ' $1', $order);
+        }
         if ($order === 'hot') {
             $order = 'view_count desc';
         }

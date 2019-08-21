@@ -1,0 +1,46 @@
+{layout:main}
+{this.title=$data.title}
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="path">
+                    当前位置: 
+                <ul><li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div id="content">
+                <div class="title">
+                    {$data.title}
+                </div>
+                <div class="game-stage">
+                    <canvas id="game-stage"></canvas>
+                </div>
+                <div class="content">
+                    {$data.content}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="right-box">
+                <div class="panel top-panel">
+                    <div class="header">
+                        排行榜
+                    </div>
+                    <div class="body">
+                       <ul>
+                           {$i=1}
+                            {contents:model=game order=score_desc num=10 field=id,nickname,score extra=true}
+                            <li> 
+                                <span>{=$i++}</span>{$content.nickname}({$content.score})
+                            </li>
+                            {/contents}
+                       </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
