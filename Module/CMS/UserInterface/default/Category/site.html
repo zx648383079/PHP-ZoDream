@@ -1,6 +1,7 @@
 {layout:main}
 {css href=@dialog.css}
 {js src=@jquery.dialog.min.js}
+{js src=@jquery.cookie.js}
 {>js}
 bindNavigation();
 {/>}
@@ -109,13 +110,13 @@ bindNavigation();
         <div class="input-group">
                 <label for="name">名称</label>
                 <div>
-                    <input type="text" id="name" class="form-control " name="name" value="" placeholder="请输入 名称" required="">
+                    <input type="text" id="name" class="form-control " name="name" value="" placeholder="请输入 名称">
                 </div>
             </div>
         <div class="input-group">
                 <label for="link">链接</label>
                 <div>
-                    <input type="text" id="link" class="form-control " name="link" value="新闻" placeholder="请输入 网址" required="">
+                    <input type="text" id="link" class="form-control " name="link" value="" placeholder="请输入 网址" >
                 </div>
             </div>
     </div>

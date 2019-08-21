@@ -457,6 +457,7 @@ footer {
             height: 40px;
             overflow: hidden;
             border-radius: 25px;
+            background-size: 100%;
             cursor: pointer;
         }
         input {
@@ -552,6 +553,7 @@ footer {
                     float: left;
                     margin-right: 5px;
                     margin-top: 2.5px;
+                    background-size: 100%;
                 }
             }
         }
@@ -665,8 +667,31 @@ footer {
 #add-box {
     .dialog-body {
         width: 400px;
-        height: 300px;
+        height: 150px;
     }
+}
+
+.icon-baidu {
+    background-image: url(../images/icon/baidu.png);
+}
+
+.icon-bing {
+    background-image: url(../images/icon/bing.png); 
+}
+.icon-google {
+    background-image: url(../images/icon/google.png);
+}
+.icon-github {
+    background-image: url(../images/icon/github.png);
+}
+.icon-bilibili {
+    background-image: url(../images/icon/bilibili.png);
+}
+.icon-jd {
+    background-image: url(../images/icon/jd.png);
+}
+.icon-taobao {
+    background-image: url(../images/icon/taobao.png);
 }
 
 .site-panel {
