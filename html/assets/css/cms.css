@@ -304,6 +304,20 @@ footer {
     padding: 20px 0;
     border-bottom: 1px solid #f0f0f0;
     font-weight: 400; }
+  .right-box .top-panel ul li {
+    position: relative;
+    padding: 5px 0; }
+  .right-box .top-panel .item-top {
+    background: #ED4138;
+    border: 1px solid #db2b28;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    text-align: center;
+    margin-right: 20px; }
+  .right-box .top-panel .item-score {
+    float: right; }
 
 .tree-box li {
   line-height: 40px;

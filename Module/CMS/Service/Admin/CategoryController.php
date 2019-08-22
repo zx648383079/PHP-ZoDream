@@ -20,7 +20,7 @@ class CategoryController extends Controller {
         if (!$model->position) {
             $model->position = 99;
         }
-        $model_list = ModelModel::select('name', 'id')->all();
+        $model_list = ModelModel::where('type', 0)->select('name', 'id')->all();
         $group_list = GroupModel::where('type', 0)->all();
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         if (!empty($id)) {

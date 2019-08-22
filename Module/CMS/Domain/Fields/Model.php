@@ -27,7 +27,8 @@ class Model extends BaseField {
     public function toInput($value, ModelFieldModel $field) {
         $option = $field->setting('option');
         $model = ModelModel::find($option['model']);
-        $items = Module::scene()->setModel($model)->query()->pluck('title', 'id');
+        $items = Module::scene()->setModel($model)
+            ->query()->where('model_id', $model->id)->pluck('title', 'id');
         return Theme::select($field->field, $items, $value, $field->name, $field->is_required > 0);
     }
 

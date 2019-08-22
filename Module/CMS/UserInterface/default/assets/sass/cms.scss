@@ -390,6 +390,27 @@ footer {
             }
         }
     }
+    .top-panel {
+        ul {
+            li {
+                position: relative;
+                padding: 5px 0;
+            }
+        }
+        .item-top {
+            background: #ED4138;
+            border: 1px solid #db2b28;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            color: #fff;
+            text-align: center;
+            margin-right: 20px;
+        }
+        .item-score {
+            float: right;
+        }
+    }
 }
 
 .tree-box {
@@ -767,8 +788,8 @@ footer {
             }
         }
     }
-    
 }
+
 
 @media (max-width: 1200px){
     .container {

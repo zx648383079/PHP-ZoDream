@@ -156,7 +156,9 @@ $(function() {
         form.submit();
     })
     .on('click', ".file-input [data-type=upload]", function() {
-        file_upload.start($(this));
+        let that = $(this);
+        file_upload.options.filter = that.data('allow') || '';
+        file_upload.start(that);
     })
     .on('click', ".file-input [data-type=preview]", function() {
         let img = $(this).parents('.file-input').find('input').val();

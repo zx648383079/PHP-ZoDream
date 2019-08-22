@@ -135,7 +135,7 @@ class SingleScene extends BaseScene {
         }
         list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = $main['created_at'] = time();
-        $main['cat_id'] = intval($data['cat_id']);
+        $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['model_id'] = $this->model->id;
         $main['user_id'] = auth()->id();
         $id = $this->query()->insert($main);
@@ -185,11 +185,9 @@ class SingleScene extends BaseScene {
         if (empty($fields)) {
             $fields = '*';
         }
-        return $this->addWhere($this->query(), $params)->when(!empty($keywords), function ($query) use ($keywords) {
+        return $this->addQuery($this->query(), $params, $order, $fields)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('title', 'like', '%'.$keywords.'%');
-        })->select($fields)
-            ->when(!empty($order), function ($query) use ($order) {
-            $query->orderBy($order);
         })->page($per_page);
     }
 

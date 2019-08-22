@@ -1,5 +1,6 @@
 {layout:main}
 {this.title=$data.title}
+{js src=$data.script}
 <div class="banner-bg" style="background-image:url({$cat.image});">
 
 </div>
@@ -16,7 +17,7 @@
                     {$data.title}
                 </div>
                 <div class="game-stage">
-                    <canvas id="game-stage"></canvas>
+                    <canvas id="game-stage" data-score="{url:./form/save?model=game_bang&game=:$data.id}"></canvas>
                 </div>
                 <div class="content">
                     {$data.content}
@@ -32,9 +33,11 @@
                     <div class="body">
                        <ul>
                            {$i=1}
-                            {contents:model=game order=score_desc num=10 field=id,nickname,score extra=true}
+                            {contents:model=game_bang game=$data.id order=score_desc num=10 field=title,score}
                             <li> 
-                                <span>{=$i++}</span>{$content.nickname}({$content.score})
+                                <span class="item-top">{=$i++}</span>
+                                <a href="javascript:;">{$content.title}</a>
+                                <span class="item-score">{$content.score}</span>
                             </li>
                             {/contents}
                        </ul>

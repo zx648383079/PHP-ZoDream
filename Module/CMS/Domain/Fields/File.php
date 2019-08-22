@@ -8,9 +8,11 @@ use Zodream\Html\Dark\Theme;
 
 class File extends BaseField {
 
+    const DEFAULT_ALLOW = '';
+
     public function options(ModelFieldModel $field) {
         return implode('', [
-            Theme::text('setting[option][allow]', '*', '允许格式'),
+            Theme::text('setting[option][allow]', self::DEFAULT_ALLOW, '允许格式'),
             Theme::text('setting[option][length]', '2M', '允许大小'),
         ]);
     }
@@ -22,7 +24,10 @@ class File extends BaseField {
     }
 
     public function toInput($value, ModelFieldModel $field) {
+        $option = $field->setting('option');
         return Theme::file($field->field, $value, $field->name, null,
-            $field->is_required > 0);
+            $field->is_required > 0)->options([
+            'allow' => $option && isset($option['allow']) ? $option['allow'] : self::DEFAULT_ALLOW
+        ]);
     }
 }

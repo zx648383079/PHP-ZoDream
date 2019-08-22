@@ -13,7 +13,7 @@ $this->title = 'ZoDream';
             <button type="submit" class="btn btn-default">搜索</button>
             <input type="hidden" name="id" value="<?=$model->id?>">
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/form/create', ['model_id' => $model->id])?>">新增文章</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/form/create', ['model_id' => $model->id])?>">新增数据</a>
     </div>
 
     <table class="table  table-bordered well">

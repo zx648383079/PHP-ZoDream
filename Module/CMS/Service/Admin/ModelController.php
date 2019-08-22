@@ -97,11 +97,20 @@ class ModelController extends Controller {
                 ->count() > 0) {
             return $this->jsonFailure('字段已存在');
         }
+        $old = $field->getOldAttribute('field');
+        if ($field->is_main > 0
+            && $field->is_system < 1
+            && Module::scene() instanceof SingleScene) {
+            $field->is_main = 0;
+        }
         if (!$field->save()) {
             return $this->jsonFailure($field->getFirstError());
         }
         $scene = Module::scene()->setModel(ModelModel::find($field->model_id));
         if ($id > 0) {
+            $field->setOldAttribute([
+                'field' => $old
+            ]);
             $scene->updateField($field);
         } else {
             $scene->addField($field);

@@ -69,30 +69,66 @@ abstract class BaseScene implements SceneInterface {
      * 添加
      * @param Builder $query
      * @param array $params
+     * @param null $order
+     * @param string $field
      * @return Builder
      */
-    protected function addWhere(Builder $query, $params = []) {
+    protected function addQuery(Builder $query, $params = [], $order = null, $field = '') {
+        list($order, $hasExtra) = $this->filterQuery($order);
+        list($field, $hasExtra2) = $this->filterQuery($field);
+        $hasExtra = $hasExtra || $hasExtra2;
+        if (!empty($order)) {
+            $query->orderBy($order);
+        }
+        if (empty($field)) {
+            $field = '*';
+        }
+        if ($hasExtra) {
+            $prefix = $this->getMainTable().'.';
+            $field = str_replace('*', $prefix.'*', $field);
+            $query->leftJoin($this->getExtendTable().' extra', $prefix.'id', 'extra.id');
+        }
+        $query->select($field);
         if (empty($params)) {
             return $query;
         }
         list($main, $extra) = $this->splitByField($params);
         if (!empty($extra)) {
-            $main['id'] =
-                $this->addWhereOrIn($this->extendQuery(), $extra)->pluck('id');
+            if ($hasExtra) {
+                $this->addWhereOrIn($query, $extra, 'extra.');
+            } else {
+                $main['id'] =
+                    $this->addWhereOrIn($this->extendQuery(), $extra)->pluck('id');
+            }
         }
         return $this->addWhereOrIn($query, $main);
     }
 
-    private function addWhereOrIn(Builder $query, array $params) {
+    private function filterQuery($order) {
+        if (empty($order)) {
+            return [$order, false];
+        }
+        $hasExtra = false;
+        list($mainNames, $extraNames) = $this->getGroupFieldName();
+        foreach ($extraNames as $key) {
+            if (strpos($order, $key) >= 0) {
+                $hasExtra = true;
+                $order = str_replace($key, 'extra.' . $key, $order);
+            }
+        }
+        return [$order, $hasExtra];
+    }
+
+    private function addWhereOrIn(Builder $query, array $params, $prefix = '') {
         if (empty($params)) {
             return $query;
         }
         foreach ($params as $key => $item) {
             if (is_array($item)) {
-                $query->whereIn($key, $item);
+                $query->whereIn($prefix.$key, $item);
                 continue;
             }
-            $query->where($key, $item);
+            $query->where($prefix.$key, $item);
         }
         return $query;
     }

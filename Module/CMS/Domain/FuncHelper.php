@@ -4,6 +4,7 @@ namespace Module\CMS\Domain;
 use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Template\Domain\Model\Base\OptionModel;
@@ -24,7 +25,7 @@ class FuncHelper {
 
     protected static $cache = [];
 
-    protected static function getOrSet($func, $key, callable $callback) {
+    protected static function getOrSet($func, $key, $callback) {
         if (!isset(static::$cache[$func])) {
             static::$cache[$func] = [];
         }
@@ -32,7 +33,8 @@ class FuncHelper {
             || array_key_exists($key, static::$cache[$func])) {
             return static::$cache[$func][$key];
         }
-        return static::$cache[$func][$key] = call_user_func($callback);
+        return static::$cache[$func][$key] = is_callable($callback) ?
+            call_user_func($callback) : $callback;
     }
 
     public static function option($code) {
@@ -97,33 +99,78 @@ class FuncHelper {
         return $category;
     }
 
+    /**
+     * @param string|int $model
+     * @return ModelModel
+     */
+    public static function model($model) {
+        $item = static::getOrSet(__FUNCTION__, $model, function () use ($model) {
+            if (is_numeric($model)) {
+                return ModelModel::find($model);
+            }
+            return ModelModel::where('`table`', $model)->first();
+        });
+        if (empty($item)) {
+            return $item;
+        }
+        if (is_numeric($model)) {
+            return static::getOrSet(__FUNCTION__, $item->table, $item);
+        }
+        return static::getOrSet(__FUNCTION__, $item->id, $item);
+    }
+
+    /**
+     * @param array|null $params
+     * @return Page
+     */
     public static function contents(array $params = null) {
-        $category = self::getCategoryId($params);
-        $keywords = static::getVal($params, ['keywords', 'keyword', 'query']);
-        $page = intval(static::getVal($params, ['page']));
-        $fields = static::getVal($params, ['fields']);
-        $order = static::getVal($params, ['order', 'orderBy'], 'updated_at desc');
-        if (strpos($order, '_') > 0) {
-            $order = preg_replace('/_(desc|asc)/i', ' $1', $order);
-        }
-        if ($order === 'hot') {
-            $order = 'view_count desc';
-        }
-        $per_page = static::getVal($params, ['per_page', 'size', 'num', 'limit'], 20);
+        $data = self::getContentsQuery($params);
         return static::getOrSet(__FUNCTION__,
-            sprintf('%s-%s-%s-%s-%s-%s', $category, $keywords, $page, $per_page, $fields, $order),
-            function () use ($category, $keywords, $page, $per_page, $fields, $order) {
+            md5(json_encode($data)),
+            function () use ($data) {
+            if (isset($data[1]['model_id'])) {
+                $scene = Module::scene()->setModel(self::model($data[1]['model_id']));
+                return $scene->search(...$data);
+            }
+            $category = $data[1]['cat_id'];
             $children = static::channels(['children' => $category]);
             $cat = static::channel($category, true);
             if (empty($cat) || !$cat->model) {
                 return new Page(0);
             }
             $children[] = $category;
+            $data[1]['cat_id'] = $children;
             $scene = Module::scene()->setModel($cat->model);
-            return $scene->search($keywords, [
-                'cat_id' => $children
-            ], $order, $page, $per_page, $fields);
+            return $scene->search(...$data);
         });
+    }
+
+    protected static function getContentsQuery(array $param) {
+        $data = [];
+        if (isset($param['model'])) {
+            $data['model_id'] = self::model($param['model'])->id;
+        } else {
+            $data['cat_id'] = self::getCategoryId($param);
+        }
+        $keywords = static::getVal($param, ['keywords', 'keyword', 'query']);
+        $page = intval(static::getVal($param, ['page'], 1));
+        $fields = static::getVal($param, ['field', 'fields']);
+        $order = static::getVal($param, ['order', 'orderBy'], 'updated_at desc');
+        if (strpos($order, '_') > 0) {
+            $order = preg_replace('/_(desc|asc)/i', ' $1', $order);
+        }
+        if ($order === 'hot') {
+            $order = 'view_count desc';
+        }
+        $per_page = static::getVal($param, ['per_page', 'size', 'num', 'limit'], 20);
+        $tags = ['model', 'keywords', 'keyword', 'query', 'page', 'field', 'fields', 'order', 'orderBy', 'per_page', 'size', 'num', 'limit', 'category', 'cat_id', 'cat', 'channel'];
+        foreach ($param as $key => $value) {
+            if (in_array($key, $tags)) {
+                continue;
+            }
+            $data[$key] = $value;
+        }
+        return [$keywords, $data, $order, $page, $per_page, $fields];
     }
 
     /**
