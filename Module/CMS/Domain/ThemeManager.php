@@ -19,6 +19,8 @@ use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Error\Exception;
+use Module\CMS\Domain\Model\LinkageDataModel;
+use Module\CMS\Domain\Model\LinkageModel;
 
 class ThemeManager {
 
@@ -225,7 +227,7 @@ class ThemeManager {
 
     protected function runScript($data) {
         usort($data, function ($pre, $next) {
-            $maps = ['group' => 1, 'model' => 2, 'field' => 3, 'channel' => 4, 'content' => 5];
+            $maps = ['group' => 1, 'linkage' => 2, 'model' => 3, 'form' => 4, 'field' => 5, 'channel' => 6, 'content' => 7];
             if (!isset($maps[$pre['action']])) {
                 return -1;
             }
@@ -254,6 +256,37 @@ class ThemeManager {
     protected function runActionGroup($data) {
         if (!isset($data['data'])) {
             $this->insertGroup($data);
+        }
+    }
+
+    protected function runActionForm($data) {
+        $data['type'] = 1;
+        return $this->runActionModel($data);
+    }
+
+    protected function runActionLinkage($data) {
+        $items = isset($data['data']) ? $data['data'] : [];
+        unset($data['data'], $data['action']);
+        $model = LinkageModel::create($data);
+        if (!$model) {
+            throw new Exception('数据错误');
+        }
+        $this->setCache([$model->code => $model->id, $model->id => $model], 'linkage');
+        $this->runActionLinkageData($items, 0, '', $model->id);
+    }
+
+    public function runActionLinkageData(array $data, $parent_id, $prefix, $linkage_id) {
+        foreach ($data as $item) {
+            $children = isset($item['children']) ? $item['children'] : [];
+            unset($item['children']);
+            $item['parent_id'] = $parent_id;
+            $item['linkage_id'] = $linkage_id;
+            $item['full_name'] = $prefix.' '.$item['name'];
+            $model = LinkageDataModel::create($item);
+            if (!$model || empty($children)) {
+                continue;
+            }
+            $this->runActionLinkageData($children, $model->id, $item['full_name'], $linkage_id);
         }
     }
 
@@ -288,6 +321,15 @@ class ThemeManager {
         unset($data['model'], $data['action']);
         if (isset($data['setting']) && is_array($data['setting'])) {
             $data['setting'] = Json::encode($data['setting']);
+        }
+        if (!isset($data['type'])) {
+            $data['type'] = 'text';
+        } elseif (strpos($data['type'], '@model:') === 0) {
+            $data['setting']['option']['model'] = $this->getCacheId($data['type']);
+            $data['type'] = 'model';
+        } elseif (strpos($data['type'], '@linkage:') === 0) {
+            $data['setting']['option']['linkage_id'] = $this->getCacheId($data['type']);
+            $data['type'] = 'linkage';
         }
         $model = ModelFieldModel::create($data);
         if (!$model) {

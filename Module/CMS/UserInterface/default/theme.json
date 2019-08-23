@@ -68,11 +68,17 @@
             "category_template": "theme",
             "list_template": "theme_list",
             "show_template": "theme",
-            "fields": [{
-                "name": "文件",
-                "field": "file",
-                "type": "file"
-            }]
+            "fields": [
+                {
+                    "name": "文件",
+                    "field": "file",
+                    "type": "file"
+                },
+                {
+                    "name": "预览地址",
+                    "field": "preview"
+                }
+            ]
         },
         {
             "action": "model",
@@ -141,6 +147,35 @@
                 "field": "uri",
                 "type": "text"
             }]
+        },
+        {
+            "action": "model",
+            "name": "游戏",
+            "table": "game",
+            "category_template": "game",
+            "list_template": "game_list",
+            "show_template": "gmae",
+            "fields": [{
+                "name": "脚本",
+                "field": "script",
+                "type": "file"
+            }]
+        },
+        {
+            "action": "form",
+            "name": "游戏榜单",
+            "table": "game_bang",
+            "fields": [
+                {
+                    "name": "所属游戏",
+                    "field": "game",
+                    "type": "@model:game"
+                },
+                {
+                    "name": "分数",
+                    "field": "score"
+                }
+            ]
         },
         {
             "action": "channel",

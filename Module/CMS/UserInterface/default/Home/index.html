@@ -65,7 +65,7 @@ var silder = $(".photo .slider").slider({
                                 <li> 
                                     <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
-                                        {$content.title}<span>{this.time:$content.created_at}</span></a>
+                                        {$content.title}<span>{this.ago:$content.created_at}</span></a>
                                   </li>
                             {/contents}
                         </ul>
@@ -76,7 +76,7 @@ var silder = $(".photo .slider").slider({
                                 <li> 
                                     <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
                                         <em></em>
-                                        {$content.title}<span>{this.time:$content.created_at}</span></a>
+                                        {$content.title}<span>{this.ago:$content.created_at}</span></a>
                                 </li>
                             {/contents}
                         </ul>
