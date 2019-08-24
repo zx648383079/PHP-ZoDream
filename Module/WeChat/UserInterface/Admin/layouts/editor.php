@@ -108,6 +108,10 @@ $this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? 
                 <label for="template_id">模板ID</label>
                 <input type="text" id="template_id" name="editor[template_id]" value="<?=$model->getEditor('template_id')?>" placeholder="示例：模板ID" size="100">
             </div>
+            <div class="input-group">
+                <label for="template_id">链接</label>
+                <input type="text" id="template_url" name="editor[template_url]" value="<?=$model->getEditor('template_url')?>" placeholder="" size="100">
+            </div>
             <textarea name="editor[template_data]" placeholder="模板参数：key=value 换行"><?=$model->getEditor('template_data')?></textarea>
             <div class="template-preview"></div>
         </div>

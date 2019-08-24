@@ -8,6 +8,7 @@ use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\ThirdParty\WeChat\EventEnum;
+use Zodream\ThirdParty\WeChat\Mass;
 use Zodream\ThirdParty\WeChat\Template;
 
 class ReplyController extends Controller {
@@ -76,8 +77,42 @@ class ReplyController extends Controller {
         return $this->show(compact('user_id', 'user_list'));
     }
 
-    public function sendAllAction() {
+    public function sendAllAction($user_id = 0, $editor = []) {
+        if ($editor['type'] === 3) {
+            return $this->sendTemplate($user_id, $editor['template_id'], $editor['template_url'], $editor['template_data']);
+        }
+        $data = '';
+        $type = Mass::TEXT;
+        if ($editor['type'] < 1) {
+            $data = $editor['text'];
+        }
+        /** @var Mass $api */
+        $api = WeChatModel::find($this->weChatId())
+            ->sdk(Mass::class);
+        $openid = null;
+        if ($user_id > 0) {
+            $openid = UserModel::where('id', $user_id)->value('openid');
+        }
+        $res = empty($openid) ? $api->sendAll($data, $type) : $api->send([$openid], $data, $type);
+        return $this->jsonSuccess('', '发送成功');
+    }
 
+    private function sendTemplate($user_id, $template_id, $url, $data) {
+        if ($user_id < 1) {
+            return $this->jsonFailure('模板消息只能发给单个用户');
+        }
+        $openid = UserModel::where('id', $user_id)->value('openid');
+        if (empty($openid)) {
+            return $this->jsonFailure('用户未关注公众号');
+        }
+        /** @var Template $api */
+        $api = WeChatModel::find($this->weChatId())
+            ->sdk(Template::class);
+        $res = $api->send($openid, $template_id, url($url), TemplateModel::strToArr($data));
+        if ($res) {
+            return $this->jsonSuccess('', '发送成功');
+        }
+        return $this->jsonFailure('发送失败');
     }
 
     public function templateAction() {
