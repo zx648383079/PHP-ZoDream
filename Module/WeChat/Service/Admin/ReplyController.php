@@ -1,9 +1,14 @@
 <?php
 namespace Module\WeChat\Service\Admin;
 
+use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 
+use Module\WeChat\Domain\Model\TemplateModel;
+use Module\WeChat\Domain\Model\UserModel;
+use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\ThirdParty\WeChat\EventEnum;
+use Zodream\ThirdParty\WeChat\Template;
 
 class ReplyController extends Controller {
 
@@ -60,5 +65,62 @@ class ReplyController extends Controller {
         return $this->jsonSuccess([
             'refresh' => true
         ]);
+    }
+
+    public function allAction($user_id = 0) {
+        $user_list = FansModel::query()->alias('f')
+            ->where('f.status', FansModel::STATUS_SUBSCRIBED)
+            ->leftJoin(UserModel::tableName().' u', 'f.id', 'u.id')
+            ->whereNotNull('u.id')
+            ->get('f.id,u.nickname as name');
+        return $this->show(compact('user_id', 'user_list'));
+    }
+
+    public function sendAllAction() {
+
+    }
+
+    public function templateAction() {
+        $model_list = TemplateModel::where('wid', $this->weChatId())->page();
+        return $this->show(compact('model_list'));
+    }
+
+    public function refreshTemplateAction() {
+        /** @var Template $api */
+        $api = WeChatModel::find($this->weChatId())
+            ->sdk(Template::class);
+        $data = $api->allTemplate();
+        if (!isset($data['template_list'])) {
+            return $this->jsonFailure('同步失败');
+        }
+        TemplateModel::where('wid', $this->weChatId())->delete();
+        foreach ($data['template_list'] as $item) {
+            TemplateModel::create([
+                'wid' => $this->weChatId(),
+                'template_id' => $item['template_id'],
+                'title' => $item['title'],
+                'content' => $item['content'],
+                'example' => $item['example'],
+            ]);
+        }
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function templateFieldAction($id) {
+        $model = TemplateModel::where('template_id', $id)->first();
+        if (empty($model)) {
+            return $this->jsonFailure('模板不存在');
+        }
+        return $this->jsonSuccess($model->getFields());
+    }
+
+    public function templatePreviewAction($id, $data) {
+        $model = TemplateModel::where('template_id', $id)->first();
+        if (empty($model)) {
+            return $this->jsonFailure('模板不存在');
+        }
+        return $this->jsonSuccess($model->preview($data));
     }
 }

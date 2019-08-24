@@ -7,29 +7,14 @@ use Domain\Model\Model;
  * Class TemplateModel
  * @package Module\WeChat\Domain\Model
  * @property integer $id
- * @property integer $type
- * @property integer $category
- * @property string $name
+ * @property integer $wid
+ * @property string $template_id
+ * @property string $title
  * @property string $content
- * @property integer $created_at
- * @property integer $updated_at
+ * @property string $example
  */
 class TemplateModel extends Model {
 
-    public static $type_list = [
-        '标题样式',
-        '正文样式',
-        '图文样式',
-        '引导样式',
-        '分割线',
-        '二维码',
-        '音频样式',
-        '视频样式',
-        '图标样式',
-
-        91 => '节日模板',
-        92 => '行业模板'
-    ];
 
     public static function tableName() {
         return 'wechat_template';
@@ -37,25 +22,56 @@ class TemplateModel extends Model {
 
     protected function rules() {
         return [
-            'type' => 'int:0,999',
-            'category' => 'int',
-            'name' => 'required|string:0,100',
-            'content' => 'required',
-            'created_at' => 'int',
-            'updated_at' => 'int',
+            'wid' => 'required|int',
+            'template_id' => 'required|string:0,64',
+            'title' => 'required|string:0,100',
+            'content' => 'required|string:0,255',
+            'example' => 'required|string:0,255',
         ];
     }
 
     protected function labels() {
         return [
             'id' => 'Id',
-            'type' => '类型',
-            'category' => '分类',
-            'name' => '名称',
-            'content' => '内容',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'wid' => 'Wid',
+            'template_id' => 'Template Id',
+            'title' => 'Title',
+            'content' => 'Content',
+            'example' => 'Example',
         ];
+    }
+
+    public function getFields() {
+        if (preg_match_all('/\{([^\{]+)\.DATA\}/', $this->content, $matches, PREG_SET_ORDER)) {
+            return array_column($matches, 1);
+        }
+        return [];
+    }
+
+    public function preview($data) {
+        $data = self::strToArr($data);
+        return preg_replace_callback('/\{\s?\{([^\{]+)\.DATA\}\s?\}/', function ($match) use ($data) {
+            $key = trim($match[1]);
+            return isset($data[$key]) ? $data[$key] : '';
+        }, $this->content);
+    }
+
+    public static function strToArr($data) {
+        if (is_array($data)) {
+            return $data;
+        }
+        $args = [];
+        foreach (explode("\n", $data) as $line) {
+            if (empty($line)) {
+                continue;
+            }
+            $arg = explode('=', $line, 2);
+            if (empty($arg[0])) {
+                continue;
+            }
+            $args[$arg[0]] = isset($arg[1]) ? $arg[1] : '';
+        }
+        return $args;
     }
 
 }

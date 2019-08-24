@@ -12,9 +12,12 @@ if (!isset($tab_id)) {
 if (!is_array($tab_id)) {
     $tab_id = $tab_id ? [0, 1, 2, 3, 7] : [1, 2, 3, 4, 5, 6, 7];
 }
+if (!isset($model)) {
+    $model = new ReplyModel();
+}
 $type_id = $model->getEditor('type');
 $scene = $model->getEditor('scene');
-$this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? $type_id : $tab_id[0], $this->url('./admin/')));
+$this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? $type_id : $tab_id[0], $this->url('./admin/', false)));
 ?>
 <div class="zd-tab wx-editor">
     <div class="zd-tab-head">
@@ -106,6 +109,7 @@ $this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? 
                 <input type="text" id="template_id" name="editor[template_id]" value="<?=$model->getEditor('template_id')?>" placeholder="示例：模板ID" size="100">
             </div>
             <textarea name="editor[template_data]" placeholder="模板参数：key=value 换行"><?=$model->getEditor('template_data')?></textarea>
+            <div class="template-preview"></div>
         </div>
         <?php endif;?>
         <?php if(in_array(ReplyModel::TYPE_EVENT, $tab_id)):?>

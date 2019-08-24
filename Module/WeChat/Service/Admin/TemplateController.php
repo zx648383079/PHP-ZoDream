@@ -2,14 +2,14 @@
 namespace Module\WeChat\Service\Admin;
 
 
-use Module\WeChat\Domain\Model\TemplateModel;
+use Module\WeChat\Domain\Model\MediaTemplateModel;
 
 class TemplateController extends Controller {
     public function indexAction($type = 0) {
         if (app('request')->isAjax()) {
             $this->layout = false;
         }
-        $model_list = TemplateModel::where('type', intval($type))->page();
+        $model_list = MediaTemplateModel::where('type', intval($type))->page();
         return $this->show(app('request')->isAjax() ? 'page' : 'index', compact('model_list'));
     }
 
@@ -18,12 +18,12 @@ class TemplateController extends Controller {
     }
 
     public function editAction($id) {
-        $model = TemplateModel::findOrNew($id);
+        $model = MediaTemplateModel::findOrNew($id);
         return $this->show(compact('model'));
     }
 
     public function saveAction() {
-        $model = new TemplateModel();
+        $model = new MediaTemplateModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('template')
@@ -33,7 +33,7 @@ class TemplateController extends Controller {
     }
 
     public function deleteAction($id) {
-        TemplateModel::where('id', $id)->delete();
+        MediaTemplateModel::where('id', $id)->delete();
         return $this->jsonSuccess([
             'refresh' => true
         ]);

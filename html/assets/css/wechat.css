@@ -86,6 +86,11 @@ table .active {
   width: auto;
   min-width: 80px; }
 
+.wx-editor .template-preview {
+  background-color: #fff;
+  border: 1px solid;
+  border-radius: 5px; }
+
 .editor-box .editor-template-box {
   width: 520px;
   float: left;

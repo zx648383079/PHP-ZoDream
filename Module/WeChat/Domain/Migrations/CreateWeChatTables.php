@@ -3,6 +3,7 @@ namespace Module\WeChat\Domain\Migrations;
 
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MediaModel;
+use Module\WeChat\Domain\Model\MediaTemplateModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
 use Module\WeChat\Domain\Model\TemplateModel;
@@ -50,7 +51,7 @@ class CreateWeChatTables extends Migration {
             $table->timestamps();
         });
 
-        Schema::createTable(TemplateModel::tableName(), function(Table $table) {
+        Schema::createTable(MediaTemplateModel::tableName(), function(Table $table) {
             $table->setComment('微信图文模板');
             $table->set('id')->pk()->ai();
             $table->set('type')->tinyint(3)->defaultVal(0)->comment('类型：素材、节日、行业');
@@ -58,6 +59,15 @@ class CreateWeChatTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('模板标题');
             $table->set('content')->text()->notNull()->comment('模板内容');
             $table->timestamps();
+        });
+        Schema::createTable(TemplateModel::tableName(), function(Table $table) {
+            $table->setComment('微信模板消息模板');
+            $table->set('id')->pk()->ai();
+            $table->set('wid')->int(10)->unsigned()->notNull()->comment('所属微信公众号ID');
+            $table->set('template_id')->varchar(64)->notNull()->comment('模板id');
+            $table->set('title')->varchar(100)->notNull()->comment('标题');
+            $table->set('content')->varchar(255)->notNull()->comment('内容');
+            $table->set('example')->varchar(255)->notNull()->comment('示例');
         });
     }
 
@@ -67,13 +77,17 @@ class CreateWeChatTables extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropTable(WeChatModel::tableName());
-        Schema::dropTable(ReplyModel::tableName());
-        Schema::dropTable(FansModel::tableName());
-        Schema::dropTable(UserModel::tableName());
-        Schema::dropTable(MessageHistoryModel::tableName());
-        Schema::dropTable(MediaModel::tableName());
-        Schema::dropTable(MenuModel::tableName());
+        Schema::dropTable([
+            WeChatModel::tableName(),
+            ReplyModel::tableName(),
+            FansModel::tableName(),
+            UserModel::tableName(),
+            MessageHistoryModel::tableName(),
+            MediaModel::tableName(),
+            MenuModel::tableName(),
+            TemplateModel::tableName(),
+            MediaTemplateModel::tableName()
+        ]);
     }
 
     /**

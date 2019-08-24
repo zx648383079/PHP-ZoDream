@@ -46,6 +46,16 @@ $this->registerCssFile([
                 '关键字回复',
                 './admin/reply',
                 'fa fa-list'
+            ],
+            [
+                '群发消息',
+                './admin/reply/all',
+                'fa fa-list'
+            ],
+            [
+                '模板消息',
+                './admin/reply/template',
+                'fa fa-list'
             ]
         ]
     ],
