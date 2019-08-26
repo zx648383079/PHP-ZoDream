@@ -417,6 +417,8 @@ footer {
         margin-right: 10px;
         border-radius: 10px;
         color: #999; }
+      .search-box .search-tips li.active {
+        background-color: rgba(153, 153, 153, 0.1); }
   .search-box .search-engine {
     position: absolute;
     top: 60px;

@@ -88,14 +88,42 @@ class Search {
             e.stopPropagation();
             engineBox.show();
         }).on('keyup', '.search-input input', function(e) {
-            const keywords = $(this).val() as string;
+            let $this = $(this);
+            const keywords = $this.val() as string;
             if (e.key === 'Enter') {
                 that.tapSearch(keywords);
                 return;
             }
-            if (that.showTip) {
-                that.refreshTip(keywords);
+            if (!that.showTip) {
+                return;
             }
+            if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') {
+                that.refreshTip(keywords);
+                return;
+            }
+            const items = that.box.find('.search-tips li');
+            if (items.length < 0) {
+                return;
+            }
+            let i = -1;
+            for (let j = 0; j < items.length; j++) {
+                const element = $(items[j]);
+                if (element.hasClass('active')) {
+                    i = j;
+                    element.removeClass('active');
+                    break;
+                }
+            }
+            if (e.key === 'ArrowDown') {
+                i = i < items.length - 1 ? i + 1 : 0;
+            } else if (e.key === 'ArrowUp') {
+                i = i < 1 ? items.length - 1 : i;
+            }
+            const element = items.eq(i);
+            element.addClass('active');
+            $this.val(element.text().replace(/^\d+/, ''))
+        }).on('click', '.search-input input', function(e) {
+            e.stopPropagation();
         }).on('click', '.search-tips li', function() {
             that.tapSearch($(this).text().replace(/^\d+/, ''));
         });
@@ -117,6 +145,11 @@ class Search {
      * tapSearch
      */
     public tapSearch(keywords: string) {
+        keywords = keywords.trim();
+        if (!keywords || keywords.length < 1) {
+            return;
+        }
+        this.box.find('.search-tips').hide();
         const engine = this.SEARCH_ENGINE[this.engine];
         const url = engine.url.replace('{word}', encodeURI(keywords.trim()));
         window.open(url, '_blank');
