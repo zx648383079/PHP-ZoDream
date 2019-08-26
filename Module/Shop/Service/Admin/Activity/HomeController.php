@@ -9,10 +9,4 @@ class HomeController extends Controller {
         return $this->show();
     }
 
-    /**
-     * 抽奖
-     */
-    public function lotteryAction() {
-        return $this->show();
-    }
 }
