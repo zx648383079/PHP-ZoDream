@@ -1,23 +1,37 @@
-
 #table-box {
-  select {
-    height: auto;
-    display: block;
-    min-width: 200px;
-  }
+    select {
+        height: auto;
+        display: block;
+        min-width: 200px;
+    }
 }
+
 .search-box {
-  &::after {
-    clear: both;
-  }
+    &::after {
+        clear: both;
+    }
 }
 
 table {
-  .btn {
-    padding: 0 8px;
-    margin: 0 4px;
-  }
-  .danger {
-    background: rgba(255, 0, 0, .2);
-  }
+    .btn {
+        padding: 0 8px;
+        margin: 0 4px;
+    }
+
+    .danger {
+        background: rgba(255, 0, 0, .2);
+    }
+}
+
+.on-edit {
+    display: none;
+}
+
+.edit-mode {
+    .on-edit {
+        display: inline-block;
+    }
+    .no-edit {
+        display: none;
+    }
 }

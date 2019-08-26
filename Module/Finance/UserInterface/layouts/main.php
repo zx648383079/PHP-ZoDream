@@ -15,6 +15,7 @@ $this->registerCssFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
+        '@jquery.upload.min.js',
         '@jquery.datetimer.min.js',
         '@main.min.js',
         '@finance.min.js'

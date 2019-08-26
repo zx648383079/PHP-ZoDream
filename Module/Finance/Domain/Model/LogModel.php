@@ -57,7 +57,7 @@ class LogModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'type' => '类型呢',
+            'type' => '类型',
             'money' => '金额',
             'frozen_money' => '冻结金额',
             'account_id' => '账户',
@@ -118,5 +118,79 @@ class LogModel extends Model {
             $data[$i] = isset($days[$i]) ? $days[$i] : 0;
         }
         return $data;
+    }
+
+    public static function import($file) {
+        $file = (string)$file;
+        if (!is_file($file)) {
+            return false;
+        }
+        $handle = fopen($file, 'r');
+        if (!$handle) {
+            return false;
+        }
+        $status = 0;
+        $column = [];
+        $type = 0;
+        $account_id = 0;
+        while (($data = fgetcsv($handle)) !== false) {
+            if ($status === 0) {
+                if (strpos($data[0], '---') === 0) {
+                    $status = 1;
+                }
+                continue;
+            }
+            if (strpos($data[0], '---') === 0) {
+                break;
+            }
+            $data = array_map(function ($item) {
+                return trim(iconv('GB2312', 'UTF-8', $item));
+            }, $data);
+            if ($status === 1) {
+                $column = $data;
+                $status = 2;
+                $type = in_array('交易时间', $data) ? 1 : 2;
+                $account_id = MoneyAccountModel::auth()->where('name', $type == 1 ? '微信' : '支付宝')
+                    ->value('id');
+                continue;
+            }
+            $item = array_combine($column, $data);
+            if ($type === 1) {
+                // 微信
+                static::create([
+                    'type' => $item['收/支'] == '支出' ? 0 : 1,
+                    'money' => substr($item['金额(元)'], 1),
+                    'frozen_money' => 0,
+                    'account_id' => $account_id,
+                    'channel_id' => 0,
+                    'project_id' => 0,
+                    'budget_id' => 0,
+                    'remark' => sprintf('%s %s',$item['交易对方'], $item['商品']),
+                    'user_id' => auth()->id(),
+                    'created_at' => time(),
+                    'updated_at' => time(),
+                    'happened_at' => $item['交易时间'],
+                ]);
+            } elseif ($type === 2) {
+                // 支付宝
+                static::create([
+                    'type' => $item['收/支'] == '支出' ? 0 : 1,
+                    'money' => $item['金额（元）'],
+                    'frozen_money' => 0,
+                    'account_id' => $account_id,
+                    'channel_id' => 0,
+                    'project_id' => 0,
+                    'budget_id' => 0,
+                    'remark' => sprintf('%s %s',$item['交易对方'], $item['商品名称']),
+                    'user_id' => auth()->id(),
+                    'created_at' => time(),
+                    'updated_at' => time(),
+                    'happened_at' => !empty($item['付款时间'])
+                        ? $item['付款时间'] : $item['交易创建时间'],
+                ]);
+            }
+        }
+        fclose($handle);
+        return true;
     }
 }

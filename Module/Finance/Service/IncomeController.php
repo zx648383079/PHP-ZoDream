@@ -6,8 +6,10 @@ use Module\Finance\Domain\Model\ConsumptionChannelModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
+use Zodream\Domain\Upload\BaseUpload;
+use Zodream\Domain\Upload\Upload;
 use Zodream\Helpers\Time;
-
+use Zodream\Service\Factory;
 
 
 class IncomeController extends Controller {
@@ -26,10 +28,13 @@ class IncomeController extends Controller {
         return $this->show(compact('month', 'income_days', 'income_list', 'expenditure_list', 'expenditure_days', 'log_list', 'day_length'));
     }
 
-    public function logAction($type = null) {
-        $log_list = LogModel::auth()->when(is_numeric($type), function ($query) use ($type) {
+    public function logAction($type = null, $keywords = null) {
+        $log_list = LogModel::auth()
+            ->when(is_numeric($type), function ($query) use ($type) {
             $query->where('type', intval($type));
-        })->orderBy('happened_at', 'desc')->page();
+        })->when(!empty($keywords), function ($query) {
+                LogModel::search($query, 'remark');
+            })->orderBy('happened_at', 'desc')->page();
         return $this->show(compact('log_list'));
     }
 
@@ -78,6 +83,25 @@ class IncomeController extends Controller {
         return $this->jsonSuccess([
             'url' => url('./income/log')
         ]);
+    }
+
+    public function importAction() {
+        $upload = new Upload();
+        $upload->setDirectory(Factory::root()->directory('data/cache'));
+        $upload->upload('file');
+        if (!$upload->checkType('csv') || !$upload->save()) {
+            return $this->jsonFailure('文件不支持，仅支持gb2312编码的csv文件');
+        }
+        $upload->each(function (BaseUpload $file) {
+            LogModel::import($file->getFile());
+        });
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function exportAction() {
+
     }
 
     public function addDayLogAction() {
