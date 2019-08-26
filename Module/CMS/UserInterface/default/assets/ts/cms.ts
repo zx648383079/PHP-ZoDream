@@ -42,6 +42,16 @@ class Search {
             url: 'https://www.google.com/search?q={word}',
         },
         {
+            name: 'DuckDuckGo',
+            icon: 'icon-duckduckgo',
+            url: 'https://duckduckgo.com/?q={word}',
+            suggest: function(keywords, cb) {
+                this.jsonp('https://duckduckgo.com/ac/?q=' + keywords, res => {
+                    cb(this.pluck(res, 'phrase'));
+                }, 'callback');
+            },
+        },
+        {
             name: 'Github',
             icon: 'icon-github',
             url: 'https://github.com/search?utf8=✓&q={word}',
