@@ -124,6 +124,7 @@ class Search {
             $this.val(element.text().replace(/^\d+/, ''))
         }).on('click', '.search-input input', function(e) {
             e.stopPropagation();
+            engineBox.hide();
         }).on('click', '.search-tips li', function() {
             that.tapSearch($(this).text().replace(/^\d+/, ''));
         });
