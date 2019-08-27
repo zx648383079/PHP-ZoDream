@@ -24,6 +24,8 @@
       text-align: center;
       left: -13px;
       top: -10px; }
+    .debugger-bar .bar-title .fa-close::before {
+      content: "\f00d"; }
   .debugger-bar .bar-info {
     display: none;
     max-height: 200px;
@@ -31,12 +33,19 @@
     background: #f9cfa6; }
     .debugger-bar .bar-info table {
       border-collapse: collapse; }
+      .debugger-bar .bar-info table tr {
+        cursor: pointer; }
+        .debugger-bar .bar-info table tr:hover {
+          color: #CD1818; }
       .debugger-bar .bar-info table .error-tr {
         background: #CD1818;
         color: #fff; }
-      .debugger-bar .bar-info table .header-tr td {
-        line-height: 30px;
-        font-weight: 600; }
+      .debugger-bar .bar-info table .header-tr {
+        background-color: #faf0e7; }
+        .debugger-bar .bar-info table .header-tr td {
+          line-height: 30px;
+          font-weight: 600;
+          border: none; }
       .debugger-bar .bar-info table td {
         line-height: 20px;
         text-align: left;

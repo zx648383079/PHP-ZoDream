@@ -6,7 +6,6 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
-use Module\Document\Domain\Model\FieldModel;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
@@ -104,6 +103,11 @@ class FuncHelper {
      * @return ModelModel
      */
     public static function model($model) {
+        static::getOrSet(__FUNCTION__, 'all', function () use ($model) {
+            $data = ModelModel::query()->all();
+            static::setModel(...$data);
+            return $data;
+        });
         $item = static::getOrSet(__FUNCTION__, $model, function () use ($model) {
             if (is_numeric($model)) {
                 return ModelModel::find($model);
@@ -117,6 +121,17 @@ class FuncHelper {
             return static::getOrSet(__FUNCTION__, $item->table, $item);
         }
         return static::getOrSet(__FUNCTION__, $item->id, $item);
+    }
+
+    protected static function setModel(...$data) {
+        foreach ($data as $item) {
+            if (!isset(static::$cache['model'][$item['id']])) {
+                static::$cache['model'][$item['id']] = $item;
+            }
+            if (!isset(static::$cache['model'][$item['table']])) {
+                static::$cache['model'][$item['table']] = $item;
+            }
+        }
     }
 
     /**
@@ -203,7 +218,7 @@ class FuncHelper {
     }
 
     public static function previous($name = null) {
-        $data = static::getOrSet(__FUNCTION__, function () {
+        $data = static::getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $scene = Module::scene()->setModel($cat->model);
             return $scene->query()->where('id', '<', static::$current['content'])
@@ -213,7 +228,7 @@ class FuncHelper {
     }
 
     public static function next($name = null) {
-        $data = static::getOrSet(__FUNCTION__, function () {
+        $data = static::getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $scene = Module::scene()->setModel($cat->model);
             return $scene->query()->where('id', '>', static::$current['content'])
@@ -237,6 +252,7 @@ class FuncHelper {
             if (isset(static::$cache['channel'][$item['id']])) {
                 return;
             }
+            $item['model'] = self::model($item['model_id']);
             static::$cache['channel'][$item['id']] = $item;
         }
     }
@@ -318,6 +334,7 @@ class FuncHelper {
         $data = static::getOrSet(__FUNCTION__, $id, function () use ($id) {
             return CategoryModel::find($id);
         });
+        $data['model'] = self::model($data->model_id);
         if ($name === true) {
             return $data;
         }
@@ -403,6 +420,11 @@ class FuncHelper {
         return $default;
     }
 
+    /**
+     * @param $id
+     * @return string|\Zodream\Infrastructure\Http\UrlGenerator
+     * @throws \Exception
+     */
     public static function formAction($id) {
         return url('./form/save', compact('id'));
     }
