@@ -3,9 +3,14 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '添加商品详情';
+$url = $this->url('./admin/', false);
+$js = <<<JS
+bindSecKill('{$url}');
+JS;
+$this->registerJs($js);
 ?>
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/seckill/create')?>">设置商品</a>
+    <a class="btn btn-success pull-right" data-type="goods" href="javascript:;">设置商品</a>
 </div>
 <table class="table table-hover">
     <thead>
@@ -49,4 +54,19 @@ $this->title = '添加商品详情';
 </table>
 <div align="center">
     <?=$model_list->getLink()?>
+</div>
+
+<div id="goods-dialog" class="dialog dialog-box" data-type="dialog">
+    <div class="dialog-header">
+        <div class="dialog-title">选择商品</div>
+        <i class="fa fa-close dialog-close"></i>
+    </div>
+    <div class="dialog-body">
+
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="dialog-yes">确认</button>
+        <button type="button"
+            class="dialog-close">取消</button>
+    </div>
 </div>

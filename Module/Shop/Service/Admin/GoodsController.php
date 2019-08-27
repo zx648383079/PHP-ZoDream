@@ -13,6 +13,7 @@ use Module\Shop\Domain\Models\GoodsAttributeModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsIssueModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\ProductModel;
 use Zodream\Helpers\Json;
@@ -193,8 +194,22 @@ class GoodsController extends Controller {
         ]);
     }
 
-    public function dialogAction($keywords = null, $cat_id = 0, $brand_id = 0) {
-        $model_list = GoodsModel::when(!empty($keywords), function ($query) {
+    public function dialogAction(
+        $keywords = null,
+        $cat_id = 0,
+        $brand_id = 0, $selected = [],
+        $just_selected = false,
+        $simple = false) {
+        if (!empty($selected) && is_string($selected)) {
+            if (strpos($selected, '[') === false) {
+                $selected = explode(',', $selected);
+            } else {
+                $selected = json_decode($selected, true);
+            }
+        }
+        $selected = array_map('intval', (array)$selected);
+        $simple = !!$simple;
+        $model_list = GoodsSimpleModel::when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
                     GoodsModel::search($query, 'name');
                 });
@@ -202,7 +217,18 @@ class GoodsController extends Controller {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($brand_id), function ($query) use ($brand_id) {
                 $query->where('brand_id', intval($brand_id));
-            })->orderBy('id', 'desc')->select('id', 'name', 'thumb', 'price')->page();
-        return $this->show(compact('model_list'));
+            })->when($just_selected, function ($query) use ($selected) {
+            $query->whereIn('id', $selected);
+            })->orderBy('id', 'desc')->page();
+        if (app('request')->wantsJson()) {
+            return $this->jsonSuccess($model_list);
+        }
+        if (!$simple) {
+            $cat_list = CategoryModel::tree()->makeTreeForHtml();
+            $brand_list = BrandModel::select('id', 'name')->all();
+            $this->send(compact('cat_id', 'cat_list', 'brand_id', 'brand_list', 'just_selected', 'keywords'));
+        }
+        $this->layout = false;
+        return $this->show(compact('model_list', 'selected', 'simple'));
     }
 }

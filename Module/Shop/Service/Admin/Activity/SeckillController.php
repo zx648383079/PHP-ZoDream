@@ -54,6 +54,7 @@ class SeckillController extends Controller {
     }
 
     public function goodsAction() {
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_SEC_KILL)->page();
         return $this->show(compact('model_list'));
     }
 

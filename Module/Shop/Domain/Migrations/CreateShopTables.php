@@ -552,6 +552,7 @@ class CreateShopTables extends Migration {
             $table->set('scope_type')->tinyint(1)->defaultVal(0)->comment('商品范围类型');
             $table->set('scope')->text()->notNull()->comment('商品范围值');
             $table->set('configure')->text()->notNull()->comment('其他配置信息');
+            $table->set('status')->bool()->defaultVal(1)->comment('开启关闭');
             $table->timestamp('start_at');
             $table->timestamp('end_at');
             $table->timestamps();

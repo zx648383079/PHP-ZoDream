@@ -530,3 +530,47 @@ table {
 		}
 	}
 }
+
+#goods-dialog {
+	.dialog-body {
+		overflow: unset;
+	}
+}
+
+.dialog-goods-box {
+	overflow-y: auto;
+	background-color: #eee;
+	max-width: 600px;
+	max-height: 400px;
+	.item {
+		text-align: center;
+		display: inline-block;
+		background-color: #fff;
+		margin: 3px;
+		position: relative;
+		.thumb {
+			width: 100px;
+			height: 100px;
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.price {
+			color: #f00;
+		}
+		&.selected {
+			background-color: rgb(174, 255, 238);
+			&::after {
+				position: absolute;
+				font-size: 100px;
+				color: rgba(red, .3);
+				font-family: "Font Awesome 5 Free";
+				content: "\f00c";
+				font-weight: 900;
+				top: 10px;
+				left: 0;
+			}
+		}
+	}
+}

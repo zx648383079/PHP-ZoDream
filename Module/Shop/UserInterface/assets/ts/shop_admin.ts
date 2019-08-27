@@ -905,6 +905,94 @@ class Delivery {
     }
 }
 
+class GoodsDailog {
+    constructor(
+        element: string
+    ) {
+        this.dialog = $(element).dialog({});
+        $.get(BASE_URI + 'goods/dialog', {
+            selected: this.selected.join(',')
+        }, html => {
+            this.html(html);
+        });
+        this.bindEvent();
+    }
+
+    public dialog: any;
+    public selected: number[] = [];
+
+    private bindEvent() {
+        let that = this;
+        this.on('submit', '.dialog-goods-search form', function() {
+            let $this = $(this);
+            $.post($this.attr('action'), $this.serialize() + '&selected=' + that.selected.join(','), html => {
+                that.html(html);
+            })
+            return false;
+        }).on('click', '.dialog-goods-box .item', function() {
+            let $this = $(this).toggleClass('selected');
+            let id = parseInt($this.data('id'), 10);
+            that.toggleGoods(id, $this.hasClass('selected'));
+        });
+    }
+
+    /**
+     * toggleGoods
+     */
+    public toggleGoods(id: number, has?: boolean) {
+        let index = this.selected.indexOf(id);
+        if (typeof has === 'undefined') {
+            has = index < 0;
+        }
+        if (has) {
+            if (index < 0) {
+                this.selected.push(id);
+            }
+            return;
+        }
+        if (index >= 0) {
+            this.selected = this.selected.splice(index, 1);
+        }
+    }
+
+    /**
+     * html
+     */
+    public html(html: string) {
+        if (html.indexOf('dialog-goods-box') > 0) {
+            this.find('.dialog-body').html(html);
+        } else {
+            this.find('.dialog-body .dialog-goods-box').html(html);
+        }
+        this.dialog.resize();
+        return this;
+    }
+
+    public find(tag: string) {
+        return this.dialog.find(tag);
+    }
+
+    public on(event: string, tag: string, cb: Function) {
+        this.dialog.box.on(event, tag, cb);
+        return this;
+    }
+
+    /**
+     * show
+     */
+    public show() {
+        this.dialog.show();
+    }
+}
+
+function bindSecKill(baseUri: string) {
+    BASE_URI = baseUri;
+    let box = new GoodsDailog('#goods-dialog');
+    $('*[data-type="goods"]').click(function() {
+        box.show();
+    });
+}
+
 function bindShipping(baseUri: string) {
     BASE_URI = baseUri;
     let shipping = new Delivery($('.regional-table'));
