@@ -2,21 +2,19 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '拍卖活动列表';
+$this->title = '满减/满送活动列表';
 ?>
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/auction/create')?>">新增拍卖活动</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/lottery/create')?>">新增满减/满送</a>
 </div>
 <table class="table table-hover">
     <thead>
     <tr>
         <th>ID</th>
-        <th>商品名称</th>
-        <th>活动名称</th>
+        <th>名称</th>
         <th class="auto-hide">开始时间</th>
         <th class="auto-hide">结束时间</th>
-        <th class="auto-hide">起拍价</th>
-        <th>一口价</th>
+        <th>状态</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -33,16 +31,14 @@ $this->title = '拍卖活动列表';
             <td class="auto-hide">
                 
             </td>
-            <td class="auto-hide">
-                
-            </td>
             <td>
-
+                开启/关闭
             </td>
+            
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/activity/coupon/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/activity/conpon/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/activity/lottery/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/activity/lottery/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

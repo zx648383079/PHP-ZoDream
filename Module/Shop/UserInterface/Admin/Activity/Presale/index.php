@@ -2,10 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '拍卖活动列表';
+$this->title = '预售活动列表';
 ?>
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/auction/create')?>">新增拍卖活动</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/presale/create')?>">新增预售</a>
 </div>
 <table class="table table-hover">
     <thead>
@@ -15,8 +15,7 @@ $this->title = '拍卖活动列表';
         <th>活动名称</th>
         <th class="auto-hide">开始时间</th>
         <th class="auto-hide">结束时间</th>
-        <th class="auto-hide">起拍价</th>
-        <th>一口价</th>
+        <th>定金</th>
         <th>操作</th>
     </tr>
     </thead>

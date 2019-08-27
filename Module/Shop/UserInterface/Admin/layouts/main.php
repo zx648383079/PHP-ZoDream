@@ -105,6 +105,11 @@ $this->registerCssFile([
                 'fa fa-list'
             ],
             [
+                '预售',
+                './admin/activity/presale',
+                'fa fa-list'
+            ],
+            [
                 '砍价',
                 './admin/activity/bargain',
                 'fa fa-list'

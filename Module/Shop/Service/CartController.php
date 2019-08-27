@@ -3,12 +3,13 @@ namespace Module\Shop\Service;
 
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Module;
 
 class CartController extends Controller {
 
     public function indexAction() {
-        $like_goods = GoodsModel::limit(7)->select(GoodsModel::THUMB_MODE)->all();
+        $like_goods = GoodsSimpleModel::limit(7)->all();
         $cart = Module::cart();
         return $this->sendWithShare()->show(compact('like_goods', 'cart'));
     }

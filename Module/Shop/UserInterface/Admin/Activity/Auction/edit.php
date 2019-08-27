@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
-$this->title = '优惠券';
+$this->title = '拍卖';
 $js = <<<JS
     var start_at = $('[name=start_at]').datetimer();
     var end_at = $('[name=end_at]').datetimer({
