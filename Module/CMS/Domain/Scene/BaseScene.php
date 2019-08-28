@@ -111,7 +111,7 @@ abstract class BaseScene implements SceneInterface {
         $hasExtra = false;
         list($mainNames, $extraNames) = $this->getGroupFieldName();
         foreach ($extraNames as $key) {
-            if (strpos($order, $key) >= 0) {
+            if (strpos($order, $key) !== false) {
                 $hasExtra = true;
                 $order = str_replace($key, 'extra.' . $key, $order);
             }
