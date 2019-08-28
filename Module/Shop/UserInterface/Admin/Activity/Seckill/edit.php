@@ -14,7 +14,7 @@ $this->registerJs($js, View::JQUERY_READY);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './admin/activity/seckill/save')?>
-    <?=Form::text('名称')?>
+    <?=Form::text('name')?>
     <div class="input-group">
         <label for="start_at">起止时间</label>
         <div class="">

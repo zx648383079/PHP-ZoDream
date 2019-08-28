@@ -2,6 +2,8 @@
 namespace Module\Shop\Domain\Migrations;
 
 use Module\Shop\Domain\Models\Activity\ActivityModel;
+use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
+use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
@@ -556,6 +558,21 @@ class CreateShopTables extends Migration {
             $table->timestamp('start_at');
             $table->timestamp('end_at');
             $table->timestamps();
+        });
+        Schema::createTable(ActivityTimeModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('title')->varchar(40)->notNull();
+            $table->set('start_at')->time();
+            $table->set('end_at')->time();
+        });
+        Schema::createTable(SeckillGoodsModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('act_id')->int()->unsigned()->notNull();
+            $table->set('time_id')->int()->unsigned()->notNull();
+            $table->set('goods_id')->int()->unsigned()->notNull();
+            $table->set('price')->decimal(8, 2)->defaultVal(0);
+            $table->set('amount')->smallInt(5)->defaultVal(0);
+            $table->set('every_amount')->tinyint(3)->defaultVal(0);
         });
     }
 
