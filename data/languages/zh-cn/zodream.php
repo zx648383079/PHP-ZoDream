@@ -68,7 +68,10 @@ return [
     'Please input your nick name' => '请输入姓名',
     'Please input your email' => '请输入邮箱',
     'Please input your URL' => '请输入网址',
+    'Please input the content' => '请输入内容',
     'Catalog' => '目录',
     'Reply' => '回复',
     'Reply Comment' => '回复评论',
+    'zh' => '中',
+    'en' => 'EN'
 ];

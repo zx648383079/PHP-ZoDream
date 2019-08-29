@@ -23,7 +23,11 @@ class CreateBlogTables extends Migration {
             $table->set('title')->varchar(200)->notNull();
             $table->set('description')->varchar();
             $table->set('keywords')->varchar();
-            $table->set('language')->varchar(20)->defaultVal('')->comment('编程语言');
+            $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('programming_language')->varchar(20)
+                ->defaultVal('')->comment('编程语言');
+            $table->set('language')->enum(['zh', 'en'])->defaultVal('zh')
+                ->comment('内容语言');
             $table->set('thumb')->varchar();
             $table->set('edit_type')->tinyint(1)->defaultVal(BlogModel::EDIT_HTML)->comment('编辑器类型');
             $table->set('content')->text();

@@ -398,7 +398,23 @@
       line-height: 40px; }
       .book-skin .book-body .info span,
       .book-skin .book-body .info a {
-        margin-right: 20px; }
+        margin-right: 20px;
+        color: #333; }
+      .book-skin .book-body .info .language-toggle {
+        display: inline-block;
+        margin-right: 20px;
+        border: 1px solid #af5d0d;
+        border-bottom: none; }
+        .book-skin .book-body .info .language-toggle a {
+          display: inline-block;
+          background-color: #af5d0d;
+          color: #fff;
+          margin: 0;
+          width: 40px;
+          text-align: center; }
+          .book-skin .book-body .info .language-toggle a.active {
+            background-color: #f9cfa6;
+            color: #333; }
     .book-skin .book-body .content {
       margin-bottom: 40px; }
       .book-skin .book-body .content a {

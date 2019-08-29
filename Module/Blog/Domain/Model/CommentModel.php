@@ -78,7 +78,7 @@ class CommentModel extends Model {
     }
 
     public function blog() {
-	    return $this->hasOne(BlogModel::class, 'id', 'blog_id');
+	    return $this->hasOne(BlogSimpleModel::class, 'id', 'blog_id');
     }
 
     public function getReplyCount() {

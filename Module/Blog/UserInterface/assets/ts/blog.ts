@@ -55,6 +55,18 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
         });
         SyntaxHighlighter.all();
     }
+    let dynamicBox = $('.book-dynamic');
+    $.get(baseUri + 'log', {blog: id}, html => {
+        dynamicBox.html(html);
+    });
+    $.getJSON(baseUri + 'counter', {blog: id}, function(data) {
+        if (data.code != 200) {
+            return;
+        }
+        $('.book-body .tools .comment b').text(data.data.comment_count);
+        $('.book-body .tools .click b').text(data.data.click_count);
+        $('.book-body .tools .recommend-blog b').text(data.data.recommend);
+    });
     let commentBox = $('.book-footer');
     if (commentBox.length > 0) {
         $.get(baseUri + 'comment', {
@@ -79,7 +91,7 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
     $('.book-navicon').click(function () {
         bookSkin.toggleClass('book-collapsed');
     });
-    let dynamicBox = $('.book-dynamic');
+    
     let side = $('#content').sideNav({
             target: '.book-side-nav',
             contentLength: 20,

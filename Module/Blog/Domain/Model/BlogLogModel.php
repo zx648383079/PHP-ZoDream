@@ -2,6 +2,8 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
+
 /**
  * Class BlogLogModel
  * @property integer $id
@@ -45,6 +47,14 @@ class BlogLogModel extends Model {
             'action' => 'Action',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function blog() {
+        return $this->hasOne(BlogSimpleModel::class, 'id', 'blog_id');
     }
 
 }

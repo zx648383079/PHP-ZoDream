@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Model;
 
 
+use Module\Auth\Domain\Entities\Concerns\UserTrait;
 use Module\Auth\Domain\Model\Concerns\FindPasswordTrait;
 use Module\Auth\Domain\Model\Concerns\LoginTrait;
 use Module\Auth\Domain\Model\Concerns\PasswordTrait;
@@ -29,7 +30,7 @@ use Zodream\Service\Factory;
  */
 class UserModel extends BaseModel {
 
-    use LoginTrait, RegisterTrait, PasswordTrait, UserRoleTrait, FindPasswordTrait;
+    use UserTrait, LoginTrait, RegisterTrait, PasswordTrait, UserRoleTrait, FindPasswordTrait;
 
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -44,10 +45,6 @@ class UserModel extends BaseModel {
     ];
 
     protected $hidden = ['password'];
-
-	public static function tableName() {
-        return 'user';
-    }
 	
 	public $rememberMe = false;
 	
@@ -60,37 +57,6 @@ class UserModel extends BaseModel {
 	public $roles = [];
 	
 	public $oldPassword = false;
-
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,100',
-            'email' => 'required|string:0,200',
-            'password' => 'required|string:0,100',
-            'sex' => 'int:0,9',
-            'avatar' => 'string:0,255',
-            'money' => 'int',
-            'token' => 'string:0,60',
-            'status' => 'int:0,99',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => '昵称',
-            'email' => '邮箱',
-            'password' => '密码',
-            'sex' => '性别',
-            'avatar' => '头像',
-            'money' => '金币',
-            'token' => 'Token',
-            'status' => '状态',
-            'created_at' => '注册时间',
-            'updated_at' => '更新时间',
-        ];
-    }
 
 
     public function getSexLabelAttribute() {

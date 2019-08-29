@@ -3,6 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Helpers\Json;
+use Infrastructure\HtmlExpand;
 /** @var $this View */
 /** @var $blog BlogModel */
 $this->title = $blog->title;
@@ -57,15 +58,7 @@ $this->extend('layouts/header', [
         </ul>
     </div>
     <div class="book-dynamic">
-        <?php foreach ($log_list as $log): ?>
-            <dl>
-                <dt><a><?=$log['name']?></a> <?=$log['action']?>了 《<a href="<?=$this->url('./detail/id/'.$log['blog_id'])?>"><?=$log['title']?></a>》</dt>
-                <dd>
-                    <p><?=$log['content']?></p>
-                    <span class="book-time"><?=$this->ago($log['create_at'])?></span>
-                </dd>
-            </dl>
-        <?php endforeach;?>
+
     </div>
 
     <div class="book-side-nav">
@@ -78,14 +71,25 @@ $this->extend('layouts/header', [
         <img src="/assets/images/forkme.png" alt="Fork Me On Github">
     </a>
     <div class="info">
+        <?php if(count($languages) > 1):?>
+        <div class="language-toggle">
+            <?php foreach($languages as $item):?>
+            <?php if($blog->id == $item['id']):?>
+            <a href="<?=$this->url('./', ['id' => $item['id']])?>" class="active"><?=$this->t($item['language'])?></a>
+            <?php else:?>
+            <a href="<?=$this->url('./', ['id' => $item['id']])?>"><?=$this->t($item['language'])?></a>
+            <?php endif;?>  
+            <?php endforeach;?>
+        </div>
+        <?php endif;?>
         <?php if($blog->user):?>
         <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></a>
         <?php endif;?>
         <?php if($blog->term):?>
         <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($blog->term->name)?></b></a>
         <?php endif;?>
-        <?php if(!empty($blog->language)):?>
-        <a class="language" href="<?=$this->url('./', ['language' => $blog->language], false)?>"><i class="fa fa-code"></i><b><?=$blog->language?></b></a>
+        <?php if(!empty($blog->programming_language)):?>
+        <a class="language" href="<?=$this->url('./', ['programming_language' => $blog->programming_language], false)?>"><i class="fa fa-code"></i><b><?=$blog->programming_language?></b></a>
         <?php endif;?>
         <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>

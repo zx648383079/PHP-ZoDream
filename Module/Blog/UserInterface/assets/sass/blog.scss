@@ -229,6 +229,25 @@ $acolor: #333;
             span,
             a {
                 margin-right: 20px;
+                color: $acolor;
+            }
+            .language-toggle {
+                display: inline-block;
+                margin-right: 20px;
+                border: 1px solid $activeColor;
+                border-bottom: none;
+                a {
+                    display: inline-block;
+                    background-color: $activeColor;
+                    color: $white;
+                    margin: 0;
+                    width: 40px;
+                    text-align: center;
+                    &.active {
+                        background-color: $defaultColor;
+                        color: $acolor;
+                    }
+                }
             }
         }
         .content {

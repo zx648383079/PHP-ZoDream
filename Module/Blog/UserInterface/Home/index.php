@@ -98,8 +98,8 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
             <?php if($item->term):?>
             <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=$item->term->name?></b></a>
             <?php endif;?>
-            <?php if(!empty($item->language)):?>
-            <a class="language" href="<?=$this->url('./', ['language' => $item->language])?>"><i class="fa fa-code"></i><b><?=$item->language?></b></a>
+            <?php if(!empty($item->programming_language)):?>
+            <a class="language" href="<?=$this->url('./', ['programming_language' => $item->programming_language])?>"><i class="fa fa-code"></i><b><?=$item->programming_language?></b></a>
             <?php endif;?>
             <span class="comment"><i class="fa fa-comments"></i><b><?=$item->comment_count?></b></span>
             <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item->recommend?></b></span>

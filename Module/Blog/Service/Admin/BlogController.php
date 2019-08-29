@@ -4,6 +4,7 @@ namespace Module\Blog\Service\Admin;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
+use PhpParser\Node\Expr\Empty_;
 
 
 class BlogController extends Controller {
@@ -26,9 +27,9 @@ class BlogController extends Controller {
         return $this->runMethodNotProcess('edit', ['id' => null]);
     }
 
-    public function editAction($id) {
-        $model = BlogModel::findOrNew($id);
-        if (!$model->isNewRecord && $model->user_id != auth()->id()) {
+    public function editAction($id, $language = null) {
+        $model = BlogModel::getOrNew($id, $language);
+        if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
             return $this->redirectWithMessage($this->getUrl('blog'), '博客不存在！');
         }
         $term_list = TermModel::select('id', 'name')->all();
@@ -38,20 +39,54 @@ class BlogController extends Controller {
 
     public function saveAction($id = null) {
         $model = BlogModel::findOrNew($id);
-        $model->user_id = auth()->id();
-        $model->comment_status = 0;
         $isNew = $model->isNewRecord;
-        if (!$model->load(null, ['user_id']) || !$model->save()) {
+        if (!$model->load(null, ['user_id'])) {
             return $this->jsonFailure($model->getFirstError());
         }
-        TagRelationshipModel::bind($model->id, app('request')->get('tag', []), $isNew);
+        // 需要同步的字段
+        $async_column = [
+            'user_id',
+            'term_id',
+            'programming_language',
+            'type',
+            'source_url',
+            'comment_status'];
+        $model->user_id = auth()->id();
+        $model->comment_status = 0;
+        if ($model->parent_id > 0) {
+            $parent = BlogModel::find($model->parent_id);
+            if (empty($model->language) || $model->language == 'zh') {
+                $model->language = 'en';
+            }
+            foreach ($async_column as $key) {
+                $model->{$key} = $parent->{$key};
+            }
+        }
+        if (!$model->save()) {
+            return $this->jsonFailure($model->getFirstError());
+        }
+        if ($model->parent_id < 1) {
+            TagRelationshipModel::bind($model->id, app('request')->get('tag', []), $isNew);
+            $data = [];
+            foreach ($async_column as $key) {
+                $data[$key] = $model->getAttributeSource($key);
+            }
+            BlogModel::where('parent_id', $model->id)->update($data);
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('blog')
         ]);
     }
 
     public function deleteAction($id) {
-        BlogModel::where('id', $id)->where('user_id', auth()->id())->delete();
+        $model = BlogModel::where('id', $id)->where('user_id', auth()->id());
+        if (empty($model)) {
+            return $this->jsonFailure('文章不存在');
+        }
+        $model->delete();
+        if ($model->parent_id < 1) {
+            BlogModel::where('parent_id', $id)->delete();
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('blog')
         ]);
