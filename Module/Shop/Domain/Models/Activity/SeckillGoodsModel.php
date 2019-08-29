@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Models\Activity;
 
 
 use Domain\Model\Model;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
 
 /**
  * Class SeckillGoodsModel
@@ -42,5 +43,9 @@ class SeckillGoodsModel extends Model {
             'amount' => 'Amount',
             'every_amount' => 'Every Amount',
         ];
+    }
+
+    public function goods() {
+        return $this->hasOne(GoodsSimpleModel::class, 'id', 'goods_id');
     }
 }

@@ -27,10 +27,10 @@ $this->title = '秒杀活动列表';
                 <?=$item->name?>
             </td>
             <td class="auto-hide">
-                
+            <?=$this->time($item->start_at)?>
             </td>
             <td class="auto-hide">
-                
+            <?=$this->time($item->end_at)?>
             </td>
             <td>
                 开启/关闭

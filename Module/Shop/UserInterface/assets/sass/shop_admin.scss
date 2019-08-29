@@ -556,6 +556,13 @@ table {
 				height: 100%;
 			}
 		}
+		.name {
+			width: 100px;
+			overflow: hidden;
+			color: #333;
+			font-size: 12px;
+			height: 16px;
+		}
 		.price {
 			color: #f00;
 		}
@@ -572,5 +579,8 @@ table {
 				left: 0;
 			}
 		}
+	}
+	.dialog-pager {
+		text-align: center;
 	}
 }

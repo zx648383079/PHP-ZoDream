@@ -920,19 +920,31 @@ class GoodsDailog {
 
     public dialog: any;
     public selected: number[] = [];
+    private _selected: number[] = [];
+    private _doneCallback: Function;
 
     private bindEvent() {
         let that = this;
         this.on('submit', '.dialog-goods-search form', function() {
             let $this = $(this);
-            $.post($this.attr('action'), $this.serialize() + '&selected=' + that.selected.join(','), html => {
+            $.get($this.attr('action'), $this.serialize() + '&selected=' + that.selected.join(','), html => {
                 that.html(html);
-            })
+            });
             return false;
         }).on('click', '.dialog-goods-box .item', function() {
             let $this = $(this).toggleClass('selected');
             let id = parseInt($this.data('id'), 10);
             that.toggleGoods(id, $this.hasClass('selected'));
+        }).on('click', '.dialog-pager a', function(e) {
+            e.preventDefault();
+            $.get($(this).attr('href'), html => {
+                that.html(html);
+            });
+        });
+        this.dialog.on('done', () => {
+            this.selected = [...this._selected];
+            this.dialog.close();
+            this._doneCallback && this._doneCallback.call(this, this.selected);
         });
     }
 
@@ -940,18 +952,18 @@ class GoodsDailog {
      * toggleGoods
      */
     public toggleGoods(id: number, has?: boolean) {
-        let index = this.selected.indexOf(id);
+        let index = this._selected.indexOf(id);
         if (typeof has === 'undefined') {
             has = index < 0;
         }
         if (has) {
             if (index < 0) {
-                this.selected.push(id);
+                this._selected.push(id);
             }
             return;
         }
         if (index >= 0) {
-            this.selected = this.selected.splice(index, 1);
+            this._selected = this._selected.splice(index, 1);
         }
     }
 
@@ -968,11 +980,15 @@ class GoodsDailog {
         return this;
     }
 
-    public find(tag: string) {
+    public find(tag: string): JQuery {
         return this.dialog.find(tag);
     }
 
-    public on(event: string, tag: string, cb: Function) {
+    public on(event: string, tag: string | Function, cb?: (event: JQueryEventObject) => void) {
+        if (event === 'done') {
+            this._doneCallback = tag as Function;
+            return this;
+        }
         this.dialog.box.on(event, tag, cb);
         return this;
     }
@@ -981,16 +997,60 @@ class GoodsDailog {
      * show
      */
     public show() {
+        this._selected = [...this.selected];
+        this.find('.dialog-goods-box .item').each((_, item) => {
+            let $this = $(item);
+            $this.toggleClass('selected', this._selected.indexOf($this.data('id')) >= 0);
+        });
         this.dialog.show();
     }
 }
 
-function bindSecKill(baseUri: string) {
+function bindSecKill(baseUri: string, actId, timeId) {
     BASE_URI = baseUri;
+    let refreshSelected = function() {
+        let selected = [];
+        $('table tbody tr').each(function() {
+            const goods = $(this).data('goods');
+            if (goods < 1) {
+                return;
+            }
+            selected.push(goods);
+        });
+        box.selected = selected;
+    };
     let box = new GoodsDailog('#goods-dialog');
     $('*[data-type="goods"]').click(function() {
         box.show();
     });
+    box.on('done', (selected: number[]) => {
+        $.get(baseUri + 'activity/seckill/update_goods', {
+            act_id: actId,
+            time_id: timeId,
+            goods: selected.join(',')
+        }, html => {
+            $('table tbody').html(html);
+        });
+    });
+    $('table tbody').on('click', 'a', function(e) {
+        e.preventDefault();
+        postJson($(this).attr('href'), data => {
+            if (data.code == 200) {
+                $(this).closest('tr').remove();
+                refreshSelected();
+            }
+        });
+    }).on('change', 'input', function() {
+        let $this = $(this);
+        postJson(baseUri + 'activity/seckill/change_goods', {
+            id: $this.closest('tr').data('id'),
+            name: $this.attr('name'),
+            value: $this.val()
+        }, data => {
+
+        });
+    });
+    refreshSelected();
 }
 
 function bindShipping(baseUri: string) {

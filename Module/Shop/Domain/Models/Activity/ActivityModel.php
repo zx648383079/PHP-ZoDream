@@ -65,5 +65,17 @@ class ActivityModel extends Model {
         ];
     }
 
+    public function setStartAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->__attributes['start_at'] = $value;
+    }
 
+    public function setEndAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->__attributes['end_at'] = $value;
+    }
 }

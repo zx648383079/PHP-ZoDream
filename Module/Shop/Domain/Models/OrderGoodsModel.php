@@ -63,7 +63,7 @@ class OrderGoodsModel extends Model {
     }
 
     public function goods() {
-        return $this->hasOne(Goods::class, 'id', 'goods_id');
+        return $this->hasOne(GoodsSimpleModel::class, 'id', 'goods_id');
     }
 
 

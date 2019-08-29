@@ -200,14 +200,7 @@ class GoodsController extends Controller {
         $brand_id = 0, $selected = [],
         $just_selected = false,
         $simple = false) {
-        if (!empty($selected) && is_string($selected)) {
-            if (strpos($selected, '[') === false) {
-                $selected = explode(',', $selected);
-            } else {
-                $selected = json_decode($selected, true);
-            }
-        }
-        $selected = array_map('intval', (array)$selected);
+        $selected = static::parseArrInt($selected);
         $simple = !!$simple;
         $model_list = GoodsSimpleModel::when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {

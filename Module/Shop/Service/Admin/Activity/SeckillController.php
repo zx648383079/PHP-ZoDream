@@ -3,8 +3,9 @@ namespace Module\Shop\Service\Admin\Activity;
 
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
+use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
+use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Service\Admin\Controller;
-use Module\Shop\Domain\Models\CouponModel;
 
 class SeckillController extends Controller {
 
@@ -73,9 +74,52 @@ class SeckillController extends Controller {
         ]);
     }
 
-    public function goodsAction() {
-        $model_list = ActivityModel::where('type', ActivityModel::TYPE_SEC_KILL)->page();
-        return $this->show(compact('model_list'));
+    public function goodsAction($act_id, $time_id) {
+        $model_list = SeckillGoodsModel::with('goods')->where('act_id', $act_id)->where('time_id', $time_id)->page();
+        return $this->show(compact('model_list', 'act_id', 'time_id'));
+    }
+
+    public function updateGoodsAction($act_id, $time_id, $goods) {
+        $goods = static::parseArrInt($goods);
+        $exist = SeckillGoodsModel::where('act_id', $act_id)->where('time_id', $time_id)->pluck('goods_id');
+        list($add, $_, $del) = static::splitId($goods, $exist);
+        if (!empty($add)) {
+            SeckillGoodsModel::query()->insert(array_map(function ($goods) use ($act_id, $time_id) {
+                return [
+                    'act_id' => $act_id,
+                    'time_id' => $time_id,
+                    'goods_id' => $goods,
+                    'price' => 1,
+                    'amount' => 1,
+                    'every_amount' => 1,
+                ];
+            }, $add));
+        }
+        if (!empty($del)) {
+            SeckillGoodsModel::where('act_id', $act_id)->where('time_id', $time_id)->whereIn('goods_id', $del)->delete();
+        }
+        $this->layout = false;
+        $model_list = SeckillGoodsModel::with('goods')->where('act_id', $act_id)->where('time_id', $time_id)->page();
+        return $this->show('goodsBody', compact('model_list'));
+    }
+
+    public function changeGoodsAction($id, $name, $value) {
+        if (!in_array($name, ['price', 'amount', 'every_amount'])) {
+            return $this->jsonFailure('');
+        }
+        SeckillGoodsModel::where('id', $id)->update([
+            $name => floor($value)
+        ]);
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('activity/seckill')
+        ]);
+    }
+
+    public function deleteGoodsAction($id) {
+        SeckillGoodsModel::where('id', $id)->delete();
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('activity/seckill')
+        ]);
     }
 
 

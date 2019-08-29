@@ -44,16 +44,16 @@ use Zodream\Template\View;
 <?php endif;?>
     <div class="goods-list">
         <?php foreach($model_list as $item):?>
-        <div class="item<?=in_array($item->id, $selected) ? ' selected' : ''?>" data-id="<?=$item->id?>">
+        <a href="javascript:;" title="<?=$item->name?>" class="item<?=in_array($item->id, $selected) ? ' selected' : ''?>" data-id="<?=$item->id?>">
             <div class="thumb">
                 <img src="<?=$item->thumb?>" alt="">
             </div>
             <div class="name"><?=$item->name?></div>
             <div class="price"><?=$item->price?></div>
-        </div>
+        </a>
         <?php endforeach;?>
     </div>
-    <div>
+    <div class="dialog-pager">
         <?=$model_list->getLink()?>
     </div>
 <?php if(!$simple):?>

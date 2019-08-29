@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '添加商品详情';
 $url = $this->url('./admin/', false);
 $js = <<<JS
-bindSecKill('{$url}');
+bindSecKill('{$url}', {$act_id}, {$time_id});
 JS;
 $this->registerJs($js);
 ?>
@@ -25,31 +25,7 @@ $this->registerJs($js);
     </tr>
     </thead>
     <tbody>
-    <?php foreach($model_list as $item):?>
-        <tr>
-            <td><?=$item->id?></td>
-            <td>
-                <?=$item->name?>
-            </td>
-            <td class="auto-hide">
-                
-            </td>
-            <td>
-                <input type="text">
-            </td>
-            <td>
-                <input type="text">
-            </td>
-            <td>
-                <input type="text">
-            </td>
-            <td>
-                <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/activity/seckill/delete', ['id' => $item->id])?>">删除</a>
-                </div>
-            </td>
-        </tr>
-    <?php endforeach; ?>
+        <?php $this->extend('./goodsBody');?>
     </tbody>
 </table>
 <div align="center">
