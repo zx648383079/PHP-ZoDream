@@ -18,6 +18,12 @@ use Module\Shop\Domain\Models\GoodsSimpleModel;
  */
 class SeckillGoodsModel extends Model {
 
+    protected $append = ['goods', 'status'];
+
+    const STATUS_DISABLE = 0; // 已抢光
+    const STATUS_BUY = 1;     // 可以买
+    const STATUS_WAIT = 2;     // 即将开始
+
     public static function tableName() {
         return 'shop_seckill_goods';
     }
@@ -47,5 +53,9 @@ class SeckillGoodsModel extends Model {
 
     public function goods() {
         return $this->hasOne(GoodsSimpleModel::class, 'id', 'goods_id');
+    }
+
+    public function getStatusAttribute() {
+        return self::STATUS_BUY;
     }
 }

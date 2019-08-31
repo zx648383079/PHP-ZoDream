@@ -952,6 +952,9 @@ class GoodsDailog {
      * toggleGoods
      */
     public toggleGoods(id: number, has?: boolean) {
+        if (id < 1) {
+            return;
+        }
         let index = this._selected.indexOf(id);
         if (typeof has === 'undefined') {
             has = index < 0;

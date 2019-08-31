@@ -4,7 +4,6 @@ namespace Module\Shop\Service\Api;
 use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
-use Module\Shop\Domain\Models\Scene\Goods;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 
 class GoodsController extends Controller {

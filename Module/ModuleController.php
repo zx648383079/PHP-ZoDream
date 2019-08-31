@@ -33,7 +33,15 @@ abstract class ModuleController extends BaseController {
                 $selected = json_decode($selected, true);
             }
         }
-        return array_map('intval', (array)$selected);
+        $data = [];
+        foreach ((array)$selected as $item) {
+            $item = intval($item);
+            if ($item < 1) {
+                continue;
+            }
+            $data[] = $item;
+        }
+        return $data;
     }
 
     /**
