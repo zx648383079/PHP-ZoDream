@@ -59,7 +59,7 @@ class LoginQrModel extends Model {
     }
 
     public function getUrlAttribute() {
-        return url('./qr/authorize', ['token' => $this->token], false);
+        return url('./qr/authorize', ['token' => $this->token], true, false);
     }
 
     public static function generateToken() {

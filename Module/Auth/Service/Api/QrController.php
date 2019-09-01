@@ -56,6 +56,8 @@ class QrController extends RestController {
             $model->save();
             return $this->render($model->toArray());
         }
+        $model->status = LoginQrModel::STATUS_UN_CONFIRM;
+        $model->save();
         return $this->render($model->toArray());
     }
 }

@@ -3,7 +3,7 @@ namespace Module\Tool\Service;
 
 
 use Zodream\Helpers\PinYin;
-use Zodream\Infrastructure\Security\Hash;
+use Zodream\Helpers\Security\Hash;
 
 class ConverterController extends Controller {
 

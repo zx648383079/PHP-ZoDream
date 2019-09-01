@@ -9,7 +9,7 @@ use Module\Auth\Domain\Model\Concerns\PasswordTrait;
 use Module\Auth\Domain\Model\Concerns\RegisterTrait;
 use Module\Auth\Domain\Model\Concerns\UserRoleTrait;
 use Zodream\Database\Model\UserModel as BaseModel;
-use Zodream\Infrastructure\Security\Hash;
+use Zodream\Helpers\Security\Hash;
 
 use Zodream\Service\Factory;
 
