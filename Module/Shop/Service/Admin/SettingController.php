@@ -81,32 +81,4 @@ class SettingController extends Controller {
             OptionModel::where('id', $id)->update(compact('value'));
         }
     }
-
-    public function checkinAction() {
-        if (app('request')->isPost()) {
-            $data = app('request')->get('option.checkin');
-            $plus = [];
-            foreach ($data['day'] as $i => $item) {
-                if (!isset($data['plus'][$i]) || intval($data['plus'][$i]) <= 0 || intval($item) <= 0) {
-                    continue;
-                }
-                $plus[intval($item)] = intval($data['plus'][$i]);
-            }
-            ksort($plus);
-            OptionModel::insertOrUpdate('checkin', Json::encode([
-                'basic' => intval($data['basic']),
-                'loop' => intval($data['loop']),
-                'plus' => $plus
-            ]), '签到');
-            return $this->jsonSuccess([
-                'refresh' => true
-            ]);
-        }
-        $data = OptionModel::findCodeJson('checkin', [
-            'basic' => 1,
-            'loop' => 0,
-            'plus' => []
-        ]);
-        return $this->show(compact('data'));
-    }
 }

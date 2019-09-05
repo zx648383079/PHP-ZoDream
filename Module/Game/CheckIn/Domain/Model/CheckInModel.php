@@ -64,6 +64,11 @@ class CheckInModel extends Model {
         return $this->scopeTime($query, date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59'));
     }
 
+    public function scopeYesterday($query) {
+        $time = strtotime('-1 day');
+        return $this->scopeTime($query, date('Y-m-d 00:00:00', $time), date('Y-m-d 23:59:59', $time));
+    }
+
     public function scopeTime($query, $start_at, $end_at) {
         if (!is_numeric($start_at)) {
             $start_at = strtotime($start_at);

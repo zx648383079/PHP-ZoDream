@@ -11,7 +11,7 @@ JS;
 $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open('./admin/setting/checkin')?>
+<?=Form::open('./admin/setting/save')?>
     <?=Theme::text('option[checkin][basic]', $data['basic'], '基本奖励', '', true)?>
     <?=Theme::text('option[checkin][loop]', $data['loop'], '几天循环', '')?>
     <div class="input-group">

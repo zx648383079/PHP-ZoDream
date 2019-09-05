@@ -1,9 +1,20 @@
 <?php
 namespace Module\Game\CheckIn\Service;
 
+use Module\Game\CheckIn\Domain\Model\CheckInModel;
+
 class HomeController extends Controller {
 
     public function indexAction() {
-        return $this->show();
+        $model = CheckInModel::today()->where('user_id', auth()->id())->first();
+        return $this->show(compact('model'));
+    }
+
+    public function checkInAction() {
+        $model = CheckInModel::checkIn(auth()->id(), CheckInModel::METHOD_APP);
+        if ($model) {
+            return $this->jsonSuccess($model);
+        }
+        return $this->jsonFailure('签到失败');
     }
 }

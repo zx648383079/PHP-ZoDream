@@ -4,7 +4,7 @@ namespace Module\Game\CheckIn\Service\Api;
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Zodream\Route\Controller\RestController;
 
-class CheckInController extends RestController {
+class HomeController extends RestController {
 
     protected function rules() {
         return [
@@ -20,8 +20,11 @@ class CheckInController extends RestController {
     }
 
     public function checkInAction() {
-        if (CheckInModel::checkIn(auth()->id(), CheckInModel::METHOD_APP)) {
-            return $this->indexAction();
+        $model = CheckInModel::checkIn(auth()->id(), CheckInModel::METHOD_APP);
+        if ($model) {
+            return $this->render([
+                'data' => $model
+            ]);
         }
         return $this->renderFailure('签到失败');
     }

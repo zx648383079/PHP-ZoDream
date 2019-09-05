@@ -35,7 +35,9 @@ if (process.argv) {
     if (mo) {
         var prefix = '';
         var modu = mo;
-        if (mo.indexOf('-') > 0) {
+        if (mo.indexOf('Game-') === 0) {
+            modu = mo.replace('-', '/');
+        } else if (mo.indexOf('-') > 0) {
             [modu, prefix] = mo.split('-');
         }
         // 暂不考虑大小写转化
