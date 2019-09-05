@@ -5,7 +5,6 @@ use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
-use Module\Auth\Domain\Model\Game\CheckInModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\OAuthModel;
@@ -66,17 +65,6 @@ class CreateAuthTables extends Migration {
         $this->createLog();
         $this->createRole();
         $this->createBulletin();
-        Schema::createTable(CheckInModel::tableName(), function(Table $table) {
-            $table->setComment('签到记录');
-            $table->set('id')->pk()->ai();
-            $table->set('user_id')->int()->notNull();
-            $table->set('type')->tinyint(1)->defaultVal(0)->comment('签到类型，1为补签');
-            $table->set('running')->int(5)->defaultVal(1)->comment('连续几天');
-            $table->set('money')->int(5)->defaultVal(0)->comment('虚拟币奖励');
-            $table->set('ip')->varchar(120)->defaultVal('');
-            $table->set('method')->tinyint(2)->defaultVal(0)->comment('签到方式');
-            $table->timestamp('created_at');
-        });
     }
 
     /**
@@ -93,7 +81,6 @@ class CreateAuthTables extends Migration {
         Schema::dropTable(AccountLogModel::tableName());
         Schema::dropTable(VisitLogModel::tableName());
         Schema::dropTable(ActionLogModel::tableName());
-        Schema::dropTable(CheckInModel::tableName());
     }
 
     public function seed() {

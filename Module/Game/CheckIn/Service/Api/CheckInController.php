@@ -1,7 +1,7 @@
 <?php
-namespace Module\Auth\Service\Api;
+namespace Module\Game\CheckIn\Service\Api;
 
-use Module\Auth\Domain\Model\Game\CheckInModel;
+use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Zodream\Route\Controller\RestController;
 
 class CheckInController extends RestController {

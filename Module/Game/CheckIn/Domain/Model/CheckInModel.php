@@ -1,5 +1,5 @@
 <?php
-namespace Module\Auth\Domain\Model\Game;
+namespace Module\Game\CheckIn\Domain\Model;
 
 
 use Domain\Model\Model;
