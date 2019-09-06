@@ -17,7 +17,7 @@ $this->title = 'ZoDream';
 
 <div class="column-item">
     <div class="icon">
-        <?=$max_day?>
+        <?=intval($max_day)?>
     </div>
     <div class="content">
         <h3>最长签到</h3>

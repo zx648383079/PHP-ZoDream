@@ -11,6 +11,7 @@ $this->registerCssFile([
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
+        '@main.min.js',
         '@checkin.min.js'
     ]);
 ?>

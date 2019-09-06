@@ -23,6 +23,9 @@ class Controller extends ModuleController {
 //    }
 
     protected function processCustomRule($role) {
+        if (auth()->guest()) {
+            return $this->redirectWithAuth();
+        }
         if (auth()->user()->hasRole($role)) {
             return true;
         }

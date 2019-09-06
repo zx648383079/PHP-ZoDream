@@ -4,6 +4,7 @@ namespace Module\Game\Bank\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class BankLogModel
@@ -61,6 +62,10 @@ class BankLogModel extends Model {
 
     public function product() {
         return $this->hasOne(BankProductModel::class, 'id', 'product_id');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getIncomeAttribute() {

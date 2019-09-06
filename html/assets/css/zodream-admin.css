@@ -153,6 +153,27 @@ footer {
 .full-theme .container {
   width: 100%; }
 
+.column-item {
+  width: 300px;
+  display: inline-block;
+  position: relative;
+  height: 100px;
+  background-color: #fff;
+  margin: 10px;
+  vertical-align: top; }
+  .column-item .icon {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding-top: 20px;
+    font-size: 40px; }
+  .column-item .content {
+    margin-left: 100px;
+    padding: 20px 10px; }
+
 @media (max-width: 1200px) {
   .container {
     width: 100%; } }

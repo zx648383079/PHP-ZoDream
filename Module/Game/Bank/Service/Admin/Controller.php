@@ -12,4 +12,16 @@ class Controller extends ModuleController {
             '*' => 'administrator'
         ];
     }
+
+    protected function processCustomRule($role) {
+        if (auth()->guest()) {
+            return $this->redirectWithAuth();
+        }
+        if (auth()->user()->hasRole($role)) {
+            return true;
+        }
+        return $this->redirectWithMessage('/',
+            __('Not Role！')
+            , 4,403);
+    }
 }

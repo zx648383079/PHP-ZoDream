@@ -9,13 +9,13 @@ $this->registerCssFile([
         '@zodream.css',
         '@zodream-admin.css',
         '@dialog.css',
-        '@shop_admin.css'
+        '@bank.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@main.min.js',
-        '@shop_admin.min.js'
+        '@bank.min.js'
     ]);
 ?>
 

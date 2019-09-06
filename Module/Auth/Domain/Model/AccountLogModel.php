@@ -65,13 +65,13 @@ class AccountLogModel extends Model {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
-        $old_money = UserModel::query()->where('user_id', $user_id)
+        $old_money = UserModel::query()->where('id', $user_id)
             ->value('money');
         $new_money = floatval($old_money) + $money;
         if ($new_money < 0) {
             return false;
         }
-        UserModel::query()->where('user_id', $user_id)->update([
+        UserModel::query()->where('id', $user_id)->update([
             'money' => $new_money
         ]);
         static::log($user_id, $type, $item_id, $money, $remark, $status);
