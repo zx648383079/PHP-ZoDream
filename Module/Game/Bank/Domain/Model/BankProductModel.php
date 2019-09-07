@@ -16,7 +16,7 @@ use Domain\Model\Model;
  */
 class BankProductModel extends Model {
     public static function tableName() {
-        return 'bank_product';
+        return 'game_bank_product';
     }
 
     protected function rules() {

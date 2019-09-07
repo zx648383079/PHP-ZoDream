@@ -1,7 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Scene;
 
-use Module\Auth\Domain\Model\Game\CheckInModel;
+use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Module;
 

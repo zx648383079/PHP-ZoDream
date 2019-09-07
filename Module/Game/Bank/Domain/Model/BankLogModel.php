@@ -27,7 +27,7 @@ class BankLogModel extends Model {
     const STATUS_FINISH = 1;
 
     public static function tableName() {
-        return 'bank_log';
+        return 'game_bank_log';
     }
 
     protected function rules() {
