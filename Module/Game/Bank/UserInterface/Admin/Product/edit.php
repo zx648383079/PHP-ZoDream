@@ -13,7 +13,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'项目';
     <?=Form::text('min_amount', true)?>
     <?=Form::text('cycle', true)?>
     <?=Form::text('earnings', true)?>
-    <?=Form::text('rick')?>
+    <?=Form::text('risk')?>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>

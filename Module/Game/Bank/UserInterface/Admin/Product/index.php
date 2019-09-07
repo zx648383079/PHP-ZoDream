@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '投资项目';
 ?>
 
-    <a class="btn btn-success" href="<?=$this->url('./admin/product')?>">新增项目</a>
+    <a class="btn btn-success" href="<?=$this->url('./admin/product/create')?>">新增项目</a>
     <hr/>
     <div>
         <div class="col-xs-12">
@@ -39,7 +39,7 @@ $this->title = '投资项目';
                             <?=$item->earnings?>
                         </td>
                         <td>
-                            <?=$item->rick?>
+                            <?=$item->risk?>
                         </td>
                         <td>
                             <a class="btn btn-primary" href="<?=$this->url('./admin/product/edit', ['id' => $item->id])?>">编辑</a>

@@ -7,11 +7,12 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@dialog.css',
-        '@tcg.css'
+        '@bank.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
-        '@tcg.min.js'
+        '@main.min.js',
+        '@bank.min.js'
     ]);
 ?>
 <!DOCTYPE html>
@@ -20,7 +21,7 @@ $this->registerCssFile([
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?=$this->get('title', '卡牌游戏')?></title>
+    <title><?=$this->get('title', '投资游戏')?></title>
     <?=$this->header()?>
 </head>
 <body>

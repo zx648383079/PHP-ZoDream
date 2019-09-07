@@ -1,10 +1,13 @@
 <?php
 namespace Module\Auth\Service\Admin;
 
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;
 
 
 class Controller extends ModuleController {
+
+    use AdminRole;
 
     public $layout = '/Admin/layouts/main';
 
@@ -22,15 +25,4 @@ class Controller extends ModuleController {
 //        return $this->show('/admin/prompt', compact('url', 'message', 'time'));
 //    }
 
-    protected function processCustomRule($role) {
-        if (auth()->guest()) {
-            return $this->redirectWithAuth();
-        }
-        if (auth()->user()->hasRole($role)) {
-            return true;
-        }
-        return $this->redirectWithMessage('/',
-            __('Not Role！')
-            , 4,403);
-    }
 }

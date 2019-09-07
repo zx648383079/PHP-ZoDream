@@ -11,7 +11,7 @@ class CreateBankTables extends Migration {
     public function up() {
         $this->append(BankProductModel::tableName(), function (Table $table) {
             $table->setComment('理财产品表');
-            $table->set('id')->pk();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar()->comment('产品名');
             $table->set('min_amount')
                 ->smallInt(4)->unsigned()->defaultVal(0)->comment('门槛');
@@ -24,7 +24,7 @@ class CreateBankTables extends Migration {
                 ->unsigned()->defaultVal(0)->comment('风险系数/10000');
         })->append(BankLogModel::tableName(), function (Table $table) {
             $table->setComment('投资记录表');
-            $table->set('id')->pk();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull()->unsigned();
             $table->set('product_id')->int()->notNull()->unsigned();
             $table->set('money')

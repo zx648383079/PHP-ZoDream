@@ -1,27 +1,13 @@
 <?php
 namespace Module\Game\CheckIn\Service\Admin;
 
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;
 
 class Controller extends ModuleController {
 
+    use AdminRole;
+
     public $layout = '/Admin/layouts/main';
 
-    protected function rules() {
-        return [
-            '*' => 'administrator'
-        ];
-    }
-
-    protected function processCustomRule($role) {
-        if (auth()->guest()) {
-            return $this->redirectWithAuth();
-        }
-        if (auth()->user()->hasRole($role)) {
-            return true;
-        }
-        return $this->redirectWithMessage('/',
-            __('Not Role！')
-            , 4,403);
-    }
 }

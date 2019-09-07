@@ -32,7 +32,6 @@ class BankLogModel extends Model {
 
     protected function rules() {
         return [
-            'id' => 'required|int',
             'user_id' => 'required|int',
             'product_id' => 'required|int',
             'money' => 'required|int',
@@ -85,6 +84,7 @@ class BankLogModel extends Model {
         if (empty($product) || $product->min_amount > $money) {
             return false;
         }
+
         $log = static::create([
             'user_id' => $user_id,
             'product_id' => $product->id,
@@ -97,8 +97,11 @@ class BankLogModel extends Model {
         if (empty($log)) {
             return false;
         }
-        AccountLogModel::change($user_id, AccountLogModel::TYPE_BANK, $log->id,
-            -$money, sprintf('投资 %s 项目', $product->name), 1);
+        if (!AccountLogModel::change($user_id, AccountLogModel::TYPE_BANK, $log->id,
+            -$money, sprintf('投资 %s 项目', $product->name), 1)) {
+            $log->delete();
+            return false;
+        }
         return true;
     }
 

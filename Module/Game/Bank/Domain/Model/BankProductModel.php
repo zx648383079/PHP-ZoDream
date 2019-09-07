@@ -21,7 +21,6 @@ class BankProductModel extends Model {
 
     protected function rules() {
         return [
-            'id' => 'required|int',
             'name' => 'string:0,255',
             'min_amount' => 'int:0,9999',
             'cycle' => 'int:0,9999',

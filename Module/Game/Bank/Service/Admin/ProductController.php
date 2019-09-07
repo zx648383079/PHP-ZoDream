@@ -10,7 +10,7 @@ class ProductController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function addProjectAction() {
+    public function createAction() {
         return $this->runMethodNotProcess('edit', ['id' => 0]);
     }
 
@@ -19,7 +19,7 @@ class ProductController extends Controller {
         return $this->show(compact('model'));
     }
 
-    public function saveProjectAction() {
+    public function saveAction() {
         $model = new BankProductModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
@@ -29,7 +29,7 @@ class ProductController extends Controller {
         return $this->jsonFailure($model->getFirstError());
     }
 
-    public function deleteProjectAction($id) {
+    public function deleteAction($id) {
         BankProductModel::where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./admin/product')
