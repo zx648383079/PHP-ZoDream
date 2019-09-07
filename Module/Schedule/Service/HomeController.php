@@ -6,6 +6,7 @@ use Module\Schedule\Domain\ScheduleAble;
 use Zodream\Infrastructure\Queue\QueueManager;
 use Zodream\Infrastructure\Queue\Worker;
 use Zodream\Infrastructure\Queue\WorkerOptions;
+use Zodream\Route\Router;
 use Zodream\Service\Factory;
 
 class HomeController extends Controller {
@@ -32,6 +33,14 @@ class HomeController extends Controller {
                 continue;
             }
             $instance = new $item;
+            if (!$instance instanceof ScheduleAble) {
+                continue;
+            }
+            $instance->registerSchedule($scheduler);
+        }
+        $modules = config('modules');
+        foreach ($modules as $module) {
+            $instance = Router::moduleInstance($module);
             if (!$instance instanceof ScheduleAble) {
                 continue;
             }
