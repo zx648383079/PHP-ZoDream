@@ -1,7 +1,7 @@
 <?php
-namespace Module\WeChat\Domain\Game;
+namespace Module\Game\ZaJinHua\Domain;
 
-class ZaJinHua {
+class Poker {
 
     const COLORS = ['♠', '♥', '♣', '♦'];
     const POKERS = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];

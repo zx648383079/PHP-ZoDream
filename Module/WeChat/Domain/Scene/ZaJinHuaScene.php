@@ -2,12 +2,12 @@
 namespace Module\WeChat\Domain\Scene;
 
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\WeChat\Domain\Game\ZaJinHua;
+use Module\Game\ZaJinHua\Domain\Poker;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Module;
 
 /**
- * 每日签到
+ * 扎金花
  * @package Module\WeChat\Domain\Scene
  * @property integer $pool // 锅底
  * @property integer $min  // 最小暗注金额
@@ -108,7 +108,7 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
     }
 
     public function end() {
-        $game = new ZaJinHua();
+        $game = new Poker();
         $tip = '您输了，请再接再厉';
         if (!$game->compare($this->system, $this->user)) {
             $tip = sprintf('恭喜，您获得了%s', $this->pool);
@@ -142,7 +142,7 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
                 'content' => '您的账户余额不足，请重新选择'
             ]);
         }
-        $game = new ZaJinHua();
+        $game = new Poker();
         list($system, $user) = $game->assign($game->get());
         $data = [
             'pool' => $money * 2,
