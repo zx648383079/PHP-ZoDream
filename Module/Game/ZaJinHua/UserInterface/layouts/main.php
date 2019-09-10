@@ -21,7 +21,7 @@ $this->registerCssFile([
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?=$this->get('title', '投资游戏')?></title>
+    <title><?=$this->get('title', '扎金花游戏')?></title>
     <?=$this->header()?>
 </head>
 <body>

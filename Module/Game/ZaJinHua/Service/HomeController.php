@@ -10,6 +10,9 @@ class HomeController extends Controller {
 
     public function indexAction() {
         $player = Player::load();
+        if ($player->status === Player::STATUS_FAILURE || $player->status === Player::STATUS_WINNER) {
+            $player->clear();
+        }
         return $this->show(compact('player'));
     }
 
