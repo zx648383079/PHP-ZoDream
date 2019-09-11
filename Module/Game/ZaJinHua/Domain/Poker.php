@@ -31,7 +31,7 @@ class Poker {
 
     public function getSingleScore($item) {
         $color = mb_substr($item, 0, 1);
-        $poker = mb_substr($item, 1, 1);
+        $poker = mb_substr($item, 1);
         return [4 - array_search($color, self::COLORS), (13 - array_search($poker, self::POKERS))];
     }
 

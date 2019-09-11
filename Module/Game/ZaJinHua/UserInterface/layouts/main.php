@@ -7,12 +7,13 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@dialog.css',
-        '@bank.css'
+        '@poker.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@main.min.js',
-        '@bank.min.js'
+        '@jquery.pjax.min.js',
+        '@poker.min.js'
     ]);
 ?>
 <!DOCTYPE html>
@@ -25,7 +26,9 @@ $this->registerCssFile([
     <?=$this->header()?>
 </head>
 <body>
+    <div id="game-box">
     <?=$content?>
+    </div>
 
     <?=$this->footer()?>
 </body>

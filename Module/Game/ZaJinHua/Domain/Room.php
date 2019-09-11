@@ -2,7 +2,6 @@
 namespace Module\Game\ZaJinHua\Domain;
 
 
-
 use IteratorAggregate;
 use ArrayIterator;
 
@@ -14,7 +13,8 @@ class Room implements IteratorAggregate {
     const TYPE_ADD = 3;   // 加注
     const TYPE_COMPARE = 4;  // 比牌
     const TYPE_ABANDON = 5;  // 弃牌
-    const TYPE_END = 6;
+    const TYPE_OPEN = 6;
+    const TYPE_END = 7;
 
     /**
      * @var Banker
@@ -31,6 +31,8 @@ class Room implements IteratorAggregate {
     public $min = 0;
 
     public $records = [];
+
+    public $max = 0;
 
     /**
      * @param Banker $banker
@@ -65,12 +67,13 @@ class Room implements IteratorAggregate {
         foreach ($this->all() as $player) {
             if ($player->begin($this, $money) === false) {
                 $this->removePlayer($player);
+                continue;
             }
+            $this->addRecord($player, self::TYPE_BEGIN, $money, '加入底注');
         }
         if (empty($this->players)) {
             return false;
         }
-        $this->addRecord($this->banker, self::TYPE_BEGIN, $money, '加入底注');
         $this->min = $money;
         $this->deal();
         $this->players[0]->status = Player::STATUS_DO;
@@ -109,7 +112,7 @@ class Room implements IteratorAggregate {
         if ($player->eq($this->banker)) {
             return;
         }
-        $this->banker->with();
+        $this->banker->withAction();
     }
 
     public function fill(Player $player, $money) {
@@ -118,26 +121,49 @@ class Room implements IteratorAggregate {
         if ($player->eq($this->banker)) {
             return;
         }
-        $this->banker->with();
+        $this->banker->withAction();
     }
 
     public function compare(Player $player, Player $other = null) {
         if (!$other) {
             $other = $this->banker;
         }
+        $player->rival = $other;
+        $other->rival = $player;
         if (!$player->compare($other)) {
             $player->status = Player::STATUS_FAILURE;
             $this->addRecord($player, self::TYPE_COMPARE, 0,
                 sprintf('与 【%s】 比牌失败', $other->getName()));
             return;
         }
-        $player->status = Player::STATUS_WINNER;
+        if ($other->eq($this->banker)) {
+            $player->status = Player::STATUS_WINNER;
+        } else {
+            $this->removePlayer($player);
+        }
         $this->addRecord($player, self::TYPE_COMPARE, 0,
             sprintf('与 【%s】 比牌胜利', $other->getName()));
     }
 
     public function bet(Player $player, $money) {
         $this->pool += $money;
+        if ($this->max > 0 && $this->pool >= $this->max) {
+            $this->addRecord($this->banker, self::TYPE_OPEN, 0,
+                sprintf('自动开牌'));
+            $players = $this->all();
+            $pokers = array_map(function (Player $player) {
+                return $player->pokers;
+            }, $players);
+            $poker = new Poker();
+            $i = $poker->getWinner($pokers);
+            foreach ($players as $k => $item) {
+                if ($i === $k) {
+                    $item->status = Player::STATUS_WINNER;
+                    continue;
+                }
+                $item->status = Player::STATUS_FAILURE;
+            }
+        }
     }
 
     public function addRecord(Player $player, $type, $money, $remark) {

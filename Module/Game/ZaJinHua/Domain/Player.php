@@ -1,6 +1,8 @@
 <?php
 namespace Module\Game\ZaJinHua\Domain;
 
+use Exception;
+
 class Player {
 
     const STATUS_NONE = 0; // 未开始
@@ -16,6 +18,10 @@ class Player {
     public $isWatch = false;
 
     public $status = self::STATUS_NONE;
+    /**
+     * @var Player
+     */
+    public $rival;
 
     /**
      * @var Room
@@ -41,17 +47,43 @@ class Player {
         return $poker->compare($this->pokers, $player->pokers);
     }
 
-    public function with() {
-        $this->room->bet($this, $this->room->min * ($this->isWatch ? 2 : 1));
+    public function withAction() {
+        $this->bet($this->room->min);
         $this->room->with($this);
     }
 
-    public function fill($money) {
-        if ($money < $this->room->min) {
-            return;
-        }
-        $this->room->bet($this, $money * ($this->isWatch ? 2 : 1));
+    public function fillAction($money) {
+        $this->bet($money);
         $this->room->fill($this, $money);
+    }
+
+    public function bet($money) {
+        if ($money < $this->room->min) {
+            throw new Exception(sprintf('下注不能低于 %s ', $this->room->min));
+        }
+        if ($this->isWatch) {
+            $money *= 2;
+        }
+        if ($money > 2000) {
+            throw new Exception('您的余额不足');
+        }
+        $this->room->bet($this, $money);
+    }
+
+    public function compareAction() {
+        if (count($this->room->all()) < 3) {
+            return $this->openAction();
+        }
+        $this->bet($this, $this->room->min);
+        $this->room->compare($this);
+    }
+
+    public function openAction() {
+        if (count($this->room->all()) > 2) {
+            throw new Exception('开牌失败');
+        }
+        $this->bet($this->room->min * 2);
+        $this->room->compare($this);
     }
 
     public function invoke($action, $money = 0) {
@@ -86,16 +118,21 @@ class Player {
             return;
         }
         if ($action === 'call') {
-            $this->with();
+            $this->withAction();
             return;
         }
         if ($action === 'compare') {
-            $this->room->compare($this);
+            $this->compareAction();
+            return;
+        }
+        if ($action === 'open') {
+            $this->openAction();
             return;
         }
         if ($action === 'fill') {
-            $this->fill($money);
+            $this->fillAction($money);
         }
+
     }
 
 
@@ -110,6 +147,7 @@ class Player {
         $this->pokers = [];
         $this->room = null;
         $this->isWatch = false;
+        $this->rival = null;
     }
 
     /**
