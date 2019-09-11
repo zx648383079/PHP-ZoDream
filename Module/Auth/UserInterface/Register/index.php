@@ -2,7 +2,13 @@
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '注册账号';
-$this->extend('layouts/header');
+$url = $this->url('./', false);
+$js = <<<JS
+bindRegister('{$url}');
+JS;
+
+$this->extend('layouts/header')
+    ->registerJs($js);
 ?>
     <section class="container">
         <div class="login-box">

@@ -25,6 +25,6 @@ class RegisterController extends ModuleController {
                 'url' => url('/')
             ]);
         }
-        return $this->jsonFailure($model->getError());
+        return $this->jsonFailure($model->getFirstError());
     }
 }

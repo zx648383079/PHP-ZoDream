@@ -3,13 +3,13 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
-$url = $this->url('./');
+$url = $this->url('./', false);
 $js = <<<JS
 bindLogin('{$url}');
 JS;
 
 $this->extend('layouts/header')
-    ->registerJs($js, View::JQUERY_READY);
+    ->registerJs($js);
 ?>
     <section class="container">
         <div class="login-box">

@@ -37,12 +37,11 @@ class HomeController extends ModuleController {
         return $this->show(compact('redirect_uri', 'title'));
     }
 
-    public function checkAction() {
-        list($name, $value) = app('request')->get('name,value');
-        if (!in_array($name, ['username', 'email'])) {
+    public function checkAction($name, $value) {
+        if (!in_array($name, ['name', 'email'])) {
             return $this->jsonFailure('查询失败！');
         }
-        $count = UserModel::where([$name => $value])->count('id')->scalar();
+        $count = UserModel::where([$name => $value])->count('id');
         return $this->jsonSuccess($count > 0);
     }
 

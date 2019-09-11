@@ -3,14 +3,17 @@ $(function() {
 		window.parent.location.href = window.location.href;
 		return;
     }
-    $(".login-form .input-group input").focus(function() {
-        $(this).parents('.input-group').addClass('input-focus');
-    }).blur(function() {
-        $(this).parents('.input-group').removeClass('input-focus');
-    });
-    $(".login-form").submit(function() {
-        let _this = $(this),
-            loading = Dialog.loading();
+    $('.login-form').on('focus', '.input-group input', function() {
+        $(this).closest('.input-group').addClass('input-focus').removeClass('error');
+    }).on('blur', '.input-group input', function() {
+        $(this).closest('.input-group').removeClass('input-focus');
+    }).submit(function() {
+        let _this = $(this);
+        if (_this.find('.error').length > 0) {
+            Dialog.tip('您填写的信息不正确!');
+            return false;
+        }
+        let loading = Dialog.loading();
         postJson(_this.attr('action'), _this.serialize(), function(data) {
             loading.close();
             parseAjax(data);
@@ -19,6 +22,37 @@ $(function() {
     });
 
 });
+
+function bindRegister(baseUrl: string) {
+    $('.login-form .input-group input').blur(function() {
+        let _this = $(this);
+        let box = _this.closest('.input-group');
+        let name = _this.attr('name');
+        let val = _this.val().toString().trim();
+        if (val.length < 1) {
+            box.addClass('error');
+            return;
+        }
+        if (name === 'name' || name === 'email') {
+            postJson(baseUrl + 'check', {
+                name,
+                value: val
+            }, data => {
+                if (data.code == 200 && data.data) {
+                    box.addClass('error');
+                    Dialog.tip((name == 'name' ? '昵称' : '邮箱') + '已注册');
+                    return;
+                }
+            });
+            return;
+        }
+        if (name === 'rePassword' && val !== $('.login-form input[name="password"]').val()) {
+            box.addClass('error');
+            Dialog.tip('两次密码不一致');
+            return;
+        }
+    });
+}
 
 function bindLogin(baseUrl: string) {
     let is_init = false,
