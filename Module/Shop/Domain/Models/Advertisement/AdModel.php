@@ -103,7 +103,23 @@ class AdModel extends Model {
         return $this->getHtml();
     }
 
-    public static function banners() {
+    public static function banners($isMobile = true) {
+        if (!$isMobile) {
+            return [
+                [
+                    'id' => 1,
+                    'content' => 'https://yanxuan.nosdn.127.net/e3f2098930e91ef57619e8341c99d07e.jpg?imageView&quality=95&thumbnail=1920x420'
+                ],
+                [
+                    'id' => 2,
+                    'content' => 'https://yanxuan.nosdn.127.net/f8a21857bac1176827980affd311b576.jpg?imageView&quality=95&thumbnail=1920x420'
+                ],
+                [
+                    'id' => 3,
+                    'content' => 'https://yanxuan.nosdn.127.net/e397b44d76fe62db24f201fa8c812d31.jpg?imageView&quality=95&thumbnail=1920x420'
+                ],
+            ];
+        }
         return [
             [
                 'id' => 1,

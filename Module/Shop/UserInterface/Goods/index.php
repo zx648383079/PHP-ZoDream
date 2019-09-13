@@ -82,20 +82,20 @@ $this->registerCssFile('@slider.css')
                     <div>
                         <div class="number-box">
                             <i class="fa fa-minus"></i>
-                            <input type="text" class="number-input">
+                            <input type="text" class="number-input" value="1">
                             <i class="fa fa-plus"></i>
                         </div>
                     </div>
                 </div>
                 <div class="actions">
-                    <a href="" class="btn">
+                    <a href="javascript:buyGoods('<?=$goods->id?>', false);" class="btn">
                     立即购买
                     </a>
-                    <a href="javascript:addToCart('<?=$goods->id?>');" class="btn btn-primary">
+                    <a href="javascript:addToCart('<?=$goods->id?>', false);" class="btn btn-primary">
                         <i class="fa fa-shopping-cart"></i>
                         加入购物车
                     </a>
-                    <a href="" class="btn btn-collect">
+                    <a href="javascript:collectGoods('<?=$goods->id?>', '.btn-collect');" class="btn btn-collect">
                         <i class="fa fa-star"></i>
                         收藏
                     </a>

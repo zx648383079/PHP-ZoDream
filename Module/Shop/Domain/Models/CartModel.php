@@ -12,7 +12,6 @@ use Domain\Model\Model;
 use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Item;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
-use Module\Shop\Domain\Models\Scene\Goods;
 use Zodream\Infrastructure\Cookie;
 
 use Zodream\Service\Factory;
@@ -62,7 +61,7 @@ class CartModel extends Model implements ICartItem {
     }
 
     public function goods() {
-        return $this->hasOne(Goods::class, 'id', 'goods_id');
+        return $this->hasOne(GoodsSimpleModel::class, 'id', 'goods_id');
     }
 
     public function getTotalAttribute() {

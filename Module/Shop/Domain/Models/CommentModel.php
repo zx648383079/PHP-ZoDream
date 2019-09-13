@@ -17,7 +17,8 @@ use Module\Auth\Domain\Model\UserModel;
  * @property string $content
  * @property integer $rank
  * @property integer $user_id
- * @property integer $goods_id
+ * @property integer $item_type
+ * @property integer $item_id
  * @property integer $create_at
  *
  */

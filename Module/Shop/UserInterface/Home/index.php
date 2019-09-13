@@ -24,9 +24,10 @@ $this->registerCssFile('@slider.css')
         <div class="slider-previous">&lt;</div>
        <div class="slider-box">
            <ul>
-               <li><img src="https://yanxuan.nosdn.127.net/02a73327b066531cbb9057c242a90d2e.jpg?imageView&quality=95&thumbnail=1920x420" width="100%" alt=""></li>
-               <li><img src="https://yanxuan.nosdn.127.net/c73499b06bc31dd4efaee7fb45bbb904.jpg?watermark&type=1&gravity=northwest&dx=0&dy=0&image=OGY0ZTRiMTA1ODMzMjFhYTYyYmQwMjEwNGI2ZmE0NzAucG5n|imageView&quality=95&thumbnail=1920x420" width="100%" alt=""></li>
-               <li><img src="https://yanxuan.nosdn.127.net/384586f370cc9fdf286b40e02d57f298.jpg?watermark&type=1&gravity=northwest&dx=0&dy=0&image=OGY0ZTRiMTA1ODMzMjFhYTYyYmQwMjEwNGI2ZmE0NzAucG5n|imageView&quality=95&thumbnail=1920x420" width="100%" alt=""></li>
+                <?php foreach($banners as $item):?>
+                <li><img src="<?=$item['content']?>" width="100%" alt=""></li>
+                <?php endforeach;?>
+              
            </ul>
        </div>
        <div class="slider-next">&gt;</div>
@@ -75,9 +76,11 @@ $this->registerCssFile('@slider.css')
             <div class="slider-box">
                 <ul>
                     <?php foreach($new_goods as $item):?>
-                    <li class="goods-item">
+                    <li class="goods-item item-hover">
                         <div class="thumb">
-                            <img src="<?=$item->thumb?>" alt="">
+                            <a href="<?=$this->url('./goods', ['id' => $item->id])?>">
+                                <img src="<?=$item->thumb?>" alt="">
+                            </a>
                         </div>
                         <div class="name"><?=$item->name?></div>
                         <div class="price"><?=$item->price?></div>
@@ -112,22 +115,20 @@ $this->registerCssFile('@slider.css')
     </div>
 </div>
 
- <?php foreach($categories_tree as $item):?>
+ <?php foreach($floor_categories as $item):?>
 <div class="floor category-floor">
     <div class="container">
         <div class="floor-header">
             <h3><?=$item['name']?></h3>
 
             <div class="header-right">
-                <?php if(isset($item['children'])):
-                    $i = 0;
-                    foreach($item['children'] as $column):?>
-                <?php if($i ++ > 0):?>
+                <?php foreach($item['children'] as $i => $column):?>
+                <?php if($i > 0):?>
                 <b class="spilt">/</b>
                 <?php endif;?>
-                <span><?=$column['name']?></span>
-                <?php endforeach;endif;?>
-                <a href="">查看更多 &gt;</a>
+                <a href="<?=$this->url('./category', ['id' => $column['id']])?>"><?=$column['name']?></a>
+                <?php endforeach;?>
+                <a href="<?=$this->url('./category', ['id' => $item['id']])?>">查看更多 &gt;</a>
             </div>
             
         </div>
@@ -135,8 +136,8 @@ $this->registerCssFile('@slider.css')
             <img src="<?=$item['banner']?>" alt="">
         </div>
         <div class="goods-list">
-            <?php foreach($category_goods as $goods):?>
-            <a href="" class="goods-item">
+            <?php foreach($item['goods'] as $goods):?>
+            <a href="<?=$this->url('./goods', ['id' => $goods['id']])?>" class="goods-item item-hover">
                 <div class="thumb">
                     <img src="<?=$goods->thumb?>" alt="">
                 </div>
@@ -162,7 +163,7 @@ $this->registerCssFile('@slider.css')
                     <?php foreach($comment_goods as $item):?>
                     <li class="goods-item">
                         <div class="thumb">
-                            <img src="<?=$item->goods->thumb?>" alt="">
+                            <a href="<?=$this->url('./goods', ['id' => $item['item_id']])?>"><img src="<?=$item->goods->thumb?>" alt=""></a>
                         </div>
                         <div class="comment-item">
                             <div class="item-top">

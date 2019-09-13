@@ -13,60 +13,11 @@ $this->title = 'ZoDream';
             收货信息
             </div>
             <div class="panel-body">
-                <div class="address-view">
-                    <div>
-                        <div>
-                            <i class="fa fa-map-marker"></i>
-                            默认地址
-                            <a href="" class="btn">修改</a>
-                        </div>
-                        <div>
-                            <span>收 货 人: </span>
-                            <?=$address->name?></div>
-                        <div>
-                            <span>联系方式 : </span>    
-                            <?=$address->tel?></div>
-                        <div>
-                            <span>收货地址 : </span>    
-                            <?=$address->region->full_name?> <?=$address->address?></div>
-                    </div>
-                    <div class="right">
-                        <p><a href="">地址切换</a></p>
-                        <p><a href="" class="btn">新建地址</a></p>
-                    </div>
-                </div>
-                <div class="address-edit">
-                    <div>
-                        <div>*所在地区:</div>
-                        <div>
-                            <select name="" id=""></select>
-                            <select name="" id=""></select>
-                            <select name="" id=""></select>
-                        </div>
-                        <div>*详细地址:</div>
-                        <div>
-                            <textarea name="" id="" cols="30" rows="10"></textarea>
-                        </div>
-                        <div>*收货人:</div>
-                        <div>
-                            <input type="text">
-                        </div>
-                        <div>*手机号码:</div>
-                        <div>
-                            <input type="text">
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <div class="checkbox">
-                                <input type="checkbox" name="is_default" value="1" id="checkboxInput" checked>
-                                <label for="checkboxInput"></label>
-                            </div>
-                            设为默认
-                        </div>
-                        <button type="button" class="dialog-yes">确认</button><button type="button" class="dialog-close">取消</button>
-                    </div>
-                </div>
+                <?php if($address):?>
+                   <?php $this->extend('./address');?>
+                <?php else:?>
+                    <?php $this->extend('./addressEdit');?>
+                <?php endif;?>
             </div>
         </div>
 
@@ -137,8 +88,10 @@ $this->title = 'ZoDream';
                 <div class="checkout-footer">
                    <div>应付总额:<?=$order->order_amount?></div>
                     <a href="<?=$this->url('./cashier/checkout')?>" class="btn">去付款</a>
+                    <?php if($address):?>
                     <div><?=$address->name?> <?=$address->tel?></div>
                     <div><?=$address->region->full_name?> <?=$address->address?></div>
+                    <?php endif;?>
                     <input type="hidden" name="address" value="<?=$address ? $address->id : ''?>">
                     <input type="hidden" name="cart" value="<?=app('request')->get('cart')?>">
                 </div>

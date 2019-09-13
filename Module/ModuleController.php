@@ -2,6 +2,7 @@
 namespace Module;
 
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Helpers\Json;
 use Zodream\Route\Controller\ModuleController as BaseController;
 
 abstract class ModuleController extends BaseController {
@@ -30,7 +31,7 @@ abstract class ModuleController extends BaseController {
             if (strpos($selected, '[') === false) {
                 $selected = explode(',', $selected);
             } else {
-                $selected = json_decode($selected, true);
+                $selected = Json::decode($selected, true);
             }
         }
         $data = [];

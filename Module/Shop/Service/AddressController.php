@@ -24,13 +24,13 @@ class AddressController extends Controller {
 
     public function editAction($id) {
         $model = AddressModel::findOrNew($id);
-        return $this->show(compact('model', 'cat_list'));
+        return $this->show(compact('model'));
     }
 
     public function saveAction() {
         $model = new AddressModel();
         $model->user_id = auth()->id();
-        if ($model->load() && $model->autoIsNew()->save()) {
+        if ($model->load(null, ['user_id']) && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => $this->getUrl('address')
             ]);

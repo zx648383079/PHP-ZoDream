@@ -26,4 +26,8 @@ class ArticleController extends Controller {
         $article_list = ArticleModel::where('cat_id', $id)->page();
         return $this->show(compact('cat', 'cat_list', 'article_list'));
     }
+
+    public function helpAction() {
+        return $this->sendWithShare()->show();
+    }
 }

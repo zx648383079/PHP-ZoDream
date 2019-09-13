@@ -15,4 +15,12 @@ class MemberController extends Controller {
         }
         return $this->sendWithShare()->show(compact('redirect_uri'));
     }
+
+    public function profileAction() {
+        return $this->sendWithShare()->show();
+    }
+
+    public function historyAction() {
+        return $this->sendWithShare()->show();
+    }
 }

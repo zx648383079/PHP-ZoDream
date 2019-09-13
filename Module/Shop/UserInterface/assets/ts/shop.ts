@@ -1,5 +1,12 @@
 const CHECKED_CHANGE = 'cart_checked_change';
-function addToCart(id: number, amount: number = 1, properties?: string[]) {
+function addToCart(id: number, amount: number|boolean = 1, properties?: string[]) {
+    if (typeof amount === 'boolean') {
+        amount = parseInt($('.number-input').val() + '', 10);
+    }
+    if (amount < 1) {
+        Dialog.tip('数量不能小于1');
+        return;
+    }
     postJson('cart/add', {
         goods: id,
         amount: amount,
@@ -9,7 +16,14 @@ function addToCart(id: number, amount: number = 1, properties?: string[]) {
     });
 }
 
-function buyGoods(id: number, amount: number = 1, properties?: string[]) {
+function buyGoods(id: number, amount: number|boolean = 1, properties?: string[]) {
+    if (typeof amount === 'boolean') {
+        amount = parseInt($('.number-input').val() + '', 10);
+    }
+    if (amount < 1) {
+        Dialog.tip('数量不能小于1');
+        return;
+    }
     window.location.href = 'cashier?type=1&cart='+ JSON.stringify([
         {
             goods: id,

@@ -59,7 +59,7 @@ $this->title = $category->name;
             </div>
             <div class="goods-list">
                 <?php foreach($goods_list as $goods):?>
-                <a href="<?=$this->url('./goods', ['id' => $goods->id])?>" class="goods-item">
+                <a href="<?=$this->url('./goods', ['id' => $goods->id])?>" class="goods-item item-hover">
                     <div class="thumb">
                         <img src="<?=$goods->thumb?>" alt="">
                     </div>

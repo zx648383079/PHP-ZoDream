@@ -11,12 +11,12 @@ use Zodream\Template\View;
         <ul>
             <li class="active"><a>个人中心</a></li>
             <li><a>消息通知</a></li>
-            <li><a>帐号信息</a></li>
+            <li><a href="<?=$this->url('./member/profile')?>">帐号信息</a></li>
             <li><a href="<?=$this->url('./address')?>">地址管理</a></li>
-            <li><a>帐号安全 </a></li>
+            <li><a href="<?=$this->url('./account/center')?>">帐号安全 </a></li>
             <li><a>我的积分</a></li>
-            <li><a>我的收藏</a></li>
-            <li><a>我的足迹</a></li>
+            <li><a href="<?=$this->url('./collect')?>">我的收藏</a></li>
+            <li><a href="<?=$this->url('./member/history')?>">我的足迹</a></li>
             <li><a>我的甄选家</a></li>
         </ul>
     </div>
@@ -31,13 +31,6 @@ use Zodream\Template\View;
             <li><a>礼品卡</a></li>
             <li><a>优先购</a></li>
             <li><a>我的众筹</a></li>
-            <li><a>服务中心
-            </a></li>
-            <li><a>售后记录
-            </a></li>
-            <li><a>价格保护
-            </a></li>
-            <li><a>帮助中心</a></li>
 
         </ul>
     </div>
@@ -46,9 +39,9 @@ use Zodream\Template\View;
         服务中心
         </div>
         <ul>
-            <li><a>售后记录</a></li>
-            <li><a>价格保护</a></li>
-            <li><a>帮助中心</a></li>
+            <li><a href="<?=$this->url('./refund')?>">售后记录</a></li>
+            <li><a href="<?=$this->url('./refund/price_protect')?>">价格保护</a></li>
+            <li><a href="<?=$this->url('./article/help')?>">帮助中心</a></li>
         </ul>
     </div>
 </div>
