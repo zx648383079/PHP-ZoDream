@@ -2,6 +2,8 @@
 namespace Module\Shop\Service\Mobile;
 
 
+use Module\Shop\Domain\Repositories\AccountRepository;
+
 class AccountController extends Controller {
 
     protected function rules() {
@@ -19,6 +21,7 @@ class AccountController extends Controller {
     }
 
     public function centerAction() {
-        return $this->show();
+        $model_list = AccountRepository::getConnect();
+        return $this->show(compact('model_list'));
     }
 }

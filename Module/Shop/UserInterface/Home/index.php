@@ -103,7 +103,7 @@ $this->registerCssFile('@slider.css')
         </div>
         <div class="first-goods-list">
             <?php foreach($best_goods as $item):?>
-            <a href="" class="goods-item">
+            <a href="<?=$this->url('./goods', ['id' => $item->id])?>" class="goods-item">
                 <div class="thumb">
                     <img src="<?=$item->thumb?>" alt="">
                 </div>

@@ -664,18 +664,111 @@ header {
   display: grid;
   grid-template-columns: 1fr 100px; }
 
-.form-table .input-group .avatar-input {
-  cursor: pointer;
-  width: 70px;
-  height: 70px;
-  position: relative; }
-  .form-table .input-group .avatar-input img {
-    width: 100%;
-    height: 100%; }
-  .form-table .input-group .avatar-input .fa {
-    position: absolute;
-    bottom: 5px;
-    right: 5px; }
+.form-table .input-group {
+  margin-bottom: 20px; }
+  .form-table .input-group .avatar-input {
+    cursor: pointer;
+    width: 70px;
+    height: 70px;
+    position: relative; }
+    .form-table .input-group .avatar-input img {
+      width: 100%;
+      height: 100%; }
+    .form-table .input-group .avatar-input .fa {
+      position: absolute;
+      bottom: 5px;
+      right: 5px; }
+
+.account-box .account-tip {
+  padding-top: 25px;
+  color: #999;
+  font-size: 12px;
+  text-align: right; }
+
+.account-box .account-header {
+  padding: 25px;
+  display: grid;
+  grid-template-columns: 1fr 150px 150px; }
+  .account-box .account-header .money {
+    font-size: 50px; }
+  .account-box .account-header p {
+    font-size: 12px;
+    line-height: 26px; }
+  .account-box .account-header .btn {
+    display: block;
+    text-align: center; }
+
+.message-box {
+  display: grid;
+  grid-template-columns: 250px 1fr; }
+  .message-box .message-menu {
+    background-color: #e0f0fd; }
+  .message-box .menu-item {
+    padding: 12px 18px 12px 16px;
+    display: grid;
+    grid-template-columns: 80px 1fr; }
+    .message-box .menu-item .icon {
+      width: 51px;
+      height: 51px;
+      border-radius: 25.5px;
+      background-color: #ccc;
+      font-size: 30px;
+      text-align: center;
+      line-height: 50px; }
+    .message-box .menu-item .info .name {
+      color: #000;
+      font-weight: 700; }
+    .message-box .menu-item .info p {
+      color: #676d70; }
+    .message-box .menu-item:hover {
+      background-color: #fff; }
+    .message-box .menu-item.active {
+      background-color: #fff;
+      border-left: 4px solid #d75650; }
+
+.coupon-page .coupon-item {
+  width: 378px;
+  margin: 0 25px 20px 0;
+  height: 145px;
+  display: inline-grid;
+  grid-template-columns: 144px 1fr 52px;
+  border: 1px solid #f2f2f2;
+  background: #fff;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.04); }
+  .coupon-page .coupon-item .thumb {
+    width: 104px;
+    height: 104px;
+    margin: 20px;
+    border: 1px solid #f1f2f6; }
+    .coupon-page .coupon-item .thumb img {
+      width: 100%;
+      height: 100%; }
+  .coupon-page .coupon-item .price {
+    margin-bottom: 5px; }
+    .coupon-page .coupon-item .price em {
+      font-style: normal;
+      font-size: 34px;
+      color: #BE4141;
+      vertical-align: top; }
+    .coupon-page .coupon-item .price .limit {
+      color: #BE4141;
+      font-size: 12px;
+      margin: 12px 0 0 10px;
+      vertical-align: bottom;
+      background: #fff4ec; }
+  .coupon-page .coupon-item .range {
+    font-size: 12px;
+    font-weight: 700; }
+  .coupon-page .coupon-item .action {
+    background-color: #BE4141; }
+    .coupon-page .coupon-item .action a {
+      position: relative;
+      display: block;
+      top: 25px;
+      width: 20px;
+      margin: 0 auto;
+      font-size: 16px;
+      color: #fff; }
 
 .goods-item.goods-action {
   display: inline-block;

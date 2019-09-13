@@ -16,7 +16,7 @@ class AccountRepository {
                 $map_list[$item['vendor']] = array_merge($map_list[$item['vendor']], $item);
             }
         }
-        return $map_list;
+        return array_values($map_list);
     }
 
     private static function getConnectMaps() {

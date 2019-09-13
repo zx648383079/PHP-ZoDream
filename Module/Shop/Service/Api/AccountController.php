@@ -3,7 +3,7 @@ namespace Module\Shop\Service\Api;
 
 
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Shop\Domain\Repositories\AccountRepository;
 
 class AccountController extends Controller {
 
@@ -49,8 +49,7 @@ class AccountController extends Controller {
     }
 
     public function connectAction() {
-        $model_list = OAuthModel::where('user_id', auth()->id())
-            ->get('id', 'vendor', 'nickname', 'created_at');
+        $model_list = AccountRepository::getConnect();
         return $this->render($model_list);
     }
 

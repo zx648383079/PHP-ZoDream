@@ -3,6 +3,13 @@ namespace Module\Shop\Service;
 
 class MemberController extends Controller {
 
+    protected function rules() {
+        return [
+            'login' => '?',
+            '*' => '@'
+        ];
+    }
+
     public function indexAction() {
         $user = auth()->user();
         return $this->show(compact('user'));
