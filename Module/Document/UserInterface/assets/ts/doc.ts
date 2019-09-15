@@ -178,4 +178,24 @@ $(function() {
             $("#debug-box .js_responseBox").html(html);
         });
     });
+    $('select[data-type="code"]').change(function() {
+        let $this = $(this);
+        let val = $this.val();
+        if (val.trim().length < 1) {
+            return;
+        }
+        let name = $this.attr('name');
+        postJson($this.data('url'), {
+            [name]: val
+        }, function(data) {
+            if (data.code != 200) {
+                parseAjax(data);
+                return;
+            }
+            Dialog.box({
+                title: '预览',
+                content: '<pre><code class="language-'+val+'">'+ Prism.highlight(data.data, Prism.languages[val]) +'</code></pre>'
+            });
+        });
+    });
 });

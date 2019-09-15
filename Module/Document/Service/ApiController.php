@@ -1,6 +1,7 @@
 <?php
 namespace Module\Document\Service;
 
+use Module\Document\Domain\CodeParser;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\ProjectModel;
@@ -26,6 +27,11 @@ class ApiController extends Controller {
     public function mockAction($id) {
         $response_json = FieldModel::getMockData($id);
         return $this->jsonSuccess($response_json);
+    }
+
+    public function codeAction($id, $lang, $kind = FieldModel::KIND_RESPONSE) {
+        $content = (new CodeParser())->formatField($id, $kind, '', $lang);
+        return $this->jsonSuccess($content);
     }
 
 }

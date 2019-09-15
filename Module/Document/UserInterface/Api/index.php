@@ -158,6 +158,14 @@ $this->registerJs($js, View::JQUERY_READY);
         <div class="zd-panel panel-default">
             <div class="zd-panel-head">
                 响应参数
+                <select data-type="code" name="lang" data-url="<?=$this->url('./api/code', ['id' => $api->id])?>">
+                    <option value="">生成Model</option>
+                    <option>c#</option>
+                    <option>go</option>
+                    <option>typescript</option>
+                    <option>dart</option>
+                    <option>java</option>
+                </select>
             </div>
             <!-- /.panel-heading -->
             <div class="zd-panel-body">
