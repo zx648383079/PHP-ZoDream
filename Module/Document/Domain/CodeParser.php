@@ -151,7 +151,7 @@ class CodeParser {
                 ];
                 continue;
             }
-            if (is_float($item) && strlen($item.'') < 6) {
+            if (is_float($item) && strlen(preg_replace('/\d+\./', '', $item)) < 4) {
                 $package[$name][] = [
                     'name' => $key,
                     'type' => self::TYPE_FLOAT
