@@ -1,5 +1,6 @@
 <?php
 namespace Module\RPC\Domain;
+
 use Zodream\Helpers\Json;
 
 /**
