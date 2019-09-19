@@ -1,23 +1,18 @@
 <?php
 namespace Module\Game\Miner\Service;
 
-use Module\Game\Bank\Domain\Model\BankLogModel;
-use Module\Game\Bank\Domain\Model\BankProductModel;
+use Module\Game\Miner\Domain\Model\PlayerMinerModel;
+use Module\Game\Miner\Domain\Model\PlayerModel;
 
 class HomeController extends Controller {
 
     public function indexAction() {
-        $model_list = BankProductModel::orderBy('risk', 'asc')->orderBy('earnings', 'asc')->orderBy('id', 'desc')->page();
-        return $this->show(compact('model_list'));
-    }
-
-    public function investAction($id, $money) {
-        if (auth()->user()->money < $money) {
-            return $this->jsonFailure('您的账户金额不足');
+        $player = PlayerModel::findCurrent();
+        if ($player->isNewRecord) {
+            return $this->redirect('./house');
         }
-        if (BankLogModel::invest(auth()->id(), $id, $money)) {
-            return $this->jsonSuccess('', '投资成功');
-        }
-        return $this->jsonFailure('投资失败!');
+        $miner_list = PlayerMinerModel::with('miner', 'area')
+            ->where('player_id', $player->id)->page();
+        return $this->show(compact('player', 'miner_list'));
     }
 }

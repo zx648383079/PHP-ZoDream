@@ -30,11 +30,11 @@ class MinerModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'earnings' => 'Earnings',
-            'price' => 'Price',
-            'max_ps' => 'Max Ps',
-            'max_money' => 'Max Money',
+            'name' => '名称',
+            'earnings' => '加成收益',
+            'price' => '价格',
+            'max_ps' => '最大体力',
+            'max_money' => '最大收益',
         ];
     }
 

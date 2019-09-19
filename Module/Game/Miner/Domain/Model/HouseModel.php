@@ -30,10 +30,10 @@ class HouseModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'amount' => 'Amount',
-            'resume_speed' => 'Resume Speed',
-            'price' => 'Price',
+            'name' => '名称',
+            'amount' => '可住人数',
+            'resume_speed' => '体力恢复速度',
+            'price' => '价格',
         ];
     }
 

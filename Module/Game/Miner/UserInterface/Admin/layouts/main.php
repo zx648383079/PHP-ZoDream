@@ -26,18 +26,23 @@ $this->registerCssFile([
         'fa fa-home',
     ],
     [
-        '银行管理',
+        '内容管理',
         false,
         'fa fa-calendar-check',
         [
             [
-                '产品管理',
-                './admin/product',
+                '矿场列表',
+                './admin/area',
                 'fa fa-list'
             ],
             [
-                '投资记录',
-                './admin/log',
+                '矿工种类',
+                './admin/miner',
+                'fa fa-list'
+            ],
+            [
+                '住宅种类',
+                './admin/house',
                 'fa fa-list'
             ],
         ]

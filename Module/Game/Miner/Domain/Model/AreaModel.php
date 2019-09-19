@@ -33,10 +33,10 @@ class AreaModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'earnings' => 'Earnings',
-            'price' => 'Price',
-            'amount' => 'Amount',
+            'name' => '矿场名',
+            'earnings' => '基本收益',
+            'price' => '使用价格',
+            'amount' => '总产量',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

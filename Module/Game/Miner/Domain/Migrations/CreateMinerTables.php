@@ -47,7 +47,7 @@ class CreateMinerTables extends Migration {
             $table->set('earnings')
                 ->smallInt(4)->unsigned()->notNull()->comment('收益');
             $table->set('price')->int(10, true)
-                ->defaultVal(0)->comment('使用价格');
+                ->defaultVal(0)->comment('价格');
             $table->set('max_ps')->int(11, true)
                 ->defaultVal(0)->comment('最大体力');
             $table->set('max_money')->int(11, true)
