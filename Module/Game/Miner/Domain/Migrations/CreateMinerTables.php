@@ -57,7 +57,7 @@ class CreateMinerTables extends Migration {
             $table->set('id')->pk(true);
             $table->set('player_id')->int(10, true, true);
             $table->set('miner_id')->int(10, true, true);
-            $table->set('area_id')->int(10, true, true);
+            $table->set('area_id')->int(10, true)->defaultVal(0);
             $table->set('physical_strength')->comment('当前体力');
             $table->set('status')->tinyint(1)->defaultVal(0)->comment('当前状态');
             $table->timestamp('start_at');

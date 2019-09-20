@@ -54,7 +54,9 @@ $shadow: rgba(0, 0, 0, 0.8);
     }
 }
 
-.house-box {
+.house-box,
+.miner-box,
+.area-box {
     margin-top: 20px;
     .item {
         display: grid;

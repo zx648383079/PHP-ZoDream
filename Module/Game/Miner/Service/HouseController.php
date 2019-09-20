@@ -3,6 +3,7 @@ namespace Module\Game\Miner\Service;
 
 use Module\Game\Miner\Domain\Model\HouseModel;
 use Module\Game\Miner\Domain\Model\PlayerModel;
+use Exception;
 
 class HouseController extends Controller {
 
@@ -13,11 +14,14 @@ class HouseController extends Controller {
     }
 
     public function buyAction($id) {
-        if (PlayerModel::buyHouse($id)) {
+        try {
+            PlayerModel::buyHouse($id);
             return $this->jsonSuccess([
                 'url' => url('./')
             ]);
+        } catch (Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure('您的账户余额不足');
+
     }
 }

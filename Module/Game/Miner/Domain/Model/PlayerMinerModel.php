@@ -18,6 +18,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class PlayerMinerModel extends Model {
+
+    const STATUS_NONE = 0;
+    const STATUS_WORK = 1;
+
+
     public static function tableName() {
         return 'game_miner_player_miner';
     }
@@ -47,6 +52,14 @@ class PlayerMinerModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function miner() {
+        return $this->hasOne(MinerModel::class, 'id', 'miner_id');
+    }
+
+    public function area() {
+        return $this->hasOne(AreaModel::class, 'id', 'area_id');
     }
 
 

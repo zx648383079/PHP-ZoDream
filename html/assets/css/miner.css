@@ -34,9 +34,13 @@
     .page-tip.min .toggle::before {
       content: "\f067"; }
 
-.house-box {
+.house-box,
+.miner-box,
+.area-box {
   margin-top: 20px; }
-  .house-box .item {
+  .house-box .item,
+  .miner-box .item,
+  .area-box .item {
     display: grid;
     grid-template-columns: 1fr 80px;
     line-height: 30px; }

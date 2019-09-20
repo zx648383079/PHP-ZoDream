@@ -43,8 +43,10 @@ $this->title = '用户列表';
             <td>
                 <div class="btn-group  btn-group-xs">
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/user/account', ['id' => $item->id])?>">明细</a>
+                    <?php if($item->id != auth()->id()):?>
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/user/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/user/delete', ['id' => $item->id])?>">删除</a>
+                    <?php endif;?>
                 </div>
             </td>
         </tr>
