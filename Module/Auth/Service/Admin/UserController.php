@@ -2,6 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
@@ -75,5 +76,34 @@ class UserController extends Controller {
         return $this->jsonSuccess([
             'url' => $this->getUrl('user')
         ]);
+    }
+
+    public function accountAction($id) {
+        $user = UserModel::find($id);
+        $log_list = AccountLogModel::where('user_id', $id)->orderBy('id', 'desc')
+            ->page();
+        return $this->show(compact('user', 'log_list'));
+    }
+
+    public function rechargeAction($id) {
+        $user = UserModel::find($id);
+        return $this->show(compact('user'));
+    }
+
+    public function rechargeSaveAction($user_id, $money, $remark, $type = 0) {
+        $money = abs(intval($money));
+        if ($money <= 0) {
+            return $this->jsonFailure('金额输入不正确');
+        }
+        if ($type > 0) {
+            $money *= -1;
+        }
+        if (AccountLogModel::change($user_id,
+            AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
+            return $this->jsonSuccess([
+                'url' => url('./admin/user/account', ['id' => $user_id])
+            ], '充值成功');
+        }
+        return $this->jsonFailure('操作失败，金额不足');
     }
 }

@@ -8,7 +8,8 @@ class HouseController extends Controller {
 
     public function indexAction() {
         $house_list = HouseModel::query()->all();
-        return $this->show(compact('house_list'));
+        $player = PlayerModel::findCurrent();
+        return $this->show(compact('house_list', 'player'));
     }
 
     public function buyAction($id) {
@@ -17,6 +18,6 @@ class HouseController extends Controller {
                 'url' => url('./')
             ]);
         }
-        return $this->jsonFailure('');
+        return $this->jsonFailure('您的账户余额不足');
     }
 }

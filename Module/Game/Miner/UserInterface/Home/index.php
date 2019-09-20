@@ -5,7 +5,7 @@ use Zodream\Template\View;
 ?>
 
 <div class="product-box">
-    <?php foreach($model_list as $item):?>
+    <?php foreach($miner_list as $item):?>
     <a class="item" data-min="<?=$item->min_amount?>" href="<?=$this->url('./invest', ['id' => $item->id])?>">
         <div class="name"><?=$item->name?></div>
         <div class="column">
@@ -21,16 +21,5 @@ use Zodream\Template\View;
 </div>
 
 <div align="center">
-    <?=$model_list->getLink()?>
-</div>
-
-<div id="invest-dialog" class="dialog dialog-content" data-type="dialog">
-    <div class="dialog-body">
-        <p class="tip">请输入投资金额</p>
-        <input type="text" name="money" placeholder="整数金额">
-    </div>
-    <div class="dialog-footer">
-        <button class="dialog-yes">投资</button>
-        <button class="dialog-close">取消</button>
-    </div>
+    <?=$miner_list->getLink()?>
 </div>

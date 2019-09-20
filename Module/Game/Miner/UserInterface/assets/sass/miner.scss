@@ -1,0 +1,64 @@
+$bg: #333;
+$back: #000;
+$white: #fff;
+$mainBg: #f4f4f4;
+$tipBg: #F5FAFF;
+$tipFg: #666;
+$shadow: rgba(0, 0, 0, 0.8);
+
+.page-tip {
+    border: 1px dashed $bg;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: $tipBg;
+    position: relative;
+    .blue {
+        color: $bg;
+    }
+    ul {
+        width: 100%;
+        padding: 0;
+        li {
+            padding-left: 10px;
+            list-style: inside;
+            a {
+                color: $tipFg;
+            }
+        }
+    }
+    .toggle {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        height: 26px;
+        width: 26px;
+        &::before {
+            font-family: "Font Awesome 5 Free";
+            font-size: 14px;
+            font-weight: 900;
+            font-size: inherit;
+            text-rendering: auto;
+            content: "\f068";
+        }
+    }
+    &.min {
+        width: 200px;
+        ul {
+            display: none;
+        }
+        .toggle {
+            &::before {
+                content: "\f067";
+            }
+        }
+    }
+}
+
+.house-box {
+    margin-top: 20px;
+    .item {
+        display: grid;
+        grid-template-columns: 1fr 80px;
+        line-height: 30px;
+    }
+}

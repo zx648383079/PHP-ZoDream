@@ -12,6 +12,7 @@ use Domain\Model\Model;
  * @property integer $type
  * @property integer $item_id
  * @property integer $money
+ * @property integer $total_money
  * @property integer $status
  * @property string $remark
  * @property integer $created_at
@@ -19,6 +20,8 @@ use Domain\Model\Model;
  */
 class AccountLogModel extends Model {
 
+    const TYPE_SYSTEM = 1; // 系统自动
+    const TYPE_ADMIN = 9; // 管理员充值
     const TYPE_DEFAULT = 99;
     const TYPE_CHECK_IN = 30;
     const TYPE_BANK = 31;
@@ -34,6 +37,7 @@ class AccountLogModel extends Model {
             'type' => 'int:0,99',
             'item_id' => 'int',
             'money' => 'required|int',
+            'total_money' => 'required|int',
             'status' => 'int:0,9',
             'remark' => 'required|string:0,255',
             'created_at' => 'int',
@@ -48,6 +52,7 @@ class AccountLogModel extends Model {
             'type' => 'Type',
             'item_id' => 'Item Id',
             'money' => 'Money',
+            'total_money' => 'Total Money',
             'status' => 'Status',
             'remark' => 'Remark',
             'created_at' => 'Created At',
@@ -55,10 +60,10 @@ class AccountLogModel extends Model {
         ];
     }
 
-    public static function log($user_id, $type, $item_id, $money, $remark, $status = 0) {
-
+    public static function log(
+        $user_id, $type, $item_id, $money, $total_money, $remark, $status = 0) {
         return static::create(
-            compact('user_id', 'type', 'item_id', 'money', 'remark', 'status'));
+            compact('user_id', 'type', 'item_id', 'money', 'total_money', 'remark', 'status'));
     }
 
     public static function change($user_id, $type, $item_id, $money, $remark, $status = 0) {
@@ -74,7 +79,7 @@ class AccountLogModel extends Model {
         UserModel::query()->where('id', $user_id)->update([
             'money' => $new_money
         ]);
-        static::log($user_id, $type, $item_id, $money, $remark, $status);
+        static::log($user_id, $type, $item_id, $money, $new_money, $remark, $status);
         if (auth()->id() === $user_id) {
             // 自动更新当前用户信息
             auth()->user()->moeny = $new_money;

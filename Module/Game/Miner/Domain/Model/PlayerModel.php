@@ -20,8 +20,6 @@ class PlayerModel extends Model {
         return 'game_miner_player';
     }
 
-
-
     protected function rules() {
         return [
             'user_id' => 'required|int',
@@ -41,6 +39,10 @@ class PlayerModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function house() {
+        return $this->hasOne(HouseModel::class, 'id', 'house_id');
     }
 
     /**
@@ -63,6 +65,10 @@ class PlayerModel extends Model {
         if (empty($house)) {
             return false;
         }
+        $model = static::findCurrent();
+        if ($model->house_id === $house->id) {
+            return false;
+        }
         if (!AccountLogModel::change(
             auth()->id(), 41, $houseId, -$house->price,
             sprintf('购买住宅 %s', $house->name),
@@ -70,7 +76,6 @@ class PlayerModel extends Model {
         )) {
             return false;
         }
-        $model = static::findCurrent();
         $model->house_id = $house->id;
         return $model->save();
     }

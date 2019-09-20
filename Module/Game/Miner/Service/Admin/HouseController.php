@@ -20,7 +20,7 @@ class HouseController extends Controller {
     }
 
     public function saveAction() {
-        $model = new AreaModel();
+        $model = new HouseModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
                 'url' => url('./admin/house')

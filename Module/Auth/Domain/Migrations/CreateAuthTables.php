@@ -142,7 +142,8 @@ class CreateAuthTables extends Migration {
             $table->set('user_id')->int()->unsigned()->defaultVal(0);
             $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
             $table->set('item_id')->int()->defaultVal(0);
-            $table->set('money')->int()->notNull();
+            $table->set('money')->int()->notNull()->comment('本次发生金额');
+            $table->set('total_money')->int()->notNull()->comment('当前账户余额');
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('remark')->varchar()->notNull();
             $table->timestamps();

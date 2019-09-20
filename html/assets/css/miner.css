@@ -1,0 +1,44 @@
+.page-tip {
+  border: 1px dashed #333;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #F5FAFF;
+  position: relative; }
+  .page-tip .blue {
+    color: #333; }
+  .page-tip ul {
+    width: 100%;
+    padding: 0; }
+    .page-tip ul li {
+      padding-left: 10px;
+      list-style: inside; }
+      .page-tip ul li a {
+        color: #666; }
+  .page-tip .toggle {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    height: 26px;
+    width: 26px; }
+    .page-tip .toggle::before {
+      font-family: "Font Awesome 5 Free";
+      font-size: 14px;
+      font-weight: 900;
+      font-size: inherit;
+      text-rendering: auto;
+      content: "\f068"; }
+  .page-tip.min {
+    width: 200px; }
+    .page-tip.min ul {
+      display: none; }
+    .page-tip.min .toggle::before {
+      content: "\f067"; }
+
+.house-box {
+  margin-top: 20px; }
+  .house-box .item {
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    line-height: 30px; }
+
+/*# sourceMappingURL=miner.css.map */
