@@ -9,7 +9,7 @@ $(function() {
     });
     dialog.box.on('click', '.area-box a', function() {
         let area_id = $(this).closest('.item').data('id');
-        this.close();
+        dialog.close();
         postJson(url, {
             area_id
         }, res => {

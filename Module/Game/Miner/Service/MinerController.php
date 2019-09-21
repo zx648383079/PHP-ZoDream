@@ -44,4 +44,15 @@ class MinerController extends Controller {
             return $this->jsonFailure($ex->getMessage());
         }
     }
+
+    public function balanceAction($id) {
+        try {
+            PlayerModel::balanceMiner($id);
+            return $this->jsonSuccess([
+                'url' => url('./')
+            ]);
+        } catch (Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+    }
 }

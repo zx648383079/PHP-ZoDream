@@ -14,7 +14,7 @@ use Zodream\Template\View;
     </ul>
     <span class="toggle"></span>
 </div>
-
+<a href="<?=$this->url('./')?>">返回</a>
 <div class="house-box">
     <?php foreach($house_list as $item):?>
     <div class="item">

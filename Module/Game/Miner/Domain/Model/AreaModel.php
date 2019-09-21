@@ -34,8 +34,8 @@ class AreaModel extends Model {
         return [
             'id' => 'Id',
             'name' => '矿场名',
-            'earnings' => '基本收益',
-            'price' => '使用价格',
+            'earnings' => '基本收益(/m)',
+            'price' => '单次使用价格',
             'amount' => '总产量',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

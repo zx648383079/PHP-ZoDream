@@ -26,6 +26,9 @@ class AccountLogModel extends Model {
     const TYPE_CHECK_IN = 30;
     const TYPE_BANK = 31;
     const TYPE_GAME = 40;
+    const STATUS_WAITING_PAY = 0;
+    const STATUS_PAID = 1;
+    const STATUS_REFUND = 9;
 
     public static function tableName() {
         return 'account_log';
@@ -60,13 +63,57 @@ class AccountLogModel extends Model {
         ];
     }
 
+    /**
+     * 退款，并更改用户金额
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public function refund() {
+        UserModel::query()->where('id', $this->user_id)
+            ->updateOne('money', - $this->money);
+        $this->status = self::STATUS_REFUND;
+        return $this->save();
+    }
+
+    /**
+     * 设置支付，不操作用户余额
+     * @return bool|mixed
+     */
+    public function paid() {
+        $this->status = self::STATUS_PAID;
+        return $this->save();
+    }
+
+    /**
+     * 创建一条记录
+     * @param $user_id
+     * @param $type
+     * @param $item_id
+     * @param $money
+     * @param $total_money
+     * @param $remark
+     * @param int $status
+     * @return AccountLogModel
+     */
     public static function log(
         $user_id, $type, $item_id, $money, $total_money, $remark, $status = 0) {
         return static::create(
             compact('user_id', 'type', 'item_id', 'money', 'total_money', 'remark', 'status'));
     }
 
-    public static function change($user_id, $type, $item_id, $money, $remark, $status = 0) {
+    /**
+     * 更改用户金额，并记录
+     * @param $user_id
+     * @param $type
+     * @param $item_id
+     * @param $money
+     * @param $remark
+     * @param int $status
+     * @return bool|int
+     * @throws \Exception
+     */
+    public static function change(
+        $user_id, $type, $item_id, $money, $remark, $status = 1) {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
@@ -79,12 +126,56 @@ class AccountLogModel extends Model {
         UserModel::query()->where('id', $user_id)->update([
             'money' => $new_money
         ]);
-        static::log($user_id, $type, $item_id, $money, $new_money, $remark, $status);
+        $log = static::log($user_id, $type, $item_id, $money, $new_money, $remark, $status);
         if (auth()->id() === $user_id) {
             // 自动更新当前用户信息
             auth()->user()->moeny = $new_money;
         }
-        return true;
+        return $log->id;
+    }
+
+    /**
+     * 通过callback 同步创建记录修改余额
+     * @param $user_id
+     * @param $type
+     * @param callable $cb 最好返回 model
+     * @param $money
+     * @param $total_money
+     * @param $remark
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    public static function changeAsync(
+        $user_id, $type, callable $cb,
+        $money, $total_money, $remark) {
+        if (empty($user_id)) {
+            $user_id = auth()->id();
+        }
+        $old_money = UserModel::query()->where('id', $user_id)
+            ->value('money');
+        $new_money = floatval($old_money) + $money;
+        if ($new_money < 0) {
+            return false;
+        }
+        $log = static::log($user_id, $type, 0, $money, $new_money, $remark, 0);
+        if (empty($log)) {
+            return false;
+        }
+        UserModel::query()->where('id', $user_id)->update([
+            'money' => $new_money
+        ]);
+        $model = call_user_func($cb, $log);
+        if ($model === false) {
+            $log->refund();
+            return false;
+        }
+        if (is_numeric($model)) {
+            $log->item_id = $model;
+        } elseif (isset($model['id'])) {
+            $log->item_id = $model['id'];
+        }
+        $log->paid();
+        return $model;
     }
 
     public static function isBought($id, $type = self::TYPE_DEFAULT) {

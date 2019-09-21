@@ -5,8 +5,9 @@ namespace Module\Game\Miner\Domain\Model;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Exception;
+use PhpParser\Node\Expr\Empty_;
 
-    /**
+/**
  * Class PlayerModel
  * @package Module\Game\Miner\Domain\Model
  * @property integer $id
@@ -48,15 +49,33 @@ class PlayerModel extends Model {
     }
 
     /**
+     *
+     * @param $id
+     * @return PlayerModel
+     * @throws Exception
+     */
+    public static function findById($id) {
+        static $items = [];
+        if (isset($items[$id])) {
+            return $items[$id];
+        }
+        return $items[$id] = static::find($id);
+    }
+
+    /**
      * @return PlayerModel
      * @throws \Exception
      */
     public static function findCurrent() {
+        static $model = null;
+        if (!empty($model)) {
+            return $model;
+        }
         $model = static::where('user_id', auth()->id())->first();
         if (!empty($model)) {
             return $model;
         }
-        return new static([
+        return $model = new static([
             'user_id' => auth()->id(),
             'name' => sprintf('%s 的住宅', auth()->user()->name)
         ]);
@@ -109,12 +128,36 @@ class PlayerModel extends Model {
         if (empty($miner)) {
             throw new Exception('矿工不存在');
         }
-        if ($miner->status == PlayerMinerModel::STATUS_WORK) {
-            $miner->end();
+        $miner->balance();
+        if ($miner->physical_strength < $miner->miner->max_ps / 2) {
+            throw new Exception('体力不能小于50%');
+        }
+        $area = AreaModel::find($area_id);
+        if (empty($area)) {
+            throw new Exception('矿场不存在');
+        }
+        if ($area->price > 0
+            && !AccountLogModel::change($model->user_id,
+                44, $area->id, -$area->price, '购买矿场使用权')) {
+            throw new Exception('账户余额不足');
         }
         $miner->area_id = $area_id;
         $miner->status = PlayerMinerModel::STATUS_WORK;
         $miner->start_at = time();
+        return $miner->save();
+    }
+
+    public static function balanceMiner($id) {
+        $model = static::findCurrent();
+        if ($model->house_id < 1) {
+            throw new Exception('矿工不存在');
+        }
+        $miner = PlayerMinerModel::where('player_id', $model->id)
+            ->where('id', $id)->first();
+        if (empty($miner)) {
+            throw new Exception('矿工不存在');
+        }
+        return $miner->balance();
     }
 
 

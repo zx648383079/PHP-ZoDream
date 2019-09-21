@@ -32,7 +32,7 @@ class HouseModel extends Model {
             'id' => 'Id',
             'name' => '名称',
             'amount' => '可住人数',
-            'resume_speed' => '体力恢复速度',
+            'resume_speed' => '体力恢复速度(/m)',
             'price' => '价格',
         ];
     }
