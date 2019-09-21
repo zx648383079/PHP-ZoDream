@@ -812,6 +812,11 @@ footer {
             .nav-toggle {
                 display: inline-block;
             }
+            li {
+                a {
+                    display: block;
+                }
+            }
             &.open {
                 float: none;
                 .nav-toggle {

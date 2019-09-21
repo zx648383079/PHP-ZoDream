@@ -626,6 +626,8 @@ footer {
     display: none; }
   header .nav-bar .nav-toggle {
     display: inline-block; }
+  header .nav-bar li a {
+    display: block; }
   header .nav-bar.open {
     float: none; }
     header .nav-bar.open .nav-toggle {

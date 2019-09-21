@@ -25,9 +25,21 @@ function bindChapter() {
             let length = getStrLength(contentBox.val());
             lengthBox.find('span').text(length);
             lengthBox.find('input').val(length);
+        },
+        isSaving = false;
+        autoSave = function() {
+            if (isSaving) {
+                return;
+            }
+            isSaving = true;
+            setTimeout(() => {
+                console.log('saving');
+                
+            }, 2000);
         };
     contentBox.on('input propertychange', function() {
         showLength();
+        autoSave();
     }).on('keydown', function(e) {
         if (e.keyCode === 9) {
             e.preventDefault();
