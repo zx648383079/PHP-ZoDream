@@ -1,0 +1,63 @@
+{@font-awesome.min.css}
+{@animate.min.css}
+{@zodream.css}
+{@cms-movie.css}
+{@jquery.min.js}
+{js file=@cms.min.js}
+<!DOCTYPE html>
+<html lang="{$language,'zh-CN'}">
+   <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width, initial-scale=1">
+        <title>{this.title}-zodream</title>
+        <meta name="Keywords" content="{this.keywords}" />
+        <meta name="Description" content="{this.description}" />
+        <meta name="author" content="zodream" />
+        <link rel="icon" href="/assets/images/favicon.png">
+       {header:}
+   </head>
+   <body>
+       <div class="container">
+            <header>
+                    <div class="row">
+                        <div class="col-md-4 logo">
+                            <a href="{url:./}">
+                                <img src="/assets/images/wap_logo.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-bar">
+                        <i class="nav-toggle"></i>
+                        <ul>
+                            <li>
+                                <a href="{url:./}">首页</a>
+                            </li>
+                            {channels:tree=1 group=nav}
+                            <li class="{channelActive:$channel.id,true}">
+                                <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
+                                {if:isset($channel.children)}
+                                <ul class="sub-menu">
+                                    {for:$channel.children,$item}
+                                    <li>
+                                        <a href="{url:./category?id=:$item.id}">{$item.title}</a>
+                                    </li>
+                                    {/for}
+                                </ul>
+                                {/if}
+                            </li>
+                            
+                            {/channels}
+                        </ul>
+                    </div>
+            </header>
+            {$content}
+            <footer>
+                <div class="copyright">
+                        <a href="http://www.miitbeian.gov.cn/" target="_blank">湘ICP备16003508号</a>
+                </div>
+            </footer>
+       </div>
+        {footer:}
+   </body>
+</html>

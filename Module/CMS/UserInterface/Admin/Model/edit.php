@@ -17,6 +17,7 @@ $this->registerJs($js);
     <?=Form::text('name', true)?>
     <?=Form::text('table', true)->readonly($model->id > 0)?>
     <div class="content-box">
+        <?=Form::select('child_model', [$model_list, ['无分集']])?>
         <?=Form::text('category_template', true)?>
         <?=Form::text('list_template', true)?>
         <?=Form::text('show_template', true)?>

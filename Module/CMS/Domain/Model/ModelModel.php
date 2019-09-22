@@ -12,6 +12,7 @@ use Zodream\Database\Schema\Table;
  * @property string $table
  * @property integer $type
  * @property integer $position
+ * @property integer $child_model
  * @property string $category_template
  * @property string $list_template
  * @property string $show_template
@@ -29,6 +30,7 @@ class ModelModel extends BaseModel {
             'table' => 'required|string:0,100',
             'type' => 'int:0,9',
             'position' => 'int:0,999',
+            'child_model' => 'int',
             'category_template' => 'string:0,20',
             'list_template' => 'string:0,20',
             'show_template' => 'string:0,20',
@@ -43,6 +45,7 @@ class ModelModel extends BaseModel {
             'table' => '表名',
             'type' => '类型',
             'position' => '排序',
+            'child_model' => '分级模型',
             'category_template' => '分类模板',
             'list_template' => '列表模板',
             'show_template' => '详情模板',

@@ -83,6 +83,7 @@ class MultiScene extends BaseScene {
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
             $table->set('model_id')->int()->notNull();
+            $table->set('parent_id')->int()->defaultVal(0);
             $table->set('user_id')->int()->defaultVal(0);
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();
@@ -164,15 +165,16 @@ class MultiScene extends BaseScene {
         return $table->dropColumn();
     }
 
-    public function insert(array $data, array $field_list) {
+    public function insert(array $data) {
         $count = $this->query()
             ->where('title', $data['title'])->count();
         if ($count > 0) {
             return $this->setError('title', '标题重复');
         }
-        list($main, $extend) = $this->filterInput($data, $field_list);
+        list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = intval($data['cat_id']);
+        $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
         $main['model_id'] = $this->model->id;
         $main['user_id'] = auth()->id();
         $id = $this->query()->insert($main);
@@ -181,13 +183,13 @@ class MultiScene extends BaseScene {
         return true;
     }
 
-    public function update($id, array $data, array $field_list) {
+    public function update($id, array $data) {
         $count = $this->query()->where('id', '<>', $id)
             ->where('title', $data['title'])->count();
         if ($count > 0) {
             return $this->setError('title', '标题重复');
         }
-        list($main, $extend) = $this->filterInput($data, $field_list);
+        list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = time();
         $main['model_id'] = $this->model->id;
         $this->query()

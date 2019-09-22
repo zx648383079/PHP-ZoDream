@@ -1,0 +1,41 @@
+{
+    "name": "movie",
+    "description": "视频网主题",
+    "author": "zodream",
+    "cover": "assets/images/screenshot.png",
+    "script": [{
+            "action": "copy",
+            "src": "assets",
+            "dist": "assets"
+        },
+        {
+            "action": "option",
+            "data": [{
+                "name": "主题",
+                "code": "theme",
+                "type": "text",
+                "value": "movie",
+                "default": ""
+            }]
+        },
+        {
+            "action": "group",
+            "name": "nav"
+        },
+        {
+            "action": "model",
+            "name": "图片",
+            "table": "images",
+            "fields": [{
+                    "action": "disable",
+                    "field": "content"
+                },
+                {
+                    "name": "图片",
+                    "field": "image",
+                    "type": "file"
+                }
+            ]
+        }
+    ]
+}

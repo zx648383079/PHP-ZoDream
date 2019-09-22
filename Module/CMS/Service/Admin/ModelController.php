@@ -22,7 +22,10 @@ class ModelController extends Controller {
         if (!$model->position) {
             $model->position = 99;
         }
-        return $this->show(compact('model'));
+        $model_list = ModelModel::query()
+            ->where('type', 0)
+            ->whereNotIn('id', [$id])->get(['id', 'name']);
+        return $this->show(compact('model', 'model_list'));
     }
 
     public function saveAction($id = 0) {

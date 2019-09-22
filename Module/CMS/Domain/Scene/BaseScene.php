@@ -36,7 +36,9 @@ abstract class BaseScene implements SceneInterface {
 
     protected function getGroupFieldName() {
         $field_list = $this->fieldList();
-        $main = ['id', 'cat_id', 'model_id', 'user_id', 'status', 'view_count', 'updated_at', 'created_at'];
+        $main = ['id', 'cat_id', 'model_id', 'user_id',
+            'status', 'view_count',
+            'updated_at', 'created_at', 'parent_id'];
         $extra = [];
         foreach ($field_list as $item) {
             if ($item->is_main > 0) {

@@ -41,9 +41,10 @@ class CreateCmsTables extends Migration {
             $table->set('table')->varchar(100)->notNull();
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
-            $table->set('category_template')->varchar(20);
-            $table->set('list_template')->varchar(20);
-            $table->set('show_template')->varchar(20);
+            $table->set('child_model')->int(10, true)->defaultVal(0)->comment('分集模型');
+            $table->set('category_template')->varchar(20)->defaultVal('');
+            $table->set('list_template')->varchar(20)->defaultVal('');
+            $table->set('show_template')->varchar(20)->defaultVal('');
             $table->set('setting')->text();
         });
         Schema::createTable(CategoryModel::tableName(), function (Table $table) {
@@ -60,9 +61,9 @@ class CreateCmsTables extends Migration {
             $table->set('url')->varchar(100);
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('groups')->varchar()->defaultVal('');
-            $table->set('category_template')->varchar(20);
-            $table->set('list_template')->varchar(20);
-            $table->set('show_template')->varchar(20);
+            $table->set('category_template')->varchar(20)->defaultVal('');
+            $table->set('list_template')->varchar(20)->defaultVal('');
+            $table->set('show_template')->varchar(20)->defaultVal('');
             $table->set('setting')->text();
             $table->timestamps();
         });
@@ -77,6 +78,7 @@ class CreateCmsTables extends Migration {
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
             $table->set('model_id')->int()->notNull();
+            $table->set('parent_id')->int()->defaultVal(0);
             $table->set('user_id')->int()->defaultVal(0);
             $table->set('keywords')->varchar();
             $table->set('thumb')->varchar();

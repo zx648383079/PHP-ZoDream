@@ -19,8 +19,6 @@ use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Error\Exception;
-use Module\CMS\Domain\Model\LinkageDataModel;
-use Module\CMS\Domain\Model\LinkageModel;
 
 class ThemeManager {
 
@@ -96,13 +94,16 @@ class ThemeManager {
         $data = [];
         $model_list = ModelModel::query()->asArray()->all();
         foreach ($model_list as $item) {
-            $item['action'] = 'model';
-            $item['setting'] = Json::decode($item['setting']);
-            $item['fields'] = $this->packFields($item['id']);
             $this->setCache([
                 $item['id'] => '@model:'.$item['table']
             ], 'model');
-            unset($item['id']);
+        }
+        foreach ($model_list as $item) {
+            $item['action'] = 'model';
+            $item['setting'] = Json::decode($item['setting']);
+            $item['fields'] = $this->packFields($item['id']);
+            $item['child'] = $this->getCacheId($item['child_model'], 'model');
+            unset($item['id'], $item['child_model']);
             $data[] = $item;
 
         }
@@ -292,7 +293,10 @@ class ThemeManager {
 
     protected function runActionModel($data) {
         $fields = isset($data['fields']) ? $data['fields'] : [];
-        unset($data['fields'], $data['action']);
+        if (isset($data['child'])) {
+            $data['child_model'] = $this->getCacheId($data['child']);
+        }
+        unset($data['fields'], $data['action'], $data['child']);
         if (isset($data['setting']) && is_array($data['setting'])) {
             $data['setting'] = Json::encode($data['setting']);
         }

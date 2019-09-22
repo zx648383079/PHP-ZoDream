@@ -136,6 +136,7 @@ class SingleScene extends BaseScene {
         list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
+        $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
         $main['model_id'] = $this->model->id;
         $main['user_id'] = auth()->id();
         $id = $this->query()->insert($main);
