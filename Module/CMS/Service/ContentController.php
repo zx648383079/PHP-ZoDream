@@ -30,6 +30,6 @@ class ContentController extends Controller {
             $cat->model_id === $model->id
                 ? $cat->show_template
                 : $model->show_template,
-            compact('cat', 'data', 'title'));
+            compact('cat', 'data', 'title', 'model'));
     }
 }
