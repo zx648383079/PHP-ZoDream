@@ -29,10 +29,6 @@ bindNavigation();
                         </div>
                     </div>
                     <ul class="search-engine-body">
-                        <li>
-                            <span style="background: url(https://webjike.com/images/search_icon.png) -80px 0px"></span>
-                            百度
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -81,7 +77,7 @@ bindNavigation();
         </div>
         <div class="panel-body">
             {contents:category=$channel.id num=8}
-            <a href="{url:./content?category=:$channel.id:&id=:$content.id}" class="site-item">
+            <a href="{url:$content}" class="site-item">
                 <div class="item-name">
                     <img src="{$content.thumb}" alt="{$content.title}">
                     {$content.title}

@@ -63,7 +63,7 @@ var silder = $(".photo .slider").slider({
                         <ul class="list-box">
                             {contents:category=news num=10}
                                 <li> 
-                                    <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
+                                    <a href="{url:$content}" target="_blank" title="{$content.title}">
                                         <em></em>
                                         {$content.title}<span>{this.ago:$content.created_at}</span></a>
                                   </li>
@@ -74,7 +74,7 @@ var silder = $(".photo .slider").slider({
                         <ul class="list-box">
                             {contents:category=web_news num=10}
                                 <li> 
-                                    <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" target="_blank" title="{$content.title}">
+                                    <a href="{url:$content}" target="_blank" title="{$content.title}">
                                         <em></em>
                                         {$content.title}<span>{this.ago:$content.created_at}</span></a>
                                 </li>

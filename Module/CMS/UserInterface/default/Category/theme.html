@@ -18,14 +18,14 @@ bindTheme();
                 <div class="col-xs-6 col-sm-4 col-md-4">
                     <div class="item">
                         <div class="thumb">
-                            <a href="{url:./content?category=:$cat.id:&id=:$item.id}">
+                            <a href="{url:$item}">
                                 <img src="{$item.thumb}" alt="">
                             </a>
-                            <a href="{url:./content?category=:$cat.id:&id=:$item.id}" class="fa fa-search"></a>
+                            <a href="{url:$item}" class="fa fa-search"></a>
                         </div>
                         <div class="info">
                             <div class="title">
-                                    <a href="{url:./content?category=:$cat.id:&id=:$item.id}">{$item.title}</a>
+                                    <a href="{url:$item}">{$item.title}</a>
                             </div>
                             <div class="desc">
                                     {$item.description}

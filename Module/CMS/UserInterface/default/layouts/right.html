@@ -7,7 +7,7 @@
            <ul>
                 {contents:channel=news order=hot num=10}
                 <li> 
-                    <a href="{url:./content?category=:$content.cat_id:&id=:$content.id}" title="{$content.title}">
+                    <a href="{url:$content}" title="{$content.title}">
                         {$content.title}</a>
                     </li>
                 {/contents}

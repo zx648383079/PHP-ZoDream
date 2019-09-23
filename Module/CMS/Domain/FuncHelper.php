@@ -18,6 +18,7 @@ class FuncHelper {
     public static $current = [
         'channel' => 0,
         'content' => 0,
+        'model' => 0,
     ];
 
     protected static $index = [];
@@ -178,7 +179,13 @@ class FuncHelper {
             $order = 'view_count desc';
         }
         $per_page = static::getVal($param, ['per_page', 'size', 'num', 'limit'], 20);
-        $tags = ['model', 'keywords', 'keyword', 'query', 'page', 'field', 'fields', 'order', 'orderBy', 'per_page', 'size', 'num', 'limit', 'category', 'cat_id', 'cat', 'channel'];
+        $tags = ['model', 'keywords', 'keyword',
+            'query', 'page', 'field', 'fields',
+            'order', 'orderBy', 'per_page',
+            'size', 'num', 'limit',
+            'parent_id',
+            'category', 'cat_id',
+            'cat', 'channel'];
         foreach ($param as $key => $value) {
             if (in_array($key, $tags)) {
                 continue;
@@ -429,10 +436,54 @@ class FuncHelper {
         return url('./form/save', compact('id'));
     }
 
+    public static function contentUrl(array $data) {
+        $args = [
+            'id' => $data['id'],
+            'category' => $data['cat_id'],
+            'model' => $data['model_id']
+        ];
+        if (isset($_GET['preview'])) {
+            $args['preview'] = $_GET['preview'];
+        }
+        return url('./content', $args);
+    }
+
+    public static function url($data) {
+        if (is_array($data)) {
+            return self::contentUrl($data);
+        }
+        $args = [];
+        if (isset($_GET['preview'])) {
+            $args['preview'] = $_GET['preview'];
+        }
+        return url($data, $args);
+    }
+
+    public static function registerFunc(ParserCompiler $compiler, $class, $method = null) {
+        if (empty($method)) {
+            list($class, $method) = [static::class, $class];
+        }
+        foreach ((array)$method as $item) {
+            $compiler->registerFunc($item, sprintf('%s::%s', $class, $item));
+        }
+        return $compiler;
+    }
+
     public static function register(ParserCompiler $compiler) {
-        $compiler->registerFunc('channel', '\Module\CMS\Domain\FuncHelper::channel')
-            ->registerFunc('channelActive', '\Module\CMS\Domain\FuncHelper::channelActive')
-            ->registerFunc('channels', function ($params = null) {
+        static::registerFunc($compiler, [
+            'channel',
+            'channelActive',
+            'content',
+            'field',
+            'markdown',
+            'formAction',
+            'location',
+            'previous',
+            'next',
+            'option',
+            'contentUrl',
+            'url',
+        ])->registerFunc('channels', function ($params = null) {
                 if ($params === -1) {
                     return '<?php endforeach; ?>';
                 }
@@ -472,15 +523,6 @@ class FuncHelper {
                 }
                 return sprintf('<?=%s->getLink()?>', $tag);
             })
-            ->registerFunc('content', '\Module\CMS\Domain\FuncHelper::content')
-            ->registerFunc('field', '\Module\CMS\Domain\FuncHelper::field')
-            ->registerFunc('markdown', '\Module\CMS\Domain\FuncHelper::markdown')
-            ->registerFunc('formAction', '\Module\CMS\Domain\FuncHelper::formAction')
-            ->registerFunc('location', '\Module\CMS\Domain\FuncHelper::location')
-            ->registerFunc('previous', '\Module\CMS\Domain\FuncHelper::previous')
-            ->registerFunc('next', '\Module\CMS\Domain\FuncHelper::next')
-            ->registerFunc('option', '\Module\CMS\Domain\FuncHelper::option')
-            ->registerFunc('url', '<?= $this->url(%s, isset($_GET[\'preview\']) ? [\'preview\' => $_GET[\'preview\']] : []) ?>')
             ->registerFunc('redirect', '\Infrastructure\HtmlExpand::toUrl');
         return $compiler;
     }
