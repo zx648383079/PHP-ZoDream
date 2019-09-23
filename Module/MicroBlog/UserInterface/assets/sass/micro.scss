@@ -19,6 +19,19 @@
                 float: left;
             }
         }
+        .title {
+            .tip {
+                display: none;
+                float: right;
+                font-weight: 700;
+                color: #777;
+                font-size: 12px;
+                em {
+                    font-style: normal;
+                    padding: 0 2px;
+                }
+            }
+        }
     }
     .micro-item {
         background-color: #fff;
@@ -80,17 +93,29 @@
                     height: 30px;
                 }
             }
+        }
+        .reply-input {
             .input {
                 textarea {
                     width: 100%;
                     height: 30px;
                     resize: none;
+                    padding: 6px 2px;
+                    line-height: 18px;
+                    font-size: 14px;
                 }
             }
-            .actions {
+            .input-actions {
                 text-align: right;
                 .tools {
                     float: left;
+                }
+                .btn {
+                    line-height: 25px;
+                    padding: 0 10px;
+                    &.btn-disable {
+                        background-color: #ccc;
+                    }
                 }
             }
         }
@@ -128,6 +153,9 @@
             &:not(:last-child) {
                 border-bottom: 1px solid #333;
             }
+        }
+        .reply-box {
+            background-color: #eaeaec;
         }
     }
 }

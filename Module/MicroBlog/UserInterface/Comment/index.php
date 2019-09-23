@@ -7,16 +7,16 @@ use Zodream\Template\View;
     <div class="avatar">
         <img src="<?=!auth()->guest() ? auth()->user()->avatar : '/assets/images/avatar/1.png'?>" alt="">
     </div>
-    <div>
+    <div class="reply-input">
         <div class="input">
-            <textarea name=""></textarea>
+            <textarea name="content"></textarea>
         </div>
-        <div class="actions">
+        <div class="input-actions">
             <div class="tools">
                 <i class="fa fa-smile"></i>
                 <i class="fa fa-image"></i>
             </div>
-            <button>发布</button>
+            <a class="btn" href="<?=$this->url('./comment/save', ['micro_id' => $id])?>">评论</a>
         </div>
     </div>
 </div>

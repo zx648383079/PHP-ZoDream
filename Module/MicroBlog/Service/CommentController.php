@@ -15,11 +15,11 @@ class CommentController extends ModuleController {
         ];
     }
 
-    public function indexAction($id) {
+    public function indexAction($id, $sort = 'created_at', $order = 'desc') {
         $comment_list = CommentModel::where([
             'micro_id' => intval($id),
             'parent_id' => 0,
-        ])->page();
+        ])->orderBy($sort, $order)->page();
         return $this->show(compact('comment_list', 'id'));
     }
 
@@ -44,7 +44,9 @@ class CommentController extends ModuleController {
         if (empty($model)) {
             return $this->jsonFailure('评论失败！');
         }
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess([
+            'url' => url('./comment', ['id' => $data['micro_id']])
+        ]);
     }
 
     public function disagreeAction($id) {

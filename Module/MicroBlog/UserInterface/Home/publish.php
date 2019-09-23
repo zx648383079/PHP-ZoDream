@@ -5,7 +5,11 @@ use Zodream\Template\View;
 ?>
 
 <div class="micro-publish">
-    <div class="title">有什么新鲜事想告诉大家?</div>
+    <div class="title">有什么新鲜事想告诉大家?
+        <div class="tip">
+            已输入<em>0</em>字
+        </div>
+    </div>
     <form action="<?=$this->url('./create')?>" method="post">
         <div class="input">
             <textarea name="content" required></textarea>

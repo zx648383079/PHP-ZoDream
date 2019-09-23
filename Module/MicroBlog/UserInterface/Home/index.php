@@ -13,6 +13,7 @@ $this->registerCssFile([
     '@micro.css'])
     ->registerJsFile([
         '@jquery.min.js',
+        '@main.min.js',
         '@micro.min.js'
     ])
     ->registerJs($js, View::JQUERY_READY);
