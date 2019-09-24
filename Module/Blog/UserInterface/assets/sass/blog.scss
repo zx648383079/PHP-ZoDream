@@ -106,7 +106,7 @@ $acolor: #333;
         margin-right: 200px;
         background-color: $defaultColor;
         padding: 30px 15px;
-        min-height: 800px;
+        min-height: 400px;
         position: relative;
         .book-fork {
             img {
@@ -252,9 +252,22 @@ $acolor: #333;
         }
         .content {
             margin-bottom: 40px;
+            max-height: 300px;
+            overflow-y: hidden;
             a {
                 color: #06a;
             }
+        }
+        .toggle-open {
+            background-color: rgba(255, 255, 255, .9);
+            line-height: 40px;
+            text-align: center;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 60px;
+            color: #777;
+            cursor: pointer;
         }
         .tools {
             border-top: 1px dotted $activeColor;
@@ -269,6 +282,14 @@ $acolor: #333;
             .disagree {
                 float: right;
                 margin-left: 20px;
+            }
+        }
+        &.open {
+            .content {
+                max-height: inherit;
+            }
+            .toggle-open {
+                display: none;
             }
         }
     }

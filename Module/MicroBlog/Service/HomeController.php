@@ -3,6 +3,7 @@ namespace Module\MicroBlog\Service;
 
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\ModuleController;
+use Zodream\Service\Config;
 use Zodream\Service\Factory;
 
 class HomeController extends ModuleController {
@@ -61,5 +62,9 @@ class HomeController extends ModuleController {
             return false;
         }
         return Factory::root()->file('UserInterface/Home/layouts/main.php');
+    }
+
+    public function redirectWithAuth() {
+        return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);
     }
 }

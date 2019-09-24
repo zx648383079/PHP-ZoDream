@@ -75,6 +75,9 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
             commentBox.html(html);
         });
     }
+    $('.book-body .toggle-open').click(function() {
+        $(this).closest('.book-body').toggleClass('open');
+    });
     $('.recommend-blog').click(function () {
         let that = $(this).find('b');
         $.getJSON(baseUri + 'recommend', {

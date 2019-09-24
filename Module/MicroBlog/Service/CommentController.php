@@ -3,6 +3,7 @@ namespace Module\MicroBlog\Service;
 
 use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\ModuleController;
+use Zodream\Service\Config;
 
 class CommentController extends ModuleController {
 
@@ -81,5 +82,9 @@ class CommentController extends ModuleController {
 
     public function logAction() {
         CommentModel::alias('c');
+    }
+
+    public function redirectWithAuth() {
+        return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);
     }
 }

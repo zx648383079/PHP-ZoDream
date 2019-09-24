@@ -303,7 +303,7 @@
     margin-right: 200px;
     background-color: #f9cfa6;
     padding: 30px 15px;
-    min-height: 800px;
+    min-height: 400px;
     position: relative; }
     .book-skin .book-body .book-fork img {
       position: absolute;
@@ -416,9 +416,21 @@
             background-color: #f9cfa6;
             color: #333; }
     .book-skin .book-body .content {
-      margin-bottom: 40px; }
+      margin-bottom: 40px;
+      max-height: 300px;
+      overflow-y: hidden; }
       .book-skin .book-body .content a {
         color: #06a; }
+    .book-skin .book-body .toggle-open {
+      background-color: rgba(255, 255, 255, 0.9);
+      line-height: 40px;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 60px;
+      color: #777;
+      cursor: pointer; }
     .book-skin .book-body .tools {
       border-top: 1px dotted #af5d0d;
       line-height: 40px;
@@ -431,6 +443,10 @@
       .book-skin .book-body .tools .disagree {
         float: right;
         margin-left: 20px; }
+    .book-skin .book-body.open .content {
+      max-height: inherit; }
+    .book-skin .book-body.open .toggle-open {
+      display: none; }
   .book-skin .book-footer.comment {
     margin-top: 50px;
     margin-right: 200px;
