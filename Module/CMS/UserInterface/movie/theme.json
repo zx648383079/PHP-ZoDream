@@ -23,19 +23,111 @@
             "name": "nav"
         },
         {
+            "action": "linkage",
+            "name": "清晰度",
+            "code": "definition",
+            "data": [
+                {
+                    "name": "标清"
+                },
+                {
+                    "name": "高清"
+                }
+            ]
+        },
+        {
+            "action": "linkage",
+            "name": "地区",
+            "code": "area",
+            "data": [
+                {
+                    "name": "大陆"
+                },
+                {
+                    "name": "欧美"
+                }
+            ]
+        },
+        {
             "action": "model",
-            "name": "图片",
-            "table": "images",
+            "name": "剧集",
+            "table": "series",
             "fields": [{
                     "action": "disable",
                     "field": "content"
-                },
-                {
-                    "name": "图片",
-                    "field": "image",
-                    "type": "file"
                 }
             ]
+        },
+        {
+            "action": "model",
+            "name": "视频",
+            "table": "videos",
+            "child": "@model:series",
+            "fields": [
+                {
+                    "name": "清晰度",
+                    "field": "definition",
+                    "type": "@linkage:definition"
+                },
+                {
+                    "name": "导演",
+                    "field": "video_kind"
+                },
+                {
+                    "name": "主演",
+                    "field": "video_kind"
+                },
+                {
+                    "name": "年份",
+                    "field": "age"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "电影",
+            "name": "movie",
+            "type": "@model:videos",
+            "image": "/assets/images/movie.jpg",
+            "group": "nav",
+            "children": [{
+                    "title": "战争片",
+                    "name": "war_movie",
+                    "type": "@model:videos",
+                    "image": "/assets/images/movie.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "电视剧",
+            "name": "tv",
+            "type": "@model:videos",
+            "image": "/assets/images/movie.jpg",
+            "group": "nav",
+            "children": [{
+                    "title": "欧美剧",
+                    "name": "ou_tv",
+                    "type": "@model:videos",
+                    "image": "/assets/images/movie.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "动漫",
+            "name": "anime",
+            "type": "@model:videos",
+            "image": "/assets/images/movie.jpg",
+            "group": "nav"
+        },
+        {
+            "action": "channel",
+            "title": "综艺",
+            "name": "anime",
+            "type": "@model:videos",
+            "image": "/assets/images/movie.jpg",
+            "group": "nav"
         }
     ]
 }
