@@ -1,10 +1,11 @@
 @import "scrollbar";
+@import "theme";
 body {
-    background-color: #f4f4f4;
+    background-color: $bodyBg;
 }
 
 a {
-    color: #333;
+    color: $fg;
     text-decoration: none;
 }
 
@@ -16,10 +17,10 @@ a {
 }
 header,
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: $headerBg;
+    color: $headerFg;
     a {
-        color: #fff;
+        color: $headerFg;
     }
     ul,
     li {
@@ -78,9 +79,9 @@ footer {
         width: 300px;
         font-size: 30px;
         text-align: center;
-        background-color: #fff;
+        background-color: $bg;
         margin: 8px;
-        box-shadow: rgba(#333, .7) 0 0 10px;
+        box-shadow: $shadow 0 0 10px;
         position: relative;
         overflow: hidden;
         &.unknow {
@@ -113,12 +114,12 @@ footer {
 }
 
 .panel {
-    background-color: #fff;
+    background-color: $bg;
     margin-bottom: 20px;
     .panel-header {
         line-height: 50px;
         padding-left: 20px;
-        border-left: 5px solid #333;
+        border-left: 5px solid $border;
         font-size: 20px;
         font-weight: 700;
     }
@@ -134,10 +135,10 @@ footer {
             }
             .time {
                 text-align: right;
-                color: #ccc;
+                color: $secondaryFg;
             }
             &:hover {
-                box-shadow: rgba(#333, .7) 0 0 10px;  
+                box-shadow: $shadow 0 0 10px;  
             }
         }
         &.scoll-box {
@@ -151,7 +152,7 @@ footer {
             }
         }
         .note-item {
-            border-bottom: rgba(0,0,0,0.1) solid 1px;
+            border-bottom: rgba($border, .1) solid 1px;
             box-sizing: border-box;
             padding: 10px;
             counter-increment: item-counter;
@@ -186,7 +187,7 @@ footer {
         bottom: 0;
         left: 0;
         right: 0;
-        background: #333;
+        background: $headerBg;
         transform: scaleX(0);
         transform-origin: 50%;
         transition-property: transform;
@@ -237,20 +238,20 @@ footer {
     }
     button {
         width: 100px;
-        border: 1px solid #333;
+        border: 1px solid $border;
         border-radius: 0;
     }
 }
 
 .about-box,
 .contact-box {
-    background-color: #fff;
+    background-color: $bg;
     padding: 20px;
     .heading {
         h3, 
         h1, 
         h2 {
-            color: #333;
+            color: $fg;
             font-size: 2.1em;
             font-weight: 500;
             margin: 0;
@@ -274,7 +275,7 @@ footer {
             font-family: 'Play-Regular';
         }
         p {
-            color: rgb(179, 177, 177);
+            color: $secondaryFg;
             font-size: 15px;
             margin: 5px 0px 0px;
             font-family: 'Play-Regular';
@@ -285,14 +286,14 @@ footer {
 
 .friend-box {
     margin: 50px 0;
-    background-color: #fff;
+    background-color: $bg;
     min-height: 300px;
     line-height: 40px;
     padding: 20px 10px;
     .friend-link {
         grid-template-columns: 150px 1fr;
         > div:first-child {
-            border-right: 5px solid #333;
+            border-right: 5px solid $border;
             font-size: 20px;
         }
     }
@@ -300,9 +301,10 @@ footer {
 
 .friend-apply {
     text-align: right;
+    margin-bottom: 30px;
     .btn {
-        border: 1px solid #333;
-        background-color: #fff;
+        border: 1px solid $border;
+        background-color: $bg;
     }
 }
 

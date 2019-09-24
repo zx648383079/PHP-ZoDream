@@ -13,7 +13,7 @@ a {
 
 header,
 footer {
-  background-color: #333;
+  background-color: #A10000;
   color: #fff; }
   header a,
   footer a {
@@ -96,7 +96,7 @@ footer {
   .panel .panel-header {
     line-height: 50px;
     padding-left: 20px;
-    border-left: 5px solid #333;
+    border-left: 5px solid #A10000;
     font-size: 20px;
     font-weight: 700; }
   .panel .panel-body .list-item {
@@ -109,7 +109,7 @@ footer {
       overflow: hidden; }
     .panel .panel-body .list-item .time {
       text-align: right;
-      color: #ccc; }
+      color: #b3b1b1; }
     .panel .panel-body .list-item:hover {
       box-shadow: rgba(51, 51, 51, 0.7) 0 0 10px; }
   .panel .panel-body.scoll-box {
@@ -138,7 +138,7 @@ footer {
       line-height: 30px;
       display: block; }
   .panel .panel-body .note-item {
-    border-bottom: rgba(0, 0, 0, 0.1) solid 1px;
+    border-bottom: rgba(161, 0, 0, 0.1) solid 1px;
     box-sizing: border-box;
     padding: 10px;
     counter-increment: item-counter;
@@ -169,7 +169,7 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #333;
+    background: #A10000;
     -webkit-transform: scaleX(0);
             transform: scaleX(0);
     -webkit-transform-origin: 50%;
@@ -211,7 +211,7 @@ footer {
     height: 192px; }
   .contact-box button {
     width: 100px;
-    border: 1px solid #333;
+    border: 1px solid #A10000;
     border-radius: 0; }
 
 .about-box,
@@ -257,13 +257,14 @@ footer {
   .friend-box .friend-link {
     grid-template-columns: 150px 1fr; }
     .friend-box .friend-link > div:first-child {
-      border-right: 5px solid #333;
+      border-right: 5px solid #A10000;
       font-size: 20px; }
 
 .friend-apply {
-  text-align: right; }
+  text-align: right;
+  margin-bottom: 30px; }
   .friend-apply .btn {
-    border: 1px solid #333;
+    border: 1px solid #A10000;
     background-color: #fff; }
 
 .apply-dialog input {

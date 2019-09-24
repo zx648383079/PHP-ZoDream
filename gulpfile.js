@@ -17,6 +17,7 @@ var gulp = require('gulp'),
     jsRoot = moduleRoot + 'UserInterface/assets/js/',
     tsRoot = moduleRoot + 'UserInterface/assets/ts/',
     cssRoot = moduleRoot + 'UserInterface/assets/sass/',
+    sassIncludes = [cssRoot].concat(bourbon, neat),
     jsDist = 'html/assets/js',
     mo = undefined,
     mode = 'dev',
@@ -84,7 +85,7 @@ function sassTask() {
         return gulp.src(cssRoot + "*.scss")
             .pipe(sass({
                 sourcemaps: false,
-                includePaths: [bourbon, neat]  // 引入其他的
+                includePaths: sassIncludes  // 引入其他的
             }))
             .pipe(autoprefixer())
             .pipe(minCss())
@@ -94,7 +95,7 @@ function sassTask() {
         .pipe(sourcemaps.init())
         .pipe(sass({
             sourcemaps: true,
-            includePaths: [bourbon, neat]  // 引入其他的
+            includePaths: sassIncludes  // 引入其他的
         }))
         .pipe(autoprefixer())
         .pipe(sourcemaps.write('./'))

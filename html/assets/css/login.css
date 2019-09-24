@@ -14,21 +14,28 @@
       outline: none;
       border-bottom: 1px solid #767676; }
     .login-box .login-form .input-group .fa {
-      transition: all .5s; }
+      transition: all .5s;
+      color: #CC2525; }
     .login-box .login-form .input-group.input-focus input {
       padding-left: 0;
       padding-right: 30px;
-      border-bottom: 2px solid #000; }
+      border-bottom: 2px solid #A10000; }
     .login-box .login-form .input-group.input-focus .fa {
       left: 280px;
       color: #767676; }
+    .login-box .login-form .input-group.error .fa {
+      color: red; }
+    .login-box .login-form .input-group.error input[type="text"],
+    .login-box .login-form .input-group.error input[type="email"],
+    .login-box .login-form .input-group.error input[type="password"] {
+      border-bottom-color: red; }
     .login-box .login-form .btn {
-      background: #333;
+      background: #CC2525;
       color: #fff;
       width: 100%;
       margin: 0; }
       .login-box .login-form .btn:hover {
-        background: #000; }
+        background: #A10000; }
     .login-box .login-form a {
       color: #333;
       text-decoration: none; }
@@ -39,7 +46,8 @@
       .login-box .login-form .other-box .fa {
         float: right;
         line-height: 30px;
-        margin-right: 10px; }
+        margin-right: 10px;
+        color: #CC2525; }
     .login-box .login-form .login-qr-box {
       position: absolute;
       top: 0;
@@ -51,7 +59,7 @@
         top: 106px;
         left: 129px;
         font-size: 50px;
-        color: #f00;
+        color: red;
         display: none; }
       .login-box .login-form .login-qr-box .scan-box,
       .login-box .login-form .login-qr-box .success-box,
@@ -88,7 +96,7 @@
       border-bottom: 1px solid #767676; }
     .login-box .login-oauth-box a {
       font-size: 30px;
-      color: #333;
+      color: #CC2525;
       margin: 5px; }
   .login-box.slided .login-form {
     -webkit-transform: translate(-300px, 0);
@@ -96,7 +104,7 @@
     min-height: 300px; }
 
 .footer {
-  background: #000;
+  background: #A10000;
   color: #fff;
   font-weight: 400;
   font-size: 14px;

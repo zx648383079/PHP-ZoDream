@@ -1,3 +1,4 @@
+@import 'theme';
 .login-box {
     max-width: 300px;
     margin: 20vh auto 40vh;
@@ -11,33 +12,44 @@
         .input-group {
             input[type="text"],
             input[type="email"],
-            input[type="password"], {
+            input[type="password"] {
                 border: none;
                 outline: none;
                 border-bottom: 1px solid #767676;
             }
             .fa {
                 transition: all .5s;
+                color: $secondary;
             }
             &.input-focus {
                 input {
                     padding-left: 0;
                     padding-right: 30px;
-                    border-bottom: 2px solid #000;
+                    border-bottom: 2px solid $headerBg;
                 }
                 .fa {
                     left: 280px;
                     color: #767676;
                 }
             }
+            &.error {
+                .fa {
+                    color: $error;
+                }
+                input[type="text"],
+                input[type="email"],
+                input[type="password"] {
+                    border-bottom-color: $error;
+                }
+            }
         }
         .btn {
-            background: #333;
-            color: #fff;
+            background: $secondary;
+            color: $headerFg;
             width: 100%;
             margin: 0;
             &:hover {
-                background: #000;
+                background: $headerBg;
             }
         }
         a {
@@ -53,6 +65,7 @@
                 float: right;
                 line-height: 30px;
                 margin-right: 10px;
+                color: $secondary;
             }
         }
         .login-qr-box {
@@ -67,7 +80,7 @@
                     top: 106px;
                     left: 129px;
                     font-size: 50px;
-                    color: #f00;
+                    color: $error;
                     display: none;
                 }
             }
@@ -126,7 +139,7 @@
         }
         a {
             font-size: 30px;
-            color: #333;
+            color: $secondary;
             margin: 5px;
         }
     }
@@ -138,15 +151,15 @@
     }
 }
 .footer {
-    background: #000;
-    color: #fff;
+    background: $headerBg;
+    color: $headerFg;
     font-weight: 400;
     font-size: 14px;
     padding: 32px 20px;
     position: relative;
     text-align: center;
     a {
-        color: #fff;
+        color: $headerFg;
         text-decoration: none;
     }
 }

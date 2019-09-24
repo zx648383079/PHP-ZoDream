@@ -270,25 +270,25 @@
           top: 40px;
           left: 5px;
           font-size: 20px;
-          color: #f9cfa6; }
+          color: #fff; }
         .book-skin .book-title .book-nav > li.book-search input {
           font-size: 20px;
           padding-left: 25px;
           background: transparent;
-          border: 1px solid #f9cfa6;
+          border: 1px solid #fff;
           display: none; }
         .book-skin .book-title .book-nav > li.book-search .search-tip {
           position: absolute;
           top: 63px;
           z-index: 99;
           line-height: 25px;
-          background: #f9cfa6;
+          background: #fff;
           width: 100%;
           display: none; }
           .book-skin .book-title .book-nav > li.book-search .search-tip li {
             list-style: none; }
             .book-skin .book-title .book-nav > li.book-search .search-tip li:hover {
-              background: #af5d0d;
+              background: #A10000;
               color: #fff; }
         .book-skin .book-title .book-nav > li.book-search input:focus + .search-tip,
         .book-skin .book-title .book-nav > li.book-search.focus .search-tip {
@@ -301,7 +301,7 @@
         display: none; }
   .book-skin .book-body {
     margin-right: 200px;
-    background-color: #f9cfa6;
+    background-color: #fff;
     padding: 30px 15px;
     min-height: 400px;
     position: relative; }
@@ -338,7 +338,7 @@
         line-height: 30px;
         text-align: center;
         position: relative;
-        background: #f9cfa6; }
+        background: #fff; }
         .book-skin .book-body .book-sort a:after {
           position: absolute;
           content: "";
@@ -349,10 +349,10 @@
           border: transparent 25px solid;
           border-top-color: rgba(0, 0, 0, 0.6); }
         .book-skin .book-body .book-sort a.active {
-          background: #af5d0d;
+          background: #A10000;
           color: #fff; }
           .book-skin .book-body .book-sort a.active:after {
-            border-top-color: #af5d0d; }
+            border-top-color: #A10000; }
     .book-skin .book-body .book-item {
       margin: 0 -15px;
       padding: 15px 20px 5px;
@@ -382,19 +382,19 @@
       .book-skin .book-body .book-item:hover dd, .book-skin .book-body .book-item:nth-child(2) dd, .book-skin .book-body .book-item:nth-child(3) dd, .book-skin .book-body .book-item:nth-child(4) dd {
         display: block; }
       .book-skin .book-body .book-item:hover {
-        box-shadow: rgba(33, 33, 33, 0.7) 0 0 10px; }
+        box-shadow: rgba(51, 51, 51, 0.7) 0 0 10px; }
       .book-skin .book-body .book-item:not(:last-child) {
-        border-bottom: 1px solid #af5d0d; }
+        border-bottom: 1px solid #A10000; }
       .book-skin .book-body .book-item.fade-pre-item {
         visibility: hidden; }
       .book-skin .book-body .book-item.fade-item {
         -webkit-animation-name: fadeInLeft;
                 animation-name: fadeInLeft;
-        background: #f9cfa6;
+        background: #fff;
         border-bottom: none;
         visibility: visible; }
     .book-skin .book-body .info {
-      border-bottom: 1px dotted #af5d0d;
+      border-bottom: 1px dotted #A10000;
       line-height: 40px; }
       .book-skin .book-body .info span,
       .book-skin .book-body .info a {
@@ -403,17 +403,17 @@
       .book-skin .book-body .info .language-toggle {
         display: inline-block;
         margin-right: 20px;
-        border: 1px solid #af5d0d;
+        border: 1px solid #A10000;
         border-bottom: none; }
         .book-skin .book-body .info .language-toggle a {
           display: inline-block;
-          background-color: #af5d0d;
+          background-color: #A10000;
           color: #fff;
           margin: 0;
           width: 40px;
           text-align: center; }
           .book-skin .book-body .info .language-toggle a.active {
-            background-color: #f9cfa6;
+            background-color: #fff;
             color: #333; }
     .book-skin .book-body .content {
       margin-bottom: 40px;
@@ -432,7 +432,7 @@
       color: #777;
       cursor: pointer; }
     .book-skin .book-body .tools {
-      border-top: 1px dotted #af5d0d;
+      border-top: 1px dotted #A10000;
       line-height: 40px;
       position: absolute;
       bottom: 0;
@@ -450,7 +450,7 @@
   .book-skin .book-footer.comment {
     margin-top: 50px;
     margin-right: 200px;
-    background: #f9cfa6;
+    background: #fff;
     padding: 15px;
     position: relative; }
 
@@ -458,16 +458,16 @@
   float: left; }
   .book-pager li {
     list-style: none;
-    background: #f9cfa6;
+    background: #fff;
     width: 40px;
     line-height: 40px;
     text-align: center;
     float: left;
-    border-top: 1px dotted #af5d0d; }
+    border-top: 1px dotted #A10000; }
     .book-pager li a {
       display: block; }
     .book-pager li.active {
-      background: #af5d0d;
+      background: #A10000;
       color: #fff; }
     .book-pager li:hover {
       font-weight: 700; }
@@ -479,7 +479,7 @@
 
 .book-comments .title {
   font-size: 20px;
-  border-left: 5px solid #af5d0d;
+  border-left: 5px solid #A10000;
   padding-left: 10px;
   margin-top: 15px; }
   .book-comments .title .order {
@@ -498,7 +498,7 @@
       font-weight: 600; }
     .book-comments .comment-item .info .time {
       margin-left: 20px;
-      color: #767676; }
+      color: #b3b1b1; }
     .book-comments .comment-item .info .floor {
       float: right; }
   .book-comments .comment-item .content p {
@@ -515,7 +515,7 @@
     width: 200px;
     text-align: center;
     top: 30px;
-    background: #f9cfa6;
+    background: #fff;
     font-size: 20px;
     line-height: 40px; }
     .book-comments .comment-item .actions span {
@@ -523,12 +523,12 @@
   .book-comments .comment-item .comments {
     padding-left: 100px;
     margin-top: 8px;
-    border-top: 1px solid #af5d0d; }
+    border-top: 1px solid #A10000; }
     .book-comments .comment-item .comments .comment-item:last-child {
       border: none;
       padding-bottom: 0; }
   .book-comments .comment-item:not(:last-child) {
-    border-bottom: 1px solid #af5d0d; }
+    border-bottom: 1px solid #A10000; }
 
 .book-comments.hot-comments .title {
   margin-top: 0; }
@@ -549,7 +549,7 @@
   top: 130px; }
   .book-sidebar .book-chapter li,
   .book-sidebar .book-new li {
-    background: #f9cfa6;
+    background: #fff;
     list-style: none;
     width: 150px;
     line-height: 30px;
@@ -560,7 +560,7 @@
       margin-right: 5px; }
     .book-sidebar .book-chapter li.active,
     .book-sidebar .book-new li.active {
-      background: #af5d0d;
+      background: #A10000;
       color: #fff;
       width: 200px; }
       .book-sidebar .book-chapter li.active:hover,
@@ -574,7 +574,7 @@
       width: 175px; }
     .book-sidebar .book-chapter li:not(:last-child),
     .book-sidebar .book-new li:not(:last-child) {
-      border-bottom: 1px solid #af5d0d; }
+      border-bottom: 1px solid #A10000; }
   .book-sidebar .book-new {
     margin-top: 50px; }
     .book-sidebar .book-new h3 {
@@ -587,8 +587,8 @@
   .book-dynamic h3 {
     padding-left: 10px; }
   .book-dynamic dl {
-    background: #f9cfa6;
-    border-bottom: 1px solid #af5d0d; }
+    background: #fff;
+    border-bottom: 1px solid #A10000; }
     .book-dynamic dl dt {
       line-height: 30px;
       font-size: 12px; }
@@ -603,18 +603,18 @@
       .book-dynamic dl dd p {
         margin: 5px 0; }
     .book-dynamic dl:hover dt {
-      background: #af5d0d;
+      background: #A10000;
       color: #fff; }
     .book-dynamic dl:hover dd {
       display: block; }
 
 .book-side-nav li {
   font-size: 12px;
-  background: #f9cfa6;
+  background: #fff;
   list-style: none;
   width: 150px;
   line-height: 30px;
-  border-bottom: 1px solid #af5d0d;
+  border-bottom: 1px solid #A10000;
   padding-left: 20px;
   box-sizing: border-box; }
   .book-side-nav li.nav-level-0 {
@@ -622,12 +622,12 @@
     font-weight: 600; }
   .book-side-nav li.nav-level-1 {
     width: 175px;
-    color: #767676; }
+    color: #b3b1b1; }
   .book-side-nav li.nav-level-2 {
-    color: #767676;
+    color: #b3b1b1;
     width: 200px; }
   .book-side-nav li.active {
-    background: #af5d0d;
+    background: #A10000;
     color: #fff; }
     .book-side-nav li.active a {
       color: #fff; }
@@ -640,7 +640,7 @@
 
 .book-comment-form .title {
   font-size: 20px;
-  border-left: 5px solid #af5d0d;
+  border-left: 5px solid #A10000;
   padding-left: 10px;
   margin-top: 15px; }
 
@@ -659,7 +659,7 @@
       display: table-cell;
       background: transparent;
       border: none;
-      border-bottom: 1px solid #af5d0d;
+      border-bottom: 1px solid #A10000;
       font-size: 20px;
       width: 100%; }
 
@@ -668,12 +668,12 @@
   height: 100px;
   resize: none;
   background: transparent;
-  border: 1px solid #af5d0d;
+  border: 1px solid #A10000;
   font-size: 20px; }
 
 .book-comment-form button {
   line-height: 30px;
-  background: #af5d0d;
+  background: #A10000;
   padding: 0 20px;
   border: none; }
 
@@ -762,7 +762,7 @@
       width: 100%; }
       .book-skin .book-sidebar .book-chapter li.active {
         width: 100%;
-        background: #af5d0d;
+        background: #A10000;
         color: #fff; }
         .book-skin .book-sidebar .book-chapter li.active:hover {
           width: 100%; }
@@ -770,7 +770,7 @@
           color: #fff; }
       .book-skin .book-sidebar .book-chapter li:hover {
         width: 100%;
-        background: #d39357;
+        background: #CC2525;
         color: #fff; }
   .book-skin .book-sidebar .book-dynamic,
   .book-skin .book-sidebar .book-new,
