@@ -82,12 +82,7 @@ class LinkageController extends Controller {
     }
 
     public function treeAction($id) {
-        $data = cache()->getOrSet('cms_linkage_tree_'.$id, function () use ($id) {
-            $tree = new Tree(LinkageDataModel::query()->where('linkage_id', $id)
-                ->select('id', 'name', 'parent_id')->asArray()->all());
-            return $tree->makeIdTree();
-        }, 60);
-        return $this->jsonSuccess($data);
+        return $this->jsonSuccess(LinkageModel::idTree($id));
     }
 
 }

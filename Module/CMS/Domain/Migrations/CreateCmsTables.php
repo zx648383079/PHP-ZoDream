@@ -90,7 +90,7 @@ class CreateCmsTables extends Migration {
         Schema::createTable(LinkageModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
-            $table->set('type')->tinyint(1)->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('code')->char(20)->unique()->notNull();
         });
         Schema::createTable(LinkageDataModel::tableName(), function (Table $table) {

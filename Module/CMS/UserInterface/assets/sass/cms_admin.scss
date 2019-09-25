@@ -46,6 +46,8 @@ table {
     text-align: center;
     display: inline-block;
     .thumb {
+        max-height: 200px;
+        overflow-y: auto;
         img {
             width: 200px;
         }

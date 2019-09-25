@@ -31,7 +31,7 @@ $this->title = '本地主题';
             <div class="name"><?=$item['name']?></div>
             <div class="desc"><?=$item['description']?></div>
             <a data-type="del" data-tip="是否确定清空数据并使用此主题？" href="<?=$this->url('./admin/theme/apply',
-                ['theme' => $current['name']], false)?>" class="btn">使用</a>
+                ['theme' => $item['name']], false)?>" class="btn">使用</a>
         </div>
         <?php endforeach;?>
     </div>

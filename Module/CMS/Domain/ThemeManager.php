@@ -268,7 +268,10 @@ class ThemeManager {
     protected function runActionLinkage($data) {
         $items = isset($data['data']) ? $data['data'] : [];
         unset($data['data'], $data['action']);
-        $model = LinkageModel::create($data);
+        $model = LinkageModel::where('code', $data['code'])->first();
+        if (empty($model)) {
+            $model = LinkageModel::create($data);
+        }
         if (!$model) {
             throw new Exception('数据错误');
         }
@@ -300,7 +303,10 @@ class ThemeManager {
         if (isset($data['setting']) && is_array($data['setting'])) {
             $data['setting'] = Json::encode($data['setting']);
         }
-        $model = ModelModel::create($data);
+        $model = ModelModel::where('`table`', $data['table'])->first();
+        if (empty($model)) {
+            $model = ModelModel::create($data);
+        }
         if (!$model) {
             throw new Exception('数据错误');
         }
@@ -362,7 +368,10 @@ class ThemeManager {
         if (isset($data['group'])) {
             $data['groups'] = implode(',', (array)$data['group']);
         }
-        $model = CategoryModel::create($data);
+        $model = CategoryModel::where('name', $data['name'])->first();
+        if (empty($model)) {
+            $model = CategoryModel::create($data);
+        }
         if (!$model) {
             throw new Exception('数据错误');
         }
@@ -398,7 +407,10 @@ class ThemeManager {
         if ($this->getCacheId($item['name'], 'group') > 0) {
             return;
         }
-        $model = GroupModel::create($item);
+        $model = GroupModel::where('name', $item['name'])->first();
+        if (empty($model)) {
+            $model = GroupModel::create($item);
+        }
         if ($model) {
             $this->setCache([$model->name => $model->id], 'group');
         }

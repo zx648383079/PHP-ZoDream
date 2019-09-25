@@ -3,6 +3,8 @@ namespace Module\CMS\Domain;
 
 use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\LinkageDataModel;
+use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
@@ -170,6 +172,7 @@ class FuncHelper {
         }
         $keywords = static::getVal($param, ['keywords', 'keyword', 'query']);
         $page = intval(static::getVal($param, ['page'], 1));
+        $param['parent_id'] = static::getVal($param, ['parent_id', 'parent'], 0);
         $fields = static::getVal($param, ['field', 'fields']);
         $order = static::getVal($param, ['order', 'orderBy'], 'updated_at desc');
         if (strpos($order, '_') > 0) {
@@ -183,9 +186,10 @@ class FuncHelper {
             'query', 'page', 'field', 'fields',
             'order', 'orderBy', 'per_page',
             'size', 'num', 'limit',
-            'parent_id',
+            'parent',
             'category', 'cat_id',
             'cat', 'channel'];
+        // 通过标签提前过滤
         foreach ($param as $key => $value) {
             if (in_array($key, $tags)) {
                 continue;
@@ -393,7 +397,7 @@ class FuncHelper {
             return $data;
         }
         if ($name === 'url') {
-            return url('./content', ['id' => $data['id'], 'category' => $category]);
+            return self::url($data);
         }
         return isset($data[$name]) ? $data[$name] : null;
     }
@@ -425,6 +429,44 @@ class FuncHelper {
             }
         }
         return $default;
+    }
+
+    public static function linkage($id) {
+        if (!is_numeric($id)) {
+            $id = LinkageModel::where('code', $id)->value('id');
+        }
+        if (empty($id)) {
+            return [];
+        }
+        return LinkageModel::idTree($id);
+    }
+
+    public static function range($start, $end, $step = 1) {
+        if (empty($step)) {
+            $step = 1;
+        }
+        $step = abs(intval($step));
+        if (!is_numeric($start)) {
+            $start = intval(date($start));
+        }
+        if (!is_numeric($end)) {
+            $end = intval(date($end));
+        }
+        if ($start > $end) {
+            $step *= -1;
+        }
+        $items = [];
+        while (true) {
+            $items[] = $start;
+            $start += $step;
+            if (
+            ($step > 0 && $start > $end)
+            || ($step < 0 && $start < $end)
+            ) {
+                break;
+            }
+        }
+        return $items;
     }
 
     /**
@@ -469,6 +511,20 @@ class FuncHelper {
         return $compiler;
     }
 
+    public static function registerBlock(ParserCompiler $compiler, $method, $item = 'item') {
+        return $compiler->registerFunc($method,
+            function ($params = null) use ($method, $item) {
+            if ($params === -1) {
+                return '<?php endforeach; ?>';
+            }
+            $i = count(static::$index);
+            $box = sprintf('$_%s_%d', $method, $i);
+            static::$index[] = $box;
+            return sprintf('<?php %s=%s::%s(%s); foreach(%s as $%s):?>', $box,
+                static::class, $method, $params, $box, $item);
+        }, true);
+    }
+
     public static function register(ParserCompiler $compiler) {
         static::registerFunc($compiler, [
             'channel',
@@ -483,36 +539,12 @@ class FuncHelper {
             'option',
             'contentUrl',
             'url',
-        ])->registerFunc('channels', function ($params = null) {
-                if ($params === -1) {
-                    return '<?php endforeach; ?>';
-                }
-                $i = count(static::$index);
-                $box = '$_channels_'.$i;
-                $item = 'channel';
-                static::$index[] = $box;
-                return sprintf('<?php %s=\Module\CMS\Domain\FuncHelper::channels(%s); foreach(%s as $%s):?>', $box, $params, $box, $item);
-            }, true)
-            ->registerFunc('contents', function ($params = null) {
-                if ($params === -1) {
-                    return '<?php endforeach; ?>';
-                }
-                $i = count(static::$index);
-                $box = '$_contents_'.$i;
-                $item = 'content';
-                static::$index[] = $box;
-                return sprintf('<?php %s=\Module\CMS\Domain\FuncHelper::contents(%s); foreach(%s as $%s):?>', $box, $params, $box, $item);
-            }, true)
-            ->registerFunc('contentPage', function ($params = null) {
-                if ($params === -1) {
-                    return '<?php endforeach; ?>';
-                }
-                $i = count(static::$index);
-                $box = '$_contents_page_'.$i;
-                $item = 'content';
-                static::$index[] = $box;
-                return sprintf('<?php %s=\Module\CMS\Domain\FuncHelper::contentPage(%s); foreach(%s as $%s):?>', $box, $params, $box, $item);
-            }, true)
+        ]);
+        static::registerBlock($compiler, 'channels', 'channel');
+        static::registerBlock($compiler, 'contents', 'content');
+        static::registerBlock($compiler, 'linkage');
+        static::registerBlock($compiler, 'range');
+        static::registerBlock($compiler, 'contentPage', 'content')
             ->registerFunc('pager', function ($index = 0) {
                 if ($index < 1) {
                     $index = count(static::$index) + $index;

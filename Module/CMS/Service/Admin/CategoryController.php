@@ -4,6 +4,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Module;
 
 class CategoryController extends Controller {
     public function indexAction() {
@@ -50,7 +51,21 @@ class CategoryController extends Controller {
     }
 
     public function deleteAction($id) {
-        CategoryModel::where('id', $id)->delete();
+        $items = CategoryModel::getChildrenWithParent($id);
+        $cat = CategoryModel::find($id);
+        $modelIds = CategoryModel::whereIn('id', $items)
+            ->where('model_id', '>', 0)
+            ->pluck('model_id');
+        if (empty($modelIds)) {
+            $model_list = ModelModel::whereIn('id', $modelIds)
+                ->get();
+            foreach ($model_list as $model) {
+                $scene = Module::scene()->setModel($model);
+                $ids = $scene->query()->whereIn('cat_id', $items)->pluck('id');
+                $scene->remove($ids);
+            }
+        }
+        CategoryModel::whereIn('id', $items)->delete();
         return $this->jsonSuccess([
             'url' => $this->getUrl('category')
         ]);

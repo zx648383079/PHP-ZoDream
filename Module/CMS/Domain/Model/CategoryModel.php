@@ -2,6 +2,7 @@
 namespace Module\CMS\Domain\Model;
 
 use Module\Cms\Domain\Entities\CategoryEntity;
+use Zodream\Helpers\Tree as TreeHelper;
 use Zodream\Html\Tree;
 
 /**
@@ -83,4 +84,11 @@ class CategoryModel extends CategoryEntity {
         return new Tree(static::query()->orderBy('position', 'asc')->all());
     }
 
+
+    public static function getChildrenWithParent($id) {
+        $data = TreeHelper::getTreeChild(self::query()->orderBy('parent_id', 'asc')
+            ->orderBy('id', 'asc')->get('id', 'parent_id'), $id);
+        $data[] = $id;
+        return $data;
+    }
 }

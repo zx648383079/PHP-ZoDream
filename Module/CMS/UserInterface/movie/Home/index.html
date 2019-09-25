@@ -33,13 +33,15 @@ var silder = $(".banner .slider").slider({
         
     </div>
     <div class="panel-body">
-        <a class="video-item">
+        {contents:category=movie num=10}
+        <a class="video-item" href="{url:$content}">
             <div class="thumb">
-                <img src="http://tva4.sinaimg.cn/large/007X8olVly1g77833cyqhj307i0b4q61.jpg" alt="">
+                <img src="{$content.thumb}" alt="{$content.title}">
                 <span class="play-icon"></span>
                 <span class="tag">高清</span>
             </div>
-            <div class="title">玩具总动员4</div>
+            <div class="title">{$content.title}</div>
         </a>
+        {/contents}
     </div>
 </div>

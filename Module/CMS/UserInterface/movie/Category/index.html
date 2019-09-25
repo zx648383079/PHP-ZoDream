@@ -6,26 +6,9 @@
             <div class="line-title">分类</div>
             <div class="line-body">
                 <a href="" class="active">全部</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
-                <a href="">北美</a>
+                {channels:parent=$cat.id}
+                <a href="{url:./category/list?id=:$channel.id}">{$channel.title}</a>
+                {/channels}
             </div>
             <div class="line-more">更多</div>
         </div>
@@ -33,24 +16,18 @@
             <div class="line-title">地区</div>
             <div class="line-body">
                 <a href="" class="active">全部</a>
-                <a href="">北美</a>
-                <a href="">欧洲</a>
+                {linkage:area}
+                <a href="">{$item.name}</a>
+                {/linkage}
             </div>
         </div>
         <div class="screen-line">
-            <div class="line-title">地区</div>
+            <div class="line-title">年份</div>
             <div class="line-body">
                 <a href="" class="active">全部</a>
-                <a href="">北美</a>
-                <a href="">欧洲</a>
-            </div>
-        </div>
-        <div class="screen-line">
-            <div class="line-title">地区</div>
-            <div class="line-body">
-                <a href="" class="active">全部</a>
-                <a href="">北美</a>
-                <a href="">欧洲</a>
+                {range:Y,1996}
+                <a href="">{$item}</a>
+                {/range}
             </div>
         </div>
     </div>
@@ -61,4 +38,17 @@
 <div class="tab-header">
     <a href="" class="active">电影</a>
     <a href="">电视剧</a>
+</div>
+
+<div>
+    {for:$page,$item}
+    <a class="video-item" href="{url:$item}">
+        <div class="thumb">
+            <img src="{$item.thumb}" alt="{$item.title}">
+            <span class="play-icon"></span>
+            <span class="tag">高清</span>
+        </div>
+        <div class="title">{$item.title}</div>
+    </a>
+    {/for}
 </div>

@@ -5,21 +5,18 @@
         <video src=""></video>
     </div>
     <div class="play-detail">
-        <div class="title"></div>
+        <div class="title">{$parent.title}</div>
         <div class="tags">
-            <span class="tag">分类</span>
-            <span>123123</span>
+            <span class="tag">分类:</span>
+            <span>{$cat.title}</span>
             <span class="split-line"></span>
-            <span class="tag">分类</span>
-            <span>123123</span>
-            <span class="split-line"></span>
-            <span class="tag">分类</span>
-            <span>123123</span>
+            <span class="tag">地区:</span>
+            <span>{$parent.area}</span>
         </div>
         <div class="play-action">
             <a href="" class="btn">刷新重试</a>
-            <a href="" class="btn">上一集</a>
-            <a href="" class="btn">下一集</a>
+            <a href="{previous:url}" class="btn">上一集</a>
+            <a href="{next:url}" class="btn">下一集</a>
         </div>
     </div>
 </div>
@@ -29,9 +26,9 @@
         分集
     </div>
     <div class="panel-body">
-        <a class="play-item">第一集</a>
-        <a class="play-item">第二集</a>
-        <a class="play-item">第三集</a>
+        {contents:category=$cat.id parent=$data.parent_id num=100}
+        <a class="play-item" href="{url:$content}">{$content.title}</a>
+        {/contents}
     </div>
 </div>
 <div class="panel">
@@ -39,11 +36,11 @@
         <i class="fa fa-file"></i>
         详细剧情
         <div class="tip">
-                更新时间：2019-09-22 20:21
+                更新时间：{this.time:$parent.updated_at}
         </div>
     </div>
     <div class="panel-body">
-        12312312312
+            {$data.content}
     </div>
 </div>
 

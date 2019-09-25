@@ -20,16 +20,22 @@ class ContentController extends Controller {
         FuncHelper::$current['model'] = $model->id;
         $scene = Module::scene()->setModel($model);
         $data = $scene->find($id);
+        $parent = null;
         if (empty($data)) {
             return $this->redirect('./');
         }
         $data['view_count'] ++;
         $scene->update($id, ['view_count' => $data['view_count']]);
+        if ($data['parent_id'] > 0 && $cat->model) {
+            $parent = Module::scene()
+                ->setModel($cat->model)->find($data['parent_id']);
+        }
+        Module::scene()->setModel($model);
         $title = $data['title'];
         return $this->show(
             $cat->model_id === $model->id
                 ? $cat->show_template
                 : $model->show_template,
-            compact('cat', 'data', 'title', 'model'));
+            compact('cat', 'data', 'title', 'model', 'parent'));
     }
 }

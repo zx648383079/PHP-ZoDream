@@ -201,13 +201,6 @@ class MultiScene extends BaseScene {
         return true;
     }
 
-    public function remove($id) {
-        $this->query()
-            ->where('id', $id)->delete();
-        $this->extendQuery()
-            ->where('id', $id)->delete();
-    }
-
     /**
      * @param $keywords
      * @param array $params
@@ -243,16 +236,5 @@ class MultiScene extends BaseScene {
             ->one();
         // 主表数据更重要
         return array_merge((array)$extend, $data);
-    }
-
-    /**
-     * @return Builder
-     */
-    public function query() {
-        return DB::table($this->getMainTable());
-    }
-
-    public function extendQuery() {
-        return DB::table($this->getExtendTable());
     }
 }

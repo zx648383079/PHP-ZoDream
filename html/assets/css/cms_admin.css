@@ -22,8 +22,11 @@ table .text-right {
 .theme-item {
   text-align: center;
   display: inline-block; }
-  .theme-item .thumb img {
-    width: 200px; }
+  .theme-item .thumb {
+    max-height: 200px;
+    overflow-y: auto; }
+    .theme-item .thumb img {
+      width: 200px; }
   .theme-item .name {
     line-height: 30px;
     font-weight: 600; }

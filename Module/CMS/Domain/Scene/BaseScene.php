@@ -5,6 +5,7 @@ use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Column;
 use Zodream\Helpers\Str;
@@ -25,6 +26,41 @@ abstract class BaseScene implements SceneInterface {
         $this->model = $model;
         $this->site = $site;
         return $this;
+    }
+
+    public function remove($id) {
+        foreach ([
+                     $this->query(),
+                     $this->extendQuery()
+                 ] as $query) {
+            /** @var Builder $query */
+            if (is_array($id)) {
+                $query->whereIn('id', $id)->delete();
+                continue;
+            }
+            if (!is_callable($id)) {
+                $query->where('id', $id)->delete();
+                continue;
+            }
+            if (call_user_func($id, $query) === false) {
+                return;
+            }
+            $query->delete();
+        }
+    }
+
+    /**
+     * @return Builder
+     */
+    public function query() {
+        return DB::table($this->getMainTable());
+    }
+
+    /**
+     * @return Builder
+     */
+    public function extendQuery() {
+        return DB::table($this->getExtendTable());
     }
 
     /**

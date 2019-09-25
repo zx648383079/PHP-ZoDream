@@ -165,12 +165,7 @@ class SingleScene extends BaseScene {
         return true;
     }
 
-    public function remove($id) {
-        $this->query()
-            ->where('id', $id)->delete();
-        $this->extendQuery()
-            ->where('id', $id)->delete();
-    }
+
 
     /**
      * @param $keywords
@@ -207,11 +202,5 @@ class SingleScene extends BaseScene {
         return array_merge((array)$extend, $data);
     }
 
-    public function query() {
-        return DB::table($this->getMainTable());
-    }
 
-    public function extendQuery() {
-        return DB::table($this->getExtendTable());
-    }
 }

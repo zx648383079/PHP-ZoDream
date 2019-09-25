@@ -52,6 +52,7 @@
             "action": "model",
             "name": "剧集",
             "table": "series",
+            "show_template": "play",
             "fields": [{
                     "action": "disable",
                     "field": "content"
@@ -71,11 +72,16 @@
                 },
                 {
                     "name": "导演",
-                    "field": "video_kind"
+                    "field": "director"
                 },
                 {
                     "name": "主演",
-                    "field": "video_kind"
+                    "field": "leader"
+                },
+                {
+                    "name": "地区",
+                    "field": "area",
+                    "type": "@linkage:area"
                 },
                 {
                     "name": "年份",

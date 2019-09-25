@@ -1,4 +1,3 @@
-@charset "UTF-8";
 body {
   background: #f0f0f0;
   color: #666; }
@@ -203,21 +202,21 @@ a {
   grid-template-columns: 200px 1fr;
   gap: 10px; }
 
-.info-header .header-detail，
+.info-header .header-detail,
 .play-box .play-detail {
   color: #333; }
-  .info-header .header-detail，
-.play-box .play-detail .title {
+  .info-header .header-detail .title,
+  .play-box .play-detail .title {
     line-height: 40px;
     font-weight: 700; }
-  .info-header .header-detail，
-.play-box .play-detail .tag {
+  .info-header .header-detail .tag,
+  .play-box .play-detail .tag {
     color: #666; }
-  .info-header .header-detail，
-.play-box .play-detail p {
+  .info-header .header-detail p,
+  .play-box .play-detail p {
     margin-bottom: 10px; }
-  .info-header .header-detail，
-.play-box .play-detail .split-line {
+  .info-header .header-detail .split-line,
+  .play-box .play-detail .split-line {
     display: inline-block;
     margin-left: 12px;
     margin-right: 12px;

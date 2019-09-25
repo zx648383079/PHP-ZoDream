@@ -2,29 +2,33 @@
 
 <div class="info-header">
     <div class="thumb">
-        <img src="http://tva4.sinaimg.cn/large/007X8olVly1g77833cyqhj307i0b4q61.jpg" alt="">
+        <img src="{$data.thumb}" alt="">
         <span class="play-icon"></span>
-        <span class="tag">高清</span>
+        <span class="tag">{$data.definition}</span>
     </div>
     <div class="header-detail">
-        <div class="title">123123</div>
+        <div class="title">{$data.title}</div>
         <p>
-            <span class="tag">分类</span>
-            <span>123123</span>
+            <span class="tag">导演:</span>
+            <span>{$data.director}</span>
         </p>
         <p>
-            <span class="tag">分类</span>
-            <span>123123</span>
-            <span class="split-line"></span>
-            <span class="tag">分类</span>
-            <span>123123</span>
-            <span class="split-line"></span>
-            <span class="tag">分类</span>
-            <span>123123</span>
+            <span class="tag">主演:</span>
+            <span>{$data.leader}</span>
         </p>
         <p>
-            <span class="tag">分类</span>
-            <span>这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事这是一个好看的故事</span>
+            <span class="tag">类型:</span>
+            <span>{$cat.name}</span>
+            <span class="split-line"></span>
+            <span class="tag">地区:</span>
+            <span>{$data.area}</span>
+            <span class="split-line"></span>
+            <span class="tag">年份:</span>
+            <span>{$data.age}</span>
+        </p>
+        <p>
+            <span class="tag">简介:</span>
+            <span>{$data.description}</span>
         </p>
         <a href="" class="btn btn-primary">立即播放</a>
         <a href="" class="btn">分享</a>
@@ -36,9 +40,9 @@
         分集
     </div>
     <div class="panel-body">
-        <a class="play-item">第一集</a>
-        <a class="play-item">第二集</a>
-        <a class="play-item">第三集</a>
+        {contents:category=$cat.id parent=$data.id num=100}
+        <a class="play-item" href="{url:$content}">{$content.title}</a>
+        {/contents}
     </div>
 </div>
 <div class="panel">
@@ -46,11 +50,11 @@
         <i class="fa fa-file"></i>
         详细剧情
         <div class="tip">
-                更新时间：2019-09-22 20:21
+                更新时间：{this.time:$parent.updated_at}
         </div>
     </div>
     <div class="panel-body">
-        12312312312
+        {$data.content}
     </div>
 </div>
 
@@ -64,13 +68,15 @@
         </a>
     </div>
     <div class="panel-body">
-        <a class="video-item">
-            <div class="thumb">
-                <img src="http://tva4.sinaimg.cn/large/007X8olVly1g77833cyqhj307i0b4q61.jpg" alt="">
-                <span class="play-icon"></span>
-                <span class="tag">高清</span>
-            </div>
-            <div class="title">玩具总动员4</div>
-        </a>
+            {contents:category=$cat.id num=10}
+            <a class="video-item" href="{url:$content}">
+                <div class="thumb">
+                    <img src="{$content.thumb}" alt="{$content.title}">
+                    <span class="play-icon"></span>
+                    <span class="tag">高清</span>
+                </div>
+                <div class="title">{$content.title}</div>
+            </a>
+            {/contents}
     </div>
 </div>
