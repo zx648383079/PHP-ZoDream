@@ -32,6 +32,9 @@ class ContentController extends Controller {
         }
         Module::scene()->setModel($model);
         $title = $data['title'];
+        if (!empty($parent)) {
+            $title = sprintf('%s %s', $parent['title'], $data['title']);
+        }
         return $this->show(
             $cat->model_id === $model->id
                 ? $cat->show_template

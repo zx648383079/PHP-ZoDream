@@ -13,7 +13,7 @@ a {
     background-color: #fff;
     border-radius: 4px;
     border: 1px solid #eee;
-    width: 800px;
+    width: 80%;
     margin: 0 auto;
 }
 
@@ -306,5 +306,48 @@ footer {
     a {
         color: $white;
         text-decoration: none;
+    }
+}
+
+@media (max-width: 1200px){
+    .container {
+        width: 95%;
+    }
+}
+
+@media (max-width: 768px){
+    .container {
+        width: 100%;
+        .row {
+            margin: 0;
+        }
+    }
+    .nav-bar {
+        margin: 0;
+        &::before,
+        &::after {
+            display: none;
+        }
+    }
+    .video-item {
+        width: 150px;
+        .thumb {
+            height: 200px;
+            .play-icon {
+                &::after {
+                    left: 50px;
+                    top: 75px;
+                }
+            }
+        }
+    }
+    .info-header {
+        display: block;
+    }
+    .play-action {
+        float: none;
+        .btn {
+            padding: 0 10px;
+        }
     }
 }

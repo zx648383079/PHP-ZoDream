@@ -513,14 +513,14 @@ class FuncHelper {
 
     public static function registerBlock(ParserCompiler $compiler, $method, $item = 'item') {
         return $compiler->registerFunc($method,
-            function ($params = null) use ($method, $item) {
+            function ($params = null) use ($method, $item, $compiler) {
             if ($params === -1) {
-                return '<?php endforeach; ?>';
+                return $compiler->block('endforeach;');
             }
             $i = count(static::$index);
             $box = sprintf('$_%s_%d', $method, $i);
             static::$index[] = $box;
-            return sprintf('<?php %s=%s::%s(%s); foreach(%s as $%s):?>', $box,
+            return $compiler->block('%s=%s::%s(%s); foreach(%s as $%s):', $box,
                 static::class, $method, $params, $box, $item);
         }, true);
     }
@@ -545,7 +545,7 @@ class FuncHelper {
         static::registerBlock($compiler, 'linkage');
         static::registerBlock($compiler, 'range');
         static::registerBlock($compiler, 'contentPage', 'content')
-            ->registerFunc('pager', function ($index = 0) {
+            ->registerFunc('pager', function ($index = 0) use ($compiler) {
                 if ($index < 1) {
                     $index = count(static::$index) + $index;
                 }
@@ -553,7 +553,7 @@ class FuncHelper {
                 if (strpos($tag, 'channel') > 0) {
                     return '';
                 }
-                return sprintf('<?=%s->getLink()?>', $tag);
+                return $compiler->echo('%s->getLink()', $tag);
             })
             ->registerFunc('redirect', '\Infrastructure\HtmlExpand::toUrl');
         return $compiler;

@@ -1,8 +1,18 @@
 {layout:main}
-
+{css href=@video-js.min.css}
+{js src=@video.min.js}
+{js src=@videojs-contrib-hls.min.js}
+{>js}
+var player = videojs('example-video');
+player.play();
+{/>}
 <div class="play-box">
     <div class="play-body">
-        <video src=""></video>
+        <video id="example-video" width="100%" class="video-js vjs-default-skin vjs-fluid" controls>
+            <source
+                src="{$data.thumb}"
+                type="application/x-mpegURL">
+        </video>
     </div>
     <div class="play-detail">
         <div class="title">{$parent.title}</div>
@@ -15,8 +25,14 @@
         </div>
         <div class="play-action">
             <a href="" class="btn">刷新重试</a>
-            <a href="{previous:url}" class="btn">上一集</a>
-            <a href="{next:url}" class="btn">下一集</a>
+            {$previous=previous:url,$data}
+            {if:$previous}
+            <a href="{$previous}" class="btn">上一集</a>
+            {/if}
+            {$next=next:url,$data}
+            {if:$next}
+            <a href="{$next}" class="btn">下一集</a>
+            {/if}
         </div>
     </div>
 </div>
@@ -40,7 +56,7 @@
         </div>
     </div>
     <div class="panel-body">
-            {$data.content}
+            {$parent.content}
     </div>
 </div>
 
