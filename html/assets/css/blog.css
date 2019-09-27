@@ -347,7 +347,7 @@
           left: 0;
           bottom: -50px;
           border: transparent 25px solid;
-          border-top-color: rgba(0, 0, 0, 0.6); }
+          border-top-color: rgba(161, 0, 0, 0.6); }
         .book-skin .book-body .book-sort a.active {
           background: #A10000;
           color: #fff; }
@@ -772,6 +772,8 @@
         width: 100%;
         background: #CC2525;
         color: #fff; }
+        .book-skin .book-sidebar .book-chapter li:hover a {
+          color: #fff; }
   .book-skin .book-sidebar .book-dynamic,
   .book-skin .book-sidebar .book-new,
   .book-skin .book-sidebar .book-side-nav {
