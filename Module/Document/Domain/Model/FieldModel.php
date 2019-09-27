@@ -216,11 +216,12 @@ class FieldModel extends Model {
                 'type' => 'string',
                 'kind' => $kind,
                 'default_value' => is_array($item) || strlen($item) > 30 ? '' : $item,
-                'is_required' => !empty($item)
+                'is_required' => !empty($item) ? 1 : 0
             ]);
             self::parseChildren($item, $model);
             $data[] = $model;
         }
+        return $data;
     }
 
     public static function parseChildren($content, FieldModel $model) {

@@ -51,8 +51,8 @@ $this->registerJs($js, View::JQUERY_READY);
                                     <td style="width: 35%"><?=$item['default_value']?></td>
                                     <td style="width: 35%"><?=$item['remark']?></td>
                                     <td style="width: 10%">
-                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-edit"></a>
-                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
+                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']], false)?>');" class="fa fa-edit"></a>
+                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']], false)?>');" class="fa fa-trash-o"></a>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -61,8 +61,8 @@ $this->registerJs($js, View::JQUERY_READY);
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 3, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
-                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 3, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
+                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 3, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 3, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
@@ -108,8 +108,8 @@ $this->registerJs($js, View::JQUERY_READY);
                                     <td><?=$item['default_value']?></td>
                                     <td><?=$item['remark']?></td>
                                     <td style="width: 10%">
-                                    <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-edit"></a>
-                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
+                                    <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']], false)?>');" class="fa fa-edit"></a>
+                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']], false)?>');" class="fa fa-trash-o"></a>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -118,8 +118,8 @@ $this->registerJs($js, View::JQUERY_READY);
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 1, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
-                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 1, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
+                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 1, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 1, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
@@ -166,10 +166,10 @@ $this->registerJs($js, View::JQUERY_READY);
 
                                     <td style="width: 10%">
 
-                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']])?>');" class="fa fa-edit"></a>
-                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']])?>');" class="fa fa-trash-o"></a>
+                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']], false)?>');" class="fa fa-edit"></a>
+                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']], false)?>');" class="fa fa-trash-o"></a>
                                         <?php if(in_array($item->type, ['array', 'object'])):?>
-                                        <a href="javascript:;" onclick="addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id])?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
+                                        <a href="javascript:;" onclick="addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id], false)?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
                                         <?php endif;?>
                                     </td>
                                 </tr>
@@ -179,8 +179,8 @@ $this->registerJs($js, View::JQUERY_READY);
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
-                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 2, 'api_id' => $model->id])?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
+                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 2, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
