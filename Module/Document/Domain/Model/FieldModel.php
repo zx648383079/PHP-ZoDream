@@ -53,7 +53,7 @@ class FieldModel extends Model {
         return [
             'name' => 'required|string:0,50',
             'title' => 'string:0,50',
-            'is_required' => 'int:0,9',
+            'is_required' => 'bool',
             'default_value' => 'string:0,255',
             'mock' => 'string:0,255',
             'parent_id' => 'int',
@@ -96,7 +96,8 @@ class FieldModel extends Model {
         if ($this->kind != self::KIND_RESPONSE) {
             return $this;
         }
-        $this->default_value = $this->getMockValueAttribute().'';
+        $val = $this->getMockValueAttribute().'';
+        $this->default_value = $this->type === 'number' ? floatval($val) : $val;
         return $this;
     }
 
@@ -109,8 +110,8 @@ class FieldModel extends Model {
         if (!$type){
             return $this->mock;
         }
-        $rule = $data[1] ? $data[1] : '';
-        $value = $data[2] ? $data[2] : '';
+        $rule = isset($data[1]) ? $data[1] : '';
+        $value = isset($data[2]) ? $data[2] : '';
         $mock = new MockRule();
         if ($type == 'array') {
             $type = 'arr';
@@ -138,6 +139,12 @@ class FieldModel extends Model {
         return true;
     }
 
+    public function check() {
+        return self::where('kind', $this->kind)->where('api_id', $this->api_id)
+            ->where('parent_id', intval($this->parent_id))->where('name', $this->name)
+                ->where('id', '<>', $this->id)->count() < 1;
+    }
+
     /**
      * 获取响应字段默认值数组
      * @param int $api_id
@@ -156,6 +163,9 @@ class FieldModel extends Model {
             if($v['type'] == 'object'){
                 $data[$name] = self::getDefaultData($api_id, $v['id']);
                 continue;
+            }
+            if ($v['default_value'] === '' && $v['mock']) {
+                $v->setMock();
             }
             $data[$name] = $v['default_value'];
         }

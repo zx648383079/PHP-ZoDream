@@ -142,35 +142,56 @@ class ApiController extends Controller {
     public function saveFieldAction() {
         $model = new FieldModel();
         if (!$model->load() || !$model->autoIsNew()->setMock()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->refreshFieldAction($model->kind, $model->api_id);
         }
         if ($model->api_id < 1) {
             ApiModel::preStore($model->id);
         }
-        $data = $model->toArray();
-        $data['edit_url'] = $this->getUrl('api/edit_field', ['id' => $model->id]);
-        $data['delete_url'] = $this->getUrl('api/delete_field', ['id' => $model->id]);
-        $data['has_children'] = $model->has_children;
-        if ($data['has_children']) {
-            $data['child_url'] = $this->getUrl('api/create_field', ['parent_id' => $model->id, 'api_id' => $model->api_id, 'kind' => $model->kind]);
-        }
-        $data['type_label'] = $model->type_label;
-        return $this->jsonSuccess($data);
+        return $this->refreshFieldAction($model->kind, $model->api_id);
     }
 
     public function deleteFieldAction($id) {
-        FieldModel::where('id', $id)->delete();
-        return $this->jsonSuccess();
+        $model = FieldModel::find($id);
+        if (empty($model)) {
+            return '';
+        }
+        $model->delete();
+        FieldModel::where('parent_id', $id)->update([
+            'parent_id' => 0
+        ]);
+        return $this->refreshFieldAction($model->kind, $model->api_id);
     }
 
     public function importFieldAction($content, $kind = 1, $api_id = 0) {
         $data = FieldModel::parseContent($content, $kind);
         foreach ($data as $model) {
             $model->api_id = $api_id;
+            if (!$model->check()) {
+                continue;
+            }
             $model->save();
         }
-        return $this->jsonSuccess([
-            'refresh' => true
-        ]);
+        return $this->refreshFieldAction($kind, $api_id);
+    }
+
+    public function refreshFieldAction($kind = 1, $api_id = 0) {
+        $kind = intval($kind);
+        $this->layout = false;
+        if ($kind === FieldModel::KIND_RESPONSE) {
+            $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)
+                ->where('api_id', $api_id)->all();
+            return $this->show('responseRow', compact('response_fields'));
+        }
+        if ($kind === FieldModel::KIND_REQUEST) {
+            $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)
+                ->where('api_id', $api_id)->all();
+            return $this->show('requestRow', compact('request_fields'));
+        }
+        if ($kind == FieldModel::KIND_HEADER) {
+            $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)
+                ->where('api_id', $api_id)->all();
+            return $this->show('headerRow', compact('header_fields'));
+        }
+        return '';
     }
 }

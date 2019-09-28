@@ -13,7 +13,12 @@ $this->registerJs($js, View::JQUERY_READY);
 
 <div class="row">
     <div class="col-lg-12">
-        <h1> <?=$this->title?></h1>
+        <div class="page-header">
+            <h1><?=$this->title?> </h1>
+            <div class="opt-btn">
+                <a href="javascript:;" data-action="code" class="btn btn-default"><i class="fa fa-fw fa-wrench"></i>代码</a>
+            </div>
+        </div>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -158,14 +163,6 @@ $this->registerJs($js, View::JQUERY_READY);
         <div class="zd-panel panel-default">
             <div class="zd-panel-head">
                 响应参数
-                <select data-type="code" name="lang" data-url="<?=$this->url('./api/code', ['id' => $api->id])?>">
-                    <option value="">生成Model</option>
-                    <option>c#</option>
-                    <option>go</option>
-                    <option>typescript</option>
-                    <option>dart</option>
-                    <option>java</option>
-                </select>
             </div>
             <!-- /.panel-heading -->
             <div class="zd-panel-body">
@@ -224,5 +221,27 @@ $this->registerJs($js, View::JQUERY_READY);
             <!-- /.panel -->
         </div>
         <!-- /.col-lg-12 -->
+    </div>
+</div>
+
+<div id="coder-dialog" class="dialog dialog-box" data-type="dialog">
+    <div class="dialog-header">
+        <form action="<?=$this->url('./api/code', ['id' => $api->id], false)?>" method="post">
+            <select name="kind">
+                <?php foreach([1 => '响应', 2 => '请求', 0 => '整体'] as $k => $item):?>
+                <option value="<?=$k?>"><?=$item?></option>
+                <?php endforeach;?>
+            </select>
+            <select name="lang">
+                <?php foreach(['c#', 'go', 'ts', 'dart', 'java', 'kotlin'] as $item):?>
+                <option value="<?=$item?>"><?=$item?></option>
+                <?php endforeach;?>
+            </select>
+            <button>生成</button>
+            <button type="button" class="dialog-close">关闭</button>
+        </form>
+    </div>
+    <div class="dialog-body">
+
     </div>
 </div>

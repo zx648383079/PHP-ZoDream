@@ -1,6 +1,7 @@
 <?php
 namespace Module\Document\Domain;
 
+use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
@@ -35,12 +36,27 @@ class CodeParser {
         'java' => 'java',
     ];
 
+    public function formatHttp($api_id, $lang) {
+        $api = ApiModel::find($api_id);
+        $method = lcfirst(Str::studly(sprintf('format_http_%s', $this->langMaps[$lang])));
+
+        $name = str_replace(['/', '.'], '_', trim($api->uri, '/'));
+        $lines = [
+            $this->formatField($api_id, 1, $name.'_request', $lang),
+            $this->formatField($api_id, 2, $name.'_response', $lang),
+        ];
+        if (method_exists($this, $method)) {
+            $lines[] = $this->{$method}($api, Str::studly($name), empty($lines[0]) ? null :
+                Str::studly($name.'_request'), Str::studly($name.'_response'));
+        }
+        return implode(self::NEW_LINE, $lines);
+    }
+
     public function formatField($api_id, $kind, $name, $lang, $parent_id = 0) {
         if (empty($name)) {
             $name = 'object_item';
         }
         $api_id = $api_id ? $api_id : 0;
-
         $packages = $this->formatFieldItem($name, $api_id, $kind, $parent_id);
         $files = [];
         foreach ($packages as $name => $package) {
@@ -52,6 +68,9 @@ class CodeParser {
 
     public function formatFieldItem($name, $api_id, $kind, $parent_id = 0) {
         $fields = FieldModel::where('kind', $kind)->where('api_id', $api_id)->where('parent_id', $parent_id)->all();
+        if ($kind != FieldModel::KIND_RESPONSE && empty($fields)) {
+            return [];
+        }
         $package = [$name => []];
         $maps = [
             'number' => 'int',
@@ -333,6 +352,15 @@ class CodeParser {
             sprintf('interface %s {', Str::studly($name)),
             $attributes,
             '}'
+        ]);
+    }
+
+    private function formatHttpTs(ApiModel $api, $name, $request, $response) {
+        return implode(self::NEW_LINE, [
+            sprintf('export const get%s = (%s) => %s%sfetch<%s>(\'%s\');', $name,
+                !empty($request) ? sprintf('params: %s', $request) : '',
+                self::NEW_LINE, self::TAB, $response, $api->uri),
+            sprintf('get%s({}).then(res => {});', $name),
         ]);
     }
 

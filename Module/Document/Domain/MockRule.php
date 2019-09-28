@@ -1,6 +1,9 @@
 <?php
 namespace Module\Document\Domain;
 
+use Zodream\Helpers\Str;
+use Zodream\Helpers\Time;
+
 class MockRule {
 
     public $name;
@@ -50,6 +53,7 @@ class MockRule {
             }
             return $number;
         }
+        return Str::randomInt(0, 9999);
     }
 
     /**
@@ -227,7 +231,10 @@ class MockRule {
      * @param string $format
      * @return false|string
      */
-    public function date($format = 'Y-m-d H:i:s') {
+    public function date($format) {
+        if (empty($format)) {
+            $format = 'Y-m-d H:i:s';
+        }
         return date($format);
     }
 
@@ -307,6 +314,17 @@ class MockRule {
         $prefix = $data[mt_rand(0, count($data) - 1)];
         return $prefix . $this->number('10000000-99999999');
 
+    }
+
+    public function avatar() {
+        return url()->asset(sprintf('images/avatar/%d.png', Str::randomInt(0, 48)));
+    }
+
+    public function time($rule) {
+        if ($rule == 13) {
+            return Time::millisecond();
+        }
+        return time();
     }
 
     /**

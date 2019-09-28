@@ -58,85 +58,16 @@ function formatJson(json, options?: any) {
     return formatted;
 }
 
-function delField(ele: any, url: string) {
-    postJson(url, function (data) {
-        if (data.code == 200) {
-            $(ele).parents('tr').remove();
-        }
-    })
-}
-
-function getRowHtml(data: any, hasTr: boolean = true): string {
-    let html: string;
-    switch (data.kind + '') {
-        case '3':
-            html = strFormat('<td style="width: 20%">{0}</td><td style="width: 35%">{1}</td><td style="width: 35%">{2}</td><td style="width: 10%"><a href="javascript:;" onclick="editField(this, \'{3}\');" class="fa fa-edit"></a><a href="javascript:;" onclick="delField(this, \'{4}\');" class="fa fa-trash-o"></a></td>', data.name, data.default_value, data.remark, data.edit_url, data.delete_url);
-            break;
-        case '2':
-            html = strFormat('<td style="text-align: left;padding-left: 50px;">{1}{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td style="width: 10%"><a href="javascript:;" onclick="editField(this, \'{7}\');" class="fa fa-edit"></a><a href="javascript:;" onclick="delField(this, \'{8}\');" class="fa fa-trash-o"></a>{9}</td>', data.parent_id < 1 ? 'warning' : '', data.parent_id > 0 ? '└' : '', data.name, data.title, data.type_label, data.mock, data.remark, data.edit_url, data.delete_url, data.has_children ? strFormat('<a href="javascript:;" onclick="addField(\'{0}\', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>', data.child_url) : '');
-            break;
-        case '1':
-        default:
-            html = strFormat('<td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td style="width: 10%"><a href="javascript:;" onclick="editField(this, \'{6}\');" class="fa fa-edit"></a><a href="javascript:;" onclick="delField(this, \'{7}\');" class="fa fa-trash-o"></a></td>', data.name, data.title, data.type_label, data.is_required ? '是' : '否', data.default_value, data.remark, data.edit_url, data.delete_url);
-            break;
-    }
-    if (hasTr) {
-        return '<tr>'+ html+'</tr>';
-    }
-    return html;
-}
-
-
-function addField(url: string, parent?: any) {
-    let box = Dialog.box({
-        url: url,
-        title: '添加字段'
-    }).on('done', function() {
-        let form = this.find('form');
-        postJson(form.attr('action'), form.serialize(), function(data) {
-            if (data.code != 200) {
-                parseAjax(data);
-                return;
-            }
-            Dialog.remove();
-            if (parent) {
-                $(parent).closest('tr').after(getRowHtml(data.data))
-                return;
-            }
-            $("#table-"+data.data.kind+" tbody:last").append(getRowHtml(data.data));
-        });
-    });
-}
-
-function editField(ele: any, url: string) {
+function dialogPost(url: string, title: string, cb: (data: any) => void) {
     Dialog.box({
         url: url,
-        title: '编辑字段'
+        title: title
     }).on('done', function() {
-        let form = this.find('form');
-        postJson(form.attr('action'), form.serialize(), function(data) {
-            if (data.code != 200) {
-                parseAjax(data);
-                return;
-            }
-            Dialog.remove();
-            $(ele).parents('tr').html(getRowHtml(data.data, false));
-        });
-    });
-}
-
-function importField(url: string) {
-    Dialog.form({
-        content: {
-            type: 'textarea',
-            placeholder: '允许xml、json和表单格式数据',
-            style: 'width: 500px;height:300px'
-        }
-    }, '自动配数据').on('done', function() {
         let that = this;
-        postJson(url, this.data, function(data) {
-            parseAjax(data);
-            this.close();
+        let form = this.find('form');
+        $.post(form.attr('action'), form.serialize(), function(html) {
+            that.close();
+            cb && cb(html);
         });
     });
 }
@@ -153,6 +84,56 @@ function refreshMock(url: string) {
 
 function refreshJson(data: any) {
     $('.json-box').html('<pre><code class="language-json">'+ Prism.highlight(formatJson(data), Prism.languages.json) +'</code></pre>');
+}
+
+function editApi(baseUri: string, apiId: number) {
+    $('[name=parent_id]').change(function () { 
+        $(".extent-box").toggle($(this).val() > 0);
+    });
+    $(document).on('click', '[data-action="add"]', function() {
+        let box = $(this).closest('.panel');
+        let kind = box.data('kind');
+        dialogPost(baseUri + 'create_field?kind=' + kind + '&api_id=' + apiId, '添加字段', res => {
+            box.find('table tbody').html(res);
+        });
+    }).on('click', '[data-action="import"]', function() {
+        let box = $(this).closest('.panel');
+        let kind = box.data('kind');
+        Dialog.form({
+            content: {
+                type: 'textarea',
+                placeholder: '允许xml、json和表单格式数据',
+                style: 'width: 500px;height:300px'
+            }
+        }, '自动配数据').on('done', function() {
+            let that = this;
+            $.post(baseUri + 'import_field?kind=' + kind + '&api_id=' + apiId, that.data, function(html) {
+                that.close();
+                box.find('table tbody').html(html);
+            });
+        });
+    }).on('click', '[data-action="edit"]', function() {
+        let box = $(this).closest('.panel');
+        let kind = box.data('kind');
+        let tr = $(this).closest('tr');
+        dialogPost(baseUri + 'edit_field?id=' + tr.data('id'), '编辑字段', res => {
+            box.find('table tbody').html(res);
+        });
+    }).on('click', '[data-action="delete"]', function() {
+        let box = $(this).closest('.panel');
+        let kind = box.data('kind');
+        let tr = $(this).closest('tr');
+        $.post(baseUri + 'delete_field?id=' + tr.data('id'), html => {
+            box.find('table tbody').html(html);
+        });
+    }).on('click', '[data-action="child"]', function() {
+        let box = $(this).closest('.panel');
+        let kind = box.data('kind');
+        let tr = $(this).closest('tr');
+        dialogPost(baseUri + 'create_field?kind=' + kind + '&api_id=' + apiId + '&parent_id='  + tr.data('id'), '添加字段', res => {
+            box.find('table tbody').html(res);
+        });
+    });
 }
 
 $(function() {
@@ -178,24 +159,21 @@ $(function() {
             $("#debug-box .js_responseBox").html(html);
         });
     });
-    $('select[data-type="code"]').change(function() {
+    let coder = $('#coder-dialog').dialog();
+    coder.find('.dialog-header form').submit(function() {
         let $this = $(this);
-        let val = $this.val();
-        if (val.trim().length < 1) {
-            return;
-        }
-        let name = $this.attr('name');
-        postJson($this.data('url'), {
-            [name]: val
-        }, function(data) {
+        let val = $this.find('[name=lang]').val();
+        postJson($this.attr('action'), $this.serialize(), function(data) {
             if (data.code != 200) {
                 parseAjax(data);
                 return;
             }
-            Dialog.box({
-                title: '预览',
-                content: '<pre><code class="language-'+val+'">'+ Prism.highlight(data.data, Prism.languages[val]) +'</code></pre>'
-            });
+            coder.find('.dialog-body').html('<pre><code class="language-'+val+'">'+ Prism.highlight(data.data, Prism.languages[val]) +'</code></pre>');
+            coder.showCenter();
         });
+        return false;
+    });
+    $('a[data-action="code"]').click(function() {
+        coder.show();
     });
 });

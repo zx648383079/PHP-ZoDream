@@ -32,13 +32,17 @@ $this->registerCssFile('@forum.css')
                 <div class="info">
                     <div class="name">
                         <a href="<?=$this->url('./forum', ['id' => $item->id])?>"><?=$item['name']?></a>
-                        <span>(1)</span>
+                        <?php if($item->today_count > 0):?>
+                        <span>(<?=$item->today_count?>)</span>
+                        <?php endif;?>
                     </div>
-                    <div class="count">主题：，帖数：</div>
+                    <div class="count">主题：<?=$item->thread_count?>，帖数：<?=$item->post_count?></div>
+                    <?php if($item->last_thread):?>
                     <div class="last-thread">
-                        <a href=""></a>
-                        5分钟 admin
+                        <a href="<?=$this->url('./thread', ['id' => $item->last_thread->id])?>"><?=$this->text($item->last_thread->title, 10)?></a>
+                        <?=$this->ago($item->last_thread->created_at)?> <?=$item->last_thread->user->name?>
                     </div>
+                    <?php endif;?>
                 </div>
             </div>
             <?php endforeach;?>

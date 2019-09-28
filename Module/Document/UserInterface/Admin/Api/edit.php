@@ -4,12 +4,11 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = $model->id ?  '编辑接口:'.$model->name : '新建接口';
+$url = $this->url('./admin/api/', false);
 $js = <<<JS
-$('[name=parent_id]').change(function () { 
-    $(".extent-box").toggle($(this).val() > 0);
-});
+    editApi('{$url}', {$model->id});
 JS;
-$this->registerJs($js, View::JQUERY_READY);
+$this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
@@ -25,7 +24,7 @@ $this->registerJs($js, View::JQUERY_READY);
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default" data-kind="3">
                     <div class="panel-heading">
                         Haader参数
                     </div>
@@ -34,35 +33,25 @@ $this->registerJs($js, View::JQUERY_READY);
                         <div class="table-responsive">
 
                             <div class="panel-header">
-                            <table id="table-3" class="table table-striped table-bordered table-hover">
+                            <table id="table-3" class="table table-striped table-bordered table-hover table-wrap">
                                 <thead>
                                 <tr class="success">
 
                                     <th>字段键</th>
-                                    <th>字段值</th>
+                                    <th style="width: 35%">字段值</th>
                                     <th>备注说明</th>
                                     <th>快捷操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($header_fields as $item):?>
-                                <tr>
-                                    <td style="width: 20%"><?=$item['name']?></td>
-                                    <td style="width: 35%"><?=$item['default_value']?></td>
-                                    <td style="width: 35%"><?=$item['remark']?></td>
-                                    <td style="width: 10%">
-                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']], false)?>');" class="fa fa-edit"></a>
-                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']], false)?>');" class="fa fa-trash-o"></a>
-                                    </td>
-                                </tr>
-                                <?php endforeach;?>
+                                <?php $this->extend('./headerRow', compact('header_fields'));?>
                                 </tbody>
                             </table>
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 3, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
-                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 3, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
+                                <a href="javascript:;" class="btn btn-default" data-action="add"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:;" data-action="import"  class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
@@ -76,7 +65,7 @@ $this->registerJs($js, View::JQUERY_READY);
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default" data-kind="1">
                     <div class="panel-heading">
                         请求参数
                     </div>
@@ -99,27 +88,14 @@ $this->registerJs($js, View::JQUERY_READY);
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($request_fields as $item):?>
-                                <tr>
-                                    <td><?=$item['name']?></td>
-                                    <td><?=$item['title']?></td>
-                                    <td><?=$item->type_list[$item->type]?></td>
-                                    <td><?=$item['is_required'] ? '是' : '否'?></td>
-                                    <td><?=$item['default_value']?></td>
-                                    <td><?=$item['remark']?></td>
-                                    <td style="width: 10%">
-                                    <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']], false)?>');" class="fa fa-edit"></a>
-                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']], false)?>');" class="fa fa-trash-o"></a>
-                                    </td>
-                                </tr>
-                                <?php endforeach;?>
+                                <?php $this->extend('./requestRow', compact('request_fields'));?>
                                 </tbody>
                             </table>
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 1, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
-                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 1, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
+                                <a href="javascript:;"  data-action="add" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:;"  data-action="import" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->
@@ -133,7 +109,7 @@ $this->registerJs($js, View::JQUERY_READY);
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default" data-kind="2">
                     <div class="panel-heading">
                         响应参数
                     </div>
@@ -153,34 +129,14 @@ $this->registerJs($js, View::JQUERY_READY);
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($response_fields as $item):?>
-                                <tr class="<?=$item['parent_id'] < 1 ? 'warning' : ''?>">
-
-                                    <td style="text-align: left;padding-left: 50px;"><?=$item['parent_id'] ? '└' : ''?><?=$item['name']?></td>
-                                    <td><?=$item['title']?></td>
-                                    <td><?=$item->type_list[$item->type]?></td>
-
-                                    <td><?=$item['mock']?></td>
-
-                                    <td><?=$item['remark']?></td>
-
-                                    <td style="width: 10%">
-
-                                        <a href="javascript:;" onclick="editField(this, '<?=$this->url('./admin/api/edit_field', ['id' => $item['id']], false)?>');" class="fa fa-edit"></a>
-                                        <a href="javascript:;" onclick="delField(this, '<?=$this->url('./admin/api/delete_field', ['id' => $item['id']], false)?>');" class="fa fa-trash-o"></a>
-                                        <?php if(in_array($item->type, ['array', 'object'])):?>
-                                        <a href="javascript:;" onclick="addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'parent_id' => $item['id'], 'api_id' => $model->id], false)?>', this);" class="btn btn-xs"><i class="fa fa-fw fa-plus"></i></a>
-                                        <?php endif;?>
-                                    </td>
-                                </tr>
-                                <?php endforeach;?>
+                                <?php $this->extend('./responseRow', compact('response_fields'));?>
                                 </tbody>
                             </table>
                             </div>
 
                             <div class="form-group">
-                                <a href="javascript:addField('<?=$this->url('./admin/api/create_field', ['kind' => 2, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
-                                <a href="javascript:importField('<?=$this->url('./admin/api/import_field', ['kind' => 2, 'api_id' => $model->id], false)?>');" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
+                                <a href="javascript:;"  data-action="add" class="btn btn-default"><i class="fa fa-plus"></i>添加参数</a>
+                                <a href="javascript:;"  data-action="import" class="btn btn-default"><i class="fa fa-random"></i>自动匹配数据</a>
                             </div>
                         </div>
                         <!-- /.table-responsive -->

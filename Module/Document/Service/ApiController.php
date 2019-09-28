@@ -30,7 +30,12 @@ class ApiController extends Controller {
     }
 
     public function codeAction($id, $lang, $kind = FieldModel::KIND_RESPONSE) {
-        $content = (new CodeParser())->formatField($id, $kind, '', $lang);
+        $coder = new CodeParser();
+        if ($kind < 1) {
+            $content = $coder->formatHttp($id, $lang);
+        } else {
+            $content = $coder->formatField($id, $kind, '', $lang);
+        }
         return $this->jsonSuccess($content);
     }
 

@@ -60,6 +60,20 @@ class ForumModel extends Model {
 	    return $this->hasMany(static::class, 'parent_id', 'id');
     }
 
+    public function getTodayCountAttribute() {
+	    if ($this->thread_count < 1) {
+	        return 0;
+        }
+	    $time = strtotime(date('Y-m-d'));
+	    return ThreadModel::where('forum_id', $this->id)
+            ->where('created_at', '>=',  $time)
+            ->where('created_at', '<=',  $time + 86400)->count();
+    }
+
+    public function lastThread() {
+	    return $this->hasOne(ThreadModel::class, 'forum_id', 'id');
+    }
+
     public static function tree() {
         return new Tree(static::cacheAll());
     }

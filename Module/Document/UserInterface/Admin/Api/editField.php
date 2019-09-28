@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 ?>
 
-<form action="<?=$this->url('./admin/api/save_field')?>" method="post" class="form-table" role="form">
+<form action="<?=$this->url('./admin/api/save_field', false)?>" method="post" class="form-table" role="form">
 
     <?php if($model->kind == 3):?>
     <div class="input-group">
