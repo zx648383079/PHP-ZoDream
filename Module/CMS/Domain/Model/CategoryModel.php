@@ -1,7 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
-use Module\Cms\Domain\Entities\CategoryEntity;
+use Module\CMS\Domain\Entities\CategoryEntity;
 use Zodream\Helpers\Tree as TreeHelper;
 use Zodream\Html\Tree;
 

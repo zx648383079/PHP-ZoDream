@@ -1,5 +1,5 @@
 <?php
-namespace Module\Cms\Domain\Entities;
+namespace Module\CMS\Domain\Entities;
 
 use Domain\Entities\Entity;
 
