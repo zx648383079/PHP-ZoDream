@@ -3,6 +3,7 @@ namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Helpers\Time;
 
 /**
 * Class ThreadPostModel
@@ -47,6 +48,10 @@ class ThreadPostModel extends Model {
 
     public function user() {
         return $this->hasOne(UserModel::class, 'id', 'user_id');
+    }
+
+    public function getUpdatedAtAttribute() {
+        return Time::isTimeAgo($this->getAttributeValue('updated_at'), 2678400);
     }
 
 }

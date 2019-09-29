@@ -36,6 +36,11 @@
                     font-weight: 700;
                 }
             }
+            .last-thread {
+                a {
+                    color: #369;
+                }
+            }
             &:hover {
                 box-shadow: rgba(#333, .7) 0 0 10px;
             }
@@ -44,6 +49,16 @@
 }
 
 .thread-list {
+    .thread-item-header {
+        border-bottom: 1px solid;
+        display: grid;
+        grid-template-columns: 1fr 105px 60px 105px;
+        background-color: #fff;
+        line-height: 30px;
+        .count {
+            font-size: 12px;
+        }
+    }
     .thread-item {
         border-bottom: 1px solid;
         display: grid;
@@ -116,6 +131,9 @@
             }
             .content {
                 padding: 0 20px;
+                a {
+                    color: #369;
+                }
             }
             .last-time {
                 text-align: right;

@@ -11,6 +11,10 @@ class HideNode extends Node {
      */
     protected $page;
 
+    public function isNest(): bool {
+        return true;
+    }
+
     public function render($type = null) {
         if ($this->isHide()) {
             return $this->hideHtml();

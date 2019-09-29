@@ -36,8 +36,8 @@ $this->registerCssFile([
     <div class="thread-box">
         <div class="thread-title">
             <div class="count">
-                <span>查看：0</span>
-                <span>回复：0</span>
+                <span>查看：<?=$thread->view_count?></span>
+                <span>回复：<?=$thread->post_count?></span>
             </div>
             <div class="title">
                 <?php if($thread->classify):?>
@@ -45,7 +45,7 @@ $this->registerCssFile([
                     <a href=""><?=$thread->classify->name?></a>
                 ]
                 <?php endif;?>
-                <?=$thread->title?>
+                <?=$this->text($thread->title)?>
             </div>
         </div>
         <?php $this->extend('./page');?>
@@ -60,7 +60,9 @@ $this->registerCssFile([
             </div>
             <div class="post-content">
                 <form data-type="ajax" action="<?=$this->url('./thread/reply')?>" method="post">
-                    <textarea name="content"></textarea>
+                    <div class="editor">
+                        <textarea name="content" required></textarea>
+                    </div>
                     <div class="footer">
                         <button class="btn">发表回复</button>
                         <input type="hidden" name="thread_id" value="<?=$thread->id?>">

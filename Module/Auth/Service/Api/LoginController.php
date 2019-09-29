@@ -14,12 +14,13 @@ class LoginController extends RestController {
     }
 
     public function indexAction() {
-        $user = new UserModel();
-        if ($user->load() && $user->signIn()) {
-            return $this->render(array_merge(auth()->user()->toArray(), [
-                'token' => auth()->createToken(auth()->user())
+        $model = new UserModel();
+        if ($model->load() && $model->signIn()) {
+            $user = auth()->user();
+            return $this->render(array_merge($user->toArray(), [
+                'token' => auth()->createToken($user)
             ]));
         }
-        return $this->renderFailure($user->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 }

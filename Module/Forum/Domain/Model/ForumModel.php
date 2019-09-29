@@ -70,8 +70,9 @@ class ForumModel extends Model {
             ->where('created_at', '<=',  $time + 86400)->count();
     }
 
-    public function lastThread() {
-	    return $this->hasOne(ThreadModel::class, 'forum_id', 'id');
+    public function getLastThreadAttribute() {
+	    return ThreadModel::query()->where('forum_id', $this->id)
+            ->orderBy('id', 'desc')->first();
     }
 
     public static function tree() {
@@ -130,5 +131,12 @@ class ForumModel extends Model {
             }
         }
         return $data;
+    }
+
+    public static function updateCount($id, $key = 'thread_count') {
+        $path = TreeHelper::getTreeParent(static::cacheAll(), $id);
+        $path[] = $id;
+        return static::whereIn('id', $path)
+            ->updateOne($key);
     }
 }

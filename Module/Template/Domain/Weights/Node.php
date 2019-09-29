@@ -19,6 +19,10 @@ class Node implements INode {
 
     }
 
+    public function isNest(): bool {
+        return  false;
+    }
+
     public function attr($key, $value = null) {
         if (is_array($key)) {
             $this->attributes = array_merge($this->attributes, $key);

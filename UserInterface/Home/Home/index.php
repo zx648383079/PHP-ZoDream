@@ -27,6 +27,30 @@ $this->set([
             <div class="name"><?=__('Shop')?>(DEMO)</div>
             <p class="desc"><?=__('shop tip')?></p>
         </a>
+        <a href="<?=$this->url('cms')?>">
+            CMS(DEMO)
+        </a>
+        <a href="<?=$this->url('finance')?>">
+            <?=__('Finance')?>
+        </a>
+        <a href="<?=$this->url('disk')?>">
+            <?=__('Disk')?>
+        </a>
+        <a href="<?=$this->url('book')?>">
+            <?=__('Book')?>
+        </a>
+        <a href="<?=$this->url('chat')?>">
+            <?=__('Chat')?>
+        </a>
+        <a href="<?=$this->url('micro')?>">
+            <?=__('Micro Blog')?>
+        </a>
+        <a href="<?=$this->url('note')?>">
+            <?=__('Note')?>
+        </a>
+        <a href="<?=$this->url('check_in')?>">
+            <?=__('Check In')?>
+        </a>
         <a class="unknow" href="<?=$this->url('cms')?>">
             <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">
             CMS(DEMO)

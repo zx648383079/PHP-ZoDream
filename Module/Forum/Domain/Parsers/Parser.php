@@ -3,6 +3,7 @@ namespace Module\Forum\Domain\Parsers;
 
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Template\Domain\Pages\Page;
+use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Traits\SingletonPattern;
 
 class Parser extends Page {
@@ -13,6 +14,12 @@ class Parser extends Page {
      * @var ThreadPostModel
      */
     protected $model;
+
+    private $uid = 0;
+
+    protected function uid() {
+        return $this->uid ++;
+    }
 
     /**
      * @param ThreadPostModel $model
@@ -33,7 +40,10 @@ class Parser extends Page {
     protected function loadNodes() {
         $data = [
             'hide' => HideNode::class,
-            'file' => FileNode::class
+            'file' => FileNode::class,
+            'code' => CodeNode::class,
+            'a' => LinkNode::class,
+            'img' => ImgNode::class
         ];
         foreach ($data as $key => $item) {
             $this->register($key, $item);
@@ -41,22 +51,32 @@ class Parser extends Page {
     }
 
     public function parse($html) {
+        $this->uid = 0;
         if ($html instanceof ThreadPostModel) {
             $this->setModel($html);
             $html = $html->content;
         }
-        $i = 0;
+        return $this->parseText($html);
+    }
+
+    private function parseText($html) {
+        $maps = [];
         foreach ($this->node_list as $node => $value) {
             $html = preg_replace_callback(
                 sprintf('#<%s(\s+([^\<\>]+))?>([\s\S]*?)</%s>#i', $node, $node),
-                function ($match) use ($node, &$i) {
+                function ($match) use ($node, &$maps) {
                     $attributes = $this->parseAttributes($match[2]);
-                    $attributes['index'] = $i ++;
-                    $attributes['content'] = $match[3];
-                return $this->node($node, $attributes)->render();
-            }, $html);
+                    $attributes['index'] = $this->uid();
+                    $node = $this->node($node, $attributes);
+                    $attributes['content'] = $node->isNest()
+                        ? $this->parseText($match[3])
+                        : htmlspecialchars($match[3]);
+                    $cacheKey = md5(sprintf('%s-%s', Time::millisecond(), $attributes['index']));
+                    $maps[$cacheKey] = $node->attr($attributes)->render();
+                    return $cacheKey;
+                }, $html);
         }
-        return $html;
+        return str_replace(array_keys($maps), array_values($maps), htmlspecialchars($html));
     }
 
     private function parseAttributes($attr) {

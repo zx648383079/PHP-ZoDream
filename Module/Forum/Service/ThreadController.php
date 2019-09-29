@@ -8,7 +8,18 @@ use Module\Forum\Domain\Model\ThreadPostModel;
 
 class ThreadController extends Controller {
 
-    public function indexAction($id) {
+    protected function rules() {
+        return [
+            'create' => '@',
+            '*' => '*'
+        ];
+    }
+
+    public function indexAction($id, $page = 1) {
+        if ($page < 2) {
+            ThreadModel::query()->where('id', $id)
+                ->updateOne('view_count');
+        }
         $thread = ThreadModel::find($id);
         if (empty($thread)) {
             return $this->redirectWithMessage('./');
@@ -46,6 +57,7 @@ class ThreadController extends Controller {
             'grade' => 0,
             'ip' => app('request')->ip()
         ]);
+        ForumModel::updateCount($thread->forum_id, 'thread_count');
         return $this->jsonSuccess([
             'url' => url('./forum', ['id' => $forum_id])
         ]);
@@ -59,6 +71,10 @@ class ThreadController extends Controller {
         if ($thread_id < 1) {
             return $this->jsonFailure('请选择帖子');
         }
+        $thread = ThreadModel::find($thread_id);
+        if (empty($thread)) {
+            return $this->jsonFailure('请选择帖子');
+        }
         $max = ThreadPostModel::where('thread_id', $thread_id)->max('grade');
         $post = ThreadPostModel::create([
             'content' => $content,
@@ -70,6 +86,9 @@ class ThreadController extends Controller {
         if (empty($post)) {
             return $this->jsonFailure('发表失败');
         }
+        ForumModel::updateCount($thread->forum_id, 'post_count');
+        ThreadModel::query()->where('id', $thread_id)
+            ->updateOne('post_count');
         return $this->jsonSuccess([
             'url' => url('./thread', ['id' => $thread_id, 'page' => ceil($post->grade / 20)])
         ]);

@@ -64,4 +64,9 @@ class ThreadModel extends Model {
     public function getUpdatedAtAttribute() {
         return Time::isTimeAgo($this->getAttributeValue('updated_at'), 2678400);
     }
+
+    public function getLastPostAttribute() {
+        return ThreadPostModel::query()->where('thread_id', $this->id)
+            ->orderBy('id', 'desc')->first();
+    }
 }

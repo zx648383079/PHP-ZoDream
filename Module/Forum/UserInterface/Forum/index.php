@@ -48,11 +48,13 @@ $this->registerCssFile([
                         <a href="<?=$this->url('./forum', ['id' => $item->id])?>"><?=$item['name']?></a>
                         <span>(1)</span>
                     </div>
-                    <div class="count">主题：，帖数：</div>
+                    <div class="count">主题：<?=$item->thread_count?>，帖数：<?=$item->post_count?></div>
+                    <?php if($item->last_thread):?>
                     <div class="last-thread">
-                        <a href=""></a>
-                        5分钟 admin
+                        <a href="<?=$this->url('./thread', ['id' => $item->last_thread->id])?>"><?=$this->text($item->last_thread->title, 10)?></a>
+                        <?=$item->last_thread->updated_at?> <?=$item->last_thread->user->name?>
                     </div>
+                    <?php endif;?>
                 </div>
             </div>
             <?php endforeach;?>
@@ -76,7 +78,10 @@ $this->registerCssFile([
                 </select>
                 <input type="text" name="title" required>
             </div>
-            <textarea name="content" required></textarea>
+            
+            <div class="editor">
+                <textarea name="content" required></textarea>
+            </div>
             <div class="footer">
                 <button class="btn">发表帖子</button>
                 <input type="hidden" name="forum_id" value="<?=$forum->id?>">

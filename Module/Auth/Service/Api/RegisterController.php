@@ -16,8 +16,7 @@ class RegisterController extends RestController {
 
     public function indexAction() {
         $model = new UserModel();
-        if ($model->load(app('request')
-                ->get('email,fullName:name,password,confirmPassword:rePassword,terms:agree'))
+        if ($model->load()
             && $model->signUp()) {
             $user = auth()->user();
             return $this->render(array_merge($user->toArray(), [

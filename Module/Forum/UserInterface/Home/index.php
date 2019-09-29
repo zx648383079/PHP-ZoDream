@@ -40,7 +40,7 @@ $this->registerCssFile('@forum.css')
                     <?php if($item->last_thread):?>
                     <div class="last-thread">
                         <a href="<?=$this->url('./thread', ['id' => $item->last_thread->id])?>"><?=$this->text($item->last_thread->title, 10)?></a>
-                        <?=$this->ago($item->last_thread->created_at)?> <?=$item->last_thread->user->name?>
+                        <?=$item->last_thread->updated_at?> <?=$item->last_thread->user->name?>
                     </div>
                     <?php endif;?>
                 </div>
