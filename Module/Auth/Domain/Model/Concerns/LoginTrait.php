@@ -11,7 +11,7 @@ trait LoginTrait {
         return [
             'email' => 'required|email',
             'password' => 'required|string:0,30',
-            'code' => 'validateCode'
+            //'code' => 'validateCode'
         ];
     }
 
