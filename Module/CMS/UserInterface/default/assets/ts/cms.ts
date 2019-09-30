@@ -529,4 +529,7 @@ $(function() {
     }).on('click', '.nav-bar .nav-toggle', function() {
         $(this).closest('.nav-bar').toggleClass('open');
     });
+    $('img.lazy').lazyload({
+        callback: 'img'
+    });
 });

@@ -2,7 +2,7 @@
 
 <div class="info-header">
     <div class="thumb">
-        <img src="{$data.thumb}" alt="">
+        <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$data.thumb}" alt="">
         <span class="play-icon"></span>
         <span class="tag">{$data.definition}</span>
     </div>
@@ -71,7 +71,7 @@
             {contents:category=$cat.id num=10}
             <a class="video-item" href="{url:$content}">
                 <div class="thumb">
-                    <img src="{$content.thumb}" alt="{$content.title}">
+                    <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
                     <span class="play-icon"></span>
                     <span class="tag">高清</span>
                 </div>

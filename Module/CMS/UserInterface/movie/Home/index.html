@@ -36,7 +36,7 @@ var silder = $(".banner .slider").slider({
         {contents:category=movie num=10}
         <a class="video-item" href="{url:$content}">
             <div class="thumb">
-                <img src="{$content.thumb}" alt="{$content.title}">
+                <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
                 <span class="play-icon"></span>
                 <span class="tag">高清</span>
             </div>

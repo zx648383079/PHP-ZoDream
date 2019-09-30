@@ -6,4 +6,7 @@ $(function() {
         e.preventDefault();
         $(this).closest('.screen-line').toggleClass('line-open');
     });
+    $('img.lazy').lazyload({
+        callback: 'img'
+    });
 });

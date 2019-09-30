@@ -23,6 +23,9 @@ class FormController extends Controller {
         $scene = Module::scene()->setModel($model);
         $id = 0;
         if ($model->setting('is_only')) {
+            if (auth()->guest()) {
+                return $this->jsonFailure('请先登录！');
+            }
             $id = $scene->query()
                 ->where('model_id', $model->id)
                 ->where('user_id', auth()->id())

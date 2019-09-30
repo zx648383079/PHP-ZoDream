@@ -35,7 +35,7 @@
                         {contents:category=$channel.id num=8}
                         <a href="{url:$content}" class="site-item">
                             <div class="item-name">
-                                <img src="{$content.thumb}" alt="{$content.title}">
+                                <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
                                 {$content.title}
                             </div>
                             <div class="item-desc">{$content.description}</div>
