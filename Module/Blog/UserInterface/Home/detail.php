@@ -104,7 +104,7 @@ $this->extend('layouts/header', [
         <?=$blog->toHtml()?>
     </div>
     <div class="toggle-open">
-        点击查看全文 <i class="fa fa-angle-double-down"></i>
+        <?=__('Click here to view')?> <i class="fa fa-angle-double-down"></i>
     </div>
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>

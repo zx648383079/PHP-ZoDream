@@ -9,6 +9,13 @@ var footer = $('footer'),
 if (diff > 0) {
     footer.css('margin-top', diff + 'px');
 }
+if (!$.cookie('c_t')) {
+    $('.dialog-cookie-tip').show();
+}
+$('.dialog-cookie-tip .btn').click(function() {
+    $.cookie('c_t', 1);
+    $(this).closet('.dialog-cookie-tip').hide();
+});
 JS;
 
 $this->registerCssFile([
@@ -18,6 +25,7 @@ $this->registerCssFile([
     '@home.css'
 ])->registerJsFile([
     '@jquery.min.js',
+    '@jquery.cookie.js',
     '@jquery.lazyload.min.js'
 ])->registerJs($js, View::JQUERY_READY);
 ?>
@@ -52,6 +60,7 @@ $this->registerCssFile([
         <div class="dialog-cookie-tip">
             <div class="dialog-body">
                 <?=__('cookie tip')?>
+                <a href="<?=$this->url('about')?>"><?=__('READ MORE')?></a>
             </div>
             <div class="dialog-footer">
                 <button class="btn">OK</button>

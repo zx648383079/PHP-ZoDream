@@ -282,6 +282,11 @@ footer {
             line-height: 1.6em;
         }
     }
+    .autograph {
+        line-height: 30px;
+        color: $fg;
+        text-align: right;
+    }
 }
 
 .friend-box {
@@ -335,11 +340,18 @@ footer {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #fff;
-    box-shadow: rgba(#333, .7) 0 0 10px;
+    background-color: $bg;
+    box-shadow: $shadow 0 0 10px;
     padding: 40px 20px;
     .dialog-footer {
         text-align: right;
+        .btn {
+            background-color: $headerBg;
+            color: $headerFg;
+        }
+    }
+    a {
+        color: $secondary;
     }
 }
 
