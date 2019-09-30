@@ -14,7 +14,7 @@ if (!$.cookie('c_t')) {
 }
 $('.dialog-cookie-tip .btn').click(function() {
     $.cookie('c_t', 1);
-    $(this).closet('.dialog-cookie-tip').hide();
+    $(this).closest('.dialog-cookie-tip').hide();
 });
 JS;
 
