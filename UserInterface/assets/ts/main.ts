@@ -119,7 +119,9 @@ $(function() {
         if (!confirm(tip)) {
             return;
         }
+        let loading = Dialog.loading();
         postJson($(this).attr('href'), function(data) {
+            loading.close();
             if (data.code == 200 && !data.msg) {
                 data.msg = '删除成功！';
             }
@@ -146,7 +148,11 @@ $(function() {
     })
     .on('submit', "form[data-type=ajax]", function() {
         let $this = $(this);
-        ajaxForm($this.attr('action'), $this.serialize());
+        let loading = Dialog.loading();
+        ajaxForm($this.attr('action'), $this.serialize(), res => {
+            loading.close();
+            parseAjax(res);
+        });
         return false;
     })
     .on('click', "a[data-type=post]", function(e) {

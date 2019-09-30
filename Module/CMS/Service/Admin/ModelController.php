@@ -33,6 +33,9 @@ class ModelController extends Controller {
         if (!$model->load()) {
             return $this->jsonFailure('表单错误');
         }
+        if (!app('request')->has('setting')) {
+            $model->setting = null;
+        }
         if ($id > 0) {
             $model->deleteAttribute('table');
         } elseif (ModelModel::where('`table`', $model->table)->count() > 0) {

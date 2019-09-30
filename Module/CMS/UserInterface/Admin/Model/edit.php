@@ -23,7 +23,8 @@ $this->registerJs($js);
         <?=Form::text('show_template', true)?>
     </div>
     <div class="form-box">
-        <?=Form::checkbox('is_show')?>
+        <?=Form::checkbox('setting[is_show]')->value($model->setting('is_show'))->label('显示')->tip('允许显示在前台')?>
+        <?=Form::checkbox('setting[is_only]')->value($model->setting('is_only'))->label('唯一')->tip('是否保持用户唯一')?>
     </div>
     <?=Form::text('position')?>
     <button type="submit" class="btn btn-success">确认保存</button>

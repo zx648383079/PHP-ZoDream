@@ -29,10 +29,11 @@ abstract class BaseScene implements SceneInterface {
     }
 
     public function remove($id) {
+        $main = null;
         foreach ([
                      $this->query(),
                      $this->extendQuery()
-                 ] as $query) {
+                 ] as $i => $query) {
             /** @var Builder $query */
             if (is_array($id)) {
                 $query->whereIn('id', $id)->delete();
@@ -42,11 +43,43 @@ abstract class BaseScene implements SceneInterface {
                 $query->where('id', $id)->delete();
                 continue;
             }
-            if (call_user_func($id, $query) === false) {
+            if ($i < 1) {
+                $query->where('model_id', $this->model->id);
+            }
+            if (($main = call_user_func($id, $query, $main, $i)) === false) {
                 return;
             }
             $query->delete();
         }
+    }
+
+    public function find($id) {
+        $data = [];
+        if (!is_callable($id) && $id < 1) {
+            return [];
+        }
+        $main = null;
+        foreach ([
+                     $this->query(),
+                     $this->extendQuery()
+                 ] as $i => $query) {
+            /** @var Builder $query */
+            if (!is_callable($id)) {
+                $data[] = $query->where('id', $id)->first();
+                continue;
+            }
+            if ($i < 1) {
+                $query->where('model_id', $this->model->id);
+            }
+            if (call_user_func($id, $query, $main, $i) === false) {
+                return $data;
+            }
+            $data[] = $main = $query->first();
+        }
+        // 主表数据更重要
+        return array_merge(...array_filter($data, function ($item) {
+            return !empty($item);
+        }));
     }
 
     /**

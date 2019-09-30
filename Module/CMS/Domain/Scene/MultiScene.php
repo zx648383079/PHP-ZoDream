@@ -222,19 +222,4 @@ class MultiScene extends BaseScene {
                 $query->orderBy($order);
             })->page($per_page);
     }
-
-    public function find($id) {
-        if ($id < 1) {
-            return [];
-        }
-        $data = $this->query()
-            ->where('id', $id)->one();
-        if (empty($data)) {
-            return [];
-        }
-        $extend = $this->extendQuery()->where('id', $id)
-            ->one();
-        // 主表数据更重要
-        return array_merge((array)$extend, $data);
-    }
 }

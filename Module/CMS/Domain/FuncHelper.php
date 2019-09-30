@@ -3,12 +3,14 @@ namespace Module\CMS\Domain;
 
 use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
 use Module\Template\Domain\Model\Base\OptionModel;
+use Zodream\Database\Query\Builder;
+use Zodream\Helpers\Json;
+use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
 use Zodream\Infrastructure\Support\Html;
@@ -115,7 +117,7 @@ class FuncHelper {
             if (is_numeric($model)) {
                 return ModelModel::find($model);
             }
-            return ModelModel::where('`table`', $model)->first();
+            return ModelModel::query()->where('`table`', $model)->first();
         });
         if (empty($item)) {
             return $item;
@@ -144,7 +146,7 @@ class FuncHelper {
     public static function contents(array $params = null) {
         $data = self::getContentsQuery($params);
         return static::getOrSet(__FUNCTION__,
-            md5(json_encode($data)),
+            md5(Json::encode($data)),
             function () use ($data) {
             if (isset($data[1]['model_id'])) {
                 $scene = Module::scene()->setModel(self::model($data[1]['model_id']));
@@ -235,7 +237,7 @@ class FuncHelper {
             return $scene->query()->where('id', '<', static::$current['content'])
                 ->orderBy('id', 'desc')->first();
         });
-        return static::getContentValue($name, $data, static::$current['channel']);
+        return static::getContentValue($name, $data);
     }
 
     public static function next($name = null) {
@@ -245,7 +247,7 @@ class FuncHelper {
             return $scene->query()->where('id', '>', static::$current['content'])
                 ->orderBy('id', 'asc')->first();
         });
-        return static::getContentValue($name, $data, static::$current['channel']);
+        return static::getContentValue($name, $data);
     }
 
     protected static function getChannelId($val, $key = 'name') {
@@ -277,7 +279,7 @@ class FuncHelper {
         return static::getOrSet(__FUNCTION__,
             $model_id,
             function () use ($model_id) {
-                return ModelFieldModel::where('model_id', $model_id)->all();
+                return ModelFieldModel::query()->where('model_id', $model_id)->all();
             });
     }
 
@@ -363,6 +365,9 @@ class FuncHelper {
         if (is_array($id)) {
             isset($id['name']) && $name = $id['name'];
             $category = static::getVal($id, ['category', 'cat_id', 'cat', 'channel']);
+            if (isset($id['model']) && !isset($id['id'])) {
+                return self::formContent($id['model'], $name, $category);
+            }
             $id = $id['id'];
         }
         $id = intval($id);
@@ -379,17 +384,52 @@ class FuncHelper {
                 $scene = Module::scene()->setModel($cat->model);
             return $scene->find($id);
         });
-        return self::getContentValue($name, $category, $data);
+        return self::getContentValue($name, $data);
+    }
+
+    public static function formContent($model, $name = null, $category = null, $user = null) {
+        if (is_array($model)) {
+            isset($model['name']) && $name = $model['name'];
+            $category = static::getVal($model, ['category', 'cat_id', 'cat', 'channel']);
+            $user = static::getVal($model, ['user', 'user_id']);
+            $model = $model['model'];
+        }
+        $model = self::model($model);
+        if (!$model->setting('is_show')) {
+            return null;
+        }
+        if ($model->setting('is_only') && $user < 1) {
+            $user = auth()->id();
+        }
+        $data = static::getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category, $model->id, $user),
+            function () use ($model, $category, $user) {
+                $scene = Module::scene()->setModel($model);
+                return $scene->find(
+                    function (Builder $query, $pre, $i) use ($category, $user) {
+                        if (!empty($pre) && isset($pre['id'])) {
+                            $query->where('id', $pre['id']);
+                            return;
+                        }
+                        if ($i > 0 && empty($pre)) {
+                            return false;
+                        }
+                    if (!empty($category)) {
+                        $query->where('cat_id', self::channel($category, 'id'));
+                    }
+                    if (!empty($user)) {
+                        $query->where('user_id', $user);
+                    }
+                });
+            });
+        return self::getContentValue($name, $data);
     }
 
     /**
      * @param $name
-     * @param $category
      * @param $data
      * @return null|string|mixed
-     * @throws \Exception
      */
-    protected static function getContentValue($name, $data, $category) {
+    protected static function getContentValue($name, $data) {
         if (empty($data)) {
             return null;
         }
@@ -433,7 +473,7 @@ class FuncHelper {
 
     public static function linkage($id) {
         if (!is_numeric($id)) {
-            $id = LinkageModel::where('code', $id)->value('id');
+            $id = LinkageModel::query()->where('code', $id)->value('id');
         }
         if (empty($id)) {
             return [];
@@ -471,8 +511,7 @@ class FuncHelper {
 
     /**
      * @param $id
-     * @return string|\Zodream\Infrastructure\Http\UrlGenerator
-     * @throws \Exception
+     * @return string
      */
     public static function formAction($id) {
         return url('./form/save', compact('id'));
@@ -497,6 +536,9 @@ class FuncHelper {
         $args = [];
         if (isset($_GET['preview'])) {
             $args['preview'] = $_GET['preview'];
+        }
+        if (Str::endWith($data, ',false')) {
+            return url(substr($data, 0, strlen($data) - 6), $args, true, false);
         }
         return url($data, $args);
     }
@@ -530,6 +572,7 @@ class FuncHelper {
             'channel',
             'channelActive',
             'content',
+            'formContent',
             'field',
             'markdown',
             'formAction',

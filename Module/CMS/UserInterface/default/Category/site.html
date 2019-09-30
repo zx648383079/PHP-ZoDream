@@ -2,8 +2,9 @@
 {css href=@dialog.css}
 {js src=@jquery.dialog.min.js}
 {js src=@jquery.cookie.js}
+{$navigation=content:model=navigation name=content}
 {>js}
-bindNavigation();
+bindNavigation({$navigation});
 {/>}
 <div class="container">
     <div class="row site-bg" style="background-image:url({$cat.image});">

@@ -266,7 +266,7 @@ interface IGroup {
     items: ISiteItem[],
 }
 
-const NAV_COOKIE = 'n_co';
+const NAV_COOKIE = 'nav_self';
 
 class Navigation {
     constructor(
@@ -287,8 +287,11 @@ class Navigation {
      * load
      */
     public load() {
-        let data = $.cookie(NAV_COOKIE);
-        if (!data) {
+        if (this.groups.length > 0) {
+            return;
+        }
+        let data = window.localStorage.getItem(NAV_COOKIE);
+        if (!data || data.indexOf('{') < 0) {
             return;
         }
         this.groups = JSON.parse(data);
@@ -323,14 +326,19 @@ class Navigation {
         }).on('click', '.panel-footer .btn', function() {
             const text = $(this).text();
             if (text.indexOf('本') >= 0) {
-                $.cookie(NAV_COOKIE, JSON.stringify(this.groups), {expires:365,});
+                window.localStorage.setItem(NAV_COOKIE, JSON.stringify(that.groups));
                 Dialog.tip('本地保存成功！');
                 return;
             }
             if (text.indexOf('恢') >= 0) {
-                this.groups = [];
-                $.cookie(NAV_COOKIE, null);
+                that.groups = [];
+                window.localStorage.removeItem(NAV_COOKIE);
                 Dialog.tip('清空成功！');
+                that.saveAsync();
+                return;
+            }
+            if (text.indexOf('云') >= 0) {
+                that.saveAsync();
                 return;
             }
         });
@@ -395,6 +403,20 @@ class Navigation {
             this.saveSite(data);
         }
         this.refresh();
+    }
+
+    public saveAsync() {
+        $.post('form/save', {
+            model: 'navigation',
+            content: JSON.stringify(this.groups),
+            title: '我的导航',
+        }, res => {
+            if (res.code == 200) {
+                Dialog.tip('保存成功');
+                return;
+            }
+            Dialog.tip(res.errors);
+        }, 'json');
     }
 
     private addSite(data: any) {
@@ -480,9 +502,9 @@ class Navigation {
     }
 }
 
-function bindNavigation() {
+function bindNavigation(data?: any) {
     let search = new Search($('.search-box')),
-        navigate = new Navigation($('.self-box'));
+        navigate = new Navigation($('.self-box'), data);
 }
 
 function bindTheme() {

@@ -149,6 +149,15 @@
             }]
         },
         {
+            "action": "form",
+            "name": "导航",
+            "table": "navigation",
+            "setting": {
+                "is_show": 1,
+                "is_only": 1
+            }
+        },
+        {
             "action": "model",
             "name": "游戏",
             "table": "game",

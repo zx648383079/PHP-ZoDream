@@ -4,6 +4,8 @@ namespace Module\CMS\Domain\Model;
 use Zodream\Database\Query\Query;
 use Zodream\Database\Query\Record;
 use Zodream\Database\Schema\Table;
+use Zodream\Helpers\Json;
+
 /**
  * Class ContentModel
  * @package Domain\Model\CMS
@@ -69,5 +71,33 @@ class ModelModel extends BaseModel {
         return $data;
     }
 
+
+    public function getSettingAttribute() {
+        $setting = $this->getAttributeValue('setting');
+        return empty($setting) ? [] : Json::decode($setting);
+    }
+
+    public function setSettingAttribute($value) {
+        $this->__attributes['setting'] = is_array($value) ?
+            Json::encode($value) : $value;
+    }
+
+    public function setting(...$keys) {
+        $data = $this->setting;
+        foreach ($keys as $key) {
+            if (empty($key)) {
+                return $data;
+            }
+            if (empty($data) || !is_array($data)) {
+                return null;
+            }
+            if (isset($data[$key]) || array_key_exists($key, $data)) {
+                $data = $data[$key];
+                continue;
+            }
+            return null;
+        }
+        return $data;
+    }
 
 }

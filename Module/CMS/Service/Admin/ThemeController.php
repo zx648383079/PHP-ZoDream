@@ -25,7 +25,7 @@ class ThemeController extends Controller {
     }
 
     public function applyAction($theme) {
-        // ThemeManager::clear();
+        ThemeManager::clear();
         (new ThemeManager())->apply($theme);
         return $this->jsonSuccess([
             'url' => $this->getUrl('theme')

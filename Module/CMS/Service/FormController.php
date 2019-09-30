@@ -21,8 +21,20 @@ class FormController extends Controller {
             return $this->jsonFailure('表单数据错误');
         }
         $scene = Module::scene()->setModel($model);
+        $id = 0;
+        if ($model->setting('is_only')) {
+            $id = $scene->query()
+                ->where('model_id', $model->id)
+                ->where('user_id', auth()->id())
+                ->value('id');
+        }
         $data = app('request')->get();
-        if (!$scene->insert($data)) {
+        if ($id > 0) {
+            $res = $scene->update($id, $data);
+        } else {
+            $res = $scene->insert($data);
+        }
+        if (!$res) {
             return $this->jsonFailure($scene->getFirstError());
         }
         return $this->jsonSuccess([
@@ -36,7 +48,7 @@ class FormController extends Controller {
      */
     protected function getModel() {
         if (app('request')->has('id')) {
-            return ModelModel::find(intval(app('request')->get('id')));
+            return FuncHelper::model(intval(app('request')->get('id')));
         }
         return FuncHelper::model(app('request')->get('model'));
     }

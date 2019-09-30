@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\DB;
+use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
@@ -185,21 +186,6 @@ class SingleScene extends BaseScene {
             ->when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('title', 'like', '%'.$keywords.'%');
         })->page($per_page);
-    }
-
-    public function find($id) {
-        if ($id < 1) {
-            return [];
-        }
-        $data = $this->query()
-            ->where('id', $id)->one();
-        if (empty($data)) {
-            return [];
-        }
-        $extend = $this->extendQuery()->where('id', $id)
-            ->one();
-        // 主表数据更重要
-        return array_merge((array)$extend, $data);
     }
 
 
