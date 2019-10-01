@@ -31,7 +31,7 @@ class FieldModel extends Model {
     const KIND_RESPONSE = 2;
     const KIND_HEADER = 3;
 
-    public $type_list = [
+    public static $type_list = [
         'string' => '字符串(string)',
         'json'   => '字符串(json)',
         'number' => '数字(number)',
@@ -97,7 +97,7 @@ class FieldModel extends Model {
             return $this;
         }
         $val = $this->getMockValueAttribute().'';
-        $this->default_value = $this->type === 'number' ? floatval($val) : $val;
+        $this->default_value = self::format($this->type, $val);
         return $this;
     }
 
@@ -167,10 +167,23 @@ class FieldModel extends Model {
             if ($v['default_value'] === '' && $v['mock']) {
                 $v->setMock();
             }
-            $data[$name] = $v['default_value'];
+            $data[$name] = self::format($v['type'], $v['default_value']);
         }
         return $data;
 
+    }
+
+    public static function format($type, $val) {
+        if ($type === 'number') {
+            return floatval($val);
+        }
+        if ($type === 'boolean') {
+            if (is_bool($val)) {
+                return $val;
+            }
+            return $val === 'true';
+        }
+        return $val;
     }
 
     /**
@@ -195,7 +208,7 @@ class FieldModel extends Model {
                 $data[$name] = $value ? $value : (object)array();
                 continue;
             }
-            $data[$name] = $v->getMockValueAttribute();
+            $data[$name] = self::format($v->type, $v->getMockValueAttribute());
         }
         return $data;
 

@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Admin;
 
 use Module\Shop\Domain\Models\AttributeGroupModel;
 use Module\Shop\Domain\Models\AttributeModel;
+use Module\Shop\Domain\Models\AttributeUniqueModel;
 use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\CategoryModel;
@@ -57,7 +58,7 @@ class GoodsController extends Controller {
         return $this->show(compact('model', 'cat_list', 'brand_list', 'group_list', 'gallery_list'));
     }
 
-    public function saveAction($id, $product = null, $gallery = null) {
+    public function saveAction($id, $product = null, $gallery = null, $attr = null) {
         $model = new GoodsModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
@@ -72,6 +73,9 @@ class GoodsController extends Controller {
         }
         if (!empty($gallery)) {
             GoodsGalleryModel::batchSave($gallery, $model->id);
+        }
+        if (!empty($attr)) {
+            AttributeUniqueModel::batchSave($model, $attr);
         }
         return $this->jsonSuccess([
             'url' => $this->getUrl('goods')

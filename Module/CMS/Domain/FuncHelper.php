@@ -405,7 +405,7 @@ class FuncHelper {
             function () use ($model, $category, $user) {
                 $scene = Module::scene()->setModel($model);
                 return $scene->find(
-                    function (Builder $query, $pre, $i) use ($category, $user) {
+                    function (Builder $query, $pre, $i) use ($category, $user, $model) {
                         if (!empty($pre) && isset($pre['id'])) {
                             $query->where('id', $pre['id']);
                             return;
@@ -416,8 +416,8 @@ class FuncHelper {
                     if (!empty($category)) {
                         $query->where('cat_id', self::channel($category, 'id'));
                     }
-                    if (!empty($user)) {
-                        $query->where('user_id', $user);
+                    if (!empty($user) || $model->setting('is_only')) {
+                        $query->where('user_id', intval($user));
                     }
                 });
             });

@@ -1,11 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
+use Module\Document\Domain\Model\FieldModel;
 ?>
 <?php foreach($request_fields as $item):?>
 <tr data-id="<?=$item['id']?>">
     <td><?=$item['name']?></td>
     <td><?=$item['title']?></td>
-    <td><?=$item->type_list[$item->type]?></td>
+    <td><?=FieldModel::$type_list[$item->type]?></td>
     <td><?=$item['is_required'] ? '是' : '否'?></td>
     <td><?=$item['default_value']?></td>
     <td><?=$item['remark']?></td>

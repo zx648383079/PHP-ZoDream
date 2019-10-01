@@ -73,14 +73,20 @@ class ApiModel extends Model {
      * @throws \Exception
      */
     public static function preStore($id) {
+        $id = intval($id);
+        if ($id < 1) {
+            return;
+        }
         $data = self::getStore();
-        $data[] = $id;
+        if (in_array($id, $data)) {
+            return;
+        }
         session()->set(self::PRE_STORE_KEY, $data);
     }
 
     /**
      * 获取
-     * @throws \Exception
+     * return array
      */
     public static function getStore() {
         $data = session(self::PRE_STORE_KEY);

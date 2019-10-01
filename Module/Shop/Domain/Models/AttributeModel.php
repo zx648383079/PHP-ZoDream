@@ -1,8 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Models;
 
-
-use Domain\Model\Model;
+use Module\Shop\Domain\Entities\AttributeEntity;
 use Zodream\Helpers\Json;
 
 /**
@@ -17,39 +16,12 @@ use Zodream\Helpers\Json;
  * @property string $default_value
  * @property integer $position
  */
-class AttributeModel extends Model {
+class AttributeModel extends AttributeEntity {
 
     public static $search_list = ['不需要检索', '关键字检索', '范围检索'];
     public static $type_list = ['唯一属性', '单选属性', '复选属性'];
 
-    public static function tableName() {
-        return 'shop_attribute';
-    }
-
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,30',
-            'group_id' => 'required|int',
-            'type' => 'int:0,9',
-            'search_type' => 'int:0,9',
-            'input_type' => 'int:0,9',
-            'default_value' => 'string:0,255',
-            'position' => 'int:0,999',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => '名称',
-            'group_id' => '分组',
-            'type' => '类型',
-            'search_type' => '搜索类型',
-            'input_type' => '输入类型',
-            'default_value' => '默认值',
-            'position' => '排序',
-        ];
-    }
+    protected $append = ['attr_items'];
 
     public function group() {
         return $this->hasOne(AttributeGroupModel::class, 'id', 'group_id');

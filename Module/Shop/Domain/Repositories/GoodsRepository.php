@@ -54,8 +54,11 @@ class GoodsRepository {
         }
         $data = $goods->toArray();
         $data['properties'] = $goods->properties;
+        $data['category'] = $goods->category;
+        $data['brand'] = $goods->brand;
         $data['static_properties'] = $goods->static_properties;
         $data['is_collect'] = $goods->is_collect;
+        $data['gallery'] = $goods->gallery;
         return $data;
     }
 

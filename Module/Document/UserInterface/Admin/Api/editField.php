@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Document\Domain\Model\FieldModel;
 /** @var $this View */
 ?>
 
@@ -31,7 +32,7 @@ use Zodream\Template\View;
     <div class="input-group">
         <label>参数类型</label>
         <select class="form-control" name="type">
-            <?php foreach($model->type_list as $key => $item):?>
+            <?php foreach(FieldModel::type_list as $key => $item):?>
                <option value="<?=$key?>" <?= $key == $model->type ? 'selected' : '' ?>><?=$item?></option>
             <?php endforeach;?>
         </select>
@@ -73,10 +74,15 @@ use Zodream\Template\View;
     <div class="input-group">
         <label>参数类型</label>
         <select class="form-control" name="type">
-            <?php foreach($model->type_list as $key => $item):?>
+            <?php foreach(FieldModel::$type_list as $key => $item):?>
                <option value="<?=$key?>" <?= $key == $model->type ? 'selected' : '' ?>><?=$item?></option>
             <?php endforeach;?>
         </select>
+    </div>
+
+    <div class="input-group">
+        <label>默认值</label>
+        <input class="form-control" name="default_value" value="<?=$model->default_value?>" placeholder="非必填">
     </div>
 
     <div class="input-group">

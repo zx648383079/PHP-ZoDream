@@ -47,6 +47,9 @@ use Zodream\Html\Page;
 class GoodsModel extends GoodsEntity {
 
 
+    public function gallery() {
+        return $this->hasMany(GoodsGalleryModel::class, 'goods_id', 'id');
+    }
 
     /**
      * @return array
@@ -111,7 +114,7 @@ class GoodsModel extends GoodsEntity {
         if ($this->attribute_group_id < 1) {
             return [];
         }
-        $attr_list = AttributeModel::where('group_id', $this->attribute_group_id)
+        $attr_list = AttributeUniqueModel::where('group_id', $this->attribute_group_id)
             ->where('type', 0)->orderBy('position asc')->orderBy('type asc')->get('id', 'name');
         if (empty($attr_list)) {
             return [];

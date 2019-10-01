@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Document\Domain\Model\FieldModel;
 /** @var $this View */
 $this->title = '接口：'.$api->name;
 $this->set('current_id', $api->id);
@@ -139,7 +140,7 @@ $this->registerJs($js, View::JQUERY_READY);
                         <tr>
                             <td><?=$item['name']?></td>
                             <td><?=$item['title']?></td>
-                            <td><?=$item->type_list[$item->type]?></td>
+                            <td><?=FieldModel::$type_list[$item->type]?></td>
                             <td><?=$item['is_required'] ? '是' : '否'?></td>
                             <td><?=$item['default_value']?></td>
                             <td><?=$item['remark']?></td>
@@ -181,9 +182,13 @@ $this->registerJs($js, View::JQUERY_READY);
                         <?php foreach($response_fields as $item):?>
                         <tr class="<?=$item['parent_id'] < 1 ? 'warning' : ''?>">
 
-                            <td style="text-align: left;padding-left: 50px;"><?=$item['parent_id'] ? '└' : ''?><?=$item['name']?></td>
+                            <td style="text-align: left;padding-left: 50px;">
+                                <?php if($item['level'] > 0):?>
+                                    <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?></span>
+                                <?php endif;?>
+                                <?=$item['name']?></td>
                             <td><?=$item['title']?></td>
-                            <td><?=$item->type_list[$item->type]?></td>
+                            <td><?=FieldModel::$type_list[$item['type']]?></td>
 
                             <td><?=$item['mock']?></td>
 

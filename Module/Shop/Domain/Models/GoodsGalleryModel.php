@@ -29,6 +29,14 @@ class GoodsGalleryModel extends Model {
         ];
     }
 
+    public function getImageAttribute() {
+        $thumb = $this->getAttributeSource('image');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
     public static function batchSave($data, $id) {
         if (empty($data)) {
             return;

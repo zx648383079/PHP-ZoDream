@@ -80,7 +80,7 @@ class MockRule {
      * @return string
      */
     public function boolean($rule) {
-        if(!isset($rule)){
+        if($rule === ''){
             $rule = $this->number('0-1');
         }
         if(1 === $rule){
@@ -165,6 +165,20 @@ class MockRule {
             'Angel',
             'John');
         return $data[mt_rand(0, count($data)-1)];
+    }
+
+    public function app_name($rule) {
+        static $i = -1;
+        $data = ['QQ', '微信', '微博', '百度', 'Github', 'Google', 'Paypal', '支付宝', '小米', 'Bing', '哔哩哔哩'];
+        $en_data = ['qq', 'weixin', 'weibo', 'baidu', 'github', 'google', 'paypal', 'alipay', 'mi', 'bing', 'bilibili'];
+
+        if ($i < 0) {
+            $i = mt_rand(0, count($data)-1);
+        }
+        if ($rule == 'en') {
+            return $en_data[$i];
+        }
+        return $data[$i];
     }
 
     /**

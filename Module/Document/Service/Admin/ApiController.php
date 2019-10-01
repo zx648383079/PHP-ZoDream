@@ -4,6 +4,7 @@ namespace Module\Document\Service\Admin;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\ProjectModel;
+use Zodream\Html\Tree;
 use Zodream\Http\Http;
 use Zodream\Http\Uri;
 
@@ -18,6 +19,7 @@ class ApiController extends Controller {
         $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
         $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
         $response_json = FieldModel::getDefaultData($id);
+        $response_fields = (new Tree($response_fields))->makeTreeForHtml();
         return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields', 'response_json'));
     }
 
@@ -36,10 +38,20 @@ class ApiController extends Controller {
         }
         $project = ProjectModel::find($model->project_id);
         $tree_list = ApiModel::getTree($model->project_id);
-        $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $id)->all();
-        $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
-        $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
+
+        $response_fields = $this->getFieldList($id, FieldModel::KIND_RESPONSE);
+        $request_fields = $this->getFieldList($id, FieldModel::KIND_REQUEST);
+        $header_fields = $this->getFieldList($id, FieldModel::KIND_HEADER);
+        $response_fields = (new Tree($response_fields))->makeTreeForHtml();
         return $this->show(compact('model', 'project', 'tree_list', 'response_fields', 'request_fields', 'header_fields'));
+    }
+
+    private function getFieldList($id, $kind) {
+        $query = FieldModel::where('kind', $kind);
+        if ($id > 0) {
+            return $query->where('api_id', $id)->get();
+        }
+        return $query->whereIn('id', ApiModel::getStore())->get();
     }
 
     public function saveAction() {
@@ -141,7 +153,7 @@ class ApiController extends Controller {
 
     public function saveFieldAction() {
         $model = new FieldModel();
-        if (!$model->load() || !$model->autoIsNew()->setMock()->save()) {
+        if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->refreshFieldAction($model->kind, $model->api_id);
         }
         if ($model->api_id < 1) {
@@ -170,6 +182,9 @@ class ApiController extends Controller {
                 continue;
             }
             $model->save();
+            if ($model->api_id < 1) {
+                ApiModel::preStore($model->id);
+            }
         }
         return $this->refreshFieldAction($kind, $api_id);
     }
@@ -180,6 +195,7 @@ class ApiController extends Controller {
         if ($kind === FieldModel::KIND_RESPONSE) {
             $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)
                 ->where('api_id', $api_id)->all();
+            $response_fields = (new Tree($response_fields))->makeTreeForHtml();
             return $this->show('responseRow', compact('response_fields'));
         }
         if ($kind === FieldModel::KIND_REQUEST) {
