@@ -28,6 +28,7 @@ class CodeParser {
         'flutter' => 'Dart',
         'go' => 'Go',
         'c#' => 'Net',
+        'csharp' => 'Net',
         '.net' => 'Net',
         '.net core' => 'Net',
         'asp.net' => 'Net',
@@ -67,7 +68,8 @@ class CodeParser {
     }
 
     public function formatFieldItem($name, $api_id, $kind, $parent_id = 0) {
-        $fields = FieldModel::where('kind', $kind)->where('api_id', $api_id)->where('parent_id', $parent_id)->all();
+        $fields = FieldModel::where('kind', $kind)->where('api_id', $api_id)
+            ->where('parent_id', $parent_id)->all();
         if ($kind != FieldModel::KIND_RESPONSE && empty($fields)) {
             return [];
         }
@@ -304,7 +306,7 @@ class CodeParser {
             sprintf('public class %s', Str::studly($name)),
             '{',
             $attributes,
-            '}'
+            '}',
         ]);
     }
 

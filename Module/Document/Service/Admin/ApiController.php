@@ -30,6 +30,7 @@ class ApiController extends Controller {
 
     public function editAction($id, $project_id = 0, $parent_id = 0) {
         $model = ApiModel::findOrNew($id);
+        $model->id = intval($model->id);
         if ($project_id > 0) {
             $model->project_id = $project_id;
         }
@@ -175,15 +176,16 @@ class ApiController extends Controller {
     }
 
     public function importFieldAction($content, $kind = 1, $api_id = 0) {
+        $api_id = intval($api_id);
         $data = FieldModel::parseContent($content, $kind);
         foreach ($data as $model) {
             $model->api_id = $api_id;
-            if (!$model->check()) {
+            if (!$model->check(ApiModel::getStore())) {
                 continue;
             }
             $model->save();
-            if ($model->api_id < 1) {
-                ApiModel::preStore($model->id);
+            if ($api_id < 1) {
+                ApiModel::preStore($model);
             }
         }
         return $this->refreshFieldAction($kind, $api_id);
@@ -193,19 +195,16 @@ class ApiController extends Controller {
         $kind = intval($kind);
         $this->layout = false;
         if ($kind === FieldModel::KIND_RESPONSE) {
-            $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)
-                ->where('api_id', $api_id)->all();
+            $response_fields = $this->getFieldList($api_id, FieldModel::KIND_RESPONSE);
             $response_fields = (new Tree($response_fields))->makeTreeForHtml();
             return $this->show('responseRow', compact('response_fields'));
         }
         if ($kind === FieldModel::KIND_REQUEST) {
-            $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)
-                ->where('api_id', $api_id)->all();
+            $request_fields = $this->getFieldList($api_id, FieldModel::KIND_REQUEST);
             return $this->show('requestRow', compact('request_fields'));
         }
         if ($kind == FieldModel::KIND_HEADER) {
-            $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)
-                ->where('api_id', $api_id)->all();
+            $header_fields = $this->getFieldList($api_id, FieldModel::KIND_HEADER);
             return $this->show('headerRow', compact('header_fields'));
         }
         return '';

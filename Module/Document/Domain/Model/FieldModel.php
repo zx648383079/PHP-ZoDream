@@ -124,7 +124,7 @@ class FieldModel extends Model {
 
     public function save() {
         parent::save();
-        if ($this->id < 0) {
+        if ($this->id < 1) {
             return false;
         }
         if (empty($this->children)) {
@@ -139,9 +139,13 @@ class FieldModel extends Model {
         return true;
     }
 
-    public function check() {
+    public function check(array $exits) {
+        if (empty($exits)) {
+            return true;
+        }
         return self::where('kind', $this->kind)->where('api_id', $this->api_id)
             ->where('parent_id', intval($this->parent_id))->where('name', $this->name)
+                ->whereIn('id', $exits)
                 ->where('id', '<>', $this->id)->count() < 1;
     }
 
@@ -238,7 +242,7 @@ class FieldModel extends Model {
                 'title' => $key,
                 'type' => 'string',
                 'kind' => $kind,
-                'default_value' => is_array($item) || strlen($item) > 30 ? '' : $item,
+                'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
                 'is_required' => !empty($item) ? 1 : 0
             ]);
             self::parseChildren($item, $model);
@@ -278,7 +282,7 @@ class FieldModel extends Model {
                 'name' => $key,
                 'title' => $key,
                 'type' => 'string',
-                'default_value' => is_array($item) || strlen($item) > 30 ? '' : $item,
+                'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
                 'is_required' => !empty($item)
             ]);
             self::parseChildren($item, $child);

@@ -8,7 +8,7 @@ namespace Module\Shop\Domain\Models;
  * Time: 19:07
  */
 use Domain\Model\Model;
-use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class GoodsModel
@@ -58,11 +58,11 @@ class CommentModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(UserModel::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function goods() {
-        return $this->hasOne(GoodsModel::class, 'id', 'item_id');
+        return $this->hasOne(GoodsSimpleModel::class, 'id', 'item_id');
     }
 
     public function images() {

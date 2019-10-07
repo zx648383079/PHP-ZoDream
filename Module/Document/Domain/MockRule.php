@@ -187,6 +187,7 @@ class MockRule {
      * @return mixed
      */
     public function goods($type='name') {
+        $data = [];
         switch ($type) {
             case 'name':
                 $data = array(
@@ -595,7 +596,7 @@ class MockRule {
      * @param $text_color
      * @return string
      */
-    public function image($size, $background_color, $text, $text_color) {
+    public function image($size, $background_color = null, $text = null, $text_color = null) {
 
         $width  = $this->number('100-500');
         $length = $this->number('200-400');

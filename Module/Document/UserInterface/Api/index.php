@@ -233,13 +233,13 @@ $this->registerJs($js, View::JQUERY_READY);
     <div class="dialog-header">
         <form action="<?=$this->url('./api/code', ['id' => $api->id], false)?>" method="post">
             <select name="kind">
-                <?php foreach([1 => '响应', 2 => '请求', 0 => '整体'] as $k => $item):?>
+                <?php foreach([2 => '响应', 1 => '请求', 0 => '整体'] as $k => $item):?>
                 <option value="<?=$k?>"><?=$item?></option>
                 <?php endforeach;?>
             </select>
             <select name="lang">
-                <?php foreach(['c#', 'go', 'ts', 'dart', 'java', 'kotlin'] as $item):?>
-                <option value="<?=$item?>"><?=$item?></option>
+                <?php foreach(['csharp' => 'c#', 'go', 'ts', 'dart', 'java', 'kotlin'] as $k => $item):?>
+                <option value="<?=is_int($k) ? $item : $k?>"><?=$item?></option>
                 <?php endforeach;?>
             </select>
             <button>生成</button>

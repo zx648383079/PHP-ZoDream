@@ -32,7 +32,7 @@ use Module\Document\Domain\Model\FieldModel;
     <div class="input-group">
         <label>参数类型</label>
         <select class="form-control" name="type">
-            <?php foreach(FieldModel::type_list as $key => $item):?>
+            <?php foreach(FieldModel::$type_list as $key => $item):?>
                <option value="<?=$key?>" <?= $key == $model->type ? 'selected' : '' ?>><?=$item?></option>
             <?php endforeach;?>
         </select>

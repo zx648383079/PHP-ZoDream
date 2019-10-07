@@ -73,6 +73,9 @@ class ApiModel extends Model {
      * @throws \Exception
      */
     public static function preStore($id) {
+        if ($id instanceof FieldModel) {
+            return static::preField($id);
+        }
         $id = intval($id);
         if ($id < 1) {
             return;
@@ -81,7 +84,18 @@ class ApiModel extends Model {
         if (in_array($id, $data)) {
             return;
         }
+        $data[] = $id;
         session()->set(self::PRE_STORE_KEY, $data);
+    }
+
+    public static function preField(FieldModel $model) {
+        self::preStore($model->id);
+        if (empty($model->children)) {
+            return;
+        }
+        foreach ($model->children as $item) {
+            static::preField($item);
+        }
     }
 
     /**
