@@ -80,6 +80,14 @@ $this->registerCssFile([
             </div>
             
             <div class="editor">
+                <div class="editor-plugin">
+                    <i class="fa fa-code" title="插入代码"></i>
+                    <i class="fa fa-eye-slash" title="插入隐藏内容""></i>
+                    <i class="fa fa-download" title="插入可下载内容"></i>
+                    <i class="fa fa-image" title="插入图片"></i>
+                    <i class="fa fa-video" title="插入视频"></i>
+                    <i class="fa fa-link" title="插入链接"></i>
+                </div>
                 <textarea name="content" required></textarea>
             </div>
             <div class="footer">

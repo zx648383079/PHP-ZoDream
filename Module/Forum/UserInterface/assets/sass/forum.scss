@@ -232,6 +232,22 @@
     line-height: 40px;
 }
 
+.editor {
+    .editor-plugin {
+        background-color: #fff;
+        .fa {
+            display: inline-block;
+            padding: 0 5px;
+            cursor: pointer;
+            line-height: 30px;
+            &:hover {
+                background-color: #ccc;
+            }
+        }
+    }
+}
+
+
 @media (max-width: 640px) {
     .forum-group,
     .thread-list,
