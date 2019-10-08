@@ -186,7 +186,10 @@ $(function() {
         $(this).closest('.page-tip').toggleClass('min');
     });
     $('.sidebar-container .sidebar-container-toggle').click(function() {
-        $(this).closest('.sidebar-container').toggleClass('expand');
+        let box = $(this).closest('.sidebar-container').toggleClass('expand');
+        if (box.find('ul').height() < $(window).height() - 100) {
+            box.toggleClass('sidebar-fixed', box.hasClass('expand'));
+        }
     });
     $('.sidebar-container li a').click(function() {
         let $this = $(this),

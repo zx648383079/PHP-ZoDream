@@ -36,8 +36,8 @@ $project_tags = implode(',', $project_tags);
 
 $js = <<<JS
    //资产分布
-    var myChart = echarts.init(document.getElementById('now-box'));
-    var option = {
+    var nowChart = echarts.init(document.getElementById('now-box'));
+    var nowoption = {
         title : {
             text: '本月收支情况',
             x:'center'
@@ -73,10 +73,10 @@ $js = <<<JS
     };
 
     // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+    nowChart.setOption(nowoption);
     
-    var myChart = echarts.init(document.getElementById('y-box'));
-    var option = {
+    var yChart = echarts.init(document.getElementById('y-box'));
+    var yoption = {
         title : {
             text: '上月收支情况',
             x:'center'
@@ -112,9 +112,9 @@ $js = <<<JS
     };
 
     // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+    yChart.setOption(yoption);
     
-    var myChart = echarts.init(document.getElementById('main'));
+    var mainChart = echarts.init(document.getElementById('main'));
     var option = {
         title : {
             text: '资产分布情况',
@@ -150,12 +150,12 @@ $js = <<<JS
     };
 
     // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+    mainChart.setOption(option);
 
 
     //收益曲线
-    var myChart1 = echarts.init(document.getElementById('earnings'));
-    var option1 = {
+    var eChart = echarts.init(document.getElementById('earnings'));
+    var eoption = {
         title: {
             text: '收益曲线'
         },
@@ -192,7 +192,13 @@ $js = <<<JS
             {$project_data}
         ]
     };
-    myChart1.setOption(option1);
+    eChart.setOption(eoption);
+    $(window).resize(function() {
+        eChart.resize();
+        nowChart.resize();
+        yChart.resize();
+        mainChart.resize();
+    });
 JS;
 
 $this->registerJs($js);
@@ -210,7 +216,7 @@ $this->registerJs($js);
                     <?php endif;?>
             </div>
             <div class="panel-body">
-                <div id="now-box" style="width: 600px;height:400px;"></div>
+                <div id="now-box"  style="height:400px;"></div>
             </div>
             <div class="panel-body">
                 <p>收入记录：<?=$now_income_count?>条。收入总额：<?=$now_income?>元</p>
@@ -229,7 +235,7 @@ $this->registerJs($js);
                     <?php endif;?>
             </div>
             <div class="panel-body">
-                <div id="y-box" style="width: 600px;height:400px;"></div>
+                <div id="y-box" style="height:400px;"></div>
             </div>
             <div class="panel-body">
                 <p>收入记录：<?=$y_income_count?>条。收入总额：<?=$y_income?>元</p>
@@ -244,7 +250,7 @@ $this->registerJs($js);
                 <h3 class="panel-title">资产分布</h3 >
             </div>
             <div class="panel-body">
-                <div id="main" style="width: 600px;height:400px;"></div>
+                <div id="main"  style="height:400px;"></div>
             </div>
         </div>
     </div>
@@ -254,7 +260,7 @@ $this->registerJs($js);
                 <h3 class="panel-title">收益曲线</h3 >
             </div>
             <div class="panel-body">
-                <div id="earnings" style="width: 600px;height:400px;"></div>
+                <div id="earnings" style="height:400px;"></div>
             </div>
         </div>
     </div>

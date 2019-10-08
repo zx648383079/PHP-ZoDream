@@ -3,6 +3,7 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Repositories\TermRepository;
@@ -122,9 +123,9 @@ class HomeController extends ModuleController {
     }
 
     public function suggestAction($keywords) {
-        $data = BlogModel::when(!empty($keywords), function ($query) {
+        $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
            BlogModel::search($query, 'title');
-        })->limit(4)->pluck('title', 'id');
+        })->limit(4)->get();
         return $this->jsonSuccess($data);
     }
 

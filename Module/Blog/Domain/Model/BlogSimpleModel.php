@@ -12,6 +12,8 @@ class BlogSimpleModel extends BlogEntity {
 
     const SIMPLE_MODE = ['id', 'title'];
 
+    protected $append = ['url'];
+
 	public function getUrlAttribute() {
 	    return url('./', ['id' => $this->id]);
     }

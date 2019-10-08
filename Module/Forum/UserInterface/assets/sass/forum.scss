@@ -231,3 +231,101 @@
 .path {
     line-height: 40px;
 }
+
+@media (max-width: 640px) {
+    .forum-group,
+    .thread-list,
+    .thread-new-box,
+    .thread-box {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+    .thread-list {
+        .thread-item-header {
+            display: none;
+        }
+        .thread-item {
+            display: block;
+            .time {
+                display: inline-block;
+                em {
+                    display: inline-block;
+                }
+            }
+            .reply {
+                display: none;
+            }
+            .count {
+                float: right;
+                em {
+                    display: inline-block;
+                    &::before {
+                        font-weight: 900;
+                        font-style: normal;
+                        font-family: "Font Awesome 5 Free";
+                    }
+                    &:first-child {
+                        &::before {
+                            content: "\f4ad";
+                        }
+                    }
+                    &:last-child {
+                        &::before {
+                            content: "\f06e";
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .thread-box {
+        .thread-title {
+            display: block;
+            .count {
+                display: none;
+            }
+        }
+        .post-item {
+            display: block;
+            position: relative;
+            .post-user {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                z-index: 99;
+                background-color: transparent;
+                .name {
+                    border: none;
+                }
+                .avatar {
+                    width: 40px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+            .post-content {
+                .header {
+                    padding: 0 0 0 80px;
+                    font-size: 12px;
+                }
+                .content {
+                    padding: 0 0 0 45px;
+                    min-height: 40px;
+                }
+            }
+        }
+    }
+    .post-new {
+        .post-user {
+            display: none;
+        }
+    }
+    .path {
+        margin-left: -15px;
+        li {
+            padding: 0;
+        }
+    }
+}

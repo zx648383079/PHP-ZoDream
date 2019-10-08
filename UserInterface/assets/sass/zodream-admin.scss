@@ -259,11 +259,16 @@ footer {
                     content: "\f00d";
                 }
             }
+            &.sidebar-fixed {
+                position: fixed;
+                top: 50px;
+            }
         }
     }
     .main-container {
         margin-left: 0;
         width: 100%;
+        padding-bottom: 50px;
     }
     .auto-hide {
         display: none;

@@ -29,15 +29,15 @@ function bindBlogPage(baseUri: string) {
             }
             let html = '';
             $.each(data.data, function (i, item) {
-                html += '<li>' + item + '</li>'
+                html += '<li><a href="' + item.url + '">' + item.title + '</li>'
             });
             $('.book-search .search-tip').html(html);
         });
     });
-    $('.book-search .search-tip').on('click', 'li', function () {
-        $('.book-search [name=keywords]').val($(this).text());
-        $('.book-search form').submit();
-    });
+    // $('.book-search .search-tip').on('click', 'li', function () {
+    //     $('.book-search [name=keywords]').val($(this).text());
+    //     $('.book-search form').submit();
+    // });
     $('.book-body .book-item').addClass('fade-pre-item').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
         $(this).removeClass('fade-item');
     }).lazyload({

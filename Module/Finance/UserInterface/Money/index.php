@@ -59,6 +59,9 @@ $js = <<<JS
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+    $(window).resize(function() {
+        myChart.resize();
+    });
 JS;
 
 
@@ -106,7 +109,7 @@ $this->registerJs($js);
                 <h3 class="panel-title">理财项目分布</h3 >
             </div>
             <div class="panel-body">
-                <div id="main" style="width: 600px;height:400px;"></div>
+                <div id="main" style="height:400px;"></div>
             </div>
         </div>
     </div>

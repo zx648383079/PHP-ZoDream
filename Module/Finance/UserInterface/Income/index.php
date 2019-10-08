@@ -18,115 +18,110 @@ $month_list = [
 $income_str = implode(',', $income_days);
 $expenditure_str = implode(',', $expenditure_days);
 $js = <<<JS
-      $(function () {
-            $("#month").on("change",function (e) {
-                $("#Pageform").submit();
-            });
-        });
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('income_payment'));
-        var maxD = {$day_length};
-        var xData = function(){
-            var data = [];
-            for(var i=1;i<=maxD;i++){
-                data.push(i+"日");
-            }
-            return data;
-        }();
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('income_payment'));
+    var maxD = {$day_length};
+    var xData = function(){
+        var data = [];
+        for(var i=1;i<=maxD;i++){
+            data.push(i+"日");
+        }
+        return data;
+    }();
 
-        option = {
-            "title": {
-                "text": "收支环比图",
-                "subtext": "收入 vs 支出",
-                "x": "center"
+    option = {
+        "title": {
+            "text": "收支环比图",
+            "subtext": "收入 vs 支出",
+            "x": "center"
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"
             },
-            "tooltip": {
-                "trigger": "axis",
-                "axisPointer": {
-                    "type": "shadow"
+        },
+        "grid": {
+            "borderWidth": 0,
+            "y2": 120
+        },
+        "legend": {
+            "x": "right",
+            "data": [ ]
+        },
+        "toolbox": {
+            "show": true,
+            "feature": {
+                "restore": { },
+                "saveAsImage": { }
+            }
+        },
+        "calculable": true,
+        "xAxis": [
+            {
+                "type": "category",
+                "splitLine": {
+                    "show": false
                 },
-            },
-            "grid": {
-                "borderWidth": 0,
-                "y2": 120
-            },
-            "legend": {
-                "x": "right",
-                "data": [ ]
-            },
-            "toolbox": {
-                "show": true,
-                "feature": {
-                    "restore": { },
-                    "saveAsImage": { }
-                }
-            },
-            "calculable": true,
-            "xAxis": [
-                {
-                    "type": "category",
-                    "splitLine": {
-                        "show": false
-                    },
-                    "axisTick": {
-                        "show": false
-                    },
-                    "splitArea": {
-                        "show": false
-                    },
-                    "axisLabel": {
-                        "interval": 0,
-                        "rotate": 45,
-                        "show": true,
-                        "splitNumber": 15,
-                        "textStyle": {
-                            "fontFamily": "微软雅黑",
-                            "fontSize": 12
-                        }
-                    },
-                    "data": xData,
-                }
-            ],
-            "yAxis": [
-                {
-                    "type": "value",
-                    "splitLine": {
-                        "show": false
-                    },
-                    "axisLine": {
-                        "show": true
-                    },
-                    "axisTick": {
-                        "show": false
-                    },
-                    "splitArea": {
-                        "show": false
+                "axisTick": {
+                    "show": false
+                },
+                "splitArea": {
+                    "show": false
+                },
+                "axisLabel": {
+                    "interval": 0,
+                    "rotate": 45,
+                    "show": true,
+                    "splitNumber": 15,
+                    "textStyle": {
+                        "fontFamily": "微软雅黑",
+                        "fontSize": 12
                     }
-                }
-            ],
-            "dataZoom": [
-                {
-                    "show": true,
-                    "height": 30,
-                    "xAxisIndex": [
-                        0
-                    ],
-                    bottom:40,
-                    "start": 0,
-                    "end": 80
                 },
-                {
-                    "type": "inside",
-                    "show": true,
-                    "height": 15,
-                    "xAxisIndex": [
-                        0
-                    ],
-                    "start": 1,
-                    "end": 35
+                "data": xData,
+            }
+        ],
+        "yAxis": [
+            {
+                "type": "value",
+                "splitLine": {
+                    "show": false
+                },
+                "axisLine": {
+                    "show": true
+                },
+                "axisTick": {
+                    "show": false
+                },
+                "splitArea": {
+                    "show": false
                 }
-            ],
-            "series": [
+            }
+        ],
+        "dataZoom": [
+            {
+                "show": true,
+                "height": 30,
+                "xAxisIndex": [
+                    0
+                ],
+                bottom:40,
+                "start": 0,
+                "end": 80
+            },
+            {
+                "type": "inside",
+                "show": true,
+                "height": 15,
+                "xAxisIndex": [
+                    0
+                ],
+                "start": 1,
+                "end": 35
+            }
+        ],
+        "series": [
 //            {
 //                "name": "收入",
 //                "type": "bar",
@@ -151,48 +146,56 @@ $js = <<<JS
 //                },
 //                "data": [3709, 2417, 755, 2610, 1719, 433, 2544, 4285, 3372, 2484, 4078, 1355, 5208, 17233709, 2417, 755, 2610, 1719, 433, 2544, 4285, 3372, 2484, 4078, 1355, 5208, 17231355, 5208],
 //            },
-                {
-                    "name": "收入",
-                    "type": "bar",
-                    "stack": "总量",
-                    "barMaxWidth": 50,
-                    "itemStyle": {
-                        "normal": {
-                            "color": "rgba(51,204,112,1)",
-                            "barBorderRadius": 0,
-                            "label": {
-                                "show": true,
-                                formatter : function(p) {
-                                    return p.value > 0 ? (p.value + '') : '';
-                                }
+            {
+                "name": "收入",
+                "type": "bar",
+                "stack": "总量",
+                "barMaxWidth": 50,
+                "itemStyle": {
+                    "normal": {
+                        "color": "rgba(51,204,112,1)",
+                        "barBorderRadius": 0,
+                        "label": {
+                            "show": true,
+                            formatter : function(p) {
+                                return p.value > 0 ? (p.value + '') : '';
                             }
                         }
-                    },
-                    "data": [{$income_str}]
+                    }
                 },
-                {
-                    "name": "支出",
-                    "type": "bar",
-                    "stack": "总量",
-                    "itemStyle": {
-                        "normal": {
-                            "color": "rgba(193,35,43,1)",
-                            "barBorderRadius": 0,
-                            "label": {
-                                "show": true,
-                                formatter : function(p) {
-                                    return p.value > 0 ? (p.value + '') : '';
-                                }
+                "data": [{$income_str}]
+            },
+            {
+                "name": "支出",
+                "type": "bar",
+                "stack": "总量",
+                "itemStyle": {
+                    "normal": {
+                        "color": "rgba(193,35,43,1)",
+                        "barBorderRadius": 0,
+                        "label": {
+                            "show": true,
+                            formatter : function(p) {
+                                return p.value > 0 ? (p.value + '') : '';
                             }
                         }
-                    },
-                    "data": [{$expenditure_str}]
-                }
-            ]
-        }
+                    }
+                },
+                "data": [{$expenditure_str}]
+            }
+        ]
+    }
 
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    $(function () {
+        $("#month").on("change",function (e) {
+            $("#Pageform").submit();
+        });
+    });
+    $(window).resize(function() {
+        myChart.resize();
+    });
 JS;
 
 $this->registerJs($js);
@@ -202,7 +205,7 @@ $this->registerJs($js);
         <h2 style="width:60%;">收支明细
             <small>&nbsp;
                 <form method="get" id="Pageform" action="" role="form" class="form_inline">
-                    <select class="form-control input-sm" style="width:15%;display: inline;" name="month" id="month" >
+                    <select class="form-control input-sm" style="width:15%;display: inline;min-width: 80px;" name="month" id="month" >
                         <?php foreach ($month_list as $item):?>
                         <option value="<?=$item?>" <?= $item == $month ? 'selected' : ''?>><?=$item?></option>
                         <?php endforeach;?>

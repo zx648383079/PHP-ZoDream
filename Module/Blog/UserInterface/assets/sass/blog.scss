@@ -80,6 +80,9 @@ $acolor: $fg;
                             list-style: none;
                             &:hover {
                                 @include active();
+                                a {
+                                    color: $white;
+                                }
                             }
                         }
                     }
