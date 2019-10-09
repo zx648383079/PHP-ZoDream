@@ -46,6 +46,7 @@ class Parser extends Page {
             'img' => ImgNode::class,
             'video' => VideoNode::class,
             'audio' => AudioNode::class,
+            'at' => AtNode::class
         ];
         foreach ($data as $key => $item) {
             $this->register($key, $item);
@@ -78,7 +79,18 @@ class Parser extends Page {
                     return $cacheKey;
                 }, $html);
         }
-        return str_replace(array_keys($maps), array_values($maps), htmlspecialchars($html));
+        $html = htmlspecialchars($html);
+        $html = str_replace(["\n", "\t", ' '], ['<br/>', '&nbsp;&nbsp;&nbsp;&nbsp;', '&nbsp;'], $html);
+        return str_replace(array_keys($maps), array_values($maps), $html);
+    }
+
+    public function cleanText($html) {
+        foreach ($this->node_list as $node => $value) {
+            $html = preg_replace(
+                sprintf('#<%s(\s+([^\<\>]+))?>([\s\S]*?)</%s>#i', $node, $node),
+                '', $html);
+        }
+        return htmlspecialchars($html);
     }
 
     private function parseAttributes($attr) {

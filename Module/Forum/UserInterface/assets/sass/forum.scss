@@ -65,6 +65,9 @@
         grid-template-columns: 1fr 105px 60px 105px;
         .name {
             line-height: 40px;
+            .fa-fire {
+                color: red;
+            }
         }
         .time,
         .count,
@@ -97,6 +100,9 @@
     .thread-title {
         border-bottom: 4px solid #f4f4f4;
         line-height: 40px;
+        .fa-fire {
+            color: red;
+        }
         .count {
             text-align: center;
         }
@@ -131,6 +137,7 @@
             }
             .content {
                 padding: 0 20px;
+                word-break: break-word;
                 a {
                     color: #369;
                 }
@@ -147,6 +154,31 @@
                 bottom: 0;
                 line-height: 30px;
             }
+            .quote {
+                background-color: #F9F9F9;
+                margin: 10px 0;
+                padding: 10px 35px;
+                zoom: 1;
+                color: #666;
+                position: relative;
+                overflow: hidden;
+                &::before {
+                    content: "“";
+                    position: absolute;
+                    font-size: 80px;
+                    left: -45px;
+                    top: -12px;
+                    color: #ccc;
+                }
+                &::after {
+                    content: "”";
+                    position: absolute;
+                    font-size: 80px;
+                    right: -45px;
+                    bottom: -53px;
+                    color: #ccc;
+                }
+            }
         }
         &.post-new {
             .post-content {
@@ -160,6 +192,17 @@
                     color: #fff;
                 }
             } 
+        }
+    }
+}
+
+.thread-highlight {
+    .name,
+    .title {
+        color: #a10000;
+        font-weight: 700;
+        a {
+            color: #a10000;
         }
     }
 }

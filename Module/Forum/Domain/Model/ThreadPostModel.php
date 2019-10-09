@@ -2,7 +2,7 @@
 namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Helpers\Time;
 
 /**
@@ -50,7 +50,7 @@ class ThreadPostModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(UserModel::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getUpdatedAtAttribute() {

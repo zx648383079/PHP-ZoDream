@@ -15,8 +15,8 @@ class ThreadController extends Controller {
         ];
     }
 
-    public function indexAction($id, $page = 1) {
-        if ($page < 2) {
+    public function indexAction($id, $user = 0, $page = 1) {
+        if ($page < 2 && $user < 1) {
             ThreadModel::query()->where('id', $id)
                 ->updateOne('view_count');
         }
@@ -27,7 +27,11 @@ class ThreadController extends Controller {
         $forum = ForumModel::findById($thread->forum_id);
         $path = ForumModel::findPath($thread->forum_id);
         $path[] = $forum;
-        $post_list = ThreadPostModel::with('user')->where('thread_id', $id)
+        $post_list = ThreadPostModel::with('user')
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
+            ->where('thread_id', $id)
             ->orderBy('grade', 'asc')
             ->orderBy('created_at', 'asc')->page();
         return $this->show(compact('thread', 'path', 'post_list'));

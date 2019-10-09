@@ -8,7 +8,7 @@ $this->registerCssFile('@forum.css')
 ?>
 <div class="post-list">
     <?php foreach($post_list as $item):?>
-    <div class="post-item">
+    <div class="post-item" data-id="<?=$item->id?>">
         <div class="post-user">
             <div class="name"><?=$item->user->name?></div>
             <div class="avatar">
@@ -32,7 +32,7 @@ $this->registerCssFile('@forum.css')
                 
             </div>
             <div class="footer">
-                <a href="">回复</a>
+                <a href="javascript:;" data-action="reply">回复</a>
             </div>
         </div>
         <?php else:?>
@@ -51,7 +51,7 @@ $this->registerCssFile('@forum.css')
                 <?=Parser::converter($item)?>
             </div>
             <div class="footer">
-                <a href="">回复</a>
+                <a href="javascript:;" data-action="reply">回复</a>
             </div>
         </div>
         <?php endif;?>

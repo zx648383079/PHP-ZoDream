@@ -3,11 +3,13 @@ interface IRange {
     end: number,
 }
 
+type PluginHandle = (this: Editor, parentBlock: string, event: JQuery) => void;
+
 interface IPlugin {
     icon: string,
     name?: string,
     title?: string,
-    handle: (this: Editor) => void,
+    handle: PluginHandle,
 }
 
 class Editor {
@@ -21,16 +23,32 @@ class Editor {
 
     public range: IRange;
     public textField: HTMLTextAreaElement;
+    private events: {[key: string]: Function} = {};
+
+    public on(event: string, callback: Function): this {
+        this.events[event] = callback;
+        return this;
+    }
+
+    public hasEvent(event: string): boolean {
+        return this.events.hasOwnProperty(event);
+    }
+
+    public trigger(event: string, ... args: any[]) {
+        if (!this.hasEvent(event)) {
+            return;
+        }
+        return this.events[event].call(this, ...args);
+    }
 
     private init() {
         let html = '';
         for (const item of Editor.plugins) {
-            html += '<i class="fa '+ item.icon +'" title="' + item.title +'"></i>';
+            html += '<i class="fa '+ item.icon +'" data-name="'+ item.name +'" title="' + item.title +'"></i>';
+            this.on(item.name, item.handle);
         }
         this.element.prepend('<div class="editor-plugin">' + html + '</div>');
     }
-
-
 
     private bindEvent() {
         let that = this;
@@ -48,37 +66,7 @@ class Editor {
                 return;
             }
             let tag = that.getBlock();
-            if (tag && tag !== 'hide' && (tag !== 'a' || !plugin.hasClass('fa-image'))) {
-                return;
-            }
-            if (plugin.hasClass('fa-code')) {
-                that.insert('<code></code>', 6, true);
-                return;
-            }
-            if (plugin.hasClass('fa-eye-slash')) {
-                that.append('<hide></hide>', 6, true);
-                return;
-            }
-            if (plugin.hasClass('fa-download')) {
-                that.insert('<file></file>', 6, true);
-                return;
-            }
-            if (plugin.hasClass('fa-image')) {
-                that.insert('<img></img>', 5, true);
-                return;
-            }
-            if (plugin.hasClass('fa-video')) {
-                that.insert('<video></video>', 7, true);
-                return;
-            }
-            if (plugin.hasClass('fa-music')) {
-                that.insert('<audio></audio>', 7, true);
-                return;
-            }
-            if (plugin.hasClass('fa-link')) {
-                that.insert('<a href=""></a>', 9, true);
-                return;
-            }
+            that.trigger(plugin.data('name'), tag, plugin);
         });
     }
 
@@ -248,6 +236,27 @@ class Editor {
     }
 
     /**
+     * at
+     */
+    public at(parent: number, user: string) {
+        let val = '<at parent="' + parent + '">'+ user +'</at>';
+        this.textField.value = val + this.textField.value.replace(/<at[\s\S]+<\/at>/, '');
+        $('html,body').animate({scrollTop: this.element.offset().top + 'px'}, 500);
+        this.focus();
+    }
+
+    /**
+     * clear
+     */
+    public clear(focus: boolean = true) {
+        this.textField.value = '';
+        if (!focus) {
+            return;
+        }
+        this.focus();
+    }
+
+    /**
      * move
      */
     public move(x: number) {
@@ -273,12 +282,12 @@ class Editor {
 
     public static plugins: IPlugin[] = [];
 
-    public static plugin(plugin: IPlugin| string, handle?: any, title?: any) {
+    public static plugin(plugin: IPlugin| string, handle?: string | PluginHandle, title?: string | PluginHandle) {
         if (typeof plugin !== 'object') {
             plugin = {
                 icon: plugin,
-                title: typeof handle === 'function' ? title : handle, 
-                handle: typeof handle === 'function' ? handle : title, 
+                title: (typeof handle === 'function' ? title : handle) as string, 
+                handle: (typeof handle === 'function' ? handle : title) as PluginHandle, 
             };
         }
         if (!plugin.name) {
@@ -291,28 +300,56 @@ class Editor {
     }
 }
 
-Editor.plugin('fa-code', '插入代码', function() {
-
+Editor.plugin('fa-code', '插入代码', function(tag: string) {
+    if (tag && tag !== 'hide') {
+        return;
+    }
+    this.insert('<code></code>', 6, true);
 });
-Editor.plugin('fa-eye-slash', '插入隐藏内容', function() {
-    
+Editor.plugin('fa-eye-slash', '插入隐藏内容', function(tag) {
+    if (tag) {
+        return;
+    }
+    this.append('<hide></hide>', 6, true);
 });
-Editor.plugin('fa-file', '插入可下载内容', function() {
-    
+Editor.plugin('fa-download', '插入可下载内容', function(tag) {
+    if (tag && tag !== 'hide') {
+        return;
+    }
+    this.insert('<file></file>', 6, true)
 });
-Editor.plugin('fa-image', '插入图片', function() {
-    
+Editor.plugin('fa-image', '插入图片', function(tag) {
+    if (tag && tag !== 'hide' && tag !== 'a') {
+        return;
+    }
+    this.insert('<img></img>', 5, true);
 });
-Editor.plugin('fa-music', '插入音频', function() {
-    
+Editor.plugin('fa-music', '插入音频', function(tag) {
+    if (tag && tag !== 'hide') {
+        return;
+    }
+    this.insert('<audio></audio>', 7, true);
 });
-Editor.plugin('fa-video', '插入视频', function() {
-    
+Editor.plugin('fa-video', '插入视频', function(tag) {
+    if (tag && tag !== 'hide') {
+        return;
+    }
+    this.insert('<video></video>', 7, true);
 });
-Editor.plugin('fa-link', '插入链接', function() {
-    
+Editor.plugin('fa-link', '插入链接', function(tag) {
+    if (tag && tag !== 'hide') {
+        return;
+    }
+    this.insert('<a href=""></a>', 9, true);
 });
-
+Editor.plugin('fa-trash', '清空', function() {
+    this.clear(true);
+});
 $(function() {
     let editor = new Editor($('.editor'));
+    $('.thread-box').on('click', '.post-item [data-action="reply"]', function(e) {
+        e.preventDefault();
+        let box = $(this).closest('.post-item');
+        editor.at(box.data('id'), box.find('.post-user .name').text());
+    });
 });

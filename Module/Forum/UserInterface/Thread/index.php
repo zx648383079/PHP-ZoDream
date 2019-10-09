@@ -34,7 +34,7 @@ $this->registerCssFile([
 
 <div class="container">
     <div class="thread-box">
-        <div class="thread-title">
+        <div class="thread-title<?=$thread->is_highlight ? ' thread-highlight' : ''?>">
             <div class="count">
                 <span>查看：<?=$thread->view_count?></span>
                 <span>回复：<?=$thread->post_count?></span>
@@ -46,11 +46,14 @@ $this->registerCssFile([
                 ]
                 <?php endif;?>
                 <?=$this->text($thread->title)?>
+                <?php if($thread->is_digest):?>
+                <i class="fa fa-fire"></i>
+                <?php endif;?>
             </div>
         </div>
         <?php $this->extend('./page');?>
 
-        <?php if(!auth()->guest()):?>
+        <?php if(!auth()->guest() && !$thread->is_closed):?>
         <div class="post-item post-new">
             <div class="post-user">
                 <div class="name"><?=auth()->user()->name?></div>

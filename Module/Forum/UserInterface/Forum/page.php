@@ -20,7 +20,7 @@ $this->registerCssFile('@forum.css')
     </div>
 </div>
 <?php foreach($thread_list as $item):?>
-    <div class="thread-item">
+    <div class="thread-item<?=$item->is_highlight ? ' thread-highlight' : ''?>">
         <div class="name">
             <i class="fa fa-file"></i>
             <?php if($item->classify):?>
@@ -29,6 +29,9 @@ $this->registerCssFile('@forum.css')
             ]
             <?php endif;?>
             <a href="<?=$this->url('./thread', ['id' => $item->id])?>"><?=$this->text($item->title)?></a>
+            <?php if($item->is_digest):?>
+            <i class="fa fa-fire"></i>
+            <?php endif;?>
         </div>
         <div class="time">
             <em><?=$item->user->name?></em>
