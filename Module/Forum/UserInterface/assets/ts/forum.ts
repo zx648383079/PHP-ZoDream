@@ -3,6 +3,13 @@ interface IRange {
     end: number,
 }
 
+interface IPlugin {
+    icon: string,
+    name?: string,
+    title?: string,
+    handle: (this: Editor) => void,
+}
+
 class Editor {
     constructor(
         public element: JQuery
@@ -16,15 +23,14 @@ class Editor {
     public textField: HTMLTextAreaElement;
 
     private init() {
-        this.element.prepend(`<div class="editor-plugin">
-        <i class="fa fa-code" title="插入代码"></i>
-        <i class="fa fa-eye-slash" title="插入隐藏内容""></i>
-        <i class="fa fa-download" title="插入可下载内容"></i>
-        <i class="fa fa-image" title="插入图片"></i>
-        <i class="fa fa-video" title="插入视频"></i>
-        <i class="fa fa-link" title="插入链接"></i>
-    </div>`);
+        let html = '';
+        for (const item of Editor.plugins) {
+            html += '<i class="fa '+ item.icon +'" title="' + item.title +'"></i>';
+        }
+        this.element.prepend('<div class="editor-plugin">' + html + '</div>');
     }
+
+
 
     private bindEvent() {
         let that = this;
@@ -63,6 +69,10 @@ class Editor {
             }
             if (plugin.hasClass('fa-video')) {
                 that.insert('<video></video>', 7, true);
+                return;
+            }
+            if (plugin.hasClass('fa-music')) {
+                that.insert('<audio></audio>', 7, true);
                 return;
             }
             if (plugin.hasClass('fa-link')) {
@@ -261,8 +271,47 @@ class Editor {
         this.textField.focus();
     }
 
+    public static plugins: IPlugin[] = [];
 
+    public static plugin(plugin: IPlugin| string, handle?: any, title?: any) {
+        if (typeof plugin !== 'object') {
+            plugin = {
+                icon: plugin,
+                title: typeof handle === 'function' ? title : handle, 
+                handle: typeof handle === 'function' ? handle : title, 
+            };
+        }
+        if (!plugin.name) {
+            plugin.name = plugin.icon;
+        }
+        if (!plugin.title) {
+            plugin.title = plugin.name;
+        }
+        this.plugins.push(plugin);
+    }
 }
+
+Editor.plugin('fa-code', '插入代码', function() {
+
+});
+Editor.plugin('fa-eye-slash', '插入隐藏内容', function() {
+    
+});
+Editor.plugin('fa-file', '插入可下载内容', function() {
+    
+});
+Editor.plugin('fa-image', '插入图片', function() {
+    
+});
+Editor.plugin('fa-music', '插入音频', function() {
+    
+});
+Editor.plugin('fa-video', '插入视频', function() {
+    
+});
+Editor.plugin('fa-link', '插入链接', function() {
+    
+});
 
 $(function() {
     let editor = new Editor($('.editor'));

@@ -39,8 +39,10 @@ $this->registerCssFile('@forum.css')
             <em><?=$item->view_count?></em>
         </div>
         <div class="reply">
+            <?php if($item->last_post):?>
             <em><?=$item->last_post->user->name?></em>
             <em><?=$item->last_post->updated_at?></em>
+            <?php endif;?>
         </div>
     </div>
 <?php endforeach;?>

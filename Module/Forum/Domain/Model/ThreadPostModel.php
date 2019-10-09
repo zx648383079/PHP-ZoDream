@@ -13,6 +13,7 @@ use Zodream\Helpers\Time;
  * @property integer $user_id
  * @property string $ip
  * @property integer $grade
+ * @property integer $is_invisible
  * @property integer $created_at
  * @property integer $updated_at
 */
@@ -23,11 +24,12 @@ class ThreadPostModel extends Model {
 
     protected function rules() {
         return [
-            'content' => 'required|string:0,255',
+            'content' => 'required|string',
             'thread_id' => 'required|int',
             'user_id' => 'required|int',
             'ip' => 'required|string:0,120',
-            'grade' => 'int:0,999999',
+            'grade' => 'int',
+            'is_invisible' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -41,6 +43,7 @@ class ThreadPostModel extends Model {
             'user_id' => 'User Id',
             'ip' => 'Ip',
             'grade' => '层级',
+            'is_invisible' => '是否通过审核',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

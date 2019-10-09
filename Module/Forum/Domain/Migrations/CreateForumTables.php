@@ -39,6 +39,12 @@ class CreateForumTables extends Migration {
             $table->set('user_id')->int()->notNull()->comment('发送用户');
             $table->set('view_count')->int()->defaultVal(0)->comment('查看数');
             $table->set('post_count')->int()->defaultVal(0)->comment('回帖数');
+            $table->set('is_highlight')->bool()->defaultVal(0)
+                ->comment('是否高亮');
+            $table->set('is_digest')->bool()->defaultVal(0)
+                ->comment('是否精华');
+            $table->set('is_closed')->bool()->defaultVal(0)
+                ->comment('是否关闭');
             $table->timestamps();
         });
         Schema::createTable(ThreadPostModel::tableName(), function(Table $table) {
@@ -49,6 +55,8 @@ class CreateForumTables extends Migration {
             $table->set('ip')->varchar(120)->notNull();
             $table->set('grade')->smallInt(6)
                 ->defaultVal(0)->comment('回复的层级');
+            $table->set('is_invisible')->bool()->defaultVal(0)
+                ->comment('是否通过审核');
             $table->timestamps();
         });
     }

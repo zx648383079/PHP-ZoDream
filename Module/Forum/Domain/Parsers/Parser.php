@@ -43,7 +43,9 @@ class Parser extends Page {
             'file' => FileNode::class,
             'code' => CodeNode::class,
             'a' => LinkNode::class,
-            'img' => ImgNode::class
+            'img' => ImgNode::class,
+            'video' => VideoNode::class,
+            'audio' => AudioNode::class,
         ];
         foreach ($data as $key => $item) {
             $this->register($key, $item);
