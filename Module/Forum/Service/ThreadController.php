@@ -11,6 +11,8 @@ class ThreadController extends Controller {
     protected function rules() {
         return [
             'create' => '@',
+            'digest' => '@',
+            'highlight' => '@',
             '*' => '*'
         ];
     }
@@ -95,6 +97,69 @@ class ThreadController extends Controller {
             ->updateOne('post_count');
         return $this->jsonSuccess([
             'url' => url('./thread', ['id' => $thread_id, 'page' => ceil($post->grade / 20)])
+        ]);
+    }
+
+    public function digestAction($id) {
+        $thread = ThreadModel::find($id);
+        if (empty($thread)) {
+            return $this->jsonFailure('请选择帖子');
+        }
+        if (!$thread->canDigest()) {
+            return $this->jsonFailure('无权限');
+        }
+        ThreadModel::query()->where('id', $id)
+            ->updateBool('is_digest');
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function highlightAction($id) {
+        $thread = ThreadModel::find($id);
+        if (empty($thread)) {
+            return $this->jsonFailure('请选择帖子');
+        }
+        if (!$thread->canHighlight()) {
+            return $this->jsonFailure('无权限');
+        }
+        ThreadModel::query()->where('id', $id)
+            ->updateBool('is_highlight');
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function closeAction($id) {
+        $thread = ThreadModel::find($id);
+        if (empty($thread)) {
+            return $this->jsonFailure('请选择帖子');
+        }
+        if (!$thread->canClose()) {
+            return $this->jsonFailure('无权限');
+        }
+        ThreadModel::query()->where('id', $id)
+            ->updateBool('is_closed');
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function removePostAction($id) {
+        $item = ThreadPostModel::find($id);
+        if (empty($item)) {
+            return $this->jsonFailure('请选择回帖');
+        }
+        $thread = ThreadModel::find($item->thread_id);
+        if (empty($thread)) {
+            return $this->jsonFailure('请选择帖子');
+        }
+        if (!$thread->canRemovePost($item)) {
+            return $this->jsonFailure('无权限');
+        }
+        $item->delete();
+        return $this->jsonSuccess([
+            'refresh' => true
         ]);
     }
 }

@@ -33,6 +33,15 @@ $this->registerCssFile('@forum.css')
             </div>
             <div class="footer">
                 <a href="javascript:;" data-action="reply">回复</a>
+                <?php if($thread->canDigest()):?>
+                <a href="<?=$this->url('./thread/digest', ['id' => $thread->id])?>" data-action="toggle"><?= !$thread->is_digest ? '设为' : '取消'?>精华</a>
+                <?php endif;?>
+                <?php if($thread->canHighlight()):?>
+                <a href="<?=$this->url('./thread/highlight', ['id' => $thread->id])?>" data-action="toggle"><?= !$thread->is_highlight ? '设为' : '取消'?>高亮</a>
+                <?php endif;?>
+                <?php if($thread->canClose()):?>
+                <a href="<?=$this->url('./thread/close', ['id' => $thread->id])?>" data-action="toggle"><?= !$thread->is_closed ? '设为' : '取消'?>关闭</a>
+                <?php endif;?>
             </div>
         </div>
         <?php else:?>
@@ -52,6 +61,9 @@ $this->registerCssFile('@forum.css')
             </div>
             <div class="footer">
                 <a href="javascript:;" data-action="reply">回复</a>
+                <?php if($thread->canRemovePost($item)):?>
+                <a href="<?=$this->url('./thread/remove_post', ['id' => $item->id])?>" data-action="toggle">删除</a>
+                <?php endif;?>
             </div>
         </div>
         <?php endif;?>

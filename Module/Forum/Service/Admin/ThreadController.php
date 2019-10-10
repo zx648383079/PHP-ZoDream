@@ -3,6 +3,7 @@ namespace Module\Forum\Service\Admin;
 
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
+use Module\Forum\Domain\Model\ThreadPostModel;
 
 class ThreadController extends Controller {
 
@@ -17,5 +18,13 @@ class ThreadController extends Controller {
             })->orderBy('id', 'desc')->page();
         $forum_list = ForumModel::tree()->makeTreeForHtml();
         return $this->show(compact('thread_list', 'forum_list', 'forum_id'));
+    }
+
+    public function deleteAction($id) {
+        ThreadModel::where('id', $id)->delete();
+        ThreadPostModel::where('thread_id', $id)->delete();
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('thread')
+        ]);
     }
 }

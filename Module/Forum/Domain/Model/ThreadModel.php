@@ -78,4 +78,32 @@ class ThreadModel extends Model {
         return ThreadPostModel::query()->where('thread_id', $this->id)
             ->orderBy('id', 'desc')->first();
     }
+
+    public function canDigest() {
+        if (auth()->guest()) {
+            return false;
+        }
+        return auth()->user()->hasRole('administrator');
+    }
+
+    public function canHighlight() {
+        return $this->canDigest();
+    }
+
+    public function canClose() {
+        return $this->canDigest();
+    }
+
+    public function canRemovePost(ThreadPostModel $item) {
+	    if (auth()->guest()) {
+	        return false;
+        }
+	    if (auth()->id() == $this->user_id) {
+	        return true;
+        }
+	    if (auth()->id() == $item->user_id) {
+	        return true;
+        }
+	    return auth()->user()->hasRole('administrator');
+    }
 }

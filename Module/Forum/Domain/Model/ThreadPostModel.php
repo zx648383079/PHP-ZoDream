@@ -57,4 +57,11 @@ class ThreadPostModel extends Model {
         return Time::isTimeAgo($this->getAttributeValue('updated_at'), 2678400);
     }
 
+    public function canRemove() {
+        if (auth()->guest()) {
+            return false;
+        }
+        return auth()->id() == $this->user_id;
+    }
+
 }

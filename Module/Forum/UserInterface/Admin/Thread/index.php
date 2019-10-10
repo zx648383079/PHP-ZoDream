@@ -57,10 +57,8 @@ $this->title = '帖子列表';
                 <?php endif;?>
             </td>
             <td>
-                推荐：<?=$item->recommend?>/
-                回复：<a href="<?=$this->url('./admin/comment', ['blog_id' => $item->id])?>">
-                    <?=$item->comment_count?>
-                </a>
+                浏览：<?=$item->view_count?>/
+                回复：<?=$item->post_count?>
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
