@@ -15,7 +15,7 @@ return [
     'Sorry, the page you are looking for could not be found.' => '抱歉，页面走丢了！',
     'site keywords' => 'zodream,个人博客,开源博客,开发博客,ts,vue,php,uwp,angular,编程博客',
     'site description' => '从一而始，至一而终，简单的个人博客',
-    'site title' => '简单的个人博客',
+    'site title' => 'zodream',
     'Upload' => '上传',
     'Preview' => '预览',
     'Please input' => '请输入',
