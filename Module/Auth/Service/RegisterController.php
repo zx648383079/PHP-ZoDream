@@ -23,7 +23,7 @@ class RegisterController extends ModuleController {
             $model->logLogin();
             return $this->jsonSuccess([
                 'url' => url('/')
-            ]);
+            ], '注册成功！');
         }
         return $this->jsonFailure($model->getFirstError());
     }
