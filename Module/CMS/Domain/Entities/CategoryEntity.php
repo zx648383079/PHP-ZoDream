@@ -15,6 +15,7 @@ use Domain\Entities\Entity;
  * @property string $keywords
  * @property string $description
  * @property string $image
+ * @property string $thumb
  * @property string $content
  * @property string $url
  * @property integer $position
@@ -45,6 +46,7 @@ class CategoryEntity extends Entity {
             'keywords' => 'string:0,255',
             'description' => 'string:0,255',
             'image' => 'string:0,100',
+            'thumb' => 'string:0,100',
             'content' => '',
             'url' => 'string:0,100',
             'position' => 'int:0,999',
@@ -68,7 +70,8 @@ class CategoryEntity extends Entity {
             'parent_id' => '上级',
             'keywords' => '关键词',
             'description' => '简介',
-            'image' => '图片',
+            'thumb' => '缩略图',
+            'image' => '主图',
             'content' => '内容',
             'url' => '链接',
             'position' => '排序',

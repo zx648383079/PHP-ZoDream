@@ -17,6 +17,7 @@ use Zodream\Html\Tree;
  * @property string $keywords
  * @property string $description
  * @property string $image
+ * @property string $thumb
  * @property string $content
  * @property string $url
  * @property integer $position

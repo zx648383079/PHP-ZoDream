@@ -43,6 +43,7 @@ $this->registerJs($js);
                         <?php endforeach;?>
                     </select>
                 </div>
+                <?=Form::file('thumb')?>
                 <?=Form::file('image')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>

@@ -40,7 +40,11 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
         <ul>
             <?php foreach ($cat_list as $item): ?>
             <li <?=$category == $item->id ? 'class="active"' : '' ?>>
-                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a></li>
+                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a>
+                <?php if($item['blog_count'] > 0):?>
+                <span class="count"><?=$item['blog_count'] > 99 ? '99+' : $item['blog_count']?></span>
+                <?php endif;?>
+                </li>
             <?php endforeach; ?>
         </ul>
     </div>

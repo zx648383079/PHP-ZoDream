@@ -54,11 +54,12 @@ class CreateCmsTables extends Migration {
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('model_id')->int()->defaultVal(0);
             $table->set('parent_id')->int()->defaultVal(0);
-            $table->set('keywords')->varchar();
-            $table->set('description')->varchar();
-            $table->set('image')->varchar(100);
+            $table->set('keywords')->varchar()->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->set('thumb')->varchar(100)->defaultVal('')->comment('缩略图');
+            $table->set('image')->varchar(100)->defaultVal('')->comment('主图');
             $table->set('content')->text();
-            $table->set('url')->varchar(100);
+            $table->set('url')->varchar(100)->defaultVal('');
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('groups')->varchar()->defaultVal('');
             $table->set('category_template')->varchar(20)->defaultVal('');

@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Repositories;
 
 
+use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
 
 class TermRepository {
@@ -17,7 +18,13 @@ class TermRepository {
         }
         static::$caches = [];
         $data = TermModel::query()->get();
+        $blog_count = BlogModel::query()->where('parent_id', 0)
+            ->groupBy('term_id')
+            ->select('term_id,COUNT(*) as count')
+            ->pluck('count', 'term_id');
         foreach ($data as $item) {
+            $item['blog_count'] = isset($blog_count[$item['id']])
+                ? intval($blog_count[$item['id']]) : 0;
             static::$caches[intval($item['id'])] = $item;
         }
     }

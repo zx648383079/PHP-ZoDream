@@ -53,7 +53,11 @@ $this->extend('layouts/header', [
         <ul>
             <?php foreach ($cat_list as $item): ?>
                 <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=__($item->name)?></a></li>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=__($item->name)?></a>
+                    <?php if($item['blog_count'] > 0):?>
+                    <span class="count"><?=$item['blog_count'] > 99 ? '99+' : $item['blog_count']?></span>
+                    <?php endif;?>
+                    </li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -66,7 +70,7 @@ $this->extend('layouts/header', [
 </div>
 
 
-<div class="book-body">
+<div class="book-body open">
     <a class="book-fork" href="https://github.com/zx648383079/PHP-ZoDream">
         <img src="/assets/images/forkme.png" alt="Fork Me On Github">
     </a>

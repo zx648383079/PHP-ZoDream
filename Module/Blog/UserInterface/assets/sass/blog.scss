@@ -450,6 +450,21 @@ $acolor: $fg;
             .fa {
                 margin-right: 5px;
             }
+            .count {
+                position: absolute;
+                color: $white;
+                background-color: $headerBg;
+                border-radius: 50%;
+                display: inline-block;
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                text-align: center;
+                left: 11px;
+                margin-top: 2px;
+                font-size: 10px;
+                overflow: hidden;
+            }
             &.active {
                 @include active();
                 width: 200px;
@@ -458,6 +473,12 @@ $acolor: $fg;
                 }
                 a {
                     color: $white;
+                }
+                .count {
+                    color: $headerBg; 
+                    background-color: $white;
+                    left: auto;
+                    right: 0;
                 }
             }
             &:hover {
