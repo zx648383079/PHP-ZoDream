@@ -310,6 +310,42 @@ class CodeParser {
         ]);
     }
 
+    private function formatHttpNet(ApiModel $api, $name, $request, $response) {
+        return implode(self::NEW_LINE, [
+            sprintf('public interface I%sRepository', $name),
+            '{',
+            sprintf('%sTask<%s> Get%sAsync(%s, Action<HttpException> action = null);',
+                self::TAB, $response, $name, !empty($request) ? sprintf('%s params', $request) : ''),
+            '}',
+            sprintf('public class Rest%sRepository: I%sRepository', $name, $name),
+            '{',
+            self::TAB.'private readonly HttpHelper _http;',
+            self::TAB.'public RestCategoryRepository(string baseUrl)',
+            self::TAB.'{',
+                self::TAB.self::TAB.'_http = new HttpHelper(baseUrl);',
+            self::TAB.'}',
+            sprintf('%spublic async Task<%s> Get%sAsync(%sAction<HttpException> action = null);',
+                self::TAB, $response, $name, !empty($request) ? sprintf('%s params, ', $request) : ''),
+            sprintf('%s%s=> await _http.%sAsync<%s>("%s", %saction);',
+            self::TAB, self::TAB, strtolower($api->method), $response, $api->uri,
+                !empty($request) ? 'params, ' : ''),
+            '}',
+            '// 注册',
+            sprintf('public I%sRepository %s => new Rest%sRepository(_url);', $name, $name, $name),
+
+            '// 使用',
+            sprintf('var data = await App.Repository.%s.Get%sAsync();', $name, $name),
+            'if (data == null)',
+            '{',
+            '    return;',
+            '}',
+            'await DispatcherHelper.ExecuteOnUIThreadAsync(() =>',
+            '{',
+                '',
+            '});'
+        ]);
+    }
+
 
     // ts
 
@@ -358,10 +394,17 @@ class CodeParser {
     }
 
     private function formatHttpTs(ApiModel $api, $name, $request, $response) {
+        $maps = [
+            'get' => 'fetch',
+            'delete' => 'deleteRequest'
+        ];
+        $method = strtolower($api->method);
         return implode(self::NEW_LINE, [
-            sprintf('export const get%s = (%s) => %s%sfetch<%s>(\'%s\');', $name,
+            sprintf('export const get%s = (%s) => %s%s%s<%s>(\'%s\'%s);', $name,
                 !empty($request) ? sprintf('params: %s', $request) : '',
-                self::NEW_LINE, self::TAB, $response, $api->uri),
+                self::NEW_LINE, self::TAB, isset($maps[$method]) ?
+                    $maps[$method] : $method ,
+                $response, $api->uri, !empty($request) ? ', params' : ''),
             sprintf('get%s({}).then(res => {});', $name),
         ]);
     }
@@ -431,6 +474,18 @@ class CodeParser {
             implode(self::NEW_LINE, $from),
             implode(self::NEW_LINE, $to),
             '}'
+        ]);
+    }
+
+    private function formatHttpDart(ApiModel $api, $name, $request, $response) {
+        return implode(self::NEW_LINE, [
+            sprintf('Future<%s> get%s(%s[func action]) async {', $response, $name,
+                !empty($request) ? sprintf('%s params, ', $request) : ''),
+            sprintf('%sreturn await RestClient.%s<%s>(\'%s\', %saction)', self::TAB,
+                strtolower($api->method), $response, $api->uri,
+                !empty($request) ? 'params, ' : ''
+            ),
+            sprintf('var data = await get%s({});', $name),
         ]);
     }
 }

@@ -230,7 +230,7 @@ class FieldModel extends Model {
         if (substr($content, 0, 1) == '{') {
             $args = Json::decode($content);
         } elseif (substr($content, 0, 1) == '<') {
-            $args = Xml::specialDecode($content);
+            $args = Xml::specialDecode(preg_replace('/^[\s\S]*\<xml\>/', '<xml>', $content));
         } else {
             $args = [];
             parse_str($content, $args);
