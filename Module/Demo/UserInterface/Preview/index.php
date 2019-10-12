@@ -18,20 +18,15 @@ var d4 = $("#time4").datetimer({
 });
 JS;
 
-$this->extend('layout/header')
-    ->registerCssFile('@datetimer.min.css')
+$this->registerCssFile('@datetimer.css')
     ->registerJsFile('@jquery.datetimer.min.js')
     ->registerJs($js, View::JQUERY_READY);
 ?>
 
-    <input type="text" id="time">
+<input type="text" id="time">
 
-    <input type="text" id="time2">
-    <br/>
-    <input type="text" id="time3">
+<input type="text" id="time2">
+<br/>
+<input type="text" id="time3">
 
-    <input type="text" id="time4">
-
-<?php
-$this->extend('layout/footer');
-?>
+<input type="text" id="time4">

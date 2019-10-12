@@ -3,7 +3,6 @@ namespace Module\OpenPlatform;
 
 use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
-use PhpParser\Node\Expr\Empty_;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\Module as BaseModule;
