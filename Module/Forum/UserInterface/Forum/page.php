@@ -28,7 +28,7 @@ $this->registerCssFile('@forum.css')
             <a href="<?=$this->url('./forum', ['id' => $item->forum_id, 'classify' => $item->classify_id])?>"><?=$item->classify->name?></a>
             ]
             <?php endif;?>
-            <a href="<?=$this->url('./thread', ['id' => $item->id])?>"><?=$this->text($item->title)?></a>
+            <a class="title" href="<?=$this->url('./thread', ['id' => $item->id])?>"><?=$this->text($item->title)?></a>
             <?php if($item->is_digest):?>
             <i class="fa fa-fire"></i>
             <?php endif;?>

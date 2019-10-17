@@ -359,4 +359,9 @@ $(function() {
         }
         postJson($this.attr('href'), parseAjax);
     });
+    $('.thread-list').on('click', '.thread-item a', function(e) {
+        e.stopPropagation();
+    }).on('click', '.thread-item', function() {
+        window.location.href = $(this).find('a.title').attr('href');
+    });
 });
