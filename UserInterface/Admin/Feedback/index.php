@@ -6,14 +6,13 @@ use Zodream\Template\View;
 $this->title = '留言反馈列表';
 ?>
 
-<table class="table table-bordered well">
+<table class="table table-toggle">
     <thead>
     <tr>
         <th>ID</th>
         <th>称呼</th>
         <th>邮箱</th>
         <th>联系方式</th>
-        <th>内容</th>
         <th>状态</th>
         <th>操作</th>
     </tr>
@@ -30,14 +29,16 @@ $this->title = '留言反馈列表';
                 <?=$item->phone?>
             </td>
             <td>
-                <?=$this->text($item->content)?>
-            </td>
-            <td>
                 <?php if($item->status < 1):?>
                 待审核
                 <?php endif;?>
             </td>
             <td>
+            </td>
+        </tr>
+        <tr class="tr-child">
+            <td colspan="6">
+                <?=$this->text($item->content)?>
             </td>
         </tr>
     <?php endforeach; ?>

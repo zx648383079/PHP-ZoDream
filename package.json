@@ -23,23 +23,23 @@
   "homepage": "https://github.com/zx648383079/PHP-ZoDream#readme",
   "dependencies": {
     "@types/jquery": "^3.3.31",
-    "bourbon": "^5.1.0",
-    "bourbon-neat": "^1.9.1",
+    "bourbon": "^6.0.0",
+    "bourbon-neat": "^4.0.0",
     "gulp": "^4.0.2",
-    "gulp-clean-css": "^3.10.0",
+    "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-tslint": "^8.1.4",
-    "gulp-typescript": "^4.0.2",
+    "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
     "node-sass": "^4.12.0",
-    "tslint": "^5.19.0",
+    "tslint": "^5.20.0",
     "typescript": "^3.6.3",
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "gulp-autoprefixer": "^6.1.0"
+    "gulp-autoprefixer": "^7.0.1"
   }
 }

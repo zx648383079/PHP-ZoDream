@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
+use Domain\AdminMenu;
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',
@@ -19,43 +20,4 @@ $this->registerCssFile([
     ]);
 ?>
 
-<?= Layout::mainIfPjax($this, [
-    [
-        '首页',
-        './',
-        'fa fa-home',
-    ],
-    [
-        '友情链接',
-        './friend_link',
-        'fa fa-link'
-    ],
-    [
-        '留言反馈',
-        './feedback',
-        'fa fa-cookie'
-    ],
-    [
-        '系统管理',
-        false,
-        'fa fa-cogs',
-        [
-            [
-                '基本设置',
-                './',
-                'fa fa-cog'
-            ],
-            [
-                '清除缓存',
-                './cache',
-                'fa fa-trash'
-            ],
-            [
-                '生成SiteMap',
-                './sitemap',
-                'fa fa-map'
-            ]
-        ],
-        true
-    ]
-], $content, 'ZoDream Admin') ?>
+<?= Layout::mainIfPjax($this, AdminMenu::all(), $content, 'ZoDream Admin') ?>

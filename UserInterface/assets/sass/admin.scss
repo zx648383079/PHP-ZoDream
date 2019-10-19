@@ -18,3 +18,14 @@
         word-break: break-all;
     }
 }
+
+.tr-child {
+    display: none;
+    td {
+        background-color: white;
+        min-height: 30px;
+        text-align: left;
+        padding: 10px;
+        word-break: break-word;
+    }
+}

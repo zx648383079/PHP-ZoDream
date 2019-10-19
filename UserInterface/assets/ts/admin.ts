@@ -21,4 +21,11 @@ $(document).ready(function() {
         li.parents(".zd-tab").find(".zd-tab-body .zd-tab-item").eq(li.index()).remove();
         li.remove();
     });
+    $('.table-toggle tr').click(function() {
+        let $this = $(this);
+        if ($this.hasClass('tr-child')) {
+            return;
+        }
+        $this.next('.tr-child').toggle();
+    });
 });
