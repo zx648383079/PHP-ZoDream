@@ -291,10 +291,27 @@ class Navigation {
             return;
         }
         let data = window.localStorage.getItem(NAV_COOKIE);
-        if (!data || data.indexOf('{') < 0) {
+        if (data && data.indexOf('{') >= 0) {
+            this.groups = JSON.parse(data);
             return;
         }
-        this.groups = JSON.parse(data);
+        let that = this;
+        this.groups = [];
+        this.box.find('.panel-body .group-item').each(function() {
+            let $this = $(this);
+            let group: IGroup = {
+                name: $this.find('.group-name').text(),
+                items: []
+            };
+            $this.find('.site-item').each(function() {
+                let $a = $(this);
+                group.items.push({
+                    name: $a.text(),
+                    url: $a.attr('href')
+                });
+            });
+            that.groups.push(group);
+        });
     }
 
     /**
