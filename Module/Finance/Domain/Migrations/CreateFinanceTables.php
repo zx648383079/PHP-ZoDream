@@ -72,6 +72,8 @@ class CreateFinanceTables extends Migration {
             $table->set('budget_id')->int()->defaultVal(0)->comment('支出时选择预算');
             $table->set('remark')->text()->comment('备注');
             $table->set('happened_at')->dateTime()->notNull()->comment('发生时间');
+            $table->set('out_trade_no')->varchar(100)->defaultVal('')
+                ->comment('外部导入的交易单号');
             $table->set('user_id')->int()->notNull();
             $table->timestamps();
         });

@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property string $url
  * @property string $logo
  * @property string $brief
+ * @property string $email
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -26,6 +27,7 @@ class FriendLinkModel extends Model {
             'url' => 'required|string:0,50',
             'logo' => 'string:0,200',
             'brief' => 'string:0,255',
+            'email' => 'string:0,100',
             'status' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -39,6 +41,7 @@ class FriendLinkModel extends Model {
             'url' => 'Url',
             'logo' => 'Logo',
             'brief' => 'Brief',
+            'email' => 'Email',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

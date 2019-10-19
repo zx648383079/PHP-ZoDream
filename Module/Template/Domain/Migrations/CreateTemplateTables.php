@@ -112,6 +112,7 @@ class CreateTemplateTables extends Migration {
             $table->set('url')->varchar(50)->notNull();
             $table->set('logo')->varchar(200)->defaultVal('');
             $table->set('brief')->varchar()->defaultVal('');
+            $table->set('email')->varchar(100)->defaultVal('');
             $table->set('status')->bool()->defaultVal(0);
             $table->timestamps();
         });

@@ -44,15 +44,19 @@ $this->registerCssFile('@dialog.css')
         <form action="" method="post">
             <div>*<?=__('Site Name')?>:</div>
             <div>
-                <input type="text" name="name" required>
+                <input type="text" name="name" placeholder="显示的网站名称" required>
             </div>
             <div>*<?=__('URL')?>:</div>
             <div>
-                <input type="text" name="url" required>
+                <input type="text" name="url" placeholder="跳转的网站链接" required>
             </div>
             <div><?=__('Site Description')?>:</div>
             <div>
-                <input type="text" name="brief">
+                <input type="text" name="brief" placeholder="网站简介">
+            </div>
+            <div><?=__('Email')?>:</div>
+            <div>
+                <input type="email" name="email" placeholder="将发送结果到你的邮箱">
             </div>
         </form>
     </div>

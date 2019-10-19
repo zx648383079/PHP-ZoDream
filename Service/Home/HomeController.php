@@ -27,13 +27,15 @@ class HomeController extends Controller {
                 'name' =>  app('request')->get('name'),
                 'url' =>  app('request')->get('url'),
                 'brief' =>  app('request')->get('brief'),
+                'email' =>  app('request')->get('email'),
             ]);
         }
         return $this->show();
     }
 
     public function notFoundAction() {
-        Factory::view()->setDirectory(Factory::root()->directory('UserInterface/Home'));
+        Factory::view()->setDirectory(Factory::root()
+            ->directory('UserInterface/Home'));
         app('response')->setStatusCode(404);
         return $this->show('/404');
     }
