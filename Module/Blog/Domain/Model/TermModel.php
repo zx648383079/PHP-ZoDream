@@ -1,7 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Model;
 
-use Domain\Model\Model;
+use Module\Blog\Domain\Entities\TermEntity;
 
 
 /**
@@ -14,33 +14,7 @@ use Domain\Model\Model;
  * @property integer $parent_id
  * @property string $thumb
  */
-class TermModel extends Model {
-	public static function tableName() {
-        return 'blog_term';
-    }
-
-	protected function rules() {
-        return [
-            'name' => 'required|string:1,200',
-            'keywords' => 'string:0,200',
-            'description' => 'string:0,200',
-            'user_id' => 'int',
-            'parent_id' => 'int',
-            'thumb' => ''
-        ];
-	}
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => '分类',
-            'keywords' => '关键字',
-            'description' => '说明',
-            'user_id' => 'User Id',
-            'parent_id' => '上级',
-            'thumb' => '图片'
-        ];
-    }
+class TermModel extends TermEntity {
 
     public function getUrlAttribute() {
         return url('./', ['category' => $this->id]);
@@ -48,7 +22,7 @@ class TermModel extends Model {
 
     public function getThumbAttribute() {
 	    $thumb = $this->getAttributeSource('thumb');
-        return empty($thumb) ? '/assets/images/banner.jpg' : $thumb;
+        return url()->asset(empty($thumb) ? '/assets/images/banner.jpg' : $thumb);
     }
 
     public function blog() {

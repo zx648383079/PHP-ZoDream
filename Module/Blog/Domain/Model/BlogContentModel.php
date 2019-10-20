@@ -6,11 +6,13 @@ namespace Module\Blog\Domain\Model;
  * @property integer $id
  * @property string $title
 */
-class BlogSimpleModel extends BlogModel {
+class BlogContentModel extends BlogModel {
 
-    const SIMPLE_MODE = ['id', 'title', 'description', 'created_at'];
+    const SIMPLE_MODE = ['id', 'title', 'edit_type', 'content'];
 
-    protected $append = ['url'];
+    public function getContentAttribute() {
+        return $this->toHtml();
+    }
 
     public static function query() {
         return parent::query()->select(self::SIMPLE_MODE);

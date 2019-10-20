@@ -7,14 +7,14 @@ use Zodream\Route\Controller\RestController;
 
 class ChapterController extends RestController {
 
-    public function indexAction($id = 0, $book = 0) {
+    public function indexAction($id = 0, $book = 0, $per_page = 20) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
         $chapter_list  = BookChapterModel::where('book_id', $book)
             ->orderBy('position', 'asc')
-            ->orderBy('created_at', 'asc')->all();
-        return $this->render($chapter_list);
+            ->orderBy('created_at', 'asc')->page($per_page);
+        return $this->renderPage($chapter_list);
     }
 
     public function detailAction($id) {

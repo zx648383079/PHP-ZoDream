@@ -3,6 +3,7 @@ namespace Module\Blog\Service\Api;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
+use Module\Blog\Domain\Repositories\CommentRepository;
 use Zodream\Route\Controller\RestController;
 
 
@@ -17,13 +18,7 @@ class CommentController extends RestController {
     }
 
     public function indexAction($blog_id, $parent_id = 0, $is_hot = false, $sort = 'created_at', $order = 'desc') {
-        $comment_list = CommentModel::with('replies')
-            ->where([
-            'blog_id' => intval($blog_id),
-            'parent_id' => intval($parent_id)
-            ])->when($is_hot, function ($query) {
-                $query->where('agree', '>', 0)->orderBy('agree desc');
-            })->orderBy($sort, $order)->page();
+        $comment_list = CommentRepository::getList($blog_id, $parent_id, $is_hot, $sort, $order);
         return $this->renderPage($comment_list);
     }
 

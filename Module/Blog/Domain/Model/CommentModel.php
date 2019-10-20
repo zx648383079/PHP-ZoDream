@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Blog\Domain\Entities\CommentEntity;
 
 
 /**
@@ -24,54 +25,9 @@ use Domain\Model\Model;
  * @property integer $disagree
  * @property integer $position
  */
-class CommentModel extends Model {
+class CommentModel extends CommentEntity {
 
-	public static function tableName() {
-        return 'blog_comment';
-    }
-
-    protected function rules() {
-        return [
-            'content' => 'required',
-            'name' => 'string:0,45',
-            'email' => 'string:0,100',
-            'url' => 'string:0,200',
-            'ip' => 'string:0,20',
-            'created_at' => 'int',
-            'karma' => 'int',
-            'approved' => 'string:0,20',
-            'agent' => 'string:0,255',
-            'type' => 'string:0,20',
-            'parent_id' => 'int',
-            'user_id' => 'int',
-            'blog_id' => 'int',
-            'agree' => 'int',
-            'disagree' => 'int',
-            'position' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'content' => '内容',
-            'name' => 'Name',
-            'email' => 'Email',
-            'url' => 'Url',
-            'ip' => 'Ip',
-            'created_at' => '发布时间',
-            'karma' => 'Karma',
-            'approved' => 'Approved',
-            'agent' => 'Agent',
-            'type' => 'Type',
-            'parent_id' => 'Parent Id',
-            'user_id' => 'User Id',
-            'blog_id' => 'Blog Id',
-            'agree' => 'Agree',
-            'disagree' => 'Disagree',
-            'position' => 'Position',
-        ];
-    }
+    protected $hidden = ['email', 'url', 'ip', 'agent'];
 
     public function replies() {
 	    return $this->hasMany(static::class, 'parent_id');

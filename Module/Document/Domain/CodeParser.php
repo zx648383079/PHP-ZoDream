@@ -262,7 +262,7 @@ class CodeParser {
 
     private function netAttributeLine($name, $type) {
         $lines = [];
-        if (preg_match('/_.+s/', $name, $match)) {
+        if (preg_match('/_.+/', $name, $match)) {
             $lines[] = sprintf('%s[JsonProperty(PropertyName = "%s")]', self::TAB, $name);
         }
         $lines[] = sprintf('%spublic %s %s { get; set; }', self::TAB, $type, Str::studly($name));

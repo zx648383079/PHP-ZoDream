@@ -3,6 +3,7 @@ namespace Module\Blog\Service;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
+use Module\Blog\Domain\Repositories\CommentRepository;
 use Module\ModuleController;
 
 class CommentController extends ModuleController {
@@ -17,10 +18,7 @@ class CommentController extends ModuleController {
     }
 
     public function indexAction($blog_id) {
-        $hot_comments = CommentModel::where([
-            'blog_id' => intval($blog_id),
-            'parent_id' => 0,
-        ])->where('agree', '>', 0)->orderBy('agree desc')->limit(4)->all();
+        $hot_comments = CommentRepository::getHot($blog_id, 4);
         return $this->show(compact('hot_comments', 'blog_id'));
     }
 

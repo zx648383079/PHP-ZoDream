@@ -1,7 +1,10 @@
 <?php
 namespace Module\Blog\Service\Api;
 
+use Module\Blog\Domain\Model\BlogContentModel;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\BlogSimpleModel;
+use Module\Blog\Domain\Repositories\BlogRepository;
 use Zodream\Route\Controller\RestController;
 
 class HomeController extends RestController {
@@ -13,42 +16,34 @@ class HomeController extends RestController {
         ];
     }
 
-    public function indexAction($id = 0, $sort = 'new', $category = null, $keywords = null, $per_page = 20) {
+    public function indexAction($id = 0, $sort = 'new', $category = null, $keywords = null,
+                                $user = null, $language = null, $programming_language = null,
+                                $tag = null, $per_page = 20) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
-        $blog_list  = BlogModel::with('term', 'user')
-            ->select('id', 'title', 'description',
-                'created_at', 'comment_count',
-                'click_count', 'recommend', 'user_id', 'term_id')
-            ->when($category > 0, function ($query) use ($category) {
-                $query->where('term_id', intval($category));
-            })
-            ->when(!empty($sort), function ($query) use ($sort) {
-                if ($sort == 'new') {
-                    return $query->orderBy('created_at', 'desc');
-                }
-                if ($sort == 'recommend') {
-                    return $query->orderBy('recommend', 'desc');
-                }
-                if ($sort == 'hot') {
-                    return $query->orderBy('comment_count', 'desc');
-                }
-            })->when(!empty($keywords), function ($query) {
-                BlogModel::search($query, ['title']);
-            })
-            ->page($per_page);
+        $blog_list  = BlogRepository::getList($sort, $category, $keywords,
+            $user, $language, $programming_language, $tag, $per_page);
         return $this->renderPage($blog_list);
     }
 
     public function detailAction($id) {
         $id = intval($id);
-        BlogModel::where('id', $id)->updateOne('click_count');
         $blog = BlogModel::find($id);
         if (empty($blog)) {
             return $this->renderFailure('id 错误！');
         }
-        return $this->render($blog->toArray());
+        return $this->render($blog);
+    }
+
+    public function contentAction($id) {
+        $id = intval($id);
+        BlogModel::where('id', $id)->updateOne('click_count');
+        $blog = BlogContentModel::find($id);
+        if (empty($blog)) {
+            return $this->renderFailure('id 错误！');
+        }
+        return $this->render($blog);
     }
 
     public function recommendAction($id) {
@@ -56,9 +51,9 @@ class HomeController extends RestController {
         if (!BlogModel::canRecommend($id)) {
             return $this->renderFailure('一个用户只能操作一次！');
         }
-        $blog = BlogModel::find($id);
+        $blog = BlogSimpleModel::find($id);
         $blog->recommendThis();
-        return $this->render($blog->toArray());
+        return $this->render($blog);
     }
 
     public function suggestAction($keywords) {

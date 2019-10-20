@@ -43,7 +43,7 @@ class BiQuGe extends BaseSpider {
         $author = str_replace('：', ':', $author);
         $author = explode(':', $author, 2)[1];
         $path = $html->find('#fmimg img', 0)->src;
-        if (!empty($path)) {
+        if (!empty($path) && strpos($path, '//') === false) {
             $path = (clone $uri)->setPath($path)->encode();
         }
         return [

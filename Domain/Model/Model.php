@@ -52,7 +52,7 @@ abstract class Model extends BaseModel {
      * 过滤sort order
      * @param $sort
      * @param $order
-     * @param array $sort_list
+     * @param array $sort_list 允许的sort值
      * @param string $default_order
      * @return array
      */

@@ -1,7 +1,6 @@
 <?php
 namespace Module\Blog\Domain\Entities;
 
-
 use Domain\Entities\Entity;
 
 class BlogEntity extends Entity {

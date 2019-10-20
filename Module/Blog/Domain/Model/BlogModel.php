@@ -33,8 +33,10 @@ use Zodream\Helpers\Time;
 */
 class BlogModel extends BlogEntity {
 
+    protected $append = ['url', 'term', 'user', 'is_recommended'];
+
 	public function term() {
-	    return $this->hasOne(TermModel::class, 'id', 'term_id');
+	    return $this->hasOne(TermSimpleModel::class, 'id', 'term_id');
     }
 
     public function user() {
@@ -43,6 +45,11 @@ class BlogModel extends BlogEntity {
 
     public function comment() {
 	    return $this->hasMany(CommentModel::class, 'blog_id', 'id');
+    }
+
+    public function getThumbAttribute() {
+        $thumb = $this->getAttributeSource('thumb');
+        return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
     }
 
 	public function getUrlAttribute() {
@@ -57,6 +64,13 @@ class BlogModel extends BlogEntity {
 	    return static::where('id', '>', $this->id)->orderBy('id asc')->select('id, title, description, created_at')->one();
     }
 
+    public function getIsRecommendedAttribute() {
+	    if (auth()->guest()) {
+	        return false;
+        }
+	    return !self::canRecommend($this->id);
+    }
+
     /**
      * @return string|void
      */
@@ -66,22 +80,8 @@ class BlogModel extends BlogEntity {
 
     public function toHtml() {
         return cache()->getOrSet(sprintf('blog_%d_content', $this->id), function () {
-            return TagModel::replaceTag($this->id, HtmlExpand::toHtml($this->content, $this->edit_type == 1));
+            return TagModel::replaceTag($this->id, HtmlExpand::toHtml($this->getAttributeValue('content'), $this->edit_type == 1));
         }, 3600);
-    }
-
-    public static function getNew($limit = 5) {
-	    return static::orderBy('created_at desc')->select('id, title, description, created_at')->limit($limit ?? 5)->all();
-    }
-
-    public static function getHot() {
-        return static::orderBy('comment_count desc')->select('id, title, description, created_at')->limit(5)->all();
-    }
-
-    public static function getBest() {
-        return static::orderBy('recommend desc')
-            ->select('id, title, description, created_at')
-            ->limit(5)->all();
     }
 
     public function getHotComment() {

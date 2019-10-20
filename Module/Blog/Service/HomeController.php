@@ -6,6 +6,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
+use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\TermRepository;
 use Module\ModuleController;
 use Zodream\Service\Factory;
@@ -28,46 +29,12 @@ class HomeController extends ModuleController {
         if ($id > 0) {
             return $this->runMethodNotProcess('detail', compact('id'));
         }
-        $blog_list  = BlogModel::with('user')
-            ->select('id', 'title', 'description',
-                'created_at', 'comment_count',
-                'programming_language',
-                'click_count', 'recommend', 'user_id', 'term_id')
-            ->when($category > 0, function ($query) use ($category) {
-                $query->where('term_id', intval($category));
-            })
-            ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', intval($user));
-            })
-            ->when(!empty($sort), function ($query) use ($sort) {
-                if ($sort == 'new') {
-                    return $query->orderBy('created_at', 'desc');
-                }
-                if ($sort == 'recommend') {
-                    return $query->orderBy('recommend', 'desc');
-                }
-                if ($sort == 'hot') {
-                    return $query->orderBy('comment_count', 'desc');
-                }
-            })->when(!empty($keywords), function ($query) {
-                BlogModel::search($query, ['title', 'language']);
-            })->when(!empty($language), function ($query) use ($language) {
-                $query->where('language', $language);
-            })->when(!empty($programming_language), function ($query) use ($programming_language) {
-                $query->where('programming_language', $programming_language);
-            })->when(!empty($tag), function ($query) use ($tag) {
-                $query->whereIn('id', TagModel::getBlogByName($tag));
-            })
-            ->page();
-        foreach ($blog_list as $item) {
-            $item->term = TermRepository::get($item->term_id);
-        }
+        $blog_list  = BlogRepository::getList($sort, $category, $keywords,
+            $user, $language, $programming_language, $tag);
         $cat_list = TermRepository::get();
         $comment_list = CommentModel::with('blog')
             ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->all();
-        $new_list = BlogModel::orderBy('created_at', 'desc')
-            ->select('id', 'title')
-            ->limit(4)->all();
+        $new_list = BlogRepository::getNew(4);
         $term = null;
         if ($category > 0) {
             $term = TermRepository::get($category);

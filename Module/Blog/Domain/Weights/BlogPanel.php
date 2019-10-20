@@ -2,12 +2,13 @@
 namespace Module\Blog\Domain\Weights;
 
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Template\Domain\Weights\Node;
 
 class BlogPanel extends Node {
 
     public function render($type = null) {
-        $data = BlogModel::getNew($this->attr('limit'));
+        $data = BlogRepository::getNew($this->attr('limit'));
         return implode('', array_map(function (BlogModel $item) {
             return sprintf('<div class="list-item"><a class="name" href="%s">%s</a><div class="time">%s</div></div>',
                 url('blog', ['id' => $item->id]), $item->title, $item->created_at);
