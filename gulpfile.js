@@ -80,7 +80,7 @@ function get_env() {
     return args[1];
 }
 
-function sassTask() {
+async function sassTask() {
     if (mode == 'prod') {
         return gulp.src(cssRoot + "*.scss")
             .pipe(sass({
@@ -104,14 +104,14 @@ function sassTask() {
         .pipe(gulp.dest(cssDist));
 }
 
-function cssTask() {
+async function cssTask() {
     return gulp.src(cssRoot + "*.css")
         .pipe(minCss())
         .pipe(rename({suffix:'.min'}))
         .pipe(gulp.dest(cssDist));
 }
 
-function tslintTask() {
+async function tslintTask() {
     return gulp.src(jsRoot + '*.ts')
         .pipe(tslint({
             formatter: 'verbose'
@@ -119,7 +119,7 @@ function tslintTask() {
         .pipe(tslint.report());
 }
 
-function tsTask() {
+async function tsTask() {
     return gulp.src(tsRoot + '*.ts')
     .pipe(tsProject())
     .pipe(uglify())
@@ -127,11 +127,11 @@ function tsTask() {
     .pipe(gulp.dest(jsDist));
 }
 
-function jsTask() {
+async function jsTask() {
     return gulp.src(jsRoot + '*.js')
-    .pipe(uglify())
-    .pipe(rename({suffix:'.min'}))
-    .pipe(gulp.dest(jsDist));
+        .pipe(uglify())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(jsDist));
 }
 
 exports.sassTask = sassTask;

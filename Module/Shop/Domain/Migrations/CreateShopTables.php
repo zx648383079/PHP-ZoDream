@@ -213,6 +213,8 @@ class CreateShopTables extends Migration {
             $table->set('thumb')->varchar(200)->comment('缩略图');
             $table->set('amount')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
+            $table->set('discount')->decimal(8, 2)->defaultVal(0)
+                ->comment('已享受的折扣');
             $table->set('refund_id')->int()->defaultVal(0);
             $table->set('status')->int()->defaultVal(0);
             $table->set('after_sale_status')->int()->defaultVal(0);

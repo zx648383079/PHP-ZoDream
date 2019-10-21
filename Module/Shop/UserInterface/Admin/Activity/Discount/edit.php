@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
-$this->title = '抽奖';
+$this->title = '满减/满送';
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open('./admin/activity/save')?>

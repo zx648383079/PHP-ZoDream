@@ -22,11 +22,11 @@ function bindChapter() {
     let lengthBox = $('.length-box'),
         contentBox = $("#content-box"),
         showLength = function() {
-            let length = getStrLength(contentBox.val());
+            let length = getStrLength(contentBox.val() + '');
             lengthBox.find('span').text(length);
             lengthBox.find('input').val(length);
         },
-        isSaving = false;
+        isSaving = false,
         autoSave = function() {
             if (isSaving) {
                 return;
@@ -40,7 +40,7 @@ function bindChapter() {
     contentBox.on('input propertychange', function() {
         showLength();
         autoSave();
-    }).on('keydown', function(e) {
+    }).on('keydown', function(this: HTMLTextAreaElement, e) {
         if (e.keyCode === 9) {
             e.preventDefault();
             let position = this.selectionStart + 4;
@@ -56,16 +56,45 @@ function bindChapter() {
 function bindImport(baseUri: string) {
     let box = $('.book-box'),
         items = [],
+        startAt = new Date(),
+        timeHandle = 0,
         progress = $('.dialog-progress'),
+        showProgress = function(val: number, label: string) {
+            progress.show().find('progress').val(val).next('span').text(label);
+        },
+        stepTip = function(element: JQuery, data: {next: number, count: number}) {
+            if (timeHandle > 0) {
+                clearInterval(timeHandle);
+            }
+            let text = data.next + '/' + data.count + '(预计需要';
+            let now = new Date();
+            let diff = now.getTime() - startAt.getTime();
+            let total = Math.ceil((diff / data.next * (data.count - data.next)) / 1000);
+            timeHandle = setInterval(() => {
+                let tip = total + '秒';
+                if (total > 60) {
+                    tip = Math.floor(total / 60) + '分' + Math.ceil(total % 60) + '秒';
+                }
+                element.text(text + tip +')');
+                if (total < 1) {
+                    return;
+                }
+                total --;
+            }, 1000);
+        },
         loopStep = function (data: any) {
             if (data.code == 200 && typeof data.data == 'object' && data.data.key) {
-                progress.show().find('progress').val(data.data.next * 100 / data.data.count).next('span').text(data.data.next + '/' + data.data.count);
+                stepTip(progress.show().find('progress').val(data.data.next * 100 / data.data.count).next('span'), data.data)
                 postJson(baseUri + 'spider/async', data.data, loopStep);
                 return;
             }
             progress.hide();
+            if (timeHandle > 0) {
+                clearInterval(timeHandle);
+                timeHandle = 0;
+            }
             parseAjax(data);
-        }
+        };
     $('.search form').submit(function() {
         postJson(baseUri + 'spider/search', $(this).serialize(), function(data) {
             if (data.code != 200) {
@@ -93,6 +122,8 @@ function bindImport(baseUri: string) {
             Dialog.tip('书籍不存在');
             return;
         }
+        startAt = new Date();
+        showProgress(0, '初始化。。。');
         postJson(baseUri + 'spider/async', book, loopStep);
     });
 }
