@@ -71,7 +71,8 @@ class CreateBookTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('book_id')->int()->notNull();
-            $table->set('chapter_id')->int()->notNull();
+            $table->set('chapter_id')->int()->defaultVal(0);
+            $table->set('progress')->tinyint(1)->defaultVal(0);
             $table->timestamps();
         });
         Schema::createTable(BookLogModel::tableName(), function(Table $table) {

@@ -13,6 +13,7 @@ use Zodream\Infrastructure\Cookie;
  * @property integer $user_id
  * @property integer $book_id
  * @property integer $chapter_id
+ * @property integer $progress
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -25,7 +26,8 @@ class BookHistoryModel extends Model {
         return [
             'user_id' => 'required|int',
             'book_id' => 'required|int',
-            'chapter_id' => 'required|int',
+            'chapter_id' => 'int',
+            'progress' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -37,6 +39,7 @@ class BookHistoryModel extends Model {
             'user_id' => 'User Id',
             'book_id' => 'Book Id',
             'chapter_id' => 'Chapter Id',
+            'progress' => 'Progress',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

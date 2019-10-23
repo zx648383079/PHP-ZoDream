@@ -8,7 +8,6 @@ use Zodream\Route\Controller\RestController;
 
 class HomeController extends RestController {
 
-
     public function indexAction($id = 0, $category = null, $keywords = null, $top = null, $page = 1, $per_page = 20) {
         if (!is_array($id) && $id > 0) {
             return $this->detailAction($id);

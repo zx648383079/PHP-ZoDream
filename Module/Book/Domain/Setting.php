@@ -82,6 +82,17 @@ class Setting {
             return $this;
         }
         $this->isChange = true;
-        return parent::setAttribute($key, $value);
+        if (is_object($key)) {
+            $key = (array)$key;
+        }
+        if (is_array($key)) {
+            $this->__attributes = array_merge($this->__attributes, $key);
+            return $this;
+        }
+        if (empty($key)) {
+            return $this;
+        }
+        $this->__attributes[$key] = $value;
+        return $this;
     }
 }
