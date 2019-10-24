@@ -56,8 +56,11 @@ class Panel {
                 let ele = target.helper,
                     row = ele.closest('.weight-row');
                 if (!row || row.length < 1) {
-                    // 没用拖放成功！
-                    return;
+                    if (ele.hasClass('weight-row')) {
+                        row = ele;
+                    } else {
+                        return;
+                    }
                 }
                 that.page.addWeight(ele, row);
             }
