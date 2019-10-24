@@ -8,6 +8,7 @@ namespace Module\Book\Domain\Model;
  * Time: 21:00
  */
 use Domain\Model\Model;
+use Module\Book\Domain\Entities\ChapterEntity;
 
 
 /**
@@ -27,46 +28,15 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class BookChapterModel extends Model {
-    public static function tableName() {
-        return 'book_chapter';
-    }
+class BookChapterModel extends ChapterEntity {
 
-    protected function rules() {
-        return [
-            'book_id' => 'int',
-            'title' => 'required|string:0,200',
-            'parent_id' => 'int',
-            'status' => 'int:0,9',
-            'source' => 'string:0,200',
-            'size' => 'int',
-            'deleted_at' => 'int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'book_id' => '书',
-            'title' => '标题',
-            'parent_id' => '上级',
-            'status' => '状态',
-            'source' => '来源',
-            'size' => '字数',
-            'deleted_at' => '删除时间',
-            'created_at' => '发布时间',
-            'updated_at' => '更新时间',
-        ];
-    }
 
     public function body() {
         return $this->hasOne(BookChapterBodyModel::class, 'id', 'id');
     }
 
     public function book() {
-        return $this->hasOne(BookModel::class, 'id', 'book_id');
+        return $this->hasOne(BookSimpleModel::class, 'id', 'book_id');
     }
 
     public function getUrlAttribute() {

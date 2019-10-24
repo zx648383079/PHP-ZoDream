@@ -12,7 +12,6 @@ use Zodream\Template\View;
 class Linkage extends BaseField {
 
     public function options(ModelFieldModel $field) {
-        ;
         return implode('', [
             Theme::select('setting[option][linkage_id]', [LinkageModel::query()->all()], 0, '联动项'),
         ]);

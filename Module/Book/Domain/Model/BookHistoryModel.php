@@ -2,7 +2,6 @@
 namespace Module\Book\Domain\Model;
 
 use Domain\Model\Model;
-
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Cookie;
 
@@ -18,6 +17,9 @@ use Zodream\Infrastructure\Cookie;
  * @property integer $updated_at
  */
 class BookHistoryModel extends Model {
+
+    protected $append = ['book', 'chapter'];
+
     public static function tableName() {
         return 'book_history';
     }
@@ -45,21 +47,18 @@ class BookHistoryModel extends Model {
         ];
     }
 
+    public function book() {
+        return $this->hasOne(BookSimpleModel::class, 'id', 'book_id');
+    }
+
+    public function chapter() {
+        return $this->hasOne(ChapterSimpleModel::class,
+            'id', 'chapter_id');
+    }
 
     public static function log(BookChapterModel $chapter) {
         if (!auth()->guest()) {
-            if (static::hasHistory($chapter->book_id)) {
-                static::where('book_id', $chapter->book_id)
-                    ->where('user_id', auth()->id())->update([
-                        'chapter_id' => $chapter->id
-                    ]);
-                return;
-            }
-            static::create([
-                'chapter_id' => $chapter->id,
-                'user_id' => auth()->id(),
-                'book_id' => $chapter->book_id
-            ]);
+            static::record($chapter->book_id, $chapter->id);
             return;
         }
         $history = app('request')->cookie(static::tableName());
@@ -69,6 +68,26 @@ class BookHistoryModel extends Model {
             $history = array_splice($history, 0, 10);
         }
         Cookie::forever(static::tableName(), serialize($history));
+    }
+
+    public static function record($book, $chapter, $progress = 0) {
+        if (auth()->guest()) {
+            return;
+        }
+        if (static::hasHistory($book)) {
+            static::where('book_id', $book)
+                ->where('user_id', auth()->id())->update([
+                    'chapter_id' => $chapter,
+                    'progress' => $progress
+                ]);
+            return;
+        }
+        static::create([
+            'chapter_id' => $chapter,
+            'progress' => $progress,
+            'user_id' => auth()->id(),
+            'book_id' => $book
+        ]);
     }
 
     public static function getHistoryId() {
@@ -84,21 +103,26 @@ class BookHistoryModel extends Model {
     /**
      * 获取一页的章节内容
      * @return Page
+     * @throws \Exception
      */
     public static function getHistory() {
-        if (auth()->guest()) {
-            return BookChapterModel::with('book')
-                ->whereIn('id', static::getHistoryId())->page();
+        if (!auth()->guest()) {
+            return static::with('book', 'chapter')
+                ->where('user_id', auth()->id())->page();
         }
-        $page = static::where('user_id', auth()->id())->orderBy('updated_at', 'desc')
-            ->select('chapter_id')
-            ->page();
-        $ids = [];
+        $items = static::getHistoryId();
+        if (empty($items)) {
+            return new Page(0);
+        }
+        $page = BookChapterModel::with('book')->whereIn('id' ,$items)->page();
+        $items = [];
         foreach ($page as $item) {
-            $ids[] = $item->chapter_id;
+            $arg = new static();
+            $arg->setRelation('book', $item->book);
+            $arg->setRelation('chapter', $item);
+            $arg->progress = 0;
+            $items[] = $arg;
         }
-        $page->setPage(BookChapterModel::with('book')
-            ->whereIn('id', $ids)->all());
-        return $page;
+        return $page->setPage($items);
     }
 }

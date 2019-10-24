@@ -466,3 +466,15 @@ function bindPay() {
         paymentInput.val($this.data('id'));
     });
 }
+
+function bindAddress(baseUrl: string) {
+    let dialog = $('.address-dialog').dialog();
+    $('.address-dialog .region-input').multiSelect({
+        default: 0,
+        data: baseUrl + 'region/tree',
+        tag: 'region_id'
+    });
+    $('.add-btn').click(function() {
+        dialog.show();
+    });
+}

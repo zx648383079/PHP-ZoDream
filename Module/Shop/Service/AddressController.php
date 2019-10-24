@@ -3,6 +3,7 @@ namespace Module\Shop\Service;
 
 
 use Module\Shop\Domain\Models\AddressModel;
+use Module\Shop\Domain\Models\Scene\Address;
 
 
 class AddressController extends Controller {
@@ -14,7 +15,7 @@ class AddressController extends Controller {
     }
 
     public function indexAction() {
-        $model_list = AddressModel::with('region')->page();
+        $model_list = Address::with('region')->page();
         return $this->sendWithShare()->show(compact('model_list'));
     }
 

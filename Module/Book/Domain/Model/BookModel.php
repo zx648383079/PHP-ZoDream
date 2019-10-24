@@ -8,6 +8,7 @@ namespace Module\Book\Domain\Model;
  * Time: 21:00
  */
 use Domain\Model\Model;
+use Module\Book\Domain\Entities\BookEntity;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
 
@@ -32,59 +33,17 @@ use Zodream\Helpers\Time;
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
- * @method Query ofClassify()
+ * @method static Query ofClassify()
  */
-class BookModel extends Model {
+class BookModel extends BookEntity {
+
+    protected $append = ['category', 'author',
+        'chapter_count', 'first_chapter', 'last_chapter'];
 
     public $classify_list = [
         '无分级',
         '成人级',
     ];
-
-    public static function tableName() {
-        return 'book';
-    }
-
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,100',
-            'cover' => 'string:0,200',
-            'description' => 'string:0,200',
-            'author_id' => 'int',
-            'user_id' => 'int',
-            'classify' => 'int',
-            'cat_id' => 'int:0,999',
-            'size' => 'int',
-            'source' => 'string:0,200',
-            'click_count' => 'int',
-            'recommend_count' => 'int',
-            'over_at' => 'int',
-            'deleted_at' => 'int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => '书名',
-            'cover' => '封面',
-            'description' => '简介',
-            'author_id' => '作者',
-            'user_id' => 'User Id',
-            'classify' => '分级',
-            'cat_id' => '分类',
-            'size' => '字数',
-            'source' => '来源',
-            'click_count' => '点击',
-            'recommend_count' => '推荐',
-            'over_at' => '完本时间',
-            'deleted_at' => '删除时间',
-            'created_at' => '发布时间',
-            'updated_at' => '更新时间',
-        ];
-    }
 
     public function chapter() {
         return $this->hasMany(BookChapterModel::className(), 'book_id', 'id');

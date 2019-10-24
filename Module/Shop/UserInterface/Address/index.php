@@ -2,7 +2,13 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '收货地址';
+$url = $this->url('./', false);
+$js = <<<JS
+bindAddress('{$url}');
+JS;
+$this->registerJs($js)
+    ->registerJsFile('@jquery.multi-select.min.js');
 ?>
 
 <div class="user-page">
@@ -12,8 +18,8 @@ $this->title = 'ZoDream';
         </div>
         <div class="address-box">
             <div class="header">
-                <span>bbb</span>
-                <a href="">
+                <span>收货地址</span>
+                <a class="add-btn" href="javascript:;">
                     <i class="fa fa-plus"></i>
                     新建地址
                 </a>
@@ -24,30 +30,24 @@ $this->title = 'ZoDream';
                 <div>联系方式</div>
                 <div>操作</div>
             </div>
+            <?php foreach($model_list as $item):?>
             <div class="address-row">
-                <div>1312</div>
-                <div>123123</div>
-                <div>23123</div>
+                <div><?=$item->name?></div>
+                <div><?=$item->region->full_name?> <?=$item->region->address?></div>
+                <div><?=$item->tel?></div>
                 <div>
                     <a href="">编辑</a>
                     <a href="">删除</a>
                 </div>
                 <div>
-                    <a href="">设为默认地址</a>
+                    <?php if($item->is_default):?>
+                        <span class="btn">默认地址</span>
+                    <?php else:?>
+                        <a href="">设为默认地址</a> 
+                    <?php endif;?>
                 </div>
             </div>
-            <div class="address-row">
-                <div>1312</div>
-                <div>123123</div>
-                <div>23123</div>
-                <div>
-                    <a href="">编辑</a>
-                    <a href="">删除</a>
-                </div>
-                <div>
-                    <span class="btn">默认地址</span>
-                </div>
-            </div>
+            <?php endforeach;?>
         </div>
     </div>
 </div>
@@ -60,22 +60,22 @@ $this->title = 'ZoDream';
     </div>
     <div class="dialog-body">
         <div>*所在地区:</div>
-        <div>
+        <div class="region-input">
             <select name="" id=""></select>
             <select name="" id=""></select>
             <select name="" id=""></select>
         </div>
         <div>*详细地址:</div>
         <div>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
+            <textarea name="address" id="" cols="30" rows="10"></textarea>
         </div>
         <div>*收货人:</div>
         <div>
-            <input type="text">
+            <input type="text" name="name">
         </div>
         <div>*手机号码:</div>
         <div>
-            <input type="text">
+            <input type="text" name="tel">
         </div>
     </div>
     <div class="dialog-footer">
