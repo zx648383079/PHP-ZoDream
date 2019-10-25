@@ -34,7 +34,7 @@ $this->registerCssFile('@forum.css')
             <?php endif;?>
         </div>
         <div class="time">
-            <em><?=$item->user->name?></em>
+            <em data-action="user" data-id="<?=$item->user_id?>"><?=$item->user->name?></em>
             <em><?=$item->updated_at?></em>
         </div>
         <div class="count">

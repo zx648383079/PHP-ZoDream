@@ -27,7 +27,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -37,12 +37,12 @@ $this->registerCssFile([
         [
             [
                 '用户列表',
-                './admin/user',
+                './@admin/user',
                 'fa fa-list'
             ],
             [
                 '新增用户',
-                './admin/user/create',
+                './@admin/user/create',
                 'fa fa-plus'
             ]
         ],
@@ -57,22 +57,22 @@ $this->registerCssFile([
         [
             [
                 '角色列表',
-                './admin/role',
+                './@admin/role',
                 'fa fa-list'
             ],
             [
                 '新增角色',
-                './admin/role/create',
+                './@admin/role/create',
                 'fa fa-plus'
             ],
             [
                 '权限列表',
-                './admin/permission',
+                './@admin/permission',
                 'fa fa-list'
             ],
             [
                 '新增权限',
-                './admin/permission/create',
+                './@admin/permission/create',
                 'fa fa-plus'
             ]
         ],
@@ -87,12 +87,12 @@ $this->registerCssFile([
         [
             [
                 '消息列表',
-                './admin/bulletin',
+                './@admin/bulletin',
                 'fa fa-list'
             ],
             [
                 '发送消息',
-                './admin/bulletin/create',
+                './@admin/bulletin/create',
                 'fa fa-plus'
             ]
         ]
@@ -104,27 +104,27 @@ $this->registerCssFile([
         [
             [
                 '个人资料',
-                './admin/account',
+                './@admin/account',
                 'fa fa-info-circle'
             ],
             [
                 '账号关联',
-                './admin/account/connect',
+                './@admin/account/connect',
                 'fa fa-link'
             ],
             [
                 '更改密码',
-                './admin/account/password',
+                './@admin/account/password',
                 'fa fa-key'
             ],
             [
                 '登陆记录',
-                './admin/account/login_log',
+                './@admin/account/login_log',
                 'fa fa-calendar-alt'
             ],
             [
                 '操作记录',
-                './admin/account/log',
+                './@admin/account/log',
                 'fa fa-calendar'
             ],
             [

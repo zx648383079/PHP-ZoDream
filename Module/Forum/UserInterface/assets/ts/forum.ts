@@ -351,7 +351,7 @@ $(function() {
         e.preventDefault();
         let box = $(this).closest('.post-item');
         editor.at(box.data('id'), box.find('.post-user .name').text());
-    }).on('click', '[ data-action="toggle"]', function(e) {
+    }).on('click', '[data-action="toggle"]', function(e) {
         e.preventDefault();
         let $this = $(this);
         if (!confirm('您确定要' + $this.text())) {
@@ -363,5 +363,7 @@ $(function() {
         e.stopPropagation();
     }).on('click', '.thread-item', function() {
         window.location.href = $(this).find('a.title').attr('href');
+    }).on('mouseover', '*[data-action=user]', function() {
+        let $this = $(this);
     });
 });
