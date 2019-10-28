@@ -52,7 +52,7 @@ class TaskModel extends Model {
             'name' => '名称',
             'description' => '说明',
             'status' => 'Status',
-            'every_time' => 'Every Time',
+            'every_time' => '单次时长（/分钟）',
             'time_length' => 'Time Length',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

@@ -9,6 +9,8 @@ use Domain\Model\Model;
  * @property integer $id
  * @property integer $user_id
  * @property integer $task_id
+ * @property integer $day_id
+ * @property integer $status
  * @property integer $end_at
  * @property integer $time
  * @property integer $created_at
@@ -23,6 +25,8 @@ class TaskLogModel extends Model {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',
+            'day_id' => 'int',
+            'status' => 'int:0,9',
             'end_at' => 'int',
             'created_at' => 'int',
         ];
@@ -33,6 +37,8 @@ class TaskLogModel extends Model {
             'id' => 'Id',
             'user_id' => 'User Id',
             'task_id' => 'Task Id',
+            'day_id' => 'Day Id',
+            'status' => 'Status',
             'end_at' => 'End At',
             'created_at' => 'Created At',
         ];

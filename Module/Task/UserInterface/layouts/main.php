@@ -31,6 +31,11 @@ $this->registerCssFile([
         'fa fa-business-time',
         [
             [
+                '今日任务',
+                './task/today',
+                'fa fa-list'
+            ],
+            [
                 '任务列表',
                 './task',
                 'fa fa-list'
