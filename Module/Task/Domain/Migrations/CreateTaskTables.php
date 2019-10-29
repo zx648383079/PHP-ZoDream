@@ -28,6 +28,8 @@ class CreateTaskTables extends Migration {
             $table->set('task_id')->int()->notNull();
             $table->set('day_id')->int()->defaultVal(0);
             $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('outage_time')->smallInt(5)->defaultVal(0)
+                ->comment('打扰时间');
             $table->timestamp('end_at');
             $table->timestamp('created_at');
         })->append(TaskDayModel::tableName(), function (Table $table) {

@@ -14,6 +14,7 @@ use Domain\Model\Model;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property TaskModel $task
  */
 class TaskDayModel extends Model {
 
@@ -51,7 +52,54 @@ class TaskDayModel extends Model {
     }
 
     public function start() {
+        if ($this->amount < 1) {
+            $this->setError('amount', '次数已用完，请重新添加');
+            return false;
+        }
+        if ($this->task->status == TaskModel::STATUS_COMPETE) {
+            $this->setError('task_id', '此任务已完成');
+            return false;
+        }
+        if (!$this->task->makeNewRun($this)) {
+            $this->setError('task_id', '启动失败');
+            return false;
+        }
+        $this->status = TaskModel::STATUS_RUNNING;
+        return $this->save();
+    }
 
+    public function stop() {
+        return $this->task->makeEnd($this);
+    }
+
+    public function check() {
+        if ($this->status !== TaskModel::STATUS_RUNNING) {
+            $this->setError('status', '此任务不在运行');
+            return false;
+        }
+        if ($this->task->every_time <= 0) {
+            return true;
+        }
+        $log = TaskLogModel::findRunning($this->task_id);
+        if (empty($log)) {
+            $this->makeEnd($this->task, 0);
+            $this->setError('status', '此任务不在运行');
+            return false;
+        }
+        $log->end_at = time();
+        if ($log->getTimeAttribute() >= $this->task->every_time) {
+            $this->stop();
+        }
+        return true;
+    }
+
+    public function makeEnd(TaskModel $task, $time) {
+        if ($time > 0 &&
+            ($task->every_time <= 0 || $task->every_time <= $time)) {
+            $this->amount --;
+        }
+        $this->status = TaskModel::STATUS_NONE;
+        $this->save();
     }
 
     public static function add(TaskModel $task, $amount = 1) {
@@ -69,6 +117,17 @@ class TaskDayModel extends Model {
            'amount' => $amount,
            'status' => 0
         ]);
+    }
+
+    public static function makeEndTask(TaskModel $task, $time) {
+        $model = self::where('task_id', $task->id)
+            ->where('amount', '>', 0)
+            ->where('status', TaskModel::STATUS_RUNNING)
+            ->first();
+        if (empty($model)) {
+            return;
+        }
+        $model->makeEnd($task, $time);
     }
 
 }

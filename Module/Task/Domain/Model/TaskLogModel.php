@@ -12,10 +12,16 @@ use Domain\Model\Model;
  * @property integer $day_id
  * @property integer $status
  * @property integer $end_at
+ * @property integer $outage_time
  * @property integer $time
  * @property integer $created_at
  */
 class TaskLogModel extends Model {
+
+    const STATUS_NONE = 0;
+    const STATUS_PAUSE = 1; // 暂停
+    const STATUS_FINISH = 2; // 完成
+    const STATUS_FAILURE = 3; // 中断失败，未完成一个番茄时间
 
     public static function tableName() {
         return 'task_log';
@@ -27,6 +33,7 @@ class TaskLogModel extends Model {
             'task_id' => 'required|int',
             'day_id' => 'int',
             'status' => 'int:0,9',
+            'outage_time' => 'int',
             'end_at' => 'int',
             'created_at' => 'int',
         ];
@@ -39,6 +46,7 @@ class TaskLogModel extends Model {
             'task_id' => 'Task Id',
             'day_id' => 'Day Id',
             'status' => 'Status',
+            'outage_time' => '中断时间',
             'end_at' => 'End At',
             'created_at' => 'Created At',
         ];
@@ -46,7 +54,9 @@ class TaskLogModel extends Model {
 
     public function getTimeAttribute() {
         $end_at = $this->getAttributeSource('end_at');
-        return ($end_at > 0 ? $end_at : time()) - $this->getAttributeSource('created_at');
+        return ($end_at > 0 ? $end_at : time())
+            - $this->getAttributeSource('created_at')
+            - $this->getAttributeSource('outage_time') ;
     }
 
     /**

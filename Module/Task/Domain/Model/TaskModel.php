@@ -22,7 +22,8 @@ class TaskModel extends Model {
 
     const STATUS_NONE = 0;
     const STATUS_RUNNING = 1;
-    const STATUS_COMPETE = 2;
+    const STATUS_PAUSE = 2;
+    const STATUS_COMPETE = 3;
 
     protected $append = ['start_at'];
 
@@ -71,21 +72,35 @@ class TaskModel extends Model {
         return $this->getAttributeSource('updated_at');
     }
 
-    public function makeEnd() {
+    public function makeEnd(TaskDayModel $day = null) {
         $log = TaskLogModel::findRunning($this->id);
-        $log->end_at = time();
-        $this->time_length += $log->getTimeAttribute();
+        $time = 0;
+        if (!empty($log)) {
+            $log->end_at = time();
+            $time = $log->getTimeAttribute();
+            $log->status =
+                $this->every_time <= 0 || $time >= $this->every_time
+                    ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
+            $log->save();
+        }
+        $this->time_length += $time;
         $this->status = self::STATUS_NONE;
-        return $log->save() && $this->save();
+        if ($day) {
+            $day->makeEnd($this, $time);
+        } else {
+            TaskDayModel::makeEndTask($this, $time);
+        }
+        return $this->save();
     }
 
-    public function makeNewRun() {
+    public function makeNewRun(TaskDayModel $day = null) {
         $this->status = self::STATUS_RUNNING;
         $this->updated_at = time();
         $log = TaskLogModel::create([
            'user_id' => auth()->id(),
            'task_id' => $this->id,
-           'created_at' => $this->start_at
+           'created_at' => $this->start_at,
+            'day_id' => $day ? $day->id : 0
         ]);
         if ($log && $this->save()) {
             return $log;
