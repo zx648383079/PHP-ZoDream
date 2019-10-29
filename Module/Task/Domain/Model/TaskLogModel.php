@@ -65,6 +65,7 @@ class TaskLogModel extends Model {
      */
     public static function findRunning($task_id) {
         return self::where('task_id', $task_id)
-            ->where('end_at', 0)->first();
+            ->where('status', [self::STATUS_NONE, self::STATUS_PAUSE])
+            ->first();
     }
 }

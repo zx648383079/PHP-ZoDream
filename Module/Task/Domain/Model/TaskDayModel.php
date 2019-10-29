@@ -11,12 +11,17 @@ use Domain\Model\Model;
  * @property integer $task_id
  * @property string $today
  * @property integer $amount
+ * @property integer $success_amount
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property TaskModel $task
  */
 class TaskDayModel extends Model {
+
+    const STATUS_NONE = 0;
+    const STATUS_RUNNING = 1;
+    const STATUS_PAUSE = 2;
 
     public static function tableName() {
         return 'task_day';
@@ -28,6 +33,7 @@ class TaskDayModel extends Model {
             'task_id' => 'required|int',
             'today' => 'required|string:0,8',
             'amount' => 'int:0,9',
+            'success_amount' => 'int:0,9',
             'status' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -41,6 +47,7 @@ class TaskDayModel extends Model {
             'task_id' => '任务',
             'today' => 'Today',
             'amount' => '执行次数',
+            'success_amount' => '成功次数',
             'status' => '状态',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

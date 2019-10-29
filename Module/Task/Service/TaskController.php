@@ -3,6 +3,7 @@ namespace Module\Task\Service;
 
 use Module\Task\Domain\Model\TaskDayModel;
 use Module\Task\Domain\Model\TaskModel;
+use Module\Task\Domain\Repositories\TaskRepository;
 
 class TaskController extends Controller {
 
@@ -70,6 +71,9 @@ class TaskController extends Controller {
         $model = TaskDayModel::findOrNew($id);
         $task_list = TaskModel::where('user_id', auth()->id())
             ->where('status', '<', 2)->get();
+        if ($model->isNewRecord) {
+            $model->amount = 1;
+        }
         return $this->show(compact('model', 'task_list'));
     }
 
@@ -99,70 +103,40 @@ class TaskController extends Controller {
         ]);
     }
 
-    public function toggleAction($id) {
-        $day = TaskDayModel::where('id', $id)
-            ->where('amount', '>', 0)
-            ->where('today', date('Ymd'))->first();
-        if (empty($day)) {
-            return $this->jsonFailure('任务错误');
-        }
-        $model = TaskModel::find($day->task_id);
-        if (empty($model)) {
-            return $this->jsonFailure('任务错误');
-        }
-        if ($model->status == TaskModel::STATUS_COMPETE) {
-            return $this->jsonFailure('任务已结束');
-        }
-        if ($model->status == TaskModel::STATUS_RUNNING) {
-            $model->makeEnd();
-            return $this->jsonSuccess($model);
-        }
-        $log = $model->makeNewRun();
-        return $this->jsonSuccess($model, $log);
-    }
 
     public function playAction($id) {
-        $model = TaskModel::find($id);
-        if (empty($model)) {
-            return $this->jsonFailure('任务错误');
+        try {
+            $day = TaskRepository::start($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        if ($model->status == TaskModel::STATUS_COMPETE) {
-            return $this->jsonFailure('任务已结束');
-        }
-        if ($model->status == TaskModel::STATUS_RUNNING) {
-            return $this->jsonSuccess($model);
-        }
-        $log = $model->makeNewRun();
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess($day);
     }
 
     public function pauseAction($id) {
-        $model = TaskModel::find($id);
-        if (empty($model)) {
-            return $this->jsonFailure('任务错误');
+        try {
+            $day = TaskRepository::pause($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        if ($model->status == TaskModel::STATUS_COMPETE) {
-            return $this->jsonFailure('任务已结束');
-        }
-        if ($model->status == TaskModel::STATUS_RUNNING) {
-            $model->makeEnd();
-        }
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess($day);
     }
 
     public function stopAction($id) {
-        $model = TaskModel::find($id);
-        if (empty($model)) {
-            return $this->jsonFailure('任务错误');
+        try {
+            $day = TaskRepository::stop($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        if ($model->status == TaskModel::STATUS_COMPETE) {
-            return $this->jsonSuccess($model->toArray());
+        return $this->jsonSuccess($day);
+    }
+
+    public function checkAction($id) {
+        try {
+            $day = TaskRepository::check($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        if ($model->status == TaskModel::STATUS_RUNNING) {
-            $model->makeEnd();
-        }
-        $model->status = TaskModel::STATUS_COMPETE;
-        $model->save();
-        return $this->jsonSuccess($model->toArray());
+        return $this->jsonSuccess($day);
     }
 }
