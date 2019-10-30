@@ -56,7 +56,11 @@ class TaskLogModel extends Model {
         $end_at = $this->getAttributeSource('end_at');
         return ($end_at > 0 ? $end_at : time())
             - $this->getAttributeSource('created_at')
-            - $this->getAttributeSource('outage_time') ;
+            - $this->getAttributeSource('outage_time');
+    }
+
+    public function getStartAtAttribute() {
+        return $this->getAttributeSource('created_at') + $this->getAttributeSource('outage_time');
     }
 
     /**
@@ -65,7 +69,7 @@ class TaskLogModel extends Model {
      */
     public static function findRunning($task_id) {
         return self::where('task_id', $task_id)
-            ->where('status', [self::STATUS_NONE, self::STATUS_PAUSE])
+            ->whereIn('status', [self::STATUS_NONE, self::STATUS_PAUSE])
             ->first();
     }
 }

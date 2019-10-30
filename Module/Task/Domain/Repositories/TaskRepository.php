@@ -7,6 +7,12 @@ use Module\Task\Domain\Model\TaskModel;
 use Exception;
 
 class TaskRepository {
+
+    public static function getActiveTask() {
+        return TaskModel::where('user_id', auth()->id())
+            ->where('status', '<', 2)->get();
+    }
+
     /**
      * 开始
      * @param $id
@@ -14,6 +20,14 @@ class TaskRepository {
      * @throws Exception
      */
     public static function start($id) {
+        $other = TaskDayModel::where('user_id', auth()->id())
+            ->where('id', '<>', $id)->where('status', '>', TaskDayModel::STATUS_NONE)
+            ->pluck('id');
+        if (!empty($other)) {
+            foreach ($other as $item) {
+                self::stop($item);
+            }
+        }
         $day = TaskDayModel::findWithAuth($id);
         if (empty($day)) {
             throw new Exception('任务不存在');
@@ -77,7 +91,8 @@ class TaskRepository {
         }
         $time = $log->getTimeAttribute();
         $log->status =
-            $day->task->every_time <= 0 || $time >= $day->task->every_time
+            $day->task->every_time <= 0 ||
+            $time >= $day->task->every_time * 60
                 ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
         $log->save();
         $day->task->time_length += $time;
@@ -141,7 +156,7 @@ class TaskRepository {
         }
         $log->end_at = time();
         $time = $log->getTimeAttribute();
-        if ($time < $day->task->every_time) {
+        if ($time < $day->task->every_time * 60) {
             return false;
         }
         $log->status = TaskLogModel::STATUS_FINISH;
@@ -186,7 +201,7 @@ class TaskRepository {
         }
         $time = $log->getTimeAttribute();
         $log->status =
-            $task->every_time <= 0 || $time >= $task->every_time
+            $task->every_time <= 0 || $time >= $task->every_time * 60
                 ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
         $log->save();
         $task->time_length += $time;

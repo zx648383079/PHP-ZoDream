@@ -58,6 +58,10 @@ class TaskDayModel extends Model {
         return $this->hasOne(TaskModel::class, 'id', 'task_id');
     }
 
+    public function getLogAttribute() {
+        return TaskLogModel::findRunning($this->task_id);
+    }
+
     public function start() {
         if ($this->amount < 1) {
             $this->setError('amount', '次数已用完，请重新添加');
@@ -94,7 +98,7 @@ class TaskDayModel extends Model {
             return false;
         }
         $log->end_at = time();
-        if ($log->getTimeAttribute() >= $this->task->every_time) {
+        if ($log->getTimeAttribute() >= $this->task->every_time * 60) {
             $this->stop();
         }
         return true;
@@ -102,7 +106,7 @@ class TaskDayModel extends Model {
 
     public function makeEnd(TaskModel $task, $time) {
         if ($time > 0 &&
-            ($task->every_time <= 0 || $task->every_time <= $time)) {
+            ($task->every_time <= 0 || $task->every_time * 60 <= $time)) {
             $this->amount --;
         }
         $this->status = TaskModel::STATUS_NONE;

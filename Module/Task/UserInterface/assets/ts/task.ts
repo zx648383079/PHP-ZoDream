@@ -6,18 +6,19 @@ class Timer {
 
     private _handle: number;
 
-    public start(element: JQuery, start_at: string | number) {
+    public start(element: JQuery, start_at: string | number, cb: () => void) {
         this.stop();
         this.element = element;
         this.startAt = new Date(typeof start_at == 'number' ? start_at * 1000 : start_at);
         let that = this;
         this._handle = setInterval(function() {
             that._showTime();
+            cb && cb();
         }, 500);
     }
 
     private _showTime() {
-        this.element.text(Timer.format(new Date() - this.startAt));
+        this.element.text(Timer.format(new Date().getTime() - this.startAt.getTime()));
     }
 
     public stop() {
@@ -42,25 +43,83 @@ class Timer {
 }
 
 let timer = new Timer();
+let isLoading = false;
+let times = 120;
 
 function bindTask(baseUri: string) {
-    $(".task-item .fa-pause-circle").click(function() {
+    refreshPanel(baseUri);
+    $('.panel ').on('click', '.task-item .fa-pause-circle', function() {
         pauseTask(baseUri, $(this).closest('.task-item'));
-    });
-    $(".task-item .fa-play-circle").click(function() {
+    }).on('click', '.task-item .fa-play-circle', function() {
         playTask(baseUri, $(this).closest('.task-item'));
-    });
-    $(".task-item .fa-stop-circle").click(function() {
+    }).on('click', '.task-item .fa-stop-circle', function() {
         stopTask(baseUri, $(this).closest('.task-item'));
     });
-    $(".task-item").each(function() {
-        let item = $(this),
-            time = item.find('.time');
-        if (item.hasClass('active')) {
-            timer.start(time, parseInt(time.data('start')));
+    let box = $('.dialog-panel');
+    $('[data-action=add]').click(function(e) {
+        e.preventDefault();
+        box.show();
+    });
+    box.on('click', '.task-item', function() {
+        $(this).toggleClass('active');
+    }).on('click', '.btn', function() {
+        let items = [];
+        box.find('.task-item.active').each(function() {
+            items.push($(this).removeClass('active').data('id'));
+        });
+        box.hide();
+        if (items.length < 1) {
             return;
         }
-        time.text(Timer.format(parseInt(time.text()) * 1000));
+        postJson(baseUri + 'task/batch_add', {
+            id: items
+        }, res => {
+            if (res.code !== 200) {
+                parseAjax(res);
+                return;
+            }
+            refreshPanel(baseUri);
+        });
+    });
+}
+
+function refreshPanel(baseUri: string) {
+    timer.stop();
+    $.get(baseUri + 'home/panel', html => {
+        $('.panel .panel-body').html(html);
+        $('.panel .task-item').each(function() {
+            let item = $(this),
+                time = item.find('.time');
+            if (item.hasClass('active')) {
+                timer.start(time, parseInt(time.data('start'), 10), () => {
+                    checkTask(baseUri, item);
+                });
+                return;
+            }
+            time.text(Timer.format(parseInt(time.text()) * 1000));
+        });
+    });
+}
+
+function checkTask(baseUri: string, element: JQuery) {
+    times -- ;
+    if (isLoading) {
+        return;
+    }
+    if (times > 0) {
+        return;
+    }
+    isLoading = true;
+    times = 120;
+    postJson(baseUri + 'task/check', {
+        id: element.data('id')
+    }, function(data) {
+        isLoading = false;
+        if (data.code == 200 && data.data) {
+            refreshPanel(baseUri);
+            Dialog.notify('提示', data.messages);
+            alert(data.messages);
+        }
     });
 }
 
@@ -70,7 +129,7 @@ function pauseTask(baseUri: string, element: JQuery) {
         id: element.data('id')
     }, function(data) {
         if (data.code == 200) {
-            element.removeClass('active').find('.time').text(Timer.format(data.data.time_length * 1000));
+            refreshPanel(baseUri);
         }
     });
 }
@@ -80,7 +139,7 @@ function playTask(baseUri: string, element: JQuery) {
         id: element.data('id')
     }, function(data) {
         if (data.code == 200) {
-            timer.start(element.addClass('active').find('.time'), data.data.start_at)
+            refreshPanel(baseUri);
         }
     });
 }
@@ -88,9 +147,19 @@ function playTask(baseUri: string, element: JQuery) {
 function stopTask(baseUri: string, element: JQuery) {
     if (element.hasClass('active')) {
         timer.stop();
+        postJson(baseUri + 'task/stop', {
+            id: element.data('id')
+        }, _ => {
+            refreshPanel(baseUri);
+        });
+        return;
     }
-    postJson(baseUri + 'task/stop', {
+    if (!confirm('是否确定结束此任务？')) {
+        return;
+    }
+    postJson(baseUri + 'task/stop_task', {
         id: element.data('id')
+    }, _ => {
+        refreshPanel(baseUri);
     });
-    element.remove();
 }

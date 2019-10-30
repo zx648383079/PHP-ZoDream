@@ -2,6 +2,7 @@
 namespace Module\Task\Service;
 
 use Module\Task\Domain\Model\TaskDayModel;
+use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Repositories\TaskRepository;
 
@@ -40,6 +41,9 @@ class TaskController extends Controller {
     }
 
     public function deleteAction($id) {
+        try {
+            TaskRepository::stopTask($id);
+        } catch (\Exception $ex) {}
         TaskModel::where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./task')
@@ -50,8 +54,7 @@ class TaskController extends Controller {
         if (empty($time)) {
             $time = date('Ymd');
         }
-        $task_list = TaskModel::where('user_id', auth()->id())
-            ->where('status', '<', 2)->get();
+        $task_list = TaskRepository::getActiveTask();
         if (empty($task_list)) {
             return $this->redirectWithMessage(
                 './task/create', '请先添加任务'
@@ -69,8 +72,12 @@ class TaskController extends Controller {
 
     public function editDayAction($id) {
         $model = TaskDayModel::findOrNew($id);
-        $task_list = TaskModel::where('user_id', auth()->id())
-            ->where('status', '<', 2)->get();
+        $task_list = TaskRepository::getActiveTask();
+        if (empty($task_list)) {
+            return $this->redirectWithMessage(
+                './task/create', '请先添加任务'
+            );
+        }
         if ($model->isNewRecord) {
             $model->amount = 1;
         }
@@ -97,6 +104,9 @@ class TaskController extends Controller {
     }
 
     public function deleteDayAction($id) {
+        try {
+            TaskRepository::stop($id);
+        } catch (\Exception $ex) {}
         TaskDayModel::where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./task/today')
@@ -137,6 +147,47 @@ class TaskController extends Controller {
         } catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($day);
+        if ($day === false) {
+            return $this->jsonSuccess($day);
+        }
+        // 记录今天完成的任务次数，每4轮多休息
+        $count = TaskLogModel::where('created_at', '>',
+            strtotime(date('Y-m-d 00:00:00')))
+            ->where('status', TaskLogModel::STATUS_FINISH)
+            ->where('user_id', auth()->id())
+            ->count();
+        $tip = '本轮任务完成，请休息3-5分钟';
+        if ($count % 4 === 0) {
+            $tip = '本轮任务完成，请休息20-25分钟';
+        }
+        return $this->jsonSuccess($day, $tip);
+    }
+
+    public function batchAddAction($id) {
+        $task_list = TaskModel::where('user_id', auth()->id())
+            ->whereIn('id', (array)$id)->get();
+        if (empty($task_list)) {
+            return $this->jsonFailure('请选择任务');
+        }
+        foreach ($task_list as $item) {
+            TaskDayModel::add($item, 1);
+        }
+        return $this->jsonSuccess();
+    }
+
+    public function stopTaskAction($id) {
+        try {
+            $day = TaskDayModel::findWithAuth($id);
+            if (empty($day)) {
+                return $this->jsonFailure('任务不存在');
+            }
+            if ($day->status != TaskDayModel::STATUS_NONE) {
+                return $this->jsonFailure('正在进行中的任务无法停止');
+            }
+            $task = TaskRepository::stopTask($day->task_id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($task);
     }
 }

@@ -79,7 +79,7 @@ class TaskModel extends Model {
             $log->end_at = time();
             $time = $log->getTimeAttribute();
             $log->status =
-                $this->every_time <= 0 || $time >= $this->every_time
+                $this->every_time <= 0 || $time >= $this->every_time * 60
                     ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
             $log->save();
         }
