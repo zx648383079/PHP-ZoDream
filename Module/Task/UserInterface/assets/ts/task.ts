@@ -47,6 +47,9 @@ let isLoading = false;
 let times = 120;
 
 function bindTask(baseUri: string) {
+    if ('Notification' in window) {
+        Notification.requestPermission();
+    }
     refreshPanel(baseUri);
     $('.panel ').on('click', '.task-item .fa-pause-circle', function() {
         pauseTask(baseUri, $(this).closest('.task-item'));

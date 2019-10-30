@@ -47,5 +47,44 @@ $this->registerCssFile([
             ]
         ],
         true
+    ],
+    [
+        '工作统计',
+        false,
+        'fa fa-chart-line',
+        [
+            [
+                '周视图',
+                './record?type=week',
+                'fa fa-chart-area'
+            ],
+            [
+                '月视图',
+                './record?type=month',
+                'fa fa-chart-bar'
+            ]
+        ],
+    ],
+    [
+        '工作记录',
+        false,
+        'fa fa-chart-line',
+        [
+            [
+                '日视图',
+                './review/day',
+                'fa fa-chart-bar'
+            ],
+            [
+                '周视图',
+                './review/week',
+                'fa fa-chart-area'
+            ],
+            [
+                '月视图',
+                './review/month',
+                'fa fa-calendar-alt'
+            ]
+        ],
     ]
 ], $content, 'ZoDream Task') ?>
