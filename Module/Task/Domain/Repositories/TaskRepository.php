@@ -100,8 +100,9 @@ class TaskRepository {
         $day->task->save();
         if ($log->status === TaskLogModel::STATUS_FINISH) {
             $day->success_amount ++;
+        } else {
+            $day->failure_amount ++;
         }
-        $day->amount = 0;
         $day->status = TaskDayModel::STATUS_NONE;
         $day->save();
         return $day;
@@ -128,6 +129,7 @@ class TaskRepository {
         $log->end_at = time();
         $log->status = TaskLogModel::STATUS_PAUSE;
         $log->save();
+        $day->pause_amount ++;
         $day->status = TaskDayModel::STATUS_PAUSE;
         $day->save();
         $day->task->status = TaskModel::STATUS_PAUSE;
@@ -214,6 +216,8 @@ class TaskRepository {
         }
         if ($log->status === TaskLogModel::STATUS_FINISH) {
             $day->success_amount ++;
+        } else {
+            $day->failure_amount ++;
         }
         $day->amount = 0;
         $day->status = TaskDayModel::STATUS_NONE;

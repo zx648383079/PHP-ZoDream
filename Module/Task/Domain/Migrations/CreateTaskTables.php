@@ -40,6 +40,8 @@ class CreateTaskTables extends Migration {
             $table->set('today')->char(8)->notNull();
             $table->set('amount')->tinyint(1)->defaultVal(1)->comment('剩余次数');
             $table->set('success_amount')->tinyint(1)->defaultVal(0)->comment('成功次数');
+            $table->set('pause_amount')->tinyint(1)->defaultVal(0)->comment('暂停次数');
+            $table->set('failure_amount')->tinyint(1)->defaultVal(0)->comment('中断次数');
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamps();
         });

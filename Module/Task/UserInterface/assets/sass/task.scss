@@ -112,3 +112,38 @@
         text-align: center;
     }
 }
+
+.dialog-timer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: #fff;
+    display: none;
+    .dialog-body {
+        position: absolute;
+        top: 20vh;
+        text-align: center;
+        left: 0;
+        right: 0;
+        .timer-box {
+            font-size: 80px;
+        }
+        .timer-tip {
+            color: #ccc;
+        }
+    }
+    .dialog-footer {
+        position: absolute;
+        bottom: 30px;
+        font-size: 50px;
+        text-align: center;
+        left: 0;
+        right: 0;
+        a {
+            color: #333;
+        }
+    }
+}

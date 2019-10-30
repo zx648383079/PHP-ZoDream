@@ -35,3 +35,21 @@ $this->registerJs($js);
     </div>
     <a href="javascript:;" class="btn">确定</a>
 </div>
+
+<div class="dialog-timer">
+    <div class="dialog-body">
+        <div class="timer-box">
+            12:00
+        </div>
+        <div class="timer-tip">画画</div>
+    </div>
+
+    <div class="dialog-footer">
+        <a href="javascript:;" class="timer-pause" alt="暂停计时">
+            <i class="fa fa-pause-circle"></i>
+        </a>
+        <a href="javascript:;" class="timer-close" alt="停止计时">
+            <i class="fa fa-times-circle"></i>
+        </a>
+    </div>
+</div>

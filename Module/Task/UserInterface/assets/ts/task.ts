@@ -84,6 +84,31 @@ function bindTask(baseUri: string) {
             refreshPanel(baseUri);
         });
     });
+    let timerBox = $('.dialog-timer');
+    let startPoint = null;
+    timerBox.on('click', '.timer-close', function(e) {
+        e.preventDefault();
+        timerBox.hide();
+    }).on('touchstart', function(e) {
+        startPoint = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+    }).on('touchmove', function(e) {
+        const diff = Math.min(e.changedTouches[0].clientY - startPoint.y, 0);
+        timerBox.css('transform', 'translateY('+ diff +'px);')
+    }).on('touchend', function(e) {
+        const diff = startPoint.y - e.changedTouches[0].clientY;
+        const h = $(window).height();
+        if (diff < h / 3) {
+            timerBox.animate({
+                transform: 'translateY(0px)'
+            }, 1000);
+            return;
+        }
+        timerBox.animate({
+            transform: 'translateY(-' + h +'px)'
+        }, 1000, 'liner', () => {
+            timerBox.hide();
+        });
+    });
 }
 
 function refreshPanel(baseUri: string) {
