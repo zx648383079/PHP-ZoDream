@@ -6,9 +6,12 @@ class Timer {
 
     private _handle: number;
 
+    public dialog: JQuery;
+
     public start(element: JQuery, start_at: string | number, cb: () => void) {
         this.stop();
         this.element = element;
+        this.dialog = undefined;
         this.startAt = new Date(typeof start_at == 'number' ? start_at * 1000 : start_at);
         let that = this;
         this._handle = setInterval(function() {
@@ -18,7 +21,16 @@ class Timer {
     }
 
     private _showTime() {
-        this.element.text(Timer.format(new Date().getTime() - this.startAt.getTime()));
+        const diff = new Date().getTime() - this.startAt.getTime();
+        this.element.text(Timer.format(diff));
+        if (!this.dialog) {
+            return;
+        }
+        const total = this.element.closest('.task-item').data('time');
+        if (total < 1) {
+            return;
+        }
+        this.dialog.find('.timer-box').text(Timer.format(total * 60000 - diff));
     }
 
     public stop() {
@@ -28,6 +40,7 @@ class Timer {
         }
         this.element = undefined;
         this._handle = 0;
+        this.dialog = undefined;
     }
     
     public static format(time: number): string {
@@ -38,7 +51,7 @@ class Timer {
             b = function(t) {
                 return t < 10 ? '0' + t : t;
             };
-        return b(h) + ':' + b(m) + ':' + b(s);
+        return (h > 0 ? b(h) + ':' : '') + b(m) + ':' + b(s);
     }
 }
 
@@ -57,6 +70,14 @@ function bindTask(baseUri: string) {
         playTask(baseUri, $(this).closest('.task-item'));
     }).on('click', '.task-item .fa-stop-circle', function() {
         stopTask(baseUri, $(this).closest('.task-item'));
+    }).on('click', '.task-item .name', function() {
+        let row = $(this).closest('.task-item');
+        if (!row.hasClass('active')) {
+            return;
+        }
+        timerBox.find('.timer-tip').text($(this).text());
+        timerBox.show();
+        timer.dialog = timerBox;
     });
     let box = $('.dialog-panel');
     $('[data-action=add]').click(function(e) {
@@ -89,26 +110,53 @@ function bindTask(baseUri: string) {
     timerBox.on('click', '.timer-close', function(e) {
         e.preventDefault();
         timerBox.hide();
+        stopTask(baseUri, timer.element.closest('.task-item'));
+    }).on('click', '.timer-pause', function(e) {
+        e.preventDefault();
+        timerBox.hide();
+        pauseTask(baseUri, timer.element.closest('.task-item'));
     }).on('touchstart', function(e) {
         startPoint = {x: e.touches[0].clientX, y: e.touches[0].clientY};
     }).on('touchmove', function(e) {
         const diff = Math.min(e.changedTouches[0].clientY - startPoint.y, 0);
-        timerBox.css('transform', 'translateY('+ diff +'px);')
+        timerBox.css('transform', 'translateY('+ diff +'px)');
+        timerBox.addClass('closing');
     }).on('touchend', function(e) {
         const diff = startPoint.y - e.changedTouches[0].clientY;
         const h = $(window).height();
         if (diff < h / 3) {
-            timerBox.animate({
-                transform: 'translateY(0px)'
-            }, 1000);
+            animation(-diff, 0, i => {
+                timerBox.css('transform', 'translateY('+ i +'px)');
+            }, () => {
+                timerBox.removeClass('closing');
+            });
             return;
         }
-        timerBox.animate({
-            transform: 'translateY(-' + h +'px)'
-        }, 1000, 'liner', () => {
+        animation(-diff, -h, i => {
+            timerBox.css('transform', 'translateY('+ i +'px)');
+        }, () => {
+            timerBox.removeClass('closing');
             timerBox.hide();
+            stopTask(baseUri, timer.element.closest('.task-item'));
         });
     });
+}
+
+function animation(
+    start: number, end: number,
+    callHandle: (i: number) => void, endHandle?: () => void) {
+    const diff = start > end ? -1 : 1;
+    let step = 1;
+    const handle = setInterval(() => {
+        start += (step ++) * diff;
+        if ((diff > 0 && start >= end) || (diff < 0 && start <= end)) {
+            clearInterval(handle);
+            callHandle(end);
+            endHandle && endHandle();
+            return;
+        }
+        callHandle(start);
+    }, 16);
 }
 
 function refreshPanel(baseUri: string) {

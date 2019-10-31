@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 ?>
 <?php foreach($model_list as $item):?>
-    <div class="task-item<?=$item->status == 1 ? ' active' : ''?>" data-id="<?=$item->id?>">
+    <div class="task-item<?=$item->status == 1 ? ' active' : ''?>" data-id="<?=$item->id?>" data-time="<?=$item->task->every_time?>">
         <div class="name">
             <?=$item->task->name?>
             <?php if($item->amount > 1):?>
