@@ -2,6 +2,7 @@
 namespace Module\Task\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Helpers\Time;
 
 /**
  * Class TaskDayModel
@@ -35,7 +36,7 @@ class TaskDayModel extends Model {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',
-            'today' => 'required|string:0,8',
+            'today' => 'required',
             'amount' => 'int:0,9',
             'success_amount' => 'int:0,127',
             'pause_amount' => 'int:0,127',
@@ -62,6 +63,20 @@ class TaskDayModel extends Model {
         ];
     }
 
+    public function scopeMonth($query, $time) {
+        return $this->scopeTime($query, date('Y-m-01', $time),
+            date('Y-m-t', $time));
+    }
+
+    public function scopeWeek($query, $now) {
+        $time = ('1' == date('w', $now)) ? strtotime('Monday', $now) : strtotime('last Monday', $now);
+        return $this->scopeTime($query, date('Y-m-d', $time), date('Y-m-d', strtotime('Sunday', $now)));
+    }
+
+    public function scopeTime($query, $start_at, $end_at) {
+        return $query->where('today', '>=', $start_at)->where('today', '<=', $end_at);
+    }
+
     public function task() {
         return $this->hasOne(TaskModel::class, 'id', 'task_id');
     }
@@ -70,12 +85,16 @@ class TaskDayModel extends Model {
         return TaskLogModel::findRunning($this->task_id);
     }
 
+    public function getWeekAttribute() {
+        return Time::weekFormat($this->today);
+    }
+
     public function start() {
         if ($this->amount < 1) {
             $this->setError('amount', '次数已用完，请重新添加');
             return false;
         }
-        if ($this->task->status == TaskModel::STATUS_COMPETE) {
+        if ($this->task->status == TaskModel::STATUS_COMPLETE) {
             $this->setError('task_id', '此任务已完成');
             return false;
         }
@@ -122,7 +141,7 @@ class TaskDayModel extends Model {
     }
 
     public static function add(TaskModel $task, $amount = 1) {
-        $day = date('Ymd');
+        $day = date('Y-m-d');
         $model = static::where('task_id', $task->id)
             ->where('today', $day)->first();
         if (!empty($model)) {

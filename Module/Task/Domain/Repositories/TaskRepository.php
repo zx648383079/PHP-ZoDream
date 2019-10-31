@@ -96,7 +96,7 @@ class TaskRepository {
                 ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
         $log->save();
         $day->task->time_length += $time;
-        $day->task->status = TaskModel::STATUS_COMPETE;
+        $day->task->status = TaskModel::STATUS_COMPLETE;
         $day->task->save();
         if ($log->status === TaskLogModel::STATUS_FINISH) {
             $day->success_amount ++;
@@ -181,14 +181,14 @@ class TaskRepository {
      */
     public static function stopTask($id) {
         $task = TaskModel::findWithAuth($id);
-        if (empty($task) || $task->status == TaskModel::STATUS_COMPETE) {
+        if (empty($task) || $task->status == TaskModel::STATUS_COMPLETE) {
             throw new Exception('任务不存在');
         }
         if ($task->status !== TaskModel::STATUS_NONE) {
             self::stopLog($task);
             self::cancelDay($task);
         }
-        $task->status = TaskModel::STATUS_COMPETE;
+        $task->status = TaskModel::STATUS_COMPLETE;
         $task->save();
         return $task;
     }

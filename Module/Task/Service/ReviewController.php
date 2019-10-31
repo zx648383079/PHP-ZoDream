@@ -1,8 +1,33 @@
 <?php
 namespace Module\Task\Service;
 
+use Module\Task\Domain\Model\TaskLogModel;
+use Zodream\Helpers\Time;
+
 class ReviewController extends Controller {
 
-    public function indexAction() {
+    public function indexAction($type, $date = null) {
+        return $this->show(compact('type', 'date'));
+    }
+
+    public function viewAction($type, $date = null) {
+        $time = strtotime(date('Y-m-d 00:00:00', empty($date) ? time() : strtotime($date)));
+        if ($type === 'week') {
+            list($start_at, $end_at) = Time::week($time, false);
+        } elseif ($type === 'month') {
+            list($start_at, $end_at) = Time::month($time, false);
+        } else {
+            $type = 'day';
+            $start_at = $time;
+            $end_at = $time + 86399;
+        }
+        $log_list = TaskLogModel::with('task')
+            ->where('created_at', '>=', $start_at)
+            ->where('created_at', '<=', $end_at)
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $this->layout = false;
+        return $this->show($type, compact('log_list', 'start_at', 'end_at'));
     }
 }

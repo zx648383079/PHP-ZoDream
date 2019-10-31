@@ -23,7 +23,7 @@ class TaskModel extends Model {
     const STATUS_NONE = 0;
     const STATUS_RUNNING = 1;
     const STATUS_PAUSE = 2;
-    const STATUS_COMPETE = 3;
+    const STATUS_COMPLETE = 3;
 
     protected $append = ['start_at'];
 

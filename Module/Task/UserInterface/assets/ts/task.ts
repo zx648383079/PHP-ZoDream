@@ -191,3 +191,25 @@ function stopTask(baseUri: string, element: JQuery) {
         refreshPanel(baseUri);
     });
 }
+
+function bindRecord() {
+    $('#today').datetimer({format: 'yyyy-mm-dd'});
+    $('.search-box form').submit(function() {
+        let $this = $(this);
+        $.get($this.attr('action'), $this.serialize(), html => {
+            $('.chart-box').html(html);
+        });
+        return false;
+    }).trigger('submit');
+}
+
+function bindReview() {
+    $('#today').datetimer({format: 'yyyy-mm-dd'});
+    $('.search-box form').submit(function() {
+        let $this = $(this);
+        $.get($this.attr('action'), $this.serialize(), html => {
+            $('.review-box').html(html);
+        });
+        return false;
+    }).trigger('submit');
+}

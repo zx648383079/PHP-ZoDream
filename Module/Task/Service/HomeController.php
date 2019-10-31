@@ -15,8 +15,10 @@ class HomeController extends Controller {
         $this->layout = false;
         $model_list = TaskDayModel::with('task')
             ->where('user_id', auth()->id())
+            ->where('today', date('Y-m-d'))
             ->where('amount', '>', 0)
-            ->orderBy('status', 'asc')->orderBy('id', 'asc')->get();
+            ->orderBy('status', 'asc')
+            ->orderBy('id', 'asc')->get();
         return $this->show(compact('model_list'));
     }
 }

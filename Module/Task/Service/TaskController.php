@@ -52,7 +52,7 @@ class TaskController extends Controller {
 
     public function todayAction($time = null) {
         if (empty($time)) {
-            $time = date('Ymd');
+            $time = date('Y-m-d');
         }
         $task_list = TaskRepository::getActiveTask();
         if (empty($task_list)) {

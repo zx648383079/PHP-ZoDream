@@ -7,9 +7,11 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@zodream-admin.css',
+        '@datetimer.css',
         '@dialog.css',
         '@task.css'
     ])->registerJsFile([
+        '@echarts.min.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
@@ -68,21 +70,21 @@ $this->registerCssFile([
     [
         '工作记录',
         false,
-        'fa fa-chart-line',
+        'fa fa-history',
         [
             [
                 '日视图',
-                './review/day',
-                'fa fa-chart-bar'
+                './review?type=day',
+                'fa fa-clock'
             ],
             [
                 '周视图',
-                './review/week',
-                'fa fa-chart-area'
+                './review?type=week',
+                'fa fa-calendar'
             ],
             [
                 '月视图',
-                './review/month',
+                './review?type=month',
                 'fa fa-calendar-alt'
             ]
         ],

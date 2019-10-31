@@ -52,6 +52,10 @@ class TaskLogModel extends Model {
         ];
     }
 
+    public function task() {
+        return $this->hasOne(TaskModel::class, 'id', 'task_id');
+    }
+
     public function getTimeAttribute() {
         $end_at = $this->getAttributeSource('end_at');
         return ($end_at > 0 ? $end_at : time())
