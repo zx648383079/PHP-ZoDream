@@ -230,6 +230,7 @@ function checkTask(baseUri: string, element: JQuery) {
     }, function(data) {
         isLoading = false;
         if (data.code == 200 && data.data) {
+            timer.dialog && timer.dialog.trigger(TASK_HIDE_TIMER);
             refreshPanel(baseUri);
             Dialog.notify('提示', data.messages);
             alert(data.messages);

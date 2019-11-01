@@ -29,10 +29,19 @@ class TaskController extends Controller {
         return $this->show(compact('model'));
     }
 
-    public function saveAction() {
-        $model = new TaskModel();
-        $model->user_id = auth()->id();
-        if ($model->load() && $model->autoIsNew()->save()) {
+    public function saveAction($id, $status = false) {
+        $data = app('request')
+            ->get('name,every_time,description');
+        $model = TaskModel::findOrNew($id);
+        if ($id > 0 && $model->user_id !== auth()->id()) {
+            return $this->jsonFailure('任务不存在');
+        }
+        $model->set($data)->user_id = auth()->id();
+        if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
+        && $status != TaskModel::STATUS_COMPLETE) {
+            $model->status = 0;
+        }
+        if ($model->save()) {
             return $this->jsonSuccess([
                 'url' => url('./task')
             ]);

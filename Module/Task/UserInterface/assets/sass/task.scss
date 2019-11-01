@@ -15,12 +15,11 @@
         min-height: 300px;
         .task-item {
             display: grid;
-            grid-template-columns: 1fr 150px 120px;
+            grid-template-columns: 1fr 100px 100px;
             text-align: center;
             line-height: 40px;
             .name {
                 text-align: left;
-                padding-left: 10px;
                 .amount {
                     border-radius: 50%;
                     display: inline-block;

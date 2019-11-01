@@ -52,7 +52,7 @@ class TaskModel extends Model {
             'parent_id' => 'Parent Id',
             'name' => '名称',
             'description' => '说明',
-            'status' => 'Status',
+            'status' => '状态',
             'every_time' => '单次时长（/分钟）',
             'time_length' => 'Time Length',
             'created_at' => 'Created At',

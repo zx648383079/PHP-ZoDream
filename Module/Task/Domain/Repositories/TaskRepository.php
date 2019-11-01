@@ -96,7 +96,7 @@ class TaskRepository {
                 ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
         $log->save();
         $day->task->time_length += $time;
-        $day->task->status = TaskModel::STATUS_COMPLETE;
+        $day->task->status = TaskModel::STATUS_NONE;
         $day->task->save();
         if ($log->status === TaskLogModel::STATUS_FINISH) {
             $day->success_amount ++;
