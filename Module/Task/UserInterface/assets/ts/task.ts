@@ -8,7 +8,13 @@ class Timer {
 
     public dialog: JQuery;
 
-    public start(element: JQuery, start_at: string | number, cb: () => void) {
+    private _timeSpace = 300;
+
+    private _timeDown = 0;
+
+    private _maxTime = 1; // 1分钟
+
+    public start(element: JQuery, start_at: string | number) {
         this.stop();
         this.element = element;
         this.dialog = undefined;
@@ -16,21 +22,26 @@ class Timer {
         let that = this;
         this._handle = setInterval(function() {
             that._showTime();
-            cb && cb();
-        }, 500);
+        }, this._timeSpace);
     }
 
     private _showTime() {
         const diff = new Date().getTime() - this.startAt.getTime();
-        this.element.text(Timer.format(diff));
+        this.element.trigger(TASK_REFRESH_TIME, Timer.format(diff));
+        this._timeDown -= this._timeSpace;
+        if (this._timeDown <= 0) {
+            this.element.trigger(TASK_CHECK);
+            this._timeDown = this._maxTime * 60000;
+        }
         if (!this.dialog) {
             return;
         }
-        const total = this.element.closest('.task-item').data('time');
+        const total = this.element.data('time');
         if (total < 1) {
             return;
         }
-        this.dialog.find('.timer-box').text(Timer.format(total * 60000 - diff));
+        const time = total * 60000 - diff;
+        this.dialog.trigger(TASK_TICK_TIMER, Timer.format(Math.max(0, time)));
     }
 
     public stop() {
@@ -58,26 +69,44 @@ class Timer {
 let timer = new Timer();
 let isLoading = false;
 let times = 120;
+const TASK_START = 'task_start';
+const TASK_PAUSE = 'task_pause';
+const TASK_STOP = 'task_stop';
+const TASK_CHECK = 'task_check';
+const TASK_REFRESH_TIME = 'task_refresh_time';
+const TASK_SHOW_TIMER = 'task_show_timer';
+const TASK_HIDE_TIMER = 'task_hide_timer';
+const TASK_TICK_TIMER = 'task_tick_timer';
 
 function bindTask(baseUri: string) {
     if ('Notification' in window) {
         Notification.requestPermission();
     }
     refreshPanel(baseUri);
-    $('.panel ').on('click', '.task-item .fa-pause-circle', function() {
-        pauseTask(baseUri, $(this).closest('.task-item'));
-    }).on('click', '.task-item .fa-play-circle', function() {
-        playTask(baseUri, $(this).closest('.task-item'));
-    }).on('click', '.task-item .fa-stop-circle', function() {
-        stopTask(baseUri, $(this).closest('.task-item'));
-    }).on('click', '.task-item .name', function() {
-        let row = $(this).closest('.task-item');
+    $('.panel ').on(TASK_START, '.task-item', function() {
+        playTask(baseUri, $(this));
+    }).on(TASK_PAUSE, '.task-item', function() {
+        pauseTask(baseUri, $(this));
+    }).on(TASK_STOP, '.task-item', function() {
+        stopTask(baseUri, $(this));
+    }).on(TASK_REFRESH_TIME, '.task-item', function(_, time: string) {
+        $(this).find('.time').text(time);
+    }).on(TASK_CHECK, '.task-item', function() {
+        checkTask(baseUri, $(this));
+    }).on(TASK_SHOW_TIMER, '.task-item', function() {
+        let row = $(this);
         if (!row.hasClass('active')) {
             return;
         }
-        timerBox.find('.timer-tip').text($(this).text());
-        timerBox.show();
-        timer.dialog = timerBox;
+        timerBox.trigger(TASK_SHOW_TIMER, $(this).find('.name').text());
+    }).on('click', '.task-item .fa-pause-circle', function() {
+        $(this).closest('.task-item').trigger(TASK_PAUSE);
+    }).on('click', '.task-item .fa-play-circle', function() {
+        $(this).closest('.task-item').trigger(TASK_START);
+    }).on('click', '.task-item .fa-stop-circle', function() {
+        $(this).closest('.task-item').trigger(TASK_STOP);
+    }).on('click', '.task-item .name', function() {
+        $(this).closest('.task-item').trigger(TASK_SHOW_TIMER);
     });
     let box = $('.dialog-panel');
     $('[data-action=add]').click(function(e) {
@@ -107,14 +136,36 @@ function bindTask(baseUri: string) {
     });
     let timerBox = $('.dialog-timer');
     let startPoint = null;
-    timerBox.on('click', '.timer-close', function(e) {
+    timerBox.on(TASK_HIDE_TIMER, function(_, i = 0) {
+        animation(i, -$(window).height(), i => {
+            timerBox.css('transform', 'translateY('+ i +'px)');
+        }, () => {
+            timerBox.removeClass('closing');
+            timerBox.hide();
+        });
+    }).on(TASK_SHOW_TIMER, function(_, name: string) {
+        timerBox.find('.timer-tip').text(name);
+        timerBox.show();
+        timer.dialog = timerBox;
+        animation(-$(window).height(), 0, i => {
+            timerBox.css('transform', 'translateY('+ i +'px)');
+        }, () => {
+            timerBox.removeClass('closing');
+        });
+    }).on(TASK_TICK_TIMER, function(_, time: string) {
+        timerBox.find('.timer-box').text(time);
+    }).on(TASK_PAUSE, function() {
+        timer.element.trigger(TASK_PAUSE);
+        timerBox.trigger(TASK_HIDE_TIMER);
+    }).on(TASK_STOP, function(_, i) {
+        timer.element.trigger(TASK_STOP);
+        timerBox.trigger(TASK_HIDE_TIMER, i);
+    }).on('click', '.timer-close', function(e) {
         e.preventDefault();
-        timerBox.hide();
-        stopTask(baseUri, timer.element.closest('.task-item'));
+        timerBox.trigger(TASK_STOP);
     }).on('click', '.timer-pause', function(e) {
         e.preventDefault();
-        timerBox.hide();
-        pauseTask(baseUri, timer.element.closest('.task-item'));
+        timerBox.trigger(TASK_PAUSE);
     }).on('touchstart', function(e) {
         startPoint = {x: e.touches[0].clientX, y: e.touches[0].clientY};
     }).on('touchmove', function(e) {
@@ -132,13 +183,7 @@ function bindTask(baseUri: string) {
             });
             return;
         }
-        animation(-diff, -h, i => {
-            timerBox.css('transform', 'translateY('+ i +'px)');
-        }, () => {
-            timerBox.removeClass('closing');
-            timerBox.hide();
-            stopTask(baseUri, timer.element.closest('.task-item'));
-        });
+        timerBox.trigger(TASK_STOP, -diff);
     });
 }
 
@@ -167,26 +212,19 @@ function refreshPanel(baseUri: string) {
             let item = $(this),
                 time = item.find('.time');
             if (item.hasClass('active')) {
-                timer.start(time, parseInt(time.data('start'), 10), () => {
-                    checkTask(baseUri, item);
-                });
+                timer.start(item, parseInt(time.data('start'), 10));
                 return;
             }
-            time.text(Timer.format(parseInt(time.text()) * 1000));
+            item.trigger(TASK_REFRESH_TIME, Timer.format(parseInt(time.text()) * 1000))
         });
     });
 }
 
 function checkTask(baseUri: string, element: JQuery) {
-    times -- ;
     if (isLoading) {
         return;
     }
-    if (times > 0) {
-        return;
-    }
     isLoading = true;
-    times = 120;
     postJson(baseUri + 'task/check', {
         id: element.data('id')
     }, function(data) {
