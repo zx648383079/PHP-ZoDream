@@ -13,6 +13,8 @@ class HistoryController extends RestController {
 
     public function recordAction($book, $chapter = 0, $progress = 0) {
         BookHistoryModel::record($book, $chapter, $progress);
-        return $this->render(true);
+        return $this->render([
+            'data' => true
+        ]);
     }
 }

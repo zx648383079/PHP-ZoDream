@@ -14,6 +14,8 @@ class ThemeController extends RestController {
     public function saveAction() {
         $setting = new Setting();
         $setting->load()->set([])->save();
-        return $this->render(true);
+        return $this->render([
+            'data' => true
+        ]);
     }
 }
