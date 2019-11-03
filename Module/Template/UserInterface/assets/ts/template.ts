@@ -6,68 +6,6 @@ const DEL_URI = 'weight/destroy',
     SAVE_SETTING_URI = 'weight/save_setting',
     INFO_URI = 'weight/info';
 
-class Panel {
-    constructor(
-        tag: string,
-        public page: Page
-    ) {
-        this.element = $(tag);
-        this._init();
-    }
-
-    public element: JQuery;
-
-    private _init() {
-        this._bindEvent();
-    }
-
-    private _bindEvent() {
-        let that = this;
-        this.element.find(".panel .head .fa-close").click(function() {
-            that.element.addClass("min");
-        });
-        this.element.find(".menu>li>.head").click(function() {
-            $(this).parent().toggleClass("active");
-        });
-    }
-
-    public toggle(state?: boolean) {
-        if (typeof state == 'boolean') {
-            state = !state;
-        }
-        this.element.toggleClass('min', state);
-        return this;
-    }
-
-    public bindDrag() {
-        let that = this;
-        this.element.find(".weight-edit-grid").draggable({
-            connectToSortable: ".weight-row",
-            helper: "clone",
-            opacity: .3,
-            revert: "invalid",
-            start: function() {
-                that.page.body.addClass("hover");
-            },
-            stop: function(event, target) {
-                that.page.body.removeClass("hover");
-                console.log(arguments);
-                
-                let ele = target.helper,
-                    row = ele.closest('.weight-row');
-                if (!row || row.length < 1) {
-                    if (ele.hasClass('weight-row')) {
-                        row = ele;
-                    } else {
-                        return;
-                    }
-                }
-                that.page.addWeight(ele, row);
-            }
-        });
-    }
-}
-
 class Weight {
     constructor(
         public box: JQuery
@@ -115,24 +53,23 @@ class Page {
         this.box = $("#page-box");
         this.element = $('#mainMobile');
         this.bodyBox = $('#mainGrid');
-        this.body = this.bodyBox.contents().find('body') as JQuery;
+        this.panelGroup = this.box.find('.panel-group');
+        this.bodyBox.contents().ready(() => {
+            this.body = this.bodyBox.contents().find('body') as JQuery;
+            this._init();
+        })
         
-        this.weightBox = new Panel('#weight', this),
-        this.propertyBox = new Panel('#property', this);
-        this._init();
     }
 
     public box: JQuery;
 
     public element: JQuery;
 
+    public panelGroup: JQuery;
+
     public bodyBox: JQuery;
 
     public body: JQuery;
-
-    public weightBox: Panel;
-
-    public propertyBox: Panel;
 
     public weight: Weight;
 
@@ -148,9 +85,6 @@ class Page {
         $(window).resize(function() {
             that.resize();
         });
-        this.body.find(".weight-row").sortable({
-            connectWith: ".weight-row"
-        });
         this.body.on("click", ".weight-action .del", function() {
             that.removeWeight($(this).closest('.weight-edit-grid'));
         }).on("click", ".weight-action .edit", function(e) {
@@ -160,7 +94,29 @@ class Page {
             e.stopPropagation();
             that.refreshWeight($(this).closest('.weight-edit-grid'));
         });
-        this.weightBox.bindDrag();
+        this.panelGroup.on('click', '.panel-item .panel-header .fa-close', function(e) {
+            e.stopPropagation();
+            let box = $(this).closest('.panel-item');
+            box.addClass('min');
+            that.resize();
+        }).on('click', '.panel-item .panel-header', function() {
+            let box = $(this).closest('.panel-item');
+            if (box.hasClass('min')) {
+                box.removeClass('min').siblings().addClass('min');
+                that.resize();
+            }
+        }).find('.weight-edit-grid').attr('draggable', 'true').on('dragstart', function(e) {
+            e.originalEvent.dataTransfer.setData("Text", e.target.id);
+        });
+        this.body.find('.weight-row').on('dragover', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }).on('drop', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log(this, e);
+            
+        });
         this.bindRule();
     }
 
@@ -239,8 +195,7 @@ class Page {
         this.weight = new Weight(element);
         this.weight.toggle(true);
         if (withEdit) {
-            this.weightBox.toggle(true);
-            this.propertyBox.toggle(true);
+            
         }
         return this.weight;
     }
@@ -272,10 +227,24 @@ class Page {
     }
 
     public resize() {
-        this.box.height($(window).height() - 57);
-        this.drawRule(this.element.find('.top-rule'), 20);
-        
-        this.drawRule(this.element.find('.left-rule'), 20);
+        let width = 16;
+        this.panelGroup.find('.panel-item').each(function() {
+            if (!$(this).hasClass('min')) {
+                width = 16 * 15;
+            }
+        });
+        this.panelGroup.width(width);
+        this.box.css('padding-left', width + 'px');
+        const height = $(window).height() - 57;
+        this.box.height(height);
+        const isMobile = !!this.element.attr('class');
+        if (!isMobile) {
+            this.element.height(height - 25);
+        }
+        const top = isMobile ? this.bodyBox.offset().top - this.element.offset().top - 20 : 0;
+        const left = isMobile ? this.bodyBox.offset().left - this.element.offset().left - 20 : 0;
+        this.drawRule(this.element.find('.top-rule').css('top', top + 'px'), left + 20);
+        this.drawRule(this.element.find('.left-rule').css('left', left + 'px'), top + 20);
         this.bodyBox.width(this.element.width() - 10);
         this.bodyBox.height(this.element.height());
     }
@@ -358,9 +327,9 @@ class Page {
         let direct = canvas.width > canvas.height; // true 横向
         let length = direct ? canvas.width : canvas.height;
         
-        for (let i = 0; i < length; i+= 10) {
+        for (let i = start; i < length; i+= 10) {
             let real = i - start;
-            let len = real % 50 === 0 ? 10 : 5; 
+            let len = real % 50 === 0 ? 10 : 5;
             this.drawLine(context, direct,  i, len, len > 5 ? real.toString() : undefined);
         }
     }
@@ -395,7 +364,8 @@ function bindPage(pageId: number, baseUri: string) {
     $(".mobile-size li").click(function() {
         $(".mobile-size").parent().removeClass("open");
         let size = $(this).attr("data-size").split("*");
-        page.element.removeClass().addClass('mobile-' + size[0]);
+        page.element.removeClass().removeAttr('style').addClass('mobile-' + size[0]);
+        page.resize();
     });
     $(".navbar>li>div").click(function() {
         $(this).parent().toggleClass("open");

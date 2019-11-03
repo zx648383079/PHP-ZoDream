@@ -52,7 +52,7 @@ $sizes: (320: 568,
             border: 1px solid #767766;
             background: #fff;
             color: #333;
-            z-index: 999;
+            z-index: 9999;
 
             >li {
                 border-bottom: 1px solid #767766;
@@ -115,7 +115,59 @@ $sizes: (320: 568,
 
 #page-box {
     position: relative;
-    padding: 0 15rem;
+}
+
+.rule-box {
+    .top-rule {
+        top: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        height: 20px;
+        width: 100%;
+        background-color: #ccc;
+    }
+    .left-rule {
+        width: 20px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        height: 100%;
+        background-color: #ccc;
+    }
+    .rule-tools {
+        position: fixed;
+        bottom: 0;
+        line-height: 50px;
+        font-size: 30px;
+        background: #fff;
+        border: 1px solid #ccc;
+        left: 50%;
+        margin-left: -90px;
+        i {
+            cursor: pointer;
+        }
+    }
+    .rule-lines {
+        .h-line,
+        .v-line {
+            border-top: 1px dotted #47f;
+            border-right: 1px dotted #47f;
+            position: absolute;
+        }
+        .h-line {
+            cursor: n-resize;
+            width: 100%;
+            height: 1px;
+        }
+        .v-line {
+            cursor: ew-resize;
+            width: 1px;
+            top: 0;
+            bottom: 0;
+        }
+    }
 }
 
 #mainMobile {
@@ -127,62 +179,30 @@ $sizes: (320: 568,
     min-height: 500px;
     background-color: #fcc;
     padding: 20px 0 0 20px;
+    .top-rule {
+        top: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        height: 20px;
+        width: 100%;
+        background-color: #ccc;
+    }
+    .left-rule {
+        width: 20px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        height: 100%;
+        background-color: #ccc;
+    }
     .rule-box {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        .top-rule {
-            top: 0;
-            left: 0;
-            right: 0;
-            position: absolute;
-            height: 20px;
-            width: 100%;
-            background-color: #ccc;
-        }
-        .left-rule {
-            width: 20px;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            position: absolute;
-            height: 100%;
-            background-color: #ccc;
-        }
-        .rule-tools {
-            position: fixed;
-            bottom: 0;
-            line-height: 50px;
-            font-size: 30px;
-            background: #fff;
-            border: 1px solid #ccc;
-            left: 50%;
-            margin-left: -90px;
-            i {
-                cursor: pointer;
-            }
-        }
-        .rule-lines {
-            .h-line,
-            .v-line {
-                border-top: 1px dotted #47f;
-                border-right: 1px dotted #47f;
-                position: absolute;
-            }
-            .h-line {
-                cursor: n-resize;
-                width: 100%;
-                height: 1px;
-            }
-            .v-line {
-                cursor: ew-resize;
-                width: 1px;
-                top: 0;
-                bottom: 0;
-            }
-        }
     }
 
     #mainGrid {
@@ -295,24 +315,24 @@ $sizes: (320: 568,
 
 }
 
-#weight,
-#property {
+.panel-group {
     position: absolute;
     top: 0;
+    left: 0;
     width: 15rem;
     bottom: 0;
-
-    >.panel {
+    z-index: 999;
+    .panel-item {
         background: #fff;
         border: 1px solid #7e8;
         position: absolute;
         top: 0;
-        left: 0;
-        right: 0;
+        left: 1rem;
+        width: 14rem;
         bottom: 0;
         z-index: 100;
 
-        >.head {
+        .panel-header {
             background: #7e8;
             color: #fff;
             font-size: 1.5rem;
@@ -323,7 +343,7 @@ $sizes: (320: 568,
             }
         }
 
-        >.body {
+        .panel-body {
             //position: relative;
             overflow-y: auto;
 
@@ -331,16 +351,23 @@ $sizes: (320: 568,
                 z-index: 100;
             }
         }
+        &.min {
+            position: static;
+            width: 1rem;
+            margin-bottom: 5px;
+            .panel-header {
+                position: static;
+                font-size: 12px;
+                .fa-close {
+                    display: none;
+                }
+            }
+            .panel-body {
+                display: none;
+            }
+        }
     }
 
-    &.min {
-        display: none;
-    }
-
-}
-
-#weight {
-    left: 0;
     .weight-edit-grid {
         cursor: pointer;
         display: inline-block;
@@ -357,7 +384,7 @@ $sizes: (320: 568,
                 width: 3rem;
                 height: 3rem;
                 line-height: 3rem;
-
+                text-align: center;
                 .fa {
                     font-size: 3rem;
                 }
@@ -369,25 +396,17 @@ $sizes: (320: 568,
             display: none;
         }
     }
-
-}
-
-#property {
-    right: 0;
-
-    .zd-tab {
-        .zd-tab-head {
-            .zd-tab-item {
+    .tab-box {
+        .tab-header {
+            .tab-item {
                 width: 4.9rem;
             }
         }
     }
 }
 
-
-
-.expand {
-    >.head {
+.expand-box {
+    .expand-header {
         background: #efefef;
         font-size: 1.3rem;
         line-height: 30px;
@@ -397,18 +416,18 @@ $sizes: (320: 568,
         }
     }
 
-    >.body {
+    .expand-body {
         display: none;
     }
 
     &.open {
-        >.head {
+        .expand-header {
             .fa {
                 transform: rotate(180deg);
             }
         }
 
-        >.body {
+        .expand-body {
             display: block;
         }
     }
