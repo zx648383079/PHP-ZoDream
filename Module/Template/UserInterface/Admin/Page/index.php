@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Template\Domain\Page;
 
-$base_url = $this->url('./admin/');
+$base_url = $this->url('./admin/', false);
 $id = $model->id;
 $js = <<<JS
 bindPage('{$id}', '{$base_url}');

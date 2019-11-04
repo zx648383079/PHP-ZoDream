@@ -223,61 +223,6 @@ $sizes: (320: 568,
             }
         }
 
-        .weight-row {
-            min-height: 100px;
-
-            .weight-edit-grid {
-                width: 100%;
-                min-height: 50px;
-                background: #fff;
-                box-sizing: border-box;
-                border: 1px dotted #7e8;
-
-                .weight-preview {
-                    display: none;
-                }
-
-                .weight-action {
-                    position: absolute;
-                    right: 0;
-                    font-size: 0.7rem;
-                    margin-top: -0.5rem;
-                    color: #fff;
-                    background: #6a4;
-                    padding: 2px;
-                    display: none;
-
-                    a {
-                        cursor: pointer;
-                    }
-
-                    .del {
-                        color: #f00;
-                    }
-                }
-
-                &:hover,
-                &.weight-edit-mode {
-                    border: 1px solid rgb(180, 24, 58);
-
-                    .weight-action {
-                        display: block;
-                    }
-                }
-
-                &.weight-loading {
-                    .weight-view {
-                        text-align: center;
-                        background: rgba(0, 0, 0, .1);
-
-                        img {
-                            height: 80px;
-                        }
-                    }
-                }
-            }
-        }
-
         &::-webkit-scrollbar {
             width: 8px;
             height: 8px;

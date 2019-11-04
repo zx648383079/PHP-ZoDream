@@ -9,7 +9,7 @@ use Domain\Model\Model;
  * @package Module\Template
  * @property integer $id
  * @property integer $page_id
- * @property integer $weight_id 部件名
+ * @property integer $theme_weight_id 部件名
  * @property integer $parent_id
  * @property integer $position
  * @property string $title
@@ -19,7 +19,7 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property WeightModel $weight
+ * @property ThemeWeightModel $weight
  */
 class PageWeightModel extends Model {
 
@@ -30,7 +30,7 @@ class PageWeightModel extends Model {
     protected function rules() {
         return [
             'page_id' => 'required|int',
-            'weight_id' => 'required|int',
+            'theme_weight_id' => 'required|int',
             'parent_id' => 'int',
             'position' => 'int',
             'title' => 'string:0,200',
@@ -45,8 +45,8 @@ class PageWeightModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'weight_name' => 'Weight Name',
+            'page_id' => 'Page Id',
+            'theme_weight_id' => 'Weight Id',
             'parent_id' => 'Parent Id',
             'position' => 'Position',
             'title' => 'Title',

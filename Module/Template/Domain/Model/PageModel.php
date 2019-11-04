@@ -17,6 +17,7 @@ use Domain\Model\Model;
  * @property string $template
  * @property string $settings
  * @property integer $position
+ * @property integer $theme_page_id
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -43,6 +44,7 @@ class PageModel extends Model {
             'description' => 'string:0,255',
             'template' => 'string:0,255',
             'settings' => '',
+            'theme_page_id' => 'required|int',
             'position' => 'int:0,99',
             'deleted_at' => 'int',
             'created_at' => 'int',
@@ -60,6 +62,7 @@ class PageModel extends Model {
             'keywords' => 'Keywords',
             'thumb' => 'Thumb',
             'description' => 'Description',
+            'theme_page_id' => 'Theme Page Id',
             'template' => 'Template',
             'settings' => 'Settings',
             'position' => 'Position',

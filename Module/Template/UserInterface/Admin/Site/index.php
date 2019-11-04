@@ -8,17 +8,17 @@ $this->title = $site->title;
 
 <div class="container">
     <?=Form::open($site, './admin/site/save')?>
-        <div class="zd-tab">
-            <div class="zd-tab-head">
-                <div class="zd-tab-item">
+        <div class="tab-box">
+            <div class="tab-header">
+                <div class="tab-item">
                     基本
                 </div>
-                <div class="zd-tab-item">
+                <div class="tab-item">
                     高级
                 </div>
             </div>
-            <div class="zd-tab-body">
-                <div class="zd-tab-item">
+            <div class="tab-body">
+                <div class="tab-item">
                     <?=Form::text('name', true)?>
                     <?=Form::text('title', true)?>
                     <?=Form::text('keywords')?>
@@ -27,7 +27,7 @@ $this->title = $site->title;
                     <?=Form::textarea('description')?>
                     <button type="submit" class="btn btn-success">确认保存</button>
                 </div>
-                <div class="zd-tab-item">
+                <div class="tab-item">
                     
                 </div>
             </div>

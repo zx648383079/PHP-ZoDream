@@ -34,7 +34,7 @@
     "gulp-tslint": "^8.1.4",
     "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.0",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3",
     "vue": "^2.6.10"

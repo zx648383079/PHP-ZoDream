@@ -1,6 +1,5 @@
 {
-  "name": "test",
-  "thumb": "./screenshot.png",
+  "name": "default",
   "keywords": "",
   "description": "说明",
   "author": "zz",
@@ -9,17 +8,23 @@
   "copyright": "@zz",
   "email": "123@12.com",
   "url": "http://",
-  "themes": [
+  "thumb": "images/screenshot.png",
+  "style": [
+    "css/style.css"
+  ],
+  "script": [
+    "js/script.js"
+  ],
+  "pages": [
     {
-      "name": "default",
-      "path": "./default",
-      "thumb": "screenshot.png",
-      "style": [
-        "./style.css"
-      ],
-      "script": [
-        "./main.js"
-      ]
+      "name": "index",
+      "path": "index.html"
+    }
+  ],
+  "weights": [
+    {
+      "name": "navbar",
+      "path": "menu/navbar"
     }
   ]
 }

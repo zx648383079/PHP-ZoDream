@@ -107,15 +107,16 @@ class Page {
             }
         }).find('.weight-edit-grid').attr('draggable', 'true').on('dragstart', function(e) {
             e.originalEvent.dataTransfer.setData("Text", e.target.id);
+            weight = $(this);
         });
+        let weight: JQuery = null;
         this.body.find('.weight-row').on('dragover', function(e) {
             e.stopPropagation();
             e.preventDefault();
         }).on('drop', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            console.log(this, e);
-            
+            that.addWeight(weight.clone(), $(this));
         });
         this.bindRule();
     }
@@ -212,6 +213,7 @@ class Page {
 
     public addWeight(element: JQuery, parent: JQuery): Weight {
         let that = this;
+        parent.append(element);
         element.width('auto');
         let weight = this.setWeight(element).toggleLoading(true);
         this.post(NEW_URI, {

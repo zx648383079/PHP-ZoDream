@@ -14,6 +14,7 @@ use Domain\Model\Model;
  * @property string $thumb
  * @property string $description
  * @property string $domain
+ * @property integer $theme_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -31,6 +32,7 @@ class SiteModel extends Model {
             'thumb' => 'string:0,255',
             'description' => 'string:0,255',
             'domain' => 'string:0,50',
+            'theme_id' => 'required|int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -46,6 +48,7 @@ class SiteModel extends Model {
             'thumb' => 'Thumb',
             'description' => 'Description',
             'domain' => 'Domain',
+            'theme_id' => 'Theme Id',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

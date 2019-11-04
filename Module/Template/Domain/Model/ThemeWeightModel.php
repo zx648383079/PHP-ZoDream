@@ -3,7 +3,6 @@ namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Disk\Directory;
-use Zodream\Disk\FileObject;
 use Zodream\Service\Factory;
 
 /**
@@ -16,8 +15,9 @@ use Zodream\Service\Factory;
  * @property integer $type
  * @property string $path
  * @property integer $editable
+ * @property integer $theme_id
  */
-class WeightModel extends Model {
+class ThemeWeightModel extends Model {
 
     const TYPE_BASIC = 0;
     const TYPE_ADVANCE = 1;
@@ -27,7 +27,7 @@ class WeightModel extends Model {
     const ADAPT_MOBILE = 2; // 适应手机
 
     public static function tableName() {
-        return 'tpl_weight';
+        return 'tpl_theme_weight';
     }
 
 
@@ -39,6 +39,7 @@ class WeightModel extends Model {
             'type' => 'int:0,999',
             'adapt_to' => 'int:0,9',
             'editable' => 'int:0,9',
+            'theme_id' => 'required|int',
             'path' => 'string:0,200',
         ];
     }
@@ -50,6 +51,7 @@ class WeightModel extends Model {
             'thumb' => 'Thumb',
             'type' => 'Type',
             'editable' => 'Editable',
+            'theme_id' => 'Theme Id',
             'path' => 'Path',
         ];
     }
@@ -79,32 +81,6 @@ class WeightModel extends Model {
             $args[$item->type][] = $item;
         }
         return $args;
-    }
-
-
-    public static function findWeights() {
-        $directory = new Directory(dirname(dirname(__DIR__)) . '/UserInterface/weights');
-        return static::getWeights($directory);
-    }
-
-    protected static function getWeights(Directory $dir) {
-        if ($dir->hasFile('weight.json')) {
-            return [static::getWeightInfo($dir)];
-        }
-        $weights = [];
-        $dir->map(function (FileObject $file) use (&$weights) {
-            if (!($file instanceof Directory)) {
-                return;
-            }
-            $weights = array_merge($weights, static::getWeights($file));
-        });
-        return $weights;
-    }
-
-    protected static function getWeightInfo(Directory $directory) {
-        $data = json_decode($directory->childFile('weight.json')->read(), true);
-        $data['path'] = $directory->getRelative(Factory::root());
-        return $data;
     }
 
     /**
