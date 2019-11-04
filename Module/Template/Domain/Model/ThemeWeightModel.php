@@ -86,23 +86,26 @@ class ThemeWeightModel extends Model {
     /**
      * 是否已安装
      * @param $name
+     * @param $theme_id
      * @return bool
      */
-    public static function isInstalled($name) {
-        return static::where('name', $name)->count() > 0;
+    public static function isInstalled($name, $theme_id) {
+        return static::where('name', $name)->where('theme_id', $theme_id)->count() > 0;
     }
 
     /**
      * 创建
      * @param $name
+     * @param $theme_id
      * @param $path
      * @param $thumb
      * @param null $description
-     * @param bool $editable  是否允许编辑
+     * @param bool $editable 是否允许编辑
      * @param int $type
      * @return static
      */
     public static function install($name,
+                                   $theme_id,
                                    $path = null,
                                    $thumb = null,
                                    $description = null,
@@ -113,7 +116,7 @@ class ThemeWeightModel extends Model {
         }
         $path = (string)$path;
         $editable = intval($editable);
-        return static::create(compact('name', 'path',
+        return static::create(compact('name', 'theme_id', 'path',
             'description', 'type', 'thumb', 'editable'));
     }
 }

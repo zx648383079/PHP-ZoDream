@@ -42,23 +42,33 @@ class ThemeModel extends Model {
         ];
     }
 
+    public static function isInstalled($name) {
+        return static::where('name', $name)->count() > 0;
+    }
+
     /**
      * @return static[]
      */
     public static function findTheme() {
-        return static::getTheme(Module::templateFolder());
+        return static::mapFolder(Module::templateFolder(), function ($item) {
+            if ($item->hasFile('theme.json')) {
+                return [static::createTheme($item)];
+            }
+            return false;
+        });
     }
 
-    protected static function getTheme(Directory $dir) {
-        if ($dir->hasFile('theme.json')) {
-            return [static::createTheme($dir)];
+    protected static function mapFolder(Directory $dir, callable $cb) {
+        $item = $cb($dir);
+        if ($item !== false) {
+            return $item;
         }
         $items = [];
-        $dir->map(function (FileObject $file) use (&$items) {
+        $dir->map(function (FileObject $file) use (&$items, $cb) {
             if (!($file instanceof Directory)) {
                 return;
             }
-            $items = array_merge($items, static::getTheme($file));
+            $items = array_merge($items, static::mapFolder($file, $cb));
         });
         return $items;
     }
@@ -70,10 +80,27 @@ class ThemeModel extends Model {
             $item['path'] = $data['path'].'/'.$item['path'];
             return new ThemePageModel($item);
         }, $data['pages']);
-        $data['weights'] = isset($data['weights']) ? array_map(function ($item) use ($data) {
-            $item['path'] = $data['path'].'/'.$item['path'];
-            return new ThemeWeightModel($item);
-        }, $data['weights']) : [];
+        $data['weights'] = self::getWeight($data, $folder);
         return new static($data);
+    }
+
+    private static function getWeight($data, Directory $folder) {
+        if (!isset($data['weights'])) {
+            return [];
+        }
+        if (is_array($data['weights'])) {
+            return array_map(function ($item) use ($data) {
+                $item['path'] = $data['path'].'/'.$item['path'];
+                return new ThemeWeightModel($item);
+            }, $data['weights']);
+        }
+        return static::mapFolder($folder->directory($data['weights']), function ($item) {
+            if ($item->hasFile('weight.json')) {
+                $args = Json::decode($item->childFile('weight.json')->read());
+                $args['path'] = $item->getRelative(Module::templateFolder());
+                return [new ThemeWeightModel($args)];
+            }
+            return false;
+        });
     }
 }

@@ -38,4 +38,8 @@ class ThemePageModel extends Model {
             'path' => 'Path',
         ];
     }
+
+    public static function isInstalled($name, $theme_id) {
+        return static::where('name', $name)->where('theme_id', $theme_id)->count() > 0;
+    }
 }

@@ -3,6 +3,7 @@ namespace Module\Template\Service\Admin;
 
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\WeightModel;
 
 use Module\Template\Domain\Page;
@@ -53,18 +54,5 @@ class WeightController extends Controller {
 
     public function thumbAction($id) {
         WeightModel::find($id);
-    }
-
-    public function installAction() {
-        $data = WeightModel::findWeights();
-        foreach ($data as $item) {
-            if (WeightModel::isInstalled($item['name'])) {
-                continue;
-            }
-            WeightModel::install($item);
-        }
-        return $this->jsonSuccess([
-            'refresh' => true
-        ]);
     }
 }

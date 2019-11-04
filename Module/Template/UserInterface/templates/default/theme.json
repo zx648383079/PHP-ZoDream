@@ -21,10 +21,5 @@
       "path": "index.html"
     }
   ],
-  "weights": [
-    {
-      "name": "navbar",
-      "path": "menu/navbar"
-    }
-  ]
+  "weights": "weights"
 }
