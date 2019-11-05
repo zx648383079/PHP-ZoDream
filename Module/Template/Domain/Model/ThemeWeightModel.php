@@ -70,12 +70,12 @@ class ThemeWeightModel extends Model {
     }
 
 
-
     /**
+     * @param $theme_id
      * @return array
      */
-    public static function groupByType() {
-        $data = self::all();
+    public static function groupByType($theme_id) {
+        $data = self::where('theme_id', $theme_id)->get();
         $args = [];
         foreach ($data as $item) {
             $args[$item->type][] = $item;

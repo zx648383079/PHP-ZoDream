@@ -14,7 +14,6 @@ use Domain\Model\Model;
  * @property string $keywords
  * @property string $thumb
  * @property string $description
- * @property string $template
  * @property string $settings
  * @property integer $position
  * @property integer $theme_page_id
@@ -42,7 +41,6 @@ class PageModel extends Model {
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
             'description' => 'string:0,255',
-            'template' => 'string:0,255',
             'settings' => '',
             'theme_page_id' => 'required|int',
             'position' => 'int:0,99',
@@ -63,13 +61,16 @@ class PageModel extends Model {
             'thumb' => 'Thumb',
             'description' => 'Description',
             'theme_page_id' => 'Theme Page Id',
-            'template' => 'Template',
             'settings' => 'Settings',
             'position' => 'Position',
             'deleted_at' => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function page() {
+        return $this->hasOne(ThemePageModel::class, 'id', 'theme_page_id');
     }
 
     public function site() {

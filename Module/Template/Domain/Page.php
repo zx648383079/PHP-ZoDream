@@ -3,7 +3,10 @@ namespace Module\Template\Domain;
 
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Module;
+use phpDocumentor\Reflection\Types\Self_;
 use Zodream\Disk\Directory;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Traits\Attributes;
 use Zodream\Service\Factory;
 use Zodream\Template\Engine\ParserCompiler;
@@ -12,6 +15,8 @@ use Zodream\Template\ViewFactory;
 class Page {
 
     use Attributes;
+
+    const EXT = '.html';
 
     /**
      * @var PageWeightModel[]
@@ -46,7 +51,7 @@ class Page {
             ? $page :
             PageModel::where('name', $page)->one();
         $this->directory = Factory::root()
-            ->directory('Module/Template/UserInterface/templates/default');
+            ->directory(Module::templateFolder());
         $this->setIsEditMode($isEditMode);
 
     }
@@ -115,7 +120,8 @@ class Page {
 
     protected function loadWeights() {
         // 加载公共模块
-        $this->addWeight(PageWeightModel::where('is_share', 1)->all());
+        $this->addWeight(PageWeightModel::where('is_share', 1)
+            ->where('site_id', $this->page->site_id)->all());
         // 加载页面模块
         $this->addWeight($this->page->weights);
     }
@@ -168,7 +174,7 @@ HTML;
             $this->getFactory()
                 ->registerCssFile('@template.css');
         }
-        return $this->getFactory()->render($this->page->template, [
+        return $this->getFactory()->render(Str::lastReplace($this->page->page->path, self::EXT), [
             'title' => $this->page->title,
             'keywords' => $this->page->keywords,
             'description' => $this->page->description,
@@ -197,7 +203,7 @@ HTML;
         $factory = new ViewFactory();
         $factory->setEngine(ParserCompiler::class)
             ->setConfigs([
-                'suffix' => '.html'
+                'suffix' => self::EXT
             ])
             ->getEngine()->registerFunc('weight', '<?=$page->weight(%s)?>');
         return $factory;

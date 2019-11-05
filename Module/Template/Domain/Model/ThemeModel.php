@@ -46,6 +46,30 @@ class ThemeModel extends Model {
         return static::where('name', $name)->count() > 0;
     }
 
+    public static function install(ThemeModel $model) {
+        $id = static::where('name', $model->name)->value('id');
+        if ($id > 0) {
+            $model->id = $id;
+            $model->isNewRecord = false;
+        } else{
+            $model->save();
+        }
+        foreach ($model->pages as $page) {
+            if (ThemePageModel::isInstalled($page->name, $model->id)) {
+                continue;
+            }
+            $page->theme_id = $model->id;
+            $page->save();
+        }
+        foreach ($model->weights as $weight) {
+            if (ThemeWeightModel::isInstalled($weight->name, $model->id)) {
+                continue;
+            }
+            $weight->theme_id = $model->id;
+            $weight->save();
+        }
+    }
+
     /**
      * @return static[]
      */

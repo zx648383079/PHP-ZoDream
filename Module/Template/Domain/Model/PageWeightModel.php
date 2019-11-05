@@ -9,6 +9,7 @@ use Domain\Model\Model;
  * @package Module\Template
  * @property integer $id
  * @property integer $page_id
+ * @property integer $site_id
  * @property integer $theme_weight_id 部件名
  * @property integer $parent_id
  * @property integer $position
@@ -30,6 +31,7 @@ class PageWeightModel extends Model {
     protected function rules() {
         return [
             'page_id' => 'required|int',
+            'site_id' => 'required|int',
             'theme_weight_id' => 'required|int',
             'parent_id' => 'int',
             'position' => 'int',
@@ -46,6 +48,7 @@ class PageWeightModel extends Model {
         return [
             'id' => 'Id',
             'page_id' => 'Page Id',
+            'site_id' => 'Site Id',
             'theme_weight_id' => 'Weight Id',
             'parent_id' => 'Parent Id',
             'position' => 'Position',
@@ -59,7 +62,8 @@ class PageWeightModel extends Model {
     }
 
     public function weight() {
-        return $this->hasOne(WeightModel::class, 'id', 'weight_id');
+        return $this->hasOne(ThemeWeightModel::class,
+            'id', 'theme_weight_id');
     }
 
     public function hasExtInfo($ext) {
@@ -67,7 +71,7 @@ class PageWeightModel extends Model {
     }
 
     public static function saveFromPost() {
-        $weight = WeightModel::find(intval(app('request')->get('weight_id')));
+        $weight = ThemeWeightModel::find(intval(app('request')->get('weight_id')));
         $maps = ['id', 'page_id', 'weight_id', 'parent_id',
             'position', 'title', 'content', 'is_share', 'settings'];
         $data = $weight->getPostConfigs();

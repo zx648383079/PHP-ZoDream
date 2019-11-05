@@ -3,7 +3,9 @@ namespace Module\Template\Domain;
 
 
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\Model\WeightModel;
+use Module\Template\Module;
 use Module\Template\Service\BaseWeight;
 use Zodream\Helpers\Str;
 use Zodream\Service\Factory;
@@ -26,7 +28,7 @@ class Weight {
      */
     protected $factory;
     /**
-     * @var WeightModel
+     * @var ThemeWeightModel
      */
     protected $weight;
 
@@ -56,7 +58,7 @@ class Weight {
             return new $path;
         }
         if (!file_exists($path)) {
-            $path = (string)Factory::root()->child($path);
+            $path = (string)Module::templateFolder($path);
         }
         if (is_dir($path)) {
             $path .= '/weight.php';

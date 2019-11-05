@@ -407,6 +407,13 @@ $sizes: (320: 568,
         }
     }
 
+    .card-action {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
     &.card-add {
         .card-logo {
             border-radius: 50%;
@@ -432,5 +439,32 @@ $sizes: (320: 568,
         .card-body {
             background: rgba(255, 255, 255, .8);
         }
+        .card-action {
+            display: block;
+        }
     }
+}
+
+.theme-select,
+.page-select {
+    .theme-item,
+    .page-item {
+        display: inline-block;
+        text-align: center;
+        margin: 5px;
+        .thumb {
+            height: 80px;
+            width: 80px;
+        }
+        &.active {
+            border: 1px solid red;
+        }
+        &:hover {
+            box-shadow: 3px 3px 4px rgba(33,33,33,.7);
+        }
+    }
+}
+.theme-select {
+    max-height: 600px;
+    overflow-y: auto;
 }

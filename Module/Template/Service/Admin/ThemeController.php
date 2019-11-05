@@ -15,10 +15,7 @@ class ThemeController extends Controller {
     public function installAction() {
         $data = ThemeModel::findTheme();
         foreach ($data as $item) {
-            if (WeightModel::isInstalled($item['name'])) {
-                continue;
-            }
-            WeightModel::install($item);
+            ThemeModel::install($item);
         }
         return $this->jsonSuccess([
             'refresh' => true

@@ -71,6 +71,7 @@ class CreateTemplateTables extends Migration {
         })->append(PageWeightModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai(1000);  // 预留id给页面预留不同入口
             $table->set('page_id')->int()->notNull();
+            $table->set('site_id')->int()->notNull();
             $table->set('theme_weight_id')->int()->notNull();
             $table->set('parent_id')->int(10);
             $table->set('position')->int(5);

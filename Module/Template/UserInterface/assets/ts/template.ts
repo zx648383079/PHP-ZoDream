@@ -383,3 +383,36 @@ function bindPage(pageId: number, baseUri: string) {
         $(this).parent().toggleClass("open");
     });
 }
+
+function bindEdit() {
+    $('.theme-select').on('click', '.theme-item', function() {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('input[name=theme_id]').val($(this).data('id'));
+    });
+}
+
+function bindPageEdit() {
+    let dialog = $('#page-dialog').dialog();
+    let url = null;
+    $('.card-add a').click(function(e) {
+        e.preventDefault();
+        dialog.show();
+        url = $(this).attr('href');
+    });
+    $('.page-select').on('click', '.page-item', function() {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+    dialog.on('done', function() {
+        let ele = this.find('.page-item.active');
+        if (ele.length < 1) {
+            alert('请选择模板');
+            return;
+        }
+        this.close();
+        postJson(url, {
+            page_id: ele.data('id')
+        }, res => {
+            parseAjax(res);
+        });
+    });
+}

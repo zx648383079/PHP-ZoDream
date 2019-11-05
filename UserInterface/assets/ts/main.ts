@@ -181,6 +181,10 @@ $(function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
         $this.closest(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
+    }).on('click', ".tab-box .tab-header .tab-item", function() {
+        let $this = $(this);
+        $this.addClass("active").siblings().removeClass("active");
+        $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
     })
     .on('click', ".page-tip .toggle", function() {
         $(this).closest('.page-tip').toggleClass('min');

@@ -21,15 +21,17 @@ class WeightController extends Controller {
 
     public function createAction() {
         $page_id = intval(app('request')->get('page_id'));
+        $pageModel = PageModel::find($page_id);
         $weight_id = intval(app('request')->get('weight_id'));
         $parent_id = intval(app('request')->get('parent_id'));
         $model = PageWeightModel::create([
-            'page_id' => $page_id,
-            'weight_id' => $weight_id,
-            'parent_id' => $parent_id
+            'page_id' => $pageModel->id,
+            'theme_weight_id' => $weight_id,
+            'parent_id' => $parent_id,
+            'site_id' => $pageModel->site_id
         ]);
         $data = $model->toArray();
-        $data['html'] = (new Page(PageModel::find($page_id), true))
+        $data['html'] = (new Page($pageModel, true))
             ->renderWeight($model);
         return $this->jsonSuccess($data);
     }
