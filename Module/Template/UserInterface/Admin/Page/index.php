@@ -49,7 +49,7 @@ $this->registerJs($js, View::JQUERY_READY);
 </nav>
 <div id="page-box">
     <div class="panel-group">
-        <div class="panel-item">
+        <div class="panel-item" data-panel="weight">
             <div class="panel-header">
                 <span class="title">部件</span>
                 <a class="fa fa-close"></a>
@@ -76,6 +76,7 @@ $this->registerJs($js, View::JQUERY_READY);
                                     <?php if ($item->editable):?>
                                     <a class="edit">编辑</a>
                                     <?php endif;?>
+                                    <a class="property">属性</a>
                                     <a class="drag">拖拽</a>
                                     <a class="del">删除</a>
                                 </div>
@@ -90,7 +91,7 @@ $this->registerJs($js, View::JQUERY_READY);
                 <?php endforeach;?>
             </div>
         </div>
-        <div class="panel-item min">
+        <div class="panel-item min" data-panel="property">
             <div class="panel-header">
                 <span class="title">属性</span>
                 <a class="fa fa-close"></a>

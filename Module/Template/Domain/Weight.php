@@ -88,6 +88,7 @@ class Weight {
     <div class="weight-action">
         <a class="refresh">刷新</a>
         {$editHtml}
+        <a class="property">属性</a>
         <a class="drag">拖拽</a>
         <a class="del">删除</a>
     </div>

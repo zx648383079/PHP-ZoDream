@@ -93,6 +93,10 @@ class Page {
         }).on("click", ".weight-action .refresh", function(e) {
             e.stopPropagation();
             that.refreshWeight($(this).closest('.weight-edit-grid'));
+        }).on("click", ".weight-action .property", function(e) {
+            e.stopPropagation();
+            that.setWeight($(this).closest('.weight-edit-grid'));
+            that.showPanel('property');
         });
         this.panelGroup.on('click', '.panel-item .panel-header .fa-close', function(e) {
             e.stopPropagation();
@@ -119,6 +123,15 @@ class Page {
             that.addWeight(weight.clone(), $(this));
         });
         this.bindRule();
+    }
+
+    /**
+     * showPanel
+     */
+    public showPanel(name: string): JQuery {
+        let panel = this.panelGroup.find('[data-panel=' + name +']');
+        panel.removeClass('min').siblings().addClass('min');
+        return panel;
     }
 
     /**
@@ -237,7 +250,7 @@ class Page {
         });
         this.panelGroup.width(width);
         this.box.css('padding-left', width + 'px');
-        const height = $(window).height() - 57;
+        const height = $(window).height() - this.box.offset().top;
         this.box.height(height);
         const isMobile = !!this.element.attr('class');
         if (!isMobile) {
@@ -247,8 +260,8 @@ class Page {
         const left = isMobile ? this.bodyBox.offset().left - this.element.offset().left - 20 : 0;
         this.drawRule(this.element.find('.top-rule').css('top', top + 'px'), left + 20);
         this.drawRule(this.element.find('.left-rule').css('left', left + 'px'), top + 20);
-        this.bodyBox.width(this.element.width() - 10);
-        this.bodyBox.height(this.element.height());
+        this.bodyBox.width(this.element.width() - 20);
+        this.bodyBox.height(this.element.height() - 20);
     }
 
     public html(): string {

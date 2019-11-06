@@ -38,7 +38,7 @@ class ThemeWeightModel extends Model {
             'thumb' => 'string:0,100',
             'type' => 'int:0,999',
             'adapt_to' => 'int:0,9',
-            'editable' => 'int:0,9',
+            'editable' => '',
             'theme_id' => 'required|int',
             'path' => 'string:0,200',
         ];
