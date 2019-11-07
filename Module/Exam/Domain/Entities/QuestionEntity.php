@@ -32,5 +32,18 @@ class QuestionEntity extends Entity {
         ];
     }
 
+    protected function labels() {
+        return [
+            'title' => '题目',
+            'image' => '图片',
+            'course_id' => 'required|int',
+            'parent_id' => 'int',
+            'type' => '类型',
+            'easiness' => '难易程度',
+            'analysis' => '解析',
+            'created_at' => 'int',
+            'updated_at' => 'int',
+        ];
+    }
 
 }

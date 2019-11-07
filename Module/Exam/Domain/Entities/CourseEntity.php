@@ -33,10 +33,10 @@ class CourseEntity extends Entity {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'thumb' => 'Thumb',
-            'description' => 'Description',
-            'parent_id' => 'Parent Id',
+            'name' => '科目名',
+            'thumb' => '图标',
+            'description' => '简介',
+            'parent_id' => '上级科目',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
