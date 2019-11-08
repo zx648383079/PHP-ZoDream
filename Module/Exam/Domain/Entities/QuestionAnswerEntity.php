@@ -8,8 +8,11 @@ use Domain\Entities\Entity;
  * @package Module\Exam\Domain\Entities
  * @property integer $id
  * @property integer $question_id
+ * @property integer $user_id
  * @property string $content
- * @property string $analysis
+ * @property integer $status
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class QuestionAnswerEntity extends Entity {
 	public static function tableName() {
@@ -19,8 +22,11 @@ class QuestionAnswerEntity extends Entity {
     protected function rules() {
         return [
             'question_id' => 'required|int',
+            'user_id' => 'required|int',
             'content' => '',
-            'analysis' => '',
+            'status' => 'int:0,9',
+            'created_at' => 'int',
+            'updated_at' => 'int',
         ];
     }
 
@@ -28,8 +34,11 @@ class QuestionAnswerEntity extends Entity {
         return [
             'id' => 'Id',
             'question_id' => 'Question Id',
+            'user_id' => 'User Id',
             'content' => 'Content',
-            'analysis' => 'Analysis',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 }

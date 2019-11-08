@@ -53,10 +53,13 @@ class CreateExamTables extends Migration {
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('is_right')->bool()->defaultVal(0)->comment('是否是正确答案');
         })->append(QuestionAnswerEntity::tableName(), function (Table $table) {
-            $table->setComment('题回答选项');
+            $table->setComment('用户回答');
             $table->set('id')->pk(true);
             $table->set('question_id')->int(11, true, true);
-
+            $table->set('user_id')->int(11, true, true);
+            $table->set('content')->text()->comment('题目内容');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('状态');
+            $table->timestamps();
         })->append(QuestionWrongEntity::tableName(), function (Table $table) {
             $table->setComment('错题集');
             $table->set('id')->pk(true);

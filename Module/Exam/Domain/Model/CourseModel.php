@@ -17,6 +17,10 @@ use Zodream\Html\Tree;
  */
 class CourseModel extends CourseEntity {
 
+    public function children() {
+        return $this->hasMany(static::class, 'parent_id', 'id');
+    }
+
     public static function tree() {
         return new Tree(static::query()->get());
     }
