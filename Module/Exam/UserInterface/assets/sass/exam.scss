@@ -1,0 +1,42 @@
+.option-box {
+    .option-item {
+        .option-value {
+            display: inline-block;
+        }
+        select {
+            min-width: 40px;
+        }
+    }
+}
+.question-item {
+    margin-bottom: 30px;
+    .title {
+        font-size: 16px;
+        .order {
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 20px;
+        }
+    }
+    .option-list {
+        padding-left: 40px;
+        line-height: 30px;
+        .option-item {
+            &:hover {
+                background-color: rgba(#ccc, .1);
+            }
+        }
+        .order {
+            font-weight: 600;
+        }
+    }
+    .content {
+
+    }
+    .image {
+
+    }
+    textarea {
+        width: 100%;
+    }
+}

@@ -3,8 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Theme;
 use Zodream\Helpers\Str;
+use Module\Exam\Domain\Model\QuestionModel;
 /** @var $this View */
 $this->title = '题目列表';
+
 ?>
 <div class="search">
     <form class="form-horizontal" role="form">
@@ -45,6 +47,7 @@ $this->title = '题目列表';
         <tr>
             <td><?=$item->id?></td>
             <td>
+                【<?=QuestionModel::$type_list[$item['type']]?>】
                 <?=Str::substr($item->title, 0, 20, true)?>
             </td>
             <td class="auto-hide">

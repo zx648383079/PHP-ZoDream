@@ -40,6 +40,10 @@ class CreateExamTables extends Migration {
             $table->set('parent_id')->int(11, true)->defaultVal(0);
             $table->set('type')->tinyint(1)->defaultVal(0)->comment('题目类型');
             $table->set('easiness')->tinyint(1)->defaultVal(0)->comment('难易程度');
+            $table->set('content')->text()->comment('题目内容');
+            $table->set('dynamic')->text()->comment('动态内容');
+            $table->set('answer')->text()->comment('题目答案');
+            $table->set('analysis')->text()->comment('题库解析');
             $table->timestamps();
         })->append(QuestionOptionEntity::tableName(), function (Table $table) {
             $table->setComment('题选择选项');
@@ -49,11 +53,10 @@ class CreateExamTables extends Migration {
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('is_right')->bool()->defaultVal(0)->comment('是否是正确答案');
         })->append(QuestionAnswerEntity::tableName(), function (Table $table) {
-            $table->setComment('题选择选项');
+            $table->setComment('题回答选项');
             $table->set('id')->pk(true);
             $table->set('question_id')->int(11, true, true);
-            $table->set('content')->text()->comment('题目答案');
-            $table->set('analysis')->text()->comment('题库解析');
+
         })->append(QuestionWrongEntity::tableName(), function (Table $table) {
             $table->setComment('错题集');
             $table->set('id')->pk(true);
