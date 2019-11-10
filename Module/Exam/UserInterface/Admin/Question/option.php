@@ -25,6 +25,7 @@ use Zodream\Html\Dark\Theme;
             <a href="javascript:;" class="remove-btn">x</a>
         </div>
         <?php endforeach;?>
+        <?php for($i = count($option_list); $i < 4; $i ++):?>
         <div class="option-item">
             <div class="option-value">
                 <input type="text" name="option[content][]">
@@ -40,6 +41,7 @@ use Zodream\Html\Dark\Theme;
             </select>
             <a href="javascript:;" class="remove-btn">x</a>
         </div>
+        <?php endfor;?>
         <a href="javascript:;" class="add-option">+</a>
     </div>
 </div>

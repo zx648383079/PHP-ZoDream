@@ -41,7 +41,7 @@
     }
 }
 
-.examm-group {
+.exam-group {
     background-color: #fff;
     margin: 10px 0;
     .group-header {
@@ -82,6 +82,79 @@
             &:hover {
                 box-shadow: rgba(#333, .7) 0 0 10px;
             }
+        }
+    }
+}
+
+.course-header {
+    margin-top: 30px;
+    padding: 26px 35px;
+    background: #fff;
+    h1 {
+        font-weight: 700;
+        font-size: 20px;
+        color: #333;
+        text-align: center;
+    }
+    h2 {
+        font-weight: 400;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.7;
+        margin-top: 18px;
+    }
+}
+
+.menu-box {
+    a {
+        margin: 20px 0 0 20px;
+        display: inline-block;
+        width: 200px;
+        background: #fff;
+        height: 150px;
+        text-align: center;
+        padding-top: 40px;
+        .fa {
+            display: block;
+            font-size: 50px;
+        }
+    }
+}
+
+.tool-bar {
+    .btn-bar {
+        button {
+            width: 100px;
+            line-height: 33px;
+            text-align: center;
+            border-radius: 5px;
+            outline: 0;
+            background-color: #50c2ff;
+            color: #fff;
+            border: 1px solid #37B5F8;
+            &.right {
+                float: right;
+                border: 1px solid #e9e9e9;
+                color: #333;
+                background-color: transparent;
+                margin-left: 20px;
+            }
+        }
+    }
+    .msg-bar {
+        .left {
+            margin-left: 20px;
+        }
+        .gray {
+            color: #999;
+        }
+        .count-right {
+            color: #3da600;
+            cursor: pointer;
+        }
+        .count-wrong {
+            color: #EE4653;
+            cursor: pointer;
         }
     }
 }

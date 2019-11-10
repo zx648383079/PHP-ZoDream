@@ -46,7 +46,7 @@ $this->title = '题目列表';
     <?php foreach($model_list as $item):?>
         <tr>
             <td><?=$item->id?></td>
-            <td>
+            <td title="<?=$item->title?>">
                 【<?=QuestionModel::$type_list[$item['type']]?>】
                 <?=Str::substr($item->title, 0, 20, true)?>
             </td>

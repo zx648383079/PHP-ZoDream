@@ -9,12 +9,18 @@ $this->extend('layouts/main');
     <ul class="path">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li>
+            <a href="<?=$this->url('./')?>" >题库首页</a>
         </li><li class="active">
-            题库首页
+            <?=$course->name?>
         </li>
     </ul>
 </div>
 <div class="container">
+    <div class="course-header">
+        <h1><?=$course->name?></h1>
+        <h2><?=$course->description?></h2>
+    </div>
     <?php foreach($course_list as $group):?>
     <div class="exam-group">
         <div class="group-header">
@@ -37,4 +43,19 @@ $this->extend('layouts/main');
         </div>
     </div>
     <?php endforeach;?>
+
+    <div class="menu-box">
+        <a href="<?=$this->url('./question', ['id' => 1])?>">
+            <i class="fa fa-sort-amount-down"></i>
+            顺序练习</a>
+        <a >
+            <i class="fa fa-random"></i>
+            随机练习</a>
+        <a >
+            <i class="fa fa-question-circle"></i>
+            难题练习</a>
+        <a >
+            <i class="fa fa-file-alt"></i>
+            全真模拟</a>
+    </div>
 </div>

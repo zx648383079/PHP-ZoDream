@@ -3,56 +3,49 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = $question['title'];
-$prefix = sprintf('question[%s]', $question['id']);
+
 $this->extend('layouts/main');
 ?>
-<div class="question-item">
-    <?php if($question['type'] < 3):?>
-    <div class="title">
-        <span class="order"><?=$question['order']?>.</span>
-        <?=$question['title']?>
-    </div>
-    <?php else:?>
-    <div class="title">
-        <span class="order"><?=$question['order']?>.</span>
-        <?=preg_replace_callback('/_{2,}/', function($match) use ($prefix) {
-            return sprintf('<input type="text" name="%s[answer][]" style="width: %spx">', $prefix, strlen($match[0]) * 20);
-        }, $question['title'])?>
-    </div>
-    <?php endif;?>
-    <?php if(!empty($question['content'])):?>
-    <div class="content">
-        <?=$question['content']?>
-    </div>
-    <?php endif;?>
-    <?php if(!empty($question['image'])):?>
-    <div class="image">
-        <img src="<?=$question['image']?>" alt="">
-    </div>
-    <?php endif;?>
-    <?php if($question['type'] < 2):?>
-    <div class="option-list">
-        <?php foreach($question['option'] as $option):?>
-        <div class="option-item">
-        <?php if($question['type'] < 1):?>
-        <input type="radio" name="<?=$prefix?>[answer]" value="<?=$option['id']?>" id="option_<?=$option['id']?>">
-        <?php else:?>
-        <input type="checkbox" name="<?=$prefix?>[answer][]" value="<?=$option['id']?>" id="option_<?=$option['id']?>">
-        <?php endif;?>
-        <span class="order"><?=$option['order']?>.</span>
-        <label for="option_<?=$option['id']?>"><?=$option['content']?></label>
+<div class="container">
+    <ul class="path">
+        <li>
+            <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li>
+            <a href="<?=$this->url('./')?>" >题库首页</a>
+        </li><li class="active">
+            <a href="<?=$this->url('./course', ['id' => $course->id])?>" ><?=$course->name?></a>
+        </li>
+        <li class="active">
+            顺序练习
+        </li>
+    </ul>
+</div>
+<div class="container">
+    <?php $this->extend('./item');?>
+    <div class="tool-bar">
+        <div class="btn-bar">
+            <button class="left gl">上一题</button>
+            <button class="left gl"
+                ref="next">下一题</button>
+            <button class="right pt">显示答题卡</button>
+            <button class="right pt">收起详解</button></div>
+        <div class="msg-bar">
+            <label class="">
+                <input type="checkbox" checked=""
+                    class="checkbox-next"><span>&nbsp;答对自动下一题</span>
+            </label>
+            <span class="left">
+                <span
+                    class="gray">答对：</span><span class="count-right">1&nbsp;题</span>
+            </span>
+            <span
+                class="left">
+                <span class="gray">答错：</span>
+                <span class="count-wrong">2&nbsp;题</span>
+                </span>
+            <span class="left">
+                <span
+                    class="gray">正确率：</span>33%</span>
         </div>
-        <?php endforeach;?>
     </div>
-    <?php elseif ($question['type'] == 2):?>
-    <div class="option-list">
-        <input type="radio" name="<?=$prefix?>[answer]" value="1">对
-        <input type="radio" name="<?=$prefix?>[answer]" value="0">错
-    </div>
-    <?php elseif ($question['type'] == 3):?>
-    <textarea name="<?=$prefix?>[answer]" rows="10"></textarea>
-    <?php endif;?>
-    <?php if(!empty($question['dynamic'])):?>
-    <input type="hidden" name="<?=$prefix?>[dynamic]" value="<?=$question['dynamic']?>">
-    <?php endif;?>
 </div>

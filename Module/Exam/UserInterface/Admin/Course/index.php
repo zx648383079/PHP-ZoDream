@@ -27,7 +27,7 @@ $this->title = '科目列表';
                 <?php endif;?>
                 <a href="<?=$this->url('./@admin/question', ['course' => $item['id']])?>"><?=$item['name']?></a>
             </td>
-            <td><?=$item['description']?></td>
+            <td><?=$this->text($item['description'], 20)?></td>
             <td>
                 <div class="btn-group  btn-group-xs">
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/question', ['course' => $item['id']])?>">查看</a>

@@ -17,6 +17,59 @@ class QuestionModel extends QuestionEntity {
     }
 
     public function check($answer, $dynamic = null) {
+        if (!is_array($dynamic)) {
+            $dynamic = empty($dynamic) ? [] : Json::decode(base64_decode($dynamic));
+        }
+        if ($this->type < 1) {
+            return $this->checkType0($answer);
+        }
+        if ($this->type == 1) {
+            return $this->checkType1($answer);
+        }
+        if ($this->type == 2) {
+            return $this->checkType2($answer);
+        }
+        if ($this->type == 3) {
+            return $this->checkType3($answer, $dynamic);
+        }
+        if ($this->type == 4) {
+            return $this->checkType4($answer, $dynamic);
+        }
+        return false;
+    }
+
+    private function checkType4($answer, array $dynamic) {
+        $answer = (array)$answer;
+        foreach (explode("\n", $this->answer) as $i => $line) {
+            $line = trim($line);
+            if (substr($line, 0, 1) === '=') {
+                $line = self::compilerValue(substr($line, 1), $dynamic);
+            }
+            if (!isset($answer[$i]) || $answer[$i] !== $line) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function checkType3($answer, array $dynamic) {
+        // 完全对比有问题
+        return self::strReplace($this->answer, $dynamic) === $answer;
+    }
+
+    private function checkType2($answer) {
+        return intval($this->answer) === intval($answer);
+    }
+
+    private function checkType1($answer) {
+        $answer = (array)$answer;
+        $items = QuestionOptionModel::where('question_id', $this->id)->where('is_right', 1)->pluck('id');
+        return count($answer) === count($items) && count(array_diff($answer, $items)) === 0;
+    }
+
+    private function checkType0($answer) {
+        return QuestionOptionModel::where('question_id', $this->id)
+            ->where('id', intval($answer))->where('is_right', 1)->count() === 1;
     }
 
     public function format($order = null) {
