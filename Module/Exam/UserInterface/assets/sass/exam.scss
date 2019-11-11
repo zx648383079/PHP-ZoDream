@@ -158,3 +158,34 @@
         }
     }
 }
+.sheet-panel,
+.analysis-panel {
+    display: none;
+}
+
+.sheet-panel {
+    .panel-body {
+        max-height: 200px;
+        overflow-y: auto;
+        li {
+            list-style: none;
+            display: inline-block;
+            width: 60px;
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            &.right {
+                background-color: #3da600;
+                color: #fff;
+            }
+            &.wrong {
+                background-color: #EE4653;
+                color: #fff;
+            }
+            &:hover {
+                border: 1px solid #777;
+            }
+        }
+    }
+}

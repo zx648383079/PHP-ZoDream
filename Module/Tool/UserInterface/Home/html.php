@@ -10,7 +10,7 @@ JS;
 $this->registerJs($js);
 ?>
 
-<div class="converter-box">
+<div class="converter-box large-box">
     <div class="input-box">
         <textarea id="input" name="" placeholder="请输入内容"></textarea>
     </div>

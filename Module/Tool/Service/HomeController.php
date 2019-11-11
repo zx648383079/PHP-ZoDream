@@ -24,6 +24,10 @@ class HomeController extends Controller {
         return $this->show();
     }
 
+    public function jsonAction() {
+        return $this->show();
+    }
+
     public function cssAction() {
         return $this->show();
     }

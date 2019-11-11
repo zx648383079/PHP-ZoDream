@@ -2,11 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'CSS 美化';
-$js = <<<JS
-registerEditor('text/css');
-JS;
-$this->registerJs($js);
+$this->title = 'JSON 美化';
 ?>
 
 <div class="converter-box large-box">
@@ -14,7 +10,7 @@ $this->registerJs($js);
         <textarea id="input" name="" placeholder="请输入内容"></textarea>
     </div>
     <div class="actions">
-        <button data-type="cssbeautify">美化</button>
+        <button data-type="jsonbeautify">美化</button>
         <button data-type="clear">清空</button>
     </div>
     <div class="output-box">

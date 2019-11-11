@@ -41,3 +41,17 @@ function bindEditQuestion(baseUri: string) {
     });
 
 }
+
+function bindDo() {
+    $('.tool-bar').on('click', '.btn-bar button', function() {
+        let $this = $(this);
+        let target = $this.data('target');
+        if (target) {
+            let text = $this.text();
+            let show = text.indexOf('显示') >= 0;
+            $(target).toggle(show);
+            $this.text(show ? text.replace('显示', '收起') : text.replace('收起', '显示'));
+            return;
+        }
+    })
+}

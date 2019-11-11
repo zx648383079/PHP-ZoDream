@@ -36,6 +36,25 @@
             border-right: none;
         }
     }
+    &.large-box {
+        display: block;
+        .actions {
+            padding-top: 0;
+            button {
+                display: inline-block;
+                width: auto;
+                min-width: 100px;
+            }
+        }
+        textarea {
+            resize: vertical;
+        }
+        .input-box {
+            textarea {
+                height: 100px;
+            }
+        }
+    }
 }
 
 .converter-tip {

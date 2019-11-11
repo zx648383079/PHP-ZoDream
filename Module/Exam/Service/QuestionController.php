@@ -10,6 +10,7 @@ class QuestionController extends Controller {
         $model = QuestionModel::find($id);
         $question = $model->format();
         $course = CourseModel::find($model->course_id);
-        return $this->show(compact('question', 'model', 'course'));
+        $question_list = QuestionModel::where('course_id', '>=', $model->course_id)->orderBy('id', 'asc')->pluck('id');
+        return $this->show(compact('question', 'model', 'course', 'question_list'));
     }
 }
