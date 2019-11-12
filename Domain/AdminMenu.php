@@ -9,7 +9,7 @@ class AdminMenu {
         $menus = self::moduleMenu();
         array_unshift($menus, [
             '首页',
-            '/',
+            './',
             'fa fa-home',
         ] );
         $menus[] = [
@@ -19,17 +19,17 @@ class AdminMenu {
             [
                 [
                     '基本设置',
-                    '/',
+                    './',
                     'fa fa-cog'
                 ],
                 [
                     '清除缓存',
-                    '/cache',
+                    './cache',
                     'fa fa-trash'
                 ],
                 [
                     '生成SiteMap',
-                    '/sitemap',
+                    './sitemap',
                     'fa fa-map'
                 ]
             ],
