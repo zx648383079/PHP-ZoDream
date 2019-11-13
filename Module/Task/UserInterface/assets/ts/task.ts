@@ -142,11 +142,13 @@ function bindTask(baseUri: string) {
         }, () => {
             timerBox.removeClass('closing');
             timerBox.hide();
+            exitFullscreen();
         });
     }).on(TASK_SHOW_TIMER, function(_, name: string) {
         timerBox.find('.timer-tip').text(name);
         timerBox.show();
         timer.dialog = timerBox;
+        fullScreen();
         animation(-$(window).height(), 0, i => {
             timerBox.css('transform', 'translateY('+ i +'px)');
         }, () => {
@@ -299,4 +301,17 @@ function bindReview() {
         });
         return false;
     }).trigger('submit');
+}
+
+function fullScreen() {
+    const element = document.documentElement;
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    }
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
 }
