@@ -43,7 +43,7 @@ function bindEditQuestion(baseUri: string) {
 }
 
 function bindDo() {
-    $('.tool-bar').on('click', '.btn-bar button', function() {
+    let panel = $('.question-panel').on('click', '.tool-bar .btn-bar button', function() {
         let $this = $(this);
         let target = $this.data('target');
         if (target) {
@@ -53,5 +53,19 @@ function bindDo() {
             $this.text(show ? text.replace('显示', '收起') : text.replace('收起', '显示'));
             return;
         }
+    }).on('click', '.tool-bar .btn-bar a', function() {
+        let $this = $(this);
+        let data = new FormData();
+        panel.find('.question-item').each(function() {
+            $(this).find('input,textarea,select').each(function() {
+                if ((this.getAttribute('type') === 'radio' || this.getAttribute('type') === 'checkbox') && !this.checked) {
+                    return;
+                }
+                data.append(this.getAttribute('name'), $(this).val() as string);
+            });
+        });
+        $.post($this.attr('href'), data, res => {
+            panel.html(res);
+        });
     })
 }

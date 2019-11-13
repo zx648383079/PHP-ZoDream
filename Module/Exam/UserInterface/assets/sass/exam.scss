@@ -123,8 +123,10 @@
 
 .tool-bar {
     .btn-bar {
-        button {
+        button,
+        .btn {
             width: 100px;
+            padding: 0;
             line-height: 33px;
             text-align: center;
             border-radius: 5px;
