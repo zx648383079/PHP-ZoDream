@@ -7,8 +7,12 @@ use Zodream\Template\View;
 <?php $this->extend('./item');?>
 <div class="tool-bar">
     <div class="btn-bar">
-        <a class="left btn">上一题</a>
-        <a class="left btn">下一题</a>
+        <?php if($previous_url):?>
+        <a class="left btn" href="<?=$previous_url?>">上一题</a>
+        <?php endif;?>
+        <?php if($next_url):?>
+        <a class="left btn" href="<?=$next_url?>">下一题</a>
+        <?php endif;?>
         <button class="right" data-target=".sheet-panel">显示答题卡</button>
         <button class="right" data-target=".analysis-panel">显示详解</button>
     </div>

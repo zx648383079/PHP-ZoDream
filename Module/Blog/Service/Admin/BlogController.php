@@ -61,7 +61,8 @@ class BlogController extends Controller {
             foreach ($async_column as $key) {
                 $model->{$key} = $parent->{$key};
             }
-        }
+        } 
+        $model->parent_id = intval($model->parent_id);
         if (!$model->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
