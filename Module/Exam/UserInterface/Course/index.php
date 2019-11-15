@@ -45,16 +45,16 @@ $this->extend('layouts/main');
     <?php endforeach;?>
 
     <div class="menu-box">
-        <a href="<?=$this->url('./question', ['id' => 1])?>">
+        <a href="<?=$this->url('./question', ['course' => $course->id])?>">
             <i class="fa fa-sort-amount-down"></i>
             顺序练习</a>
-        <a >
+        <a href="<?=$this->url('./question', ['course' => $course->id, 'type' => 1])?>">
             <i class="fa fa-random"></i>
             随机练习</a>
-        <a >
+        <a href="<?=$this->url('./question', ['course' => $course->id, 'type' => 2])?>">
             <i class="fa fa-question-circle"></i>
             难题练习</a>
-        <a >
+        <a href="<?=$this->url('./question', ['course' => $course->id, 'type' => 3])?>">
             <i class="fa fa-file-alt"></i>
             全真模拟</a>
     </div>

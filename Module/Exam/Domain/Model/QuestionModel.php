@@ -72,8 +72,12 @@ class QuestionModel extends QuestionEntity {
             ->where('id', intval($answer))->where('is_right', 1)->count() === 1;
     }
 
-    public function format($order = null) {
-        $dynamicItems = $this->generateDynamic();
+    public function format($order = null, $dynamicItems = null) {
+        if (empty($dynamicItems)) {
+            $dynamicItems = $this->generateDynamic();
+        } elseif (is_string($dynamicItems)) {
+            $dynamicItems = Json::decode(base64_decode($dynamicItems));
+        }
         $data = [
             'order' => empty($order) ? $this->id : $order,
             'id' => $this->id,
