@@ -8,6 +8,24 @@ function bindEditQuestion(baseUri: string) {
             $('.option-box').html(html);
         });
     });
+    $('input[name=title]').on('input propertychange', function() {
+        let $this = $(this);
+        let title = $this.val();
+        if (!title || title.toString().trim().length < 1) {
+            return;
+        }
+        let id = $('input[name=id]').val();
+        postJson(baseUri + 'question/check', {
+            id,
+            title 
+        }, res => {
+            $this.next('a').remove();
+            if (res.code !== 200 || !res.data) {
+                return;
+            }
+            $this.after('<a href="' + res.data.url + '" target="_blank">' + res.data.title + '</a>')
+        });
+    });
     $('.option-box').on('click', '.option-item .remove-btn',  function(e) {
         e.preventDefault();
         let box = $(this).closest('.option-item');

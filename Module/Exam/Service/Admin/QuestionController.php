@@ -69,4 +69,16 @@ class QuestionController extends Controller {
            'url' => $this->getUrl('question')
         ]);
     }
+
+    public function checkAction($title, $id = 0) {
+        $model = QuestionModel::where('title', $title)->where('id', '<>', intval($id))->first();
+        if (!$model) {
+            return $this->jsonSuccess(false);
+        }
+        return $this->jsonSuccess([
+            'id' => $model->id,
+            'title' => $model->title,
+            'url' => url('./question', ['id' => $model->id])
+        ]);
+    }
 }
