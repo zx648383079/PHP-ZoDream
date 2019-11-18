@@ -13,22 +13,7 @@ use Zodream\Template\View;
         <?php if($next_url):?>
         <a class="left btn" href="<?=$next_url?>">下一题</a>
         <?php endif;?>
-        <button class="right" data-target=".sheet-panel">显示答题卡</button>
         <button class="right" data-target=".analysis-panel">显示详解</button>
-    </div>
-    <div class="msg-bar">
-        <span class="left">
-            <span
-                class="gray">答对：</span><span class="count-right">1&nbsp;题</span>
-        </span>
-        <span
-            class="left">
-            <span class="gray">答错：</span>
-            <span class="count-wrong">2&nbsp;题</span>
-            </span>
-        <span class="left">
-            <span
-                class="gray">正确率：</span>33%</span>
     </div>
 </div>
 
@@ -37,18 +22,6 @@ use Zodream\Template\View;
         题目解析
     </div>
     <div class="panel-body">
-        <?=empty($model->analysis) ? '暂无解析' : $model->analysis?>
-    </div>
-</div>
-<div class="panel sheet-panel">
-    <div class="panel-header">
-        答题卡
-    </div>
-    <div class="panel-body">
-        <ul>
-            <?php foreach($question_list as $i => $item):?>
-            <li data-id="<?=$item?>"><?=$i + 1?></li>
-            <?php endforeach;?>
-        </ul>
+        <?=empty($question['analysis']) ? '暂无解析' : $question['analysis']?>
     </div>
 </div>

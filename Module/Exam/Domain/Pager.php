@@ -8,6 +8,7 @@ class Pager {
 
     private $items = [];
     private $index = 0;
+    public $finished = false;
 
     /**
      * @param array $items
@@ -149,7 +150,7 @@ class Pager {
         foreach ($this->items as $i => $item) {
             unset($this->items[$i]['model']);
         }
-        return ['items', 'index'];
+        return ['items', 'index', 'finished'];
     }
 
     public static function create($course, $type = 0) {

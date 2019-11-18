@@ -16,7 +16,14 @@ class PagerController extends Controller {
         $previous_url = !empty($items['previous']) ? url('./pager', array_merge($param, ['page' => $items['previous']])) : null;
         $next_url = !empty($items['next']) ? url('./pager', array_merge($param, ['page' => $items['next']])) : null;
         $items = $items['items'];
-        return $this->show(compact('course', 'pager', 'type', 'items', 'previous_url', 'next_url'));
+        return $this->show(compact(
+            'course', 'pager', 'type',
+            'items', 'previous_url', 'report', 'cart_list',
+            'next_url'));
+    }
+
+    public function checkAction() {
+
     }
 
 }

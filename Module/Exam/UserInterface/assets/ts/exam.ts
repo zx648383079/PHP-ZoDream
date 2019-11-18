@@ -8,7 +8,7 @@ function bindEditQuestion(baseUri: string) {
             $('.option-box').html(html);
         });
     });
-    $('input[name=title]').on('input propertychange', function() {
+    $('input[name=title]').on('change', function() {
         let $this = $(this);
         let title = $this.val();
         if (!title || title.toString().trim().length < 1) {
@@ -23,7 +23,7 @@ function bindEditQuestion(baseUri: string) {
             if (res.code !== 200 || !res.data) {
                 return;
             }
-            $this.after('<a href="' + res.data.url + '" target="_blank">' + res.data.title + '</a>')
+            $this.after('<a href="' + res.data.url + '" target="_blank">已存在【' + res.data.title + '】</a>')
         });
     });
     $('.option-box').on('click', '.option-item .remove-btn',  function(e) {

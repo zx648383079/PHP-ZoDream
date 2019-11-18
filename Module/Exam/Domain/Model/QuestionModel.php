@@ -72,7 +72,7 @@ class QuestionModel extends QuestionEntity {
             ->where('id', intval($answer))->where('is_right', 1)->count() === 1;
     }
 
-    public function format($order = null, $dynamicItems = null) {
+    public function format($order = null, $dynamicItems = null, $hasAnswer = false) {
         if (empty($dynamicItems)) {
             $dynamicItems = $this->generateDynamic();
         } elseif (is_string($dynamicItems)) {
@@ -88,6 +88,11 @@ class QuestionModel extends QuestionEntity {
                 '' : base64_encode(Json::encode($dynamicItems)),
             'type' => intval($this->type),
         ];
+        if ($hasAnswer) {
+            $data['answer'] =$this->type == 4 ? $this->getType4Answer($dynamicItems)
+                : self::strReplace($this->answer, $dynamicItems);
+            $data['analysis'] = self::strReplace($this->analysis, $dynamicItems);
+        }
         if ($this->type < 2) {
             $option_list = QuestionOptionModel::where('question_id', $this->id)
                 ->orderBy('id', 'asc')->get();
@@ -95,15 +100,31 @@ class QuestionModel extends QuestionEntity {
             $i = 0;
             foreach ($option_list as $item) {
                 $i ++;
-                $data['option'][] = [
+                $option = [
                     'id' => $item['id'],
                     'content' => $item['type'] > 0 ? $item['content'] :
                         self::strReplace($item['content'], $dynamicItems),
                     'order' => self::intToChr($i)
                 ];
+                if ($hasAnswer) {
+                    $option['is_right'] = $item->is_right > 0;
+                }
+                $data['option'][] = $option;
             }
         }
         return $data;
+    }
+
+    private function getType4Answer($dynamic) {
+        $items = [];
+        foreach (explode("\n", $this->answer) as $i => $line) {
+            $line = trim($line);
+            if (substr($line, 0, 1) === '=') {
+                $line = self::compilerValue(substr($line, 1), $dynamic);
+            }
+            $items[] = $line;
+        }
+        return $items;
     }
 
     public function generateDynamic() {

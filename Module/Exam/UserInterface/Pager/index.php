@@ -26,17 +26,54 @@ $this->extend('layouts/main')->registerJs($js);
 <div class="container">
     <div class="question-panel">
         <?php foreach($items as $item):?>
-            <?php $this->extend('./item', ['question' => $item]);?>
+            <?php $this->extend(
+                $pager->finished ? './view' : './item'
+                , ['question' => $item]);?>
         <?php endforeach;?>
     </div>
-    <div class="pager">
+    <div class="tool-bar">
         <?php if($previous_url):?>
         <a href="<?=$previous_url?>">上一页</a>
         <?php endif;?>
         <?php if($next_url):?>
         <a href="<?=$next_url?>">下一页</a>
-        <?php else:?>
+        <?php elseif (!$pager->finished):?>
         <a href="<?=$this->url('./pager/check')?>">交卷</a>
         <?php endif;?>
     </div>
+    <?php if($pager->finished):?>
+    <div class="msg-bar">
+        <span class="left">
+            <span
+                class="gray">答对：</span><span class="count-right"><?=$report['right']?>&nbsp;题</span>
+        </span>
+        <span
+            class="left">
+            <span class="gray">答错：</span>
+            <span class="count-wrong"><?=$report['wrong']?>&nbsp;题</span>
+            </span>
+        <span class="left">
+            <span
+                class="gray">正确率：</span><?=$report['scale']?>%</span>
+    </div>
+    <div class="panel sheet-panel">
+        <div class="panel-header">
+            答题卡
+        </div>
+        <div class="panel-body">
+            <ul>
+                <?php foreach($cart_list as $item):?>
+                <?php if($item['right'] > 0):?>
+                <li class="right" data-id="<?=$item['id']?>"><?=$item['order']?></li>
+                <?php elseif ($item['right'] < 0):?>
+                <li class="wrong" data-id="<?=$item['id']?>"><?=$item['order']?></li>
+                <?php else:?>
+                <li data-id="<?=$item['id']?>"><?=$item['order']?></li>
+                <?php endif;?>
+                <?php endforeach;?>
+            </ul>
+        </div>
+    </div>
+    <?php endif;?>
+
 </div>
