@@ -20,6 +20,10 @@ class HomeController extends Controller {
         return $this->show();
     }
 
+    public function hexAction() {
+        return $this->show();
+    }
+
     public function jsAction() {
         return $this->show();
     }

@@ -58,6 +58,11 @@ $this->registerCssFile([
                 './home/ascii',
                 'fa fa-list'
             ],
+            [
+                '进制',
+                './home/hex',
+                'fa fa-list'
+            ],
          ],
          true
      ],
@@ -76,7 +81,7 @@ $this->registerCssFile([
                 './home/sha1',
                 'fa fa-list'
             ],
-             [
+            [
                 'password_hash',
                 './home/password',
             ],

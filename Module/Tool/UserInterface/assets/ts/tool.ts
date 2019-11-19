@@ -65,11 +65,9 @@ function formatJson(json, options?: any) {
 }
 
 function asciiEncode(content: string): string {
-    let val = [];
-    for (let i = 0; i < content.length; i++) {
-        val.push(content.charAt(i)+":" + content.charCodeAt(i));
-    }
-    return val.join("\n");
+    return strMap(content, (str, code) => {
+        return str + ':' + code;
+    }, "\n");
 }
 function asciiDecode(content: string): string {
     return content.replace(/(\d+)/g, function(m, i) {
@@ -81,6 +79,35 @@ function unicodeDecode(content: string) {
     var div = document.createElement('div');
     div.innerHTML = content;
     return div.innerHTML;
+}
+
+function strMap(content: string, cb: (str: string, code: number) => string|false|void, link = ''): string {
+    if (!content || content.length < 1) {
+        return;
+    }
+    let items = [];
+    for (let i = 0; i < content.length; i++) {
+        const val = cb(content.charAt(i), content.charCodeAt(i));
+        if (typeof val === 'boolean' && !val) {
+            break;
+        }
+        if (typeof val === 'string') {
+            items.push(val);
+        }
+    }
+    return items.join(link);
+}
+
+function matchReplace(content: string, reg: RegExp, cb: (matches: string[]) => string): string {
+    if (!content || content.length < 1) {
+        return;
+    }
+    let res: RegExpExecArray;
+    let str = content;
+    while ((res = reg.exec(content)) != null)  {
+        str = str.replace(res[0], cb(res));
+    }
+    return str;
 }
 
 function converter(content: string, type: string): string| number {
@@ -97,6 +124,36 @@ function converter(content: string, type: string): string| number {
             break;
         case 'ascii_decode':
             result = asciiDecode(content);
+            break;
+        case 'binaryencode':
+            result = strMap(content, (_, code) => {
+                return '\\b' + code.toString(2);
+            });
+            break;
+        case 'binarydecode':
+            result = matchReplace(content, /\\b([01]+)/g, matches => {
+                return String.fromCharCode(parseInt(matches[1], 2));
+            });
+            break;
+        case 'octalencode':
+            result = strMap(content, (_, code) => {
+                return '\\' + code.toString(8);
+            });
+            break;
+        case 'octaldecode':
+            result = matchReplace(content, /\\([0-7]+)/g, matches => {
+                return String.fromCharCode(parseInt(matches[1], 8));
+            });
+            break;
+        case 'hexencode':
+            result = strMap(content, (_, code) => {
+                return '\\x' + code.toString(16);
+            });
+            break;
+        case 'hexdecode':
+            result = matchReplace(content, /\\x([0-9a-f]+)/g, matches => {
+                return String.fromCharCode(parseInt(matches[1], 16));
+            });
             break;
         case 'unicode':
             result = escape(content).toLocaleLowerCase().replace(/%u/gi,'\\u');
