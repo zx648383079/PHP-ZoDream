@@ -50,7 +50,9 @@ gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface
 | [RPC模块](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/RPC)             | json rpc                                                                            | 开发中                                                         | 未上线                            |
 | [聊天系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Chat)           | 聊天室                                                                                       | 待开发                                                         | 未上线                            |
 | [BBS论坛系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Forum)       | BBS论坛系统                                                                                  | 已完成1.0                                                         | [demo](http://zodream.cn/forum)                            |
-| [任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)       | 计划任务系统                                                                                 | 已完成1.0                                                         | 未上线                            |
+| [任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)       | 系统计划任务系统，指定时间自动运行后台任务                                                                                | 已完成1.0                                                         | 未上线                            |
+| [个人计划系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Task)       | 个人计划任务系统，新增番茄时间管理，及时间记录统计                                                                                 | 已完成1.0                                                         | [demo](http://zodream.cn/task)                           |
+| [题库系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Exam)       | 分科目题库，刷题用，待开发技能进阶树、技能专属认证，最终目标：实现对任何技能明确分阶，指导用户进阶，验证用户自身技能缺陷               | 已完成1.0                                                         | 未上线                            |
 | [商城系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Shop)           | 商城系统，包括手机PC端，计划angular化及开发APP（Flutter、UWP）、小程序、Vue手机版                                                                                   | 开发中                                                         | 未上线                            |
 | [LOG查看系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/LogView)     | LOG查看系统，主要实现对iis日志的读取显示，可以标记，并根据标记进行推断整理，进行可疑访问查找 | 已完成1.0                                                         | 未上线                            |
 | [可视化编辑系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Template) | 可视化拖拽编辑系统系统                                                                       | 待开发                                                         | 未上线                            |
@@ -61,5 +63,5 @@ gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface
 官网：http://zodream.cn
 
 
-更新时间：2019/09/30
+更新时间：2019/11/20
 
