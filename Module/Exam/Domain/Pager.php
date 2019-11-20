@@ -3,8 +3,9 @@ namespace Module\Exam\Domain;
 
 use Module\Exam\Domain\Model\QuestionModel;
 use Exception;
+use Zodream\Infrastructure\Interfaces\ArrayAble;
 
-class Pager {
+class Pager implements ArrayAble {
 
     private $items = [];
     private $index = 0;
@@ -31,6 +32,11 @@ class Pager {
         }
     }
 
+    public function append($id) {
+        $this->items[] = compact('id');
+        return $this;
+    }
+
     public function answer($id, $answer, $dynamic = null) {
         $this->selectedId($id);
         return $this->judge($answer, $dynamic);
@@ -51,7 +57,7 @@ class Pager {
                 $this->items[$i]['answer'] = '';
             }
         }
-        return;
+        return $this;
     }
 
     public function getPage($page = 1, $per_page = 1) {
@@ -159,6 +165,20 @@ class Pager {
             return $this->items[$i]['model'];
         }
         return $this->items[$i]['model'] = QuestionModel::find($this->items[$i]['id']);
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function toArray() {
+        $items = [];
+        for ($i = 0; $i < count($this->items); $i ++) {
+            $items[] = $this->format($i);
+        }
+        return $items;
     }
 
     public function __sleep() {

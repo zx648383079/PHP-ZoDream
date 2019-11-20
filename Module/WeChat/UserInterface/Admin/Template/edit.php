@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Module\WeChat\Domain\Model\TemplateModel;
+use Module\WeChat\Domain\Model\MediaTemplateModel;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑图文模板';
@@ -16,7 +16,7 @@ $this->title = '编辑图文模板';
 
 <?=Form::open($model, './admin/template/save')?>
     <?=Form::text('name', true)?>
-    <?=Form::select('type', TemplateModel::$type_list)?>
+    <?=Form::select('type', MediaTemplateModel::$type_list)?>
     <?=Form::select('category', ['不限'])?>
     <?=Form::textarea('content', true)?>
     

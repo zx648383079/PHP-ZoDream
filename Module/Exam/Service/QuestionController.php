@@ -19,7 +19,7 @@ class QuestionController extends Controller {
             return $this->goBack();
         }
         $course = $model->course;
-        list($cart_list, $previous_url, $next_url, $current) = $this->getCart($model->id, $model->course_id);
+        list($cart_list, $previous_url, $next_url, $current) = $this->getCard($model->id, $model->course_id);
         $question = $model->format($current, null, true);
         return $this->show(compact('course',
             'cart_list',
@@ -43,7 +43,7 @@ class QuestionController extends Controller {
         return $this->show(compact('items'));
     }
 
-    private function getCart($id, $course) {
+    private function getCard($id, $course) {
         $data = QuestionModel::where('course_id', $course)
             ->orderBy('id asc')->pluck('id');
         $items = [];

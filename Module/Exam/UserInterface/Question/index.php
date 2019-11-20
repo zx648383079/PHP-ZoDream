@@ -21,9 +21,6 @@ $this->extend('layouts/main')
         </li><li class="active">
             <a href="<?=$this->url('./course', ['id' => $course->id])?>" ><?=$course->name?></a>
         </li>
-        <li class="active">
-            <?=$this->title?>
-        </li>
     </ul>
 </div>
 <div class="container">
