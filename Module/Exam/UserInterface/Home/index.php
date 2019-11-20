@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '';
+$this->title = '题库首页';
 $this->extend('layouts/main');
 ?>
 <div class="container">

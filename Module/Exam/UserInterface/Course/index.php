@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '';
+$this->title = $course->name;
 $this->extend('layouts/main');
 ?>
 <div class="container">
@@ -45,7 +45,7 @@ $this->extend('layouts/main');
     <?php endforeach;?>
 
     <div class="menu-box">
-        <a href="<?=$this->url('./pager', ['course' => $course->id])?>">
+        <a href="<?=$this->url('./question', ['course' => $course->id])?>">
             <i class="fa fa-sort-amount-down"></i>
             顺序练习</a>
         <a href="<?=$this->url('./pager', ['course' => $course->id, 'type' => 1])?>">

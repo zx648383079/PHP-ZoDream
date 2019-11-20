@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $prefix = sprintf('question[%s]', $question['id']);
 ?>
-<div class="question-item">
+<div class="question-item item-type-<?=$question['type']?> <?=$question['right'] > 0 ? 'item-right' : 'item-wrong'?>">
     <?php if($question['type'] < 3):?>
     <div class="title">
         <span class="order"><?=$question['order']?>.</span>
@@ -16,7 +16,11 @@ $prefix = sprintf('question[%s]', $question['id']);
         <?php 
         $i = -1;
         echo preg_replace_callback('/_{2,}/', function($match) use ($prefix, $question, &$i) {
-            return sprintf('<input type="text" name="%s[answer][]" style="width: %spx" value="%s" readonly>', $prefix, $question['answer'][++$i], strlen($match[0]) * 20);
+            $i ++;
+            if (isset($question['your_answer'][$i]) && $question['your_answer'][$i] === $question['answer'][$i]) {
+                return sprintf('<label class="right">%s</label>', $question['your_answer'][$i]);
+            }
+            return sprintf('<label class="%s" title="你的答案">%s</label><label class="right" title="参考答案">%s</label>', $question['right'] > 0 ? 'right' : 'wrong', isset($question['your_answer'][$i]) ? $question['your_answer'][$i] : '', $question['answer'][$i]);
         }, $question['title'])?>
     </div>
     <?php endif;?>
@@ -35,22 +39,45 @@ $prefix = sprintf('question[%s]', $question['id']);
         <?php foreach($question['option'] as $option):?>
         <div class="option-item">
         <?php if($question['type'] < 1):?>
-        <input type="radio" name="<?=$prefix?>[answer]" value="<?=$option['id']?>" id="option_<?=$option['id']?>" <?=$option['is_right'] ? 'checked' : ''?> disabled>
+        <?php if($option['id'] == $question['your_answer'] || $option['is_right']):?>
+        <span class="order <?= $option['is_right'] ? 'right' : 'wrong' ?>"><?=$option['order']?>.</span>
         <?php else:?>
-        <input type="checkbox" name="<?=$prefix?>[answer][]" value="<?=$option['id']?>" id="option_<?=$option['id']?>" <?=$option['is_right'] ? 'checked' : ''?> disabled>
-        <?php endif;?>
         <span class="order"><?=$option['order']?>.</span>
+        <?php endif;?>
+        <?php else:?>
+        <?php if(in_array($option['id'], $question['your_answer']) || $option['is_right']):?>
+        <span class="order <?= $option['is_right'] ? 'right' : 'wrong' ?>"><?=$option['order']?>.</span>
+        <?php else:?>
+        <span class="order"><?=$option['order']?>.</span>
+        <?php endif;?>
+        <?php endif;?>
         <label for="option_<?=$option['id']?>"><?=$option['content']?></label>
         </div>
         <?php endforeach;?>
     </div>
     <?php elseif ($question['type'] == 2):?>
     <div class="option-list">
-        <input type="radio" name="<?=$prefix?>[answer]" value="1" <?=$question['answer'] === '1' ? 'checked' : ''?> readonly>对
-        <input type="radio" name="<?=$prefix?>[answer]" value="0" <?=$question['answer'] === '0' ? 'checked' : ''?>  readonly>错
+        <?php foreach(['1' => '对', '0' => '错'] as $val => $label):?>
+        <div class="option-item">
+            <?php 
+            $val .= '';
+            if($val === $question['your_answer'] || $question['answer'] === $val):?>
+            <span class="<?= $question['answer'] === $val ? 'right' : 'wrong' ?>"><?=$label?></span>
+            <?php else:?>
+            <span><?=$label?></span>
+            <?php endif;?>
+        </div>
+       <?php endforeach;?>
     </div>
     <?php elseif ($question['type'] == 3):?>
-    <textarea name="<?=$prefix?>[answer]" rows="10" readonly><?=$question['answer']?></textarea>
+    <div class="answer-text <?=$question['right'] > 0 ? 'right' : 'wrong'?>">
+        <label>你的答案:</label>
+        <textarea readonly><?=$question['your_answer']?></textarea>
+    </div>
+    <div class="answer-text right">
+        <label>参考答案:</label>
+        <textarea readonly><?=$question['answer']?></textarea>
+    </div>
     <?php endif;?>
     <?php if(!empty($question['dynamic'])):?>
     <input type="hidden" name="<?=$prefix?>[dynamic]" value="<?=$question['dynamic']?>">

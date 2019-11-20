@@ -25,7 +25,7 @@ class Pager {
         }
         foreach ($this->items as $i => $item) {
             if ($item['id'] == $id) {
-                $this->index = $id;
+                $this->index = $i;
                 return;
             }
         }
@@ -41,6 +41,17 @@ class Pager {
         $right = $model->check($answer, $dynamic) ? 1 : -1;
         $this->merge(compact('answer', 'dynamic', 'right'));
         return $right > 0;
+    }
+
+    public function finish() {
+        $this->finished = true;
+        foreach ($this->items as $i => $item) {
+            if (!isset($item['right'])) {
+                $this->items[$i]['right'] = -1;
+                $this->items[$i]['answer'] = '';
+            }
+        }
+        return;
     }
 
     public function getPage($page = 1, $per_page = 1) {
@@ -108,10 +119,14 @@ class Pager {
         }
         $model = $this->getQuestion($i);
         $data = $model->format($i + 1,
-            isset($this->items[$i]['dynamic']) ? $this->items[$i]['dynamic'] : null);
-        foreach (['right', 'answer'] as $key) {
+            isset($this->items[$i]['dynamic']) ? $this->items[$i]['dynamic'] : null,
+            $this->finished);
+        foreach (['right', 'answer' => 'your_answer'] as $key => $name) {
+            if (is_integer($key)) {
+                $key = $name;
+            }
             if (isset($this->items[$i][$key])) {
-                $data[$key] = $this->items[$i][$key];
+                $data[$name] = $this->items[$i][$key];
             }
         }
         return $data;
@@ -168,5 +183,16 @@ class Pager {
         return (new static())->setItems(array_map(function ($id) {
             return compact('id');
         }, $items));
+    }
+
+    public static function formatQuestion(QuestionModel $model,
+                                          $answer,
+                                          $dynamic = null) {
+        $data = $model->format(null,
+            $dynamic,
+            true);
+        $data['your_answer'] = $answer;
+        $data['right'] = $model->check($answer, $dynamic) ? 1 : -1;
+        return $data;
     }
 }

@@ -60,8 +60,14 @@ function bindEditQuestion(baseUri: string) {
 
 }
 
-function bindDo() {
-    let panel = $('.question-panel').on('click', '.tool-bar .btn-bar button', function() {
+function bindDo(baseUri: string) {
+    let panel = $('.question-panel').on('change', 'input,textarea', function() {
+        saveQuestion(baseUri, $(this).closest('.question-item'));
+    });
+}
+
+function bindDoQuestion(baseUri: string) {
+    $('.question-panel').on('click', '.tool-bar .btn-bar button', function() {
         let $this = $(this);
         let target = $this.data('target');
         if (target) {
@@ -71,19 +77,39 @@ function bindDo() {
             $this.text(show ? text.replace('显示', '收起') : text.replace('收起', '显示'));
             return;
         }
-    }).on('click', '.tool-bar .btn-bar a', function() {
+    }).on('click', '.tool-bar .btn-bar a', function(e) {
         let $this = $(this);
-        let data = new FormData();
-        panel.find('.question-item').each(function() {
-            $(this).find('input,textarea,select').each(function() {
-                if ((this.getAttribute('type') === 'radio' || this.getAttribute('type') === 'checkbox') && !this.checked) {
-                    return;
-                }
-                data.append(this.getAttribute('name'), $(this).val() as string);
+        if ($this.data('type') === 'check') {
+            e.preventDefault();
+            const box = $this.closest('.question-panel').find('.question-item-box');
+            $.post($this.attr('href'), questionData(box), res => {
+                box.html(res);
             });
-        });
-        $.post($this.attr('href'), data, res => {
-            panel.html(res);
-        });
+            return;
+        }
     })
+}
+
+function questionData(item: JQuery): string {
+    let data = [];
+    item.find('input,textarea').each(function(this: HTMLInputElement) {
+        if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
+            return;
+        }
+        data.push(encodeURIComponent( this.name ) + '=' +
+				encodeURIComponent( $(this).val().toString() ))
+    });
+    return data.join('&');
+}
+
+function saveQuestion(baseUri: string, item: JQuery, cb?: (data: any) => void) {
+    const data = questionData(item);
+    if (data.length < 1) {
+        return;
+    }
+    postJson(baseUri + 'pager/save', data, res => {
+        if (res.code === 200) {
+            cb && cb(res.data);
+        }
+    });
 }

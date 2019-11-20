@@ -9,6 +9,8 @@ class CourseController extends Controller {
         $course = CourseModel::find($id);
         $course_list = CourseModel::with('children')
             ->where('parent_id', intval($id))->get();
+        session()->delete(PagerController::CACHE_KEY);
+        session()->delete(QuestionController::CACHE_KEY);
         return $this->show(compact('course_list', 'course'));
     }
 }

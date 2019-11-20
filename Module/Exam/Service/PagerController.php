@@ -6,10 +6,12 @@ use Module\Exam\Domain\Pager;
 
 class PagerController extends Controller {
 
+    const CACHE_KEY = 'exam_pager';
+
     public function indexAction($course, $type = 0, $page = 1, $per_page = 1) {
         $param = compact('course', 'type', 'page', 'per_page');
         $course = CourseModel::find($course);
-        $pager = Pager::create($course->id, intval($type));
+        $pager = $this->getPager($course->id, $type);
         $cart_list = $pager->getCard();
         $report = $pager->getReport();
         $items = $pager->getPage($page, $per_page);
@@ -23,7 +25,36 @@ class PagerController extends Controller {
     }
 
     public function checkAction() {
+        $pager = $this->getPager();
+        $pager->finish();
+        session([self::CACHE_KEY => $pager]);
+        return $this->jsonSuccess([
+            'refresh' => true
+        ], '交卷成功！');
+    }
 
+    public function saveAction($question) {
+        $pager = $this->getPager();
+        foreach ($question as $id => $item) {
+            $pager->answer($id, $item['answer'], isset($item['dynamic']) ? $item['dynamic'] : null);
+        }
+        session([self::CACHE_KEY => $pager]);
+        return $this->jsonSuccess(true);
+    }
+
+    /**
+     * @param null $course
+     * @param int $type
+     * @return Pager
+     * @throws \Exception
+     */
+    private function getPager($course = null, $type = 0) {
+        if (session()->has(self::CACHE_KEY)) {
+            return session(self::CACHE_KEY);
+        }
+        $pager = Pager::create($course, intval($type));
+        session([self::CACHE_KEY => $pager]);
+        return $pager;
     }
 
 }

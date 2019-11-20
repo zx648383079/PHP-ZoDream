@@ -4,10 +4,14 @@ use Zodream\Template\View;
 /** @var $this View */
 $type_list = ['顺序练习', '随机练习', ''];
 $this->title = $course->name.'-'.$type_list[$type];
+$url = $this->url('./', false);
 $js = <<<JS
-bindDo();
+bindDo('{$url}');
 JS;
-$this->extend('layouts/main')->registerJs($js);
+$this->extend('layouts/main')
+    ->registerCssFile('@dialog.css')
+    ->registerJsFile('@jquery.dialog.min.js')
+    ->registerJsFile('@main.min.js')->registerJs($js);
 ?>
 <div class="container">
     <ul class="path">
@@ -38,7 +42,7 @@ $this->extend('layouts/main')->registerJs($js);
         <?php if($next_url):?>
         <a href="<?=$next_url?>">下一页</a>
         <?php elseif (!$pager->finished):?>
-        <a href="<?=$this->url('./pager/check')?>">交卷</a>
+        <a data-type="ajax" href="<?=$this->url('./pager/check')?>">交卷</a>
         <?php endif;?>
     </div>
     <?php if($pager->finished):?>
@@ -56,7 +60,7 @@ $this->extend('layouts/main')->registerJs($js);
             <span
                 class="gray">正确率：</span><?=$report['scale']?>%</span>
     </div>
-    <div class="panel sheet-panel">
+    <div class="panel sheet-panel" style="display: block;">
         <div class="panel-header">
             答题卡
         </div>

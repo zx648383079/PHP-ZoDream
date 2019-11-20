@@ -1,3 +1,5 @@
+@import 'theme';
+$success: #337ab7;
 .option-box {
     .option-item {
         .option-value {
@@ -10,6 +12,8 @@
 }
 .question-item {
     margin-bottom: 30px;
+    position: relative;
+    min-height: 60px;
     .title {
         font-size: 16px;
         .order {
@@ -17,11 +21,51 @@
             font-size: 30px;
             margin-left: 20px;
         }
+        .wrong,
+        .right {
+            display: inline-block;
+            min-width: 30px;
+            vertical-align: bottom;
+            padding: 0 10px;
+            &:hover {
+                border-bottom-width: 3px;
+            }
+        }
+        .wrong {
+            border-bottom: 1px solid $error;
+        }
+        .right {
+            border-bottom: 1px solid $success;
+        }
     }
     .option-list {
         padding-left: 40px;
         line-height: 30px;
         .option-item {
+            position: relative;
+            .right,
+            .wrong {
+                &::before {
+                    font-family: "Font Awesome 5 Free";
+                    font-weight: 900;
+                    text-rendering: auto;
+                    position: absolute;
+                    left: -20px;
+                    top: 0;
+                }
+            }
+            .wrong {
+                &::before {
+                    content: "\f00d";
+                    color: $error;
+                }
+            }
+            .right {
+                &::before {
+                    content: "\f00c";
+                    color: $success;
+                }
+            }
             &:hover {
                 background-color: rgba(#ccc, .1);
             }
@@ -38,6 +82,48 @@
     }
     textarea {
         width: 100%;
+        resize: vertical;
+        min-height: 100px;
+    }
+    .answer-text {
+        textarea {
+            outline: none;
+            background-color: transparent;
+        }
+        &.wrong {
+            textarea {
+                border: 1px solid $error;
+            }
+        }
+        &.right {
+            textarea {
+                border: 1px solid $success;
+            }
+        }
+    }
+    &.item-right,
+    &.item-wrong {
+        &::before {
+            font-family: "Font Awesome 5 Free";
+            text-rendering: auto;
+            position: absolute;
+            font-size: 60px;
+            font-weight: 900;;
+            right: 0;
+            top: 0;
+        }
+    }
+    &.item-wrong {
+        &::before {
+            content: "\f00d";
+            color: rgba($error, .5);
+        }
+    }
+    &.item-right {
+        &::before {
+            content: "\f00c";
+            color: rgba($success, .5);
+        }
     }
 }
 
@@ -177,17 +263,29 @@
             line-height: 40px;
             text-align: center;
             border: 1px solid #ccc;
+            box-sizing: border-box;
             cursor: pointer;
-            &.right {
-                background-color: #3da600;
+            a {
+                display: block;
+            }
+            &.right,
+            &.wrong {
                 color: #fff;
+                a {
+                    color: #fff; 
+                }
+            }
+            &.active {
+                border: 2px solid $success;
+            }
+            &.right {
+                background-color: $success;
             }
             &.wrong {
-                background-color: #EE4653;
-                color: #fff;
+                background-color: $error;
             }
             &:hover {
-                border: 1px solid #777;
+                border-color: #777;
             }
         }
     }

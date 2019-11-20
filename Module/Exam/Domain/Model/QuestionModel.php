@@ -89,7 +89,8 @@ class QuestionModel extends QuestionEntity {
             'type' => intval($this->type),
         ];
         if ($hasAnswer) {
-            $data['answer'] =$this->type == 4 ? $this->getType4Answer($dynamicItems)
+            $data['answer'] = $this->type == 4
+                ? $this->getType4Answer($dynamicItems)
                 : self::strReplace($this->answer, $dynamicItems);
             $data['analysis'] = self::strReplace($this->analysis, $dynamicItems);
         }
@@ -166,6 +167,17 @@ class QuestionModel extends QuestionEntity {
             return self::compilerCon($match[1], $match[2], $match[3])
                 ? self::compilerValue($match[4], $data) : self::compilerValue($match[5], $str);
         }
+        if (preg_match('/^(.+?)([\+\-*\/]{1,3})(.+?)$/', $str, $match)) {
+            $match[1] = trim($match[1]);
+            $match[3] = trim($match[3]);
+            if (isset($data[$match[1]])) {
+                $match[1] = $data[$match[1]];
+            }
+            if (isset($data[$match[3]])) {
+                $match[3] = $data[$match[3]];
+            }
+            return self::compilerCon($match[1], $match[2], $match[3]);
+        }
         if (strpos($str, '...') > 0) {
             return Str::randomInt(...explode('...', $str));
         }
@@ -194,6 +206,18 @@ class QuestionModel extends QuestionEntity {
         }
         if ($con === '==' || $con === '===') {
             return $arg == $val;
+        }
+        if ($con === '+') {
+            return $arg + $val;
+        }
+        if ($con === '-') {
+            return $arg - $val;
+        }
+        if ($con === '*') {
+            return $arg * $val;
+        }
+        if ($con === '/') {
+            return $arg / $val;
         }
         return false;
     }

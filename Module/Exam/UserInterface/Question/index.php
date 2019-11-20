@@ -3,10 +3,14 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = $question['title'];
+$url = $this->url('./', false);
 $js = <<<JS
-bindDo();
+bindDoQuestion('{$url}');
 JS;
-$this->extend('layouts/main')->registerJs($js);
+$this->extend('layouts/main')
+    ->registerCssFile('@dialog.css')
+    ->registerJsFile('@jquery.dialog.min.js')
+    ->registerJsFile('@main.min.js')->registerJs($js);
 ?>
 <div class="container">
     <ul class="path">
