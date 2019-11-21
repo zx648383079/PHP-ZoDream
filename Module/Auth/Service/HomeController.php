@@ -1,7 +1,6 @@
 <?php
 namespace Module\Auth\Service;
 
-use Carbon\Carbon;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
@@ -23,7 +22,7 @@ class HomeController extends ModuleController {
         if ($user->load() && $user->signIn()) {
             return $this->redirect(app('request')->get('redirect_uri', '/'));
         }
-        $time = Carbon::today()->startOfDay()->timestamp;
+        $time = strtotime(date('Y-m-d 00:00:00'));
         $num = LoginLogModel::where('ip', app('request')->ip())
             ->where('status', 0)
             ->where('created_at', '>=', $time)->count();
