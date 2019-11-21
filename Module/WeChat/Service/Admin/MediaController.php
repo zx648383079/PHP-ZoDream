@@ -21,7 +21,7 @@ class MediaController extends Controller {
         })->when(!empty($keywords), function ($query) {
             MediaModel::search($query, 'title');
             })->page();
-        if (app('request')->isAjax()) {
+        if (app('request')->isAjax() && !app('request')->isPjax()) {
             return $this->jsonSuccess($model_list);
         }
         return $this->show(compact('model_list', 'type'));

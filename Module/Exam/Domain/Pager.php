@@ -99,7 +99,7 @@ class Pager implements ArrayAble {
         }
         $scale = 100;
         if ($wrong > 0 || $right > 0) {
-            $scale = $right * 100 / ($wrong + $right);
+            $scale = round($right * 100 / ($wrong + $right), 2);
         }
         return compact('wrong', 'right', 'scale');
     }
@@ -178,7 +178,13 @@ class Pager implements ArrayAble {
         for ($i = 0; $i < count($this->items); $i ++) {
             $items[] = $this->format($i);
         }
-        return $items;
+        $data = [
+            'data' => $items
+        ];
+        if ($this->finished) {
+            $data['report'] = $this->getReport();
+        }
+        return $data;
     }
 
     public function __sleep() {
