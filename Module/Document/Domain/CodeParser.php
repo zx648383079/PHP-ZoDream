@@ -34,7 +34,8 @@ class CodeParser {
         'asp.net' => 'Net',
         'uwp' => 'Net',
         'wpf' => 'Net',
-        'java' => 'java',
+        'java' => 'Java',
+        'kotlin' => 'Kotlin'
     ];
 
     public function formatHttp($api_id, $lang) {
@@ -456,16 +457,16 @@ class CodeParser {
         $tab = str_repeat(self::TAB, 2);
         $to = [
             sprintf('%sMap<String, dynamic> toJson() {', self::TAB),
-            sprintf('%sfinal Map<String, dynamic> data = new Map<String, dynamic>();', $tab)
+            sprintf('%sfinal Map<String, dynamic> json = new Map<String, dynamic>();', $tab)
         ];
         foreach ($package as $item) {
             $name = lcfirst(Str::studly($item['name']));
             $ctor[] = 'this.'.$name;
             $from[] = sprintf('%s%s = json[\'%s\'];', $tab, $name, $item['name']);
-            $to[] = sprintf('%s%s = json[\'%s\'];', $tab, $name, $item['name']);
+            $to[] = sprintf('%sjson[\'%s\'] = %s;', $tab, $item['name'], $name);
         }
         $from[] = sprintf('%s}', self::TAB);
-        $to[] = sprintf('%sreturn data;', $tab);
+        $to[] = sprintf('%sreturn json;', $tab);
         $to[] = sprintf('%s}', self::TAB);
         return implode(self::NEW_LINE, [
             sprintf('class %s {', $packageName),
@@ -478,6 +479,92 @@ class CodeParser {
     }
 
     private function formatHttpDart(ApiModel $api, $name, $request, $response) {
+        return implode(self::NEW_LINE, [
+            sprintf('Future<%s> get%s(%s[func action]) async {', $response, $name,
+                !empty($request) ? sprintf('%s params, ', $request) : ''),
+            sprintf('%sreturn await RestClient.%s<%s>(\'%s\', %saction)', self::TAB,
+                strtolower($api->method), $response, $api->uri,
+                !empty($request) ? 'params, ' : ''
+            ),
+            sprintf('var data = await get%s({});', $name),
+        ]);
+    }
+
+    // kotlin
+
+    private function kotlinAttributeLine($name, $type) {
+        return sprintf('%svar %s: %s', self::TAB, lcfirst(Str::studly($name)), $type);
+    }
+
+    private function formatKotlinString(array $item) {
+        return $this->kotlinAttributeLine($item['name'], 'String');
+    }
+
+    private function formatKotlinNull(array $item) {
+        return $this->kotlinAttributeLine($item['name'], 'Any');
+    }
+
+    private function formatKotlinInt(array $item) {
+        return $this->kotlinAttributeLine($item['name'], 'Int');
+    }
+
+    private function formatKotlinFloat(array $item) {
+        return $this->formatKotlinDouble($item);
+    }
+
+    private function formatKotlinDouble(array $item) {
+        return $this->kotlinAttributeLine($item['name'], 'Double');
+    }
+
+    private function formatKotlinBool(array $item) {
+        return $this->kotlinAttributeLine($item['name'], 'Boolean');
+    }
+
+    private function formatKotlinObject(array $item) {
+        return $this->kotlinAttributeLine($item['name'], Str::studly($item['package']));
+    }
+
+    private function formatKotlinArray(array $item) {
+        return $this->kotlinAttributeLine($item['name'], sprintf('List<%s>', Str::studly($item['package'])));
+    }
+
+    private function formatPackageKotlin($name, $attributes, array $package) {
+        $packageName = Str::studly($name);
+        $ctor = [];
+        $from = [
+            sprintf('%sfun fromJson(json: JSONObject) {', self::TAB)
+        ];
+        $tab = str_repeat(self::TAB, 2);
+        $to = [
+            sprintf('%sfun toJson(): JSONObject {', self::TAB),
+            sprintf('%svar json = SONObject()', $tab)
+        ];
+        $types = [
+            self::TYPE_INT => 'Int',
+            self::TYPE_STRING => 'String',
+            self::TYPE_BOOL => 'Boolean',
+            self::TYPE_DOUBLE => 'Double',
+            self::TYPE_FLOAT => 'Double',
+        ];
+        foreach ($package as $item) {
+            $name = lcfirst(Str::studly($item['name']));
+            $ctor[] = 'this.'.$name;
+            $from[] = sprintf('%s%s = json.get%s("%s")', $tab, $name, isset($types[$item['type']]) ? $types[$item['type']] : 'String', $item['name']);
+            $to[] = sprintf('%sjson.put("%s", %s)', $tab, $item['name'], $name);
+        }
+        $from[] = sprintf('%s}', self::TAB);
+        $to[] = sprintf('%sreturn json', $tab);
+        $to[] = sprintf('%s}', self::TAB);
+        return implode(self::NEW_LINE, [
+            sprintf('data class %s {', $packageName),
+            $attributes,
+            implode(self::NEW_LINE, $from),
+            implode(self::NEW_LINE, $to),
+            '}'
+        ]);
+    }
+
+    private function formatHttpKotlin(ApiModel $api, $name, $request, $response) {
         return implode(self::NEW_LINE, [
             sprintf('Future<%s> get%s(%s[func action]) async {', $response, $name,
                 !empty($request) ? sprintf('%s params, ', $request) : ''),
