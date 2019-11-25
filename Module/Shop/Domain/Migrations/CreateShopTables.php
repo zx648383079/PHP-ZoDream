@@ -400,7 +400,7 @@ class CreateShopTables extends Migration {
             $table->set('free_step')->float(10, 3)->defaultVal(0);
         });
         Schema::createTable(ShippingRegionModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('shipping_id')->int()->notNull();
             $table->set('group_id')->int()->notNull();
             $table->set('region_id')->int()->notNull();
         });

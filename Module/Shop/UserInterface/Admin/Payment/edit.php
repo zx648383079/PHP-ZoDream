@@ -23,6 +23,7 @@ $this->registerCssFile('@select2.min.css')
         <label>限定配送</label>
         <div>
             <select name="shipping[]" id="shipping-box" multiple style="width: 100%">
+                <option value="0">不限</option>
                 <?php foreach($shipping_list as $item):?>
                 <option value="<?=$item->id?>"><?=$item->name?></option>
                 <?php endforeach;?>

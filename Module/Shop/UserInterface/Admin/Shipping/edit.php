@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '配送方式';
-$url = $this->url('./admin'); 
+$url = $this->url('./@admin/', false); 
 $js = <<<JS
 bindShipping('{$url}');
 JS;
@@ -32,6 +32,24 @@ $this->registerJs($js);
                 <th>续费 (元)</th>
                 <th>免费标准</th>
             </tr>
+            <?php foreach($group_list as $item):?>
+            <tr>
+                <td class="am-text-left">
+                    <p class="selected-content am-margin-bottom-xs"><?=$item->region_label?></p>
+                    <p class="operation am-margin-bottom-xs"> <a class="edit" href="javascript:;">编辑</a> <a
+                            class="delete" href="javascript:;">删除</a> </p>
+                    <input type="hidden"
+                        name="shipping[region][]" value="<?=implode(',', $item->region_ids)?>">
+                    <input type="hidden" name="shipping[id][]" value="<?=$item->id?>">
+                </td>
+                <td> <input type="number" name="shipping[first_step][]" value="<?=$item->first_step?>" required=""></td>
+                <td> <input type="number" name="shipping[first_fee][]" value="<?=$item->first_fee?>" required=""></td>
+                <td> <input type="number" name="shipping[additional][]" value="<?=$item->additional?>"></td>
+                <td> <input type="number" name="shipping[additional_fee][]" value="<?=$item->additional_fee?>"></td>
+                <td> <input type="number" name="shipping[free_step][]" value="<?=$item->free_step?>"></td>
+            </tr>
+            <?php endforeach;?>
+
             <tr>
                 <td colspan="6" class="am-text-left">
                     <a class="btn add-region"

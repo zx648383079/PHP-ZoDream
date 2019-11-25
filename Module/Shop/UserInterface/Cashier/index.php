@@ -93,7 +93,8 @@ $this->title = 'ZoDream';
                     <div><?=$address->region->full_name?> <?=$address->address?></div>
                     <?php endif;?>
                     <input type="hidden" name="address" value="<?=$address ? $address->id : ''?>">
-                    <input type="hidden" name="cart" value="<?=app('request')->get('cart')?>">
+                    <input type="hidden" name="cart" value="<?=$this->text(app('request')->get('cart'))?>">
+                    <input type="hidden" name="type" value="<?=$this->text(app('request')->get('type'))?>">
                 </div>
             </div>
             <?=Form::close()?>

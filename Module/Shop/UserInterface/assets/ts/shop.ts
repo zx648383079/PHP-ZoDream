@@ -469,12 +469,71 @@ function bindPay() {
 
 function bindAddress(baseUrl: string) {
     let dialog = $('.address-dialog').dialog();
-    $('.address-dialog .region-input').multiSelect({
+    let fillForm = function(data?: any) {
+        dialog.find('.dialog-title').text(data ? '修改地址' : '新建地址');
+        dialog.find('input,textarea').each(function(this: HTMLInputElement) {
+            if (this.type === 'checkbox') {
+                this.checked = !data || data[this.name];
+                return;
+            }
+            this.value = data && data[this.name] ? data[this.name] : '';
+        });
+    };
+    let regionBox = $('.address-dialog .region-input').multiSelect({
         default: 0,
         data: baseUrl + 'region/tree',
         tag: 'region_id'
     });
+    dialog.on('done', function() {
+        this.close();
+        postJson(baseUrl + 'address/save', formData(dialog), res => {
+            parseAjax(res);
+        })
+    });
     $('.add-btn').click(function() {
+        fillForm();
         dialog.show();
     });
+}
+
+function formData(item: JQuery): string {
+    let data = [];
+    item.find('input,textarea,select').each(function(this: HTMLInputElement) {
+        if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
+            return;
+        }
+        data.push(encodeURIComponent( this.name ) + '=' +
+				encodeURIComponent( $(this).val().toString() ))
+    });
+    return data.join('&');
+}
+
+function bindPayTime() {
+    let items = $('[data-type="countdown"]');
+    setInterval(function() {
+        const now = Math.floor(new Date().getTime() / 1000);
+        items.each(function() {
+            let ele = $(this);
+            const diff = Math.max(ele.data('end') - now, 0);
+            ele.text(formatTime(diff));
+        });
+    }, 1000);
+}
+
+function twoPad(i: number): string {
+    return i < 10 && i >= 0 ? '0' + i : i.toString();
+}
+
+function formatTime(diff: number) {
+    let h = Math.floor(diff / 3600);
+    diff -= h * 3600;
+    let m = Math.floor(diff / 60);
+    let s = diff % 60;
+    if (h !== 0) {
+        return twoPad(h) + '时' + twoPad(m) + '分' + twoPad(s) + '秒';
+    }
+    if (m !== 0) {
+        return twoPad(m) + '分' + twoPad(s) + '秒';
+    }
+    return twoPad(s) + '秒';
 }

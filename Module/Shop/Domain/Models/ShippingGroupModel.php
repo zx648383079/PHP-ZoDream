@@ -47,4 +47,40 @@ class ShippingGroupModel extends Model {
         ];
     }
 
+    public function getRegionIdsAttribute() {
+        return ShippingRegionModel::where('shipping_id', $this->shipping_id)
+            ->where('group_id', $this->id)->pluck('region_id');
+    }
+
+    public function getRegionLabelAttribute() {
+        $regions = $this->region_ids;
+        if (empty($regions)) {
+            return '';
+        }
+        $name = RegionModel::whereIn('id', array_splice($regions, 0, 5))
+            ->pluck('full_name');
+        return implode('、', $name);
+    }
+
+    public static function batchSave($shipping_id, $data) {
+        if (empty($data)) {
+            return;
+        }
+        static::where('shipping_id', $shipping_id)
+            ->whereNotIn('id', $data['id'])->delete();
+        foreach ($data['region'] as $i => $region) {
+            $id = isset($data['id'][$i]) ? intval($data['id'][$i]) : 0;
+            $group = compact('shipping_id');
+            foreach (['first_step', 'first_fee', 'additional', 'additional_fee', 'free_step'] as $key) {
+                $group[$key] = isset($data[$key][$i]) ? floatval($data[$key][$i]) : 0;
+            }
+            if ($id > 0) {
+                static::where('id', $id)->update($group);
+            } else {
+                $id = static::query()->insert($group);
+            }
+            ShippingRegionModel::batchSave($shipping_id, $id, explode(',', $region));
+        }
+
+    }
 }

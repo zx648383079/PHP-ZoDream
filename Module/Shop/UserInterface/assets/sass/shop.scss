@@ -1675,8 +1675,11 @@ header {
 
 .address-dialog {
     width: 697px;
-    height: 284px;
+    height: 283px;
     .dialog-body {
+        height: 202px;
+    }
+    .address-body {
         display: grid;
         grid-template-columns: 77px 1fr 77px 1fr;
         grid-gap: 20px;
@@ -2063,6 +2066,17 @@ header {
                 margin: 0;
             }
         }
+    }
+    .order-pay-tip {
+        padding-top: 20px;
+        line-height: 40px;
+        font-size: 20px;
+        .primary-tip {
+            color: #0f0;
+        }
+    }
+    .pay-btn {
+        text-align: right;
     }
 }
 

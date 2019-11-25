@@ -809,6 +809,7 @@ class Delivery {
             '       <a class="delete" href="javascript:;">删除</a>' +
             '   </p>' +
             '   <input type="hidden" name="shipping[region][]" value="' + checkedIds + '">' +
+            '   <input type="hidden" name="shipping[id][]">' +
             '</td>' +
             '<td>' +
             '   <input type="number" name="shipping[first_step][]" value="1" required>' +
@@ -866,7 +867,7 @@ class Delivery {
                 }
                 str += $(item).val() + ',';
             });
-            _this.region.render(str.split(','), $input.val().split(','));
+            _this.region.render(str.split(','), $input.val().toString().split(','));
             // 显示地区选择弹窗
             _this.showRegionalModal(function () {
                 // 弹窗交互完成
@@ -894,10 +895,10 @@ class Delivery {
      * 切换计费方式
      */
     public clickMethodEvent () {
-        $('input:radio[name="method"]').change(function (e) {
+        $('input:radio[name="method"]').change(function (this: HTMLInputElement) {
             let $first = $('.first')
                 , $additional = $('.additional');
-            if (e.currentTarget.value === '1')
+            if (this.value === '1')
                 $first.text('首重 (Kg)') && $additional.text('续重 (Kg)');
             else
                 $first.text('首件 (个)') && $additional.text('续件 (个)');

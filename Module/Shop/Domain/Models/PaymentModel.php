@@ -64,6 +64,7 @@ class PaymentModel extends Model {
     public static function paymentList() {
         return [
             'balance' =>  '余额支付',
+            'zo' => 'Zo Pay',
             'alipay' =>  '支付宝支付',
             'wx' =>  '微信支付',
         ];

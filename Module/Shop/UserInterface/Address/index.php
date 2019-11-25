@@ -37,7 +37,7 @@ $this->registerJs($js)
                 <div><?=$item->tel?></div>
                 <div>
                     <a href="">编辑</a>
-                    <a href="">删除</a>
+                    <a data-type="del" href="<?=$this->url('./address/delete', ['id' => $item->id])?>">删除</a>
                 </div>
                 <div>
                     <?php if($item->is_default):?>
@@ -59,23 +59,26 @@ $this->registerJs($js)
         <i class="fa fa-close dialog-close"></i>
     </div>
     <div class="dialog-body">
-        <div>*所在地区:</div>
-        <div class="region-input">
-            <select name="" id=""></select>
-            <select name="" id=""></select>
-            <select name="" id=""></select>
-        </div>
-        <div>*详细地址:</div>
-        <div>
-            <textarea name="address" id="" cols="30" rows="10"></textarea>
-        </div>
-        <div>*收货人:</div>
-        <div>
-            <input type="text" name="name">
-        </div>
-        <div>*手机号码:</div>
-        <div>
-            <input type="text" name="tel">
+        <div class="address-body">
+            <div>*所在地区:</div>
+            <div class="region-input">
+                <select name="" id=""></select>
+                <select name="" id=""></select>
+                <select name="" id=""></select>
+            </div>
+            <div>*详细地址:</div>
+            <div>
+                <textarea name="address" id="" cols="30" rows="10"></textarea>
+            </div>
+            <div>*收货人:</div>
+            <div>
+                <input type="text" name="name">
+            </div>
+            <div>*手机号码:</div>
+            <div>
+                <input type="text" name="tel">
+                <input type="hidden" name="id">
+            </div>
         </div>
     </div>
     <div class="dialog-footer">

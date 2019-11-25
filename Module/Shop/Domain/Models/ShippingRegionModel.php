@@ -21,8 +21,11 @@ class ShippingRegionModel extends Model {
         return 'shop_shipping_region';
     }
 
+    protected $primaryKey = false;
+
     protected function rules() {
         return [
+            'shipping_id' => 'required|int',
             'group_id' => 'required|int',
             'region_id' => 'required|int',
         ];
@@ -30,9 +33,19 @@ class ShippingRegionModel extends Model {
 
     protected function labels() {
         return [
-            'id' => 'Id',
+            'shipping_id' => 'Id',
             'group_id' => 'Group Id',
             'region_id' => 'Region Id',
         ];
+    }
+
+    public static function batchSave($shipping_id, $group_id, $data) {
+        $exist = static::where(compact('shipping_id', 'group_id'))
+            ->pluck('region_id');
+        $items = [];
+        foreach ($data as $region_id) {
+            $items[] = compact('shipping_id', 'group_id', 'region_id');
+        }
+        static::query()->insert($items);
     }
 }
