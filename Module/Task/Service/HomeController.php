@@ -2,6 +2,7 @@
 namespace Module\Task\Service;
 
 use Module\Task\Domain\Model\TaskDayModel;
+use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Repositories\TaskRepository;
 
 class HomeController extends Controller {
@@ -19,6 +20,10 @@ class HomeController extends Controller {
             ->where('amount', '>', 0)
             ->orderBy('status', 'asc')
             ->orderBy('id', 'asc')->get();
-        return $this->show(compact('model_list'));
+        $last_log = TaskLogModel::where('user_id', auth()->id())
+            ->where('status', '>', 1)
+            ->where('end_at', '>', time() - 3600)
+            ->first();
+        return $this->show(compact('model_list', 'last_log'));
     }
 }

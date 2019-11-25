@@ -13,6 +13,16 @@
     .panel-body {
         padding: 10px;
         min-height: 300px;
+        .last-task-time {
+            border-top: 1px dotted;
+            line-height: 30px;
+            margin-top: 20px;
+            .time {
+                cursor: pointer;
+                color: #f00;
+                font-weight: 600;
+            }
+        }
         .task-item {
             display: grid;
             grid-template-columns: 1fr 100px 100px;

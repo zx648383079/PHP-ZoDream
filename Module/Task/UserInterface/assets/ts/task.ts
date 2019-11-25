@@ -60,7 +60,7 @@ class Timer {
             m = Math.floor(time / 60) % 60,
             h = Math.floor(time / 3600),
             b = function(t) {
-                return t < 10 ? '0' + t : t;
+                return t < 10 && t >= 0 ? '0' + t : t;
             };
         return (h > 0 ? b(h) + ':' : '') + b(m) + ':' + b(s);
     }
@@ -77,13 +77,25 @@ const TASK_REFRESH_TIME = 'task_refresh_time';
 const TASK_SHOW_TIMER = 'task_show_timer';
 const TASK_HIDE_TIMER = 'task_hide_timer';
 const TASK_TICK_TIMER = 'task_tick_timer';
+const TASK_BATCH_ADD = 'task_batch_add';
 
 function bindTask(baseUri: string) {
     if ('Notification' in window) {
         Notification.requestPermission();
     }
     refreshPanel(baseUri);
-    $('.panel ').on(TASK_START, '.task-item', function() {
+    $('.panel').on('dragover', function(ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
+    }).on('drop', function(ev) {
+        ev.stopPropagation();
+		ev.preventDefault();
+        const id = parseInt(ev.originalEvent.dataTransfer.getData('task'), 10);
+        if (id < 1) {
+            return;
+        }
+        box.trigger(TASK_BATCH_ADD, id);
+    }).on(TASK_START, '.task-item', function() {
         playTask(baseUri, $(this));
     }).on(TASK_PAUSE, '.task-item', function() {
         pauseTask(baseUri, $(this));
@@ -107,6 +119,14 @@ function bindTask(baseUri: string) {
         $(this).closest('.task-item').trigger(TASK_STOP);
     }).on('click', '.task-item .name', function() {
         $(this).closest('.task-item').trigger(TASK_SHOW_TIMER);
+    }).on('click', '.last-task-time .time', function() {
+        let $this = $(this);
+        const time = $this.data('time');
+        if ($this.text().indexOf('前') >= 0) {
+            $this.text(time);
+            return;
+        }
+        $this.text(Timer.format(new Date().getTime() - new Date(time).getTime()) + '秒前');
     });
     let box = $('.dialog-panel');
     $('[data-action=add]').click(function(e) {
@@ -124,6 +144,11 @@ function bindTask(baseUri: string) {
         if (items.length < 1) {
             return;
         }
+        box.trigger(TASK_BATCH_ADD, items);
+    }).on(TASK_BATCH_ADD, function(_, items) {
+        if (!items) {
+            return;
+        }
         postJson(baseUri + 'task/batch_add', {
             id: items
         }, res => {
@@ -133,6 +158,10 @@ function bindTask(baseUri: string) {
             }
             refreshPanel(baseUri);
         });
+    }).on('mouseenter', '.task-item', function() {
+        $(this).attr('draggable', 'true');
+    }).on('dragstart', '.task-item', function(ev) {
+        ev.originalEvent.dataTransfer.setData('task', $(this).data('id'));
     });
     let timerBox = $('.dialog-timer');
     let startPoint = null;

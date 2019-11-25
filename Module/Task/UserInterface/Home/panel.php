@@ -23,3 +23,9 @@ use Zodream\Template\View;
         <div class="desc"><?=$item->task->description?></div>
     </div>
 <?php endforeach; ?>
+<?php if($last_log):?>
+    <div class="last-task-time">
+        上次任务结束时间：
+        <span class="time" data-time="<?=$this->time($last_log->end_at)?>"><?=$this->time($last_log->end_at)?></span>
+    </div>
+<?php endif;?>
