@@ -1,32 +1,32 @@
 <?php
-namespace Module\Task\Service;
+namespace Module\Task\Service\Api;
 
 use Module\Task\Domain\Model\TaskDayModel;
 use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Repositories\TaskRepository;
+use Zodream\Route\Controller\RestController;
 
-class TaskController extends Controller {
+class TaskController extends RestController {
 
-    public function indexAction() {
-        $model_list = TaskModel::where('user_id', auth()->id())
+    public function indexAction($id = 0) {
+        if ($id > 0) {
+            return $this->detailAction($id);
+        }
+        $data = TaskModel::where('user_id', auth()->id())
             ->orderBy('id', 'desc')->page();
-        return $this->show(compact('model_list'));
+        return $this->render(compact('data'));
     }
 
-    public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
-    }
-
-    public function editAction($id) {
+    public function detailAction($id) {
         $model = TaskModel::findOrNew($id);
         if ($id > 0 && $model->user_id !== auth()->id()) {
-            return $this->redirectWithMessage('./task', '任务不存在');
+            return $this->renderFailure('任务不存在');
         }
         if (empty($model->every_time)) {
             $model->every_time = 25;
         }
-        return $this->show(compact('model'));
+        return $this->render($model);
     }
 
     public function saveAction($id, $status = false) {
@@ -34,7 +34,7 @@ class TaskController extends Controller {
             ->get('name,every_time,description');
         $model = TaskModel::findOrNew($id);
         if ($id > 0 && $model->user_id !== auth()->id()) {
-            return $this->jsonFailure('任务不存在');
+            return $this->renderFailure('任务不存在');
         }
         $model->set($data)->user_id = auth()->id();
         if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
@@ -42,11 +42,9 @@ class TaskController extends Controller {
             $model->status = 0;
         }
         if ($model->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./task')
-            ]);
+            return $this->render($model);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id, $stop = false) {
@@ -56,8 +54,8 @@ class TaskController extends Controller {
         if (!$stop) {
             TaskModel::where('id', $id)->delete();
         }
-        return $this->jsonSuccess([
-            'url' => url('./task')
+        return $this->render([
+            'data' => true
         ]);
     }
 
@@ -65,41 +63,25 @@ class TaskController extends Controller {
         if (empty($time)) {
             $time = date('Y-m-d');
         }
-        $task_list = TaskRepository::getActiveTask();
-        if (empty($task_list)) {
-            return $this->redirectWithMessage(
-                './task/create', '请先添加任务'
-            );
-        }
-        $model_list = TaskDayModel::with('task')
+        $data = TaskDayModel::with('task')
             ->where('user_id', auth()->id())
             ->where('today', $time)->page();
-        return $this->show(compact('model_list', 'task_list'));
+        return $this->renderPage($data);
     }
 
-    public function createDayAction() {
-        return $this->runMethodNotProcess('editDay', ['id' => 0]);
-    }
-
-    public function editDayAction($id) {
+    public function detailDayAction($id) {
         $model = TaskDayModel::findOrNew($id);
-        $task_list = TaskRepository::getActiveTask();
-        if (empty($task_list)) {
-            return $this->redirectWithMessage(
-                './task/create', '请先添加任务'
-            );
-        }
         if ($model->isNewRecord) {
             $model->amount = 1;
         }
-        return $this->show(compact('model', 'task_list'));
+        return $this->render($model);
     }
 
     public function saveDayAction($task_id, $id = 0, $amount = 1) {
         $task = TaskModel::where('user_id', auth()->id())
             ->where('id', $task_id)->first();
         if (empty($task)) {
-            return $this->jsonFailure('任务不存在');
+            return $this->renderFailure('任务不存在');
         }
         if ($id > 0) {
             TaskDayModel::where('id', $id)->update([
@@ -109,9 +91,7 @@ class TaskController extends Controller {
         } else {
             TaskDayModel::add($task, $amount);
         }
-        return $this->jsonSuccess([
-            'url' => url('./task/today')
-        ]);
+        return $this->render(['data' => true]);
     }
 
     public function deleteDayAction($id) {
@@ -119,9 +99,7 @@ class TaskController extends Controller {
             TaskRepository::stop($id);
         } catch (\Exception $ex) {}
         TaskDayModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
-            'url' => url('./task/today')
-        ]);
+        return $this->render(['data' => true]);
     }
 
 
@@ -129,37 +107,37 @@ class TaskController extends Controller {
         try {
             $day = TaskRepository::start($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($day);
+        return $this->render($day);
     }
 
     public function pauseAction($id) {
         try {
             $day = TaskRepository::pause($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($day);
+        return $this->render($day);
     }
 
     public function stopAction($id) {
         try {
             $day = TaskRepository::stop($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($day);
+        return $this->render($day);
     }
 
     public function checkAction($id) {
         try {
             $day = TaskRepository::check($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
         if ($day === false) {
-            return $this->jsonSuccess($day);
+            return $this->render($day);
         }
         // 记录今天完成的任务次数，每4轮多休息
         $count = TaskLogModel::where('created_at', '>',
@@ -171,34 +149,34 @@ class TaskController extends Controller {
         if ($count % 4 === 0) {
             $tip = '本轮任务完成，请休息20-25分钟';
         }
-        return $this->jsonSuccess($day, $tip);
+        return $this->render(array_merge($day->toArray(), compact('tip')));
     }
 
     public function batchAddAction($id) {
         $task_list = TaskModel::where('user_id', auth()->id())
             ->whereIn('id', (array)$id)->get();
         if (empty($task_list)) {
-            return $this->jsonFailure('请选择任务');
+            return $this->renderFailure('请选择任务');
         }
         foreach ($task_list as $item) {
             TaskDayModel::add($item, 1);
         }
-        return $this->jsonSuccess();
+        return $this->render(['data' => true]);
     }
 
     public function stopTaskAction($id) {
         try {
             $day = TaskDayModel::findWithAuth($id);
             if (empty($day)) {
-                return $this->jsonFailure('任务不存在');
+                return $this->renderFailure('任务不存在');
             }
             if ($day->status != TaskDayModel::STATUS_NONE) {
-                return $this->jsonFailure('正在进行中的任务无法停止');
+                return $this->renderFailure('正在进行中的任务无法停止');
             }
             $task = TaskRepository::stopTask($day->task_id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($task);
+        return $this->render($task);
     }
 }
