@@ -54,8 +54,8 @@ $this->registerJs($js);
                 <?=Form::text('market_price')?>
             </div>
             <div class="zd-tab-item">
-                <?=Form::file('thumb')?>
-                <?=Form::file('picture')?>
+                <?=Form::file('thumb')->dialog(true)?>
+                <?=Form::file('picture')->dialog(true)?>
                 <div class="multi-image-box">
                     <?php foreach($gallery_list as $item):?>
                     <div class="image-item">
@@ -165,3 +165,5 @@ $this->registerJs($js);
     {{ /each }}
     </tbody>
 </script>
+
+<?php $this->extend('./imgDialog');?>

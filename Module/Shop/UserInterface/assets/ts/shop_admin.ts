@@ -435,6 +435,75 @@ function bindGoods(baseUri: string, goodsId: number) {
             return data.state == 'SUCCESS' ? data : false;
         }
     });
+    bindImgDialog(baseUri);
+}
+
+function bindImgDialog(baseUri: string) {
+    let dialog = $('.images-dialog').dialog();
+    let multiple = false;
+    let callback: (item: string| string[]) => void;
+    let hasMore = true;
+    let start = 0;
+    let size = 20;
+    dialog.box.on('click', '.img-item', function() {
+        let $this = $(this);
+        if (multiple) {
+            $this.toggleClass('selected');
+            return;
+        }
+        $this.addClass('selected').siblings().removeClass('selected');
+    }).on('scroll', function() {
+        if (!hasMore) {
+            return;
+        }
+        if (dialog.box.scrollTop() + 20 < dialog.box.height()) {
+            return;
+        }
+        $.getJSON('/ueditor.php', {
+            action: 'listimage',
+            start,
+            size,
+            noCache: new Date().getTime()
+        }, data => {
+            if (data.state !== 'SUCCESS') {
+                return;
+            }
+            hasMore = data.start + size < data.total;
+            start += size;
+            $.each(data.list, function() {
+                dialog.box.find('.dialog-body').append(`<div class="img-item"><img src="${this.url}" _src="${this.url}"></div>`);
+            });
+        });
+    });
+    dialog.on('done', function() {
+        let items = [];
+        dialog.find('.img-item.selected img').each(function() {
+            items.push($(this).attr('_src'));
+        });
+        this.close();
+        if (items.length < 1) {
+            return;
+        }
+        if (multiple) {
+            callback && callback(items);
+            return;
+        }
+        callback && callback(items[0]);
+    });
+    $(document).on('click', '[data-type="images"]', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        multiple = $this.data('mode') === 'multiple';
+        dialog.show();
+        let items = dialog.find('.img-item');
+        if (items.lenth > 0) {
+            items.removeClass('selected');
+        }
+        dialog.box.trigger('srcoll');
+        callback = (item) => {
+            $this.closest('.file-input').find('input').val(typeof item === 'string' ? item :  item.join(';'));
+        };
+    });
 }
 
 ///

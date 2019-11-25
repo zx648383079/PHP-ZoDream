@@ -18,6 +18,7 @@ return [
     'site title' => 'zodream梦想开源',
     'Upload' => '上传',
     'Preview' => '预览',
+    'Online' => '在线',
     'Please input' => '请输入',
     'loading...' => '加载中...',
     'back home' => '返回首页',

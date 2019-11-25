@@ -562,3 +562,20 @@ table {
 		text-align: center;
 	}
 }
+.images-dialog {
+	.dialog-body {
+		height: 300px;
+		overflow-y: auto;
+		.img-item {
+			display: inline-block;
+			cursor: pointer;
+			img {
+				width: 113px;
+				height: 113px;
+			}
+			.selected {
+				border: 2px solid #0f0;
+			}
+		}
+	}
+}
