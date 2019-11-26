@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Domain\Model\Concerns;
 
+use Module\Auth\Domain\Events\Login;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
@@ -41,6 +42,7 @@ trait LoginTrait {
             $this->setError($user->getError());
             return false;
         }
+        event(new Login($user, $_SERVER['HTTP_USER_AGENT'], app('request')->ip(), time()));
         return $user->login();
     }
 

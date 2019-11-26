@@ -23,6 +23,7 @@ use Zodream\Service\Factory;
  * @property integer $sex
  * @property string $avatar
  * @property integer $money
+ * @property integer $parent_id
  * @property string $token
  * @property integer $status
  * @property integer $created_at
@@ -134,7 +135,7 @@ class UserModel extends BaseModel {
      *
      * @param $username
      * @param $password
-     * @return bool|UserModel|void|\Zodream\Infrastructure\Interfaces\UserObject
+     * @return bool|UserModel
      * @throws \Exception
      */
 	public static function findByAccount($username, $password) {

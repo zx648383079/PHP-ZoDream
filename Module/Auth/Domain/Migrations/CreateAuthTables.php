@@ -34,6 +34,7 @@ class CreateAuthTables extends Migration {
             $table->set('sex')->tinyint(1)->defaultVal(0);
             $table->set('avatar')->varchar(255);
             $table->set('money')->int()->defaultVal(0)->unsigned();
+            $table->set('parent_id')->int(10, true, true)->defaultVal(0);
             $table->set('token')->varchar(60);
             $table->set('status')->tinyint(2)->defaultVal(UserModel::STATUS_ACTIVE);
             $table->timestamps();
