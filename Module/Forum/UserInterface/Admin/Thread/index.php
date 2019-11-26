@@ -49,7 +49,7 @@ $this->title = '帖子列表';
                 <?=Str::substr($item->title, 0, 20, true)?></td>
             <td>
                 <?php if ($item->forum):?>
-                    <a href="<?=$this->url('./admin/thread', ['forum_id' => $item->forum_id])?>">
+                    <a href="<?=$this->url('./@admin/thread', ['forum_id' => $item->forum_id])?>">
                         <?=$item->forum->name?>
                     </a>
                 <?php else:?>
@@ -63,7 +63,7 @@ $this->title = '帖子列表';
             <td>
                 <div class="btn-group  btn-group-xs">
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./thread', ['id' => $item->id])?>" target="_blank">查看</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/thread/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/thread/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

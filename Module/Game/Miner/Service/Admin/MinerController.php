@@ -23,7 +23,7 @@ class MinerController extends Controller {
         $model = new MinerModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => url('./admin/miner')
+                'url' => url('./@admin/miner')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -32,7 +32,7 @@ class MinerController extends Controller {
     public function deleteAction($id) {
         MinerModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => url('./admin/miner')
+            'url' => url('./@admin/miner')
         ]);
     }
 }

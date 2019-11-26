@@ -8,7 +8,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '分类';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/term/save')?>
+<?=Form::open($model, './@admin/term/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>

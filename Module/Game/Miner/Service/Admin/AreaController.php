@@ -23,7 +23,7 @@ class AreaController extends Controller {
         $model = new AreaModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => url('./admin/area')
+                'url' => url('./@admin/area')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -32,7 +32,7 @@ class AreaController extends Controller {
     public function deleteAction($id) {
         AreaModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => url('./admin/area')
+            'url' => url('./@admin/area')
         ]);
     }
 }

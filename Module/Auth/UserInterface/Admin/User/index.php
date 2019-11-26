@@ -14,7 +14,7 @@ $this->title = '用户列表';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/user/create')?>">新增用户</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/user/create')?>">新增用户</a>
 </div>
 
 <table class="table  table-bordered well">
@@ -42,10 +42,10 @@ $this->title = '用户列表';
             <td class="auto-hide"><?=$item->created_at?></td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/user/account', ['id' => $item->id])?>">明细</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/user/account', ['id' => $item->id])?>">明细</a>
                     <?php if($item->id != auth()->id()):?>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/user/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/user/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/user/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/user/delete', ['id' => $item->id])?>">删除</a>
                     <?php endif;?>
                 </div>
             </td>

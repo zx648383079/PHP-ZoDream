@@ -15,7 +15,7 @@ $this->title = '账户明细列表';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/user/recharge', ['id' => $user->id])?>">手动充值</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/user/recharge', ['id' => $user->id])?>">手动充值</a>
 </div>
 
 <table class="table  table-bordered well">

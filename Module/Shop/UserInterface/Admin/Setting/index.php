@@ -23,13 +23,13 @@ function parseArr($value) {
 
 
 $this->title = '基本设置';
-$url = $this->url('./admin'); 
+$url = $this->url('./@admin'); 
 $js = <<<JS
 bindSetting('{$url}');
 JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
-<?=Form::open('./admin/setting/save')?>
+<?=Form::open('./@admin/setting/save')?>
     <div class="zd-tab option-box">
         <div class="zd-tab-head">
             <?php foreach($group_list as $group):?>
@@ -89,7 +89,7 @@ $this->registerJs($js, View::JQUERY_READY);
         <div class="dialog-title">编辑选择项</div><i class="fa fa-close dialog-close"></i>
     </div>
     <div class="dialog-body">
-    <?=Form::open('./admin/setting/update')?>
+    <?=Form::open('./@admin/setting/update')?>
         <?=Theme::text('name', '', '名称')?>
         <?=Theme::select('type', ['group' => '分组', 'text' => '文本', 'textarea' => '多行文本', 'select' => '下拉选择', 'radio' => '单选', 'checkbox' => '多选', 'bool' => '开关', 'image' => '图片', 'file' => '文件'], 'group', '类型')?>
         <div class="group-property">

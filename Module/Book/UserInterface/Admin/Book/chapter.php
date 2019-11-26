@@ -14,7 +14,7 @@ $this->title = $book->name;
             <button type="submit" class="btn btn-default">搜索</button>
             <input type="hidden" name="book" value="<?=$book->id?>">
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/book/create_chapter', ['book' => $book->id])?>">新增章节</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/book/create_chapter', ['book' => $book->id])?>">新增章节</a>
     </div>
 
     <table class="table  table-bordered well">
@@ -38,8 +38,8 @@ $this->title = $book->name;
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/book/edit_chapter', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/book/delete_chapter', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book/edit_chapter', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/book/delete_chapter', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

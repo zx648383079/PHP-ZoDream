@@ -31,9 +31,9 @@ $this->title = '历史记录';
                 <td><?=$item->message?></td>
                 <td>
                     <?php if($item->mark < 1):?>
-                    <a data-type="ajax" href="<?=$this->url('./admin/log/mark', ['id' => $item->id])?>">标记</a>
+                    <a data-type="ajax" href="<?=$this->url('./@admin/log/mark', ['id' => $item->id])?>">标记</a>
                     <?php endif;?>
-                    <a data-type="del" href="<?=$this->url('./admin/log/delete', ['id' => $item->id])?>">删除</a>
+                    <a data-type="del" href="<?=$this->url('./@admin/log/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

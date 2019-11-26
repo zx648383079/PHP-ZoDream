@@ -7,7 +7,7 @@ use Zodream\Html\Dark\Theme;
 $this->title = '淘宝客设置';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open('./admin/plugin/tbk/setting')?>
+<?=Form::open('./@admin/plugin/tbk/setting')?>
     <?=Theme::text('option[taobaoke][app_key]', $data['app_key'], 'APP KEY', '', true)?>
     <?=Theme::text('option[taobaoke][secret]', $data['secret'], 'Secret', '', true)?>
     

@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '属性类型';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/attribute/save_group')?>
+<?=Form::open($model, './@admin/attribute/save_group')?>
     <?=Form::text('name', true)?>
     <?=Form::textarea('attr_group')?>
     <button type="submit" class="btn btn-success">确认保存</button>

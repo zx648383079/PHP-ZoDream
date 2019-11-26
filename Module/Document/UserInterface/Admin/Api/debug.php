@@ -15,7 +15,7 @@ $this->title = '接口调试';
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
-        <form id="js_requestForm" method="post" action="<?=$this->url('./admin/api/debug_result')?>">
+        <form id="js_requestForm" method="post" action="<?=$this->url('./@admin/api/debug_result')?>">
             <input type="hidden" name="id" value="<?=$api->id?>">
         <div class="row">
             <div class="col-lg-7">

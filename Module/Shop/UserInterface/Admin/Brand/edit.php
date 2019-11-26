@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '品牌';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/brand/save')?>
+<?=Form::open($model, './@admin/brand/save')?>
     <?=Form::text('name', true)?>
     <?=Form::file('logo')?>
     <?=Form::text('keywords')?>

@@ -22,7 +22,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -32,17 +32,17 @@ $this->registerCssFile([
          [
              [
                  '小说列表',
-                 './admin/book',
+                 './@admin/book',
                  'fa fa-list'
              ],
              [
                  '新建小说',
-                 './admin/book/create',
+                 './@admin/book/create',
                  'fa fa-plus'
              ],
              [
                 '同步小说',
-                './admin/book/import',
+                './@admin/book/import',
                 'fa fa-retweet'
              ]
          ],
@@ -55,12 +55,12 @@ $this->registerCssFile([
          [
              [
                  '分类列表',
-                 './admin/category',
+                 './@admin/category',
                  'fa fa-list'
              ],
              [
                  '新增分类',
-                 './admin/category/create',
+                 './@admin/category/create',
                  'fa fa-plus'
              ]
          ],
@@ -72,12 +72,12 @@ $this->registerCssFile([
          [
              [
                  '作者列表',
-                 './admin/author',
+                 './@admin/author',
                  'fa fa-list'
              ],
              [
                  '新增作者',
-                 './admin/author/create',
+                 './@admin/author/create',
                  'fa fa-plus'
              ]
          ],

@@ -13,7 +13,7 @@ $this->registerCssFile('@select2.min.css')
     ->registerJs($js, View::JQUERY_READY);
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/payment/save')?>
+<?=Form::open($model, './@admin/payment/save')?>
     <?=Form::text('name', true)?>
     <?=Form::file('icon')?>
     <?=Form::select('code', $pay_list, true)?>

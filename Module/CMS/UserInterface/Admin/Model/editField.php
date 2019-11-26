@@ -5,7 +5,7 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 
 $this->title = $model->id > 0 ? '编辑' : '新增'.'字段';
-$url = $this->url('./admin/model/option');
+$url = $this->url('./@admin/model/option');
 $js = <<<JS
 bindField('{$url}');
 JS;
@@ -13,7 +13,7 @@ $this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/model/save_field')?>
+<?=Form::open($model, './@admin/model/save_field')?>
     <?=Form::text('name', true)?>
     <?=Form::text('field', true)?>
     <?=Form::radio('is_main', ['否', '是'])?>

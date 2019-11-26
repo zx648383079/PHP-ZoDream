@@ -22,7 +22,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -32,17 +32,17 @@ $this->registerCssFile([
         [
             [
                 '矿场列表',
-                './admin/area',
+                './@admin/area',
                 'fa fa-list'
             ],
             [
                 '矿工种类',
-                './admin/miner',
+                './@admin/miner',
                 'fa fa-list'
             ],
             [
                 '住宅种类',
-                './admin/house',
+                './@admin/house',
                 'fa fa-list'
             ],
         ]

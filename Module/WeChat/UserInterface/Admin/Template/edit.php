@@ -14,7 +14,7 @@ $this->title = '编辑图文模板';
     <span class="toggle"></span>
 </div>
 
-<?=Form::open($model, './admin/template/save')?>
+<?=Form::open($model, './@admin/template/save')?>
     <?=Form::text('name', true)?>
     <?=Form::select('type', MediaTemplateModel::$type_list)?>
     <?=Form::select('category', ['不限'])?>

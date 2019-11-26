@@ -55,15 +55,15 @@ $this->title = '订单列表';
                 <?php endif;?>
             </div>
             <div class="item-actions">
-                <a href="<?=$this->url('./admin/order/info', ['id' => $item->id])?>">订单详情</a>
+                <a href="<?=$this->url('./@admin/order/info', ['id' => $item->id])?>">订单详情</a>
                 <?php if($item->status == OrderModel::STATUS_UN_PAY):?>
-                <a href="<?=$this->url('./admin/order/info', ['id' => $item->id])?>">修改运费</a>
+                <a href="<?=$this->url('./@admin/order/info', ['id' => $item->id])?>">修改运费</a>
                 <?php endif;?>
                 <?php if($item->status == OrderModel::STATUS_SHIPPED):?>
-                <a href="<?=$this->url('./admin/order/info', ['id' => $item->id])?>">拒收</a>
+                <a href="<?=$this->url('./@admin/order/info', ['id' => $item->id])?>">拒收</a>
                 <?php endif;?>
                 <?php if(in_array($item->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_CANCEL, OrderModel::STATUS_INVALID])):?>
-                <a class="btn-danger" data-type="del" href="<?=$this->url('./admin/order/delete', ['id' => $item->id])?>">删除</a>
+                <a class="btn-danger" data-type="del" href="<?=$this->url('./@admin/order/delete', ['id' => $item->id])?>">删除</a>
                 <?php endif;?>
             </div>
         </div>

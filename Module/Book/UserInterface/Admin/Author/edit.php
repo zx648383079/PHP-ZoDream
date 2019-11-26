@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '作者';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/author/save')?>
+<?=Form::open($model, './@admin/author/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>

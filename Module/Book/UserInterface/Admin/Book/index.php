@@ -41,8 +41,8 @@ $this->title = 'ZoDream';
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-       <a class="btn btn-success pull-right" href="<?=$this->url('./admin/book/create')?>">新增小说</a>
-       <a class="btn btn-success pull-right" data-type="ajax" href="<?=$this->url('./admin/book/refresh')?>">整理小说</a>
+       <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/book/create')?>">新增小说</a>
+       <a class="btn btn-success pull-right" data-type="ajax" href="<?=$this->url('./@admin/book/refresh')?>">整理小说</a>
     </div>
 
     <table class="table  table-bordered well">
@@ -65,7 +65,7 @@ $this->title = 'ZoDream';
                 </td>
                 <td>
                     <?php if ($item->category):?>
-                        <a href="<?=$this->url('./admin/book', ['cat_id' => $item->cat_id])?>">
+                        <a href="<?=$this->url('./@admin/book', ['cat_id' => $item->cat_id])?>">
                             <?=$item->category->name?>
                         </a>
                     <?php else:?>
@@ -74,7 +74,7 @@ $this->title = 'ZoDream';
                 </td>
                 <td>
                     <?php if ($item->author):?>
-                        <a href="<?=$this->url('./admin/book', ['author_id' => $item->author_id])?>">
+                        <a href="<?=$this->url('./@admin/book', ['author_id' => $item->author_id])?>">
                             <?=$item->author->name?>
                         </a>
                     <?php else:?>
@@ -86,9 +86,9 @@ $this->title = 'ZoDream';
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/book/chapter', ['book' => $item->id])?>">章节</a>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/book/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/book/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book/chapter', ['book' => $item->id])?>">章节</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/book/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

@@ -8,7 +8,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '标签';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/tag/save')?>
+<?=Form::open($model, './@admin/tag/save')?>
     <?=Form::text('name', true)?>
     <?=Form::textarea('description')?>
 

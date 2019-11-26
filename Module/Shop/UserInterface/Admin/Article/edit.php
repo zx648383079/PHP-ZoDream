@@ -16,7 +16,7 @@ JS;
 $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/article/save')?>
+<?=Form::open($model, './@admin/article/save')?>
 <div class="zd-tab">
         <div class="zd-tab-head">
             <div class="zd-tab-item active">

@@ -23,7 +23,7 @@ use Zodream\Template\View;
         </td>
         <td>
             <div class="btn-group  btn-group-xs">
-                <a class="btn btn-danger" href="<?=$this->url('./admin/activity/seckill/deleteGoods', ['id' => $item->id])?>">删除</a>
+                <a class="btn btn-danger" href="<?=$this->url('./@admin/activity/seckill/deleteGoods', ['id' => $item->id])?>">删除</a>
             </div>
         </td>
     </tr>

@@ -12,7 +12,7 @@ class SiteController extends Controller {
     public function indexAction($id = 0) {
         $site = SiteModel::findOrDefault($id, ['name' => 'new site', 'title' => 'New Site', 'thumb' => '']);
         if ($site->id > 0 && $site->user_id != auth()->id()) {
-            return $this->redirect('./admin');
+            return $this->redirect('./@admin');
         }
         $page_list = [];
         if ($site->id > 0) {

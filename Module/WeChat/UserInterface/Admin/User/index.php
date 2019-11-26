@@ -12,7 +12,7 @@ $this->title = '用户管理';
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a data-type="ajax" href="<?=$this->url('./admin/user/refresh')?>">同步</a>
+    <a data-type="ajax" href="<?=$this->url('./@admin/user/refresh')?>">同步</a>
 </div>
 <table>
     <thead>
@@ -33,9 +33,9 @@ $this->title = '用户管理';
                 <td><?=$item->status_label?></td>
                 <td>
                     <?php if($item->status === 0):?>
-                     <a href="<?=$this->url('./admin/reply/all', ['user_id' => $item->id])?>">群发消息</a>
+                     <a href="<?=$this->url('./@admin/reply/all', ['user_id' => $item->id])?>">群发消息</a>
                     <?php endif;?>
-                    <a data-type="del" href="<?=$this->url('./admin/user/delete', ['id' => $item->id])?>">删除</a>
+                    <a data-type="del" href="<?=$this->url('./@admin/user/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

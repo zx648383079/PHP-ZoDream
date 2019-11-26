@@ -31,7 +31,7 @@ $this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <h1><?=$this->title?></h1>
-<?= Form::open($model, './admin/project/save') ?>
+<?= Form::open($model, './@admin/project/save') ?>
     <?= Form::text('name', true) ?>
     <?php if(!$model->id):?>
     <?= Form::select('type', ['普通文档', 'API文档']) ?>

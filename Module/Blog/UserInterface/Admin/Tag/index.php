@@ -8,7 +8,7 @@ $canDo = auth()->user()->isAdministrator();
 ?>
 
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/tag/create')?>">新增标签</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/tag/create')?>">新增标签</a>
 </div>
 
 <table class="table  table-bordered well">
@@ -29,8 +29,8 @@ $canDo = auth()->user()->isAdministrator();
             <td>
                 <?php if($canDo):?>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/tag/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/tag/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/tag/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/tag/delete', ['id' => $item->id])?>">删除</a>
                 </div>
                 <?php endif;?>
                 

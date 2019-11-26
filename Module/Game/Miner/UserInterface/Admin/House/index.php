@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '住宅种类';
 ?>
 
-<a class="btn btn-success" href="<?=$this->url('./admin/house/create')?>">新增住宅</a>
+<a class="btn btn-success" href="<?=$this->url('./@admin/house/create')?>">新增住宅</a>
 <hr/>
 <div>
     <div class="col-xs-12">
@@ -32,8 +32,8 @@ $this->title = '住宅种类';
                         <?=$item->amount?>
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="<?=$this->url('./admin/house/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/house/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/house/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/house/delete', ['id' => $item->id])?>">删除</a>
                     </td>
                 </tr>
             <?php endforeach?>

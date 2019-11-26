@@ -11,7 +11,7 @@ JS;
 $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/shipping/save')?>
+<?=Form::open($model, './@admin/shipping/save')?>
     <?=Form::text('name', true)?>
     <?=Form::file('icon')?>
     <?=Form::select('code', $shipping_list, true)?>

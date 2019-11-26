@@ -8,7 +8,7 @@ $this->title = '个人资料';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/account/update')?>
+<?=Form::open($model, './@admin/account/update')?>
     <?=Form::text('name', true)?>
     <?=Form::email('email', true)?>
     <?=Form::radio('sex', $model->sex_list)?>

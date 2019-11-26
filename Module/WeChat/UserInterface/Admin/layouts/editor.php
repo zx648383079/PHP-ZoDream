@@ -17,7 +17,7 @@ if (!isset($model)) {
 }
 $type_id = $model->getEditor('type');
 $scene = $model->getEditor('scene');
-$this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? $type_id : $tab_id[0], $this->url('./admin/', false)));
+$this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? $type_id : $tab_id[0], $this->url('./@admin/', false)));
 ?>
 <div class="zd-tab wx-editor">
     <div class="zd-tab-head">

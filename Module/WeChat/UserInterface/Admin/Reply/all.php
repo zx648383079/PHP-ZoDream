@@ -15,7 +15,7 @@ $this->title = '群发消息';
     <span class="toggle"></span>
 </div>
 
-<?=Form::open('./admin/reply/send_all')?>
+<?=Form::open('./@admin/reply/send_all')?>
     <?=Theme::select('user_id', [$user_list, [0 => '发送全部']], $user_id, '接收方')?>
     <?php $this->extend('../layouts/editor', [
         'tab_id' => [0, 1, 2, 3]

@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '满减/满送';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open('./admin/activity/save')?>
+<?=Form::open('./@admin/activity/save')?>
     <?=Form::text('name', true)?>
     <?=Form::textarea('description')?>
     <?=Form::radio('活动范围', ['全部商品', '指定分类', '指定品牌', '指定商品'])?>

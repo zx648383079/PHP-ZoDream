@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '秒杀时间';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/activity/seckill/save_time')?>
+<?=Form::open($model, './@admin/activity/seckill/save_time')?>
     <?=Form::text('title')?>
     <div class="input-group">
         <label for="start_at">起止时间</label>

@@ -25,8 +25,8 @@ $this->title = '支付方式列表';
                 <td><?=$item->goods_count?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/payment/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/payment/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/payment/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/payment/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

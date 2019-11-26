@@ -46,7 +46,7 @@ $this->title = '订单发货';
     </div>
 </div>
 
-<?=Form::open($order, './admin/order/save')?>
+<?=Form::open($order, './@admin/order/save')?>
 <div class="panel">
     <div class="panel-header">
         填写发货信息

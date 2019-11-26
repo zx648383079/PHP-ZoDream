@@ -23,7 +23,7 @@ class ProductController extends Controller {
         $model = new BankProductModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => url('./admin/product')
+                'url' => url('./@admin/product')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -32,7 +32,7 @@ class ProductController extends Controller {
     public function deleteAction($id) {
         BankProductModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => url('./admin/product')
+            'url' => url('./@admin/product')
         ]);
     }
 }

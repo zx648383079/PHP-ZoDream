@@ -22,12 +22,12 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
         '签到设置',
-        './admin/setting',
+        './@admin/setting',
         'fa fa-calendar-check'
     ],
 ], $content, 'ZoDream Check In Admin') ?>

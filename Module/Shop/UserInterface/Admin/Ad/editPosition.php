@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '广告位';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/ad/save_position')?>
+<?=Form::open($model, './@admin/ad/save_position')?>
     <?=Form::text('name', true)?>
     <?=Form::text('width', '100%')?>
     <?=Form::text('height', '100%')?>

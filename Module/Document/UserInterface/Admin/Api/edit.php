@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = $model->id ?  '编辑接口:'.$model->name : '新建接口';
-$url = $this->url('./admin/api/', false);
+$url = $this->url('./@admin/api/', false);
 $js = <<<JS
     editApi('{$url}', {$model->id});
 JS;
@@ -12,7 +12,7 @@ $this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
-<?= Form::open($model, './admin/api/save') ?>
+<?= Form::open($model, './@admin/api/save') ?>
     <?= Form::text('name', true) ?>
     <?= Form::select('parent_id', [$tree_list, [0 => '-- 顶级 --']])?>
 

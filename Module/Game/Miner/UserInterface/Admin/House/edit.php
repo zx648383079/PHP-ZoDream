@@ -8,7 +8,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'住宅';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/house/save')?>
+<?=Form::open($model, './@admin/house/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('amount', true)?>
     <?=Form::text('price', true)?>

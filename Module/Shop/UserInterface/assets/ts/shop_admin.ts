@@ -443,6 +443,7 @@ function bindImgDialog(baseUri: string) {
     let multiple = false;
     let callback: (item: string| string[]) => void;
     let hasMore = true;
+    let isLoading = false;
     let start = 0;
     let size = 20;
     dialog.box.on('click', '.img-item', function() {
@@ -452,26 +453,30 @@ function bindImgDialog(baseUri: string) {
             return;
         }
         $this.addClass('selected').siblings().removeClass('selected');
-    }).on('scroll', function() {
-        if (!hasMore) {
+    });
+    let boxBody = dialog.find('.dialog-body').on('scroll', function() {
+        let $this = $(this);
+        if (!hasMore || isLoading) {
             return;
         }
-        if (dialog.box.scrollTop() + 20 < dialog.box.height()) {
+        if ($this.height() + $this.scrollTop() + 20 < this.scrollHeight) {
             return;
         }
+        isLoading = true;
         $.getJSON('/ueditor.php', {
             action: 'listimage',
             start,
             size,
             noCache: new Date().getTime()
         }, data => {
+            isLoading = false;
             if (data.state !== 'SUCCESS') {
                 return;
             }
-            hasMore = data.start + size < data.total;
-            start += size;
+            start = parseInt(data.start) + size;
+            hasMore = start < data.total;
             $.each(data.list, function() {
-                dialog.box.find('.dialog-body').append(`<div class="img-item"><img src="${this.url}" _src="${this.url}"></div>`);
+                $this.append(`<div class="img-item"><img src="${this.url}" _src="${this.url}"></div>`);
             });
         });
     });
@@ -496,10 +501,10 @@ function bindImgDialog(baseUri: string) {
         multiple = $this.data('mode') === 'multiple';
         dialog.show();
         let items = dialog.find('.img-item');
-        if (items.lenth > 0) {
+        if (items.length > 0) {
             items.removeClass('selected');
         }
-        dialog.box.trigger('srcoll');
+        boxBody.trigger('scroll');
         callback = (item) => {
             $this.closest('.file-input').find('input').val(typeof item === 'string' ? item :  item.join(';'));
         };

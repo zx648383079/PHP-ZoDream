@@ -16,9 +16,9 @@ $this->registerJs($js, View::JQUERY_READY);
                 <div class="page-header">
                     <h1>接口主页 </h1>
                     <div class="opt-btn">
-                        <a href="<?=$this->url('./admin/api/edit', ['id' => $api->id])?>" class="btn btn-default"><i class="fa fa-fw fa-edit"></i>编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/api/delete', ['id' => $api->id])?>"><i class="fa fa-fw fa-times"></i>删除</a>
-                        <a href="<?=$this->url('./admin/api/debug', ['id' => $api->id])?>" class="btn btn-default"><i class="fa fa-fw fa-wrench"></i>调试</a>
+                        <a href="<?=$this->url('./@admin/api/edit', ['id' => $api->id])?>" class="btn btn-default"><i class="fa fa-fw fa-edit"></i>编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/api/delete', ['id' => $api->id])?>"><i class="fa fa-fw fa-times"></i>删除</a>
+                        <a href="<?=$this->url('./@admin/api/debug', ['id' => $api->id])?>" class="btn btn-default"><i class="fa fa-fw fa-wrench"></i>调试</a>
 
                     </div>
                 </div>
@@ -224,7 +224,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <div class="col-lg-12">
         <div class="zd-panel panel-default">
             <div class="zd-panel-head">
-                返回示例<a role="button" href="javascript:refreshMock('<?=$this->url('./admin/api/mock', ['id' => $api->id])?>');" class="btn fa fa-sync" title="刷新数据" ></a>
+                返回示例<a role="button" href="javascript:refreshMock('<?=$this->url('./@admin/api/mock', ['id' => $api->id])?>');" class="btn fa fa-sync" title="刷新数据" ></a>
             </div>
             <div class="zd-panel-body">
                 <div class="json-box">

@@ -30,7 +30,7 @@ $this->registerJsFile([
 ?>
 
 <h1><?=$this->title?></h1>
-<?= Form::open($model, './admin/page/save') ?>
+<?= Form::open($model, './@admin/page/save') ?>
     <?= Form::text('name', true) ?>
     <?= Form::select('parent_id', [$tree_list, [0 => '-- 顶级 --']])?>
 

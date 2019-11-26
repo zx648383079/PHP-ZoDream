@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '分类';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/article/save_category')?>
+<?=Form::open($model, './@admin/article/save_category')?>
     <?=Form::text('name', true)?>
     <?=Form::select('parent_id', [$cat_list, [0 => '-- 无上级分类 --']], true)?>
     <?=Form::file('thumb')?>

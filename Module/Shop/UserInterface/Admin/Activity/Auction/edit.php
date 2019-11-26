@@ -13,7 +13,7 @@ JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/activity/coupon/save')?>
+<?=Form::open($model, './@admin/activity/coupon/save')?>
     <?=Form::text('goods_id', true)?>
     <?=Form::text('name')?>
     <div class="input-group">

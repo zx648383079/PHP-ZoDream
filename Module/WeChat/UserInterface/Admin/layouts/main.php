@@ -24,7 +24,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -34,27 +34,27 @@ $this->registerCssFile([
         [
             [
                 '关注回复',
-                ['./admin/reply', 'event' => 'subscribe'],
+                ['./@admin/reply', 'event' => 'subscribe'],
                 'fa fa-list'
             ],
             [
                 '自动回复',
-                ['./admin/reply', 'event' => 'default'],
+                ['./@admin/reply', 'event' => 'default'],
                 'fa fa-list'
             ],
             [
                 '关键字回复',
-                './admin/reply',
+                './@admin/reply',
                 'fa fa-list'
             ],
             [
                 '群发消息',
-                './admin/reply/all',
+                './@admin/reply/all',
                 'fa fa-list'
             ],
             [
                 '模板消息',
-                './admin/reply/template',
+                './@admin/reply/template',
                 'fa fa-list'
             ]
         ]
@@ -66,34 +66,34 @@ $this->registerCssFile([
         [
             [
                 '图文消息',
-                ['./admin/media', 'type' => 'news'],
+                ['./@admin/media', 'type' => 'news'],
                 'fa fa-list',
             ],
             [
                 '图片',
-                ['./admin/media', 'type' => 'image'],
+                ['./@admin/media', 'type' => 'image'],
                 'fa fa-image',
             ],
             [
                 '语音',
-                ['./admin/media', 'type' => 'voice'],
+                ['./@admin/media', 'type' => 'voice'],
                 'fa fa-music',
             ],
             [
                 '视频',
-                ['./admin/media', 'type' => 'video'],
+                ['./@admin/media', 'type' => 'video'],
                 'fa fa-video',
             ],
             [
                 '图文模板管理',
-                ['./admin/template'],
+                ['./@admin/template'],
                 'fa fa-list',
             ],
         ]
     ],
     [
         '菜单管理',
-        './admin/menu',
+        './@admin/menu',
         'fa 
         fa-puzzle-piece',
     ],
@@ -104,12 +104,12 @@ $this->registerCssFile([
         [
             [
                 '已关注',
-                './admin/user',
+                './@admin/user',
                 'fa fa-list'
             ],
             [
                 '黑名单',
-                ['./admin/user', 'backlist' => 1],
+                ['./@admin/user', 'backlist' => 1],
                 'fa fa-bomb'
             ]
         ]
@@ -121,12 +121,12 @@ $this->registerCssFile([
         [
             [
                 '全部消息',
-                './admin/log',
+                './@admin/log',
                 'fa fa-list'
             ],
             [
                 '已收藏的消息',
-                ['./admin/log', 'mark' => 1],
+                ['./@admin/log', 'mark' => 1],
                 'fa fa-heart'
             ]
         ]
@@ -138,7 +138,7 @@ $this->registerCssFile([
         [
             [
                 '公众号列表',
-                './admin/manage',
+                './@admin/manage',
                 'fa fa-list'
             ]
         ],

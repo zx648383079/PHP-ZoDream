@@ -7,7 +7,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'分组';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/group/save')?>
+<?=Form::open($model, './@admin/group/save')?>
     <?=Form::text('name', true)?>
     <?=Form::radio('type', ['栏目', '内容'])?>
     <?=Form::textarea('description')?>

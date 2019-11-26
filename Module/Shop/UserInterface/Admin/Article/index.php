@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '文章列表';
 ?>
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/article/create')?>">新增文章</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/article/create')?>">新增文章</a>
 </div>
 
 <table class="table table-bordered well">
@@ -25,8 +25,8 @@ $this->title = '文章列表';
             <td><?=$item->category->name?></td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/article/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/article/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/article/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/article/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

@@ -9,7 +9,7 @@ bindEdit();
 JS;
 $this->registerJs($js);
 ?>
-<?=Form::open($model, './admin/site/save')?>
+<?=Form::open($model, './@admin/site/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('title', true)?>
     <?=Form::text('keywords')?>
@@ -20,7 +20,7 @@ $this->registerJs($js);
         <?php foreach($theme_list as $item):?>
             <div class="theme-item<?=$item->id == $model->theme_id ? ' active' : ''?>" data-id="<?=$item->id?>">
                 <div class="thumb">
-                    <img src="<?=$this->url('./admin/theme/asset',
+                    <img src="<?=$this->url('./@admin/theme/asset',
                         ['file' => $item['thumb']], false)?>" alt="">
                 </div>
                 <div class="name"><?=$item['name']?></div>

@@ -8,7 +8,7 @@ $this->title = '账户充值';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open('./admin/user/recharge_save')?>
+<?=Form::open('./@admin/user/recharge_save')?>
     <div class="input-group">
         <label>账号</label>
         <div>

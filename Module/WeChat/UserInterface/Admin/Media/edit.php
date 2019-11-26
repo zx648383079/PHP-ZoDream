@@ -18,7 +18,7 @@ $this->registerJs($js);
     <span class="toggle"></span>
 </div>
 
-<?=Form::open($model, './admin/media/save')?>
+<?=Form::open($model, './@admin/media/save')?>
     <?=Form::text('title', true)?>
     <?=Form::select('parent_id', [$model_list, 'id', 'title', ['无']])?>
     <?=Form::text('thumb', true)?>
@@ -29,7 +29,7 @@ $this->registerJs($js);
         <div class="editor-template-box">
             <ul class="template-menu">
                 <?php foreach(MediaTemplateModel::$type_list as $key => $item):?>
-                    <li data-url="<?=$this->url('./admin/template', ['type' => $key])?>"><?=$item?></li>
+                    <li data-url="<?=$this->url('./@admin/template', ['type' => $key])?>"><?=$item?></li>
                 <?php endforeach;?>
             </ul>
             <div class="template-box">

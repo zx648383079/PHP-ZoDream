@@ -8,7 +8,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'项目';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/product/save')?>
+<?=Form::open($model, './@admin/product/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('min_amount', true)?>
     <?=Form::text('cycle', true)?>

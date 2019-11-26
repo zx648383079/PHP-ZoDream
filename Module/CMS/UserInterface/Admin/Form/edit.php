@@ -6,7 +6,7 @@ $this->title = '编辑表单';
 ?>
 
 <h1><?=$this->title?></h1>
-<form data-type="ajax" action="<?=$this->url('./admin/form/save')?>" method="post" class="form-table" role="form">
+<form data-type="ajax" action="<?=$this->url('./@admin/form/save')?>" method="post" class="form-table" role="form">
     <div class="zd-tab">
         <div class="zd-tab-head">
             <?php foreach($tab_list as $key => $item):?>

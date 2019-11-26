@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '矿工种类';
 ?>
 
-<a class="btn btn-success" href="<?=$this->url('./admin/miner/create')?>">新增工种</a>
+<a class="btn btn-success" href="<?=$this->url('./@admin/miner/create')?>">新增工种</a>
 <hr/>
 <div>
     <div class="col-xs-12">
@@ -32,8 +32,8 @@ $this->title = '矿工种类';
                         <?=$item->earnings?>
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="<?=$this->url('./admin/miner/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/miner/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/miner/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/miner/delete', ['id' => $item->id])?>">删除</a>
                     </td>
                 </tr>
             <?php endforeach?>

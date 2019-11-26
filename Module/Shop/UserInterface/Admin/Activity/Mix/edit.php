@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '抽奖';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open('./admin/activity/save')?>
+<?=Form::open('./@admin/activity/save')?>
     <?=Form::text('name', true)?>
     <?=Form::textarea('description')?>
 

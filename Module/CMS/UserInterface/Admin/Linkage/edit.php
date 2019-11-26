@@ -7,7 +7,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'联动菜单';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/linkage/save')?>
+<?=Form::open($model, './@admin/linkage/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('code', true)?>
     <?=Form::radio('type', ['栏目', '内容'])?>

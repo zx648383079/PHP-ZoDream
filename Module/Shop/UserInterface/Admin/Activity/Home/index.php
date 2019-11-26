@@ -124,7 +124,7 @@ $this->title = '营销中心';
                 <p>通过可视化进行装修专题</p>
             </div>
         </div>
-        <a class="column-item" href="<?=$this->url('./admin/activity/coupon')?>">
+        <a class="column-item" href="<?=$this->url('./@admin/activity/coupon')?>">
             <div class="icon">
                 <div class="fa fa-folder"></div>
             </div>

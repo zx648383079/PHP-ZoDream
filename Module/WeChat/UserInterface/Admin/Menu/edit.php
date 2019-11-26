@@ -14,7 +14,7 @@ $this->title = '编辑菜单';
     <span class="toggle"></span>
 </div>
 
-<?=Form::open($model, './admin/menu/save')?>
+<?=Form::open($model, './@admin/menu/save')?>
     <?=Form::text('name', true)?>
     <?=Form::select('parent_id', [$menu_list, ['顶级菜单']])?>
     <?php $this->extend('../layouts/editor', [

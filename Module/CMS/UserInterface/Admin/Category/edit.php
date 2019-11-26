@@ -10,7 +10,7 @@ JS;
 $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/category/save')?>
+<?=Form::open($model, './@admin/category/save')?>
     <div class="zd-tab">
         <div class="zd-tab-head">
             <div class="zd-tab-item active">

@@ -27,7 +27,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -37,12 +37,12 @@ $this->registerCssFile([
          [
              [
                  '文章列表',
-                 './admin/blog',
+                 './@admin/blog',
                  'fa fa-list'
              ],
              [
                  '发表文章',
-                 './admin/blog/create',
+                 './@admin/blog/create',
                  'fa fa-plus'
              ]
          ],
@@ -55,17 +55,17 @@ $this->registerCssFile([
          [
              [
                  '分类列表',
-                 './admin/term',
+                 './@admin/term',
                  'fa fa-list'
              ],
              [
                  '新增分类',
-                 './admin/term/create',
+                 './@admin/term/create',
                  'fa fa-plus'
              ],
              [
                 '标签列表',
-                './admin/tag',
+                './@admin/tag',
                 'fa fa-list'
             ],
          ],
@@ -73,7 +73,7 @@ $this->registerCssFile([
      ],
      [
         '评论',
-        './admin/comment',
+        './@admin/comment',
         'fa fa-comment',
     ],
 ], $content, 'ZoDream 博客管理平台') ?>

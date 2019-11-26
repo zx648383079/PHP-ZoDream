@@ -22,7 +22,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -32,7 +32,7 @@ $this->registerCssFile([
          [
              [
                  '微博列表',
-                 './admin/blog',
+                 './@admin/blog',
                  'fa fa-list'
              ],
          ],
@@ -40,7 +40,7 @@ $this->registerCssFile([
      ],
      [
         '评论',
-        './admin/comment',
+        './@admin/comment',
         'fa fa-comment',
     ],
 ], $content, 'ZoDream 微博客管理平台') ?>

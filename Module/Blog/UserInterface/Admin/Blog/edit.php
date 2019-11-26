@@ -7,7 +7,7 @@ $lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 
 $this->title = ($model->id > 0 ? '编辑' : '新增'). '文章';
 $configs = app('request')->isMobile() ?
     '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '{}';
-$url = $this->url('./admin', false);
+$url = $this->url('./@admin', false);
 $tags = json_encode($tags);
 $js = <<<JS
 bindEdit({$configs}, '{$url}', {$tags});
@@ -22,14 +22,14 @@ $this->registerJs($js);
     <div class="language-toggle">
     切换到
     <?php if($model->parent_id < 1):?>
-     <a href="<?=$this->url('./admin/blog/edit', ['id' => $model->id, 'language' => 'en'])?>">EN</a>
+     <a href="<?=$this->url('./@admin/blog/edit', ['id' => $model->id, 'language' => 'en'])?>">EN</a>
      <?php else:?>
-     <a href="<?=$this->url('./admin/blog/edit', ['id' => $model->parent_id])?>">中</a>
+     <a href="<?=$this->url('./@admin/blog/edit', ['id' => $model->parent_id])?>">中</a>
     <?php endif;?>
     </div>
     <?php endif;?>
 </div>
-<?=Form::open($model, './admin/blog/save')?>
+<?=Form::open($model, './@admin/blog/save')?>
     <div class="zd-tab">
         <div class="zd-tab-head">
             <div class="zd-tab-item active">

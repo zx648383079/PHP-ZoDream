@@ -16,7 +16,7 @@ $passwordTip = $model->id ? '新密码' : '密码';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/user/save')?>
+<?=Form::open($model, './@admin/user/save')?>
     <?=Form::text('name', true)?>
     <?=Form::email('email', true)?>
     <?=Form::radio('sex', $model->sex_list)?>

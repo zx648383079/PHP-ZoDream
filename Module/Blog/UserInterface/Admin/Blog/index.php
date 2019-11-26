@@ -24,7 +24,7 @@ $this->title = '文章列表';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/blog/create')?>">新增文章</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/blog/create')?>">新增文章</a>
 </div>
 
 <table class="table  table-bordered well">
@@ -46,7 +46,7 @@ $this->title = '文章列表';
             <?=Str::substr($item->title, 0, 20, true)?></td>
             <td>
                 <?php if ($item->term):?>
-                    <a href="<?=$this->url('./admin/blog', ['term_id' => $item->term_id])?>">
+                    <a href="<?=$this->url('./@admin/blog', ['term_id' => $item->term_id])?>">
                         <?=$item->term->name?>
                     </a>
                 <?php else:?>
@@ -55,15 +55,15 @@ $this->title = '文章列表';
             </td>
             <td>
                 推荐：<?=$item->recommend?>/
-                评论：<a href="<?=$this->url('./admin/comment', ['blog_id' => $item->id])?>">
+                评论：<a href="<?=$this->url('./@admin/comment', ['blog_id' => $item->id])?>">
                     <?=$item->comment_count?>
                 </a>
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./detail', ['id' => $item->id])?>" target="_blank">查看</a>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/blog/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/blog/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/blog/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/blog/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

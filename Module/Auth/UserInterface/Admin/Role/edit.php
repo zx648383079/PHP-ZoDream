@@ -14,7 +14,7 @@ $this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/role/save')?>
+<?=Form::open($model, './@admin/role/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('display_name')?>
     <?=Form::textarea('description')?>

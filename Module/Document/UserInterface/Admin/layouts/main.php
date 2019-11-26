@@ -8,7 +8,7 @@ if(isset($project_list)) {
     $menus = [
         [
             '首页',
-            './admin',
+            './@admin',
             'fa fa-home',
         ],
         [
@@ -24,29 +24,29 @@ if(isset($project_list)) {
     foreach ($project_list as $item) {
         $menus[1][3][] = [
             $item['name'],
-            ['./admin/project', 'id' => $item['id']],
+            ['./@admin/project', 'id' => $item['id']],
             'fa fa-book'
         ];
     }
     $menus[1][3][] = [
         '新建项目',
-        './admin/project/create',
+        './@admin/project/create',
         'fa fa-plus'
     ];
 } else {
     $menus = [
         [
             '返回首页',
-            './admin',
+            './@admin',
             'fa fa-arrow-left',
         ],
         [
             '项目主页',
-            ['./admin/project', 'id' => $project->id],
+            ['./@admin/project', 'id' => $project->id],
             'fa fa-home',
         ]
     ];
-    $baseUri = $project->type == 1 ? './admin/api' : './admin/page';
+    $baseUri = $project->type == 1 ? './@admin/api' : './@admin/page';
     foreach ($tree_list as $item) {
         $children = [];
         if(isset($item['children'])) {

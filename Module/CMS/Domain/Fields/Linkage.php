@@ -25,7 +25,7 @@ class Linkage extends BaseField {
 
     public function toInput($value, ModelFieldModel $field) {
         $value = intval($value);
-        $url = url('./admin/linkage/tree', ['id' => $field->setting('option', 'linkage_id')]);
+        $url = url('./@admin/linkage/tree', ['id' => $field->setting('option', 'linkage_id')]);
         $js = <<<JS
 $('#linkage-{$field->id}').multiSelect({
     default: {$value},

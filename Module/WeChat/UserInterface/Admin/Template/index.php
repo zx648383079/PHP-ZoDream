@@ -13,7 +13,7 @@ $this->title = '图文模板管理';
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./admin/template/create')?>">添加</a>
+    <a href="<?=$this->url('./@admin/template/create')?>">添加</a>
 </div>
 <table>
     <thead>
@@ -37,8 +37,8 @@ $this->title = '图文模板管理';
                     </div>
                 </td>
                 <td>
-                    <a href="<?=$this->url('./admin/template/edit', ['id' => $item->id])?>">编辑</a>
-                    <a data-type="del" href="<?=$this->url('./admin/template/delete', ['id' => $item->id])?>">删除</a>
+                    <a href="<?=$this->url('./@admin/template/edit', ['id' => $item->id])?>">编辑</a>
+                    <a data-type="del" href="<?=$this->url('./@admin/template/delete', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

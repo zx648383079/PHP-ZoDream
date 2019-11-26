@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Template\Domain\Page;
 
-$base_url = $this->url('./admin/', false);
+$base_url = $this->url('./@admin/', false);
 $id = $model->id;
 $js = <<<JS
 bindPage('{$id}', '{$base_url}');
@@ -40,7 +40,7 @@ $this->registerJs($js, View::JQUERY_READY);
             </div>
         </li>
         <li>
-            <a data-type="ajax" href="<?=$this->url('./admin/weight/install')?>">
+            <a data-type="ajax" href="<?=$this->url('./@admin/weight/install')?>">
                 <i class="fa fa-sync"></i>
                 <span>刷新</span>
             </a>
@@ -190,7 +190,7 @@ $this->registerJs($js, View::JQUERY_READY);
         </div>
     </div>
     <div id="mainMobile" class="<?= $model->type > 0 ? 'mobile-320':''?>">
-        <iframe id="mainGrid" src="<?=$this->url('./admin/page/template', ['id' => $model->id, 'edit' => true])?>">
+        <iframe id="mainGrid" src="<?=$this->url('./@admin/page/template', ['id' => $model->id, 'edit' => true])?>">
             
         </iframe>
         <canvas class="top-rule"></canvas>

@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '投资项目';
 ?>
 
-    <a class="btn btn-success" href="<?=$this->url('./admin/product/create')?>">新增项目</a>
+    <a class="btn btn-success" href="<?=$this->url('./@admin/product/create')?>">新增项目</a>
     <hr/>
     <div>
         <div class="col-xs-12">
@@ -25,7 +25,7 @@ $this->title = '投资项目';
                 <?php foreach($model_list as $item): ?>
                     <tr>
                         <td>
-                            <a href="<?=$this->url('./admin/log', ['product_id' => $item->id])?>">
+                            <a href="<?=$this->url('./@admin/log', ['product_id' => $item->id])?>">
                                 <?=$item->name?>
                             </a>
                         </td>
@@ -42,8 +42,8 @@ $this->title = '投资项目';
                             <?=$item->risk?>
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="<?=$this->url('./admin/product/edit', ['id' => $item->id])?>">编辑</a>
-                            <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/product/delete', ['id' => $item->id])?>">删除</a>
+                            <a class="btn btn-primary" href="<?=$this->url('./@admin/product/edit', ['id' => $item->id])?>">编辑</a>
+                            <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/product/delete', ['id' => $item->id])?>">删除</a>
                         </td>
                     </tr>
                 <?php endforeach?>

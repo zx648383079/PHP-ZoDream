@@ -85,7 +85,7 @@ $this->registerJs($js);
         </div>
         <?php if($order->status == OrderModel::STATUS_PAID_UN_SHIP):?>
         <div class="text-center">
-            <a href="<?=$this->url('./admin/order/shipping', ['id' => $order->id])?>" class="btn">我要发货</a>
+            <a href="<?=$this->url('./@admin/order/shipping', ['id' => $order->id])?>" class="btn">我要发货</a>
         </div>
         <?php endif;?>
     </div>
@@ -154,7 +154,7 @@ $this->registerJs($js);
             <i class="fa fa-edit"></i>    
             备注信息</div>
             <div class="panel-body">
-            <?=Form::open($order, './admin/order/save')?>
+            <?=Form::open($order, './@admin/order/save')?>
                     <div class="remark-box">
                         <textarea name="remark" required></textarea>
                     </div>

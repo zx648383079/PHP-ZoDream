@@ -14,7 +14,7 @@ $this->title = '权限列表';
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/permission/create')?>">新增权限</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/permission/create')?>">新增权限</a>
     </div>
 
     <table class="table  table-bordered well">
@@ -34,8 +34,8 @@ $this->title = '权限列表';
                 <td><?=$item->display_name?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/permission/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/permission/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/permission/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/permission/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

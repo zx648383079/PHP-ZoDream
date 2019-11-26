@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '砍价活动列表';
 ?>
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/lottery/create')?>">新增砍价</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/lottery/create')?>">新增砍价</a>
 </div>
 <table class="table table-hover">
     <thead>
@@ -37,8 +37,8 @@ $this->title = '砍价活动列表';
             
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/activity/lottery/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/activity/lottery/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/lottery/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/lottery/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

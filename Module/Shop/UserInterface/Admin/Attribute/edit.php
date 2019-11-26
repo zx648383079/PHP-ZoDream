@@ -7,7 +7,7 @@ use Module\Shop\Domain\Models\AttributeModel;
 $this->title = '属性';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/attribute/save')?>
+<?=Form::open($model, './@admin/attribute/save')?>
     <?=Form::text('name', true)?>
     <?=Form::select('group_id', [$type_list])?>
     <?=Form::radio('search_type', AttributeModel::$search_list)?>

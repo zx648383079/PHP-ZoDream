@@ -37,8 +37,8 @@ $this->title = '商品列表';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/goods/create')?>">新增商品</a>
-    <a class="btn pull-right" href="<?=$this->url('./admin/goods/trash')?>">回收站</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/goods/create')?>">新增商品</a>
+    <a class="btn pull-right" href="<?=$this->url('./@admin/goods/trash')?>">回收站</a>
 </div>
 
 <table class="table table-hover">
@@ -69,7 +69,7 @@ $this->title = '商品列表';
             </td>
             <td class="auto-hide">
                 <?php if ($item->category):?>
-                    <a href="<?=$this->url('./admin/goods', ['cat_id' => $item->cat_id])?>">
+                    <a href="<?=$this->url('./@admin/goods', ['cat_id' => $item->cat_id])?>">
                         <?=$item->category->name?>
                     </a>
                 <?php else:?>
@@ -78,7 +78,7 @@ $this->title = '商品列表';
             </td>
             <td class="auto-hide">
                 <?php if ($item->brand):?>
-                    <a href="<?=$this->url('./admin/goods', ['brand_id' => $item->brand_id])?>">
+                    <a href="<?=$this->url('./@admin/goods', ['brand_id' => $item->brand_id])?>">
                         <?=$item->brand->name?>
                     </a>
                 <?php else:?>
@@ -90,7 +90,7 @@ $this->title = '商品列表';
             </td>
             <td class="auto-hide">
                 <?php foreach(['is_best' => '精品', 'is_hot' => '热门', 'is_new' => '新品'] as $key => $label):?>
-                <div class="toggle-box<?=$item[$key] ? ' active' : ''?>" data-type="toggle" data-url="<?=$this->url('./admin/goods/toggle', ['id' => $item->id, 'name' => $key])?>"><?=$label?><i class="fa"></i></div>
+                <div class="toggle-box<?=$item[$key] ? ' active' : ''?>" data-type="toggle" data-url="<?=$this->url('./@admin/goods/toggle', ['id' => $item->id, 'name' => $key])?>"><?=$label?><i class="fa"></i></div>
                 <?php endforeach;?>
             </td>
             <td>
@@ -98,8 +98,8 @@ $this->title = '商品列表';
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/goods/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/goods/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/goods/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/goods/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

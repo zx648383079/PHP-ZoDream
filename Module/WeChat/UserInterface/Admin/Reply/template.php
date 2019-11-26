@@ -13,7 +13,7 @@ $this->title = '微信模板消息模板';
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a data-type="ajax" href="<?=$this->url('./admin/reply/refresh_template')?>">同步</a>
+    <a data-type="ajax" href="<?=$this->url('./@admin/reply/refresh_template')?>">同步</a>
 </div>
 <table>
     <thead>
@@ -36,7 +36,7 @@ $this->title = '微信模板消息模板';
                 </td>
                 <td>
                     <a href="javascript" data-text="<?=$item->example?>">预览</a>
-                    <a data-type="del" href="<?=$this->url('./admin/reply/delete_template', ['id' => $item->id])?>">删除</a>
+                    <a data-type="del" href="<?=$this->url('./@admin/reply/delete_template', ['id' => $item->id])?>">删除</a>
                 </td>
            </tr>
         <?php endforeach;?>

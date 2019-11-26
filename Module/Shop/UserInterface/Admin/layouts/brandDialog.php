@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 ?>
-<div class="dialog dialog-box brand-dialog" data-type="dialog" data-url="<?=$this->url('./admin/brand/dialog')?>">
+<div class="dialog dialog-box brand-dialog" data-type="dialog" data-url="<?=$this->url('./@admin/brand/dialog')?>">
     <div class="dialog-header">
         <div class="dialog-title">选择品牌</div><i class="fa fa-close dialog-close"></i>
     </div>

@@ -5,8 +5,8 @@ use Zodream\Template\View;
 $this->title = '秒杀活动列表';
 ?>
 <div class="search">
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/seckill/create')?>">新增秒杀活动</a>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./admin/activity/seckill/time')?>">秒杀时间列表</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/seckill/create')?>">新增秒杀活动</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/seckill/time')?>">秒杀时间列表</a>
 </div>
 <table class="table table-hover">
     <thead>
@@ -38,9 +38,9 @@ $this->title = '秒杀活动列表';
             
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/activity/seckill/time', ['id' => $item->id])?>">设置商品</a>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/activity/seckill/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/activity/seckill/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/seckill/time', ['id' => $item->id])?>">设置商品</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/seckill/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/seckill/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

@@ -9,8 +9,8 @@ $this->title = '项目:'.$project->name;
     <h3>项目主页</h3>
 
     <div class="opt-btn">
-        <a class="btn btn-default" href="<?=$this->url('./admin/project/edit', ['id' => $project->id])?>">编辑</a>
-        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/project/delete', ['id' => $project->id])?>">删除</a>
+        <a class="btn btn-default" href="<?=$this->url('./@admin/project/edit', ['id' => $project->id])?>">编辑</a>
+        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/project/delete', ['id' => $project->id])?>">删除</a>
     </div>
 </div>
 

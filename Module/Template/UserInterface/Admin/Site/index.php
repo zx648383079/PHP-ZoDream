@@ -11,7 +11,7 @@ $this->registerJs($js);
 ?>
 
 <div class="container">
-    <?=Form::open($site, './admin/site/save')?>
+    <?=Form::open($site, './@admin/site/save')?>
         <div class="tab-box">
             <div class="tab-header">
                 <div class="tab-item">
@@ -42,7 +42,7 @@ $this->registerJs($js);
         <?php foreach($page_list as $item):?>
         <div class="card">
             <div class="card-logo">
-                <a href="<?=$this->url('./admin/page', ['id' => $item->id])?>">
+                <a href="<?=$this->url('./@admin/page', ['id' => $item->id])?>">
                     <img src="<?=$item->thumb?>" alt="">
                 </a>
             </div>
@@ -56,7 +56,7 @@ $this->registerJs($js);
 
         <div class="card card-add">
             <div class="card-logo">
-                <a href="<?=$this->url('./admin/page/create', ['site_id' => $site->id])?>">
+                <a href="<?=$this->url('./@admin/page/create', ['site_id' => $site->id])?>">
                     <i class="fa fa-plus"></i>
                 </a>
             </div>
@@ -68,7 +68,7 @@ $this->registerJs($js);
 
         <div class="card card-add">
             <div class="card-logo">
-                <a href="<?=$this->url('./admin/page/create', ['site_id' => $site->id, 'type' => 1])?>">
+                <a href="<?=$this->url('./@admin/page/create', ['site_id' => $site->id, 'type' => 1])?>">
                     <i class="fa fa-plus"></i>
                 </a>
             </div>
@@ -89,7 +89,7 @@ $this->registerJs($js);
             <?php foreach($template_list as $item):?>
             <div class="page-item" data-id="<?=$item->id?>">
                 <div class="thumb">
-                    <img src="<?=$this->url('./admin/theme/asset',
+                    <img src="<?=$this->url('./@admin/theme/asset',
                         ['file' => $item['thumb']], false)?>" alt="">
                 </div>
                 <div class="name"><?=$item['name']?></div>

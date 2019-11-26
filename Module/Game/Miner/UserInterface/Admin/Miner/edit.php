@@ -8,7 +8,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'工种';
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/miner/save')?>
+<?=Form::open($model, './@admin/miner/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('earnings', true)?>
     <?=Form::text('price', true)?>

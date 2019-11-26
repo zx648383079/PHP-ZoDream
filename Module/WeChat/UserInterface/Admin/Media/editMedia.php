@@ -14,7 +14,7 @@ $this->title = '编辑媒体资源';
     <span class="toggle"></span>
 </div>
 
-<?=Form::open($model, './admin/media/save')?>
+<?=Form::open($model, './@admin/media/save')?>
     <?=Form::text('title', true)?>
     <?=Form::select('type', MediaModel::$types)?>
     <?=Form::select('material_type', MediaModel::$materialTypes)?>

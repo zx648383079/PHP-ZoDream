@@ -28,7 +28,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -38,27 +38,27 @@ $this->registerCssFile([
         [
             [
                 '商品列表',
-                './admin/goods',
+                './@admin/goods',
                 'fa fa-list'
             ],
             [
                 '新建商品',
-                './admin/goods/create',
+                './@admin/goods/create',
                 'fa fa-plus'
             ],
             [
                 '分类列表',
-                './admin/category',
+                './@admin/category',
                 'fa fa-list'
             ],
             [
                 '品牌列表',
-                './admin/brand',
+                './@admin/brand',
                 'fa fa-list'
             ],
             [
                 '商品类型',
-                './admin/attribute/group',
+                './@admin/attribute/group',
                 'fa fa-list'
             ],
         ],
@@ -71,62 +71,62 @@ $this->registerCssFile([
         [
             [
                 '营销中心',
-                './admin/activity/home',
+                './@admin/activity/home',
                 'fa fa-list'
             ],
             [
                 '优惠券',
-                './admin/activity/coupon',
+                './@admin/activity/coupon',
                 'fa fa-list'
             ],
             [
                 '组合',
-                './admin/activity/mix',
+                './@admin/activity/mix',
                 'fa fa-list'
             ],
             [
                 '返现',
-                './admin/activity/cash_back',
+                './@admin/activity/cash_back',
                 'fa fa-list'
             ],
             [
                 '满减/满送',
-                './admin/activity/discount',
+                './@admin/activity/discount',
                 'fa fa-list'
             ],
             [
                 '团购',
-                './admin/activity/group_buy',
+                './@admin/activity/group_buy',
                 'fa fa-list'
             ],
             [
                 '拍卖',
-                './admin/activity/auction',
+                './@admin/activity/auction',
                 'fa fa-list'
             ],
             [
                 '预售',
-                './admin/activity/presale',
+                './@admin/activity/presale',
                 'fa fa-list'
             ],
             [
                 '砍价',
-                './admin/activity/bargain',
+                './@admin/activity/bargain',
                 'fa fa-list'
             ],
             [
                 '限时秒杀',
-                './admin/activity/seckill',
+                './@admin/activity/seckill',
                 'fa fa-list'
             ],
             [
                 '抽奖',
-                './admin/activity/lottery',
+                './@admin/activity/lottery',
                 'fa fa-list'
             ],
             [
                 '试用',
-                './admin/activity/free_trial',
+                './@admin/activity/free_trial',
                 'fa fa-list'
             ],
         ]
@@ -138,12 +138,12 @@ $this->registerCssFile([
         [
             [
                 '订单列表',
-                './admin/order',
+                './@admin/order',
                 'fa fa-list'
             ],
             [
                 '新建订单',
-                './admin/order/create',
+                './@admin/order/create',
                 'fa fa-plus'
             ],
         ],
@@ -155,22 +155,22 @@ $this->registerCssFile([
         [
             [
                 '文章列表',
-                './admin/article',
+                './@admin/article',
                 'fa fa-list'
             ],
             [
                 '新建文章',
-                './admin/article/create',
+                './@admin/article/create',
                 'fa fa-plus'
             ],
             [
                 '分类列表',
-                './admin/article/category',
+                './@admin/article/category',
                 'fa fa-list'
             ],
             [
                 '新建分类',
-                './admin/article/create_category',
+                './@admin/article/create_category',
                 'fa fa-plus'
             ],
         ],
@@ -182,22 +182,22 @@ $this->registerCssFile([
         [
             [
                 '广告列表',
-                './admin/ad',
+                './@admin/ad',
                 'fa fa-list'
             ],
             [
                 '新建广告',
-                './admin/ad/create',
+                './@admin/ad/create',
                 'fa fa-plus'
             ],
             [
                 '广告位列表',
-                './admin/ad/position',
+                './@admin/ad/position',
                 'fa fa-list'
             ],
             [
                 '新建广告位',
-                './admin/ad/create_position',
+                './@admin/ad/create_position',
                 'fa fa-plus'
             ],
         ],
@@ -209,7 +209,7 @@ $this->registerCssFile([
         [
             [
                 '淘宝客',
-                './admin/plugin/tbk',
+                './@admin/plugin/tbk',
                 'fa fa-list'
             ],
         ],
@@ -221,27 +221,27 @@ $this->registerCssFile([
         [
             [
                 '基本设置',
-                './admin/setting',
+                './@admin/setting',
                 'fa fa-cog'
             ],
             [
                 '支付列表',
-                './admin/payment',
+                './@admin/payment',
                 'fa fa-list'
             ],
             [
                 '新建支付',
-                './admin/payment/create',
+                './@admin/payment/create',
                 'fa fa-plus'
             ],
             [
                 '配送列表',
-                './admin/shipping',
+                './@admin/shipping',
                 'fa fa-list'
             ],
             [
                 '新建配送',
-                './admin/shipping/create',
+                './@admin/shipping/create',
                 'fa fa-plus'
             ],
         ],

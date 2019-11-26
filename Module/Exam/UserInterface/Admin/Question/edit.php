@@ -5,7 +5,7 @@ use Zodream\Html\Dark\Form;
 use Module\Exam\Domain\Model\QuestionModel;
 /** @var $this View */
 $this->title = '题目';
-$url = $this->url('./admin/', false);
+$url = $this->url('./@admin/', false);
 $js = <<<JS
 bindEditQuestion('{$url}');
 JS;

@@ -6,7 +6,7 @@ use Module\Shop\Domain\Models\AttributeModel;
 $this->title = '属性';
 ?>
    <div class="search">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/attribute/create', ['group_id' => $group_id])?>">新增属性</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/attribute/create', ['group_id' => $group_id])?>">新增属性</a>
     </div>
 
     <table class="table  table-bordered well">
@@ -34,8 +34,8 @@ $this->title = '属性';
                 <td><?=$item->position?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/attribute/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/attribute/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/attribute/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/attribute/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

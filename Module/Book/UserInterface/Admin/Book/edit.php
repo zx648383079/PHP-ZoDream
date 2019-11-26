@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '小说';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/book/save')?>
+<?=Form::open($model, './@admin/book/save')?>
     <?=Form::text('name', true)?>
     <?=Form::select('cat_id', [$cat_list, 'real_name'], true)?>
     <?=Form::select('author_id', [$author_list], true)?>

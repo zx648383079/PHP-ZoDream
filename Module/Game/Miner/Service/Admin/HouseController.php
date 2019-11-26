@@ -23,7 +23,7 @@ class HouseController extends Controller {
         $model = new HouseModel();
         if ($model->load() && $model->autoIsNew()->save()) {
             return $this->jsonSuccess([
-                'url' => url('./admin/house')
+                'url' => url('./@admin/house')
             ]);
         }
         return $this->jsonFailure($model->getFirstError());
@@ -32,7 +32,7 @@ class HouseController extends Controller {
     public function deleteAction($id) {
         HouseModel::where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => url('./admin/house')
+            'url' => url('./@admin/house')
         ]);
     }
 }

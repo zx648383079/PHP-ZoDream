@@ -23,7 +23,7 @@ $this->registerCssFile([
 <?= Layout::mainIfPjax($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -33,7 +33,7 @@ $this->registerCssFile([
          [
              [
                  '帖子列表',
-                 './admin/thread',
+                 './@admin/thread',
                  'fa fa-list'
              ],
          ],
@@ -46,12 +46,12 @@ $this->registerCssFile([
          [
              [
                  '板块列表',
-                 './admin/forum',
+                 './@admin/forum',
                  'fa fa-list'
              ],
              [
                  '新增板块',
-                 './admin/forum/create',
+                 './@admin/forum/create',
                  'fa fa-plus'
              ]
          ],

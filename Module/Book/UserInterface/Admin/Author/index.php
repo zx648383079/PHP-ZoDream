@@ -12,7 +12,7 @@ $this->title = 'ZoDream';
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./admin/author/create')?>">新增作者</a>
+        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/author/create')?>">新增作者</a>
     </div>
 
     <table class="table  table-bordered well">
@@ -37,9 +37,9 @@ $this->title = 'ZoDream';
                 </td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/book', ['author_id' => $item->id])?>" target="_blank">查看</a>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/author/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/author/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book', ['author_id' => $item->id])?>" target="_blank">查看</a>
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/author/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/author/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
             </tr>

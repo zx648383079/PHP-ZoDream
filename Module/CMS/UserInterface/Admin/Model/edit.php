@@ -12,7 +12,7 @@ $this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/model/save')?>
+<?=Form::open($model, './@admin/model/save')?>
     <?=Form::radio('type', [1 => '表单', 0 => '实体'])?>
     <?=Form::text('name', true)?>
     <?=Form::text('table', true)->readonly($model->id > 0)?>

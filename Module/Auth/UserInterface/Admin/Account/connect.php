@@ -22,7 +22,7 @@ $this->registerJs($js);
         <?=$item->vendor?>(<?=$item->nickname?>)
     </div>
     <div class="action">
-        <a data-type="del" href="<?=$this->url('./admin/account/delete_connect', ['id' => $item->id])?>">解绑</a>
+        <a data-type="del" href="<?=$this->url('./@admin/account/delete_connect', ['id' => $item->id])?>">解绑</a>
     </div>
 </div>
 <?php endforeach; ?>

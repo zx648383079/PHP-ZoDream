@@ -37,19 +37,19 @@ $this->title = '评论列表';
                 </a>
             </td>
             <td>
-                <a href="<?=$this->url('./admin/comment', ['email' => $item->email])?>">
+                <a href="<?=$this->url('./@admin/comment', ['email' => $item->email])?>">
                     <?=$item->email?>
                 </a>
             </td>
             <td><?=$item->content?></td>
             <td>
-                <a href="<?=$this->url('./admin/comment', ['blog_id' => $item->blog_id])?>">
+                <a href="<?=$this->url('./@admin/comment', ['blog_id' => $item->blog_id])?>">
                     <?=$item->blog->title?>
                 </a>
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/comment/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/comment/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

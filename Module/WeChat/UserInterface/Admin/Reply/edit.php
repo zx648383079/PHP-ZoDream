@@ -21,7 +21,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <span class="toggle"></span>
 </div>
 
-<?=Form::open($model, './admin/reply/save')?>
+<?=Form::open($model, './@admin/reply/save')?>
     <?=Form::select('event', $event_list)?>
     <div class="message-box" <?= $model->event != 'message' ? 'style="display:none"': ''?>>
         <?=Form::text('keywords')?>

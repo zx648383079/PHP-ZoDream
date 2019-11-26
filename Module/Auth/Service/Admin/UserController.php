@@ -100,7 +100,7 @@ class UserController extends Controller {
         if (AccountLogModel::change($user_id,
             AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
             return $this->jsonSuccess([
-                'url' => url('./admin/user/account', ['id' => $user_id])
+                'url' => url('./@admin/user/account', ['id' => $user_id])
             ], '充值成功');
         }
         return $this->jsonFailure('操作失败，金额不足');

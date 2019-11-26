@@ -14,7 +14,7 @@ $this->title = '消息管理';
     <span class="toggle"></span>
 </div>
 <div class="page-action">
-    <a href="<?=$this->url('./admin/reply/add')?>">添加</a>
+    <a href="<?=$this->url('./@admin/reply/add')?>">添加</a>
 </div>
 <div>
     <table class="table table-hover">
@@ -40,8 +40,8 @@ $this->title = '消息管理';
                 <td>
                     <?=$item->keywords?></td>
                 <td>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./admin/reply/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/reply/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/reply/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/reply/delete', ['id' => $item->id])?>">删除</a>
                 </td>
             </tr>
         <?php endforeach?>

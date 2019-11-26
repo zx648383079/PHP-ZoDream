@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '分类';
 ?>
 <h1><?=$this->title?></h1>
-<?=Form::open($model, './admin/category/save')?>
+<?=Form::open($model, './@admin/category/save')?>
     <?=Form::text('name', true)?>
     <div class="input-group">
         <label>上级</label>

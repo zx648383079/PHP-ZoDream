@@ -8,7 +8,7 @@ foreach ($cat_menu as $item) {
     $menus[] = [
         sprintf('%s %s', $item['level'] > 0 ? 'ￂ'.
             str_repeat('ｰ', $item['level'] - 1) : '', $item['title']),
-        ['./admin/content', 'cat_id' => $item['id']],
+        ['./@admin/content', 'cat_id' => $item['id']],
         'fa fa-file'
     ];
 }
@@ -17,7 +17,7 @@ $form_menu = [];
 foreach ($form_list as $item) {
     $form_menu[] = [
         $item['name'],
-        ['./admin/form', 'id' => $item['id']],
+        ['./@admin/form', 'id' => $item['id']],
         'fa fa-paint-brush'
     ];
 }
@@ -40,7 +40,7 @@ $this->registerCssFile([
 <?= Layout::main($this, [
     [
         '首页',
-        './admin',
+        './@admin',
         'fa fa-home',
     ],
     [
@@ -50,22 +50,22 @@ $this->registerCssFile([
         [
             [
                 '栏目',
-                './admin/category',
+                './@admin/category',
                 'fa fa-bars'
             ],
             [
                 '模型',
-                './admin/model',
+                './@admin/model',
                 'fa fa-boxes'
             ],
             [
                 '分组',
-                './admin/group',
+                './@admin/group',
                 'fa fa-columns'
             ],
             [
                 '联动',
-                './admin/linkage',
+                './@admin/linkage',
                 'fa fa-cogs'
             ]
         ],
@@ -94,12 +94,12 @@ $this->registerCssFile([
         [
             [
                 '本地主题',
-                './admin/theme',
+                './@admin/theme',
                 'fa fa-desktop'
             ],
             [
                 '主题市场',
-                './admin/theme/market',
+                './@admin/theme/market',
                 'fa fa-shopping-bag'
             ],
         ]

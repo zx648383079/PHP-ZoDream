@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '模块列表';
 ?>
 
-<a class="btn btn-success" href="<?=$this->url('./admin/model/create')?>">新增模块</a>
+<a class="btn btn-success" href="<?=$this->url('./@admin/model/create')?>">新增模块</a>
 <hr/>
 
 <div>
@@ -30,9 +30,9 @@ $this->title = '模块列表';
                         <?=$item->type > 0 ? '表单' : '实体'?>
                     </td>
                     <td>
-                        <a class="btn btn-default" href="<?=$this->url('./admin/model/field', ['id' => $item->id])?>">模块字段</a>
-                        <a class="btn btn-default" href="<?=$this->url('./admin/model/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./admin/model/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/model/field', ['id' => $item->id])?>">模块字段</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/model/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/model/delete', ['id' => $item->id])?>">删除</a>
                     </td>
                 </tr>
             <?php endforeach?>

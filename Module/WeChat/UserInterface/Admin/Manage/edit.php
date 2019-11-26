@@ -15,7 +15,7 @@ $this->title = '编辑微信公众号';
     <span class="toggle"></span>
 </div>
 
-<?=Form::open($model, './admin/manage/save')?>
+<?=Form::open($model, './@admin/manage/save')?>
     <?=Form::text('name', true)?>
     <?=Form::text('token', true)?>
     <?=Form::text('account', true)?>
