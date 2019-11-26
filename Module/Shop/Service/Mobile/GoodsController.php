@@ -9,6 +9,9 @@ class GoodsController extends Controller {
 
     public function indexAction($id) {
         $goods = GoodsModel::find($id);
+        if (empty($goods)) {
+            return $this->redirect($this->getUrl(''));
+        }
         $goods_list = GoodsModel::where('is_best', 1)->limit(3)->all();
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->limit(3)->all();

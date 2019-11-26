@@ -14,11 +14,31 @@ class HomeController extends Controller {
             return $this->redirect('./mobile');
         }
         $banners = AdModel::banners(false);
+        return $this->sendWithShare()->show(compact('banners'));
+    }
+
+    public function brandAction() {
+        return $this->jsonSuccess([]);
+    }
+
+    public function newAction() {
         $new_goods = GoodsRepository::getRecommendQuery('is_new')->all();
+        return $this->jsonSuccess(compact('new_goods'));
+    }
+
+    public function bestAction() {
         $best_goods = GoodsRepository::getRecommendQuery('is_best')->limit(7)->all();
+        return $this->jsonSuccess(compact('best_goods'));
+    }
+
+    public function categoryAction() {
+        $this->layout = false;
         $floor_categories = CategoryRepository::getHomeFloor();
+        return $this->jsonSuccess($this->renderHtml(compact('floor_categories')));
+    }
+
+    public function commentAction() {
         $comment_goods = CommentModel::with('goods', 'user')->where('item_type', 0)->limit(6)->all();
-        return $this->sendWithShare()->show(compact('new_goods', 'best_goods',
-            'floor_categories', 'comment_goods', 'banners'));
+        return $this->jsonSuccess(compact('comment_goods'));
     }
 }

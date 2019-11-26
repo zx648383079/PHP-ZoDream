@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '商品搜索';
 ?>
 
 <div class="category-page">
@@ -13,7 +13,7 @@ $this->title = 'ZoDream';
                 <a href="<?=$this->url('./')?>">全部商品</a>
             </li>
             <li>
-                <?=$keywords?>
+                <?=$this->text($keywords)?>
             </li>
         </ul>
 

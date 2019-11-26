@@ -174,17 +174,20 @@ Lazy.addMethod('img', function (imgEle: JQuery) {
  * 加载模板，需要引用 template 函数
  */
 Lazy.addMethod('tpl', function (tplEle: JQuery) {
-   let url = tplEle.attr('data-url');
-   let templateId = tplEle.attr('data-tpl');
-   $.getJSON(url, function (data) {
-       if (data.code != 200) {
-           return;
-       }
-       if (typeof data.data != 'string') {
-           data.data = template(templateId, data.data);
-       }
-       tplEle.html(data.data);
-   });
+    let url = tplEle.attr('data-url');
+    let templateId = tplEle.attr('data-tpl');
+    tplEle.addClass('lazy-loading');
+    $.getJSON(url, function (data) {
+        if (data.code != 200) {
+            return;
+        }
+        if (typeof data.data != 'string') {
+            data.data = template(templateId, data.data);
+        }
+        tplEle.removeClass('lazy-loading');
+        tplEle.html(data.data);
+        tplEle.trigger('lazyLoaded');
+    });
 });
 /**
  * 滚动加载模板，需要引用 template 函数

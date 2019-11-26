@@ -162,6 +162,7 @@ $(function() {
         $(this).removeClass('expanded');
     });
     $('img.lazy').lazyload({callback: 'img'});
+    $(".template-lazy").lazyload({callback: 'tpl'});
     $(".more-load").lazyload({
         mode: 1,
         callback: function(moreEle: JQuery) {
@@ -536,4 +537,22 @@ function formatTime(diff: number) {
         return twoPad(m) + '分' + twoPad(s) + '秒';
     }
     return twoPad(s) + '秒';
+}
+
+function bindHome() {
+    var silder = $('.banner .slider').slider({
+        width: 1,
+        height: 420,
+    });
+    $('.template-lazy').on('lazyLoaded', function() {
+        let box = $(this).find('.slider-goods');
+        if (box.length < 1) {
+            return;
+        }
+        box.slider({
+            width: 266,
+            height: 344,
+            haspoint: false
+        });
+    });
 }

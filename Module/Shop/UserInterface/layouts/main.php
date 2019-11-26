@@ -12,7 +12,8 @@ $this->registerCssFile([
     '@jquery.dialog.min.js',
     '@jquery.lazyload.min.js',
     '@main.min.js',
-    '@shop.min.js'
+    '@shop.min.js',
+    '@template-web.js'
 ]);
 ?>
 <!DOCTYPE html>
