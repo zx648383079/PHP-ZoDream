@@ -17,7 +17,7 @@ $this->title = 'ZoDream';
                     <button>兑换</button>
                 </div>
                 <a href="">如何兑换使用优惠券 >></a>
-                <a href="" class="btn">
+                <a href="<?=$this->url('./coupon')?>" class="btn">
                     <i class="fa fa-gift"></i>
                     领券中心
                 </a>

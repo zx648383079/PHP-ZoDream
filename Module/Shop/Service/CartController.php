@@ -34,4 +34,10 @@ class CartController extends Controller {
         return $this->jsonSuccess();
     }
 
+    public function miniAction() {
+        $this->layout = false;
+        $cart = Module::cart();
+        return $this->show(compact('cart'));
+    }
+
 }

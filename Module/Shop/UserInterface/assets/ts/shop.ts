@@ -13,6 +13,9 @@ function addToCart(id: number, amount: number|boolean = 1, properties?: string[]
         properties: JSON.stringify(properties)
     }, function(data) {
         parseAjax(data);
+        if (data.code === 200) {
+            $('.header-cart').trigger('cartRefresh');
+        }
     });
 }
 
@@ -146,10 +149,23 @@ $(function() {
     $(".header-nav").mouseleave(function() {
         $(this).find('.nav-dropdown').hide();
     });
-    $(".header-cart").mouseover(function() {
+    let miniCart = $(".header-cart").mouseover(function() {
         $(this).find('.cart-dialog').show();
     }).mouseout(function() {
         $(this).find('.cart-dialog').hide();
+    }).on('cartRefresh', function() {
+        let $this = $(this);
+        $.get($this.data('url'), html => {
+            $this.html(html);
+        });
+    }).on('click', '.action .fa-times', function() {
+        $.getJSON('cart/delete', {
+            id: $(this).closest('.cart-item').data('id'),
+        }, function(data) {
+            if (data.code == 200) {
+                miniCart.trigger('cartRefresh');
+            }
+        });
     });
     $(".header-search").mouseover(function() {
         $(this).addClass('expanded');
@@ -589,7 +605,7 @@ function bindHome() {
     });
 }
 
-function bindGoods() {
+function bindGoods(goods: number) {
     $('.template-lazy').on('lazyLoaded', function() {
         let box = $(this).find('.slider-goods');
         if (box.length < 1) {
@@ -598,7 +614,13 @@ function bindGoods() {
         box.slider({
             width: 266,
             height: 344,
+            haspoint: false
         });
+    });
+    $('.picture-box').on('mouseover', 'ul li', function() {
+        let $this = $(this);
+        $this.addClass('active').siblings().removeClass('active');
+        $this.closest('.picture-box').find('.view img').attr('src', $this.find('img').attr('src'));
     });
     $('.detail-box .tab-body .tab-item').on('tabActived', function(_, i) {
         if (i > 0) {
@@ -611,6 +633,16 @@ function bindGoods() {
         $.get($this.attr('href'), html => {
             $this.closest('.comment-page-box').html(html);
         });
+    });
+    $(document).on('click', '[data-type="buy"]', function(e) {
+        e.preventDefault();
+        buyGoods(goods, $('.info-box .number-input').val() as number);
+    }).on('click', '[data-type="addCart"]', function(e) {
+        e.preventDefault();
+        addToCart(goods, $('.info-box .number-input').val() as number);
+    }).on('click', '[data-type="collect"]', function(e) {
+        e.preventDefault();
+        collectGoods(goods, $(this));
     });
 }
 

@@ -90,6 +90,10 @@ class GoodsModel extends GoodsEntity {
         return $box['product']->price + $box['properties_price'];
     }
 
+    public function getCommentCountAttribute() {
+        return CommentModel::where('item_type', 0)->where('item_id', $this->id)->count();
+    }
+
     public function getPropertiesAttribute() {
         if ($this->attribute_group_id < 1) {
             return [];

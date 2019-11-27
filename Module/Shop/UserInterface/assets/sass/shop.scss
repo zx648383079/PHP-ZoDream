@@ -116,6 +116,7 @@ header {
         background-color: #333;
         z-index: 4;
         color: #ccc;
+        font-size: 12px;
         .top-left {
             float: left;
             >a {
@@ -1245,6 +1246,9 @@ header {
                     height: 100%;
                     background-color: #f4f4f4;
                 }
+                &.active {
+                    border: 3px solid #b4a078;
+                }
             }
         }
     }
@@ -1311,6 +1315,12 @@ header {
         padding-top: 27px;
         border: 1px solid #e8e8e8;
         border-top: none;
+        .score {
+            margin-bottom: 10px;
+            .light {
+                color: red;
+            }
+        }
         .comment-header {
             display: grid;
             grid-template-columns: 126px 1fr;
@@ -1384,9 +1394,6 @@ header {
             }
             .score {
                 margin-bottom: 10px;
-                .light {
-                    color: red;
-                }
             }
             .attr {
                 color: #999;
@@ -1425,6 +1432,19 @@ header {
 }
 
 .cart-page {
+    .empty-cart-box {
+        margin-top: 10px;
+        position: relative;
+        border: 1px solid #ddd;
+        height: 400px;
+        text-align: center;
+        padding-top: 150px;
+        p {
+            font-size: 50px;
+            color: #ccc;
+            line-height: 100px;
+        }
+    }
     .cart-header {
         display: grid;
         grid-template-columns: 120px 1fr 180px 170px 150px 120px;

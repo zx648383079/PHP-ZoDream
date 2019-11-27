@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = $goods->name;
 $js = <<<JS
-bindGoods();
+bindGoods({$goods->id});
 JS;
 $this->registerCssFile('@slider.css')
     ->registerJsFile('@jquery.slider.min.js')
@@ -86,14 +86,14 @@ $this->registerCssFile('@slider.css')
                     </div>
                 </div>
                 <div class="actions">
-                    <a href="javascript:buyGoods('<?=$goods->id?>', false);" class="btn">
+                    <a href="javascript:;" data-type="buy" class="btn">
                     立即购买
                     </a>
-                    <a href="javascript:addToCart('<?=$goods->id?>', false);" class="btn btn-primary">
+                    <a href="javascript:;" data-type="addCart" class="btn btn-primary">
                         <i class="fa fa-shopping-cart"></i>
                         加入购物车
                     </a>
-                    <a href="javascript:collectGoods('<?=$goods->id?>', '.btn-collect');" class="btn btn-collect">
+                    <a  href="javascript:;" data-type="collect" class="btn btn-collect">
                         <i class="fa fa-star"></i>
                         收藏
                     </a>

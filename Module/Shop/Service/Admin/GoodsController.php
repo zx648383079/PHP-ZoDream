@@ -65,7 +65,7 @@ class GoodsController extends Controller {
         }
         if ($id < 1) {
             GoodsAttributeModel::where('goods_id', '<', 1)->update([
-                'goods_id' => $id
+                'goods_id' => $model->id
             ]);
         }
         if (!empty($product)) {
