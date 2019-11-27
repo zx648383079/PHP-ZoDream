@@ -8,7 +8,7 @@ use Module\Shop\Domain\Entities\GoodsEntity;
  */
 class GoodsSimpleModel extends GoodsEntity {
 
-    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'cat_id', 'brand_id'];
+    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'cat_id', 'brand_id', 'status'];
 
     protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'shop', 'url', 'wap_url'];
 

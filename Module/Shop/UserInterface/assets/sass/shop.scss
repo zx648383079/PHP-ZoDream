@@ -1384,6 +1384,9 @@ header {
             }
             .score {
                 margin-bottom: 10px;
+                .light {
+                    color: red;
+                }
             }
             .attr {
                 color: #999;
@@ -1901,6 +1904,10 @@ header {
         margin-bottom: -2px;
         width: 110px;
         text-align: center;
+        em {
+            font-style: normal;
+            font-size: 12px;
+        }
         &.active {
             border-bottom: 2px solid #b4a078;
         }

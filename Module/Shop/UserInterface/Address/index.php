@@ -30,24 +30,9 @@ $this->registerJs($js)
                 <div>联系方式</div>
                 <div>操作</div>
             </div>
-            <?php foreach($model_list as $item):?>
-            <div class="address-row">
-                <div><?=$item->name?></div>
-                <div><?=$item->region->full_name?> <?=$item->region->address?></div>
-                <div><?=$item->tel?></div>
-                <div>
-                    <a href="">编辑</a>
-                    <a data-type="del" href="<?=$this->url('./address/delete', ['id' => $item->id])?>">删除</a>
-                </div>
-                <div>
-                    <?php if($item->is_default):?>
-                        <span class="btn">默认地址</span>
-                    <?php else:?>
-                        <a href="">设为默认地址</a> 
-                    <?php endif;?>
-                </div>
+            <div class="address-page-box">
+                <?php $this->extend('./page');?>
             </div>
-            <?php endforeach;?>
         </div>
     </div>
 </div>

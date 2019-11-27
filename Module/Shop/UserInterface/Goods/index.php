@@ -4,9 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = $goods->name;
 $js = <<<JS
-$(".slider-goods").slider({
-    haspoint: false
-});
+bindGoods();
 JS;
 $this->registerCssFile('@slider.css')
     ->registerJsFile('@jquery.slider.min.js')
@@ -103,29 +101,7 @@ $this->registerCssFile('@slider.css')
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-header">
-                大家都在看
-            </div>
-            <div class="panel-body">
-                <div class="slider slider-goods" data-height="279" data-width="210">
-                    <div class="slider-previous">&lt;</div>
-                    <div class="slider-box">
-                        <ul>
-                            <?php foreach($hot_goods as $item):?>
-                            <li class="goods-item">
-                                <div class="thumb">
-                                    <img src="<?=$item->thumb?>" alt="">
-                                </div>
-                                <div class="name"><?=$item->name?></div>
-                                <div class="price"><?=$item->price?></div>
-                            </li>
-                            <?php endforeach;?>
-                        </ul>
-                    </div>
-                    <div class="slider-next">&gt;</div>
-                </div>
-            </div>
+        <div class="template-lazy" data-url="<?=$this->url('./goods/recommend', ['id' => $goods->id])?>" data-tpl="recommend_tpl">
         </div>
 
         <div class="detail-box">
@@ -135,7 +111,10 @@ $this->registerCssFile('@slider.css')
                     详情
                     </div>
                     <div class="tab-item">
-                    评价()
+                    评价
+                    <?php if($goods->comment_count > 0):?>
+                    (<?=$goods->comment_count?>)
+                    <?php endif;?>
                     </div>
                     <div class="tab-item">
                     常见问题
@@ -147,98 +126,23 @@ $this->registerCssFile('@slider.css')
                         <?=$goods->content?>
                         </div>
                     </div>
-                    <div class="tab-item">
-                        <div class="comment-box">
-                            <div class="comment-header">
-                                <div class="text-center">
-                                好评率
-                                </div>
-                                <div>
-                                大家都在说：
-                                </div>
-                                <div class="text-center">
-                                    <div class="rate">91%</div>
-                                    <div class="score">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <div class="tag-box">
-                                    <span class="active">全部（111）</span>
-                                    <span>有图（24）</span>
-                                    <span>追评（3）</span>
-                                    <span>有效实用（11）</span>
-                                </div>
-                            </div>
-                            <div class="comment-filter">
-                                <span>排序</span>
-                                <a href="" class="active"> 默认</a>
-                                <a href="">评价时间</a>
-                            </div>
-                            <?php foreach($comment_list as $item):?>
-                            <div class="comment-item">
-                                <div class="user-box">
-                                    <div class="avatar">
-                                        <img src="<?=$item->user->avatar?>" alt="">
-                                    </div>
-                                    <div class="name"><?=$item->user->name?></div>
-                                </div>
-                                <div>
-                                    <div class="score">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="attr">
-                                    规格:雾白
-                                    </div>
-                                    <div class="content"><?=$item->content?></div>
-                                    <ul class="image-box">
-                                        <?php foreach($item->images as $img):?>
-                                        <li>
-                                            <img src="<?=$img->image?>" alt="">
-                                        </li>
-                                        <?php endforeach;?>
-                                    </ul>
-                                    <div class="time"><?=$item->created_at?></div>
-                                </div>
-                            </div>
-                            <?php endforeach;?>
-                        </div>
+                    <div id="comment-tab" class="tab-item" data-url="<?=$this->url('./goods/comment', ['id' => $goods->id])?>">
+                        
                     </div>
-                    <div class="tab-item issue-box">
-                        <ul>
-                        <?php foreach($issue_list as $item):?>
-                            <li class="issue">
-                                <div class="question"><?=$item['question']?></div>
-                                <div class="answer"><?=$item['answer']?></div>
-                            </li>
-                        <?php endforeach;?>
-                        </ul>
+                    <div class="tab-item issue-box" data-url="<?=$this->url('./goods/issue', ['id' => $goods->id])?>">
+                        
                     </div>
                 </div>
             </div>
-            <div class="panel">
-                <div class="panel-header">
-                    24小时热销榜
-                </div>
-                <div class="panel-body">
-                    <?php foreach($hot_goods as $item):?>
-                    <a href="" class="goods-item">
-                        <div class="thumb">
-                            <img src="<?=$item->thumb?>" alt="">
-                        </div>
-                        <div class="name"><?=$item->name?></div>
-                        <div class="price"><?=$item->price?></div>
-                    </a>
-                    <?php endforeach;?>
-                </div>
+
+            <div class="template-lazy" data-url="<?=$this->url('./goods/hot', ['id' => $goods->id])?>" data-tpl="hot_tpl">
             </div>
+            
         </div>
     </div>
 </div>
+
+<?php $this->extend([
+    './recommend.tpl',
+    './hot.tpl'
+]);?>

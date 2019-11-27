@@ -215,40 +215,5 @@ class OrderModel extends Model {
         return time();
     }
 
-    public static function getSubtotal() {
-        if (auth()->guest()) {
-            return [
-                'un_pay' => 0,
-                'shipped' => 0,
-                'finish' => 0,
-                'cancel' => 0,
-                'invalid' => 0,
-                'paid_un_ship' => 0,
-                'received' => 0,
-                'uncomment' => 0,
-                'refunding' => 0
-            ];
-        }
-        $data = static::where('user_id', auth()->id())->groupBy('status')->asArray()
-            ->get('status, COUNT(*) AS count');
-        $data = array_column($data, 'count', 'status');
-        $args = [
-            'un_pay' => self::STATUS_UN_PAY,
-            'shipped' => self::STATUS_SHIPPED,
-            'finish' => self::STATUS_FINISH,
-            'cancel' => self::STATUS_CANCEL,
-            'invalid' => self::STATUS_INVALID,
-            'paid_un_ship' => self::STATUS_PAID_UN_SHIP,
-            'received' => self::STATUS_RECEIVED
-        ];
-        foreach ($args as $key => $status) {
-            $args[$key] = isset($data[$status])
-                ? intval($data[$status]) : 0;
-        }
-        $args['uncomment'] = OrderGoodsModel::auth()
-            ->where('status', self::STATUS_RECEIVED)->count();
-        $args['refunding'] = OrderRefundModel::auth()
-            ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count();
-        return $args;
-    }
+
 }

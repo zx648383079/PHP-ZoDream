@@ -8,6 +8,7 @@ use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\Scene\Order;
+use Module\Shop\Domain\Repositories\OrderRepository;
 
 class OrderController extends Controller {
 
@@ -22,13 +23,7 @@ class OrderController extends Controller {
         if ($id > 0) {
             return $this->infoAction($id);
         }
-        $order_list = Order::with('goods')
-            ->where('user_id', auth()->id())
-            ->when($status > 0, function ($query) use ($status) {
-                $query->where('status', intval($status));
-            })
-            ->orderBy('created_at', 'desc')
-            ->page();
+        $order_list = OrderRepository::getList($status);
         return $this->renderPage($order_list);
     }
 
@@ -41,16 +36,14 @@ class OrderController extends Controller {
     }
 
     public function countAction() {
-        return $this->render(OrderModel::getSubtotal());
+        return $this->render(OrderRepository::getSubtotal());
     }
 
     public function receiveAction($id) {
-        $order = Order::findWithAuth($id);
-        if (!$order || $order->status != OrderModel::STATUS_SHIPPED) {
-            return $this->renderFailure('签收失败！');
-        }
-        if (!OrderLogModel::receive($order)) {
-            return $this->renderFailure('签收失败！');
+        try {
+            $order = OrderRepository::receive($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         $address = OrderAddressModel::where('order_id', $id)->one();
         $data = $order->toArray();
@@ -59,17 +52,26 @@ class OrderController extends Controller {
     }
 
     public function cancelAction($id) {
-        $order = Order::findWithAuth($id);
-        if (!$order || !in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
-            return $this->renderFailure('取消失败！');
-        }
-        if (!OrderLogModel::cancel($order)) {
-            return $this->renderFailure('取消失败！');
+        try {
+            $order = OrderRepository::cancel($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         $address = OrderAddressModel::where('order_id', $id)->one();
         $data = $order->toArray();
         $data['address'] = $address;
         return $this->render($data);
+    }
+
+    public function repurchaseAction($id) {
+        try {
+            OrderRepository::repurchase($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render([
+            'data' => true
+        ]);
     }
 
     public function commentAction($status) {

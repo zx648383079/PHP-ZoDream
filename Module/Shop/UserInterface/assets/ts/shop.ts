@@ -136,11 +136,6 @@ $(function() {
         }
         ajaxForm(form.attr('action'), form.serialize());
     });
-    $(".tab-box .tab-header .tab-item").click(function() {
-        let $this = $(this);
-        $this.addClass("active").siblings().removeClass("active");
-        $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
-    });
     $(".header-nav>li").mouseenter(function() {
         $(".header-nav .nav-dropdown").hide();
         $(this).find('.nav-dropdown').show();
@@ -479,6 +474,9 @@ function bindAddress(baseUrl: string) {
             }
             this.value = data && data[this.name] ? data[this.name] : '';
         });
+        if (data && data.region_id > 0) {
+            regionBox.val = data.region_id;
+        }
     };
     let regionBox = $('.address-dialog .region-input').multiSelect({
         default: 0,
@@ -487,14 +485,51 @@ function bindAddress(baseUrl: string) {
     });
     dialog.on('done', function() {
         this.close();
-        postJson(baseUrl + 'address/save', formData(dialog), res => {
-            parseAjax(res);
-        })
+        postJson(baseUrl + 'address/save', formData(dialog), parseResponse);
     });
     $('.add-btn').click(function() {
         fillForm();
         dialog.show();
     });
+    let pageBox = $('.address-page-box').on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        replaceUrl($(this).attr('href'));
+    }).on('click', 'a[data-action="edit"]', function(e) {
+        e.preventDefault();
+        $.getJSON($(this).attr('href'), res => {
+            fillForm(res.data);
+            dialog.show();
+        });
+    }).on('click', 'a[data-action="del"]', function(e) {
+        e.preventDefault();
+        if (!confirm('确定要删除此收货地址?')) {
+            return;
+        }
+        postJson($(this).attr('href'), parseResponse);
+    }).on('click', 'a[data-action="default"]', function(e) {
+        e.preventDefault();
+        postJson($(this).attr('href'), parseResponse);
+    }),
+        parseResponse = function(data: any) {
+            if (data.code !== 200) {
+                parseAjax(data);
+                return;
+            }
+            if (typeof data.data !== 'object') {
+                return;
+            }
+            let url = data.data.url;
+            if (data.data.refresh) {
+                url = window.location.href;
+            }
+            replaceUrl(url);
+        },
+        replaceUrl = function(url: string) {
+            $.get(url, html => {
+                pageBox.html(html);
+                history.pushState(null, '我的收货地址', url);
+            });
+        };
 }
 
 function formData(item: JQuery): string {
@@ -554,5 +589,63 @@ function bindHome() {
             height: 344,
             haspoint: false
         });
+    });
+}
+
+function bindGoods() {
+    $('.template-lazy').on('lazyLoaded', function() {
+        let box = $(this).find('.slider-goods');
+        if (box.length < 1) {
+            return;
+        }
+        box.slider({
+            width: 266,
+            height: 344,
+        });
+    });
+    $('.detail-box .tab-body .tab-item').on('tabActived', function(_, i) {
+        if (i > 0) {
+            lazyTab($(this));
+        }
+    });
+    $('#comment-tab').on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        $.get($this.attr('href'), html => {
+            $this.closest('.comment-page-box').html(html);
+        });
+    });
+}
+
+function lazyTab(tab: JQuery) {
+    const url = tab.data('url');
+    if (!url || tab.hasClass('lazy-loading') || tab.hasClass('tab-lazy-loaded')) {
+        return;
+    }
+    tab.addClass('lazy-loading');
+    $.get(url, function (html) {
+        tab.removeClass('lazy-loading');
+        tab.html(html);
+        tab.addClass('tab-lazy-loaded');
+    });
+}
+
+function bindOrder() {
+    let replaceUrl = function(url: string, title: string = '订单') {
+        $.get(url, html => {
+            box.html(html);
+            history.pushState(null, title, url);
+        });
+    };
+    $('.order-tab a').click(function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        $this.addClass('active').siblings().removeClass('active');
+        replaceUrl($this.attr('href'), $this.text());
+    });
+    let box = $('.order-page-box').on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        replaceUrl($this.attr('href'), '我的订单第' + $this.text() + '页');
     });
 }

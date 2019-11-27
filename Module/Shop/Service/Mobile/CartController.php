@@ -3,6 +3,7 @@ namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Module;
 
 class CartController extends Controller {
@@ -13,11 +14,11 @@ class CartController extends Controller {
     }
 
     public function addAction($goods, $amount = 1) {
-        $goods = GoodsModel::find($goods);
-        if (!$goods->canBuy($amount)) {
-            return $this->jsonFailure('库存不足');
+        try {
+            CartRepository::addGoods($goods, $amount);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        Module::cart()->add(CartModel::fromGoods($goods, $amount))->save();
         return $this->jsonSuccess(null, '加入购物车成功！');
     }
 

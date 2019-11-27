@@ -10,8 +10,36 @@ use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Module;
 use Zodream\Helpers\Json;
 use InvalidArgumentException;
+use Exception;
 
 class CartRepository {
+    /**
+     * @param $goods
+     * @param int $amount
+     * @return GoodsModel
+     * @throws Exception
+     */
+    public static function checkGoods($goods, $amount = 1) {
+        if (is_numeric($goods)) {
+            $goods = GoodsModel::find($goods);
+        }
+        if (empty($goods)) {
+            throw new Exception('商品不存在');
+        }
+        if ($goods->status != GoodsModel::STATUS_SALE) {
+            throw new Exception(sprintf('商品【%s】已下架', $goods->name));
+        }
+        if (!$goods->canBuy($amount)) {
+            throw new Exception(sprintf('商品【%s】库存不足', $goods->name));
+        }
+        return $goods;
+    }
+
+    public static function addGoods($goods, $amount = 1, $properties = null) {
+        $goods = static::checkGoods($goods, $amount);
+        Module::cart()->add(CartModel::fromGoods($goods, $amount))->save();
+        return true;
+    }
     /**
      * @param $goods_list
      * @param $address

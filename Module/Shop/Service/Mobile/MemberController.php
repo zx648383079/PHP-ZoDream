@@ -1,9 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-
-
-use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Repositories\OrderRepository;
 
 class MemberController extends Controller {
 
@@ -17,7 +15,7 @@ class MemberController extends Controller {
 
     public function indexAction() {
         $user = auth()->user();
-        $order_subtotal = OrderModel::getSubtotal();
+        $order_subtotal = OrderRepository::getSubtotal();
         return $this->show(compact('user', 'order_subtotal'));
     }
 

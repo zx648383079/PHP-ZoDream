@@ -5,6 +5,7 @@ use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Repositories\OrderRepository;
 
 
 class OrderController extends Controller {
@@ -16,13 +17,7 @@ class OrderController extends Controller {
     }
 
     public function indexAction($status = 0) {
-        $order_list = OrderModel::with('goods')
-            ->where('user_id', auth()->id())
-            ->when($status > 0, function ($query) use ($status) {
-                $query->where('status', intval($status));
-            })
-            ->orderBy('created_at', 'desc')
-            ->page();
+        $order_list = OrderRepository::getList($status);
         return $this->show(compact('order_list', 'status'));
     }
 
@@ -34,12 +29,10 @@ class OrderController extends Controller {
     }
 
     public function receiveAction($id) {
-        $order = OrderModel::findWithAuth($id);
-        if (!$order || $order->status != OrderModel::STATUS_SHIPPED) {
-            return $this->jsonFailure('签收失败！');
-        }
-        if (!OrderLogModel::receive($order)) {
-            return $this->jsonFailure('签收失败！');
+        try {
+            OrderRepository::receive($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
             'refresh' => true
@@ -47,15 +40,24 @@ class OrderController extends Controller {
     }
 
     public function cancelAction($id) {
-        $order = OrderModel::findWithAuth($id);
-        if (!$order || !in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
-            return $this->jsonFailure('取消失败！');
-        }
-        if (!OrderLogModel::cancel($order)) {
-            return $this->jsonFailure('取消失败！');
+        try {
+            OrderRepository::cancel($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
            'refresh' => true
+        ]);
+    }
+
+    public function repurchaseAction($id) {
+        try {
+            OrderRepository::repurchase($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('cart')
         ]);
     }
 }

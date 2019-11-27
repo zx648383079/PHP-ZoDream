@@ -180,11 +180,15 @@ $(function() {
     .on('click', ".zd-tab .zd-tab-head .zd-tab-item", function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
-        $this.closest(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
+        let tab = $this.closest(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active");
+        tab.siblings().removeClass("active");
+        tab.trigger('tabActived', $this.index());
     }).on('click', ".tab-box .tab-header .tab-item", function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
-        $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active").siblings().removeClass("active");
+        let tab = $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active");
+        tab.siblings().removeClass("active");
+        tab.trigger('tabActived', $this.index());
     })
     .on('click', ".page-tip .toggle", function() {
         $(this).closest('.page-tip').toggleClass('min');
