@@ -525,10 +525,7 @@ function bindAddress(baseUrl: string) {
             replaceUrl(url);
         },
         replaceUrl = function(url: string) {
-            $.get(url, html => {
-                pageBox.html(html);
-                history.pushState(null, '我的收货地址', url);
-            });
+            partialLoad(pageBox, url, '我的收货地址');
         };
 }
 
@@ -632,10 +629,7 @@ function lazyTab(tab: JQuery) {
 
 function bindOrder() {
     let replaceUrl = function(url: string, title: string = '订单') {
-        $.get(url, html => {
-            box.html(html);
-            history.pushState(null, title, url);
-        });
+        partialLoad(box, url, title);
     };
     $('.order-tab a').click(function(e) {
         e.preventDefault();
@@ -647,5 +641,12 @@ function bindOrder() {
         e.preventDefault();
         let $this = $(this);
         replaceUrl($this.attr('href'), '我的订单第' + $this.text() + '页');
+    });
+}
+
+function partialLoad(box: JQuery, url: string, title = 'zodream') {
+    $.get(url, html => {
+        box.html(html);
+        history.pushState(null, title, url);
     });
 }
