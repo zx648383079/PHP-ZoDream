@@ -2220,8 +2220,8 @@ footer {
         }
     }
     .footer-main {
-        height: 204px;
-        padding-top: 37px;
+        min-height: 204px;
+        padding: 37px 0 27px;
         background-color: #414141;
         .top-grid {
             display: grid;
@@ -2253,6 +2253,8 @@ footer {
             text-align: center;
             color: #999;
             position: relative;
+            font-size: 12px;
+            line-height: 30px;
             .nav-list {
                 a {
                     color: #999;

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '帐号安全';
+$this->title = '通知中心';
 ?>
 <div class="user-page">
     <div class="container side-box">

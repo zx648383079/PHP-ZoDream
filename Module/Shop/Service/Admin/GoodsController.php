@@ -17,6 +17,7 @@ use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\ProductModel;
+use Module\Shop\Domain\Repositories\GoodsRepository;
 use Zodream\Helpers\Json;
 
 class GoodsController extends Controller {
@@ -227,5 +228,12 @@ class GoodsController extends Controller {
         }
         $this->layout = false;
         return $this->show(compact('model_list', 'selected', 'simple'));
+    }
+
+    public function importAction() {
+        if (app('request')->isJson()) {
+            GoodsRepository::importJson(app('request')->get());
+        }
+        return $this->jsonSuccess();
     }
 }

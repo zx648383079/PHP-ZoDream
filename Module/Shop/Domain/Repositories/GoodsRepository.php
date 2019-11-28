@@ -91,4 +91,11 @@ class GoodsRepository {
                 $query->where('brand_id', intval($brand));
             })->page($per_page);
     }
+
+    public static function importJson(array $data) {
+        if (empty($data)) {
+            return;
+        }
+
+    }
 }
