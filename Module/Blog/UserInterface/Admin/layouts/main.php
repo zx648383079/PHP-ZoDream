@@ -21,7 +21,7 @@ $this->registerCssFile([
         'ueditor/ueditor.all.js',
         '@main.min.js',
         '@blog_admin.min.js'
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::mainIfPjax($this, [

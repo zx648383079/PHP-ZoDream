@@ -2,9 +2,8 @@
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '注册账号';
-$url = $this->url('./', false);
 $js = <<<JS
-bindRegister('{$url}');
+bindRegister();
 JS;
 
 $this->extend('layouts/header')

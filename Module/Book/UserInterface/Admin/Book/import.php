@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '同步小说';
-$url = $this->url('./');
+$url = $this->url('./', false);
 $js = <<<JS
 bindImport('{$url}');
 JS;

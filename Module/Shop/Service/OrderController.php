@@ -17,7 +17,7 @@ class OrderController extends Controller {
     }
 
     public function indexAction($status = 0) {
-        $order_list = OrderRepository::getList($status);
+        $order_list = OrderRepository::getList(intval($status));
         if (app('request')->isAjax()) {
             $this->layout = false;
             return $this->show('page', compact('order_list'));

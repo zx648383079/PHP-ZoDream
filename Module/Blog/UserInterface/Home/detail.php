@@ -7,7 +7,6 @@ use Infrastructure\HtmlExpand;
 /** @var $this View */
 /** @var $blog BlogModel */
 $this->title = $blog->title;
-$url = $this->url('./', false);
 $lang = [
     'side_title' => __('Catalog'),
     'reply_btn' => __('Reply'),
@@ -17,7 +16,7 @@ $lang = [
 ];
 $lang = Json::encode($lang);
 $js = <<<JS
-bindBlog('{$url}', '{$blog->id}', {$blog->edit_type}, {$lang});
+bindBlog('{$blog->id}', {$blog->edit_type}, {$lang});
 JS;
 
 if ($blog->edit_type < 1) {

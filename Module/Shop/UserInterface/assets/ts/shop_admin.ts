@@ -1,4 +1,3 @@
-let BASE_URI: string;
 class Attribute {
     /**
      *
@@ -411,8 +410,7 @@ class Attribute {
     }
 }
 
-function bindGoods(baseUri: string, goodsId: number) {
-    BASE_URI = baseUri;
+function bindGoods(goodsId: number) {
     bindEdit();
     let attr = new Attribute($(".attribute-box"), goodsId);
     $("#attribute_group_id").change(function() {
@@ -435,10 +433,10 @@ function bindGoods(baseUri: string, goodsId: number) {
             return data.state == 'SUCCESS' ? data : false;
         }
     });
-    bindImgDialog(baseUri);
+    bindImgDialog();
 }
 
-function bindImgDialog(baseUri: string) {
+function bindImgDialog() {
     let dialog = $('.images-dialog').dialog();
     let multiple = false;
     let callback: (item: string| string[]) => void;
@@ -1084,8 +1082,7 @@ class GoodsDailog {
     }
 }
 
-function bindSecKill(baseUri: string, actId, timeId) {
-    BASE_URI = baseUri;
+function bindSecKill(actId, timeId) {
     let refreshSelected = function() {
         let selected = [];
         $('table tbody tr').each(function() {
@@ -1102,7 +1099,7 @@ function bindSecKill(baseUri: string, actId, timeId) {
         box.show();
     });
     box.on('done', (selected: number[]) => {
-        $.get(baseUri + 'activity/seckill/update_goods', {
+        $.get(BASE_URI + 'activity/seckill/update_goods', {
             act_id: actId,
             time_id: timeId,
             goods: selected.join(',')
@@ -1120,7 +1117,7 @@ function bindSecKill(baseUri: string, actId, timeId) {
         });
     }).on('change', 'input', function() {
         let $this = $(this);
-        postJson(baseUri + 'activity/seckill/change_goods', {
+        postJson(BASE_URI + 'activity/seckill/change_goods', {
             id: $this.closest('tr').data('id'),
             name: $this.attr('name'),
             value: $this.val()
@@ -1131,15 +1128,14 @@ function bindSecKill(baseUri: string, actId, timeId) {
     refreshSelected();
 }
 
-function bindShipping(baseUri: string) {
-    BASE_URI = baseUri;
+function bindShipping() {
     let shipping = new Delivery($('.regional-table'));
 }
 
 function bindEditAd() {
     let groups = $(".type-group .input-group");
     $("#type").change(function() {
-        groups.eq(parseInt($(this).val()) % 2).show().siblings().hide();
+        groups.eq(parseInt($(this).val() as string) % 2).show().siblings().hide();
     }).trigger('change');
 }
 
@@ -1165,14 +1161,14 @@ function bindEdit() {
     });
 }
 
-function bindSetting(baseUri: string) {
+function bindSetting() {
     $('.zd-tab-head .zd-tab-item').eq(0).trigger('click');
     $("#field_type,#type").change(function() {
         $(this).closest('.input-group').next('.group-property').toggle($(this).val() != 'group');
     }).trigger('change');
     let dialog = $('.option-dialog').dialog();
     $('.option-box .input-group .fa-edit').click(function() {
-        $.getJSON(baseUri + '/setting/info', {id: $(this).data('id')}, function(data) {
+        $.getJSON(BASE_URI + 'setting/info', {id: $(this).data('id')}, function(data) {
             if (data.code !== 200) {
                 return;
             }
@@ -1184,10 +1180,10 @@ function bindSetting(baseUri: string) {
         
     });
     dialog.on('done', function() {
-        ajaxForm(baseUri + '/setting/update', dialog.find('form').serialize());
+        ajaxForm(BASE_URI + 'setting/update', dialog.find('form').serialize());
     });
     dialog.find('.dialog-del').click(function() {
-        postJson(baseUri+'/setting/delete', {id: dialog.find('[name=id]').val()}, function(data) {
+        postJson(BASE_URI + 'setting/delete', {id: dialog.find('[name=id]').val()}, function(data) {
             parseAjax(data);
         });
     });

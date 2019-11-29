@@ -1,7 +1,7 @@
 function bindField(baseUri: string) {
     let field = $('#field');
     $('#name').blur(function() {
-        pinyinIfEmpty(field, $(this).val());
+        pinyinIfEmpty(field, $(this).val() as string);
     });
     $("#type").change(function() {
         $.get(baseUri, {

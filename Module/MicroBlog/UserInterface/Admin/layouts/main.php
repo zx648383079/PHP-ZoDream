@@ -16,7 +16,7 @@ $this->registerCssFile([
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
         '@main.min.js',
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::mainIfPjax($this, [

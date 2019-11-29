@@ -3,9 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('blog');
-$url = $this->url('./', false);
 $js = <<<JS
-bindBlogPage('{$url}');
+bindBlogPage();
 JS;
 $data = [];
 if (!empty($term)) {

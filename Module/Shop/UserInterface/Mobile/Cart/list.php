@@ -3,11 +3,9 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
-$url = $this->url('./mobile/');
-
 $js = <<<JS
 $(".swipe-row").swipeAction();
-bindCart('{$url}');
+bindCart();
 JS;
 
 $this->registerJsFile('@jquery.swipeAction.min.js')

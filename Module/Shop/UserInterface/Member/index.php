@@ -48,23 +48,33 @@ $this->header_tpl = './user_header';
 
             <div class="panel un-order-box">
                 <div class="panel-header">
-                    <span>未完成订单（1）</span>
-                    <a href="">查看全部订单</a>
+                    <span>未完成订单（<?=$order_list->getTotal()?>）</span>
+                    <a href="<?=$this->url('./order')?>">查看全部订单</a>
                 </div>
                 <div class="panel-body">
+                    <?php foreach($order_list as $order):?>
                     <div class="order-item">
-                        <div>
-                            <img src="http://yanxuan.nosdn.127.net/9014a75315685c0ecccece8583fdba68.png?imageView&thumbnail=100x100&quality=95" alt="">
+                        <div class="goods-img">
+                            <?php if($order->goods):?>
+                            <img src="<?=$order->goods[0]->thumb?>" alt="">
+                            <?php endif;?>
                         </div>
                         <div>包裹1</div>
-                        <div>待付款</div>
-                        <div>11</div>
+                        <div><?=$order->status_label?></div>
+                        <div><?=$order->order_amount?></div>
                         <div>
-                            <p><a href="" class="btn">付款</a></p>
-                            <p><a href="">查看详情</a></p>
-                            <p><a href="">取消订单</a></p>
+                            <?php if($order->status == 10):?>
+                            <p><a href="<?=$this->url('./cashier/pay', ['id' => $order->id])?>" class="btn">付款</a></p>
+                            <?php elseif($order->status == 40):?>
+                            <p><a data-type="ajax" href="<?=$this->url('./order/receive', ['id' => $order->id])?>" class="btn">签收</a></p>
+                            <?php endif;?>
+                            <p><a href="<?=$this->url('./order/detail', ['id' => $order->id])?>">查看详情</a></p>
+                            <?php if($order->status == 10):?>
+                            <p><a data-type="del" data-tip="确定要取消订单?" href="<?=$this->url('./order/cancel', ['id' => $order->id])?>">取消订单</a></p>
+                            <?php endif;?>
                         </div>
                     </div>
+                    <?php endforeach;?>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->registerCssFile('@font-awesome.min.css')
     ->registerCssFile('@dialog.css')
-    ->registerCssFile('@book_mobile.css');
+    ->registerCssFile('@book_mobile.css')->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./@mobile/', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

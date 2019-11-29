@@ -23,9 +23,8 @@ function parseArr($value) {
 
 
 $this->title = '基本设置';
-$url = $this->url('./@admin'); 
 $js = <<<JS
-bindSetting('{$url}');
+bindSetting();
 JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>

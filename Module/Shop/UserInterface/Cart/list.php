@@ -2,10 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$url = $this->url('./');
-
 $js = <<<JS
-bindCart('{$url}');
+bindCart();
 JS;
 $this->registerJs($js);
 ?>

@@ -12,7 +12,7 @@ use Exception;
 class OrderRepository {
 
     /**
-     * @param int $status
+     * @param int|int[] $status
      * @param null $keywords
      * @return Page<Order>
      * @throws Exception
@@ -20,7 +20,10 @@ class OrderRepository {
     public static function getList($status = 0, $keywords = null) {
         return Order::with('goods')
             ->where('user_id', auth()->id())
-            ->when($status > 0, function ($query) use ($status) {
+            ->when(!empty($status), function ($query) use ($status) {
+                if (is_array($status)) {
+                    return $query->whereIn('status', $status);
+                }
                 $query->where('status', intval($status));
             })
             ->when(!empty($keywords), function ($query) use ($keywords) {

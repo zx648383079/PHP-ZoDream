@@ -13,7 +13,7 @@ $this->registerCssFile([
     '@jquery.lazyload.min.js',
     '@main.min.js',
     '@note.min.js'
-]);
+])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

@@ -3,9 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
-$url = $this->url('./', false);
 $js = <<<JS
-bindLogin('{$url}');
+bindLogin();
 JS;
 
 $this->extend('layouts/header')

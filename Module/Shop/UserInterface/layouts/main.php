@@ -14,7 +14,7 @@ $this->registerCssFile([
     '@main.min.js',
     '@shop.min.js',
     '@template-web.js'
-]);
+])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

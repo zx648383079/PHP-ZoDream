@@ -8,9 +8,11 @@ use Zodream\Template\View;
         <div class="panel-header order-item-header">
             <span class="time">下单时间：<?=$order->created_at?></span>
             <span class="number">订单号：<?=$order->series_number?></span>
-            <a href="">
+            <?php if($order->status < 10):?>
+            <a data-type="del" href="<?=$this->url('./order/delete', ['id' => $order->id])?>">
                 <i class="fa fa-trash"></i>
             </a>
+            <?php endif;?>
         </div>
         <div class="panel-body">
             <?php foreach($order->goods as $goods):?>
@@ -28,7 +30,11 @@ use Zodream\Template\View;
                     <p>（含运费：¥0.00元）</p>
                 </div>
                 <div class="actions">
+                    <?php if($order->status == 10):?>
                     <a href="<?=$this->url('./cashier/pay', ['id' => $order->id])?>" class="btn">付款</a>
+                    <?php elseif($order->status == 40):?>
+                    <a data-type="ajax" href="<?=$this->url('./order/receive', ['id' => $order->id])?>" class="btn">签收</a>
+                    <?php endif;?>
                     <a href="<?=$this->url('./order/detail', ['id' => $order->id])?>">查看详情</a>
                     <?php if($order->status == 10):?>
                     <a data-type="del" data-tip="确定要取消订单?" href="<?=$this->url('./order/cancel', ['id' => $order->id])?>">取消订单</a>

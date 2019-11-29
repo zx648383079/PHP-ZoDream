@@ -148,6 +148,34 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         return $this;
     }
 
+    public function checkoutButton() {
+        return [
+            'action' => 'checkout',
+            'text' => '去结算'
+        ];
+    }
+
+    public function promotionCell() {
+        return [
+            [
+                'popup_tip' => '还差8元包邮',
+                'link' => [
+                    'text' => '去凑单',
+                    'url' => '',
+                ]
+            ]
+        ];
+    }
+
+    public function subtotal() {
+        return [
+            'total' => $this->total(),
+            'total_weight' => 1,
+            'original_total' => $this->total(),
+            'discount_amount' => 0,
+        ];
+    }
+
     public function getIterator() {
         return new ArrayIterator($this->all());
     }
@@ -170,6 +198,11 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @return string
      */
     public function toJson($options = 0) {
-        return Json::encode($this->all());
+        return Json::encode([
+            'groups' => $this->toArray(),
+            'subtotal' => $this->subtotal(),
+            'checkout_button' => $this->checkoutButton(),
+            'promotion_cell' => $this->promotionCell()
+        ]);
     }
 }

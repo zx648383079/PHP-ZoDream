@@ -19,7 +19,7 @@ $this->registerCssFile([
         '@jquery.datetimer.min.js',
         '@main.min.js',
         '@finance.min.js'
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::mainIfPjax($this, [

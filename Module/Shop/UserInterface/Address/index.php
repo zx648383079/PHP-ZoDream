@@ -3,9 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '收货地址';
-$url = $this->url('./', false);
 $js = <<<JS
-bindAddress('{$url}');
+bindAddress();
 JS;
 $this->registerJs($js)
     ->registerJsFile('@jquery.multi-select.min.js');

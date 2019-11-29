@@ -1,4 +1,4 @@
-function bindBlogPage(baseUri: string) {
+function bindBlogPage() {
     $('.book-nav').click(function () {
         $(this).toggleClass('hover');
     });
@@ -23,7 +23,7 @@ function bindBlogPage(baseUri: string) {
         if (!keywords) {
             return;
         }
-        $.getJSON(baseUri + 'home/suggest?keywords=' + keywords, function (data) {
+        $.getJSON(BASE_URI + 'home/suggest?keywords=' + keywords, function (data) {
             if (data.code != 200) {
                 return;
             }
@@ -48,7 +48,7 @@ function bindBlogPage(baseUri: string) {
     
 }
 
-function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
+function bindBlog(id: number, type: number, langs = {}) {
     if (type != 1) {
         uParse('#content', {
             rootPath: '/assets/ueditor'
@@ -56,10 +56,10 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
         SyntaxHighlighter.all();
     }
     let dynamicBox = $('.book-dynamic');
-    $.get(baseUri + 'log', {blog: id}, html => {
+    $.get(BASE_URI + 'log', {blog: id}, html => {
         dynamicBox.html(html);
     });
-    $.getJSON(baseUri + 'counter', {blog: id}, function(data) {
+    $.getJSON(BASE_URI + 'counter', {blog: id}, function(data) {
         if (data.code != 200) {
             return;
         }
@@ -69,7 +69,7 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
     });
     let commentBox = $('.book-footer');
     if (commentBox.length > 0) {
-        $.get(baseUri + 'comment', {
+        $.get(BASE_URI + 'comment', {
             blog_id: id
         }, function (html) {
             commentBox.html(html);
@@ -80,7 +80,7 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
     });
     $('.recommend-blog').click(function () {
         let that = $(this).find('b');
-        $.getJSON(baseUri + 'recommend', {
+        $.getJSON(BASE_URI + 'recommend', {
             blog_id: id
         }, function (data) {
             if (data.code == 200) {
@@ -129,11 +129,11 @@ function bindBlog(baseUri: string, id: number, type: number, langs = {}) {
     });
 }
 
-function bindBlogComment(baseUri: string, id: number, langs = {}) {
+function bindBlogComment(id: number, langs = {}) {
     let box = $('#comment-box'),
         sort_order = true,
         getMoreComments = function (page: number, target: JQuery = box) {
-            $.get(baseUri + 'comment/more', {
+            $.get(BASE_URI + 'comment/more', {
                 blog_id: id,
                 page: page,
                 order: sort_order ? 'desc' : 'asc',
@@ -166,7 +166,7 @@ function bindBlogComment(baseUri: string, id: number, langs = {}) {
     }).on('click', '.actions .agree', function() {
         let $this = $(this),
             id = $this.closest('.comment-item').data('id');
-        $.getJSON(baseUri + 'comment/agree', {
+        $.getJSON(BASE_URI + 'comment/agree', {
             id: id
         }, function(data: IResponse) {
             if (data.code == 302) {
@@ -182,7 +182,7 @@ function bindBlogComment(baseUri: string, id: number, langs = {}) {
     }).on('click', '.actions .disagree', function() {
         let $this = $(this),
             id = $this.closest('.comment-item').data('id');
-        $.getJSON(baseUri + 'comment/disagree', {
+        $.getJSON(BASE_URI + 'comment/disagree', {
             id: id
         }, function(data: IResponse) {
             if (data.code == 302) {

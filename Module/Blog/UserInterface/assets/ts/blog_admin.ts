@@ -1,4 +1,4 @@
-function bindEdit(configs: any, baseUri: string, tags = []) {
+function bindEdit(configs: any, tags = []) {
     let editor: any,
         box = $('#editor-container');
     UE.delEditor('editor-container');
@@ -19,7 +19,7 @@ function bindEdit(configs: any, baseUri: string, tags = []) {
     }).trigger('change');
     $("#tag-box").select2({
         ajax: {
-            url: baseUri + '/tag',
+            url: BASE_URI + 'tag',
             data: function (params) {
                 return {
                     keywords: params.term,

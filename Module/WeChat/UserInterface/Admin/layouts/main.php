@@ -18,7 +18,7 @@ $this->registerCssFile([
         '@jquery.upload.min.js',
         '@main.min.js',
         '@wechat.min.js'
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::mainIfPjax($this, [

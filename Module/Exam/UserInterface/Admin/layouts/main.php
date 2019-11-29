@@ -17,7 +17,7 @@ $this->registerCssFile([
         '@jquery.upload.min.js',
         '@main.min.js',
         '@exam.min.js'
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./@admin/', false)), View::HTML_HEAD);
 
 ?>
 

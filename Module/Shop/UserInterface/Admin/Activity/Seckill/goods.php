@@ -3,9 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '添加商品详情';
-$url = $this->url('./@admin/', false);
 $js = <<<JS
-bindSecKill('{$url}', {$act_id}, {$time_id});
+bindSecKill({$act_id}, {$time_id});
 JS;
 $this->registerJs($js);
 ?>

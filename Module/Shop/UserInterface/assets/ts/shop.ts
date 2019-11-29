@@ -1,3 +1,4 @@
+declare var BASE_URI: string;
 const CHECKED_CHANGE = 'cart_checked_change';
 function addToCart(id: number, amount: number|boolean = 1, properties?: string[]) {
     if (typeof amount === 'boolean') {
@@ -7,7 +8,7 @@ function addToCart(id: number, amount: number|boolean = 1, properties?: string[]
         Dialog.tip('数量不能小于1');
         return;
     }
-    postJson('cart/add', {
+    postJson(BASE_URI + 'cart/add', {
         goods: id,
         amount: amount,
         properties: JSON.stringify(properties)
@@ -27,7 +28,7 @@ function buyGoods(id: number, amount: number|boolean = 1, properties?: string[])
         Dialog.tip('数量不能小于1');
         return;
     }
-    window.location.href = 'cashier?type=1&cart='+ JSON.stringify([
+    window.location.href = BASE_URI + 'cashier?type=1&cart='+ JSON.stringify([
         {
             goods: id,
             amount: amount,
@@ -37,7 +38,7 @@ function buyGoods(id: number, amount: number|boolean = 1, properties?: string[])
 }
 
 function collectGoods(id: number, target?: any) {
-    postJson('collect/toggle?id=' + id, function(data) {
+    postJson(BASE_URI + 'collect/toggle?id=' + id, function(data) {
         if (data.code != 200) {
             return;
         }
@@ -159,7 +160,7 @@ $(function() {
             $this.html(html);
         });
     }).on('click', '.action .fa-times', function() {
-        $.getJSON('cart/delete', {
+        $.getJSON(BASE_URI + 'cart/delete', {
             id: $(this).closest('.cart-item').data('id'),
         }, function(data) {
             if (data.code == 200) {
@@ -201,24 +202,24 @@ $(function() {
     });
     let searchInput = $(".header-search input").keydown(function(e) {
         if (e.keyCode == 13) {
-            search($(this).val());
+            search($(this).val() as string);
         }
     });
     $(".header-search .fa-search").click(function() {
-        search(searchInput.val());
+        search(searchInput.val() as string);
     });
     $(window).scroll(function() {
         $(".header-main").toggleClass('top-fixed', $(this).scrollTop() > 180);
     }).trigger('scroll');
 });
 
-function bindCart(baseUrl: string) {
+function bindCart() {
     $('.number-box input').change(function() {
         let _this = $(this),
             amount = _this.val(),
             box = _this.closest('.cart-item'),
             id = box.attr('data-id');
-        $.getJSON(baseUrl + 'cart/update', {
+        $.getJSON(BASE_URI + 'cart/update', {
             id: id,
             amount: amount
         }, function(data) {
@@ -229,7 +230,7 @@ function bindCart(baseUrl: string) {
         let _this = $(this),
             box = _this.closest('.cart-item'),
             id = box.attr('data-id');
-        $.getJSON(baseUrl + 'cart/delete', {
+        $.getJSON(BASE_URI + 'cart/delete', {
             id: id,
         }, function(data) {
             parseAjax(data);
@@ -262,7 +263,7 @@ function bindCart(baseUrl: string) {
 
 function togglecChecked(checked: boolean, ...args: JQuery[]) {
     args.forEach(items => {
-        items.each(function() {
+        items.each(function(this: HTMLInputElement) {
             let item = $(this);
             item.toggleClass('active', checked);
             if (!item.is('input')) {
@@ -329,7 +330,7 @@ function bindCartDialog(goodsId: number) {
         },
         refreshProduct = function() {
             let amount = parseInt(cartDialog.find('.number-box .number-input').val()+''), properties = getSelectedProperties();
-            postJson('goods/price', {
+            postJson(BASE_URI + 'goods/price', {
                 id: goodsId,
                 amount: amount,
                 properties: JSON.stringify(properties)
@@ -479,7 +480,7 @@ function bindPay() {
     });
 }
 
-function bindAddress(baseUrl: string) {
+function bindAddress() {
     let dialog = $('.address-dialog').dialog();
     let fillForm = function(data?: any) {
         dialog.find('.dialog-title').text(data ? '修改地址' : '新建地址');
@@ -496,12 +497,12 @@ function bindAddress(baseUrl: string) {
     };
     let regionBox = $('.address-dialog .region-input').multiSelect({
         default: 0,
-        data: baseUrl + 'region/tree',
+        data: BASE_URI + 'region/tree',
         tag: 'region_id'
     });
     dialog.on('done', function() {
         this.close();
-        postJson(baseUrl + 'address/save', formData(dialog), parseResponse);
+        postJson(BASE_URI + 'address/save', formData(dialog), parseResponse);
     });
     $('.add-btn').click(function() {
         fillForm();

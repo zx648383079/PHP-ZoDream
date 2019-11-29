@@ -85,7 +85,7 @@ $this->registerCssFile([
         '@prism.js',
         '@main.min.js',
         '@doc.min.js'
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::main($this, $menus, $content, 'ZoDream Document') ?>

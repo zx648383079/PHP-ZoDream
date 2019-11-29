@@ -1055,24 +1055,24 @@ const USER_MENU: Array<IMenu> = [
     },
 ];
 
-function registerChat(baseUri: string) {
+function registerChat() {
     let room = new ChatRoom($('.dialog-chat'));
     room.on(EVENT_REFRESH_USERS, (box: ChatUserBox) => {
-        postJson(baseUri + 'friend', function(data) {
+        postJson(BASE_URI + 'friend', function(data) {
             if (data.code != 200) {
                 return;
             }
             box.friends = data.data;
         });
     }).on(EVENT_REFRESH_GROUPS, (box: ChatUserBox) => {
-        postJson(baseUri + 'group', function(data) {
+        postJson(BASE_URI + 'group', function(data) {
             if (data.code != 200) {
                 return;
             }
             box.groups = data.data;
         });
     }).on(EVENT_SEARCH_USERS, (keywords: string, box: ChatSearchBox) => {
-        postJson(baseUri + 'friend/search', {
+        postJson(BASE_URI + 'friend/search', {
             keywords: keywords
         }, function(data) {
             if (data.code != 200) {
@@ -1081,7 +1081,7 @@ function registerChat(baseUri: string) {
             box.users = data.data.data;
         });
     }).on(EVENT_GET_MESSAGE, (user: IUser, page: number, per_page: number, box: ChatMessageBox) => {
-        postJson(baseUri + 'friend/message', {
+        postJson(BASE_URI + 'friend/message', {
             user: user.id,
             page: page,
             per_page: per_page,
@@ -1092,7 +1092,7 @@ function registerChat(baseUri: string) {
             box.messages = data.data.data;
         });
     }).on(EVENT_SEND_MESSAGE, (content: string, user: IUser, box: ChatMessageBox) => {
-        postJson(baseUri + 'friend/send_message', {
+        postJson(BASE_URI + 'friend/send_message', {
             user: user.id,
             content: content
         }, function(data) {
@@ -1107,7 +1107,7 @@ function registerChat(baseUri: string) {
             box.editor.clear();
         });
     }).on(EVENT_APPLY_USER, (user: IUser, group: number, remark: string, box: ChatApplyBox) => {
-        postJson(baseUri + 'friend/apply', {
+        postJson(BASE_URI + 'friend/apply', {
             user: user.id,
             group: group,
             remark: remark
@@ -1118,7 +1118,7 @@ function registerChat(baseUri: string) {
             box.hide();
         });
     }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
-        postJson(baseUri + 'friend/agree', {
+        postJson(BASE_URI + 'friend/agree', {
             user: user.id,
             name: user.name,
             group: group
@@ -1129,14 +1129,14 @@ function registerChat(baseUri: string) {
             box.hide();
         });
     }).on(EVENT_APPLY_USERS, (box: ChatApplyLogBox) => {
-        postJson(baseUri + 'friend/apply_log', function(data) {
+        postJson(BASE_URI + 'friend/apply_log', function(data) {
             if (data.code != 200) {
                 return;
             }
             box.users = data.data;
         });
     });
-    postJson(baseUri + 'user', function(data) {
+    postJson(BASE_URI + 'user', function(data) {
         if (data.code === 200) {
             room.init(data.data);
             loopPing();
@@ -1152,7 +1152,7 @@ function registerChat(baseUri: string) {
     let handle;
     let lastTime;
     let loopPing = function() {
-        postJson(baseUri + 'message/ping', {
+        postJson(BASE_URI + 'message/ping', {
             time: lastTime || 0,
             user: room.chatBox.revice ? room.chatBox.revice.id : 0
         }, function(data) {
@@ -1210,7 +1210,7 @@ function registerWsChat(baseUri: string) {
     }).on(EVENT_SEND_MESSAGE, (content: string, user: IUser, box: ChatMessageBox) => {
         socket.Emit(EVENT_SEND_MESSAGE, {content, user: user.id});
     }).on(EVENT_APPLY_USER, (user: IUser, group: number, remark: string, box: ChatApplyBox) => {
-        postJson(baseUri + 'friend/apply', {
+        postJson(BASE_URI + 'friend/apply', {
             user: user.id,
             group: group,
             remark: remark
@@ -1221,7 +1221,7 @@ function registerWsChat(baseUri: string) {
             box.hide();
         });
     }).on(EVENT_ADD_USER, (user: IUser, group: number, box: ChatAddUserBox) => {
-        postJson(baseUri + 'friend/agree', {
+        postJson(BASE_URI + 'friend/agree', {
             user: user.id,
             group: group
         }, function(data) {

@@ -23,7 +23,7 @@ $(function() {
 
 });
 
-function bindRegister(baseUrl: string) {
+function bindRegister() {
     $('.login-form .input-group input').blur(function() {
         let _this = $(this);
         let box = _this.closest('.input-group');
@@ -34,7 +34,7 @@ function bindRegister(baseUrl: string) {
             return;
         }
         if (name === 'name' || name === 'email') {
-            postJson(baseUrl + 'check', {
+            postJson(BASE_URI + 'check', {
                 name,
                 value: val
             }, data => {
@@ -54,18 +54,18 @@ function bindRegister(baseUrl: string) {
     });
 }
 
-function bindLogin(baseUrl: string) {
+function bindLogin() {
     let is_init = false,
         is_checking = false,
         qr_box = $(".login-form .login-qr-box"),
         refreshQr = function() {
-            qr_box.find('.qr-box img').attr('src', baseUrl + 'qr?v=' + Math.random());
+            qr_box.find('.qr-box img').attr('src', BASE_URI + 'qr?v=' + Math.random());
             is_checking = true;
             check_loop();
             qr_box.attr('class', 'login-qr-box');
         },
         check_qr = function(cb) {
-            $.getJSON(baseUrl + 'qr/check', function(data) {
+            $.getJSON(BASE_URI + 'qr/check', function(data) {
                 if (data.code == 200) {
                     qr_box.attr('class', 'login-qr-box qr_success');
                     is_checking = false;

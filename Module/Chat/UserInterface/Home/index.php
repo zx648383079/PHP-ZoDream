@@ -3,9 +3,8 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream Chat';
-$url = $this->url('./');
 $js = <<<JS
-registerChat('{$url}')
+registerChat()
 JS;
 $this->registerJs($js);
 ?>
