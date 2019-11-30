@@ -669,9 +669,10 @@ header {
             padding: 20px 15px;
             bottom: 0;
             background: #fff;
-            width: 345px;
+            width: 340px;
             min-height: 180px;
-            margin: 0 5px;
+            left: 50%;
+            margin-left: -170px;
             overflow: hidden;
             .item-top {
                 color: #999;

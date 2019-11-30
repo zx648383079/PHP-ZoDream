@@ -186,9 +186,15 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @return array
      */
     public function toArray() {
-        return array_map(function (Group $group) {
+        $items = array_map(function (Group $group) {
             return $group->toArray();
         }, $this->all());
+        return [
+            'data' => $items,
+            'subtotal' => $this->subtotal(),
+            'checkout_button' => $this->checkoutButton(),
+            'promotion_cell' => $this->promotionCell()
+        ];
     }
 
     /**
@@ -198,11 +204,6 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @return string
      */
     public function toJson($options = 0) {
-        return Json::encode([
-            'groups' => $this->toArray(),
-            'subtotal' => $this->subtotal(),
-            'checkout_button' => $this->checkoutButton(),
-            'promotion_cell' => $this->promotionCell()
-        ]);
+        return Json::encode($this->toArray());
     }
 }

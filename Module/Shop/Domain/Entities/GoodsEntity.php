@@ -109,7 +109,7 @@ class GoodsEntity extends Entity {
             return static::query();
         }
         $get_order = function ($order, $def = 'desc') {
-            return is_null($order) ? $def : $order > 0 ? 'desc' : 'asc';
+            return is_null($order) ? $def : ($order > 0 ? 'desc' : 'asc');
         };
         if ($sort == self::SORT_NAME) {
             return static::orderBy('name', $get_order($order, 'asc'));
