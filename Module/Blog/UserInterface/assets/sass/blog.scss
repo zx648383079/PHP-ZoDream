@@ -702,8 +702,13 @@ $acolor: $fg;
                     .category,
                     .comment,
                     .agree,
+                    .disagree,
                     .click {
                         font-size: 12px;
+                    }
+                    .agree,
+                    .disagree {
+                        margin-top: 3px;
                     }
                 }
                 .book-time {
