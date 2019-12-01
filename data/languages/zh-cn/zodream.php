@@ -8,7 +8,7 @@ return [
     '{time} hour ago' => '{time}小时前',
     '{time} minute ago' => '{time}分钟前',
     '{time} second ago' => '{time}秒前',
-    '{domain} Domain Is Disallow' => '{domain} 域名不允许',
+    '{domain} Domain Is Disallow, IP: {ip}' => '{domain} 域名不允许，客户端IP：{ip}',
     'Error Message' => '错误信息',
     'System Info' => '系统信息',
     'Execute Info' => '运行信息',

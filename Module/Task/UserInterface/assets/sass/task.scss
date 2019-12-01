@@ -252,6 +252,7 @@
     .task-list {
         min-height: 200px;
         overflow-y: auto;
+        max-height: 60vh;
         .task-item {
             line-height: 30px;
             margin: 2px;
