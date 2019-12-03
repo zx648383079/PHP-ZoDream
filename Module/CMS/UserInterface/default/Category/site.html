@@ -178,7 +178,7 @@ bindNavigation({$navigation});
         </div>
         <div class="panel-body">
             {contents:category=$channel.id num=8}
-            <a href="{url:$content}" class="site-item">
+            <a href="{url:$content}" class="site-item" title="{$content.title}-{$content.description}">
                 <div class="item-name">
                     <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
                     {$content.title}

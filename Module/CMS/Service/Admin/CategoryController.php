@@ -5,6 +5,7 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
+use Zodream\Helpers\Json;
 
 class CategoryController extends Controller {
     public function indexAction() {
@@ -40,9 +41,16 @@ class CategoryController extends Controller {
         return $this->show(compact('model', 'model_list', 'cat_list', 'group_list'));
     }
 
-    public function saveAction($id) {
+    public function saveAction() {
         $model = new CategoryModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
+        if (!$model->load()) {
+            return $this->jsonFailure($model->getFirstError());
+        }
+        $model->autoIsNew();
+        if ($model->isNewRecord && empty($model->setting)) {
+            $model->setting = serialize([]);
+        }
+        if (!$model->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
         return $this->jsonSuccess([
