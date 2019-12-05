@@ -481,6 +481,9 @@ class CreateShopTables extends Migration {
             $table->set('is_hot')->bool()->defaultVal(0);
             $table->set('is_new')->bool()->defaultVal(0);
             $table->set('status')->tinyint(2)->defaultVal(10);
+            $table->set('position')->tinyint(1)->defaultVal(99)->comment('排序');
+            $table->set('dynamic_position')->tinyint(1)
+                ->defaultVal(0)->comment('动态排序');
             $table->softDeletes();
             $table->timestamps();
         });
