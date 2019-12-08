@@ -21,12 +21,14 @@ class CreateTemplateTables extends Migration {
      */
     public function up() {
         $this->append(ThemeModel::tableName(), function(Table $table) {
+            $table->setComment('所有可用主题');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
             $table->set('description')->varchar(200)->defaultVal('');
             $table->set('thumb')->varchar(100)->defaultVal('');
             $table->set('path')->varchar(200)->notNull();
         })->append(ThemePageModel::tableName(), function(Table $table) {
+            $table->setComment('所有主题下面页面框架');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
             $table->set('description')->varchar(200)->defaultVal('');
@@ -34,6 +36,7 @@ class CreateTemplateTables extends Migration {
             $table->set('theme_id')->int()->notNull();
             $table->set('path')->varchar(200)->notNull();
         })->append(ThemeWeightModel::tableName(), function(Table $table) {
+            $table->setComment('所有主题组件');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
             $table->set('description')->varchar(200);
@@ -44,6 +47,7 @@ class CreateTemplateTables extends Migration {
             $table->set('theme_id')->int()->notNull();
             $table->set('path')->varchar(200);
         })->append(SiteModel::tableName(), function(Table $table) {
+            $table->setComment('自定义站点');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('user_id')->int()->notNull();
@@ -55,6 +59,7 @@ class CreateTemplateTables extends Migration {
             $table->set('theme_id')->int()->notNull();
             $table->timestamps();
         })->append(PageModel::tableName(), function(Table $table) {
+            $table->setComment('自定义站点页面');
             $table->set('id')->pk()->ai();
             $table->set('site_id')->int()->notNull();
             $table->set('type')->tinyint(1)->defaultVal(0);
@@ -69,6 +74,7 @@ class CreateTemplateTables extends Migration {
             $table->softDeletes();
             $table->timestamps();
         })->append(PageWeightModel::tableName(), function(Table $table) {
+            $table->setComment('自定义页面组件及设置');
             $table->set('id')->pk()->ai(1000);  // 预留id给页面预留不同入口
             $table->set('page_id')->int()->notNull();
             $table->set('site_id')->int()->notNull();

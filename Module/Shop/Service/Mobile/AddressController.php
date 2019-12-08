@@ -2,7 +2,8 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Models\AddressModel;
+use Module\Shop\Domain\Models\Scene\Address;
+use Module\Shop\Domain\Repositories\AddressRepository;
 
 
 class AddressController extends Controller {
@@ -14,7 +15,7 @@ class AddressController extends Controller {
     }
 
     public function indexAction($selected = 0) {
-        $model_list = AddressModel::with('region')->page();
+        $model_list = AddressRepository::getList();
         return $this->show(compact('model_list', 'selected'));
     }
 
@@ -23,30 +24,42 @@ class AddressController extends Controller {
     }
 
     public function editAction($id) {
-        $model = AddressModel::findOrNew($id);
+        $model = $id > 0 ? AddressRepository::get($id) : new Address();
+        if (!$model) {
+            $this->redirect($this->getUrl('address'));
+        }
         return $this->show(compact('model'));
     }
 
     public function saveAction() {
-        $model = new AddressModel();
-        $model->user_id = auth()->id();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('address')
-            ]);
+        $data = app('request')->get();
+        try {
+            $address = AddressRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('address')
+        ]);
     }
 
     public function deleteAction($id) {
-        AddressModel::where('id', $id)->delete();
+        try {
+            AddressRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
         return $this->jsonSuccess([
             'url' => $this->getUrl('address')
         ]);
     }
 
     public function defaultAction($id) {
-        AddressModel::defaultId($id);
+        try {
+            AddressRepository::setDefault($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
         return $this->jsonSuccess(true);
     }
 }

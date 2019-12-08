@@ -2,9 +2,8 @@
 namespace Module\Shop\Service;
 
 
-use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\Scene\Address;
-
+use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
 
@@ -15,7 +14,7 @@ class AddressController extends Controller {
     }
 
     public function indexAction() {
-        $model_list = Address::with('region')->page();
+        $model_list = AddressRepository::getList();
         if (app('request')->isAjax()) {
             $this->layout = false;
             return $this->show('page', compact('model_list'));
@@ -24,34 +23,31 @@ class AddressController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->runMethodNotProcess('edit', ['id' => 0]);
     }
 
     public function editAction($id) {
         if (app('request')->isAjax()) {
             return $this->infoAction($id);
         }
-        $model = AddressModel::with('region')->where('user_id', auth()->id())
-            ->where('id', $id)->first();
+        $model = $id > 0 ? AddressRepository::get($id) : new Address();
+        if (!$model) {
+            $this->redirect('./address');
+        }
         return $this->show(compact('model'));
     }
 
     public function infoAction($id) {
-        $address = Address::with('region')->where('user_id', auth()->id())
-            ->where('id', $id)->first();
+        $address = AddressRepository::get($id);
         return $this->jsonSuccess($address);
     }
 
     public function saveAction() {
-        $model = new AddressModel();
         $data = app('request')->get();
-        $data['user_id'] = auth()->id();
-        if (isset($data['id']) && $data['id'] > 0
-            && isset($data['tel']) && strpos($data['tel'], '****') > 0) {
-            unset($data['tel']);
-        }
-        if (!$model->load($data) || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+        try {
+            $address = AddressRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
             'refresh' => true
@@ -59,15 +55,22 @@ class AddressController extends Controller {
     }
 
     public function deleteAction($id) {
-        AddressModel::where('user_id', auth()->id())
-            ->where('id', $id)->delete();
+        try {
+            AddressRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
         return $this->jsonSuccess([
             'refresh' => true
         ]);
     }
 
     public function defaultAction($id) {
-        Address::defaultId($id);
+        try {
+            AddressRepository::setDefault($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
         return $this->jsonSuccess([
             'refresh' => true
         ]);

@@ -5,6 +5,7 @@ use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Models\ShippingModel;
+use Module\Shop\Domain\Repositories\AddressRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Exception;
 
@@ -48,17 +49,18 @@ class CashierController extends Controller {
         return $this->jsonSuccess($order);
     }
 
-    public function editAddressAction($id) {
+    public function editAddressAction($id = 0) {
         $this->layout = false;
-        $address = AddressModel::findOrNew($id);
+        $address = $id > 0 ? AddressModel::findOrNew($id) : null;
         return $this->show('addressEdit', compact('address'));
     }
 
     public function saveAddressAction() {
-        $address = new AddressModel();
-        $address->user_id = auth()->id();
-        if (!$address->load(null, ['user_id']) || !$address->autoIsNew()->save()) {
-            return $this->showContent('false,'.$address->getFirstError());
+        $data = app('request')->get();
+        try {
+            $address = AddressRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->showContent('false,'.$ex->getMessage());
         }
         $this->layout = false;
         return $this->show('address', compact('address'));

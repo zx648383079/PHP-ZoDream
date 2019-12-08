@@ -1,5 +1,7 @@
 <?php
-/** @var $this \Zodream\Template\View */
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
 $this->registerJsFile('@jquery.min.js')
     ->registerJsFile('@jquery.dialog.min.js')
     ->registerJsFile('@main.min.js')

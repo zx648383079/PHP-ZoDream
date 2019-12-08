@@ -527,23 +527,23 @@ function bindAddress() {
         e.preventDefault();
         postJson($(this).attr('href'), parseResponse);
     }),
-        parseResponse = function(data: any) {
-            if (data.code !== 200) {
-                parseAjax(data);
-                return;
-            }
-            if (typeof data.data !== 'object') {
-                return;
-            }
-            let url = data.data.url;
-            if (data.data.refresh) {
-                url = window.location.href;
-            }
-            replaceUrl(url);
-        },
-        replaceUrl = function(url: string) {
-            partialLoad(pageBox, url, '我的收货地址');
-        };
+    parseResponse = function(data: any) {
+        if (data.code !== 200) {
+            parseAjax(data);
+            return;
+        }
+        if (typeof data.data !== 'object') {
+            return;
+        }
+        let url = data.data.url;
+        if (data.data.refresh) {
+            url = window.location.href;
+        }
+        replaceUrl(url);
+    },
+    replaceUrl = function(url: string) {
+        partialLoad(pageBox, url, '我的收货地址');
+    };
 }
 
 function formData(item: JQuery): string {
@@ -682,4 +682,37 @@ function partialLoad(box: JQuery, url: string, title = 'zodream') {
         box.html(html);
         history.pushState(null, title, url);
     });
+}
+
+function bindCashier() {
+    const bindRegion = () => {
+        const input = $('.address-edit .region-input');
+        if (input.length < 1) {
+            return;
+        }
+        let regionBox = input.multiSelect({
+            default: input.data('value') || 0,
+            data: BASE_URI + 'region/tree',
+            tag: 'region_id'
+        });
+    };
+    $('.cashier-page').on('click', '.address-edit [data-action="save"]', function() {
+        let box = $(this).closest('.panel-body');
+        $.post(BASE_URI + 'cashier/save_address', formData(box), (html: string) => {
+            if (html.indexOf('false,') === 0) {
+                Dialog.tip(html.substr(6));
+                return;
+            }
+            box.html(html);
+        });
+    }).on('click', '.address-view [data-action="edit"]', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        let box = $this.closest('.panel-body');
+        $.get($this.attr('href'), html => {
+            box.html(html);
+            bindRegion();
+        });
+    });
+    bindRegion();
 }

@@ -3,7 +3,12 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Form;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '结算';
+$js = <<<JS
+bindCashier();
+JS;
+$this->registerJs($js)
+    ->registerJsFile('@jquery.multi-select.min.js');
 ?>
 
 <div class="cashier-page">

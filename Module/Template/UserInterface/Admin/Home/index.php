@@ -35,3 +35,18 @@ $this->title = '站点选择';
         </div>
     </div>
 </div>
+
+<div class="dialog dialog-box theme-dialog" data-type="dialog">
+    <div class="dialog-header">
+        <div class="dialog-title">选择主题</div>
+        <i class="fa fa-close dialog-close"></i>
+    </div>
+    <div class="dialog-body">
+
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="dialog-yes">确认</button>
+        <button type="button"
+            class="dialog-close">取消</button>
+    </div>
+</div>

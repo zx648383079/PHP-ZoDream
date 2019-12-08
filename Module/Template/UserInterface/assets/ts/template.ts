@@ -429,3 +429,116 @@ function bindPageEdit() {
         });
     });
 }
+
+class SearchDailog {
+    constructor(
+        element: string
+    ) {
+        this.dialog = $(element).dialog({});
+        $.get(this.dialog.box.data('url'), {
+            selected: this.selected.join(',')
+        }, html => {
+            this.html(html);
+        });
+        this.bindEvent();
+    }
+
+    public dialog: any;
+    public selected: number[] = [];
+    private _selected: number[] = [];
+    private _doneCallback: Function;
+
+    private bindEvent() {
+        let that = this;
+        this.on('submit', '.dialog-search form', function() {
+            let $this = $(this);
+            $.get($this.attr('action'), $this.serialize() + '&selected=' + that.selected.join(','), html => {
+                that.html(html);
+            });
+            return false;
+        }).on('click', '.dialog-body-box .item', function() {
+            let $this = $(this).toggleClass('selected');
+            let id = parseInt($this.data('id'), 10);
+            that.toggleItem(id, $this.hasClass('selected'));
+        }).on('click', '.dialog-pager a', function(e) {
+            e.preventDefault();
+            $.get($(this).attr('href'), html => {
+                that.html(html);
+            });
+        });
+        this.dialog.on('done', () => {
+            this.selected = [...this._selected];
+            this.dialog.close();
+            this._doneCallback && this._doneCallback.call(this, this.selected);
+        });
+    }
+
+    /**
+     */
+    public toggleItem(id: number, has?: boolean) {
+        if (id < 1) {
+            return;
+        }
+        let index = this._selected.indexOf(id);
+        if (typeof has === 'undefined') {
+            has = index < 0;
+        }
+        if (has) {
+            if (index < 0) {
+                this._selected.push(id);
+            }
+            return;
+        }
+        if (index >= 0) {
+            this._selected = this._selected.splice(index, 1);
+        }
+    }
+
+    /**
+     * html
+     */
+    public html(html: string) {
+        if (html.indexOf('dialog-body-box') > 0) {
+            this.find('.dialog-body').html(html);
+        } else {
+            this.find('.dialog-body .dialog-body-box').html(html);
+        }
+        this.dialog.resize();
+        return this;
+    }
+
+    public find(tag: string): JQuery {
+        return this.dialog.find(tag);
+    }
+
+    public on(event: string, tag: string | Function, cb?: (event: JQueryEventObject) => void) {
+        if (event === 'done') {
+            this._doneCallback = tag as Function;
+            return this;
+        }
+        this.dialog.box.on(event, tag, cb);
+        return this;
+    }
+
+    /**
+     * show
+     */
+    public show() {
+        this._selected = [...this.selected];
+        this.find('.dialog-body-box .item').each((_, item) => {
+            let $this = $(item);
+            $this.toggleClass('selected', this._selected.indexOf($this.data('id')) >= 0);
+        });
+        this.dialog.show();
+    }
+}
+
+function bindNewTheme() {
+    let box = new SearchDailog('.theme-dialog');
+    $('*[data-type="add"]').click(function() {
+        box.show();
+    });
+    box.on('done', (selected: number[]) => {
+        
+    });
+}

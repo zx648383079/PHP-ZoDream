@@ -3,7 +3,7 @@ namespace Module\Shop\Service\Api;
 
 
 use Module\Shop\Domain\Models\RegionModel;
-use Module\Shop\Domain\Models\Scene\Address;
+use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
 
@@ -11,70 +11,67 @@ class AddressController extends Controller {
         if ($id > 0) {
             return $this->infoAction($id);
         }
-        $address_list = Address::with('region')->where('user_id', auth()->id())->page();
+        $address_list = AddressRepository::getList();
         return $this->renderPage($address_list);
     }
 
     public function infoAction($id) {
-        $address = Address::with('region')->where('user_id', auth()->id())
-            ->where('id', $id)->first();
+        $address = AddressRepository::get($id);
+        if (!$address) {
+            $this->renderFailure('地址有误');
+        }
         return $this->render($address);
     }
 
-    public function createAction($is_default = false) {
+    public function createAction() {
         $data = app('request')->validate([
             'name' => '',
             'region_id' => 'int',
             'region_name' => '',
             'tel' => '',
-            'address' => ''
+            'address' => '',
+            'is_default' => ''
         ]);
-        if ($data['region_id'] < 1 && !empty($data['region_name'])) {
-            $data['region_id'] = RegionModel::findIdByName($data['region_name']);
-        }
-        $address = new Address($data);
-        $address->user_id = auth()->id();
-        if (!$address->save()) {
-            return $this->renderFailure($address->getFirstError());
-        }
-        if ($is_default) {
-            Address::defaultId($address->id);
+        try {
+            $address = AddressRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render($address);
     }
 
-    public function updateAction($is_default = false) {
+    public function updateAction() {
         $data = app('request')->validate([
             'id' => 'int',
             'name' => '',
             'region_id' => 'int',
             'tel' => '',
-            'address' => ''
+            'address' => '',
+            'is_default' => ''
         ]);
-        $address = Address::findWithAuth($data['id']);
-        if (empty($address)) {
-            return $this->renderFailure('id error');
-        }
-        if (isset($data['tel']) && strpos($data['tel'], '****') > 0) {
-            unset($data['tel']);
-        }
-        $address->set($data);
-        if (!$address->save()) {
-            return $this->renderFailure($address->getFirstError());
-        }
-        if ($is_default) {
-            Address::defaultId($address->id);
+        try {
+            $address = AddressRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render($address);
     }
 
     public function deleteAction($id) {
-        Address::where('user_id', auth()->id())->where('id', $id)->delete();
+        try {
+            AddressRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->render(['data' => true]);
     }
 
     public function defaultAction($id) {
-        Address::defaultId($id);
+        try {
+            AddressRepository::setDefault($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->render(['data' => true]);
     }
 }

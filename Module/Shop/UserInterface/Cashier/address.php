@@ -7,7 +7,7 @@ defined('APP_DIR') or exit();
         <div>
             <i class="fa fa-map-marker"></i>
             默认地址
-            <a href="" class="btn">修改</a>
+            <a href="<?=$this->url('./cashier/edit_address', ['id' => $address->id])?>" class="btn" data-action="edit">修改</a>
         </div>
         <div>
             <span>收 货 人: </span>
@@ -21,6 +21,6 @@ defined('APP_DIR') or exit();
     </div>
     <div class="right">
         <p><a href="">地址切换</a></p>
-        <p><a href="" class="btn">新建地址</a></p>
+        <p><a href="<?=$this->url('./cashier/edit_address')?>" class="btn" data-action="edit">新建地址</a></p>
     </div>
 </div>
