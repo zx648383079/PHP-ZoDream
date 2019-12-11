@@ -6,7 +6,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '配送方式';
 
 $js = <<<JS
-bindShipping('{$url}');
+bindShipping();
 JS;
 $this->registerJs($js);
 ?>

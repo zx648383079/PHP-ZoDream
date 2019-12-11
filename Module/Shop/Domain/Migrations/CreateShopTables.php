@@ -593,11 +593,17 @@ class CreateShopTables extends Migration {
         Schema::createTable(PayLogModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('payment_id')->int()->notNull();
+            $table->set('payment_name')->varchar(30)->defaultVal('');
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->set('data')->varchar()->defaultVal('')->comment('可以接受多个订单号');
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('amount')->decimal(10, 2)->defaultVal(0);
+            $table->set('currency')->varchar(10)->defaultVal('')->comment('货币');
+            $table->set('currency_money')->decimal(10, 2)->defaultVal(0)->comment('货币金额');
+            $table->set('trade_no')->varchar(100)->defaultVal('')->comment('外部订单号');
+            $table->timestamp('begin_at')->comment('开始时间');
+            $table->timestamp('confirm_at')->comment('确认支付时间');
             $table->timestamps();
         });
     }

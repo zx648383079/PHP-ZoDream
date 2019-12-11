@@ -71,10 +71,4 @@ class ShippingModel extends Model {
     public static function getByAddress(AddressModel $address) {
         return static::all();
     }
-
-    public static function shippingList() {
-        return [
-            'sf' => '顺丰'
-        ];
-    }
 }

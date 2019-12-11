@@ -1130,6 +1130,22 @@ function bindSecKill(actId, timeId) {
 
 function bindShipping() {
     let shipping = new Delivery($('.regional-table'));
+    $('select[name=code]').change(function() {
+        let input = $('[name=name]');
+        if ((input.val() as string).trim().length < 1) {
+            input.val($(this).find('option:selected').text());
+        }
+    }).trigger('change');
+}
+
+function bindPayment() {
+    $('#shipping-box').select2();
+    $('select[name=code]').change(function() {
+        let input = $('[name=name]');
+        if ((input.val() as string).trim().length < 1) {
+            input.val($(this).find('option:selected').text());
+        }
+    }).trigger('change');
 }
 
 function bindEditAd() {

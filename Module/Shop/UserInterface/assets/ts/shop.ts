@@ -114,7 +114,7 @@ $(function() {
         }
         window.location.href = $(this).attr('href') + '?cart=' + ids.join('-');
     });
-    $(".checkout-footer .btn").click(function(e) {
+    $('.checkout-footer').on('click', '.btn', function(e) {
         e.preventDefault();
         let form = $(this).closest('form'),
             is_check = true;
@@ -696,7 +696,16 @@ function bindCashier() {
             tag: 'region_id'
         });
     };
-    $('.cashier-page').on('click', '.address-edit [data-action="save"]', function() {
+    const refreshFooter = () => {
+        postJson(BASE_URI + 'cashier/preview', pageBox.find('form').serialize(), res => {
+            if (res.code !== 200) {
+                parseAjax(res);
+                return;
+            }
+            pageBox.find('.checkout-footer').html(res.data.checkout);
+        });
+    };
+    let pageBox = $('.cashier-page').on('click', '.address-edit [data-action="save"]', function() {
         let box = $(this).closest('.panel-body');
         $.post(BASE_URI + 'cashier/save_address', formData(box), (html: string) => {
             if (html.indexOf('false,') === 0) {
@@ -704,6 +713,7 @@ function bindCashier() {
                 return;
             }
             box.html(html);
+            refreshFooter();
         });
     }).on('click', '.address-view [data-action="edit"]', function(e) {
         e.preventDefault();
@@ -713,6 +723,8 @@ function bindCashier() {
             box.html(html);
             bindRegion();
         });
+    }).on('click', '.shipping-box [name="shipping"],.payment-box [name="payment"]', function() {
+        refreshFooter();
     });
     bindRegion();
 }

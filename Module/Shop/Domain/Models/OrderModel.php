@@ -40,10 +40,12 @@ class OrderModel extends Model {
     const STATUS_CANCEL = 1;
     const STATUS_INVALID = 2;
     const STATUS_UN_PAY = 10;
+    const STATUS_PAYING = 12;
     const STATUS_PAID_UN_SHIP = 20;
     const STATUS_SHIPPED = 40;
     const STATUS_RECEIVED = 60;
     const STATUS_FINISH = 80;
+    const STATUS_REFUNDED = 81;
 
     const TYPE_NONE = 0; //普通订单
     const TYPE_AUCTION = 1; //拍卖订单
@@ -51,12 +53,14 @@ class OrderModel extends Model {
 
     public static $status_list = [
         self::STATUS_UN_PAY => '待支付',
+        self::STATUS_PAYING => '支付中',
         self::STATUS_SHIPPED => '待收货',
         self::STATUS_FINISH => '已完成',
         self::STATUS_CANCEL => '已取消',
         self::STATUS_INVALID => '已失效',
         self::STATUS_PAID_UN_SHIP => '待发货',
-        self::STATUS_RECEIVED => '待评价'
+        self::STATUS_RECEIVED => '待评价',
+        self::STATUS_REFUNDED => '已退款'
     ];
 
     public static function tableName() {

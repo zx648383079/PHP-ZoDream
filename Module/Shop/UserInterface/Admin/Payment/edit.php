@@ -5,12 +5,10 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '支付方式';
 $js = <<<JS
-$('#shipping-box').select2();
+bindPayment();
 JS;
 
-$this->registerCssFile('@select2.min.css')
-    ->registerJsFile('@select2.min.js')
-    ->registerJs($js, View::JQUERY_READY);
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/payment/save')?>

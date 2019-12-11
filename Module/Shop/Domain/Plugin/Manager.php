@@ -9,9 +9,9 @@ use Zodream\Service\Factory;
 /**
  * Class Manager
  * @package Module\Shop\Domain\Plugin
- * @method static shipping(string $code, $configs = []): BaseShipping
- * @method static payment(string $code, $configs = []): BasePayment
- * @method static oauth(string $code, $configs = []): BaseOAuth
+ * @method static BaseShipping shipping(string $code, $configs = [])
+ * @method static BasePayment payment(string $code, $configs = [])
+ * @method static BaseOAuth oauth(string $code, $configs = [])
  */
 class Manager {
     const NAME_MAP = [
@@ -27,7 +27,7 @@ class Manager {
      * @return BaseShipping|BaseOAuth|BasePayment|mixed
      * @throws Exception
      */
-    public function getInstance($code, $type = 'payment') {
+    public static function getInstance($code, $type = 'payment') {
         $type = strtolower($type);
         $code = Str::studly($code);
         if (isset(self::$instances[$type][$code])) {
@@ -41,7 +41,7 @@ class Manager {
         $class = self::NAME_MAP[$type].$code;
         if (!class_exists($class)) {
             throw new Exception(
-                __('plugin error')
+                __('plugin {code} error', compact('code'))
             );
         }
         return self::$instances[$type][$code] = new $class();
@@ -73,7 +73,7 @@ class Manager {
                 __('plugin error')
             );
         }
-        $code = array_unshift($arguments);
+        $code = array_shift($arguments);
         $instance = self::getInstance($code, $name);
         if (!empty($arguments)) {
             $instance->config(...$arguments);

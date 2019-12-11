@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Admin;
 use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Models\ShippingRegionModel;
+use Module\Shop\Domain\Repositories\ShippingRepository;
 
 class ShippingController extends Controller {
 
@@ -18,7 +19,7 @@ class ShippingController extends Controller {
 
     public function editAction($id) {
         $model = ShippingModel::findOrDefault($id, ['position' => 60]);
-        $shipping_list = ShippingModel::shippingList();
+        $shipping_list = ShippingRepository::getPlugins();
         $group_list = [];
         if (!$model->isNewRecord) {
             $group_list = ShippingGroupModel::where('shipping_id', $model->id)

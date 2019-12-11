@@ -22,6 +22,7 @@ class CashierController extends Controller {
         }
         $address = AddressModel::where('user_id', auth()->id())->first();
         $order = OrderModel::preview($goods_list);
+        $order->setAddress($address);
         $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
         $payment_list = PaymentModel::all();
         return $this->sendWithShare()->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list'));
@@ -46,7 +47,10 @@ class CashierController extends Controller {
         } catch (Exception $e) {
             return $this->jsonFailure($e->getMessage());
         }
-        return $this->jsonSuccess($order);
+        $this->layout = false;
+        $data = $order->toArray();
+        $data['checkout'] = $this->renderHtml('total', compact('order'));
+        return $this->jsonSuccess($data);
     }
 
     public function editAddressAction($id = 0) {

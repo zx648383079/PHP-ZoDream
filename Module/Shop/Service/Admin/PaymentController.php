@@ -3,6 +3,7 @@ namespace Module\Shop\Service\Admin;
 
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Models\ShippingModel;
+use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class PaymentController extends Controller {
 
@@ -17,7 +18,7 @@ class PaymentController extends Controller {
 
     public function editAction($id) {
         $model = PaymentModel::findOrNew($id);
-        $pay_list = PaymentModel::paymentList();
+        $pay_list = PaymentRepository::getPlugins();
         $shipping_list = ShippingModel::select('id', 'name')->all();
         return $this->show(compact('model', 'pay_list', 'shipping_list'));
     }

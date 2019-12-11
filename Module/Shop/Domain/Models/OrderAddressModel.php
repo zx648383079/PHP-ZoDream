@@ -51,6 +51,7 @@ class OrderAddressModel extends Model {
             'region_name' => $address->region->full_name,
             'tel' => $address->tel,
             'address' => $address->address,
+            'address_id' => $address->id
         ]);
 
     }

@@ -78,30 +78,21 @@ $this->registerJs($js)
                     <h4>发票信息：</h4>
                     <input type="checkbox" name="" id="">我要开发票
                 </div>
-                <div>
+                <div class="coupon-box">
                     <h4>使用优惠券(0张)</h4>
                     
                 </div>
-                <div  class="amount-box">
-                    <div>商品合计:<?=$order->goods_amount?></div>
-                    <div>运费:<?=$order->shipping_fee?></div>
-                </div>
-                <div>
+                
+                <div class="card-box">
                     <h4>使用礼品卡</h4>
                     <input type="checkbox" name="" id="">可用余额
                 </div>
                 <div class="checkout-footer">
-                   <div>应付总额:<?=$order->order_amount?></div>
-                    <a href="<?=$this->url('./cashier/checkout')?>" class="btn">去付款</a>
-                    <?php if($address):?>
-                    <div><?=$address->name?> <?=$address->tel?></div>
-                    <div><?=$address->region->full_name?> <?=$address->address?></div>
-                    <?php endif;?>
-                    <input type="hidden" name="address" value="<?=$address ? $address->id : ''?>">
-                    <input type="hidden" name="cart" value="<?=$this->text(app('request')->get('cart'))?>">
-                    <input type="hidden" name="type" value="<?=$this->text(app('request')->get('type'))?>">
+                    <?php $this->extend('./total');?>
                 </div>
             </div>
+            <input type="hidden" name="cart" value="<?=$this->text(app('request')->get('cart'))?>">
+            <input type="hidden" name="type" value="<?=$this->text(app('request')->get('type'))?>">
             <?=Form::close()?>
         </div>
     </div>
