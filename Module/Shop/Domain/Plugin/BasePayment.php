@@ -9,11 +9,11 @@ abstract class BasePayment {
 
     abstract public function preview(): string;
 
-    abstract public function pay(): array;
+    abstract public function pay(array $log): array;
 
-    abstract public function callback(): array;
+    abstract public function callback(array $input): array;
 
-    abstract public function refund(): array;
+    abstract public function refund(array $log): array;
 
 
 }

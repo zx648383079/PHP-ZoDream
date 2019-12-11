@@ -16,15 +16,15 @@ class Zo extends BasePayment {
         // TODO: Implement preview() method.
     }
 
-    public function pay(): array {
+    public function pay(array $log): array {
         // TODO: Implement pay() method.
     }
 
-    public function callback(): array {
+    public function callback(array $input): array {
         // TODO: Implement callback() method.
     }
 
-    public function refund(): array {
+    public function refund(array $log): array {
         // TODO: Implement refund() method.
     }
 }

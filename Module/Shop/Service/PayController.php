@@ -5,6 +5,7 @@ use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PayLogModel;
 use Module\Shop\Domain\Models\PaymentModel;
+use Module\Shop\Domain\Repositories\PaymentRepository;
 use Zodream\Helpers\Str;
 
 class PayController extends Controller {
@@ -15,21 +16,10 @@ class PayController extends Controller {
             return;
         }
         $payment = PaymentModel::find($payment);
-        $log = PayLogModel::create([
-            'type' => PayLogModel::TYPE_ORDER,
-            'payment_id' => $payment->id,
-            'user_id' => auth()->id(),
-            'data' => $order->id,
-            'status' => PayLogModel::STATUS_NONE,
-            'amount' => $order->order_amount,
-        ]);
-        $notify_url = url('./pay/notify/0/code/'.Str::unStudly($payment->code));
-
+        PaymentRepository::pay($order, $payment);
     }
 
-    public function notifyAction($code) {
-        $id = intval(app('request')->get('id'));
-        $log = PayLogModel::find($id);
-        $log && $log->pay();
+    public function notifyAction($payment) {
+        PaymentRepository::callback(PaymentModel::find($payment));
     }
 }
