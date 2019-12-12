@@ -52,7 +52,7 @@ $this->title = 'ZoDream';
            </div>
            <div class="panel un-order-box">
                <div class="panel-header">
-                    <span class="time">包裹 1已取消</span>
+                    <span class="time">包裹 1<?=$order->status_label?></span>
                     
                     <a href="" class="btn">再次购买</a>
                </div>

@@ -23,7 +23,7 @@ class PayController extends Controller {
         if (isset($data['url'])) {
             return $this->redirect($data['url']);
         }
-        return $this->show($data);
+        return $this->sendWithShare()->show($data);
     }
 
     public function notifyAction($payment) {
@@ -32,6 +32,6 @@ class PayController extends Controller {
 
     public function resultAction($id) {
         $log = PayLogModel::find($id);
-        return $this->show(compact('log'));
+        return $this->sendWithShare()->show(compact('log'));
     }
 }

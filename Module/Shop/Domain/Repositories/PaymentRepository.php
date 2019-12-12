@@ -88,7 +88,7 @@ class PaymentRepository {
      */
     public static function getPayee(PaymentModel $payment) {
         return Manager::payment($payment->code)
-            ->setConfigs(Json::decode($payment->settings));
+            ->setConfigs(empty($payment->settings) ? [] : Json::decode($payment->settings));
     }
 
     public static function getPlugins() {

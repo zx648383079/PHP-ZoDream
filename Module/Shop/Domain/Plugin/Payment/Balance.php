@@ -22,7 +22,7 @@ class Balance extends BasePayment {
     public function pay(array $log): array {
         $res = AccountLogModel::change(
             auth()->id(), AccountLogModel::TYPE_SHOPPING, $log['payment_id'],
-            $log['currency_money'], $log['body']);
+            -$log['currency_money'], $log['body']);
         if (!$res) {
             PaymentRepository::payed([
                 'status' => 'FAILURE',

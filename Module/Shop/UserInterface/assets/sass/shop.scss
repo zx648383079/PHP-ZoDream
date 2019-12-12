@@ -1973,6 +1973,37 @@ header {
     border-bottom: 1px dashed #ddd;
 }
 
+.pay-result-page {
+    .pay-success,
+    .pay-failure {
+        margin: 40px 0;
+        text-align: center;
+        min-height: 40vh;
+        .red {
+            color: red;
+        }
+        .fa-check-circle {
+            color: rgb(0, 178, 78);
+            font-size: 50px;
+            margin: 20px 0;
+        }
+        p {
+            margin-bottom: 40px;
+        }
+        .fa-times-circle {
+            color: rgb(208, 127, 13);
+            font-size: 50px;
+            position: relative;
+            top: 10px;
+        }
+        h2 {
+            line-height: 50px;
+            position: relative;
+            margin: 40px 0 30px;
+        }
+    }
+}
+
 .cashier-page {
     .container {
         .panel {
