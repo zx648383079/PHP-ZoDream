@@ -1,7 +1,9 @@
 <?php
 namespace Module\Shop\Domain\Plugin\Payment;
 
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Shop\Domain\Plugin\BasePayment;
+use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class Balance extends BasePayment {
 
@@ -10,7 +12,7 @@ class Balance extends BasePayment {
     }
 
     public function getIntro(): string {
-        // TODO: Implement getIntro() method.
+        return '余额支付';
     }
 
     public function preview(): string {
@@ -18,7 +20,22 @@ class Balance extends BasePayment {
     }
 
     public function pay(array $log): array {
-        // TODO: Implement pay() method.
+        $res = AccountLogModel::change(
+            auth()->id(), AccountLogModel::TYPE_SHOPPING, $log['payment_id'],
+            $log['currency_money'], $log['body']);
+        if (!$res) {
+            PaymentRepository::payed([
+                'status' => 'FAILURE',
+                'payment_id' => $log['payment_id']
+            ]);
+            return $this->toUrl($log['return_url']);
+        }
+        PaymentRepository::payed([
+            'status' => 'SUCCESS',
+            'payment_id' => $log['payment_id'],
+            'trade_no' => $res
+        ]);
+        return $this->toUrl($log['return_url']);
     }
 
     public function callback(array $input): array {

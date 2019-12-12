@@ -16,10 +16,22 @@ class PayController extends Controller {
             return;
         }
         $payment = PaymentModel::find($payment);
-        PaymentRepository::pay($order, $payment);
+        $data = PaymentRepository::pay($order, $payment);
+        if (app('request')->isAjax()) {
+            return $this->jsonSuccess($data);
+        }
+        if (isset($data['url'])) {
+            return $this->redirect($data['url']);
+        }
+        return $this->show($data);
     }
 
     public function notifyAction($payment) {
-        PaymentRepository::callback(PaymentModel::find($payment));
+        return PaymentRepository::callback(PaymentModel::find($payment));
+    }
+
+    public function resultAction($id) {
+        $log = PayLogModel::find($id);
+        return $this->show(compact('log'));
     }
 }

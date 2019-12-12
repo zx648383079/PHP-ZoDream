@@ -37,7 +37,7 @@ class CashierController extends Controller {
         }
         return $this->jsonSuccess([
             'url' => url('./cashier/pay', ['id' => $order->id])
-        ]);
+        ], '提交订单成功！');
     }
 
     public function previewAction($address, $shipping = 0, $payment = 0, $cart = '', $type = 0) {

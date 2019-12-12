@@ -51,13 +51,4 @@ class PaymentModel extends Model {
     public function getFee() {
         return 0;
     }
-
-    public function pay(OrderModel $order) {
-        $log = new PayLogModel();
-        /** 生成支付请求并记录 */
-    }
-
-    public function callback() {
-
-    }
 }

@@ -2089,6 +2089,12 @@ header {
         }
         .checkout-footer {
             grid-column: 1/3;
+            .amount-box {
+                .price {
+                    min-width: 100px;
+                    display: inline-block;
+                }
+            }
             .btn {
                 color: #fff;
                 border: 1px solid #b4a078;

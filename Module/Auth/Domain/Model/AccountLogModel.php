@@ -27,6 +27,7 @@ class AccountLogModel extends Model {
     const TYPE_CHECK_IN = 30;
     const TYPE_BANK = 31;
     const TYPE_GAME = 40;
+    const TYPE_SHOPPING = 60;
     const STATUS_WAITING_PAY = 0;
     const STATUS_PAID = 1;
     const STATUS_REFUND = 9;

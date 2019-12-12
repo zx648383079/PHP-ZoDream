@@ -81,20 +81,4 @@ class PayLogModel extends Model {
             'updated_at' => 'Updated At',
         ];
     }
-
-    public function pay() {
-        $this->status = self::STATUS_SUCCESS;
-        $this->save();
-        if ($this->type != self::TYPE_ORDER) {
-            return true;
-        }
-        $order_list = OrderModel::whereIn('id', explode(',', $this->data))->get();
-        foreach ($order_list as $order) {
-            if ($order->status != OrderModel::STATUS_UN_PAY) {
-                continue;
-            }
-            OrderLogModel::pay($order);
-        }
-        return true;
-    }
 }
