@@ -1,10 +1,12 @@
 <?php
 namespace Module\Shop\Domain\Plugin;
 
-use Module\Shop\Domain\Models\PaymentModel;
 use Zodream\Infrastructure\Support\Html;
 
 abstract class BasePayment {
+
+    const STATUS_SUCCESS = 'SUCCESS';
+    const STATUS_FAILURE = 'FAILURE';
 
     /**
      * @var array
@@ -13,7 +15,13 @@ abstract class BasePayment {
 
     abstract public function getName(): string;
 
-    abstract public function getIntro(): string;
+    public function getIntro(): string {
+        return $this->getName();
+    }
+
+    public function settings(): array {
+        return [];
+    }
 
     abstract public function preview(): string;
 

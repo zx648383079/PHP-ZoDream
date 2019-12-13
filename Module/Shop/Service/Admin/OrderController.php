@@ -8,6 +8,7 @@ use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\ShippingModel;
+use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class OrderController extends Controller {
 
@@ -37,6 +38,19 @@ class OrderController extends Controller {
         return $this->show(compact('order', 'goods_list', 'address', 'shipping_list'));
     }
 
+    public function refundAction($id) {
+        $order = OrderModel::find($id);
+        if (!in_array($order->status, [OrderModel::STATUS_PAID_UN_SHIP])) {
+            return $this->redirectWithMessage($this->getUrl('order'), '订单状态有误');
+        }
+        $payment_list = [
+            '原路退回',
+            '退到余额',
+            '线下退款'
+        ];
+        return $this->show(compact('order', 'payment_list'));
+    }
+
     public function saveAction($id, $operate = null) {
         $order = OrderModel::find($id);
         if ($operate == 'shipping') {
@@ -55,6 +69,13 @@ class OrderController extends Controller {
         if ($operate == 'cancel') {
             if (!OrderLogModel::cancel($order, app('request')->get('remark'))) {
                 return $this->jsonFailure('取消失败');
+            }
+        }
+        if ($operate == 'refund') {
+            if (!PaymentRepository::refund($order,
+                app('request')->get('refund_type'),
+                app('request')->get('money'))) {
+                return $this->jsonFailure('退款失败');
             }
         }
         return $this->jsonSuccess([

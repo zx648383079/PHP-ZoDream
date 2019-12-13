@@ -35,6 +35,7 @@ class PaymentRepository {
             'body' => '订单支付',
             'return_url' => $return_url,
             'notify_url' => $notify_url,
+            'ip' => app('request')->ip()
         ]);
     }
 
@@ -98,5 +99,19 @@ class PaymentRepository {
             $items[$item] = Manager::payment($item)->getName();
         }
         return $items;
+    }
+
+    public static function refund(OrderModel $order, $type, $money = 0) {
+        if ($order->status < OrderModel::STATUS_PAID_UN_SHIP
+        || $order->status > OrderModel::STATUS_FINISH) {
+            return false;
+        }
+        $money = $money <= 0 ? $order->order_amount : $money;
+        if ($money > $order->order_amount) {
+            return false;
+        }
+        if ($type == 1) {
+
+        }
     }
 }

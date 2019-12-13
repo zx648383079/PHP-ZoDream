@@ -25,13 +25,13 @@ class Balance extends BasePayment {
             -$log['currency_money'], $log['body']);
         if (!$res) {
             PaymentRepository::payed([
-                'status' => 'FAILURE',
+                'status' => self::STATUS_FAILURE,
                 'payment_id' => $log['payment_id']
             ]);
-            return $this->toUrl($log['return_url']);
+            throw new \Exception('账号余额不足');
         }
         PaymentRepository::payed([
-            'status' => 'SUCCESS',
+            'status' => self::STATUS_SUCCESS,
             'payment_id' => $log['payment_id'],
             'trade_no' => $res
         ]);

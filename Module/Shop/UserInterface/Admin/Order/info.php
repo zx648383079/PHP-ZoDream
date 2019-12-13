@@ -86,6 +86,7 @@ $this->registerJs($js);
         <?php if($order->status == OrderModel::STATUS_PAID_UN_SHIP):?>
         <div class="text-center">
             <a href="<?=$this->url('./@admin/order/shipping', ['id' => $order->id])?>" class="btn">我要发货</a>
+            <a href="<?=$this->url('./@admin/order/refund', ['id' => $order->id])?>" class="btn">退款</a>
         </div>
         <?php endif;?>
     </div>
@@ -115,7 +116,7 @@ $this->registerJs($js);
                 <span class="text-red"><?=$goods->price?></span>
             </td>
             <td>
-                <?=$goods->number?>
+                <?=$goods->amount?>
             </td>
             <td>
                 <span class="text-red"><?=$goods->total?></span>

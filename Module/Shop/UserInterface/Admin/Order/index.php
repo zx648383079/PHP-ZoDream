@@ -36,7 +36,7 @@ $this->title = '订单列表';
                             <h4><?=$goods->name?></h4>
                             <p>属性</p>
                             <span class="price"><?=$goods->price?></span>
-                            <span class="amount"> x <?=$goods->number?></span>
+                            <span class="amount"> x <?=$goods->amount?></span>
                         </div>
                    </div>
                 <?php endforeach;?>
