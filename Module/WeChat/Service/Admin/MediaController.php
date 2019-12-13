@@ -53,7 +53,7 @@ class MediaController extends Controller {
                 'url' => $this->getUrl('media')
             ]);
         }
-        return $this->jsonFailure($model->getError());
+        return $this->jsonFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {

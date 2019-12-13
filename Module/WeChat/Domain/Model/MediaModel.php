@@ -97,7 +97,7 @@ class MediaModel extends Model {
             'only_comment' => 'int:0,9',
             'content' => '',
             'parent_id' => 'int',
-            'media_id' => 'required|string:0,100',
+            'media_id' => 'string:0,100',
             'url' => 'string:0,255',
             'expired_at' => 'int',
             'created_at' => 'int',

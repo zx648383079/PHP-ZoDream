@@ -58,12 +58,6 @@ $this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? 
                     </div>
                     <div class="media-grid">
                         <ul>
-                            <li>
-                                <img src="/assets/images/upload.png" alt="" >
-                            </li>
-                            <li>
-                                <img src="/assets/images/upload.png" alt="" >
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -89,12 +83,6 @@ $this->registerJs(sprintf('bindTab(%s, \'%s\');', in_array($type_id, $tab_id) ? 
                     </div>
                     <div class="media-list">
                         <ul>
-                            <li>
-                                123123123123
-                            </li>
-                            <li>
-                                123123
-                            </li>
                         </ul>
                     </div>
                 </div>
