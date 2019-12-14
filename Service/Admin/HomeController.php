@@ -4,7 +4,6 @@ namespace Service\Admin;
  * 后台首页
  */
 use Infrastructure\SiteMap;
-use Module\Auth\Domain\Model\VisitLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Route\Router;
 
@@ -13,7 +12,6 @@ class HomeController extends Controller {
 
 	function indexAction() {
         $user = auth()->user();
-        //$search = VisitLogModel::getTopSearch();
         return $this->show(array(
 //            'name' => $user['name'],
 //            'num' => $user['login_num'],

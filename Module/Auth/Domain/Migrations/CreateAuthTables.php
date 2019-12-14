@@ -14,9 +14,7 @@ use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
-use Module\Auth\Domain\Model\VisitLogModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class CreateAuthTables extends Migration {
@@ -26,7 +24,7 @@ class CreateAuthTables extends Migration {
      * @return void
      */
     public function up() {
-        Schema::createTable(UserModel::tableName(), function(Table $table) {
+        $this->append(UserModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('email')->varchar(200)->notNull();
@@ -38,8 +36,7 @@ class CreateAuthTables extends Migration {
             $table->set('token')->varchar(60);
             $table->set('status')->tinyint(2)->defaultVal(UserModel::STATUS_ACTIVE);
             $table->timestamps();
-        });
-        Schema::createTable(OAuthModel::tableName(), function(Table $table) {
+        })->append(OAuthModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('nickname')->varchar(30)->defaultVal('')->comment('昵称');
@@ -47,15 +44,12 @@ class CreateAuthTables extends Migration {
             $table->set('identity')->varchar(100)->notNull();
             $table->set('data')->text();
             $table->timestamp('created_at');
-        });
-
-        Schema::createTable(UserMetaModel::tableName(), function(Table $table) {
+        })->append(UserMetaModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull();
             $table->set('content')->text()->notNull();
-        });
-        Schema::createTable(LoginQrModel::tableName(), function(Table $table) {
+        })->append(LoginQrModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->defaultVal(0);
             $table->set('token')->varchar(32)->notNull();
@@ -66,22 +60,7 @@ class CreateAuthTables extends Migration {
         $this->createLog();
         $this->createRole();
         $this->createBulletin();
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down() {
-        Schema::dropTable(UserModel::tableName());
-        Schema::dropTable(OAuthModel::tableName());
-        Schema::dropTable(LoginLogModel::tableName());
-        Schema::dropTable(UserMetaModel::tableName());
-        Schema::dropTable(LoginQrModel::tableName());
-        Schema::dropTable(AccountLogModel::tableName());
-        Schema::dropTable(VisitLogModel::tableName());
-        Schema::dropTable(ActionLogModel::tableName());
+        parent::up();
     }
 
     public function seed() {
@@ -95,40 +74,36 @@ class CreateAuthTables extends Migration {
     }
 
     public function createRole(): void {
-        Schema::createTable(RoleModel::tableName(), function (Table $table) {
+        $this->append(RoleModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull()->unique();
             $table->set('display_name')->varchar(100)->defaultVal('');
             $table->set('description')->varchar()->defaultVal('');
             $table->timestamps();
-        });
-        Schema::createTable(UserRoleModel::tableName(), function (Table $table) {
+        })->append(UserRoleModel::tableName(), function (Table $table) {
             $table->set('user_id')->int()->notNull()->unsigned();
             $table->set('role_id')->int()->notNull()->unsigned();
-        });
-        Schema::createTable(PermissionModel::tableName(), function (Table $table) {
+        })->append(PermissionModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull()->unique();
             $table->set('display_name')->varchar(100)->defaultVal('');
             $table->set('description')->varchar()->defaultVal('');
             $table->timestamps();
-        });
-        Schema::createTable(RolePermissionModel::tableName(), function (Table $table) {
+        })->append(RolePermissionModel::tableName(), function (Table $table) {
             $table->set('role_id')->int()->notNull()->unsigned();
             $table->set('permission_id')->int()->notNull()->unsigned();
         });
     }
 
     public function createBulletin(): void {
-        Schema::createTable(BulletinModel::tableName(), function (Table $table) {
+        $this->append(BulletinModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
             $table->set('content')->varchar()->notNull();
             $table->set('type')->tinyint(2)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->timestamps();
-        });
-        Schema::createTable(BulletinUserModel::tableName(), function (Table $table) {
+        })->append(BulletinUserModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('bulletin_id')->int()->notNull();
             $table->set('status')->tinyint(1)->defaultVal(0);
@@ -138,7 +113,7 @@ class CreateAuthTables extends Migration {
     }
 
     public function createLog() {
-        Schema::createTable(AccountLogModel::tableName(), function (Table $table) {
+        $this->append(AccountLogModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->unsigned()->defaultVal(0);
             $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
@@ -148,8 +123,7 @@ class CreateAuthTables extends Migration {
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('remark')->varchar()->notNull();
             $table->timestamps();
-        });
-        Schema::createTable(LoginLogModel::tableName(), function (Table $table) {
+        })->append(LoginLogModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('ip')->varchar(120)->notNull();
             $table->set('user_id')->int()->defaultVal(0);
@@ -157,34 +131,13 @@ class CreateAuthTables extends Migration {
             $table->set('status')->bool()->defaultVal(0);
             $table->set('mode')->varchar(20)->defaultVal(LoginLogModel::MODE_WEB);
             $table->timestamp('created_at');
-        });
-        Schema::createTable(ActionLogModel::tableName(), function (Table $table) {
+        })->append(ActionLogModel::tableName(), function (Table $table) {
             $table->setComment('操作记录 ');
             $table->set('id')->pk()->ai();
             $table->set('ip')->varchar(120)->notNull();
             $table->set('user_id')->int()->notNull();
             $table->set('action')->varchar(30)->notNull();
             $table->set('remark')->varchar()->defaultVal('');
-            $table->timestamp('created_at');
-        });
-        Schema::createTable(VisitLogModel::tableName(), function (Table $table) {
-            $table->setComment('访问记录 ');
-            $table->set('id')->pk()->ai();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('browser')->varchar(40)->defaultVal('')->comment('浏览器');
-            $table->set('browser_version')->varchar(20)->defaultVal('')->comment('浏览器版本');
-            $table->set('os')->varchar(20)->defaultVal('')->comment('操作系统');
-            $table->set('os_version')->varchar(20)->defaultVal('')->comment('操作系统版本');
-            $table->set('url')->varchar(255)->defaultVal('')->comment('请求网址');
-            $table->set('referer')->varchar(255)->defaultVal('')->comment('来路');
-            $table->set('agent')->varchar(255)->defaultVal('')->comment('代理');
-            $table->set('country')->varchar(45)->defaultVal('');
-            $table->set('region')->varchar(45)->defaultVal('');
-            $table->set('city')->varchar(45)->defaultVal('');
-            $table->set('user_id')->int()->defaultVal(0);
-            $table->set('user_name')->varchar(30)->defaultVal('');
-            $table->set('latitude')->varchar(30)->defaultVal('')->comment('纬度');
-            $table->set('longitude')->varchar(30)->defaultVal('')->comment('经度');
             $table->timestamp('created_at');
         });
     }

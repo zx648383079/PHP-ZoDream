@@ -1,7 +1,6 @@
 <?php
 namespace Module\Book\Domain\Migrations;
 
-use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
@@ -10,13 +9,12 @@ use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class CreateBookTables extends Migration {
 
     public function up() {
-        Schema::createTable(BookModel::tableName(), function(Table $table) {
+        $this->append(BookModel::tableName(), function(Table $table) {
             $table->setComment('小说');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->unique()->notNull()->comment('书名');
@@ -34,8 +32,7 @@ class CreateBookTables extends Migration {
             $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
             $table->softDeletes();
             $table->timestamps();
-        });
-        Schema::createTable(BookChapterModel::tableName(), function(Table $table) {
+        })->append(BookChapterModel::tableName(), function(Table $table) {
             $table->setComment('小说章节');
             $table->set('id')->pk()->ai();
             $table->set('book_id')->int()->defaultVal(0);
@@ -47,26 +44,22 @@ class CreateBookTables extends Migration {
             $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
             $table->softDeletes();
             $table->timestamps();
-        });
-        Schema::createTable(BookChapterBodyModel::tableName(), function(Table $table) {
+        })->append(BookChapterBodyModel::tableName(), function(Table $table) {
             $table->setComment('小说章节内容');
             $table->set('id')->pk()->ai();
             $table->set('content')->longtext()->comment('内容');
-        });
-        Schema::createTable(BookCategoryModel::tableName(), function(Table $table) {
+        })->append(BookCategoryModel::tableName(), function(Table $table) {
             $table->setComment('小说分类');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->unique()->notNull()->comment('分类名');
             $table->timestamp('created_at');
-        });
-        Schema::createTable(BookAuthorModel::tableName(), function(Table $table) {
+        })->append(BookAuthorModel::tableName(), function(Table $table) {
             $table->setComment('小说作者');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->unique()->notNull()->comment('作者名');
             $table->set('avatar')->varchar(200)->comment('作者头像');
             $table->timestamps();
-        });
-        Schema::createTable(BookHistoryModel::tableName(), function(Table $table) {
+        })->append(BookHistoryModel::tableName(), function(Table $table) {
             $table->setComment('小说阅读历史');
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
@@ -74,23 +67,14 @@ class CreateBookTables extends Migration {
             $table->set('chapter_id')->int()->defaultVal(0);
             $table->set('progress')->tinyint(1)->defaultVal(0);
             $table->timestamps();
-        });
-        Schema::createTable(BookLogModel::tableName(), function(Table $table) {
+        })->append(BookLogModel::tableName(), function(Table $table) {
             $table->setComment('小说点击统计');
             $table->set('id')->pk()->ai();
             $table->set('book_id')->int()->notNull();
             $table->set('hits')->int()->defaultVal(0);
             $table->set('created_at')->date()->notNull();
         });
-    }
-
-    public function down() {
-        Schema::dropTable(BookModel::tableName());
-        Schema::dropTable(BookCategoryModel::tableName());
-        Schema::dropTable(BookChapterBodyModel::tableName());
-        Schema::dropTable(BookChapterModel::tableName());
-        Schema::dropTable(BookAuthorModel::tableName());
-        Schema::dropTable(BookLogModel::tableName());
+        parent::up();
     }
 
     public function seed() {

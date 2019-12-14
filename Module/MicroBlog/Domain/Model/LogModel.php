@@ -17,8 +17,9 @@ class LogModel extends Model {
     const TYPE_COMMENT = 1;
 
     const ACTION_RECOMMEND = 0;
-    const ACTION_AGREE = 1;
-    const ACTION_DISAGREE = 2;
+    const ACTION_COLLECT = 1;
+    const ACTION_AGREE = 2;
+    const ACTION_DISAGREE = 3;
 
 
 	public static function tableName() {

@@ -2,6 +2,7 @@
 namespace Module\MicroBlog\Service;
 
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
+use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\ModuleController;
 use Zodream\Service\Config;
 use Zodream\Service\Factory;
@@ -33,23 +34,22 @@ class HomeController extends ModuleController {
     }
 
     public function createAction() {
-        if (!MicroBlogModel::canPublish()) {
+        if (!MicroRepository::canPublish()) {
             return $this->jsonFailure('发送过于频繁！');
         }
-        $model = new MicroBlogModel();
-        $model->user_id = auth()->id();
-        $model->content = app('request')->get('content');
-        if ($model->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./')
-            ]);
+        $model = MicroRepository::create(app('request')->get('content'));
+        if (!$model) {
+            return $this->jsonFailure('发送失败');
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => url('./')
+        ]);
+
     }
 
     public function recommendAction($id) {
         $id = intval($id);
-        if (!MicroBlogModel::canRecommend($id)) {
+        if (!MicroBlogModel::isRecommended($id)) {
             return $this->jsonFailure('一个用户只能操作一次！');
         }
         $model = MicroBlogModel::find($id);

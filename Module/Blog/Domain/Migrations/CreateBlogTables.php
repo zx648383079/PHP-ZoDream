@@ -8,7 +8,6 @@ use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class CreateBlogTables extends Migration {
@@ -18,7 +17,7 @@ class CreateBlogTables extends Migration {
      * @return void
      */
     public function up() {
-        Schema::createTable(BlogModel::tableName(), function(Table $table) {
+        $this->append(BlogModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(200)->notNull();
             $table->set('description')->varchar();
@@ -41,16 +40,14 @@ class CreateBlogTables extends Migration {
             $table->set('comment_status')->tinyint(1)->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();
-        });
-        Schema::createTable(TermModel::tableName(), function(Table $table) {
+        })->append(TermModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull();
             $table->set('parent_id')->int(10)->defaultVal(0);
             $table->set('keywords')->varchar();
             $table->set('description')->varchar();
             $table->set('thumb')->varchar();
-        });
-        Schema::createTable(CommentModel::tableName(), function(Table $table) {
+        })->append(CommentModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('content')->varchar()->notNull();
             $table->set('name')->varchar(30);
@@ -66,39 +63,23 @@ class CreateBlogTables extends Migration {
             $table->set('disagree')->int(10)->defaultVal(0);
             $table->set('approved')->bool()->defaultVal(2);
             $table->timestamp('created_at');
-        });
-        Schema::createTable(BlogLogModel::tableName(), function(Table $table) {
+        })->append(BlogLogModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('type')->tinyint(3)->defaultVal(0);
             $table->set('id_value')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
             $table->timestamp('created_at');
-        });
-        Schema::createTable(TagModel::tableName(), function(Table $table) {
+        })->append(TagModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull();
             $table->set('description')->varchar();
             $table->set('blog_count')->int()->defaultVal(0);
-        });
-        Schema::createTable(TagRelationshipModel::tableName(), function(Table $table) {
+        })->append(TagRelationshipModel::tableName(), function(Table $table) {
             $table->set('tag_id')->int()->notNull();
             $table->set('blog_id')->int()->notNull();
             $table->set('position')->tinyint(3)->defaultVal(99);
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down() {
-        Schema::dropTable(BlogModel::tableName());
-        Schema::dropTable(TermModel::tableName());
-        Schema::dropTable(CommentModel::tableName());
-        Schema::dropTable(BlogLogModel::tableName());
-        Schema::dropTable(TagModel::tableName());
-        Schema::dropTable(TagRelationshipModel::tableName());
+        parent::up();
     }
 }
