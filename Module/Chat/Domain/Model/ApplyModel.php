@@ -2,7 +2,7 @@
 namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class ApplyModel
@@ -47,7 +47,11 @@ class ApplyModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(UserModel::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function applier() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'apply_user');
     }
 
     public static function canApply($user_id) {

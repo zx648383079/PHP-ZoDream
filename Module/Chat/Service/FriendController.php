@@ -11,14 +11,25 @@ class FriendController extends Controller {
 
     public function indexAction() {
         $data = FriendGroupModel::with('users')
-            ->whereIn('user_id', [0, auth()->id()])->all();
+            ->where('user_id', auth()->id())->orderBy('id asc')->all();
+        if (empty($data)) {
+            $data = [FriendGroupModel::create([
+                'name' => '我的好友',
+                'user_id' => auth()->id(),
+            ])];
+        }
         foreach ($data as $key => $item) {
             $data[$key] = $item->toArray();
-            if (!isset($item['users'])) {
+            $data[$key]['users'] = $item['users'];
+            if (!$item->relationLoaded('users')) {
                 $data[$key]['users'] = [];
             }
-            if ($item['user_id'] < 1) {
-                $data[$key]['users'][] = auth()->user();
+            if ($key < 1) {
+                $user = auth()->user();
+                array_unshift($data[$key]['users'], new FriendModel([
+                    'name' => $user->name,
+                    'user' => $user
+                ]));
             }
             $data[$key]['count'] = count($data[$key]['users']);
             $data[$key]['online_count'] = 0;
@@ -57,7 +68,7 @@ class FriendController extends Controller {
 
     public function agreeAction($user, $name, $group = 0) {
         if ($group < 1) {
-            $group = FriendGroupModel::where('user_id', 0)->value('id');
+            $group = FriendGroupModel::where('user_id', auth()->id())->orderBy('id asc')->value('id');
         }
         $apply = ApplyModel::where('user_id', auth()->id())
             ->where('apply_user', $user)->where('status', 0)
@@ -87,7 +98,7 @@ class FriendController extends Controller {
 
     public function applyAction($user, $group = 0, $remark = null) {
         if ($group < 1) {
-            $group = FriendGroupModel::where('user_id', 0)->value('id');
+            $group = FriendGroupModel::where('user_id', auth()->id())->orderBy('id asc')->value('id');
         }
         if (!ApplyModel::canApply($user)) {
             return $this->jsonFailure('不能重复申请');
@@ -103,12 +114,14 @@ class FriendController extends Controller {
     }
 
     public function applyLogAction() {
-        $data = ApplyModel::with('user')->where('user_id', auth()->id())->orderBy('status asc')
+        $data = ApplyModel::with('applier', 'user')
+            ->where('user_id', auth()->id())->orderBy('status asc')
             ->orderBy('id desc')->limit(10)->get();
         foreach ($data as $key => $item) {
             /** @var $item ApplyModel */
             $data[$key] = $item->toArray();
             $data[$key]['user'] = $item->user;
+            $data[$key]['applier'] = $item->applier;
         }
         return $this->jsonSuccess($data);
     }

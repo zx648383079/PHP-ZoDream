@@ -120,11 +120,17 @@ async function tslintTask() {
 }
 
 async function tsTask() {
+    if (mode == 'prod') {
+        return gulp.src(tsRoot + '*.ts')
+            .pipe(tsProject())
+            .pipe(uglify())
+            .pipe(rename({suffix:'.min'}))
+            .pipe(gulp.dest(jsDist));
+    }
     return gulp.src(tsRoot + '*.ts')
-    .pipe(tsProject())
-    .pipe(uglify())
-    .pipe(rename({suffix:'.min'}))
-    .pipe(gulp.dest(jsDist));
+        .pipe(tsProject())
+        .pipe(rename({suffix:'.min'}))
+        .pipe(gulp.dest(jsDist));
 }
 
 async function jsTask() {

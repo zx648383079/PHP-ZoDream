@@ -7,7 +7,7 @@ interface IMenu {
     children?: Array<IMenu>
 }
 
-interface IGroup {
+interface IUserGroup {
     id?: number,
     name: string,
     count?: number,
@@ -18,16 +18,30 @@ interface IGroup {
 interface IUser {
     id: number,
     name: string,
-    avatar: string,
-    brief: string,
+    user: IUserInfo,
     new_count?: number,
     last_message?: IMessage
 }
 
-interface IApplyLog {
+interface IGroup {
     id: number,
-    remark: string,
-    user: IUser
+    name: string,
+    cover: string,
+    brief: string,
+}
+
+interface IUserInfo {
+    id: number,
+    name: string,
+    avatar: string,
+    brief: string,
+}
+
+interface IApplyLog {
+    id?: number,
+    remark?: string,
+    user: IUserInfo,
+    applier?: IUserInfo
 }
 
 enum ChatType {
@@ -254,7 +268,7 @@ class ChatAddUserBox extends ChatBaseBox {
         this.bindEvent();
     }
 
-    protected _user: IUser;
+    protected _user: IUserInfo;
 
     private _groups: IGroup[];
 
@@ -272,7 +286,7 @@ class ChatAddUserBox extends ChatBaseBox {
 
     public showWithUser(user: IApplyLog) {
         this.parent.trigger(EVENT_USER_GROUPS, this);
-        this._user = user.user;
+        this._user = user.applier;
         this.refresh();
         this.center().show();
     }
@@ -349,9 +363,9 @@ class ChatUserInfoBox extends ChatBaseBox {
     }
 
     public refresh() {
-        this.find('.dialog-user-avatar img').attr('src', this._user.avatar);
+        this.find('.dialog-user-avatar img').attr('src', this._user.user.avatar);
         this.find('.user-name').text(this._user.name);
-        this.find('.user-breif').text(this._user.brief);
+        this.find('.user-breif').text(this._user.user.brief);
     }
 
 }
@@ -398,7 +412,7 @@ class ChatApplyLogBox extends ChatBaseBox {
     </div>`,
         html = '';
         this._users.forEach(user => {
-            html += ChatSearchBox.format(tpl, user.id, user.user.avatar, user.user.name, user.remark || '');
+            html += ChatSearchBox.format(tpl, user.id, user.applier.avatar, user.applier.name, user.remark || '');
         });
         this.find('.dialog-apply-list').html(html);
     }
@@ -439,10 +453,10 @@ class ChatSearchBox extends ChatBaseBox {
 
     private _is_search_user: boolean = true;
 
-    private _users: Array<IUser> = [];
+    private _users: Array<IUserInfo> = [];
 
     
-    public set users(v : IUser[]) {
+    public set users(v : IUserInfo[]) {
         this._users = v;
         this.render();
     }
@@ -472,7 +486,7 @@ class ChatSearchBox extends ChatBaseBox {
         let _this = this;
         this.box.on('click', '.dialog-search-list .dialog-info', function() {
             let user = _this.getUser($(this).data('id'));
-            _this.parent.applyBox.showWithUser(user);
+            _this.parent.applyBox.showWithUser({user, id: 0, remark: ''});
         })
         .on('click', '.dialog-tab-header .dialog-tab-item', function() {
             let $this = $(this);
@@ -485,7 +499,7 @@ class ChatSearchBox extends ChatBaseBox {
         });
     }
 
-    public getUser(id: number): IUser {
+    public getUser(id: number): IUserInfo {
         for (let i = 0; i < this._users.length; i++) {
             if (this._users[i].id == id) {
                 return this._users[i];
@@ -564,7 +578,7 @@ class ChatMessageBox extends ChatBaseBox {
     constructor(
         public box: JQuery,
         private parent: ChatRoom,
-        public send?: IUser,
+        public send?: IUserInfo,
         public revice?: IUser
     ) {
         super();
@@ -660,14 +674,14 @@ class ChatMessageBox extends ChatBaseBox {
             <div class="content">
                 {1}
             </div>
-        </div>`, item.user.avatar, item.content);
+        </div>`, item.user.user.avatar, item.content);
         }
         return ChatMessageBox.format(`<div class="message-left">
         <img class="avatar" src="{0}">
         <div class="content">
             {1}
         </div>
-    </div>`, item.user.avatar, item.content);
+    </div>`, item.user.user.avatar, item.content);
     }
 
     private cleanMessage(): Array<IMessage> {
@@ -745,25 +759,25 @@ class ChatUserBox extends ChatBaseBox {
         this.bindEvent();
     }
 
-    private _user: IUser;
+    private _user: IUserInfo;
     private _last_friends: Array<IUser> = [];
-    private _friends: Array<IGroup>;
-    private _groups: Array<IUser>;
+    private _friends: Array<IUserGroup>;
+    private _groups: Array<IGroup>;
     public menu: ChatMenu;
 
     
-    public set user(v : IUser) {
+    public set user(v : IUserInfo) {
         this._user = v;
         this.renderUser();
         this.refresh();
     }
 
-    public get user(): IUser {
+    public get user(): IUserInfo {
         return this._user;
     }
     
 
-    public set friends(args: Array<IGroup>) {
+    public set friends(args: Array<IUserGroup>) {
         this._friends = args;
         this.renderFriends();
         args.forEach(group => {
@@ -777,14 +791,14 @@ class ChatUserBox extends ChatBaseBox {
         this.refreshMenu();
     }
 
-    public set groups(args: Array<IUser>) {
+    public set groups(args: Array<IGroup>) {
         this._groups = args;
         this.renderGroup();
-        args.forEach(user => {
-            if (user.last_message) {
-                this._last_friends.push(user);
-            }
-        });
+        // args.forEach(user => {
+        //     if (user.last_message) {
+        //         this._last_friends.push(user);
+        //     }
+        // });
         this.renderLastFriends();
     }
 
@@ -809,7 +823,7 @@ class ChatUserBox extends ChatBaseBox {
     </div>`,
         html = '';
         this._groups.forEach(group => {
-            html += ChatUserBox.format(tpl, group.avatar, group.name, group.brief);
+            html += ChatUserBox.format(tpl, group.cover, group.name, group.brief);
         });
         this.find('.dialog-tab-box .dialog-tab-item').eq(2).html(html);
     }
@@ -843,7 +857,9 @@ class ChatUserBox extends ChatBaseBox {
         this._friends.forEach(group => {
             let groupHtml = '';
             group.users.forEach(user => {
-                groupHtml += ChatUserBox.format(tpl, user.avatar, user.name, user.brief || '', user.id);
+                console.log(user);
+                
+                groupHtml += ChatUserBox.format(tpl, user.user.avatar, user.name, user.user.brief || '', user.id);
             });
             html += ChatUserBox.format(panel, group.name, group.online_count, group.count, groupHtml);
         });
@@ -871,7 +887,7 @@ class ChatUserBox extends ChatBaseBox {
         this._last_friends.forEach(user => {
             let count = user.new_count || 0;
             this._user.new_count += count;
-            html += ChatUserBox.format(tpl, user.avatar, user.name, ChatMessageBox.date(user.last_message.time), user.last_message.content, count, user.id);
+            html += ChatUserBox.format(tpl, user.user.avatar, user.name, ChatMessageBox.date(user.last_message.time), user.last_message.content, count, user.id);
         });
         this.find('.dialog-tab-box .dialog-tab-item').eq(0).html(html);
         this.renderUser();
@@ -913,7 +929,7 @@ class ChatUserBox extends ChatBaseBox {
             $(this).closest('.dialog-panel').toggleClass('expanded');
         }).on('click', '.dialog-tab .dialog-user', function() {
             let id = $(this).data('id');
-            if (id == _this._user.id) {
+            if (!id || id == _this._user.id) {
                 return;
             }
             _this.parent.chatBox.showWithUser(_this.getUser(id));
@@ -927,7 +943,7 @@ class ChatUserBox extends ChatBaseBox {
             }
         });
         this.parent.on(EVENT_USER_GROUPS, (box: ChatAddUserBox) => {
-            box.groups = _this._friends;
+            //box.groups = _this._friends;
         });
     }
 
@@ -957,13 +973,33 @@ class ChatRoom {
     ) {
         
     }
-
+    /**
+     * 好友及消息列表
+     */
     public mainBox: ChatUserBox;
+    /**
+     * 接受好友申请
+     */
     public addBox: ChatAddUserBox;
+    /**
+     * 申请加好友
+     */
     public applyBox: ChatApplyBox;
+    /**
+     * 查看用户资料
+     */
     public userBox: ChatUserInfoBox;
+    /**
+     * 搜索
+     */
     public searchBox: ChatSearchBox;
+    /**
+     * 聊天室
+     */
     public chatBox: ChatMessageBox;
+    /**
+     * 申请记录
+     */
     public applyLogBox: ChatApplyLogBox;
     private _events: {[event: string]: Function} = {};
 
@@ -983,7 +1019,7 @@ class ChatRoom {
         return this._events[event].call(this, ...args);
     }
 
-    public init(user: IUser) {
+    public init(user: IUserInfo) {
         this.mainBox = new ChatUserBox(this.find('.dialog-chat-box'), this);
         this.addBox = new ChatAddUserBox(this.find('.dialog-add-box'), this);
         this.applyBox = new ChatApplyBox(this.find('.dialog-apply-box'), this);
@@ -1167,7 +1203,7 @@ function registerChat() {
                 }
                 lastTime = data.data.time;
             }
-            handle = setTimeout(loopPing, 3000);
+            handle = setTimeout(loopPing, 10000);
         })
     }, doEvent = function(event: string, data?: any) {
         if (event === 'message_count') {

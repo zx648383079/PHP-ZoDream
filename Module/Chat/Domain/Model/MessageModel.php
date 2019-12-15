@@ -2,7 +2,7 @@
 namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Auth\Domain\Model\Scene\User;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class FriendModel
@@ -66,11 +66,11 @@ class MessageModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function receive() {
-        return $this->hasOne(User::class, 'id', 'receive_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'receive_id');
     }
 
 }

@@ -2,6 +2,7 @@
 namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Service\Factory;
 
 /**
@@ -16,6 +17,9 @@ use Zodream\Service\Factory;
  * @property integer $updated_at
  */
 class FriendModel extends Model {
+
+    protected $append = ['user'];
+
     public static function tableName() {
         return 'chat_friend';
     }
@@ -41,6 +45,10 @@ class FriendModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getMessages() {

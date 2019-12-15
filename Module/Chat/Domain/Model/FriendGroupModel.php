@@ -35,7 +35,8 @@ class FriendGroupModel extends Model {
 
     public function users() {
         return $this->hasMany(FriendModel::class, 'group_id')
-            ->where('belong_id', auth()->id());
+            ->where('belong_id', auth()->id())
+            ->appendRelation((new FriendModel())->user(), 'user');
     }
 
 
