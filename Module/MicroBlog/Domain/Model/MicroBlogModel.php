@@ -10,12 +10,18 @@ use Module\Auth\Domain\Model\UserModel;
  * @property integer $id
  * @property integer $user_id
  * @property string $content
- * @property integer $recommend
+ * @property integer $recommend_count
+ * @property integer $forward_count
+ * @property integer $comment_count
+ * @property integer $forward_id
  * @property string $source
  * @property integer $created_at
  * @property integer $updated_at
 */
 class MicroBlogModel extends Model {
+
+    protected $append = ['is_recommended'];
+
 	public static function tableName() {
         return 'micro_blog';
     }
@@ -24,7 +30,10 @@ class MicroBlogModel extends Model {
         return [
             'user_id' => 'int',
             'content' => 'required|string:0,140',
-            'recommend' => 'int',
+            'recommend_count' => 'int',
+            'forward_count' => 'int',
+            'comment_count' => 'int',
+            'forward_id' => 'int',
             'source' => 'string:0,30',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -36,51 +45,34 @@ class MicroBlogModel extends Model {
             'id' => 'Id',
             'user_id' => 'User Id',
             'content' => 'Content',
-            'recommend' => 'Recommend',
+            'recommend_count' => 'Recommend Count',
+            'forward_count' => 'Forward Count',
+            'comment_count' => 'Comment Count',
+            'forward_id' => 'Forward Id',
             'source' => 'Source',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
+
     public function user() {
         return $this->hasOne(UserModel::class, 'id', 'user_id');
     }
 
-    /**
-     * 不允许频繁发布
-     * @return bool
-     * @throws \Exception
-     */
-    public static function canPublish() {
-	    $time = static::where('user_id', auth()->id())->max('created_at');
-	    return !$time || $time < time() - 300;
+    public function forward() {
+	    return $this->hasOne(static::class, 'id', 'forward_id');
     }
 
-    public static function isRecommended($id) {
+    public function getIsRecommendedAttribute() {
+	    if (auth()->guest()) {
+	        return false;
+        }
         return LogModel::where([
                 'user_id' => auth()->id(),
                 'type' => LogModel::TYPE_MICRO_BLOG,
-                'id_value' => $id,
+                'id_value' => $this->id,
                 'action' => LogModel::ACTION_RECOMMEND
-            ])->count() > 1;
-    }
-
-    /**
-     * 推荐
-     * @return bool
-     * @throws \Exception
-     */
-    public function recommendThis() {
-        $this->recommend++;
-        if (!$this->save()) {
-            return false;
-        }
-        return !!LogModel::create([
-            'type' => LogModel::TYPE_MICRO_BLOG,
-            'action' => LogModel::ACTION_RECOMMEND,
-            'id_value' => $this->id,
-            'user_id' => auth()->id()
-        ]);
+            ])->count() > 0;
     }
 }

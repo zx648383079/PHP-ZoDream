@@ -13,6 +13,7 @@ class HomeController extends ModuleController {
         return [
             'recommend' => '@',
             'create' => '@',
+            'forward' => '@',
             '*' => '*'
         ];
     }
@@ -48,13 +49,33 @@ class HomeController extends ModuleController {
     }
 
     public function recommendAction($id) {
-        $id = intval($id);
-        if (!MicroBlogModel::isRecommended($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+        if (!app('request')->isAjax()) {
+            return $this->redirect('./');
         }
-        $model = MicroBlogModel::find($id);
-        $model->recommendThis();
-        return $this->jsonSuccess($model->recommend);
+        try {
+            $model = MicroRepository::recommend($id);
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($model);
+    }
+
+    public function forwardMiniAction($id) {
+        $this->layout = false;
+        $blog = MicroBlogModel::find($id);
+        return $this->show(compact('blog'));
+    }
+
+    public function forwardAction($id, $content, $is_comment = false) {
+        if (!app('request')->isAjax()) {
+            return $this->redirect('./');
+        }
+        try {
+            $model = MicroRepository::forward($id, $content, $is_comment);
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($model);
     }
 
     public function findLayoutFile() {

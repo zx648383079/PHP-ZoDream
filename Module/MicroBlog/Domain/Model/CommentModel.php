@@ -17,6 +17,8 @@ use Domain\Model\Model;
  */
 class CommentModel extends Model {
 
+    protected $append = ['is_agree', 'reply_count'];
+
 	public static function tableName() {
         return 'micro_comment';
     }
@@ -54,39 +56,17 @@ class CommentModel extends Model {
 	    return $this->hasOne(MicroBlogModel::class, 'id', 'micro_id');
     }
 
-    public function getReplyCount() {
-	    return $this->reply_count = static::where('parent_id', $this->id)->count();
+    public function getReplyCountAttribute() {
+	    return static::where('parent_id', $this->id)->count();
     }
 
-    public static function canAgree($id) {
-	    return LogModel::where([
-	        'user_id' => auth()->id(),
+    public function getAgreeTypeAttribute() {
+	    $log = LogModel::where([
+            'user_id' => auth()->id(),
             'type' => LogModel::TYPE_COMMENT,
-            'id_value' => $id,
-            'action' => ['in', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]]
-        ])->count() < 1;
-    }
-
-    /**
-     * 是否赞同此评论
-     * @param bool $isAgree
-     * @return bool
-     * @throws \Exception
-     */
-    public function agreeThis($isAgree = true) {
-        if ($isAgree) {
-            $this->agree ++;
-        } else {
-            $this->disagree ++;
-        }
-        if (!$this->save()) {
-            return false;
-        }
-        return !!LogModel::create([
-            'type' => LogModel::TYPE_COMMENT,
-            'action' => $isAgree ? LogModel::ACTION_AGREE : LogModel::ACTION_DISAGREE,
             'id_value' => $this->id,
-            'user_id' => auth()->id()
-        ]);
+            'action' => ['in', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]]
+        ])->first('action');
+	    return !$log ? 0 : $log->action;
     }
 }

@@ -1,7 +1,7 @@
-function bindMicroPage(baseUri: string) {
+function bindMicroPage() {
     $('.micro-publish').on('submit', 'form', function() {
         let $this = $(this);
-        $.post($this.attr('action'), $this.serialize(), function (data) {
+        postJson($this.attr('action'), $this.serialize(), data => {
             if (data.code == 200) {
                 window.location.reload();
                 return;
@@ -10,8 +10,8 @@ function bindMicroPage(baseUri: string) {
                 window.location.href = data.url;
                 return;
             }
-            alert(data.message);
-        }, 'json');
+            parseAjax(data);
+        });
         return false;
     }).on('input propertychange', 'textarea', function() {
         let $this = $(this);
@@ -25,7 +25,7 @@ function bindMicroPage(baseUri: string) {
         if (comment.is(':hidden')) {
             return;
         }
-        $.get(baseUri + 'comment', {
+        $.get(BASE_URI + 'comment', {
             id: box.data('id')
         }, function(html) {
             comment.html(html);
@@ -33,28 +33,43 @@ function bindMicroPage(baseUri: string) {
     }).on('click', '[data-action=recommend]', function() {
         let $this = $(this),
             box = $this.closest('.micro-item');
-        $.getJSON(baseUri + 'recommend', {
+        $.getJSON(BASE_URI + 'recommend', {
             id: box.data('id')
         }, function(data) {
             if (data.code == 200) {
-                $this.text('赞' + data.data).toggleClass('active');
+                $this.text('赞' + (data.data && data.data.recommend_count > 0 ? data.data.recommend_count : '')).toggleClass('active', data.data.is_recommended);
             }
             if (data.code == 302) {
                 window.location.href = data.url;
                 return;
             }
         });
+    }).on('click', '[data-action="dialog"]', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        let forwardDialog = Dialog.box({
+            url: $this.attr('href'),
+            title: '转发微博',
+            hasYes: false,
+            hasNo: false,
+            ondone: function() {
+                let box = this.find('.forward-box') as JQuery;
+                postJson(box.attr('action'), box.serialize(), res => {
+                    forwardDialog.close();
+                    parseAjax(res);
+                });
+            }
+        });
     }).on('click', '.reply-input .btn', function(e) {
         e.preventDefault();
         let $this = $(this);
         let url = $this.attr('href');
-        let content = $this.closest('.reply-input').find('textarea').val() as string;
-        if (content.length < 0) {
+        let box = $this.closest('.reply-input');
+        let content = box.find('textarea').val() as string;
+        if (content.trim().length < 0) {
             return;
         }
-        postJson(url, {
-            content
-        }, res => {
+        postJson(url, formData(box), res => {
             if (res.code != 200 || !res.data.url) {
                 return;
             }
@@ -71,7 +86,6 @@ function bindMicroPage(baseUri: string) {
         e.preventDefault();
         let $this = $(this);
         let prev = $this.closest('.actions');
-        
         if (prev.next('.reply-input').length > 0) {
             prev.next('.reply-input').toggle();
             return;

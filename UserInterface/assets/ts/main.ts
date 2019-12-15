@@ -28,6 +28,18 @@ function ajaxForm(url, data, callback?: (data: IResponse)=>any) {
         parseAjax(data);
     });
 }
+
+function formData(item: JQuery): string {
+    let data = [];
+    item.find('input,textarea,select').each(function(this: HTMLInputElement) {
+        if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
+            return;
+        }
+        data.push(encodeURIComponent( this.name ) + '=' +
+				encodeURIComponent( $(this).val().toString() ))
+    });
+    return data.join('&');
+}
 /**
  * 转化请求响应结果
  * @param data 

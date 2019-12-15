@@ -2,6 +2,7 @@
 namespace Module\MicroBlog\Service;
 
 use Module\MicroBlog\Domain\Model\CommentModel;
+use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\ModuleController;
 use Zodream\Service\Config;
 
@@ -37,16 +38,20 @@ class CommentController extends ModuleController {
         return $this->show(compact('comment_list'));
     }
 
-    public function saveAction() {
-        $data = app('request')->get('content,parent_id,micro_id');
-        $data['user_id'] = auth()->id();
-        $data['parent_id'] = intval($data['parent_id']);
-        $model = CommentModel::create($data);
-        if (empty($model)) {
-            return $this->jsonFailure('评论失败！');
+    public function saveAction($content,
+                               $micro_id,
+                               $parent_id = 0,
+                               $is_forward = false) {
+        try {
+            $model = MicroRepository::comment($content,
+                $micro_id,
+                $parent_id,
+                $is_forward);
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
-            'url' => url('./comment', ['id' => $data['micro_id']])
+            'url' => url('./comment', ['id' => $micro_id])
         ]);
     }
 
@@ -54,35 +59,26 @@ class CommentController extends ModuleController {
         if (!app('request')->isAjax()) {
             return $this->redirect('./');
         }
-        $id = intval($id);
-        if (!CommentModel::canAgree($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+        try {
+            $model = MicroRepository::disagree($id);
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        $model = CommentModel::find($id);
-        $model->agreeThis(false);
-        return $this->jsonSuccess($model->disagree);
+        return $this->jsonSuccess($model);
     }
 
     public function agreeAction($id) {
         if (!app('request')->isAjax()) {
             return $this->redirect('./');
         }
-        $id = intval($id);
-        if (!CommentModel::canAgree($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+        try {
+            $model = MicroRepository::agree($id);
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        $model = CommentModel::find($id);
-        $model->agreeThis();
-        return $this->jsonSuccess($model->agree);
+        return $this->jsonSuccess($model);
     }
 
-    public function reportAction($id) {
-
-    }
-
-    public function logAction() {
-        CommentModel::alias('c');
-    }
 
     public function redirectWithAuth() {
         return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);

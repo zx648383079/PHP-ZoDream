@@ -546,18 +546,6 @@ function bindAddress() {
     };
 }
 
-function formData(item: JQuery): string {
-    let data = [];
-    item.find('input,textarea,select').each(function(this: HTMLInputElement) {
-        if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
-            return;
-        }
-        data.push(encodeURIComponent( this.name ) + '=' +
-				encodeURIComponent( $(this).val().toString() ))
-    });
-    return data.join('&');
-}
-
 function bindPayTime() {
     let items = $('[data-type="countdown"]');
     setInterval(function() {

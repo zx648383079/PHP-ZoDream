@@ -55,8 +55,46 @@ footer {
         height: 60px;
         display: inline-block;
         padding: 0 20px;
+        position: relative;
         &:hover {
             border-bottom: 3px solid #fff;
+            .sub-nav {
+                display: block;
+            }
+        }
+    }
+    ul {
+        display: inline-block;
+        &.nav-right {
+            float: right;
+        }
+    }
+    .sub-nav {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.2);
+        left: 0;
+        width: 100%;
+        margin-top: -5px;
+        a {
+            color: #333;
+            display: block;
+            &:hover {
+                background-color: #f2f2f5;
+                text-decoration: none;
+                color: #eb7350;
+            }
+        }
+        ul {
+            display: block;
+        }
+        li {
+            display: block;
+            padding: 0;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
         }
     }
     .nav-bar-toggle {
@@ -382,9 +420,23 @@ footer {
             li {
                 display: block;
                 line-height: 40px;
-                height: 40px;
+                height: auto;
+            }
+            .sub-nav {
+                display: block;
+                position: static;
+                margin: 0;
+                margin: 0 -20px;
+                width: auto;
+                a {
+                    color: #fff;
+                }
+            }
+            &.nav-right {
+                float: none;
             }
         }
+        
         &.open {
             ul {
                 display: block;

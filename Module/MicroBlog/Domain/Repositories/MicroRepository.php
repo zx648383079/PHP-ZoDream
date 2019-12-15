@@ -20,10 +20,11 @@ class MicroRepository {
         return !$time || $time < time() - 300;
     }
 
-    public static function create($content, $images = null) {
+    public static function create($content, $images = null, $source = 'web') {
         $model = MicroBlogModel::create([
             'user_id' => auth()->id(),
-            'content' => $content
+            'content' => $content,
+            'source' => $source
         ]);
         if ($model) {
             self::at($content, $model->id);
@@ -38,6 +39,7 @@ class MicroRepository {
      * @param int $parent_id
      * @param bool $is_forward 是否转发
      * @return CommentModel
+     * @throws Exception
      */
     public static function comment($content,
                                    $micro_id,
@@ -56,21 +58,23 @@ class MicroRepository {
         if (!$comment) {
             throw new Exception('评论失败');
         }
-        if (!$is_forward) {
-            self::at($content, $model->id);
-            return $comment;
+        if ($is_forward) {
+            if ($model->forward_id > 0) {
+                $sourceUser = UserModel::where('id', $model->id)->first('name');
+                $content = sprintf('%s// @%s : %s', $content, $sourceUser->name, $model->content);
+            }
+            MicroBlogModel::create([
+                'user_id' => auth()->id(),
+                'content' => $content,
+                'forward_id' => $model->forward_id > 0 ? $model->forward_id :
+                    $model->id,
+                'forward_count' => 1,
+                'source' => 'web'
+            ]);
+            $model->forward_count ++;
         }
-        if ($model->foreard_id > 0) {
-            $sourceUser = UserModel::where('id', $model->id)->first('name');
-            $content = sprintf('%s// @%s : %s', $content, $sourceUser->name, $model->content);
-        }
-        MicroBlogModel::create([
-            'user_id' => auth()->id(),
-            'content' => $content,
-            'forward_id' => $model->foreard_id > 0 ? $model->foreard_id :
-                $model->id
-        ]);
-        $model->forward ++;
+        self::at($content, $model->id);
+        $model->comment_count ++;
         $model->save();
         return $comment;
     }
@@ -109,7 +113,7 @@ class MicroRepository {
         }
         $res = self::toggleLog($id,
             LogModel::ACTION_RECOMMEND, LogModel::TYPE_MICRO_BLOG);
-        $model->recommend += $res ? 1 : -1;
+        $model->recommend_count += $res ? 1 : -1;
         $model->save();
         return $model;
     }
@@ -130,22 +134,24 @@ class MicroRepository {
         $model = MicroBlogModel::create([
             'user_id' => auth()->id(),
             'content' => $content,
-            'forward_id' => $source->id
+            'forward_id' => $source->id,
+            'forward_count' => 1,
+            'source' => 'web'
         ]);
         if (!$model) {
             throw new Exception('转发失败');
         }
-        $source->forward ++;
+        if ($is_comment) {
+            CommentModel::create([
+                'content' => $content,
+                'user_id' => auth()->id(),
+                'micro_id' => $source->id,
+            ]);
+            $source->comment_count ++;
+        }
+        $source->forward_count ++;
         $source->save();
         self::at($content, $model->id);
-        if (!$is_comment) {
-            return $model;
-        }
-        $comment = CommentModel::create([
-            'content' => $content,
-            'user_id' => auth()->id(),
-            'micro_id' => $source->id,
-        ]);
         return $model;
     }
 

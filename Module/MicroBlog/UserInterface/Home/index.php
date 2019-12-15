@@ -3,19 +3,19 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '微博客';
-$url = $this->url('./', false);
 $js = <<<JS
-bindMicroPage('{$url}');
+bindMicroPage();
 JS;
 $this->registerCssFile([
-    '@font-awesome.min.css',
+    '@dialog.css',
     '@animate.min.css',
     '@micro.css'])
     ->registerJsFile([
-        '@jquery.min.js',
+        '@jquery.dialog.min.js',
         '@main.min.js',
         '@micro.min.js'
     ])
+    ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD)
     ->registerJs($js, View::JQUERY_READY);
 ?>
 

@@ -18,8 +18,9 @@ class CreateMicroBlogTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int(10);
             $table->set('content')->varchar(140)->notNull();
-            $table->set('recommend')->int(10)->defaultVal(0)->comment('推荐数');
-            $table->set('forward')->int(10)->defaultVal(0)->comment('转发数');
+            $table->set('recommend_count')->int(10)->defaultVal(0)->comment('推荐数');
+            $table->set('forward_count')->int(10)->defaultVal(0)->comment('转发数');
+            $table->set('comment_count')->int(10)->defaultVal(0)->comment('评论数');
             $table->set('forward_id')->int(10)->defaultVal(0)->comment('转发的源id');
             $table->set('source')->varchar(30)->defaultVal('')->comment('来源');
             $table->timestamps();

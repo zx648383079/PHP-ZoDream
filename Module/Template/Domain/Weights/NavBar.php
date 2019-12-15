@@ -39,8 +39,35 @@ $('.nav-bar .nav-bar-toggle').click(function() {
 });
 JS;
         Factory::view()->registerJs($js, View::JQUERY_READY);
-        return sprintf('<div class="nav-bar"><span class="nav-bar-toggle"></span><ul>%s</ul></div>', implode('', array_map(function ($item) {
+        return sprintf('<div class="nav-bar"><span class="nav-bar-toggle"></span><ul>%s</ul>%s</div>', implode('', array_map(function ($item) {
             return sprintf('<li><a href="%s">%s</a></li>', url($item['url']), __($item['name']));
-        }, $data)));
+        }, $data)), $this->renderRight());
+    }
+
+    private function renderRight() {
+        if (auth()->guest()) {
+            return '';
+        }
+        $name = auth()->user()->name;
+        return <<<HTML
+<ul class="nav-right">
+    <li>
+        <a href="">{$name}</a>
+        <div class="sub-nav">
+            <ul>
+                <li>
+                    <a href="">私信</a>
+                </li>
+                <li>
+                    <a href="">账号设置</a>
+                </li>
+                <li>
+                    <a href="">退出</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul>
+HTML;
     }
 }
