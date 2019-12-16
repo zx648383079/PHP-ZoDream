@@ -128,7 +128,7 @@ class LogModel extends Model {
      * @return array
      */
     public static function getLast($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'ip, MAX(create_at) as create_at, referer',
             'where' => $where,
             'groupBy' => 1,
@@ -143,7 +143,7 @@ class LogModel extends Model {
      * @return array
      */
     public static function geAllMonth($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp',
             'where' => $where,
             'groupBy' => '1,2,3',
@@ -158,7 +158,7 @@ class LogModel extends Model {
      * @return mixed
      */
     public static function geTopUrl($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'url, COUNT(*) as count',
             'where' => $where,
             'groupBy' => 1,
@@ -171,9 +171,10 @@ class LogModel extends Model {
      * 获取前三十名访问者的IP
      * @param array|string $where
      * @return mixed
+     * @throws \Exception
      */
     public static function geTopIp($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'ip, COUNT(*) as count',
             'where' => $where,
             'groupBy' => 1,
@@ -186,9 +187,10 @@ class LogModel extends Model {
      * 获取前三十名访问者浏览器
      * @param array|string $where
      * @return mixed
+     * @throws \Exception
      */
     public static function geTopBrowser($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'browser, COUNT(*) as count',
             'where' => $where,
             'groupBy' => 1,
@@ -201,9 +203,10 @@ class LogModel extends Model {
      * 获取前三十名访问者系统
      * @param array|string $where
      * @return mixed
+     * @throws \Exception
      */
     public static function geTopOs($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'os, COUNT(*) as count',
             'where' => $where,
             'groupBy' => 1,
@@ -216,9 +219,10 @@ class LogModel extends Model {
      * 获取前三十名访问者国家
      * @param array|string $where
      * @return mixed
+     * @throws \Exception
      */
     public static function geTopCountry($where = null) {
-        return static::find()->load([
+        return static::query()->load([
             'select' => 'RIGHT(ip,INSTR(REVERSE(ip),\".\")-1) as country, COUNT(*) as count',
             'where' => $where,
             'groupBy' => 1,
@@ -286,6 +290,7 @@ class LogModel extends Model {
      * 获取前三十名外链
      * @param array|string $where
      * @return mixed
+     * @throws \Exception
      */
     public static function getTopReferer($where = null) {
         if (empty($where)) {
