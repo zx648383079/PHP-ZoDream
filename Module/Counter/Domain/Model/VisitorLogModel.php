@@ -2,6 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Request;
 
 /**
  * Class VisitorLogModel
@@ -35,5 +36,25 @@ class VisitorLogModel extends Model {
             'first_at' => 'First At',
             'last_at' => 'Last At',
         ];
+    }
+
+    public static function log(Request $request) {
+        if ($request->has('loaded') || $request->has('leave')) {
+            return;
+        }
+        $ip = $request->ip();
+        $user_id = auth()->id();
+        $model = static::where('ip', $ip)->where('user_id', $user_id)->first();
+        if ($model) {
+            $model->last_at = time();
+            $model->save();
+            return;
+        }
+        static::create([
+            'ip' => $ip,
+            'user_id' => $user_id,
+            'first_at' => time(),
+            'last_at' => time(),
+        ]);
     }
 }

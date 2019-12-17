@@ -2,6 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Request;
 
 /**
  * Class ClickLogModel
@@ -50,6 +51,10 @@ class ClickLogModel extends Model {
             'tag_url' => 'Tag Url',
             'created_at' => 'Created At',
         ];
+    }
+
+    public static function log(Request $request) {
+
     }
 
 }

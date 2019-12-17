@@ -2,6 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Request;
 
 /**
  * Class LoadTimeLogModel
@@ -41,5 +42,18 @@ class LoadTimeLogModel extends Model {
             'load_time' => 'Load Time',
             'created_at' => 'Created At',
         ];
+    }
+
+    public static function log(Request $request) {
+        if (!$request->has('loaded') || $request->has('leave')) {
+            return;
+        }
+        static::create([
+            'url' => (string)$request->uri(),
+            'ip' => $request->ip(),
+            'session_id' => session()->id(),
+            'user_agent' => $request->server('HTTP_USER_AGENT', '-'),
+            'load_time' => floatval(($request->get('loaded') - $request->get('enter')) / 1000),
+        ]);
     }
 }

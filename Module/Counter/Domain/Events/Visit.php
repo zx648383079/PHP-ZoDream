@@ -41,8 +41,8 @@ class Visit {
         int $userId
     ) {
         $this->ip = $ip;
-        $this->referrer = $referrer;
-        $this->url = $url;
+        $this->referrer = (string)$referrer;
+        $this->url = (string)$url;
         $this->userAgent = $userAgent;
         $this->timestamp = $timestamp;
         $this->sessionId = $sessionId;

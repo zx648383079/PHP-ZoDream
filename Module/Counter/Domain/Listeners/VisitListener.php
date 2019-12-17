@@ -7,8 +7,7 @@ use Zodream\Infrastructure\Http\UserAgent;
 
 class VisitListener {
 
-
-    public function handle(Visit $visit) {
+    public function __construct(Visit $visit) {
         $model = new LogModel();
         $os = UserAgent::os($visit->getUserAgent());
         $browser = UserAgent::browser($visit->getUserAgent());

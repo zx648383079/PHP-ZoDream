@@ -2,6 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Infrastructure\Http\Request;
 
 /**
  * Class PageLogModel
@@ -11,6 +12,8 @@ use Domain\Model\Model;
  * @property integer $visit_count
  */
 class PageLogModel extends Model {
+
+    public $timestamps = false;
 
     public static function tableName() {
         return 'ctr_page_log';
@@ -29,5 +32,22 @@ class PageLogModel extends Model {
             'url' => 'Url',
             'visit_count' => 'Visit Count',
         ];
+    }
+
+    public static function log(Request $request) {
+        if ($request->has('loaded') || $request->has('leave')) {
+            return;
+        }
+        $url = (string)$request->uri();
+        $model = static::where('url', $url)->first();
+        if ($model) {
+            $model->visit_count ++;
+            $model->save();
+            return;
+        }
+        static::create([
+            'url' => $url,
+            'visit_count' => 1
+        ]);
     }
 }
