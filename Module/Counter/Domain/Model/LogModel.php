@@ -15,13 +15,13 @@ use Zodream\Service\Factory;
  * @property string $os
  * @property string $os_version
  * @property string $url
- * @property string $referer
- * @property string $agent
+ * @property string $referrer
+ * @property string $user_agent
  * @property string $country
  * @property string $region
  * @property string $city
  * @property integer $user_id
- * @property string $user_name
+ * @property string $session_id
  * @property string $latitude
  * @property string $longitude
  * @property integer $created_at
@@ -40,13 +40,13 @@ class LogModel extends Model {
             'os' => 'string:0,20',
             'os_version' => 'string:0,20',
             'url' => 'string:0,255',
-            'referer' => 'string:0,255',
-            'agent' => 'string:0,255',
+            'referrer' => 'string:0,255',
+            'user_agent' => 'string:0,255',
             'country' => 'string:0,45',
             'region' => 'string:0,45',
             'city' => 'string:0,45',
             'user_id' => 'int',
-            'user_name' => 'string:0,30',
+            'session_id' => 'string:0,30',
             'latitude' => 'string:0,30',
             'longitude' => 'string:0,30',
             'created_at' => 'int',
@@ -62,13 +62,13 @@ class LogModel extends Model {
             'os' => 'Os',
             'os_version' => 'Os Version',
             'url' => 'Url',
-            'referer' => 'Referer',
-            'agent' => 'Agent',
+            'referrer' => 'Referrer',
+            'user_agent' => 'User Agent',
             'country' => 'Country',
             'region' => 'Region',
             'city' => 'City',
             'user_id' => 'User Id',
-            'user_name' => 'User Name',
+            'session_id' => 'Session Id',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
             'created_at' => 'Created At',

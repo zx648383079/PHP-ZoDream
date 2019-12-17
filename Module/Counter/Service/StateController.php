@@ -6,6 +6,7 @@ use Module\ModuleController as Controller;
 class StateController extends Controller {
 
     public function indexAction() {
+
         return '';
     }
 }

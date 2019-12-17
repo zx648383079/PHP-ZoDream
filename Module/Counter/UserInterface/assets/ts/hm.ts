@@ -15,7 +15,11 @@ class Counter {
         let that = this;
         window.addEventListener('pageshow', function() {
             that.data.enter = new Date().getTime();
-            that.notify();
+            that.notifyAsync();
+        }, true);
+        window.addEventListener('lοad', function() {
+            that.data.loaded = new Date().getTime();
+            that.notifyAsync();
         }, true);
         window.addEventListener('pagehide', function() {
             that.data.leave = new Date().getTime();
@@ -35,6 +39,10 @@ class Counter {
         const img = new Image();
         img.src = this.createImg(this.data);
         img.onload = () => {};
+    }
+
+    private notifyAsync() {
+        this.notify();
     }
 
     private getSystem() {
