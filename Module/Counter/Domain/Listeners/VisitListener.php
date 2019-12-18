@@ -18,7 +18,7 @@ class VisitListener {
         $model->os_version = $os[1];
         $model->referrer = $visit->getReferrer();
         $model->url = $visit->getUrl();
-        $model->session = $visit->getSessionId();
+        $model->session_id = $visit->getSessionId();
         $model->user_agent = $visit->getUserAgent();
         $model->user_id = $visit->getUserId();
         $model->created_at = $visit->getTimestamp();

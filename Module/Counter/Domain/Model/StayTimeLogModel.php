@@ -2,7 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\Request;
+use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class StayTimeLogModel
@@ -47,35 +47,29 @@ class StayTimeLogModel extends Model {
         ];
     }
 
-    public static function log(Request $request) {
-        if ($request->has('loaded') && !$request->has('leave')) {
-            return;
-        }
-        $data = [
-            'url' => $request->uri(),
-            'ip' => $request->ip(),
-            'session_id' => session()->id(),
-            'user_agent' => $request->server('HTTP_USER_AGENT', '-'),
-        ];
-        if (!$request->has('leave')) {
+    public static function log(CounterState $state) {
+        if ($state->status === CounterState::STATUS_ENTER) {
             static::create([
-                'url' => (string)$data['url'],
-                'ip' => $data['ip'],
-                'user_agent' => $data['user_agent'],
-                'session_id' => $data['session_id'],
-                'status' => 0,
-                'enter_at' => time(),
+                'url' => $state->url,
+                'ip' => $state->ip,
+                'user_agent' => $state->user_agent,
+                'session_id' => $state->session_id,
+                'status' => $state->status,
+                'enter_at' => $state->getTimeOrNow('enter_at'),
                 'leave_at' => 0,
             ]);
             return;
         }
-        static::where('url', $data['url'])
-            ->where('session_id', $data['session_id'])
-            ->where('leave_at', 0)->orderBy('id', 'desc')
-            ->limit(1)
-            ->update([
-                'status' => 1,
-                'leave_at' => time()
-            ]);
+        if ($state->status === CounterState::STATUE_LEAVE) {
+            static::where('url', $state->url)
+                ->where('session_id', $state->session_id)
+                ->where('leave_at', 0)->orderBy('id', 'desc')
+                ->limit(1)
+                ->update([
+                    'status' => $state->status,
+                    'leave_at' => $state->getTimeOrNow('leave_at')
+                ]);
+            return;
+        }
     }
 }

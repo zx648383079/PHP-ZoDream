@@ -7,12 +7,13 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@dialog.css',
-        '@tcg.css'
+        '@game_tcg.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
-        '@tcg.min.js'
-    ]);
+        '@main.min.js',
+        '@game_tcg.min.js'
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

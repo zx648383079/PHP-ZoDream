@@ -2,7 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\Request;
+use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class PageLogModel
@@ -34,11 +34,11 @@ class PageLogModel extends Model {
         ];
     }
 
-    public static function log(Request $request) {
-        if ($request->has('loaded') || $request->has('leave')) {
+    public static function log(CounterState $state) {
+        if ($state->status !== CounterState::STATUS_ENTER) {
             return;
         }
-        $url = (string)$request->uri();
+        $url = $state->url;
         $model = static::where('url', $url)->first();
         if ($model) {
             $model->visit_count ++;

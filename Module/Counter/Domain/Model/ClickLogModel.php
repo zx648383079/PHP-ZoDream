@@ -2,7 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Infrastructure\Http\Request;
+use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class ClickLogModel
@@ -53,7 +53,7 @@ class ClickLogModel extends Model {
         ];
     }
 
-    public static function log(Request $request) {
+    public static function log(CounterState $state) {
 
     }
 

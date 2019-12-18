@@ -1,5 +1,5 @@
 
-$(function() {
+function bindWork() {
     let dialog = $('.area-dialog').dialog();
     let url = '';
     $('a[data-type="work"]').click(function(e) {
@@ -16,4 +16,4 @@ $(function() {
             parseAjax(res);
         });
     });
-});
+}

@@ -7,13 +7,13 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@dialog.css',
-        '@miner.css'
+        '@game_miner.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@main.min.js',
-        '@miner.min.js'
-    ]);
+        '@game_miner.min.js'
+    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

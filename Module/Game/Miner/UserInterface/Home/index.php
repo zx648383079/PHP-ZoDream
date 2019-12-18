@@ -2,6 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$js = <<<JS
+bindWork();
+JS;
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 <div class="page-tip">
     <p class="blue">操作提示</p>

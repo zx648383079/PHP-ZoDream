@@ -63,6 +63,7 @@ class CreateCounterTables extends Migration {
             $table->set('city')->varchar(45)->defaultVal('');
             $table->set('user_id')->int()->defaultVal(0);
             $table->set('session_id')->varchar(30)->defaultVal('');
+            $table->set('language')->varchar(20)->defaultVal('');
             $table->set('latitude')->varchar(30)->defaultVal('')->comment('纬度');
             $table->set('longitude')->varchar(30)->defaultVal('')->comment('经度');
             $table->timestamp('created_at');

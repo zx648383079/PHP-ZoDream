@@ -20,7 +20,7 @@ class Counter {
         window.addEventListener('lοad', function() {
             that.data.loaded = new Date().getTime();
             that.notifyAsync();
-        }, true);
+        }, false);
         window.addEventListener('pagehide', function() {
             that.data.leave = new Date().getTime();
             that.notify();
