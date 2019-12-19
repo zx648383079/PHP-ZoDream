@@ -7,18 +7,18 @@ interface IMenu {
     children?: Array<IMenu>
 }
 
-interface IUserGroup {
+interface IFriendGroup<T> {
     id?: number,
     name: string,
     count?: number,
     online_count?: number,
-    users: Array<IUser>
+    users: Array<T>
 }
 
-interface IUser {
+interface IFriend {
     id: number,
     name: string,
-    user: IUserInfo,
+    user: IUser,
     new_count?: number,
     last_message?: IMessage
 }
@@ -30,18 +30,19 @@ interface IGroup {
     brief: string,
 }
 
-interface IUserInfo {
+interface IUser {
     id: number,
     name: string,
     avatar: string,
+    new_count: number,
     brief: string,
 }
 
 interface IApplyLog {
     id?: number,
     remark?: string,
-    user: IUserInfo,
-    applier?: IUserInfo
+    user: IUser,
+    applier?: IUser
 }
 
 enum ChatType {
@@ -70,7 +71,181 @@ const EVENT_REFRESH_USERS = 'refresh_users',
     EVENT_ADD_USER = 'add_user',
     EVENT_APPLY_USER = 'apply_user',
     EVENT_SEND_MESSAGE = 'send_message',
-    EVENT_GET_MESSAGE = 'get_message';
+    EVENT_GET_MESSAGE = 'get_message',
+    HTML_MAIN = `<div class="dialog-box dialog-chat-box">
+    <div class="dialog-header">
+        <div class="dialog-action">
+            <i class="fa fa-plus"></i>
+            <i class="fa fa-minus"></i>
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-info">
+        <div class="dialog-info-avatar">
+            <img src="" alt="">
+        </div>
+        <div class="dialog-info-name">
+            <h3></h3>
+            <p>......</p>
+        </div>
+        <div class="dialog-message-count">
+            99
+        </div>
+    </div>
+    <div class="dialog-tab">
+        <div class="dialog-tab-header">
+            <div class="dialog-tab-item active">
+                <i class="fa fa-comment"></i>
+            </div><div class="dialog-tab-item">
+                <i class="fa fa-user"></i>
+            </div><div class="dialog-tab-item">
+                <i class="fa fa-comments"></i>
+            </div>
+        </div>
+        <div class="dialog-tab-box">
+            <div class="dialog-tab-item active">
+            </div>
+            <div class="dialog-tab-item">
+            </div>
+            <div class="dialog-tab-item">
+            </div>
+        </div>
+    </div>
+    <div class="dialog-menu">
+        <ul>
+            <li>
+                <i class="fa fa-eye"></i>
+                查看资料</li>
+            <li>
+                <i class="fa fa-bookmark"></i>
+                移动好友</li>
+            <li>
+                <i class="fa fa-trash"></i>
+                删除好友</li>
+        </ul>
+    </div>
+</div>`,
+    HTML_ROOM = `<div class="dialog-box dialog-chat-room">
+    <div class="dialog-header">
+        <div class="dialog-title">与 xx 聊天中</div>
+        <div class="dialog-action">
+            <i class="fa fa-minus"></i>
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-message-box">
+        
+    </div>
+    <div class="dialog-message-tools">
+        <i class="fa fa-smile"></i>
+        <i class="fa fa-image"></i>
+        <i class="fa fa-camera"></i>
+        <i class="fa fa-video"></i>
+        <i class="fa fa-file"></i>
+        <i class="fa fa-gift"></i>
+    </div>
+    <div class="dialog-message-editor">
+        <div class="dialog-message-text" contenteditable="true">
+
+        </div>
+        <div class="dailog-message-action">
+            <button>发送</button>
+        </div>
+    </div>
+</div>`,
+    HTML_SEARCH_USER = `<div class="dialog-box dialog-search-box">
+    <div class="dialog-header">
+        <div class="dialog-title dialog-tab-header">
+            <div class="dialog-tab-item active">找人</div>
+            <div class="dialog-tab-item">找群</div>
+        </div>
+        <div class="dialog-action">
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-search">
+        <input type="text">
+        <i class="fa fa-search"></i>
+    </div>
+    <div class="dialog-search-list">
+    </div>
+</div>`,
+    HTML_USER_INFO = `<div class="dialog-box dialog-user-box">
+    <div class="dialog-header">
+        <div class="dialog-action">
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-user-avatar">
+        <img src="./image/avatar.jpg" alt="">
+    </div>
+    <h3 class="user-name">1231</h3>
+    <div class="dialog-user-info">
+        <p class="user-brief">123123</p>
+        <p>123123</p>
+        <p>123123</p>
+    </div>
+</div>`,
+    HTML_APPLY = `<div class="dialog-box dialog-apply-box">
+    <div class="dialog-header">
+        <div class="dialog-action">
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-user-avatar">
+        <img src="./image/avatar.jpg" alt="">
+    </div>
+    <h3 class="user-name">1231</h3>
+    <div class="dialog-add-action">
+        <textarea name="" placeholder="我是123123"></textarea>
+        <select name="" id="">
+            <option value="">选择分组</option>
+        </select>
+        <button class="dialog-yes">申请</button>
+    </div>
+</div>`,
+    HTML_AGREE_APPLY = `<div class="dialog-box dialog-add-box">
+    <div class="dialog-header">
+        <div class="dialog-action">
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-user-avatar">
+        <img src="./image/avatar.jpg" alt="">
+    </div>
+    <h3 class="user-name">1231</h3>
+    <p class="user-brief">留言</p>
+    <div class="dialog-add-action">
+        <select name="" id="">
+            <option value="">选择分组</option>
+        </select>
+        <button class="dialog-yes">同意</button>
+        <button>拒绝</button>
+    </div>
+</div>`,
+    HTML_APPLY_LOG = `<div class="dialog-box dialog-apply-log-box">
+    <div class="dialog-header">
+        <div class="dialog-title">验证消息</div>
+        <div class="dialog-action">
+            <i class="fa fa-close"></i>
+        </div>
+    </div>
+    <div class="dialog-apply-list">
+        <div class="dialog-info" data-id="2">
+            <div class="dialog-info-avatar">
+                <img src="http://zodream.localhost/assets/images/avatar/18.png" alt="">
+            </div>
+            <div class="dialog-info-name">
+                <h3>1606282309</h3>
+                <p>附加消息：123</p>
+            </div>
+            <div class="dialog-action">
+                <button>同意</button>
+                <button>忽略</button>
+            </div>
+        </div>
+    </div>
+</div>`;
 
 abstract class ChatBaseBox {
     private cache_element: any = {};
@@ -261,18 +436,18 @@ class ChatAddUserBox extends ChatBaseBox {
      *
      */
     constructor(
-        public box: JQuery,
         protected parent: ChatRoom
     ) {
         super();
-        this.bindEvent();
     }
 
-    protected _user: IUserInfo;
+    public box: JQuery;
 
-    private _groups: IGroup[];
+    protected _user: IUser;
 
-    public set groups(args: IGroup[]) {
+    private _groups: IFriendGroup<IFriend>[];
+
+    public set groups(args: IFriendGroup<IFriend>[]) {
         this._groups = args;
         this.renderGroup();
     }
@@ -284,9 +459,17 @@ class ChatAddUserBox extends ChatBaseBox {
         });
     }
 
+    protected render() {
+        if (!this.box) {
+            this.box = this.parent.append(HTML_AGREE_APPLY);
+            this.bindEvent();
+        }
+    }
+
     public showWithUser(user: IApplyLog) {
+        this.render();
         this.parent.trigger(EVENT_USER_GROUPS, this);
-        this._user = user.applier;
+        this._user = user.applier || user.user;
         this.refresh();
         this.center().show();
     }
@@ -315,17 +498,26 @@ class ChatApplyBox extends ChatAddUserBox {
      *
      */
     constructor(
-        public box: JQuery,
+        
         protected parent: ChatRoom
     ) {
-        super(box, parent);
+        super(parent);
     }
+
+    public box: JQuery;
 
     public bindEvent() {
         let _this = this;
         this.box.on('click', '.dialog-add-action .dialog-yes', function() {
             _this.parent.trigger(EVENT_APPLY_USER, _this._user, _this.find('select').val(), _this.find('textarea').val(), _this);
         });
+    }
+
+    protected render() {
+        if (!this.box) {
+            this.box = this.parent.append(HTML_APPLY);
+            this.bindEvent();
+        }
     }
     
 }
@@ -335,21 +527,22 @@ class ChatUserInfoBox extends ChatBaseBox {
      *
      */
     constructor(
-        public box: JQuery,
         private parent: ChatRoom
     ) {
         super();
     }
 
-    private _user: IUser;
+    public box: JQuery;
+
+    private _user: IFriend;
 
     
-    public set user(v : IUser) {
+    public set user(v : IFriend) {
         this._user = v;
         this.refresh();
     }
 
-    public get user(): IUser {
+    public get user(): IFriend {
         return this._user;
     }
     
@@ -357,7 +550,10 @@ class ChatUserInfoBox extends ChatBaseBox {
     /**
      * showWithUser
      */
-    public showWithUser(user: IUser) {
+    public showWithUser(user: IFriend) {
+        if (!this.box) {
+            this.box = this.parent.append(HTML_USER_INFO);
+        }
         this.user = user;
         this.center().show();
     }
@@ -375,12 +571,12 @@ class ChatApplyLogBox extends ChatBaseBox {
      *
      */
     constructor(
-        public box: JQuery,
         private parent: ChatRoom
     ) {
         super();
-        this.bindEvent();
     }
+
+    public box: JQuery;
 
     private _users: Array<IApplyLog> = [];
 
@@ -391,6 +587,10 @@ class ChatApplyLogBox extends ChatBaseBox {
     }
 
     public showWithRefresh() {
+        if (!this.box) {
+            this.box = this.parent.append(HTML_APPLY_LOG);
+            this.bindEvent();
+        }
         this.parent.trigger(EVENT_APPLY_USERS, this);
         this.show();
     }
@@ -444,23 +644,22 @@ class ChatSearchBox extends ChatBaseBox {
      *
      */
     constructor(
-        public box: JQuery,
         private parent: ChatRoom
     ) {
         super();
-        this.bindEvent();
     }
+
+    public box: JQuery;
 
     private _is_search_user: boolean = true;
 
-    private _users: Array<IUserInfo> = [];
+    private _users: Array<IUser> = [];
 
     
-    public set users(v : IUserInfo[]) {
+    public set users(v : IUser[]) {
         this._users = v;
         this.render();
     }
-    
 
     private render() {
         let tpl = `<div class="dialog-info" data-id="{3}">
@@ -499,13 +698,37 @@ class ChatSearchBox extends ChatBaseBox {
         });
     }
 
-    public getUser(id: number): IUserInfo {
+    public getUser(id: number): IUser {
         for (let i = 0; i < this._users.length; i++) {
             if (this._users[i].id == id) {
                 return this._users[i];
             }
         }
         return null;
+    }
+
+    private renderBox() {
+        if (!this.box) {
+            this.box = this.parent.append(HTML_SEARCH_USER);
+            this.bindEvent();
+        }
+    }
+
+    /**
+     * showCenter
+     */
+    public showCenter() {
+        this.renderBox();
+        this.center().show();
+    }
+
+    /**
+     * show
+     */
+    public show() {
+        this.renderBox();
+        this.box.show();
+        return this;
     }
 
 }
@@ -576,17 +799,19 @@ class ChatMessageBox extends ChatBaseBox {
      *
      */
     constructor(
-        public box: JQuery,
         private parent: ChatRoom,
-        public send?: IUserInfo,
-        public revice?: IUser
+        public send?: IUser,
+        public revice?: IFriend
     ) {
         super();
+        this.box = this.parent.append(HTML_ROOM);
         this.refresh();
         this.bindEvent();
     }
 
     public editor: ChatEditor;
+
+    public box: JQuery
 
     private _messages: Array<IMessage> = [];
 
@@ -610,7 +835,7 @@ class ChatMessageBox extends ChatBaseBox {
         this.box.on('click', '.fa-smile-o', function() {
             _this.editor.insertHtmlAtCaret('<img src="./image/avatar.jpg" alt="">');
         }).on('click', '.dailog-message-action button', function() {
-            _this.parent.trigger(EVENT_SEND_MESSAGE, _this.editor.text(), _this.revice, _this);
+            _this.parent.trigger(EVENT_SEND_MESSAGE, _this.editor.text(), _this.revice.user, _this);
         });
         $(window).resize(function() {
             if (!_this.parent.isFixed()) {
@@ -674,14 +899,14 @@ class ChatMessageBox extends ChatBaseBox {
             <div class="content">
                 {1}
             </div>
-        </div>`, item.user.user.avatar, item.content);
+        </div>`, item.user.avatar, item.content);
         }
         return ChatMessageBox.format(`<div class="message-left">
         <img class="avatar" src="{0}">
         <div class="content">
             {1}
         </div>
-    </div>`, item.user.user.avatar, item.content);
+    </div>`, item.user.avatar, item.content);
     }
 
     private cleanMessage(): Array<IMessage> {
@@ -710,7 +935,7 @@ class ChatMessageBox extends ChatBaseBox {
     /**
      * showWithUser
      */
-    public showWithUser(user: IUser) {
+    public showWithUser(user: IFriend) {
         this.revice = user;
         this.renderTitle();
         if (this.parent.isFixed()) {
@@ -718,7 +943,7 @@ class ChatMessageBox extends ChatBaseBox {
         }
         this.show();
         this.messages = [];
-        this.parent.trigger(EVENT_GET_MESSAGE, user, 1, 10, this);
+        this.parent.trigger(EVENT_GET_MESSAGE, user.user, 1, 10, this);
     }
 
     public static date(date: Date | number, fmt: string = 'y年m月d日'): string {
@@ -745,39 +970,42 @@ class ChatMessageBox extends ChatBaseBox {
 
 
 }
-
+/**
+ * 会员列表
+ */
 class ChatUserBox extends ChatBaseBox {
     /**
      *
      */
     constructor(
-        public box: JQuery,
         private parent: ChatRoom
     ) {
         super();
+        this.box = this.parent.append(HTML_MAIN);
         this.menu = new ChatMenu(this.find('.dialog-menu'), USER_MENU);
         this.bindEvent();
     }
 
-    private _user: IUserInfo;
-    private _last_friends: Array<IUser> = [];
-    private _friends: Array<IUserGroup>;
+    public box: JQuery;
+    private _user: IUser;
+    private _last_friends: Array<IFriend> = [];
+    private _friends: Array<IFriendGroup<IFriend>> = [];
     private _groups: Array<IGroup>;
     public menu: ChatMenu;
 
     
-    public set user(v : IUserInfo) {
+    public set user(v : IUser) {
         this._user = v;
         this.renderUser();
         this.refresh();
     }
 
-    public get user(): IUserInfo {
+    public get user(): IUser {
         return this._user;
     }
     
 
-    public set friends(args: Array<IUserGroup>) {
+    public set friends(args: Array<IFriendGroup<IFriend>>) {
         this._friends = args;
         this.renderFriends();
         args.forEach(group => {
@@ -857,8 +1085,6 @@ class ChatUserBox extends ChatBaseBox {
         this._friends.forEach(group => {
             let groupHtml = '';
             group.users.forEach(user => {
-                console.log(user);
-                
                 groupHtml += ChatUserBox.format(tpl, user.user.avatar, user.name, user.user.brief || '', user.id);
             });
             html += ChatUserBox.format(panel, group.name, group.online_count, group.count, groupHtml);
@@ -920,7 +1146,7 @@ class ChatUserBox extends ChatBaseBox {
             e.stopPropagation();
             _this.box.addClass('dialog-min');
         }).on('click', '.dialog-header .fa-plus', function() {
-            _this.parent.searchBox.center().show();
+            _this.parent.searchBox.showCenter();
         }).on('click', '.dialog-tab .dialog-tab-header .dialog-tab-item', function() {
             let $this = $(this);
             $this.addClass('active').siblings().removeClass('active');
@@ -929,7 +1155,7 @@ class ChatUserBox extends ChatBaseBox {
             $(this).closest('.dialog-panel').toggleClass('expanded');
         }).on('click', '.dialog-tab .dialog-user', function() {
             let id = $(this).data('id');
-            if (!id || id == _this._user.id) {
+            if (!id) {
                 return;
             }
             _this.parent.chatBox.showWithUser(_this.getUser(id));
@@ -943,7 +1169,7 @@ class ChatUserBox extends ChatBaseBox {
             }
         });
         this.parent.on(EVENT_USER_GROUPS, (box: ChatAddUserBox) => {
-            //box.groups = _this._friends;
+            box.groups = _this._friends;
         });
     }
 
@@ -958,10 +1184,17 @@ class ChatUserBox extends ChatBaseBox {
         this.menu.setChildrenMenu('move', menus);
     }
 
-    public getUser(id: number): IUser {
-        for (let i = 0; i < this._last_friends.length; i++) {
-            if (this._last_friends[i].id == id) {
-                return this._last_friends[i];
+    public getUser(id: number): IFriend {
+        for (const item of this._last_friends) {
+            if (item.id == id) {
+                return item;
+            }
+        }
+        for (const group of this._friends) {
+            for (const item of group.users) {
+                if (item.id == id) {
+                    return item;
+                }
             }
         }
     }
@@ -971,7 +1204,11 @@ class ChatRoom {
     constructor(
         public target: JQuery
     ) {
-        
+        if (this.target && this.target.length > 0) {
+            return;
+        }
+        this.target = $('<div class="dialog-chat dialog-fixed"></div>');
+        $(document.body).append(this.target);
     }
     /**
      * 好友及消息列表
@@ -1019,14 +1256,14 @@ class ChatRoom {
         return this._events[event].call(this, ...args);
     }
 
-    public init(user: IUserInfo) {
-        this.mainBox = new ChatUserBox(this.find('.dialog-chat-box'), this);
-        this.addBox = new ChatAddUserBox(this.find('.dialog-add-box'), this);
-        this.applyBox = new ChatApplyBox(this.find('.dialog-apply-box'), this);
-        this.userBox = new ChatUserInfoBox(this.find('.dialog-user-box'), this);
-        this.applyLogBox = new ChatApplyLogBox(this.find('.dialog-apply-log-box'), this);
-        this.searchBox = new ChatSearchBox(this.find('.dialog-search-box'), this);
-        this.chatBox = new ChatMessageBox(this.find('.dialog-chat-room'), this, user);
+    public init(user: IUser) {
+        this.mainBox = new ChatUserBox(this);
+        this.addBox = new ChatAddUserBox(this);
+        this.applyBox = new ChatApplyBox(this);
+        this.userBox = new ChatUserInfoBox(this);
+        this.applyLogBox = new ChatApplyLogBox(this);
+        this.searchBox = new ChatSearchBox(this);
+        this.chatBox = new ChatMessageBox(this, user);
         this.mainBox.user = user;
     }
 
@@ -1035,6 +1272,15 @@ class ChatRoom {
      */
     public find(tag: string): JQuery {
         return this.target.find(tag);
+    }
+
+    /**
+     * append
+     */
+    public append(html: string): JQuery {
+        const box = $(html);
+        this.target.append(box);
+        return box;
     }
 
     /**
@@ -1179,7 +1425,7 @@ function registerChat() {
         }
     });
     
-    $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
+    room.target.on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
     });
     $('#toggle-btn').click(function() {

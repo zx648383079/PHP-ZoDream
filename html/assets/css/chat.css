@@ -148,7 +148,6 @@ body {
       width: 0.375rem;
       margin-right: 0.3125rem;
       background: #f5f5f5;
-      -webkit-transition: all 0.3s ease-in-out;
       transition: all 0.3s ease-in-out;
       border-radius: 0rem; }
     .dialog-chat .dialog-chat-room .dialog-message-box::-webkit-scrollbar-track {
@@ -231,7 +230,6 @@ body {
       width: 0.375rem;
       margin-right: 0.3125rem;
       background: #f5f5f5;
-      -webkit-transition: all 0.3s ease-in-out;
       transition: all 0.3s ease-in-out;
       border-radius: 0rem; }
     .dialog-chat .dialog-chat-room .dialog-message-text::-webkit-scrollbar-track {
@@ -420,7 +418,6 @@ body {
         width: 0.375rem;
         margin-right: 0.3125rem;
         background: #f5f5f5;
-        -webkit-transition: all 0.3s ease-in-out;
         transition: all 0.3s ease-in-out;
         border-radius: 0rem; }
       .dialog-chat.dialog-chat-page .dialog-chat-box .dialog-tab .dialog-tab-box .dialog-tab-item::-webkit-scrollbar-track {
