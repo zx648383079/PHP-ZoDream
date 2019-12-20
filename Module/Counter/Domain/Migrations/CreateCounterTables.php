@@ -3,6 +3,7 @@ namespace Module\Counter\Domain\Migrations;
 
 
 use Module\Counter\Domain\Model\ClickLogModel;
+use Module\Counter\Domain\Model\JumpLogModel;
 use Module\Counter\Domain\Model\LoadTimeLogModel;
 use Module\Counter\Domain\Model\LogModel;
 use Module\Counter\Domain\Model\PageLogModel;
@@ -26,6 +27,15 @@ class CreateCounterTables extends Migration {
             $table->set('ip')->varchar(120)->notNull();
             $table->timestamp('first_at');
             $table->timestamp('last_at');
+        })->append(JumpLogModel::tableName(), function(Table $table) {
+            $table->setComment('页面跳出记录');
+            $table->set('id')->pk(true);
+            $table->set('referrer')->varchar()->notNull();
+            $table->set('url')->varchar()->notNull();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('session_id')->varchar(30)->defaultVal('');
+            $table->set('user_agent')->varchar(255)->defaultVal('')->comment('代理');
+            $table->timestamp('created_at');
         })->append(ClickLogModel::tableName(), function(Table $table) {
             $table->setComment('页面点击记录');
             $table->set('id')->pk(true);

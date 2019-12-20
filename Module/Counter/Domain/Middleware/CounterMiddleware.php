@@ -1,7 +1,9 @@
 <?php
 namespace Module\Counter\Domain\Middleware;
 
+use Module\Counter\Domain\Events\JumpOut;
 use Module\Counter\Domain\Events\Visit;
+use Module\Counter\Domain\Listeners\JumpOutListener;
 use Module\Counter\Domain\Listeners\VisitListener;
 use Zodream\Service\Middleware\MiddlewareInterface;
 use Zodream\Template\View;
@@ -18,6 +20,7 @@ class CounterMiddleware implements MiddlewareInterface {
             return;
         }
         event()->listen(Visit::class, VisitListener::class)
+            ->listen(JumpOut::class, JumpOutListener::class)
             ->dispatch(Visit::createCurrent());
         $js = <<<JS
 var _hmt = _hmt || [];
