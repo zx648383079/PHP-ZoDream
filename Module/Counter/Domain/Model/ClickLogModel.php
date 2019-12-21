@@ -28,7 +28,7 @@ class ClickLogModel extends Model {
         return [
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
-            'session_id' => 'string:0,30',
+            'session_id' => 'string:0,32',
             'user_agent' => 'string:0,255',
             'x' => 'string:0,100',
             'y' => 'string:0,100',

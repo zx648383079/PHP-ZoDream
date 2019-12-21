@@ -25,7 +25,7 @@ class LoadTimeLogModel extends Model {
         return [
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
-            'session_id' => 'string:0,30',
+            'session_id' => 'string:0,32',
             'user_agent' => 'string:0,255',
             'load_time' => 'required|int:0,99999',
             'created_at' => 'int',

@@ -27,7 +27,7 @@ class StayTimeLogModel extends Model {
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
             'user_agent' => 'string:0,255',
-            'session_id' => 'string:0,30',
+            'session_id' => 'string:0,32',
             'status' => 'int:0,9',
             'enter_at' => 'int',
             'leave_at' => 'int',

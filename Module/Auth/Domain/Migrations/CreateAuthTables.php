@@ -114,6 +114,7 @@ class CreateAuthTables extends Migration {
 
     public function createLog() {
         $this->append(AccountLogModel::tableName(), function (Table $table) {
+            $table->setComment('账户资金变动表');
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->unsigned()->defaultVal(0);
             $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
@@ -124,6 +125,7 @@ class CreateAuthTables extends Migration {
             $table->set('remark')->varchar()->notNull();
             $table->timestamps();
         })->append(LoginLogModel::tableName(), function (Table $table) {
+            $table->setComment('账户登录日志表');
             $table->set('id')->pk()->ai();
             $table->set('ip')->varchar(120)->notNull();
             $table->set('user_id')->int()->defaultVal(0);
@@ -132,7 +134,7 @@ class CreateAuthTables extends Migration {
             $table->set('mode')->varchar(20)->defaultVal(LoginLogModel::MODE_WEB);
             $table->timestamp('created_at');
         })->append(ActionLogModel::tableName(), function (Table $table) {
-            $table->setComment('操作记录 ');
+            $table->setComment('操作记录');
             $table->set('id')->pk()->ai();
             $table->set('ip')->varchar(120)->notNull();
             $table->set('user_id')->int()->notNull();

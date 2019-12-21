@@ -19,9 +19,14 @@ class CounterMiddleware implements MiddlewareInterface {
         if (app()->isDebug() || app('request')->isCli()) {
             return;
         }
-        event()->listen(Visit::class, VisitListener::class)
-            ->listen(JumpOut::class, JumpOutListener::class)
-            ->dispatch(Visit::createCurrent());
+        $event = event();
+        $event->listen(Visit::class, VisitListener::class)
+            ->listen(JumpOut::class, JumpOutListener::class);
+        $uri = app('request')->uri()->getPath();
+        if (strpos($uri, '/counter') === 0 || strpos($uri, '/to') === 0) {
+            return;
+        }
+        $event->dispatch(Visit::createCurrent());
         $js = <<<JS
 var _hmt = _hmt || [];
 (function() {

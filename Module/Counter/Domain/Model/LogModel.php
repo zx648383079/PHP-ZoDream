@@ -46,7 +46,7 @@ class LogModel extends Model {
             'region' => 'string:0,45',
             'city' => 'string:0,45',
             'user_id' => 'int',
-            'session_id' => 'string:0,30',
+            'session_id' => 'string:0,32',
             'latitude' => 'string:0,30',
             'longitude' => 'string:0,30',
             'created_at' => 'int',
@@ -84,10 +84,10 @@ class LogModel extends Model {
         $model->browser_version = $browser[1];
         $model->os = $os[0];
         $model->os_version = $os[1];
-        $model->referer = Url::referrer();
+        $model->referrer = Url::referrer();
         $model->url = url()->current();
-        $model->session = Factory::session()->id();
-        $model->agent = app('request')->server('HTTP_USER_AGENT', '-');
+        $model->session_id = Factory::session()->id();
+        $model->user_agent = app('request')->server('HTTP_USER_AGENT', '-');
         $model->created_at = Time::format();
         return $model->save();
     }

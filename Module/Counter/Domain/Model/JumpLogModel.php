@@ -25,7 +25,7 @@ class JumpLogModel extends Model {
             'referrer' => 'required|string:0,255',
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
-            'session_id' => 'string:0,30',
+            'session_id' => 'string:0,32',
             'user_agent' => 'string:0,255',
             'created_at' => 'int',
         ];

@@ -105,7 +105,7 @@ class Visit {
             $request->referrer(),
             $request->uri(),
             $request->server('HTTP_USER_AGENT', '-'), time(),
-            session()->id(),
+            session()->id().'',
             auth()->id()
         );
     }

@@ -87,5 +87,5 @@ $lang = Json::encode($lang);
 </div>
 
 <script>
-bindBlogComment('<?=$this->url('./', false)?>', '<?=$blog_id?>', <?=$lang?>);
+bindBlogComment('<?=$blog_id?>', <?=$lang?>);
 </script>
