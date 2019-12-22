@@ -11,6 +11,11 @@ class BlogEntity extends Entity {
     const EDIT_HTML = 0;
     const EDIT_MARKDOWN = 1; // markdown
 
+    const OPEN_PUBLIC = 0;
+    const OPEN_LOGIN = 1;
+    const OPEN_PASSWORD = 5;
+    const OPEN_BUY = 6;
+
     public static function tableName() {
         return 'blog';
     }
@@ -30,6 +35,8 @@ class BlogEntity extends Entity {
             'term_id' => 'int',
             'type' => 'int:0,9',
             'source_url' => 'string:0,100',
+            'open_type' => 'int:0,127',
+            'open_rule' => 'string:0,20',
             'recommend' => 'int',
             'comment_count' => 'int',
             'click_count' => 'int',
@@ -56,6 +63,8 @@ class BlogEntity extends Entity {
             'term_id' => '分类',
             'type' => '类型',
             'source_url' => '来源',
+            'open_type' => '公开类型',
+            'open_rule' => '公开规则',
             'recommend' => '推荐',
             'comment_count' => '评论',
             'click_count' => '点击',

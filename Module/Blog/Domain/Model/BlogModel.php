@@ -23,6 +23,8 @@ use Zodream\Helpers\Time;
  * @property integer $term_id
  * @property integer $type
  * @property string $source_url
+ * @property integer $open_type
+ * @property string $open_rule
  * @property integer $recommend
  * @property integer $comment_count
  * @property integer $click_count
@@ -33,7 +35,7 @@ use Zodream\Helpers\Time;
 */
 class BlogModel extends BlogEntity {
 
-    protected $append = ['url', 'term', 'user', 'is_recommended'];
+    protected $append = ['url', 'term', 'user', 'is_recommended', 'can_read'];
 
 	public function term() {
 	    return $this->hasOne(TermSimpleModel::class, 'id', 'term_id');
@@ -69,6 +71,38 @@ class BlogModel extends BlogEntity {
 	        return false;
         }
 	    return !self::canRecommend($this->id);
+    }
+
+    public function getCanReadAttribute() {
+	    if ($this->open_type < 1 || $this->user_id == auth()->id()) {
+	        return true;
+        }
+	    if ($this->open_type == self::OPEN_LOGIN) {
+	        return !auth()->guest();
+        }
+        if ($this->open_type == self::OPEN_PASSWORD) {
+            if (auth()->guest()) {
+                return session('BLOG_PWD') === $this->open_rule;
+            }
+            return BlogLogModel::where([
+                'user_id' => auth()->id(),
+                'type' => BlogLogModel::TYPE_BLOG,
+                'id_value' => $this->id,
+                'action' => BlogLogModel::ACTION_REAL_RULE
+            ])->count() > 1;
+        }
+        if ($this->open_type == self::OPEN_BUY) {
+            if (auth()->guest()) {
+                return false;
+            }
+            return BlogLogModel::where([
+                    'user_id' => auth()->id(),
+                    'type' => BlogLogModel::TYPE_BLOG,
+                    'id_value' => $this->id,
+                    'action' => BlogLogModel::ACTION_REAL_RULE
+                ])->count() > 0;
+        }
+        return false;
     }
 
     /**

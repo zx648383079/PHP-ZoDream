@@ -22,22 +22,24 @@ class CreateBlogTables extends Migration {
             $table->set('title')->varchar(200)->notNull();
             $table->set('description')->varchar();
             $table->set('keywords')->varchar();
-            $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('parent_id')->int()->unsigned()->defaultVal(0);
             $table->set('programming_language')->varchar(20)
                 ->defaultVal('')->comment('编程语言');
             $table->set('language')->enum(['zh', 'en'])->defaultVal('zh')
                 ->comment('内容语言');
             $table->set('thumb')->varchar();
-            $table->set('edit_type')->tinyint(1)->defaultVal(BlogModel::EDIT_HTML)->comment('编辑器类型');
+            $table->set('edit_type')->tinyint(1)->unsigned()->defaultVal(BlogModel::EDIT_HTML)->comment('编辑器类型');
             $table->set('content')->text();
-            $table->set('user_id')->int(10);
-            $table->set('term_id')->int(10);
-            $table->set('type')->bool()->defaultVal(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
+            $table->set('user_id')->int(10)->unsigned();
+            $table->set('term_id')->int(10)->unsigned();
+            $table->set('type')->bool()->unsigned()->defaultVal(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
             $table->set('source_url')->varchar(100)->comment('原文链接');
-            $table->set('recommend')->int(10)->defaultVal(0);
-            $table->set('comment_count')->int(10)->defaultVal(0);
-            $table->set('click_count')->int(10)->defaultVal(0);
-            $table->set('comment_status')->tinyint(1)->defaultVal(0);
+            $table->set('recommend')->int(10)->unsigned()->defaultVal(0);
+            $table->set('comment_count')->int(10)->unsigned()->defaultVal(0);
+            $table->set('click_count')->int(10)->unsigned()->defaultVal(0);
+            $table->set('comment_status')->tinyint(1)->unsigned()->defaultVal(0);
+            $table->set('open_type')->tinyint(1)->unsigned()->defaultVal(0)->comment('公开类型');
+            $table->set('open_rule')->varchar(20)->defaultVal('')->comment('类型匹配的值');
             $table->softDeletes();
             $table->timestamps();
         })->append(TermModel::tableName(), function(Table $table) {

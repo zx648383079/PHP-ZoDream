@@ -2,6 +2,7 @@
 namespace Module\Blog\Service\Admin;
 
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use PhpParser\Node\Expr\Empty_;
@@ -10,7 +11,7 @@ use PhpParser\Node\Expr\Empty_;
 class BlogController extends Controller {
 
     public function indexAction($keywords = null, $term_id = null) {
-        $blog_list = BlogModel::with('term')
+        $blog_list = BlogPageModel::with('term')
             ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
@@ -18,7 +19,7 @@ class BlogController extends Controller {
                 });
             })->when(!empty($term_id), function ($query) use ($term_id) {
                 $query->where('term_id', intval($term_id));
-            })->orderBy('id', 'desc')->select('id', 'title', 'term_id', 'comment_count', 'recommend')->page();
+            })->orderBy('id', 'desc')->page();
         $term_list = TermModel::select('id', 'name')->all();
         return $this->show(compact('blog_list', 'term_list'));
     }
@@ -49,6 +50,8 @@ class BlogController extends Controller {
             'term_id',
             'programming_language',
             'type',
+            'open_type',
+            'open_rule',
             'source_url',
             'comment_status'];
         $model->user_id = auth()->id();

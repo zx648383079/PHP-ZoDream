@@ -577,6 +577,47 @@ $acolor: $fg;
     }
 }
 
+.rule-box {
+    margin-top: 40px;
+    .rule-header {
+        text-align: center;
+        font-weight: 700;
+        b {
+            color: $headerBg;
+        }
+    }
+    .rule-tip {
+        text-align: center;
+        line-height: 40px;
+        color: $secondaryFg;
+        
+    }
+    button {
+        height: 30px;
+        width: 80px;
+        background: $secondary;
+        color: $headerFg;
+        border: 0;
+        outline: 0;
+    }
+    &.rule-login {
+        
+    }
+    &.rule-password {
+        text-align: center;
+        input {
+            height: 30px;
+            border: 0;
+            outline: 0;
+            background: $bg;
+            padding: 0 10px;
+        }
+    }
+    &.rule-buy {
+        text-align: center;
+    }
+}
+
 .book-comment-form {
     .title {
         font-size: 20px;

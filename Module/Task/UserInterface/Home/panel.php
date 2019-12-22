@@ -13,11 +13,11 @@ use Zodream\Template\View;
         </div>
         <div class="time" data-start="<?= $item->status == 1 ? $item->log->start_at :  0?>"><?=$item->task->time_length?></div>
         <div class="actions">
-            <a href="javascript:;" class="fa fa-pause-circle" alt="停止计时">
+            <a href="javascript:;" class="fa fa-pause-circle" title="停止计时">
             </a>
-            <a href="javascript:;" class="fa fa-play-circle" alt="开始计时">
+            <a href="javascript:;" class="fa fa-play-circle" title="开始计时">
             </a>
-            <a href="javascript:;" class="fa fa-stop-circle" alt="终止任务">
+            <a href="javascript:;" class="fa fa-stop-circle" title="终止任务">
             </a>
         </div>
         <div class="desc"><?=$item->task->description?></div>

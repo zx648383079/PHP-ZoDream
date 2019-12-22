@@ -93,7 +93,11 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     <?php endif;?>
     <?php foreach ($blog_list as $item):?>
     <dl class="book-item">
-        <dt><a href="<?=$item->url?>"><?=$item->title?></a>
+        <dt>
+            <?php if($item->open_type > 0):?>
+                <i class="fa fa-lock" title="阅读需要满足条件"></i>
+            <?php endif;?>
+            <a href="<?=$item->url?>" title="<?=$item->title?>"><?=$item->title?></a>
             <span class="book-time"><?=$item->created_at?></span></dt>
         <dd>
             <p><?=$item->description?></p>

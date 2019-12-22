@@ -47,3 +47,11 @@
         display: inline-block;
     }
 }
+
+table {
+    td {
+        &.text-left {
+            text-align: left;
+        }
+    }
+}

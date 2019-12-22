@@ -45,10 +45,10 @@ $this->registerJs($js);
     </div>
 
     <div class="dialog-footer">
-        <a href="javascript:;" class="timer-pause" alt="暂停计时">
+        <a href="javascript:;" class="timer-pause" title="暂停计时">
             <i class="fa fa-pause-circle"></i>
         </a>
-        <a href="javascript:;" class="timer-close" alt="停止计时">
+        <a href="javascript:;" class="timer-close" title="停止计时">
             <i class="fa fa-times-circle"></i>
         </a>
     </div>

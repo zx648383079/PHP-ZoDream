@@ -18,7 +18,7 @@ class HomeController extends Controller {
             ->where('user_id', auth()->id())
             ->where('today', date('Y-m-d'))
             ->where('amount', '>', 0)
-            ->orderBy('status', 'asc')
+            ->orderBy('status', 'desc')
             ->orderBy('id', 'asc')->get();
         $last_log = TaskLogModel::where('user_id', auth()->id())
             ->where('status', '>', 1)

@@ -75,6 +75,8 @@ return [
     'Catalog' => '目录',
     'Reply' => '回复',
     'Reply Comment' => '回复评论',
+    'coin' => '金币',
+    'price format' => '{money} 金币',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

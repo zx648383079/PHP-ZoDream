@@ -104,7 +104,7 @@ $this->extend('layouts/header', [
         <?php endif;?>
     </div>
     <div id="content" class="content style-type-<?=$blog->edit_type?>">
-        <?=$blog->toHtml()?>
+        <?php $this->extend('./content');?>
     </div>
     <div class="toggle-open">
         <?=__('Click here to view')?> <i class="fa fa-angle-double-down"></i>

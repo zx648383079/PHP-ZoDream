@@ -41,7 +41,10 @@ $this->title = '文章列表';
     <?php foreach($blog_list as $item):?>
         <tr>
             <td><?=$item->id?></td>
-            <td>
+            <td class="text-left">
+            <?php if($item->open_type > 0):?>
+                <i class="fa fa-lock" title="阅读需要满足条件"></i>
+            <?php endif;?>
             [<?=$item->type == 1 ? '转载' : '原创'?>]
             <?=Str::substr($item->title, 0, 20, true)?></td>
             <td>

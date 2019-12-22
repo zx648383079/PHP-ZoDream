@@ -1,3 +1,15 @@
+function formData(item: JQuery): string {
+    let data = [];
+    item.find('input,textarea,select').each(function(this: HTMLInputElement) {
+        if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
+            return;
+        }
+        data.push(encodeURIComponent( this.name ) + '=' +
+				encodeURIComponent( $(this).val().toString() ))
+    });
+    return data.join('&');
+}
+
 function bindBlogPage() {
     $('.book-nav').click(function () {
         $(this).toggleClass('hover');
@@ -77,6 +89,25 @@ function bindBlog(id: number, type: number, langs = {}) {
     }
     $('.book-body .toggle-open').click(function() {
         $(this).closest('.book-body').toggleClass('open');
+    });
+    $('.rule-box button').click(function() {
+        let $this = $(this);
+        $.post($this.data('url'), formData($this.closest('.rule-box')), res => {
+            if (res.code != 200) {
+                alert(res.errors);
+                return;
+            }
+            alert(res.messages);
+            setTimeout(() => {
+                if (res.data.refresh) {
+                    window.location.reload();
+                    return;
+                }
+                if (res.data.url) {
+                    window.location.href = res.data.url;
+                }
+            }, 500);
+        }, 'json');
     });
     $('.recommend-blog').click(function () {
         let that = $(this).find('b');

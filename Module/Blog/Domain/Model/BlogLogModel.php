@@ -22,6 +22,8 @@ class BlogLogModel extends Model {
     const ACTION_AGREE = 1;
     const ACTION_DISAGREE = 2;
 
+    const ACTION_REAL_RULE = 3; // 是否能阅读
+
 
 	public static function tableName() {
         return 'blog_log';

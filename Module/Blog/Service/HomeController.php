@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service;
 
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
@@ -94,6 +95,64 @@ class HomeController extends ModuleController {
            BlogModel::search($query, 'title');
         })->limit(4)->get();
         return $this->jsonSuccess($data);
+    }
+
+    public function openAction(int $id) {
+        $model = BlogModel::find($id);
+        if (!$model) {
+            return $this->jsonFailure('文章不存在');
+        }
+        if ($model->can_read) {
+            return $this->jsonSuccess([
+                'refresh' => true
+            ], '文章可正常阅读');
+        }
+        if ($model->open_type == BlogModel::OPEN_LOGIN) {
+            return $this->jsonSuccess([
+                'url' => url('auth', ['redirect_uri' => url()->previous()])
+            ], '请先登陆');
+        }
+        if ($model->open_type == BlogModel::OPEN_PASSWORD) {
+            $password = app('request')->get('password');
+            if ($password !== $model->open_rule) {
+                return $this->jsonFailure('阅读密码错误');
+            }
+            session(['BLOG_PWD' => $password]);
+            if (!auth()->guest()) {
+                BlogLogModel::create([
+                    'user_id' => auth()->id(),
+                    'type' => BlogLogModel::TYPE_BLOG,
+                    'id_value' => $model->id,
+                    'action' => BlogLogModel::ACTION_REAL_RULE
+                ]);
+            }
+            return $this->jsonSuccess([
+                'refresh' => true
+            ], '密码正确');
+        }
+        if ($model->open_type == BlogModel::OPEN_BUY) {
+            if (auth()->guest()) {
+                return $this->jsonSuccess([
+                    'url' => url('auth', ['redirect_uri' => url()->previous()])
+                ], '请先登陆');
+            }
+            $res = AccountLogModel::change(
+                auth()->id(), AccountLogModel::TYPE_BUY_BLOG,
+                $model->id, intval($model->open_rule), '购买文章阅读权限');
+            if (!$res) {
+                return $this->jsonFailure('账户余额不足');
+            }
+            BlogLogModel::create([
+                'user_id' => auth()->id(),
+                'type' => BlogLogModel::TYPE_BLOG,
+                'id_value' => $model->id,
+                'action' => BlogLogModel::ACTION_REAL_RULE
+            ]);
+            return $this->jsonSuccess([
+                'refresh' => true
+            ], '购买成功');
+        }
+        return $this->jsonFailure('未知');
     }
 
     public function findLayoutFile() {

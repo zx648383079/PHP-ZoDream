@@ -10,6 +10,8 @@ class TaskRepository {
 
     public static function getActiveTask() {
         return TaskModel::where('user_id', auth()->id())
+            ->orderBy('status', 'desc')
+            ->orderBy('id', 'asc')
             ->where('status', '<', 2)->get();
     }
 

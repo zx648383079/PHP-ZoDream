@@ -16,6 +16,8 @@ namespace Module\Blog\Domain\Model;
  * @property integer $user_id
  * @property integer $term_id
  * @property integer $type
+ * @property integer $open_type
+ * @property string $open_rule
  * @property string $source_url
  * @property integer $recommend
  * @property integer $comment_count
@@ -32,6 +34,7 @@ class BlogPageModel extends BlogModel {
         'language',
         'programming_language',
         'term_id',
+        'open_type',
         'comment_count',
         'click_count', 'recommend', 'created_at'];
 
