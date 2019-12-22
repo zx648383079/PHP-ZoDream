@@ -18,7 +18,9 @@ class LazyItem {
        public mode: LazyMode = LazyMode.once,
        public diff: number|Function = 0
     ) {
-
+       element.on('lazy-refresh', () => {
+           this.refresh();
+       });
     }
 
     private _lastHeight: number; // 上次执行的高度
@@ -163,31 +165,34 @@ Lazy.addMethod('img', function (imgEle: JQuery) {
    let img = imgEle.attr('data-src');
    $("<img />")
        .bind("load", function () {
-        if (imgEle.is('img') || imgEle.is('video')) {
-            imgEle.attr('src', img);
-            return;
-        }
-        imgEle.css('background-image', 'url(' + img + ')');
+           if (imgEle.is('img') || imgEle.is('video')) {
+               imgEle.attr('src', img);
+               return;
+           }
+           imgEle.css('background-image', 'url(' + img + ')');
        }).attr('src', img);
 });
 /**
  * 加载模板，需要引用 template 函数
  */
 Lazy.addMethod('tpl', function (tplEle: JQuery) {
-    let url = tplEle.attr('data-url');
-    let templateId = tplEle.attr('data-tpl');
-    tplEle.addClass('lazy-loading');
-    $.getJSON(url, function (data) {
-        if (data.code != 200) {
-            return;
-        }
-        if (typeof data.data != 'string') {
-            data.data = template(templateId, data.data);
-        }
-        tplEle.removeClass('lazy-loading');
-        tplEle.html(data.data);
-        tplEle.trigger('lazyLoaded');
-    });
+   let url = tplEle.attr('data-url');
+   tplEle.addClass('lazy-loading');
+   let templateId = tplEle.attr('data-tpl');
+   $.get(url, data => {
+       let html = '';
+       if (typeof data === 'object') {
+            if (data.code != 200) {
+                return;
+            }
+            html = typeof data.data != 'string' ? template(templateId, data.data) : data.data;
+       } else {
+           html = data;
+       }
+       tplEle.removeClass('lazy-loading');
+       tplEle.html(html);
+       tplEle.trigger('lazyLoaded');
+   }, typeof templateId === 'undefined' ? null : 'json');
 });
 /**
  * 滚动加载模板，需要引用 template 函数

@@ -14,6 +14,7 @@ $this->registerCssFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
+        '@jquery.lazyload.min.js',
         '@main.min.js',
         '@counter.min.js'
     ]);
