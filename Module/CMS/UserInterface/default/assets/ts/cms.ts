@@ -127,7 +127,7 @@ class Search {
             if (e.key === 'ArrowDown') {
                 i = i < items.length - 1 ? i + 1 : 0;
             } else if (e.key === 'ArrowUp') {
-                i = i < 1 ? items.length - 1 : i;
+                i = (i < 1 ? items.length: i) - 1;
             }
             const element = items.eq(i);
             element.addClass('active');

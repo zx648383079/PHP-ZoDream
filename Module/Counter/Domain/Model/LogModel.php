@@ -2,6 +2,7 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
 use Zodream\Service\Factory;
 
@@ -124,17 +125,11 @@ class LogModel extends Model {
 
     /**
      * 获取IP最后访问时间及来路
-     * @param string|array $where
-     * @return array
+     * @return Query
      */
-    public static function getLast($where = null) {
-        return static::query()->load([
-            'select' => 'ip, MAX(create_at) as create_at, referer',
-            'where' => $where,
-            'groupBy' => 1,
-            'orderBy' => '2 DESC',
-            'limit' => 15
-        ])->all();
+    public static function getLastQuery() {
+        return LogModel::query()->select('ip, MAX(created_at) as created_at, referrer')
+            ->groupBy(1)->orderBy('2 DESC');
     }
 
     /**
@@ -144,7 +139,7 @@ class LogModel extends Model {
      */
     public static function geAllMonth($where = null) {
         return static::query()->load([
-            'select' => 'YEAR(create_at) as year, MONTH(create_at) as month, DAYOFMONTH(create_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp',
+            'select' => 'YEAR(created_at) as year, MONTH(created_at) as month, DAYOFMONTH(created_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp',
             'where' => $where,
             'groupBy' => '1,2,3',
             'orderBy' => '1,2,3',
@@ -243,8 +238,8 @@ class LogModel extends Model {
         if (!is_array($where)) {
             $where = (array)$where;
         }
-        $where[] = "(INSTR(referer,'?q=') OR INSTR(referer, '?wd=') OR INSTR(referer,'?p=') OR INSTR(referer,'?query=') OR INSTR(referer,'?qkw=') OR INSTR(referer,'?search=') OR INSTR(referer,'?qr=') OR INSTR(referer,'?string='))";
-        $data = static::select('referer,COUNT(*) as count')->load([
+        $where[] = "(INSTR(referrer,'?q=') OR INSTR(referrer, '?wd=') OR INSTR(referrer,'?p=') OR INSTR(referrer,'?query=') OR INSTR(referrer,'?qkw=') OR INSTR(referrer,'?search=') OR INSTR(referrer,'?qr=') OR INSTR(referrer,'?string='))";
+        $data = static::select('referrer,COUNT(*) as count')->load([
             'where' => $where,
             'groupBy' => 1,
             'orderBy' => '2 DESC',
@@ -253,7 +248,7 @@ class LogModel extends Model {
         $args = [];
         $urls = [];
         foreach ($data as $item) {
-            if(preg_match('#//([\w\.]+?)/.*?\?[a-z]+=([^&]+)#i', $item['referer'], $match)) {
+            if(preg_match('#//([\w\.]+?)/.*?\?[a-z]+=([^&]+)#i', $item['referrer'], $match)) {
                 if (!array_key_exists($match[1], $urls)) {
                     $urls[$match[1]] = 0;
                 }
@@ -300,8 +295,8 @@ class LogModel extends Model {
             $where = (array)$where;
         }
         $allUrls = static::where($where)->select('url')->all();
-        $where[] = 'referer NOT LIKE "%'.url()->getHost().'%"';
-        $args = static::select('referer,COUNT(*) as count')->load([
+        $where[] = 'referrer NOT LIKE "%'.url()->getHost().'%"';
+        $args = static::select('referrer,COUNT(*) as count')->load([
             'where' => $where,
             'groupBy' => 1,
             'orderBy' => '2 DESC',
@@ -340,7 +335,7 @@ class LogModel extends Model {
                 0   //IP
             ];
         }
-        $args = static::select($type.'(create_at) as d, COUNT(*) as c')->load([
+        $args = static::select($type.'(created_at) as d, COUNT(*) as c')->load([
             'where' => $where,
             'groupBy' => 1,
             'orderBy' => 1
@@ -368,7 +363,7 @@ class LogModel extends Model {
             $flowCount[$item['d']][1] ++;
         }
 
-        $ips = static::select($type.'(create_at) as d, ip')->load([
+        $ips = static::select($type.'(created_at) as d, ip')->load([
             'where' => $where,
             'groupBy' => '1,2',
             'orderBy' => 1

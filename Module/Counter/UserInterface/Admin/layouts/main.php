@@ -79,7 +79,7 @@ $this->registerCssFile([
         [
             [
                 '受访页面',
-                './@admin/visit/page',
+                './@admin/visit',
                 'fa fa-'
             ],
             [
