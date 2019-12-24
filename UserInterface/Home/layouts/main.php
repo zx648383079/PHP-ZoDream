@@ -40,6 +40,7 @@ $this->registerCssFile([
         <meta name="Description" content="<?=$this->get('description')?>" />
         <meta name="author" content="zodream" />
         <link rel="icon" href="/assets/images/favicon.png">
+        <link rel="alternate" type="application/rss+xml" title="<?=__('site title')?>" href="<?=$this->url('/blog/rss')?>">
        <?=$this->header();?>
    </head>
    <body>
