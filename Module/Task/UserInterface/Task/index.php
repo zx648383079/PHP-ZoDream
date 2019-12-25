@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Task\Domain\Model\TaskModel;
 /** @var $this View */
 $this->title = 'ZoDream';
 ?>
@@ -25,7 +26,7 @@ $this->title = 'ZoDream';
                 <td><?=$item->time?></td>
                 <td>
                     <div class="btn-group  btn-group-xs">
-                        <?php if($item->status < 3):?>
+                        <?php if($item->status >= TaskModel::STATUS_NONE):?>
                         <a class="btn btn-danger" data-type="del" data-tip="确认结束任务？" href="<?=$this->url('./task/delete', ['id' => $item->id, 'stop' => 1])?>">结束</a>
                         <?php endif;?>
                        <a class="btn btn-default btn-xs" href="<?=$this->url('./task/edit', ['id' => $item->id])?>">编辑</a>

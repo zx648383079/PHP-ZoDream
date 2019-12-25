@@ -22,9 +22,9 @@ use Zodream\Helpers\Time;
  */
 class TaskDayModel extends Model {
 
-    const STATUS_NONE = 0;
-    const STATUS_RUNNING = 1;
-    const STATUS_PAUSE = 2;
+    const STATUS_NONE = 5;
+    const STATUS_RUNNING = 9;
+    const STATUS_PAUSE = 8;
 
     protected $append = ['task', 'log'];
 
@@ -102,7 +102,7 @@ class TaskDayModel extends Model {
             $this->setError('task_id', '启动失败');
             return false;
         }
-        $this->status = TaskModel::STATUS_RUNNING;
+        $this->status = self::STATUS_RUNNING;
         return $this->save();
     }
 
@@ -136,7 +136,7 @@ class TaskDayModel extends Model {
             ($task->every_time <= 0 || $task->every_time * 60 <= $time)) {
             $this->amount --;
         }
-        $this->status = TaskModel::STATUS_NONE;
+        $this->status = self::STATUS_NONE;
         $this->save();
     }
 
@@ -153,14 +153,14 @@ class TaskDayModel extends Model {
            'task_id' => $task->id,
            'today' => $day,
            'amount' => $amount,
-           'status' => 0
+           'status' => self::STATUS_NONE
         ]);
     }
 
     public static function makeEndTask(TaskModel $task, $time) {
         $model = self::where('task_id', $task->id)
             ->where('amount', '>', 0)
-            ->where('status', TaskModel::STATUS_RUNNING)
+            ->where('status', self::STATUS_RUNNING)
             ->first();
         if (empty($model)) {
             return;

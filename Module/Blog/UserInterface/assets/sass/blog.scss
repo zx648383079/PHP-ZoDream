@@ -496,6 +496,11 @@ $acolor: $fg;
         }
         li {
             width: 100%;
+            padding: 3px 0 3px 20px;
+            line-height: 20px;
+            a {
+                font-size: 14px;
+            }
         }
     }
     

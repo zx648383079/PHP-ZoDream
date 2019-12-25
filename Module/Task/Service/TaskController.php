@@ -10,6 +10,7 @@ class TaskController extends Controller {
 
     public function indexAction() {
         $model_list = TaskModel::where('user_id', auth()->id())
+            ->orderBy('status', 'desc')
             ->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
@@ -39,7 +40,7 @@ class TaskController extends Controller {
         $model->set($data)->user_id = auth()->id();
         if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
         && $status != TaskModel::STATUS_COMPLETE) {
-            $model->status = 0;
+            $model->status = TaskModel::STATUS_NONE;
         }
         if ($model->save()) {
             return $this->jsonSuccess([
@@ -73,7 +74,10 @@ class TaskController extends Controller {
         }
         $model_list = TaskDayModel::with('task')
             ->where('user_id', auth()->id())
-            ->where('today', $time)->page();
+            ->where('today', $time)
+            ->orderBy('status', 'desc')
+            ->orderBy('id', 'desc')
+            ->page();
         return $this->show(compact('model_list', 'task_list'));
     }
 

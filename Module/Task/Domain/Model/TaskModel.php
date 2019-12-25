@@ -20,10 +20,10 @@ use Domain\Model\Model;
  */
 class TaskModel extends Model {
 
-    const STATUS_NONE = 0;
-    const STATUS_RUNNING = 1;
-    const STATUS_PAUSE = 2;
-    const STATUS_COMPLETE = 3;
+    const STATUS_NONE = 5;
+    const STATUS_RUNNING = 9;
+    const STATUS_PAUSE = 8;
+    const STATUS_COMPLETE = 1;
 
     protected $append = ['start_at'];
 
