@@ -12,7 +12,7 @@ class RssController extends ModuleController {
     public function indexAction(Response $response) {
         $key = '__ZoDream_rss__';
         if (cache()->has($key)) {
-            return $response->rss(cache($key));
+            return $response->xml(cache($key));
         }
         $rss = new Rss();
         $rss->setTitle(__('site title'))
@@ -33,7 +33,7 @@ class RssController extends ModuleController {
         }
         $res = (string)$rss;
         cache()->set($key, $res, 3600);
-        return $response->rss($res);
+        return $response->xml($res);
     }
 
 }

@@ -40,7 +40,7 @@ $this->registerCssFile([
         <meta name="Description" content="<?=$this->get('description')?>" />
         <meta name="author" content="zodream" />
         <link rel="icon" href="/assets/images/favicon.png">
-        <link rel="alternate" type="application/rss+xml" title="<?=__('site title')?>" href="<?=$this->url('/blog/rss')?>">
+        <link rel="alternate" type="application/rss+xml" title="<?=__('site title')?>" href="<?=$this->url('/blog/rss', false)?>">
        <?=$this->header();?>
    </head>
    <body>
@@ -54,7 +54,14 @@ $this->registerCssFile([
             <div class="container">
                 <?=$this->node('friend-link')?>
                 <div class="copyright">
+                    
                     <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备16003508号</a>
+                    <p>
+                        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43052402000190">
+                            <img src="<?=$this->asset('images/beian.png')?>" alt="备案图标">
+                        湘公网安备 43052402000190号
+                        </a>
+                    </p>
                 </div>
             </div>
         </footer>
