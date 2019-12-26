@@ -49,6 +49,9 @@ JS;
             return '';
         }
         $name = auth()->user()->name;
+        $bulletin_url = url('/auth/admin/bulletin');
+        $account_url = url('/auth/admin/account');
+        $logout_url = url('/auth/logout');
         return <<<HTML
 <ul class="nav-right">
     <li>
@@ -56,13 +59,13 @@ JS;
         <div class="sub-nav">
             <ul>
                 <li>
-                    <a href="">私信</a>
+                    <a href="{$bulletin_url}">私信</a>
                 </li>
                 <li>
-                    <a href="">账号设置</a>
+                    <a href="{$account_url}">账号设置</a>
                 </li>
                 <li>
-                    <a href="">退出</a>
+                    <a href="{$logout_url}">退出</a>
                 </li>
             </ul>
         </div>
