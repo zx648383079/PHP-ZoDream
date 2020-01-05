@@ -35,6 +35,9 @@
     tr {
         line-height: 30px;
     }
+    .ellipsis {
+        word-break: break-all;
+    }
     .highlight {
         font-size: 16px;
         font-weight: bold;
