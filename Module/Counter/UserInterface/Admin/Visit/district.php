@@ -2,17 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '搜索引擎';
-$maps = [
-    'bing.com' => '必应',
-    'so.com' => '360搜索',
-    'so.m.sm.cn' => '神马搜索',
-    'yz.m.sm.cn' => '神马搜索',
-    'baidu.com' => '百度',
-    'sogou.com' => '搜狗',
-    'google.com' => '谷歌',
-]
+$this->title = '地域分布';
 ?>
+
 <form class="search-bar" action="" method="get">
     <label for="">时间：</label>
     <div class="tab-header">
@@ -25,16 +17,17 @@ $maps = [
     <input type="text" readonly name="end_at">
     <button>搜索</button>
 </form>
-<table class="table table-hover">
+
+<table class="table table-hover table-wrap">
 <thead>
     <tr>
-        <td rowspan="2">
-            搜索引擎
-        </td>
-        <td colspan="3">
-            网站基础指标
+        <td rowspan="2" width="50%">
+            地域
         </td>
         <td colspan="2">
+            网站基础指标
+        </td>
+        <td colspan="3">
             流量质量指标
         </td>
     </tr>
@@ -46,10 +39,10 @@ $maps = [
             访客数(UV)
         </td>
         <td>
-            IP数
+            贡献下游浏览量
         </td>
         <td>
-            跳出率
+            退出页次数
         </td>
         <td>
             平均访问时长
@@ -59,7 +52,7 @@ $maps = [
 <tbody>
     <?php foreach($items as $item):?>
         <tr>
-            <td title="<?=$item['host']?>"><?=isset($maps[$item['host']]) ? $maps[$item['host']] : $item['host']?></td>
+            <td width="50%"><?=$this->text($item['url'])?></td>
             <td><?=$item['pv']?></td>
             <td><?=$item['uv']?></td>
             <td><?=$item['ip']?></td>
@@ -68,4 +61,9 @@ $maps = [
         </tr>
     <?php endforeach;?>
 </tbody>
+<tfoot>
+    <tr>
+        <td colspan="6"><?=$items->getLink()?></td>
+    </tr>
+</tfoot>
 </table>

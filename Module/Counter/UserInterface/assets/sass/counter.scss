@@ -22,6 +22,15 @@
         }
     }
 }
+
+.search-bar  {
+    line-height: 30px;
+    .tab-header {
+        background-color: transparent;
+        margin: 0;
+        display: inline-block;
+    }
+}
 .table {
     tr {
         line-height: 30px;
@@ -51,6 +60,12 @@
             color: rgb(240, 48, 48);
             content: "\f062";
         }
+    }
+}
+
+.table-wrap {
+    td {
+        word-break: break-all;
     }
 }
 

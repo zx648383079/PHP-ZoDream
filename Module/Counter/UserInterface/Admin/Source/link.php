@@ -4,8 +4,19 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '外部链接';
 ?>
-
-<table class="table table-hover">
+<form class="search-bar" action="" method="get">
+    <label for="">时间：</label>
+    <div class="tab-header">
+        <a href="<?=$this->url(['start_at' => 'today'])?>" class="<?=!$start_at || $start_at === 'today' ? 'active' : ''?>" data-type="today">今天</a>
+        <a href="<?=$this->url(['start_at' => 'yesterday'])?>" class="<?=$start_at === 'yesterday' ? 'active' : ''?>" data-type="yesterday">昨天</a>
+        <a href="<?=$this->url(['start_at' => 'week'])?>" class="<?=$start_at === 'week' ? 'active' : ''?>" data-type="week">最近7天</a>
+        <a href="<?=$this->url(['start_at' => 'month'])?>" class="<?=$start_at === 'month' ? 'active' : ''?>" data-type="month">最近30天</a>
+    </div>
+    <input type="text" readonly name="start_at">-
+    <input type="text" readonly name="end_at">
+    <button>搜索</button>
+</form>
+<table class="table table-hover table-wrap">
 <thead>
     <tr>
         <td rowspan="2">

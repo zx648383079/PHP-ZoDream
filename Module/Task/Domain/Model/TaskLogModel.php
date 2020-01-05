@@ -32,7 +32,7 @@ class TaskLogModel extends Model {
             'user_id' => 'required|int',
             'task_id' => 'required|int',
             'day_id' => 'int',
-            'status' => 'int:0,9',
+            'status' => 'int:0,127',
             'outage_time' => 'int',
             'end_at' => 'int',
             'created_at' => 'int',
@@ -74,6 +74,7 @@ class TaskLogModel extends Model {
     public static function findRunning($task_id) {
         return self::where('task_id', $task_id)
             ->whereIn('status', [self::STATUS_NONE, self::STATUS_PAUSE])
+            ->orderBy('id', 'desc')
             ->first();
     }
 }

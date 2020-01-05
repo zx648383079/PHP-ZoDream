@@ -37,7 +37,7 @@ class TaskModel extends Model {
             'parent_id' => 'int',
             'name' => 'required|string:0,100',
             'description' => 'string:0,255',
-            'status' => 'int:0,9',
+            'status' => 'int:0,127',
             'every_time' => 'int',
             'time_length' => 'int',
             'created_at' => 'int',

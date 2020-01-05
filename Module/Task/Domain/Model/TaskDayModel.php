@@ -41,7 +41,7 @@ class TaskDayModel extends Model {
             'success_amount' => 'int:0,127',
             'pause_amount' => 'int:0,127',
             'failure_amount' => 'int:0,127',
-            'status' => 'int:0,9',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

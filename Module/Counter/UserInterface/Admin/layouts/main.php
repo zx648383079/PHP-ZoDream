@@ -9,11 +9,13 @@ $this->registerCssFile([
         '@zodream.css',
         '@zodream-admin.css',
         '@dialog.css',
+        '@datetimer.css',
         '@counter.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
+        '@jquery.datetimer.min.js',
         '@jquery.lazyload.min.js',
         '@main.min.js',
         '@counter.min.js'
@@ -33,7 +35,7 @@ $this->registerCssFile([
         [
             [
                 '实时访客',
-                './@admin/trend/latest',
+                './@admin/trend',
                 'fa fa-'
             ],
             [

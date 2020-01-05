@@ -12,7 +12,7 @@ class TaskRepository {
         return TaskModel::where('user_id', auth()->id())
             ->orderBy('status', 'desc')
             ->orderBy('id', 'asc')
-            ->where('status', '>', TaskModel::STATUS_NONE)->get();
+            ->where('status', '>=', TaskModel::STATUS_NONE)->get();
     }
 
     /**
@@ -38,7 +38,16 @@ class TaskRepository {
             return $day;
         }
         if ($day->status == TaskDayModel::STATUS_PAUSE) {
-            $log = TaskLogModel::findRunning($day->task_id);
+            while (true) {
+                $log = TaskLogModel::findRunning($day->task_id);
+                if (!$log) {
+                    break;
+                }
+                if ($log->day_id != $day->id) {
+                    self::stop($log->day_id);
+                    $log = false;
+                }
+            }
             if (!empty($log)) {
                 $log->outage_time += time() - $log->end_at;
                 $log->end_at = 0;

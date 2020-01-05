@@ -4,27 +4,23 @@ namespace Module\Counter\Service\Admin;
 use Module\Counter\Domain\Repositories\StateRepository;
 
 class SourceController extends Controller {
-    public function indexAction() {
-        $time = strtotime(date('Y-m-d 00:00:00'));
-        $items = StateRepository::allSource($time, $time + 86400);
-        return $this->show(compact('items'));
+    public function indexAction($start_at = null, $end_at = null) {
+        $items = StateRepository::allSource(...$this->getTimeInput());
+        return $this->show(compact('items', 'start_at', 'end_at'));
     }
 
-    public function engineAction() {
-        $time = strtotime(date('Y-m-d 00:00:00'));
-        $items = StateRepository::searchEngine($time, $time + 86400);
-        return $this->show(compact('items'));
+    public function engineAction($start_at = null, $end_at = null) {
+        $items = StateRepository::searchEngine(...$this->getTimeInput());
+        return $this->show(compact('items', 'start_at', 'end_at'));
     }
 
-    public function searchWordAction() {
-        $time = strtotime(date('Y-m-d 00:00:00'));
-        $items = StateRepository::searchKeywords($time, $time + 86400);
-        return $this->show(compact('items'));
+    public function searchWordAction($start_at = null, $end_at = null) {
+        $items = StateRepository::searchKeywords(...$this->getTimeInput());
+        return $this->show(compact('items', 'start_at', 'end_at'));
     }
 
-    public function linkAction() {
-        $time = strtotime(date('Y-m-d 00:00:00'));
-        $items = StateRepository::host($time, $time + 86400);
-        return $this->show(compact('items'));
+    public function linkAction($start_at = null, $end_at = null) {
+        $items = StateRepository::host(...$this->getTimeInput());
+        return $this->show(compact('items', 'start_at', 'end_at'));
     }
 }
