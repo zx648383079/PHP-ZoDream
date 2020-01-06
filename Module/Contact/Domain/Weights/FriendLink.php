@@ -1,5 +1,9 @@
 <?php
-namespace Module\Template\Domain\Weights;
+namespace Module\Contact\Domain\Weights;
+
+use Module\Contact\Domain\Model\FriendLinkModel;
+use Module\Template\Domain\Weights\INode;
+use Module\Template\Domain\Weights\Node;
 
 class FriendLink extends Node implements INode {
 
@@ -7,12 +11,7 @@ class FriendLink extends Node implements INode {
 
     protected function registerAsync() {
         $this->page->on(self::KEY, function () {
-           return [
-                [
-                    'name' => '小呆导航',
-                    'url' => 'http://webjike.com'
-                ]
-           ];
+           return FriendLinkModel::where('status', 1)->asArray()->get();
         });
     }
 

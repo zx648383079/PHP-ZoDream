@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Form;
 /** @var $this View */
 
 $this->title = __('About Us');
@@ -30,7 +31,7 @@ $this->set([
             <p>本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。</p>
         </div>
         <div>
-            <form method="post">
+            <?= Form::open('/contact/home/feedback', 'POST', ['data-type' => 'ajax',]) ?>
                 <div class="col-md-6">
                     <input type="text" name="name" value="" placeholder="<?=__('Nick Name')?>" required="">
                     <input type="email" name="email" value="" placeholder="<?=__('Email')?>" required="">
@@ -40,7 +41,7 @@ $this->set([
                     <textarea name="content" placeholder="<?=__('Feedback Content')?>"></textarea>
                     <button type="submit" class="btn btn-show"><?=__('Send')?></button>
                 </div>
-            </form>
+            <?= Form::close() ?>
             <div class="clearfix"> </div>
         </div>
     </div>

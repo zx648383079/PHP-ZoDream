@@ -1,3 +1,6 @@
+declare var BASE_URI: string;
+declare var UPLOAD_URI: string;
+
 interface IResponse {
     code: number,
     status: string,
@@ -111,7 +114,7 @@ let strFormat = function(arg: string, ...args: any[]) {
 $(function() {
     if (typeof Upload == 'function') {
         let file_upload = new Upload(null, {
-            url: '/ueditor.php?action=uploadimage',
+            url: UPLOAD_URI,
             name: 'upfile',
             template: '{url}',
             onafter: function(data: any, element: JQuery) {

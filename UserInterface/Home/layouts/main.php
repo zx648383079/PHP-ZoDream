@@ -22,11 +22,14 @@ $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
     '@zodream.css',
+    '@dialog.css',
     '@home.css'
 ])->registerJsFile([
     '@jquery.min.js',
     '@jquery.cookie.js',
-    '@jquery.lazyload.min.js'
+    '@jquery.lazyload.min.js',
+    '@jquery.dialog.min.js',
+    '@main.min.js'
 ])->registerJs($js, View::JQUERY_READY);
 ?>
 <!DOCTYPE html>

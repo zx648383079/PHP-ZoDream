@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Form;
 /** @var $this View */
 
 $this->title = __('friend link');
@@ -12,16 +13,14 @@ $this->set([
 $js = <<<JS
 var dialog = $('.apply-dialog').dialog();
 dialog.on('done', function() {
-    this.find('form').submit();
-    //this.hide();
+    this.find('form').trigger('submit');
+    this.hide();
 });
 $(".friend-apply .btn").click(function () {
     dialog.show();
 });
 JS;
-$this->registerCssFile('@dialog.css')
-    ->registerJsFile('@jquery.dialog.min.js')
-    ->registerJs($js, View::JQUERY_READY);
+$this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="container">
@@ -41,7 +40,7 @@ $this->registerCssFile('@dialog.css')
         <i class="fa fa-close dialog-close"></i>
     </div>
     <div class="dialog-body">
-        <form action="" method="post">
+        <?= Form::open('/contact/home/friend_link', 'POST', ['data-type' => 'ajax',]) ?>
             <div>*<?=__('Site Name')?>:</div>
             <div>
                 <input type="text" name="name" placeholder="显示的网站名称" required>
@@ -58,7 +57,7 @@ $this->registerCssFile('@dialog.css')
             <div>
                 <input type="email" name="email" placeholder="将发送结果到你的邮箱">
             </div>
-        </form>
+        <?= Form::close() ?>
     </div>
     <div class="dialog-footer">
         <button type="button" class="dialog-yes"><?=__('Apply')?></button>

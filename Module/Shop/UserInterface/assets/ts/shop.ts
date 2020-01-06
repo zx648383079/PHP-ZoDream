@@ -1,4 +1,3 @@
-declare var BASE_URI: string;
 const CHECKED_CHANGE = 'cart_checked_change';
 function addToCart(id: number, amount: number|boolean = 1, properties?: string[]) {
     if (typeof amount === 'boolean') {

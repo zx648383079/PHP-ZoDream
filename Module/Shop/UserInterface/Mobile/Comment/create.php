@@ -4,6 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '评价晒单';
 $js = <<<JS
+var UPLOAD_URI="/ueditor.php?action=uploadimage";
 bindComment();
 JS;
 $this->registerJs($js)

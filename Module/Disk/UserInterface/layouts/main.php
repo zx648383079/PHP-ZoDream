@@ -17,7 +17,7 @@ $this->registerCssFile([
         '@vue.js',
         '@main.min.js',
         '@disk.min.js'
-    ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
+    ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::main($this, [

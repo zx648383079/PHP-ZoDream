@@ -57,16 +57,6 @@ class AdminMenu {
         }
         url()->setModulePath($oldGlobalModule);
         return [
-            [
-                '友情链接',
-                './friend_link',
-                'fa fa-link'
-            ],
-            [
-                '留言反馈',
-                './feedback',
-                'fa fa-cookie'
-            ],
         ];
     }
 }

@@ -1,8 +1,7 @@
 <?php
-namespace Service\Admin;
+namespace Module\Contact\Service\Admin;
 
-
-use Module\Template\Domain\Model\Base\FeedbackModel;
+use Module\Contact\Domain\Model\FeedbackModel;
 
 class FeedbackController extends Controller {
 

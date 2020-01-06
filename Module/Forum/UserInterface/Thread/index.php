@@ -4,12 +4,9 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = $thread->title;
 $this->registerCssFile([
-        '@dialog.css',
         '@forum.css',
     ])
     ->registerJsFile([
-        '@main.min.js',
-        '@jquery.dialog.min.js',
         '@forum.min.js'
     ]);
 ?>

@@ -1,8 +1,6 @@
 <?php
 namespace Module\Template\Domain\Migrations;
 
-use Module\Template\Domain\Model\Base\FeedbackModel;
-use Module\Template\Domain\Model\Base\FriendLinkModel;
 use Module\Template\Domain\Model\Base\OptionModel;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
@@ -103,25 +101,6 @@ class CreateTemplateTables extends Migration {
             $table->set('default_value')->varchar(255)->defaultVal('')->comment('默认值或候选值');
             $table->set('value')->text();
             $table->set('position')->tinyint(4)->defaultVal(99);
-        })->append(FeedbackModel::tableName(), function (Table $table) {
-            $table->setComment('留言');
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(20)->notNull();
-            $table->set('email')->varchar(50)->defaultVal('');
-            $table->set('phone')->varchar(30)->defaultVal('');
-            $table->set('content')->varchar()->defaultVal('');
-            $table->set('status')->bool()->defaultVal(0);
-            $table->timestamps();
-        })->append(FriendLinkModel::tableName(), function (Table $table) {
-            $table->setComment('友情链接');
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(20)->notNull();
-            $table->set('url')->varchar(50)->notNull();
-            $table->set('logo')->varchar(200)->defaultVal('');
-            $table->set('brief')->varchar()->defaultVal('');
-            $table->set('email')->varchar(100)->defaultVal('');
-            $table->set('status')->bool()->defaultVal(0);
-            $table->timestamps();
         });
     }
 }
