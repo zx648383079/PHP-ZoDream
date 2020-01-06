@@ -24,6 +24,7 @@ $this->title = '友情链接申请列表';
             <td><?=$item->name?></td>
             <td>
                 <code><?=$item->url?></code>
+                <a href="<?=$item->url?>" target="_blank" rel="noopener noreferrer" class="fa fa-globe"></a>
             </td>
             <td>
                 <?=$this->text($item->brief)?>
