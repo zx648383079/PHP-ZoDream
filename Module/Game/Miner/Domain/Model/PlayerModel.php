@@ -5,7 +5,6 @@ namespace Module\Game\Miner\Domain\Model;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Exception;
-use PhpParser\Node\Expr\Empty_;
 
 /**
  * Class PlayerModel

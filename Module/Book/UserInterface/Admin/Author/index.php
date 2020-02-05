@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
 ?>
-   <div class="search">
+   <div class="page-search">
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">标题</label>

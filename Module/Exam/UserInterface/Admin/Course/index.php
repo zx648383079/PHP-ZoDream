@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '科目列表';
 ?>
-<div class="search">
+<div class="page-search">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/course/create')?>">新增科目</a>
 </div>
 

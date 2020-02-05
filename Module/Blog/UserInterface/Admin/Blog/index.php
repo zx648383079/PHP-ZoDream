@@ -7,7 +7,7 @@ use Zodream\Helpers\Str;
 $this->title = '文章列表';
 ?>
 
-<div class="search">
+<div class="page-search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label for="keywords">标题</label>
@@ -42,7 +42,9 @@ $this->title = '文章列表';
         <tr>
             <td><?=$item->id?></td>
             <td class="text-left">
-            <?php if($item->open_type > 0):?>
+            <?php if($item->open_type == 2):?>
+                <i class="fa fa-ban" title="此文档为草稿"></i>
+            <?php elseif($item->open_type > 0):?>
                 <i class="fa fa-lock" title="阅读需要满足条件"></i>
             <?php endif;?>
             [<?=$item->type == 1 ? '转载' : '原创'?>]
@@ -64,7 +66,7 @@ $this->title = '文章列表';
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./detail', ['id' => $item->id])?>" target="_blank">查看</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./detail', ['id' => $item->id])?>" target="_blank">预览</a>
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/blog/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/blog/delete', ['id' => $item->id])?>">删除</a>
                 </div>

@@ -1,3 +1,17 @@
+let autoTimer = 0;
+let autoDraft = () => {
+    if (autoTimer > 0) {
+        return;
+    }
+    autoTimer = setTimeout(() => {
+        if (autoTimer > 0) {
+            clearTimeout(autoTimer);
+            autoTimer = 0;
+        }
+        
+    }, 3000);
+};
+
 function bindEdit(configs: any, tags = []) {
     let editor: any,
         box = $('#editor-container');

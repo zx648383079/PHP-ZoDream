@@ -15,6 +15,7 @@ class BlogEntity extends Entity {
     const OPEN_LOGIN = 1;
     const OPEN_PASSWORD = 5;
     const OPEN_BUY = 6;
+    const OPEN_DRAFT = 2;
 
     public static function tableName() {
         return 'blog';

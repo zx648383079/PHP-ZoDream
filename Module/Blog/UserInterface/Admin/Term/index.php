@@ -7,7 +7,7 @@ $this->title = '文章分类列表';
 $canDo = auth()->user()->isAdministrator();
 ?>
 
-<div class="search">
+<div class="page-search">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/term/create')?>">新增分类</a>
 </div>
 

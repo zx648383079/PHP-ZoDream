@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '满减/满送活动列表';
 ?>
-<div class="search">
+<div class="page-search">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/discount/create')?>">新增满减/满送</a>
 </div>
 <table class="table table-hover">

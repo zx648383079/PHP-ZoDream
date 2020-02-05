@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '秒杀活动列表';
 ?>
-<div class="search">
+<div class="page-search">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/seckill/create')?>">新增秒杀活动</a>
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/seckill/time')?>">秒杀时间列表</a>
 </div>

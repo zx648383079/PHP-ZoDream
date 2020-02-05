@@ -7,7 +7,7 @@ $this->title = '标签列表';
 $canDo = auth()->user()->isAdministrator();
 ?>
 
-<div class="search">
+<div class="page-search">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/tag/create')?>">新增标签</a>
 </div>
 

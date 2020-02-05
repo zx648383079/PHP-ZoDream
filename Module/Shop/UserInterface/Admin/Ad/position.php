@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '广告位列表';
 ?>
-   <div class="search">
+   <div class="page-search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/ad/create_position')?>">新增广告位</a>
     </div>
 

@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
 ?>
-   <div class="search">
+   <div class="page-search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
     </div>
 

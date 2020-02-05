@@ -30,7 +30,7 @@ class HomeController extends RestController {
     public function detailAction($id) {
         $id = intval($id);
         $blog = BlogModel::find($id);
-        if (empty($blog)) {
+        if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
             return $this->renderFailure('id 错误！');
         }
         return $this->render($blog);

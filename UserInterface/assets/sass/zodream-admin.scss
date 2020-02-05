@@ -220,6 +220,20 @@ footer {
     }
 }
 
+.page-search {
+    .form-horizontal {
+        display: inline-block;
+    }
+    .pull-right {
+        float: right;
+    }
+    &::after {
+        content: " ";
+        display: block;
+        clear: both;
+    }
+}
+
 @media (max-width: 1200px){
     .container {
         width: 100%;

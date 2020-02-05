@@ -45,7 +45,7 @@ $this->registerJs($js);
                 <?=Form::select('programming_language', array_merge(['' => '请选择'], array_combine($lang_list, $lang_list)))?>
                 <?=Form::select('type', ['原创', '转载'])?>
                 <?=Form::text('source_url')?>
-                <?=Form::select('open_type', ['公开', '仅登录', 5 => '密码', 6 => '购买'])?>
+                <?=Form::select('open_type', ['公开', '仅登录', 5 => '密码', 6 => '购买', 2 => '草稿'])?>
                 <?=Form::text('open_rule')?>
                 <?php endif;?>
                 <?=Form::select('edit_type', ['Ueditor', 'MarkDown'])?>

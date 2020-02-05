@@ -8,7 +8,7 @@ use Module\Exam\Domain\Model\QuestionModel;
 $this->title = '题目列表';
 
 ?>
-<div class="search">
+<div class="page-search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label class="sr-only" for="keywords">标题</label>

@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
 ?>
-<div class="search">
+<div class="page-search">
     <?php if($parent_id > 0):?>
     <a class="btn btn-success" href="<?=$this->url('./@admin/content',
         ['cat_id' => $cat->id])?>">返回</a>

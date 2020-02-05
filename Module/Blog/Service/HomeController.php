@@ -54,6 +54,10 @@ class HomeController extends ModuleController {
         if (empty($blog)) {
             return $this->redirect('./');
         }
+        if ($blog->open_type == BlogModel::OPEN_DRAFT &&
+            (auth()->guest() || $blog->user_id != auth()->id())) {
+            return $this->redirect('./');
+        }
         $blog->term = TermRepository::get($blog->term_id);
         $parent_id = $blog->parent_id > 0 ? $blog->parent_id : $blog->id;
         $languages = BlogModel::where('parent_id', $parent_id)->asArray()->get('id', 'language');

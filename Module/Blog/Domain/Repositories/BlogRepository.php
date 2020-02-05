@@ -24,6 +24,7 @@ class BlogRepository {
                                    $user = null, $language = null, $programming_language = null,
                                    $tag = null, $per_page = 20) {
         return BlogPageModel::with('term', 'user')
+            ->where('open_type', '<>', BlogModel::OPEN_DRAFT)
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('term_id', intval($category));
             })

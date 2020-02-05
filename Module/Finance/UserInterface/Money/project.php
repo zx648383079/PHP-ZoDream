@@ -20,7 +20,7 @@ JS;
 $this->registerJs($js);
 ?>
 
-<div class="search">
+<div class="page-search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <input type="text" class="form-control" id="name" placeholder="配置项目">

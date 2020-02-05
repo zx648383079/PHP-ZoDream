@@ -112,7 +112,7 @@ let strFormat = function(arg: string, ...args: any[]) {
 }
 
 $(function() {
-    if (typeof Upload == 'function') {
+    if (typeof Upload === 'function' && typeof UPLOAD_URI === 'string') {
         let file_upload = new Upload(null, {
             url: UPLOAD_URI,
             name: 'upfile',

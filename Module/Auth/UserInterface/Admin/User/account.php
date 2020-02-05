@@ -7,7 +7,7 @@ use Zodream\Html\Dark\Form;
 $this->title = '账户明细列表';
 ?>
 
-<div class="search">
+<div class="page-search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label for="">渠道</label>

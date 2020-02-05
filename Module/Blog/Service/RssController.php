@@ -20,6 +20,7 @@ class RssController extends ModuleController {
             ->setLink(url('/'))
             ->setImage(url()->asset('assets/images/favicon.png'), url('/'));
         $model_list = BlogModel::query()->with('term')
+            ->where('open_type', BlogModel::OPEN_PUBLIC)
             ->orderBy('id', 'desc')
             ->get('id', 'term_id', 'title', 'edit_type', 'content', 'programming_language', 'created_at');
         foreach ($model_list as $item) {

@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '预售活动列表';
 ?>
-<div class="search">
+<div class="page-search">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/presale/create')?>">新增预售</a>
 </div>
 <table class="table table-hover">

@@ -5,7 +5,7 @@ use Module\Shop\Domain\Models\AttributeModel;
 /** @var $this View */
 $this->title = '属性';
 ?>
-   <div class="search">
+   <div class="page-search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/attribute/create', ['group_id' => $group_id])?>">新增属性</a>
     </div>
 

@@ -5,7 +5,7 @@ use Module\Shop\Domain\Models\OrderModel;
 /** @var $this View */
 $this->title = '订单列表';
 ?>
-<div class="search">
+<div class="page-search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label class="sr-only" for="series_number">订单号</label>

@@ -7,7 +7,7 @@ use Zodream\Helpers\Str;
 $this->title = '帖子列表';
 ?>
 
-<div class="search">
+<div class="page-search">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label for="keywords">标题</label>

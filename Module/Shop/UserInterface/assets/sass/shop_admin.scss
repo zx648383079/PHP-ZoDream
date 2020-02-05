@@ -4,11 +4,6 @@ $red: red;
 $white: #fff;
 $color_celeste_approx: #ccc;
 
-.search {
-    .form-horizontal {
-        display: inline-block;
-    }
-}
 
 .place-div {
 	label {
@@ -460,6 +455,17 @@ table {
 }
 
 .option-box {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	.zd-tab-head,
+	.tab-header {
+		border-right: 1px dotted #767676;
+		box-sizing: border-box;
+		.zd-tab-item,
+		.tab-item {
+			width: 100%;
+		}
+	}
 	.input-group {
 		.fa-edit {
 			display: none;

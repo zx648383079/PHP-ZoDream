@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '支付方式列表';
 ?>
-   <div class="search">
+   <div class="page-search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/payment/create')?>">新增支付方式</a>
     </div>
 

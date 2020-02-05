@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '属性类型';
 ?>
-   <div class="search">
+   <div class="page-search">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/attribute/create_group')?>">新增类型</a>
     </div>
 
