@@ -184,7 +184,7 @@ class CreateWeChatTables extends Migration {
             $table->set('show_cover')->bool()->defaultVal(0)->comment('显示图文的封面');
             $table->set('open_comment')->bool()->defaultVal(0)->comment('图文是否可以评论');
             $table->set('only_comment')->bool()->defaultVal(0)->comment('图文可以评论的人');
-            $table->set('content')->text()->comment('素材内容');
+            $table->set('content')->longtext()->comment('素材内容');
             $table->set('parent_id')->int()->defaultVal(0)->comment('图文父id');
             $table->set('media_id')->varchar(100)->defaultVal('')->comment('素材ID');
             $table->set('url')->varchar()->defaultVal('')->comment('图片的url');

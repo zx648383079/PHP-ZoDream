@@ -30,7 +30,7 @@ class CreateCounterTables extends Migration {
         })->append(JumpLogModel::tableName(), function(Table $table) {
             $table->setComment('页面跳出记录');
             $table->set('id')->pk(true);
-            $table->set('referrer')->varchar()->notNull();
+            $table->set('referrer')->varchar()->defaultVal('');
             $table->set('url')->varchar()->notNull();
             $table->set('ip')->varchar(120)->notNull();
             $table->set('session_id')->varchar(32)->defaultVal('');

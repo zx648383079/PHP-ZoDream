@@ -116,6 +116,27 @@ $this->extend('layouts/header', [
     </div>
 </div>
 
+<div class="book-navigation">
+    <?php if ($blog->previous):?>
+    <a class="prev" href="<?=$blog->previous->url?>">
+        <i class="fa fa-angle-left"></i>
+        <div class="prev-text">
+            <span class="prev-label">上一篇</span>
+            <span class="prev-title"><?=$blog->previous->title?></span>
+        </div>
+    </a>
+    <?php endif;?>
+    <?php if ($blog->next):?>
+    <a class="next" href="<?=$blog->next->url?>">
+        <div class="next-text">
+            <span class="next-label">上一篇</span>
+            <span class="next-title"><?= $blog->next->title ?></span>
+        </div>
+        <i class="fa fa-angle-right"></i>
+    </a>
+    <?php endif;?>
+</div>
+
 <?php if($blog->comment_status > 0):?>
 <div id="comments" class="book-footer comment">
     

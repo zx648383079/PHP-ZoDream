@@ -49,6 +49,15 @@ class MessageReply {
     }
 
     /**
+     * @param MessageResponse $response
+     * @return MessageReply
+     */
+    public function setResponse(MessageResponse $response) {
+        $this->response = $response;
+        return $this;
+    }
+
+    /**
      * 回复
      * @return MessageResponse
      */
@@ -85,7 +94,7 @@ class MessageReply {
      * @throws \Exception
      */
     public function getOpenId() {
-        return $this->message->getFrom();
+        return empty($this->message) ? session()->id() : $this->message->getFrom();
     }
 
     /**
@@ -94,7 +103,9 @@ class MessageReply {
      */
     public function getUserId(): int {
         if ($this->user_id === -1) {
-            $this->user_id = OAuthModel::findUserId($this->getOpenId(), OAuthModel::TYPE_WX);
+            $this->user_id =
+                empty($this->message) ? auth()->id() :
+                OAuthModel::findUserId($this->getOpenId(), OAuthModel::TYPE_WX);
         }
         return $this->user_id;
     }
@@ -220,9 +231,12 @@ class MessageReply {
             ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
         foreach ($model_list as $item) {
             /** @var $item MediaModel */
+
+            $picUrl = empty($this->message) ? $item->thumb : MediaModel::where('type', MediaModel::TYPE_IMAGE)
+                ->where('content', $item->thumb)->value('url');
             $this->response->addNews($item->title, $item->title,
-                MediaModel::where('type', MediaModel::TYPE_IMAGE)
-                ->where('content', $item->thumb)->first()->url);
+                $picUrl
+                );
         }
         return $this->response;
     }

@@ -112,7 +112,7 @@ class ReplyModel extends EditorModel {
             if ($item['match'] > 0) {
                 continue;
             }
-            if (strpos($content, $key) !== false) {
+            if (strpos($content, $key.'') !== false) {
                 return $item['id'];
             }
         }

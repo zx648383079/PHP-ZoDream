@@ -70,7 +70,9 @@ function bindTab(typeId: number| string, baseUri: string) {
 }
 
 function bindEditor(tag: string) {
-    let editor = UE.getEditor('container',{
+    UE.delEditor('container');
+    let editor = UE.getEditor('container', {
+        scaleEnabled: true,
         toolbars: [
             ['fullscreen', 'source', 'undo', 'redo', 'bold', 'italic', 'underline', 'customstyle', 'link','simpleupload', 'insertvideo']
         ],
@@ -97,4 +99,76 @@ function bindEditor(tag: string) {
     tplBox.on('click', '.rich_media_content', function() {
         editor.execCommand('insertHtml', $(this).html());
     });
+}
+
+function bindEmulate(wid: number) {
+    let box = $('.emulate-box'),
+        room = box.find('.scroll-body');
+    let resize = function() {
+        
+    },
+    askReply = function(content: string|number, type?: string) {
+        $.post(BASE_URI + 'emulate/reply', {
+            id: wid,
+            type,
+            content
+        }, (data: any) => {
+            if (data.code !== 200) {
+                return;
+            }
+            setTimeout(() => {
+                room.scrollTop(room[0].scrollHeight);
+            }, 100);
+            data = data.data;
+            if (data.type === 'text') {
+                room.append('<div class="message-left"><img class="avatar" src="/assets/images/favicon.png"><div class="content">' + data.content + '</div></div>');
+                return;
+            }
+            if (data.type === 'news') {
+                let html = '';
+                $.each(data.items, function() {
+                    html += '<a class="new-item" href="'+this.url+'" target="_blank"><div class="thumb"><img src="'+ this.thumb +'" alt="'+ this.title +'"></div><div class="title">'+this.title+'</div></a>';
+                });
+                room.append(html);
+            }
+        }, 'json');
+    },
+    sendMsg = function(msg: string) {
+        if (msg.length < 1) {
+            return;
+        }
+        room.append('<div class="message-right"><img class="avatar" src="/assets/images/favicon.png"><div class="content">' + msg + '</div></div>');
+        room.scrollTop(room[0].scrollHeight);
+        askReply(msg);
+    };
+    box.on('click', '.box-header .fa-arrow-left', function() {
+        history.back();
+    });
+    let footer = box.find('.box-footer').on('click', '.fa-list', function() {
+        footer.removeClass('toggle-input').removeClass('toggle-more');
+    }).on('click', '.fa-plus-circle', function() {
+        footer.toggleClass('toggle-more');
+    }).on('click', '.fa-keyboard', function() {
+        footer.addClass('toggle-input').removeClass('toggle-more');
+    }).on('click', '.menu-body li', function(e) {
+        let $this = $(this);
+        if ($this.data('event')) {
+            askReply($this.data('event'), 'menu');
+            return;
+        }
+        $this.toggleClass('active');
+    }).on('keydown', '.input-box textarea', function(e) {
+        if (e.keyCode == 13) {
+            sendMsg(this.value.trim());
+            this.value = '';
+            e.preventDefault();
+        }
+    });
+
+    $(window).resize(resize);
+    resize();
+}
+
+function bindEmulateMedia() {
+    $('img').lazyload({callback: 'img'});
 }

@@ -46,4 +46,5 @@ $this->registerJs($js);
         
     </div>
     <button class="btn btn-primary">保存</button>
+    <input type="hidden" name="type" value="news">
 <?= Form::close('id') ?>

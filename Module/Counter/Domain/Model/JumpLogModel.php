@@ -22,7 +22,7 @@ class JumpLogModel extends Model {
 
     protected function rules() {
         return [
-            'referrer' => 'required|string:0,255',
+            'referrer' => 'string:0,255',
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
             'session_id' => 'string:0,32',

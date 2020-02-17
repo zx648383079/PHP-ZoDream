@@ -54,6 +54,6 @@ class BookController extends Controller {
         $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(15)->all();
         $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->orderBy('click_count', 'desc')->limit(10)->all();
         $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->orderBy('created_at', 'desc')->all();
-        return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
+        return $this->show(compact('book', 'cat', 'like_book', 'hot_book', 'author_book'));
     }
 }

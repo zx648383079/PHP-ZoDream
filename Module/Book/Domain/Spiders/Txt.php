@@ -40,6 +40,9 @@ class Txt {
             $book = BookModel::findOrDefault(intval($book), [
                 'name' => $file->getNameWithoutExtension()
             ]);
+            if ($book->isNewRecord) {
+                $book->save();
+            }
         }
         if (empty($book)) {
             return;

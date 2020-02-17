@@ -1,10 +1,1 @@
-#table-box select {
-  height: auto;
-  display: block;
-  min-width: 200px; }
-
-@media (max-width: 767px) {
-  .zd-tab .zd-tab-head .zd-tab-item {
-    width: 32%; } }
-
-/*# sourceMappingURL=gzo.css.map */
+#table-box select{height:auto;display:block;min-width:200px}.table-group{display:inline-block}.table-group select{min-width:60px;height:30px}.column-item{display:block;width:auto;height:50px;line-height:50px}.column-item span{min-width:30%;display:inline-block;text-align:center}.dialog-select{display:none;position:fixed;background-color:rgba(0,0,0,.2);top:0;bottom:0;left:0;right:0}.dialog-select .dialog-body{position:absolute;top:40vh;left:50vw;width:300px;margin-left:-150px;background-color:#fff}.dialog-select .dialog-body button,.dialog-select .dialog-body select{height:50px;min-width:80px;border:none;outline:0}@media (max-width:767px){.zd-tab .zd-tab-head .zd-tab-item{width:32%}}

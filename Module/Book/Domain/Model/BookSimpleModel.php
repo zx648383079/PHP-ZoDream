@@ -20,7 +20,7 @@ use Zodream\Helpers\Time;
  * @property string $name
  * @property string $cover 封面
  * @property string $description 简介
- * @property integer $words_count 字数
+ * @property integer $size 字数
  * @property integer $over_at
  * @property integer $updated_at
  */
@@ -36,7 +36,7 @@ class BookSimpleModel extends BookEntity {
 
     public static function query() {
         return parent::query()->select([
-            'id', 'name', 'cover', 'description', 'words_count',
+            'id', 'name', 'cover', 'description', 'size',
             'over_at', 'updated_at']);
     }
 }

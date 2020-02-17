@@ -13,7 +13,7 @@ use Exception;
  * @property string $type
  * @property integer $material_type
  * @property string $title
- * @property integer $thumb
+ * @property string $thumb
  * @property integer $show_cover
  * @property integer $open_comment
  * @property integer $only_comment

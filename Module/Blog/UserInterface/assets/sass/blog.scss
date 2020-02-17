@@ -337,6 +337,50 @@ $acolor: $fg;
     }
 }
 
+.book-navigation {
+    padding: 30px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    .prev,
+    .next {
+        display: grid;
+        grid-template-columns: 30px 1fr;
+        white-space: nowrap;
+        .fa {
+            padding: 13px 0 0 10px;
+            color: #7a7a7a;
+            font-size: 20px;
+            display: inline-block;
+        }
+        .prev-text,
+        .next-text {
+            display: inline-block;
+            overflow: hidden;
+        }
+        .prev-label,
+        .next-label {
+            font-size: .8em;
+        }
+        .prev-title,
+        .next-title {
+            display: block;
+            color: #0c0c0c;
+            font-size: 18px;
+            font-weight: 400;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .next {
+        text-align: right;
+        grid-template-columns: 1fr 30px;
+        .fa {
+            padding: 13px 10px 0 0;
+        }
+    }
+}
+
 .book-comments {
     .reply-hide {
         display: none;
