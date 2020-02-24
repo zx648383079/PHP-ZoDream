@@ -4,6 +4,7 @@ namespace Module\MicroBlog\Service;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\ModuleController;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Config;
 use Zodream\Service\Factory;
 
@@ -19,7 +20,7 @@ class HomeController extends ModuleController {
     }
 
     public function indexAction($sort = 'new', $keywords = null) {
-        $blog_list  = MicroBlogModel::with('user')
+        $blog_list  = MicroBlogModel::with('user', 'attachment')
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
                     return $query->orderBy('created_at', 'desc');
@@ -34,11 +35,11 @@ class HomeController extends ModuleController {
         return $this->show(compact('blog_list', 'keywords'));
     }
 
-    public function createAction() {
+    public function createAction(Request $request) {
         if (!MicroRepository::canPublish()) {
             return $this->jsonFailure('发送过于频繁！');
         }
-        $model = MicroRepository::create(app('request')->get('content'));
+        $model = MicroRepository::create($request->get('content'), $request->get('file'));
         if (!$model) {
             return $this->jsonFailure('发送失败');
         }

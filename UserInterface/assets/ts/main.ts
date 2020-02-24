@@ -120,6 +120,8 @@ $(function() {
             onafter: function(data: any, element: JQuery) {
                 if (data.state == 'SUCCESS') {
                     element.prev('input').val(data.url);
+                } else if (data.code === 302) {
+                    location.href = data.url;
                 }
                 return false;
             }

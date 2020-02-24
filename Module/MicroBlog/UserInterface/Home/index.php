@@ -12,10 +12,11 @@ $this->registerCssFile([
     '@micro.css'])
     ->registerJsFile([
         '@jquery.dialog.min.js',
+        '@jquery.upload.min.js',
         '@main.min.js',
         '@micro.min.js'
     ])
-    ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD)
+    ->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./', false)), View::HTML_HEAD)
     ->registerJs($js, View::JQUERY_READY);
 ?>
 

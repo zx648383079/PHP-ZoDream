@@ -20,7 +20,7 @@ use Module\Auth\Domain\Model\UserModel;
 */
 class MicroBlogModel extends Model {
 
-    protected $append = ['is_recommended'];
+    protected $append = ['is_recommended', 'attachment'];
 
 	public static function tableName() {
         return 'micro_blog';
@@ -62,6 +62,10 @@ class MicroBlogModel extends Model {
 
     public function forward() {
 	    return $this->hasOne(static::class, 'id', 'forward_id');
+    }
+
+    public function attachment() {
+	    return $this->hasMany(AttachmentModel::class, 'micro_id', 'id');
     }
 
     public function getIsRecommendedAttribute() {

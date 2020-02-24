@@ -1,9 +1,53 @@
+const DIALOG_CLOSE = 'dialog-close';
 function bindMicroPage() {
+    let dialogTarget: JQuery;
+    let file_upload = new Upload(null, {
+        url: UPLOAD_URI,
+        name: 'upfile',
+        template: '{url}',
+        onafter: function(data: any, element: JQuery) {
+            if (data.state == 'SUCCESS') {
+                element.find('.dialog-body .add-btn').before('<div class="file-item"><img src="'+data.url+'" alt=""><input type="hidden" name="file[]" value="'+data.url+'"><i class="fa fa-times"></i></div>');
+                element.show();
+            } else if (data.code === 302) {
+                location.href = data.url;
+            }
+            return false;
+        }
+    });
+    let uploadBox = $('.dialog-upload').on(DIALOG_CLOSE, function() {
+        uploadBox.hide();
+        uploadBox.find('.file-item').remove();
+    }).on('click', '.dialog-header .fa-times', function() {
+        uploadBox.trigger(DIALOG_CLOSE);
+    }).on('click', '.file-item .fa-times', function() {
+        $(this).closest('.file-item').remove();
+    }).on('click', '.add-btn', function() {
+        file_upload.options.filter = '';
+        file_upload.start(uploadBox);
+    });
+    let emojiBox = $('.dialog-emoji').on('click', '.dialog-header .fa-times', function() {
+        emojiBox.hide();
+    }).on('click', '.dialog-header .tab-header li', function() {
+        let $this = $(this);
+        $this.addClass('active').siblings().removeClass('active');
+        $this.closest('.dialog-emoji').find('.dialog-body .tab-item').eq($this.index()).addClass('active').siblings().removeClass('active');
+    }).on('click', '.emoji-item', function() {
+        let $this = $(this);
+        let area = dialogTarget.find('textarea');
+        area.val( area.val() + '[' + $this.attr('title') + ']');
+        emojiBox.hide();
+    });
     $('.micro-publish').on('submit', 'form', function() {
         let $this = $(this);
-        postJson($this.attr('action'), $this.serialize(), data => {
+        let files = [''];
+        uploadBox.find('.file-item input').each(function(this: HTMLInputElement) {
+            files.push('file[]=' + this.value);
+        });
+        postJson($this.attr('action'), $this.serialize() + files.join('&'), data => {
             if (data.code == 200) {
                 window.location.reload();
+                uploadBox.trigger(DIALOG_CLOSE);
                 return;
             }
             if (data.code == 302) {
@@ -18,6 +62,24 @@ function bindMicroPage() {
         let tip = $this.closest('.micro-publish').find('.tip');
         let len = ($this.val() as string).length;
         tip.toggle(len > 0).find('em').text(len);
+    }).on('click', '.actions .tools .fa-smile', function() {
+        let offset = $(this).offset();
+        emojiBox.css({
+            left: offset.left,
+            top: offset.top + 20
+        }).show();
+        dialogTarget = $(this).closest('.comment-publish,form');
+    }).on('click', '.actions .tools .fa-image,.actions .tools .fa-video', function() {
+        let $this = $(this);
+        file_upload.options.filter = $this.hasClass('fa-image') ? 'image/*' : '';
+        file_upload.start(uploadBox);
+        let offset = $this.offset();
+        uploadBox.css({
+            left: offset.left,
+            top: offset.top + 20
+        });
+        uploadBox.find('.file-item').remove();
+        dialogTarget = $this.closest('.comment-publish,form');
     });
     $('.micro-item').on('click', '[data-action=comment]', function() {
         let box = $(this).closest('.micro-item'),

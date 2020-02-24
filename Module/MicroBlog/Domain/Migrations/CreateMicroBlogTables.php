@@ -1,6 +1,7 @@
 <?php
 namespace Module\MicroBlog\Domain\Migrations;
 
+use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
@@ -24,6 +25,11 @@ class CreateMicroBlogTables extends Migration {
             $table->set('forward_id')->int(10)->defaultVal(0)->comment('转发的源id');
             $table->set('source')->varchar(30)->defaultVal('')->comment('来源');
             $table->timestamps();
+        })->append(AttachmentModel::tableName(), function (Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('micro_id')->int()->notNull();
+            $table->set('thumb')->varchar()->notNull();
+            $table->set('file')->varchar()->notNull();
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('content')->varchar()->notNull();

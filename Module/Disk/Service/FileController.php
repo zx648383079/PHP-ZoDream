@@ -55,7 +55,6 @@ class FileController extends Controller {
         if (empty($file) || $file->type != FileModel::TYPE_VIDEO) {
             return $this->jsonFailure('');
         }
-        $tool = 'D:\ffmpeg\bin\ffmpeg.exe';
         $video = $this->diskFolder->file($file->location);
         $baseFolder = $this->diskFolder->directory($file->id);
         $baseFolder->create();
@@ -64,7 +63,7 @@ class FileController extends Controller {
             if ($file->extension != 'mp4') {
                 $tmp = $baseFolder->file($file->id.'.mp4');
                 if (!$tmp->exist()) {
-                    FFmpeg::factory($tool, $video)
+                    FFmpeg::factory(null, $video)
                         ->overwrite()
                         ->set('c:v', 'libx264')
                         ->set('strict')
@@ -74,14 +73,14 @@ class FileController extends Controller {
             }
             $tsFile = $baseFolder->file($file->id.'.ts');
             if (!$tsFile->exist()) {
-                FFmpeg::factory($tool, $video)
+                FFmpeg::factory(null, $video)
                     ->overwrite()
                     ->set('vcodec', 'copy')
                     ->set('acodec', 'copy')
                     ->set('vbsf', 'h264_mp4toannexb')
                     ->output($tsFile)->ready()->start()->join()->stop();
             }
-            FFmpeg::factory($tool, $tsFile)
+            FFmpeg::factory(null, $tsFile)
                 ->overwrite()
                 ->set('c', 'copy')
                 ->set('map', 0)

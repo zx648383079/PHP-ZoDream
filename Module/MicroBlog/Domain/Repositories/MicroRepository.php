@@ -2,6 +2,7 @@
 namespace Module\MicroBlog\Domain\Repositories;
 
 use Module\Auth\Domain\Model\UserModel;
+use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
@@ -26,9 +27,28 @@ class MicroRepository {
             'content' => $content,
             'source' => $source
         ]);
-        if ($model) {
-            self::at($content, $model->id);
+        if (!$model) {
+            return $model;
         }
+        self::at($content, $model->id);
+        if (empty($images)) {
+            return $model;
+        }
+        $data = [];
+        foreach ($images as $image) {
+            if (empty($image)) {
+                continue;
+            }
+            $data[] = [
+                'thumb' => $image,
+                'file' => $image,
+                'micro_id' => $model->id
+            ];
+        }
+        if (empty($data)) {
+            return $model;
+        }
+        AttachmentModel::query()->insert($data);
         return $model;
     }
 

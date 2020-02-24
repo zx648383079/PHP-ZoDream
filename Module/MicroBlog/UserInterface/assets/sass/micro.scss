@@ -58,6 +58,24 @@
                 font-size: 12px;
             }
         }
+        .attachment {
+            li {
+                list-style: none;
+                display: inline-block;
+                cursor: zoom-in;
+            }
+            img {
+                max-width: 100%;
+            }
+            .media-min {
+                li {
+                    width: 110px;
+                    height: 110px;
+                    margin: 4px 0 0 4px;
+                    position: relative;
+                }
+            }
+        }
         .ations {
             display: flex;
             justify-content: space-around;
@@ -182,4 +200,91 @@
         height: 80px;
         resize: none;
     }
+}
+
+.dialog-emoji,
+.dialog-upload {
+    position: absolute;
+    display: none;
+    width: 100%;
+    max-width: 320px;
+    background-color: #fff;
+    box-shadow: 1px 1px 0 rgba($color: #000000, $alpha: .3);
+    z-index: 9999;
+    .dialog-header {
+        line-height: 40px;
+        position: relative;
+        .fa-times {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        .tab-header {
+            background-color: #f2f2f5;
+            border-color: #d9d9d9;
+            li {
+                display: inline-block;
+                &.active {
+                    background-color: #fff;
+                    border-bottom: 2px solid #fa7d3c;
+                }
+            }
+            
+        }
+    }
+    .dialog-body {
+        height: 250px;
+        overflow-y: auto;
+        .tab-item {
+            display: none;
+            &.active {
+                display: block;
+            }
+        }
+    }
+    .emoji-item {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border: 1px solid #e8e8e8;
+        text-align: center;
+        padding: 6px 4px;
+        img {
+            width: 22px;
+            height: 22px;
+        }
+        &:hover {
+            border: 1px solid #eb7350;
+            background: #fff9ec;
+        }
+    }
+
+    .file-item,
+    .add-btn {
+        text-align: center;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        position: relative;
+        border: 1px solid #e8e8e8;
+        vertical-align: top;
+        .fa-plus {
+            font-size: 60px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .fa-times {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+    .add-btn {
+        padding: 20px 0;
+    }
+}
+.dialog-upload {
+    z-index: 99;
 }

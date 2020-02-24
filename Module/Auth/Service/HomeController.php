@@ -6,6 +6,7 @@ use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
 
 
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 
 
@@ -17,10 +18,18 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction() {
+    public function indexAction(Request $request) {
         $user = new UserModel();
         if ($user->load() && $user->signIn()) {
-            return $this->redirect(app('request')->get('redirect_uri', '/'));
+            return $this->redirect($request->get('redirect_uri', '/'));
+        }
+        if ($request->isAjax() && $request->isGet()) {
+            return $this->json([
+                'code' => 302,
+                'status' => __('failure'),
+                'errors' => '重定向',
+                'url' => url(['redirect_uri' => $request->referrer()])
+            ]);
         }
         $time = strtotime(date('Y-m-d 00:00:00'));
         $num = LoginLogModel::where('ip', app('request')->ip())

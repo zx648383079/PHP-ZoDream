@@ -28,3 +28,32 @@ use Zodream\Template\View;
         </div>
     </form>
 </div>
+
+<div class="dialog-emoji">
+    <div class="dialog-header">
+        <ul class="tab-header">
+            <li class="active">默认</li>
+        </ul>
+        <i class="fa fa-times"></i>
+    </div>
+    <div class="dialog-body">
+        <div class="tab-item active">
+            <div class="emoji-item" title="哼">
+                <img src="//img.t.sinajs.cn/t4/appstyle/expression/ext/normal/e3/2018new_weixioa02_org.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="dialog-upload">
+    <div class="dialog-header">
+        <span>请选择上传的文件</span>
+        <i class="fa fa-times"></i>
+    </div>
+    <div class="dialog-body">
+        
+        <div class="add-btn">
+            <i class="fa fa-plus"></i>
+        </div>
+    </div>
+</div>

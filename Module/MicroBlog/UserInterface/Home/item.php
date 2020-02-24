@@ -15,6 +15,17 @@ use Zodream\Template\View;
             <div class="content">
                 <?=$blog->content?>
             </div>
+            <?php if($blog->attachment):?>
+            <div class="attachment">
+                <ul class="<?=count($blog->attachment) > 1 ? 'media-min' : ''?>">
+                    <?php foreach($blog->attachment as $file):?>
+                    <li>
+                        <img src="<?=$file->thumb?>" alt="">
+                    </li>
+                    <?php endforeach;?>
+                </ul>
+            </div>
+            <?php endif;?>
         </div>
         <?php if($blog->forward_id > 0 && $blog->forward):?>
         <div class="forward-source">
