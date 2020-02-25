@@ -17,6 +17,12 @@ use Zodream\Template\View;
             </div>
             <?php if($blog->attachment):?>
             <div class="attachment">
+                <i class="fa fa-times"></i>
+                <div class="media-large">
+                    <img src="" alt="">
+                    <div class="media-prev"></div>
+                    <div class="media-next"></div>
+                </div>
                 <ul class="<?=count($blog->attachment) > 1 ? 'media-min' : ''?>">
                     <?php foreach($blog->attachment as $file):?>
                     <li>

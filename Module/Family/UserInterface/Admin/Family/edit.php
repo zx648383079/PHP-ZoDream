@@ -5,6 +5,10 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 
 $this->title = $model->id > 0 ? '编辑' : '新增'. '族人';
+$js = <<<JS
+bindEdit();
+JS;
+$this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>
@@ -26,7 +30,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '族人';
                 <?=Form::select('sex', ['其他', '女', '男'], true)?>
                 <?=Form::select('clan_id', [$clan_list], true)?>
                 <?=Form::select('parent_id', [$parent_list, ['请选择']])?>
-                <?=Form::select('mother_id', [$parent_list, ['请选择']])?>
+                <?=Form::select('mother_id', ['请选择'])?>
 
                 <!-- <div class="input-group">
                     <label for="parent_id">生父</label>
@@ -81,3 +85,5 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '族人';
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>
+
+<?php $this->extend('./dialog');?>

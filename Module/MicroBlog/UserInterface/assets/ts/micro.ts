@@ -166,5 +166,14 @@ function bindMicroPage() {
             <a class="btn" href="${url}">回复</a>
         </div>
     </div>`)
+    }).on('click', '.attachment li', function() {
+        let $this = $(this);
+        let box = $this.closest('.attachment');
+        box.addClass('media-slider');
+        box.find('.media-large img').attr('src', $this.find('img').attr('src'));
+    }).on('click', '.attachment .fa-times', function() {
+        $(this).closest('.attachment').removeClass('media-slider');
+    }).on('click', '.attachment .media-large img', function() {
+        $(this).closest('.attachment').removeClass('media-slider');
     });
 }

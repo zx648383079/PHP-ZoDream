@@ -59,6 +59,7 @@
             }
         }
         .attachment {
+            position: relative;
             li {
                 list-style: none;
                 display: inline-block;
@@ -73,6 +74,43 @@
                     height: 110px;
                     margin: 4px 0 0 4px;
                     position: relative;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+            .fa-times {
+                display: none;
+                position: absolute;
+                right: 5px;
+                top: 5px;
+            }
+            .media-large {
+                display: none;
+                position: relative;
+                img {
+                    cursor: zoom-out;
+                }
+            }
+            &.media-slider {
+                background-color: #f2f2f5;
+                padding-top: 30px;
+                .fa-times {
+                    display: block;
+                }
+                .media-large {
+                    display: block;
+                }
+                ul {
+                    display: none;
+                    &.media-min {
+                        display: block;
+                    }
+                }
+                li {
+                    width: 56px;
+                    height: 56px;
                 }
             }
         }

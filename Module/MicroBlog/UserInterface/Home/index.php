@@ -21,7 +21,9 @@ $this->registerCssFile([
 ?>
 
 <div class="micro-skin">
-    <?php $this->extend('./publish');?>
+    <?php if(!auth()->guest()):?>
+        <?php $this->extend('./publish');?>
+    <?php endif;?>
 
     <?php foreach($blog_list as $item):?>
         <?php $this->extend('./item', ['blog' => $item]);?>

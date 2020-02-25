@@ -1,7 +1,7 @@
-function bindEditQuestion(baseUri: string) {
+function bindEditQuestion() {
     let id = $('input[name=id]').val() || 0;
     $('select[name="type"]').change(function() {
-        $.get(baseUri + 'question/option', {
+        $.get(BASE_URI + 'question/option', {
             id,
             type: $(this).val()
         }, html => {
@@ -15,7 +15,7 @@ function bindEditQuestion(baseUri: string) {
             return;
         }
         let id = $('input[name=id]').val();
-        postJson(baseUri + 'question/check', {
+        postJson(BASE_URI + 'question/check', {
             id,
             title 
         }, res => {
@@ -113,3 +113,28 @@ function saveQuestion(baseUri: string, item: JQuery, cb?: (data: any) => void) {
         }
     });
 }
+
+function bindDatePicker(start: string = 'start_at', end: string = 'end_at', format: string = 'yyyy-mm-dd') {
+    let startBox = $('[name='+ start +']').datetimer({
+        format
+    });
+    if (end) {
+        $('[name='+ end +']').datetimer({
+            format,
+            min: startBox
+        });
+    }
+}
+
+function bindEditPage() {
+    bindDatePicker();
+    let box = $('.rule-box').on('click', '.fa-times', function() {
+        if (box.find('tbody tr').length === 1) {
+            return;
+        }
+        $(this).closest('tr').remove();
+    }).on('click', '.fa-plus', function() {
+        box.find('tbody').append(box.find('tbody tr')[0].outerHTML);
+    });
+}
+

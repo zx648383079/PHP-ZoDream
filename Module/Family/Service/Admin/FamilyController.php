@@ -3,6 +3,7 @@ namespace Module\Family\Service\Admin;
 
 use Module\Family\Domain\Model\ClanModel;
 use Module\Family\Domain\Model\FamilyModel;
+use Module\Family\Domain\Model\FamilySpouseModel;
 
 class FamilyController extends Controller {
 
@@ -59,5 +60,16 @@ class FamilyController extends Controller {
         return $this->jsonSuccess([
             'url' => $this->getUrl('family')
         ]);
+    }
+
+    public function spouseAction($id) {
+        $model = FamilyModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('族人不存在');
+        }
+        $items = FamilySpouseModel::where('family_id', $model->id)->pluck('spouse_id');
+        $items[] = $model->spouse_id;
+        $items = FamilyModel::whereIn('id', $items)->get();
+        return $this->jsonSuccess($items);
     }
 }
