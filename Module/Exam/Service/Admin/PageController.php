@@ -1,6 +1,7 @@
 <?php
 namespace Module\Exam\Service\Admin;
 
+use Module\Auth\Domain\Model\UserModel;
 use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\PageEvaluateModel;
 use Module\Exam\Domain\Model\PageModel;
@@ -46,10 +47,20 @@ class PageController extends Controller {
         ]);
     }
 
-    public function evaluateAction($id) {
+    public function evaluateAction($id, $keywords = null) {
         $page = PageModel::find($id);
-        $model_list = PageEvaluateModel::with('user')->orderBy('created_at', 'desc')->page();
-        return $this->show(compact('model_list', 'page'));
+        $model_list = PageEvaluateModel::with('user')
+            ->when(!empty($keywords), function ($query) {
+            $users = UserModel::where(function ($query) {
+                    PageEvaluateModel::search($query, 'name');
+                })->pluck('id');
+            if (empty($users)) {
+                $query->isEmpty();
+                return;
+            }
+            $query->whereIn('user_id', $users);
+        })->orderBy('created_at', 'desc')->page();
+        return $this->show(compact('model_list', 'page', 'keywords'));
     }
 
     public function questionAction($id) {

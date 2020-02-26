@@ -315,3 +315,41 @@ $success: #337ab7;
         }
     }
 }
+
+.container.page-box {
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 10px 10px 0 #ccc;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    .page-remark {
+        border-top: 3px dotted #ccc;
+    }
+    .page-info {
+        margin-bottom: 30px;
+        border-bottom: 1px dotted #ccc;
+        h2 {
+            text-align: center;
+            line-height: 50px;
+        }
+        p {
+            line-height: 30px;
+            span {
+                margin-right: 15px;
+            }
+            em {
+                font-style: normal;
+                font-weight: bold;
+            }
+        }
+    }
+    .page-score {
+        position: absolute;
+        top: 10px;
+        right: 20vw;
+        font-size: 120px;
+        color: rgba(255,0,0,.5);
+        transform: rotate(-30deg);
+    }
+}

@@ -8,28 +8,67 @@ use Module\Exam\Domain\Model\PageQuestionModel;
 
 class PageController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction($id) {
         $page = PageModel::find($id);
+        if (empty($page)) {
+            return $this->redirect('./');
+        }
         $evaluate = $page->createQuestion(auth()->id());
         if (empty($evaluate)) {
             return $this->redirect('./');
         }
         $question_list = PageQuestionModel::with('question')
             ->where('evaluate_id', $evaluate->id)->orderBy('id', 'asc')->get();
-        return $this->show(compact('page', 'evaluate', 'question_list'));
+        $items = [];
+        foreach ($question_list as $i => $item) {
+            $args = $item->format($i + 1, false);
+            $args['id'] = $item->id;
+            $args['your_answer'] = $item->answer;
+            $items[] = $args;
+        }
+        return $this->show(compact('page', 'evaluate', 'question_list', 'items'));
     }
 
-    public function saveAction($id, $answer) {
-        $model = PageQuestionModel::where('user_id', auth()->id())
-            ->where('id', $id)->first();
-        $model->answer = $answer;
+    public function saveAction($question) {
+        foreach ($question as $id => $item) {
+            $model = PageQuestionModel::where('user_id', auth()->id())
+                ->where('id', $id)->first();
+            $model->answer = $item['answer'];
+            $model->save();
+        }
         return $this->jsonSuccess();
     }
 
     public function checkAction($id) {
-        $model = PageEvaluateModel::where('user_id', auth()->id)->where('id', $id)->first();
+        /** @var PageEvaluateModel $model */
+        $model = PageEvaluateModel::where('user_id', auth()->id())->where('id', $id)->first();
         $model->status = 1;
-        return $this->jsonSuccess();
+        $model->spent_time = $model->getSpentTime();
+        $question_list = PageQuestionModel::with('question')
+            ->where('evaluate_id', $model->id)->orderBy('id', 'asc')->get();
+        foreach ($question_list as $item) {
+            $right = $item->question->check($item->answer, $item->content);
+            $item->status =
+                 $right
+                    ? PageQuestionModel::STATUS_SUCCESS : PageQuestionModel::STATUS_FAILURE;
+            if ($right) {
+                $model->right ++;
+                $model->score ++;
+            } else {
+                $model->wrong ++;
+            }
+            $item->save();
+        }
+        $model->save();
+        return $this->jsonSuccess([
+            'url' => url('./')
+        ], '交卷成功！');
     }
 
     public function historyAction($id) {
@@ -41,6 +80,14 @@ class PageController extends Controller {
         $page = PageModel::find($evaluate->page_id);
         $question_list = PageQuestionModel::with('question')
             ->where('evaluate_id', $evaluate->id)->orderBy('id', 'asc')->get();
-        return $this->show(compact('page', 'evaluate', 'question_list'));
+        $items = [];
+        foreach ($question_list as $i => $item) {
+            $args = $item->format($i + 1, true);
+            $args['id'] = $item->id;
+            $args['your_answer'] = $item->answer;
+            $args['right'] = $item->status == PageQuestionModel::STATUS_SUCCESS ? 1 : -1;
+            $items[] = $args;
+        }
+        return $this->show(compact('page', 'evaluate', 'question_list', 'items'));
     }
 }

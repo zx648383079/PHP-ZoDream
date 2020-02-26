@@ -62,7 +62,13 @@ function bindEditQuestion() {
 
 function bindDo(baseUri: string) {
     let panel = $('.question-panel').on('change', 'input,textarea', function() {
-        saveQuestion(baseUri, $(this).closest('.question-item'));
+        saveQuestion(baseUri + 'pager/save', $(this).closest('.question-item'));
+    });
+}
+
+function bindDoPage(baseUri: string) {
+    let panel = $('.question-panel').on('change', 'input,textarea', function() {
+        saveQuestion(baseUri + 'page/save', $(this).closest('.question-item'));
     });
 }
 
@@ -102,12 +108,12 @@ function questionData(item: JQuery): string {
     return data.join('&');
 }
 
-function saveQuestion(baseUri: string, item: JQuery, cb?: (data: any) => void) {
+function saveQuestion(uri: string, item: JQuery, cb?: (data: any) => void) {
     const data = questionData(item);
     if (data.length < 1) {
         return;
     }
-    postJson(baseUri + 'pager/save', data, res => {
+    postJson(uri, data, res => {
         if (res.code === 200) {
             cb && cb(res.data);
         }

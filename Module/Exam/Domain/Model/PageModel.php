@@ -78,7 +78,7 @@ class PageModel extends PageEntity {
         $data = [];
         foreach ($this->rule_value as $course_id => $types) {
             foreach ($types as $type => $count) {
-                $question_list = QuestionModel::where('type', $types)
+                $question_list = QuestionModel::where('type', $type)
                     ->where('course_id', $course_id)
                     ->orderBy('rand()')->limit($count)->get();
                 $data = array_merge($data, $question_list);
@@ -93,7 +93,7 @@ class PageModel extends PageEntity {
             ->where('page_id', $this->id)->orderBy('id', 'desc')
             ->first();
         if ($model && $model->status < 1 && ($this->limit_time === 0 ||
-                time() - $model->getAttributeSource('created_at') < $this->limit_time * 60)) {
+                $model->getSpentTime() < $this->limit_time * 60)) {
             return $model;
         }
         $model = PageEvaluateModel::create([

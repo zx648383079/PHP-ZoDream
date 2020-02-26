@@ -19,7 +19,7 @@ $this->extend('layouts/main')
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li>
             <a href="<?=$this->url('./')?>" >题库首页</a>
-        </li><li class="active">
+        </li><li>
             <a href="<?=$this->url('./course', ['id' => $course->id])?>" ><?=$course->name?></a>
         </li>
         <li class="active">

@@ -18,7 +18,17 @@ use Module\Exam\Domain\Entities\PageQuestionEntity;
  */
 class PageQuestionModel extends PageQuestionEntity {
 
+    const STATUS_NONE = 0;
+    const STATUS_SUCCESS = 1;
+    const STATUS_FAILURE = 2;
+
     public function question() {
         return $this->hasOne(QuestionModel::class, 'id', 'question_id');
+    }
+
+    public function format($i = 0, $finished = true) {
+        return $this->question->format($i,
+            $this->content,
+            $finished);
     }
 }
