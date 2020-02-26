@@ -16,8 +16,8 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Form::text('name', true)?>
     <?=Form::select('rule_type', ['随机选题', '固定题库'])?>
     <?=Form::text('limit_time')?>
-    <?=Form::text('start_at', true)?>
-    <?=Form::text('end_at', true)?>
+    <?=Form::text('start_at', true)->value($model->start_at)?>
+    <?=Form::text('end_at', true)->value($model->end_at)?>
     <div class="rule-box">
         <table>
             <thead>

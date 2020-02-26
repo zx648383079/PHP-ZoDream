@@ -48,6 +48,11 @@ class PageController extends Controller {
     public function checkAction($id) {
         /** @var PageEvaluateModel $model */
         $model = PageEvaluateModel::where('user_id', auth()->id())->where('id', $id)->first();
+        if ($model->status > 0) {
+            return $this->jsonSuccess([
+                'url' => url('./')
+            ], '交卷成功！');
+        }
         $model->status = 1;
         $model->spent_time = $model->getSpentTime();
         $question_list = PageQuestionModel::with('question')

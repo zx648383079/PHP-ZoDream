@@ -70,6 +70,39 @@ function bindDoPage(baseUri: string) {
     let panel = $('.question-panel').on('change', 'input,textarea', function() {
         saveQuestion(baseUri + 'page/save', $(this).closest('.question-item'));
     });
+    let counter = $('.time-counter');
+    let timer = setInterval(() => {
+        let diff = new Date().getTime() - new Date(counter.data('start')).getTime();
+        let limit = counter.data('limit');
+        if (!limit || limit < 1) {
+            counter.text('已耗时：' + formatTime(diff));
+            return;
+        }
+        diff = limit * 60000 - diff;
+        if (diff <= 0) {
+            clearInterval(timer);
+            $('.tool-bar a').trigger('click');
+            return;
+        }
+        counter.text('剩余时间：' + formatTime(diff));
+    }, 500);
+}
+
+function formatTime(time: number, format?: string): string {
+    if (isNaN(time)) {
+        time = 0;
+    }
+    time = Math.floor(time / 1000);
+    let s = time % 60,
+        m = format && format.indexOf('h') < 0 ? Math.floor(time / 60) : (Math.floor(time / 60) % 60),
+        h = Math.floor(time / 3600),
+        b = function(t) {
+            return t < 10 && t >= 0 ? '0' + t : t;
+        };
+    if (!format) {
+        return (h !== 0 ? b(h) + ':' : '') + b(m) + ':' + b(s);
+    }
+    return format.replace(/h+/, b(h)).replace(/i+/, b(m)).replace(/s+/, b(s));
 }
 
 function bindDoQuestion(baseUri: string) {
