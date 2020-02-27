@@ -68,6 +68,7 @@ $this->registerCssFile([
                 </div>
             </div>
         </footer>
+        <?php if(date('d') === 1 && auth()->guest()):?>
         <div class="dialog-cookie-tip">
             <div class="dialog-body">
                 <?=__('cookie tip')?>
@@ -77,6 +78,7 @@ $this->registerCssFile([
                 <button class="btn">OK</button>
             </div>
         </div>
+        <?php endif;?>
         <?=$this->footer()?>
    </body>
 </html>

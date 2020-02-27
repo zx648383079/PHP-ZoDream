@@ -5,7 +5,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
-
+use Module\Blog\Domain\Events\BlogUpdate;
 
 class BlogController extends Controller {
 
@@ -76,6 +76,7 @@ class BlogController extends Controller {
             }
             BlogModel::where('parent_id', $model->id)->update($data);
         }
+        event(new BlogUpdate($model, time()));
         return $this->jsonSuccess([
             'url' => $this->getUrl('blog')
         ]);
