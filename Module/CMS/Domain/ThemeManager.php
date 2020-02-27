@@ -10,7 +10,7 @@ use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Module;
 use Module\Forum\Domain\Model\ForumModel;
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;

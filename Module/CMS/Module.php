@@ -5,7 +5,7 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\Scene\SingleScene;
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {

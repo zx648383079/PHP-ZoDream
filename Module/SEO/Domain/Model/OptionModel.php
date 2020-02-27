@@ -1,10 +1,8 @@
 <?php
-namespace Module\Template\Domain\Model\Base;
+namespace Module\SEO\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Database\Command;
 use Zodream\Helpers\Json;
-
 
 /**
  * Class OptionModel
@@ -17,10 +15,10 @@ use Zodream\Helpers\Json;
  * @property string $default_value
  * @property string $value
  * @property integer $position
-*/
+ */
 class OptionModel extends Model {
-	public static function tableName() {
-        return 'base_option';
+    public static function tableName() {
+        return 'seo_option';
     }
 
     protected function rules() {
@@ -51,7 +49,7 @@ class OptionModel extends Model {
     }
 
     public function children() {
-	    return $this->hasMany(static::class, 'parent_id', 'id');
+        return $this->hasMany(static::class, 'parent_id', 'id');
     }
 
     /**
@@ -59,9 +57,9 @@ class OptionModel extends Model {
      * @param $code
      * @return string
      */
-	public static function findCode($code) {
-		return static::where('code', $code)->value('value');
-	}
+    public static function findCode($code) {
+        return static::where('code', $code)->value('value');
+    }
 
     /**
      * 获取设置并解码
@@ -85,7 +83,7 @@ class OptionModel extends Model {
      * @return integer
      * @throws \Exception
      */
-	public static function insertOrUpdate($code, $value, $name) {
+    public static function insertOrUpdate($code, $value, $name) {
         $id = static::where('code', $code)->value('id');
         if (!empty($id)) {
             return static::where('id', $id)->update([

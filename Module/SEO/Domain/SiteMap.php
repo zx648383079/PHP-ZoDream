@@ -1,5 +1,5 @@
 <?php
-namespace Infrastructure;
+namespace Module\SEO\Domain;
 
 use Zodream\Helpers\Time;
 use Zodream\Service\Factory;

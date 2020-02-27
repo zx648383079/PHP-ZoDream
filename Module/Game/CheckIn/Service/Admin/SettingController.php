@@ -1,7 +1,7 @@
 <?php
 namespace Module\Game\CheckIn\Service\Admin;
 
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Helpers\Json;
 
 class SettingController extends Controller {

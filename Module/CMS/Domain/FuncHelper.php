@@ -7,7 +7,7 @@ use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;

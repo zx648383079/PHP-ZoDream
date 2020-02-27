@@ -5,7 +5,7 @@ use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Module;
 use Module\ModuleController;
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Service\Factory;
 use Zodream\Template\Engine\ParserCompiler;

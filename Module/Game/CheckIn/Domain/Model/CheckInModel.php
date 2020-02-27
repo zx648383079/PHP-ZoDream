@@ -4,7 +4,7 @@ namespace Module\Game\CheckIn\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Helpers\Json;
 
 /**

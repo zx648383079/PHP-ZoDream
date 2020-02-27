@@ -4,7 +4,7 @@ namespace Module\Shop\Service\Admin\Plugin;
 
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Service\Admin\Controller;
-use Module\Template\Domain\Model\Base\OptionModel;
+use Module\SEO\Domain\Model\OptionModel;
 use Zodream\ThirdParty\ALi\TaoBaoKe;
 
 class TbkController extends Controller {
