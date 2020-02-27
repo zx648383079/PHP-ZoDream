@@ -1,74 +1,68 @@
 <?php
-namespace Module\MicroBlog\Domain\Model;
+namespace Module\Code\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
 
 /**
-* Class MicroBlogModel
+ * Class CodeCodeModel
  * @property integer $id
  * @property integer $user_id
  * @property string $content
+ * @property string $language
  * @property integer $recommend_count
- * @property integer $forward_count
- * @property integer $comment_count
  * @property integer $collect_count
- * @property integer $forward_id
+ * @property integer $comment_count
  * @property string $source
  * @property integer $created_at
  * @property integer $updated_at
-*/
-class MicroBlogModel extends Model {
+ */
+class CodeModel extends Model {
 
-    protected $append = ['is_recommended', 'attachment', 'is_collected'];
+    protected $append = ['is_recommended', 'tags', 'is_collected'];
 
 	public static function tableName() {
-        return 'micro_blog';
+        return 'code_code';
     }
 
     protected function rules() {
-        return [
+		return [
             'user_id' => 'int',
-            'content' => 'required|string:0,140',
+            'content' => 'required',
+            'language' => 'string:0,20',
             'recommend_count' => 'int',
-            'forward_count' => 'int',
-            'comment_count' => 'int',
             'collect_count' => 'int',
-            'forward_id' => 'int',
-            'source' => 'string:0,30',
+            'comment_count' => 'int',
+            'source' => 'string:0,255',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
-    }
+	}
 
-    protected function labels() {
-        return [
+	protected function labels() {
+		return [
             'id' => 'Id',
             'user_id' => 'User Id',
             'content' => 'Content',
+            'language' => 'Language',
             'recommend_count' => 'Recommend Count',
-            'forward_count' => 'Forward Count',
-            'comment_count' => 'Comment Count',
             'collect_count' => 'Collect Count',
-            'forward_id' => 'Forward Id',
+            'comment_count' => 'Comment Count',
             'source' => 'Source',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
-    }
+	}
+
 
 
     public function user() {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-    public function forward() {
-	    return $this->hasOne(static::class, 'id', 'forward_id');
-    }
-
-    public function attachment() {
-	    return $this->hasMany(AttachmentModel::class, 'micro_id', 'id');
+    public function tags() {
+	    return $this->hasMany(TagModel::class, 'code_id', 'id');
     }
 
     public function getIsRecommendedAttribute() {

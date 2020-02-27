@@ -11,7 +11,11 @@ use Zodream\Template\View;
         </div>
         <div>
             <div class="name"><?=$blog->user->name?></div>
-            <p><span class="time"><?=$blog->created_at?></span> <span class="from">来自<?=$blog->source ?: 'web'?></span></p>
+            <p><span class="time"><?=$blog->created_at?></span> <span class="from">来自<?=$blog->source ?: 'web'?></span>
+            <?php if($blog->user_id == auth()->id()):?>
+            <a class="remove" href="javascript:;" data-action="remove">[删除]</a>
+            <?php endif;?>
+        </p>
             <div class="content">
                 <?=$blog->content?>
             </div>
@@ -45,7 +49,7 @@ use Zodream\Template\View;
     </div>
     
     <div class="ations">
-        <a href="javascript:;">收藏</a>
+        <a class="<?=$blog->is_collected ? 'active' : ''?>"  data-action="collect" href="javascript:;">收藏</a>
         <a data-action="dialog" href="<?=$this->url('./forward_mini', ['id' => $blog->id])?>">转发<?=$blog->forward_count > 0 ? $blog->forward_count : null?></a>
         <a data-action="comment" href="javascript:;">评论<?=$blog->comment_count > 0 ? $blog->comment_count : null?></a>
         <a class="<?=$blog->is_recommended ? 'active' : ''?>" data-action="recommend" href="javascript:;">赞<?=$blog->recommend_count > 0 ? $blog->recommend_count : null?></a>

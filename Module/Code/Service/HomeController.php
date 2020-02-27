@@ -1,8 +1,9 @@
 <?php
-namespace Module\MicroBlog\Service;
+namespace Module\Code\Service;
 
-use Module\MicroBlog\Domain\Model\MicroBlogModel;
-use Module\MicroBlog\Domain\Repositories\MicroRepository;
+use Module\Code\Domain\Model\CodeModel;
+use Module\Code\Domain\Model\TagModel;
+use Module\Code\Domain\Repositories\CodeRepository;
 use Module\ModuleController;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Config;
@@ -14,13 +15,13 @@ class HomeController extends ModuleController {
         return [
             'recommend' => '@',
             'create' => '@',
-            'forward' => '@',
+            'collect' => '@',
             '*' => '*'
         ];
     }
 
     public function indexAction($sort = 'new', $keywords = null) {
-        $blog_list  = MicroBlogModel::with('user', 'attachment')
+        $code_list  = CodeModel::with('user', 'tags')
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
                     return $query->orderBy('created_at', 'desc');
@@ -29,17 +30,24 @@ class HomeController extends ModuleController {
                     return $query->orderBy('recommend_count', 'desc');
                 }
             })->when(!empty($keywords), function ($query) {
-                MicroBlogModel::search($query, ['content']);
+                $ids = TagModel::where(function($query) {
+                    TagModel::search($query, ['content']);
+                })->pluck('code_id');
+                if (empty($ids)) {
+                    $query->isEmpty();
+                    return;
+                }
+                $query->whereIn('id', $ids);
             })
             ->page();
-        return $this->show(compact('blog_list', 'keywords'));
+        return $this->show(compact('code_list', 'keywords'));
     }
 
     public function createAction(Request $request) {
-        if (!MicroRepository::canPublish()) {
+        if (!CodeRepository::canPublish()) {
             return $this->jsonFailure('发送过于频繁！');
         }
-        $model = MicroRepository::create($request->get('content'), $request->get('file'));
+        $model = CodeRepository::create($request->get('content'), $request->get('tags'), $request->get('language'));
         if (!$model) {
             return $this->jsonFailure('发送失败');
         }
@@ -54,7 +62,7 @@ class HomeController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::recommend($id);
+            $model = CodeRepository::recommend($id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
@@ -66,25 +74,7 @@ class HomeController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::collect($id);
-        }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
-        }
-        return $this->jsonSuccess($model);
-    }
-
-    public function forwardMiniAction($id) {
-        $this->layout = false;
-        $blog = MicroBlogModel::find($id);
-        return $this->show(compact('blog'));
-    }
-
-    public function forwardAction($id, $content, $is_comment = false) {
-        if (!app('request')->isAjax()) {
-            return $this->redirect('./');
-        }
-        try {
-            $model = MicroRepository::forward($id, $content, $is_comment);
+            $model = CodeRepository::collect($id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
@@ -96,7 +86,7 @@ class HomeController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::delete($id);
+            $model = CodeRepository::delete($id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }

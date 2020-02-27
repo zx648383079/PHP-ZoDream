@@ -1,8 +1,8 @@
 <?php
-namespace Module\MicroBlog\Service;
+namespace Module\Code\Service;
 
-use Module\MicroBlog\Domain\Model\CommentModel;
-use Module\MicroBlog\Domain\Repositories\MicroRepository;
+use Module\Code\Domain\Model\CommentModel;
+use Module\Code\Domain\Repositories\CodeRepository;
 use Module\ModuleController;
 use Zodream\Service\Config;
 
@@ -19,7 +19,7 @@ class CommentController extends ModuleController {
 
     public function indexAction($id, $sort = 'created_at', $order = 'desc') {
         $comment_list = CommentModel::where([
-            'micro_id' => intval($id),
+            'code_id' => intval($id),
             'parent_id' => 0,
         ])->orderBy($sort, $order)->page();
         return $this->show(compact('comment_list', 'id'));
@@ -29,7 +29,7 @@ class CommentController extends ModuleController {
         list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
         $comment_list = CommentModel::with('replies')
             ->where([
-            'micro_id' => intval($id),
+            'code_id' => intval($id),
             'parent_id' => intval($parent_id)
         ])->orderBy($sort, $order)->page();
         if ($parent_id > 0) {
@@ -39,19 +39,18 @@ class CommentController extends ModuleController {
     }
 
     public function saveAction($content,
-                               $micro_id,
+                               $code_id,
                                $parent_id = 0,
                                $is_forward = false) {
         try {
-            $model = MicroRepository::comment($content,
-                $micro_id,
-                $parent_id,
-                $is_forward);
+            $model = CodeRepository::comment($content,
+                $code_id,
+                $parent_id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
-            'url' => url('./comment', ['id' => $micro_id])
+            'url' => url('./comment', ['id' => $code_id])
         ]);
     }
 
@@ -60,7 +59,7 @@ class CommentController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::disagree($id);
+            $model = CodeRepository::disagree($id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
@@ -72,7 +71,7 @@ class CommentController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::agree($id);
+            $model = CodeRepository::agree($id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
@@ -84,13 +83,12 @@ class CommentController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::deleteComment($id);
+            $model = CodeRepository::deleteComment($id);
         }catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess($model);
     }
-
 
     public function redirectWithAuth() {
         return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);

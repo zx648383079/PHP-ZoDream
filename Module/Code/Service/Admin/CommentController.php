@@ -1,14 +1,14 @@
 <?php
-namespace Module\MicroBlog\Service\Admin;
+namespace Module\Code\Service\Admin;
 
-use Module\MicroBlog\Domain\Model\CommentModel;
+use Module\Code\Domain\Model\CommentModel;
 
 class CommentController extends Controller {
 
-    public function indexAction($micro_id = null, $keywords = null, $email = null, $name = null) {
-        $comment_list = CommentModel::with('micro')
-            ->when(!empty($micro_id), function ($query) use ($micro_id) {
-                $query->where('micro_id', intval($micro_id));
+    public function indexAction($code_id = null, $keywords = null, $email = null, $name = null) {
+        $comment_list = CommentModel::with('code')
+            ->when(!empty($code_id), function ($query) use ($code_id) {
+                $query->where('code_id', intval($code_id));
             })->when(!empty($email), function ($query) use ($email) {
                 $query->where('email', $email);
             })->when(!empty($keywords), function ($query) {

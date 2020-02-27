@@ -12,6 +12,18 @@
                 resize: none;
             }
         }
+        .lang-input {
+            display: inline-block;
+            input {
+                width: 60px;
+            }
+        }
+        .tag-input {
+            display: inline-block;
+            input {
+                width: 200px;
+            }
+        }
         .actions {
             position: relative;
             text-align: right;
@@ -112,6 +124,13 @@
                     width: 56px;
                     height: 56px;
                 }
+            }
+        }
+        .tags {
+            li {
+                display: inline-block;
+                background-color: #ccc;
+                padding: 2px 5px;
             }
         }
         .ations {

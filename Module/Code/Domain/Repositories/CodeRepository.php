@@ -1,14 +1,15 @@
 <?php
-namespace Module\MicroBlog\Domain\Repositories;
+namespace Module\Code\Domain\Repositories;
 
 use Module\Auth\Domain\Model\UserModel;
-use Module\MicroBlog\Domain\Model\AttachmentModel;
-use Module\MicroBlog\Domain\Model\CommentModel;
-use Module\MicroBlog\Domain\Model\LogModel;
-use Module\MicroBlog\Domain\Model\MicroBlogModel;
+use Module\Code\Domain\Model\TagModel;
+use Module\Code\Domain\Model\CollectModel;
+use Module\Code\Domain\Model\CommentModel;
+use Module\Code\Domain\Model\LogModel;
+use Module\Code\Domain\Model\CodeModel;
 use Exception;
 
-class MicroRepository {
+class CodeRepository {
 
     /**
      * 不允许频繁发布
@@ -16,39 +17,40 @@ class MicroRepository {
      * @throws \Exception
      */
     public static function canPublish() {
-        $time = MicroBlogModel::where('user_id', auth()->id())
+        $time = CodeModel::where('user_id', auth()->id())
             ->max('created_at');
-        return !$time || $time < time() - 300;
+        return !$time || $time < time() - 120;
     }
 
-    public static function create($content, $images = null, $source = 'web') {
-        $model = MicroBlogModel::create([
+    public static function create($content, $tags, $lang) {
+        $model = CodeModel::create([
             'user_id' => auth()->id(),
             'content' => $content,
-            'source' => $source
+            'language' => $lang,
         ]);
         if (!$model) {
             return $model;
         }
-        self::at($content, $model->id);
-        if (empty($images)) {
+        if (empty($tags)) {
             return $model;
         }
+        if (!is_array($tags)) {
+            $tags = explode(' ', $tags);
+        }
         $data = [];
-        foreach ($images as $image) {
-            if (empty($image)) {
+        foreach ($tags as $tag) {
+            if (empty($tag)) {
                 continue;
             }
             $data[] = [
-                'thumb' => $image,
-                'file' => $image,
-                'micro_id' => $model->id
+                'content' => $tag,
+                'code_id' => $model->id
             ];
         }
         if (empty($data)) {
             return $model;
         }
-        AttachmentModel::query()->insert($data);
+        TagModel::query()->insert($data);
         return $model;
     }
 
@@ -62,10 +64,9 @@ class MicroRepository {
      * @throws Exception
      */
     public static function comment($content,
-                                   $micro_id,
-                                   $parent_id = 0,
-                                   $is_forward = false) {
-        $model = MicroBlogModel::find($micro_id);
+                                   $code_id,
+                                   $parent_id = 0) {
+        $model = CodeModel::find($code_id);
         if (!$model) {
             throw new Exception('id 错误');
         }
@@ -73,49 +74,19 @@ class MicroRepository {
             'content' => $content,
             'parent_id' => $parent_id,
             'user_id' => auth()->id(),
-            'micro_id' => $model->id,
+            'code_id' => $model->id,
         ]);
         if (!$comment) {
             throw new Exception('评论失败');
         }
-        if ($is_forward) {
-            if ($model->forward_id > 0) {
-                $sourceUser = UserModel::where('id', $model->id)->first('name');
-                $content = sprintf('%s// @%s : %s', $content, $sourceUser->name, $model->content);
-            }
-            MicroBlogModel::create([
-                'user_id' => auth()->id(),
-                'content' => $content,
-                'forward_id' => $model->forward_id > 0 ? $model->forward_id :
-                    $model->id,
-                'forward_count' => 1,
-                'source' => 'web'
-            ]);
-            $model->forward_count ++;
-        }
-        self::at($content, $model->id);
         $model->comment_count ++;
         $model->save();
         return $comment;
     }
 
-    public static function collect($id) {
-        $model = MicroBlogModel::find($id);
-        if (!$model) {
-            throw new Exception('id 错误');
-        }
-        if ($model->user_id == auth()->id()) {
-            throw new Exception('自己无法收藏');
-        }
-        $res = self::toggleLog($id,
-            LogModel::ACTION_COLLECT, LogModel::TYPE_MICRO_BLOG);
-        $model->collect_count += $res ? 1 : -1;
-        $model->save();
-        return $model;
-    }
-
+    
     public static function delete($id) {
-        $model = MicroBlogModel::find($id);
+        $model = CodeModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');
         }
@@ -123,8 +94,8 @@ class MicroRepository {
             throw new Exception('无法删除');
         }
         $model->delete();
-        CommentModel::where('micro_id', $id)->delete();
-        AttachmentModel::where('micro_id', $id)->delete();
+        CommentModel::where('code_id', $id)->delete();
+        TagModel::where('code_id', $id)->delete();
         return true;
     }
 
@@ -133,12 +104,24 @@ class MicroRepository {
         if (!$comment) {
             throw new Exception('id 错误');
         }
-        $model = MicroBlogModel::find($comment->micro_id);
+        $model = CodeModel::find($comment->micro_id);
         if ($model->user_id != auth()->id() && $comment->user_id != auth()->id()) {
             throw new Exception('无法删除');
         }
         $comment->delete();
         $mdoel->comment_count --;
+        $model->save();
+        return $model;
+    }
+
+    public static function collect($id) {
+        $model = MicroBlogModel::find($id);
+        if (!$model) {
+            throw new Exception('id 错误');
+        }
+        $res = self::toggleLog($id,
+            LogModel::ACTION_COLLECT, LogModel::TYPE_MICRO_BLOG);
+        $model->collect_count += $res ? 1 : -1;
         $model->save();
         return $model;
     }
@@ -166,7 +149,7 @@ class MicroRepository {
     }
 
     public static function recommend($id) {
-        $model = MicroBlogModel::find($id);
+        $model = CodeModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');
         }
@@ -177,42 +160,6 @@ class MicroRepository {
         return $model;
     }
 
-    /**
-     * 转发
-     * @param $id
-     * @param $content
-     * @param bool $is_comment 是否并评论
-     * @return MicroBlogModel
-     * @throws Exception
-     */
-    public static function forward($id, $content, $is_comment = false) {
-        $source = MicroBlogModel::find($id);
-        if (!$source) {
-            throw new Exception('id 错误');
-        }
-        $model = MicroBlogModel::create([
-            'user_id' => auth()->id(),
-            'content' => $content,
-            'forward_id' => $source->id,
-            'forward_count' => 1,
-            'source' => 'web'
-        ]);
-        if (!$model) {
-            throw new Exception('转发失败');
-        }
-        if ($is_comment) {
-            CommentModel::create([
-                'content' => $content,
-                'user_id' => auth()->id(),
-                'micro_id' => $source->id,
-            ]);
-            $source->comment_count ++;
-        }
-        $source->forward_count ++;
-        $source->save();
-        self::at($content, $model->id);
-        return $model;
-    }
 
     /**
      * @param $id
@@ -290,14 +237,5 @@ class MicroRepository {
         $model->disagree ++;
         $model->save();
         return $model;
-    }
-
-    public static function at($content, $id) {
-        if (!preg_match_all('/@(\S+?)\s/', $content, $matches)) {
-            return;
-        }
-        foreach ($matches[1] as $name) {
-
-        }
     }
 }
