@@ -7,30 +7,71 @@ $this->set([
     'keywords' => __('site keywords'),
     'description' => __('site description')
 ]);
+$module_list = [
+    [
+        'blog',
+        __('blog')
+    ],
+    [
+        'doc',
+        __('Document')
+    ],
+    [
+        'tool',
+        __('Tool')
+    ],
+    [
+        'code',
+        __('Code Block')
+    ],
+    [
+        'exam',
+        __('Exam')
+    ]
+];
+$demo_list = [
+    [
+        'forum',
+        __('Forum')
+    ],
+    [
+        'micro',
+        __('Micro Blog')
+    ],
+    [
+        'book',
+        __('Book')
+    ],
+    [
+        'cms',
+        __('CMS')
+    ],
+    [
+        'finance',
+        __('Finance')
+    ],
+    [
+        'shop',
+        __('Shop')
+    ],
+    [
+        'task',
+        __('Task')
+    ],
+    // [
+    //     'wx',
+    //     __('WeChat')
+    // ]
+];
 ?>
 
 <div class="container">
     <div class="metro-grid">
-        <a href="<?=$this->url('blog')?>">
-            <?=__('blog')?>
+       <?php foreach($module_list as $item):?>
+       <a href="<?=$this->url($item[0])?>">
+            <?=$item[1]?>
         </a>
-        <a href="<?=$this->url('doc')?>">
-            <?=__('Document')?>
-        </a>
-        <a href="<?=$this->url('tool')?>">
-            <?=__('Tool')?>
-        </a>
-        <a href="<?=$this->url('forum')?>">
-            <?=__('Forum')?>(DEMO)
-        </a>
-        <a href="<?=$this->url('shop')?>">
-            <div class="name"><?=__('Shop')?>(DEMO)</div>
-            <p class="desc"><?=__('shop tip')?></p>
-        </a>
-        <a class="unknow" href="<?=$this->url('cms')?>">
-            <img src="<?=$this->asset('images/zd_seo.jpg')?>" alt="">
-            CMS(DEMO)
-        </a>
+       <?php endforeach;?>
     </div>
 
     <div class="row">
@@ -53,6 +94,22 @@ $this->set([
                     <?=$this->node('note-panel', ['limit' => 12])?>
                     <a href="<?=$this->url('./note')?>" class="more"><?=__('View More...')?></a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <?=__('Demo')?>
+            <small><?= __('Demo Tip') ?></small>
+        </div>
+        <div class="panel-body">
+            <div class="metro-grid">
+            <?php foreach($demo_list as $item):?>
+            <a href="<?=$this->url($item[0])?>">
+                    <?=$item[1]?>
+                </a>
+            <?php endforeach;?>
             </div>
         </div>
     </div>

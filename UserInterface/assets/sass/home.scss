@@ -168,8 +168,16 @@ footer {
         border-left: 5px solid $border;
         font-size: 20px;
         font-weight: 700;
+        small {
+            font-size: 12px;
+            font-weight: 200;
+            color: #767676;
+        }
     }
     .panel-body {
+        .metro-grid {
+            margin: 0;
+        }
         .list-item {
             display: grid;
             grid-template-columns: 1fr 100px;
@@ -500,6 +508,10 @@ footer {
 @media (max-width: 640px) {
     .metro-grid {
         a {
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 20px;
             &.unknow {
                 display: none;
             }
