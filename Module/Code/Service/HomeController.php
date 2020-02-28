@@ -20,8 +20,11 @@ class HomeController extends ModuleController {
         ];
     }
 
-    public function indexAction($sort = 'new', $keywords = null) {
+    public function indexAction($sort = 'new', $keywords = null, $id = 0) {
         $code_list  = CodeModel::with('user', 'tags')
+            ->when($id > 0, function($query) use ($id) {
+                $query->where('id', $id);
+            })
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
                     return $query->orderBy('created_at', 'desc');
@@ -29,7 +32,7 @@ class HomeController extends ModuleController {
                 if ($sort == 'recommend') {
                     return $query->orderBy('recommend_count', 'desc');
                 }
-            })->when(!empty($keywords), function ($query) {
+            })->when(!empty($keywords) && $id < 1, function ($query) {
                 $ids = TagModel::where(function($query) {
                     TagModel::search($query, ['content']);
                 })->pluck('code_id');
