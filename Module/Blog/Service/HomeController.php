@@ -94,7 +94,7 @@ class HomeController extends ModuleController {
         return $this->jsonSuccess($model->recommend);
     }
 
-    public function suggestAction($keywords) {
+    public function suggestionAction($keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
            BlogModel::search($query, 'title');
         })->limit(4)->get();

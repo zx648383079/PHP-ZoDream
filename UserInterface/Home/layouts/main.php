@@ -3,21 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 
-$js = <<<JS
-var footer = $('footer'),
-    diff = $(window).height() - footer.offset().top - footer.height();
-if (diff > 0) {
-    footer.css('margin-top', diff + 'px');
-}
-if (!$.cookie('c_t')) {
-    $('.dialog-cookie-tip').show();
-}
-$('.dialog-cookie-tip .btn').click(function() {
-    $.cookie('c_t', 1);
-    $(this).closest('.dialog-cookie-tip').hide();
-});
-JS;
-
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
@@ -29,8 +14,9 @@ $this->registerCssFile([
     '@jquery.cookie.js',
     '@jquery.lazyload.min.js',
     '@jquery.dialog.min.js',
-    '@main.min.js'
-])->registerJs($js, View::JQUERY_READY);
+    '@main.min.js',
+    '@home.min.js'
+]);
 ?>
 <!DOCTYPE html>
 <html lang="<?=trans()->getLanguage()?>">
@@ -68,6 +54,18 @@ $this->registerCssFile([
                 </div>
             </div>
         </footer>
+        <div class="dialog-search">
+            <i class="dialog-close"></i>
+            <div class="dialog-body">
+                <form action="" method="get">
+                    <i class="input-search"></i>
+                    <input type="text" name="keywords" value="<?=$this->text(app('request')->get('keywords'))?>" placeholder="请输入关键字，按回车 / Enter 搜索" autocomplete="off">
+                    <i class="input-clear"></i>
+                </form>
+                <ul class="search-suggestion">
+                </ul>
+            </div>        
+        </div>
         <?php if(date('d') === 1 && auth()->guest()):?>
         <div class="dialog-cookie-tip">
             <div class="dialog-body">

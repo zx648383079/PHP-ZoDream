@@ -241,6 +241,25 @@
             background-color: #eaeaec;
         }
     }
+    &.code-container {
+        max-width: 1200px;
+        .micro-item {
+            .body {
+                display: block;
+                position: relative;
+                padding-left: 80px;
+                min-height: 200px;
+            }
+            .avatar {
+                position: absolute;
+                left: 10px;
+            }
+        }
+        .content {
+            overflow-x: auto;
+            width: 100%;
+        }
+    }
 }
 .forward-box {
     max-width: 400px;

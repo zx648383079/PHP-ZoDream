@@ -45,6 +45,16 @@ JS;
     }
 
     private function renderRight() {
+        $html = $this->renderAccount();
+        return <<<HTML
+<ul class="nav-right">
+    <li class="search-icon"><i class="fa fa-search"></i></li>
+    {$html}
+</ul>
+HTML;
+    }
+
+    private function renderAccount() {
         if (auth()->guest()) {
             return '';
         }
@@ -53,7 +63,6 @@ JS;
         $account_url = url('/auth/admin/account');
         $logout_url = url('/auth/logout');
         return <<<HTML
-<ul class="nav-right">
     <li>
         <a href="">{$name}</a>
         <div class="sub-nav">
@@ -70,7 +79,6 @@ JS;
             </ul>
         </div>
     </li>
-</ul>
 HTML;
     }
 }

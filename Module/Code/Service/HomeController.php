@@ -93,6 +93,13 @@ class HomeController extends ModuleController {
         return $this->jsonSuccess();
     }
 
+    public function suggestionAction($keywords = null) {
+        $data = TagModel::when(!empty($keywords), function($query) {
+            TagModel::search($query, ['content']);
+        })->groupBy('content')->limit(4)->pluck('content');
+        return $this->jsonSuccess($data);
+    }
+
     public function findLayoutFile() {
         if ($this->action !== 'index') {
             return false;

@@ -3,12 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = $forum->name;
-$this->registerCssFile([
-        '@forum.css',
-    ])
-    ->registerJsFile([
-        '@forum.min.js'
-    ]);
+$this->extend('layouts/header');
 ?>
 
 <div class="container">

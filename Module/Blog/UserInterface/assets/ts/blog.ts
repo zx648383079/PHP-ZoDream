@@ -35,7 +35,7 @@ function bindBlogPage() {
         if (!keywords) {
             return;
         }
-        $.getJSON(BASE_URI + 'home/suggest?keywords=' + keywords, function (data) {
+        $.getJSON(BASE_URI + 'home/suggestion?keywords=' + keywords, function (data) {
             if (data.code != 200) {
                 return;
             }

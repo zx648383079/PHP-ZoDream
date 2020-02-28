@@ -3,8 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Forum\Domain\Parsers\Parser;
 /** @var $this View */
-$this->registerCssFile('@forum.css')
-    ->registerJsFile('@forum.min.js');
 ?>
 <div class="post-list">
     <?php foreach($post_list as $item):?>

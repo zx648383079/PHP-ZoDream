@@ -9,7 +9,7 @@ use Zodream\Template\View;
         <div class="avatar">
             <img src="<?=$code->user->avatar?>" alt="">
         </div>
-        <div>
+        <div class="main-body">
             <div class="name"><?=$code->user->name?></div>
             <p><span class="time"><?=$code->created_at?></span>
                 <span class="lang"><?=$this->text($code->language)?></span>
@@ -18,10 +18,9 @@ use Zodream\Template\View;
                 <?php endif;?>
             </p>
             <div class="content">
-                <pre>
-                    <code language="language-<?=strtolower($this->text($code->language))?>"><?=$this->text($code->content)?></code>
+                <pre class="line-numbers">
+                    <code class="language-<?=strtolower($this->text($code->language))?>"><?=$this->text($code->content)?></code>
                 </pre>
-                
             </div>
             <?php if($code->tags):?>
             <div class="tags">

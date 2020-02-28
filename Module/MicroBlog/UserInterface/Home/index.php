@@ -28,4 +28,8 @@ $this->registerCssFile([
     <?php foreach($blog_list as $item):?>
         <?php $this->extend('./item', ['blog' => $item]);?>
     <?php endforeach;?>
+
+    <div class="micro-footer">
+        <?=$blog_list->getLink()?>
+    </div>
 </div>

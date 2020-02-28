@@ -2,3 +2,16 @@
     width: $width;
     height: $height;
 }
+
+@mixin icon($code, $size: 16px) {
+    display: inline-block;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: inherit;
+    text-rendering: auto;
+    font-style: normal;
+    font-size: $size;
+    &::before {
+        content: $code;
+    }
+}

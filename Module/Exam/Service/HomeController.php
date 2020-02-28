@@ -10,4 +10,11 @@ class HomeController extends Controller {
             ->where('parent_id', intval($id))->get();
         return $this->show(compact('course_list'));
     }
+
+    public function suggestionAction($keywords = null) {
+        $data = CourseModel::when(!empty($keywords), function ($query) {
+            CourseModel::search($query, 'name');
+         })->limit(4)->get();
+        return $this->jsonSuccess($data);
+    }
 }

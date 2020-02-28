@@ -2,8 +2,6 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerCssFile('@forum.css')
-    ->registerJsFile('@forum.min.js');
 ?>
 <div class="thread-item-header">
     <div class="name">

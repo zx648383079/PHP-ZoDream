@@ -17,8 +17,14 @@ use Zodream\Html\Tree;
  */
 class CourseModel extends CourseEntity {
 
+    protected $append = ['url'];
+
     public function children() {
         return $this->hasMany(static::class, 'parent_id', 'id');
+    }
+
+    public function getUrlAttribute() {
+	    return url('./course', ['id' => $this->id]);
     }
 
     public static function tree() {

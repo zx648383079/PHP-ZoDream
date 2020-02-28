@@ -9,10 +9,12 @@ JS;
 $this->registerCssFile([
     '@dialog.css',
     '@animate.min.css',
+    '@prism.css',
     '@micro.css'])
     ->registerJsFile([
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
+        '@prism.js',
         '@main.min.js',
         '@micro.min.js'
     ])
@@ -20,7 +22,7 @@ $this->registerCssFile([
     ->registerJs($js, View::JQUERY_READY);
 ?>
 
-<div class="micro-skin">
+<div class="micro-skin code-container">
     <?php if(!auth()->guest()):?>
         <?php $this->extend('./publish');?>
     <?php endif;?>
@@ -28,4 +30,8 @@ $this->registerCssFile([
     <?php foreach($code_list as $item):?>
         <?php $this->extend('./item', ['code' => $item]);?>
     <?php endforeach;?>
+
+    <div class="micro-footer">
+        <?=$code_list->getLink()?>
+    </div>
 </div>
