@@ -6,8 +6,12 @@ use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookHistoryModel;
+use Module\Book\Domain\Model\BookListModel;
 use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Model\BookRoleModel;
+use Module\Book\Domain\Model\ListItemModel;
+use Module\Book\Domain\Model\RoleRelationModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -73,6 +77,33 @@ class CreateBookTables extends Migration {
             $table->set('book_id')->int()->notNull();
             $table->set('hits')->int()->defaultVal(0);
             $table->set('created_at')->date()->notNull();
+        })->append(BookRoleModel::tableName(), function(Table $table) {
+            $table->setComment('小说角色');
+            $table->set('id')->pk()->ai();
+            $table->set('book_id')->int()->notNull();
+            $table->set('name')->varchar(50)->notNull();
+            $table->set('avatar')->varchar(200)->defaultVal('');
+            $table->set('description')->varchar(200)->defaultVal('');
+        })->append(RoleRelationModel::tableName(), function(Table $table) {
+            $table->setComment('小说角色关系');
+            $table->set('id')->pk()->ai();
+            $table->set('role_id')->int()->notNull();
+            $table->set('title')->varchar(50)->notNull();
+            $table->set('role_link')->int()->notNull();
+        })->append(BookListModel::tableName(), function(Table $table) {
+            $table->setComment('书单');
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('title')->varchar(50)->notNull();
+            $table->set('description')->varchar(200)->defaultVal('');
+            $table->timestamps();
+        })->append(ListItemModel::tableName(), function(Table $table) {
+            $table->setComment('书单书籍');
+            $table->set('id')->pk()->ai();
+            $table->set('list_id')->int()->notNull();
+            $table->set('book_id')->int()->notNull();
+            $table->set('remark')->varchar(200)->defaultVal('');
+            $table->timestamps();
         });
         parent::up();
     }

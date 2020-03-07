@@ -8,15 +8,23 @@ use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
 use Zodream\Database\Command;
+use Zodream\Disk\Directory;
+use Zodream\Disk\File;
+use Zodream\Disk\FileObject;
 use Zodream\Disk\FileSystem;
-
 use Zodream\Helpers\Str;
-
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
-
 use Exception;
 
 class DiskController extends Controller {
+
+    protected function rules() {
+        return [
+            'import' => 'cli',
+            '*' => '@'
+        ];
+    }
     
     public function indexAction() {
         $role = [];
@@ -48,8 +56,8 @@ class DiskController extends Controller {
         return $this->jsonSuccess($data);
     }
 
-    public function deleteAction() {
-        $id = app('request')->get('id');
+    public function deleteAction(Request $request) {
+        $id = $request->get('id');
         if (empty($id)) {
             return $this->jsonFailure('不能为空！');
         }
@@ -61,8 +69,8 @@ class DiskController extends Controller {
         return $this->jsonSuccess();
     }
 
-    public function shareAction() {
-        $data = app('request')->get('id,user,mode 0,end_at');
+    public function shareAction(Request $request) {
+        $data = $request->get('id,user,mode 0,end_at');
         if (empty($data['id'])) {
             return $this->jsonFailure('不能为空！');
         }
@@ -124,10 +132,10 @@ class DiskController extends Controller {
     /**
      * 增加文件夹
      */
-    public function createAction() {
+    public function createAction(Request $request) {
         $model = new DiskModel();
-        $model->name = app('request')->get('name');
-        $model->parent_id = intval(app('request')->get('parent_id', 0));
+        $model->name = $request->get('name');
+        $model->parent_id = intval($request->get('parent_id', 0));
         $model->created_at = $model->updated_at = time();
         $model->user_id = auth()->id();
         $model->file_id = 0;
@@ -140,8 +148,8 @@ class DiskController extends Controller {
         return $this->jsonSuccess($model->toArray());
     }
 
-    function renameAction() {
-        $data = app('request')->get('id,name');
+    function renameAction(Request $request) {
+        $data = $request->get('id,name');
         $model = DiskModel::find($data['id']);
         if (empty($model)) {
             return $this->jsonFailure('选择错误的文件！');
@@ -157,8 +165,8 @@ class DiskController extends Controller {
         return $this->jsonSuccess($model);
     }
 
-    function checkAction() {
-        $data = app('request')->get('md5,name,parent_id');
+    function checkAction(Request $request) {
+        $data = $request->get('md5,name,parent_id');
         if (empty($data['md5']) || empty($data['name'])) {
             return $this->jsonFailure('不能为空！');
         }
@@ -182,8 +190,8 @@ class DiskController extends Controller {
         return $this->jsonSuccess($disk);
     }
 
-    public function addAction() {
-        $data = app('request')->get('name,md5,size,parent_id 0,type,temp');
+    public function addAction(Request $request) {
+        $data = $request->get('name,md5,size,parent_id 0,type,temp');
         $file = $this->cacheFolder->file($data['md5']);
         if (!$file->exist() || $file->size() != $data['size']) {
             return $this->jsonFailure('FILE ERROR!');
@@ -222,9 +230,9 @@ class DiskController extends Controller {
         return $this->jsonSuccess($data);
     }
 
-    public function moveAction() {
-        $id = app('request')->get('id');
-        $parent_id = intval(app('request')->get('parent'));
+    public function moveAction(Request $request) {
+        $id = $request->get('id');
+        $parent_id = intval($request->get('parent'));
         if (empty($id)) {
             return $this->jsonFailure('没有移动对象');
         }
@@ -244,8 +252,8 @@ class DiskController extends Controller {
         return $this->jsonSuccess('成功');
     }
 
-    public function copyAction() {
-        $id = app('request')->get('id');
+    public function copyAction(Request $request) {
+        $id = $request->get('id');
         $parent_id = intval(app('request')->get('parent'));
         if (empty($id)) {
             return $this->jsonFailure('没有移动对象');
@@ -271,6 +279,45 @@ class DiskController extends Controller {
             DiskModel::search($query, 'name', false, 'name');
         })->get('name', 'id');
         return $this->jsonSuccess($data);
+    }
+
+    public function importAction(Request $request) {
+       $file = $request->read('', '请输入文件夹：');
+       if (empty($file)) {
+           return '路径错误';
+       }
+       $folder = Factory::root()->directory($file);
+       if (!$folder->exist()) {
+           return '路径错误';
+       }
+       $this->importFolder($folder);
+        return '导入完成';
+    }
+
+    private function importFolder(Directory $directory) {
+        $directory->map(function (FileObject $file) {
+            if ($file->isDirectory()) {
+                $this->importFolder($file);
+                return;
+            }
+            /** @var File $file */
+            $fileModel = FileModel::create([
+                'name' => $file->getName(),
+                'extension' => FileModel::getType($file->getExtension()),
+                'md5' => $file->md5(),
+                'location' => $file->getFullName(),
+                'size' => $file->size(),
+            ]);
+            if (empty($fileModel)) {
+                return '';
+            }
+            $model = new DiskModel();
+            $model->user_id = auth()->id();
+            $model->file_id = $fileModel->id;
+            $model->name = $fileModel->name;
+            $model->parent_id = 0;
+            $model->addAsLast();
+        });
     }
 
     public function getUrl($file) {
