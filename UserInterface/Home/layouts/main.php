@@ -43,7 +43,7 @@ $this->registerCssFile([
             <div class="container">
                 <?=$this->node('friend-link')?>
                 <div class="copyright">
-                    
+                    <p>Copyright ©zodream.cn, All Rights Reserved.</p>
                     <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备16003508号</a>
                     <p>
                         <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43052402000190">

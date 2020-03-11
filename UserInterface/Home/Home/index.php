@@ -50,10 +50,10 @@ $demo_list = [
         'finance',
         __('Finance')
     ],
-    [
-        'shop',
-        __('Shop')
-    ],
+    // [
+    //     'shop',
+    //     __('Shop')
+    // ],
     [
         'task',
         __('Task')

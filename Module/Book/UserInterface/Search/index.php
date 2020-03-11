@@ -10,7 +10,7 @@ $this->extend('layouts/header');
 <!--body开始-->
 <div class="box-container local">当前位置：
     <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>&nbsp;>&nbsp;
-    <a href="<?=$this->url('./home/list')?>">搜索</a></div>
+    <a href="<?=$this->url('./search/list')?>">搜索“<?= $this->text($keywords)?>”</a></div>
 <div class="clear"></div>
 <div class="box-container m_list list">
     <div class="Con">
@@ -18,7 +18,7 @@ $this->extend('layouts/header');
             <ul class="ul_m_list">
                 <?php foreach ($book_list as $key => $item):?>
                     <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
-                        <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->name?></a>]</div>
+                        <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->real_name?></a>]</div>
                         <div class="title">
                             <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
                             <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>

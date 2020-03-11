@@ -20,10 +20,11 @@ $this->registerCssFile('@book.css')->registerJs(sprintf('var BASE_URI = "%s";', 
             <div class="mainbox">
             <div class="left_con">
                 <ul>
-                <li><a href="<?=$this->url('./')?>" title=""><?=$this->site_name?></a></li>
-                <li><em class="ver">|</em><a href="<?=$this->url('./mobile')?>" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" target="_blank">手机版</a></li>
-                    <li><em class="ver">|</em><a href="<?=$this->url('./search/list', ['status' => 2])?>" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li>
-                    <li><em class="ver">|</em><a href="<?=$this->url('./search/download')?>" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>
+                    <li><a href="<?=$this->url('./')?>" title=""><?=$this->site_name?></a></li>
+                    <li><em class="ver">|</em><a href="<?=$this->url('./mobile')?>" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" >手机版</a></li>
+                    <li><em class="ver">|</em><a href="<?=$this->url('./list')?>" class="name" style="color:#F00;" title="书单" >书单</a></li>
+                    <li><em class="ver">|</em><a href="<?=$this->url('./search/list', ['status' => 2])?>" class="name" style="color:#F00;" title="完本小说" >完本小说</a></li>
+                    <li><em class="ver">|</em><a href="<?=$this->url('./search/download')?>" class="name" style="color:#F00;" title="小说下载" >小说下载</a></li>
                 </ul>
             </div>
             <div class="right_con">
@@ -46,13 +47,13 @@ $this->registerCssFile('@book.css')->registerJs(sprintf('var BASE_URI = "%s";', 
         <div class="box-container h">
         <div class="header">
             <div class="top">
-            <div class="logo"><a href="<?=$this->url('./')?>" title="<?=$this->site_name?>-搜刮好东西"><img src="/assets/images/logo.png" alt="<?=$this->site_name?>-搜刮好东西" /></a></div>
+            <div class="logo"><a href="<?=$this->url('./')?>" title="<?=$this->site_name?>-搜刮好东西"><img src="/assets/images/wap_logo.png" alt="<?=$this->site_name?>-搜刮好东西" /></a></div>
             <div class="c_con">
             </div>
             <div class="s_box">
                 <div class="s_entry"></div>
-                <form name="searchform" id="searchform" method="get" target="_blank" action="<?=$this->url('./search')?>">
-                    <input name="keywords" id="searchword" type="text" maxlength="18" />
+                <form name="searchform" id="searchform" method="get"  action="<?=$this->url('./search')?>">
+                    <input name="keywords" id="searchword" type="text" maxlength="18" value="<?=isset($keywords) ? $this->text($keywords) : ''?>"/>
                     <input type="submit" value="搜索" id="s_btn" />
                 </form>
                 <div class="hotword">

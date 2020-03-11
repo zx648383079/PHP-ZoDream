@@ -122,6 +122,10 @@ class UserModel extends BaseModel {
 	    return !empty($email) && self::where('email', $email)->count() < 1;
     }
 
+    public static function getRememberTokenName() {
+        return 'token';
+    }
+
     /**
      * @param $id
      * @return UserModel|boolean

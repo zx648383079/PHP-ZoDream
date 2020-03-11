@@ -1,7 +1,7 @@
 <?php
 namespace Module\Book\Domain\Repositories;
 
-use Module\Book\Domain\Model\BookLogModel;
+use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookPageModel;
 
@@ -21,7 +21,7 @@ class BookRepository {
                 $query->where('cat_id', intval($category));
             });
         return !empty($top) ?
-            BookLogModel::getPage($query, $top, $page, $per_page)
+            BookClickLogModel::getPage($query, $top, $page, $per_page)
             : $query->page($per_page);
     }
 }

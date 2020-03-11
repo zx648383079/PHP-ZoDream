@@ -3430,4 +3430,123 @@ body.article .Con.box_con .box_box {
     background: #bf2c24;
 }
 
+.book-list-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    grid-gap: 10px;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    .thumb {
+        width: 160px;
+        height: 120px;
+        position: relative;
+        img {
+            position: absolute;
+            width: 84px;
+            height: 110px;
+            top: 5px;
+            left: 26px;
+            z-index: 66;
+            &:first-of-type,
+            &:last-of-type {
+                width: 68px;
+                height: 90px;
+                top: 15px;
+                z-index: 1;
+            }
+            &:first-of-type {
+                left: 0;
+            }
+            &:last-of-type {
+                left: 68px;
+            }
+        }
+    }
+    .info {
+        .title {
+            color: #333;
+            display: block;
+            font-weight: 700;
+            line-height: 1em;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .desc {
+            color: #777;
+            height: 70px;
+            overflow-y: hidden;
+        }
+        .info-footer {
+
+        }
+        .info-count {
+            float: right;
+        }
+    }
+}
+
+.book-list-info {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px 0 20px 30px;
+    .title {
+        color: #333;
+        font-size: 22px;
+        font-weight: bold;
+    }
+    .desc {
+        min-height: 80px;
+    }
+    .info-count {
+
+    }
+}
+.list-book-item {
+    padding: 20px 30px 0;
+    position: relative;
+    background-color: #fff;
+    .thumb {
+        position: absolute;
+        img {
+            width: 90px;
+            height: 120px;
+        }
+    }
+    .info {
+        padding-left: 100px;
+        line-height: 30px;
+        .title {
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+    .remark {
+        min-height: 80px;
+        padding: 10px 0;
+    }
+    .action-box {
+        display: flex;
+        justify-content: space-around;
+        flex-flow: row nowrap;
+        line-height: 40px;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        a {
+            display: inline-block;
+            text-align: center;
+            width: 25%;
+            &:not(:last-child) {
+                border-right: 1px solid #333;
+            }
+            &.active {
+                color: #f00;
+            }
+        }
+    }
+}
+
 @import "read";

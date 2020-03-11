@@ -23,9 +23,9 @@ $this->registerCssFile('@font-awesome.min.css')
       <div class="left_con"> 
         <ul>
           <li><?=$site_name?></li>
-          <li><em class="ver">|</em><a href="<?=$this->url('./mobile')?>" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" target="_blank">手机版</a></li>
-            <li><em class="ver">|</em><a href="<?=$this->url('./search/list', ['status' => 2])?>" class="name" style="color:#F00;" title="完本小说" target="_blank">完本小说</a></li>
-            <li><em class="ver">|</em><a href="<?=$this->url('./search/download')?>" class="name" style="color:#F00;" title="小说下载" target="_blank">小说下载</a></li>
+          <li><em class="ver">|</em><a href="<?=$this->url('./mobile')?>" class="name" style="color:#F00; text-decoration:underline" title="在手机上阅读" >手机版</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./search/list', ['status' => 2])?>" class="name" style="color:#F00;" title="完本小说" >完本小说</a></li>
+            <li><em class="ver">|</em><a href="<?=$this->url('./search/download')?>" class="name" style="color:#F00;" title="小说下载" >小说下载</a></li>
         </ul>
       </div>
       <div class="right_con">

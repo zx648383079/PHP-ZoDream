@@ -5,6 +5,7 @@ use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
+use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookListModel;
 use Module\Book\Domain\Model\BookLogModel;
@@ -72,6 +73,14 @@ class CreateBookTables extends Migration {
             $table->set('progress')->tinyint(1)->defaultVal(0);
             $table->timestamps();
         })->append(BookLogModel::tableName(), function(Table $table) {
+            $table->setComment('小说记录统计');
+            $table->set('id')->pk()->ai();
+            $table->set('type')->tinyint(3)->defaultVal(0);
+            $table->set('id_value')->int(10)->notNull();
+            $table->set('user_id')->int(10)->notNull();
+            $table->set('action')->int(10)->notNull();
+            $table->timestamp('created_at');
+        })->append(BookClickLogModel::tableName(), function(Table $table) {
             $table->setComment('小说点击统计');
             $table->set('id')->pk()->ai();
             $table->set('book_id')->int()->notNull();
@@ -96,6 +105,9 @@ class CreateBookTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('title')->varchar(50)->notNull();
             $table->set('description')->varchar(200)->defaultVal('');
+            $table->set('book_count')->smallInt(5)->defaultVal(0);
+            $table->set('click_count')->smallInt(5)->defaultVal(0);
+            $table->set('collect_count')->smallInt(5)->defaultVal(0);
             $table->timestamps();
         })->append(ListItemModel::tableName(), function(Table $table) {
             $table->setComment('书单书籍');
@@ -103,6 +115,9 @@ class CreateBookTables extends Migration {
             $table->set('list_id')->int()->notNull();
             $table->set('book_id')->int()->notNull();
             $table->set('remark')->varchar(200)->defaultVal('');
+            $table->set('star')->tinyint(1)->defaultVal(10);
+            $table->set('agree')->smallInt(5)->defaultVal(0);
+            $table->set('disagree')->smallInt(5)->defaultVal(0);
             $table->timestamps();
         });
         parent::up();

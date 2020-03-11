@@ -20,6 +20,7 @@ trait LoginTrait {
         if (!$this->validate($this->signInRules())) {
             return false;
         }
+        /** @var UserModel $user */
         $user = $this->findByEmail($this->email);
         if (empty($user)) {
             $this->setError('email', '邮箱未注册！');
@@ -34,16 +35,15 @@ trait LoginTrait {
             return false;
         }
         if (!empty($this->rememberMe)) {
-            $token = Str::random(10);
+            $token = Str::random(60);
             $user->token = $token;
-            Cookie::set('token', $token, 3600 * 24 * 30);
         }
         if (!$user->save()) {
             $this->setError($user->getError());
             return false;
         }
         event(new Login($user, $_SERVER['HTTP_USER_AGENT'], app('request')->ip(), time()));
-        return $user->login();
+        return $user->login(!empty($this->rememberMe));
     }
 
     /**
