@@ -34,7 +34,7 @@ $this->registerJs($js);
         <div class="zd-tab-body">
             <div class="zd-tab-item active">
                 <?=Form::text('name', true)?>
-                <?=Form::text('series_number')?>
+                <?=Form::text('series_number')->after('<a data-action="sn" href="javascript:;">生成</a>')?>
                 <div class="input-group">
                     <label>分类</label>
                     <select name="cat_id" required>
@@ -82,6 +82,7 @@ $this->registerJs($js);
                 <?=Form::checkbox('is_hot')?>
                 <?=Form::checkbox('is_new')?>
                 <?=Form::radio('status', [10 => '上架', 0 => '下架'])?>
+                <?=Form::radio('type', ['普通商品', '卡密商品', '充值商品'])?>
             </div>
             <div class="zd-tab-item">
                 <?=Form::select('attribute_group_id', [$group_list])?>

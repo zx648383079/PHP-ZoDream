@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '留言反馈列表';
 ?>
 
-<table class="table table-toggle">
+<table class="table table-toggle table-hover">
     <thead>
     <tr>
         <th>ID</th>

@@ -37,7 +37,7 @@ $this->registerCssFile([
         'fa fa-cookie'
     ],
     [
-        '留言反馈',
+        '订阅',
         './@admin/subscribe',
         'fa fa-rss'
     ],

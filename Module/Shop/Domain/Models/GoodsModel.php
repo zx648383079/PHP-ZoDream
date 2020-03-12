@@ -38,6 +38,8 @@ use Zodream\Html\Page;
  * @property integer $is_hot
  * @property integer $is_new
  * @property integer $status
+ * @property integer $type
+ * @property string $admin_note
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at

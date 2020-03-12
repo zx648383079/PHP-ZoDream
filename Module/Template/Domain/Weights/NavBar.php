@@ -62,13 +62,19 @@ HTML;
         $bulletin_url = url('/auth/admin/bulletin');
         $account_url = url('/auth/admin/account');
         $logout_url = url('/auth/logout');
+        $bulletin_label = '私信';
+        $bulletin_count = auth()->user()->bulletin_count;
+        if ($bulletin_count > 0) {
+            $bulletin_label .= sprintf('(%d)', $bulletin_count);
+            $name .= '<i class="new-tip" title="您有新的消息"></i>';
+        }
         return <<<HTML
     <li>
-        <a href="">{$name}</a>
+        <a href="javascript:;">{$name}</a>
         <div class="sub-nav">
             <ul>
                 <li>
-                    <a href="{$bulletin_url}">私信</a>
+                    <a href="{$bulletin_url}">{$bulletin_label}</a>
                 </li>
                 <li>
                     <a href="{$account_url}">账号设置</a>

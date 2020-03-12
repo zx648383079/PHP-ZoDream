@@ -41,4 +41,8 @@ class BulletinUserModel extends Model {
         ];
     }
 
+    public function bulletin() {
+	    return $this->hasOne(BulletinModel::class, 'id', 'bulletin_id');
+    }
+
 }

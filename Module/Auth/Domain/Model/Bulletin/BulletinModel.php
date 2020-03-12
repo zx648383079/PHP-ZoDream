@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Model\Bulletin;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Service\Factory;
 
 /**
@@ -42,6 +43,10 @@ class BulletinModel extends Model {
         ];
     }
 
+    public function user() {
+	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
     /**
      * SEND MESSAGE TO ANY USERS
      *
@@ -53,19 +58,27 @@ class BulletinModel extends Model {
      * @throws \Exception
      */
 	public static function message($user, $title, $content, $type = 0) {
-	    $bulletin = new static();
-	    $bulletin->title = $title;
-	    $bulletin->content = $content;
-	    $bulletin->type = $type;
-	    $bulletin->create_at = time();
-	    $bulletin->user_id = auth()->id();
-		if (!$bulletin->save()) {
-			return false;
-		}
-		$data = [];
-		foreach ((array)$user as $item) {
-			$data[] = [$bulletin->id, $item];
-		}
-		return BulletinUserModel::query()->insert(['bulletin_id', 'user_id'], $data);
+        return static::send($user, $title, $content, $type, auth()->id());
 	}
+
+    public static function system($user, $title, $content, $type = 99) {
+        return static::send($user, $title, $content, $type, 0);
+    }
+
+    public static function send($user, $title, $content, $type = 0, $sender = 0) {
+        $bulletin = new static();
+        $bulletin->title = $title;
+        $bulletin->content = $content;
+        $bulletin->type = $type;
+        $bulletin->create_at = time();
+        $bulletin->user_id = $sender;
+        if (!$bulletin->save()) {
+            return false;
+        }
+        $data = [];
+        foreach ((array)$user as $item) {
+            $data[] = [$bulletin->id, $item, time()];
+        }
+        return BulletinUserModel::query()->insert(['bulletin_id', 'user_id', 'created_at'], $data);
+    }
 }

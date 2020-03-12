@@ -20,6 +20,7 @@ use Module\Shop\Domain\Models\Scene\Goods;
  * @property integer $status
  * @property integer $after_sale_status
  * @property integer $comment_id
+ * @property string $type_remark
  */
 class OrderGoodsModel extends Model {
 
@@ -41,6 +42,7 @@ class OrderGoodsModel extends Model {
             'status' => 'int',
             'after_sale_status' => 'int',
             'comment_id' => 'int',
+            'type_remark' => '',
         ];
     }
 

@@ -1,0 +1,13 @@
+.table-toggle {
+    tr {
+        background-color: #fff;
+        &.tr-child {
+            background-color: transparent;
+            td {
+                text-align: left;
+                padding-bottom: 20px;
+            }
+        }
+    }
+    
+}

@@ -2,6 +2,7 @@
 namespace Module\Shop\Domain\Entities;
 
 use Domain\Entities\Entity;
+use Zodream\Database\Model\Query;
 
 class GoodsEntity extends Entity {
     const STATUS_SALE = 10;
@@ -43,6 +44,8 @@ class GoodsEntity extends Entity {
             'is_hot' => 'int:0,9',
             'is_new' => 'int:0,9',
             'status' => 'int:0,99',
+            'type' => 'int:0,99',
+            'admin_note' => '',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -72,6 +75,8 @@ class GoodsEntity extends Entity {
             'is_hot' => '热门',
             'is_new' => '最新',
             'status' => '状态',
+            'type' => '商品类型',
+            'admin_note' => '管理员备注',
             'deleted_at' => 'Deleted At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

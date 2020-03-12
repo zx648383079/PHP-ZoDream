@@ -3,43 +3,20 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
-$this->title = '抽奖';
+$this->title = '返现';
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open('./@admin/activity/save')?>
     <?=Form::text('name', true)?>
     <?=Form::textarea('description')?>
-    <?=Form::select('type', ['刮刮乐', '转盘'])?>
 
-    <?=Form::text('覆盖区文字')?>
-    <?=Form::text('按钮文字')?>
+    <?=Form::select('type', ['全部商品', '指定商品'])?>
 
-    <?=Form::text('初始可抽次数')?>
-    <?=Form::text('积分可抽次数')?>
-    <?=Form::text('兑换所需积分')?>
+    <?=Form::text('限制')?>
+    <?=Form::text('订单金额满')?>
+    <?=Form::text('返现金额')?>
+    <?=Form::checkbox('是否要求5星好评')?>
 
-    <div>
-        <a href="">添加奖项</a> <p>最少添加2项，最多添加8项，所有奖项概率之和需为100%</p>
-        <table>
-            <tr>
-                <td>未中奖
-                    <input type="text">
-                </td>
-                <td>
-                    获奖概率
-                    <input type="text">%
-                </td>
-                <td>
-                    <input type="color">
-                </td>
-                <td>
-                    <i class="fa fa-up"></i>
-                    <i class="fa fa-down"></i>
-                    <i class="fa fa-times"></i>
-                </td>
-            </tr>
-        </table>
-    </div>
 
     <?=Form::text('start_at', true)?>
     <?=Form::text('end_at', true)?>

@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Model;
 
 
 use Module\Auth\Domain\Entities\Concerns\UserTrait;
+use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\Concerns\FindPasswordTrait;
 use Module\Auth\Domain\Model\Concerns\LoginTrait;
 use Module\Auth\Domain\Model\Concerns\PasswordTrait;
@@ -70,6 +71,10 @@ class UserModel extends BaseModel {
             return null;
         }
 	    return url()->asset($avatar);
+    }
+
+    public function getBulletinCountAttribute() {
+        return BulletinUserModel::where('user_id', $this->id)->where('status', 0)->count();
     }
 
 	public function setPassword($password) {

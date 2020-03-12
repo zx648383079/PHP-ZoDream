@@ -108,6 +108,15 @@ footer {
     .nav-bar-toggle {
         display: none;
     }
+    .new-tip {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: yellow;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+    }
 }
 
 
@@ -544,7 +553,9 @@ footer {
                 float: none;
             }
         }
-        
+        .new-tip {
+            display: none;
+        }
         &.open {
             ul {
                 display: block;

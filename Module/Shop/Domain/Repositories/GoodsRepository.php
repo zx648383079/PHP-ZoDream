@@ -7,6 +7,7 @@ use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsPageModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Zodream\Database\Model\Query;
+use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 
 class GoodsRepository {
@@ -97,5 +98,19 @@ class GoodsRepository {
             return;
         }
 
+    }
+
+    public static function generateSn() {
+        $sn = time();
+        $i = 0;
+        while ($i < 10) {
+            $i ++;
+            $sn = 'SN'.str_pad(Str::randomNumber(8), 8, '0', STR_PAD_LEFT );
+            $count = GoodsModel::where('series_number', $sn)->count();
+            if ($count < 1) {
+                break;
+            }
+        }
+        return $sn;
     }
 }

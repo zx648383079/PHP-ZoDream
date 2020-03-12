@@ -98,6 +98,9 @@ $this->title = '商品列表';
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
+                    <?php if($item->type == 1):?>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/goods/card', ['id' => $item->id])?>">卡密</a>
+                    <?php endif;?>
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/goods/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/goods/delete', ['id' => $item->id])?>">删除</a>
                 </div>

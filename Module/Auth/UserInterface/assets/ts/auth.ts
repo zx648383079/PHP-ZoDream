@@ -37,3 +37,9 @@ function bindAuth(id: number) {
             .catch(console.error);
     }).toggle(!!navigator.credentials);
 }
+
+function bindBulletin() {
+    $(document).on('click', '.bulletin-item .title', function() {
+        $(this).closest('.bulletin-item').toggleClass('min');
+    });
+}

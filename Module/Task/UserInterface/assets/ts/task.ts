@@ -151,7 +151,7 @@ function bindTask(baseUri: string) {
             return;
         }
         box.trigger(TASK_BATCH_ADD, items);
-    }).on(TASK_BATCH_ADD, function(_, items) {
+    }).on(TASK_BATCH_ADD, function(_, ...items) {
         if (!items) {
             return;
         }

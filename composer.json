@@ -5,7 +5,7 @@
   "homepage": "https://zodream.cn",
   "license": "MIT",
   "require" : {
-    "php" : ">=7.0.0",
+    "php" : ">=7.1",
     "zodream/zodream" : "dev-master",
     "zodream/disk" : "dev-master",
     "zodream/gzo" : "dev-master",

@@ -80,7 +80,7 @@ function parseAjax(data: IResponse) {
  * 转化float
  * @param arg 
  */
-let toFoat = function (arg) {
+let toFoat = function (arg: any) {
     if (!arg) {
         return 0;
     }
@@ -94,7 +94,7 @@ let toFoat = function (arg) {
  * 转化数字
  * @param arg 
  */
-let toInt = function (arg) {
+let toInt = function (arg: any) {
     if (!arg) {
         return 0;
     }

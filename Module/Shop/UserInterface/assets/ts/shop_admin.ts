@@ -420,6 +420,25 @@ function bindGoods(goodsId: number) {
         $("input[name=product]").val(JSON.stringify(attr.productList));
         $(this).closest('form').submit();
     });
+    $("#price").change(function() {
+        let target = $('#market_price');
+        let price = toFoat($(this).val());
+        if (price <= 0) {
+            return;
+        }
+        if (toFoat(target.val()) < price) {
+            target.val(toInt(price * 1.1));
+        }
+    });
+    $(document).on('click', '*[data-action="sn"]', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        $.getJSON(BASE_URI + 'goods/generate_sn', data => {
+            if (data.code == 200) {
+                $this.prev('input').val(data.data);
+            }
+        });
+    });
     $('.multi-image-box .add-item').upload({
         grid: '.multi-image-box',
         url: '/ueditor.php?action=uploadimage',
@@ -1215,6 +1234,25 @@ function bindDatePicker(start: string = 'start_at', end: string = 'end_at', form
             min: startBox
         });
     }
+}
+
+function bindGoodsCard() {
+    $('.page-search a').click(function(e) {
+        let url = $(this).attr('href');
+        if (url.indexOf('export_card') > 0) {
+            return;
+        }
+        e.preventDefault();
+        if (url.indexOf('create_card') > 0) {
+            let amount = prompt('请输入生成数量:', '99');
+            postJson(url, {
+                amount
+            }, data => {
+                parseAjax(data);
+            });
+            return;
+        }
+    });
 }
 
 $(function() {

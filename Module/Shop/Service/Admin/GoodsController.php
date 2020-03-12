@@ -11,6 +11,7 @@ use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\CollectModel;
 use Module\Shop\Domain\Models\CommentModel;
 use Module\Shop\Domain\Models\GoodsAttributeModel;
+use Module\Shop\Domain\Models\GoodsCardModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsIssueModel;
 use Module\Shop\Domain\Models\GoodsModel;
@@ -51,7 +52,8 @@ class GoodsController extends Controller {
     }
 
     public function editAction($id) {
-        $model = GoodsModel::findOrNew($id);
+        $model = GoodsModel::findOrDefault($id, [
+            'stock' => 1, 'weight' => 0, 'status' => GoodsModel::STATUS_SALE]);
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $brand_list = BrandModel::select('id', 'name')->all();
         $group_list = AttributeGroupModel::all();
@@ -123,6 +125,11 @@ class GoodsController extends Controller {
         return $this->jsonSuccess();
     }
 
+    public function generateSnAction() {
+        $sn = GoodsRepository::generateSn();
+        return $this->jsonSuccess($sn);
+    }
+
     public function attributeAction($group_id, $goods_id = 0) {
         $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position asc')->orderBy('type asc')->asArray()->all();
         foreach ($attr_list as &$item) {
@@ -164,6 +171,43 @@ class GoodsController extends Controller {
             GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $attribute_id)->where('value', $value)->delete();
         }
         return $this->jsonSuccess();
+    }
+
+    public function cardAction($id, $keywords = null) {
+        $model = GoodsModel::find($id);
+        if (empty($model)) {
+            return $this->redirect($this->getUrl('goods'));
+        }
+        $card_list = GoodsCardModel::where('goods_id', $id)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                $query->where('card_no', $keywords);
+            })->orderBy('order_id', 'asc')->orderBy('id', 'desc')->page();
+        return $this->show(compact('card_list', 'model', 'keywords'));
+    }
+
+    public function importCardAction($id) {
+
+    }
+
+    public function exportCardAction($id) {
+
+    }
+
+    public function createCardAction($id, $amount = 1) {
+        GoodsCardModel::generate($id, $amount);
+        GoodsCardModel::refreshStock($id);
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
+    }
+
+    public function deleteCardAction($id) {
+        $model = GoodsCardModel::find($id);
+        $model->delete();
+        GoodsCardModel::refreshStock($model->goods_id);
+        return $this->jsonSuccess([
+            'refresh' => true
+        ]);
     }
 
     public function refreshAction() {
