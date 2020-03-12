@@ -19,7 +19,7 @@ class MediaController extends Controller {
             ->when(!empty($type), function ($query) use ($type) {
             $query->where('type', $type);
         })->when(!empty($keywords), function ($query) {
-            MediaModel::search($query, 'title');
+            MediaModel::searchWhere($query, 'title');
             })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb')->page();
         if (app('request')->isAjax() && !app('request')->isPjax()) {
             return $this->jsonSuccess($model_list);

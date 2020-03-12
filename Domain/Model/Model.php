@@ -21,7 +21,7 @@ abstract class Model extends BaseModel {
      * @return Builder
      * @throws \Exception
      */
-    public static function search($query, $columns, $saveLog = true, $key = 'keywords') {
+    public static function search(Builder $query, $columns, $saveLog = true, $key = 'keywords') {
         $columns = (array)$columns;
         $keywords = explode(' ', app('request')->get($key));
         foreach ($keywords as $item) {
@@ -46,6 +46,12 @@ abstract class Model extends BaseModel {
 //            ]);
         }
         return $query;
+    }
+
+    public static function searchWhere(Builder $query, $columns, $saveLog = true, $key = 'keywords') {
+        $query->where(function ($query) use ($columns, $saveLog, $key) {
+            static::search($query, $columns, $saveLog, $key);
+        });
     }
 
     /**

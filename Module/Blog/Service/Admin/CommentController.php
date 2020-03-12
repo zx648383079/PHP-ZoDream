@@ -12,9 +12,9 @@ class CommentController extends Controller {
             })->when(!empty($email), function ($query) use ($email) {
                 $query->where('email', $email);
             })->when(!empty($keywords), function ($query) {
-                CommentModel::search($query, 'content');
+                CommentModel::searchWhere($query, 'content');
             })->when(!empty($name), function ($query) {
-                CommentModel::search($query, 'name', false, 'name');
+                CommentModel::searchWhere($query, 'name', false, 'name');
             })->orderBy('id', 'desc')->page();
         return $this->show(compact('comment_list'));
     }

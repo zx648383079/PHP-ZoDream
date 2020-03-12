@@ -14,7 +14,7 @@ class PermissionController extends Controller {
 
     public function indexAction($keywords = null) {
         $permission_list = PermissionModel::when(!empty($keywords), function ($query) {
-            PermissionModel::search($query, 'name');
+            PermissionModel::searchWhere($query, 'name');
         })->page();
         return $this->show(compact('permission_list'));
     }

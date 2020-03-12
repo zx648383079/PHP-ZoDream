@@ -8,7 +8,7 @@ class MicroController extends Controller {
     public function indexAction($keywords = null) {
         $model_list  = MicroBlogModel::with('user')
             ->when(!empty($keywords), function ($query) {
-                MicroBlogModel::search($query, ['content']);
+                MicroBlogModel::searchWhere($query, ['content']);
             })->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }

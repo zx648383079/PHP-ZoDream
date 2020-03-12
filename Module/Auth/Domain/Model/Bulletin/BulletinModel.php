@@ -58,7 +58,7 @@ class BulletinModel extends Model {
      * @throws \Exception
      */
 	public static function message($user, $title, $content, $type = 0) {
-        return static::send($user, $title, $content, $type, auth()->id());
+        return static::send($user, htmlspecialchars($title), htmlspecialchars($content), $type, auth()->id());
 	}
 
     public static function system($user, $title, $content, $type = 99) {

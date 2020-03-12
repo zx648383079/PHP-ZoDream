@@ -276,7 +276,7 @@ class DiskController extends Controller {
 
     public function usersAction($name = null) {
         $data = UserModel::where('id', '<>', auth()->id())->when(!empty($name), function ($query) {
-            DiskModel::search($query, 'name', false, 'name');
+            DiskModel::searchWhere($query, 'name', false, 'name');
         })->get('name', 'id');
         return $this->jsonSuccess($data);
     }

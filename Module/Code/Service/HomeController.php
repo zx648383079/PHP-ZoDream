@@ -98,7 +98,7 @@ class HomeController extends ModuleController {
 
     public function suggestionAction($keywords = null) {
         $data = TagModel::when(!empty($keywords), function($query) {
-            TagModel::search($query, ['content']);
+            TagModel::searchWhere($query, ['content']);
         })->groupBy('content')->limit(4)->pluck('content');
         return $this->jsonSuccess($data);
     }

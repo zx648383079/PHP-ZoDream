@@ -13,7 +13,7 @@ class HomeController extends Controller {
 
     public function suggestionAction($keywords = null) {
         $data = CourseModel::when(!empty($keywords), function ($query) {
-            CourseModel::search($query, 'name');
+            CourseModel::searchWhere($query, 'name');
          })->limit(4)->get();
         return $this->jsonSuccess($data);
     }

@@ -17,7 +17,7 @@ class SearchController extends Controller {
 
     public function tipsAction($keywords) {
         $data = GoodsModel::when(!empty($keywords), function ($query) {
-                GoodsModel::search($query, 'name');
+                GoodsModel::searchWhere($query, 'name');
             })->limit(10)->pluck('name');
         return $this->render($data);
     }

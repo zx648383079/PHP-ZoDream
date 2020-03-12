@@ -42,7 +42,7 @@ class BlogRepository {
                     return $query->orderBy('comment_count', 'desc');
                 }
             })->when(!empty($keywords), function ($query) {
-                BlogModel::search($query, ['title', 'programming_language']);
+                BlogModel::searchWhere($query, ['title', 'programming_language']);
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
             })->when(!empty($programming_language), function ($query) use ($programming_language) {

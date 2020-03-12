@@ -32,7 +32,7 @@ class HomeController extends RestController {
 
     public function suggestAction($keywords) {
         $data = BookModel::when(!empty($keywords), function ($query) {
-            BookModel::search($query, 'name');
+            BookModel::searchWhere($query, 'name');
         })->limit(4)->pluck('name');
         return $this->render($data);
     }

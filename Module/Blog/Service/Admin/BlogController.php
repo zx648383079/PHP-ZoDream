@@ -13,9 +13,7 @@ class BlogController extends Controller {
         $blog_list = BlogPageModel::with('term')
             ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    BlogModel::search($query, 'title');
-                });
+                BlogModel::searchWhere($query, 'title');
             })->when(!empty($term_id), function ($query) use ($term_id) {
                 $query->where('term_id', intval($term_id));
             })->orderBy('id', 'desc')->page();

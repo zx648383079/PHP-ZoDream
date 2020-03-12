@@ -7,7 +7,7 @@ use Module\Book\Domain\Model\BookCategoryModel;
 class CategoryController extends Controller {
     public function indexAction($keywords = null) {
         $model_list = BookCategoryModel::withCount('book')->when(!empty($keywords), function ($query) {
-            BookCategoryModel::search($query, 'name');
+            BookCategoryModel::searchWhere($query, 'name');
         })->all();
         return $this->show(compact('model_list'));
     }

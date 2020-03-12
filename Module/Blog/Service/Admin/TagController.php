@@ -15,9 +15,7 @@ class TagController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list = TagModel::when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    TagModel::search($query, 'name');
-                });
+                TagModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
         if (app('request')->isAjax() && !app('request')->header('X-PJAX')) {
             return $this->jsonSuccess($model_list);

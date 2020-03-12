@@ -32,7 +32,7 @@ class HomeController extends ModuleController {
                     return $query->orderBy('recommend_count', 'desc');
                 }
             })->when(!empty($keywords) && $id < 1, function ($query) {
-                MicroBlogModel::search($query, ['content']);
+                MicroBlogModel::searchWhere($query, ['content']);
             })
             ->page();
         return $this->show(compact('blog_list', 'keywords'));

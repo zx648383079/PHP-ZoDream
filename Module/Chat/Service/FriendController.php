@@ -43,7 +43,7 @@ class FriendController extends Controller {
             ->pluck('user_id');
         $exclude[] = auth()->id();
         $data = UserModel::when(!empty($keywords), function ($query) {
-            FriendModel::search($query, 'name');
+            FriendModel::searchWhere($query, 'name');
         })->whereNotIn('id', $exclude)->page();
         return $this->jsonSuccess($data);
     }

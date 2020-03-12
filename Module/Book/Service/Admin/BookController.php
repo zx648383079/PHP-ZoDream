@@ -13,7 +13,7 @@ class BookController extends Controller {
         $model_list = BookModel::with('category', 'author')
             //->withCount('chapter')
             ->when(!empty($keywords), function ($query) {
-                BookModel::search($query, 'name');
+                BookModel::searchWhere($query, 'name');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($author_id), function ($query) use ($author_id) {
@@ -72,9 +72,7 @@ class BookController extends Controller {
         $book = BookModel::find($book);
         $model_list = BookChapterModel::where('book_id', $book->id)
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    BookModel::search($query, 'title');
-                });
+                BookModel::searchWhere($query, 'title');
             })->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list',  'book', 'keywords'));
     }

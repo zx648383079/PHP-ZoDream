@@ -33,7 +33,7 @@ class IncomeController extends Controller {
             ->when(is_numeric($type), function ($query) use ($type) {
             $query->where('type', intval($type));
         })->when(!empty($keywords), function ($query) {
-                LogModel::search($query, 'remark');
+                LogModel::searchWhere($query, 'remark');
             })->orderBy('happened_at', 'desc')->page();
         return $this->show(compact('log_list'));
     }

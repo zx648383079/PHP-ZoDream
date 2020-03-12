@@ -16,7 +16,7 @@ class RoleController extends Controller {
 
     public function indexAction($keywords = null) {
         $role_list = RoleModel::when(!empty($keywords), function ($query) {
-            RoleModel::search($query, 'name');
+            RoleModel::searchWhere($query, 'name');
         })->page();
         return $this->show(compact('role_list'));
     }

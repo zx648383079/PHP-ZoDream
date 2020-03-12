@@ -17,7 +17,7 @@ class UserController extends Controller {
 
     public function indexAction($keywords = null) {
         $user_list = UserModel::when(!empty($keywords), function ($query) {
-            OAuthModel::search($query, 'name');
+            OAuthModel::searchWhere($query, 'name');
         })->page();
         return $this->show(compact('user_list'));
     }

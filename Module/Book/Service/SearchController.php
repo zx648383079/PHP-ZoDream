@@ -8,7 +8,7 @@ class SearchController extends Controller {
 
     public function indexAction($keywords) {
         $book_list = BookModel::ofClassify()->when(!empty($keywords), function ($query) {
-            BookModel::search($query, ['name']);
+            BookModel::searchWhere($query, ['name']);
         })->page();
         return $this->show(compact('book_list', 'keywords'));
     }

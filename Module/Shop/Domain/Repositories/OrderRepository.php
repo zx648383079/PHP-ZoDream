@@ -27,7 +27,7 @@ class OrderRepository {
                 $query->where('status', intval($status));
             })
             ->when(!empty($keywords), function ($query) use ($keywords) {
-                Order::search($query, ['series_number']);
+                Order::searchWhere($query, ['series_number']);
             })
             ->orderBy('created_at', 'desc')
             ->page();

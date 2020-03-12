@@ -35,7 +35,7 @@ class AccountController extends Controller {
     public function loginLogAction($keywords = null) {
         $model_list = LoginLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                LoginLogModel::search($query, 'ip');
+                LoginLogModel::searchWhere($query, 'ip');
             })
             ->orderBy('id desc')->page();
         return $this->show(compact('model_list'));
@@ -44,7 +44,7 @@ class AccountController extends Controller {
     public function logAction($keywords = null) {
         $model_list = ActionLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                LoginLogModel::search($query, 'ip');
+                LoginLogModel::searchWhere($query, 'ip');
             })
             ->orderBy('id desc')->page();
         return $this->show(compact('model_list'));

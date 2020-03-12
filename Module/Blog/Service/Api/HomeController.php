@@ -58,7 +58,7 @@ class HomeController extends RestController {
 
     public function suggestAction($keywords) {
         $data = BlogModel::when(!empty($keywords), function ($query) {
-           BlogModel::search($query, 'title');
+           BlogModel::searchWhere($query, 'title');
         })->limit(4)->pluck('title', 'id');
         return $this->render(compact('data'));
     }

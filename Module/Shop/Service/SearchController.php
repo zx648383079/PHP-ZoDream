@@ -9,7 +9,7 @@ class SearchController extends Controller {
 
     public function indexAction($keywords = null) {
         $goods_list = GoodsSimpleModel::when(!empty($keywords), function ($query) {
-            GoodsModel::search($query, 'name');
+            GoodsModel::searchWhere($query, 'name');
         })->page();
         return $this->sendWithShare()->show(compact('goods_list', 'keywords'));
     }

@@ -15,7 +15,7 @@ class HomeController extends Controller {
 
     public function suggestionAction($keywords = null) {
         $data = ThreadSimpleModel::when(!empty($keywords), function ($query) {
-            ThreadModel::search($query, 'title');
+            ThreadModel::searchWhere($query, 'title');
          })->limit(4)->get();
         return $this->jsonSuccess($data);
     }

@@ -22,7 +22,7 @@ class GoodsRepository {
                 $query->whereIn('id', array_map('intval', $id));
             })
             ->when(!empty($keywords), function ($query) {
-                GoodsEntity::search($query, 'name');
+                GoodsEntity::searchWhere($query, 'name');
             })->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
             })->when($brand > 0, function ($query) use ($brand) {
@@ -40,7 +40,7 @@ class GoodsRepository {
                 $query->whereIn('id', array_map('intval', $id));
             })
             ->when(!empty($keywords), function ($query) {
-                GoodsEntity::search($query, 'name');
+                GoodsEntity::searchWhere($query, 'name');
             })->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
             })->when($brand > 0, function ($query) use ($brand) {
@@ -85,7 +85,7 @@ class GoodsRepository {
                 $query->whereIn('id', array_map('intval', $id));
             })
             ->when(!empty($keywords), function (Query $query) {
-                GoodsEntity::search($query, 'name');
+                GoodsEntity::searchWhere($query, 'name');
             })->when($category > 0, function (Query $query) use ($category) {
                 $query->where('cat_id', intval($category));
             })->when($brand > 0, function (Query $query) use ($brand) {

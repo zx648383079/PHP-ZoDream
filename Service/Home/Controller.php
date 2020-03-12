@@ -9,6 +9,7 @@ abstract class Controller extends BaseController {
     public $layout = 'main';
 
 	public function prepare() {
+		$this->send('layout_search_url', url('/blog'));
 		//$this->send(OptionModel::findOption(['autoload' => 'yes']));
 	}
 }

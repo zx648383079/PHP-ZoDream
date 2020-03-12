@@ -57,7 +57,7 @@ $this->registerCssFile([
         <div class="dialog-search">
             <i class="dialog-close"></i>
             <div class="dialog-body">
-                <form action="" method="get">
+                <form action="<?=isset($layout_search_url) ? $layout_search_url : $this->url('./')?>" method="get">
                     <i class="input-search"></i>
                     <input type="text" name="keywords" value="<?=$this->text(app('request')->get('keywords'))?>" placeholder="请输入关键字，按回车 / Enter 搜索" autocomplete="off">
                     <i class="input-clear"></i>
