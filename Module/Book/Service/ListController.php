@@ -18,6 +18,7 @@ class ListController extends Controller {
     }
 
     public function detailAction($id) {
+        BookListModel::where('id', $id)->updateOne('click_count');
         $list = BookListModel::find($id);
         $items = ListItemModel::with('book')->where('list_id', $id)->get();
         return $this->show(compact('list', 'items'));

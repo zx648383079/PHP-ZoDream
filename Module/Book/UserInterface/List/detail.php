@@ -52,12 +52,11 @@ $this->extend('layouts/header');
                 </p>
                 <p>
                 单主评分：
-                    <div class="star-box">
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                    </div>
+                    <span class="star-box">
+                    <?php for($i = 0; $i < 10; $i += 2):?>
+                        <i class="fa fa-star <?=$i < $item['star'] ? 'light' : ''?>"></i>
+                    <?php endfor;?>
+                    </span>
                 </p>
             </div>
             <p class="remark">
