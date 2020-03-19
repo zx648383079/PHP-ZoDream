@@ -15,6 +15,7 @@ class CreateFamilyTables extends Migration {
             $table->setComment('家族表');
             $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->notNull();
+            $table->set('cover')->varchar(100)->notNull();
             $table->set('description')->varchar()->defaultVal('');
             $table->set('status')->bool();
             $table->set('user_id')->unsigned()->int();

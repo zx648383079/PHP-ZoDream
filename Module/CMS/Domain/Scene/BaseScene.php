@@ -204,6 +204,57 @@ abstract class BaseScene implements SceneInterface {
         return $query;
     }
 
+    protected function addSearchQuery(Builder $query, $keywords) {
+        if (empty($keywords)) {
+            return $query;
+        }
+        $field_list = $this->fieldList();
+        $main = ['title', 'keywords'];
+        $extra = [];
+        foreach ($field_list as $item) {
+            if ($item->is_search < 1) {
+                continue;
+            }
+            if ($item->is_main > 0) {
+                $main[] = $item->field;
+                continue;
+            }
+            $extra[] = $item->field;
+        }
+        $query->where(function ($query) use ($keywords, $main) {
+            $items = explode(' ', $keywords);
+            foreach ($items as $item) {
+                $item = trim(trim($item), '%');
+                if (empty($item)) {
+                    continue;
+                }
+                foreach ($main as $column) {
+                    $query->orWhere($column, 'like', '%'.$item.'%');
+                }
+            }
+        });
+        if (empty($extra)) {
+            return $query;
+        }
+        $ids = $this->extendQuery()->where(function ($query) use ($keywords, $extra) {
+            $items = explode(' ', $keywords);
+            foreach ($items as $item) {
+                $item = trim(trim($item), '%');
+                if (empty($item)) {
+                    continue;
+                }
+                foreach ($extra as $column) {
+                    $query->orWhere($column, 'like', '%'.$item.'%');
+                }
+            }
+        })->pluck('id');
+        if (empty($ids)) {
+            $query->isEmpty();
+            return $query;
+        }
+        return $query->whereIn($this->getMainTable().'.id', $ids);
+    }
+
     protected function getResultByField(Builder $query, $field = '*') {
 
     }

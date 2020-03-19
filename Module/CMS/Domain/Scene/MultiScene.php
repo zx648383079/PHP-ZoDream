@@ -215,8 +215,9 @@ class MultiScene extends BaseScene {
         if (empty($fields)) {
             $fields = '*';
         }
-        return $this->addWhere($this->query(), $params)->when(!empty($keywords), function ($query) use ($keywords) {
-            $query->where('title', 'like', '%'.$keywords.'%');
+        return $this->addWhere($this->query(), $params)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+            $this->addSearchQuery($query, $keywords);
         })->select($fields)
             ->when(!empty($order), function ($query) use ($order) {
                 $query->orderBy($order);

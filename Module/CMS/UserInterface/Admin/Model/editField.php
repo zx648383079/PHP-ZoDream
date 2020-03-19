@@ -23,6 +23,7 @@ $this->registerJs($js);
 
     </div>
     <?=Form::radio('is_required', ['非必填', '必填'])?>
+    <?=Form::radio('is_search', ['否', '是'])?>
     <?=Form::text('length')?>
     <?=Form::text('match')?>
     <?=Form::text('tip_message')?>

@@ -2,15 +2,20 @@
 namespace Module\Forum\Service;
 
 
+use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
+use Zodream\Infrastructure\Http\Request;
 
 class ThreadController extends Controller {
 
     protected function rules() {
         return [
             'create' => '@',
+            'edit' => '@',
+            'edit_post' => '@',
+            'reply' => '@',
             'digest' => '@',
             'highlight' => '@',
             '*' => '*'
@@ -67,6 +72,45 @@ class ThreadController extends Controller {
         return $this->jsonSuccess([
             'url' => url('./forum', ['id' => $forum_id])
         ]);
+    }
+
+    public function editAction($id) {
+        $thread = ThreadModel::find($id);
+        if ($thread->user_id !== auth()->id()) {
+            return $this->redirect('./');
+        }
+        $post = ThreadPostModel::where([
+            'user_id' => auth()->id(),
+            'thread_id' => $thread->id,
+            'grade' => 0,
+        ])->first();
+        $classify_list = ForumClassifyModel::where('forum_id', $thread->forum_id)
+            ->orderBy('id', 'asc')->all();
+        return $this->show(compact('thread', 'post', 'classify_list'));
+    }
+
+    public function updateAction($id, Request $request) {
+        $thread = ThreadModel::find($id);
+        if ($thread->user_id !== auth()->id()) {
+            return $this->jsonFailure('无权限');
+        }
+        if ($request->has('title')) {
+            $thread->title = $request->get('title');
+        }
+        if ($request->has('classify_id')) {
+            $thread->classify_id = $request->get('classify_id');
+        }
+        $thread->save();
+        $post = ThreadPostModel::where([
+            'user_id' => auth()->id(),
+            'thread_id' => $thread->id,
+            'grade' => 0,
+        ])->update([
+            'content' => $request->get('content')
+        ]);
+        return $this->jsonSuccess([
+            'url' => url('./thread', ['id' => $id])
+        ], '更新成功');
     }
 
     public function replyAction($content, $thread_id) {

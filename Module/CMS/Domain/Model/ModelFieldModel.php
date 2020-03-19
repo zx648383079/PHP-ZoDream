@@ -16,6 +16,7 @@ use Zodream\Helpers\Str;
  * @property integer $form_type
  * @property integer $is_main
  * @property integer $is_required
+ * @property integer $is_search
  * @property integer $is_default
  * @property integer $is_system
  * @property integer $is_disable
@@ -73,6 +74,7 @@ class ModelFieldModel extends BaseModel {
             'form_type' => 'int:0,999',
             'is_main' => 'int:0,9',
             'is_required' => 'int:0,9',
+            'is_search' => 'int:0,9',
             'is_default' => 'int:0,9',
             'is_disable' => 'int:0,9',
             'is_system' => 'int:0,9',
@@ -96,6 +98,7 @@ class ModelFieldModel extends BaseModel {
             'position' => '排序',
             'form_type' => '表单类型',
             'is_required' => '是否必填',
+            'is_search' => '是否搜索',
             'is_default' => '默认值',
             'is_system' => '系统字段',
             'match' => '匹配规则',

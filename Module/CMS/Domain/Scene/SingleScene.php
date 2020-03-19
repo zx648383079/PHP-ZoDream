@@ -184,7 +184,7 @@ class SingleScene extends BaseScene {
         }
         return $this->addQuery($this->query(), $params, $order, $fields)
             ->when(!empty($keywords), function ($query) use ($keywords) {
-            $query->where('title', 'like', '%'.$keywords.'%');
+            $this->addSearchQuery($query, $keywords);
         })->page($per_page);
     }
 

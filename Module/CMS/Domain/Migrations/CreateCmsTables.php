@@ -26,6 +26,7 @@ class CreateCmsTables extends Migration {
             $table->set('form_type')->tinyint(3)->defaultVal(0);
             $table->set('is_main')->bool()->defaultVal(0);
             $table->set('is_required')->bool()->defaultVal(1);
+            $table->set('is_search')->bool()->defaultVal(0)->comment('是否能搜索');
             $table->set('is_disable')->bool()->defaultVal(0)->comment('禁用/启用');
             $table->set('is_system')->bool()->defaultVal(0)
                 ->comment('系统自带禁止删除');

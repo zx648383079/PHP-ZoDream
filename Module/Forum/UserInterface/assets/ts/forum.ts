@@ -24,6 +24,7 @@ class Editor {
     public range: IRange;
     public textField: HTMLTextAreaElement;
     private events: {[key: string]: Function} = {};
+    private upload: any;
 
     public on(event: string, callback: Function): this {
         this.events[event] = callback;
@@ -245,6 +246,27 @@ class Editor {
         this.focus();
     }
 
+    public insertFile(cb: (file: string[], data: any) => void, allow = '') {
+        let _that = this;
+        if (!this.upload) {
+            this.upload = new Upload(null, {
+                url: UPLOAD_URI,
+                name: 'upfile',
+                template: '{url}',
+                onafter: function(data: any) {
+                    if (data.state == 'SUCCESS') {
+                        cb.call(_that, data.url, data);
+                    } else if (data.code === 302) {
+                        location.href = data.url;
+                    }
+                    return false;
+                }
+            });
+        }
+        this.upload.options.filter = allow;
+        this.upload.start();
+    }
+
     /**
      * clear
      */
@@ -316,25 +338,33 @@ Editor.plugin('fa-download', '插入可下载内容', function(tag) {
     if (tag && tag !== 'hide') {
         return;
     }
-    this.insert('<file></file>', 6, true)
+    this.insertFile(file => {
+        this.insert('<file>'+ file +'</file>', 6, true);
+    });
 });
 Editor.plugin('fa-image', '插入图片', function(tag) {
     if (tag && tag !== 'hide' && tag !== 'a') {
         return;
     }
-    this.insert('<img></img>', 5, true);
+    this.insertFile(file => {
+        this.insert('<img>'+file+'</img>', 5, true);
+    }, 'image/*');
 });
 Editor.plugin('fa-music', '插入音频', function(tag) {
     if (tag && tag !== 'hide') {
         return;
     }
-    this.insert('<audio></audio>', 7, true);
+    this.insertFile(file => {
+        this.insert('<audio>'+file+'</audio>', 7, true);
+    }, 'audio/*');
 });
 Editor.plugin('fa-video', '插入视频', function(tag) {
     if (tag && tag !== 'hide') {
         return;
     }
-    this.insert('<video></video>', 7, true);
+    this.insertFile(file => {
+        this.insert('<video></video>', 7, true);
+    }, 'video/*');
 });
 Editor.plugin('fa-link', '插入链接', function(tag) {
     if (tag && tag !== 'hide') {
