@@ -80,11 +80,11 @@ function parseAjax(data: IResponse) {
  * 转化float
  * @param arg 
  */
-let toFoat = function (arg: any) {
+let toFloat = function (arg: any) {
     if (!arg) {
         return 0;
     }
-    arg = arg.replace(',', '').match(/[\d\.]+/);
+    arg = arg.toString().replace(',', '').match(/[\d\.]+/);
     if (!arg) {
         return 0;
     }
@@ -98,11 +98,11 @@ let toInt = function (arg: any) {
     if (!arg) {
         return 0;
     }
-    arg = arg.replace(',', '').match(/[\d]+/);
+    arg = arg.toString().replace(',', '').match(/[\d]+/);
     if (!arg) {
         return 0;
     }
-    return parseInt(arg);
+    return parseInt(arg, 10);
 };
 
 let strFormat = function(arg: string, ...args: any[]) {

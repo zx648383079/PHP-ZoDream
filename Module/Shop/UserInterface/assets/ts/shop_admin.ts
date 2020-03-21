@@ -422,11 +422,11 @@ function bindGoods(goodsId: number) {
     });
     $("#price").change(function() {
         let target = $('#market_price');
-        let price = toFoat($(this).val());
+        let price = toFloat($(this).val());
         if (price <= 0) {
             return;
         }
-        if (toFoat(target.val()) < price) {
+        if (toFloat(target.val()) < price) {
             target.val(toInt(price * 1.1));
         }
     });
@@ -997,9 +997,19 @@ class Delivery {
     }
 }
 
+interface IGoodsSimple {
+    id: number,
+    title?: string,
+    thumb?: string,
+    price?: number
+}
+
 class GoodsDailog {
     constructor(
-        element: string
+        element: string,
+        public multi: boolean = true,
+        public save: boolean = true,
+        public selected: number[] = []
     ) {
         this.dialog = $(element).dialog({});
         $.get(BASE_URI + 'goods/dialog', {
@@ -1011,8 +1021,7 @@ class GoodsDailog {
     }
 
     public dialog: any;
-    public selected: number[] = [];
-    private _selected: number[] = [];
+    private _selected: IGoodsSimple[] = [];
     private _doneCallback: Function;
 
     private bindEvent() {
@@ -1024,9 +1033,20 @@ class GoodsDailog {
             });
             return false;
         }).on('click', '.dialog-goods-box .item', function() {
-            let $this = $(this).toggleClass('selected');
-            let id = parseInt($this.data('id'), 10);
-            that.toggleGoods(id, $this.hasClass('selected'));
+            let $this = $(this);
+            let goods = {
+                id: toInt($this.data('id')),
+                thumb: $this.data('thumb'),
+                title: $this.attr('title'),
+                price: toFloat($this.data('price'))
+            };
+            if (!that.multi) {
+                that._selected = [goods];
+                $this.addClass('selected').siblings().removeClass('selected');
+                return;
+            }
+            $this.toggleClass('selected');
+            that.toggleGoods(goods, $this.hasClass('selected'));
         }).on('click', '.dialog-pager a', function(e) {
             e.preventDefault();
             $.get($(this).attr('href'), html => {
@@ -1034,31 +1054,43 @@ class GoodsDailog {
             });
         });
         this.dialog.on('done', () => {
-            this.selected = [...this._selected];
+            this.selected = [];
+            this._selected.forEach(item => {
+                this.selected.push(item.id);
+            })
             this.dialog.close();
-            this._doneCallback && this._doneCallback.call(this, this.selected);
+            if (!this._doneCallback) {
+                return;
+            }
+            if (this.multi) {
+                this._doneCallback.call(this, this.selected, this._selected);return;
+            }
+            if (this._selected.length < 1) {
+                return;
+            }
+            this._doneCallback.call(this, this.selected[0], this._selected[0]);
         });
     }
 
     /**
      * toggleGoods
      */
-    public toggleGoods(id: number, has?: boolean) {
-        if (id < 1) {
+    public toggleGoods(goods: IGoodsSimple, has?: boolean) {
+        if (goods.id < 1) {
             return;
         }
-        let index = this._selected.indexOf(id);
+        let index = this.indexOf(goods.id);
         if (typeof has === 'undefined') {
             has = index < 0;
         }
         if (has) {
             if (index < 0) {
-                this._selected.push(id);
+                this._selected.push(goods);
             }
             return;
         }
         if (index >= 0) {
-            this._selected = this._selected.splice(index, 1);
+            this._selected.splice(index, 1);
         }
     }
 
@@ -1092,12 +1124,26 @@ class GoodsDailog {
      * show
      */
     public show() {
-        this._selected = [...this.selected];
+        this._selected = [];
+        if (this.save) {
+            this.selected.forEach(id => {
+                this._selected.push({id});
+            });
+        }
         this.find('.dialog-goods-box .item').each((_, item) => {
             let $this = $(item);
-            $this.toggleClass('selected', this._selected.indexOf($this.data('id')) >= 0);
+            $this.toggleClass('selected', this.indexOf($this.data('id')) >= 0);
         });
         this.dialog.show();
+    }
+
+    public indexOf(id: number): number {
+        for (let i = 0; i < this._selected.length; i++) {
+            if (this._selected[i].id == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 
@@ -1225,11 +1271,11 @@ function bindSetting() {
 }
 
 function bindDatePicker(start: string = 'start_at', end: string = 'end_at', format: string = 'yyyy-mm-dd') {
-    let startBox = $('[name='+ start +']').datetimer({
+    let startBox = $('[name="'+ start +'"]').datetimer({
         format
     });
     if (end) {
-        $('[name='+ end +']').datetimer({
+        $('[name="'+ end +'"]').datetimer({
             format,
             min: startBox
         });
@@ -1252,6 +1298,136 @@ function bindGoodsCard() {
             });
             return;
         }
+    });
+}
+
+function bindMix() {
+    let box = new GoodsDailog('#goods-dialog', true, false);
+    let table = $('.group-box').on('click', 'a[data-action=del]', function(e) {
+        e.preventDefault();
+        $(this).closest('tr').remove();
+    }).on('click', 'a[data-action=add]', function(e) {
+        e.preventDefault();
+        box.show();
+    }).on('change', 'tbody input[type="text"]', function() {
+        let tr = $(this).closest('tr');
+        let price = 0, amount = 0;
+        tr.find('input[type="text"]').each(function(this: HTMLInputElement) {
+            if (this.name.indexOf('price') >= 0) {
+                price = toFloat(this.value);
+                return;
+            }
+            if (this.name.indexOf('amount') >= 0) {
+                amount = toInt(this.value);
+            }
+        });
+        tr.find('.subtotal').text(price * amount);
+        refreshPrice();
+    });
+    let refreshPrice = function() {
+        let total = 0;
+        table.find('tr .subtotal').each(function() {
+            total += toFloat(this.innerText);
+        });
+        $('#price').val(total);
+    };
+    box.on('done', (_, items: IGoodsSimple[]) => {
+        if (items.length < 0) {
+            return;
+        }
+        let exist = [];
+        table.find('input[name="configure[goods_id][]"]').each(function(this: HTMLInputElement) {
+            exist.push(toInt(this.value));
+        });
+        let html = '';
+        items.forEach(item => {
+            if (exist.indexOf(item.id) >= 0) {
+                return;
+            }
+            html += '<tr><td><span>'+ 
+            item.title +'</span><input type="hidden" name="configure[goods_id][]" value="'+ 
+            item.id +'"></td><td><input type="text" name="configure[amount][]" value="1"></td><td><input type="text" name="configure[price][]" value="'+ item.price +'"></td><td>'+ item.price +'</td><td class="subtotal">'+ item.price +'</td><td><a href="javascript:;" data-action="del">删除</a></td></tr>';
+        });
+        table.find('table tbody').append(html);
+        refreshPrice();
+    });
+    bindDatePicker();
+}
+
+function bindCashBack() {
+    bindDatePicker();
+}
+
+function bindAuction() {
+    bindDatePicker(); 
+}
+
+function bindBargain() {
+    bindDatePicker(); 
+}
+
+function bindFreeTrial() {
+    bindDatePicker();
+}
+
+function bindLottery() {
+    bindDatePicker();
+    let box = $('.items-table').on('click', 'a[data-action="add"]', function() {
+        if (box.find('table tr').length > 7) {
+            return;
+        }
+        let table = box.find('table');
+        table.append(table.find('tr:last').clone());
+    }).on('click', '[data-action="up"]', function() {
+        let tr = $(this).closest('tr');
+        let prev = tr.prev('tr');
+        if (prev.length < 1) {
+            return;
+        }
+        prev.before(tr);
+    }).on('click', '[data-action="down"]', function() {
+        let tr = $(this).closest('tr');
+        let next = tr.next('tr');
+        if (next.length < 1) {
+            return;
+        }
+        next.after(tr);
+    }).on('click', '[data-action="del"]', function() {
+        if (box.find('table tr').length < 3) {
+            return;
+        }
+        $(this).closest('tr').remove();
+    });
+}
+
+function bindPresale() {
+    bindDatePicker(); 
+    bindDatePicker('configure[final_start_at]', 'configure[final_end_at]'); 
+    $('a[data-action="add"]').click(function() {
+        let $this = $(this);
+        $this.before($this.prev('.step-item').clone());
+    });
+    $('input[name="configure[deposit_scale]"]').click(function(this: HTMLInputElement) {
+        $('input[name="configure[deposit_scale_other]"]').toggle(this.value == '99');
+    });
+    $('input[name="configure[price_type]"]').click(function(this: HTMLInputElement) {
+        $('.price_type_0, .price_type_1').hide();
+        $('.price_type_' + this.value).show();
+    });
+}
+
+function bindDiscount() {
+    bindDatePicker();
+    $('input[name="configure[type]"]').click(function(this: HTMLInputElement) {
+        $('.unit').text(toInt(this.value) > 0 ? '件' : '元');
+    });
+}
+
+function bindGroupBuy() {
+    bindDatePicker();
+    $('a[data-action="add"]').click(function() {
+        let $this = $(this);
+        $this.before($this.prev('.step-item').clone());
     });
 }
 

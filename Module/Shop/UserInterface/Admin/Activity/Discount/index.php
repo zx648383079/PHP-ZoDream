@@ -26,10 +26,10 @@ $this->title = '满减/满送活动列表';
                 <?=$item->name?>
             </td>
             <td class="auto-hide">
-                
+                <?=$this->time($item->start_at)?>
             </td>
             <td class="auto-hide">
-                
+                <?=$this->time($item->end_at)?>
             </td>
             <td>
                 开启/关闭
@@ -37,8 +37,8 @@ $this->title = '满减/满送活动列表';
             
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/lottery/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/lottery/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/discount/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/discount/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

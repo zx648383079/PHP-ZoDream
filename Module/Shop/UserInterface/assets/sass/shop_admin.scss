@@ -219,6 +219,15 @@ $color_celeste_approx: #ccc;
     display: block;
 }
 
+.mix-item {
+	text-align: left;
+}
+.step-item {
+	input[type="text"] {
+		min-width: auto !important;
+	}
+}
+
 .product-table,
 .regional-table {
     border: 1px solid #ddd;
@@ -227,7 +236,12 @@ $color_celeste_approx: #ccc;
     th {
         border-left: 1px solid #ddd;
         border-top: 1px solid #ddd;
-    }
+	}
+	tfoot {
+		td {
+			text-align: left;
+		}
+	}
 }
 
 .regional-table {

@@ -525,6 +525,7 @@ class CreateShopTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull();
             $table->set('thumb')->varchar(200)->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
             $table->set('type')->tinyint(2)->defaultVal(ActivityModel::TYPE_AUCTION);
             $table->set('scope_type')->tinyint(1)->defaultVal(0)->comment('商品范围类型');
             $table->set('scope')->text()->notNull()->comment('商品范围值');

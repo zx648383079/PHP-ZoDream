@@ -64,5 +64,30 @@ abstract class ModuleController extends BaseController {
         return [array_diff($current, $exist), array_intersect($current, $exist), array_diff($exist, $current)];
     }
 
+    /**
+     * 将多项表单转为数组
+     * @param array $data
+     * @param null $default
+     * @return array
+     */
+    public static function formArr(array $data, $default = null) {
+        if (empty($data)) {
+            return [];
+        }
+        $items = [];
+        $first = current($data);
+        if (!is_array($first)) {
+            return [];
+        }
+        foreach ($first as $i => $_) {
+            $item = [];
+            foreach ($data as $key => $args) {
+                $item[$key] = isset($args[$i]) ? $args[$i] : $default;
+            }
+            $items[] = $item;
+        }
+        return $items;
+    }
+
 
 }

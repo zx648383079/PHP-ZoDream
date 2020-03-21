@@ -1,13 +1,13 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
-use Module\Shop\Domain\Models\CouponModel;
 
 class LotteryController extends Controller {
 
     public function indexAction() {
-        $model_list = CouponModel::page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_LOTTERY)->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 
@@ -16,22 +16,27 @@ class LotteryController extends Controller {
     }
 
     public function editAction($id) {
-        $model = CouponModel::findOrNew($id);
-        return $this->show(compact('model'));
+        $model = ActivityModel::findOrNew($id);
+        $configure = $model->configure;
+        return $this->show(compact('model', 'configure'));
     }
 
     public function saveAction() {
-        $model = new CouponModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('coupon'), '保存成功！');
+        $model = new ActivityModel();
+        $model->load();
+        $model->type = ActivityModel::TYPE_LOTTERY;
+        if (!$model->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->redirectWithMessage($this->getUrl('coupon'), $model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('activity/lottery')
+        ], '保存成功！');
     }
 
     public function deleteAction($id) {
-        CouponModel::where('id', $id)->delete();
+        ActivityModel::where('type', ActivityModel::TYPE_LOTTERY)->where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('coupon')
+            'url' => $this->getUrl('activity/lottery')
         ]);
     }
 

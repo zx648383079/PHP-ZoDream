@@ -44,7 +44,7 @@ use Zodream\Template\View;
 <?php endif;?>
     <div class="goods-list">
         <?php foreach($model_list as $item):?>
-        <a href="javascript:;" title="<?=$item->name?>" class="item<?=in_array($item->id, $selected) ? ' selected' : ''?>" data-id="<?=$item->id?>">
+        <a href="javascript:;" title="<?=$item->name?>" class="item<?=in_array($item->id, $selected) ? ' selected' : ''?>" data-id="<?=$item->id?>" data-thumb="<?=$item->thumb?>" data-price="<?=$item->price?>">
             <div class="thumb">
                 <img src="<?=$item->thumb?>" alt="">
             </div>

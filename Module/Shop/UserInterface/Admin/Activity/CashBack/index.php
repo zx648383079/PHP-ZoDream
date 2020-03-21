@@ -11,7 +11,7 @@ $this->title = '砍价活动列表';
     <thead>
     <tr>
         <th>ID</th>
-        <th>商品名称</th>
+        <th>活动名称</th>
         <th class="auto-hide">开始时间</th>
         <th class="auto-hide">结束时间</th>
         <th>状态</th>
@@ -26,10 +26,10 @@ $this->title = '砍价活动列表';
                 <?=$item->name?>
             </td>
             <td class="auto-hide">
-                
+                <?=$this->time($item->start_at)?>
             </td>
             <td class="auto-hide">
-                
+                <?=$this->time($item->end_at)?>
             </td>
             <td>
                 开启/关闭
@@ -37,8 +37,8 @@ $this->title = '砍价活动列表';
             
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/lottery/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/lottery/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/cash_back/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/cash_back/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>

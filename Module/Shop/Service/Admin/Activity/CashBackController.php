@@ -1,13 +1,13 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
-use Module\Shop\Domain\Models\CouponModel;
 
 class CashBackController extends Controller {
 
     public function indexAction() {
-        $model_list = CouponModel::page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_CASH_BACK)->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 
@@ -16,22 +16,35 @@ class CashBackController extends Controller {
     }
 
     public function editAction($id) {
-        $model = CouponModel::findOrNew($id);
-        return $this->show(compact('model'));
+        $model = ActivityModel::findOrNew($id);
+        $configure = $model->configure;
+        if (empty($configure)) {
+            $configure = [
+                'order_amount' => 0,
+                'money' => 0,
+            ];
+        }
+        if (!isset($configure['star'])) {
+            $configure['star'] = 0;
+        }
+        return $this->show(compact('model', 'configure'));
     }
 
     public function saveAction() {
-        $model = new CouponModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('coupon'), '保存成功！');
+        $model = new ActivityModel();
+        $model->type = ActivityModel::TYPE_CASH_BACK;
+        if (!$model->load() || !$model->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->redirectWithMessage($this->getUrl('coupon'), $model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('activity/cash_back')
+        ], '保存成功！');
     }
 
     public function deleteAction($id) {
-        CouponModel::where('id', $id)->delete();
+        ActivityModel::where('type', ActivityModel::TYPE_CASH_BACK)->where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('coupon')
+            'url' => $this->getUrl('activity/cash_back')
         ]);
     }
 

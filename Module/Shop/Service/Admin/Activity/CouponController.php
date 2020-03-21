@@ -7,7 +7,7 @@ use Module\Shop\Domain\Models\CouponModel;
 class CouponController extends Controller {
 
     public function indexAction() {
-        $model_list = CouponModel::page();
+        $model_list = CouponModel::orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 

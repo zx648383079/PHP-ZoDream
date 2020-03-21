@@ -1,13 +1,14 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
-use Module\Shop\Domain\Models\CouponModel;
+use Zodream\Infrastructure\Http\Request;
 
 class MixController extends Controller {
 
     public function indexAction() {
-        $model_list = CouponModel::page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_MIX)->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }
 
@@ -16,22 +17,40 @@ class MixController extends Controller {
     }
 
     public function editAction($id) {
-        $model = CouponModel::findOrNew($id);
-        return $this->show(compact('model'));
+        $model = ActivityModel::findOrNew($id);
+        $configure = $model->mix_configure;
+        return $this->show(compact('model', 'configure'));
     }
 
-    public function saveAction() {
-        $model = new CouponModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->redirectWithMessage($this->getUrl('coupon'), '保存成功！');
+    public function saveAction(Request $request, $id = 0) {
+        $model = ActivityModel::findOrNew($id);
+        $model->type = ActivityModel::TYPE_MIX;
+        $model->name = $request->get('name');
+        $model->description = $request->get('description');
+        $model->start_at = $request->get('start_at');
+        $model->end_at = $request->get('end_at');
+        $goods_list = self::formArr($request->get('configure'), 0);
+        if (empty($goods_list)) {
+            return $this->jsonFailure('请选择商品');
         }
-        return $this->redirectWithMessage($this->getUrl('coupon'), $model->getFirstError());
+        $model->scope_type = ActivityModel::SCOPE_GOODS;
+        $model->scope = array_column($goods_list, 'goods_id');
+        $model->configure = [
+            'goods' => $goods_list,
+            'price' => $request->get('price')
+        ];
+        if (!$model->save()) {
+            return $this->jsonFailure($model->getFirstError());
+        }
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('activity/mix')
+        ], '保存成功！');
     }
 
     public function deleteAction($id) {
-        CouponModel::where('id', $id)->delete();
+        ActivityModel::where('type', ActivityModel::TYPE_MIX)->where('id', $id)->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('coupon')
+            'url' => $this->getUrl('activity/mix')
         ]);
     }
 

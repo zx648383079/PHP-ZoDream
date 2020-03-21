@@ -37,10 +37,10 @@ $this->title = '免费试用列表';
             
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/lottery/edit', ['id' => $item->id])?>">申请记录</a>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/lottery/edit', ['id' => $item->id])?>">试用报告</a>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/lottery/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/lottery/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/free_trial/apply', ['id' => $item->id])?>">申请记录</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/free_trial/report', ['id' => $item->id])?>">试用报告</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/activity/free_trial/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/activity/free_trial/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
         </tr>
