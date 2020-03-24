@@ -18,16 +18,14 @@ use Zodream\Template\View;
                 <?php endif;?>
             </p>
             <div class="content">
-                <pre class="line-numbers">
-                    <code class="language-<?=strtolower($this->text($code->language))?>"><?=$this->text($code->content)?></code>
-                </pre>
+                <pre class="line-numbers"><code class="language-<?=strtolower($this->text($code->language))?>"><?=$this->text($code->content)?></code></pre>
             </div>
             <?php if($code->tags):?>
             <div class="tags">
                 <ul>
                     <?php foreach($code->tags as $tag):?>
                     <li>
-                        <a href="<?=$this->url('./', ['keywords' => $tag->content])?>"><?=$tag->content?></a>
+                        <a href="<?=$this->url('./', ['keywords' => $tag->content], false)?>"><?=$tag->content?></a>
                     </li>
                     <?php endforeach;?>
                 </ul>

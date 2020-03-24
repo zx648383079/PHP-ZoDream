@@ -88,6 +88,7 @@
         color: #111;
         line-height: 1.2;
         margin: 1em 0 0.6em;
+        border-bottom: 2px solid rgb(248,57,41);
         a {
             color: #333;
             text-decoration: none;
@@ -119,6 +120,7 @@
         color: #111;
         line-height: 1.2;
         margin: 1em 0 0.6em;
+        border-bottom: 1px solid rgb(248,57,41);
         &:first-child {
             margin-top: 0;
         }
@@ -282,14 +284,14 @@
         font-size: .9em;
     }
     pre {
-        white-space: pre;
+        white-space: pre-wrap;
+        word-wrap: break-word;
         margin: 0;
         > code {
             background: rgba(127, 127, 127, 0.05);
             display: block;
             padding: 0.65rem 1rem;
             border: 1px solid rgba(0, 0, 0, 0.18);
-            overflow: auto;
         }
         &:not(:first-child) {
             margin-top: 1rem;

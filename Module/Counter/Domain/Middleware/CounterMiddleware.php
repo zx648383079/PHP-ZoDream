@@ -23,10 +23,34 @@ class CounterMiddleware implements MiddlewareInterface {
         $event->listen(Visit::class, VisitListener::class)
             ->listen(JumpOut::class, JumpOutListener::class);
         $uri = app('request')->uri()->getPath();
-        if (strpos($uri, '/counter') === 0 || strpos($uri, '/to') === 0) {
+        if (strpos($uri, '/counter') === 0
+            || strpos($uri, '/to') === 0
+            || strpos($uri, '/admin.php') === 0
+            || strpos($uri, '/admin') > 3) {
             return;
         }
         $event->dispatch(Visit::createCurrent());
+        $this->useBaidu();
+    }
+
+    private function useBaidu() {
+        $key = config('baidu.tongji');
+        if (empty($key)) {
+            return;
+        }
+        $js = <<<JS
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?{$key}";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+JS;
+        view()->registerJs($js, View::HTML_HEAD);
+    }
+
+    private function useCounter() {
         $js = <<<JS
 var _hmt = _hmt || [];
 (function() {

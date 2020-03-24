@@ -40,15 +40,17 @@ class CreateBlogTables extends Migration {
             $table->set('comment_status')->tinyint(1)->unsigned()->defaultVal(0);
             $table->set('open_type')->tinyint(1)->unsigned()->defaultVal(0)->comment('公开类型');
             $table->set('open_rule')->varchar(20)->defaultVal('')->comment('类型匹配的值');
+            $table->set('weather')->varchar(20)->defaultVal('')->comment('天气');
             $table->softDeletes();
             $table->timestamps();
         })->append(TermModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull();
             $table->set('parent_id')->int(10)->defaultVal(0);
-            $table->set('keywords')->varchar();
-            $table->set('description')->varchar();
-            $table->set('thumb')->varchar();
+            $table->set('keywords')->varchar()->defaultVal('');
+            $table->set('description')->varchar()->defaultVal('');
+            $table->set('thumb')->varchar()->defaultVal('');
+            $table->set('styles')->varchar()->defaultVal('')->comment('独立引入样式');
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('content')->varchar()->notNull();

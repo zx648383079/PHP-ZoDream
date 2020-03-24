@@ -13,6 +13,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '分类';
     <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>
     <?=Form::file('thumb')?>
+    <?=Form::select('styles', ['' => '无', 'daily' => '日记'])?>
 
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>

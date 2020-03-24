@@ -12,11 +12,7 @@ class CodeNode extends Node {
         Factory::view()->registerCssFile('@prism.css')
             ->registerJsFile('@prism.js');
         return <<<HTML
-<pre>
-    <code class="language-{$lang}">
-        {$content}
-    </code>
-</pre>
+<pre><code class="language-{$lang}">{$content}</code></pre>
 HTML;
 
     }

@@ -25,6 +25,7 @@ use Zodream\Helpers\Time;
  * @property string $source_url
  * @property integer $open_type
  * @property string $open_rule
+ * @property string weather
  * @property integer $recommend
  * @property integer $comment_count
  * @property integer $click_count

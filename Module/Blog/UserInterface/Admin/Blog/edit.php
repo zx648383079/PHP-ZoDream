@@ -2,8 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
+use Module\Blog\Domain\Weather;
 /** @var $this View */
 $lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 'Go', 'C#', 'ASP.NET', '.NET Core', 'Python', 'C', 'C++', 'Java', 'Kotlin', 'Swift', 'Objective-C', 'Dart', 'Flutter'];
+$weather_list = Weather::getList();
 $this->title = ($model->id > 0 ? '编辑' : '新增'). '文章';
 $configs = app('request')->isMobile() ?
     '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '{}';
@@ -49,6 +51,7 @@ $this->registerJs($js);
                 <?=Form::text('open_rule')?>
                 <?php endif;?>
                 <?=Form::select('edit_type', ['Ueditor', 'MarkDown'])?>
+                <?=Form::select('weather', array_merge(['' => '请选择'], $weather_list))?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
                 <?php if($model->parent_id < 1):?>

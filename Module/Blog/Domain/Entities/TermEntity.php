@@ -13,6 +13,7 @@ use Domain\Entities\Entity;
  * @property integer $user_id
  * @property integer $parent_id
  * @property string $thumb
+ * @property string $styles
  */
 class TermEntity extends Entity {
 	public static function tableName() {
@@ -26,7 +27,8 @@ class TermEntity extends Entity {
             'description' => 'string:0,200',
             'user_id' => 'int',
             'parent_id' => 'int',
-            'thumb' => ''
+            'thumb' => '',
+            'styles' => '',
         ];
 	}
 
@@ -38,7 +40,8 @@ class TermEntity extends Entity {
             'description' => '说明',
             'user_id' => 'User Id',
             'parent_id' => '上级',
-            'thumb' => '图片'
+            'thumb' => '图片',
+            'styles' => '样式'
         ];
     }
 

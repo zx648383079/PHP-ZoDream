@@ -13,6 +13,7 @@ use Module\Blog\Domain\Entities\TermEntity;
  * @property integer $user_id
  * @property integer $parent_id
  * @property string $thumb
+ * @property string $styles
  */
 class TermModel extends TermEntity {
 
