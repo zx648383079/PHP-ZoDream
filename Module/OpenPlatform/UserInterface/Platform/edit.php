@@ -14,7 +14,8 @@ $this->registerJs($js);
     <?=Form::text('name', true)?>
     <?=Form::select('type', $model->type_list, true)?>
     <?=Form::text('domain')?>
-    <?php if ($model->id):?>
+    <?=Form::textarea('description')?>
+    <?php if ($model->id && $model->status == 1):?>
         <?=Form::text('appid')->readonly(true)?>
         <?=Form::text('secret')->readonly(true)->size(40)?>
         <?=Form::select('sign_type', $model->sign_type_list, true)?>
@@ -23,6 +24,6 @@ $this->registerJs($js);
         <?=Form::textarea('public_key')?>
     <?php endif;?>
 
-    <button type="submit" class="btn btn-success">确认保存</button>
+    <button type="submit" class="btn btn-success"><?=$model->id ? '确认保存' : '提交审核'?></button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>

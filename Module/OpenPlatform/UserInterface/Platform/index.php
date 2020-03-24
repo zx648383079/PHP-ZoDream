@@ -2,7 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '管理应用';
+$status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
 ?>
    <div class="page-search">
         <form class="form-horizontal" role="form">
@@ -21,17 +22,21 @@ $this->title = 'ZoDream';
             <th>ID</th>
             <th>应用名</th>
             <th>APP ID</th>
+            <th>状态</th>
             <th>时间</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($model_list as $item):?>
-            <tr>
+            <tr class="status-<?=intval($item->status)?>">
                 <td><?=$item->id?></td>
                 <td><?=$item->name?></td>
                 <td>
                     <?=$item->appid?>
+                </td>
+                <td>
+                    <?=$status_list[intval($item->status)]?>
                 </td>
                 <td>
                     <?=$item->created_at?>

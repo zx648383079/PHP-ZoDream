@@ -1,5 +1,5 @@
 <?php
-namespace Module\MicroBlog\Service\Admin;
+namespace Module\OpenPlatform\Service\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;

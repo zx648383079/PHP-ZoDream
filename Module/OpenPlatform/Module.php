@@ -1,6 +1,8 @@
 <?php
 namespace Module\OpenPlatform;
 
+use Module\Auth\Domain\Events\TokenCreated;
+use Module\OpenPlatform\Domain\Listeners\TokenListener;
 use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Zodream\Domain\Access\JWTAuth;
@@ -37,16 +39,17 @@ class Module extends BaseModule {
         if (empty($module)) {
             return;
         }
-        return $this->invokeWithPlatform($module, $uris);
+        return $this->invokeWithPlatform($module, $uris, $path);
     }
 
     /**
      * @param $module
      * @param $uris
+     * @param $path
      * @return RestResponse|mixed
      * @throws \Exception
      */
-    protected function invokeWithPlatform($module, $uris) {
+    protected function invokeWithPlatform($module, $uris, $path) {
         app()->instance('app::class', Api::class);
         app()->register('auth', JWTAuth::class);
         $platform = PlatformModel::findByAppId(app('request')->get('appid'));
@@ -57,6 +60,12 @@ class Module extends BaseModule {
                 'message' => __('APP ID error')
             ]);
         }
+        if (!$platform->verifyRule($module, $path)) {
+            return RestResponse::createWithAuto([
+                'code' => 404,
+                'message' => __('The URL you requested was disabled')
+            ]);
+        }
         if (!$platform->verifyRest()) {
             app('response')->setStatusCode(404);
             return RestResponse::createWithAuto([
@@ -65,6 +74,7 @@ class Module extends BaseModule {
             ]);
         }
         app()->instance('platform', $platform);
+        event()->listen(TokenCreated::class, TokenListener::class);
         $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');
         if ($data instanceof RestResponse) {
             return $platform->ready($data);

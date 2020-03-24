@@ -5,6 +5,7 @@ use Domain\Model\Model;
 use Module\OpenPlatform\Domain\Hmac;
 use Zodream\Database\Model\UserModel;
 use Zodream\Helpers\Arr;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 
 /**
@@ -15,21 +16,29 @@ use Zodream\Infrastructure\Http\Output\RestResponse;
  * @property string $name
  * @property integer $type
  * @property string $domain
+ * @property string $description
  * @property string $appid
  * @property string $secret
  * @property integer $sign_type
  * @property string $sign_key
  * @property integer $encrypt_type
  * @property string $public_key
+ * @property string $rules
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
 class PlatformModel extends Model {
 
+    const STATUS_NONE = 0;
+    const STATUS_WAITING = 9;
+    const STATUS_SUCCESS = 1;
+
     public $type_list = [
         '网站',
         'APP',
+        '小程序',
+        '游戏',
     ];
 
     public $sign_type_list = [
@@ -62,7 +71,9 @@ class PlatformModel extends Model {
             'sign_key' => 'string:0,32',
             'encrypt_type' => 'int:0,9',
             'public_key' => '',
-            'status' => 'int:0,9',
+            'rules' => '',
+            'description' => '',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -81,7 +92,9 @@ class PlatformModel extends Model {
             'sign_key' => '签名密钥',
             'encrypt_type' => '加密方式',
             'public_key' => '加密公钥',
+            'rules' => '允许规则',
             'status' => '状态',
+            'description' => '介绍',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -175,6 +188,46 @@ class PlatformModel extends Model {
         }
         app('request')->append($data);
         return true;
+    }
+
+    public function verifyRule($module, $path) {
+        if (empty($this->rules)) {
+            return true;
+        }
+        $rules = explode("\n", $this->rules);
+        foreach ($rules as $rule) {
+            $rule = trim($rule);
+            if (empty($rule)) {
+                continue;
+            }
+            if ($rule === '*') {
+                return true;
+            }
+            if (substr($rule, 0, 1) === '-') {
+                if ($this->verifyOneRule(substr($rule, 1), $module, $path)) {
+                    return false;
+                }
+                continue;
+            }
+            if ($this->verifyOneRule($rule, $module, $path)) {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private function verifyOneRule($rule, $module, $path) {
+        $first = substr($rule, 0, 1);
+        if ($first === '@') {
+            return strpos($module, substr($rule, 1)) !== false;
+        }
+        if ($first === '^') {
+            return preg_match('#' + $rule +'#i', $path, $match);
+        }
+        if ($first !== '~') {
+            return substr($rule, 1) === $path;
+        }
+        return preg_match('#' + substr($rule, 1) +'#i', $path, $match);
     }
 
     /**
