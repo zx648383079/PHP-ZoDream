@@ -17,8 +17,17 @@ class PasswordController extends RestController {
         ]);
     }
 
-    public function resetAction() {
+    public function sendFindEmailAction($email) {
+        if (empty($email)) {
+            return $this->renderFailure('请输入有效邮箱');
+        }
+        $user = UserModel::findByEmail($email);
+        if (empty($user)) {
+            return $this->renderFailure('邮箱未注册');
+        }
         return $this->render([
+            'data' => true,
+            'message' => sprintf('邮件已成功发送至 %s 请注意查收！', $email)
         ]);
     }
 
