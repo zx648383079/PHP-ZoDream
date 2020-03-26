@@ -7,15 +7,21 @@ use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Repositories\TaskRepository;
 use Zodream\Route\Controller\RestController;
 
-class TaskController extends RestController {
+class HomeController extends RestController {
 
-    public function indexAction($id = 0) {
+    public function indexAction(int $status = 0, int $id = 0) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
         $data = TaskModel::where('user_id', auth()->id())
+            ->when($status > 0, function ($query) use ($status) {
+                if ($status > 1) {
+                    return $query->where('status', TaskModel::STATUS_COMPLETE);
+                }
+                return $query->where('status', '>=', 5);
+            })
             ->orderBy('id', 'desc')->page();
-        return $this->render(compact('data'));
+        return $this->renderPage($data);
     }
 
     public function detailAction($id) {
@@ -29,7 +35,7 @@ class TaskController extends RestController {
         return $this->render($model);
     }
 
-    public function saveAction($id, $status = false) {
+    public function saveAction($id = 0, $status = false) {
         $data = app('request')
             ->get('name,every_time,description');
         $model = TaskModel::findOrNew($id);
@@ -137,7 +143,7 @@ class TaskController extends RestController {
             return $this->renderFailure($ex->getMessage());
         }
         if ($day === false) {
-            return $this->render($day);
+            return $this->render(['data' => $day]);
         }
         // 记录今天完成的任务次数，每4轮多休息
         $count = TaskLogModel::where('created_at', '>',
