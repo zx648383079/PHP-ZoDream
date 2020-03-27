@@ -34,8 +34,9 @@ class UserModel extends BaseModel {
 
     use UserTrait, LoginTrait, RegisterTrait, PasswordTrait, UserRoleTrait, FindPasswordTrait;
 
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
+    const STATUS_DELETED = 0; // 已删除
+    const STATUS_FROZEN = 2; // 账户已冻结
+    const STATUS_ACTIVE = 10; // 账户正常
 
     const SEX_MALE = 1; // 性别男
     const SEX_FEMALE = 2; //性别女

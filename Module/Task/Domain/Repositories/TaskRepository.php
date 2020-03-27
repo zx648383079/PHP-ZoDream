@@ -38,15 +38,17 @@ class TaskRepository {
             return $day;
         }
         if ($day->status == TaskDayModel::STATUS_PAUSE) {
-            while (true) {
-                $log = TaskLogModel::findRunning($day->task_id);
-                if (!$log) {
-                    break;
+            $log_list = TaskLogModel::where('task_id', $day->task_id)
+                ->whereIn('status', [TaskLogModel::STATUS_NONE, TaskLogModel::STATUS_PAUSE])
+                ->orderBy('id', 'desc')
+                ->get();
+            $log = null;
+            foreach ($log_list as $item) {
+                if ($item->day_id === $day->id) {
+                    $log = $item;
+                    continue;
                 }
-                if ($log->day_id != $day->id) {
-                    self::stop($log->day_id);
-                    $log = false;
-                }
+                self::stopDayLog($item);
             }
             if (!empty($log)) {
                 $log->outage_time += time() - $log->end_at;
@@ -79,6 +81,41 @@ class TaskRepository {
         return $day;
     }
 
+    private static function stopDayLog(TaskLogModel $log) {
+        $day = TaskDayModel::findWithAuth($log->day_id);
+        if ($log->status != TaskLogModel::STATUS_PAUSE) {
+            $log->end_at = time();
+        }
+        $time = $log->getTimeAttribute();
+        if (empty($day)) {
+            $log->status = TaskLogModel::STATUS_FAILURE;
+            $log->save();
+            return;
+        }
+        $log->status =
+            $day->task->every_time <= 0 ||
+            $time >= $day->task->every_time * 60
+                ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
+        $log->save();
+        if ($day->status == TaskDayModel::STATUS_NONE) {
+            return;
+        }
+        self::addDayTime($day, $log, $time);
+    }
+
+    private static function addDayTime(TaskDayModel $day, TaskLogModel $log, $time) {
+        $day->task->time_length += $time;
+        $day->task->status = TaskModel::STATUS_NONE;
+        $day->task->save();
+        if ($log->status === TaskLogModel::STATUS_FINISH) {
+            $day->success_amount ++;
+        } else {
+            $day->failure_amount ++;
+        }
+        $day->status = TaskDayModel::STATUS_NONE;
+        return $day->save();
+    }
+
     /**
      * 停止
      * @param $id
@@ -106,16 +143,7 @@ class TaskRepository {
             $time >= $day->task->every_time * 60
                 ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
         $log->save();
-        $day->task->time_length += $time;
-        $day->task->status = TaskModel::STATUS_NONE;
-        $day->task->save();
-        if ($log->status === TaskLogModel::STATUS_FINISH) {
-            $day->success_amount ++;
-        } else {
-            $day->failure_amount ++;
-        }
-        $day->status = TaskDayModel::STATUS_NONE;
-        $day->save();
+        self::addDayTime($day, $log, $time);
         return $day;
     }
 

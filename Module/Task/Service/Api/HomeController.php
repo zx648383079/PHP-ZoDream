@@ -185,4 +185,18 @@ class HomeController extends RestController {
         }
         return $this->render($task);
     }
+
+    public function batchStopTaskAction($id) {
+        try {
+            foreach ((array)$id as $item) {
+                if ($item < 1) {
+                    continue;
+                }
+                TaskRepository::stopTask($item);
+            }
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render(['data' => true]);
+    }
 }

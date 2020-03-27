@@ -2,7 +2,9 @@
 namespace Module\Auth\Service\Api;
 
 use Infrastructure\Uploader;
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
@@ -21,7 +23,7 @@ class UserController extends RestController {
 
     /**
      * 上传用户头像
-     * @return \Zodream\Infrastructure\Http\Output\RestResponse
+     * @return RestResponse
      * @throws \Exception
      */
     public function avatarAction() {
@@ -43,7 +45,7 @@ class UserController extends RestController {
     /**
      * 更新用户信息
      * @param Request $request
-     * @return \Zodream\Infrastructure\Http\Output\RestResponse
+     * @return RestResponse
      * @throws \Exception
      */
     public function updateAction(Request $request) {
@@ -62,10 +64,30 @@ class UserController extends RestController {
         return $this->render($user);
     }
 
+    public function driverAction() {
+        return $this->render(['data' => []]);
+    }
+
+    /**
+     * 注销账户
+     * @param $reason
+     * @return RestResponse
+     * @throws \Exception
+     */
+    public function cancelAction($reason) {
+        $user = auth()->user();
+        $user->status = UserModel::STATUS_FROZEN;
+        $user->save();
+        BulletinModel::system(1, '账户注销申请',
+            sprintf('申请用户：%s，注销理由：%s <a href="%s">马上查看</a>', $user->name,
+                $reason, url('./@admin/user/edit', ['id' => $user->id])), 98);
+        return $this->render($user);
+    }
+
     /**
      * 验证邮箱是否注册
      * @param $email
-     * @return \Zodream\Infrastructure\Http\Output\RestResponse
+     * @return RestResponse
      * @throws \Exception
      */
     public function checkAction($email) {

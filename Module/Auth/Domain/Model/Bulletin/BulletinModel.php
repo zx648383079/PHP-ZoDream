@@ -14,8 +14,12 @@ use Zodream\Service\Factory;
  * @property integer $user_id
  * @property integer $create_at
  * @property integer $delete_at
+ * @property UserSimpleModel $user
  */
 class BulletinModel extends Model {
+
+    protected $append = ['user', 'user_name', 'icon'];
+
 	public static function tableName() {
         return 'bulletin';
     }
@@ -45,6 +49,26 @@ class BulletinModel extends Model {
 
     public function user() {
 	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function getUserNameAttribute() {
+	    if ($this->user_id < 1) {
+	        return '[系统通知]';
+        }
+	    if ($this->user) {
+	        return mb_substr($this->user->name, 0, 1);
+        }
+	    return '[用户已删除]';
+    }
+
+    public function getIconAttribute() {
+        if ($this->user_id < 1) {
+            return '系';
+        }
+        if ($this->user) {
+            return $this->user->name;
+        }
+        return 'NULL';
     }
 
     /**

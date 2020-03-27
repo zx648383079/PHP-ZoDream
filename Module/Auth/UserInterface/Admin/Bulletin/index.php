@@ -31,7 +31,7 @@ $this->registerJs($js);
     </div>
     <div class="content"><?=$item->bulletin->content?></div>
     <div class="footer">
-        <span>发送者：<?=$item->bulletin->user_id > 0 ? $item->bulletin->user->name : '[系统]'?></span>
+        <span>发送者：<?=$item->bulletin->user_name?></span>
         <span>发送时间：<?=$item->created_at?></span>
         <span>状态：<?=$item->status > 0 ? '已阅' : '未读'?></span>
     </div>

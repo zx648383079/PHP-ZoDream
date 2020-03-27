@@ -16,6 +16,8 @@ class BulletinUserModel extends Model {
     const NONE = 0;
     const READ = 1;  // 已阅读
 
+    protected $append = ['bulletin'];
+
 	public static function tableName() {
         return 'bulletin_user';
     }
