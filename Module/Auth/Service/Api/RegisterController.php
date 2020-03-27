@@ -8,7 +8,7 @@ use Zodream\Route\Controller\RestController;
 
 class RegisterController extends RestController {
 
-    protected function rules() {
+    protected function methods() {
         return [
             'index' => ['POST'],
         ];
