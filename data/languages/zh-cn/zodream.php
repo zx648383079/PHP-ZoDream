@@ -83,6 +83,8 @@ return [
     'Reply Comment' => '回复评论',
     'coin' => '金币',
     'price format' => '{money} 金币',
+    'Account is disabled' => '此帐户被禁用',
+    'Email or password is incorrect' => '邮箱或密码不正确',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

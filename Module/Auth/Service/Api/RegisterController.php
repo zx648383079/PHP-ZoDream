@@ -2,8 +2,8 @@
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
-use Module\Auth\Domain\Model\UserModel;
-
+use Module\Auth\Domain\Repositories\AuthRepository;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
 class RegisterController extends RestController {
@@ -14,11 +14,17 @@ class RegisterController extends RestController {
         ];
     }
 
-    public function indexAction() {
-        $model = new UserModel();
-        if (!$model->load()
-            || !$model->signUp()) {
-            return $this->renderFailure($model->getFirstError());
+    public function indexAction(Request $request) {
+        try {
+            AuthRepository::register(
+                $request->get('name'),
+                $request->get('email'),
+                $request->get('password'),
+                $request->get('rePassword'),
+                $request->has('agree')
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         $user = auth()->user();
         $token = auth()->createToken($user);

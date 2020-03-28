@@ -9,6 +9,10 @@ use Zodream\Route\Controller\RestController;
 
 class HomeController extends RestController {
 
+    public function rules() {
+        return ['*' => '@'];
+    }
+
     public function indexAction(int $status = 0, int $id = 0) {
         if ($id > 0) {
             return $this->detailAction($id);

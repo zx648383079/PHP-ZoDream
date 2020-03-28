@@ -1,9 +1,9 @@
 <?php
 namespace Module\SMS\Domain\Migrations;
 
-use Module\SMS\Doamin\Model\SmsLogModel;
-use Module\SMS\Doamin\Model\SmsSignatureModel;
-use Module\SMS\Doamin\Model\SmsTemplateModel;
+use Module\SMS\Domain\Model\SmsLogModel;
+use Module\SMS\Domain\Model\SmsSignatureModel;
+use Module\SMS\Domain\Model\SmsTemplateModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;

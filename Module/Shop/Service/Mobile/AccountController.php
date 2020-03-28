@@ -2,7 +2,7 @@
 namespace Module\Shop\Service\Mobile;
 
 
-use Module\Shop\Domain\Repositories\AccountRepository;
+use Module\Auth\Domain\Repositories\AccountRepository;
 
 class AccountController extends Controller {
 

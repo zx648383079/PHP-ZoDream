@@ -67,4 +67,16 @@ class LoginLogModel extends Model {
             'created_at' => time()
         ]);
 	}
+
+    /**
+     * 今天失败登录的次数
+     * @param string $ip
+     * @param integer $time
+     * @return integer
+     */
+	public static function failureCount(string $ip, int $time) {
+	    return self::where('ip', $ip)
+                ->where('status', 0)
+                ->where('created_at', '>=', $time)->count();
+    }
 }

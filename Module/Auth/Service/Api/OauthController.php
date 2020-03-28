@@ -3,7 +3,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
-use Zodream\Helpers\Str;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Route\Controller\RestController;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
 use Module\Auth\Service\OauthController as BaseController;
@@ -17,33 +17,23 @@ class OauthController extends RestController {
     }
 
     public function miniAction($code, $nickname, $avatar = '', $gender = 2) {
-        $user = UserModel::find(1);
-        return $this->render(array_merge($user->toArray(), [
-            'token' => auth()->createToken($user)
-        ]));
-        
         $mini = new MiniOAuth();
-        $data = $mini->login($code);
-        $user = OAuthModel::findUser(
-            $data['openid'],
-            OAuthModel::TYPE_WX_MINI);
-        if (!empty($user)) {
-            return $this->render(array_merge($user->toArray(), [
-                'token' => auth()->createToken($user)
-            ]));
+        try {
+            $data = $mini->login($code);
+            $user = AuthRepository::oauth(
+                OAuthModel::TYPE_WX_MINI,
+                $data['openid'],
+                function () use ($nickname, $gender, $avatar) {
+                    return [
+                        $nickname,
+                        null,
+                        $gender == 1 ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
+                        $avatar
+                    ];
+                }, isset($data['unionid']) ? $data['unionid'] : null);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $rnd = Str::random(3);
-        $email = sprintf('%s_%s@zodream.cn',
-            OAuthModel::TYPE_WX_MINI, $data['openid']);
-        $user = UserModel::create([
-            'name' => $nickname,
-            'email' => $email,
-            'password' => $rnd,
-            'sex' => $gender == 1 ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
-            'avatar' => $avatar
-        ]);
-        OAuthModel::bindUser($user, $data['openid'],
-            OAuthModel::TYPE_WX_MINI);
         return $this->render(array_merge($user->toArray(), [
             'token' => auth()->createToken($user)
         ]));

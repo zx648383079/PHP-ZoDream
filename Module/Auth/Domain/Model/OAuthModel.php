@@ -102,6 +102,7 @@ class OAuthModel extends Model {
      * @param string $unionId
      * @param string $type
      * @return UserModel|bool
+     * @throws \Exception
      */
     public static function findUserWithUnion($openid,
                                             $unionId,
@@ -109,6 +110,9 @@ class OAuthModel extends Model {
         $user = static::findUser($openid, $type);
         if (!empty($user)) {
             return $user;
+        }
+        if (empty($unionId)) {
+            return false;
         }
         return static::findUser($unionId, $type);
     }

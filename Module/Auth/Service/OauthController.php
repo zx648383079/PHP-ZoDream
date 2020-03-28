@@ -3,6 +3,7 @@ namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\ModuleController;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Zodream\Helpers\Str;
@@ -31,62 +32,23 @@ class OauthController extends ModuleController {
         if (!$auth->callback()) {
             return $this->failureCallback('授权回调失败！');
         }
-        $user = $this->findUser($type, $auth);
-        if (!empty($user)) {
-            return $this->successCallback($user, $type);
+        try {
+            $user = AuthRepository::oauth($type, $auth->identity,
+                function () use ($auth) {
+                    if (empty($auth->info())) {
+                        throw new \Exception('获取用户信息失败');
+                    }
+                    return [
+                        $auth->username,
+                        $auth->email,
+                        $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
+                        $auth->avatar
+                    ];
+            }, $auth->unionid);
+        } catch (\Exception $ex) {
+            return $this->failureCallback($ex->getMessage());
         }
-        if (empty($auth->info())) {
-            return $this->failureCallback('获取用户信息失败');
-        }
-        if (!auth()->guest()) {
-            $user = auth()->user();
-            $this->successBindUser($type, $user, $auth);
-            return $this->successCallback($user);
-        }
-        $rnd = Str::random(3);
-        $email = sprintf('%s_%s@zodream.cn', $type, $rnd);
-        if (!empty($auth->email)
-//            && ($user = UserModel::findByEmail($auth->email))) {
-//            OAuthModel::bindUser($user, $auth->identity, $type);
-//            $user->login();
-//            return $this->redirect('/');
-            && UserModel::validateEmail($auth->email) ) {
-            $email = $auth->email;
-        }
-
-        $user = UserModel::create([
-            'name' => empty($auth->username) ? '用户_'.$rnd : $auth->username ,
-            'email' => $email,
-            'password' => $rnd,
-            'sex' => $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
-            'avatar' => $auth->avatar
-        ]);
-        if (empty($user)) {
-            return $this->failureCallback('系统错误！');
-        }
-        $this->successBindUser($type, $user, $auth);
-        return $this->successCallback($user, $type);
-    }
-
-    protected function findUser($type, $auth) {
-        if ($type == 'wechat' && $auth->unionid) {
-            return OAuthModel::findUserWithUnion($auth->openid, $auth->unionid, $type);
-        }
-        return OAuthModel::findUser(
-            $auth->identity,
-            $type);
-    }
-
-    /**
-     * @param $type
-     * @param $user
-     * @param $auth
-     */
-    protected function successBindUser($type, $user, $auth) {
-        OAuthModel::bindUser($user, $auth->identity, $type, $auth->username);
-        if ($type == 'wechat' && $auth->unionid) {
-            OAuthModel::bindUser($user, $auth->openid, $type, $auth->username);
-        }
+        return $this->successCallback($user);
     }
 
     protected function failureCallback($error) {
@@ -107,13 +69,11 @@ class OauthController extends ModuleController {
         return $this->redirect($redirect_uri);
     }
 
-    protected function successCallback(UserModel $user, $type) {
+    protected function successCallback(UserModel $user) {
         $redirect_uri = session('redirect_uri');
         /** @var PlatformModel $platform */
         $platform = session('platform');
         if (empty($platform) || empty($redirect_uri)) {
-            $user->login();
-            $user->logLogin(true, $type);
             return $this->redirect($redirect_uri ? $redirect_uri : '/');
         }
         $domain = parse_url($redirect_uri, PHP_URL_HOST);

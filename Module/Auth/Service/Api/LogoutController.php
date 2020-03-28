@@ -1,12 +1,13 @@
 <?php
 namespace Module\Auth\Service\Api;
 
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Route\Controller\RestController;
 
 class LogoutController extends RestController {
 
     public function indexAction() {
-        auth()->logout();
+        AuthRepository::logout();
         return $this->render([]);
     }
 }

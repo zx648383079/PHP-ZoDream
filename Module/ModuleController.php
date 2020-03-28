@@ -2,6 +2,7 @@
 namespace Module;
 
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Helpers\Json;
 use Zodream\Route\Controller\ModuleController as BaseController;
 
@@ -19,8 +20,7 @@ abstract class ModuleController extends BaseController {
         if (!auth()->guest()) {
             return true;
         }
-        $user = new UserModel();
-        if ($user->signInHeader()) {
+        if (AuthRepository::loginByBasicAuthorization()) {
             return true;
         }
         return false;

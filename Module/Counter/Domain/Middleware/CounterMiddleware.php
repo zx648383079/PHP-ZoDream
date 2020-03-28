@@ -24,6 +24,7 @@ class CounterMiddleware implements MiddlewareInterface {
             ->listen(JumpOut::class, JumpOutListener::class);
         $uri = app('request')->uri()->getPath();
         if (strpos($uri, '/counter') === 0
+            || strpos($uri, '/auth') === 0
             || strpos($uri, '/to') === 0
             || strpos($uri, '/admin.php') === 0
             || strpos($uri, '/admin') > 3) {

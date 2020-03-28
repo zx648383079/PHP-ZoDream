@@ -7,6 +7,10 @@ use Zodream\Route\Controller\RestController;
 
 class RecordController extends RestController {
 
+    public function rules() {
+        return ['*' => '@'];
+    }
+
     public function indexAction($type, $date = null, $chart = null, $ignore = false) {
         $time = empty($date) ? time() : strtotime($date);
         $data = [];

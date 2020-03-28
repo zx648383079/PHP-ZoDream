@@ -4,10 +4,6 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '账号关联';
 
-$icon_list = [
-    'wx' => 'weixin'
-];
-
 $js = <<<JS
 bindAuth(1);
 JS;
@@ -18,11 +14,16 @@ $this->registerJs($js);
 <?php foreach($model_list as $item):?>
 <div class="connect-item">
     <div class="nmae">
-        <i class="fab fa-<?=isset($icon_list[$item->vendor]) ? $icon_list[$item->vendor] : $item->vendor?>"></i>
-        <?=$item->vendor?>(<?=$item->nickname?>)
+        <i class="fab <?=$item['icon']?>"></i>
+        <?=$item['name']?>
+        <?php if (isset($item['nickname'])):?>
+        (<?=$item['nickname']?>)
+        <?php endif;?>
     </div>
     <div class="action">
-        <a data-type="del" href="<?=$this->url('./@admin/account/delete_connect', ['id' => $item->id])?>">解绑</a>
+        <?php if (isset($item['id'])):?>
+            <a data-type="del" href="<?=$this->url('./@admin/account/delete_connect', ['id' => $item['id']])?>">解绑</a>
+        <?php endif;?>
     </div>
 </div>
 <?php endforeach; ?>

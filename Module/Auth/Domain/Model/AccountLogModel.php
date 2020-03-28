@@ -34,7 +34,7 @@ class AccountLogModel extends Model {
     const STATUS_REFUND = 9;
 
     public static function tableName() {
-        return 'account_log';
+        return 'user_account_log';
     }
 
     protected function rules() {

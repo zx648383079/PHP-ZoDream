@@ -7,6 +7,7 @@ use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
+use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
@@ -31,6 +32,7 @@ class CreateAuthTables extends Migration {
             $table->set('password')->varchar(100)->notNull();
             $table->set('sex')->tinyint(1)->defaultVal(0);
             $table->set('avatar')->varchar(255);
+            $table->set('birthday')->date()->defaultVal(date('Y-m-d'));
             $table->set('money')->int()->defaultVal(0)->unsigned();
             $table->set('parent_id')->int(10, true, true)->defaultVal(0);
             $table->set('token')->varchar(60);
@@ -140,6 +142,15 @@ class CreateAuthTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('action')->varchar(30)->notNull();
             $table->set('remark')->varchar()->defaultVal('');
+            $table->timestamp('created_at');
+        })->append(MailLogModel::tableName(), function (Table $table) {
+            $table->setComment('发送邮件记录');
+            $table->set('id')->pk()->ai();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('code')->varchar(40)->notNull();
+            $table->set('amount')->tinyint(1)->defaultVal(10);
             $table->timestamp('created_at');
         });
     }

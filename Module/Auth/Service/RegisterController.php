@@ -1,8 +1,9 @@
 <?php
 namespace Module\Auth\Service;
 
-use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\ModuleController;
+use Zodream\Infrastructure\Http\Request;
 
 class RegisterController extends ModuleController {
 
@@ -17,14 +18,20 @@ class RegisterController extends ModuleController {
         return $this->show();
     }
 
-    public function postAction() {
-        $model = new UserModel();
-        if ($model->load() && $model->signUp()) {
-            $model->logLogin();
-            return $this->jsonSuccess([
-                'url' => url('/')
-            ], '注册成功！');
+    public function postAction(Request $request) {
+        try {
+            AuthRepository::register(
+                $request->get('name'),
+                $request->get('email'),
+                $request->get('password'),
+                $request->get('rePassword'),
+                $request->has('agree'));
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
+        $redirect_uri = $request->get('redirect_uri');
+        return $this->jsonSuccess([
+            'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
+        ], '注册成功！');
     }
 }

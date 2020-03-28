@@ -3,10 +3,10 @@ namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\ModuleController;
-
-
 use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Http\Response;
 use Zodream\Service\Factory;
 
 
@@ -19,10 +19,13 @@ class HomeController extends ModuleController {
     }
 
     public function indexAction(Request $request) {
-        $user = new UserModel();
-        if ($user->load() && $user->signIn()) {
+        try {
+            AuthRepository::login(
+                $request->get('email'),
+                $request->get('password'),
+                $request->has('rememberMe'));
             return $this->redirect($request->get('redirect_uri', '/'));
-        }
+        } catch (\Exception $ex) {}
         if ($request->isAjax() && $request->isGet()) {
             return $this->json([
                 'code' => 302,
@@ -32,15 +35,13 @@ class HomeController extends ModuleController {
             ]);
         }
         $time = strtotime(date('Y-m-d 00:00:00'));
-        $num = LoginLogModel::where('ip', app('request')->ip())
-            ->where('status', 0)
-            ->where('created_at', '>=', $time)->count();
+        $num = LoginLogModel::failureCount($request->ip(), $time);
         if ($num > 2) {
             $num = intval($num / 3);
             $this->send('code', $num);
             Factory::session()->set('level', $num);
         }
-        $redirect_uri = app('request')->get('redirect_uri');
+        $redirect_uri = $request->get('redirect_uri');
         $title = '用户登录';
         return $this->show(compact('redirect_uri', 'title'));
     }
@@ -55,21 +56,29 @@ class HomeController extends ModuleController {
 
     /**
      * @route login
-     * @method GET,POST
-     * @return \Zodream\Infrastructure\Http\Response
+     * @method GET, POST
+     * @param $email
+     * @param Request $request
+     * @return Response
      * @throws \Exception
      */
-    public function loginAction() {
-        $user = new UserModel();
-        if ($user->load() && $user->signIn()) {
-            auth()->user()->logLogin();
-            $redirect_uri = app('request')->get('redirect_uri');
-            return $this->jsonSuccess([
-                'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
-            ], '登录成功！');
+    public function loginAction(Request $request, $email = null) {
+        try {
+            AuthRepository::login(
+                $email,
+                $request->get('password'),
+                $request->has('rememberMe'));
+        } catch (\Exception $ex) {
+            if (!empty($email)) {
+                LoginLogModel::addLoginLog($email, 0, false);
+            }
+            return $this->jsonFailure($ex->getMessage());
         }
-        $user->logLogin(false);
-        return $this->jsonFailure($user->getFirstError());
+        $redirect_uri = $request->get('redirect_uri');
+        return $this->jsonSuccess([
+            'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
+        ], '登录成功！');
+
     }
 
     public function logoutAction() {

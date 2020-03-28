@@ -4,34 +4,35 @@ namespace Module\Forum\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class ForumClassifyModel
+ * Class EmojiModel
+ * @package Module\Forum\Domain\Model
  * @property integer $id
+ * @property integer $cat_id
  * @property string $name
  * @property string $icon
- * @property integer $forum_id
- * @property integer $position
  */
-class ForumClassifyModel extends Model {
+class EmojiModel extends Model {
+
+    public $timestamps = false;
+
     public static function tableName() {
-        return 'bbs_forum_classify';
+        return 'bbs_emoji';
     }
 
     protected function rules() {
         return [
-            'name' => 'required|string:0,20',
-            'icon' => 'string:0,100',
-            'forum_id' => 'int',
-            'position' => 'int:0,999',
+            'cat_id' => 'required|int',
+            'name' => 'required|string:0,255',
+            'icon' => 'required|string:0,255',
         ];
     }
 
     protected function labels() {
         return [
             'id' => 'Id',
+            'cat_id' => 'Cat Id',
             'name' => 'Name',
             'icon' => 'Icon',
-            'forum_id' => 'Forum Id',
-            'position' => 'Position',
         ];
     }
 

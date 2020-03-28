@@ -7,6 +7,10 @@ use Zodream\Route\Controller\RestController;
 
 class ReviewController extends RestController {
 
+    public function rules() {
+        return ['*' => '@'];
+    }
+
     public function indexAction($type, $date = null) {
         $time = strtotime(date('Y-m-d 00:00:00', empty($date) ? time() : strtotime($date)));
         if ($type === 'week') {

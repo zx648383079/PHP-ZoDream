@@ -4,15 +4,9 @@ namespace Module\Auth\Domain\Model;
 
 use Module\Auth\Domain\Entities\Concerns\UserTrait;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
-use Module\Auth\Domain\Model\Concerns\FindPasswordTrait;
-use Module\Auth\Domain\Model\Concerns\LoginTrait;
-use Module\Auth\Domain\Model\Concerns\PasswordTrait;
-use Module\Auth\Domain\Model\Concerns\RegisterTrait;
 use Module\Auth\Domain\Model\Concerns\UserRoleTrait;
 use Zodream\Database\Model\UserModel as BaseModel;
 use Zodream\Helpers\Security\Hash;
-
-use Zodream\Service\Factory;
 
 /**
  * Class UserModel
@@ -25,6 +19,7 @@ use Zodream\Service\Factory;
  * @property string $avatar
  * @property integer $money
  * @property integer $parent_id
+ * @property string $birthday
  * @property string $token
  * @property integer $status
  * @property integer $created_at
@@ -32,7 +27,7 @@ use Zodream\Service\Factory;
  */
 class UserModel extends BaseModel {
 
-    use UserTrait, LoginTrait, RegisterTrait, PasswordTrait, UserRoleTrait, FindPasswordTrait;
+    use UserTrait, UserRoleTrait;
 
     const STATUS_DELETED = 0; // 已删除
     const STATUS_FROZEN = 2; // 账户已冻结
@@ -47,23 +42,15 @@ class UserModel extends BaseModel {
         '女'
     ];
 
-    protected $hidden = ['password'];
-	
-	public $rememberMe = false;
-	
-	public $code = false;
-	
-	public $agree = false;
-	
-	public $rePassword = false;
-	
-	public $roles = [];
-	
-	public $oldPassword = false;
+    protected $hidden = ['password', 'token', 'status'];
 
+    protected $append = ['sex_label'];
+
+	public $roles = [];
 
     public function getSexLabelAttribute() {
-	    return $this->sex_list[$this->sex];
+	    return isset($this->sex_list[$this->sex])
+            ? $this->sex_list[$this->sex] : $this->sex_list[0];
     }
 
     public function getAvatarAttribute() {
@@ -85,33 +72,6 @@ class UserModel extends BaseModel {
 	public function validatePassword($password) {
 		return Hash::verify($password, $this->password);
 	}
-
-	public function validateAgree() {
-	    return !empty($this->agree);
-    }
-
-    public function validateCode() {
-        if ($this->code === false) {
-            return true;
-        }
-        $code = Factory::session()->get('code');
-        if (empty($code) || $this->code != $code) {
-            $this->setError('code', '验证码错误！');
-            return false;
-        }
-        return true;
-    }
-
-    public function validateRePassword() {
-        if ($this->rePassword === false) {
-            return true;
-        }
-        if (empty($this->rePassword) || $this->rePassword != $this->password) {
-            $this->setError('rePassword', '两次密码不一致！');
-            return false;
-        }
-        return true;
-    }
 
     /**
      * 更改为手动记录状态

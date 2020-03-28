@@ -6,6 +6,7 @@ use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\ModuleController;
 use Zodream\Image\QrCode;
+use Zodream\Infrastructure\Http\Response;
 
 class QrController extends ModuleController {
 
@@ -58,7 +59,7 @@ class QrController extends ModuleController {
      * @param $token
      * @param bool $confirm
      * @param bool $reject
-     * @return \Zodream\Infrastructure\Http\Response
+     * @return Response
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {

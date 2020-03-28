@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Domain\Repositories;
+namespace Module\Auth\Domain\Repositories;
 
 use Module\Auth\Domain\Model\OAuthModel;
 
@@ -27,6 +27,10 @@ class AccountRepository {
             ],
             'wx' => [
                 'name' => '微信',
+                'icon' => 'fa-weixin',
+            ],
+            'wx_mini' => [
+                'name' => '微信小程序',
                 'icon' => 'fa-weixin',
             ],
             'alipay' => [

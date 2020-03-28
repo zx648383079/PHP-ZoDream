@@ -2,6 +2,9 @@
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
+use Zodream\Helpers\Str;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
 class PasswordController extends RestController {
@@ -18,12 +21,13 @@ class PasswordController extends RestController {
     }
 
     public function sendFindEmailAction($email) {
-        if (empty($email)) {
-            return $this->renderFailure('请输入有效邮箱');
-        }
-        $user = UserModel::findByEmail($email);
-        if (empty($user)) {
-            return $this->renderFailure('邮箱未注册');
+        try {
+            AuthRepository::sendEmail(
+                $email,
+                Str::randomNumber(8)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render([
             'data' => true,
@@ -31,19 +35,29 @@ class PasswordController extends RestController {
         ]);
     }
 
-    public function updateAction($old_password, $password) {
-        /** @var UserModel $model */
-        $model = auth()->user();
-        if (strlen($password) < 6) {
-            return $this->renderFailure('密码必须大于6位！');
+    public function resetAction(Request $request) {
+        try {
+            AuthRepository::resetPassword(
+                $request->get('code'),
+                $request->get('password'),
+                $request->get('confirm_password')
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!$model->validatePassword($old_password)) {
-            return $this->renderFailure('密码不正确！');
+        return $this->render(['data' => true]);
+    }
+
+    public function updateAction(Request $request) {
+        try {
+            AuthRepository::password(
+                $request->get('old_password'),
+                $request->get('password'),
+                $request->get('confirm_password')
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->setPassword($password);
-        if ($model->save()) {
-            return $this->render(['data' => true]);
-        }
-        return $this->renderFailure($model->getFirstError());
+        return $this->render(['data' => true]);
     }
 }

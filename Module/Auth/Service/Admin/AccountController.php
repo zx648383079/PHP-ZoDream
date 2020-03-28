@@ -6,7 +6,7 @@ use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
-
+use Module\Auth\Domain\Repositories\AccountRepository;
 
 class AccountController extends Controller {
 
@@ -16,8 +16,7 @@ class AccountController extends Controller {
     }
 
     public function connectAction() {
-        $model_list = OAuthModel::where('user_id', auth()->id())
-            ->get('id', 'vendor', 'nickname', 'created_at');
+        $model_list = AccountRepository::getConnect();
         return $this->show(compact('model_list'));
     }
 
