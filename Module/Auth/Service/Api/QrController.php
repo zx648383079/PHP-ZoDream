@@ -10,6 +10,13 @@ use Zodream\Route\Controller\RestController;
 
 class QrController extends RestController {
 
+    protected function methods() {
+        return [
+            'index' => ['POST'],
+            'authorize' => ['POST']
+        ];
+    }
+
     protected function rules() {
         return [
             '*' => '@',

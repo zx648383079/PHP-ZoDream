@@ -32,9 +32,9 @@
 
     "mobiledetect/mobiledetectlib": "~2.8",
     "phpoffice/phpspreadsheet": "~1.0",
-    "phpmailer/phpmailer": "~6.0.6",
+    "phpmailer/phpmailer": "^6.1",
     "nesbot/carbon": "~2.10.0",
-    "mtdowling/cron-expression": "~1.0",
+    "dragonmantank/cron-expression": "~3.0",
     "zhuzhichao/ip-location-zh": "~2.4",
     "khanamiryan/qrcode-detector-decoder": "~1.0",
     "bacon/bacon-qr-code": "~1.0.3",

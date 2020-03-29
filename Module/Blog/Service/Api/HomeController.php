@@ -33,7 +33,9 @@ class HomeController extends RestController {
         if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
             return $this->renderFailure('id 错误！');
         }
-        return $this->render($blog);
+        $data = $blog->toArray();
+        $data['content'] = $blog->toHtml();
+        return $this->render($data);
     }
 
     public function contentAction($id) {
@@ -57,9 +59,9 @@ class HomeController extends RestController {
     }
 
     public function suggestAction($keywords) {
-        $data = BlogModel::when(!empty($keywords), function ($query) {
+        $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
            BlogModel::searchWhere($query, 'title');
-        })->limit(4)->pluck('title', 'id');
+        })->limit(4)->get();
         return $this->render(compact('data'));
     }
 }

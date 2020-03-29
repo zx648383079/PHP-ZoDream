@@ -40,7 +40,8 @@ class PasswordController extends RestController {
             AuthRepository::resetPassword(
                 $request->get('code'),
                 $request->get('password'),
-                $request->get('confirm_password')
+                $request->get('confirm_password'),
+                $request->get('email')
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

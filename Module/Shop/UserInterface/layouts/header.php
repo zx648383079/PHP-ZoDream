@@ -91,7 +91,7 @@ use Zodream\Template\View;
                 <i class="fa fa-search"></i>
             </div>
             <div class="header-cart" data-url="<?=$this->url('./cart/mini')?>">
-                <?php $this->extend('cart/mini');?>
+                <?php $this->extend('Cart/mini');?>
             </div>
         </div>
     </div>

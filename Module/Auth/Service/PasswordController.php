@@ -27,14 +27,15 @@ class PasswordController extends ModuleController {
             AuthRepository::resetPassword(
                 $request->get('code'),
                 $request->get('password'),
-                $request->get('rePassword')
+                $request->get('rePassword'),
+                $request->get('email')
             );
         } catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
             'url' => url('./')
-        ]);
+        ], '密码重置成功');
     }
 
     public function sendAction($email) {

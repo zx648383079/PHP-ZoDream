@@ -75,6 +75,7 @@ class HomeController extends RestController {
         }
         $data = TaskDayModel::with('task')
             ->where('user_id', auth()->id())
+            ->where('amount', '>', 0)
             ->where('today', $time)->page();
         return $this->renderPage($data);
     }

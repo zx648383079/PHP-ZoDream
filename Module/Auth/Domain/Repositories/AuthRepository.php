@@ -16,6 +16,8 @@ use Zodream\Validate\Validator;
 
 class AuthRepository {
 
+    const UNSET_PASSWORD = 'no_password';
+
     public static function login($email, $password, $remember = false) {
         if (empty($email) || empty($password)) {
             throw AuthException::invalidLogin();
@@ -115,7 +117,7 @@ class AuthRepository {
         if (empty($avatar)) {
             $avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
         }
-        $password = 'no_password';
+        $password = self::UNSET_PASSWORD;
         $user = UserModel::create(compact('name',
             'email', 'password', 'sex', 'avatar'));
         if (empty($user)) {
@@ -146,7 +148,7 @@ class AuthRepository {
         }
         /** @var UserModel $user */
         $user = auth()->user();
-        if (!$user->validatePassword($oldPassword)) {
+        if ($user->password !== self::UNSET_PASSWORD && !$user->validatePassword($oldPassword)) {
             throw new Exception('密码不正确！');
         }
         $user->setPassword($password);
@@ -183,6 +185,13 @@ class AuthRepository {
         if (empty($user)) {
             throw new Exception('邮箱未注册');
         }
+        $count = MailLogModel::where('type', MailLogModel::TYPE_FIND)
+            ->where('user_id', $user->id)
+            ->where('created_at', '>', time() - 120)
+            ->count();
+        if ($count > 0) {
+            throw new Exception('发送过于频繁，请稍后再试');
+        }
         $html = view()->render('@root/Template/mail', [
             'name' => $user->name,
             'time' => Time::format(),
@@ -194,7 +203,7 @@ class AuthRepository {
             ->addAddress($email, $user->name)
             ->send('密码重置邮件', $html);
         if (!$res) {
-            throw new Exception('邮件发送失败');
+            throw new Exception($mail->getError());//'邮件发送失败');
         }
         MailLogModel::create([
             'ip' => app('request')->ip(),
@@ -207,7 +216,10 @@ class AuthRepository {
         return $res;
     }
 
-    public static function resetPassword($code, $password, $confirmPassword) {
+    public static function resetPassword($code, $password, $confirmPassword, $email) {
+        if (empty($email) || !Validator::email()->validate($email)) {
+            throw new Exception('请输入有效邮箱');
+        }
         if (!self::verifyPassword($password)) {
             throw new Exception('密码长度必须不小于6位');
         }
@@ -215,13 +227,16 @@ class AuthRepository {
             throw new Exception('两次密码不一致');
         }
         $log = self::verifyEmailCode($code);
-        MailLogModel::where('user_id', $log->user_id)
-            ->where('type', MailLogModel::TYPE_FIND)
-            ->delete();
         $user = UserModel::find($log->user_id);
         if (empty($user) || $user->status != UserModel::STATUS_ACTIVE) {
             throw AuthException::disableAccount();
         }
+        if ($user->email !== $email) {
+            throw new Exception('邮箱或安全码不正确');
+        }
+        MailLogModel::where('user_id', $log->user_id)
+            ->where('type', MailLogModel::TYPE_FIND)
+            ->delete();
         $user->setPassword($password);
         if (!$user->save()) {
             throw new Exception($user->getFirstError());

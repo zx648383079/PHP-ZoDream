@@ -8,16 +8,16 @@ $this->extend('layouts/header');
     <div class="login-box">
         <form class="form-ico login-form" action="<?= $this->url('./password/reset', false) ?>" method="POST">
             <div class="input-group">
-                <input type="email" placeholder="请输入邮箱" required>
+                <input type="email" placeholder="请输入邮箱" name="email" required>
                 <i class="fa fa-at" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="password" placeholder="请输入密码" required>
+                <input type="password" placeholder="请输入密码" name="password" required>
                 <i class="fa fa-lock" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="password" placeholder="请确认密码" required>
-                <i class="fa fa-circle-o" aria-hidden="true"></i>
+                <input type="password" placeholder="请确认密码" name="rePassword" required>
+                <i class="fa fa-circle" aria-hidden="true"></i>
             </div>
 
             <button type="submit" class="btn btn-full">确定修改</button>

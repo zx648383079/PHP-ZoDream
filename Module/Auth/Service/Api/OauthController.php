@@ -18,6 +18,7 @@ class OauthController extends RestController {
 
     public function miniAction($code, $nickname, $avatar = '', $gender = 2) {
         $mini = new MiniOAuth();
+        $guest = auth()->guest();
         try {
             $data = $mini->login($code);
             $user = AuthRepository::oauth(
@@ -33,6 +34,9 @@ class OauthController extends RestController {
                 }, isset($data['unionid']) ? $data['unionid'] : null);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
+        }
+        if (!$guest) {
+            return $this->render($user->toArray());
         }
         return $this->render(array_merge($user->toArray(), [
             'token' => auth()->createToken($user)
