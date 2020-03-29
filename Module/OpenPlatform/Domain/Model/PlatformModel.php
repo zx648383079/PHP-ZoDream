@@ -200,9 +200,6 @@ class PlatformModel extends Model {
             if (empty($rule)) {
                 continue;
             }
-            if ($rule === '*') {
-                return true;
-            }
             if (substr($rule, 0, 1) === '-') {
                 if ($this->verifyOneRule(substr($rule, 1), $module, $path)) {
                     return false;
@@ -217,17 +214,20 @@ class PlatformModel extends Model {
     }
 
     private function verifyOneRule($rule, $module, $path) {
+        if ($rule === '*') {
+            return true;
+        }
         $first = substr($rule, 0, 1);
         if ($first === '@') {
             return strpos($module, substr($rule, 1)) !== false;
         }
         if ($first === '^') {
-            return preg_match('#' + $rule +'#i', $path, $match);
+            return preg_match('#'. $rule.'#i', $path, $match);
         }
         if ($first !== '~') {
             return substr($rule, 1) === $path;
         }
-        return preg_match('#' + substr($rule, 1) +'#i', $path, $match);
+        return preg_match('#'.substr($rule, 1).'#i', $path, $match);
     }
 
     /**
