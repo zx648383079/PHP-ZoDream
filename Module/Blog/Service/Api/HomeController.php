@@ -29,6 +29,7 @@ class HomeController extends RestController {
 
     public function detailAction($id) {
         $id = intval($id);
+        BlogModel::where('id', $id)->updateOne('click_count');
         $blog = BlogModel::find($id);
         if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
             return $this->renderFailure('id 错误！');

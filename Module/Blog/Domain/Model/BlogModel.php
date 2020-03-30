@@ -38,6 +38,8 @@ class BlogModel extends BlogEntity {
 
     protected $append = ['url', 'term', 'user', 'is_recommended', 'can_read'];
 
+    protected $hidden = ['open_rule'];
+
 	public function term() {
 	    return $this->hasOne(TermSimpleModel::class, 'id', 'term_id');
     }
