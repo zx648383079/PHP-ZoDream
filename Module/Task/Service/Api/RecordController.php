@@ -51,8 +51,7 @@ class RecordController extends RestController {
                return $item['amount'] > 0;
             });
         }
-        $chart = $chart === 'table' ? $chart : 'chart';
-        return $this->render(compact('date', 'type', 'day_list'));
+        return $this->render(['data' => $day_list]);
     }
 
 }

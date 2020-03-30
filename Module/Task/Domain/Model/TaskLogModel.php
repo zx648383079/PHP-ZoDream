@@ -23,6 +23,8 @@ class TaskLogModel extends Model {
     const STATUS_FINISH = 2; // 完成
     const STATUS_FAILURE = 3; // 中断失败，未完成一个番茄时间
 
+    protected $append = ['time'];
+
     public static function tableName() {
         return 'task_log';
     }
