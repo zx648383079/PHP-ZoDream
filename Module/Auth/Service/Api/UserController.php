@@ -3,6 +3,7 @@ namespace Module\Auth\Service\Api;
 
 use Infrastructure\Uploader;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
@@ -48,18 +49,11 @@ class UserController extends RestController {
      * @throws \Exception
      */
     public function updateAction(Request $request) {
-        $user = auth()->user();
-        foreach (['name', 'sex', 'birthday'] as $key) {
-            if (!$request->has($key)) {
-                continue;
-            }
-            $value = $request->get($key);
-            if (empty($value)) {
-                continue;
-            }
-            $user->{$key} = $value;
+        try {
+            $user = AuthRepository::updateProfile($request);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $user->save();
         return $this->render($user);
     }
 

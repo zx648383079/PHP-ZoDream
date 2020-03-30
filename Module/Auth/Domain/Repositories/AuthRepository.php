@@ -11,6 +11,7 @@ use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
 
@@ -243,6 +244,27 @@ class AuthRepository {
         }
         ActionLogModel::addLog($user->id, 'password', '重置密码');
         return true;
+    }
+
+    public static function updateProfile(Request $request) {
+        $user = auth()->user();
+        foreach (['name', 'sex', 'birthday'] as $key) {
+            if (!$request->has($key)) {
+                continue;
+            }
+            $value = $request->get($key);
+            if (empty($value)) {
+                continue;
+            }
+            if ($key === 'name' && UserModel::where('name', $value)
+                    ->where('id', '<>', $user->id)
+                    ->count() > 0) {
+                throw new Exception('昵称已被占用');
+            }
+            $user->{$key} = $value;
+        }
+        $user->save();
+        return $user;
     }
 
 
