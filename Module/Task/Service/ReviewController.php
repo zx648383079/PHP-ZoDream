@@ -2,6 +2,7 @@
 namespace Module\Task\Service;
 
 use Module\Task\Domain\Model\TaskLogModel;
+use Module\Task\Domain\Repositories\ReviewRepository;
 use Zodream\Helpers\Time;
 
 class ReviewController extends Controller {
@@ -21,12 +22,7 @@ class ReviewController extends Controller {
             $start_at = $time;
             $end_at = $time + 86399;
         }
-        $log_list = TaskLogModel::with('task')
-            ->where('created_at', '>=', $start_at)
-            ->where('created_at', '<=', $end_at)
-            ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'asc')
-            ->get();
+        $log_list = ReviewRepository::logList($start_at, $end_at, true);
         $this->layout = false;
         return $this->show($type, compact('log_list', 'start_at', 'end_at'));
     }

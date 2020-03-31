@@ -81,6 +81,10 @@ class TaskDayModel extends Model {
         return $this->hasOne(TaskModel::class, 'id', 'task_id');
     }
 
+    public function logs() {
+        return $this->hasMany(TaskLogModel::class, 'day_id', 'id');
+    }
+
     public function getLogAttribute() {
         return TaskLogModel::findRunning($this->task_id);
     }
