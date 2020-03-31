@@ -7,6 +7,7 @@ use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Infrastructure\Http\Request;
 
 class UserController extends Controller {
 
@@ -33,8 +34,8 @@ class UserController extends Controller {
         return $this->show(compact('model', 'role_list'));
     }
 
-    public function saveAction() {
-        $id = intval(app('request')->get('id'));
+    public function saveAction(Request $request) {
+        $id = intval($request->get('id'));
         $rule = $id > 0 ? [
             'name' => 'required|string',
             'email' => 'required|email',
@@ -48,9 +49,12 @@ class UserController extends Controller {
             'avatar' => 'string',
             'password' => 'required|string',
         ];
-        $data = app('request')->get('name,email,sex,avatar,password,confirm_password');
+        $data = $request->get('name,email,sex,avatar,password,confirm_password');
         if ($id < 1 && $data['password'] != $data['confirm_password']) {
             return $this->jsonFailure('两次密码不一致！');
+        }
+        if (empty($data['password'])) {
+            unset($data['password'], $data['confirm_password']);
         }
         $model = UserModel::findOrNew($id);
         if (!$model->load($data) || !$model->validate($rule)) {
@@ -62,7 +66,7 @@ class UserController extends Controller {
         if (!$model->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
-        $model->setRole(app('request')->get('roles'));
+        $model->setRole($request->get('roles'));
         return $this->jsonSuccess([
             'url' => $this->getUrl('user')
         ]);

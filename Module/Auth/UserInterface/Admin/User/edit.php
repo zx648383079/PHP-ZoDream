@@ -22,8 +22,8 @@ $passwordTip = $model->id ? '新密码' : '密码';
     <?=Form::radio('sex', $model->sex_list)?>
     <?=Form::file('avatar')?>
     <?=Form::text('birthday')?>
-    <?= Form::password('password', '', '输入'.$passwordTip, $passwordTip) ?>
-    <?= Form::password('confirm_password', '', '输入确认密码', '确认密码') ?>
+    <?= Form::password('password', false, '输入'.$passwordTip, $passwordTip) ?>
+    <?= Form::password('confirm_password', false, '输入确认密码', '确认密码') ?>
 
     <div class="input-group">
         <label>角色</label>
