@@ -25,6 +25,7 @@ $this->title = '用户列表';
         <th class="auto-hide">邮箱</th>
         <th class="auto-hide">性别</th>
         <th>余额</th>
+        <th>状态</th>
         <th class="auto-hide">最近登陆时间</th>
         <th class="auto-hide">注册时间</th>
         <th>操作</th>
@@ -38,6 +39,7 @@ $this->title = '用户列表';
             <td class="auto-hide"><?=$item->email?></td>
             <td class="auto-hide"><?=$item->sex_label?></td>
             <td><?=$item->money?></td>
+            <td><?=$item->status?></td>
             <td class="auto-hide"><?=$item->last_at?></td>
             <td class="auto-hide"><?=$item->created_at?></td>
             <td>

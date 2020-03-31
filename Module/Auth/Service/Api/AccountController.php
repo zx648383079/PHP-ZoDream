@@ -56,7 +56,7 @@ class AccountController extends RestController {
         $user->save();
         BulletinModel::system(1, '账户注销申请',
             sprintf('申请用户：%s，注销理由：%s <a href="%s">马上查看</a>', $user->name,
-                $reason, url('./@admin/user/edit', ['id' => $user->id])), 98);
+                $reason, url('/auth/admin/user/edit', ['id' => $user->id])), 98);
         return $this->render($user);
     }
 }

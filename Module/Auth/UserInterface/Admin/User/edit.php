@@ -37,4 +37,7 @@ $passwordTip = $model->id ? '新密码' : '密码';
     </div>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <?php if($model->id > 0 && $model->id != auth()->id()):?>
+    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/user/delete', ['id' => $model->id])?>">删除此账户</a>
+    <?php endif;?>
 <?= Form::close('id') ?>

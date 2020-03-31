@@ -2,6 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 
+use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
@@ -71,7 +72,9 @@ class UserController extends Controller {
         if ($id == auth()->id()) {
             return $this->jsonFailure('不能删除自己！');
         }
-        UserModel::where('id', $id)->delete();
+        $user = UserModel::find($id);
+        $user->delete();
+        event(new CancelAccount($user, time()));
         return $this->jsonSuccess([
             'url' => $this->getUrl('user')
         ]);

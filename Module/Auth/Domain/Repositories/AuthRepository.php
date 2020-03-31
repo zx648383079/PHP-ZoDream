@@ -98,6 +98,9 @@ class AuthRepository {
         $type, $openid, callable $infoCallback, $unionId = null) {
         $user = OAuthModel::findUserWithUnion($openid, $unionId, $type);
         if (!empty($user)) {
+            if ($user->status !== UserModel::STATUS_ACTIVE) {
+                throw AuthException::disableAccount();
+            }
             self::doLogin($user, false, $type);
             return $user;
         }
