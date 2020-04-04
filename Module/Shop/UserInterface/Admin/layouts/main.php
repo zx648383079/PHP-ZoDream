@@ -223,7 +223,7 @@ $this->registerCssFile([
         [
             [
                 '基本设置',
-                './@admin/setting',
+                '/seo/admin/setting',
                 'fa fa-cog'
             ],
             [

@@ -4,7 +4,7 @@ namespace Module\Game\CheckIn\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\SEO\Domain\Model\OptionModel;
+use Module\SEO\Domain\Option;
 use Zodream\Helpers\Json;
 
 /**
@@ -128,7 +128,7 @@ class CheckInModel extends Model {
     }
 
     public static function getCheckInMoney($day) {
-        $data = OptionModel::findCode('checkin');
+        $data = Option::value('checkin');
         if (empty($data)) {
             return 0;
         }

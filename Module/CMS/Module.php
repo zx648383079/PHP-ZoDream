@@ -5,7 +5,7 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\Scene\SingleScene;
-use Module\SEO\Domain\Model\OptionModel;
+use Module\SEO\Domain\Option;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {
@@ -27,11 +27,7 @@ class Module extends BaseModule {
         if (!empty($preview)) {
             return $preview;
         }
-        $theme = OptionModel::findCode('theme');
-        if (!is_string($theme)) {
-            $theme = 'default';
-        }
-        return $theme;
+        return Option::value('theme', 'default');
     }
 
     /**

@@ -1,21 +1,22 @@
 <?php
-namespace Module\Shop\Service\Admin;
-
-
+namespace Module\SEO\Service\Admin;
 
 use Module\SEO\Domain\Model\OptionModel;
-use Zodream\Helpers\Json;
+use Module\SEO\Domain\Events\OptionUpdated;
 
 class SettingController extends Controller {
 
     public function indexAction() {
-        $group_list = OptionModel::where('parent_id', 0)->where('type', '!=', 'hide')->orderBy('position', 'asc', 'id', 'asc')->all();
+        $group_list = OptionModel::where('parent_id', 0)
+            ->where('type', 'group')
+            ->orderBy('position', 'asc', 'id', 'asc')->all();
         return $this->show(compact('group_list'));
     }
 
     public function saveAction() {
         $this->saveNewOption();
         $this->saveOption();
+        event(new OptionUpdated());
         return $this->jsonSuccess([
             'refresh' => true
         ]);
@@ -41,6 +42,7 @@ class SettingController extends Controller {
 
     public function deleteAction($id) {
         OptionModel::where('id', $id)->delete();
+        event(new OptionUpdated());
         return $this->jsonSuccess([
             'refresh' => true
         ]);

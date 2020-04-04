@@ -2,6 +2,7 @@
 namespace Module\SEO\Domain\Model;
 
 use Domain\Model\Model;
+use Module\SEO\Domain\Events\OptionUpdated;
 use Zodream\Helpers\Json;
 
 /**
@@ -17,6 +18,7 @@ use Zodream\Helpers\Json;
  * @property integer $position
  */
 class OptionModel extends Model {
+
     public static function tableName() {
         return 'seo_option';
     }
@@ -52,6 +54,18 @@ class OptionModel extends Model {
         return $this->hasMany(static::class, 'parent_id', 'id');
     }
 
+    public function getFormatValueAttribute(){
+        $value = $this->getAttributeSource('value');
+        if ($this->type === 'switch') {
+            return (is_numeric($value) && $value == 1) ||
+                (is_bool($value) && $value) || $value === 'true';
+        }
+        if ($this->type === 'json') {
+            return empty($value) ? [] : Json::decode($value);
+        }
+        return $value;
+    }
+
     /**
      * FIND ALL TO ASSOC ARRAY
      * @param $code
@@ -80,28 +94,63 @@ class OptionModel extends Model {
      * @param string $code
      * @param static $value
      * @param callable|string $name
-     * @return integer
+     * @return bool
      * @throws \Exception
      */
     public static function insertOrUpdate($code, $value, $name) {
         $id = static::where('code', $code)->value('id');
         if (!empty($id)) {
-            return static::where('id', $id)->update([
+            static::where('id', $id)->update([
                 'value' => $value,
             ]);
+        } else {
+            $data = is_callable($name) ? call_user_func($name) : [
+                'name' => $name,
+            ];
+            $data = array_merge([
+                'name' => $code,
+                'code' => $code,
+                'parent_id' => '0',
+                'type' => 'hide',
+                'visibility' => 0,
+                'default_value' => '',
+                'value' => $value,
+            ], $data);
+            static::query()->insert($data);
         }
-        $data = is_callable($name) ? call_user_func($name) : [
-            'name' => $name,
-        ];
-        $data = array_merge([
-            'name' => $code,
-            'code' => $code,
-            'parent_id' => '0',
-            'type' => 'hide',
-            'visibility' => 0,
-            'default_value' => '',
-            'value' => $value,
-        ], $data);
-        return static::query()->insert($data);
+        event(new OptionUpdated());
+        return true;
+    }
+
+    /**
+     * 添加一个分组
+     * @param array|string $name
+     * @param callable $cb
+     * @return bool
+     * @throws \Exception
+     */
+    public static function group($name, callable $cb) {
+        if (!is_array($name)) {
+            $name = compact('name');
+        }
+        $name['type'] = 'group';
+        $name['parent_id'] = 0;
+        $id = static::query()->insert($name);
+        if ($id < 1) {
+            return false;
+        }
+        $items = call_user_func($cb, $id);
+        if (!is_array($items)) {
+            return true;
+        }
+        $item = reset($items);
+        if (!is_array($item)) {
+            $items = [$items];
+        }
+        static::query()->insert(array_map(function ($item) use ($id) {
+            $item['parent_id'] = $id;
+            return $item;
+        }, $items));
+        return true;
     }
 }

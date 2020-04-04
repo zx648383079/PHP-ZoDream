@@ -15,7 +15,7 @@ use Zodream\Database\Schema\Table;
 class CreateCmsTables extends Migration {
 
     public function up() {
-        Schema::createTable(ModelFieldModel::tableName(), function (Table $table) {
+        $this->append(ModelFieldModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('field')->varchar(100)->notNull();
@@ -35,8 +35,7 @@ class CreateCmsTables extends Migration {
             $table->set('error_message')->varchar();
             $table->set('tab_name')->varchar(4)->defaultVal('')->comment('编辑组名');
             $table->set('setting')->text();
-        });
-        Schema::createTable(ModelModel::tableName(), function (Table $table) {
+        })->append(ModelModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('table')->varchar(100)->notNull();
@@ -47,8 +46,7 @@ class CreateCmsTables extends Migration {
             $table->set('list_template')->varchar(20)->defaultVal('');
             $table->set('show_template')->varchar(20)->defaultVal('');
             $table->set('setting')->text();
-        });
-        Schema::createTable(CategoryModel::tableName(), function (Table $table) {
+        })->append(CategoryModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('title')->varchar(100)->notNull();
@@ -68,14 +66,12 @@ class CreateCmsTables extends Migration {
             $table->set('show_template')->varchar(20)->defaultVal('');
             $table->set('setting')->text();
             $table->timestamps();
-        });
-        Schema::createTable(GroupModel::tableName(), function (Table $table) {
+        })->append(GroupModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(20)->notNull();
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('description')->varchar();
-        });
-        Schema::createTable(ContentModel::tableName(), function (Table $table) {
+        })->append(ContentModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
@@ -88,14 +84,12 @@ class CreateCmsTables extends Migration {
             $table->set('status')->bool()->defaultVal(0);
             $table->set('view_count')->int()->defaultVal(0);
             $table->timestamps();
-        });
-        Schema::createTable(LinkageModel::tableName(), function (Table $table) {
+        })->append(LinkageModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('code')->char(20)->unique()->notNull();
-        });
-        Schema::createTable(LinkageDataModel::tableName(), function (Table $table) {
+        })->append(LinkageDataModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('linkage_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull();
@@ -103,15 +97,6 @@ class CreateCmsTables extends Migration {
             $table->set('position')->tinyint(3)->defaultVal(99);
             $table->set('full_name')->varchar(200)->notNull();
         });
-    }
-
-    public function down() {
-        Schema::dropTable(ModelModel::tableName());
-        Schema::dropTable(ModelFieldModel::tableName());
-        Schema::dropTable(CategoryModel::tableName());
-        Schema::dropTable(GroupModel::tableName());
-        Schema::dropTable(ContentModel::tableName());
-        Schema::dropTable(LinkageModel::tableName());
-        Schema::dropTable(LinkageDataModel::tableName());
+        parent::up();
     }
 }

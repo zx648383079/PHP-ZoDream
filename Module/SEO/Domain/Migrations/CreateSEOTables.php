@@ -24,4 +24,53 @@ class CreateSEOTables extends Migration {
         parent::up();
     }
 
+    public function seed() {
+        if (OptionModel::query()->count() > 0) {
+            return;
+        }
+        OptionModel::group('基本', function ($parent_id) {
+            return [
+                [
+                    'name' => '站点名',
+                    'code' => 'site_title',
+                ],
+                [
+                    'name' => '站点关键字',
+                    'code' => 'site_keywords',
+                ],
+                [
+                    'name' => '站点介绍',
+                    'code' => 'site_description',
+                    'type' => 'textarea',
+                ],
+                [
+                    'name' => '站点LOGO',
+                    'code' => 'site_logo',
+                    'type' => 'image',
+                ],
+            ];
+        });
+        OptionModel::group('高级', function ($parent_id) {
+            return [
+                [
+                    'name' => '关站',
+                    'code' => 'site_close',
+                    'type' => 'switch',
+                    'value' => 0
+                ],
+                [
+                    'name' => '关站说明',
+                    'code' => 'site_close_tip',
+                    'type' => 'basic_editor'
+                ],
+                [
+                    'name' => '开启灰度',
+                    'code' => 'site_gray',
+                    'type' => 'switch',
+                    'value' => 0
+                ],
+            ];
+        });
+    }
+
 }

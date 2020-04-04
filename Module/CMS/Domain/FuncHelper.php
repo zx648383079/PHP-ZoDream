@@ -7,7 +7,7 @@ use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Module;
-use Module\SEO\Domain\Model\OptionModel;
+use Module\SEO\Domain\Option;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -45,9 +45,7 @@ class FuncHelper {
         if (empty($code)) {
             return null;
         }
-        return static::getOrSet(__FUNCTION__, $code, function () use ($code) {
-            return OptionModel::findCode($code);
-        });
+        return Option::value($code);
     }
 
     public static function channels(array $params = null) {

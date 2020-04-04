@@ -21,6 +21,8 @@ function parseArr($value) {
     return $data;
 }
 
+$type_list = ['group' => '分组', 'text' => '文本', 'textarea' => '多行文本', 'select' => '下拉选择', 'radio' => '单选', 'checkbox' => '多选', 'switch' => '开关', 'image' => '图片', 'file' => '文件', 'basic_editor' => '迷你编辑器', 'editor' => '编辑器', 'json' => 'JSON', 'hide' => '隐藏'];
+
 
 $this->title = '基本设置';
 $js = <<<JS
@@ -50,13 +52,13 @@ $this->registerJs($js, View::JQUERY_READY);
                    <?php elseif ($item['type'] == 'textarea'):?>
                    <?=Theme::textarea(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
                    <?php elseif ($item['type'] == 'select'):?>
-                   <?=Theme::select(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])->setLabel($item['label'])?>
+                   <?=Theme::select(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])?>
                    <?php elseif ($item['type'] == 'radio'):?>
                    <?=Theme::radio(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])?>
                    <?php elseif ($item['type'] == 'checkbox'):?>
                    <?=Theme::checkbox(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])?>
-                   <?php elseif ($item['type'] == 'bool'):?>
-                   <?=Theme::checkbox(sprintf('option[%s]', $item['id']), $item['default_value'], $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?php elseif ($item['type'] == 'switch'):?>
+                   <?=Theme::checkbox(sprintf('option[%s]', $item['id']), $item['default_value'], $item['value'], $item['name'])->setLabel($item['label'])->setType('switch')?>
                    <?php elseif ($item['type'] == 'file' || $item['type'] == 'image'):?>
                    <?=Theme::file(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
                    <?php elseif ($item['type'] == 'hide'):?>
@@ -68,7 +70,7 @@ $this->registerJs($js, View::JQUERY_READY);
             <?php endforeach;?>
             <div class="zd-tab-item">
                 <?=Theme::text('field[name]', '', '名称(必填)')?>
-                <?=Theme::select('field[type]', ['group' => '分组', 'text' => '文本', 'textarea' => '多行文本', 'select' => '下拉选择', 'radio' => '单选', 'checkbox' => '多选', 'bool' => '开关', 'image' => '图片', 'file' => '文件', 'hide' => '隐藏'], 'group', '类型')?>
+                <?=Theme::select('field[type]', $type_list, 'group', '类型')?>
                 <div class="group-property">
                     <?=Theme::select('field[parent_id]', [$group_list], '', '分组')?>
                     <?=Theme::text('field[code]', '', '别名(必填)')?>
@@ -81,6 +83,7 @@ $this->registerJs($js, View::JQUERY_READY);
     </div>
     <button type="submit" class="btn btn-success btn-save">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <a href="javascript:;" class="btn" data-action="edit">切换编辑模式</a>
 <?= Form::close() ?>
 
 <div class="dialog dialog-box option-dialog" data-type="dialog">
@@ -90,7 +93,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <div class="dialog-body">
     <?=Form::open('./@admin/setting/update')?>
         <?=Theme::text('name', '', '名称')?>
-        <?=Theme::select('type', ['group' => '分组', 'text' => '文本', 'textarea' => '多行文本', 'select' => '下拉选择', 'radio' => '单选', 'checkbox' => '多选', 'bool' => '开关', 'image' => '图片', 'file' => '文件'], 'group', '类型')?>
+        <?=Theme::select('type', $type_list, 'group', '类型')?>
         <div class="group-property">
             <?=Theme::select('parent_id', [$group_list], '', '分组')?>
             <?=Theme::text('code', '', '别名')?>
