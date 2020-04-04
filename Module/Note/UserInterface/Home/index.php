@@ -10,16 +10,8 @@ if (!auth()->guest()) {
 JS;
     $this->registerJs($js);
 }
+$this->extend('layouts/main');
 ?>
-
-<div class="search-box">
-    <form action="">
-        <div class="search-input">
-            <button><i class="fa fa-search"></i></button>
-            <input type="text" name="keywords" placeholder="搜索" value="<?=$this->text($keywords)?>">
-        </div>
-    </form>
-</div>
 
 <div class="flex-box">
     <?php if(!auth()->guest()):?>

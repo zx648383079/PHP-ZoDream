@@ -52,7 +52,9 @@ footer {
 }
 
 .app-wrapper {
-    margin-top: 50px;
+    width: 1200px;
+    margin: 50px auto 0;
+    position: relative;
     .search-container {
         display: none;
     }
@@ -70,10 +72,27 @@ footer {
             pointer-events: auto;
         }
     }
+    &.wrapper-min {
+        width: 100%;
+        .sidebar-container {
+            left: -208px;
+            .sidebar-container-toggle {
+                &::before {
+                    content: "\f101";
+                }
+            }
+        }
+        .main-container {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
 }
 
 .sidebar-container {
     width: 208px;
+    left: 0;
+    transition: left 1s;
     vertical-align: baseline;
     padding: 20px 12px 60px 36px;
     top: auto;
@@ -81,18 +100,28 @@ footer {
     overflow-y: visible;
     display: inline-block;
     .sidebar-container-toggle {
-        display: none;
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
-        font-size: inherit;
         text-rendering: auto;
+        position: absolute;
+        right: -12px;
+        width: 12px;
+        height: 80px;
+        background-color: #333;
+        z-index: 199;
+        font-size: 10px;
+        line-height: 80px;
+        text-align: center;
+        color: #fff;
+        cursor: pointer;
         &::before {
-            content: "\f0c9";
+            content: "\f100";
         }
     }
 }
 
 .main-container {
+    transition: all 1s;
     width: calc(100% - 208px);
     position: relative;
     vertical-align: baseline;
@@ -243,7 +272,34 @@ footer {
 
 @media (max-width: 767px){
     .app-wrapper {
+        width: 100%;
         min-height: calc(100vh - 50px);
+        .sidebar-container {
+            .sidebar-container-toggle {
+                &::before {
+                    content: "\f0c9";
+                }
+            }
+        }
+        &.wrapper-min {
+            .sidebar-container {
+                left: 0;
+                box-shadow: 0 0 20px $shadow;
+                .sidebar-container-toggle {
+                    box-shadow: none;
+                    left: .5rem;
+                    &::before {
+                        content: "\f00d";
+                    }
+                }
+            }
+            &.sidebar-fixed {
+                .sidebar-container {
+                    position: fixed;
+                    top: 50px;
+                }
+            }
+        }
     }
     .sidebar-container {
         left: -208px;
@@ -253,6 +309,11 @@ footer {
         .sidebar-container-toggle {
             display: block;
             position: fixed;
+            right: auto;
+            font-size: inherit;
+            line-height: unset;
+            width: auto;
+            height: auto;
             left: .7rem;
             bottom: .7rem;
             font-size: 2rem;
@@ -261,22 +322,6 @@ footer {
             transition: all .3s;
             padding: 4px 6px;
             color: $white;
-            z-index: 199;
-        }
-        &.expand {
-            left: 0;
-            box-shadow: 0 0 20px $shadow;
-            .sidebar-container-toggle {
-                box-shadow: none;
-                left: .5rem;
-                &::before {
-                    content: "\f00d";
-                }
-            }
-            &.sidebar-fixed {
-                position: fixed;
-                top: 50px;
-            }
         }
     }
     .main-container {

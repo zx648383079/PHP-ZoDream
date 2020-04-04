@@ -28,3 +28,15 @@ function bindSetting() {
         $(this).closest('form').toggleClass('edit-mode');
     });
 }
+
+function renderCMD(lines: string[]) {
+    let i = 0,
+        box = $('.cmd-box'),
+        handle = setInterval(function() {
+            if (i >= lines.length) {
+                clearInterval(handle);
+                return;
+            }
+            box.append('<p>'+ lines[i++] +'</p>').scrollTop(box[0].scrollHeight);
+        }, Math.floor(1 + Math.random() * 400));
+}

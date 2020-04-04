@@ -38,5 +38,23 @@ $this->registerCssFile([
             ],
         ],
         true
+    ],
+    [
+        '系统管理',
+        false,
+        'fa fa-cogs',
+        [
+            [
+                '清除缓存',
+                './@admin/cache',
+                'fa fa-trash'
+            ],
+            [
+                '生成SiteMap',
+                './@admin/sitemap',
+                'fa fa-map'
+            ]
+        ],
+        true
     ]
 ], $content, 'ZoDream SEO Admin') ?>
