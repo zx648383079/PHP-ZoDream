@@ -3,11 +3,7 @@ namespace Module\Template\Service\Admin;
 
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
-use Module\Template\Domain\Model\ThemeModel;
-use Module\Template\Domain\Model\WeightModel;
-
 use Module\Template\Domain\Page;
-use Zodream\Route\Controller\Controller;
 
 class WeightController extends Controller {
 

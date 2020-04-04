@@ -5,7 +5,6 @@ namespace Module\Template\Service\Admin;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
-use Module\Template\Domain\Model\WeightModel;
 use Module\Template\Domain\Page;
 
 class PageController extends Controller {

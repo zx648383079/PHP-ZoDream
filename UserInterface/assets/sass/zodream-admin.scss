@@ -58,6 +58,9 @@ footer {
     .search-container {
         display: none;
     }
+    .sidebar-container {
+        font-size: 1rem;
+    }
     &.search-mode {
         transform-origin: 50vw 50vh;
         transform: perspective(1000px) translate3d(0,50vh,0) rotate3d(1,0,0,30deg);
@@ -265,6 +268,9 @@ footer {
 
 @media (max-width: 1200px){
     .container {
+        width: 100%;
+    }
+    .app-wrapper {
         width: 100%;
     }
 

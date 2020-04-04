@@ -1,10 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Dark\Layout;
 /** @var $this View */
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@zodream.css',
+    '@zodream-admin.css',
     '@dialog.css',
     '@template.css'
 ])->registerJsFile([
@@ -13,20 +15,47 @@ $this->registerCssFile([
     '@jquery.datetimer.min.js',
     '@main.min.js',
     '@template.min.js'
-]);
+])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
-<!DOCTYPE html>
-<html lang="<?=$this->get('language', 'zh-CN')?>">
-   <head>
-       <meta name="viewport" content="width=device-width, initial-scale=1"/>
-       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-       <meta name="Description" content="<?=$this->description?>" />
-       <meta name="keywords" content="<?=$this->keywords?>" />
-       <title><?=$this->title?></title>
-       <?=$this->header();?>
-   </head>
-   <body>
-   <?=$content?>
-   <?=$this->footer()?>
-   </body>
-</html>
+<?= Layout::mainIfPjax($this, [
+    [
+        '首页',
+        './@admin',
+        'fa fa-home',
+    ],
+    [
+        '页面管理',
+        false,
+        'fa fa-columns',
+        [
+            [
+                '站点列表',
+                './@admin/site',
+                'fa fa-list'
+            ],
+            [
+                '新增站点',
+                './@admin/site/create',
+                'fa fa-plus'
+            ]
+        ],
+        true,
+    ],
+    [
+        '模板管理',
+        false,
+        'fa fa-book',
+        [
+            [
+                '主题列表',
+                './@admin/theme',
+                'fa fa-list'
+            ],
+            [
+                '刷新主题',
+                './@admin/theme/refresh',
+                'fa fa-retweet'
+            ]
+        ],
+    ],
+], $content, 'ZoDream Template Admin') ?>

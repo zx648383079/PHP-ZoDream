@@ -9,7 +9,12 @@ use Module\Template\Domain\Model\ThemePageModel;
 
 class SiteController extends Controller {
 
-    public function indexAction($id = 0) {
+    public function indexAction() {
+        $site_list = SiteModel::where('user_id', auth()->id())->all();
+        return $this->show(compact('site_list'));
+    }
+
+    public function pageAction($id = 0) {
         $site = SiteModel::findOrDefault($id, ['name' => 'new site', 'title' => 'New Site', 'thumb' => '']);
         if ($site->id > 0 && $site->user_id != auth()->id()) {
             return $this->redirect('./@admin');
