@@ -10,7 +10,7 @@ $this->title = '站点选择';
         <?php foreach($site_list as $item):?>
         <div class="card">
             <div class="card-logo">
-                <a href="<?=$this->url('./@admin/site', ['id' => $item->id])?>">
+                <a href="<?=$this->url('./@admin/site/page', ['id' => $item->id])?>">
                     <img src="<?=$item->thumb?>" alt="">
                 </a>
             </div>
@@ -33,20 +33,5 @@ $this->title = '站点选择';
                 </a>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="dialog dialog-box theme-dialog" data-type="dialog">
-    <div class="dialog-header">
-        <div class="dialog-title">选择主题</div>
-        <i class="fa fa-close dialog-close"></i>
-    </div>
-    <div class="dialog-body">
-
-    </div>
-    <div class="dialog-footer">
-        <button type="button" class="dialog-yes">确认</button>
-        <button type="button"
-            class="dialog-close">取消</button>
     </div>
 </div>

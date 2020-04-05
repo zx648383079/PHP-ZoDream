@@ -27,26 +27,23 @@ class SiteController extends Controller {
         return $this->show(compact('site', 'page_list', 'template_list'));
     }
 
-
-    public function createAction() {
-        $theme_list = ThemeModel::query()->get();
+    public function createAction($theme_id = 0, $keywords = null) {
+        if ($theme_id < 1) {
+            $model_list = ThemeModel::when(!empty($keywords), function ($query) {
+                ThemeModel::searchWhere($query, ['name']);
+            })->orderBy('id', 'desc')
+                ->page();
+            return $this->show('theme', compact('model_list', 'keywords'));
+        }
+        $theme = ThemeModel::find($theme_id);
         $model = new SiteModel([
                 'name' => 'new_site',
                 'title' => 'New Site',
-                'thumb' => '/assets/images/blog.png',
+                'thumb' => '/assets/images/thumb.jpg',
                 'user_id' => auth()->id(),
-                'theme_id' => $theme_list[0]->id
+                'theme_id' => $theme->id
         ]);
-        return $this->show(compact('model', 'theme_list'));
-//        $site = SiteModel::create([
-//            'name' => 'new_site',
-//            'title' => 'New Site',
-//            'thumb' => '/assets/images/blog.png',
-//            'user_id' => auth()->id()
-//        ]);
-//        return $this->jsonSuccess([
-//            'url' => $this->getUrl('site', ['id' => $site->id])
-//        ]);
+        return $this->show(compact('model', 'theme'));
     }
 
     public function editAction($id) {
@@ -54,20 +51,20 @@ class SiteController extends Controller {
         if (empty($model)) {
             return $this->redirectWithMessage('./', '');
         }
-        $theme_list = ThemeModel::query()->get();
-        return $this->show('create', compact('model', 'theme_list'));
+        $theme = ThemeModel::find($model->theme_id);
+        return $this->show('create', compact('model', 'theme'));
     }
 
     public function saveAction() {
         $model = new SiteModel([
             'user_id' => auth()->id()
         ]);
-        if ($model->load('', ['user_id']) && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('site', ['id' => $model->id])
-            ]);
+        if (!$model->load('', ['user_id']) || !$model->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('site/page', ['id' => $model->id])
+        ]);
     }
 
     public function deleteAction($id) {
@@ -80,7 +77,7 @@ class SiteController extends Controller {
         PageModel::where('site_id', $id)->delete();
         $model->delete();
         return $this->jsonSuccess([
-            'url' => $this->getUrl('')
+            'url' => $this->getUrl('site')
         ]);
     }
 

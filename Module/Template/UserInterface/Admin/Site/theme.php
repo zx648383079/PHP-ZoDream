@@ -12,7 +12,6 @@ $this->title = '所有主题';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/theme/install')?>" data-type="ajax">刷新</a>
 </div>
 <div class="card-box">
     <?php foreach($model_list as $item):?>
@@ -25,9 +24,6 @@ $this->title = '所有主题';
         <div class="card-body">
             <h3><?=$item->name?></h3>
             <p><?=$item->description?></p>
-        </div>
-        <div class="card-action">
-            <a data-type="del" href="<?=$this->url('./@admin/theme/delete', ['id' => $item->id])?>" class="fa fa-trash"></a>
         </div>
     </div>
     <?php endforeach;?>

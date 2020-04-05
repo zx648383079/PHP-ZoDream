@@ -17,7 +17,7 @@ $this->registerCssFile([
     '@template.min.js'
 ])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
-<?= Layout::mainIfPjax($this, [
+<?= Layout::main($this, [
     [
         '首页',
         './@admin',

@@ -4,10 +4,6 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = $site->title;
-$js = <<<JS
-bindPageEdit();
-JS;
-$this->registerJs($js);
 ?>
 
 <div class="container">

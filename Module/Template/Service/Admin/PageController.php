@@ -3,7 +3,9 @@ namespace Module\Template\Service\Admin;
 
 
 use Module\Template\Domain\Model\PageModel;
+use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\Page;
 
@@ -25,17 +27,56 @@ class PageController extends Controller {
         return $this->show(compact('model', 'page'));
     }
 
-    public function createAction($site_id, $page_id, $type = 0) {
-        $model = PageModel::create([
+    public function createAction($site_id, $page_id = 0, $type = 0, $keywords = null) {
+        $site = SiteModel::find($site_id);
+        if ($page_id < 1) {
+            $model_list = ThemePageModel::when(!empty($keywords), function ($query) {
+                ThemePageModel::searchWhere($query, ['name']);
+            })->where('theme_id', $site->theme_id)->orderBy('id', 'desc')
+                ->page();
+            return $this->show('theme', compact('model_list', 'keywords', 'site_id', 'type'));
+        }
+        $theme = ThemePageModel::find($page_id);
+        $model = new PageModel([
             'site_id' => $site_id,
             'type' => $type,
             'name' => 'new_page',
             'title' => 'New Page',
             'theme_page_id' => $page_id,
-            'thumb' => '/assets/images/blog.png'
+            'thumb' => '/assets/images/thumb.jpg',
+            'position' => 99
         ]);
+        return $this->show(compact('model', 'theme'));
+    }
+
+    public function editAction($id) {
+        $model = PageModel::find($id);
+        if (empty($model)) {
+            return $this->redirectWithMessage($this->getUrl('site'), '');
+        }
+        $theme = ThemePageModel::find($model->theme_page_id);
+        return $this->show('create', compact('model', 'theme'));
+    }
+
+    public function saveAction() {
+        $model = new PageModel();
+        if (!$model->load() || !$model->autoIsNew()->save()) {
+            return $this->jsonFailure($model->getFirstError());
+        }
         return $this->jsonSuccess([
-            'url' => $this->getUrl('page', ['id' => $model->id])
+            'url' => $this->getUrl('site/page', ['id' => $model->site_id])
+        ]);
+    }
+
+    public function deleteAction($id) {
+        $model = PageModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('页面不存在');
+        }
+        PageWeightModel::where('page_id', $id)->delete();
+        $model->delete();
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('site/page', ['id' => $model->site_id])
         ]);
     }
 
