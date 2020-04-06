@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Helpers\Json;
 
 
 /**
@@ -11,6 +12,7 @@ use Domain\Model\Model;
  * @property integer $page_id
  * @property integer $site_id
  * @property integer $theme_weight_id 部件名
+ * @property integer $theme_style_id 部件名
  * @property integer $parent_id
  * @property integer $position
  * @property string $title
@@ -33,6 +35,7 @@ class PageWeightModel extends Model {
             'page_id' => 'required|int',
             'site_id' => 'required|int',
             'theme_weight_id' => 'required|int',
+            'theme_style_id' => 'int',
             'parent_id' => 'int',
             'position' => 'int',
             'title' => 'string:0,200',
@@ -50,6 +53,7 @@ class PageWeightModel extends Model {
             'page_id' => 'Page Id',
             'site_id' => 'Site Id',
             'theme_weight_id' => 'Weight Id',
+            'theme_style_id' => 'Style Id',
             'parent_id' => 'Parent Id',
             'position' => 'Position',
             'title' => 'Title',
@@ -66,6 +70,15 @@ class PageWeightModel extends Model {
             'id', 'theme_weight_id');
     }
 
+    public function getSettingsAttribute() {
+        $val = $this->getAttributeSource('settings');
+        return empty($val) ? [] : Json::decode($val);
+    }
+
+    public function setSettingsAttribute($value) {
+        $this->__attributes['settings'] = is_array($value) ? Json::encode($value) : $value;
+    }
+
     public function hasExtInfo($ext) {
         return false;
     }
@@ -80,7 +93,7 @@ class PageWeightModel extends Model {
             if (in_array($key, $maps)) {
                 $args[$key] = $value;
             } else {
-                $args['settings'][] = $value;
+                $args['settings'][$key] = $value;
             }
         }
         $args['weight_id'] = $weight->id;

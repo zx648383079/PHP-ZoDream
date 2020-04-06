@@ -6,6 +6,7 @@ use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
+use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
@@ -26,6 +27,14 @@ class CreateTemplateTables extends Migration {
             $table->set('path')->varchar(200)->notNull();
         })->append(ThemePageModel::tableName(), function(Table $table) {
             $table->setComment('所有主题下面页面框架');
+            $table->set('id')->pk()->ai();
+            $table->set('name')->varchar(30)->notNull();
+            $table->set('description')->varchar(200)->defaultVal('');
+            $table->set('thumb')->varchar(100)->defaultVal('');
+            $table->set('theme_id')->int()->notNull();
+            $table->set('path')->varchar(200)->notNull();
+        })->append(ThemeStyleModel::tableName(), function(Table $table) {
+            $table->setComment('所有主题下面部件集成样式');
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(30)->notNull();
             $table->set('description')->varchar(200)->defaultVal('');
@@ -81,6 +90,7 @@ class CreateTemplateTables extends Migration {
             $table->set('title')->varchar(200);
             $table->set('content')->text();
             $table->set('settings')->text();
+            $table->set('theme_style_id')->int()->defaultVal(0);
             $table->set('is_share')->bool()->defaultVal(0);
             $table->timestamps();
         });

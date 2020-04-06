@@ -215,6 +215,7 @@ $(function() {
         if (box.find('ul').height() < $(window).height() - 100) {
             box.toggleClass('sidebar-fixed', box.hasClass('wrapper-min'));
         }
+        $(window).trigger('resize');
     });
     $('.sidebar-container li a').click(function() {
         let $this = $(this),

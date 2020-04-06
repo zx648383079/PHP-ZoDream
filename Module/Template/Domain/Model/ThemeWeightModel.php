@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Module;
 use Zodream\Disk\Directory;
 use Zodream\Service\Factory;
 
@@ -66,7 +67,7 @@ class ThemeWeightModel extends Model {
             return new Directory(is_dir($this->path)
                 ? $this->path : dirname($this->path));
         }
-        return Factory::root()->child($this->path);
+        return Module::templateFolder($this->path);
     }
 
 

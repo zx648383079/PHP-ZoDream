@@ -5,7 +5,9 @@ namespace Module\Template\Service\Admin;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
+use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\Page;
 
@@ -13,10 +15,11 @@ class PageController extends Controller {
 
     public function indexAction($id = 0, $site_id = 0, $type = 0) {
         $model = PageModel::findOrDefault($id, ['site_id' => $site_id, 'type' => $type, 'template' => 'index']);
-        $style_list = [];
         $site = SiteModel::findWithAuth($model->site_id);
+        $theme = ThemeModel::find($site->theme_id);
         $weight_list = ThemeWeightModel::groupByType($site->theme_id);
-        return $this->show(compact('model', 'style_list', 'weight_list'));
+        $style_list = ThemeStyleModel::where('theme_id', $site->theme_id)->get();
+        return $this->show(compact('model', 'style_list', 'weight_list', 'theme'));
     }
 
     public function templateAction($id = 0, $edit = false) {

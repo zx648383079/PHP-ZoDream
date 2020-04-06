@@ -266,7 +266,7 @@ $sizes: (320: 568,
     left: 0;
     width: 15rem;
     bottom: 0;
-    z-index: 999;
+    z-index: 99;
     .panel-item {
         background: #fff;
         border: 1px solid #7e8;
@@ -343,9 +343,24 @@ $sizes: (320: 568,
     }
     .tab-box {
         .tab-header {
+            background: #efefef;
             .tab-item {
-                width: 4.9rem;
+                width: 4.5rem;
             }
+        }
+    }
+    .style-item {
+        line-height: 60px;
+        border: 1px dotted red;
+        text-align: center;
+        color: #999;
+        font-weight: bold;
+        font-size: 20px;
+        img {
+            width: 100%;
+        }
+        &:hover {
+            border-style: solid;
         }
     }
 }

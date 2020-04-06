@@ -11,7 +11,7 @@ class WeightController extends Controller {
         return $this->jsonSuccess(WeightModel::all());
     }
 
-    public function configAction($id) {
+    public function settingAction($id) {
         return $this->jsonSuccess(PageWeightModel::find($id));
     }
 
@@ -52,5 +52,9 @@ class WeightController extends Controller {
 
     public function thumbAction($id) {
         WeightModel::find($id);
+    }
+
+    public function editDialogAction($id) {
+        return $this->jsonSuccess();
     }
 }

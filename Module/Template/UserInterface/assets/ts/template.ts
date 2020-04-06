@@ -2,6 +2,7 @@ const DEL_URI = 'weight/destroy',
     NEW_URI = 'weight/create',
     REFRESH_URI = 'weight/refresh',
     EDIT_URI = 'weight/save',
+    EDIT_DAILOG_URI = 'weight/edit_dialog',
     SETTING_URI = 'weight/setting',
     SAVE_SETTING_URI = 'weight/save_setting',
     INFO_URI = 'weight/info';
@@ -48,18 +49,27 @@ class Weight {
 class Page {
     constructor(
         public id: number,
-        public baseUri: string
+        public baseUri: string = BASE_URI
     ) {
         this.box = $("#page-box");
         this.element = $('#mainMobile');
         this.bodyBox = $('#mainGrid');
         this.panelGroup = this.box.find('.panel-group');
-        this.bodyBox.contents().ready(() => {
-            this.body = this.bodyBox.contents().find('body') as JQuery;
-            this._init();
-        })
-        
+        this.editDialog = $('#edit-dialog').dialog();
+        let that = this;
+        const iframe = this.bodyBox[0] as any;
+        const ready = function() {
+            that.body = that.bodyBox.contents().find('body') as JQuery;
+            that._init();
+        }
+        if (iframe.attachEvent) {
+            iframe.attachEvent('onload', ready); 
+        } else {
+            iframe.onload = ready;
+        }
     }
+
+    public editDialog: any;
 
     public box: JQuery;
 
@@ -82,7 +92,7 @@ class Page {
 
     private _bindEvent() {
         let that = this;
-        $(window).resize(function() {
+        $(window).on('resize', function() {
             that.resize();
         });
         this.body.on("click", ".weight-action .del", function() {
@@ -90,14 +100,15 @@ class Page {
         }).on("click", ".weight-action .edit", function(e) {
             e.stopPropagation();
             that.setWeight($(this).parents('.weight-edit-grid'));
+            that.showEditDialog();
         }).on("click", ".weight-action .refresh", function(e) {
             e.stopPropagation();
             that.refreshWeight($(this).closest('.weight-edit-grid'));
         }).on("click", ".weight-action .property", function(e) {
             e.stopPropagation();
             that.setWeight($(this).closest('.weight-edit-grid'));
-            that.showPanel('property');
-        });
+            that.showPropertyPanel();
+        })
         this.panelGroup.on('click', '.panel-item .panel-header .fa-close', function(e) {
             e.stopPropagation();
             let box = $(this).closest('.panel-item');
@@ -120,9 +131,23 @@ class Page {
         }).on('drop', function(e) {
             e.stopPropagation();
             e.preventDefault();
+            
             that.addWeight(weight.clone(), $(this));
         });
         this.bindRule();
+    }
+
+    public showEditDialog() {
+        let that = this;
+        this.post(EDIT_DAILOG_URI, {
+            id: this.weight.id()
+        }, function(data) {
+            that.editDialog.show();
+        });
+    }
+
+    public showPropertyPanel() {
+        this.showPanel('property');
     }
 
     /**
@@ -374,8 +399,8 @@ class Page {
 }
 
 
-function bindPage(pageId: number, baseUri: string) {
-    let page = new Page(pageId, baseUri);
+function bindPage(pageId: number) {
+    let page = new Page(pageId);
     $(".mobile-size li").click(function() {
         $(".mobile-size").parent().removeClass("open");
         let size = $(this).attr("data-size").split("*");
@@ -395,6 +420,9 @@ function bindPage(pageId: number, baseUri: string) {
     $(".expand>.head").click(function() {
         $(this).parent().toggleClass("open");
     });
+    if ($(window).width() > 769) {
+        $('.sidebar-container-toggle').trigger('click');
+    }
 }
 
 function bindEdit() {

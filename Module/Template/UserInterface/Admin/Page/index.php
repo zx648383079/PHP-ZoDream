@@ -2,17 +2,16 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Template\Domain\Page;
-
-$base_url = $this->url('./@admin/', false);
-$id = $model->id;
-$js = <<<JS
-bindPage('{$id}', '{$base_url}');
-JS;
-
-
 /** @var $this View */
 /** @var $page Page */
-$this->registerJs($js, View::JQUERY_READY);
+$id = $model->id;
+$js = <<<JS
+bindPage('{$id}');
+JS;
+$this->registerJsFile([
+    'ueditor/ueditor.config.js',
+    'ueditor/ueditor.all.js',
+])->registerJs($js, View::JQUERY_READY);
 ?>
 
 <nav class="top-nav">
@@ -178,9 +177,12 @@ $this->registerJs($js, View::JQUERY_READY);
                             </div>
                         </div>
                         <div class="tab-item">
+                            <div class="style-item" data-id="0">
+                                无
+                            </div>
                             <?php foreach($style_list as $item):?>
-                            <div class="style-item">
-                                <img src="<?=$item['thumb']?>" alt="<?=$item['title']?>">
+                            <div class="style-item" data-id="<?=$item->id?>">
+                                <img src="<?=$this->url('./@admin/theme/asset', ['folder' => $theme->path, 'file' => $item->thumb], false)?>" alt="<?=$item['name']?>">
                             </div>
                             <?php endforeach;?>
                         </div>
@@ -204,5 +206,20 @@ $this->registerJs($js, View::JQUERY_READY);
             </div>
             <div class="rule-lines">
             </div> -->
+    </div>
+</div>
+
+<div id="edit-dialog" class="dialog dialog-box" data-type="dialog" >
+    <div class="dialog-header">
+        <div class="dialog-title">编辑</div>
+        <i class="fa fa-close dialog-close"></i>
+    </div>
+    <form class="dialog-body" action="<?=$this->url('./@admin/weight/save')?>" method="post">
+        <p><input type="text" name="title" placeholder="请输入标题"></p>
+        <textarea id="editor-container" style="height: 400px;" name="content" placeholder="请输入内容"></textarea>
+    </form>
+    <div class="dialog-footer">
+        <button type="button" class="dialog-yes">确认</button>
+        <button type="button" class="dialog-close">取消</button>
     </div>
 </div>

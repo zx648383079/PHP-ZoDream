@@ -17,6 +17,7 @@ use Zodream\Helpers\Json;
  * @property string $path
  * @property ThemeWeightModel[] $weights
  * @property ThemePageModel[] $pages
+ * @property ThemeStyleModel[] $styles
  */
 class ThemeModel extends Model {
     public static function tableName() {
@@ -68,6 +69,13 @@ class ThemeModel extends Model {
             $weight->theme_id = $model->id;
             $weight->save();
         }
+        foreach ($model->styles as $style) {
+            if (ThemeStyleModel::isInstalled($style->name, $model->id)) {
+                continue;
+            }
+            $style->theme_id = $model->id;
+            $style->save();
+        }
     }
 
     /**
@@ -101,9 +109,13 @@ class ThemeModel extends Model {
         $data = Json::decode($folder->childFile('theme.json')->read());
         $data['path'] = $folder->getRelative(Module::templateFolder());
         $data['pages'] = array_map(function ($item) use ($data) {
-            $item['path'] = $data['path'].'/'.$item['path'];
+            $item['path'] = $data['path'].'/'.ltrim($item['path'], '/');
             return new ThemePageModel($item);
         }, $data['pages']);
+        $data['styles'] = isset($data['styles']) ? array_map(function ($item) use ($data) {
+            $item['path'] = $data['path'].'/'.ltrim($item['path'], '/');
+            return new ThemeStyleModel($item);
+        }, $data['styles']) : [];
         $data['weights'] = self::getWeight($data, $folder);
         return new static($data);
     }
@@ -114,17 +126,19 @@ class ThemeModel extends Model {
         }
         if (is_array($data['weights'])) {
             return array_map(function ($item) use ($data) {
-                $item['path'] = $data['path'].'/'.$item['path'];
+                $item['path'] = $data['path'].'/'.ltrim($item['path'], '/');
                 return new ThemeWeightModel($item);
             }, $data['weights']);
         }
-        return static::mapFolder($folder->directory($data['weights']), function ($item) {
-            if ($item->hasFile('weight.json')) {
-                $args = Json::decode($item->childFile('weight.json')->read());
-                $args['path'] = $item->getRelative(Module::templateFolder());
-                return [new ThemeWeightModel($args)];
+        return static::mapFolder($folder->directory($data['weights']), function (Directory $item) {
+            if (!$item->hasFile('weight.json')) {
+                return false;
             }
-            return false;
+            $args = Json::decode($item->childFile('weight.json')->read());
+            $args['path'] = $item->getRelative(Module::templateFolder());
+            return [new ThemeWeightModel($args)];
         });
     }
+
+
 }
