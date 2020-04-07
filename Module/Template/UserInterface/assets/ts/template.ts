@@ -18,10 +18,11 @@ class PropertyInput {
     }
 
     public static lazy(val: string) {
-        const id = PropertyInput.guid();
-        return PropertyInput.input('settings_lazy', '懒加载', PropertyInput.radio(id, 'settings[lazy]', ['关闭', '开启'], val));
+        const id = 'settings_lazy_' + PropertyInput.guid();
+        return PropertyInput.input(id, '懒加载', PropertyInput.radio(id, 'settings[lazy]', ['关闭', '开启'], val));
     }
 
+    
 
     public static margin(vals: string[] = []) {
         return PropertyInput.sideInput('settings[style][margin]', '外边距', vals);
@@ -31,11 +32,104 @@ class PropertyInput {
         return PropertyInput.sideInput('settings[style][' + name +'][padding]', '内边距', vals);
     }
 
+    public static position(data: any) {
+        const html = data && data.type != 'static' ? PropertyInput.side('settings[style][position][value]', 'settings[style][position][value]', data?.value) : '';
+        const option = PropertyInput.option({
+            static: '无',
+            relative: '相对定位',
+            absolute: '绝对定位',
+            fixed: '固定定位'
+        }, data?.type);
+        return PropertyInput.input('', '悬浮', `<select name="settings[style][position][type]">${option}</select><div class="side-input">${html}</div>`);
+    }
 
+    public static border(name?: string, data?: any) {
+        name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[border]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        let html = PropertyInput.checkbox(id, name + '[side]', ['上', '右', '下', '左'], data?.side)
+        return PropertyInput.input(id, '边框', `<input type="text" class="form-control" name="${name}[value][]" placeholder="粗细" size="4">
+        <select name="${name}[value][]">
+            <option value="">实线</option>
+            <option value="">虚线</option>
+        </select>
+        <input type="color" name="${name}[value][]"><div class="side-input">${html}</div>
+        `);
+    }
+
+    public static radius(name?: string, data?: string[]) {
+        name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[border-radius]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        return PropertyInput.input(id, '圆角', `<input type="text" id="${id}_0" class="form-control " name="${name}[]" value="" size="4" placeholder="左上">
+        <input type="text" id="${id}_1" class="form-control " name="${name}[]" value="" size="4" placeholder="右上">
+        <br/>
+        <input type="text" id="${id}_2" class="form-control " name="${name}[]" value="" size="4" placeholder="左下">
+        <input type="text" id="${id}_3" class="form-control " name="${name}[]" value="" size="4" placeholder="右下">`);
+    }
+
+
+    public static color(name?: string) {
+        name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[color]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        return PropertyInput.input(id, '字体颜色', `<input type="color" name="${name}">`);
+    }
+
+    public static background(name?: string, data?: any) {
+        name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[background]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        let html = PropertyInput.radio(id, name, ['颜色', '图片'], '0');
+        if (data && data.type == 1) {
+            html += `<div class="file-input">
+            <input type="text" id="${id}_value" class="form-control " name="${name}[value]" value="" size="20">
+            <button type="button" data-type="upload">上传</button>
+        </div>`;
+        } else {
+            html += `<input type="color" name="${name}[value]">`;
+        }
+        return PropertyInput.input(id, '背景', html);
+    }
+
+    public static visibility(name: string, val: string|number) {
+        name = 'settings[style]'+ name +'[visibility]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        
+        return PropertyInput.input(id, '可见', PropertyInput.radio(id, name, ['显示', '隐藏'], val));
+    }
+
+    public static fontSize(name: string, val?: string) {
+        name = 'settings[style]'+ name +'[font-size]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        
+        return PropertyInput.input(id, '字体大小', PropertyInput.text(id, name, val, 4));
+    }
+
+    public static textAlign(name: string, val?: string) {
+        name = 'settings[style]'+ name +'[text-align]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        
+        return PropertyInput.input(id, '字体位置', PropertyInput.radio(id, name, ['居左', '居中', '居右'], val));
+    }
+
+    public static fontWeight(name: string, val?: string) {
+        name = 'settings[style]'+ name +'[font-weight]';
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        
+        return PropertyInput.input(id, '字体粗细', PropertyInput.text(id, name, val, 4));
+    }
+
+
+
+    private static option(items: any, selected: string) {
+        let html = '';
+        $.each(items, function(i: string) {
+            const sld = selected == i ? ' selected' : '';
+            html += `<option value="${i}"${sld}>${this}</option>`;
+        });
+        return html;
+    }
 
     private static sideInput(name: string, label: string, vals: string[] = []) {
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
-        return PropertyInput.input(id, label, PropertyInput.side(id, name, vals));
+        return PropertyInput.input(id, label, PropertyInput.side(id, name, vals), 'side-input');
     }
 
     private static side(id: string, name: string, vals: string[] = []) {
@@ -47,30 +141,31 @@ class PropertyInput {
         return html;
     }
 
-    private static radio(id: number, name: string, items: any, selected: string) {
+    private static radio(id: string, name: string, items: any, selected: string| number) {
         let html = '';
         let j = 0;
         $.each(items, function(i: string) {
-            const index = [PropertyInput.nameToId(name), id, j ++].join('_');
+            const index = [id, j ++].join('_');
             const chk = i == selected ? ' checked' : '';
             html += `<span class="radio-label"><input type="radio" id="${index}" name="${name}" value="${i}"${chk}><label for="${index}">${this}</label></span>`;
         });
         return html;
     }
 
-    private static checkbox(id: number, name: string, items: any, val: string[] = []) {
+    private static checkbox(id: string, name: string, items: any, val: string[] = []) {
         let html = '';
         let j = 0;
         $.each(items, function(i: string) {
-            const index = [name, id, j ++].join('_');
+            const index = [id, j ++].join('_');
             const chk = val && val.indexOf(i) >= 0 ? ' checked' : '';
             html += `<span class="check-label"><input type="checkbox" id="${index}" name="${name}" value="${i}"${chk}><label for="${index}">${this}</label></span>`;
         });
         return html;
     }
 
-    private static text(id: string, name: string, val: string = '') {
-        return `<input type="text" id="${id}" class="form-control" name="${name}" value="${val}">`;
+    private static text(id: string, name: string, val: string = '', size?: number) {
+        const option = size ? ` size="${size}"` : '';
+        return `<input type="text" id="${id}" class="form-control" name="${name}" value="${val}"${option}>`;
     }
 
     private static input(id: string, name: string, content: string, cls: string = ''): string {
@@ -225,16 +320,42 @@ class Page {
     }
 
     public showPropertyPanel() {
-        const data: any = {
-            title: '',
-            settings: {}
-        };
-        let items = this.panelGroup.find('.form-table .tab-item');
-        items[0].innerHTML = PropertyInput.title(data.title) + PropertyInput.lazy(data.settings?.lazy);
-        let boxes = $(items[1]).find('.expand-body');
-        boxes[0].innerHTML = PropertyInput.margin(data.settings?.style?.margin)
-                        + 
-        this.showPanel('property');
+        this.post(SETTING_URI, {
+            id: this.weight.id()
+        }, res => {
+            if (res.code !== 200) {
+                return;
+            }
+            const data = res.data;
+            let items = this.panelGroup.find('.form-table .tab-item');
+            items[0].innerHTML = PropertyInput.title(data.title) + PropertyInput.lazy(data.settings?.lazy);
+            let boxes = $(items[1]).find('.expand-body');
+            boxes[0].innerHTML = PropertyInput.margin(data.settings?.style?.margin)
+                            + PropertyInput.position(data.settings?.style?.position)
+                            + PropertyInput.border(null, data.settings?.style?.border) 
+                            + PropertyInput.radius()
+                            + PropertyInput.color()
+                            + PropertyInput.background();
+            boxes[1].innerHTML = PropertyInput.visibility('title', 0)
+                            + PropertyInput.padding('title')
+                            + PropertyInput.border('title', data.settings?.style?.border) 
+                            + PropertyInput.radius('title')
+                            + PropertyInput.color('title')
+                            + PropertyInput.fontSize('title')
+                            + PropertyInput.fontWeight('title')
+                            + PropertyInput.textAlign('title')
+                            + PropertyInput.background('title');
+            boxes[2].innerHTML = PropertyInput.visibility('content', 0)
+                            + PropertyInput.padding('content')
+                            + PropertyInput.border('content', data.settings?.style?.border) 
+                            + PropertyInput.radius('content')
+                            + PropertyInput.color('content')
+                            + PropertyInput.fontSize('content')
+                            + PropertyInput.fontWeight('content')
+                            + PropertyInput.textAlign('content')
+                            + PropertyInput.background('content');
+            this.showPanel('property');
+        });
     }
 
     /**
