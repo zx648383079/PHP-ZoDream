@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Template\Domain\Page;
+use Zodream\Html\Dark\Theme;
 /** @var $this View */
 /** @var $page Page */
 $id = $model->id;
@@ -104,75 +105,254 @@ $this->registerJsFile([
                         </div><div class="tab-item">
                             样式
                         </div></div>
-                    <div class="tab-body">
+                    <div class="tab-body form-table">
                         <div class="tab-item active">
-                            <div class="input-group">
-                                <label for="">标题</label>
-                                <input type="text">
-                            </div>
-                            
+                            <?=Theme::text('title', '', '标题')?>
+                            <?=Theme::radio('settings[lazy]', ['关闭', '开启'], 0, '懒加载')?>
                         </div>
                         <div class="tab-item">
-                            <div class="panel">
-                                <div class="panel-header">标题</div>
-                                <div class="panel-body">
+                        <div class="expand-box open">
+                                <div class="expand-header">整体<span class="fa fa-chevron-down"></span></div>
+                                <div class="expand-body">
                                     <div class="input-group">
-                                        <label for="">背景</label>
-                                        <input type="text">
+                                        <label>外边距</label>
+                                        <div class="side-input">
+                                            <input type="text" id="title" class="form-control " name="settings[style][margin][]" size="4" placeholder="上">
+                                            <input type="text" id="title" class="form-control " name="settings[style][margin][]" size="4" placeholder="右">
+                                            <input type="text" id="title" class="form-control " name="settings[style][margin][]" size="4" placeholder="下">
+                                            <input type="text" id="title" class="form-control " name="settings[style][margin][]" size="4" placeholder="左">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <input type="radio" name="" id="">显示
-                                        <input type="radio" name="" id="">不显示
+                                        <label>悬浮</label>
+                                        <div class="">
+                                            <select name="settings[style][position]">
+                                                <option value="static">无</option>
+                                                <option value="relative">相对定位</option>
+                                                <option value="absolute">绝对定位</option>
+                                                <option value="fixed">固定定位</option>
+                                            </select>
+                                            <div class="side-input">
+                                                <input type="text" id="title" class="form-control " name="settings[style][top]" size="4" placeholder="上">
+                                                <input type="text" id="title" class="form-control " name="settings[style][right]" size="4" placeholder="右">
+                                                <input type="text" id="title" class="form-control " name="settings[style][bottom]" size="4" placeholder="下">
+                                                <input type="text" id="title" class="form-control " name="settings[style][left]" size="4" placeholder="左">
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">边框圆角</label>
-                                        <input type="text">
+                                        <label for="settings_lazy">边框</label>
+                                        <div class="">
+                                            <input type="text" class="form-control" name="settings[style][border][value][]" placeholder="粗细" size="4">
+                                            <select name="settings[style][border][value][]">
+                                                <option value="">实线</option>
+                                                <option value="">虚线</option>
+                                            </select>
+                                            <input type="color" name="settings[style][border][value][]">
+                                            <div class="side-input">
+                                                <span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_0" name="settings[style][border][side][]" value="0" >
+                                                    <label for="settings_style_border_side_0">上</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_1" name="settings[style][border][side][]" value="1">
+                                                    <label for="settings_style_border_side_1">右</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_2" name="settings[style][border][side][]" value="2">
+                                                    <label for="settings_style_border_side_2">下</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_3" name="settings[style][border][side][]" value="3">
+                                                    <label for="settings_style_border_side_3">左</label>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">颜色</label>
-                                        <input type="text">
+                                        <label for="settings_style_border-radius_">圆角</label>
+                                        <div class="">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][border-radius][]" value="" size="4" placeholder="左上">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][border-radius][]" value="" size="4" placeholder="右上">
+                                            <br/>
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][border-radius][]" value="" size="4" placeholder="左下">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][border-radius][]" value="" size="4" placeholder="右下">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">字体</label>
-                                        <input type="text">
+                                        <label for="">字体颜色</label>
+                                        <div>
+                                            <input type="color" name="settings[style][color]">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">位置</label>
-                                        <select name="" id="">
-                                            <option value="">居左</option>
-                                            <option value="">居中</option>
-                                            <option value="">居右</option>
-                                        </select>
+                                        <label for="settings_style_background_value">背景</label>
+                                        <div class="">
+                                            <span class="radio-label">
+                                                <input type="radio" id="settings_style_background_type0" name="settings[style][background][type]" value="0" checked="">
+                                                <label for="settings_style_background_type0">图片</label>
+                                            </span><span class="radio-label">
+                                                <input type="radio" id="settings_style_background_type1" name="settings[style][background][type]" value="1">
+                                                <label for="settings_style_background_type1">颜色</label>
+                                            </span>
+                                            <div class="file-input">
+                                                <input type="text" id="settings_style_background_value" class="form-control " name="settings[style][background][value]" value="" size="20">
+                                                <button type="button" data-type="upload">上传</button>
+                                            </div>
+                                            <input type="color" name="settings[style][background][value]" id="">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel">
-                                <div class="panel-header">边框</div>
-                                <div class="panel-body">
+                            <div class="expand-box">
+                                <div class="expand-header">标题<span class="fa fa-chevron-down"></span></div>
+                                <div class="expand-body">
+                                    <?=Theme::radio('settings[style][title][visibility]', ['显示', '隐藏'], 0, '可见')?>
                                     <div class="input-group">
-                                        <label for="">背景</label>
-                                        <input type="text">
+                                        <label>内边距</label>
+                                        <div class="side-input">
+                                            <input type="text" id="title" class="form-control " name="settings[style][title][padding][]" size="4" placeholder="上">
+                                            <input type="text" id="title" class="form-control " name="settings[style][title][padding][]" size="4" placeholder="右">
+                                            <input type="text" id="title" class="form-control " name="settings[style][title][padding][]" size="4" placeholder="下">
+                                            <input type="text" id="title" class="form-control " name="settings[style][title][padding][]" size="4" placeholder="左">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">边框</label>
-                                        <input type="text">
+                                        <label for="settings_lazy">边框</label>
+                                        <div class="">
+                                            <input type="text" class="form-control" name="settings[style][title][border][value][]" placeholder="粗细"size="4">
+                                            <select name="settings[style][title][border][value][]">
+                                                <option value="">实线</option>
+                                                <option value="">虚线</option>
+                                            </select>
+                                            <input type="color" name="settings[style][title][border][value][]">
+                                            <div class="side-input">
+                                                <span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_0" name="settings[style][title][border][side][]" value="0" >
+                                                    <label for="settings_style_border_side_0">上</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_1" name="settings[style][title][border][side][]" value="1">
+                                                    <label for="settings_style_border_side_1">右</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_2" name="settings[style][title][border][side][]" value="2">
+                                                    <label for="settings_style_border_side_2">下</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_3" name="settings[style][title][border][side][]" value="3">
+                                                    <label for="settings_style_border_side_3">左</label>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">边框圆角</label>
-                                        <input type="text">
+                                        <label for="settings_style_border-radius_">圆角</label>
+                                        <div class="">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][title][border-radius][]" value="" size="4" placeholder="左上">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][title][border-radius][]" value="" size="4" placeholder="右上">
+                                            <br/>
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][title][border-radius][]" value="" size="4" placeholder="左下">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][title][border-radius][]" value="" size="4" placeholder="右下">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">外边距</label>
-                                        <input type="text">
+                                        <label for="">字体颜色</label>
+                                        <div>
+                                            <input type="color" name="settings[style][title][color]">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">内边距</label>
-                                        <input type="text">
+                                        <label for="settings_style_background_value">背景</label>
+                                        <div class="">
+                                            <span class="radio-label">
+                                                <input type="radio" id="settings_style_background_type0" name="settings[style][title][background][type]" value="0" checked="">
+                                                <label for="settings_style_background_type0">图片</label>
+                                            </span><span class="radio-label">
+                                                <input type="radio" id="settings_style_background_type1" name="settings[style][title][background][type]" value="1">
+                                                <label for="settings_style_background_type1">颜色</label>
+                                            </span>
+                                            <div class="file-input">
+                                                <input type="text" id="settings_style_background_value" class="form-control " name="settings[style][title][background][value]" value="" size="20">
+                                                <button type="button" data-type="upload">上传</button>
+                                            </div>
+                                            <input type="color" name="settings[style][title][background][value]" id="">
+                                        </div>
+                                    </div>
+                                    <?=Theme::text('settings[style][title][font-size]', '', '字体大小')->size(4)?>
+                                    <?=Theme::text('settings[style][title][font-weight]', '', '字体粗细')->size(4)?>
+                                    <?=Theme::radio('settings[style][title][text-align]', ['居左', '居中', '居右'], 0, '字体粗细')?>
+                                </div>
+                            </div>
+                            <div class="expand-box">
+                                <div class="expand-header">内容<span class="fa fa-chevron-down"></span></div>
+                                <div class="expand-body">
+                                    <?=Theme::radio('settings[style][content][visibility]', ['显示', '隐藏'], 0, '可见')?>
+                                    <div class="input-group">
+                                        <label>内边距</label>
+                                        <div class="side-input">
+                                            <input type="text" id="title" class="form-control " name="settings[style][content][padding][]" size="4" placeholder="上">
+                                            <input type="text" id="title" class="form-control " name="settings[style][content][padding][]" size="4" placeholder="右">
+                                            <input type="text" id="title" class="form-control " name="settings[style][content][padding][]" size="4" placeholder="下">
+                                            <input type="text" id="title" class="form-control " name="settings[style][content][padding][]" size="4" placeholder="左">
+                                        </div>
                                     </div>
                                     <div class="input-group">
-                                        <label for="">粗细</label>
-                                        <input type="text">
+                                        <label for="settings_lazy">边框</label>
+                                        <div class="">
+                                            <input type="text" class="form-control" name="settings[style][content][border][value][]" placeholder="粗细" size="4">
+                                            <select name="settings[style][content][border][value][]">
+                                                <option value="">实线</option>
+                                                <option value="">虚线</option>
+                                            </select>
+                                            <input type="color" name="settings[style][content][border][value][]">
+                                            <div class="side-input">
+                                                <span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_0" name="settings[style][content][border][side][]" value="0" >
+                                                    <label for="settings_style_border_side_0">上</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_1" name="settings[style][content][border][side][]" value="1">
+                                                    <label for="settings_style_border_side_1">右</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_2" name="settings[style][content][border][side][]" value="2">
+                                                    <label for="settings_style_border_side_2">下</label>
+                                                </span><span class="check-label">
+                                                    <input type="checkbox" id="settings_style_border_side_3" name="settings[style][content][border][side][]" value="3">
+                                                    <label for="settings_style_border_side_3">左</label>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div class="input-group">
+                                        <label for="settings_style_border-radius_">圆角</label>
+                                        <div class="">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][content][border-radius][]" value="" size="4" placeholder="左上">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][content][border-radius][]" value="" size="4" placeholder="右上">
+                                            <br/>
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][content][border-radius][]" value="" size="4" placeholder="左下">
+                                            <input type="text" id="settings_style_border-radius_" class="form-control " name="settings[style][content][border-radius][]" value="" size="4" placeholder="右下">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="">字体颜色</label>
+                                        <div>
+                                            <input type="color" name="settings[style][content][color]">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="settings_style_background_value">背景</label>
+                                        <div class="">
+                                            <span class="radio-label">
+                                                <input type="radio" id="settings_style_background_type0" name="settings[style][content][background][type]" value="0" checked="">
+                                                <label for="settings_style_background_type0">图片</label>
+                                            </span><span class="radio-label">
+                                                <input type="radio" id="settings_style_background_type1" name="settings[style][content][background][type]" value="1">
+                                                <label for="settings_style_background_type1">颜色</label>
+                                            </span>
+                                            <div class="file-input">
+                                                <input type="text" id="settings_style_background_value" class="form-control " name="settings[style][content][background][value]" value="">
+                                                <button type="button" data-type="upload">上传</button>
+                                            </div>
+                                            <input type="color" name="settings[style][content][background][value]" id="">
+                                        </div>
+                                    </div>
+                                    <?=Theme::text('settings[style][content][font-size]', '', '字体大小')->size(4)?>
+                                    <?=Theme::text('settings[style][content][font-weight]', '', '字体粗细')->size(4)?>
+                                    <?=Theme::radio('settings[style][content][text-align]', ['居左', '居中', '居右'], 0, '字体粗细')?>
                                 </div>
                             </div>
                         </div>

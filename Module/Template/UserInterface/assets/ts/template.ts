@@ -6,6 +6,82 @@ const DEL_URI = 'weight/destroy',
     SETTING_URI = 'weight/setting',
     SAVE_SETTING_URI = 'weight/save_setting',
     INFO_URI = 'weight/info';
+class PropertyInput {
+    private static _guid = 0;
+    public static guid(): number {
+        return PropertyInput._guid ++;
+    }
+
+    public static title(val: string = '') {
+        const id = 'title_' + PropertyInput.guid();
+        return PropertyInput.input(id, '标题', PropertyInput.text(id, 'title', val));
+    }
+
+    public static lazy(val: string) {
+        const id = PropertyInput.guid();
+        return PropertyInput.input('settings_lazy', '懒加载', PropertyInput.radio(id, 'settings[lazy]', ['关闭', '开启'], val));
+    }
+
+
+    public static margin(vals: string[] = []) {
+        return PropertyInput.sideInput('settings[style][margin]', '外边距', vals);
+    }
+
+    public static padding(name: string, vals: string[] = []) {
+        return PropertyInput.sideInput('settings[style][' + name +'][padding]', '内边距', vals);
+    }
+
+
+
+    private static sideInput(name: string, label: string, vals: string[] = []) {
+        const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
+        return PropertyInput.input(id, label, PropertyInput.side(id, name, vals));
+    }
+
+    private static side(id: string, name: string, vals: string[] = []) {
+        let html = '';
+        $.each(['上', '右', '下', '左'], function(i: number) {
+            const val = vals && vals.length > i ? vals[i] : '';
+            html += `<input type="text" id="${id}_${i}" class="form-control " name="${name}[]" size="4" value="${val}" placeholder="${this}">`;
+        });
+        return html;
+    }
+
+    private static radio(id: number, name: string, items: any, selected: string) {
+        let html = '';
+        let j = 0;
+        $.each(items, function(i: string) {
+            const index = [PropertyInput.nameToId(name), id, j ++].join('_');
+            const chk = i == selected ? ' checked' : '';
+            html += `<span class="radio-label"><input type="radio" id="${index}" name="${name}" value="${i}"${chk}><label for="${index}">${this}</label></span>`;
+        });
+        return html;
+    }
+
+    private static checkbox(id: number, name: string, items: any, val: string[] = []) {
+        let html = '';
+        let j = 0;
+        $.each(items, function(i: string) {
+            const index = [name, id, j ++].join('_');
+            const chk = val && val.indexOf(i) >= 0 ? ' checked' : '';
+            html += `<span class="check-label"><input type="checkbox" id="${index}" name="${name}" value="${i}"${chk}><label for="${index}">${this}</label></span>`;
+        });
+        return html;
+    }
+
+    private static text(id: string, name: string, val: string = '') {
+        return `<input type="text" id="${id}" class="form-control" name="${name}" value="${val}">`;
+    }
+
+    private static input(id: string, name: string, content: string, cls: string = ''): string {
+        return `<div class="input-group"><label for="${id}">${name}</label><div class="${cls}">${content}</div></div>`;
+    }
+
+    private static nameToId(name: string) {
+        return name.replace(/\[/g, '_').replace(/\]/g, '');
+    }
+}
+
 
 class Weight {
     constructor(
@@ -120,6 +196,8 @@ class Page {
                 box.removeClass('min').siblings().addClass('min');
                 that.resize();
             }
+        }).on('click', '.expand-box .expand-header', function() {
+            $(this).closest('.expand-box').toggleClass('open');
         }).find('.weight-edit-grid').attr('draggable', 'true').on('dragstart', function(e) {
             e.originalEvent.dataTransfer.setData("Text", e.target.id);
             weight = $(this);
@@ -147,6 +225,15 @@ class Page {
     }
 
     public showPropertyPanel() {
+        const data: any = {
+            title: '',
+            settings: {}
+        };
+        let items = this.panelGroup.find('.form-table .tab-item');
+        items[0].innerHTML = PropertyInput.title(data.title) + PropertyInput.lazy(data.settings?.lazy);
+        let boxes = $(items[1]).find('.expand-body');
+        boxes[0].innerHTML = PropertyInput.margin(data.settings?.style?.margin)
+                        + 
         this.showPanel('property');
     }
 
@@ -274,6 +361,7 @@ class Page {
             }
         });
         this.panelGroup.width(width);
+        this.panelGroup.find('.panel-body .tab-body').height(this.panelGroup.height() - 60)
         this.box.css('padding-left', width + 'px');
         const height = $(window).height() - this.box.offset().top;
         this.box.height(height);
