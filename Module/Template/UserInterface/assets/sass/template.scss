@@ -365,13 +365,21 @@ $sizes: (320: 568,
         img {
             width: 100%;
         }
+        &.active {
+            border: 1px dotted green;
+        }
         &:hover {
             border-style: solid;
         }
     }
     .form-table {
         .input-group {
-            input[type="text"] {
+            >label {
+                font-size: 12px;
+                padding: 0;
+            }
+            input[type="text"],
+            select {
                 min-width: 40px;
             }
         }

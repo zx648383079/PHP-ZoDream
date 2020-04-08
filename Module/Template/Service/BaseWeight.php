@@ -5,6 +5,7 @@ use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Page;
 use Zodream\Disk\Directory;
 use Exception;
+use Zodream\Html\Dark\Theme;
 
 
 abstract class BaseWeight {
@@ -45,7 +46,15 @@ abstract class BaseWeight {
      * @return mixed
      */
     public function renderConfig(PageWeightModel $model) {
-        return null;
+        $html = Theme::text('title', $model->title, '标题');
+        return <<<HTML
+{$html}
+<textarea id="editor-container" style="height: 400px;" name="content" placeholder="请输入内容">{$model->content}</textarea>
+<script>
+UE.delEditor('editor-container');
+UE.getEditor('editor-container');
+</script>
+HTML;
     }
 
     public function parseConfigs() {

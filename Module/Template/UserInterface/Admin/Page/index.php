@@ -166,9 +166,8 @@ $this->registerJsFile([
         <div class="dialog-title">编辑</div>
         <i class="fa fa-close dialog-close"></i>
     </div>
-    <form class="dialog-body" action="<?=$this->url('./@admin/weight/save')?>" method="post">
-        <p><input type="text" name="title" placeholder="请输入标题"></p>
-        <textarea id="editor-container" style="height: 400px;" name="content" placeholder="请输入内容"></textarea>
+    <form class="dialog-body form-table" action="<?=$this->url('./@admin/weight/save')?>" method="post">
+        
     </form>
     <div class="dialog-footer">
         <button type="button" class="dialog-yes">确认</button>

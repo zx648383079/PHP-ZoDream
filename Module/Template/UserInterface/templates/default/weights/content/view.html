@@ -1,8 +1,8 @@
-<div class="content-weight">
-    <div class="title">
+<div class="content-weight {=$model->properties->formatClass()}"{=$model->properties->weightStyle()}>
+    <div class="title"{=$model->properties->titleStyle()}>
         {=$model->title}
     </div>
-    <div class="contnet">
+    <div class="contnet"{=$model->properties->contentStyle()}>
         {=$model->content}
     </div>
 </div>

@@ -7,12 +7,11 @@ class ContentWeight extends BaseWeight {
 
     /**
      * 获取生成的部件视图
-     * @param \Module\Template\Domain\Model\PageWeightModel $model
+     * @param PageWeightModel $model
      * @return mixed
      * @throws Exception
      */
     public function render(PageWeightModel $model){
-
         return $this->show('view', compact('model'));
     }
 }

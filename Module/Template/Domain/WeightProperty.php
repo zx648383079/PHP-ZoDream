@@ -4,6 +4,7 @@ namespace Module\Template\Domain;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Module;
+use Zodream\Helpers\Arr;
 use Zodream\Helpers\Str;
 
 class WeightProperty {
@@ -13,24 +14,73 @@ class WeightProperty {
 
     public $data = [];
 
+    private $sideMap = ['top', 'right', 'bottom', 'left'];
 
     public function formatClass() {
         return implode(' ', $this->classes);
     }
 
-    public function formatStyle() {
+    public function formatStyle(array $data) {
         $items = [];
-        foreach ($this->styles as $key => $val) {
+        foreach ($data as $key => $val) {
+            if ($key === 'title' || $key === 'content') {
+                continue;
+            }
+            if ($key === 'visibility') {
+                if ($val == 1) {
+                    return 'display: none;';
+                }
+                continue;
+            }
+            $method = 'formatStyle'. Str::studly($key);
+            if (method_exists($this, $method)) {
+                $items[] = $this->$method($val);
+                continue;
+            }
+
             if (is_array($val)) {
                 $val = implode(' ', $val);
             }
-            $items[] = sprintf('%s: %s;', $key, $val);
+            if (trim($val) === '') {
+                continue;
+            }
+            $items[] = $this->formatCss($key, $val);
         }
         return implode('', $items);
     }
 
+    public function weightStyle() {
+        return $this->formatTagAttr('style', $this->weightCss());
+    }
+
+    public function titleStyle() {
+        return $this->formatTagAttr('style', $this->titleCss());
+    }
+
+    public function contentStyle() {
+        return $this->formatTagAttr('style', $this->contentCss());
+    }
+
+    private function formatTagAttr($key, $value) {
+        return empty(trim($value)) ? '' : sprintf(' %s="%s"', $key, $value);
+    }
+
+    public function weightCss() {
+        return $this->formatStyle($this->styles);
+    }
+
+    public function titleCss() {
+        return isset($this->styles['title'])
+            ? $this->formatStyle($this->styles['title']) : '';
+    }
+
+    public function contentCss() {
+        return isset($this->styles['content'])
+            ? $this->formatStyle($this->styles['content']) : '';
+    }
+
     public function appendStyle(array $data) {
-        $this->styles = array_merge($this->styles, $data);
+        $this->styles = Arr::merge2D($this->styles, $data);
         return $this;
     }
 
@@ -59,6 +109,120 @@ class WeightProperty {
 
     public function __get($name) {
         return $this->get($name);
+    }
+
+    private function formatPixel($val) {
+        return is_numeric($val) ? $val. 'px' : $val;
+    }
+
+    private function formatCss($key, $val) {
+        return sprintf('%s: %s;', $key, $val);
+    }
+
+    private function arrEmptyCount(array $data) {
+        $i = 0;
+        foreach ($data as $item) {
+            if (empty($item)) {
+                $i ++;
+            }
+        }
+        return $i;
+    }
+
+    private function formatStyleMargin($val, $key = 'margin') {
+        if (!is_array($val)) {
+            return $val === '' ? '' : $this->formatCss($key, $this->formatPixel($val));
+        }
+        $val = array_map(function ($item) {
+            return $item === '' ? $item : $this->formatPixel($item);
+        }, $val);
+
+        if (count($val) == 4 && $this->arrEmptyCount($val) === 0) {
+            return $this->formatCss($key, implode(' ', $val));
+        }
+        $items = [];
+        foreach ($val as $i => $v) {
+            if ($v === '') {
+                continue;
+            }
+            $items[] = sprintf('%s-%s: %s;', $key, $this->sideMap[$i], $this->formatPixel($v));
+        }
+        return implode('', $items);
+    }
+
+    private function formatStylePadding($val) {
+        return $this->formatStyleMargin($val, 'padding');
+    }
+
+    private function formatStyleTextAlign($val) {
+        $maps = ['left', 'center', 'right'];
+        if ($val < 1) {
+            return '';
+        }
+        return $this->formatCss('text-align', $maps[$val]);
+    }
+
+    private function formatStylePosition($val) {
+        if ($val['type'] === 'static') {
+            return '';
+        }
+        $items = [
+            $this->formatCss('position', $val['type']),
+        ];
+        if (!isset($val['value'])) {
+            return $items[0];
+        }
+        foreach ($items as $i => $v) {
+            if ($v === '') {
+                continue;
+            }
+            $items[] = $this->formatCss($this->sideMap[$i], $this->formatPixel($v));
+        }
+        return implode('', $items);
+    }
+
+    private function formatStyleBorder($val) {
+        if (!isset($val['side']) || empty($val['side']) || empty($val['value'][0])) {
+            return;
+        }
+        if (is_numeric($val['value'][0])) {
+            $val['value'][0] = $this->formatPixel($val['value'][0]);
+        }
+        $v = implode(' ', $val['value']);
+        if (count($val['side']) === 4) {
+            return $this->formatCss('border', $v);
+        }
+        $items = [];
+        foreach ($val['side'] as $i) {
+            $items[] = sprintf('border-%s: %s;', $this->sideMap[$i], $v);
+        }
+        return implode('', $items);
+    }
+
+    private function formatStyleBorderRadius($val) {
+        if (count($val) === $this->arrEmptyCount($val)) {
+            return '';
+        }
+        return $this->formatCss('border-radius', implode(' ', array_map(function ($item) {
+            return $item === '' ? 0 : $this->formatPixel($item);
+        }, $val)));
+    }
+
+    private function formatStyleBackground($val) {
+        if ($val['type'] < 1) {
+            return '';
+        }
+        if ($val['type'] == 1) {
+            return $this->formatCss('background-color', $val['value']);
+        }
+        return $this->formatCss('background-image', sprintf('url(%s)', url()->asset($val['value'])));
+    }
+
+    private function formatStyleColor($val) {
+        if (!isset($val['type']) || $val['type'] < 1) {
+            return '';
+        }
+        return $this->formatCss('color', $val['value']);
     }
 
     public static function create(PageWeightModel $model) {

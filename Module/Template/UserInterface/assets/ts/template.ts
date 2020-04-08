@@ -17,9 +17,9 @@ class PropertyInput {
         return PropertyInput.input(id, '标题', PropertyInput.text(id, 'title', val));
     }
 
-    public static lazy(val: string) {
+    public static lazy(val: number) {
         const id = 'settings_lazy_' + PropertyInput.guid();
-        return PropertyInput.input(id, '懒加载', PropertyInput.radio(id, 'settings[lazy]', ['关闭', '开启'], val));
+        return PropertyInput.input(id, '懒加载', PropertyInput.radio(id, 'settings[lazy]', ['关闭', '开启'], !val ? 0 : val));
     }
 
     
@@ -33,26 +33,26 @@ class PropertyInput {
     }
 
     public static position(data: any) {
-        const html = data && data.type != 'static' ? PropertyInput.side('settings[style][position][value]', 'settings[style][position][value]', data?.value) : '';
+        const html = PropertyInput.positionSide(data?.type, data?.value);
         const option = PropertyInput.option({
             static: '无',
             relative: '相对定位',
             absolute: '绝对定位',
             fixed: '固定定位'
         }, data?.type);
-        return PropertyInput.input('', '悬浮', `<select name="settings[style][position][type]">${option}</select><div class="side-input">${html}</div>`);
+        return PropertyInput.input('', '悬浮', `<select name="settings[style][position][type]">${option}</select><div class="side-input">${html}</div>`, 'position-input');
+    }
+
+    public static positionSide(type: string, value?: any) {
+        return type && type != 'static' ? PropertyInput.side('settings[style][position][value]', 'settings[style][position][value]', value) : '';
     }
 
     public static border(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[border]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
-        let html = PropertyInput.checkbox(id, name + '[side]', ['上', '右', '下', '左'], data?.side)
-        return PropertyInput.input(id, '边框', `<input type="text" class="form-control" name="${name}[value][]" placeholder="粗细" size="4">
-        <select name="${name}[value][]">
-            <option value="">实线</option>
-            <option value="">虚线</option>
-        </select>
-        <input type="color" name="${name}[value][]"><div class="side-input">${html}</div>
+        let html = PropertyInput.checkbox(id, name + '[side][]', ['上', '右', '下', '左'], data?.side)
+        const option = PropertyInput.option(['实线', '虚线'], data && data.value && data.value[1] == 1 ? 1 : 0)
+        return PropertyInput.input(id, '边框', `<input type="text" class="form-control" name="${name}[value][]" value="${data?.value[0]}" placeholder="粗细" size="4"><select name="${name}[value][]">${option}</select><input type="color" name="${name}[value][]" value="${data?.value[2]}"><div class="side-input">${html}</div>
         `);
     }
 
@@ -67,50 +67,55 @@ class PropertyInput {
     }
 
 
-    public static color(name?: string) {
+    public static color(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[color]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
-        return PropertyInput.input(id, '字体颜色', `<input type="color" name="${name}">`);
+        return PropertyInput.input(id, '字体颜色', PropertyInput.radio(id, name + '[type]', ['无', '有'], data?.type) + `<input type="color" name="${name}[value]" value="${data?.value}">`);
     }
 
     public static background(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[background]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
-        let html = PropertyInput.radio(id, name, ['颜色', '图片'], '0');
-        if (data && data.type == 1) {
-            html += `<div class="file-input">
-            <input type="text" id="${id}_value" class="form-control " name="${name}[value]" value="" size="20">
+        let html = PropertyInput.radio(id, name+ '[type]', ['无', '颜色', '图片'], '0') + '<div class="value-input">' + PropertyInput.backgroundValue(name, data?.type)+'</div>';
+        return PropertyInput.input(id, '背景', html, 'background-input');
+    }
+
+    public static backgroundValue(name: string, type?: number) {
+        if (!type || type < 1) {
+            return '';
+        }
+        if (type == 2) {
+            return `<div class="file-input">
+            <input type="text" class="form-control " name="${name}[value]" value="" size="10">
             <button type="button" data-type="upload">上传</button>
         </div>`;
-        } else {
-            html += `<input type="color" name="${name}[value]">`;
-        }
-        return PropertyInput.input(id, '背景', html);
+        };
+        return `<input type="color" name="${name}[value]">`;
     }
 
     public static visibility(name: string, val: string|number) {
-        name = 'settings[style]'+ name +'[visibility]';
+        name = 'settings[style]['+ name +'][visibility]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
         
         return PropertyInput.input(id, '可见', PropertyInput.radio(id, name, ['显示', '隐藏'], val));
     }
 
     public static fontSize(name: string, val?: string) {
-        name = 'settings[style]'+ name +'[font-size]';
+        name = 'settings[style]['+ name +'][font-size]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
         
         return PropertyInput.input(id, '字体大小', PropertyInput.text(id, name, val, 4));
     }
 
     public static textAlign(name: string, val?: string) {
-        name = 'settings[style]'+ name +'[text-align]';
+        name = 'settings[style]['+ name +'][text-align]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
         
-        return PropertyInput.input(id, '字体位置', PropertyInput.radio(id, name, ['居左', '居中', '居右'], val));
+        return PropertyInput.input(id, '字体位置', PropertyInput.radio(id, name, ['居左', '居中', '居右'], !val ? 0 : val));
     }
 
     public static fontWeight(name: string, val?: string) {
-        name = 'settings[style]'+ name +'[font-weight]';
+        name = 'settings[style]['+ name +'][font-weight]';
         const id = PropertyInput.nameToId(name) + '_' + PropertyInput.guid();
         
         return PropertyInput.input(id, '字体粗细', PropertyInput.text(id, name, val, 4));
@@ -118,7 +123,7 @@ class PropertyInput {
 
 
 
-    private static option(items: any, selected: string) {
+    private static option(items: any, selected: string| number) {
         let html = '';
         $.each(items, function(i: string) {
             const sld = selected == i ? ' selected' : '';
@@ -165,6 +170,9 @@ class PropertyInput {
 
     private static text(id: string, name: string, val: string = '', size?: number) {
         const option = size ? ` size="${size}"` : '';
+        if (!val) {
+            val = '';
+        }
         return `<input type="text" id="${id}" class="form-control" name="${name}" value="${val}"${option}>`;
     }
 
@@ -199,7 +207,10 @@ class Weight {
      * html
      */
     public html(html?: string) {
-        return this.box.replaceWith(html);
+        const newBox = $(html);
+        this.box = this.box.replaceWith(newBox);
+        this.box = newBox;
+        return this;
     }
 
     /**
@@ -293,6 +304,17 @@ class Page {
             }
         }).on('click', '.expand-box .expand-header', function() {
             $(this).closest('.expand-box').toggleClass('open');
+        }).on('change', '.position-input select', function() {
+            let $this = $(this);
+            $this.next().html(PropertyInput.positionSide($this.val() as string));
+        }).on('click', '.background-input input[type="radio"]', function() {
+            let $this = $(this);
+            $this.closest('.background-input').find('.value-input').html(PropertyInput.backgroundValue($this.attr('name').replace('[type]', ''), $this.val() as number));
+        }).on('change', 'input,textarea', function() {
+            that.autoSave();
+        }).on('click', '.style-item', function() {
+            $(this).addClass('active').siblings().removeClass('active');
+            that.autoSave();
         }).find('.weight-edit-grid').attr('draggable', 'true').on('dragstart', function(e) {
             e.originalEvent.dataTransfer.setData("Text", e.target.id);
             weight = $(this);
@@ -307,7 +329,23 @@ class Page {
             
             that.addWeight(weight.clone(), $(this));
         });
+        this.editDialog.on('done', function() {
+            that.post(EDIT_URI, that.editDialog.find('.dialog-body').serialize(), function(res) {
+                that.showPropertyPanel();
+                that.refreshWeight();
+            })
+            this.close();
+        })
         this.bindRule();
+    }
+
+    private autoSave() {
+        const data = formData(this.panelGroup.find('.form-table')) + '&theme_style_id=' + this.panelGroup.find('.style-item.active').attr('data-id') + '&id=' + this.weight.id();
+        this.post(EDIT_URI, data, res => {
+            if (res.code === 200) {
+                this.refreshWeight();
+            }
+        });
     }
 
     public showEditDialog() {
@@ -315,9 +353,14 @@ class Page {
         this.post(EDIT_DAILOG_URI, {
             id: this.weight.id()
         }, function(data) {
+            if (data.code !== 200) {
+                return;
+            }
+            that.editDialog.find('.dialog-body').html('<input type="hidden" name="id" value="'+ that.weight.id() +'">' + data.data.html);
             that.editDialog.show();
         });
     }
+
 
     public showPropertyPanel() {
         this.post(SETTING_URI, {
@@ -327,33 +370,38 @@ class Page {
                 return;
             }
             const data = res.data;
+            const styles = data.settings?.style;
             let items = this.panelGroup.find('.form-table .tab-item');
             items[0].innerHTML = PropertyInput.title(data.title) + PropertyInput.lazy(data.settings?.lazy);
             let boxes = $(items[1]).find('.expand-body');
-            boxes[0].innerHTML = PropertyInput.margin(data.settings?.style?.margin)
-                            + PropertyInput.position(data.settings?.style?.position)
-                            + PropertyInput.border(null, data.settings?.style?.border) 
-                            + PropertyInput.radius()
-                            + PropertyInput.color()
-                            + PropertyInput.background();
-            boxes[1].innerHTML = PropertyInput.visibility('title', 0)
-                            + PropertyInput.padding('title')
-                            + PropertyInput.border('title', data.settings?.style?.border) 
-                            + PropertyInput.radius('title')
-                            + PropertyInput.color('title')
-                            + PropertyInput.fontSize('title')
-                            + PropertyInput.fontWeight('title')
-                            + PropertyInput.textAlign('title')
-                            + PropertyInput.background('title');
-            boxes[2].innerHTML = PropertyInput.visibility('content', 0)
-                            + PropertyInput.padding('content')
-                            + PropertyInput.border('content', data.settings?.style?.border) 
-                            + PropertyInput.radius('content')
-                            + PropertyInput.color('content')
-                            + PropertyInput.fontSize('content')
-                            + PropertyInput.fontWeight('content')
-                            + PropertyInput.textAlign('content')
-                            + PropertyInput.background('content');
+            boxes[0].innerHTML = PropertyInput.margin(styles?.margin)
+                            + PropertyInput.position(styles?.position)
+                            + PropertyInput.border(null, styles?.border) 
+                            + PropertyInput.radius(null, data.settings ? data.settings['border-radius'] : null)
+                            + PropertyInput.color(null, data.settings?.color)
+                            + PropertyInput.background(null, data.settings?.background);
+            boxes[1].innerHTML = PropertyInput.visibility('title', styles?.title?.visibility)
+                            + PropertyInput.padding('title', styles?.title?.padding)
+                            + PropertyInput.border('title', styles?.title?.border) 
+                            + PropertyInput.radius('title', styles?.title['border-radius'])
+                            + PropertyInput.color('title', styles?.title?.color)
+                            + PropertyInput.fontSize('title', styles?.title['font-size'])
+                            + PropertyInput.fontWeight('title', styles?.title['font-weight'])
+                            + PropertyInput.textAlign('title', styles?.title['text-align'])
+                            + PropertyInput.background('title', styles?.title?.background);
+            boxes[2].innerHTML = PropertyInput.visibility('content', styles?.content?.visibility)
+                            + PropertyInput.padding('content', styles?.content?.padding)
+                            + PropertyInput.border('content', styles?.content?.border) 
+                            + PropertyInput.radius('content', styles?.content['border-radius'])
+                            + PropertyInput.color('content', styles?.content?.color)
+                            + PropertyInput.fontSize('content', styles?.content['font-size'])
+                            + PropertyInput.fontWeight('content', styles?.content['font-weight'])
+                            + PropertyInput.textAlign('content', styles?.content['text-align'])
+                            + PropertyInput.background('content', styles?.content?.background);
+            this.panelGroup.find('.style-item').each(function() {
+                let $this = $(this);
+                $this.toggleClass('active', $this.attr('data-id') == data.theme_style_id);
+            });
             this.showPanel('property');
         });
     }
@@ -422,7 +470,22 @@ class Page {
     /**
      * refreshWeight
      */
-    public refreshWeight(element: JQuery) {
+    public refreshWeight(element?: JQuery) {
+        if (!element && !this.weight) {
+            return;
+        }
+        if (!element) {
+            const weight = this.weight.toggleLoading(true);
+            this.post(REFRESH_URI, {
+                id: weight.id()
+            }, function(data) {
+                weight.toggleLoading(false);
+                if (data.code == 200) {
+                    weight.html(data.data.html);
+                }
+            });
+            return;
+        }
         let id = element.attr('data-id'),
             weight = this.setWeight(element, false).toggleLoading(true);
         this.post(REFRESH_URI, {
@@ -558,7 +621,11 @@ class Page {
      * postJson
      */
     public post(path: string, data: any, cb: any) {
-        data['page_id'] = this.id;
+        if (typeof data === 'string') {
+            data += '&page_id=' + this.id;
+        } else {
+            data['page_id'] = this.id;
+        }
         postJson(this.baseUri + path, data, cb);
         return this;
     }

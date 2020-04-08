@@ -52,7 +52,7 @@ class Weight {
     /**
      * @return BaseWeight
      */
-    protected function newWeight() {
+    public function newWeight() {
         $path = $this->weight->path;
         if (class_exists($path)) {
             return new $path;

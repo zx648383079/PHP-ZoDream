@@ -4,6 +4,8 @@ namespace Module\Template\Service\Admin;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Page;
+use Module\Template\Domain\Weight;
+use Zodream\Infrastructure\Http\Request;
 
 class WeightController extends Controller {
 
@@ -40,9 +42,10 @@ class WeightController extends Controller {
         return $this->jsonSuccess($data);
     }
 
-    public function saveAction() {
-        $pageWeight = PageWeightModel::saveFromPost();
-        return $this->jsonSuccess($pageWeight);
+    public function saveAction($id) {
+        $model = PageWeightModel::find($id);
+        $model->saveFromPost();
+        return $this->jsonSuccess($model);
     }
 
     public function destroyAction($id) {
@@ -51,10 +54,12 @@ class WeightController extends Controller {
     }
 
     public function thumbAction($id) {
-        WeightModel::find($id);
+        PageWeightModel::find($id);
     }
 
     public function editDialogAction($id) {
-        return $this->jsonSuccess();
+        $model = PageWeightModel::find($id);
+        $html = (new Weight($model))->newWeight()->renderConfig($model);
+        return $this->jsonSuccess(compact('html'));
     }
 }

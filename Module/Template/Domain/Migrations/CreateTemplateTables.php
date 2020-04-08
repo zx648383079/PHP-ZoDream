@@ -47,7 +47,7 @@ class CreateTemplateTables extends Migration {
             $table->set('name')->varchar(30)->notNull();
             $table->set('description')->varchar(200);
             $table->set('thumb')->varchar(100);
-            $table->set('type')->tinyint(3)->defaultVal(0);
+            $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('adapt_to')->tinyint(1)->defaultVal(0)->comment('适用pc、手机');
             $table->set('editable')->bool()->defaultVal(1);
             $table->set('theme_id')->int()->notNull();

@@ -37,7 +37,7 @@ class ThemeWeightModel extends Model {
             'name' => 'required|string:0,30',
             'description' => 'string:0,200',
             'thumb' => 'string:0,100',
-            'type' => 'int:0,999',
+            'type' => 'int:0,127',
             'adapt_to' => 'int:0,9',
             'editable' => '',
             'theme_id' => 'required|int',
@@ -58,7 +58,7 @@ class ThemeWeightModel extends Model {
     }
 
     public function getPostConfigs() {
-
+        return app('request')->get();
     }
 
 

@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Domain\WeightProperty;
 use Zodream\Helpers\Json;
 
 
@@ -23,6 +24,7 @@ use Zodream\Helpers\Json;
  * @property integer $updated_at
  *
  * @property ThemeWeightModel $weight
+ * @property WeightProperty $properties
  */
 class PageWeightModel extends Model {
 
@@ -79,28 +81,36 @@ class PageWeightModel extends Model {
         $this->__attributes['settings'] = is_array($value) ? Json::encode($value) : $value;
     }
 
+    public function getPropertiesAttribute() {
+        return WeightProperty::create($this);
+    }
+
     public function hasExtInfo($ext) {
         return false;
     }
 
-    public static function saveFromPost() {
-        $weight = ThemeWeightModel::find(intval(app('request')->get('weight_id')));
-        $maps = ['id', 'page_id', 'weight_id', 'parent_id',
+    public function saveFromPost() {
+        $weight = ThemeWeightModel::find($this->theme_weight_id);
+        $disable = ['id', 'page_id', 'theme_weight_id'];
+        $maps = ['parent_id', 'theme_style_id',
             'position', 'title', 'content', 'is_share', 'settings'];
         $data = $weight->getPostConfigs();
-        $args = [];
+        $args = [
+            'settings' => $this->getSettingsAttribute()
+        ];
         foreach ($data as $key => $value) {
+            if (in_array($key, $disable)) {
+                continue;
+            }
             if (in_array($key, $maps)) {
                 $args[$key] = $value;
-            } else {
-                $args['settings'][$key] = $value;
+                continue;
             }
+            $args['settings'][$key] = $value;
         }
-        $args['weight_id'] = $weight->id;
-        $model = static::findOrNew($args['id']);
-        $model->set($args);
-        $model->save();
-        return $model;
+        $this->set($args);
+        $this->save();
+        return $this;
     }
 
     /**
