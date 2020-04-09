@@ -17,6 +17,7 @@ $this->registerJs($js);
     <?=Form::textarea('description')?>
     <?=Form::radio('type', ['普通网页', 'WAP网页'])?>
     <?=Form::text('position')?>
+    <?=Form::text('settings[cache_time]')->label('缓存时间')->value($model->setting('cache_time'))?>
     <div class="input-group">
         <label for="description">页面模板</label>
         <div class="theme-select">

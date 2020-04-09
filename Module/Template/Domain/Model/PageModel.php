@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Helpers\Json;
 
 /**
  * Class PageModel
@@ -79,6 +80,19 @@ class PageModel extends Model {
 
     public function weights() {
         return $this->hasMany(PageWeightModel::class, 'page_id', 'id');
+    }
+
+    public function getSettingsAttribute() {
+        $val = $this->getAttributeSource('settings');
+        return empty($val) ? [] : Json::decode($val);
+    }
+
+    public function setSettingsAttribute($value) {
+        $this->__attributes['settings'] = is_array($value) ? Json::encode($value) : $value;
+    }
+
+    public function setting($key, $default = null) {
+        return isset($this->settings[$key]) ? $this->settings[$key] : $default;
     }
 
     /**
