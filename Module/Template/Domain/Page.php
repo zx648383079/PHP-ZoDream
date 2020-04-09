@@ -210,7 +210,7 @@ HTML;
         }
         if ($item['type'] === 'page') {
             return [
-                'uri' => url('./page', ['id' => $item['id']]),
+                'uri' => url('./page', ['name' => PageModel::where('id', $item['id'])->value('name')]),
                 'target' => $item['target']
             ];
         }
