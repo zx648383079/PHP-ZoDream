@@ -195,6 +195,31 @@ HTML;
         return $this->render();
     }
 
+    public function converterUrl($item) {
+        if ($item['type'] === 'url') {
+            return [
+                'uri' => url($item['uri']),
+                'target' => $item['target']
+            ];
+        }
+        if ($item['type'] === 'target') {
+            return [
+                'uri' => sprintf('javascript:ajaxWeight(%d, \'%s\');', $item['target'], $item['uri']),
+                'target' => '',
+            ];
+        }
+        if ($item['type'] === 'page') {
+            return [
+                'uri' => url('./page', ['id' => $item['id']]),
+                'target' => $item['target']
+            ];
+        }
+        return [
+            'uri' => 'javascript:;',
+            'target' => '',
+        ];
+    }
+
     public function __toString() {
         return $this->render();
     }

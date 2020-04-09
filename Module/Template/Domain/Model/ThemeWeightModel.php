@@ -57,10 +57,6 @@ class ThemeWeightModel extends Model {
         ];
     }
 
-    public function getPostConfigs() {
-        return app('request')->get();
-    }
-
 
     public function getDirectoryAttribute() {
         if (file_exists($this->path)) {

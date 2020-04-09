@@ -14,10 +14,16 @@ class WeightProperty {
 
     public $data = [];
 
+    public $id = 0;
+
     private $sideMap = ['top', 'right', 'bottom', 'left'];
 
     public function formatClass() {
         return implode(' ', $this->classes);
+    }
+
+    public function weightId() {
+        return 'weight-'.$this->id;
     }
 
     public function formatStyle(array $data) {
@@ -172,7 +178,7 @@ class WeightProperty {
         if (!isset($val['value'])) {
             return $items[0];
         }
-        foreach ($items as $i => $v) {
+        foreach ($val['value'] as $i => $v) {
             if ($v === '') {
                 continue;
             }
@@ -245,6 +251,7 @@ class WeightProperty {
         if (isset($settings['class'])) {
             $instance->pushClass($settings['class']);
         }
+        $instance->id = $model->id;
         foreach ($settings as $key => $val) {
             if (in_array($key, ['style', 'class'])) {
                 continue;

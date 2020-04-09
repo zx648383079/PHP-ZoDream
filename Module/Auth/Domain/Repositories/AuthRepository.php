@@ -27,6 +27,9 @@ class AuthRepository {
             throw AuthException::invalidLogin();
         }
         $user = UserModel::findByEmail($email);
+        if (empty($user)) {
+            throw AuthException::invalidLogin();
+        }
         if (!$user->validatePassword($password)) {
             throw AuthException::invalidLogin();
         }

@@ -584,3 +584,29 @@ $sizes: (320: 568,
 		text-align: center;
 	}
 }
+
+.custom-config-view {
+    .multiple-box {
+        .item {
+            border:  1px dotted #ccc;
+            margin-bottom: 5px;
+            position: relative;
+            .multiple-del-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: red;
+                color: white;
+                line-height: 20px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+.custom-config-view {
+    max-height: 80vh;
+}

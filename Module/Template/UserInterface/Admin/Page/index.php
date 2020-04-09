@@ -5,6 +5,9 @@ use Module\Template\Domain\Page;
 use Zodream\Html\Dark\Theme;
 /** @var $this View */
 /** @var $page Page */
+
+$this->title = $model->title;
+
 $id = $model->id;
 $js = <<<JS
 bindPage('{$id}');
@@ -166,7 +169,7 @@ $this->registerJsFile([
         <div class="dialog-title">编辑</div>
         <i class="fa fa-close dialog-close"></i>
     </div>
-    <form class="dialog-body form-table" action="<?=$this->url('./@admin/weight/save')?>" method="post">
+    <form class="dialog-body form-table custom-config-view" action="<?=$this->url('./@admin/weight/save')?>" method="post">
         
     </form>
     <div class="dialog-footer">

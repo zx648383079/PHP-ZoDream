@@ -82,13 +82,17 @@ HTML;
      * @return string
      * @throws \Exception
      */
-    public function show($name = null, $data = array()) {
+    public function show($name = null, $data = []) {
         $data['page'] = $this->page;
-        return $this->page->renderWithNewRoot($this->directory, $name, $data);
+        if (!empty($this->page)) {
+            return $this->page->renderWithNewRoot($this->directory, $name, $data);
+        }
+        return Page::newViewFactory()->setDirectory($this->directory)
+            ->render($name, $data);
     }
 
     public function __call($name, $arguments) {
-        if (!method_exists($this->page, $name)) {
+        if (empty($this->page) || !method_exists($this->page, $name)) {
             throw new Exception(
                 __('{method} not found!', [
                     'method' => $name

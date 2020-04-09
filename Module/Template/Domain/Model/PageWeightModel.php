@@ -2,7 +2,9 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Domain\Weight;
 use Module\Template\Domain\WeightProperty;
+use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
 
 
@@ -89,17 +91,24 @@ class PageWeightModel extends Model {
         return false;
     }
 
+    public function setting($key, $default = null) {
+        return Arr::get($this->settings, $key, $default);
+    }
+
     public function saveFromPost() {
-        $weight = ThemeWeightModel::find($this->theme_weight_id);
         $disable = ['id', 'page_id', 'theme_weight_id'];
         $maps = ['parent_id', 'theme_style_id',
             'position', 'title', 'content', 'is_share', 'settings'];
-        $data = $weight->getPostConfigs();
+        $data = (new Weight($this))->newWeight()->parseConfigs();
         $args = [
             'settings' => $this->getSettingsAttribute()
         ];
         foreach ($data as $key => $value) {
             if (in_array($key, $disable)) {
+                continue;
+            }
+            if ($key === 'settings') {
+                $args['settings'] = array_merge($args['settings'], $value);
                 continue;
             }
             if (in_array($key, $maps)) {

@@ -1,0 +1,25 @@
+<style>
+{if:$model->setting('un_selected_color')}
+#{=$model->properties->weightId()} .contnet a {
+    color: {=$model->setting('un_selected_color')};
+}
+{/if}
+{if:$model->setting('selected_color')}
+#{=$model->properties->weightId()} .contnet a.active {
+    color: {=$model->setting('selected_color')};
+}
+{/if}
+</style>
+<div id="{=$model->properties->weightId()}" class="navbar-weight {=$model->properties->formatClass()}"{=$model->properties->weightStyle()}>
+    <div class="title"{=$model->properties->titleStyle()}>
+        {=$model->title}
+    </div>
+    <div class="contnet"{=$model->properties->contentStyle()}>
+        {for:$items,$item}
+        <a href="{$item.url.uri}" target="{$item.url.target}">
+            <i class="fa fa-{$item.icon}" aria-hidden="true"></i>
+            {$item.title}
+        </a>
+        {/for}
+    </div>
+</div>

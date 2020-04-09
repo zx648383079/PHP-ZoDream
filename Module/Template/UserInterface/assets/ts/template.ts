@@ -290,7 +290,9 @@ class Page {
             e.stopPropagation();
             that.setWeight($(this).closest('.weight-edit-grid'));
             that.showPropertyPanel();
-        })
+        }).on('click', 'a', function(e) {
+            e.preventDefault();
+        });
         this.panelGroup.on('click', '.panel-item .panel-header .fa-close', function(e) {
             e.stopPropagation();
             let box = $(this).closest('.panel-item');
@@ -320,14 +322,23 @@ class Page {
             weight = $(this);
         });
         let weight: JQuery = null;
-        this.body.find('.weight-row').on('dragover', function(e) {
+        this.body.on('dragover', '.weight-row', function(e) {
             e.stopPropagation();
             e.preventDefault();
-        }).on('drop', function(e) {
+        }).on('drop', '.weight-row', function(e) {
             e.stopPropagation();
             e.preventDefault();
             
             that.addWeight(weight.clone(), $(this));
+        });
+        this.editDialog.box.on('click', '.multiple-box .multiple-add-btn', function() {
+            let $this = $(this);
+            $this.before($this.prev('.item').clone());
+        }).on('click', '.multiple-box .multiple-del-btn', function() {
+            let $this = $(this);
+            if ($this.closest('.multiple-box').find('.item').length > 1) {
+                $this.closest('.item').remove();
+            }
         });
         this.editDialog.on('done', function() {
             that.post(EDIT_URI, that.editDialog.find('.dialog-body').serialize(), function(res) {
@@ -335,7 +346,7 @@ class Page {
                 that.refreshWeight();
             })
             this.close();
-        })
+        });
         this.bindRule();
     }
 
