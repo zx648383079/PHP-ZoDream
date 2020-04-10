@@ -342,8 +342,11 @@ class Page {
         });
         this.editDialog.on('done', function() {
             that.post(EDIT_URI, that.editDialog.find('.dialog-body').serialize(), function(res) {
+                if (res.code !== 200) {
+                    return;
+                }
                 that.showPropertyPanel();
-                that.refreshWeight();
+                that.weight.html(res.data.html);
             })
             this.close();
         });
@@ -353,9 +356,10 @@ class Page {
     private autoSave() {
         const data = formData(this.panelGroup.find('.form-table')) + '&theme_style_id=' + this.panelGroup.find('.style-item.active').attr('data-id') + '&id=' + this.weight.id();
         this.post(EDIT_URI, data, res => {
-            if (res.code === 200) {
-                this.refreshWeight();
+            if (res.code !== 200) {
+                return;
             }
+            this.weight.html(res.data.html);
         });
     }
 

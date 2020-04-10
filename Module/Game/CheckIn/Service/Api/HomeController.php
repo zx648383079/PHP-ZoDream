@@ -32,7 +32,7 @@ class HomeController extends RestController {
     public function monthAction($month = null) {
         $timestamp = empty($month) ? time() : strtotime($month);
         $data = CheckInModel::month($timestamp)->where('user_id', auth()->id())->get();
-        return $this->render($data);
+        return $this->render(compact('data'));
     }
 
 }

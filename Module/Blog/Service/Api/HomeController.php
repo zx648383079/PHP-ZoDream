@@ -3,6 +3,7 @@ namespace Module\Blog\Service\Api;
 
 use Module\Blog\Domain\Model\BlogContentModel;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Zodream\Route\Controller\RestController;
@@ -54,7 +55,7 @@ class HomeController extends RestController {
         if (!BlogModel::canRecommend($id)) {
             return $this->renderFailure('一个用户只能操作一次！');
         }
-        $blog = BlogSimpleModel::find($id);
+        $blog = BlogPageModel::find($id);
         $blog->recommendThis();
         return $this->render($blog);
     }

@@ -45,15 +45,20 @@ $this->registerCssFile([
         'fa fa-cogs',
         [
             [
-                '清除缓存',
+                '缓存管理',
                 './@admin/cache',
-                'fa fa-trash'
+                'fa fa-cookie'
             ],
             [
                 '生成SiteMap',
                 './@admin/sitemap',
                 'fa fa-map'
-            ]
+            ],
+            [
+                '数据备份',
+                './@admin/sql',
+                'fa fa-hdd'
+            ],
         ],
         true
     ]

@@ -45,7 +45,10 @@ class WeightController extends Controller {
     public function saveAction($id) {
         $model = PageWeightModel::find($id);
         $model->saveFromPost();
-        return $this->jsonSuccess($model);
+        $data = $model->toArray();
+        $data['html'] = (new Page(PageModel::find($model->page_id), true))
+            ->renderWeight($model);
+        return $this->jsonSuccess($data);
     }
 
     public function destroyAction($id) {

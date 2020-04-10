@@ -13,9 +13,4 @@ class HomeController extends Controller {
         $map = SiteMapListener::create();
         return $this->show(compact('map'));
     }
-
-    public function cacheAction() {
-        cache()->delete();
-        return $this->show();
-    }
 }

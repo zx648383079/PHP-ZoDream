@@ -5,6 +5,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
 use Module\ModuleController;
+use Zodream\Infrastructure\Http\Request;
 
 class CommentController extends ModuleController {
 
@@ -35,25 +36,13 @@ class CommentController extends ModuleController {
         return $this->show(compact('comment_list'));
     }
 
-    public function saveAction() {
-        $data = app('request')->get('name,email,url,content,parent_id,blog_id');
-        if (!BlogModel::canComment($data['blog_id'])) {
-            return $this->jsonFailure('不允许评论！');
+    public function saveAction(Request $request) {
+        try {
+            $comment = CommentRepository::create($request->get('name,email,url,content,parent_id,blog_id'));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!auth()->guest()) {
-            $data['user_id'] = auth()->id();
-            $data['name'] = auth()->user()->name;
-        }
-        $data['parent_id'] = intval($data['parent_id']);
-
-        $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->orderBy('position desc')->one();
-        $data['position'] = empty($last) ? 1 : ($last->position + 1);
-        $model = CommentModel::create($data);
-        if (empty($model)) {
-            return $this->jsonFailure('评论失败！');
-        }
-        BlogModel::where('id', $data['blog_id'])->updateOne('comment_count');
-        return $this->jsonSuccess($model);
+        return $this->jsonSuccess($comment);
     }
 
     public function disagreeAction($id) {

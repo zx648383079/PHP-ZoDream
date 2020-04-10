@@ -4,6 +4,7 @@ namespace Module\Blog\Service\Api;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
 
@@ -22,23 +23,12 @@ class CommentController extends RestController {
         return $this->renderPage($comment_list);
     }
 
-    public function saveAction() {
-        $data = app('request')->get('name,email,url,content,parent_id,blog_id');
-        if (!BlogModel::canComment($data['blog_id'])) {
-            return $this->renderFailure('不允许评论！');
+    public function saveAction(Request $request) {
+        try {
+            $comment = CommentRepository::create($request->get('name,email,url,content,parent_id,blog_id'));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!auth()->guest()) {
-            $data['user_id'] = auth()->id();
-            $data['name'] = auth()->user()->name;
-        }
-        $data['parent_id'] = intval($data['parent_id']);
-        $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->orderBy('position desc')->one();
-        $data['position'] = empty($last) ? 1 : ($last->position + 1);
-        $comment = CommentModel::create($data);
-        if (empty($comment)) {
-            return $this->renderFailure('评论失败！');
-        }
-        BlogModel::where('id', $data['blog_id'])->updateOne('comment_count');
         return $this->render($comment->toArray());
     }
 
