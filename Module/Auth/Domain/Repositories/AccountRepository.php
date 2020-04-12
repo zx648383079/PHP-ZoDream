@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Repositories;
 
 use Module\Auth\Domain\Model\OAuthModel;
+use Zodream\Helpers\Time;
 
 class AccountRepository {
 
@@ -17,6 +18,18 @@ class AccountRepository {
             }
         }
         return array_values($map_list);
+    }
+
+    public static function getDriver() {
+        return [
+            [
+                'id' => 1,
+                'name' => 'zodream pc',
+                'type' => '电脑',
+                'region' => '中国',
+                'created_at' => Time::format()
+            ]
+        ];
     }
 
     private static function getConnectMaps() {

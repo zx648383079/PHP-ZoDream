@@ -27,12 +27,13 @@ class AccountController extends RestController {
 
 
     public function connectAction() {
-        $model_list = AccountRepository::getConnect();
-        return $this->render($model_list);
+        $data = AccountRepository::getConnect();
+        return $this->render(compact('data'));
     }
 
     public function driverAction() {
-        return $this->render(['data' => []]);
+        $data = AccountRepository::getDriver();
+        return $this->render(compact('data'));
     }
 
     public function subtotalAction() {

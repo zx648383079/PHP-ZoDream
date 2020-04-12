@@ -20,7 +20,7 @@ class RegisterController extends RestController {
                 $request->get('name'),
                 $request->get('email'),
                 $request->get('password'),
-                $request->get('rePassword'),
+                $request->get('rePassword') ?: $request->get('confirm_password'),
                 $request->has('agree')
             );
         } catch (\Exception $ex) {
