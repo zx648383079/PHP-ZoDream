@@ -18,7 +18,10 @@ class CreateTaskTables extends Migration {
             $table->set('name')->varchar(100)->notNull();
             $table->set('description')->varchar()->defaultVal('');
             $table->set('status')->tinyint(1)->defaultVal(TaskModel::STATUS_NONE);
-            $table->set('every_time')->int(1)->defaultVal(0)->comment('每次计划时间');
+            $table->set('every_time')->smallInt(4)->defaultVal(0)->comment('每次计划时间');
+            $table->set('space_time')->tinyint(1)->defaultVal(0)->comment('每次休息时间');
+            $table->set('start_at')->int(10)->defaultVal(0)->comment('任务开始时间');
+            $table->set('duration')->tinyint(1)->defaultVal(0)->comment('每天连续次数');
             $table->set('time_length')->int()->defaultVal(0)->comment('总时间');
             $table->timestamps();
         })->append(TaskLogModel::tableName(), function (Table $table) {

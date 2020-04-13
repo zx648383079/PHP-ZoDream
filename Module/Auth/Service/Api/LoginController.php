@@ -16,7 +16,8 @@ class LoginController extends RestController {
     }
 
     public function indexAction(Request $request) {
-        $remember = $request->has('rememberMe');
+        $remember = $request->get('rememberMe')
+            || $request->get('remember');
         try {
             AuthRepository::login(
                 $request->get('email'),
