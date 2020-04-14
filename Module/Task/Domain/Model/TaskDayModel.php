@@ -1,7 +1,7 @@
 <?php
 namespace Module\Task\Domain\Model;
 
-use Domain\Model\Model;
+use Module\Task\Domain\Entities\TaskDayEntity;
 use Zodream\Helpers\Time;
 
 /**
@@ -20,48 +20,9 @@ use Zodream\Helpers\Time;
  * @property integer $updated_at
  * @property TaskModel $task
  */
-class TaskDayModel extends Model {
-
-    const STATUS_NONE = 5;
-    const STATUS_RUNNING = 9;
-    const STATUS_PAUSE = 8;
+class TaskDayModel extends TaskDayEntity {
 
     protected $append = ['task', 'log'];
-
-    public static function tableName() {
-        return 'task_day';
-    }
-
-    protected function rules() {
-        return [
-            'user_id' => 'required|int',
-            'task_id' => 'required|int',
-            'today' => 'required',
-            'amount' => 'int:0,9',
-            'success_amount' => 'int:0,127',
-            'pause_amount' => 'int:0,127',
-            'failure_amount' => 'int:0,127',
-            'status' => 'int:0,127',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'user_id' => 'User Id',
-            'task_id' => '任务',
-            'today' => 'Today',
-            'amount' => '执行次数',
-            'success_amount' => '成功次数',
-            'pause_amount' => '暂停次数',
-            'failure_amount' => '中断次数',
-            'status' => '状态',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
 
     public function scopeMonth($query, $time) {
         return $this->scopeTime($query, date('Y-m-01', $time),

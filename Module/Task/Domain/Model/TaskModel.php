@@ -1,7 +1,7 @@
 <?php
 namespace Module\Task\Domain\Model;
 
-use Domain\Model\Model;
+use Module\Task\Domain\Entities\TaskEntity;
 
 /**
  * Class TaskModel
@@ -21,53 +21,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  * @property integer $last_at
  */
-class TaskModel extends Model {
+class TaskModel extends TaskEntity {
 
-    const STATUS_NONE = 5;
-    const STATUS_RUNNING = 9;
-    const STATUS_PAUSE = 8;
-    const STATUS_COMPLETE = 1;
+
 
     protected $append = ['start_at'];
-
-    public static function tableName() {
-        return 'task';
-    }
-
-    protected function rules() {
-        return [
-            'user_id' => 'required|int',
-            'parent_id' => 'int',
-            'name' => 'required|string:0,100',
-            'description' => 'string:0,255',
-            'status' => 'int:0,127',
-            'every_time' => 'int:0,9999',
-            'space_time' => 'int:0,127',
-            'duration' => 'int:0,127',
-            'start_at' => 'int',
-            'time_length' => 'int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'user_id' => 'User Id',
-            'parent_id' => 'Parent Id',
-            'name' => '名称',
-            'description' => '说明',
-            'status' => '状态',
-            'every_time' => '单次时长（/分钟）',
-            'space_time' => '单次间隔（/分钟）',
-            'duration' => '每日次数',
-            'start_at' => '开始时间',
-            'time_length' => 'Time Length',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
 
     public function getTimeAttribute() {
         if ($this->status != self::STATUS_RUNNING) {
