@@ -16,6 +16,10 @@ class HomeController extends Controller {
         return $this->show();
     }
 
+    public function agreementAction() {
+        return $this->show();
+    }
+
     public function notFoundAction() {
         Factory::view()->setDirectory(Factory::root()
             ->directory('UserInterface/Home'));
