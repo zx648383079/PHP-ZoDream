@@ -19,6 +19,7 @@ class BulletinController extends Controller {
                 }
                 $query->whereIn('bulletin_id', $ids);
             })
+            ->where('user_id', auth()->id())
             ->orderBy('status', 'asc')
             ->orderBy('bulletin_id', 'desc')->page();
         return $this->show(compact('model_list', 'keywords'));

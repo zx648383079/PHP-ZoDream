@@ -28,6 +28,7 @@ class BulletinController extends RestController {
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status - 1);
             })
+            ->where('user_id', auth()->id())
             ->orderBy('status', 'asc')
             ->orderBy('bulletin_id', 'desc')->page();
         return $this->renderPage($model_list);

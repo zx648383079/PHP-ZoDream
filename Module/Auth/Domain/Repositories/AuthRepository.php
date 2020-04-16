@@ -48,13 +48,13 @@ class AuthRepository {
 
     public static function register(
         $name, $email, $password, $confirmPassword, $agreement = false) {
-        if ($agreement) {
+        if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
         if (empty($name)) {
             throw new Exception('请输入昵称');
         }
-        if (empty($email) || Validator::email()->validate($email)) {
+        if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入正确的邮箱');
         }
         if (!self::verifyPassword($password)) {
@@ -145,7 +145,7 @@ class AuthRepository {
 
     public static function password(
         $oldPassword, $password, $confirmPassword) {
-        if (empty($oldPassword) || empty($password) || $confirmPassword) {
+        if (empty($oldPassword) || empty($password) || empty($confirmPassword)) {
             throw AuthException::invalidPassword();
         }
         if (!self::verifyPassword($password)) {
