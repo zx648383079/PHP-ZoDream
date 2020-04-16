@@ -27,8 +27,10 @@ class LoginController extends RestController {
             return $this->renderFailure($ex->getMessage());
         }
         $user = auth()->user();
-        $token = auth()->createToken($user, $remember ? 365 * 86400 : 0);
-        event(new TokenCreated($token, $user));
+        $refreshTTL = $remember ? 365 * 86400 : 0;
+        $token = auth()->createToken($user, $refreshTTL);
+        event(new TokenCreated($token, $user,
+            $refreshTTL + auth()->getConfigs('refreshTTL')));
         return $this->render(array_merge($user->toArray(), [
             'token' => $token
         ]));

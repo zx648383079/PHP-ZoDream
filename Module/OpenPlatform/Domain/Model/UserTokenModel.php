@@ -24,7 +24,7 @@ class UserTokenModel extends Model {
         return [
             'user_id' => 'required|int',
             'platform_id' => 'required|int',
-            'token' => 'required|string:0,32',
+            'token' => 'required|string',
             'expired_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

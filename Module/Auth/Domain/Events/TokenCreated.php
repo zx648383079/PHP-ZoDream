@@ -11,18 +11,33 @@ class TokenCreated {
      */
     protected $user;
 
+    /**
+     * @var string
+     */
     protected $token;
+    /**
+     * @var int
+     */
+    protected $expiredAt;
 
-    public function __construct($token, UserModel $user) {
+    public function __construct($token, UserModel $user, $tokenExpired = 20160) {
         $this->token = $token;
         $this->user = $user;
+        $this->expiredAt = $tokenExpired + time();
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getToken() {
         return $this->token;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExpiredAt() {
+        return $this->expiredAt;
     }
 
     /**

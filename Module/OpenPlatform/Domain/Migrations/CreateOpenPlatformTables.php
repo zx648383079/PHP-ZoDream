@@ -33,7 +33,7 @@ class CreateOpenPlatformTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
             $table->set('platform_id')->int()->notNull();
-            $table->set('token')->char(32)->notNull();
+            $table->set('token')->text()->notNull();
             $table->timestamp('expired_at')->comment('过期时间');
             $table->timestamps();
         });

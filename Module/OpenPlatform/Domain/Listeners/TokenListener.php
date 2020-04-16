@@ -15,14 +15,11 @@ class TokenListener {
         if (empty($platform)) {
             return;
         }
-        $data = Factory::config('auth', [
-            'refreshTTL' => 20160,
-        ]);
         UserTokenModel::create([
             'user_id' => $token->getUser()->id,
             'platform_id' => $platform->id,
             'token' => $token->getToken(),
-            'expired_at' => time() + $data['refreshTTL'],
+            'expired_at' => $token->getExpiredAt(),
             'created_at' => time(),
             'updated_at' => time(),
         ]);
