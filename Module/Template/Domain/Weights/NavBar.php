@@ -7,6 +7,7 @@ use Zodream\Template\View;
 class NavBar extends Node implements INode {
 
     const KEY = 'nav-bar';
+    const OS_VERSION = 'win_version';
 
     protected function registerAsync() {
         $this->page->on(self::KEY, function () {
@@ -28,7 +29,14 @@ class NavBar extends Node implements INode {
                    'url' => 'about'
                ],
            ];
+        })->on(self::OS_VERSION, function () {
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if (!preg_match('/windows\s+nt\s*([\d\.]+)/i', $agent, $match)) {
+                return 0;
+            }
+            return floatval($match[1]);
         });
+
     }
 
     public function render($type = null) {
@@ -46,9 +54,24 @@ JS;
 
     private function renderRight() {
         $html = $this->renderAccount();
+        $version = $this->page->trigger(self::OS_VERSION);
+        $uwp_url = ($version >= 6.2 ? 'ms-windows-store://pdp/?ProductId=' : 'https://www.microsoft.com/store/apps/'). '9MT2DR6PDFG9';
         return <<<HTML
 <ul class="nav-right">
+    <li>
+        <a href="javascript:;" title="客户端下载">App客户端
+            <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="sub-nav">
+            <ul>
+                <li>
+                    <a href="{$uwp_url}" target="_blank" title="任务计时软件">Win10 UWP</a>
+                </li>
+            </ul>
+        </div>
+    </li>
     <li class="search-icon"><i class="fa fa-search"></i></li>
+    
     {$html}
 </ul>
 HTML;

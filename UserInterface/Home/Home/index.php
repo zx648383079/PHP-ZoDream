@@ -79,6 +79,11 @@ $demo_list = [
             <div class="panel">
                 <div class="panel-header">
                     <a href="<?=$this->url('./blog')?>"><?=__('Latest Blog')?></a>
+                    <div class="panel-menu">
+                        <a href="<?=$this->url('./blog/category')?>"><?=__('Categories')?></a>
+                        <a href="<?=$this->url('./blog/tag')?>"><?=__('Tags')?></a>
+                        <a href="<?=$this->url('./blog/archives')?>"><?=__('Archives')?></a>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <?=$this->node('blog-panel', ['limit' => 6])?>

@@ -182,6 +182,15 @@ footer {
             font-weight: 200;
             color: #767676;
         }
+        .panel-menu {
+            font-size: 14px;
+            float: right;
+            font-weight: 500;
+            padding-right: 10px;
+            a {
+                margin-left: 10px;
+            }
+        }
     }
     .panel-body {
         .metro-grid {
@@ -323,9 +332,53 @@ footer {
     }
 }
 
-.about-box {
+.about-header {
     margin-top: 50px;
     margin-bottom: 30px;
+}
+
+.person-box {
+    background-color: #fff;
+    padding: 20px 10px;
+    color: #555;
+    .avatar {
+        text-align: center;
+        img {
+            padding: 2px;
+            max-width: 120px;
+            height: auto;
+            border: 1px solid #eee;
+        }
+    }
+    .name {
+        text-align: center;
+        color: #222;
+        line-height: 40px;
+        font-weight: 600;
+    }
+    .desc {
+        line-height: 30px;
+        text-align: center;
+        border-top: 1px dotted #ccc;
+        border-bottom: 1px dotted #ccc;
+    }
+    .links {
+        margin-top: 10px;
+        line-height: 30px;
+        a {
+            color: #333;
+            display: inline-block;
+            width: 45%;
+            padding: 0 10px;
+            &:hover {
+                border-radius: 4px;
+                background: #eee;
+            }
+        }
+    }
+}
+
+.about-box {
     .about-top {
         text-align: center;
     }

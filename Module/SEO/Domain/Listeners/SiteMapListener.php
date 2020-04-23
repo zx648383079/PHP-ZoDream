@@ -15,6 +15,9 @@ class SiteMapListener {
 	    $map = new SiteMap();
         $map->add(url('/'), time());
         $map->add(url('/blog'), time());
+        $map->add(url('/blog/tag'), time());
+        $map->add(url('/blog/category'), time());
+        $map->add(url('/blog/archives'), time());
         $map->add(url('/cms'), time());
         $map->add(url('/doc'), time());
         $modules = config()->moduleConfigs('Home')['modules'];

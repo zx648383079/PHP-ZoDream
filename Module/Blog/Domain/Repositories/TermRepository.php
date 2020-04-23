@@ -4,6 +4,7 @@ namespace Module\Blog\Domain\Repositories;
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
+use Zodream\Html\Tree;
 
 class TermRepository {
 
@@ -45,5 +46,12 @@ class TermRepository {
             return null;
         }
         return static::$caches[$id];
+    }
+
+    /**
+     * @return array
+     */
+    public static function tree() {
+        return (new Tree(self::get()))->makeTreeForHtml();
     }
 }

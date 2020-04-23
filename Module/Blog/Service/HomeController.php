@@ -6,15 +6,10 @@ use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
-use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\TermRepository;
-use Module\ModuleController;
-use Zodream\Service\Factory;
 
-class HomeController extends ModuleController {
-
-    public $layout = true;
+class HomeController extends Controller {
 
     protected function rules() {
         return [
@@ -159,10 +154,4 @@ class HomeController extends ModuleController {
         return $this->jsonFailure('未知');
     }
 
-    public function findLayoutFile() {
-        if ($this->layout === false) {
-            return false;
-        }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
-    }
 }

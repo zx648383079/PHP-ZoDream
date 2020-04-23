@@ -12,16 +12,35 @@ $this->set([
 ?>
 
 <div class="container">
-    <div class="about-box">
-        <div class="about-top heading">
-            <h1><?=__('About Us')?></h1>
+    <div class="row about-header">
+        <div class="col-md-4">
+            <div class="person-box">
+                <div class="avatar">
+                    <img src="<?=$this->asset('images/favicon.png')?>" alt="">
+                </div>
+                <div class="name">zodream</div>
+                <div class="desc">开心就好！</div>
+                <div class="links">
+                    <a href="https://github.com/zx648383079" target="_blank">
+                        <i class="fab fa-github"></i>
+                        GitHub
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="about-bottom">
-            <h4>本站是基于 zodream 框架开发的展示站。</h4>
-            <p>zodream, PHP 轻量级框架，主要代码来源为工作积累。本站及其框架保持永久更新。</p>
-            <p>本站除博客外，其他栏目均属于代码测试项目，只为测试代码之用，不会产生任何商业用途，特别说明，本站内的任何功能，只用于本站内部测试。</p>
-            <p>本站建设意图为收藏有价值的事物，如有侵权，请提交反馈。</p>
-            <div class="autograph">2019-02-26 留</div>
+        <div class="col-md-8">
+            <div class="about-box">
+                <div class="about-top heading">
+                    <h1><?=__('About Us')?></h1>
+                </div>
+                <div class="about-bottom">
+                    <h4>本站是基于 zodream 框架开发的展示站。</h4>
+                    <p>zodream, PHP 轻量级框架，主要代码来源为工作积累。本站及其框架保持永久更新。</p>
+                    <p>本站除博客外，其他栏目均属于代码测试项目，只为测试代码之用，不会产生任何商业用途，特别说明，本站内的任何功能，只用于本站内部测试。</p>
+                    <p>本站建设意图为收藏有价值的事物，如有侵权，请提交反馈。</p>
+                    <div class="autograph">2019-02-26 留</div>
+                </div>
+            </div>
         </div>
     </div>
 

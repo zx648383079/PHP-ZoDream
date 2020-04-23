@@ -51,7 +51,7 @@ $this->registerCssFile([
             ],
             [
                 '生成SiteMap',
-                './@admin/sitemap',
+                './@admin/home/sitemap',
                 'fa fa-map'
             ],
             [

@@ -78,4 +78,19 @@ class BlogRepository {
         return BlogSimpleModel::orderBy('recommend desc')
             ->limit($limit ?? 5)->all();
     }
+
+    public static function getArchives() {
+        $data = [];
+        $items = BlogModel::query()->orderBy('created_at', 'desc')
+            ->asArray()->get('id', 'title', 'created_at');
+        foreach ($items as $item) {
+            $year = date('Y', $item['created_at']);
+            if (!isset($data[$year])) {
+                $data[$year] = [];
+            }
+            $item['date'] = date('m-d', $item['created_at']);
+            $data[$year][] = $item;
+        }
+        return $data;
+    }
 }
