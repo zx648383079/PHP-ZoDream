@@ -1,5 +1,6 @@
 # PHP-ZoDream
-PHP开发
+
+[Zodream](https://github.com/zodream/zodream) is a web application framework. There contains some examples of [zodream](https://github.com/zodream/zodream).
 
 # 说明
 

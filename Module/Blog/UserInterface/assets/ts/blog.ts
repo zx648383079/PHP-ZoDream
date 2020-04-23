@@ -112,13 +112,13 @@ function bindBlog(id: number, type: number, langs = {}) {
     $('.recommend-blog').click(function () {
         let that = $(this).find('b');
         $.getJSON(BASE_URI + 'recommend', {
-            blog_id: id
+            id
         }, function (data) {
             if (data.code == 200) {
                 that.text(data.data);
                 return;
             }
-            Dialog.tip(data.message);
+            parseAjax(data);
         })
     });
     let bookSkin = $('.book-skin');

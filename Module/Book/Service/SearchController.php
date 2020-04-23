@@ -71,6 +71,6 @@ class SearchController extends Controller {
         $new_book = BookModel::ofClassify()->where('size < 50000')->orderBy('created_at', 'desc')->orderBy('click_count', 'desc')->limit(10)->all();
         $over_book = BookModel::ofClassify()->where('over_at > 0')->orderBy('click_count', 'desc')->limit(10)->all();
         $hot_author = BookAuthorModel::limit(10)->all();
-        return $this->show(compact('book_list', 'cat_id', 'sort', 'status', 'sort_list', 'new_book', 'over_book', 'hot_author'));
+        return $this->show(compact('book_list', 'cat_id', 'status', 'sort_list', 'new_book', 'over_book', 'hot_author'));
     }
 }

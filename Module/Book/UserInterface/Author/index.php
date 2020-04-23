@@ -46,14 +46,14 @@ $this->extend('layouts/header');
           <div class="praisesBTN"><a href="javascript:ajax_praise('<?=$author->id?>');" title="推荐作家！"><font id="cms_praises"><?=$author->recommend_count?></font> 推荐作家！</a></div>
         </div>
         <div class="words">
-			 <p>简介：<br/><a href="<?=$author->url?>" title="<?=$author->name?>新书"><?=$author->name?>新书</a><?=$author->new_book->name?>已经更新了，本站提供
+			 <p>简介：<br/><a href="<?=$author->url?>" title="<?=$author->name?>新书"><?=$author->name?>新书</a><?= $author->new_book ? $author->new_book->name : '' ?>已经更新了，本站提供
                  <a href="<?=$author->url?>" title="<?=$author->name?>最新小说"><?=$author->name?>最新小说</a>
                  作品<?=$author->new_book->name?>全文在线阅读以及<?=$author->name?>已经完本的小说<?=$author->over_book->name?>txt全集免费下载，
                  <a href="<?=$author->url?>" title="<?=$author->name?>全部小说"><?=$author->name?>全部小说</a>作品txt电子书免费下载，
                  <a href="<?=$author->url?>" title="<?=$author->name?>小说"><?=$author->name?>小说</a>全集免费在线阅读，尽在新书小说网-搜刮好东西。</p>
         </div>
         <div class="read_btn">
-          <div class="btn2" style="width:328px"><a href="javascript:addBookmark('<?=$author->name?>新书-新书小说网-搜刮好东西')" class="sc" title="加入收藏夹" style="margin-right:2px">加入收藏夹</a></div>
+          <div class="btn2" style="width:328px"><a href="javascript:addBookmark('<?=$author->name?>zodream-搜刮好东西')" class="sc" title="加入收藏夹" style="margin-right:2px">加入收藏夹</a></div>
         </div>
         <div class="vote"><!--AD-->
         </div>
