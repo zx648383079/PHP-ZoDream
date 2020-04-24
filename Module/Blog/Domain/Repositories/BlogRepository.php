@@ -5,6 +5,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\TagModel;
+use Zodream\Database\Model\Query;
 use Zodream\Html\Page;
 
 class BlogRepository {
@@ -23,7 +24,8 @@ class BlogRepository {
     public static function getList($sort = 'new', $category = null, $keywords = null,
                                    $user = null, $language = null, $programming_language = null,
                                    $tag = null, $per_page = 20) {
-        return BlogPageModel::with('term', 'user')
+        /** @var Page $page */
+        $page = BlogPageModel::with('term', 'user')
             ->where('open_type', '<>', BlogModel::OPEN_DRAFT)
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('term_id', intval($category));
@@ -45,12 +47,16 @@ class BlogRepository {
                 BlogModel::searchWhere($query, ['title', 'programming_language']);
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
+            }, function ($query) {
+                $query->where('parent_id', 0);
             })->when(!empty($programming_language), function ($query) use ($programming_language) {
                 $query->where('programming_language', $programming_language);
             })->when(!empty($tag), function ($query) use ($tag) {
                 $query->whereIn('id', TagModel::getBlogByName($tag));
             })
             ->page($per_page);
+        $items = self::formatLanguage($page, BlogPageModel::with('term', 'user'));
+        return $page->setPage($items);
     }
 
     /**
@@ -59,7 +65,8 @@ class BlogRepository {
      * @return BlogSimpleModel[]
      */
     public static function getNew($limit = 5) {
-        return BlogSimpleModel::orderBy('created_at desc')->limit($limit ?? 5)->all();
+        return self::formatLanguage(
+            BlogSimpleModel::where('parent_id', 0)->orderBy('created_at desc')->limit($limit ?? 5)->all(), BlogSimpleModel::query());
     }
     /**
      * 获取热门文章
@@ -67,7 +74,8 @@ class BlogRepository {
      * @return BlogSimpleModel[]
      */
     public static function getHot($limit = 5) {
-        return BlogSimpleModel::orderBy('comment_count desc')->limit($limit ?? 5)->all();
+        return self::formatLanguage(
+            BlogSimpleModel::where('parent_id', 0)->orderBy('comment_count desc')->limit($limit ?? 5)->all(), BlogSimpleModel::query());
     }
     /**
      * 获取推荐文章
@@ -75,13 +83,13 @@ class BlogRepository {
      * @return BlogSimpleModel[]
      */
     public static function getBest($limit = 5) {
-        return BlogSimpleModel::orderBy('recommend desc')
-            ->limit($limit ?? 5)->all();
+        return self::formatLanguage(
+            BlogSimpleModel::where('parent_id', 0)->orderBy('recommend desc')->limit($limit ?? 5)->all(), BlogSimpleModel::query());
     }
 
     public static function getArchives() {
         $data = [];
-        $items = BlogModel::query()->orderBy('created_at', 'desc')
+        $items = BlogModel::query()->where('parent_id', 0)->orderBy('created_at', 'desc')
             ->asArray()->get('id', 'title', 'created_at');
         foreach ($items as $item) {
             $year = date('Y', $item['created_at']);
@@ -92,5 +100,29 @@ class BlogRepository {
             $data[$year][] = $item;
         }
         return $data;
+    }
+
+    public static function formatLanguage($items, Query $query) {
+        $lang = trans()->getLanguage();
+        if (stripos($lang, 'zh') !== false) {
+            return $items;
+        }
+        $ids = [];
+        foreach ($items as $item) {
+            $ids[] = $item['id'];
+        }
+        if (empty($ids)) {
+            return [];
+        }
+        $args = $query->whereIn('parent_id', $ids)->where('language', 'en')->get();
+        $data = [];
+        foreach ($args as $item) {
+            $data[$item['parent_id']] = $item;
+        }
+        $args = [];
+        foreach ($items as $item) {
+            $args[] = isset($data[$item['id']]) ? $data[$item['id']] : $item;
+        }
+        return $args;
     }
 }

@@ -35,6 +35,7 @@ class BlogPageModel extends BlogModel {
         'language',
         'programming_language',
         'term_id',
+        'parent_id',
         'open_type',
         'comment_count',
         'click_count', 'recommend', 'created_at'];

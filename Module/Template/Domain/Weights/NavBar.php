@@ -56,16 +56,19 @@ JS;
         $html = $this->renderAccount();
         $version = $this->page->trigger(self::OS_VERSION);
         $uwp_url = ($version >= 6.2 ? 'ms-windows-store://pdp/?ProductId=' : 'https://www.microsoft.com/store/apps/'). '9MT2DR6PDFG9';
+        $download_tip = __('Client Downloads');
+        $download = __('Application client');
+        $uwp_tip = __('My Timer');
         return <<<HTML
 <ul class="nav-right">
     <li>
-        <a href="javascript:;" title="客户端下载">App客户端
+        <a href="javascript:;" title="{$download_tip}">{$download}
             <i class="fa fa-caret-down"></i>
         </a>
         <div class="sub-nav">
             <ul>
                 <li>
-                    <a href="{$uwp_url}" target="_blank" title="任务计时软件">Win10 UWP</a>
+                    <a href="{$uwp_url}" target="_blank" title="{$uwp_tip}">Win10 UWP</a>
                 </li>
             </ul>
         </div>
@@ -85,12 +88,14 @@ HTML;
         $bulletin_url = url('/auth/admin/bulletin');
         $account_url = url('/auth/admin/account');
         $logout_url = url('/auth/logout');
-        $bulletin_label = '私信';
+        $bulletin_label = __('Bulletin');
         $bulletin_count = auth()->user()->bulletin_count;
         if ($bulletin_count > 0) {
             $bulletin_label .= sprintf('(%d)', $bulletin_count);
-            $name .= '<i class="new-tip" title="您有新的消息"></i>';
+            $name .= '<i class="new-tip" title="'.__('You have new Messages').'"></i>';
         }
+        $account_label = __('Account Settings');
+        $logout = __('Logout');
         return <<<HTML
     <li>
         <a href="javascript:;">{$name}</a>
@@ -100,10 +105,10 @@ HTML;
                     <a href="{$bulletin_url}">{$bulletin_label}</a>
                 </li>
                 <li>
-                    <a href="{$account_url}">账号设置</a>
+                    <a href="{$account_url}">{$account_label}</a>
                 </li>
                 <li>
-                    <a href="{$logout_url}">退出</a>
+                    <a href="{$logout_url}">{$logout}</a>
                 </li>
             </ul>
         </div>
