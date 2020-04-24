@@ -1,7 +1,6 @@
 <?php
 namespace Service\Home;
 
-use Domain\Model\OptionModel;
 use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {

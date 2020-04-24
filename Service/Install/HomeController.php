@@ -1,10 +1,12 @@
 <?php
 namespace Service\Install;
 
-
 use Infrastructure\Environment;
+use Module\Auth\Domain\Repositories\AuthRepository;
+use Zodream\Module\Gzo\Domain\Database\Schema;
 use Zodream\Module\Gzo\Domain\GenerateModel;
 use Zodream\Module\Gzo\Domain\Generator\ModuleGenerator;
+use Zodream\Module\Gzo\Service\ModuleController;
 
 class HomeController extends Controller {
 
@@ -76,7 +78,7 @@ class HomeController extends Controller {
         config()->reset();
         return $this->json([
             'status' => 1,
-            'url' => url(['complete'])
+            'url' => url('./complete')
         ]);
     }
 
@@ -101,12 +103,69 @@ class HomeController extends Controller {
         $user = $request->read('root', '请输入数据库账号：');
         $password = $request->read('', '请输入数据库密码：');
         $prefix = $request->read('', '请输入表前缀：');
-        ModuleGenerator::renderConfigs('config', [
-            'db' => compact('host', 'port', 'database', 'user', 'password', 'prefix')
+        $db = compact('host', 'port', 'database', 'user', 'password', 'prefix');
+        config([
+            'db' => $db
         ]);
-        $yes = $request->read('', '是否安装其他模块(Y/N)：');
-        if (empty($yes) || strtoupper($yes) !== 'Y') {
-            return $this->showContent('安装完成！');
+        try {
+            GenerateModel::schema($db['database'])
+                ->create();
+        } catch (\PDOException $ex) {
+            return $this->showContent(sprintf('请确认数据库【%s】是否创建？请手动创建', $database));
         }
+//        $yes = $request->read('', '是否安装其他模块(Y/N)：');
+//        if (empty($yes) || strtoupper($yes) !== 'Y') {
+//            return $this->showContent('安装完成！');
+//        }
+        $module_list = ModuleController::getModuleList();
+        $modules = [
+            'auth' => 'Module\Auth',
+            'blog' => 'Module\Blog',
+            'seo' => 'Module\SEO',
+            'contact' => 'Module\Contact',
+        ];
+        echo '模块列表：', PHP_EOL;
+        foreach ($module_list as $i => $item) {
+            echo $i + 1, ',', $item, (in_array('Module\\'.$item, $modules) ? '(默认)' : ''), PHP_EOL;
+        }
+        while (($num = $request->read('0', '请选要安装的模块：')) > 0) {
+            if ($num > count($module_list)) {
+                continue;
+            }
+            $uri = $request->read('', '请输入模块uri：');
+            if (empty($uri)) {
+                continue;
+            }
+            $modules[trim($uri, '/')] = 'Module\\'.$module_list[$num - 1];
+        }
+        ModuleController::installModule($modules, [
+            'install', 'seeder'
+        ]);
+        ModuleGenerator::renderConfigs('config', [
+            'db' => $db,
+            'modules' => $modules,
+            'auth' => [
+                'home' => '/auth',
+                'model' => 'Module\Auth\Domain\Model\UserModel',
+            ],
+            'view' => [
+                'asset_directory' => 'assets',
+            ],
+            'i18n' => [
+                'language' => null//'zh-cn',
+            ]
+        ]);
+        $email = $request->read('', '请输入管理员邮箱：');
+        $password = $request->read('', '请输入管理员密码：');
+        if (empty($email) || empty($password)) {
+            echo '管理员账户未创建', PHP_EOL;
+        } else {
+            try {
+                AuthRepository::createAdmin($email, $password);
+            } catch (\Exception $ex) {
+                echo $ex->getMessage(), PHP_EOL;
+            }
+        }
+        return $this->showContent('安装完成！');
     }
 }

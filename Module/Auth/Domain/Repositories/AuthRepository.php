@@ -8,6 +8,7 @@ use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
@@ -291,5 +292,32 @@ class AuthRepository {
 
     public static function verifyPassword($password) {
         return !empty($password) && mb_strlen($password) >= 6;
+    }
+
+    /**
+     * 创建管理员账户
+     * @param $email
+     * @param $password
+     * @throws Exception
+     */
+    public static function createAdmin($email, $password) {
+        $name = 'admin';
+        $count = UserModel::where('email', $email)->orWhere('name', $name)
+            ->count();
+        if ($count > 0) {
+            throw new Exception('昵称或邮箱已存在');
+        }
+        $user = new UserModel(compact('name', 'email'));
+        $user->setPassword($password);
+        $user->created_at = time();
+        $user->avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
+        $user->sex = UserModel::SEX_MALE;
+        if (!$user->save()) {
+            throw new Exception($user->getFirstError());
+        }
+        UserRoleModel::query()->insert([
+           'user_id' => $user->id,
+            'role_id' => 1
+        ]);
     }
 }
