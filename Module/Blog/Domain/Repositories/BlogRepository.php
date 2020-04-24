@@ -89,8 +89,13 @@ class BlogRepository {
 
     public static function getArchives() {
         $data = [];
-        $items = BlogModel::query()->where('parent_id', 0)->orderBy('created_at', 'desc')
-            ->asArray()->get('id', 'title', 'created_at');
+        $items = self::formatLanguage(
+            BlogModel::query()->where('parent_id', 0)
+                ->orderBy('created_at', 'desc')
+                ->asArray()->get('id', 'title', 'parent_id', 'created_at'),
+            BlogModel::query()->asArray()
+            ->select(['id', 'title', 'parent_id', 'created_at'])
+        );
         foreach ($items as $item) {
             $year = date('Y', $item['created_at']);
             if (!isset($data[$year])) {
