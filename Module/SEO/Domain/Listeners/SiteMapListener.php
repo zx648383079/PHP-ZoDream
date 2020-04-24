@@ -2,7 +2,6 @@
 namespace Module\SEO\Domain\Listeners;
 
 use Module\SEO\Domain\SiteMap;
-use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Route\Router;
 
 class SiteMapListener {
@@ -14,20 +13,15 @@ class SiteMapListener {
         url()->useCustomScript();
 	    $map = new SiteMap();
         $map->add(url('/'), time());
-        $map->add(url('/blog'), time());
-        $map->add(url('/blog/tag'), time());
-        $map->add(url('/blog/category'), time());
-        $map->add(url('/blog/archives'), time());
-        $map->add(url('/cms'), time());
-        $map->add(url('/doc'), time());
         $modules = config()->moduleConfigs('Home')['modules'];
-	    app(Router::class)->module('blog', function () use ($map) {
-            $blog_list = BlogModel::where('open_type', '<>', BlogModel::OPEN_DRAFT)->orderBy('id', 'desc')->get('id', 'updated_at');
-            foreach ($blog_list as $item) {
-                $map->add($item->url,
-                    $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
-            }
-        }, $modules);
+	    foreach ($modules as $path => $module) {
+            app(Router::class)->module($path, function () use ($map, $module) {
+                $instance = app(Router::class)->moduleInstance($module);
+                if (method_exists($instance, 'openLinks')) {
+                    call_user_func([$instance, 'openLinks'], $map);
+                }
+            }, $modules);
+        }
         $map->toXml();
         url()->useCustomScript(false);
         return $map;

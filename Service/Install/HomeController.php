@@ -108,6 +108,5 @@ class HomeController extends Controller {
         if (empty($yes) || strtoupper($yes) !== 'Y') {
             return $this->showContent('安装完成！');
         }
-
     }
 }

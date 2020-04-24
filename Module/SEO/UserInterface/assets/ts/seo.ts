@@ -38,5 +38,5 @@ function renderCMD(lines: string[]) {
                 return;
             }
             box.append('<p>'+ lines[i++] +'</p>').scrollTop(box[0].scrollHeight);
-        }, Math.floor(1 + Math.random() * 400));
+        }, Math.max(16, Math.floor(Math.min(lines.length * 100, 10000) / lines.length)));
 }

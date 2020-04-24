@@ -12,5 +12,6 @@ app(Router::class)
         $router->any('i', 'HomeController@initAction');
         $router->any('init', 'HomeController@initAction');
         $router->any('install', 'HomeController@initAction');
+        //$router->any('route:cache', 'HomeController@initAction');
     });
 $app->autoResponse();

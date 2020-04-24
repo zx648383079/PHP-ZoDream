@@ -7,7 +7,7 @@ $data = [];
 foreach ($map as $item) {
     $data[] = $item['url'];
 }
-$data[] = '生成成功！';
+$data[] = sprintf('生成成功！共 %d 条', count($data));
 $data = json_encode($data);
 $js = <<<JS
 renderCMD({$data});
