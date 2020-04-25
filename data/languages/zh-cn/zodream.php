@@ -13,7 +13,7 @@ return [
     'System Info' => '系统信息',
     'Execute Info' => '运行信息',
     'Sorry, the page you are looking for could not be found.' => '抱歉，页面走丢了！',
-    'site keywords' => 'zodream,个人日记,ts,vue,php,uwp,angular,编程日记',
+    'site keywords' => 'zodream,个人日记,typescript,vue.js教程,php开发,php框架,uwp,angular,编程入门',
     'site description' => '从一而始，至一而终，简单的个人日记',
     'site title' => 'zodream梦想开源',
     'Upload' => '上传',

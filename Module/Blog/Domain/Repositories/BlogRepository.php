@@ -110,7 +110,7 @@ class BlogRepository {
     public static function formatLanguage($items, Query $query) {
         $lang = trans()->getLanguage();
         if (stripos($lang, 'zh') !== false) {
-            return $items;
+            return is_array($items) ? $items : $items->getIterator();
         }
         $ids = [];
         foreach ($items as $item) {
