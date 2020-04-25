@@ -26,6 +26,7 @@ class CreateOpenPlatformTables extends Migration {
             $table->set('public_key')->text()->comment('密钥');
             $table->set('rules')->varchar()->comment('允许访问的网址');
             $table->set('status')->bool()->defaultVal(0);
+            $table->set('allow_self')->bool()->defaultVal(0)->comment('是否允许后台用户自己添加');
             $table->timestamps();
         });
         Schema::createTable(UserTokenModel::tableName(), function (Table $table) {
@@ -34,6 +35,7 @@ class CreateOpenPlatformTables extends Migration {
             $table->set('user_id')->int()->notNull();
             $table->set('platform_id')->int()->notNull();
             $table->set('token')->text()->notNull();
+            $table->set('is_self')->bool()->defaultVal(0)->comment('是否时用户后台添加的');
             $table->timestamp('expired_at')->comment('过期时间');
             $table->timestamps();
         });

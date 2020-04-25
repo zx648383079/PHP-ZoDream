@@ -2,10 +2,9 @@
 namespace Module\OpenPlatform\Domain\Model;
 
 use Domain\Model\Model;
-use Module\OpenPlatform\Domain\Hmac;
-use Zodream\Database\Model\UserModel;
+use Module\Auth\Domain\Model\UserModel;
+use Zodream\Database\Model\UserModel as UserObject;
 use Zodream\Helpers\Arr;
-use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 
 /**
@@ -25,6 +24,7 @@ use Zodream\Infrastructure\Http\Output\RestResponse;
  * @property string $public_key
  * @property string $rules
  * @property integer $status
+ * @property integer $allow_self
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -73,6 +73,7 @@ class PlatformModel extends Model {
             'public_key' => '',
             'rules' => '',
             'description' => '',
+            'allow_self' => 'int',
             'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -95,6 +96,7 @@ class PlatformModel extends Model {
             'rules' => '允许规则',
             'status' => '状态',
             'description' => '介绍',
+            'allow_self' => '允许手动生成',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -232,11 +234,11 @@ class PlatformModel extends Model {
 
     /**
      * 生成并保存token
-     * @param UserModel $user
+     * @param UserObject $user
      * @return string
      * @throws \Exception
      */
-    public function generateToken(UserModel $user) {
+    public function generateToken(UserObject $user) {
         $token = auth()->createToken($user);
         UserTokenModel::create([
             'user_id' => $user->getIdentity(),
@@ -245,6 +247,27 @@ class PlatformModel extends Model {
             'expired_at' => time() + 20160
         ]);
         return $token;
+    }
+
+    /**
+     * 使用临时生成的token
+     * @throws \Exception
+     */
+    public function useCustomToken() {
+        if ($this->allow_self < 1) {
+            return;
+        }
+        $token = auth()->getToken();
+        if (empty($token) || strlen($token) !== 32) {
+            return;
+        }
+        $user_id = UserTokenModel::where('token', $token)
+            ->where('platform_id', $this->id)
+            ->where('expired_at', '>', time())->value('user_id');
+        if (!$user_id || $user_id < 1) {
+            return;
+        }
+        auth()->setUser(UserModel::findByIdentity($user_id));
     }
 
     /**

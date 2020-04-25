@@ -26,6 +26,11 @@ $this->registerCssFile([
         'fa fa-home',
     ],
     [
+        '授权管理',
+        './authorize',
+        'fa fa-user-cog',
+    ],
+    [
         '应用管理',
         false,
         'fa fa-th-list',

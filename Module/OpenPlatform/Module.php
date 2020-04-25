@@ -73,6 +73,7 @@ class Module extends BaseModule {
                 'message' => __('sign or encrypt error')
             ]);
         }
+        $platform->useCustomToken();
         app()->instance('platform', $platform);
         event()->listen(TokenCreated::class, TokenListener::class);
         $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');

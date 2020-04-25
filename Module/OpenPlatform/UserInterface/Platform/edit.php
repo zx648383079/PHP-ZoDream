@@ -24,6 +24,9 @@ $this->registerJs($js);
         <?=Form::textarea('public_key')?>
     <?php endif;?>
 
+    <?=Form::radio('allow_self', ['不允许', '允许'])?>
+
+
     <button type="submit" class="btn btn-success"><?=$model->id ? '确认保存' : '提交审核'?></button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>
