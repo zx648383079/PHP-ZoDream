@@ -53,9 +53,27 @@ class TagModel extends Model {
             return $content;
         }
         $tags = static::whereIn('id', $tags)->pluck('name');
-        return str_replace($tags, array_map(function ($tag) {
+        $replace = [];
+        $i = 0;
+        $content = preg_replace_callback('#<code[^\<\>]*>[\s\S]+?</code>#', function ($match) use (&$replace, &$i) {
+            $tag = 'ZO'.$i ++.'OZ';
+            $replace[$tag] = $match[0];
+            return $tag;
+        }, $content);
+        $content = preg_replace_callback('#<a[^\<\>]+>[\s\S]+?</a>#', function ($match) use (&$replace, &$i) {
+            $tag = 'ZO'.$i ++.'OZ';
+            $replace[$tag] = $match[0];
+            return $tag;
+        }, $content);
+        $content = preg_replace_callback('#<img[^\<\>]+>#', function ($match) use (&$replace, &$i) {
+            $tag = 'ZO'.$i ++.'OZ';
+            $replace[$tag] = $match[0];
+            return $tag;
+        }, $content);
+        $content = str_replace($tags, array_map(function ($tag) {
             return Html::a($tag, ['./', 'tag' => $tag]);
         }, $tags), $content);
+        return str_replace(array_keys($replace), array_values($replace), $content);
     }
 
 }
