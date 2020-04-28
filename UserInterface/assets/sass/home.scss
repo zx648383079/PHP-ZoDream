@@ -48,6 +48,9 @@ footer {
         border-right: 5px solid #fff;
         text-align: center;
     }
+    a {
+        margin-right: 20px;
+    }
 }
 
 .nav-bar {
@@ -417,6 +420,15 @@ footer {
             border-right: 5px solid $border;
             font-size: 20px;
         }
+    }
+}
+
+.link-box {
+    margin: 50px 0;
+    min-height: 300px;
+    .panel-body {
+        padding: 10px;
+        line-height: 30px;
     }
 }
 

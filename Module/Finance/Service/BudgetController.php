@@ -2,13 +2,13 @@
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
+use Module\Finance\Domain\Repositories\BudgetRepository;
 
 
 class BudgetController extends Controller {
 
-
     public function indexAction() {
-        $model_list = BudgetModel::auth()->where('deleted_at', 0)->orderBy('id', 'desc')->page();
+        $model_list = BudgetRepository::getList();
         return $this->show(compact('model_list'));
     }
 
@@ -37,6 +37,13 @@ class BudgetController extends Controller {
         BudgetModel::auth()->where('id', $id)->update([
             'deleted_at' => time()
         ]);
+        return $this->jsonSuccess([
+            'url' => url('./budget')
+        ]);
+    }
+
+    public function refreshAction() {
+        BudgetRepository::refreshSpent();
         return $this->jsonSuccess([
             'url' => url('./budget')
         ]);

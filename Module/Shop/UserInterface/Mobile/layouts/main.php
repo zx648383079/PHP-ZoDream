@@ -27,6 +27,7 @@ $this->registerCssFile([
    </head>
    <body>
    <?=$content?>
+   <div class="demo-tip"></div>
    <?=$this->footer()?>
    </body>
 </html>

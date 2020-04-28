@@ -6,8 +6,6 @@ use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 
-
-
 class MoneyController extends Controller {
 
     public function indexAction() {

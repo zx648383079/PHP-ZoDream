@@ -33,3 +33,5 @@ $this->registerCssFile([
         <?=$blog_list->getLink()?>
     </div>
 </div>
+
+<div class="demo-tip"></div>

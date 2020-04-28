@@ -129,6 +129,8 @@ $this->registerJs($js);
         周期统计</small></h2>
     <div>
         总支出：<?=$sum?>，总预算：<?=$budget_sum?>，超出：<?=$sum > $budget_sum ? $sum - $budget_sum : 0?>
+
+        <a href="<?=$this->url('./income/log', ['type' => 1, 'budget' => $model->id])?>">查看消费记录</a>
     </div>
     <div style="border:1px solid #e0e0e0;"></div>
     <div id="log_grid" style="width: 100%;height:400px;"></div>

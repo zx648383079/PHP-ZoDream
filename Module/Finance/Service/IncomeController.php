@@ -6,9 +6,13 @@ use Module\Finance\Domain\Model\ConsumptionChannelModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
+use Module\Finance\Domain\Repositories\AccountRepository;
+use Module\Finance\Domain\Repositories\LogRepository;
+use Zodream\Database\Relation;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 use Zodream\Helpers\Time;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 
 
@@ -28,14 +32,11 @@ class IncomeController extends Controller {
         return $this->show(compact('month', 'income_days', 'income_list', 'expenditure_list', 'expenditure_days', 'log_list', 'day_length'));
     }
 
-    public function logAction($type = null, $keywords = null) {
-        $log_list = LogModel::auth()
-            ->when(is_numeric($type), function ($query) use ($type) {
-            $query->where('type', intval($type));
-        })->when(!empty($keywords), function ($query) {
-                LogModel::searchWhere($query, 'remark');
-            })->orderBy('happened_at', 'desc')->page();
-        return $this->show(compact('log_list'));
+    public function logAction($type = null, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null) {
+        $log_list = LogRepository::getList($type, $keywords, $account, $budget, $start_at, $end_at);
+        $account_list = AccountRepository::getItems();
+        $log_list = Relation::bindRelation($log_list, $account_list, 'account', ['account_id' => 'id']);
+        return $this->show(compact('log_list', 'account_list', 'keywords', 'type', 'account'));
     }
 
     public function addLogAction() {
@@ -85,6 +86,24 @@ class IncomeController extends Controller {
         ]);
     }
 
+    public function batchEditLogAction() {
+        $channel_list = ConsumptionChannelModel::auth()->all();
+        $account_list = MoneyAccountModel::auth()->all();
+        $project_list = FinancialProjectModel::auth()->all();
+        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->all();
+        return $this->show(compact('channel_list', 'account_list', 'project_list', 'budget_list'));
+    }
+
+    public function saveBatchLogAction(Request $request) {
+        $row = LogRepository::batchEdit(
+            $request->get('keywords'),
+            $request->get('account_id'),
+            $request->get('project_id'),
+            $request->get('channel_id'),
+            $request->get('budget_id'));
+        return $this->jsonSuccess([], sprintf('更新%d条数据', $row));
+    }
+
     public function importAction() {
         $upload = new Upload();
         $upload->setDirectory(Factory::root()->directory('data/cache'));
@@ -93,7 +112,7 @@ class IncomeController extends Controller {
             return $this->jsonFailure('文件不支持，仅支持gb2312编码的csv文件');
         }
         $upload->each(function (BaseUpload $file) {
-            LogModel::import($file->getFile());
+            LogRepository::import($file->getFile());
         });
         return $this->jsonSuccess([
             'refresh' => true

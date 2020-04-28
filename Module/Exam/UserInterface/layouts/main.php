@@ -5,3 +5,5 @@ use Zodream\Template\View;
 $this->registerCssFile('@exam.css')
     ->registerJsFile('@exam.min.js')->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
+
+<div class="demo-tip"></div>

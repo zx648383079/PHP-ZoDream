@@ -24,14 +24,37 @@ $this->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="container">
-    <div class="friend-box">
-        <?=$this->node('friend-link')?>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="friend-box">
+                <?=$this->node('friend-link')?>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel link-box">
+                <div class="panel-header">
+                    友链信息
+                </div>
+                <div class="panel-body">
+                    <p>
+                        名称：zodream
+                    </p>
+                    <p>
+                        地址：https://zodream.cn
+                    </p>
+                    <p>
+                        描述：zodream开发博客
+                    </p>
+                </div>
+            </div>
+            <div class="friend-apply">
+                <p><?=__('friend link tip')?></p>
+                <a href="javascript:;" class="btn btn-show"><?=__('Apply Excharge Link')?></a>
+            </div>
+        </div>
     </div>
     
-    <div class="friend-apply">
-        <p><?=__('friend link tip')?></p>
-        <a href="javascript:;" class="btn btn-show"><?=__('Apply Excharge Link')?></a>
-    </div>
+    
 </div>
 
 <div class="dialog dialog-box apply-dialog" data-type="dialog">
@@ -47,7 +70,7 @@ $this->registerJs($js, View::JQUERY_READY);
             </div>
             <div>*<?=__('URL')?>:</div>
             <div>
-                <input type="text" name="url" placeholder="跳转的网站链接" required>
+                <input type="text" name="url" placeholder="跳转的网站链接：例如:https://zodream.cn" required>
             </div>
             <div><?=__('Site Description')?>:</div>
             <div>

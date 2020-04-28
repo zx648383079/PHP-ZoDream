@@ -1,7 +1,7 @@
 <?php
 namespace Module\Finance\Domain\Model;
 
-use Domain\Model\Model;
+use Module\Finance\Domain\Entities\BudgetEntity;
 
 /**
  * 预算
@@ -16,48 +16,7 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class BudgetModel extends Model {
-
-    const CYCLE_ONCE = 0;
-    const CYCLE_DAY = 1;
-    const CYCLE_WEEK = 2;
-    const CYCLE_MONTH = 3;
-    const CYCLE_YEAR = 4;
-
-    public static function tableName() {
-        return 'finance_budget';
-    }
-
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,50',
-            'budget' => '',
-            'spent' => '',
-            'cycle' => 'int:0,9',
-            'user_id' => 'required|int',
-            'deleted_at' => 'int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => '名称',
-            'budget' => '预算',
-            'spent' => '已花费',
-            'cycle' => '周期',
-            'user_id' => 'User Id',
-            'deleted_at' => '删除时间',
-            'created_at' => '创建时间',
-            'updated_at' => '更新时间',
-        ];
-    }
-
-    public function scopeAuth($query) {
-        return $query->where('user_id', auth()->id());
-    }
+class BudgetModel extends BudgetEntity {
 
     /**
      * 获取并更新消费
@@ -99,6 +58,11 @@ class BudgetModel extends Model {
         }
         $time = $this->updated_at;
         $this->updated_at = 0;
+        if ($this->cycle == self::CYCLE_ONCE) {
+            $this->spent = LogModel::where('user_id', $this->user_id)->where('budget_id', $this->id)
+                ->where('type', LogModel::TYPE_EXPENDITURE)->sum('money');
+            $this->save();
+        }
         $this->getSpent();
         if ($this->updated_at < 1) {
             $this->updated_at = $time;
@@ -125,6 +89,10 @@ class BudgetModel extends Model {
         if ($this->cycle == self::CYCLE_YEAR) {
             return $this->getLogByYear();
         }
+    }
+
+    public function getLogByAll() {
+        return LogModel::where('user_id', $this->user_id)->where('budget_id', $this->id)->pluck('money', 'happened_at');
     }
 
     public function getLogByDay() {

@@ -1,8 +1,7 @@
 <?php
 namespace Module\Finance\Domain\Model;
 
-use Carbon\Carbon;
-use Domain\Model\Model;
+use Module\Finance\Domain\Entities\LogEntity;
 use Zodream\Database\Model\Query;
 
 /**
@@ -23,61 +22,8 @@ use Zodream\Database\Model\Query;
  * @property integer $updated_at
  * @property string $happened_at
  */
-class LogModel extends Model {
+class LogModel extends LogEntity {
 
-    /**
-     * 支出
-     */
-    const TYPE_EXPENDITURE = 0;
-    /**
-     * 收入
-     */
-    const TYPE_INCOME = 1;
-
-    public static function tableName() {
-        return 'finance_log';
-    }
-
-    protected function rules() {
-        return [
-            'type' => 'int:0,9',
-            'money' => 'numeric',
-            'frozen_money' => 'numeric',
-            'account_id' => 'required|int',
-            'channel_id' => 'int',
-            'project_id' => 'int',
-            'budget_id' => 'int',
-            'remark' => '',
-            'out_trade_no' => 'string:0-100',
-            'user_id' => 'required|int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-            'happened_at' => '',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'type' => '类型',
-            'money' => '金额',
-            'frozen_money' => '冻结金额',
-            'account_id' => '账户',
-            'channel_id' => '渠道',
-            'project_id' => '项目',
-            'budget_id' => '预算',
-            'remark' => '备注',
-            'user_id' => 'User Id',
-            'out_trade_no' => '交易单号',
-            'created_at' => '记录时间',
-            'updated_at' => '更新时间',
-            'happened_at' => '发生时间',
-        ];
-    }
-
-    public function scopeAuth($query) {
-        return $query->where('user_id', auth()->id());
-    }
 
     public function getDayAttribute() {
         return date('d', strtotime($this->happened_at));
@@ -122,94 +68,6 @@ class LogModel extends Model {
             $data[$i] = isset($days[$i]) ? $days[$i] : 0;
         }
         return $data;
-    }
-
-    public static function import($file) {
-        $file = (string)$file;
-        if (!is_file($file)) {
-            return false;
-        }
-        $handle = fopen($file, 'r');
-        if (!$handle) {
-            return false;
-        }
-        $status = 0;
-        $column = [];
-        $type = 0;
-        $account_id = 0;
-        while (($data = fgetcsv($handle)) !== false) {
-            if ($type === 0 && isset($data[0])) {
-                $type = strpos($data[0], '微信') !== false ? 1 : 2;
-            }
-            if ($status === 0) {
-                if (strpos($data[0], '---') === 0) {
-                    $status = 1;
-                }
-                continue;
-            }
-            if (strpos($data[0], '---') === 0) {
-                break;
-            }
-            $items = [];
-            foreach ($data as $item) {
-                // 修复utf8下分割不准确问题
-                $items = array_merge($items, explode(',', $item));
-            }
-            $data = $items;
-            unset($items);
-            if ($type === 2) {
-                $data = array_map(function ($item) {
-                    return trim(iconv('GB2312', 'UTF-8', $item));
-                }, $data);
-            }
-            if ($status === 1) {
-                $column = $data;
-                $status = 2;
-                $account_id = MoneyAccountModel::auth()->where('name', $type == 1 ? '微信' : '支付宝')
-                    ->value('id');
-                continue;
-            }
-            $item = array_combine($column, $data);
-
-            if ($type === 1) {
-                // 微信
-                static::createIfNot([
-                    'type' => $item['收/支'] == '支出' ? 0 : 1,
-                    'money' => preg_replace('/[^\d\.]+/', '', $item['金额(元)']),
-                    'frozen_money' => 0,
-                    'account_id' => $account_id,
-                    'channel_id' => 0,
-                    'project_id' => 0,
-                    'budget_id' => 0,
-                    'remark' => sprintf('%s %s', $item['交易对方'], $item['商品']),
-                    'user_id' => auth()->id(),
-                    'out_trade_no' => 'wx'.$item['交易单号'],
-                    'created_at' => time(),
-                    'updated_at' => time(),
-                    'happened_at' => $item['交易时间'],
-                ]);
-            } elseif ($type === 2) {
-                // 支付宝
-                static::createIfNot([
-                    'type' => $item['收/支'] == '支出' ? 0 : 1,
-                    'money' => $item['金额（元）'],
-                    'frozen_money' => 0,
-                    'account_id' => $account_id,
-                    'channel_id' => 0,
-                    'project_id' => 0,
-                    'budget_id' => 0,
-                    'remark' => sprintf('%s %s',$item['交易对方'], $item['商品名称']),
-                    'user_id' => auth()->id(),
-                    'out_trade_no' => 'ali'.$item['交易号'],
-                    'created_at' => time(),
-                    'updated_at' => time(),
-                    'happened_at' => !empty($item['付款时间'])
-                        ? $item['付款时间'] : $item['交易创建时间'],
-                ]);
-            }
-        }
-        fclose($handle);
-        return true;
     }
 
     public static function createIfNot($data) {

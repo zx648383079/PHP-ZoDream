@@ -8,3 +8,4 @@ $this->registerCssFile('@forum.css')
         '@forum.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./', false)), View::HTML_HEAD);
 ?>
+<div class="demo-tip"></div>

@@ -87,7 +87,7 @@ $this->registerJsFile('@jquery.min.js')
         </div>
     </div>
 
-
+    <div class="demo-tip"></div>
    <?=$this->footer()?>
    </body>
 </html>

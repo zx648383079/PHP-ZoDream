@@ -13,3 +13,15 @@
 @import "list";
 @import "bread";
 //@import "metro";
+
+.demo-tip {
+    position: fixed;
+    right: 0;
+    top: 0;
+    background-image: url('/assets/images/demo.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 200px;
+    height: 200px;
+    z-index: 9999;
+}

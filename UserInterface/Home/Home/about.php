@@ -14,19 +14,7 @@ $this->set([
 <div class="container">
     <div class="row about-header">
         <div class="col-md-4">
-            <div class="person-box">
-                <div class="avatar">
-                    <img src="<?=$this->asset('images/favicon.png')?>" alt="">
-                </div>
-                <div class="name">zodream</div>
-                <div class="desc">开心就好！</div>
-                <div class="links">
-                    <a href="https://github.com/zx648383079" target="_blank">
-                        <i class="fab fa-github"></i>
-                        GitHub
-                    </a>
-                </div>
-            </div>
+            <?=$this->node('author')?>
         </div>
         <div class="col-md-8">
             <div class="about-box">

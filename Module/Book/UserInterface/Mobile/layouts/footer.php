@@ -21,6 +21,7 @@ $this->registerJsFile('@jquery.min.js')
 	</div>
 </div>
 <div class="slide-ad"><!--广告--></div>
+<div class="demo-tip"></div>
    <?=$this->footer()?>
    </body>
 </html>

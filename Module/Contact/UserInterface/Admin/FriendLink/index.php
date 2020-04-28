@@ -37,6 +37,8 @@ $this->title = '友情链接申请列表';
             <td>
                 <?php if($item->status < 1):?>
                 <a class="btn btn-danger" data-type="del" data-tip="确认审核通过此友情链接？" href="<?=$this->url('./@admin/friend_link/verify', ['id' => $item->id])?>">审核</a>
+                <?php else:?>
+                <a class="btn" data-type="del" data-tip="确认下架此友情链接？" href="<?=$this->url('./@admin/friend_link/remove', ['id' => $item->id])?>">下架</a>
                 <?php endif;?>
             </td>
         </tr>

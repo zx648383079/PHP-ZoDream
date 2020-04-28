@@ -30,6 +30,7 @@ $this->registerCssFile([
    <?php $this->extend($this->get('header_tpl', './header'));?>
    <?=$content?>
    <?php $this->extend('./footer');?>
+   <div class="demo-tip"></div>
    <?=$this->footer()?>
    </body>
 </html>

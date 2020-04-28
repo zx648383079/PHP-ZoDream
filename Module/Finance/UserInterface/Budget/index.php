@@ -7,6 +7,7 @@ $this->title = '生活预算';
 ?>
 
     <a class="btn btn-success" href="<?=$this->url('./budget/add')?>">新增预算</a>
+    <a class="btn btn-success" data-type="ajax" href="<?=$this->url('./budget/refresh')?>">刷新预算</a>
     <hr/>
     <div>
         <h2>生活预算</h2>

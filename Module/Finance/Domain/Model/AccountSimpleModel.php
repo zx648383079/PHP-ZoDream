@@ -18,9 +18,9 @@ use Module\Finance\Domain\Entities\AccountEntity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class MoneyAccountModel extends AccountEntity {
+class AccountSimpleModel extends AccountEntity {
 
-    public function getTotalAttribute() {
-        return $this->money + $this->frozen_money;
+    public static function query() {
+        return parent::query()->select('id', 'name');
     }
 }

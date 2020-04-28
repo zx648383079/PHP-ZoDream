@@ -16,9 +16,11 @@ class FriendLink extends Node implements INode {
     }
 
     public function render($type = null) {
-        $data = $this->page->trigger(self::KEY);
-        return sprintf('<div class="friend-link"><div>%s</div><div>%s</div></div>', __('friend link'), implode('', array_map(function ($item) {
-            return sprintf('<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', $item['url'], $item['name']);
-        }, $data)));
+        return cache()->getOrSet(self::KEY, function () {
+            $data = $this->page->trigger(self::KEY);
+            return sprintf('<div class="friend-link"><div>%s</div><div>%s</div></div>', __('friend link'), implode('', array_map(function ($item) {
+                return sprintf('<a href="%s" target="_blank" rel="noopener noreferrer" title="%s">%s</a>', $item['url'], $item['brief'], $item['name']);
+            }, $data)));
+        });
     }
 }

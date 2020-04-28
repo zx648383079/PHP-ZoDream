@@ -2,5 +2,6 @@ User-agent: *
 Allow:/blog
 Allow:/tool
 Disallow: /admin.php
+Disallow: /open
 Disallow: /*/admin
 Sitemap: https://zodream.cn/sitemap.xml
