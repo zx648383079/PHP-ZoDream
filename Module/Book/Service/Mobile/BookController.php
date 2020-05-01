@@ -32,14 +32,14 @@ class BookController extends Controller {
 
     public function readAction($id) {
         $chapter = BookChapterModel::find($id);
-        //BookClickLogModel::logBook($chapter->book_id);
+        BookClickLogModel::logBook($chapter->book_id);
         $book = BookModel::find($chapter->book_id);
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
         }
         $cat = BookCategoryModel::find($book->cat_id);
         $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(8)->all();
-        //BookHistoryModel::log($chapter);
+        BookHistoryModel::log($chapter);
         $setting = new Setting();
         $setting->load()->save();
         return $this->show(compact('book', 'cat', 'chapter', 'like_book', 'setting'));

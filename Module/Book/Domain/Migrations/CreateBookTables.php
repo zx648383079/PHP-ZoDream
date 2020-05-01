@@ -21,7 +21,7 @@ class CreateBookTables extends Migration {
     public function up() {
         $this->append(BookModel::tableName(), function(Table $table) {
             $table->setComment('小说');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->unique()->notNull()->comment('书名');
             $table->set('cover')->varchar(200)->defaultVal('')->comment('封面');
             $table->set('description')->varchar(200)->defaultVal('')->comment('简介');
@@ -39,7 +39,7 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         })->append(BookChapterModel::tableName(), function(Table $table) {
             $table->setComment('小说章节');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('book_id')->int()->defaultVal(0);
             $table->set('title')->varchar(200)->comment('标题');
             $table->set('parent_id')->int()->defaultVal(0);
@@ -51,7 +51,7 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         })->append(BookChapterBodyModel::tableName(), function(Table $table) {
             $table->setComment('小说章节内容');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('content')->longtext()->comment('内容');
         })->append(BookCategoryModel::tableName(), function(Table $table) {
             $table->setComment('小说分类');
@@ -60,13 +60,13 @@ class CreateBookTables extends Migration {
             $table->timestamp('created_at');
         })->append(BookAuthorModel::tableName(), function(Table $table) {
             $table->setComment('小说作者');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->unique()->notNull()->comment('作者名');
             $table->set('avatar')->varchar(200)->comment('作者头像');
             $table->timestamps();
         })->append(BookHistoryModel::tableName(), function(Table $table) {
             $table->setComment('小说阅读历史');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('book_id')->int()->notNull();
             $table->set('chapter_id')->int()->defaultVal(0);
@@ -74,7 +74,7 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         })->append(BookLogModel::tableName(), function(Table $table) {
             $table->setComment('小说记录统计');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('type')->tinyint(3)->defaultVal(0);
             $table->set('id_value')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
@@ -82,26 +82,26 @@ class CreateBookTables extends Migration {
             $table->timestamp('created_at');
         })->append(BookClickLogModel::tableName(), function(Table $table) {
             $table->setComment('小说点击统计');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('book_id')->int()->notNull();
             $table->set('hits')->int()->defaultVal(0);
             $table->set('created_at')->date()->notNull();
         })->append(BookRoleModel::tableName(), function(Table $table) {
             $table->setComment('小说角色');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('book_id')->int()->notNull();
             $table->set('name')->varchar(50)->notNull();
             $table->set('avatar')->varchar(200)->defaultVal('');
             $table->set('description')->varchar(200)->defaultVal('');
         })->append(RoleRelationModel::tableName(), function(Table $table) {
             $table->setComment('小说角色关系');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('role_id')->int()->notNull();
             $table->set('title')->varchar(50)->notNull();
             $table->set('role_link')->int()->notNull();
         })->append(BookListModel::tableName(), function(Table $table) {
             $table->setComment('书单');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('title')->varchar(50)->notNull();
             $table->set('description')->varchar(200)->defaultVal('');
@@ -111,7 +111,7 @@ class CreateBookTables extends Migration {
             $table->timestamps();
         })->append(ListItemModel::tableName(), function(Table $table) {
             $table->setComment('书单书籍');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('list_id')->int()->notNull();
             $table->set('book_id')->int()->notNull();
             $table->set('remark')->varchar(200)->defaultVal('');
