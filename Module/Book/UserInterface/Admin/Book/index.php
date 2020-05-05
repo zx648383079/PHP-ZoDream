@@ -2,20 +2,20 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '小说列表';
 ?>
    <div class="page-search">
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">标题</label>
-                <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题">
+                <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题" value="<?=$keywords?>">
             </div>
             <div class="input-group">
                 <label>分类</label>
                 <select name="cat_id">
                     <option value="">请选择</option>
                     <?php foreach($cat_list as $item):?>
-                    <option value="<?=$item->id?>"><?=$item->real_name?></option>
+                    <option value="<?=$item->id?>" <?=$cat_id == $item->id ? 'selected' : ''?>><?=$item->real_name?></option>
                     <?php endforeach;?>
                 </select>
             </div>
@@ -24,7 +24,7 @@ $this->title = 'ZoDream';
                 <select name="author_id">
                     <option value="">请选择</option>
                     <?php foreach($author_list as $item):?>
-                    <option value="<?=$item->id?>"><?=$item->name?></option>
+                    <option value="<?=$item->id?>" <?=$author_id == $item->id ? 'selected' : ''?>><?=$item->name?></option>
                     <?php endforeach;?>
                 </select>
             </div>
@@ -35,7 +35,7 @@ $this->title = 'ZoDream';
                                       '无分级',
                                       '成人级',
                                   ] as $key => $item):?>
-                        <option value="<?=$key?>"><?=$item?></option>
+                        <option value="<?=$key?>"  <?=$classify == $key ? 'selected' : ''?>><?=$item?></option>
                     <?php endforeach;?>
                 </select>
             </div>

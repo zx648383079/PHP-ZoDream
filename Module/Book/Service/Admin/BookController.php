@@ -23,7 +23,7 @@ class BookController extends Controller {
             })->orderBy('id', 'desc')->page();
         $cat_list = BookCategoryModel::select('id', 'name')->all();
         $author_list = BookAuthorModel::select('id', 'name')->all();
-        return $this->show(compact('model_list', 'cat_list', 'author_list'));
+        return $this->show(compact('model_list', 'cat_list', 'author_list', 'keywords', 'cat_id', 'classify', 'author_id'));
     }
 
     public function createAction() {
@@ -45,12 +45,14 @@ class BookController extends Controller {
         if ($model->isExist()) {
             return $this->jsonFailure('书籍已存在！');
         }
-        if ($model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('book')
-            ]);
+        $model->autoIsNew();
+        $isNew = $model->isNewRecord;
+        if (!$model->save()) {
+            return $this->jsonFailure($model->getFirstError());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $isNew ? $this->getUrl('book') : -1
+        ]);
     }
 
     public function deleteAction($id) {

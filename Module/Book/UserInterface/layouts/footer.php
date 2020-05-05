@@ -15,7 +15,9 @@ $this->registerJsFile('@jquery.min.js')
             </div>
         </div>
     </div>
-    <div class="demo-tip"></div>
+    <?php if(!app()->isDebug()):?>
+        <div class="demo-tip"></div>
+    <?php endif;?>
    <?=$this->footer()?>
    </body>
 </html>

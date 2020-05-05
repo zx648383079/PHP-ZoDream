@@ -68,6 +68,10 @@ function parseAjax(data: IResponse) {
     }
     if (data.data && data.data.url) {
         setTimeout(() => {
+            if (data.data.url === -1) {
+                history.go(-1);
+                return;
+            }
             if (typeof parseAjaxUri == 'function') {
                 parseAjaxUri(data.data.url);
                 return;

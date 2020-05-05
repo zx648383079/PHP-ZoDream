@@ -24,6 +24,7 @@ $this->registerJs($js);
             <div class="zd-tab-item active">
                 <?=Form::text('title', true)?>
                 <?=Form::text('source')?>
+                <?=Form::text('position')->size(4)?>
             </div>
             <div class="zd-tab-item">
                 <textarea id="content-box" name="content"><?=$model->body ? $model->body->content : ''?></textarea>

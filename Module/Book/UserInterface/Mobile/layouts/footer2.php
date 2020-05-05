@@ -7,7 +7,9 @@ $this->registerJsFile('@jquery.min.js')
       ->registerJsFile('@jquery.dialog.min.js')
       ->registerJsFile('@book_mobile.min.js');
 ?>
-<div class="demo-tip"></div>
+<?php if(!app()->isDebug()):?>
+        <div class="demo-tip"></div>
+    <?php endif;?>
    <?=$this->footer()?>
    </body>
 </html>

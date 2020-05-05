@@ -14,6 +14,7 @@ use Domain\Entities\Entity;
  * @property integer $book_id
  * @property integer $parent_id
  * @property integer $status
+ * @property integer $position
  * @property string $source
  * @property integer $size
  * @property integer $deleted_at
@@ -32,6 +33,7 @@ class ChapterEntity extends Entity {
             'parent_id' => 'int',
             'status' => 'int:0,9',
             'source' => 'string:0,200',
+            'position' => 'int',
             'size' => 'int',
             'deleted_at' => 'int',
             'created_at' => 'int',
@@ -45,6 +47,7 @@ class ChapterEntity extends Entity {
             'book_id' => '书',
             'title' => '标题',
             'parent_id' => '上级',
+            'position' => '排序',
             'status' => '状态',
             'source' => '来源',
             'size' => '字数',
