@@ -32,7 +32,7 @@ class SiteMap implements IteratorAggregate {
     public function toXml() {
         $data = array_map(function ($item) {
             $args = [
-                'loc' => $item['url'],
+                'loc' => htmlspecialchars($item['url']),
             ];
             if (isset($item['priority'])) {
                 $args['priority'] = sprintf('%.1f', min($item['priority'], 1));
