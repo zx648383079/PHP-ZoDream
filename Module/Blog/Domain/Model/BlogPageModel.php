@@ -32,7 +32,7 @@ namespace Module\Blog\Domain\Model;
 */
 class BlogPageModel extends BlogModel {
 
-    const SIMPLE_MODE = ['id', 'title', 'description', 'user_id',
+    const SIMPLE_MODE = ['id', 'title', 'description', 'user_id', 'type',
         'thumb',
         'language',
         'programming_language',
