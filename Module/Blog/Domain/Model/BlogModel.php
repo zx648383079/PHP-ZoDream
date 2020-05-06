@@ -13,23 +13,25 @@ use Zodream\Helpers\Time;
  * @property string $title
  * @property string $description
  * @property string $keywords
- * @property string $thumb
- * @property string $language
- * @property string $programming_language
  * @property integer $parent_id
+ * @property string $programming_language
+ * @property string $language
+ * @property string $thumb
  * @property integer $edit_type
  * @property string $content
  * @property integer $user_id
  * @property integer $term_id
  * @property integer $type
  * @property string $source_url
- * @property integer $open_type
- * @property string $open_rule
- * @property string weather
+ * @property string $audio_url
+ * @property string $video_url
  * @property integer $recommend
  * @property integer $comment_count
  * @property integer $click_count
  * @property integer $comment_status
+ * @property integer $open_type
+ * @property string $open_rule
+ * @property string $weather
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at

@@ -20,6 +20,8 @@ namespace Module\Blog\Domain\Model;
  * @property string $open_rule
  * @property string weather
  * @property string $source_url
+ * @property string $audio_url
+ * @property string $video_url
  * @property integer $recommend
  * @property integer $comment_count
  * @property integer $click_count

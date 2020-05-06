@@ -9,7 +9,7 @@ $this->title = $book->name;
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">标题</label>
-                <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题" value="<?=$keywords?>">
+                <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题" value="<?=$this->text($keywords)?>">
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
             <input type="hidden" name="book" value="<?=$book->id?>">

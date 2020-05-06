@@ -47,6 +47,7 @@ $this->registerJs($js);
                 <?=Form::select('programming_language', array_merge(['' => '请选择'], array_combine($lang_list, $lang_list)))?>
                 <?=Form::select('type', ['原创', '转载'])?>
                 <?=Form::text('source_url')?>
+                <?=Form::file('thumb')?>
                 <?=Form::select('open_type', ['公开', '仅登录', 5 => '密码', 6 => '购买', 2 => '草稿'])?>
                 <?=Form::text('open_rule')?>
                 <?php endif;?>
@@ -54,6 +55,8 @@ $this->registerJs($js);
                 <?=Form::select('weather', array_merge(['' => '请选择'], $weather_list))?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
+                <?=Form::file('audio_url')->allow('audio/*')?>
+                <?=Form::file('video_url')->isFile('video/*')?>
                 <?php if($model->parent_id < 1):?>
                 <?=Form::checkbox('comment_status')?>
                 <div class="input-group">

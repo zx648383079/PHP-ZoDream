@@ -6,6 +6,16 @@ use Infrastructure\HtmlExpand;
 $html = $blog->toHtml();
 ?>
 <?php if($blog->can_read):?>
+    <?php if($blog->audio_url):?>
+    <div class="audio-box">
+        <audio src="<?=$blog->audio_url?>"></audio>
+    </div>
+    <?php endif;?>
+    <?php if($blog->video_url):?>
+    <div class="video-box">
+        <video src="<?=$blog->video_url?>"></video>
+    </div>
+    <?php endif;?>
    <?=$html?>
 <?php else:?>
    <?=HtmlExpand::substr($html, 50)?>

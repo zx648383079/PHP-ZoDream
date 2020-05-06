@@ -8,7 +8,7 @@ use Zodream\Template\View;
     <form class="form-horizontal" action="<?=$this->url(false, false)?>" role="form">
         <div class="input-group">
             <label class="sr-only" for="keywords">标题</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题" value="<?=$keywords?>">
+            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题" value="<?=$this->text($keywords)?>">
         </div>
         <div class="input-group">
             <label>分类</label>

@@ -20,20 +20,22 @@ class CreateBlogTables extends Migration {
         $this->append(BlogModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(200)->notNull();
-            $table->set('description')->varchar();
-            $table->set('keywords')->varchar();
+            $table->set('description')->varchar()->defaultVal('');
+            $table->set('keywords')->varchar()->defaultVal('');
             $table->set('parent_id')->int()->unsigned()->defaultVal(0);
             $table->set('programming_language')->varchar(20)
                 ->defaultVal('')->comment('编程语言');
             $table->set('language')->enum(['zh', 'en'])->defaultVal('zh')
                 ->comment('内容语言');
-            $table->set('thumb')->varchar();
+            $table->set('thumb')->varchar()->defaultVal('');
             $table->set('edit_type')->tinyint(1)->unsigned()->defaultVal(BlogModel::EDIT_HTML)->comment('编辑器类型');
             $table->set('content')->text();
             $table->set('user_id')->int(10)->unsigned();
             $table->set('term_id')->int(10)->unsigned();
             $table->set('type')->bool()->unsigned()->defaultVal(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
-            $table->set('source_url')->varchar(100)->comment('原文链接');
+            $table->set('source_url')->varchar(100)->defaultVal('')->comment('原文链接');
+            $table->set('audio_url')->varchar(100)->defaultVal('')->comment('音频链接');
+            $table->set('video_url')->varchar(100)->defaultVal('')->comment('视频链接');
             $table->set('recommend')->int(10)->unsigned()->defaultVal(0);
             $table->set('comment_count')->int(10)->unsigned()->defaultVal(0);
             $table->set('click_count')->int(10)->unsigned()->defaultVal(0);

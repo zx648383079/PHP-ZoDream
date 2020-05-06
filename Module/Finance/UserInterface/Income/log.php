@@ -19,7 +19,7 @@ $this->registerJs($js);
     </div>
     <form class="form-horizontal" role="form">
         <div class="input-group">
-            <input class="form-control" type="text" name="keywords" placeholder="关键字" value="<?=$keywords?>">
+            <input class="form-control" type="text" name="keywords" placeholder="关键字" value="<?=$this->text($keywords)?>">
         </div>
         <div class="input-group">
             <select class="form-control" name="type">

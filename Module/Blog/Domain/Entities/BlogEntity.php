@@ -3,6 +3,36 @@ namespace Module\Blog\Domain\Entities;
 
 use Domain\Entities\Entity;
 
+/**
+ * Class BlogEntity
+ * @package Module\Blog\Domain\Entities
+ * @property integer $id
+ * @property string $title
+ * @property string $description
+ * @property string $keywords
+ * @property integer $parent_id
+ * @property string $programming_language
+ * @property string $language
+ * @property string $thumb
+ * @property integer $edit_type
+ * @property string $content
+ * @property integer $user_id
+ * @property integer $term_id
+ * @property integer $type
+ * @property string $source_url
+ * @property string $audio_url
+ * @property string $video_url
+ * @property integer $recommend
+ * @property integer $comment_count
+ * @property integer $click_count
+ * @property integer $comment_status
+ * @property integer $open_type
+ * @property string $open_rule
+ * @property string $weather
+ * @property integer $deleted_at
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
 class BlogEntity extends Entity {
 
     const TYPE_ORIGINAL = 0; // 原创
@@ -26,23 +56,25 @@ class BlogEntity extends Entity {
             'title' => 'required|string:0,200',
             'description' => 'string:0,255',
             'keywords' => 'string:0,255',
-            'thumb' => 'string:0,255',
-            'language' => 'in:zh,en',
-            'programming_language' => 'string:0,20',
             'parent_id' => 'int',
-            'edit_type' => 'int:0,9',
+            'programming_language' => 'string:0,20',
+            'language' => '',
+            'thumb' => 'string:0,255',
+            'edit_type' => 'int:0,127',
             'content' => '',
             'user_id' => 'int',
             'term_id' => 'int',
-            'type' => 'int:0,9',
+            'type' => 'int:0,127',
             'source_url' => 'string:0,100',
-            'open_type' => 'int:0,127',
-            'open_rule' => 'string:0,20',
-            'weather' => 'string:0,20',
+            'audio_url' => 'string:0,100',
+            'video_url' => 'string:0,100',
             'recommend' => 'int',
             'comment_count' => 'int',
             'click_count' => 'int',
-            'comment_status' => 'int:0,9',
+            'comment_status' => 'int:0,127',
+            'open_type' => 'int:0,127',
+            'open_rule' => 'string:0,20',
+            'weather' => 'string:0,20',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -65,6 +97,8 @@ class BlogEntity extends Entity {
             'term_id' => '分类',
             'type' => '类型',
             'source_url' => '来源',
+            'audio_url' => '音频',
+            'video_url' => '视频',
             'open_type' => '公开类型',
             'open_rule' => '公开规则',
             'weather' => '天气',

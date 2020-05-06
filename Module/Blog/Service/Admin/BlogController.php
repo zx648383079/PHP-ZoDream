@@ -18,7 +18,7 @@ class BlogController extends Controller {
                 $query->where('term_id', intval($term_id));
             })->orderBy('id', 'desc')->page();
         $term_list = TermModel::select('id', 'name')->all();
-        return $this->show(compact('blog_list', 'term_list'));
+        return $this->show(compact('blog_list', 'term_list', 'keywords', 'term_id'));
     }
 
     public function createAction() {
@@ -47,6 +47,7 @@ class BlogController extends Controller {
             'term_id',
             'programming_language',
             'type',
+            'thumb',
             'open_type',
             'open_rule',
             'source_url',
@@ -76,7 +77,7 @@ class BlogController extends Controller {
         }
         event(new BlogUpdate($model, time()));
         return $this->jsonSuccess([
-            'url' => $this->getUrl('blog')
+            'url' => $isNew ? $this->getUrl('blog') : -1
         ]);
     }
 
@@ -90,7 +91,7 @@ class BlogController extends Controller {
             BlogModel::where('parent_id', $id)->delete();
         }
         return $this->jsonSuccess([
-            'url' => $this->getUrl('blog')
+            'refresh' => true
         ]);
     }
 }

@@ -12,7 +12,7 @@ $this->title = '试卷评估列表';
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label class="sr-only" for="keywords">用户名</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="会员名" value="<?=$keywords?>">
+            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="会员名" value="<?=$this->text($keywords)?>">
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
         <input type="hidden" name="id" value="<?=$page->id?>">

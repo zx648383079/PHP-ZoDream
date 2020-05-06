@@ -11,14 +11,14 @@ $this->title = '文章列表';
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label for="keywords">标题</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="搜索标题">
+            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="搜索标题" value="<?=$this->text($keywords)?>">
         </div>
         <div class="input-group">
             <label>分类</label>
             <select name="term_id">
-                <option value="">请选择</option>
+                <option value="0">请选择</option>
                 <?php foreach($term_list as $item):?>
-                <option value="<?=$item->id?>"><?=$item->name?></option>
+                <option value="<?=$item->id?>" <?=$item->id == $term_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>

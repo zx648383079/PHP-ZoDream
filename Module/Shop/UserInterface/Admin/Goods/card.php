@@ -17,7 +17,7 @@ $this->registerJs($js);
             】</span>
         <div class="input-group">
             <label class="sr-only" for="keywords">卡密</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="卡密" value="<?=$keywords?>">
+            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="卡密" value="<?=$this->text($keywords)?>">
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
         <input type="hidden" name="id" value="<?=$model->id?>">
