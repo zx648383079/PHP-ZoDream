@@ -13,14 +13,16 @@
         flex-wrap: wrap;
         justify-content: space-between;
         .forum-item {
-            display: grid;
-            grid-template-columns: 100px 1fr;
+            position: relative;
+            padding-left: 100px;
             height: 100px;
             width: 300px;
             transition: all 1s;
             border-bottom: 1px dotted;
             margin: 5px;
             .thumb {
+                position: absolute;
+                left: 0;
                 width: 80px;
                 height: 80px;
                 img {

@@ -41,10 +41,12 @@ footer {
     }
 }
 .friend-link {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 100px 1fr;
+    position: relative;
+    padding-left: 100px;
     >div:first-child {
+        position: absolute;
+        left: 0;
+        width: 90px;
         border-right: 5px solid #fff;
         text-align: center;
     }
@@ -415,8 +417,9 @@ footer {
     line-height: 40px;
     padding: 20px 10px;
     .friend-link {
-        grid-template-columns: 150px 1fr;
+        padding-left: 150px;
         > div:first-child {
+            width: 140px;
             border-right: 5px solid $border;
             font-size: 20px;
         }
