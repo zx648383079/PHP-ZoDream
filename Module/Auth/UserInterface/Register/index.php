@@ -34,7 +34,9 @@ $this->extend('layouts/header')
                         <input type="checkbox" name="agree" value="1" id="checkboxInput"/>
                         <label for="checkboxInput"></label>
                     </div>
-                    同意本站协议
+                    同意《
+                    <a href="<?=$this->url('/agreement')?>">本站协议</a>
+                    》
                 </div>
 
                 <button type="submit" class="btn">注册</button>

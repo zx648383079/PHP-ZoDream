@@ -52,7 +52,12 @@ class BlogRepository {
             })->when(!empty($programming_language), function ($query) use ($programming_language) {
                 $query->where('programming_language', $programming_language);
             })->when(!empty($tag), function ($query) use ($tag) {
-                $query->whereIn('id', TagModel::getBlogByName($tag));
+                $ids = TagModel::getBlogByName($tag);
+                if (empty($ids)) {
+                    $query->isEmpty();
+                    return;
+                }
+                $query->whereIn('id', $ids);
             })
             ->page($per_page);
         $items = self::formatLanguage($page, BlogPageModel::with('term', 'user'));

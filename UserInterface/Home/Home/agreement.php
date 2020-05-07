@@ -15,6 +15,8 @@ $this->set([
         <h2 class="h2">协议细则</h2>
         <h2 class="h2">1、本网站服务条款的确认和接纳</h2>
         <p class="p1">本网站各项服务的所有权和运作权归本网站拥有。</p>
+        <h2 class="h2">2、用户发布的内容</h2>
+        <p class="p1">由用户发布的内容所有权归用户，但请注意非原创或违法内容本站有权删除。</p>
     </div>
 
     <div style="line-height:25px; padding-bottom: 30px; padding-top: 30px">

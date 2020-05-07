@@ -21,11 +21,11 @@ class Module extends BaseModule {
             $map->add(url('./project', ['id' => $item->id]),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
         }
-        $items = ApiModel::query()->get('id', 'updated_at');
-        foreach ($items as $item) {
-            $map->add(url('./api', ['id' => $item->id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
-        }
+//        $items = ApiModel::query()->get('id', 'updated_at');
+//        foreach ($items as $item) {
+//            $map->add(url('./api', ['id' => $item->id]),
+//                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+//        }
         $items = PageModel::query()->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./page', ['id' => $item->id]),
