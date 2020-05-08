@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = '环境检测';
 ?>
 <div class="page-header">
     环境检测
@@ -89,5 +90,5 @@ use Zodream\Template\View;
     </table>
 </div>
 <div class="page-footer">
-    <a class="btn btn-primary" href="<?=$this->url(['database']);?>">下一步</a>
+    <a class="btn btn-primary" href="<?=$this->url('./database');?>">下一步</a>
 </div>

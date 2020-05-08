@@ -27,3 +27,23 @@
         color: #fff;
     }
 }
+
+.form-control {
+    height: 30px;
+    box-sizing: border-box;
+}
+
+.module-box {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.table {
+    th {
+        text-align: right;
+    }
+    td {
+        text-align: left;
+        line-height: 30px;
+    }
+}

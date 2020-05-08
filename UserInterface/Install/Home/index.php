@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = '开始之前';
 ?>
 <div class="page-header">
 	开始之前
@@ -22,5 +23,5 @@ use Zodream\Template\View;
 	<p>绝大多数时候，您的网站服务提供商会给您这些信息。如果您没有这些信息，在继续之前您将需要联系他们。如果您准备好了…</p>
 </div>
 <div class="page-footer">
-	<a class="btn btn-primary" href="<?=$this->url(['environment']);?>">开始安装</a>
+	<a class="btn btn-primary" href="<?=$this->url('./environment');?>">开始安装</a>
 </div>

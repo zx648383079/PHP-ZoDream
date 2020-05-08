@@ -3,10 +3,11 @@ namespace Service\Install;
 
 use Infrastructure\Environment;
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Zodream\Module\Gzo\Domain\Database\Schema;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Module\Gzo\Domain\GenerateModel;
 use Zodream\Module\Gzo\Domain\Generator\ModuleGenerator;
 use Zodream\Module\Gzo\Service\ModuleController;
+use Zodream\Module\Gzo\Service\SqlController;
 
 class HomeController extends Controller {
 
@@ -18,9 +19,7 @@ class HomeController extends Controller {
     }
 
     public function indexAction() {
-		return $this->show([
-		    'title' => '开始'
-        ]);
+		return $this->show();
 	}
 
     public function environmentAction() {
@@ -45,20 +44,24 @@ class HomeController extends Controller {
 		return $this->show();
 	}
 
-    public function dbsAction() {
+    public function dbsAction(Request $request) {
+        $configs = $request->get('db');
+        $configs['database'] = 'information_schema';
         config([
-            'db' => app('request')->get('host,port,database information_schema,user,password')
+            'db' => $configs
         ]);
-        return $this->json([
-            'status' => 1,
-            'data' => Schema::getAllDatabase()
-        ]);
+        try {
+            return (new SqlController())->schemaAction();
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
     }
 
-    public function importAction() {
+    public function importAction(Request $request) {
+        $configs = $request->get('db');
         $handle = opendir(APP_DIR. '/Service');
         $data = config()->get();
-        $data['db'] = array_merge($data['db'], app('request')->get('db'));
+        $data['db'] = array_merge($data['db'], $configs);
         config([
             'db' => $data['db']
         ]);
@@ -76,8 +79,44 @@ class HomeController extends Controller {
             ModuleGenerator::renderConfigs($file, $data);
         }
         config()->reset();
-        return $this->json([
-            'status' => 1,
+        return $this->jsonSuccess([
+            'url' => url('./module')
+        ]);
+    }
+
+    public function moduleAction() {
+        $module_list = ModuleController::getModuleList();
+        return $this->show(compact('module_list'));
+    }
+
+    public function importModuleAction($module, $user) {
+        $data = [];
+        foreach ($module['checked'] as $item) {
+            $uri = $module['uri'][$item];
+            $data[$uri] = 'Module\\'.$item;
+        }
+        ModuleController::installModule($data, [
+            'install', 'seeder'
+        ]);
+        ModuleGenerator::renderConfigs('config', [
+            'db' => config('db'),
+            'modules' => $data,
+            'auth' => [
+                'home' => '/auth',
+                'model' => 'Module\Auth\Domain\Model\UserModel',
+            ],
+            'view' => [
+                'asset_directory' => 'assets',
+            ],
+            'i18n' => [
+                'language' => null//'zh-cn',
+            ]
+        ]);
+        try {
+            AuthRepository::createAdmin($user['email'], $user['password']);
+        } catch (\Exception $ex) {
+        }
+        return $this->jsonSuccess([
             'url' => url('./complete')
         ]);
     }
