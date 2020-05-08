@@ -49,8 +49,7 @@ $this->registerCssFile('@slider.css')
                         </a>
                     </div>
                     <div class="desc">
-                        让双脚每天享受15分钟桑拿
-                        
+                        <?=$goods->brief?> 
                     </div>
                 </div>
                 <div class="price-box">
@@ -70,7 +69,7 @@ $this->registerCssFile('@slider.css')
                         ･ 支持30天无忧退换货    
                         ･ 48小时快速退款    
                         ･ 满88元免邮费    
-                        ･ 网易自营品牌    
+                        ･ 自营品牌    
                         ･ 国内部分地区无法配送 
                     </div>
                 </div>

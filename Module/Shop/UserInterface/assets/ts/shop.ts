@@ -702,6 +702,14 @@ function bindCashier() {
             box.html(html);
             refreshFooter();
         });
+    }).on('click', '.address-edit [data-action="cancel"]', function() {
+        let $this = $(this);
+        let box = $this.closest('.panel-body');
+        $.post(BASE_URI + 'cashier/address', {
+            id: $this.attr('data-prev')
+        }, (html: string) => {
+            box.html(html);
+        });
     }).on('click', '.address-view [data-action="edit"]', function(e) {
         e.preventDefault();
         let $this = $(this);
@@ -710,8 +718,39 @@ function bindCashier() {
             box.html(html);
             bindRegion();
         });
+    }).on('click', '.address-view [data-action="dialog"]', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        let box = $this.closest('.panel-body');
+        $.get($this.attr('href'), html => {
+            addressDialog.find('.dialog-body').html(html);
+            addressDialog.show();
+        });
     }).on('click', '.shipping-box [name="shipping"],.payment-box [name="payment"]', function() {
         refreshFooter();
     });
     bindRegion();
+    let addressDialog = $('#address-dialog').dialog();
+    addressDialog.box.on('click', '.address-item', function() {
+        $(this).addClass('active').siblings('.address-item').removeClass('active');
+    }).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        $.get($(this).attr('href'), html => {
+            addressDialog.find('.dialog-body').html(html);
+        });
+    });
+    addressDialog.on('done', function() {
+        let item = this.find('.address-item.active');
+        if (item.length < 1) {
+            Dialog.tip('请选择地址');
+            return;
+        }
+        this.close();
+        $.post(BASE_URI + 'cashier/address', {
+            id: item.attr('data-id')
+        }, (html: string) => {
+            pageBox.find('.address-view').closest('.panel-body').html(html);
+            refreshFooter();
+        });
+    });
 }

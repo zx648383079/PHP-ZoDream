@@ -7,18 +7,17 @@ use Zodream\Template\View;
     <div class="header-top">
         <div class="container">
             <div class="top-left">
-                <a href="">
+                <a href="<?=$this->url('./')?>">
                     好的生活，没那么贵
                 </a>
                 <div class="top-notice">
                     <i class="fa fa-volume-up"></i>
                     <ul class="notice-list">
+                        <?php foreach($notice_list as $item):?>
                         <li>
-                            <a href="">双十一期间严选客服服务时间通知</a>
+                            <a href="<?=$this->url('./article', ['id' => $item['id']])?>"><?=$item['title']?></a>
                         </li>
-                        <li>
-                            <a href="">双十一期间严选发货时效说明</a>
-                        </li>
+                        <?php endforeach;?>
                     </ul>
                 </div>
                 
@@ -58,7 +57,7 @@ use Zodream\Template\View;
     <div class="header-main">
         <div class="container">
             <div class="header-logo">
-                <img src="http://yanxuan.nosdn.127.net/3db3a7a0bae656df51581fa14f4061d9.gif" alt="">
+                <img src="<?=$this->asset('images/wap_logo.png')?>" alt="">
             </div>
             
             <ul class="header-nav">

@@ -19,7 +19,7 @@ use Module\Shop\Domain\Entities\ArticleEntity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class ArticleModel extends ArticleEntity {
+class ArticleSimpleModel extends ArticleEntity {
 
     protected $append = ['category'];
 
@@ -29,11 +29,7 @@ class ArticleModel extends ArticleEntity {
         return $this->hasOne(ArticleCategoryModel::class, 'id', 'cat_id');
     }
 
-    public static function getHelps(){
-        $data = ArticleCategoryModel::where('parent_id', 2)->all();
-        foreach ($data as $item) {
-            $item->children = static::where('cat_id', $item->id)->all();
-        }
-        return $data;
+    public static function query() {
+        return parent::query()->select(self::THUMB_MODE);
     }
 }

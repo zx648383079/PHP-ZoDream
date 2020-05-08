@@ -104,35 +104,6 @@ class AdModel extends Model {
     }
 
     public static function banners($isMobile = true) {
-        if (!$isMobile) {
-            return [
-                [
-                    'id' => 1,
-                    'content' => 'https://yanxuan.nosdn.127.net/e3f2098930e91ef57619e8341c99d07e.jpg?imageView&quality=95&thumbnail=1920x420'
-                ],
-                [
-                    'id' => 2,
-                    'content' => 'https://yanxuan.nosdn.127.net/f8a21857bac1176827980affd311b576.jpg?imageView&quality=95&thumbnail=1920x420'
-                ],
-                [
-                    'id' => 3,
-                    'content' => 'https://yanxuan.nosdn.127.net/e397b44d76fe62db24f201fa8c812d31.jpg?imageView&quality=95&thumbnail=1920x420'
-                ],
-            ];
-        }
-        return [
-            [
-                'id' => 1,
-                'content' => 'https://yanxuan.nosdn.127.net/08c22f34ed0445208c8bbf80cb769d06.jpg?imageView&quality=75&thumbnail=750x0'
-            ],
-            [
-                'id' => 2,
-                'content' => 'https://yanxuan.nosdn.127.net/8271dce9c32d58eb8598c1408acf6132.jpg?imageView&quality=75&thumbnail=750x0'
-            ],
-            [
-                'id' => 3,
-                'content' => 'https://yanxuan.nosdn.127.net/3693d1b5948a2072fdf3524668e11993.jpg?imageView&quality=75&thumbnail=750x0'
-            ],
-        ];
+        return self::getAds($isMobile ? 2 : 1);
     }
 }

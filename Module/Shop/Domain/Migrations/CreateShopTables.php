@@ -258,6 +258,43 @@ class CreateShopTables extends Migration {
         });
     }
 
+    public function seed() {
+        $count = AdPositionModel::query()->whereIn('id', [1,2])->count();
+        if ($count < 1) {
+            AdPositionModel::query()
+                ->insert([
+                    [
+                        'id' => 1,
+                        'name' => 'PC 首页 banner',
+                        'width' => '100%',
+                        'height' => '100%',
+                        'template' => '{url}',
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => 'Mobile 首页 banner',
+                        'width' => '100%',
+                        'height' => '100%',
+                        'template' => '{url}',
+                    ]
+                ]);
+        }
+        $count = ArticleCategoryModel::query()->whereIn('id', [1, 2])->count();
+        if ($count < 1) {
+            ArticleCategoryModel::query()
+                ->insert([
+                    [
+                        'id' => 1,
+                        'name' => '通知中心',
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => '帮助中心',
+                    ],
+                ]);
+        }
+    }
+
     /**
      * 物流发货
      */

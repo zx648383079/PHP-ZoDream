@@ -67,4 +67,12 @@ class AddressRepository {
         }
         return Address::defaultId($id);
     }
+
+    public static function getDefault() {
+        $id = Address::defaultId();
+        if ($id > 0) {
+            return Address::where('id', $id)->where('user_id', auth()->id())->first();
+        }
+        return Address::where('user_id', auth()->id())->first();
+    }
 }

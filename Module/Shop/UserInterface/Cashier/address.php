@@ -20,7 +20,7 @@ defined('APP_DIR') or exit();
             <?=$address->region->full_name?> <?=$address->address?></div>
     </div>
     <div class="right">
-        <p><a href="">地址切换</a></p>
-        <p><a href="<?=$this->url('./cashier/edit_address')?>" class="btn" data-action="edit">新建地址</a></p>
+        <p><a href="<?=$this->url('./cashier/address_list', ['selected' => $address->id])?>" data-action="dialog">地址切换</a></p>
+        <p><a href="<?=$this->url('./cashier/edit_address', ['prev' => $address->id])?>" class="btn" data-action="edit">新建地址</a></p>
     </div>
 </div>

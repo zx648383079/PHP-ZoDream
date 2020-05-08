@@ -20,12 +20,14 @@ class CashierController extends Controller {
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./', '请选择结算的商品');
         }
-        $address = AddressModel::where('user_id', auth()->id())->first();
+        $address = AddressRepository::getDefault();
         $order = OrderModel::preview($goods_list);
         $order->setAddress($address);
         $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
         $payment_list = PaymentModel::all();
-        return $this->sendWithShare()->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list'));
+        return $this->sendWithShare()->show(compact('goods_list',
+            'address', 'order', 'shipping_list',
+            'payment_list'));
     }
 
 
@@ -53,10 +55,19 @@ class CashierController extends Controller {
         return $this->jsonSuccess($data);
     }
 
-    public function editAddressAction($id = 0) {
+    public function editAddressAction($id = 0, $prev = 0) {
         $this->layout = false;
         $address = $id > 0 ? AddressModel::findOrNew($id) : null;
-        return $this->show('addressEdit', compact('address'));
+        if ($id > 0) {
+            $prev = $id;
+        }
+        return $this->show('addressEdit', compact('address', 'prev'));
+    }
+
+    public function addressAction($id) {
+        $this->layout = false;
+        $address = AddressModel::find($id);
+        return $this->show(empty($address) ? 'addressEdit' : 'address', compact('address'));
     }
 
     public function saveAddressAction() {
@@ -68,6 +79,12 @@ class CashierController extends Controller {
         }
         $this->layout = false;
         return $this->show('address', compact('address'));
+    }
+
+    public function addressListAction($selected) {
+        $this->layout = false;
+        $address_list = AddressRepository::getList();
+        return $this->show('addressList', compact('address_list', 'selected'));
     }
 
     public function payAction($id) {

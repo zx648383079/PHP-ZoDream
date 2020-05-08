@@ -98,18 +98,13 @@ $this->registerJs($js)
     </div>
 </div>
 
-<div class="dialog dialog-box" data-type="dialog">
+<div id="address-dialog" class="dialog dialog-box" data-type="dialog">
     <div class="dialog-header">
         <div class="dialog-title">选择地址</div>
         <i class="fa fa-close dialog-close"></i>
     </div>
     <div class="dialog-body">
-        <div class="address-item active">
-            <div>收货人: 111</div>
-            <div>联系方式：186****1369</div>
-            <div>收货地址：上海市上海市长宁区江苏路街道2369号405</div>
-            <span>默认地址</span>
-        </div>
+        
     </div>
     <div class="dialog-footer">
         <button type="button" class="dialog-yes">确定</button><button type="button" class="dialog-close">取消</button>

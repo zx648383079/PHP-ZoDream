@@ -32,6 +32,9 @@ defined('APP_DIR') or exit();
             </div>
             设为默认
         </div>
-        <button type="button" class="btn" data-action="save">保存地址</button><button type="button" class="btn btn-cancel">取消</button>
+        <button type="button" class="btn" data-action="save">保存地址</button>
+        <?php if($prev > 0):?>
+            <button type="button" class="btn btn-cancel" data-action="cancel" data-prev="<?=intval($prev)?>">取消</button>
+        <?php endif;?>
     </div>
 </div>

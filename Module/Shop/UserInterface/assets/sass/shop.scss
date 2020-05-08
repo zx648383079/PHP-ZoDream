@@ -185,6 +185,9 @@ header {
         }
         .header-logo {
             text-align: center;
+            img {
+                height: 140px;
+            }
         }
         .header-nav {
             line-height: 1;
@@ -2149,6 +2152,25 @@ header {
     }
     .pay-btn {
         text-align: right;
+    }
+}
+
+.dialog-box {
+    .address-item {
+        position: relative;
+        width: 525px;
+        margin-bottom: 10px;
+        .default {
+            color: #b4a078;
+            position: absolute;
+            right: 30px;
+            bottom: 20px;
+            font-size: 12px;
+        }
+        &.active {
+            border: 2px solid #b4a078;
+            padding: 19px 24px;
+        }
     }
 }
 

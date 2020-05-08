@@ -3,6 +3,7 @@ namespace Module\Shop\Service;
 
 use Module\ModuleController;
 use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Repositories\ArticleRepository;
 use Module\Shop\Module;
 
 class Controller extends ModuleController {
@@ -15,7 +16,8 @@ class Controller extends ModuleController {
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();
         $cart = Module::cart();
-        $this->send(compact('categories_tree', 'cart'));
+        $notice_list = ArticleRepository::getNotices();
+        $this->send(compact('categories_tree', 'cart', 'notice_list'));
         return $this;
     }
 
