@@ -493,6 +493,7 @@ footer {
     right: 0;
     bottom: 0;
     top: 0;
+    z-index: 99;
     background-color: rgba($color: #e97474, $alpha: .7);
     .dialog-close {
         @include icon("\f00d", 48px);
