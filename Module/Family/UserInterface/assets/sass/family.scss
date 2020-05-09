@@ -34,4 +34,34 @@
     .dialog-new {
         display: none;
     }
+    .dialog-result {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .family-item {
+        line-height: 30px;
+        border-bottom: 1px solid #ccc;
+        &:hover {
+            border: 1px solid red;
+        }
+        &.active {
+            background-color: rgb(185, 243, 230);
+        }
+    }
+}
+
+.clan-item {
+    background-color: #fff;
+    display: inline-block;
+    margin: 5px;
+    .cover {
+        img {
+            width: 100px;
+            height: 120px;
+        }
+    }
+    .name {
+        line-height: 30px;
+        text-align: center;
+    }
 }

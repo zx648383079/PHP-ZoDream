@@ -11,20 +11,20 @@ $canDo = auth()->user()->isAdministrator();
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label for="keywords">姓名</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="搜索姓名">
+            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="搜索姓名" value="<?=$this->text($keywords)?>">
         </div>
         <div class="input-group">
             <label>家族</label>
             <select name="clan_id">
-                <option value="">请选择</option>
+                <option value="0">请选择</option>
                 <?php foreach($clan_list as $item):?>
-                <option value="<?=$item->id?>"><?=$item->name?></option>
+                <option value="<?=$item->id?>"<?=$item->id == $clan_id ? 'selected' : ''?>><?=$item->name?></option>
                 <?php endforeach;?>
             </select>
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/family/create')?>">新增族人</a>
+    <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/family/create', ['clan_id' => $clan_id])?>">新增族人</a>
 </div>
 
 

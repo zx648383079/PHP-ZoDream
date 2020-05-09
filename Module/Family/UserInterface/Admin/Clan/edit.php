@@ -10,6 +10,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'. '族谱';
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/clan/save')?>
     <?=Form::text('name', true)?>
+    <?=Form::file('cover')?>
     <?=Form::textarea('description')?>
 
     <button type="submit" class="btn btn-success">确认保存</button>

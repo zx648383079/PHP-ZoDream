@@ -46,4 +46,8 @@ class FamilySpouseModel extends Model {
         ];
     }
 
+    public function spouse() {
+	    return $this->hasOne(FamilyModel::class, 'id', 'spouse_id');
+    }
+
 }

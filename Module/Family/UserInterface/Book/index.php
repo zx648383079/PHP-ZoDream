@@ -6,5 +6,5 @@ $this->title = '族谱';
 $this->registerCssFile('@family.css');
 ?>
 <div class="book-box">
-<?php $this->extend('./page');?>
+    <?php $this->extend('./page');?>
 </div>

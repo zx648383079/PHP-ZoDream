@@ -16,6 +16,7 @@ use Domain\Model\Model;
  * @property integer $group_id
  * @property integer $level_id
  * @property string $lifetime
+ * @property integer $clan_id
  * @property integer $status
  * @property integer $user_id
  * @property integer $created_at

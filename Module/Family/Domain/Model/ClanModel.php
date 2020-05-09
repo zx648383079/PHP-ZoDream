@@ -7,6 +7,7 @@ use Domain\Model\Model;
  * @property integer $id
  * @property string $name
  * @property string $description
+ * @property string $cover
  * @property integer $status
  * @property integer $user_id
  * @property integer $created_at
@@ -23,6 +24,7 @@ class ClanModel extends Model {
             'name' => 'required|string:0,100',
             'description' => 'string:0,255',
             'status' => 'int:0,127',
+            'cover' => 'string',
             'user_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -35,9 +37,18 @@ class ClanModel extends Model {
             'name' => '族谱名',
             'description' => '简介',
             'status' => '状态',
+            'cover' => '封面',
             'user_id' => 'User Id',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getCoverAttribute() {
+        $cover = $this->getAttributeSource('cover');
+        if (empty($cover)) {
+            $cover = '/assets/images/book_default.jpg';
+        }
+        return url()->asset($cover);
     }
 }

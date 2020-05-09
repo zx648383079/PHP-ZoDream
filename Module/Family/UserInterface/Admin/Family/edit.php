@@ -29,24 +29,22 @@ $this->registerJs($js);
                 <?=Form::text('secondary_name')?>
                 <?=Form::select('sex', ['其他', '女', '男'], true)?>
                 <?=Form::select('clan_id', [$clan_list], true)?>
-                <?=Form::select('parent_id', [$parent_list, ['请选择']])?>
-                <?=Form::select('mother_id', ['请选择'])?>
 
-                <!-- <div class="input-group">
+                <div class="input-group">
                     <label for="parent_id">生父</label>
-                    <div class="">
+                    <div class="" data-action="family">
                         <span><?=$model->father ? $model->father->name : '【请选择】'?></span>
                         <input type="hidden" name="parent_id" value="<?=$model->parent_id?>">
                     </div>
-                </div> -->
+                </div>
 
-                <!-- <div class="input-group">
+                <div class="input-group">
                     <label for="mother_id">生母</label>
-                    <div class="">
+                    <div class="" data-action="family">
                         <span><?=$model->mother ? $model->mother->name : '【请选择】'?></span>
                         <input type="hidden" name="mother_id" value="<?=$model->mother_id?>">
                     </div>
-                </div> -->
+                </div>
                 <div class="input-group">
                     <label for="birth_at">一生</label>
                     <div class="">
@@ -63,6 +61,13 @@ $this->registerJs($js);
                 <textarea id="content-box" name="lifetime" rows="10" style="width: 100%;resize: vertical;"><?=$model->lifetime?></textarea>
             </div>
             <div class="zd-tab-item">
+                <?php foreach($spouse_list as $item):?>
+                <div class="spouse-item">
+                    [妻]<?=$item->spouse->name?>(<?=$item->start_at?>~<?=$item->end_at?>) 
+                    <i class="fa fa-times"></i>
+                </div>
+                <?php endforeach;?>
+                <?php if(empty($spouse_list)):?>
                 <div class="spouse-item">
                     <?=Form::select('spouse_id', [$parent_list, ['请选择']])?>
                     <?=Form::select('spouse_relation[]', ['妻'])?>
@@ -70,14 +75,17 @@ $this->registerJs($js);
                         <label for="start_at">婚姻时间</label>
                         <div class="">
                             <input type="text" id="start_at" class="form-control " name="start_at[]">
-
                             ~
-
                             <input type="text" id="end_at" class="form-control " name="end_at[]">
-
                         </div>
                     </div>
                 </div>
+                <?php else:?>
+                <div class="spouse-add">
+                    <i class="fa fa-plus"></i>
+                </div>
+                <?php endif;?>
+                
             </div>
         </div>
     </div>

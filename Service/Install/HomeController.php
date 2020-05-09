@@ -65,7 +65,9 @@ class HomeController extends Controller {
         config([
             'db' => $data['db']
         ]);
-        ModuleGenerator::renderConfigs('config', []);
+        ModuleGenerator::renderConfigs('config', [
+            'db' => $data['db']
+        ]);
         GenerateModel::schema(app('request')->get('db.database'))
             ->create();
         unset($data['view']);
