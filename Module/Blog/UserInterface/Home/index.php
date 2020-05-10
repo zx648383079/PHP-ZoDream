@@ -6,7 +6,10 @@ $this->title = __('blog');
 $js = <<<JS
 bindBlogPage();
 JS;
-$data = [];
+$data = [
+    'keywords' => __('site keywords'),
+    'description' => __('site description')
+];
 if (!empty($term)) {
     $data = [
         'keywords' => $term->keywords,
@@ -92,6 +95,10 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
         </div>
         <div class="term-desc"><?=$term->description?></div>
     </div>
+    <?php elseif (!empty($tag)):?>
+    <h2 class="book-header"><?=$this->text($tag)?></h2>
+    <?php elseif (!empty($programming_language)):?>
+    <h2 class="book-header"><?=$this->text($programming_language)?></h2>
     <?php endif;?>
     <?php foreach ($blog_list as $item):?>
     <dl class="book-item">

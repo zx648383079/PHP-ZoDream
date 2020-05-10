@@ -6,7 +6,7 @@ use Zodream\Html\Form;
 
 $this->title = __('About Us');
 $this->set([
-    'keywords' => '关于',
+    'keywords' => __('About Us'),
     'description' => '本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。'
 ]);
 ?>

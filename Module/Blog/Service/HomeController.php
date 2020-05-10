@@ -37,7 +37,7 @@ class HomeController extends Controller {
         }
         return $this->show(compact('blog_list',
             'cat_list', 'sort', 'category', 'keywords',
-            'comment_list', 'new_list', 'term'));
+            'comment_list', 'new_list', 'term', 'tag', 'programming_language'));
     }
 
     public function detailAction($id) {

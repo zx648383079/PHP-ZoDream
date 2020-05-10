@@ -6,7 +6,7 @@ use Zodream\Html\Form;
 
 $this->title = __('friend link');
 $this->set([
-    'keywords' => '友情链接,友链',
+    'keywords' => __('friend link'),
     'description' => '申请前请收录本站，接受新站，拒绝一切非法网站。'
 ]);
 

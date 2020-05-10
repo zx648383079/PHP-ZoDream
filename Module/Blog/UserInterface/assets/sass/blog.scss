@@ -122,6 +122,21 @@ $acolor: $fg;
                 z-index: 99;
             }
         }
+        .book-header {
+            font-size: 16px;
+            line-height: 40px;
+            border-bottom: 1px solid #eee;
+            color: #484848;
+            font-weight: normal;
+            margin-bottom: 10px;
+            &::after {
+                display: block;
+                content: " ";
+                background: #000;
+                width: 60px;
+                height: 3px;
+            }
+        }
         .book-term {
             .term-info {
                 position: relative;

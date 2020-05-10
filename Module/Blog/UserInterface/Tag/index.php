@@ -3,7 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('Tags');
-$this->extend('layouts/header');
+$this->extend('layouts/header', [
+    'keywords' => __('Tags'),
+    'description' => __('Tags')
+]);
 ?>
 
 <div class="book-title">
