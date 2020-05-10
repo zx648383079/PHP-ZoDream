@@ -2,21 +2,35 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = __('blog');
-$js = <<<JS
-bindBlogPage();
-JS;
+$sort_list = ['recommend' => __('Best'), 'new' => __('New'), 'hot' => __('Hot')];
+$tags = [__('blog')];
 $data = [
     'keywords' => __('site keywords'),
     'description' => __('site description')
 ];
 if (!empty($term)) {
-    $data = [
-        'keywords' => $term->keywords,
-        'description' => $term->description,
-    ];
+    $tags[] = $term->name;
+    $data['description'] = $term->description;
+    if (!empty($term->keywords)) {
+        $data['keywords'] = $term->keywords;
+    }
 }
-$this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
+if (!empty($tag)) {
+    $tags[] = $tag;
+    $data['keywords'] = $tag;
+}
+if (!empty($programming_language)) {
+    $tags[] = $programming_language;
+    $data['keywords'] = $programming_language;
+}
+if (!empty($sort) && isset($sort_list[$sort])) {
+    $tags[] = $sort_list[$sort];
+}
+$this->title = implode('|', array_reverse($tags));
+$js = <<<JS
+bindBlogPage();
+JS;
+$this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY);
 ?>
 
 <div class="book-title">
@@ -37,7 +51,7 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     </ul>
 </div>
 
-    <div class="book-sidebar">
+<div class="book-sidebar">
     <div class="book-chapter">
         <ul>
             <?php foreach ($cat_list as $item): ?>
@@ -79,11 +93,11 @@ $this->extend('layouts/header', $data)->registerJs($js, View::JQUERY_READY);
     <div class="book-sort">
         <a href="<?=$this->url('./tag')?>"><?=__('Tags')?></a>
         <a href="<?=$this->url('./archives')?>"><?=__('Archives')?></a>
-        <?php foreach (['recommend' => 'Best', 'new' => 'New', 'hot' => 'Hot'] as $key => $item):?>
+        <?php foreach ($sort_list as $key => $item):?>
             <?php if ($key == $sort):?>
-                <a class="active" href="<?=$this->url(['sort' => $key])?>"><?=__($item)?></a>
+                <a class="active" href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
             <?php else:?>
-                <a href="<?=$this->url(['sort' => $key])?>"><?=__($item)?></a>
+                <a href="<?=$this->url(['sort' => $key])?>"><?=$item?></a>
             <?php endif;?>
         <?php endforeach;?>
     </div>

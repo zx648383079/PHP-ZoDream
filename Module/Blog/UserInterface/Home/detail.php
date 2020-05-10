@@ -24,10 +24,10 @@ if ($blog->edit_type < 1) {
         ->registerJsFile('ueditor/ueditor.parse.min.js')
         ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
 }
-$this->extend('layouts/header', [
-        'keywords' => $blog->keywords,
-        'description' => $blog->description,
-    ])
+$this->set([
+    'keywords' => $blog->keywords,
+    'description' => $blog->description,
+])->extend('layouts/header')
     ->registerJsFile('@jquery.sideNav.min.js')
     ->registerJs($js, View::JQUERY_READY);
 ?>

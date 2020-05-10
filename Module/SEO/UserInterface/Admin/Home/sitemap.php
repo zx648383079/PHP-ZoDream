@@ -7,7 +7,7 @@ $data = [];
 foreach ($map as $item) {
     $data[] = $item['url'];
 }
-$data[] = sprintf('生成成功！共 %d 条', count($data));
+$data[] = sprintf('生成成功！共 %d 条，<a href="/sitemap.xml" target="_blank">👉点击查看</a>', count($data));
 $data = json_encode($data);
 $js = <<<JS
 renderCMD({$data});
@@ -17,4 +17,5 @@ $this->registerJs($js, View::JQUERY_READY);
 
 <div class="cmd-box">
 
+    
 </div>

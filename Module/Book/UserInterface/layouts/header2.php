@@ -2,9 +2,12 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerCssFile('@font-awesome.min.css')
-  ->registerCssFile('@dialog.css')
-  ->registerCssFile('@book.css')->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
+$this->registerCssFile([
+    '@font-awesome.min.css',
+    '@dialog.css',
+    '@zodream.css',
+    '@book.css'
+  ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
 <html lang="<?=$this->get('language', 'zh-CN')?>">

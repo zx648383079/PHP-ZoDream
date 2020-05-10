@@ -24,7 +24,9 @@ $canDo = auth()->user()->isAdministrator();
     <?php foreach($term_list as $item):?>
         <tr>
             <td><?=$item->id?></td>
-            <td><?=$item->name?></td>
+            <td>
+                <a href="<?=$this->url('./@admin/blog', ['term_id' => $item->id])?>"><?=$item->name?></a>
+            </td>
             <td><?=$item->blog_count?></td>
             <td>
                 <?php if($canDo):?>
