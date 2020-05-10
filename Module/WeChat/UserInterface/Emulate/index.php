@@ -22,6 +22,16 @@ $this->registerJs($js);
     <div class="box-header">
         <i class="fa fa-arrow-left"></i>
         <?=$wx->name?>
+        <div class="header-right">
+            <i class="fa fa-ellipsis-v"></i>
+            <div class="sub-box">
+                <div class="qr">
+                    <img src="<?=$wx->qrcode ?: $this->asset('images/wx.jpg')?>" alt="<?=$wx->name?>">
+                </div>
+                <div class="name"><?=$wx->name?></div>
+                <div class="desc"><?=$wx->description?></div>
+            </div>
+        </div>
     </div>
     <div class="scroll-body">
         <?php foreach($news_list as $item):?>

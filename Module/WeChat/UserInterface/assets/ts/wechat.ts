@@ -143,6 +143,8 @@ function bindEmulate(wid: number) {
     };
     box.on('click', '.box-header .fa-arrow-left', function() {
         history.back();
+    }).on('click', '.header-right .fa', function() {
+        $(this).next('.sub-box').toggle();
     });
     let footer = box.find('.box-footer').on('click', '.fa-list', function() {
         footer.removeClass('toggle-input').removeClass('toggle-more');
