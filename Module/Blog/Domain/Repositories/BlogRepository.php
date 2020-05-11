@@ -25,8 +25,40 @@ class BlogRepository {
                                    $user = null, $language = null, $programming_language = null,
                                    $tag = null, $per_page = 20) {
         /** @var Page $page */
-        $page = BlogPageModel::with('term', 'user')
-            ->where('open_type', '<>', BlogModel::OPEN_DRAFT)
+        $page = self::bindQuery(BlogPageModel::with('term', 'user'),
+            $sort, $category, $keywords,
+            $user, $language, $programming_language,
+            $tag)->page($per_page);
+        $items = self::formatLanguage($page, BlogPageModel::with('term', 'user'));
+        return $page->setPage($items);
+    }
+
+    public static function getSimpleList($sort = 'new', $category = null, $keywords = null,
+                                   $user = null, $language = null, $programming_language = null,
+                                   $tag = null, $limit = 5) {
+        /** @var Page $page */
+        $page = self::bindQuery(BlogSimpleModel::query(), $sort, $category, $keywords,
+            $user, $language, $programming_language,
+            $tag)
+            ->limit($limit ?? 5)->all();
+        return self::formatLanguage($page, BlogSimpleModel::query());
+    }
+
+    /**
+     * @param Query $query
+     * @param string $sort
+     * @param null $category
+     * @param null $keywords
+     * @param null $user
+     * @param null $language
+     * @param null $programming_language
+     * @param null $tag
+     * @return Query
+     */
+    private static function bindQuery(Query $query, $sort = 'new', $category = null, $keywords = null,
+                                      $user = null, $language = null, $programming_language = null,
+                                      $tag = null) {
+        return $query->where('open_type', '<>', BlogModel::OPEN_DRAFT)
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('term_id', intval($category));
             })
@@ -34,13 +66,13 @@ class BlogRepository {
                 $query->where('user_id', intval($user));
             })
             ->when(!empty($sort), function ($query) use ($sort) {
-                if ($sort == 'new') {
+                if ($sort === 'new') {
                     return $query->orderBy('created_at', 'desc');
                 }
-                if ($sort == 'recommend') {
+                if ($sort === 'recommend' || $sort === 'best') {
                     return $query->orderBy('recommend', 'desc');
                 }
-                if ($sort == 'hot') {
+                if ($sort === 'hot') {
                     return $query->orderBy('comment_count', 'desc');
                 }
             })->when(!empty($keywords), function ($query) {
@@ -58,10 +90,7 @@ class BlogRepository {
                     return;
                 }
                 $query->whereIn('id', $ids);
-            })
-            ->page($per_page);
-        $items = self::formatLanguage($page, BlogPageModel::with('term', 'user'));
-        return $page->setPage($items);
+            });
     }
 
     /**
@@ -70,8 +99,8 @@ class BlogRepository {
      * @return BlogSimpleModel[]
      */
     public static function getNew($limit = 5) {
-        return self::formatLanguage(
-            BlogSimpleModel::where('parent_id', 0)->orderBy('created_at desc')->limit($limit ?? 5)->all(), BlogSimpleModel::query());
+        return self::getSimpleList('new',
+            0, null, 0, null, null, null, $limit);
     }
     /**
      * 获取热门文章
@@ -79,8 +108,8 @@ class BlogRepository {
      * @return BlogSimpleModel[]
      */
     public static function getHot($limit = 5) {
-        return self::formatLanguage(
-            BlogSimpleModel::where('parent_id', 0)->orderBy('comment_count desc')->limit($limit ?? 5)->all(), BlogSimpleModel::query());
+        return self::getSimpleList('hot',
+            0, null, 0, null, null, null, $limit);
     }
     /**
      * 获取推荐文章
@@ -88,8 +117,8 @@ class BlogRepository {
      * @return BlogSimpleModel[]
      */
     public static function getBest($limit = 5) {
-        return self::formatLanguage(
-            BlogSimpleModel::where('parent_id', 0)->orderBy('recommend desc')->limit($limit ?? 5)->all(), BlogSimpleModel::query());
+        return self::getSimpleList('best',
+            0, null, 0, null, null, null, $limit);
     }
 
     public static function getArchives() {
@@ -113,6 +142,9 @@ class BlogRepository {
     }
 
     public static function formatLanguage($items, Query $query) {
+        if (empty($items)) {
+            return [];
+        }
         $lang = trans()->getLanguage();
         if (stripos($lang, 'zh') !== false) {
             return is_array($items) ? $items : $items->getIterator();

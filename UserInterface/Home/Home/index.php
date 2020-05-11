@@ -5,8 +5,10 @@ use Zodream\Template\View;
 $this->title = __('home');
 $this->set([
     'keywords' => __('site keywords'),
-    'description' => __('site description')
-]);
+    'description' => __('site description'),
+    'layout_search_url' => $this->url('/blog'),
+    'rss_show' => true
+])->registerJs(sprintf('var SUGGESTION_URI = "%s";', $this->url('./blog/suggestion', false)), View::HTML_HEAD);
 $module_list = [
     [
         'blog',
@@ -86,7 +88,7 @@ $demo_list = [
                     </div>
                 </div>
                 <div class="panel-body">
-                    <?=$this->node('blog-panel', ['limit' => 6])?>
+                    <?=$this->node('blog-panel', ['limit' => 8])?>
                 </div>
             </div>
         </div>
@@ -98,6 +100,72 @@ $demo_list = [
                 <div class="panel-body scoll-box">
                     <?=$this->node('note-panel', ['limit' => 12])?>
                     <a href="<?=$this->url('./note')?>" class="more"><?=__('View More...')?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <a href="<?=$this->url('./blog', ['programming_language' => 'PHP'])?>">php开发</a>
+                </div>
+                <div class="panel-body">
+                    <?=$this->node('blog-panel', ['limit' => 6, 'lang' => 'PHP'])?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <a href="<?=$this->url('./blog', ['category' => 3])?>">编程入门</a>
+                </div>
+                <div class="panel-body">
+                    <?=$this->node('blog-panel', ['limit' => 6, 'category' => 3])?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <a href="<?=$this->url('./blog', ['tag' => 'vue'])?>">vue.js教程</a>
+                </div>
+                <div class="panel-body">
+                    <?=$this->node('blog-panel', ['limit' => 6, 'tag' => 'vue'])?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <a href="<?=$this->url('./blog', ['programming_language' => 'TypeScript'])?>">typescript</a>
+                </div>
+                <div class="panel-body">
+                    <?=$this->node('blog-panel', ['limit' => 6, 'lang' => 'TypeScript'])?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <a href="<?=$this->url('./blog', ['tag' => 'uwp'])?>">uwp</a>
+                </div>
+                <div class="panel-body">
+                    <?=$this->node('blog-panel', ['limit' => 6, 'tag' => 'uwp'])?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <a href="<?=$this->url('./blog', ['tag' => 'angular'])?>">angular</a>
+                </div>
+                <div class="panel-body">
+                    <?=$this->node('blog-panel', ['limit' => 6, 'tag' => 'angular'])?>
                 </div>
             </div>
         </div>

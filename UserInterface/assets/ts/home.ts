@@ -1,3 +1,4 @@
+declare var SUGGESTION_URI: string;
 $(function() {
     let footer = $('footer'),
         diff = $(window).height() - footer.offset().top - footer.height();
@@ -11,10 +12,13 @@ $(function() {
         $.cookie('c_t', 1);
         $(this).closest('.dialog-cookie-tip').hide();
     });
+    if (typeof SUGGESTION_URI === 'undefined' && typeof BASE_URI !== 'undefined') {
+        SUGGESTION_URI = BASE_URI + 'suggestion';
+    }
     let searchDialog = $('.dialog-search'),
         refreshSuggestion = function(keywords: string) {
             const ul = searchDialog.find('.search-suggestion');
-            if (typeof BASE_URI === 'undefined') {
+            if (typeof SUGGESTION_URI === 'undefined') {
                 ul.hide();
                 return;
             }
@@ -22,7 +26,7 @@ $(function() {
                 ul.html('').hide();
                 return;
             }
-            $.getJSON(BASE_URI + 'suggestion', {
+            $.getJSON(SUGGESTION_URI, {
                 keywords
             }, data => {
                 if (data.code != 200) {

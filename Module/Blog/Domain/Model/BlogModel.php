@@ -129,6 +129,15 @@ class BlogModel extends BlogEntity {
             ->orderBy('created_at desc')->limit(5)->all();
     }
 
+    public function saveIgnoreUpdate() {
+        $isNew = $this->isNewRecord;
+        $row = $this->save();
+        if ($isNew) {
+            return $row;
+        }
+        return $row || isset($this->errors['data']);
+    }
+
     /**
      * 是否允许评论
      * @param $id

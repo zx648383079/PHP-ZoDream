@@ -2,7 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->registerCssFile([
+$this->set([
+    'rss_show' => true
+])->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
     '@blog.css'])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);

@@ -29,7 +29,9 @@ $this->registerCssFile([
         <meta name="Description" content="<?=$this->get('description')?>" />
         <meta name="author" content="zodream" />
         <link rel="icon" href="<?=$this->asset('images/favicon.png')?>">
-        <link rel="alternate" type="application/rss+xml" title="<?=__('site title')?>" href="<?=$this->url('/blog/rss', false)?>">
+        <?php if($this->has('rss_show')):?>
+            <link rel="alternate" type="application/rss+xml" title="<?=__('site title')?>" href="<?=$this->url('/blog/rss', false)?>">
+        <?php endif;?>
        <?=$this->header();?>
    </head>
    <body>

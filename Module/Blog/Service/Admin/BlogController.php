@@ -64,7 +64,7 @@ class BlogController extends Controller {
             }
         } 
         $model->parent_id = intval($model->parent_id);
-        if (!$model->save()) {
+        if (!$model->saveIgnoreUpdate()) {
             return $this->jsonFailure($model->getFirstError());
         }
         if ($model->parent_id < 1) {
