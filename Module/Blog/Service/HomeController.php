@@ -7,6 +7,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
+use Module\Blog\Domain\Repositories\TagRepository;
 use Module\Blog\Domain\Repositories\TermRepository;
 
 class HomeController extends Controller {
@@ -58,7 +59,9 @@ class HomeController extends Controller {
         $languages = BlogModel::where('parent_id', $parent_id)->asArray()->get('id', 'language');
         array_unshift($languages, ['id' => $parent_id, 'language' => 'zh']);
         $cat_list = TermRepository::get();
-        return $this->show(compact('blog', 'cat_list', 'languages'));
+        $tags = TagRepository::getTags($blog->id);
+        $relation_list = TagRepository::getRelationBlogs($blog->id);
+        return $this->show(compact('blog', 'cat_list', 'languages', 'tags', 'relation_list'));
     }
 
     public function logAction($blog) {

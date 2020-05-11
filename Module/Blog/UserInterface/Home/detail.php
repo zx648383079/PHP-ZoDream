@@ -137,6 +137,20 @@ $this->set([
     <?php endif;?>
 </div>
 
+<?php if($relation_list):?>
+<div class="panel">
+    <div class="panel-header">
+        <a href="<?=$this->url('./blog')?>"><?=__('Related Articles')?></a>
+    </div>
+    <div class="panel-body">
+        <?php foreach($relation_list as $item):?>
+            <div class="list-item"><a class="name" href="<?=$this->url('./', ['id' => $item->id])?>"><?=$item->title?></a><div class="time"><?=$item->created_at?></div></div>
+        <?php endforeach;?>
+    </div>
+</div>
+<?php endif;?>
+
+
 <?php if($blog->comment_status > 0):?>
 <div id="comments" class="book-footer comment">
     

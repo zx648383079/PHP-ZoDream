@@ -4,6 +4,7 @@ namespace Module\Blog\Domain\Model;
 use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Blog\Domain\Entities\BlogEntity;
+use Module\Blog\Domain\Repositories\BlogRepository;
 use Zodream\Helpers\Time;
 
 
@@ -118,9 +119,7 @@ class BlogModel extends BlogEntity {
     }
 
     public function toHtml() {
-        return cache()->getOrSet(sprintf('blog_%d_content', $this->id), function () {
-            return TagModel::replaceTag($this->id, HtmlExpand::toHtml($this->getAttributeValue('content'), $this->edit_type == 1));
-        }, 3600);
+        return BlogRepository::renderContent($this);
     }
 
     public function getHotComment() {

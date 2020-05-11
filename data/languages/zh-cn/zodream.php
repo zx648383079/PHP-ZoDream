@@ -69,6 +69,7 @@ return [
     'Best' => '推荐',
     'New' => '最新',
     'Hot' => '最热',
+    'Related Articles' => '相关文章',
     'Categories' => '分类',
     'Tags' => '标签',
     'Archives' => '归档',

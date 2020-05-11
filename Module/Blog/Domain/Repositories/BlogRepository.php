@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Repositories;
 
+use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
@@ -66,6 +67,10 @@ class BlogRepository {
                 $query->where('user_id', intval($user));
             })
             ->when(!empty($sort), function ($query) use ($sort) {
+                if (is_array($sort)) {
+                    // 增加直接放id
+                    return $query->whereIn('id', $sort);
+                }
                 if ($sort === 'new') {
                     return $query->orderBy('created_at', 'desc');
                 }
@@ -166,5 +171,11 @@ class BlogRepository {
             $args[] = isset($data[$item['id']]) ? $data[$item['id']] : $item;
         }
         return $args;
+    }
+
+    public static function renderContent(BlogModel $blog) {
+        return cache()->getOrSet(sprintf('blog_%d_content', $blog->id), function () use ($blog) {
+            return TagRepository::renderTags($blog->id, HtmlExpand::toHtml($blog->getAttributeValue('content'), $blog->edit_type == 1));
+        }, 3600);
     }
 }
