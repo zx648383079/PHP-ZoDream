@@ -317,6 +317,19 @@ $acolor: $fg;
                 margin-left: 20px;
             }
         }
+        .book-source,
+        .book-tags {
+            font-size: 14px;
+            font-weight: 100;
+            margin-top: 10px;
+            a {
+                color: #0474c8;
+                font-weight: 600;
+            }
+        }
+        .book-bottom {
+            margin-bottom: 20px;
+        }
         &.open {
             .content {
                 max-height: inherit;

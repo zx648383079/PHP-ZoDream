@@ -9,9 +9,8 @@ $weather_list = Weather::getList();
 $this->title = ($model->id > 0 ? '编辑' : '新增'). '文章';
 $configs = app('request')->isMobile() ?
     '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '{}';
-$tags = json_encode($tags);
 $js = <<<JS
-bindEdit({$configs}, {$tags});
+bindEdit({$configs});
 JS;
 
 $this->registerJs($js);
@@ -63,6 +62,9 @@ $this->registerJs($js);
                     <label>标签</label>
                     <div>
                         <select name="tag[]" id="tag-box" multiple style="width: 100%">
+                            <?php foreach($tags as $item):?>
+                            <option value="<?=$item['id']?>" selected><?=$item['name']?></option>
+                            <?php endforeach;?>
                         </select>
                     </div>
                 </div>

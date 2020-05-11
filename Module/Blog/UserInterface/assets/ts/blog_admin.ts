@@ -12,7 +12,7 @@ let autoDraft = () => {
     }, 3000);
 };
 
-function bindEdit(configs: any, tags = []) {
+function bindEdit(configs: any) {
     let editor: any,
         box = $('#editor-container');
     UE.delEditor('editor-container');
@@ -64,7 +64,6 @@ function bindEdit(configs: any, tags = []) {
                     return {
                         id: item.id,
                         text: item.name,
-                        selected: tags.indexOf(item.id) >= 0
                     }
                 }),
                 pagination: {

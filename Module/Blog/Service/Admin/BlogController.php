@@ -6,6 +6,7 @@ use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\Blog\Domain\Events\BlogUpdate;
+use Module\Blog\Domain\Repositories\TagRepository;
 
 class BlogController extends Controller {
 
@@ -31,7 +32,7 @@ class BlogController extends Controller {
             return $this->redirectWithMessage($this->getUrl('blog'), '博客不存在！');
         }
         $term_list = TermModel::select('id', 'name')->all();
-        $tags = $model->isNewRecord ? [] : TagRelationshipModel::where('blog_id', $id)->pluck('tag_id');
+        $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
         return $this->show(compact('model', 'term_list', 'tags'));
     }
 

@@ -97,7 +97,7 @@ $this->set([
         <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>
         <span class="type">
-            <a href="<?=HtmlExpand::toUrl($blog->source_url)?>">
+            <a href="<?=HtmlExpand::toUrl($blog->source_url)?>" title="<?=__('Reprint Tip')?>">
                 <i class="fa fa-link"></i><b><?=__('Reprint')?></b>
             </a>
         </span>
@@ -105,6 +105,24 @@ $this->set([
     </div>
     <div id="content" class="content style-type-<?=$blog->edit_type?>">
         <?php $this->extend('./content');?>
+    </div>
+    <div class="book-bottom">
+        <?php if($blog->type == 1):?>
+        <div class="book-source">
+            <span>转载于：</span>
+            <a href="<?=HtmlExpand::toUrl($blog->source_url)?>" target="_blank" title="<?=__('Reprint Tip')?>">
+                <?=$this->text($blog->source_url)?>
+            </a>
+        </div>
+        <?php endif;?>
+        <?php if($tags):?>
+        <div class="book-tags">
+            <span>标签：</span>
+            <?php foreach($tags as $item):?>
+                <a href="<?=$this->url('./', ['tag' => $item['name']])?>"><?=$item['name']?></a>，
+            <?php endforeach;?>
+        </div>
+        <?php endif;?>
     </div>
     <div class="toggle-open">
         <?=__('Click here to view')?> <i class="fa fa-angle-double-down"></i>
