@@ -286,13 +286,17 @@
     }
     pre {
         white-space: pre-wrap;
-        word-wrap: break-word;
+        word-wrap: normal !important;
+        overflow-x: auto;
         margin: 0;
+        background: rgba(127, 127, 127, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.18);
         > code {
-            background: rgba(127, 127, 127, 0.05);
+            white-space: pre !important;
             display: block;
             padding: 0.65rem 1rem;
-            border: 1px solid rgba(0, 0, 0, 0.18);
+            background-color: transparent;
+            border: none;
         }
         &:not(:first-child) {
             margin-top: 1rem;

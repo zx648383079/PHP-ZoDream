@@ -15,7 +15,7 @@ return [
     'Sorry, the page you are looking for could not be found.' => '抱歉，页面走丢了！',
     'site keywords' => 'zodream,个人日记,typescript,vue.js教程,php开发,php框架,uwp,angular,编程入门',
     'site description' => '简单的个人编程日记',
-    'site title' => 'zodream梦想开源',
+    'site title' => 'zodream梦想开源/个人编程日记',
     'Upload' => '上传',
     'Preview' => '预览',
     'Online' => '在线',
