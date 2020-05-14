@@ -52,21 +52,17 @@ class TagRepository {
         }
         $replace = [];
         $i = 0;
-        $content = preg_replace_callback('#<code[^\<\>]*>[\s\S]+?</code>#', function ($match) use (&$replace, &$i) {
-            $tag = 'ZO'.$i ++.'OZ';
-            $replace[$tag] = $match[0];
-            return $tag;
-        }, $content);
-        $content = preg_replace_callback('#<a[^\<\>]+>[\s\S]+?</a>#', function ($match) use (&$replace, &$i) {
-            $tag = 'ZO'.$i ++.'OZ';
-            $replace[$tag] = $match[0];
-            return $tag;
-        }, $content);
-        $content = preg_replace_callback('#<img[^\<\>]+>#', function ($match) use (&$replace, &$i) {
-            $tag = 'ZO'.$i ++.'OZ';
-            $replace[$tag] = $match[0];
-            return $tag;
-        }, $content);
+        foreach ([
+                     '#<code[^\<\>]*>[\s\S]+?</code>#',
+                     '#<a[^\<\>]+>[\s\S]+?</a>#',
+                     '#<img[^\<\>]+>#'
+                 ] as $pattern) {
+            $content = preg_replace_callback($pattern, function ($match) use (&$replace, &$i) {
+                $tag = '[ZO'.$i ++.'OZ]';
+                $replace[$tag] = $match[0];
+                return $tag;
+            }, $content);
+        }
         $content = str_replace($tags, array_map(function ($tag) {
             return Html::a($tag, ['./', 'tag' => $tag]);
         }, $tags), $content);

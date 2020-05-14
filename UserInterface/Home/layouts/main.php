@@ -28,6 +28,12 @@ $this->registerCssFile([
         <meta name="Keywords" content="<?=$this->get('keywords')?>" />
         <meta name="Description" content="<?=$this->get('description')?>" />
         <meta name="author" content="zodream" />
+        <?php if($this->layout_og):?>
+        <!-- og 协议 -->
+            <?php foreach($this->layout_og as $key => $item):?>
+                <meta property="og:<?=$key?>" content="<?=$item?>"/>
+            <?php endforeach;?>
+        <?php endif;?>
         <link rel="icon" href="<?=$this->asset('images/favicon.png')?>">
         <?php if($this->has('rss_show')):?>
             <link rel="alternate" type="application/rss+xml" title="<?=__('site title')?>" href="<?=$this->url('/blog/rss', false)?>">

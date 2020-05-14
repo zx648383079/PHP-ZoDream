@@ -27,6 +27,11 @@ if ($blog->edit_type < 1) {
 $this->set([
     'keywords' => $blog->keywords,
     'description' => $blog->description,
+    'layout_og' => [
+        'type' => 'article',
+        'image' => $blog->thumb,
+        'release_date' => $blog->updated_at
+    ],
 ])->extend('layouts/header')
     ->registerJsFile('@jquery.sideNav.min.js')
     ->registerJs($js, View::JQUERY_READY);
