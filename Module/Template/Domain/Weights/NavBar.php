@@ -30,6 +30,9 @@ class NavBar extends Node implements INode {
                ],
            ];
         })->on(self::OS_VERSION, function () {
+            if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+                return 0;
+            }
             $agent = $_SERVER['HTTP_USER_AGENT'];
             if (!preg_match('/windows\s+nt\s*([\d\.]+)/i', $agent, $match)) {
                 return 0;

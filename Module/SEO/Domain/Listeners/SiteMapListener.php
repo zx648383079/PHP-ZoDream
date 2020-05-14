@@ -3,10 +3,34 @@ namespace Module\SEO\Domain\Listeners;
 
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Router;
+use Zodream\ThirdParty\API\Search;
 
 class SiteMapListener {
     public function __construct($event) {
         self::create();
+        if (empty($event) || !is_object($event) || app()->isDebug()) {
+            return;
+        }
+        try {
+            if (!method_exists($event, 'getUrl')) {
+                return;
+            }
+            $urls = $event->getUrl();
+            if (empty($urls)) {
+                return;
+            }
+            if (!is_array($urls)) {
+                $urls = [$urls];
+            }
+            $api = new Search([
+                'site' => url()->getHost(),
+                'token' => config('baidu.ziyuan')
+            ]);
+            $res = $api->putBaiDu($urls);
+            logger(var_export($res, true));
+        } catch (\Exception $ex) {
+            logger($ex->getMessage());
+        }
     }
 
     public static function create() {

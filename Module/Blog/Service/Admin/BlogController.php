@@ -76,7 +76,7 @@ class BlogController extends Controller {
             }
             BlogModel::where('parent_id', $model->id)->update($data);
         }
-        event(new BlogUpdate($model, time()));
+        event(new BlogUpdate($model, $isNew, time()));
         return $this->jsonSuccess([
             'url' => $isNew ? $this->getUrl('blog') : -1
         ]);
