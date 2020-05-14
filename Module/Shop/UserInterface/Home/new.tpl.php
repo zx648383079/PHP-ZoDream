@@ -1,8 +1,8 @@
 <script id="new_tpl" type="text/template">
     <div class="floor-header">
-        <h3>新品首发</h3>
-        <small>为你寻觅世间好物</small>
-        <a href="" class="header-right">更多新品 &gt;</a>
+        <h3>New Products</h3>
+        <small></small>
+        <a href="" class="header-right">More &gt;</a>
     </div>
     <div class="slider slider-goods" data-height="344">
         <div class="slider-previous">&lt;</div>

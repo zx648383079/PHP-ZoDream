@@ -5,10 +5,10 @@ use Zodream\Template\View;
 ?>
 <div class="empty-cart-box">
     <?php if(auth()->guest()):?>
-    <p>登录后可同步购物车中商品</p>
-    <a href="<?=$this->url('./member/login')?>" class="btn">登录</a>
+    <p>After login, you can synchronize the products in the shopping cart</p>
+    <a href="<?=$this->url('./member/login')?>" class="btn">Sign up now</a>
     <?php else:?>
-    <p>购物车是空的</p>
-    <a href="<?=$this->url('./')?>" class="btn">去逛逛</a>
+    <p>Your cart is empty</p>
+    <a href="<?=$this->url('./')?>" class="btn">Go Shopping</a>
     <?php endif;?>
 </div>

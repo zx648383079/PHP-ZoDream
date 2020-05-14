@@ -8,7 +8,7 @@ use Zodream\Template\View;
         <div class="container">
             <div class="top-left">
                 <a href="<?=$this->url('./')?>">
-                    好的生活，没那么贵
+                    Easy Life
                 </a>
                 <div class="top-notice">
                     <i class="fa fa-volume-up"></i>
@@ -25,31 +25,31 @@ use Zodream\Template\View;
             <div class="top-right">
                 <div class="top-item">
                     <?php if(auth()->guest()):?>
-                    <a href="<?=$this->url('./member/login')?>">登录</a>
-                    <a href="<?=$this->url('./member/login')?>">注册</a>
+                    <a href="<?=$this->url('./member/login')?>">Sign in</a>
+                    <a href="<?=$this->url('./member/login')?>">Sign up</a>
                     <?php else:?>
                     <a href="<?=$this->url('./member')?>"><?=auth()->user()->name?></a>
-                    <a href="<?=$this->url('/auth/logout', ['redirect_uri' => $this->url('./')])?>">退出</a>
+                    <a href="<?=$this->url('/auth/logout', ['redirect_uri' => $this->url('./')])?>">Sign out</a>
                     <?php endif;?>
                 </div>
                 <div class="top-item">
-                    <a href="<?=$this->url('./order')?>">我的订单</a>
+                    <a href="<?=$this->url('./order')?>">Orders</a>
                 </div>
                 <div class="top-item">
-                    会员
+                    Account
                 </div>
-                <div class="top-item">
+                <!-- <div class="top-item">
                     甄选家
                 </div>
                 <div class="top-item">
                     企业采购
-                </div>
+                </div> -->
                 <div class="top-item">
-                    客户服务
+                    Customer Service
                 </div>
                 <div class="top-item">
                     <i class="fa fa-mobile"></i>
-                    APP
+                    App
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@ use Zodream\Template\View;
             
             <ul class="header-nav">
                 <li>
-                    <a href="<?=$this->url('./')?>">首页</a>
+                    <a href="<?=$this->url('./')?>">Home</a>
                 </li>
                 <?php foreach($categories_tree as $item):?>
                 <li>
@@ -86,7 +86,7 @@ use Zodream\Template\View;
                 <?php endforeach;?>
             </ul>
             <div class="header-search" data-url="<?=$this->url('./search')?>">
-                <input type="text" name="keywords" placeholder="  搜索">
+                <input type="text" name="keywords" placeholder="Search ...">
                 <i class="fa fa-search"></i>
             </div>
             <div class="header-cart" data-url="<?=$this->url('./cart/mini')?>">

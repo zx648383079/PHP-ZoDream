@@ -16,7 +16,7 @@ use Zodream\Template\View;
                 <?php endif;?>
                 <a href="<?=$this->url('./category', ['id' => $column['id']])?>"><?=$column['name']?></a>
                 <?php endforeach;?>
-                <a href="<?=$this->url('./category', ['id' => $item['id']])?>">查看更多 &gt;</a>
+                <a href="<?=$this->url('./category', ['id' => $item['id']])?>">More &gt;</a>
             </div>
             
         </div>

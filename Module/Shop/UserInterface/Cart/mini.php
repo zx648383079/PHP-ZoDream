@@ -33,10 +33,10 @@ use Zodream\Template\View;
     </div>
     <div class="dialog-footer">
         <div class="total">
-            <span>商品合计:</span>
+            <span>SUBTOTAL:</span>
             <span><?=$cart->total()?></span>
         </div>
-        <a href="<?=$this->url('./cart')?>" class="btn">去购物车结算</a>
+        <a href="<?=$this->url('./cart')?>" class="btn">VIEW CART</a>
     </div>
 </div>
 <?php endif;?>

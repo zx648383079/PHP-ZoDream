@@ -1,9 +1,9 @@
 <script id="best_tpl" type="text/template">
     <div class="floor-header">
-        <h3>人气推荐</h3>
-        <small>编辑推荐</small>
-        <small>热销总榜</small>
-        <a href="" class="header-right">更多推荐 &gt;</a>
+        <h3>Featured Products</h3>
+        <small></small>
+        <small></small>
+        <a href="" class="header-right">More &gt;</a>
     </div>
     <div class="first-goods-list">
         {{each new_goods goods}}

@@ -25,7 +25,7 @@ $this->registerCssFile('@slider.css')
 
         <div class="panel">
             <div class="panel-header">
-            猜你喜欢
+            You like
             </div>
             <div class="panel-body">
                 <div class="slider slider-goods" data-height="279" data-width="210">

@@ -29,7 +29,7 @@ class ActivityTimeModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'title' => 'Title',
+            'title' => '名称',
             'start_at' => 'Start At',
             'end_at' => 'End At',
         ];

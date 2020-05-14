@@ -8,7 +8,7 @@ $this->title = $article->title;
     <div class="container side-box">
         <ul class="path">
             <li>
-                <a href="<?=$this->url('./')?>">首页</a>
+                <a href="<?=$this->url('./')?>">Home</a>
             </li>
             <li>
                 <?=$category->name?>

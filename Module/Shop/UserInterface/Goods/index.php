@@ -15,7 +15,7 @@ $this->registerCssFile('@slider.css')
     <div class="container">
         <ul class="path">
             <li>
-                <a href="<?=$this->url('./')?>">首页</a>
+                <a href="<?=$this->url('./')?>">Home</a>
             </li>
             <li>
                 <a href="<?=$this->url('./category', ['id' => $goods->cat_id])?>">
@@ -75,7 +75,7 @@ $this->registerCssFile('@slider.css')
                 </div>
                 <div class="property-box">
 
-                    <div>数量</div>
+                    <div>Amount</div>
                     <div>
                         <div class="number-box">
                             <i class="fa fa-minus"></i>
@@ -86,15 +86,15 @@ $this->registerCssFile('@slider.css')
                 </div>
                 <div class="actions">
                     <a href="javascript:;" data-type="buy" class="btn">
-                    立即购买
+                    BUY NOW
                     </a>
                     <a href="javascript:;" data-type="addCart" class="btn btn-primary">
                         <i class="fa fa-shopping-cart"></i>
-                        加入购物车
+                        ADD TO CART
                     </a>
                     <a  href="javascript:;" data-type="collect" class="btn btn-collect">
                         <i class="fa fa-star"></i>
-                        收藏
+                        LIKE
                     </a>
                 </div>
             </div>
@@ -107,16 +107,16 @@ $this->registerCssFile('@slider.css')
             <div class="tab-box">
                 <div class="tab-header">
                     <div class="tab-item active">
-                    详情
+                    Product details
                     </div>
                     <div class="tab-item">
-                    评价
+                    Comments
                     <?php if($goods->comment_count > 0):?>
                     (<?=$goods->comment_count?>)
                     <?php endif;?>
                     </div>
                     <div class="tab-item">
-                    常见问题
+                    Issues
                     </div>
                 </div>
                 <div class="tab-body">

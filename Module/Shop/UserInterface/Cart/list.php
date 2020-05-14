@@ -69,7 +69,7 @@ $this->registerJs($js);
         <a>清空失效商品</a>
     </div>
     <div class="total">
-        <span>商品合计 : </span>
+        <span>SUBTOTAL : </span>
         <span class="price">￥<?=$cart->total()?></span>
         <span>活动优惠 : </span>
         <span class="price">￥0</span>
@@ -80,6 +80,6 @@ $this->registerJs($js);
         <div class="tip">已满足免邮条件></div>
     </div>
     <div class="checkout">
-        <a href="<?=$this->url('./cashier')?>" class="btn">下单</a>
+        <a href="<?=$this->url('./cashier')?>" class="btn">CHECKOUT</a>
     </div>
 </div>

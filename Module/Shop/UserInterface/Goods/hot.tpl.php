@@ -1,7 +1,7 @@
 <script id="hot_tpl" type="text/template">
     <div class="panel">
         <div class="panel-header">
-            24小时热销榜
+            TOP/24
         </div>
         <div class="panel-body">
             {{each goods_list goods}}

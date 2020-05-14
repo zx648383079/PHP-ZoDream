@@ -77,6 +77,11 @@ function search(keywords: string) {
     window.location.href = $(".header-search").data('url') + '?keywords='+ keywords;
 }
 $(function() {
+    $('.back-to-top').click(function() {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 100);
+    });
     $(".check-box").click(function() {
         $(this).toggleClass('active').trigger(CHECKED_CHANGE);
     });

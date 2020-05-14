@@ -1,7 +1,7 @@
 <script id="recommend_tpl" type="text/template">
     <div class="panel">
         <div class="panel-header">
-            大家都在看
+            People who viewed this also viewed
         </div>
         <div class="panel-body">
             <div class="slider slider-goods" data-height="279" data-width="210">

@@ -1,8 +1,8 @@
 <script id="brand_tpl" type="text/template">
     <div class="floor-header">
-        <h3>品牌制造商</h3>
-        <small>工厂直达消费者，剔除品牌溢价</small>
-        <a href="" class="header-right">更多制造商 &gt;</a>
+        <h3>Featured Brands</h3>
+        <small></small>
+        <a href="" class="header-right">More &gt;</a>
     </div>
     <div class="floor-grid">
         <a href="">

@@ -10,7 +10,7 @@ $this->title = $category->name;
 
         <ul class="path">
             <li>
-                <a href="<?=$this->url('./')?>">首页</a>
+                <a href="<?=$this->url('./')?>">Home</a>
             </li>
             <li>
                 <?=$category->name?>
@@ -53,9 +53,9 @@ $this->title = $category->name;
             </div>
             <div class="category-header">
                 <div class="title">
-                床品件套
+                <?=$category->name?>
                 </div>
-                <p class="desc">MUJI等品牌制造商出品</p>
+                <p class="desc"><?=$category->description?></p>
             </div>
             <div class="goods-list">
                 <?php foreach($goods_list as $goods):?>
@@ -66,7 +66,7 @@ $this->title = $category->name;
                     <div class="name"><?=$goods->name?></div>
                     <div class="price"><?=$goods->price?></div>
                     <div class="desc">
-                    入门级奢品，真丝细润亲肤
+                        <?=$goods->brief?> 
                     </div>
                 </a>
                 <?php endforeach;?>

@@ -1,7 +1,7 @@
 <script id="comment_tpl" type="text/template">
     <div class="floor-header">
-        <h3>大家都在说</h3>
-        <small>生活，没有统一标准</small>
+        <h3>Customer reviews</h3>
+        <small></small>
     </div>
     <div class="slider slider-goods" data-height="392" data-width="367">
         <div class="slider-previous">&lt;</div>

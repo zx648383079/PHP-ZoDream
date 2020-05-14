@@ -10,7 +10,7 @@ $this->title = '商品搜索';
 
         <ul class="path">
             <li>
-                <a href="<?=$this->url('./')?>">全部商品</a>
+                <a href="<?=$this->url('./')?>">All Products</a>
             </li>
             <li>
                 <?=$this->text($keywords)?>
@@ -47,7 +47,7 @@ $this->title = '商品搜索';
                     <div class="name"><?=$goods->name?></div>
                     <div class="price"><?=$goods->price?></div>
                     <div class="desc">
-                    入门级奢品，真丝细润亲肤
+                        <?=$goods->brief?> 
                     </div>
                 </a>
                 <?php endforeach;?>
