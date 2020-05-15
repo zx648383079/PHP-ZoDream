@@ -16,7 +16,7 @@ class Author extends Node implements INode {
     }
 
     public function render($type = null) {
-        return cache()->getOrSet(self::KEY, function () {
+        return $this->cache()->getOrSet(self::KEY, function () {
             $user = $this->page->trigger(self::KEY);
             return <<<HTML
 <div class="person-box">

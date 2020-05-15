@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Weights;
 
 use Module\Template\Domain\Pages\IPage;
+use Zodream\Infrastructure\Caching\Cache;
 
 class Node implements INode {
     /**
@@ -13,6 +14,14 @@ class Node implements INode {
     public function __construct(IPage $page) {
         $this->page = $page;
         $this->registerAsync();
+    }
+
+    /**
+     * 缓存
+     * @return Cache
+     */
+    public function cache() {
+        return $this->page->cache();
     }
 
     protected function registerAsync() {

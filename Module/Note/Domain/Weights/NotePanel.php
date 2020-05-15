@@ -9,7 +9,7 @@ class NotePanel extends Node {
     const KEY = 'home_note';
 
     public function render($type = null) {
-        return cache()->getOrSet(self::KEY, function () {
+        return $this->cache()->getOrSet(self::KEY, function () {
             $data = NoteModel::getNew($this->attr('limit'));
             return implode('', array_map(function (NoteModel $item) {
                 return sprintf('<div class="note-item"><p>%s</p><div class="item-time">%s</div></div>',

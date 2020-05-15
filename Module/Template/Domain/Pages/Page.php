@@ -31,6 +31,14 @@ class Page implements IPage {
         }
     }
 
+    public function cache() {
+        static $driver = null;
+        if (empty($driver)) {
+            $driver = cache()->store('nodes');
+        }
+        return $driver;
+    }
+
     public function register(string $name, string $node) {
         $this->node_list[Str::studly($name)] = $node;
         return $this;

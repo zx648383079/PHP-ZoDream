@@ -7,7 +7,7 @@ $this->title = '缓存管理';
 ?>
 <?=Form::open('./@admin/cache/clear')?>
 
-    <?=Form::checkbox('store[]', ['default' => '默认', 'auth' => '用户', 'pages' => '页面'])->label('缓存区')?>
+    <?=Form::checkbox('store[]', ['default' => '默认', 'auth' => '用户', 'pages' => '页面', 'nodes' => '部件'])->label('缓存区')?>
 
     <button type="submit" class="btn btn-success">清除选中</button>
     <input type="hidden" name="store[]" value="">

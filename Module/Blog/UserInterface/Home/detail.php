@@ -108,9 +108,12 @@ $this->set([
         </span>
         <?php endif;?>
     </div>
-    <div id="content" class="content style-type-<?=$blog->edit_type?>">
+    <article id="content" class="content style-type-<?=$blog->edit_type?>">
         <?php $this->extend('./content');?>
-    </div>
+        <p class="book-copyright">转载请保留原文链接：
+            <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=$this->url('./', ['id' => $blog->id])?></a>
+        </p>
+    </article>
     <div class="book-bottom">
         <?php if($blog->type == 1):?>
         <div class="book-source">

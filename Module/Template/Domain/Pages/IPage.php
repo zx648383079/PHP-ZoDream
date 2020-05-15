@@ -2,7 +2,14 @@
 namespace Module\Template\Domain\Pages;
 
 
+use Zodream\Infrastructure\Caching\Cache;
+
 interface IPage {
+
+    /**
+     * @return Cache
+     */
+    public function cache();
 
     public function register(string $name, string $node);
 
