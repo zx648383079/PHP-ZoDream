@@ -79,4 +79,4 @@ $this->registerCssFile([
         './trash',
         'fa fa-trash'
     ]
-], 'ZoDream Disk') ?>
+], $content) ?>

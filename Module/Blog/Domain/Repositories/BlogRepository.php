@@ -174,7 +174,7 @@ class BlogRepository {
     }
 
     public static function renderContent(BlogModel $blog) {
-        return cache()->getOrSet(sprintf('blog_%d_content', $blog->id), function () use ($blog) {
+        return cache()->store('pages')->getOrSet(sprintf('blog_%d_content', $blog->id), function () use ($blog) {
             return TagRepository::renderTags($blog->id, HtmlExpand::toHtml($blog->getAttributeValue('content'), $blog->edit_type == 1));
         }, 3600);
     }
