@@ -69,7 +69,7 @@ class BlogRepository {
             ->when(!empty($sort), function ($query) use ($sort) {
                 if (is_array($sort)) {
                     // 增加直接放id
-                    return $query->whereIn('id', $sort);
+                    return $query->whereIn('id', $sort)->orderBy('created_at', 'desc');
                 }
                 if ($sort === 'new') {
                     return $query->orderBy('created_at', 'desc');
