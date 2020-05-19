@@ -2,8 +2,11 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '论坛';
-$this->extend('layouts/header');
+$this->title = '圈子';
+$this->set([
+    'keywords' => 'zodream圈子',
+    'description' => 'zodream程序的讨论圈子、意见反馈区'
+])->extend('layouts/header');
 ?>
 
 <div class="container">

@@ -50,7 +50,7 @@ $this->extend('layouts/header');
             <div class="post-user">
                 <div class="name"><?=auth()->user()->name?></div>
                 <div class="avatar">
-                    <img src="<?=$this->asset('images/zd.jpg')?>" alt="">
+                    <img src="<?=auth()->user()->avatar?>" alt="">
                 </div>
             </div>
             <div class="post-content">
