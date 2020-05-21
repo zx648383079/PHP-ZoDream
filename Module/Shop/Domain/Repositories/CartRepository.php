@@ -1,6 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Module\Shop\Domain\Cart\ICartItem;
+use Module\Shop\Domain\Cart\Store;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\GoodsModel;
@@ -77,8 +79,24 @@ class CartRepository {
      */
     public static function checkout($address, $shipping, $payment, $cart = '', $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
-        $order = static::preview($goods_list, $address, $shipping, $payment, false);
-        if (!$order->createOrder()) {
+        $store = new Store();
+        if (!$store->frozen($goods_list)) {
+            throw new InvalidArgumentException('库存不足！');
+        }
+        $success = false;
+        try {
+            $order = static::preview($goods_list, $address, $shipping, $payment, false);
+            if ($order->createOrder()) {
+                $success = true;
+                $store->clear();
+            } else {
+                $order->restore();
+            }
+        } catch (Exception $ex) {
+            $store->restore();
+            throw $ex;
+        }
+        if (!$success) {
             throw new InvalidArgumentException('操作失败，请重试');
         }
         if ($type < 1) {
@@ -91,7 +109,7 @@ class CartRepository {
      * 获取结算商品
      * @param string $cart
      * @param int $type
-     * @return array
+     * @return ICartItem[]
      * @throws \Exception
      */
     public static function getGoodsList($cart = '', $type = 0) {

@@ -199,6 +199,15 @@ class OrderModel extends Model {
         return true;
     }
 
+    public function restore() {
+        if ($this->id < 1) {
+            return;
+        }
+        $this->delete();
+        OrderGoodsModel::query()->where('order_id', $this->id)->delete();
+        OrderAddressModel::query()->where('order_id', $this->id)->delete();
+    }
+
     /**
      * @param CartModel[] $goods_list
      * @return OrderModel

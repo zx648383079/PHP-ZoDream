@@ -11,6 +11,10 @@ interface ICartItem {
 
     public function mergeItem(ICartItem $item);
 
+    public function goodsId();
+
+    public function productId();
+
     public function total();
 
     public function amount();
