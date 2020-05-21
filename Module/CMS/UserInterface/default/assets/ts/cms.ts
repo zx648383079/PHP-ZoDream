@@ -7,16 +7,19 @@ interface IEngine {
     suggest?: string | ISUGGEST
 }
 
+const SEARCH_COOKIE = 'sd';
+
 class Search {
     constructor(
         public box: JQuery
     ) {
+        this.engine = parseInt(window.localStorage.getItem(SEARCH_COOKIE), 10) || 0;
         this.refreshEngine();
         this.refreshDefault();
         this.bindEvent();
     }
 
-    private engine = 0;
+    private engine: number;
 
     private showTip = true;
 
@@ -149,6 +152,7 @@ class Search {
      */
     public changeEngine(i: number) {
         this.engine = i;
+        window.localStorage.setItem(SEARCH_COOKIE, i.toString());
         this.refreshDefault();
     }
 
