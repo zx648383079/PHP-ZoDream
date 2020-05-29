@@ -170,6 +170,25 @@ bindNavigation({$navigation});
             </div>
         </div>
     </div>
+    {if:$cat.id != 13}
+    <div class="panel site-panel">
+        <div class="panel-header">
+            <i class="{$cat.thumb}"></i>
+            <span>{$cat.title}</span>
+        </div>
+        <div class="panel-body">
+            {contents:category=$cat.id num=8}
+            <a href="{url:$content}" class="site-item" title="{$content.title}-{$content.description}">
+                <div class="item-name">
+                    <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                    {$content.title}
+                </div>
+                <div class="item-desc">{this.text:$content.description,20}</div>
+            </a>
+            {/contents}
+        </div>
+    </div>
+    {/if}
     {channels:parent=$cat.id}
     <div class="panel site-panel">
         <div class="panel-header">
