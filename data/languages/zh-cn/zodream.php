@@ -97,6 +97,12 @@ return [
     'price format' => '{money} 金币',
     'Account is disabled' => '此帐户被禁用',
     'Email or password is incorrect' => '邮箱或密码不正确',
+    'Reading needs to meet the conditions' => '阅读需要满足条件',
+    'Previous' => '上一篇',
+    'Next' => '下一篇',
+    'Reprint please keep the original link:' => '转载请保留原文链接：',
+    'Reprinted in:' => '转载于：',
+    'Tags:' => '标签：',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

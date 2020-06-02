@@ -27,7 +27,7 @@ $this->set([
         <?php if($item['level'] > 0):?>
         <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?></span>
         <?php endif;?>
-        <a href="<?=$this->url('./', ['category' => $item['id']])?>"><?=$item['name']?></a>
+        <a href="<?=$this->url('./', ['category' => $item['id']])?>"><?=__($item['name'])?></a>
         <span class="count">(<?=$item['blog_count']?>)</span>
     </div>
     <?php endforeach;?>

@@ -56,7 +56,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
         <ul>
             <?php foreach ($cat_list as $item): ?>
             <li <?=$category == $item->id ? 'class="active"' : '' ?>>
-                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->name?></a>
+                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>" title="<?=__($item->name)?>"><?=__($item->name)?></a>
                 <?php if($item['blog_count'] > 0):?>
                 <span class="count"><?=$item['blog_count'] > 99 ? '99+' : $item['blog_count']?></span>
                 <?php endif;?>
@@ -110,7 +110,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
         <div class="term-desc"><?=$term->description?></div>
     </div>
     <?php elseif (!empty($tag)):?>
-    <h2 class="book-header"><?=$this->text($tag)?></h2>
+    <h2 class="book-header"><?=$this->text(__($tag))?></h2>
     <?php elseif (!empty($programming_language)):?>
     <h2 class="book-header"><?=$this->text($programming_language)?></h2>
     <?php endif;?>
@@ -118,7 +118,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
     <dl class="book-item">
         <dt>
             <?php if($item->open_type > 0):?>
-                <i class="fa fa-lock" title="阅读需要满足条件"></i>
+                <i class="fa fa-lock" title="<?=__('Reading needs to meet the conditions')?>"></i>
             <?php endif;?>
             <a href="<?=$item->url?>" title="<?=$item->title?>"><?=$item->title?></a>
             <span class="book-time"><?=$item->created_at?></span></dt>
@@ -126,7 +126,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
             <p><?=$item->description?></p>
             <a class="author" href="<?=$this->url('./', ['user' => $item->user_id])?>"><i class="fa fa-edit"></i><b><?=$item->user->name?></b></a>
             <?php if($item->term):?>
-            <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=$item->term->name?></b></a>
+            <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($item->term->name)?></b></a>
             <?php endif;?>
             <?php if(!empty($item->programming_language)):?>
             <a class="language" href="<?=$this->url('./', ['programming_language' => $item->programming_language])?>"><i class="fa fa-code"></i><b><?=$item->programming_language?></b></a>

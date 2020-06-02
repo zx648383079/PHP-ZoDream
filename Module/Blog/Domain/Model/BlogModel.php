@@ -65,11 +65,14 @@ class BlogModel extends BlogEntity {
     }
 
 	public function getPreviousAttribute() {
-	    return static::where('id', '<', $this->id)->where('open_type', '<>', BlogModel::OPEN_DRAFT)->orderBy('id desc')->select('id, title, description, created_at')->one();
+	    return static::where('id', '<', $this->id)
+            ->where('language', $this->language)
+            ->where('open_type', '<>', BlogModel::OPEN_DRAFT)->orderBy('id desc')->select('id, title, description, created_at')->one();
     }
 
     public function getNextAttribute() {
-	    return static::where('id', '>', $this->id)->where('open_type', '<>', BlogModel::OPEN_DRAFT)->orderBy('id asc')->select('id, title, description, created_at')->one();
+	    return static::where('id', '>', $this->id)
+            ->where('language', $this->language)->where('open_type', '<>', BlogModel::OPEN_DRAFT)->orderBy('id asc')->select('id, title, description, created_at')->one();
     }
 
     public function getIsRecommendedAttribute() {

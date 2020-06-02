@@ -15,4 +15,16 @@ return [
     'friend link tip' => '',
     'price format' => '{money} coin',
     'Reprint Tip' => 'This article is reprinted, click to view the original page',
+    'php开发' => 'Learn PHP',
+    '编程入门' => 'Coder',
+    'vue.js教程' => 'Vue.js',
+    '小程序' => 'Mini Program',
+    'DEBUG问题集' => 'DEBUG Q&A',
+    'zodream框架' => 'zodream',
+    '编程技术' => 'Programming technology',
+    '其他技术' => 'Other technologies',
+    '闲聊' => 'Talk',
+    '游戏' => 'Gaming',
+    '帮助文档' => 'Help',
+    '算法' => 'Algorithm'
 ];

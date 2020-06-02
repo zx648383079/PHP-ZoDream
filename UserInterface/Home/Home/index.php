@@ -109,7 +109,7 @@ $demo_list = [
         <div class="col-md-4">
             <div class="panel">
                 <div class="panel-header">
-                    <a href="<?=$this->url('./blog', ['programming_language' => 'PHP'])?>">php开发</a>
+                    <a href="<?=$this->url('./blog', ['programming_language' => 'PHP'])?>"><?=__('php开发')?></a>
                 </div>
                 <div class="panel-body">
                     <?=$this->node('blog-panel', ['limit' => 6, 'lang' => 'PHP'])?>
@@ -119,7 +119,7 @@ $demo_list = [
         <div class="col-md-4">
             <div class="panel">
                 <div class="panel-header">
-                    <a href="<?=$this->url('./blog', ['category' => 3])?>">编程入门</a>
+                    <a href="<?=$this->url('./blog', ['category' => 3])?>"><?=__('编程入门')?></a>
                 </div>
                 <div class="panel-body">
                     <?=$this->node('blog-panel', ['limit' => 6, 'category' => 3])?>
@@ -129,7 +129,7 @@ $demo_list = [
         <div class="col-md-4">
             <div class="panel">
                 <div class="panel-header">
-                    <a href="<?=$this->url('./blog', ['tag' => 'vue'])?>">vue.js教程</a>
+                    <a href="<?=$this->url('./blog', ['tag' => 'vue'])?>"><?=__('vue.js教程')?></a>
                 </div>
                 <div class="panel-body">
                     <?=$this->node('blog-panel', ['limit' => 6, 'tag' => 'vue'])?>

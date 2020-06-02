@@ -23,7 +23,7 @@ $this->set([
         <a href="<?=$this->url('./archives')?>"><?=__('Archives')?></a>
     </div>
     <?php foreach ($tag_list as $item):?>
-    <a class="tag-item" href="<?=$this->url('./', ['tag' => $item['name']])?>" style="font-size: <?=$item['blog_count'] + 12?>px"><?=$item['name']?></a>
+    <a class="tag-item" href="<?=$this->url('./', ['tag' => $item['name']])?>" style="font-size: <?=$item['blog_count'] + 12?>px"><?=__($item['name'])?></a>
     <?php endforeach;?>
 </div>
     

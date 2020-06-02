@@ -57,7 +57,7 @@ $this->set([
         <ul>
             <?php foreach ($cat_list as $item): ?>
                 <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=__($item->name)?></a>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>" title="<?=__($item->name)?>"><?=__($item->name)?></a>
                     <?php if($item['blog_count'] > 0):?>
                     <span class="count"><?=$item['blog_count'] > 99 ? '99+' : $item['blog_count']?></span>
                     <?php endif;?>
@@ -110,14 +110,14 @@ $this->set([
     </div>
     <article id="content" class="content style-type-<?=$blog->edit_type?>">
         <?php $this->extend('./content');?>
-        <p class="book-copyright">转载请保留原文链接：
+        <p class="book-copyright"><?=__('Reprint please keep the original link:')?>
             <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=$this->url('./', ['id' => $blog->id])?></a>
         </p>
     </article>
     <div class="book-bottom">
         <?php if($blog->type == 1):?>
         <div class="book-source">
-            <span>转载于：</span>
+            <span><?=__('Reprinted in:')?></span>
             <a href="<?=HtmlExpand::toUrl($blog->source_url)?>" target="_blank" title="<?=__('Reprint Tip')?>">
                 <?=$this->text($blog->source_url)?>
             </a>
@@ -125,9 +125,9 @@ $this->set([
         <?php endif;?>
         <?php if($tags):?>
         <div class="book-tags">
-            <span>标签：</span>
+            <span><?=__('Tags:')?></span>
             <?php foreach($tags as $item):?>
-                <a href="<?=$this->url('./', ['tag' => $item['name']])?>"><?=$item['name']?></a>，
+                <a href="<?=$this->url('./', ['tag' => $item['name']])?>"><?=__($item['name'])?></a>，
             <?php endforeach;?>
         </div>
         <?php endif;?>
@@ -147,7 +147,7 @@ $this->set([
     <a class="prev" href="<?=$blog->previous->url?>">
         <i class="fa fa-angle-left"></i>
         <div class="prev-text">
-            <span class="prev-label">上一篇</span>
+            <span class="prev-label"><?=__('Previous')?></span>
             <span class="prev-title"><?=$blog->previous->title?></span>
         </div>
     </a>
@@ -155,7 +155,7 @@ $this->set([
     <?php if ($blog->next):?>
     <a class="next" href="<?=$blog->next->url?>">
         <div class="next-text">
-            <span class="next-label">上一篇</span>
+            <span class="next-label"><?=__('Next')?></span>
             <span class="next-title"><?= $blog->next->title ?></span>
         </div>
         <i class="fa fa-angle-right"></i>
