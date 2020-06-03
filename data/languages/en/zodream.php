@@ -26,5 +26,6 @@ return [
     '闲聊' => 'Talk',
     '游戏' => 'Gaming',
     '帮助文档' => 'Help',
-    '算法' => 'Algorithm'
+    '算法' => 'Algorithm',
+    'feedback_tip' => 'This site and its framework accept any friendly suggestions, and any friendly friends are welcome to leave comments here.',
 ];

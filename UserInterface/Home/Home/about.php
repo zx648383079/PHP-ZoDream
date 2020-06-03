@@ -36,7 +36,7 @@ $this->set([
     <div class="contact-box">
         <div class="heading">
             <h2><?=__('Feedback')?></h2>
-            <p>本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。</p>
+            <p><?=__('feedback_tip')?></p>
         </div>
         <div>
             <?= Form::open('/contact/home/feedback', 'POST', ['data-type' => 'ajax',]) ?>

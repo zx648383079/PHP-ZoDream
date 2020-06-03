@@ -17,7 +17,7 @@ class BlogPanel extends Node {
         $keywords = $this->attr('keywords');
         $sort = $this->attr('sort') ?: 'new';
         return $this->cache()->getOrSet(
-            sprintf('%s-%s-%s-%s-%s-%s-%s', self::KEY, $category, $tag, $lang, $keywords, $sort, $limit)
+            sprintf('%s-%s-%s-%s-%s-%s-%s-%s', self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, trans()->getLanguage())
             , function () use ($category, $tag, $lang, $keywords, $sort, $limit) {
             $data = BlogRepository::getSimpleList($sort, $category, $keywords,
                 0, null, $lang,

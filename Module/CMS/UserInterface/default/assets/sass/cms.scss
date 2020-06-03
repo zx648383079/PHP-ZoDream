@@ -735,6 +735,7 @@ footer {
         border-radius: 5px;
         background-color: #fafafa;
         margin-bottom: 10px;
+        position: relative;
         .item-name {
             height: 30px;
             font-size: 12px;
@@ -757,13 +758,25 @@ footer {
             height: 42px;
             overflow: hidden;
         }
+        .go-btn {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            font-size: 30px;
+        }
         &:hover {
             background: #6b7184;
-            .item-name {
+            .item-name,
+            .go-btn,
+            a {
                 color: #fff;
             }
             .item-desc {
                 color: #c0c8dc;
+            }
+            .go-btn {
+                bottom: 20px;
+                font-size: 40px;
             }
         }
     }

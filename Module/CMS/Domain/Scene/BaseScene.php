@@ -156,7 +156,9 @@ abstract class BaseScene implements SceneInterface {
         }
         if ($hasExtra) {
             $prefix = $this->getMainTable().'.';
-            $field = str_replace('*', $prefix.'*', $field);
+            $field = implode(',', array_map(function($key) use ($prefix) {
+                return in_array($key, ['*', 'id']) ? $prefix. $key : $key;
+            }, explode(',', $field)));
             $query->leftJoin($this->getExtendTable().' extra', $prefix.'id', 'extra.id');
         }
         $query->select($field);

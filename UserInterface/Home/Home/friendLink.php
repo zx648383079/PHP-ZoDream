@@ -33,17 +33,17 @@ $this->registerJs($js, View::JQUERY_READY);
         <div class="col-md-4">
             <div class="panel link-box">
                 <div class="panel-header">
-                    友链信息
+                    <?=__('Site Information')?>
                 </div>
                 <div class="panel-body">
                     <p>
-                        名称：zodream
+                        <?=__('Name:')?>zodream
                     </p>
                     <p>
-                        地址：https://zodream.cn
+                        <?=__('Link:')?>https://zodream.cn
                     </p>
                     <p>
-                        描述：zodream开发博客
+                        <?=__('Description: zodream\'s Blog')?>
                     </p>
                 </div>
             </div>
@@ -66,19 +66,19 @@ $this->registerJs($js, View::JQUERY_READY);
         <?= Form::open('/contact/home/friend_link', 'POST', ['data-type' => 'ajax',]) ?>
             <div>*<?=__('Site Name')?>:</div>
             <div>
-                <input type="text" name="name" placeholder="显示的网站名称" required>
+                <input type="text" name="name" placeholder="<?=__('Your Site Name')?>" required>
             </div>
             <div>*<?=__('URL')?>:</div>
             <div>
-                <input type="text" name="url" placeholder="跳转的网站链接：例如:https://zodream.cn" required>
+                <input type="text" name="url" placeholder="<?=__('Your Site Link, Like:')?>https://zodream.cn" required>
             </div>
             <div><?=__('Site Description')?>:</div>
             <div>
-                <input type="text" name="brief" placeholder="网站简介">
+                <input type="text" name="brief" placeholder="<?=__('Site Description')?>">
             </div>
             <div><?=__('Email')?>:</div>
             <div>
-                <input type="email" name="email" placeholder="将发送结果到你的邮箱">
+                <input type="email" name="email" placeholder="<?=__('Will send the result to your email')?>">
             </div>
         <?= Form::close() ?>
     </div>
