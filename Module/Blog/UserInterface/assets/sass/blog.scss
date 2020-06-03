@@ -279,6 +279,15 @@ $acolor: $fg;
                     &.active {
                         background-color: $defaultColor;
                         color: $acolor;
+                        position: relative;
+                        &::after {
+                            position: absolute;
+                            content: "";
+                            display: block;
+                            background-color: #fff;
+                            width: 40px;
+                            height: 3px;
+                        }
                     }
                 }
             }

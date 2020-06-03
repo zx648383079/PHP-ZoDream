@@ -81,13 +81,7 @@ $this->set([
     <div class="info">
         <?php if(count($languages) > 1):?>
         <div class="language-toggle">
-            <?php foreach($languages as $item):?>
-            <?php if($blog->id == $item['id']):?>
-            <a href="<?=$this->url('./', ['id' => $item['id']])?>" class="active"><?=$this->t($item['language'])?></a>
-            <?php else:?>
-            <a href="<?=$this->url('./', ['id' => $item['id']])?>"><?=$this->t($item['language'])?></a>
-            <?php endif;?>  
-            <?php endforeach;?>
+            <?php foreach($languages as $item):?><?php if($blog->id == $item['id']):?><a href="<?=$this->url('./', ['id' => $item['id']])?>" class="active"><?=$this->t($item['language'])?></a><?php else:?><a href="<?=$this->url('./', ['id' => $item['id']])?>"><?=$this->t($item['language'])?></a><?php endif;?><?php endforeach;?>
         </div>
         <?php endif;?>
         <?php if($blog->user):?>
