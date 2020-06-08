@@ -22,7 +22,7 @@ class LoginController extends RestController {
             AuthRepository::login(
                 $request->get('email'),
                 $request->get('password'),
-                $remember);
+                $remember, false);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -20,7 +20,16 @@ class AuthRepository {
 
     const UNSET_PASSWORD = 'no_password';
 
-    public static function login($email, $password, $remember = false) {
+    /**
+     * 登录
+     * @param $email
+     * @param $password
+     * @param bool $remember
+     * @param bool $replaceToken 是否替换记住我的token
+     * @return bool|mixed
+     * @throws Exception
+     */
+    public static function login($email, $password, $remember = false, $replaceToken = true) {
         if (empty($email) || empty($password)) {
             throw AuthException::invalidLogin();
         }
@@ -38,7 +47,9 @@ class AuthRepository {
             throw AuthException::disableAccount();
         }
         if ($remember) {
-            $user->setRememberToken(Str::random(60));
+            if ($replaceToken) {
+                $user->setRememberToken(Str::random(60));
+            }
             return self::doLogin($user, $remember);
         }
         if (!$user->save()) {
