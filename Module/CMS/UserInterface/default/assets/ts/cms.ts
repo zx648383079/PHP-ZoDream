@@ -166,7 +166,7 @@ class Search {
         }
         this.box.find('.search-tips').hide();
         const engine = this.SEARCH_ENGINE[this.engine];
-        const url = engine.url.replace('{word}', encodeURI(keywords.trim()));
+        const url = engine.url.replace('{word}', encodeURIComponent(keywords.trim()));
         window.open(url, '_blank');
     }
 
@@ -185,7 +185,7 @@ class Search {
         }
         const engine = this.SEARCH_ENGINE[this.engine];
         const suggest = !engine.suggest ? this.SEARCH_ENGINE[0].suggest : engine.suggest;
-        keywords = encodeURI(keywords);
+        keywords = encodeURIComponent(keywords);
         if (typeof suggest == 'string') {
             this.jsonp(suggest + keywords, res => {
                 if (!res || !res.data || res.data.length < 1) {

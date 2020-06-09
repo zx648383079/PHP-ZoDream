@@ -5,6 +5,7 @@ use Module\Auth\Domain\Events\TokenCreated;
 use Module\OpenPlatform\Domain\Listeners\TokenListener;
 use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Platform;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\Module as BaseModule;
@@ -52,34 +53,28 @@ class Module extends BaseModule {
     protected function invokeWithPlatform($module, $uris, $path) {
         app()->instance('app::class', Api::class);
         app()->register('auth', JWTAuth::class);
-        $platform = PlatformModel::findByAppId(app('request')->get('appid'));
-        if (empty($platform)) {
+        try {
+            $platform = Platform::createAuto();
+            if (!$platform->verifyRule($module, $path)) {
+                throw new \Exception(__('The URL you requested was disabled'));
+            }
+            if (!$platform->verifyRest()) {
+                throw new \Exception(__('sign or encrypt error'));
+            }
+            $platform->useCustomToken();
+            app()->instance('platform', $platform);
+            event()->listen(TokenCreated::class, TokenListener::class);
+            $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');
+            if ($data instanceof RestResponse) {
+                return $platform->ready($data);
+            }
+            return $data;
+        } catch (\Exception $ex) {
             app('response')->setStatusCode(404);
             return RestResponse::createWithAuto([
                 'code' => 404,
-                'message' => __('APP ID error')
+                'message' => $ex->getMessage()
             ]);
         }
-        if (!$platform->verifyRule($module, $path)) {
-            return RestResponse::createWithAuto([
-                'code' => 404,
-                'message' => __('The URL you requested was disabled')
-            ]);
-        }
-        if (!$platform->verifyRest()) {
-            app('response')->setStatusCode(404);
-            return RestResponse::createWithAuto([
-                'code' => 404,
-                'message' => __('sign or encrypt error')
-            ]);
-        }
-        $platform->useCustomToken();
-        app()->instance('platform', $platform);
-        event()->listen(TokenCreated::class, TokenListener::class);
-        $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');
-        if ($data instanceof RestResponse) {
-            return $platform->ready($data);
-        }
-        return $data;
     }
 }
