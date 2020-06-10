@@ -6,21 +6,12 @@ namespace Module\Auth\Domain\Concerns;
  * @package Module\Auth\Domain\Concerns
  */
 trait AdminRole {
+
+    use CheckRole;
+
     protected function rules() {
         return [
             '*' => 'administrator'
         ];
-    }
-
-    protected function processCustomRule($role) {
-        if (auth()->guest()) {
-            return $this->redirectWithAuth();
-        }
-        if (auth()->user()->hasRole($role)) {
-            return true;
-        }
-        return $this->redirectWithMessage('/',
-            __('Not Role！')
-            , 4,403);
     }
 }

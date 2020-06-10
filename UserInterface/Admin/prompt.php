@@ -1,16 +1,16 @@
 <?php
 defined('APP_DIR') or exit();
-/** @var $this \Zodream\Template\View */
-$this->registerCssFile('@error.css');
+use Zodream\Template\View;
+/** @var $this View */
 ?>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-4 col-md-offset-4">
-			<img src="<?=$this->getAssetFile('images/404.png')?>">
-			<p><?=isset($message)? $message:':(很抱歉，您访问的页面不存在！'?></p>
-			<p class="text-center home"><a href="<?=$url?>">返回</a></p>
-		</div>
+<div class="container page-not-found">
+	<div class="content">
+		<img src="<?=$this->asset('images/404.png')?>">
+		<p><?=__(isset($message)? $message: 'error page')?></p>
+		<p class="text-center">
+			<a class="btn btn-show" href="<?=$this->url('/')?>"><?=__('back home')?></a>
+		</p>
 	</div>
 </div>
 

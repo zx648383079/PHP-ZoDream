@@ -103,13 +103,15 @@ class PlatformModel extends Model {
         $this->secret = md5(uniqid(md5(microtime(true)),true));
     }
 
-
-
     /**
      * @param $id
      * @return PlatformModel
      */
     public static function findByAppId($id) {
         return static::where('appid', $id)->first();
+    }
+
+    public static function findWidthAuth() {
+        return static::where('user_id', auth()->id())->get('id', 'name');
     }
 }

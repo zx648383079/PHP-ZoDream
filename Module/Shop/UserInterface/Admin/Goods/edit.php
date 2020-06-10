@@ -85,7 +85,7 @@ $this->registerJs($js);
                 <?=Form::radio('type', ['普通商品', '卡密商品', '充值商品'])?>
             </div>
             <div class="zd-tab-item">
-                <?=Form::select('attribute_group_id', [$group_list])?>
+                <?=Form::select('attribute_group_id', [$group_list, ['请选择']])?>
                 <div class="attribute-box">
                     <div class="attr-box"></div>
                     <div class="product-box">

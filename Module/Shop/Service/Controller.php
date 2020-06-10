@@ -8,10 +8,8 @@ use Module\Shop\Module;
 
 class Controller extends ModuleController {
     public $layout = 'main';
-    
-    public function prepare() {
 
-    }
+
 
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();

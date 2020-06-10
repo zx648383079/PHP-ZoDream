@@ -111,6 +111,7 @@ return [
     'Your Site Link, Like:' => '跳转的网站链接：例如:',
     'Your Site Name' => '显示的网站名称',
     'feedback_tip' => '本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。',
+    'Not Role!' => '无权限访问！',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

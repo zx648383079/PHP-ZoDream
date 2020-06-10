@@ -3,6 +3,7 @@ namespace Module\OpenPlatform\Domain;
 
 use Module\Auth\Domain\Model\UserModel;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Model\PlatformOptionModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Zodream\Database\Model\UserModel as UserObject;
 use Zodream\Helpers\Arr;
@@ -12,8 +13,30 @@ class Platform {
 
     private $app;
 
+    private $options = [];
+
     public function __construct($app) {
         $this->app = $app;
+    }
+
+    public function id() {
+        return $this->app['id'];
+    }
+
+    /**
+     * 获取设置
+     * @param string $store
+     * @param string $name
+     * @return array|string
+     */
+    public function option($store, $name = null) {
+        if (!isset($this->options[$store])) {
+            $this->options[$store] = PlatformOptionModel::options($this->id(), $store);
+        }
+        if (empty($name)) {
+            return $this->options[$store];
+        }
+        return isset($this->options[$store][$name]) ? $this->options[$store][$name] : '';
     }
 
     public function getCookieTokenKey() {
@@ -151,7 +174,7 @@ class Platform {
         $token = auth()->createToken($user);
         UserTokenModel::create([
             'user_id' => $user->getIdentity(),
-            'platform_id' => $this->app['id'],
+            'platform_id' => $this->id(),
             'token' => $token,
             'expired_at' => time() + 20160
         ]);
@@ -171,7 +194,7 @@ class Platform {
             return;
         }
         $user_id = UserTokenModel::where('token', $token)
-            ->where('platform_id', $this->app['id'])
+            ->where('platform_id', $this->id())
             ->where('expired_at', '>', time())->value('user_id');
         if (!$user_id || $user_id < 1) {
             return;
@@ -185,7 +208,7 @@ class Platform {
      * @return bool
      */
     public function verifyToken($token) {
-        $count = UserTokenModel::where('platform_id', $this->app['id'])
+        $count = UserTokenModel::where('platform_id', $this->id())
             ->where('token', $token)->where('expired_at', '>', time())->count();
         return $count > 0;
     }

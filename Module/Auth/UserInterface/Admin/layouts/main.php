@@ -81,6 +81,21 @@ $this->registerCssFile([
         auth()->user()->isAdministrator()
     ],
     [
+        '第三方管理',
+        false,
+        'fa fa-bus',
+        [
+            [
+                '接口配置',
+                './@admin/oauth/option',
+                'fa fa-cog'
+            ],
+        ],
+        true,
+        false,
+        auth()->user()->isAdministrator()
+    ],
+    [
         '消息管理',
         false,
         'fa fa-bullhorn',

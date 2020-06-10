@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
@@ -259,6 +260,7 @@ class CreateShopTables extends Migration {
     }
 
     public function seed() {
+        RoleRepository::newRole('shop_admin', '商城管理员');
         $count = AdPositionModel::query()->whereIn('id', [1,2])->count();
         if ($count < 1) {
             AdPositionModel::query()

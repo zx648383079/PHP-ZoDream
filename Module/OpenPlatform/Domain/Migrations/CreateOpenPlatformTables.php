@@ -2,17 +2,17 @@
 namespace Module\OpenPlatform\Domain\Migrations;
 
 use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Model\PlatformOptionModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class CreateOpenPlatformTables extends Migration {
 
     public function up() {
-        Schema::createTable(PlatformModel::tableName(), function (Table $table) {
+        $this->append(PlatformModel::tableName(), function (Table $table) {
             $table->setComment('第三方授权信息');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(20)->notNull();
             $table->set('description')->varchar()->defaultVal('')->comment('说明');
@@ -28,21 +28,23 @@ class CreateOpenPlatformTables extends Migration {
             $table->set('status')->bool()->defaultVal(0);
             $table->set('allow_self')->bool()->defaultVal(0)->comment('是否允许后台用户自己添加');
             $table->timestamps();
-        });
-        Schema::createTable(UserTokenModel::tableName(), function (Table $table) {
+        })->append(UserTokenModel::tableName(), function (Table $table) {
             $table->setComment('用户授权平台令牌');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('platform_id')->int()->notNull();
             $table->set('token')->text()->notNull();
             $table->set('is_self')->bool()->defaultVal(0)->comment('是否时用户后台添加的');
             $table->timestamp('expired_at')->comment('过期时间');
             $table->timestamps();
-        });
-    }
-
-    public function down() {
-        Schema::dropTable(PlatformModel::tableName());
-        Schema::dropTable(UserTokenModel::tableName());
+        })->append(PlatformOptionModel::tableName(), function (Table $table) {
+            $table->setComment('平台一些第三方接口配置');
+            $table->set('id')->pk(true);
+            $table->set('platform_id')->int()->notNull();
+            $table->set('store')->varchar(20)->notNull()->comment('平台别名');
+            $table->set('name')->varchar(30)->notNull()->comment('字段');
+            $table->set('value')->text()->comment('配置值');
+            $table->timestamps();
+        })->autoUp();
     }
 }

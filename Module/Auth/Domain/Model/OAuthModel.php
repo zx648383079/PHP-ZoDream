@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * @package Domain\Model\Auth
  * @property integer $id
  * @property integer $user_id
+ * @property integer $open_id
  * @property string $nickname
  * @property string $vendor
  * @property string $identity
@@ -35,6 +36,7 @@ class OAuthModel extends Model {
             'identity' => 'string:0,100',
             'data' => '',
             'created_at' => 'int',
+            'open_id' => 'int',
         ];
     }
 
@@ -47,6 +49,7 @@ class OAuthModel extends Model {
             'identity' => 'Identity',
             'data' => 'Data',
             'created_at' => 'Created At',
+            'open_id' => 'Open Id',
         ];
     }
 
@@ -61,16 +64,18 @@ class OAuthModel extends Model {
      * @param $identifier
      * @param string $type
      * @param string $nickname
+     * @param int $open_id
      * @return OAuthModel
      */
     public static function bindUser(UserModel $user,
                                     $identifier,
-                                    $type = self::TYPE_QQ, $nickname = '') {
+                                    $type = self::TYPE_QQ, $nickname = '', $open_id = 0) {
         return static::create([
             'user_id' => $user->id,
             'vendor' => $type,
             'identity' => $identifier,
-            'nickname' => $nickname
+            'nickname' => $nickname,
+            'open_id' => $open_id
         ]);
     }
 

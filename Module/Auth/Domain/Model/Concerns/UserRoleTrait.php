@@ -114,8 +114,7 @@ trait UserRoleTrait {
      *
      * @return bool
      */
-    public function can($permission, $requireAll = false)
-    {
+    public function can($permission, $requireAll = false) {
         if (is_array($permission)) {
             foreach ($permission as $permName) {
                 $hasPerm = $this->can($permName);
@@ -198,11 +197,11 @@ trait UserRoleTrait {
         // Return based on option
         if ($options['return_type'] == 'boolean') {
             return $validateAll;
-        } elseif ($options['return_type'] == 'array') {
-            return ['roles' => $checkedRoles, 'permissions' => $checkedPermissions];
-        } else {
-            return [$validateAll, ['roles' => $checkedRoles, 'permissions' => $checkedPermissions]];
         }
+        if ($options['return_type'] == 'array') {
+            return ['roles' => $checkedRoles, 'permissions' => $checkedPermissions];
+        }
+        return [$validateAll, ['roles' => $checkedRoles, 'permissions' => $checkedPermissions]];
     }
 
     /**

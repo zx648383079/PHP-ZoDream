@@ -15,6 +15,7 @@ use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -41,6 +42,7 @@ class CreateAuthTables extends Migration {
         })->append(OAuthModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
+            $table->set('open_id')->int()->defaultVal(0)->comment('平台id');
             $table->set('nickname')->varchar(30)->defaultVal('')->comment('昵称');
             $table->set('vendor')->varchar(20)->defaultVal(OAuthModel::TYPE_QQ);
             $table->set('identity')->varchar(100)->notNull();
@@ -66,13 +68,7 @@ class CreateAuthTables extends Migration {
     }
 
     public function seed() {
-        if (RoleModel::query()->count() > 0) {
-            return;
-        }
-        RoleModel::create([
-           'name' => 'administrator',
-           'display_name' => '超级管理员'
-        ]);
+        RoleRepository::newRole('administrator', '超级管理员');
     }
 
     public function createRole(): void {

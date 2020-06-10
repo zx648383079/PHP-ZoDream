@@ -6,6 +6,7 @@ use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\ModuleController;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Platform;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Module\OAuth\Domain\Client;
@@ -28,6 +29,8 @@ class OauthController extends ModuleController {
     }
 
     public function callbackAction($type = 'qq') {
+        /** @var Platform $platform */
+        $platform = session('platform');
         $auth = $this->getOAuth($type);
         if (!$auth->callback()) {
             return $this->failureCallback('授权回调失败！');
@@ -44,11 +47,11 @@ class OauthController extends ModuleController {
                         $auth->sex == 'M' ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
                         $auth->avatar
                     ];
-            }, $auth->unionid);
+            }, $auth->unionid, !empty($platform) ? $platform->id() : 0);
         } catch (\Exception $ex) {
             return $this->failureCallback($ex->getMessage());
         }
-        return $this->successCallback($user);
+        return $this->successCallback($user, $platform);
     }
 
     protected function failureCallback($error) {
@@ -69,10 +72,8 @@ class OauthController extends ModuleController {
         return $this->redirect($redirect_uri);
     }
 
-    protected function successCallback(UserModel $user) {
+    protected function successCallback(UserModel $user, $platform) {
         $redirect_uri = session('redirect_uri');
-        /** @var PlatformModel $platform */
-        $platform = session('platform');
         if (empty($platform) || empty($redirect_uri)) {
             return $this->redirect($redirect_uri ? $redirect_uri : '/');
         }

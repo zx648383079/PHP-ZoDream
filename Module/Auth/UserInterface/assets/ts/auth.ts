@@ -43,3 +43,17 @@ function bindBulletin() {
         $(this).closest('.bulletin-item').toggleClass('min');
     });
 }
+
+function bindOAuthOption() {
+    $('#platform_id').change(function() {
+        const id = $(this).val();
+        if (id < 1) {
+            return;
+        }
+        $.get(BASE_URI + 'oauth/edit_option', {
+            platform_id: id
+        }, html => {
+            $('.edit-view').html(html);
+        });
+    }).trigger('change');
+}

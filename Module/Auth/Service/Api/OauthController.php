@@ -31,7 +31,9 @@ class OauthController extends RestController {
                         $gender == 1 ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
                         $avatar
                     ];
-                }, isset($data['unionid']) ? $data['unionid'] : null);
+                }, isset($data['unionid']) ? $data['unionid'] : null,
+                app('platform')->id()
+            );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

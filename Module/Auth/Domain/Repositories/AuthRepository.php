@@ -111,7 +111,7 @@ class AuthRepository {
     }
 
     public static function oauth(
-        $type, $openid, callable $infoCallback, $unionId = null) {
+        $type, $openid, callable $infoCallback, $unionId = null, $open_id = 0) {
         $user = OAuthModel::findUserWithUnion($openid, $unionId, $type);
         if (!empty($user)) {
             if ($user->status !== UserModel::STATUS_ACTIVE) {
@@ -124,7 +124,7 @@ class AuthRepository {
         $name = empty($nickname) ? '用户_'.time() : $nickname;
         if (!auth()->guest()) {
             $user = auth()->user();
-            self::successBindUser($type, $user, $nickname, $openid, $unionId);
+            self::successBindUser($type, $user, $nickname, $openid, $unionId, $open_id);
             return $user;
         }
         if (!empty($email)
@@ -143,15 +143,15 @@ class AuthRepository {
         if (empty($user)) {
             throw new Exception('系统错误！');
         }
-        self::successBindUser($type, $user, $nickname, $openid, $unionId);
+        self::successBindUser($type, $user, $nickname, $openid, $unionId, $open_id);
         self::doLogin($user, false, $type);
         return $user;
     }
 
-    private static function successBindUser($type, $user, $nickname, $openid, $unionId = null) {
-        OAuthModel::bindUser($user, $openid, $type, $nickname);
+    private static function successBindUser($type, $user, $nickname, $openid, $unionId = null, $open_id = 0) {
+        OAuthModel::bindUser($user, $openid, $type, $nickname, $open_id);
         if (!empty($unionId)) {
-            OAuthModel::bindUser($user, $unionId, $type, $nickname);
+            OAuthModel::bindUser($user, $unionId, $type, $nickname, $open_id);
         }
     }
 
