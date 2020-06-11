@@ -5,11 +5,21 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '接口配置';
 $js = <<<JS
-bindOAuthOption();
+$('#platform_id').change(function() {
+    var id = $(this).val();
+    if (id < 1) {
+        return;
+    }
+    $.get('{$url}edit_option', {
+        platform_id: id
+    }, function(html) {
+        $('.edit-view').html(html);
+    });
+}).trigger('change');
 JS;
-$this->registerJs($js);
+$this->registerJs($js, View::JQUERY_READY);
 ?>
-<?=Form::open('./@admin/oauth/save_option')?>
+<?=Form::open($url. 'save_option')?>
     <?=Form::select('platform_id', [$items])->label('应用')?>
 
     <div class="edit-view">

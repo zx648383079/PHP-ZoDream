@@ -10,12 +10,12 @@ class Controller extends ModuleController {
 
     public $layout = '/Mobile/layouts/main';
 
-    public function prepare() {
-
-    }
-
     protected function getUrl($path, $args = []) {
         return url('./mobile/'.$path, $args);
+    }
+
+    protected function runActionMethod($action, $vars = array()) {
+        return $this->redirect('/');
     }
 
 

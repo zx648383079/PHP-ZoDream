@@ -4,8 +4,9 @@ namespace Module\OpenPlatform;
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\OpenPlatform\Domain\Listeners\TokenListener;
 use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
-use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Platform;
+use Zodream\Disk\Directory;
+use Zodream\Disk\File;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\Module as BaseModule;
@@ -76,5 +77,14 @@ class Module extends BaseModule {
                 'message' => $ex->getMessage()
             ]);
         }
+    }
+
+    /**
+     * 获取当前模板文件
+     * @param $path
+     * @return File
+     */
+    public static function viewFile($path) {
+        return new File(__DIR__.'/UserInterface/'. trim($path, '/'));
     }
 }

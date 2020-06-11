@@ -58,6 +58,15 @@ class AuthRepository {
         return self::doLogin($user, $remember);
     }
 
+    /**
+     * @param $name
+     * @param $email
+     * @param $password
+     * @param $confirmPassword
+     * @param bool $agreement
+     * @return bool|mixed
+     * @throws Exception
+     */
     public static function register(
         $name, $email, $password, $confirmPassword, $agreement = false) {
         if (!$agreement) {
@@ -75,6 +84,18 @@ class AuthRepository {
         if ($confirmPassword !== $password) {
             throw new Exception('两次密码不一致');
         }
+        $user = self::createUser($email, $name, $password);
+        return self::doLogin($user);
+    }
+
+    /**
+     * @param $email
+     * @param $name
+     * @param $password
+     * @return UserModel
+     * @throws Exception
+     */
+    private static function createUser($email, $name, $password) {
         $count = UserModel::where('email', $email)->orWhere('name', $name)
             ->count();
         if ($count > 0) {
@@ -88,7 +109,7 @@ class AuthRepository {
         if (!$user->save()) {
             throw new Exception($user->getFirstError());
         }
-        return self::doLogin($user);
+        return $user;
     }
 
     private static function doLogin(UserModel $user, $remember = false, $vendor = LoginLogModel::MODE_WEB) {
@@ -176,6 +197,10 @@ class AuthRepository {
             throw new Exception($user->getFirstError());
         }
         return true;
+    }
+
+    public static function sendSmsCode($mobile, $type = 'login') {
+        throw new Exception('暂不支持手机注册');
     }
 
     /**
@@ -312,20 +337,7 @@ class AuthRepository {
      * @throws Exception
      */
     public static function createAdmin($email, $password) {
-        $name = 'admin';
-        $count = UserModel::where('email', $email)->orWhere('name', $name)
-            ->count();
-        if ($count > 0) {
-            throw new Exception('昵称或邮箱已存在');
-        }
-        $user = new UserModel(compact('name', 'email'));
-        $user->setPassword($password);
-        $user->created_at = time();
-        $user->avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
-        $user->sex = UserModel::SEX_MALE;
-        if (!$user->save()) {
-            throw new Exception($user->getFirstError());
-        }
+        $user = self::createUser($email, 'admin', $password);
         UserRoleModel::query()->insert([
            'user_id' => $user->id,
             'role_id' => 1

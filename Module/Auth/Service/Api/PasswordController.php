@@ -1,7 +1,6 @@
 <?php
 namespace Module\Auth\Service\Api;
 
-use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Http\Request;
@@ -32,6 +31,21 @@ class PasswordController extends RestController {
         return $this->render([
             'data' => true,
             'message' => sprintf('邮件已成功发送至 %s 请注意查收！', $email)
+        ]);
+    }
+
+    public function sendMobileCodeAction($mobile, $type = 'login') {
+        try {
+            AuthRepository::sendSmsCode(
+                $mobile,
+                $type
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render([
+            'data' => true,
+            'message' => sprintf('验证码已成功发送至 %s 请注意查收！', $mobile)
         ]);
     }
 

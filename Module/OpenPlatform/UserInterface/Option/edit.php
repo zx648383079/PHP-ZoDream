@@ -7,10 +7,11 @@ use Zodream\Helpers\Str;
 ?>
 
 <?php foreach($data as $store => $args):?>
-   <h3><?=$args['label']?></h3>
+   <h3><?=$args['_label']?></h3>
    <?php foreach($args as $key => $item):?>
-      <?php if($key !== 'label'):?>
-            <?=Theme::text(sprintf('option[%s][%s]', $store, $key), $item, Str::studly($key))?>
+      <?php if(strpos($key, '_label') === false):?>
+            <?=Theme::text(sprintf('option[%s][%s]', $store, $key), $item,
+                isset($args[$key.'_label']) ? $args[$key.'_label'] : Str::studly($key))?>
       <?php endif;?>
    <?php endforeach;?>
 <?php endforeach;?>

@@ -21,7 +21,7 @@ class Sms {
 
     public function send($mobile, $content) {
         $log = SmsLogModel::create([
-           'mobile' => $mobile,
+            'mobile' => $mobile,
             'content' => $content,
             'ip' => app('request')->ip(),
             'status' => 0,

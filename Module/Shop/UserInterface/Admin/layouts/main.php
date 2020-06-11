@@ -232,6 +232,11 @@ $this->registerCssFile([
                 'fa fa-list'
             ],
             [
+                '支付接口',
+                './@admin/payment/option',
+                'fa fa-cog'
+            ],
+            [
                 '新建支付',
                 './@admin/payment/create',
                 'fa fa-plus'

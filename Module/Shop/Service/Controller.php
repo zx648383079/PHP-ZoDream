@@ -9,14 +9,16 @@ use Module\Shop\Module;
 class Controller extends ModuleController {
     public $layout = 'main';
 
-
-
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();
         $cart = Module::cart();
         $notice_list = ArticleRepository::getNotices();
         $this->send(compact('categories_tree', 'cart', 'notice_list'));
         return $this;
+    }
+
+    protected function runActionMethod($action, $vars = array()) {
+        return $this->redirect('/');
     }
 
     public function redirectWithAuth() {

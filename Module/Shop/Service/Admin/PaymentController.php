@@ -1,11 +1,14 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
+use Module\OpenPlatform\Domain\Concerns\EditPlatformOption;
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class PaymentController extends Controller {
+
+    use EditPlatformOption;
 
     public function indexAction() {
         $model_list = PaymentModel::page();
@@ -38,5 +41,19 @@ class PaymentController extends Controller {
         return $this->jsonSuccess([
             'url' => $this->getUrl('payment')
         ]);
+    }
+
+    protected function platformOption() {
+        return [
+            'wechat_pay' => [
+                '_label' => '微信支付',
+                'appid' => '',
+                'secret' => '',
+                'mch_id' => '',
+                'key' => '',
+                'key_label' => 'API KEY',
+                'mch_id_label' => '商户号',
+            ],
+        ];
     }
 }
