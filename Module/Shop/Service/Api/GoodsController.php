@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Module\ModuleController;
 use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
@@ -13,10 +14,11 @@ class GoodsController extends Controller {
                                 $brand = 0,
                                 $keywords = null,
                                 $per_page = 20, $sort = null, $order = null) {
-        if (!is_array($id) && $id > 0) {
+
+        if (is_numeric($id) && $id > 0) {
             return $this->infoAction($id);
         }
-        $page = GoodsRepository::search(!is_array($id) ? [] : $id, $category, $brand, $keywords, $per_page, $sort, $order);
+        $page = GoodsRepository::search(ModuleController::parseArrInt($id), $category, $brand, $keywords, $per_page, $sort, $order);
         return $this->renderPage($page);
     }
 

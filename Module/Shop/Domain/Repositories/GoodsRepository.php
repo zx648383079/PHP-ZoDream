@@ -48,6 +48,12 @@ class GoodsRepository {
             })->page($per_page);
     }
 
+    /**
+     * 商品详情
+     * @param $id
+     * @return array|bool
+     * @throws \Exception
+     */
     public static function detail($id) {
         $goods = GoodsModel::find($id);
         if (empty($goods)) {
@@ -60,7 +66,31 @@ class GoodsRepository {
         $data['static_properties'] = $goods->static_properties;
         $data['is_collect'] = $goods->is_collect;
         $data['gallery'] = $goods->gallery;
+        $data['countdown'] = self::getCountdown($id);
+        $data['promotes'] = self::getPromoteList($id);
         return $data;
+    }
+
+    public static function getCountdown($id) {
+        return [
+            'end_at' => time() + 3000,
+            'name' => '秒杀',
+            'tip' => '距秒杀结束还剩'
+        ];
+    }
+
+    public static function getPromoteList($id) {
+        return [
+            [
+                'name' => '支付',
+                'items' => [
+                    [
+                        'name' => '优惠',
+                        'icon' => '领券',
+                    ]
+                ]
+            ]
+        ];
     }
 
     public static function getRecommendQuery($tag): Query {
