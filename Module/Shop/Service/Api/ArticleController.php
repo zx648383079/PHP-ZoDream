@@ -23,4 +23,11 @@ class ArticleController extends Controller {
         $cat_list = ArticleCategoryModel::where('parent_id', $parent_id)->all();
         return $this->render($cat_list);
     }
+
+    public function suggestAction($keywords) {
+        $data = ArticleModel::when(!empty($keywords), function ($query) {
+            ArticleModel::searchWhere($query, 'title');
+        })->limit(4)->get();
+        return $this->render(compact('data'));
+    }
 }

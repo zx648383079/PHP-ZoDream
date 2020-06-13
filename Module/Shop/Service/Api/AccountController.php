@@ -53,6 +53,12 @@ class AccountController extends Controller {
         return $this->render($model_list);
     }
 
+    public function certificationAction() {
+        return $this->render([
+            'data' => false
+        ]);
+    }
+
     public function subtotalAction() {
         return $this->render([
            'money' => 0,

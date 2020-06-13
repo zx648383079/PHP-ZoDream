@@ -103,7 +103,7 @@ class CategoryModel extends CategoryEntity {
                 return $args;
             }
         }
-        return false;
+        return [];
     }
 
     public static function getChildrenWithParent($id) {
