@@ -173,6 +173,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
             'total_weight' => 1,
             'original_total' => $this->total(),
             'discount_amount' => 0,
+            'count' => $this->count()
         ];
     }
 
