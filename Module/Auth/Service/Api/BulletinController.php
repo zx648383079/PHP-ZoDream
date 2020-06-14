@@ -34,4 +34,54 @@ class BulletinController extends RestController {
         return $this->renderPage($model_list);
     }
 
+    public function infoAction($id) {
+        $model = BulletinUserModel::where('user_id', auth()->id())
+            ->where('bulletin_id', $id)->first();
+        if (empty($model)) {
+            return $this->renderFailure('消息不存在');
+        }
+        $model->status = BulletinUserModel::READ;
+        $model->save();
+        return $this->render($model);
+    }
+
+    public function readAction($id) {
+        $model = BulletinUserModel::where('user_id', auth()->id())
+            ->where('bulletin_id', $id)->first();
+        if (empty($model)) {
+            return $this->renderFailure('消息不存在');
+        }
+        BulletinUserModel::where('user_id', auth()->id())
+            ->where('bulletin_id', $id)->update([
+                'status' => BulletinUserModel::READ,
+                'updated_at' => time()
+            ]);
+        return $this->render([
+            'data' => true
+        ]);
+    }
+
+    public function readAllAction() {
+        BulletinUserModel::where('user_id', auth()->id())
+            ->where('status', 0)->update([
+                'status' => BulletinUserModel::READ,
+                'updated_at' => time()
+            ]);
+        return $this->render([
+            'data' => true
+        ]);
+    }
+
+    public function deleteAction($id) {
+        $model = BulletinUserModel::where('user_id', auth()->id())
+            ->where('bulletin_id', $id)->first();
+        if (empty($model)) {
+            return $this->renderFailure('消息不存在');
+        }
+        $model->delete();
+        return $this->render([
+            'data' => true
+        ]);
+    }
+
 }

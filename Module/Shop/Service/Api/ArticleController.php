@@ -27,7 +27,7 @@ class ArticleController extends Controller {
     public function suggestAction($keywords) {
         $data = ArticleModel::when(!empty($keywords), function ($query) {
             ArticleModel::searchWhere($query, 'title');
-        })->limit(4)->get();
+        })->limit(4)->get('id', 'title');
         return $this->render(compact('data'));
     }
 }

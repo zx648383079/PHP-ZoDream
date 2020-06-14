@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Repositories;
 
 
 use Module\Shop\Domain\Entities\GoodsEntity;
+use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsPageModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
@@ -125,9 +126,46 @@ class GoodsRepository {
 
     public static function importJson(array $data) {
         if (empty($data)) {
-            return;
+            throw new \Exception('数据错误');
         }
+        if (isset($data['sn']) && self::hasSeriesNumber($data['sn'])) {
+            throw new \Exception('商品已存在');
+        }
+        $goods = GoodsModel::create([
+            'cat_id' => CategoryRepository::findOrNew($data['category']),
+            'brand_id' => BrandRepository::findOrNew($data['brand']),
+            'name' => $data['title'],
+            'series_number' => isset($data['sn']) ? $data['sn'] : self::generateSn(),
+            'keywords' => 'string:0,200',
+            'thumb' => $data['thumb'],
+            'picture' => $data['thumb'],
+            'description' => $data['description'],
+            'brief' => $data['description'],
+            'content' => $data['content'],
+            'price' => $data['price'],
+            'market_price' => $data['price'],
+            'stock' => 1,
+            'status' => GoodsModel::STATUS_SALE,
+        ]);
+        if (!$goods) {
+            throw new \Exception('创建失败');
+        }
+        if (empty($data['images'])) {
+            return $goods;
+        }
+        $items = [];
+        foreach ($data['images'] as $img) {
+            $items[] = [
+                'goods_id' => $goods->id,
+                'image' => $img,
+            ];
+        }
+        GoodsGalleryModel::query()->insert($items);
+        return $goods;
+    }
 
+    public static function hasSeriesNumber($sn) {
+        return GoodsModel::where('series_number', $sn)->count() > 0;
     }
 
     public static function generateSn() {
@@ -136,8 +174,7 @@ class GoodsRepository {
         while ($i < 10) {
             $i ++;
             $sn = 'SN'.str_pad(Str::randomNumber(8), 8, '0', STR_PAD_LEFT );
-            $count = GoodsModel::where('series_number', $sn)->count();
-            if ($count < 1) {
+            if (!self::hasSeriesNumber($sn)) {
                 break;
             }
         }

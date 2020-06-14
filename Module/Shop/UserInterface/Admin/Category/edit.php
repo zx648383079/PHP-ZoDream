@@ -22,7 +22,7 @@ $this->title = '分类';
             <?php endforeach;?>
         </select>
     </div>
-    <?=Form::file('thumb')?>
+    <?=Form::file('icon')?>
     <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>
     <button type="submit" class="btn btn-success">确认保存</button>

@@ -2,9 +2,6 @@
 namespace Module\Shop\Service\Api;
 
 use Module\ModuleController;
-use Module\Shop\Domain\Models\BrandModel;
-use Module\Shop\Domain\Models\CategoryModel;
-use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 
 class GoodsController extends Controller {
@@ -40,13 +37,5 @@ class GoodsController extends Controller {
         $new_products = GoodsRepository::getRecommendQuery('is_new')->all();
         $best_products = GoodsRepository::getRecommendQuery('is_best')->all();
         return $this->render(compact('hot_products', 'new_products', 'best_products'));
-    }
-
-    public function countAction() {
-        return $this->render([
-           'category' => CategoryModel::query()->count(),
-           'brand' => BrandModel::query()->count(),
-           'goods' => GoodsModel::query()->count()
-        ]);
     }
 }

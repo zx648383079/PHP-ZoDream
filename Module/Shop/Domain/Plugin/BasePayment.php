@@ -41,7 +41,7 @@ abstract class BasePayment {
     }
 
     public function getConf($name): string {
-        return isset($this->configs[$name]) ? $this->configs[$name] : null;
+        return isset($this->configs[$name]) ? $this->configs[$name] : '';
     }
 
     public function toForm(string $action, array $data, string $method = 'POST') {

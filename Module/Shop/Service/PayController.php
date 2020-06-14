@@ -33,7 +33,7 @@ class PayController extends Controller {
         return $this->sendWithShare()->show($data);
     }
 
-    public function notifyAction($payment) {
+    public function notifyAction($payment, $platform = 0) {
         return PaymentRepository::callback(PaymentModel::find($payment));
     }
 

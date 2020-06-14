@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Api;
 
 
+use Infrastructure\Uploader;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 
@@ -48,6 +49,12 @@ class AccountController extends Controller {
         return $this->renderPage($card_list);
     }
 
+    public function addCardAction() {
+        return $this->render([
+            'data' => false
+        ]);
+    }
+
     public function connectAction() {
         $model_list = AccountRepository::getConnect();
         return $this->render($model_list);
@@ -56,6 +63,27 @@ class AccountController extends Controller {
     public function certificationAction() {
         return $this->render([
             'data' => false
+        ]);
+    }
+
+    public function uploadCertificationAction() {
+        $upload = new Uploader('file', [
+            'pathFormat' => '/assets/upload/cert/{yyyy}{mm}{dd}/{time}{rand:6}',
+            'maxSize' => 2048000,
+            'allowFiles' => ['.png', '.jpg', '.jpeg', '.gif', '.bmp']
+        ]);
+        $data = $upload->getFileInfo();
+        if ($data['state'] !== 'SUCCESS') {
+            return $this->renderFailure($data['state']);
+        }
+        return $this->render([
+            'data' => $data['url']
+        ]);
+    }
+
+    public function saveCertificationAction() {
+        return $this->render([
+            'data' => true
         ]);
     }
 
