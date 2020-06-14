@@ -11,6 +11,7 @@ class HomeController extends Controller {
         return $this->render([
             'name' => 'ZoDream Shop',
             'version' => '0.1',
+            'logo' => url()->asset('assets/images/wap_logo.png'),
             'category' => CategoryModel::query()->count(),
             'brand' => BrandModel::query()->count(),
             'goods' => GoodsModel::query()->count()

@@ -20,7 +20,7 @@ class CategoryController extends Controller {
         if (!empty($extra)) {
             $extra = explode(',', $extra);
             if (in_array('goods_list', $extra)) {
-                $data['goods_list'] = GoodsSimpleModel::whereIn('cat_id', $model->children)
+                $data['goods_list'] = GoodsSimpleModel::whereIn('cat_id', $model->getFamily())
                     ->where('is_best', 1)->all();
             }
             if (in_array('children', $extra)) {
