@@ -67,8 +67,8 @@ class GoodsRepository {
         $data['static_properties'] = $goods->static_properties;
         $data['is_collect'] = $goods->is_collect;
         $data['gallery'] = $goods->gallery;
-        $data['countdown'] = self::getCountdown($id);
-        $data['promotes'] = self::getPromoteList($id);
+        // $data['countdown'] = self::getCountdown($id);
+        // $data['promotes'] = self::getPromoteList($id);
         return $data;
     }
 

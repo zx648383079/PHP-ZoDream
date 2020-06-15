@@ -5,6 +5,7 @@ use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Store;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\GoodsDialogModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
@@ -46,7 +47,7 @@ class CartRepository {
      * @throws Exception
      */
     public static function checkGoodsOrProduct($id, $amount = 1, $properties = null) {
-        $goods = GoodsModel::find($id);
+        $goods = GoodsDialogModel::find($id);
         if (empty($goods)) {
             throw new \Exception('商品不存在');
         }

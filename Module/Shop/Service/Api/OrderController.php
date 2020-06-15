@@ -74,6 +74,11 @@ class OrderController extends Controller {
         ]);
     }
 
+    public function logisticsAction($id) {
+        $data = [];
+        return $this->render(compact('data'));
+    }
+
     public function commentAction($status) {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->when($status > 0, function ($query) {

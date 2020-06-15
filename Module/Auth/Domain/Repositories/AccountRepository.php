@@ -40,11 +40,11 @@ class AccountRepository {
             ],
             'wx' => [
                 'name' => '微信',
-                'icon' => 'fa-weixin',
+                'icon' => 'fa-wechat',
             ],
             'wx_mini' => [
                 'name' => '微信小程序',
-                'icon' => 'fa-weixin',
+                'icon' => 'fa-wechat',
             ],
             'alipay' => [
                 'name' => '支付宝',

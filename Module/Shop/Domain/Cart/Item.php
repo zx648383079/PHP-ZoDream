@@ -12,7 +12,7 @@ trait Item  {
     }
 
     public function canMerge(ICartItem $item) {
-        return $this->productId() == $item->productId() && $this->goodsId() == $item->productId();
+        return $this->productId() == $item->productId() && $this->goodsId() == $item->goodsId();
     }
 
     public function mergeItem(ICartItem $item) {
