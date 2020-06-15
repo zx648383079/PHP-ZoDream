@@ -11,6 +11,12 @@ use Zodream\Infrastructure\Http\Output\RestResponse;
 
 class Platform {
 
+    /**
+     * 全局的平台key
+     */
+    const PLATFORM_KEY = 'platform';
+
+
     private $app;
 
     private $options = [];
@@ -223,5 +229,36 @@ class Platform {
 
     public static function createAuto($key = 'appid') {
         return static::create(app('request')->get($key));
+    }
+
+    public static function createId($id) {
+        $platform = PlatformModel::find($id);
+        if (empty($platform)) {
+            throw new \Exception(__('id error'));
+        }
+        return new static($platform);
+    }
+
+    /**
+     * 全局获取平台id
+     * @return int
+     * @throws \Exception
+     */
+    public static function platformId() {
+        return app()->has(static::PLATFORM_KEY) ? app(static::PLATFORM_KEY)->id() : 0;
+    }
+
+    /**
+     * 进入场景
+     * @param $platform
+     * @throws \Exception
+     */
+    public static function enterPlatform($platform) {
+        if (is_int($platform)) {
+            $platform = static::createId($platform);
+        } elseif (is_string($platform)) {
+            $platform = static::create($platform);
+        }
+        app()->instance(static::PLATFORM_KEY, $platform);
     }
 }

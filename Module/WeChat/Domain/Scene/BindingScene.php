@@ -73,7 +73,7 @@ class BindingScene extends BaseScene implements SceneInterface {
         }
         $openid = Module::reply()->getOpenId();
         $nickname = WxUserModel::where('openid', $openid)->value('nickname');
-        $auth = OAuthModel::bindUser($user, $openid,
+        $auth = OAuthModel::bindUser($user, $openid, '',
             OAuthModel::TYPE_WX, $nickname.'');
         $this->leave();
         return new ReplyModel([

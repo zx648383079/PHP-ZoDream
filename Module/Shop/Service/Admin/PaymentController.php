@@ -50,9 +50,11 @@ class PaymentController extends Controller {
                 'appid' => '',
                 'secret' => '',
                 'mch_id' => '',
+                'mch_name' => '',
                 'key' => '',
                 'key_label' => 'API KEY',
                 'mch_id_label' => '商户号',
+                'mch_name_label' => '商户名称',
             ],
         ];
     }

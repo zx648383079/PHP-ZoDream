@@ -5,6 +5,8 @@ namespace Module\Shop\Service\Api;
 use Infrastructure\Uploader;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
+use Module\Shop\Domain\Models\BankCardModel;
+use Module\Shop\Domain\Models\CertificationModel;
 
 class AccountController extends Controller {
 
@@ -24,28 +26,11 @@ class AccountController extends Controller {
     }
 
     public function cardAction() {
-        $card_list = AccountLogModel::where('user_id', auth()->id())
+        $card_list = BankCardModel::where('user_id', auth()->id())
             ->orderBy('created_at', 'desc')->page();
-        $card_list->clearAttribute()->setPage([
-           [
-                'id' => 1,
-                'type' => 1,
-                'icon' => url()->asset('assets/images/wap_logo.png'),
-                'bank' => '工商银行',
-                'card_number' => '*** **** **** 5555',
-                'status' => 1,
-                'created_at' => ''
-           ],
-            [
-                'id' => 2,
-                'type' => 0,
-                'icon' => url()->asset('assets/images/wap_logo.png'),
-                'bank' => '邮政储蓄银行',
-                'card_number' => '*** **** **** 6666',
-                'status' => 0,
-                'created_at' => ''
-            ]
-        ]);
+        foreach ($card_list as $item) {
+            $item['icon'] = url()->asset('assets/images/wap_logo.png');
+        }
         return $this->renderPage($card_list);
     }
 
@@ -61,8 +46,9 @@ class AccountController extends Controller {
     }
 
     public function certificationAction() {
+        $cert = CertificationModel::where('user_id', auth()->id())->first();
         return $this->render([
-            'data' => false
+            'data' => $cert ? $cert : false
         ]);
     }
 
@@ -82,6 +68,15 @@ class AccountController extends Controller {
     }
 
     public function saveCertificationAction() {
+        $cert = CertificationModel::where('user_id', auth()->id())->first();
+        if (empty($cert)) {
+            $cert = new CertificationModel();
+        }
+        $cert->load();
+        $cert->user_id = auth()->id();
+        if (!$cert->save()) {
+            return $this->renderFailure($cert->getFirstError());
+        }
         return $this->render([
             'data' => true
         ]);

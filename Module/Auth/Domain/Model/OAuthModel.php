@@ -8,10 +8,11 @@ use Domain\Model\Model;
  * @package Domain\Model\Auth
  * @property integer $id
  * @property integer $user_id
- * @property integer $open_id
+ * @property integer $platform_id
  * @property string $nickname
  * @property string $vendor
  * @property string $identity
+ * @property string $unionid
  * @property string $data
  * @property integer $created_at
  */
@@ -34,9 +35,10 @@ class OAuthModel extends Model {
             'nickname' => 'string:0,30',
             'vendor' => 'string:0,30',
             'identity' => 'string:0,100',
+            'unionid' => 'string:0,100',
             'data' => '',
             'created_at' => 'int',
-            'open_id' => 'int',
+            'platform_id' => 'int',
         ];
     }
 
@@ -47,9 +49,10 @@ class OAuthModel extends Model {
             'nickname' => '昵称',
             'vendor' => '平台',
             'identity' => 'Identity',
+            'unionid' => '联合id',
             'data' => 'Data',
             'created_at' => 'Created At',
-            'open_id' => 'Open Id',
+            'platform_id' => 'Platform Id',
         ];
     }
 
@@ -61,21 +64,23 @@ class OAuthModel extends Model {
     /**
      * 绑定用户
      * @param UserModel $user
-     * @param $identifier
+     * @param string $identifier
+     * @param string $unionId
      * @param string $type
      * @param string $nickname
-     * @param int $open_id
+     * @param int $platform_id
      * @return OAuthModel
      */
     public static function bindUser(UserModel $user,
-                                    $identifier,
-                                    $type = self::TYPE_QQ, $nickname = '', $open_id = 0) {
+                                    $identifier, $unionId = '',
+                                    $type = self::TYPE_QQ, $nickname = '', $platform_id = 0) {
         return static::create([
             'user_id' => $user->id,
             'vendor' => $type,
             'identity' => $identifier,
+            'unionid' => $unionId,
             'nickname' => $nickname,
-            'open_id' => $open_id
+            'platform_id' => $platform_id
         ]);
     }
 
@@ -86,7 +91,20 @@ class OAuthModel extends Model {
     }
 
     /**
-     * 根据第三方授权令牌登录
+     * 获取其他地方用到的openid
+     * @param int $user_id
+     * @param string $type
+     * @param int $platform_id
+     * @return mixed
+     */
+    public static function findOpenid($user_id, $type = self::TYPE_WX, $platform_id = 0) {
+        return static::where('user_id', $user_id)
+            ->where('platform_id', $platform_id)
+            ->where('type', $type)->value('identity');
+    }
+
+    /**
+     * 根据第三方授权令牌登录，不支持联合id查询
      * @param string $identifier
      * @param string $type
      * @return bool|UserModel
@@ -106,19 +124,37 @@ class OAuthModel extends Model {
      * @param string $openid
      * @param string $unionId
      * @param string $type
-     * @return UserModel|bool
+     * @param int $platform_id
+     * @return UserModel|null
      * @throws \Exception
      */
     public static function findUserWithUnion($openid,
                                             $unionId,
-                                            $type = self::TYPE_QQ) {
-        $user = static::findUser($openid, $type);
-        if (!empty($user)) {
-            return $user;
+                                            $type = self::TYPE_QQ, $platform_id = 0) {
+        /** @var OAuthModel $model */
+        $model = static::where('vendor', $type)
+            ->where('identity', $openid)->first();
+        if (!empty($model)) {
+            $model->unionid = $unionId;
+            $model->save();
+            // 这里可以验证用户是否存在，不存在删除记录
+            return UserModel::find($model->user_id);
         }
         if (empty($unionId)) {
-            return false;
+            return null;
         }
-        return static::findUser($unionId, $type);
+        $types = [$type];
+        if ($type === self::TYPE_WX || $type === self::TYPE_WX_MINI) {
+            $types = [self::TYPE_WX, self::TYPE_WX_MINI];
+        }
+        $model = static::whereIn('vendor', $types)
+            ->where('unionid', $unionId)->first();
+        if (empty($model)) {
+            return null;
+        }
+        $user = UserModel::find($model->user_id);
+        // 这里可以验证用户是否存在，不存在删除所有此用户记录
+        self::bindUser($user, $openid, $unionId, $type, $model->nickname, $platform_id);
+        return $user;
     }
 }

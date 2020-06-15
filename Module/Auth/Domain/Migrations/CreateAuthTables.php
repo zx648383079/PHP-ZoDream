@@ -42,9 +42,10 @@ class CreateAuthTables extends Migration {
         })->append(OAuthModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->notNull();
-            $table->set('open_id')->int()->defaultVal(0)->comment('平台id');
+            $table->set('platform_id')->int()->defaultVal(0)->comment('平台id');
             $table->set('nickname')->varchar(30)->defaultVal('')->comment('昵称');
             $table->set('vendor')->varchar(20)->defaultVal(OAuthModel::TYPE_QQ);
+            $table->set('unionid')->varchar(100)->defaultVal('联合id');
             $table->set('identity')->varchar(100)->notNull();
             $table->set('data')->text();
             $table->timestamp('created_at');

@@ -1,12 +1,11 @@
 <?php
 namespace Module\Shop\Service;
 
-use Module\Shop\Domain\Models\OrderLogModel;
+use Module\OpenPlatform\Domain\Platform;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PayLogModel;
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Repositories\PaymentRepository;
-use Zodream\Helpers\Str;
 
 class PayController extends Controller {
 
@@ -34,6 +33,9 @@ class PayController extends Controller {
     }
 
     public function notifyAction($payment, $platform = 0) {
+        if ($platform > 0) {
+            Platform::enterPlatform(intval($platform));
+        }
         return PaymentRepository::callback(PaymentModel::find($payment));
     }
 

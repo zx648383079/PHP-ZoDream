@@ -25,6 +25,7 @@ use Domain\Model\Model;
  * @property float $discount
  * @property float $shipping_fee
  * @property float $pay_fee
+ * @property integer $reference
  * @property integer $pay_at
  * @property integer $shipping_at
  * @property integer $receive_at
@@ -81,6 +82,7 @@ class OrderModel extends Model {
             'discount' => '',
             'shipping_fee' => '',
             'pay_fee' => '',
+            'reference' => 'int',
             'pay_at' => 'int',
             'shipping_at' => 'int',
             'receive_at' => 'int',
@@ -105,6 +107,7 @@ class OrderModel extends Model {
             'discount' => 'Discount',
             'shipping_fee' => 'Shipping Fee',
             'pay_fee' => 'Pay Fee',
+            'reference' => '推荐人',
             'pay_at' => 'Pay At',
             'shipping_at' => 'Shipping At',
             'receive_at' => 'Receive At',

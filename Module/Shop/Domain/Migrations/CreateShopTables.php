@@ -8,13 +8,16 @@ use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
+use Module\Shop\Domain\Models\AffiliateLogModel;
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
 use Module\Shop\Domain\Models\AttributeGroupModel;
 use Module\Shop\Domain\Models\AttributeModel;
+use Module\Shop\Domain\Models\BankCardModel;
 use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\CategoryModel;
+use Module\Shop\Domain\Models\CertificationModel;
 use Module\Shop\Domain\Models\CollectModel;
 use Module\Shop\Domain\Models\CommentImageModel;
 use Module\Shop\Domain\Models\CommentModel;
@@ -129,6 +132,43 @@ class CreateShopTables extends Migration {
             $table->set('address')->varchar()->notNull()->comment('注册场所地址');
             $table->set('user_id')->int()->notNull();
             $table->timestamps();
+        })->append(CertificationModel::tableName(), function (Table $table) {
+            $table->setComment('用户实名表');
+            $table->set('id')->pk(true);
+            $table->set('user_id')->int()->notNull();
+            $table->set('name')->varchar(20)->notNull()->comment('真实姓名');
+            $table->set('sex')->enum(['男', '女'])->defaultVal('男')->comment('性别');
+            $table->set('country')->varchar(20)->defaultVal('')->comment('国家或地区');
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('证件类型');
+            $table->set('card_no')->varchar(30)->notNull()->comment('证件号码');
+            $table->set('expiry_date')->varchar(30)->defaultVal('')->comment('证件有效期');
+            $table->set('profession')->varchar(30)->defaultVal('')->comment('行业');
+            $table->set('address')->varchar(200)->defaultVal('')->comment('地址');
+            $table->set('front_side')->varchar(200)->defaultVal('')->comment('正面照');
+            $table->set('back_side')->varchar(200)->defaultVal('')->comment('反面照');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('审核状态');
+            $table->timestamps();
+        })->append(BankCardModel::tableName(), function (Table $table) {
+            $table->setComment('用户银行卡表');
+            $table->set('id')->pk(true);
+            $table->set('user_id')->int()->notNull();
+            $table->set('bank')->varchar(50)->notNull()->comment('银行名');
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('卡类型: 0 储蓄卡 1 信用卡');
+            $table->set('card_no')->varchar(30)->notNull()->comment('卡号码');
+            $table->set('expiry_date')->varchar(30)->defaultVal('')->comment('卡有效期');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('审核状态');
+            $table->timestamps();
+        })->append(AffiliateLogModel::tableName(), function (Table $table) {
+            $table->setComment('用户分销记录表');
+            $table->set('id')->pk(true);
+            $table->set('user_id')->int()->notNull();
+            $table->set('item_type')->tinyint(1)->defaultVal(0)->comment('类型: 0 用户 1 订单');
+            $table->set('item_id')->int()->notNull()->comment('订单号/被推荐的用户');
+            $table->set('order_sn')->varchar(30)->defaultVal('')->comment('订单号');
+            $table->set('order_amount')->decimal(8, 2)->defaultVal(0)->comment('卡有效期');
+            $table->set('money')->decimal(8, 2)->defaultVal(0)->comment('卡有效期');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('审核状态');
+            $table->timestamps();
         });
         $this->createAttribute();
 
@@ -183,6 +223,7 @@ class CreateShopTables extends Migration {
             $table->set('discount')->decimal(8, 2)->defaultVal(0);
             $table->set('shipping_fee')->decimal(8, 2)->defaultVal(0);
             $table->set('pay_fee')->decimal(8, 2)->defaultVal(0);
+            $table->set('reference')->int()->defaultVal(0)->comment('推荐人');
             $table->timestamp('pay_at')->comment('支付时间');
             $table->timestamp('shipping_at')->comment('发货时间');
             $table->timestamp('receive_at')->comment('签收时间');

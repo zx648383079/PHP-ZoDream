@@ -2,6 +2,8 @@
 namespace Module\Shop\Service\Api;
 
 use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Shop\Domain\Models\AffiliateLogModel;
 
 class AffiliateController extends Controller {
 
@@ -15,17 +17,15 @@ class AffiliateController extends Controller {
     }
 
     public function userAction() {
-        $card_list = AccountLogModel::where('user_id', auth()->id())
+        $user_list = UserSimpleModel::where('parent_id', auth()->id())
             ->orderBy('created_at', 'desc')->page();
-        $card_list->clearAttribute()->setPage([]);
-        return $this->renderPage($card_list);
+        return $this->renderPage($user_list);
     }
 
     public function orderAction() {
-        $card_list = AccountLogModel::where('user_id', auth()->id())
+        $log_list = AffiliateLogModel::where('user_id', auth()->id())
             ->orderBy('created_at', 'desc')->page();
-        $card_list->clearAttribute()->setPage([]);
-        return $this->renderPage($card_list);
+        return $this->renderPage($log_list);
     }
 
     public function subtotalAction() {

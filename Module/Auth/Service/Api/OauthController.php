@@ -4,6 +4,7 @@ namespace Module\Auth\Service\Api;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\OpenPlatform\Domain\Platform;
 use Zodream\Route\Controller\RestController;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
 use Module\Auth\Service\OauthController as BaseController;
@@ -17,7 +18,9 @@ class OauthController extends RestController {
     }
 
     public function miniAction($code, $nickname, $avatar = '', $gender = 2) {
-        $mini = new MiniOAuth();
+        /** @var Platform $platform */
+        $platform = app('platform');
+        $mini = new MiniOAuth($platform->option('mini_auth'));
         $guest = auth()->guest();
         try {
             $data = $mini->login($code);
@@ -32,7 +35,7 @@ class OauthController extends RestController {
                         $avatar
                     ];
                 }, isset($data['unionid']) ? $data['unionid'] : null,
-                app('platform')->id()
+                $platform->id()
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

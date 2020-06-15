@@ -69,12 +69,12 @@ class Boc extends BasePayment {
 
     public function refund(array $log): array {
         $data = [
-            'merchantNo'        => $this->getConf('mer_id'),                 // 商户号
-            'mRefundSeq' => $log['refund_id'],
-            'curCode' => '001',
-            'refundAmount' => sprintf('%.2f', $log['currency_money']),
-            'orderNo' => $log['payment_id'],
-            'signData'          => ''                    // 商户签名数据
+            'merchantNo'      => $this->getConf('mer_id'),                 // 商户号
+            'mRefundSeq'      => $log['refund_id'],
+            'curCode'         => '001',
+            'refundAmount'    => sprintf('%.2f', $log['currency_money']),
+            'orderNo'         => $log['payment_id'],
+            'signData'        => ''                    // 商户签名数据
         ];
 
         $data['signData'] = $this->sign($data, [

@@ -5,7 +5,6 @@ use Module\Auth\Domain\Events\TokenCreated;
 use Module\OpenPlatform\Domain\Listeners\TokenListener;
 use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
 use Module\OpenPlatform\Domain\Platform;
-use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Infrastructure\Http\Output\RestResponse;
@@ -63,7 +62,7 @@ class Module extends BaseModule {
                 throw new \Exception(__('sign or encrypt error'));
             }
             $platform->useCustomToken();
-            app()->instance('platform', $platform);
+            Platform::enterPlatform($platform);
             event()->listen(TokenCreated::class, TokenListener::class);
             $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');
             if ($data instanceof RestResponse) {
@@ -87,4 +86,5 @@ class Module extends BaseModule {
     public static function viewFile($path) {
         return new File(__DIR__.'/UserInterface/'. trim($path, '/'));
     }
+
 }
