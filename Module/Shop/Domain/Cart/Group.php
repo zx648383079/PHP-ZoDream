@@ -52,7 +52,25 @@ class Group implements \IteratorAggregate, ArrayAble {
 
     public function get($id) {
         foreach ($this->items as $item) {
-            if ($item->getId() == $id) {
+            if (is_callable($id) && call_user_func($id, $item)) {
+                return $item;
+            }
+            if (!is_callable($id) && $item->getId() == $id) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据商品id获取
+     * @param $goodsId
+     * @param int $productId
+     * @return ICartItem|null
+     */
+    public function getGoods($goodsId, $productId = 0) {
+        foreach ($this->items as $item) {
+            if ($item->goodsId() == $goodsId && $item->productId() == $productId) {
                 return $item;
             }
         }

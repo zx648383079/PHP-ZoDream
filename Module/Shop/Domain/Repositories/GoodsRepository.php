@@ -72,6 +72,15 @@ class GoodsRepository {
         return $data;
     }
 
+    public static function formatProperties(GoodsModel $goods) {
+        if (empty($goods)) {
+            return false;
+        }
+        $data = $goods->toArray();
+        $data['properties'] = $goods->properties;
+        return $data;
+    }
+
     public static function getCountdown($id) {
         return [
             'end_at' => time() + 3000,

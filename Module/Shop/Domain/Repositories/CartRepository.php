@@ -37,9 +37,53 @@ class CartRepository {
         return $goods;
     }
 
+    /**
+     * 验证商品属性是否正确
+     * @param $id
+     * @param int $amount
+     * @param null $properties
+     * @return array [GoodsModel, ProductModel, 规格是否对]
+     * @throws Exception
+     */
+    public static function checkGoodsOrProduct($id, $amount = 1, $properties = null) {
+        $goods = GoodsModel::find($id);
+        if (empty($goods)) {
+            throw new \Exception('商品不存在');
+        }
+        if ($goods->status != GoodsModel::STATUS_SALE) {
+            throw new \Exception(sprintf('商品【%s】已下架', $goods->name));
+        }
+        if (!$goods->canBuy($amount)) {
+            throw new \Exception(sprintf('商品【%s】库存不足', $goods->name));
+        }
+        return [$goods, null, true];
+    }
+
     public static function addGoods($goods, $amount = 1, $properties = null) {
-        $goods = static::checkGoods($goods, $amount);
+        $cartItem = Module::cart()->getGoods(is_numeric($goods) ? $goods : $goods->id);
+        $totalAmount = $amount;
+        if ($cartItem) {
+            $totalAmount += $cartItem->amount();
+        }
+        $goods = static::checkGoods($goods, $totalAmount);
         Module::cart()->add(CartModel::fromGoods($goods, $amount))->save();
+        return true;
+    }
+
+    public static function updateGoods($goods, $amount = 1, $properties = null) {
+        $cartItem = Module::cart()->getGoods(is_numeric($goods) ? $goods : $goods->id);
+        if ($amount < 1) {
+            if ($cartItem) {
+                Module::cart()->removeId($cartItem->getId());
+            }
+            return true;
+        }
+        $goods = static::checkGoods($goods, $amount);
+        if ($cartItem) {
+            Module::cart()->update($cartItem->getId(), $amount);
+        } else {
+            Module::cart()->add(CartModel::fromGoods($goods, $amount))->save();
+        }
         return true;
     }
     /**

@@ -14,7 +14,8 @@ class HomeController extends Controller {
             'logo' => url()->asset('assets/images/wap_logo.png'),
             'category' => CategoryModel::query()->count(),
             'brand' => BrandModel::query()->count(),
-            'goods' => GoodsModel::query()->count()
+            'goods' => GoodsModel::query()->count(),
+            'currency' => '￥',
         ]);
     }
 }

@@ -71,6 +71,11 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         return $this;
     }
 
+    /**
+     * 根据购物车id获取购物车项
+     * @param int|callable $id
+     * @return ICartItem|null
+     */
     public function get($id) {
         foreach ($this->groups as $group) {
             if ($item = $group->get($id)) {
@@ -78,6 +83,31 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
             }
         }
         return null;
+    }
+
+    /**
+     * 根据商品id 获取购物车项
+     * @param $goodsId
+     * @param int $productId
+     * @return ICartItem|null
+     */
+    public function getGoods($goodsId, $productId = 0) {
+        foreach ($this->groups as $group) {
+            if ($item = $group->getGoods($goodsId, $productId)) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
+    public function clear() {
+        foreach ($this->groups as $group) {
+            foreach ($group as $item) {
+                $item->delete();
+            }
+        }
+        $this->groups = [];
+        return true;
     }
 
     public function remove($ids) {
@@ -190,11 +220,12 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         $items = array_map(function (Group $group) {
             return $group->toArray();
         }, $this->all());
+        $subtotal = $this->subtotal();
         return [
             'data' => $items,
-            'subtotal' => $this->subtotal(),
+            'subtotal' => $subtotal,
             'checkout_button' => $this->checkoutButton(),
-            'promotion_cell' => $this->promotionCell()
+            'promotion_cell' => $subtotal['total'] > 99 ? [] : $this->promotionCell()
         ];
     }
 
