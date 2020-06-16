@@ -10,15 +10,14 @@ class SearchController extends Controller {
     }
 
     public function keywordsAction() {
-        return $this->render([
-            '女装', '童装', '玩具'
-        ]);
+        $data = [];
+        return $this->render(compact('data'));
     }
 
     public function tipsAction($keywords) {
         $data = GoodsModel::when(!empty($keywords), function ($query) {
                 GoodsModel::searchWhere($query, 'name');
             })->limit(10)->pluck('name');
-        return $this->render($data);
+        return $this->render(compact('data'));
     }
 }

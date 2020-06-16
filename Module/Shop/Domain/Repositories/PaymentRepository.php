@@ -24,7 +24,7 @@ class PaymentRepository {
             'currency_money' => $order->order_amount,
             'begin_at' => time(),
         ]);
-        $notify_url = url(sprintf('./pay/notify/platform/%d/payment/%d',
+        $notify_url = url(sprintf('./pay/notify/0/platform/%d/payment/%d',
             app()->has('platform') ? app('platform')->id() : 0,
             $payment->id));
         $return_url = url('./pay/result/id/'. $log->id);

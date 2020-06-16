@@ -9,7 +9,7 @@ use Module\OpenPlatform\Module;
 trait EditPlatformOption {
 
     public function optionAction() {
-        $url = './';
+        $url = preg_replace('#option[^/]*#', '', url()->current());
         $items = PlatformModel::findWidthAuth();
         return $this->renderFile(Module::viewFile('Option/index.php'), compact('items', 'url'));
     }

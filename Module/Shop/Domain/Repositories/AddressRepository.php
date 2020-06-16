@@ -35,7 +35,7 @@ class AddressRepository {
             $data['region_id'] = RegionModel::findIdByName($data['region_name']);
         }
         if (isset($data['id']) && $data['id'] > 0
-            && isset($data['tel']) && strpos($data['tel'], '****') > 0) {
+            && isset($data['tel']) && strpos($data['tel'], '**') > 0) {
             unset($data['tel']);
         }
         $data['user_id'] = auth()->id();

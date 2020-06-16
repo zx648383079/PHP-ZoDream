@@ -8,6 +8,7 @@ use Module\Shop\Module;
 
 class Controller extends ModuleController {
     public $layout = 'main';
+    protected $disallow = true;
 
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();
@@ -18,6 +19,9 @@ class Controller extends ModuleController {
     }
 
     protected function runActionMethod($action, $vars = array()) {
+        if (!$this->disallow) {
+            return parent::runActionMethod($action, $vars);
+        }
         return $this->redirect('/');
     }
 

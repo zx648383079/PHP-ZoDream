@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Api;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Repositories\PaymentRepository;
+use Zodream\Database\DB;
 
 class PayController extends Controller {
 

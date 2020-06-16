@@ -14,6 +14,7 @@ use Module\Shop\Domain\Repositories\CouponRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
 use Module\Shop\Module;
 use Exception;
+use Zodream\Database\DB;
 
 class CashierController extends Controller {
 

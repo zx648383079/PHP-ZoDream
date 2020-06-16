@@ -26,6 +26,30 @@ use Zodream\Helpers\Tree as TreeHelper;
  */
 class CategoryModel extends CategoryEntity {
 
+    public function getIconAttribute() {
+        $thumb = $this->getAttributeSource('icon');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
+    public function getBannerAttribute() {
+        $thumb = $this->getAttributeSource('banner');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
+    public function getAppBannerAttribute() {
+        $thumb = $this->getAttributeSource('app_banner');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
     /**
      * @return array
      */

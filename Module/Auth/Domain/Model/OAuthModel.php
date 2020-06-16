@@ -77,8 +77,8 @@ class OAuthModel extends Model {
         return static::create([
             'user_id' => $user->id,
             'vendor' => $type,
-            'identity' => $identifier,
-            'unionid' => $unionId,
+            'identity' => $identifier.'',
+            'unionid' => $unionId.'',
             'nickname' => $nickname,
             'platform_id' => $platform_id
         ]);
@@ -100,7 +100,7 @@ class OAuthModel extends Model {
     public static function findOpenid($user_id, $type = self::TYPE_WX, $platform_id = 0) {
         return static::where('user_id', $user_id)
             ->where('platform_id', $platform_id)
-            ->where('type', $type)->value('identity');
+            ->where('vendor', $type)->value('identity');
     }
 
     /**
@@ -135,8 +135,10 @@ class OAuthModel extends Model {
         $model = static::where('vendor', $type)
             ->where('identity', $openid)->first();
         if (!empty($model)) {
-            $model->unionid = $unionId;
-            $model->save();
+            if (!empty($unionId)) {
+                $model->unionid = $unionId;
+                $model->save();
+            }
             // 这里可以验证用户是否存在，不存在删除记录
             return UserModel::find($model->user_id);
         }

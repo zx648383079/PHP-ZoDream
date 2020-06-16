@@ -4,13 +4,12 @@ namespace Module\Auth\Service;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Module\ModuleController;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\Service\Factory;
 
 
-class HomeController extends ModuleController {
+class HomeController extends Controller {
 
     protected function rules() {
         return [

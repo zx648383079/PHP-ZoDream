@@ -2,12 +2,11 @@
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Module\ModuleController;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
 
-class PasswordController extends ModuleController {
+class PasswordController extends Controller {
 
     public function indexAction($code) {
         try {

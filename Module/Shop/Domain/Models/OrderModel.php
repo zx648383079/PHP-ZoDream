@@ -10,6 +10,7 @@ namespace Module\Shop\Domain\Models;
 use Domain\Model\Model;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
+use Zodream\Helpers\Time;
 
 
 /**
@@ -134,6 +135,38 @@ class OrderModel extends Model {
 
     public function getStatusLabelAttribute() {
         return self::$status_list[$this->status];
+    }
+
+    public function getPayAtAttribute() {
+        $time = $this->getAttributeSource('pay_at');
+        if ($time < 1) {
+            return '';
+        }
+        return Time::format($time);
+    }
+
+    public function getShippingAtAttribute() {
+        $time = $this->getAttributeSource('shipping_at');
+        if ($time < 1) {
+            return '';
+        }
+        return Time::format($time);
+    }
+
+    public function getReceiveAtAttribute() {
+        $time = $this->getAttributeSource('receive_at');
+        if ($time < 1) {
+            return '';
+        }
+        return Time::format($time);
+    }
+
+    public function getFinishAtAttribute() {
+        $time = $this->getAttributeSource('finish_at');
+        if ($time < 1) {
+            return '';
+        }
+        return Time::format($time);
     }
 
     public function payment() {

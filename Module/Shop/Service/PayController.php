@@ -9,6 +9,8 @@ use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class PayController extends Controller {
 
+    protected $disallow = false;
+
     public function indexAction($order, $payment) {
         $order = OrderModel::find($order);
         if ($order->status != OrderModel::STATUS_UN_PAY) {
@@ -33,10 +35,17 @@ class PayController extends Controller {
     }
 
     public function notifyAction($payment, $platform = 0) {
-        if ($platform > 0) {
-            Platform::enterPlatform(intval($platform));
+        try {
+            if ($platform > 0) {
+                Platform::enterPlatform(intval($platform));
+            }
+            return PaymentRepository::callback(PaymentModel::find($payment));
+        } catch (\Exception $ex) {
+            logger(sprintf('(%s):%s|>>%s', url()->full(),
+                app('request')->input(),
+                $ex->getMessage()));
+            return 'failure';
         }
-        return PaymentRepository::callback(PaymentModel::find($payment));
     }
 
     public function resultAction($id) {

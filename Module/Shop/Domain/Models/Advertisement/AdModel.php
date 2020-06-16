@@ -68,6 +68,33 @@ class AdModel extends Model {
         return $this->hasOne(AdPositionModel::class, 'id', 'position_id');
     }
 
+    public function setStartAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->__attributes['start_at'] = $value;
+    }
+
+    public function setEndAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->__attributes['end_at'] = $value;
+    }
+
+    public function getStartAtAttribute() {
+        return $this->formatTimeAttribute('start_at');
+    }
+
+    public function getEndAtAttribute() {
+        return $this->formatTimeAttribute('end_at');
+    }
+
+    public function getContentAttribute() {
+        $content = $this->getAttributeSource('content');
+        return !empty($content) && $this->type == self::IMG ? url()->asset($content) : $content;
+    }
+
     public function getHtml() {
         switch ($this->type) {
             case self::TEXT:

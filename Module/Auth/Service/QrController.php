@@ -4,11 +4,10 @@ namespace Module\Auth\Service;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
-use Module\ModuleController;
 use Zodream\Image\QrCode;
 use Zodream\Infrastructure\Http\Response;
 
-class QrController extends ModuleController {
+class QrController extends Controller {
 
     protected function rules() {
         return [

@@ -46,10 +46,10 @@ class OrderAddressModel extends Model {
 
     public static function converter(AddressModel $address) {
         return new static([
-            'name' => $address->name,
+            'name' => $address->getAttributeSource('name'),
             'region_id' => $address->region_id,
             'region_name' => $address->region->full_name,
-            'tel' => $address->tel,
+            'tel' => $address->getAttributeSource('tel'),
             'address' => $address->address,
             'address_id' => $address->id
         ]);

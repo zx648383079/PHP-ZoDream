@@ -9,9 +9,9 @@ class HomeController extends Controller {
 
     public function indexAction() {
         return $this->render([
-            'name' => 'ZoDream Shop',
+            'name' => '聚百客综合商店',
             'version' => '0.1',
-            'logo' => url()->asset('assets/images/wap_logo.png'),
+            'logo' => url()->asset('assets/upload/image/shop_logo.png'),
             'category' => CategoryModel::query()->count(),
             'brand' => BrandModel::query()->count(),
             'goods' => GoodsModel::query()->count(),

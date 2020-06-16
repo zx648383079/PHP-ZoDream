@@ -1,18 +1,15 @@
 <?php
 namespace Module\Auth\Service;
 
-use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Module\ModuleController;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Platform;
-use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Cookie;
 use Zodream\Module\OAuth\Domain\Client;
 use Zodream\ThirdParty\OAuth\BaseOAuth;
 
-class OauthController extends ModuleController {
+class OauthController extends Controller {
 
     protected function rules() {
         return [
@@ -31,11 +28,11 @@ class OauthController extends ModuleController {
     public function callbackAction($type = 'qq') {
         /** @var Platform $platform */
         $platform = session('platform');
-        $auth = $this->getOAuth($type);
-        if (!$auth->callback()) {
-            return $this->failureCallback('授权回调失败！');
-        }
         try {
+            $auth = $this->getOAuth($type);
+            if (!$auth->callback()) {
+                return $this->failureCallback('授权回调失败！');
+            }
             $user = AuthRepository::oauth($type, $auth->identity,
                 function () use ($auth) {
                     if (empty($auth->info())) {

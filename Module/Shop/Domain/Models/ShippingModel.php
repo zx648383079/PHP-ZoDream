@@ -64,7 +64,7 @@ class ShippingModel extends Model {
      * @return static[]
      */
     public static function getByAddress(AddressModel $address) {
-        $items = ShippingRegionModel::query()->where('region_id', $address->region_id)
+        $items = ShippingRegionModel::query()->where('region_id', $address->region->parent_id)
             ->asArray()->get();
         if (empty($items)) {
             return [];

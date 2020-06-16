@@ -2,9 +2,8 @@
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Module\ModuleController;
 
-class LogoutController extends ModuleController {
+class LogoutController extends Controller {
 
     public function indexAction() {
         AuthRepository::logout(true);

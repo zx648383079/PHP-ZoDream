@@ -17,16 +17,21 @@ class Module extends BaseModule {
     public function openLinks(SiteMap $map) {
         $map->add(url('./'), time());
         $items = ProjectModel::where('status', ProjectModel::STATUS_PUBLIC)->get('id', 'updated_at');
+        $itemId = [];
         foreach ($items as $item) {
+            $itemId[] = $item->id;
             $map->add(url('./project', ['id' => $item->id]),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
         }
-//        $items = ApiModel::query()->get('id', 'updated_at');
+        if (empty($itemId)) {
+            return;
+        }
+//        $items = ApiModel::query()->whereIn('project_id', $itemId)->get('id', 'updated_at');
 //        foreach ($items as $item) {
 //            $map->add(url('./api', ['id' => $item->id]),
 //                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
 //        }
-        $items = PageModel::query()->get('id', 'updated_at');
+        $items = PageModel::query()->whereIn('project_id', $itemId)->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./page', ['id' => $item->id]),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);

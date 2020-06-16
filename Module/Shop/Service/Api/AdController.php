@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\Advertisement\AdModel;
+use Module\Shop\Domain\Repositories\AdRepository;
 
 class AdController extends Controller {
 
@@ -13,6 +14,8 @@ class AdController extends Controller {
     }
 
     public function bannerAction() {
-        return $this->render(AdModel::banners());
+        return $this->render([
+            'data' => AdRepository::mobileBanners()
+        ]);
     }
 }

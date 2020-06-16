@@ -125,12 +125,12 @@ class CartRepository {
         if (!$order->setAddress($address)) {
             throw new InvalidArgumentException('请选择收货地址');
         }
-        if (!$isPreview && $payment > 0 && !$order->setPayment(PaymentModel::find($payment))) {
+        if ($payment > 0 && !$order->setPayment(PaymentModel::find($payment)) && !$isPreview) {
             throw new InvalidArgumentException('请选择支付方式');
         }
         if ($shipping > 0) {
             $group_id = ShippingRegionModel::where('shipping_id', $shipping)
-                ->where('region_id', $address->region_id)->value('group_id');
+                ->where('region_id', $address->region->parent_id)->value('group_id');
             if ($group_id < 1) {
                 throw new InvalidArgumentException('当前地址不支持此配送方式');
             }

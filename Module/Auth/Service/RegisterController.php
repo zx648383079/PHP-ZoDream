@@ -2,10 +2,9 @@
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Module\ModuleController;
 use Zodream\Infrastructure\Http\Request;
 
-class RegisterController extends ModuleController {
+class RegisterController extends Controller {
 
     protected function rules() {
         return [

@@ -20,7 +20,7 @@ class UserController extends Controller {
     public function indexAction($keywords = null) {
         $user_list = UserModel::when(!empty($keywords), function ($query) {
             OAuthModel::searchWhere($query, 'name');
-        })->page();
+        })->orderBy('id', 'desc')->page();
         return $this->show(compact('user_list'));
     }
 
@@ -41,15 +41,17 @@ class UserController extends Controller {
             'email' => 'required|email',
             'sex' => 'int',
             'avatar' => 'string',
+            'birthday' => 'string',
             'password' => 'string',
         ] : [
             'name' => 'required|string',
             'email' => 'required|email',
             'sex' => 'int',
             'avatar' => 'string',
+            'birthday' => 'string',
             'password' => 'required|string',
         ];
-        $data = $request->get('name,email,sex,avatar,password,confirm_password');
+        $data = $request->get('name,email,sex,avatar,birthday,password,confirm_password');
         if ($id < 1 && $data['password'] != $data['confirm_password']) {
             return $this->jsonFailure('两次密码不一致！');
         }

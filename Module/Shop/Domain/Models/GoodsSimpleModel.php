@@ -8,9 +8,9 @@ use Module\Shop\Domain\Entities\GoodsEntity;
  */
 class GoodsSimpleModel extends GoodsEntity {
 
-    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'market_price', 'cat_id', 'brand_id', 'status'];
+    const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'cat_id', 'brand_id', 'status'];
 
-    protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'market_price', 'shop', 'url', 'wap_url'];
+    protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'shop', 'url', 'wap_url'];
 
     protected $append = ['shop', 'url', 'wap_url'];
 

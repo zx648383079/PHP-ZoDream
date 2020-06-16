@@ -40,6 +40,7 @@ class Module extends BaseModule {
         if (empty($module)) {
             return;
         }
+        url()->setModulePath($uris[0]);
         return $this->invokeWithPlatform($module, $uris, $path);
     }
 

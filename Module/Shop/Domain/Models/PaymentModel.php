@@ -45,4 +45,12 @@ class PaymentModel extends Model {
         ];
     }
 
+    public function getIconAttribute() {
+        $thumb = $this->getAttributeSource('icon');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
 }

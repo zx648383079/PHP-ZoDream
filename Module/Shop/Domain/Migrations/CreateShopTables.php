@@ -639,7 +639,7 @@ class CreateShopTables extends Migration {
             $table->set('description')->varchar()->defaultVal('');
             $table->set('settings')->text();
         })->append(PayLogModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk()->ai(10000001);
             $table->set('payment_id')->int()->notNull();
             $table->set('payment_name')->varchar(30)->defaultVal('');
             $table->set('type')->tinyint(1)->defaultVal(0);
