@@ -13,7 +13,7 @@ class Sf extends BaseShipping {
         return '';
     }
 
-    public function calculate(int $amount, float $price, float $weight): float {
+    public function calculate(array $settings, int $amount, float $price, float $weight): float {
         return 0;
     }
 }

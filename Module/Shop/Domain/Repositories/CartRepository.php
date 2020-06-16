@@ -9,7 +9,9 @@ use Module\Shop\Domain\Models\GoodsDialogModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
+use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
+use Module\Shop\Domain\Models\ShippingRegionModel;
 use Module\Shop\Module;
 use Zodream\Helpers\Json;
 use InvalidArgumentException;
@@ -32,7 +34,7 @@ class CartRepository {
         if ($goods->status != GoodsModel::STATUS_SALE) {
             throw new Exception(sprintf('商品【%s】已下架', $goods->name));
         }
-        if (!$goods->canBuy($amount)) {
+        if (!GoodsRepository::canBuy($goods, $amount)) {
             throw new Exception(sprintf('商品【%s】库存不足', $goods->name));
         }
         return $goods;
@@ -54,7 +56,7 @@ class CartRepository {
         if ($goods->status != GoodsModel::STATUS_SALE) {
             throw new \Exception(sprintf('商品【%s】已下架', $goods->name));
         }
-        if (!$goods->canBuy($amount)) {
+        if (!GoodsRepository::canBuy($goods, $amount, $properties)) {
             throw new \Exception(sprintf('商品【%s】库存不足', $goods->name));
         }
         return [$goods, null, true];
@@ -87,6 +89,21 @@ class CartRepository {
         }
         return true;
     }
+
+    public static function updateAmount($id, $amount = 1) {
+        $cartItem = Module::cart()->get($id);
+        if (empty($cartItem)) {
+            throw new Exception('购物车不存此商品');
+        }
+        if ($amount < 1) {
+            Module::cart()->removeId($id);
+            return true;
+        }
+        static::checkGoods($cartItem->goods, $amount);
+        Module::cart()->update($id, $amount);
+        return true;
+    }
+
     /**
      * @param $goods_list
      * @param $address
@@ -101,13 +118,34 @@ class CartRepository {
             throw new InvalidArgumentException('请选择结算的商品');
         }
         $order = OrderModel::preview($goods_list);
-        if (!$order->setAddress(AddressModel::findWithAuth($address))) {
+        if (empty($address)) {
+            throw new Exception('请选择收货地址');
+        }
+        $address = AddressModel::findWithAuth($address);
+        if (!$order->setAddress($address)) {
             throw new InvalidArgumentException('请选择收货地址');
         }
         if (!$isPreview && $payment > 0 && !$order->setPayment(PaymentModel::find($payment))) {
             throw new InvalidArgumentException('请选择支付方式');
         }
-        if (!$isPreview && $shipping > 0 &&!$order->setShipping(ShippingModel::find($shipping))) {
+        if ($shipping > 0) {
+            $group_id = ShippingRegionModel::where('shipping_id', $shipping)
+                ->where('region_id', $address->region_id)->value('group_id');
+            if ($group_id < 1) {
+                throw new InvalidArgumentException('当前地址不支持此配送方式');
+            }
+            $ship = ShippingModel::find($shipping);
+            $ship->settings = ShippingGroupModel::query()->where('id', $group_id)
+                ->asArray()->first();
+            if (!$order->setShipping($ship) && !$isPreview) {
+                throw new InvalidArgumentException('请选择配送方式');
+            }
+            if ($payment > 0 && !$ship->canUsePayment($order->payment)) {
+                throw new InvalidArgumentException(
+                    sprintf('当前配送方式不支持【%s】支付方式', $order->payment->name)
+                );
+            }
+        } elseif (!$isPreview) {
             throw new InvalidArgumentException('请选择配送方式');
         }
         return $order;

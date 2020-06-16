@@ -47,7 +47,11 @@ class CartController extends Controller {
     }
 
     public function updateAction($id, $amount) {
-        Module::cart()->update($id, $amount);
+        try {
+            CartRepository::updateAmount($id, $amount);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->render(Module::cart());
     }
 

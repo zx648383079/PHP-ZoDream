@@ -7,5 +7,5 @@ abstract class BaseShipping {
 
     abstract public function getIntro(): string;
 
-    abstract public function calculate(int $amount, float $price, float $weight): float;
+    abstract public function calculate(array $settings, int $amount, float $price, float $weight): float;
 }

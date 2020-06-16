@@ -11,6 +11,7 @@ use Module\Shop\Domain\Models\Scene\Order;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\CouponRepository;
+use Module\Shop\Domain\Repositories\ShippingRepository;
 use Module\Shop\Module;
 use Exception;
 
@@ -22,11 +23,19 @@ class CashierController extends Controller {
 
     public function shippingAction($goods, $address, $type = 0) {
         $goods_list = CartRepository::getGoodsList($goods, $type);
-        return $this->render(ShippingModel::getByAddress(AddressModel::findWithAuth($address)));
+        $data = ShippingModel::getByAddress(AddressModel::findWithAuth($address));
+        if (empty($data)) {
+            return $this->renderFailure('当前地址不在配送范围内');
+        }
+        foreach ($data as $item) {
+            $item->shipping_fee = ShippingRepository::getFee($item, $item->settings, $goods_list);
+        }
+        return $this->render(compact('data'));
     }
 
     public function paymentAction($goods = [], $shipping = []) {
-        return $this->render(PaymentModel::all());
+        $data = PaymentModel::all();
+        return $this->render(compact('data'));
     }
 
     public function couponAction($goods = [], $type = 0) {

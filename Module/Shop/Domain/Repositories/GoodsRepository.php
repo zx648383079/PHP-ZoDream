@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Repositories;
 
 
 use Module\Shop\Domain\Entities\GoodsEntity;
+use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsPageModel;
@@ -101,6 +102,50 @@ class GoodsRepository {
                 ]
             ]
         ];
+    }
+
+    /**
+     * 判断是否能购买指定数量
+     * @param GoodsModel|int $goods
+     * @param int $amount
+     * @param null $properties
+     * @return bool
+     */
+    public static function canBuy($goods, $amount = 1, $properties = null) {
+        if (is_numeric($goods)) {
+            $goods = GoodsModel::query()->where('id', $goods)
+                ->first('id', 'price', 'stock');
+        }
+        if (empty($properties)) {
+            return $goods->stock >= $amount;
+        }
+        $box = AttributeModel::getProductAndPriceWithProperties($properties, $goods->id);
+        if (empty($box['product'])) {
+            return $goods->stock >= $amount;
+        }
+        return $box['product']->stock >= $amount;
+    }
+
+    /**
+     * 获取最终价格
+     * @param GoodsModel|int $goods
+     * @param int $amount
+     * @param null $properties
+     * @return float
+     */
+    public static function finalPrice($goods, $amount = 1, $properties = null) {
+        if (is_numeric($goods)) {
+            $goods = GoodsModel::query()->where('id', $goods)
+                ->first('id', 'price', 'stock');
+        }
+        if (empty($properties)) {
+            return $goods->price;
+        }
+        $box = AttributeModel::getProductAndPriceWithProperties($properties, $goods->id);
+        if (empty($box['product'])) {
+            return $goods->price + $box['properties_price'];
+        }
+        return $box['product']->price + $box['properties_price'];
     }
 
     public static function getRecommendQuery($tag): Query {

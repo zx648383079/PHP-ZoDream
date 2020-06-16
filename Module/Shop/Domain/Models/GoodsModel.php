@@ -71,27 +71,6 @@ class GoodsModel extends GoodsEntity {
         return CollectModel::where('user_id', auth()->id())->where('goods_id', $this->id)->count() > 0;
     }
 
-    public function canBuy(int $amount = 1): bool {
-        return true;
-    }
-
-    /**
-     * 获取最终的单价
-     * @param int $amount
-     * @param null $properties
-     * @return float|int
-     */
-    public function final_price(int $amount = 1, $properties = null): float {
-        if (empty($properties)) {
-            return $this->price;
-        }
-        $box = AttributeModel::getProductAndPriceWithProperties($properties, $this->id);
-        if (empty($box['product'])) {
-            return $this->price + $box['properties_price'];
-        }
-        return $box['product']->price + $box['properties_price'];
-    }
-
     public function getCommentCountAttribute() {
         return CommentModel::where('item_type', 0)->where('item_id', $this->id)->count();
     }

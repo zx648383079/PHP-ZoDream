@@ -12,6 +12,7 @@ use Domain\Model\Model;
 use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Item;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
+use Module\Shop\Domain\Repositories\GoodsRepository;
 use Zodream\Infrastructure\Cookie;
 
 use Zodream\Service\Factory;
@@ -109,7 +110,7 @@ class CartModel extends Model implements ICartItem {
             return $this->delete();
         }
         $this->amount = $amount;
-        $this->price = $this->goods->final_price($amount);
+        $this->price = GoodsRepository::finalPrice($this->goods, $amount);
         return $this->save();
     }
 
@@ -131,7 +132,7 @@ class CartModel extends Model implements ICartItem {
             'user_id' => auth()->id(),
             'goods_id' => $goods->id,
             'amount' => $amount,
-            'price' => $goods->final_price($amount)
+            'price' => GoodsRepository::finalPrice($goods, $amount),
         ]);
         $model->setRelation('goods', $goods);
         return $model;

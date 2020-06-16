@@ -8,6 +8,7 @@ namespace Module\Shop\Domain\Models;
  * Time: 19:07
  */
 use Domain\Model\Model;
+use Module\Shop\Domain\Plugin\Manager;
 
 /**
  * Class PaymentModel
@@ -20,6 +21,7 @@ use Domain\Model\Model;
  * @property integer $position
  * @property integer $created_at
  * @property integer $updated_at
+ * @property array $settings
  */
 class ShippingModel extends Model {
     public static function tableName() {
@@ -53,13 +55,6 @@ class ShippingModel extends Model {
         ];
     }
 
-    /**
-     * @return float
-     */
-    public function getFee() {
-        return 0;
-    }
-
     public function canUsePayment(PaymentModel $payment) {
         return true;
     }
@@ -69,6 +64,29 @@ class ShippingModel extends Model {
      * @return static[]
      */
     public static function getByAddress(AddressModel $address) {
-        return static::all();
+        $items = ShippingRegionModel::query()->where('region_id', $address->region_id)
+            ->asArray()->get();
+        if (empty($items)) {
+            return [];
+        }
+        $groups = ShippingGroupModel::query()->whereIn('id', array_column($items, 'group_id'))
+            ->asArray()->get();
+        if (empty($groups)) {
+            return [];
+        }
+        $groups = array_column($groups, null, 'shipping_id');
+        $shipping_list = static::query()->whereIn('id', array_keys($groups))
+            ->get();
+        if (empty($shipping_list)) {
+            return [];
+        }
+        foreach ($shipping_list as $item) {
+            if (!isset($groups[$item->id])) {
+                unset($item);
+                continue;
+            }
+            $item->settings = $groups[$item->id];
+        }
+        return $shipping_list;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Models;
 
+use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Shop\Domain\Entities\AddressEntity;
 
@@ -29,7 +30,7 @@ class AddressModel extends AddressEntity {
     }
 
     public function getHideTelAttribute() {
-        return substr_replace($this->getAttributeValue('tel'), '****', 3, 4);
+        return Helpers::hideTel($this->getAttributeValue('tel'));
     }
 
     public static function defaultId($val = 0) {

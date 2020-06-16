@@ -116,4 +116,15 @@ class PaymentRepository {
 
         }
     }
+
+
+    /**
+     * 支付费用
+     * @param PaymentModel $payment
+     * @param array $goods_list
+     * @return int
+     */
+    public static function getFee(PaymentModel $payment, array $goods_list) {
+        return 0;
+    }
 }

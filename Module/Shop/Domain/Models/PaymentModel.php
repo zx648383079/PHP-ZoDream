@@ -45,10 +45,4 @@ class PaymentModel extends Model {
         ];
     }
 
-    /**
-     * @return float
-     */
-    public function getFee() {
-        return 0;
-    }
 }

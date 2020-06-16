@@ -8,6 +8,8 @@ namespace Module\Shop\Domain\Models;
  * Time: 19:07
  */
 use Domain\Model\Model;
+use Module\Shop\Domain\Repositories\PaymentRepository;
+use Module\Shop\Domain\Repositories\ShippingRepository;
 
 
 /**
@@ -169,7 +171,7 @@ class OrderModel extends Model {
         $this->payment_id = $payment->id;
         $this->payment_name = $payment->name;
         $this->setRelation('payment', $payment);
-        $this->pay_fee = $payment->getFee();
+        $this->pay_fee = PaymentRepository::getFee($payment, $this->goods);
         $this->order_amount = $this->getTotalAttribute();
         return true;
     }
@@ -181,7 +183,7 @@ class OrderModel extends Model {
         $this->shipping_id = $shipping->id;
         $this->shipping_name = $shipping->name;
         $this->setRelation('shipping', $shipping);
-        $this->shipping_fee = $shipping->getFee();
+        $this->shipping_fee = ShippingRepository::getFee($shipping, $shipping->settings, $this->goods);
         $this->order_amount = $this->getTotalAttribute();
         return true;
     }

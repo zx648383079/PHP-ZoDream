@@ -45,6 +45,7 @@ class AddressController extends Controller {
             'id' => 'int',
             'name' => '',
             'region_id' => 'int',
+            'region_name' => '',
             'tel' => '',
             'address' => '',
             'is_default' => ''

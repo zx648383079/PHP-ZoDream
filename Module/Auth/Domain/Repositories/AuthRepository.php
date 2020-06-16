@@ -58,6 +58,14 @@ class AuthRepository {
         return self::doLogin($user, $remember);
     }
 
+    public static function loginMobile($mobile, $password, $remember = false, $replaceToken = true) {
+        throw new Exception('暂不支持手机号登录');
+    }
+
+    public static function loginMobileCode($mobile, $code, $remember = false, $replaceToken = true) {
+        throw new Exception('暂不支持手机号登录');
+    }
+
     /**
      * @param $name
      * @param $email
@@ -86,6 +94,11 @@ class AuthRepository {
         }
         $user = self::createUser($email, $name, $password);
         return self::doLogin($user);
+    }
+
+    public static function registerMobile(
+        $name, $mobile, $code, $password, $confirmPassword, $agreement = false) {
+        throw new Exception('暂不支持手机号注册');
     }
 
     /**

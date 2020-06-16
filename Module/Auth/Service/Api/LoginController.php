@@ -19,10 +19,25 @@ class LoginController extends RestController {
         $remember = $request->get('rememberMe')
             || $request->get('remember');
         try {
-            AuthRepository::login(
-                $request->get('email'),
-                $request->get('password'),
-                $remember, false);
+            if ($request->has('mobile')) {
+                if ($request->has('code')) {
+                    AuthRepository::loginMobileCode(
+                        $request->get('email'),
+                        $request->get('code'),
+                        $remember, false);
+                } else {
+                    AuthRepository::loginMobile(
+                        $request->get('email'),
+                        $request->get('password'),
+                        $remember, false);
+                }
+            } else {
+                AuthRepository::login(
+                    $request->get('email'),
+                    $request->get('password'),
+                    $remember, false);
+            }
+
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

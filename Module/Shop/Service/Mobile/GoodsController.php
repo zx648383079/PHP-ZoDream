@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Mobile;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\CommentModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\GoodsRepository;
 
 class GoodsController extends Controller {
 
@@ -19,8 +20,8 @@ class GoodsController extends Controller {
     }
 
     public function priceAction($id, $amount = 1, $properties = null) {
-        $goods = GoodsModel::find($id);
-        $price = $goods->final_price($amount, $properties);
+        $goods = GoodsModel::where('id', $id)->first('id', 'price', 'stock');
+        $price = GoodsRepository::finalPrice($goods, $amount, $properties);
         $box = AttributeModel::getProductAndPriceWithProperties($properties, $id);
         return $this->jsonSuccess([
             'price' => $price,

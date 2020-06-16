@@ -16,13 +16,24 @@ class RegisterController extends RestController {
 
     public function indexAction(Request $request) {
         try {
-            AuthRepository::register(
-                $request->get('name'),
-                $request->get('email'),
-                $request->get('password'),
-                $request->get('rePassword') ?: $request->get('confirm_password'),
-                $request->has('agree')
-            );
+            if ($request->has('mobile')) {
+                AuthRepository::registerMobile(
+                    $request->get('name'),
+                    $request->get('mobile'),
+                    $request->get('code'),
+                    $request->get('password'),
+                    $request->get('rePassword') ?: $request->get('confirm_password'),
+                    $request->has('agree')
+                );
+            } else {
+                AuthRepository::register(
+                    $request->get('name'),
+                    $request->get('email'),
+                    $request->get('password'),
+                    $request->get('rePassword') ?: $request->get('confirm_password'),
+                    $request->has('agree')
+                );
+            }
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

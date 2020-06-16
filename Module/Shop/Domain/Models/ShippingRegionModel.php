@@ -12,7 +12,7 @@ use Domain\Model\Model;
 /**
  * Class PaymentModel
  * @package Domain\Model\Shopping
- * @property integer $id
+ * @property integer $shipping_id
  * @property integer $group_id
  * @property integer $region_id
  */
