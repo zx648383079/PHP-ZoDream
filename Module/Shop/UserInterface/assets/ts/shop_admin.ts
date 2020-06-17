@@ -1403,6 +1403,33 @@ function bindGroupBuy() {
     });
 }
 
+function bindCheck() {
+    let checkOrder = () => {
+        $.getJSON(BASE_URI + 'home/check_new', data => {
+            if (data.code != 200) {
+                return;
+            }
+            let success = true;
+            $.each(data.data, function(k: string, count) {
+                let ele = $('.column-item[data-name="'+ k +'"] .count');
+                if (ele.length < 1) {
+                    success = false;
+                    return;
+                }
+                if (count > ele.text()) {
+                    alert('你有新的订单等待处理');
+                }
+                ele.text(count);
+                
+            });
+            if (success) {
+                setTimeout(checkOrder, 30000);
+            }
+        });
+    };
+    setTimeout(checkOrder, 30000);
+}
+
 $(function() {
     $(document).on('click', '[data-type=toggle]', function() {
         let that = $(this);

@@ -15,8 +15,9 @@ class CreateLegworkTables extends Migration {
             $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('service_id')->int()->notNull();
+            $table->set('amount')->smallInt(4)->defaultVal(1)->comment('购买服务的数量');
             $table->set('remark')->text()->notNull()->comment('服务内容');
-            $table->set('order_amount')->decimal(8, 2)->defaultVal(0)->comment('公用回传参数，如果请求时传递了该参数，则返回给商户时会回传该参数。支付宝只会在同步返回（包括跳转回商户网站）和异步通知时将该参数原样返回');
+            $table->set('order_amount')->decimal(8, 2)->defaultVal(0)->comment('订单金额');
             $table->set('runner')->int()->defaultVal(0)->comment('跑腿人');
             $table->set('status')->tinyint(1)->defaultVal(OrderModel::STATUS_UN_PAY);
             $table->set('service_rank')->tinyint(1)->defaultVal(10)->comment('服务评价');

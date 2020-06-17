@@ -150,7 +150,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function all() {
-        return $this->groups;
+        return array_values($this->groups);
     }
 
     public function filter(callable $cb) {

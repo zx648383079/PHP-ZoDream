@@ -100,7 +100,8 @@ class OrderRepository {
         $order->status = OrderModel::STATUS_UN_PAY;
         $order->service_id = $service->id;
         $order->remark = $remark;
-        $order->order_amount = $service->price;
+        $order->amount = isset($data['amount']) && $data['amount'] > 0 ? intval($data['amount']) : 1;
+        $order->order_amount = $service->price * $order->amount;
         if ($order->save()) {
             return $order;
         }

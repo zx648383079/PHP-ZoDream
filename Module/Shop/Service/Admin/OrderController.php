@@ -1,21 +1,39 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
+use Module\Shop\Domain\Cron\ExpiredOrder;
 use Module\Shop\Domain\Models\Logistics\DeliveryModel;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Shop\Domain\Models\PayLogModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class OrderController extends Controller {
 
-    public function indexAction() {
+    public function indexAction($series_number = null, $status = 0, $log_id = null) {
         $model_list = OrderModel::with('user', 'goods', 'address')
+            ->when($status > 0, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->when(!empty($log_id), function ($query) use ($log_id) {
+                $orderId = PayLogModel::when(strlen($log_id) > 11 || !is_numeric($log_id), function ($query) use ($log_id) {
+                    $query->where('trade_no', $log_id);
+                }, function ($query) use ($log_id) {
+                    $query->where('id', $log_id);
+                })->where('type', PayLogModel::TYPE_ORDER)->value('data');
+                if (empty($orderId)) {
+                    $query->isEmpty();
+                    return;
+                }
+                $query->whereIn('id', explode(',', $orderId));
+            })
             ->orderBy('created_at', 'desc')->page();
-        return $this->show(compact('model_list'));
+        $status_list = OrderModel::$status_list;
+        return $this->show(compact('model_list', 'series_number', 'status_list', 'status', 'log_id'));
     }
 
     public function infoAction($id) {
@@ -80,6 +98,13 @@ class OrderController extends Controller {
         }
         return $this->jsonSuccess([
             'url' => $this->getUrl('order/info', ['id' => $id])
+        ]);
+    }
+
+    public function cronAction() {
+        new ExpiredOrder();
+        return $this->jsonSuccess([
+            'refresh' => true
         ]);
     }
 

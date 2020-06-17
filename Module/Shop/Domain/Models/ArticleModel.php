@@ -23,7 +23,7 @@ class ArticleModel extends ArticleEntity {
 
     protected $append = ['category'];
 
-    const THUMB_MODE = ['id', 'title', 'thumb', 'cat_id', 'created_at', 'updated_at'];
+    const THUMB_MODE = ['id', 'title', 'description', 'thumb', 'cat_id', 'created_at', 'updated_at'];
 
     public function category() {
         return $this->hasOne(ArticleCategoryModel::class, 'id', 'cat_id');

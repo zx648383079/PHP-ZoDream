@@ -11,6 +11,7 @@ use Zodream\Helpers\Json;
  * @property integer $user_id
  * @property integer $service_id
  * @property string $remark
+ * @property string $amount
  * @property float $order_amount
  * @property integer $runner
  * @property integer $status
@@ -57,6 +58,7 @@ class OrderModel extends Model {
             'user_id' => 'required|int',
             'service_id' => 'required|int',
             'remark' => 'required',
+            'amount' => 'int',
             'order_amount' => '',
             'runner' => 'int',
             'status' => 'int:0,127',
@@ -75,6 +77,7 @@ class OrderModel extends Model {
             'id' => 'Id',
             'user_id' => 'User Id',
             'service_id' => 'Service Id',
+            'amount' => 'Amount',
             'remark' => 'Remark',
             'order_amount' => 'Order Amount',
             'runner' => 'Runner',

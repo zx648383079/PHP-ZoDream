@@ -109,7 +109,7 @@ class Group implements \IteratorAggregate, ArrayAble {
     }
 
     public function all() {
-        return $this->items;
+        return array_values($this->items);
     }
     public function isEmpty() {
         return empty($this->items);

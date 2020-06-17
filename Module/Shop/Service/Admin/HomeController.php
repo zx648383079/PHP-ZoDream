@@ -1,16 +1,23 @@
 <?php
 namespace Module\Shop\Service\Admin;
 
+use Module\Shop\Domain\Repositories\Admin\OrderRepository;
+
 class HomeController extends Controller {
 
     public function indexAction() {
         $menu_list = $this->getMenus();
         $user = auth()->user();
-        return $this->show(compact('user', 'menu_list'));
+        $subtotal = OrderRepository::getSubtotal();
+        return $this->show(compact('user', 'menu_list', 'subtotal'));
     }
 
     public function dashboardAction() {
         return $this->show();
+    }
+
+    public function checkNewAction() {
+        return $this->jsonSuccess(OrderRepository::checkNew());
     }
 
 

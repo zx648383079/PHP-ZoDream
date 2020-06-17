@@ -26,7 +26,7 @@ class ExpiredOrder {
         foreach ($items as $item) {
             foreach ($item->goods as $goods) {
                 GoodsModel::query()->where('goods_id', $goods->goods_id)
-                    ->updateOne('store', $goods->amount);
+                    ->updateOne('stock', $goods->amount);
             }
             $item->status = OrderModel::STATUS_CANCEL;
             $item->save();

@@ -6,11 +6,18 @@ use Module\Shop\Domain\Models\ArticleModel;
 
 class ArticleController extends Controller {
 
-    public function indexAction($id = 0, $category = 0) {
+    public function indexAction($id = 0, $category = 0, $keywords = null) {
         if ($id > 0) {
             return $this->runMethodNotProcess('detail', compact('id'));
         }
-        $model_list = ArticleModel::with('category')->where('cat_id', $category)->select(ArticleModel::THUMB_MODE)->page();
+        $model_list = ArticleModel::with('category')
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })
+            ->when(!empty($keywords), function ($query) {
+                ArticleModel::searchWhere($query, 'title');
+            })
+            ->select(ArticleModel::THUMB_MODE)->page();
         return $this->renderPage($model_list);
     }
 
