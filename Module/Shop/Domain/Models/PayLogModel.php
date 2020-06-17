@@ -47,7 +47,7 @@ class PayLogModel extends Model {
         return [
             'payment_id' => 'required|int',
             'payment_name' => 'string:0,30',
-            'type' => 'int:0,9',
+            'type' => 'int:0,127',
             'user_id' => 'required|int',
             'data' => 'string:0,255',
             'status' => 'int:0,9',

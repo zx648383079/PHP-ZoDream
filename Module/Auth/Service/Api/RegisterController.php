@@ -3,6 +3,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
@@ -40,8 +41,8 @@ class RegisterController extends RestController {
         $user = auth()->user();
         $token = auth()->createToken($user);
         event(new TokenCreated($token, $user));
-        return $this->render(array_merge($user->toArray(), [
-            'token' => $token
-        ]));
+        $data = UserRepository::getCurrentProfile();
+        $data['token'] = $token;
+        return $this->render($data);
     }
 }

@@ -130,7 +130,7 @@ class CartRepository {
         }
         if ($shipping > 0) {
             $group_id = ShippingRegionModel::where('shipping_id', $shipping)
-                ->where('region_id', $address->region->parent_id)->value('group_id');
+                ->where('region_id', $address->region_id)->value('group_id');
             if ($group_id < 1) {
                 throw new InvalidArgumentException('当前地址不支持此配送方式');
             }

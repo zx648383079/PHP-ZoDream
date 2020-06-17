@@ -7,6 +7,12 @@ use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function indexAction($id = 0) {
         if ($id > 0) {
             return $this->infoAction($id);

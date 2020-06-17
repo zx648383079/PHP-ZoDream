@@ -4,6 +4,7 @@ namespace Module\Auth\Service\Api;
 use Infrastructure\Uploader;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
@@ -18,7 +19,8 @@ class UserController extends RestController {
     }
 
     public function indexAction() {
-        return $this->render(auth()->user());
+        $data = UserRepository::getCurrentProfile();
+        return $this->render($data);
     }
 
     /**

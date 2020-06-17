@@ -1,16 +1,15 @@
 <?php
-namespace Module\Task\Domain\Migrations;
+namespace Module\Trade\Domain\Migrations;
 
 use Module\Trade\Domain\Model\RefundModel;
 use Module\Trade\Domain\Model\TradeModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class CreateTradeTables extends Migration {
 
     public function up() {
-        Schema::createTable(TradeModel::tableName(), function (Table $table) {
+        $this->append(TradeModel::tableName(), function (Table $table) {
             $table->setComment('支付系统');
             $table->set('id')->pk()->ai();
             $table->set('open_id')->int()->notNull();
@@ -27,8 +26,7 @@ class CreateTradeTables extends Migration {
             $table->set('passback_params')->varchar(512)->defaultVal('')->comment('公用回传参数，如果请求时传递了该参数，则返回给商户时会回传该参数。支付宝只会在同步返回（包括跳转回商户网站）和异步通知时将该参数原样返回');
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamps();
-        });
-        Schema::createTable(RefundModel::tableName(), function (Table $table) {
+        })->append(RefundModel::tableName(), function (Table $table) {
             $table->setComment('支付退款系统');
             $table->set('id')->pk()->ai();
             $table->set('trade_id')->int()->notNull();
@@ -38,11 +36,6 @@ class CreateTradeTables extends Migration {
             $table->set('operator_id')->varchar(28)->defaultVal('')->comment('商户操作员编号');
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamps();
-        });
-    }
-
-    public function down() {
-        Schema::dropTable(TradeModel::tableName());
-        Schema::dropTable(RefundModel::tableName());
+        })->autoUp();
     }
 }

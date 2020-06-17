@@ -19,7 +19,7 @@ class PayController extends Controller {
         }
         $payment = PaymentModel::find($payment);
         try {
-            $data = PaymentRepository::pay($order, $payment);
+            $data = PaymentRepository::payOrder($order, $payment);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

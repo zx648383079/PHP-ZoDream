@@ -18,7 +18,7 @@ class PayController extends Controller {
         }
         $payment = PaymentModel::find($payment);
         try {
-            $data = PaymentRepository::pay($order, $payment);
+            $data = PaymentRepository::payOrder($order, $payment);
         } catch (\Exception $ex) {
             if (app('request')->isAjax()) {
                 return $this->jsonFailure($ex->getMessage());

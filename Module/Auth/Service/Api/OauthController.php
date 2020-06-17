@@ -1,10 +1,13 @@
 <?php
 namespace Module\Auth\Service\Api;
 
+use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\OpenPlatform\Domain\Platform;
+use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\RestController;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
 use Module\Auth\Service\OauthController as BaseController;
@@ -40,11 +43,32 @@ class OauthController extends RestController {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
+        $data = UserRepository::getCurrentProfile();
         if (!$guest) {
-            return $this->render($user->toArray());
+            return $this->render($data);
         }
-        return $this->render(array_merge($user->toArray(), [
-            'token' => auth()->createToken($user)
-        ]));
+        $data['token'] = auth()->createToken($user);
+        event(new TokenCreated($data['token'], $user));
+        return $this->render($data);
+    }
+
+    /**
+     * 获取openid
+     * @param $code
+     * @return RestResponse
+     * @throws \Exception
+     */
+    public function miniLoginAction($code) {
+        /** @var Platform $platform */
+        $platform = app('platform');
+        $mini = new MiniOAuth($platform->option('mini_auth'));
+        try {
+            $data = $mini->login($code);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render([
+            'openid' => $data['openid']
+        ]);
     }
 }

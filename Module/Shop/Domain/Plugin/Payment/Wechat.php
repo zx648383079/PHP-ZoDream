@@ -18,7 +18,10 @@ class Wechat extends BasePayment {
     }
 
     public function pay(array $log): array {
-        $openid = OAuthModel::findOpenid(auth()->id(), OAuthModel::TYPE_WX_MINI, Platform::platformId());
+        $openid = app('request')->get('openid');
+        if (empty($openid)) {
+            $openid = OAuthModel::findOpenid(auth()->id(), OAuthModel::TYPE_WX_MINI, Platform::platformId());
+        }
         $api = $this->getApi();
         $data = [
             'nonce_str' => Str::random(32),

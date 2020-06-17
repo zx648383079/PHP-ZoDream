@@ -1,17 +1,21 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Module\Shop\Domain\Events\PaySuccess;
+use Module\Shop\Domain\Listeners\PaySuccessListener;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PayLogModel;
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Plugin\BasePayment;
 use Module\Shop\Domain\Plugin\Manager;
+use Module\Shop\Module;
 use Zodream\Helpers\Json;
+use Zodream\Route\Router;
 
 class PaymentRepository {
 
-    public static function pay(OrderModel $order, PaymentModel $payment) {
+    public static function payOrder(OrderModel $order, PaymentModel $payment) {
         $log = PayLogModel::create([
             'type' => PayLogModel::TYPE_ORDER,
             'payment_id' => $payment->id,
@@ -24,21 +28,39 @@ class PaymentRepository {
             'currency_money' => $order->order_amount,
             'begin_at' => time(),
         ]);
-        $notify_url = url(sprintf('./pay/notify/0/platform/%d/payment/%d',
-            app()->has('platform') ? app('platform')->id() : 0,
-            $payment->id));
-        $return_url = url('./pay/result/id/'. $log->id);
-        return self::getPayee($payment)->pay([
-            'payment_id' => $log->id,
+        return self::pay($log, $payment, [
             'order_id' => $order->id,
+            'body' => '订单支付',
+        ]);
+    }
+
+    public static function pay(PayLogModel $log, PaymentModel $payment, array $extra = []) {
+        // 如果报错，则表示当前模块未安装
+        list($notify_url, $return_url) = app(Router::class)->module(Module::class,
+            function () use ($payment, $log) {
+           return [
+               url(sprintf('./pay/notify/0/platform/%d/payment/%d',
+                   app()->has('platform') ? app('platform')->id() : 0,
+                   $payment->id)),
+               url('./pay/result/id/'. $log->id)
+           ];
+        });
+        $data = array_merge([
+            'order_id' => 0,
+            'body' => '订单支付'
+        ], $extra, [
+            'payment_id' => $log->id,
             'user_id' => $log->user_id,
             'currency' => $log->currency,
             'currency_money' => $log->currency_money,
-            'body' => '订单支付',
             'return_url' => $return_url,
             'notify_url' => $notify_url,
             'ip' => app('request')->ip()
         ]);
+        if ($data['currency_money'] <= 0) {
+            throw new \Exception('订单金额有误');
+        }
+        return self::getPayee($payment)->pay($data);
     }
 
     /**
@@ -65,22 +87,21 @@ class PaymentRepository {
         if (isset($res['trade_no'])) {
             $log->trade_no = $res['trade_no'];
         }
+        if (isset($res['money']) && $res['money'] != $log->currency_money) {
+            // 金额不对
+        }
         $log->confirm_at = isset($res['payed_at']) ? $res['payed_at'] : time();
         $log->status = $res['status'] === 'SUCCESS'
             ? PayLogModel::STATUS_SUCCESS : PayLogModel::STATUS_FAILURE;
         if (!$log->save() || $res['status'] !== 'SUCCESS') {
             return false;
         }
-        if ($log->type != PayLogModel::TYPE_ORDER) {
-            return true;
-        }
-        $order_list = OrderModel::whereIn('id', explode(',', $log->data))
-            ->get();
-        foreach ($order_list as $order) {
-            if ($order->status != OrderModel::STATUS_UN_PAY) {
-                continue;
-            }
-            OrderLogModel::pay($order);
+        try {
+            $event = new PaySuccess($log);
+            new PaySuccessListener($event);
+            event($event);
+        } catch (\Exception $ex) {
+            return false;
         }
         return true;
     }
