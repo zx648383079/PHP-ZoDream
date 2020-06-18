@@ -22,13 +22,6 @@ class AccountRepository {
 
     public static function getDriver() {
         return [
-            [
-                'id' => 1,
-                'name' => 'zodream pc',
-                'type' => '电脑',
-                'region' => '中国',
-                'created_at' => Time::format()
-            ]
         ];
     }
 

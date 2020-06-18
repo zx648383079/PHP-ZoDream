@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Repositories\Admin;
 
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\OrderRefundModel;
@@ -31,6 +32,7 @@ class OrderRepository {
             ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count();
         $args['legwork'] = LegworkOrder::where('runner', 0)
             ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count();
+        $args['bulletin'] = BulletinModel::unreadCount();
         return $args;
     }
 
@@ -39,7 +41,8 @@ class OrderRepository {
             'paid_un_ship' => OrderModel::where('status', OrderModel::STATUS_PAID_UN_SHIP)
             ->count(),
             'legwork' => LegworkOrder::where('runner', 0)
-                ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count()
+                ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count(),
+            'bulletin' => BulletinModel::unreadCount()
         ];
     }
 }

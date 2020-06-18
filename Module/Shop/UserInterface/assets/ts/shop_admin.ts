@@ -1410,18 +1410,23 @@ function bindCheck() {
                 return;
             }
             let success = true;
+            let lines = [];
             $.each(data.data, function(k: string, count) {
-                let ele = $('.column-item[data-name="'+ k +'"] .count');
+                const box = $('.column-item[data-name="'+ k +'"]');
+                let ele = box.find('.count');
                 if (ele.length < 1) {
                     success = false;
                     return;
                 }
                 if (count > ele.text()) {
-                    alert('你有新的订单等待处理');
+                    lines.push('您有新的' + box.find('.name').text());
                 }
                 ele.text(count);
                 
             });
+            if (lines.length > 0) {
+                alert(lines.join("\n"));
+            }
             if (success) {
                 setTimeout(checkOrder, 30000);
             }

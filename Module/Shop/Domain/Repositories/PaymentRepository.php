@@ -138,6 +138,18 @@ class PaymentRepository {
         }
     }
 
+    /**
+     * 获取支付成功的记录
+     * @param OrderModel $order
+     * @return PayLogModel|bool
+     */
+    public static function getPayedLog(OrderModel $order) {
+        return PayLogModel::query()->where('type', PayLogModel::TYPE_ORDER)
+            ->where('payment_id', $order->payment_id)
+            ->where('status', PayLogModel::STATUS_SUCCESS)->where('data', $order->id)
+            ->first();
+    }
+
 
     /**
      * 支付费用

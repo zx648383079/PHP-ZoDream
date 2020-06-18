@@ -105,4 +105,16 @@ class BulletinModel extends Model {
         }
         return BulletinUserModel::query()->insert(['bulletin_id', 'user_id', 'created_at'], $data);
     }
+
+    /**
+     * 获取未读消息
+     * @return int
+     * @throws \Exception
+     */
+    public static function unreadCount() {
+	    if (auth()->guest()) {
+	        return 0;
+        }
+	    return BulletinUserModel::where('user_id', auth()->id())->where('status', 0)->count();
+    }
 }

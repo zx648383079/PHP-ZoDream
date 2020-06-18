@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
@@ -58,11 +59,25 @@ class OrderRepository {
         if (empty($order)) {
             throw new Exception('订单不存在');
         }
-        if (!in_array($order->status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
+        $status = $order->status;
+        if (!in_array($status, [OrderModel::STATUS_UN_PAY, OrderModel::STATUS_PAID_UN_SHIP])) {
             throw new Exception('订单无法取消');
         }
+//        if ($status === OrderModel::STATUS_PAID_UN_SHIP) {
+//            throw new Exception('请联系商家进行退款');
+//        }
         if (!OrderLogModel::cancel($order)) {
             throw new Exception('订单取消失败');
+        }
+        if ($status === OrderModel::STATUS_PAID_UN_SHIP) {
+            $log = PaymentRepository::getPayedLog($order);
+            if (empty($log)) {
+                throw new Exception('未遭到您的支付记录，请联系商家');
+            }
+            BulletinModel::system([1, 14], sprintf('订单【%s】申请退款', $order->series_number),
+                sprintf('订单%d【%s】的支付流水号【%s】第三方流水号【%s】,<a href="%s">马上查看</a>',
+                    $order->id, $order->series_number, $log->id, $log->trade_no,
+                    url('./@admin/order/info', ['id' => $order->id])), 66);
         }
         return $order;
     }

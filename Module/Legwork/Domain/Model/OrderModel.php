@@ -11,7 +11,7 @@ use Zodream\Helpers\Json;
  * @property integer $user_id
  * @property integer $service_id
  * @property string $remark
- * @property string $amount
+ * @property integer $amount
  * @property float $order_amount
  * @property integer $runner
  * @property integer $status

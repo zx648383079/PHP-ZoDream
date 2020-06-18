@@ -32,6 +32,12 @@ $status_list = [
         $order->finish_at
     ]
 ];
+$statusIndex = 0;
+foreach($status_list as $k => $item) {
+    if(in_array($order->status, $item[1])) {
+        $statusIndex = $k;
+    }
+}
 $js = <<<JS
 bindOperate();
 JS;
@@ -40,7 +46,7 @@ $this->registerJs($js);
 <h1><?=$this->title?></h1>
 <div class="progress-bar">
     <div>
-        <span></span>
+        <span style="width: <?=$statusIndex * 25?>%;"></span>
     </div>
     <?php foreach($status_list as $item):?>
     <?php if(in_array($order->status, $item[1])):?>
@@ -79,8 +85,8 @@ $this->registerJs($js);
             </div>
             <div class="col-md-3">
                 <p>优惠信息</p>
-                <p>促销优惠：-10</p>
-                <p>积分抵扣：-10</p>
+                <p>促销优惠：0</p>
+                <p>积分抵扣：0</p>
             </div>
         </div>
         <?php if($order->status == OrderModel::STATUS_PAID_UN_SHIP):?>

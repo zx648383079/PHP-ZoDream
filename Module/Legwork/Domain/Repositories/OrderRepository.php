@@ -50,8 +50,8 @@ class OrderRepository {
             throw new Exception('订单不存在');
         }
         if ($order->status != OrderModel::STATUS_TAKEN
-            || $order->status != OrderModel::STATUS_TAKING_UN_DO
-            || $order->status != OrderModel::STATUS_PAID_UN_TAKING) {
+            && $order->status != OrderModel::STATUS_TAKING_UN_DO
+            && $order->status != OrderModel::STATUS_PAID_UN_TAKING) {
             throw new Exception('此订单无法评价');
         }
         $order->service_rank = intval($rank);

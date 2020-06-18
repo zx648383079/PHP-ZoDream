@@ -41,5 +41,17 @@ function bindAuth(id: number) {
 function bindBulletin() {
     $(document).on('click', '.bulletin-item .title', function() {
         $(this).closest('.bulletin-item').toggleClass('min');
+    }).on('click', '.bulletin-item .content a', function(e) {
+        let $this = $(this);
+        if ($this.attr('target')) {
+            return;
+        }
+        const url = $this.attr('href');
+        if (url === '#' || !url || url.indexOf('javascript:') >= 0) {
+            return;
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        window.location.href = $this.attr('href');
     });
 }
