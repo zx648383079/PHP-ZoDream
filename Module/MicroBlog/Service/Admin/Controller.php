@@ -1,19 +1,19 @@
 <?php
 namespace Module\MicroBlog\Service\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
+use Module\Auth\Domain\Concerns\CheckRole;
 use Module\ModuleController;
 
 
 class Controller extends ModuleController {
 
-    use AdminRole;
+    use CheckRole;
 
     public $layout = '/Admin/layouts/main';
 
     protected function rules() {
         return [
-            '*' => 'administrator'
+            '*' => 'micro_admin'
         ];
     }
 

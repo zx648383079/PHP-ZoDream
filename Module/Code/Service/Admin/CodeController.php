@@ -4,7 +4,7 @@ namespace Module\Code\Service\Admin;
 use Module\Code\Domain\Model\CodeModel;
 use Module\Code\Domain\Model\TagModel;
 
-class MicroController extends Controller {
+class CodeController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list  = CodeModel::with('user')

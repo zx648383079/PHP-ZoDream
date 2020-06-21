@@ -7,6 +7,11 @@ use Zodream\Service\Factory;
 class Controller extends ModuleController {
     public $layout = true;
 
+    protected function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
 
     public function findLayoutFile() {
         if ($this->layout === false) {

@@ -35,6 +35,15 @@ $this->title = '商品列表';
                 <?php endforeach;?>
             </select>
         </div>
+        <div class="input-group">
+            <label>排序</label>
+            <select name="sort">
+                <option value="">请选择</option>
+                <?php foreach(['is_best' => '精品', 'is_hot' => '热门', 'is_new' => '新品'] as $key => $label):?>
+                <option value="<?=$key?>"<?=$key === $sort ? ' selected' : ''?>><?=$label?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/goods/create')?>">新增商品</a>

@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Service\Admin;
 
+use Module\Auth\Domain\Concerns\CheckRole;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\ModuleController;
@@ -8,11 +9,13 @@ use Module\ModuleController;
 
 class Controller extends ModuleController {
 
+    use CheckRole;
+
     public $layout = '/Admin/layouts/main';
 
     protected function rules() {
         return [
-            '*' => '@'
+            '*' => 'cms_admin'
         ];
     }
 
@@ -27,5 +30,9 @@ class Controller extends ModuleController {
 
     protected function getUrl($path, $args = []) {
         return url('./@admin/'.$path, $args);
+    }
+
+    public function redirectWithMessage($url, $message, $time = 4, $status = 404) {
+        return $this->show('@root/Admin/prompt', compact('url', 'message', 'time'));
     }
 }

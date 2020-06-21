@@ -1,16 +1,19 @@
 <?php
 namespace Module\Forum\Service\Admin;
 
+use Module\Auth\Domain\Concerns\CheckRole;
 use Module\ModuleController;
 
 
 class Controller extends ModuleController {
 
+    use CheckRole;
+
     public $layout = '/Admin/layouts/main';
 
     protected function rules() {
         return [
-            '*' => '@'
+            '*' => 'forum_admin'
         ];
     }
 

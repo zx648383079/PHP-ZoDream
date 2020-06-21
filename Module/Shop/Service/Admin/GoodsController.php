@@ -24,7 +24,7 @@ use Zodream\Infrastructure\Http\Request;
 
 class GoodsController extends Controller {
 
-    public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0, $trash = false) {
+    public function indexAction($keywords = null, $sort = null, $cat_id = 0, $brand_id = 0, $trash = false) {
         $model_list = GoodsModel::with('category', 'brand')
             ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
@@ -34,6 +34,10 @@ class GoodsController extends Controller {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($brand_id), function ($query) use ($brand_id) {
                 $query->where('brand_id', intval($brand_id));
+            })->when(!empty($sort), function ($query) use ($sort) {
+                if (in_array($sort, ['is_best', 'is_hot', 'is_new'])) {
+                    $query->where($sort, 1);
+                }
             })->when($trash, function ($query) {
                 $query->where('deleted_at', '>', 0);
             }, function ($query) {
@@ -41,7 +45,7 @@ class GoodsController extends Controller {
             })->orderBy('id', 'desc')->page();
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $brand_list = BrandModel::select('id', 'name')->all();
-        return $this->show(compact('model_list', 'cat_list', 'brand_list', 'keywords', 'cat_id', 'brand_id'));
+        return $this->show(compact('model_list', 'cat_list', 'brand_list', 'keywords', 'cat_id', 'brand_id', 'sort'));
     }
 
     public function trashAction($keywords = null, $cat_id = 0, $brand_id = 0) {

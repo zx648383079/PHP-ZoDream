@@ -1,17 +1,14 @@
 <?php
 namespace Module\Contact\Service\Admin;
 
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;
 
 class Controller extends ModuleController {
 
-    public $layout = '/Admin/layouts/main';
+    use AdminRole;
 
-    protected function rules() {
-        return [
-            '*' => 'administrator'
-        ];
-    }
+    public $layout = '/Admin/layouts/main';
 
     protected function getUrl($path, $args = []) {
         return url('./@admin/'.$path, $args);
