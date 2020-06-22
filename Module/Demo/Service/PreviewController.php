@@ -2,7 +2,11 @@
 namespace Module\Demo\Service;
 
 class PreviewController extends Controller {
-    public function indexAction($page = null) {
-        return $this->show($page);
+    public function indexAction($id) {
+        return $this->show();
+    }
+
+    public function viewAction($id) {
+        $this->layout = false;
     }
 }

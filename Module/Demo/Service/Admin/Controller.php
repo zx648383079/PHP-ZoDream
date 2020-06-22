@@ -1,21 +1,15 @@
 <?php
-namespace Module\Blog\Service\Admin;
+namespace Module\Demo\Service\Admin;
 
-use Module\Auth\Domain\Concerns\CheckRole;
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;
 
 
 class Controller extends ModuleController {
 
-    use CheckRole;
+    use AdminRole;
 
     public $layout = '/Admin/layouts/main';
-
-    protected function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
 
     protected function getUrl($path, $args = []) {
         return url('./@admin/'.$path, $args);
