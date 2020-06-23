@@ -61,6 +61,8 @@ class HomeController extends Controller {
             return $this->redirect('./');
         }
         $post = PostModel::find($id);
+        $post->click_count ++;
+        $post->save();
         $tags = TagRepository::getTags($post->id);
         return $this->show(compact('post', 'tags'));
     }

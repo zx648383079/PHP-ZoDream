@@ -41,6 +41,7 @@ class CreateDemoTables extends Migration {
             $table->set('item_id')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
+            $table->set('ip')->varchar(120)->defaultVal('');
             $table->timestamp('created_at');
         })->append(TagModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
