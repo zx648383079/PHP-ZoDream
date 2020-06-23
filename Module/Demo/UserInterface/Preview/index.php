@@ -1,32 +1,21 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$js = <<<JS
-$("#time").datetimer();
-$("#time2").datetimer({
-    title: 'y-m',
-    format: 'y-m-d'
-});
-var d3 = $("#time3").datetimer({
-    title: 'y-m',
-    format: 'y-m-d'
-});
-var d4 = $("#time4").datetimer({
-    title: 'y-m',
-    format: 'y-m-d',
-    min: d3
-});
-JS;
-
-$this->registerCssFile('@datetimer.css')
-    ->registerJsFile('@jquery.datetimer.min.js')
-    ->registerJs($js, View::JQUERY_READY);
+$this->title = '预览'.$post->title;
+$this->registerCssFile('@demo.css')
+    ->registerJsFile('@demo.min.js')
+    ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
-<input type="text" id="time">
+<div class="frame-resize">
+    <a href="">全屏</a>
+    <a href="">768x1024</a>
+    <a href="">1024x768</a>
+    <a href="">375x812</a>
+    <a href="">812x275</a>
+</div>
 
-<input type="text" id="time2">
-<br/>
-<input type="text" id="time3">
-
-<input type="text" id="time4">
+<div class="frame-box">
+    <iframe id="main-frame" src="<?=$this->url('./preview/view/0/id/'.$post->id.'/file/0/')?>" frameborder="0"></iframe>
+</div>

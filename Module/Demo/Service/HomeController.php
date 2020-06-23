@@ -5,6 +5,8 @@ namespace Module\Demo\Service;
 use Module\Demo\Domain\Model\CategoryModel;
 use Module\Demo\Domain\Model\PostModel;
 use Module\Demo\Domain\Model\TagModel;
+use Module\Demo\Domain\Repositories\PostRepository;
+use Module\Demo\Domain\Repositories\TagRepository;
 
 class HomeController extends Controller {
 
@@ -15,7 +17,7 @@ class HomeController extends Controller {
         if ($id > 0) {
             return $this->runMethodNotProcess('detail', compact('id'));
         }
-        $blog_list  = PostModel::with('user', 'category')
+        $post_list  = PostModel::with('user', 'category')
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
             })
@@ -48,7 +50,7 @@ class HomeController extends Controller {
         if ($category > 0) {
             $cat = CategoryModel::find($category);
         }
-        return $this->show(compact('blog_list',
+        return $this->show(compact('post_list',
             'cat_list', 'sort', 'category', 'keywords',
             'cat', 'tag'));
     }
@@ -59,6 +61,24 @@ class HomeController extends Controller {
             return $this->redirect('./');
         }
         $post = PostModel::find($id);
-        return $this->show(compact('post'));
+        $tags = TagRepository::getTags($post->id);
+        return $this->show(compact('post', 'tags'));
+    }
+
+    public function catalogAction($id) {
+        $files = PostRepository::fileMap(PostModel::find($id));
+        $this->layout = false;
+        return $this->show(compact('files'));
+    }
+
+    public function suggestionAction($keywords) {
+        $data = PostModel::when(!empty($keywords), function ($query) {
+            PostModel::searchWhere($query, 'title');
+        })->limit(4)->asArray()->get('id', 'title');
+        foreach($data as &$item) {
+            $item['url'] = url('./', ['id' => $item['id']]);
+        }
+        unset($item);
+        return $this->jsonSuccess($data);
     }
 }

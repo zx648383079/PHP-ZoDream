@@ -14,22 +14,40 @@ $this->registerJs($js);
 <div class="page-title">
     <h1><?=$this->title?></h1>
 </div>
-<?=Form::open($model, './@admin/post/save')?>
-    <div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+<?=Form::open($model, './@admin/post/save', ['enctype' => 'multipart/form-data',])?>
+    <div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本
-            </div><div class="zd-tab-item">
+            </div><div class="tab-item">
                 详情
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('title', true)?>
-                <?=Form::select('cat_id', [$cat_list], true)?>
+                <div class="input-group">
+                    <label>分类</label>
+                    <select name="cat_id" required>
+                        <?php foreach($cat_list as $item):?>
+                        <option value="<?=$item['id']?>" <?=$model->cat_id == $item['id'] ? 'selected': '' ?>>
+                            <?php if($item['level'] > 0):?>
+                                ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
+                            <?php endif;?>
+                            <?=$item['name']?>
+                        </option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
                 
                 <?=Form::file('thumb')?>
-                <?=Form::file('file')?>
+                <div class="input-group">
+                    <label for="file">文件</label>
+                    <div class="file-input">
+                        <input type="text" id="file" class="form-control " name="file" value="<?=$model->file?>">
+                        <button type="button" data-type="upload_file">上传</button>
+                    </div>
+                </div>
                 
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
@@ -44,8 +62,8 @@ $this->registerJs($js);
                     </div>
                 </div>
             </div>
-            <div class="zd-tab-item">
-                <textarea id="editor-container" style="height: 400px;" name="content" required><?=$model->content?></textarea>
+            <div class="tab-item">
+                <textarea id="editor-container" name="content" required><?=$model->content?></textarea>
             </div>
         </div>
     </div>

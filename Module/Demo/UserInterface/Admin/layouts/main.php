@@ -10,7 +10,7 @@ $this->registerCssFile([
         '@zodream.css',
         '@zodream-admin.css',
         '@dialog.css',
-        '@demo_admin.css'
+        '@demo.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',

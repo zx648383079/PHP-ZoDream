@@ -3,6 +3,7 @@ namespace Module\Demo\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Zodream\Helpers\Time;
 
 /**
  * Class PostModel
@@ -14,6 +15,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property string $thumb
  * @property string $content
  * @property string $file
+ * @property integer $size
  * @property integer $user_id
  * @property integer $cat_id
  * @property integer $comment_count
@@ -35,6 +37,7 @@ class PostModel extends Model {
             'thumb' => 'string:0,255',
             'content' => '',
             'file' => 'string:0,255',
+            'size' => 'int',
             'user_id' => 'required|int',
             'cat_id' => 'required|int',
             'comment_count' => 'int',
@@ -48,14 +51,14 @@ class PostModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'title' => 'Title',
-            'description' => 'Description',
-            'keywords' => 'Keywords',
-            'thumb' => 'Thumb',
-            'content' => 'Content',
-            'file' => 'File',
-            'user_id' => 'User Id',
-            'cat_id' => 'Cat Id',
+            'title' => '标题',
+            'description' => '简介',
+            'keywords' => '关键字',
+            'thumb' => '预览图',
+            'content' => '内容',
+            'file' => '文件',
+            'user_id' => '作者',
+            'cat_id' => '分类',
             'comment_count' => 'Comment Count',
             'click_count' => 'Click Count',
             'download_count' => 'Download Count',
@@ -67,6 +70,10 @@ class PostModel extends Model {
     public function getThumbAttribute() {
         $thumb = $this->getAttributeSource('thumb');
         return url()->asset(empty($thumb) ? '/assets/images/banner.jpg' : $thumb);
+    }
+
+    public function getCreatedAtAttribute() {
+        return Time::isTimeAgo($this->getAttributeValue('created_at'), 2678400);
     }
 
 

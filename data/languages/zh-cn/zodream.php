@@ -55,6 +55,7 @@ return [
     'Forum' => '圈子',
     'Shop' => '商城',
     'Code Block' => '代码段',
+    'Template' => '模板',
     'Exam' => '题库',
     'Finance' => '记账本',
     'Task' => '番茄时间',

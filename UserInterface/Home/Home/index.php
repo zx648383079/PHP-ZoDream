@@ -29,7 +29,11 @@ $module_list = [
     [
         'exam',
         __('Exam')
-    ]
+    ],
+    [
+        'demo',
+        __('Template')
+    ],
 ];
 $demo_list = [
     [

@@ -2,6 +2,7 @@
 namespace Module\Demo\Domain\Model;
 
 use Domain\Model\Model;
+use Zodream\Html\Tree;
 
 /**
  * Class CategoryModel
@@ -31,11 +32,11 @@ class CategoryModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'parent_id' => 'Parent Id',
-            'keywords' => 'Keywords',
-            'description' => 'Description',
-            'thumb' => 'Thumb',
+            'name' => '分类名',
+            'parent_id' => '三级',
+            'keywords' => '关键词',
+            'description' => '说明',
+            'thumb' => '封面',
         ];
     }
 
@@ -46,5 +47,13 @@ class CategoryModel extends Model {
 
     public function post() {
         return $this->hasMany(PostModel::class, 'cat_id', 'id');
+    }
+
+    /**
+     * @return Tree
+     * @throws \Exception
+     */
+    public static function tree() {
+        return new Tree(static::query()->all());
     }
 }

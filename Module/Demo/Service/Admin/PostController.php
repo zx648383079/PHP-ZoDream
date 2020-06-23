@@ -4,6 +4,7 @@ namespace Module\Demo\Service\Admin;
 use Module\Demo\Domain\Model\PostModel;
 use Module\Demo\Domain\Model\TagRelationshipModel;
 use Module\Demo\Domain\Model\CategoryModel;
+use Module\Demo\Domain\Repositories\PostRepository;
 use Module\Demo\Domain\Repositories\TagRepository;
 
 class PostController extends Controller {
@@ -16,7 +17,7 @@ class PostController extends Controller {
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->orderBy('id', 'desc')->page();
-        $cat_list = CategoryModel::select('id', 'name')->all();
+        $cat_list = CategoryModel::tree()->makeTreeForHtml();
         return $this->show(compact('post_list', 'cat_list', 'keywords', 'cat_id'));
     }
 
@@ -29,7 +30,7 @@ class PostController extends Controller {
         if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
             return $this->redirectWithMessage($this->getUrl('post'), '文章不存在！');
         }
-        $cat_list = CategoryModel::select('id', 'name')->all();
+        $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
         return $this->show(compact('model', 'cat_list', 'tags'));
     }
@@ -41,10 +42,15 @@ class PostController extends Controller {
             return $this->jsonFailure($model->getFirstError());
         }
         $model->user_id = auth()->id();
+        $file = PostRepository::file($model);
+        if ($file->exist()) {
+            $model->size = $file->size();
+        }
         if (!$model->saveIgnoreUpdate()) {
             return $this->jsonFailure($model->getFirstError());
         }
         TagRelationshipModel::bind($model->id, app('request')->get('tag', []), $isNew);
+        PostRepository::unzipFile($model);
         return $this->jsonSuccess([
             'url' => $isNew ? $this->getUrl('post') : -1
         ]);
@@ -59,5 +65,14 @@ class PostController extends Controller {
         return $this->jsonSuccess([
             'refresh' => true
         ]);
+    }
+
+    public function uploadAction() {
+        try {
+            $file = PostRepository::saveFile();
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($file);
     }
 }

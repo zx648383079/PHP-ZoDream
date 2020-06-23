@@ -28,6 +28,7 @@ class CreateDemoTables extends Migration {
             $table->set('thumb')->varchar()->defaultVal('');
             $table->set('content')->text();
             $table->set('file')->varchar()->defaultVal('')->comment('下载文件');
+            $table->set('size')->int(10, true)->defaultVal(0);
             $table->set('user_id')->int(10, true)->notNull();
             $table->set('cat_id')->int(10, true)->notNull();
             $table->set('comment_count')->int(10)->unsigned()->defaultVal(0);

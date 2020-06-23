@@ -22,16 +22,19 @@ $this->title = '文章分类列表';
     <tbody>
     <?php foreach($items as $item):?>
         <tr>
-            <td><?=$item->id?></td>
-            <td>
-                <a href="<?=$this->url('./@admin/post', ['cat_id' => $item->id])?>"><?=$item->name?></a>
+            <td><?= $item['id']?></td>
+            <td class="tree-item">
+                <?php if($item['level'] > 0):?>
+                <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?></span>
+                <?php endif;?>
+                <a href="<?=$this->url('./@admin/post', ['cat_id' => $item['id']])?>"><?=$item['name']?></a>
             </td>
-            <td><?=$item->post_count?></td>
+            <td><?=0//$item['post_count']?></td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/post', ['cat_id' => $item->id])?>">查看</a>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/category/edit', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/category/delete', ['id' => $item->id])?>">删除</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/post', ['cat_id' =>  $item['id']])?>">查看</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/category/edit', ['id' =>  $item['id']])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/category/delete', ['id' =>  $item['id']])?>">删除</a>
                 </div>
                 
             </td>

@@ -16,9 +16,14 @@ $this->title = '文章列表';
         <div class="input-group">
             <label>分类</label>
             <select name="cat_id">
-                <option value="0">请选择</option>
+                <option value="">请选择</option>
                 <?php foreach($cat_list as $item):?>
-                <option value="<?=$item->id?>" <?=$item->id == $cat_id ? 'selected' : ''?>><?=$item->name?></option>
+                <option value="<?=$item['id']?>" <?=$cat_id == $item['id'] ? 'selected': '' ?>>
+                    <?php if($item['level'] > 0):?>
+                        ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
+                    <?php endif;?>
+                    <?=$item['name']?>
+                </option>
                 <?php endforeach;?>
             </select>
         </div>
