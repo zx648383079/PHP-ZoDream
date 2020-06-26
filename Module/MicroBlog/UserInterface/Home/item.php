@@ -10,7 +10,7 @@ use Zodream\Template\View;
             <img src="<?=$blog->user->avatar?>" alt="">
         </div>
         <div>
-            <div class="name"><?=$blog->user->name?></div>
+            <div class="name"><?=$this->text($blog->user->name)?></div>
             <p><span class="time"><?=$blog->created_at?></span> <span class="from">来自<?=$blog->source ?: 'web'?></span>
             <?php if($blog->user_id == auth()->id()):?>
             <a class="remove" href="javascript:;" data-action="remove">[删除]</a>
@@ -39,7 +39,7 @@ use Zodream\Template\View;
         </div>
         <?php if($blog->forward_id > 0 && $blog->forward):?>
         <div class="forward-source">
-            <div class="name">@<?=$blog->forward->user->name?></div>
+            <div class="name">@<?=$this->text($blog->forward->user->name)?></div>
             <div class="content">
                 <?=$blog->forward->content?>
             </div>

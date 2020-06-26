@@ -7,6 +7,8 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
+use Module\Auth\Domain\Repositories\AuthRepository;
+use Zodream\Infrastructure\Http\Request;
 
 class AccountController extends Controller {
 
@@ -53,16 +55,16 @@ class AccountController extends Controller {
         return $this->show();
     }
 
-    public function updateAction() {
-        /** @var UserModel $model */
-        $model = auth()->user();
-        $model->name = app('request')->get('name');
-        if ($model->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('user')
-            ]);
+    public function updateAction(Request $request) {
+        try {
+            $user = AuthRepository::updateProfile($request);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('user')
+        ]);
+
     }
 
     public function updatePasswordAction() {

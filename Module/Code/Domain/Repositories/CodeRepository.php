@@ -8,6 +8,7 @@ use Module\Code\Domain\Model\CommentModel;
 use Module\Code\Domain\Model\LogModel;
 use Module\Code\Domain\Model\CodeModel;
 use Exception;
+use Zodream\Helpers\Html;
 
 class CodeRepository {
 
@@ -43,7 +44,7 @@ class CodeRepository {
                 continue;
             }
             $data[] = [
-                'content' => $tag,
+                'content' => Html::text($tag),
                 'code_id' => $model->id
             ];
         }
@@ -109,7 +110,7 @@ class CodeRepository {
             throw new Exception('无法删除');
         }
         $comment->delete();
-        $mdoel->comment_count --;
+        $model->comment_count --;
         $model->save();
         return $model;
     }

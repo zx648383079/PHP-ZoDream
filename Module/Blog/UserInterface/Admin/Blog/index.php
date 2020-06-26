@@ -48,7 +48,7 @@ $this->title = '文章列表';
                 <i class="fa fa-lock" title="阅读需要满足条件"></i>
             <?php endif;?>
             [<?=$item->type == 1 ? '转载' : '原创'?>]
-            <?=Str::substr($item->title, 0, 20, true)?></td>
+            <?=$this->text($item->title, 20)?></td>
             <td>
                 <?php if ($item->term):?>
                     <a href="<?=$this->url('./@admin/blog', ['term_id' => $item->term_id])?>">

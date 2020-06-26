@@ -20,7 +20,7 @@ class HtmlExpand {
 
     public static function toHtml($content, $isMarkDown = false) {
         if ($isMarkDown) {
-            $content = (new Parsedown())->text($content);
+            $content = (new Parsedown())->setSafeMode(true)->text($content);
         }
         return preg_replace_callback('/<a[^\<\>]+?href="([^"<>\s]+)"/', function ($match) {
             if (strpos($match[1], '//') === false) {

@@ -6,7 +6,7 @@ use Zodream\Helpers\Json;
 use Infrastructure\HtmlExpand;
 /** @var $this View */
 /** @var $blog BlogModel */
-$this->title = $blog->title;
+$this->title = $this->text($blog->title);
 $lang = [
     'side_title' => __('Catalog'),
     'reply_btn' => __('Reply'),
@@ -25,8 +25,8 @@ if ($blog->edit_type < 1) {
         ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
 }
 $this->set([
-    'keywords' => $blog->keywords,
-    'description' => $blog->description,
+    'keywords' => $this->text($blog->keywords),
+    'description' => $this->text($blog->description),
     'layout_og' => [
         'type' => 'article',
         'image' => $blog->thumb,
@@ -43,11 +43,11 @@ $this->set([
         </li>
         <li class="book-back"><a href="<?=$this->url('blog')?>"><?=__('Back')?></a></li>
         <?php if ($blog->previous):?>
-        <li><a href="<?=$blog->previous->url?>"><?=$blog->previous->title?></a></li>
+        <li><a href="<?=$blog->previous->url?>"><?=$this->text($blog->previous->title)?></a></li>
         <?php endif;?>
-        <li class="active"><?=$blog->title?></li>
+        <li class="active"><?=$this->text($blog->title)?></li>
         <?php if ($blog->next):?>
-        <li><a href="<?=$blog->next->url?>"><?=$blog->next->title?></a></li>
+        <li><a href="<?=$blog->next->url?>"><?=$this->text($blog->next->title)?></a></li>
         <?php endif;?>
     </ul>
 </div>
@@ -85,7 +85,7 @@ $this->set([
         </div>
         <?php endif;?>
         <?php if($blog->user):?>
-        <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>"><i class="fa fa-edit"></i><b><?=$blog->user->name?></b></a>
+        <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>"><i class="fa fa-edit"></i><b><?=$this->text($blog->user->name)?></b></a>
         <?php endif;?>
         <?php if($blog->term):?>
         <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($blog->term->name)?></b></a>
@@ -142,7 +142,7 @@ $this->set([
         <i class="fa fa-angle-left"></i>
         <div class="prev-text">
             <span class="prev-label"><?=__('Previous')?></span>
-            <span class="prev-title"><?=$blog->previous->title?></span>
+            <span class="prev-title"><?=$this->text($blog->previous->title)?></span>
         </div>
     </a>
     <?php endif;?>
@@ -150,7 +150,7 @@ $this->set([
     <a class="next" href="<?=$blog->next->url?>">
         <div class="next-text">
             <span class="next-label"><?=__('Next')?></span>
-            <span class="next-title"><?= $blog->next->title ?></span>
+            <span class="next-title"><?= $this->text($blog->next->title) ?></span>
         </div>
         <i class="fa fa-angle-right"></i>
     </a>
@@ -164,7 +164,7 @@ $this->set([
     </div>
     <div class="panel-body">
         <?php foreach($relation_list as $item):?>
-            <div class="list-item"><a class="name" href="<?=$this->url('./', ['id' => $item->id])?>"><?=$item->title?></a><div class="time"><?=$item->created_at?></div></div>
+            <div class="list-item"><a class="name" href="<?=$this->url('./', ['id' => $item->id])?>"><?=$this->text($item->title)?></a><div class="time"><?=$item->created_at?></div></div>
         <?php endforeach;?>
     </div>
 </div>

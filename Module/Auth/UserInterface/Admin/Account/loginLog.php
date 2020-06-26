@@ -31,7 +31,7 @@ $this->title = '登陆记录';
     <?php foreach($model_list as $item):?>
         <tr>
             <td><?=$item->id?></td>
-            <td><?=$item->user?></td>
+            <td><?=$this->text($item->user)?></td>
             <td><?=$item->ip?></td>
             <td><?=$item->status ? '成功' : '失败'?></td>
             <td><?=$item->mode?></td>

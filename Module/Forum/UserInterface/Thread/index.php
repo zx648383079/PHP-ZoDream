@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = $thread->title;
+$this->title = $this->text($thread->title);
 $this->extend('layouts/header');
 ?>
 
@@ -19,7 +19,7 @@ $this->extend('layouts/header');
         </li>
         <?php endforeach;?>
         <li class="active">
-            <a href="<?=$this->url('./thread', ['id' => $thread->id])?>"><?=$thread->title?></a>
+            <a href="<?=$this->url('./thread', ['id' => $thread->id])?>"><?=$this->text($thread->title)?></a>
         </li>
     </ul>
 </div>
@@ -48,7 +48,7 @@ $this->extend('layouts/header');
         <?php if(!auth()->guest() && !$thread->is_closed):?>
         <div class="post-item post-new">
             <div class="post-user">
-                <div class="name"><?=auth()->user()->name?></div>
+                <div class="name"><?=$this->text(auth()->user()->name)?></div>
                 <div class="avatar">
                     <img src="<?=auth()->user()->avatar?>" alt="">
                 </div>

@@ -49,4 +49,11 @@ class CommentRepository {
         BlogModel::where('id', $data['blog_id'])->updateOne('comment_count');
         return $comment;
     }
+
+    public static function getHot($blog_id, $limit = 4) {
+        return CommentModel::where([
+            'blog_id' => intval($blog_id),
+            'parent_id' => 0,
+        ])->where('agree', '>', 0)->orderBy('agree desc')->limit($limit)->all();
+    }
 }

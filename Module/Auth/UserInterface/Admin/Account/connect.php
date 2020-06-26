@@ -17,7 +17,7 @@ $this->registerJs($js);
         <i class="fab <?=$item['icon']?>"></i>
         <?=$item['name']?>
         <?php if (isset($item['nickname'])):?>
-        (<?=$item['nickname']?>)
+        (<?=$this->text($item['nickname'])?>)
         <?php endif;?>
     </div>
     <div class="action">

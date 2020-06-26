@@ -1,6 +1,7 @@
 <?php
 namespace Module\Template\Domain\Weights;
 
+use Zodream\Helpers\Html;
 use Zodream\Service\Factory;
 use Zodream\Template\View;
 
@@ -87,7 +88,7 @@ HTML;
         if (auth()->guest()) {
             return '';
         }
-        $name = auth()->user()->name;
+        $name = Html::text(auth()->user()->name);
         $bulletin_url = url('/auth/admin/bulletin');
         $account_url = url('/auth/admin/account');
         $logout_url = url('/auth/logout');

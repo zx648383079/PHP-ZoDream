@@ -7,6 +7,7 @@ use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Exception;
+use Zodream\Helpers\Html;
 
 class MicroRepository {
 
@@ -24,7 +25,7 @@ class MicroRepository {
     public static function create($content, $images = null, $source = 'web') {
         $model = MicroBlogModel::create([
             'user_id' => auth()->id(),
-            'content' => $content,
+            'content' => Html::text($content),
             'source' => $source
         ]);
         if (!$model) {
@@ -70,7 +71,7 @@ class MicroRepository {
             throw new Exception('id 错误');
         }
         $comment = CommentModel::create([
-            'content' => $content,
+            'content' => Html::text($content),
             'parent_id' => $parent_id,
             'user_id' => auth()->id(),
             'micro_id' => $model->id,
@@ -85,7 +86,7 @@ class MicroRepository {
             }
             MicroBlogModel::create([
                 'user_id' => auth()->id(),
-                'content' => $content,
+                'content' => Html::text($content),
                 'forward_id' => $model->forward_id > 0 ? $model->forward_id :
                     $model->id,
                 'forward_count' => 1,
@@ -138,7 +139,7 @@ class MicroRepository {
             throw new Exception('无法删除');
         }
         $comment->delete();
-        $mdoel->comment_count --;
+        $model->comment_count --;
         $model->save();
         return $model;
     }

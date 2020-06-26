@@ -8,7 +8,7 @@ use Module\Forum\Domain\Parsers\Parser;
     <?php foreach($post_list as $item):?>
     <div class="post-item" data-id="<?=$item->id?>">
         <div class="post-user">
-            <div class="name"><?=$item->user->name?></div>
+            <div class="name"><?=$this->text($item->user->name)?></div>
             <div class="avatar">
                 <img src="<?=$item->user->avatar?>" alt="">
             </div>

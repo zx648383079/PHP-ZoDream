@@ -69,7 +69,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
         <ul>
             <?php foreach ($new_list as $item): ?>
                 <li>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$item->title?></a></li>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>"><?=$this->text($item->title)?></a></li>
             <?php endforeach;?>
         </ul>
     </div>
@@ -78,9 +78,9 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
         <h3><?=__('Latest Comment')?></h3>
         <?php foreach ($comment_list as $item): ?>
         <dl>
-            <dt><a href="<?=$item->blog->url?>#comments"><?=$item->user_name?></a> <?=__('Commented')?> 《<a href="<?=$item->blog->url?>"><?=$item->blog->title?></a>》</dt>
+            <dt><a href="<?=$item->blog->url?>#comments"><?=$this->text($item->user_name)?></a> <?=__('Commented')?> 《<a href="<?=$item->blog->url?>"><?=$this->text($item->blog->title)?></a>》</dt>
             <dd>
-                <p><?=$item->content?></p>
+                <p><?=$this->text($item->content)?></p>
                 <span class="book-time"><?=$item->created_at?></span>
             </dd>
         </dl>
@@ -120,11 +120,11 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
             <?php if($item->open_type > 0):?>
                 <i class="fa fa-lock" title="<?=__('Reading needs to meet the conditions')?>"></i>
             <?php endif;?>
-            <a href="<?=$item->url?>" title="<?=$item->title?>"><?=$item->title?></a>
+            <a href="<?=$item->url?>" title="<?=$this->text($item->title)?>"><?=$this->text($item->title)?></a>
             <span class="book-time"><?=$item->created_at?></span></dt>
         <dd>
-            <p><?=$item->description?></p>
-            <a class="author" href="<?=$this->url('./', ['user' => $item->user_id])?>"><i class="fa fa-edit"></i><b><?=$item->user->name?></b></a>
+            <p><?=$this->text($item->description)?></p>
+            <a class="author" href="<?=$this->url('./', ['user' => $item->user_id])?>"><i class="fa fa-edit"></i><b><?=$this->text($item->user->name)?></b></a>
             <?php if($item->term):?>
             <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($item->term->name)?></b></a>
             <?php endif;?>

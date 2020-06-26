@@ -33,18 +33,18 @@ $this->title = '评论列表';
             <td><?=$item->id?></td>
             <td>
                 <a href="<?=$item->url?>" target="_blank">
-                    <?=$item->name?>
+                    <?=$this->text($item->name)?>
                 </a>
             </td>
             <td>
                 <a href="<?=$this->url('./@admin/comment', ['email' => $item->email])?>">
-                    <?=$item->email?>
+                    <?=$this->text($item->email)?>
                 </a>
             </td>
-            <td><?=$item->content?></td>
+            <td><?=$this->text($item->content)?></td>
             <td>
                 <a href="<?=$this->url('./@admin/comment', ['blog_id' => $item->blog_id])?>">
-                    <?=$item->blog->title?>
+                    <?=$this->text($item->blog->title)?>
                 </a>
             </td>
             <td>

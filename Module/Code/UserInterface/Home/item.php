@@ -10,7 +10,7 @@ use Zodream\Template\View;
             <img src="<?=$code->user->avatar?>" alt="">
         </div>
         <div class="main-body">
-            <div class="name"><?=$code->user->name?></div>
+            <div class="name"><?=$this->text($code->user->name)?></div>
             <p><span class="time"><?=$code->created_at?></span>
                 <span class="lang"><?=$this->text($code->language)?></span>
                 <?php if($code->user_id == auth()->id()):?>
@@ -25,7 +25,7 @@ use Zodream\Template\View;
                 <ul>
                     <?php foreach($code->tags as $tag):?>
                     <li>
-                        <a href="<?=$this->url('./', ['keywords' => $tag->content], false)?>"><?=$tag->content?></a>
+                        <a href="<?=$this->url('./', ['keywords' => $tag->content], false)?>"><?=$this->text($tag->content)?></a>
                     </li>
                     <?php endforeach;?>
                 </ul>

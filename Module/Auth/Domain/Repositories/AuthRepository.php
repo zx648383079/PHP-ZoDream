@@ -10,6 +10,7 @@ use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
+use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Http\Request;
@@ -80,6 +81,7 @@ class AuthRepository {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
+        $name = Html::text($name);
         if (empty($name)) {
             throw new Exception('请输入昵称');
         }
@@ -302,11 +304,11 @@ class AuthRepository {
 
     public static function updateProfile(Request $request) {
         $user = auth()->user();
-        foreach (['name', 'sex', 'birthday'] as $key) {
+        foreach (['name', 'sex', 'birthday', 'avatar'] as $key) {
             if (!$request->has($key)) {
                 continue;
             }
-            $value = $request->get($key);
+            $value = Html::text($request->get($key));
             if (empty($value)) {
                 continue;
             }

@@ -113,7 +113,7 @@ $this->registerCssFile([
         ]
     ],
     [
-        auth()->user()->name,
+        $this->text(auth()->user()->name),
         false,
         'fa fa-user',
         [
