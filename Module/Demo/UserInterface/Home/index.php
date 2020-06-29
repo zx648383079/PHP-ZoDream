@@ -8,6 +8,17 @@ $this->registerCssFile('@demo.css')
     ->registerJsFile('@demo.min.js')->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
+
+<div class="container">
+    <ul class="path">
+        <li>
+            <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li class="active">
+            <a href="<?=$this->url('./')?>">Demo首页</a>
+        </li>
+    </ul>
+</div>
+
 <div class="container">
     <div class="tab-bar">
         <a href="<?=$this->url('./')?>">全部</a>

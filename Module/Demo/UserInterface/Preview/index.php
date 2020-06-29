@@ -8,6 +8,19 @@ $this->registerCssFile('@demo.css')
     ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
+<div class="container">
+    <ul class="path">
+        <li>
+            <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li>
+            <a href="<?=$this->url('./')?>">Demo首页</a>
+        </li>
+        <li class="active">
+            预览 <?=$this->text($post->title)?> 
+        </li>
+    </ul>
+</div>
+
 <div class="frame-resize">
     <a href="">全屏</a>
     <a href="">768x1024</a>
@@ -17,5 +30,5 @@ $this->registerCssFile('@demo.css')
 </div>
 
 <div class="frame-box">
-    <iframe id="main-frame" src="<?=$this->url('./preview/view/0/id/'.$post->id.'/file/0/')?>" frameborder="0"></iframe>
+    <iframe id="main-frame" src="<?=$this->url('./preview/view/0/id/'.$post->id.'/file/0/', false)?>" frameborder="0"></iframe>
 </div>

@@ -12,10 +12,23 @@ $this->registerCssFile('@demo.css')
 ?>
 
 <div class="container">
+    <ul class="path">
+        <li>
+            <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
+        </li><li>
+            <a href="<?=$this->url('./')?>">Demo首页</a>
+        </li>
+        <li class="active">
+            <?=$this->text($post->title)?>
+        </li>
+    </ul>
+</div>
+
+<div class="container">
     <div class="row">
         <div class="col-md-8">
             <div class="detail-header">
-                <div class="title"><?=$post->title?></div>
+                <div class="title"><?=$this->text($post->title)?></div>
                 <div class="tags">
                     <?php foreach($tags as $item):?>
                         <a class="link-btn" href="<?=$this->url('./', ['tag' => $item['name']])?>"><?=__($item['name'])?></a>，
