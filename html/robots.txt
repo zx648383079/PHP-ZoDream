@@ -4,5 +4,6 @@ Allow:/tool
 Disallow: /admin.php
 Disallow: /open
 Disallow: /auth
+Disallow: /demo/preview
 Disallow: /*/admin
 Sitemap: https://zodream.cn/sitemap.xml

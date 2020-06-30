@@ -29,8 +29,11 @@ $(function() {
         $(this).closest('.tree-parent').toggleClass('open');
     });
     $('.frame-resize a').click(function(e) {
-        e.preventDefault();
         let $this = $(this);
+        if ($this.attr('target')) {
+            return;
+        }
+        e.preventDefault();
         $this.addClass('active').siblings().removeClass('active');
         const size = $this.text();
         let width = '100%';

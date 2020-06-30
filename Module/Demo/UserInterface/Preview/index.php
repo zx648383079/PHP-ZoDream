@@ -22,6 +22,10 @@ $this->registerCssFile('@demo.css')
 </div>
 
 <div class="frame-resize">
+    <a href="<?=$this->url('./preview/view/0/id/'.$post->id.'/file/0/', false)?>" target="_blank">
+        <i class="fa fa-times"></i>
+        移除其他内容
+    </a>
     <a href="">全屏</a>
     <a href="">768x1024</a>
     <a href="">1024x768</a>
