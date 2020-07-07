@@ -52,6 +52,7 @@ $(function() {
         };
     $('.nav-bar .search-icon').click(function() {
         searchDialog.show();
+        searchDialog.find('form input').focus();
     });
     searchDialog.on('click', '.dialog-close', function() {
         searchDialog.hide();

@@ -2,31 +2,34 @@
 namespace Module\Family\Domain\Model;
 
 use Domain\Model\Model;
+
 /**
- * Class ClanModel
+ * Class ClanMetaModel
  * @property integer $id
+ * @property integer $clan_id
  * @property string $name
- * @property string $cover
- * @property string $description
- * @property integer $status
+ * @property string $content
  * @property integer $user_id
+ * @property string $author
+ * @property integer $position
  * @property string $modify_at
  * @property integer $created_at
  * @property integer $updated_at
  */
-class ClanModel extends Model {
+class ClanMetaModel extends Model {
 
 	public static function tableName() {
-        return 'fy_clan';
+        return 'fy_clan_meta';
     }
 
     protected function rules() {
         return [
+            'clan_id' => 'required|int',
             'name' => 'required|string:0,100',
-            'cover' => 'required|string:0,100',
-            'description' => 'string:0,255',
-            'status' => 'int:0,127',
-            'user_id' => 'int',
+            'content' => '',
+            'user_id' => 'required|int',
+            'author' => 'string:0,30',
+            'position' => 'int:0,127',
             'modify_at' => 'string:0,50',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -36,22 +39,15 @@ class ClanModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => '族谱名',
-            'description' => '简介',
-            'status' => '状态',
-            'cover' => '封面',
+            'clan_id' => 'Clan Id',
+            'name' => '名称',
+            'content' => '内容',
             'user_id' => 'User Id',
+            'author' => '作者',
+            'position' => '排序',
             'modify_at' => '修订时间',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
-    }
-
-    public function getCoverAttribute() {
-        $cover = $this->getAttributeSource('cover');
-        if (empty($cover)) {
-            $cover = '/assets/images/book_default.jpg';
-        }
-        return url()->asset($cover);
     }
 }

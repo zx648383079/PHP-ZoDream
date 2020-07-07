@@ -43,7 +43,7 @@ function bindEdit() {
             familyDialog.find('.dialog-result').html(res);
         });
         return false;
-    }).on('click', '.dialog-list a', function(e) {
+    }).on('click', '.dialog-list .dialog-result a', function(e) {
         e.preventDefault();
         $.get($(this).attr('href'), res => {
             familyDialog.find('.dialog-result').html(res);

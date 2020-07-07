@@ -38,6 +38,7 @@ $canDo = auth()->user()->isAdministrator();
                 <?php if($canDo):?>
                 <div class="btn-group  btn-group-xs">
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/family', ['clan_id' => $item->id])?>">查看</a>
+                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/clan/meta', ['clan_id' => $item->id])?>">附录</a>
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/clan/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/clan/delete', ['id' => $item->id])?>">删除</a>
                 </div>

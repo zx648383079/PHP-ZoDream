@@ -1,6 +1,7 @@
 <?php
 namespace Module\Family\Domain\Migrations;
 
+use Module\Family\Domain\Model\ClanMetaModel;
 use Module\Family\Domain\Model\ClanModel;
 use Module\Family\Domain\Model\FamilyLogModel;
 use Module\Family\Domain\Model\FamilySpouseModel;
@@ -18,7 +19,19 @@ class CreateFamilyTables extends Migration {
             $table->set('cover')->varchar(100)->notNull();
             $table->set('description')->varchar()->defaultVal('');
             $table->set('status')->bool();
-            $table->set('user_id')->unsigned()->int();
+            $table->set('user_id')->int(11, true);
+            $table->set('modify_at')->varchar(50)->defaultVal('');
+            $table->timestamps();
+        })->append(ClanMetaModel::tableName(), function(Table $table) {
+            $table->setComment('家族附录');
+            $table->set('id')->pk(true);
+            $table->set('clan_id')->int(10, true)->notNull();
+            $table->set('name')->varchar(100)->notNull();
+            $table->set('content')->text();
+            $table->set('user_id')->int(11, true)->notNull();
+            $table->set('author')->varchar(30)->defaultVal('');
+            $table->set('position')->tinyint(1)->defaultVal(10);
+            $table->set('modify_at')->varchar(50)->defaultVal('');
             $table->timestamps();
         })->append(FamilyModel::tableName(), function(Table $table) {
             $table->setComment('家族人员表');
@@ -56,8 +69,7 @@ class CreateFamilyTables extends Migration {
             $table->set('remark')->text();
             $table->set('edit_user')->int()->notNull();
             $table->timestamp('created_at');
-        });
-        parent::up();
+        })->autoUp();
     }
 
 }

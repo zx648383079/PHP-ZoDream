@@ -69,8 +69,14 @@ $this->registerJs($js);
                 <?php endforeach;?>
                 <?php if(empty($spouse_list)):?>
                 <div class="spouse-item">
-                    <?=Form::select('spouse_id', [$parent_list, ['请选择']])?>
-                    <?=Form::select('spouse_relation[]', ['妻'])?>
+                    <div class="input-group">
+                        <label for="mother_id">配偶</label>
+                        <div class="" data-action="family">
+                            <span>【请选择】</span>
+                            <input type="hidden" name="spouse_id" value="0">
+                        </div>
+                    </div>
+                    <?=Form::select('spouse_relation[]', ['妻'])->label('关系')?>
                     <div class="input-group">
                         <label for="start_at">婚姻时间</label>
                         <div class="">
