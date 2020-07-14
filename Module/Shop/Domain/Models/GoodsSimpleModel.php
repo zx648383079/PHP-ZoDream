@@ -5,6 +5,32 @@ use Module\Shop\Domain\Entities\GoodsEntity;
 
 /**
  * 列表场景下的商品数据
+ * @property integer $id
+ * @property integer $cat_id
+ * @property integer $brand_id
+ * @property string $name
+ * @property string $series_number
+ * @property string $keywords
+ * @property string $thumb
+ * @property string $picture
+ * @property string $description
+ * @property string $brief
+ * @property string $content
+ * @property float $price
+ * @property float $market_price
+ * @property integer $stock
+ * @property integer $attribute_group_id
+ * @property float $weight
+ * @property integer $shipping_id
+ * @property integer $is_best
+ * @property integer $is_hot
+ * @property integer $is_new
+ * @property integer $status
+ * @property integer $type
+ * @property string $admin_note
+ * @property integer $deleted_at
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class GoodsSimpleModel extends GoodsEntity {
 
