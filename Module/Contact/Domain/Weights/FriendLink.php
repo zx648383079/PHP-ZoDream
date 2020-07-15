@@ -11,7 +11,7 @@ class FriendLink extends Node implements INode {
 
     protected function registerAsync() {
         $this->page->on(self::KEY, function () {
-           return FriendLinkModel::where('status', 1)->asArray()->get();
+           return FriendLinkModel::where('status', 1)->asArray()->orderBy('updated_at', 'asc')->get();
         });
     }
 
