@@ -62,7 +62,7 @@ $this->registerJs($js);
             </div>
             <div class="zd-tab-item">
                 <?php foreach($spouse_list as $item):?>
-                <div class="spouse-item">
+                <div class="spouse-item" data-id="<?=$item->id?>">
                     [妻]<?=$item->spouse->name?>(<?=$item->start_at?>~<?=$item->end_at?>) 
                     <i class="fa fa-times"></i>
                 </div>
@@ -73,16 +73,16 @@ $this->registerJs($js);
                         <label for="mother_id">配偶</label>
                         <div class="" data-action="family">
                             <span>【请选择】</span>
-                            <input type="hidden" name="spouse_id" value="0">
+                            <input type="hidden" name="spouse[spouse_id][]" value="0">
                         </div>
                     </div>
-                    <?=Form::select('spouse_relation[]', ['妻'])->label('关系')?>
+                    <?=Form::select('spouse[relation][]', ['妻'])->label('关系')?>
                     <div class="input-group">
                         <label for="start_at">婚姻时间</label>
                         <div class="">
-                            <input type="text" id="start_at" class="form-control " name="start_at[]">
+                            <input type="text" id="start_at" class="form-control " name="spouse[start_at][]">
                             ~
-                            <input type="text" id="end_at" class="form-control " name="end_at[]">
+                            <input type="text" id="end_at" class="form-control " name="spouse[end_at][]">
                         </div>
                     </div>
                 </div>

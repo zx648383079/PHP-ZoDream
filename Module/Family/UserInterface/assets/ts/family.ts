@@ -78,6 +78,40 @@ function bindEdit() {
             $this.find('span').text(name);
             $this.find('input').val(id);
         });
+    }).on('click', '.spouse-item .fa-times', function() {
+        let item = $(this).closest('.spouse-item');
+        postJson(BASE_URI + 'family/delete_spouse', {
+            id: item.data('id')
+        }, res => {
+            if (res.code === 200) {
+                item.remove();
+            }
+        });
+    }).on('click', '.spouse-add', function() {
+        $(this).before(`<div class="spouse-item">
+        <div class="input-group">
+            <label for="mother_id">配偶</label>
+            <div class="" data-action="family">
+                <span>【请选择】</span>
+                <input type="hidden" name="spouse[spouse_id][]" value="0">
+            </div>
+        </div>
+        <div class="input-group">
+<label for="spouse_relation_">关系</label>
+<div class="">
+<select id="spouse_relation_" name="spouse[relation][]"><option value="0" selected="">妻</option>
+</select>
+
+</div>
+</div>                    <div class="input-group">
+            <label for="start_at">婚姻时间</label>
+            <div class="">
+                <input type="text" id="start_at" class="form-control " name="spouse[start_at][]">
+                ~
+                <input type="text" id="end_at" class="form-control " name="spouse[end_at][]">
+            </div>
+        </div>
+    </div>`);
     });
     bindDatePicker('birth_at', 'death_at', 'yyyy-mm-dd hh:ii:ss');
     bindDatePicker();

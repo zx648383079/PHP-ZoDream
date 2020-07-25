@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
+use Zodream\Html\Dark\Theme;
 
 /** @var $this View */
 ?>
@@ -35,9 +36,10 @@ use Zodream\Html\Dark\Form;
         <div class="dialog-new">
             <a href="" data-action="back">&lt;&lt;返回</a>
             <?=Form::open('./@admin/family/save')?>
-                <?=Form::text('name', true)?>
-                <?=Form::text('secondary_name')?>
-                <?=Form::select('sex', ['其他', '女', '男'], true)?>
+                <?=Theme::text('name', '', '姓名', '', true)?>
+                <?=Theme::text('secondary_name', '', '表字')?>
+                <?=Theme::select('sex', ['其他', '女', '男'], 1, '性别')?>
+                <?=Theme::textarea('lifetime', '', '生平')?>
             <?= Form::close() ?>
         </div>
     </div>

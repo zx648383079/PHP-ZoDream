@@ -61,7 +61,7 @@ class FamilyController extends Controller {
         return $this->show(compact('model', 'clan_list', 'parent_list', 'spouse_list'));
     }
 
-    public function saveAction($id = null) {
+    public function saveAction(Request $request, $id = null) {
         $model = FamilyModel::findOrNew($id);
         $isNew = $model->isNewRecord;
         if (!$model->load(null, ['user_id'])) {
@@ -69,9 +69,27 @@ class FamilyController extends Controller {
         }
         $model->parent_id = intval($model->parent_id);
         $model->mother_id = intval($model->mother_id);
-        if (!$model->save()) {
+        if (!$model->saveIgnoreUpdate()) {
             return $this->jsonFailure($model->getFirstError());
         }
+        $spouseItems = self::formArr($request->get('spouse', []));
+        foreach ($spouseItems as $item) {
+            if ($item['spouse_id'] < 1) {
+                continue;
+            }
+            $item['family_id'] = $model->id;
+            if ($item['relation'] < 1) {
+                $model->spouse_id = $item['spouse_id'];
+            }
+            if (isset($item['id']) && $item['id'] > 0) {
+                FamilySpouseModel::where('id', $item['id'])
+                    ->update($item);
+                continue;
+            }
+            unset($item['id']);
+            FamilySpouseModel::query()->insert($item);
+        }
+        $model->save();
         return $this->jsonSuccess([
             'url' => $this->getUrl('family'),
             'id' => $model->id,
@@ -95,5 +113,19 @@ class FamilyController extends Controller {
         $items[] = $model->spouse_id;
         $items = FamilyModel::whereIn('id', $items)->get();
         return $this->jsonSuccess($items);
+    }
+
+    public function deleteSpouseAction($id) {
+        $model = FamilySpouseModel::find($id);
+        if (empty($model)) {
+            return $this->jsonFailure('失败');
+        }
+        FamilyModel::where('id', $model->family_id)
+            ->where('spouse_id', $model->spouse_id)
+            ->update([
+                'spouse_id' => 0
+            ]);
+        $model->delete();
+        return $this->jsonSuccess(true);
     }
 }
