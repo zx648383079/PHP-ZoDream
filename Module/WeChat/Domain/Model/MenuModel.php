@@ -2,6 +2,7 @@
 namespace Module\WeChat\Domain\Model;
 
 
+use Module\WeChat\Domain\EditorInput;
 use Zodream\ThirdParty\WeChat\MenuItem;
 
 
@@ -28,7 +29,6 @@ class MenuModel extends EditorModel {
             'name' => 'required|string:0,100',
             'type' => 'required|string:0,100',
             'content' => 'required',
-            'pages' => 'string',
             'parent_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -42,7 +42,6 @@ class MenuModel extends EditorModel {
             'name' => '菜单名',
             'type' => 'Type',
             'content' => 'Content',
-            'pages' => 'Pages',
             'parent_id' => '上级菜单',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -63,12 +62,7 @@ class MenuModel extends EditorModel {
                 return $model->toMenu();
             }, $this->children));
         }
-        if ($this->type == self::TYPE_URL) {
-            return $menu->setUrl($this->content);
-        }
-        if ($this->type == self::TYPE_MINI) {
-            return $menu->setMini($this->content, $this->pages, url('./'));
-        }
-        return $menu->setKey('menu_'.$this->id);
+        EditorInput::renderMenu($this, $menu);
+        return $menu;
     }
 }

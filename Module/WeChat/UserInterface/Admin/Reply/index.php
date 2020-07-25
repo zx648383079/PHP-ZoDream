@@ -1,7 +1,8 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\WeChat\Domain\EditorInput;
 use Zodream\Template\View;
-use Module\WeChat\Domain\Model\ReplyModel;
 /** @var $this View */
 $this->title = '消息管理';
 ?>
@@ -35,7 +36,7 @@ $this->title = '消息管理';
                     <?=$event_list[$item->event]?>
                 </td>
                 <td>
-                    <?=ReplyModel::$type_list[$item->type]?>
+                    <?=EditorInput::$type_list[$item->type]?>
                 </td>
                 <td>
                     <?=$item->keywords?></td>

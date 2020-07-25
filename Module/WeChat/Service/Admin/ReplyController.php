@@ -1,12 +1,14 @@
 <?php
 namespace Module\WeChat\Service\Admin;
 
+use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\ReplyModel;
-
 use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\Helpers\Str;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Mass;
 use Zodream\ThirdParty\WeChat\Template;
@@ -41,19 +43,30 @@ class ReplyController extends Controller {
 
     public function editAction($id) {
         $model = ReplyModel::findOrNew($id);
+        $request = app('request');
+        if ($request->has('type')) {
+            $this->layout = false;
+            $model->type = $request->get('type');
+            return $this->show('/Admin/layouts/editor', compact('model'));
+        }
         $event_list = $this->event_list;
         return $this->show(compact('model', 'event_list'));
     }
 
-    public function saveAction() {
+    public function saveAction(Request $request) {
         $model = new ReplyModel();
         $model->wid = $this->weChatId();
         $model->load();
         if ($model->event != EventEnum::Message) {
             $model->keywords = null;
         }
-        if (!$model->setEditor()->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+        try {
+            EditorInput::save($model, $request);
+            if (!$model->autoIsNew()->save()) {
+                return $this->jsonFailure($model->getFirstError());
+            }
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         ReplyModel::cacheReply($model->wid, true);
         return $this->jsonSuccess([
@@ -157,5 +170,23 @@ class ReplyController extends Controller {
             return $this->jsonFailure('模板不存在');
         }
         return $this->jsonSuccess($model->preview($data));
+    }
+
+    /**
+     * 调用方法
+     * @param $type
+     * @param $action
+     * @param Request $request
+     * @return \Zodream\Infrastructure\Http\Response
+     * @throws \Exception
+     */
+    public function editorAction($type, $action, Request $request) {
+        try {
+            return EditorInput::invoke($type,
+                $this->getActionName(Str::studly($action)),
+                $request, $this);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
     }
 }

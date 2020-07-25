@@ -46,7 +46,6 @@ class CreateWeChatTables extends Migration {
             $table->set('name')->varchar(100)->notNull()->comment('菜单名称');
             $table->set('type')->varchar(100)->notNull()->comment('菜单类型');
             $table->set('content')->text()->notNull()->comment('菜单数据');
-            $table->set('pages')->varchar(200)->comment('小程序路径');
             $table->set('parent_id')->int()->defaultVal(0);
             $table->timestamps();
         });

@@ -27,6 +27,3 @@ use Zodream\Image\Node\BorderNode;
 use Zodream\Image\Node\LineNode;
 use Zodream\Image\Node\RectNode;
 use Module\Document\Domain\CodeParser;
-use Module\Auth\Domain\Helpers;
-
-echo Helpers::hideEmail('16rfytftfvgv6r6rt7t1@qq.com');

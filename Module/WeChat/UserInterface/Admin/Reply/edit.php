@@ -30,7 +30,9 @@ $this->registerJs($js, View::JQUERY_READY);
     <div class="click-box" <?= $model->event != 'click' ? 'style="display:none"': ''?>>
         <?=Form::text('event_name')->value($model->keywords)?>
     </div>
-    <?php $this->extend('../layouts/editor'); ?>
+    <div class="editor-input-box">
+        <?php $this->extend('../layouts/editor'); ?>
+    </div>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>

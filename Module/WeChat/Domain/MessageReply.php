@@ -3,7 +3,6 @@ namespace Module\WeChat\Domain;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -198,47 +197,14 @@ class MessageReply {
      */
     protected function inputResponse($reply) {
         $reply = $this->replyIfDefault($reply);
-        $type = intval($reply->type);
-        if ($type === ReplyModel::TYPE_TEXT) {
-            return $this->response->setText($reply->content);
+        $res = EditorInput::render($reply, $this->response);
+        if (empty($res)) {
+            return $this->response;
         }
-        if ($type === ReplyModel::TYPE_URL) {
-            return $this->response->setText($reply->content);
+        if ($res instanceof MessageResponse) {
+            return $res;
         }
-        if ($type === ReplyModel::TYPE_SCENE) {
-            $name = $reply->content;
-            /** @var SceneInterface $instance */
-            $instance = new $name();
-            return $this->inputResponse($instance->enter());
-        }
-        if ($type === ReplyModel::TYPE_MEDIA) {
-            $model = MediaModel::find($reply->content);
-            if (!$model->media_id) {
-                return $this->response->setText('内容有误');
-            }
-            if ($model->type === MediaModel::TYPE_IMAGE) {
-                return $this->response->setImage($model->media_id);
-            }
-            if ($model->type === MediaModel::TYPE_VIDEO) {
-                return $this->response->setVideo($model->media_id, $model->title);
-            }
-            if ($model->type === MediaModel::TYPE_VOICE) {
-                return $this->response->setVoice($model->media_id);
-            }
-            return $this->response->setText('内容有误');
-        }
-        $model_list = MediaModel::where('id', $reply->content)
-            ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
-        foreach ($model_list as $item) {
-            /** @var $item MediaModel */
-
-            $picUrl = empty($this->message) ? $item->thumb : MediaModel::where('type', MediaModel::TYPE_IMAGE)
-                ->where('content', $item->thumb)->value('url');
-            $this->response->addNews($item->title, $item->title,
-                $picUrl
-                );
-        }
-        return $this->response;
+        return $this->inputResponse($res);
     }
 
     /**
@@ -252,7 +218,7 @@ class MessageReply {
         }
         $model = ReplyModel::findWithEvent('default', $this->model->id);
         return empty($model) ? new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
+            'type' => EditorInput::TYPE_TEXT,
             'content' => '默认回复'
         ]) : $model;
     }

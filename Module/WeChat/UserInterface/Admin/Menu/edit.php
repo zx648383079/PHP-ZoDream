@@ -17,9 +17,9 @@ $this->title = '编辑菜单';
 <?=Form::open($model, './@admin/menu/save')?>
     <?=Form::text('name', true)?>
     <?=Form::select('parent_id', [$menu_list, ['顶级菜单']])?>
-    <?php $this->extend('../layouts/editor', [
-            'tab_id' => false
-        ]); ?>
+    <div class="editor-input-box">
+        <?php $this->extend('../layouts/editor'); ?>
+    </div>
     <button type="submit" class="btn btn-success">确认保存</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
 <?= Form::close('id') ?>

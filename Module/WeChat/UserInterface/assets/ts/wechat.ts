@@ -1,18 +1,13 @@
 /// <reference path="MediumEditor.d.ts/>
 
-function bindTab(typeId: number| string, baseUri: string) {
-    let typeInput = $(".wx-editor .type-input");
-    $('.wx-editor .zd-tab-head .zd-tab-item').click(function() {
-        typeInput.val($(this).attr('data-id'));
-    }).each((i, item) => {
-        let that = $(item);
-        if (that.data('id') == typeId) {
-            typeInput.val(typeId);
-            that.addClass('active');
-            $('.wx-editor .zd-tab-body .zd-tab-item').eq(i).addClass('active');
-        }
-    });
-    $('.media-box').on('change', 'input', function() {
+function bindEditorInput(baseUri: string) {
+    let box = $('.editor-input-box').on('change', 'select[name="type"]', function() {
+        $.get(window.location.href, {
+            type: $(this).val()
+        }, html => {
+            box.html(html);
+        });
+    }).on('change', '.media-box input', function() {
         let mediaBox = $(this).closest('.media-box');
         let type = mediaBox.find('#media_type');
         postJson(baseUri + 'media', {
