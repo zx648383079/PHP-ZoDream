@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Repositories;
 
 use Exception;
 use Module\Auth\Domain\Events\Login;
+use Module\Auth\Domain\Events\Register;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
@@ -95,6 +96,7 @@ class AuthRepository {
             throw new Exception('两次密码不一致');
         }
         $user = self::createUser($email, $name, $password);
+        event(new Register($user, app('request')->ip(), time()));
         return self::doLogin($user);
     }
 
@@ -180,6 +182,7 @@ class AuthRepository {
             throw new Exception('系统错误！');
         }
         self::successBindUser($type, $user, $nickname, $openid, $unionId, $platform_id);
+        event(new Register($user, app('request')->ip(), time()));
         self::doLogin($user, false, $type);
         return $user;
     }

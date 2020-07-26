@@ -80,6 +80,7 @@ class BlogRepository {
                 if ($sort === 'hot') {
                     return $query->orderBy('comment_count', 'desc');
                 }
+                return $query;
             })->when(!empty($keywords), function ($query) {
                 BlogModel::searchWhere($query, ['title', 'programming_language']);
             })->when(!empty($language), function ($query) use ($language) {

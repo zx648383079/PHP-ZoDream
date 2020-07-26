@@ -16,7 +16,7 @@ class Balance extends BasePayment {
     }
 
     public function preview(): string {
-        // TODO: Implement preview() method.
+        return '';
     }
 
     public function pay(array $log): array {
@@ -39,11 +39,11 @@ class Balance extends BasePayment {
     }
 
     public function callback(array $input): array {
-        // TODO: Implement callback() method.
+        return [];
     }
 
     public function refund(array $log): array {
-        // TODO: Implement refund() method.
+        return [];
     }
 
 

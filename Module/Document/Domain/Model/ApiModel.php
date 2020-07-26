@@ -74,7 +74,8 @@ class ApiModel extends Model {
      */
     public static function preStore($id) {
         if ($id instanceof FieldModel) {
-            return static::preField($id);
+            static::preField($id);
+            return;
         }
         $id = intval($id);
         if ($id < 1) {

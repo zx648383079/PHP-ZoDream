@@ -1,15 +1,12 @@
 <?php
 namespace Module\Shop\Domain\Auction;
 
-use Domain\Model\Auth\UserModel;
-use Module\Auction\Domain\Model\AuctionLogModel;
-use Module\Auction\Domain\Model\AuctionModel;
-use Zodream\Infrastructure\Traits\ErrorTrait;
-use Zodream\Service\Factory;
+use Module\Auth\Domain\Model\UserModel;
+use Module\Shop\Domain\Models\Activity\AuctionLogModel;
+use Module\Shop\Domain\Models\Activity\AuctionModel;
 
 abstract class BaseAuction {
 
-    use ErrorTrait;
     /**
      * 拍卖数据
      * @var AuctionModel
@@ -27,10 +24,9 @@ abstract class BaseAuction {
     }
 
     public function setData($data) {
-        $this->clearError();
         $this->data = is_array($data) ? (new AuctionLogModel())->load($data) : $data;
         if (empty($this->data->user_id)) {
-            $this->data->user_id = Factory::user()->getId();
+            $this->data->user_id = auth()->id();
         }
         return $this;
     }
@@ -40,16 +36,16 @@ abstract class BaseAuction {
      * @return boolean
      */
     public function isValidUser() {
-        if ($this->data->user_id == $this->model->getGoods()->user_id) {
-            return $this->setError('user_id', '不能自己竞拍');
-        }
+//        if ($this->data->user_id == $this->model->getGoods()->user_id) {
+//            throw new \Exception('不能自己竞拍');
+//        }
         $lastLog = $this->model->getMaxLog();
         if (!empty($lastLog) && $lastLog->user_id == $this->data->user_id) {
-            return $this->setError('user_id', '不能连续加价');
+            throw new \Exception('不能连续加价');
         }
-        $user = UserModel::findOne($this->data->user_id);
-        if ($user->money < $this->model->deposit) {
-            return $this->setError('user_id', '账户余额不足不');
+        $user = UserModel::findIdentity($this->data->user_id);
+        if (empty($user) || $user->money < $this->model->deposit) {
+            throw new \Exception('账户余额不足');
         }
         return true;
     }
@@ -65,7 +61,7 @@ abstract class BaseAuction {
         $this->model->save();
         $this->data->status = AuctionLogModel::STATUS_SUCCESS;
         $this->data->save();
-        $user = UserModel::findOne($this->data->user_id);
+        $user = UserModel::findIdentity($this->data->user_id);
         $user->money -= $this->model->deposit;
         $user->save();
     }

@@ -12,8 +12,6 @@ interface AuctionInterface {
      */
     public function setData($data);
 
-    public function hasError();
-
     /**
      * 根据时间判断是否能拍
      * @return boolean

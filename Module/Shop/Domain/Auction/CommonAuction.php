@@ -1,7 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Auction;
 
-use Module\Auction\Domain\Model\AuctionModel;
+
+use Module\Shop\Domain\Models\Activity\AuctionModel;
 
 /**
  * 普通拍卖方式即加价拍
@@ -12,14 +13,15 @@ class CommonAuction extends BaseAuction implements AuctionInterface {
     /**
      * 根据时间判断是否能拍
      * @return boolean
+     * @throws \Exception
      */
     public function canAuction() {
         $time = time();
         if ($this->model->start_at > $time || $time >= $this->model->end_at) {
-            return $this->setError('time', '拍卖无效');
+            throw new \Exception('拍卖无效');
         }
         if ($this->model->status !== AuctionModel::STATUS_NONE) {
-            return $this->setError('status', '拍卖结束');
+            throw new \Exception('拍卖结束');
         }
         return true;
     }
@@ -52,6 +54,7 @@ class CommonAuction extends BaseAuction implements AuctionInterface {
     /**
      * 竞拍
      * @return boolean
+     * @throws \Exception
      */
     public function auction() {
         if (!$this->canAuction()) {
@@ -63,12 +66,9 @@ class CommonAuction extends BaseAuction implements AuctionInterface {
         if (!$this->isValidUser()) {
             return false;
         }
-        if ($this->hasError()) {
-            return false;
-        }
         $this->data->number = $this->model->number;
         if (!$this->data->save()) {
-            return $this->setError('save', '保存失败');
+            throw new \Exception('保存失败');
         }
         if ($this->model->fixed_price > 0
             && $this->data->bid >= $this->model->fixed_price) {

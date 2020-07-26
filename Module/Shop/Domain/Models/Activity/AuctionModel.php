@@ -3,6 +3,10 @@ namespace Module\Shop\Domain\Models\Activity;
 
 
 use Domain\Model\Model;
+use Module\Shop\Domain\Auction\AuctionInterface;
+use Module\Shop\Domain\Auction\CommonAuction;
+use Module\Shop\Domain\Auction\DutchAuction;
+use Module\Shop\Domain\Models\GoodsModel;
 
 /**
  * 拍卖
@@ -41,14 +45,14 @@ class AuctionModel extends Model {
      * @return GoodsModel
      */
     public function getGoods() {
-        return GoodsModel::findOne($this->goods_id);
+        return GoodsModel::find($this->goods_id);
     }
 
     /**
      * @return AuctionLogModel
      */
     public function getMaxLog() {
-        return AuctionLogModel::findOne([
+        return AuctionLogModel::find([
             'where' => ['auction_id' => $this->id],
             'order' => 'bid desc'
         ]);

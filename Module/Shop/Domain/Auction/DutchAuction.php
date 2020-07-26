@@ -1,7 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Auction;
 
-use Module\Auction\Domain\Model\AuctionLogModel;
+use Module\Shop\Domain\Models\Activity\AuctionLogModel;
+use Module\Shop\Domain\Models\Activity\AuctionModel;
 
 /**
  * 荷兰式拍卖即降价拍
@@ -42,7 +43,7 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
     public function canAuction() {
         $time = time();
         if ($this->model->status !== AuctionModel::STATUS_NONE) {
-            return $this->setError('status', '拍卖结束');
+            throw new \Exception('拍卖结束');
         }
         if ($this->model->end_at > 0 && $this->model->end_at < $time) {
             return false;
@@ -87,9 +88,6 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
         if (!$this->isValidUser()) {
             return false;
         }
-        if ($this->hasError()) {
-            return false;
-        }
         $this->saveToOrder();
     }
 
@@ -102,11 +100,10 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
         if ($this->model->start_at > $time || $time > $this->model->end_at) {
             return;
         }
-        $data = AuctionLogModel::findAll(['where' => [
-            'bid >='.$this->getPrice(),
-            'number <='.$this->model->surplus, 'status' => AuctionLogModel::STATUS_NONE
-        ],
-            'order' => 'bid desc, number desc']);
+        $data = AuctionLogModel::where('bid', '>=', $this->getPrice())
+            ->where('number', '<=', $this->model->surplus)
+            ->where('status', AuctionLogModel::STATUS_NONE)
+            ->orderBy('bid desc, number desc')->get();
         if (empty($data)) {
             return;
         }

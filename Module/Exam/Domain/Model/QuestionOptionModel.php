@@ -14,15 +14,15 @@ class QuestionOptionModel extends QuestionOptionEntity {
         $items = static::where('question_id', $model->id)->pluck('id');
         $hasRight = false;
         $exist = [];
-        foreach ($options['content'] as $i => $content) {
-            if (empty($content)) {
+        foreach ($options as $item) {
+            if (!isset($item['content']) || empty($item['content'])) {
                 continue;
             }
             $data = [
-                'content' => $content,
+                'content' => $item['content'],
                 'question_id' => $model->id,
-                'type' => isset($options['type'][$i]) ? intval($options['type'][$i]) : 0,
-                'is_right' => isset($options['is_right'][$i]) && $options['is_right'][$i] > 0
+                'type' => isset($item['type']) ? intval($item['type']) : 0,
+                'is_right' => isset($item['is_right']) && $item['is_right'] > 0
                     ? 1 : 0
             ];
             if ($model->type < 1 && $hasRight && $data['is_right'] > 0) {
@@ -31,9 +31,9 @@ class QuestionOptionModel extends QuestionOptionEntity {
             if ($data['is_right'] > 0) {
                 $hasRight = true;
             }
-            $id = isset($options['id'][$i])
-                && $options['id'][$i] > 0
-                && in_array($options['id'][$i], $items)? intval($options['id'][$i]) : 0;
+            $id = isset($item['id'])
+                && $item['id'] > 0
+                && in_array($item['id'], $items) ? intval($item['id']) : 0;
             if ($id > 0) {
                 $exist[] = $id;
                 static::where('question_id', $model->id)

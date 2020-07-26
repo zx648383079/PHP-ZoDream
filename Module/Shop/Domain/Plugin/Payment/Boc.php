@@ -15,7 +15,7 @@ class Boc extends BasePayment {
     }
 
     public function preview(): string {
-        // TODO: Implement preview() method.
+        return '';
     }
 
     public function pay(array $log): array {

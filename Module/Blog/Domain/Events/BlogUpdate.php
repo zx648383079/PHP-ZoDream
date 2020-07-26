@@ -49,7 +49,7 @@ class BlogUpdate {
 
     public function getUrl() {
         if (!$this->isNew) {
-            return ;
+            return '';
         }
         url()->useCustomScript();
         $url = $this->blog->url;

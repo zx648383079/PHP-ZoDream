@@ -5,6 +5,7 @@ use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\QuestionAnswerModel;
 use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
+use Zodream\Infrastructure\Http\Request;
 
 class QuestionController extends Controller {
 
@@ -48,17 +49,16 @@ class QuestionController extends Controller {
         return $this->show(compact('model', 'option_list'));
     }
 
-    public function saveAction() {
+    public function saveAction(Request $request) {
         $model = new QuestionModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
         QuestionOptionModel::batchSave($model,
-            app('request')->get('option', []));
+            self::formArr($request->get('option', [])));
         return $this->jsonSuccess([
             'url' => $this->getUrl('question')
         ]);
-
     }
 
     public function deleteAction($id) {
@@ -79,6 +79,24 @@ class QuestionController extends Controller {
             'id' => $model->id,
             'title' => $model->title,
             'url' => url('./question', ['id' => $model->id])
+        ]);
+    }
+
+    public function importAction($title, Request $request) {
+        if (empty($title)) {
+            return $this->jsonFailure('请输入标题');
+        }
+        if (QuestionModel::where('title', $title)
+                ->where('course_id', $request->get('course_id'))->count() > 0) {
+            return $this->jsonFailure('已存在同名题目');
+        }
+        $model = new QuestionModel();
+        if (!$model->load() || !$model->save()) {
+            return $this->jsonFailure($model->getFirstError());
+        }
+        QuestionOptionModel::batchSave($model, $request->get('option', []));
+        return $this->jsonSuccess([
+            'url' => $this->getUrl('question')
         ]);
     }
 }

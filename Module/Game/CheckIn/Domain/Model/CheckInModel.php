@@ -183,7 +183,7 @@ class CheckInModel extends Model {
             ->where('created_at', '>', $end_at)
             ->orderBy('created_at', 'asc')->one();
         if (empty($first) || $first->getAttributeValue('created_at') - $end_at > 86400) {
-            return $model;
+            return false;
         }
         $last = static::where('user_id', $user_id)
             ->where('id', '>', $first->id)
@@ -193,6 +193,7 @@ class CheckInModel extends Model {
             ->where('created_at', '>=', $first->getAttributeValue('created_at'))
             ->where('created_at', '<', $last->getAttributeValue('created_at'))
             ->updateOne('running', $running);
+        return true;
     }
 
     public static function countByUser($user_id) {

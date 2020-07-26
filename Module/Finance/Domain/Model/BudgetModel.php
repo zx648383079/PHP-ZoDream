@@ -89,6 +89,7 @@ class BudgetModel extends BudgetEntity {
         if ($this->cycle == self::CYCLE_YEAR) {
             return $this->getLogByYear();
         }
+        return [];
     }
 
     public function getLogByAll() {
