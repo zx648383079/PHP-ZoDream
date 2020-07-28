@@ -1,11 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Contact\Service;
 
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
-use Module\Contact\Domain\Model\FeedbackModel;
-use Module\Contact\Domain\Model\FriendLinkModel;
-use Module\Contact\Domain\Model\SubscribeModel;
+use Module\Contact\Domain\Repositories\ContactRepository;
 use Module\ModuleController;
+use Zodream\Infrastructure\Http\Request;
 
 class HomeController extends ModuleController {
 
@@ -20,36 +19,39 @@ class HomeController extends ModuleController {
 
     }
 
-    public function feedbackAction() {
-        $model = new FeedbackModel();
-        if (!$model->load() || !$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+    public function feedbackAction(Request $request) {
+        try {
+            ContactRepository::saveFeedback($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess(null, '提交留言成功');
     }
 
-    public function subscribeAction() {
-        $model = new SubscribeModel();
-        if (!$model->load() || !$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+    public function subscribeAction(Request $request) {
+        try {
+            ContactRepository::saveSubscribe($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess(null, '订阅成功');
     }
 
-    public function unsubscribeAction($email) {
-        SubscribeModel::where('email', $email)->update([
-            'status' => 1,
-            'updated_at' => time()
-        ]);
+    public function unsubscribeAction(string $email) {
+        try {
+            ContactRepository::unsubscribe($email);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess(null, '已取消订阅');
     }
 
-    public function friendLinkAction() {
-        $model = new FriendLinkModel();
-        if (!$model->load() || !$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+    public function friendLinkAction(Request $request) {
+        try {
+            ContactRepository::applyFriendLink($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        BulletinModel::system(1, '友情链接申请',
-            sprintf('<a href="%s">马上查看</a>', url('./@admin/friend_link')), 98);
         return $this->jsonSuccess(null, '提交成功，请等待审核');
     }
 }

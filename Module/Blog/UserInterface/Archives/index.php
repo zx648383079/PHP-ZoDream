@@ -30,7 +30,7 @@ $this->set([
         <div class="time-items">
             <?php foreach ($items as $item):?>
             <a class="time-item" href="<?=$this->url('./', ['id' => $item['id']])?>">
-                <div class="title"><?=$item['title']?></div>
+                <div class="title"><?=$this->text($item['title'])?></div>
                 <div class="time"><?=$item['date']?></div>
             </a>
             <?php endforeach;?>

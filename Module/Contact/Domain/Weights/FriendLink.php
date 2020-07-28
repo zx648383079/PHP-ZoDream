@@ -2,6 +2,7 @@
 namespace Module\Contact\Domain\Weights;
 
 use Module\Contact\Domain\Model\FriendLinkModel;
+use Module\Contact\Domain\Repositories\ContactRepository;
 use Module\Template\Domain\Weights\INode;
 use Module\Template\Domain\Weights\Node;
 
@@ -11,7 +12,7 @@ class FriendLink extends Node implements INode {
 
     protected function registerAsync() {
         $this->page->on(self::KEY, function () {
-           return FriendLinkModel::where('status', 1)->asArray()->orderBy('updated_at', 'asc')->get();
+           return ContactRepository::friendLink();
         });
     }
 
