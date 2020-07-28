@@ -3,6 +3,8 @@ namespace Module\Blog\Service\Api;
 
 use Infrastructure\Uploader;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Repositories\BlogRepository;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
 class PublishController extends RestController {
@@ -13,22 +15,11 @@ class PublishController extends RestController {
         ];
     }
 
-    public function indexAction($title) {
-        $title = trim($title);
-        if (empty($title)) {
-            return $this->renderFailure('请输入标题');
-        }
-        $model = BlogModel::where('title', $title)->where('user_id', auth()->id())->first();
-        if (!$model) {
-            $model = new BlogModel();
-        }
-        if (!$model->load(null, ['user_id'])) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        $model->user_id = auth()->id();
-        $model->comment_status = 0;
-        if (!$model->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function indexAction(Request $request) {
+        try {
+            $model = BlogRepository::publish($request->get());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Repositories;
 
+use Exception;
 use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
@@ -178,5 +179,30 @@ class BlogRepository {
         return cache()->store('pages')->getOrSet(sprintf('blog_%d_content', $blog->id), function () use ($blog) {
             return TagRepository::renderTags($blog->id, HtmlExpand::toHtml($blog->getAttributeValue('content'), $blog->edit_type == 1));
         }, 3600);
+    }
+
+    /**
+     * 发布博客
+     * @param array $data
+     * @return BlogModel
+     * @throws Exception
+     */
+    public static function publish(array $data) {
+        if (!isset($data['title']) || empty($data['title'])) {
+            throw new Exception('请输入标题');
+        }
+        $model = BlogModel::where('title', $data['title'])->where('user_id', auth()->id())->first();
+        if (!$model) {
+            $model = new BlogModel();
+        }
+        if (!$model->load($data, ['user_id'])) {
+            throw new Exception($model->getFirstError());
+        }
+        $model->user_id = auth()->id();
+        $model->comment_status = 0;
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
     }
 }
