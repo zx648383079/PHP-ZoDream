@@ -23,12 +23,12 @@ $this->set([
         <a class="active" href="<?=$this->url('./archives')?>"><?=__('Archives')?></a>
     </div>
     <div class="time-axis">
-        <?php foreach ($blog_list as $year => $items):?>
+        <?php foreach ($archives_list as $archives):?>
         <div class="time-title">
-            <div class="time-year"><?=$year?></div>
+            <div class="time-year"><?=$archives['year']?></div>
         </div>
         <div class="time-items">
-            <?php foreach ($items as $item):?>
+            <?php foreach ($archives['children'] as $item):?>
             <a class="time-item" href="<?=$this->url('./', ['id' => $item['id']])?>">
                 <div class="title"><?=$this->text($item['title'])?></div>
                 <div class="time"><?=$item['date']?></div>

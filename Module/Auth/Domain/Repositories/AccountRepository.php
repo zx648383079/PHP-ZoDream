@@ -1,13 +1,23 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\OAuthModel;
-use Zodream\Helpers\Time;
+use Module\Auth\Domain\Model\UserModel;
 
 class AccountRepository {
 
+    public static function cancel(UserModel $user, string $reason) {
+        $user->status = UserModel::STATUS_FROZEN;
+        $user->save();
+        BulletinModel::system(1, '账户注销申请',
+            sprintf('申请用户：%s，注销理由：%s <a href="%s">马上查看</a>', $user->name,
+                $reason, url('/auth/admin/user/edit', ['id' => $user->id])), 98);
+        return $user;
+    }
 
-    public static function getConnect() {
+    public static function getConnect(): array {
         $map_list = self::getConnectMaps();
         $model_list = OAuthModel::where('user_id', auth()->id())
             ->get('id', 'vendor', 'nickname', 'created_at');
@@ -20,12 +30,12 @@ class AccountRepository {
         return array_values($map_list);
     }
 
-    public static function getDriver() {
+    public static function getDriver(): array {
         return [
         ];
     }
 
-    private static function getConnectMaps() {
+    private static function getConnectMaps(): array {
         return [
             'qq' => [
                 'name' => 'QQ',

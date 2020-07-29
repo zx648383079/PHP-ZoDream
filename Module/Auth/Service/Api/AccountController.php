@@ -1,9 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
-use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\RestController;
@@ -27,13 +26,11 @@ class AccountController extends RestController {
 
 
     public function connectAction() {
-        $data = AccountRepository::getConnect();
-        return $this->render(compact('data'));
+        return $this->renderData(AccountRepository::getConnect());
     }
 
     public function driverAction() {
-        $data = AccountRepository::getDriver();
-        return $this->render(compact('data'));
+        return $this->renderData(AccountRepository::getDriver());
     }
 
     public function subtotalAction() {
@@ -51,13 +48,9 @@ class AccountController extends RestController {
      * @return RestResponse
      * @throws \Exception
      */
-    public function cancelAction($reason) {
+    public function cancelAction(string $reason) {
         $user = auth()->user();
-        $user->status = UserModel::STATUS_FROZEN;
-        $user->save();
-        BulletinModel::system(1, '账户注销申请',
-            sprintf('申请用户：%s，注销理由：%s <a href="%s">马上查看</a>', $user->name,
-                $reason, url('/auth/admin/user/edit', ['id' => $user->id])), 98);
+        AccountRepository::cancel($user, $reason);
         return $this->render($user);
     }
 }

@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
-use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
+use Module\Auth\Domain\Repositories\BulletinRepository;
 use Zodream\Route\Controller\RestController;
 
 class BulletinController extends RestController {
@@ -13,75 +13,41 @@ class BulletinController extends RestController {
         ];
     }
 
-    public function indexAction($keywords = null, $status = 0) {
-        $model_list = BulletinUserModel::with('bulletin')
-            ->when(!empty($keywords), function ($query) {
-                $ids = BulletinModel::where(function ($query) {
-                    BulletinModel::search($query, 'title');
-                })->pluck('id');
-                if (empty($ids)) {
-                    $query->isEmpty();
-                    return;
-                }
-                $query->whereIn('bulletin_id', $ids);
-            })
-            ->when($status > 0, function ($query) use ($status) {
-                $query->where('status', $status - 1);
-            })
-            ->where('user_id', auth()->id())
-            ->orderBy('status', 'asc')
-            ->orderBy('bulletin_id', 'desc')->page();
+    public function indexAction(string $keywords = '', $status = 0) {
+        $model_list = BulletinRepository::getList($keywords, $status);
         return $this->renderPage($model_list);
     }
 
-    public function infoAction($id) {
-        $model = BulletinUserModel::where('user_id', auth()->id())
-            ->where('bulletin_id', $id)->first();
-        if (empty($model)) {
-            return $this->renderFailure('消息不存在');
+    public function infoAction(int $id) {
+        try {
+            $model = BulletinRepository::read($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->status = BulletinUserModel::READ;
-        $model->save();
         return $this->render($model);
     }
 
     public function readAction($id) {
-        $model = BulletinUserModel::where('user_id', auth()->id())
-            ->where('bulletin_id', $id)->first();
-        if (empty($model)) {
-            return $this->renderFailure('消息不存在');
+        try {
+            BulletinRepository::read($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        BulletinUserModel::where('user_id', auth()->id())
-            ->where('bulletin_id', $id)->update([
-                'status' => BulletinUserModel::READ,
-                'updated_at' => time()
-            ]);
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 
     public function readAllAction() {
-        BulletinUserModel::where('user_id', auth()->id())
-            ->where('status', 0)->update([
-                'status' => BulletinUserModel::READ,
-                'updated_at' => time()
-            ]);
-        return $this->render([
-            'data' => true
-        ]);
+        BulletinRepository::readAll();;
+        return $this->renderData(true);
     }
 
-    public function deleteAction($id) {
-        $model = BulletinUserModel::where('user_id', auth()->id())
-            ->where('bulletin_id', $id)->first();
-        if (empty($model)) {
-            return $this->renderFailure('消息不存在');
+    public function deleteAction(int $id) {
+        try {
+            BulletinRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->delete();
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 
 }

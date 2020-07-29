@@ -60,7 +60,7 @@ class PasswordController extends RestController {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(['data' => true]);
+        return $this->renderData(true);
     }
 
     public function updateAction(Request $request) {
@@ -73,6 +73,6 @@ class PasswordController extends RestController {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(['data' => true]);
+        return $this->renderData(true);
     }
 }

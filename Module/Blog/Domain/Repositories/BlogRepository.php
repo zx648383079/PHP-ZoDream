@@ -140,12 +140,15 @@ class BlogRepository {
         foreach ($items as $item) {
             $year = date('Y', $item['created_at']);
             if (!isset($data[$year])) {
-                $data[$year] = [];
+                $data[$year] = [
+                    'year' => $year,
+                    'children' => []
+                ];
             }
             $item['date'] = date('m-d', $item['created_at']);
-            $data[$year][] = $item;
+            $data[$year]['children'][] = $item;
         }
-        return $data;
+        return array_values($data);
     }
 
     public static function formatLanguage($items, Query $query) {

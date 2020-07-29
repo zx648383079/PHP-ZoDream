@@ -8,6 +8,6 @@ class LogoutController extends RestController {
 
     public function indexAction() {
         AuthRepository::logout();
-        return $this->render([]);
+        return $this->renderData(true);
     }
 }
