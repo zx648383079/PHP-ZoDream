@@ -1,10 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\FinancialProductModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
-use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
+use Module\Finance\Domain\Repositories\AccountRepository;
+use Module\Finance\Domain\Repositories\ProductRepository;
+use Module\Finance\Domain\Repositories\ProjectRepository;
+use Zodream\Infrastructure\Http\Request;
 
 class MoneyController extends Controller {
 
@@ -28,32 +32,35 @@ class MoneyController extends Controller {
         return $this->editAccountAction(0);
     }
 
-    public function editAccountAction($id) {
-        $model = MoneyAccountModel::findOrNew($id);
+    public function editAccountAction(int $id) {
+        try {
+            $model = $id > 0 ? AccountRepository::get($id) : new MoneyAccountModel();
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./money/account', $ex->getMessage());
+        }
         return $this->show('create_account', compact('model'));
     }
 
-    public function saveAccountAction() {
-        $model = new MoneyAccountModel();
-        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./money/account')
-            ]);
+    public function saveAccountAction(Request $request) {
+        try {
+            $model = AccountRepository::save($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
-    }
-
-    public function changeAccountAction($id) {
-        MoneyAccountModel::auth()->where('id', $id)->updateBool('status');
         return $this->jsonSuccess([
             'url' => url('./money/account')
         ]);
     }
 
-    public function deleteAccountAction($id) {
-        MoneyAccountModel::auth()->where('id', $id)->update([
-            'deleted_at' => time()
+    public function changeAccountAction(int $id) {
+        AccountRepository::change($id);
+        return $this->jsonSuccess([
+            'url' => url('./money/account')
         ]);
+    }
+
+    public function deleteAccountAction(int $id) {
+        AccountRepository::softDelete($id);
         return $this->jsonSuccess([
             'url' => url('./money/account')
         ]);
@@ -69,50 +76,52 @@ class MoneyController extends Controller {
     }
 
     public function editProjectAction($id) {
-        $model = FinancialProjectModel::findOrNew($id);
+        try {
+            $model = $id > 0 ? ProjectRepository::get($id) : new FinancialProjectModel();
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./money/project', $ex->getMessage());
+        }
         $product_list = FinancialProductModel::auth()->all();
         $account_list = MoneyAccountModel::auth()->all();
         return $this->show('create_project', compact('model', 'product_list', 'account_list'));
     }
 
-    public function saveProjectAction() {
-        $model = new FinancialProjectModel();
-        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./money/project')
-            ]);
+    public function saveProjectAction(Request $request) {
+        try {
+            $model = ProjectRepository::save($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
-    }
-
-    public function deleteProjectAction($id) {
-        FinancialProjectModel::auth()->where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./money/project')
         ]);
     }
 
-    public function confirmEarningsAction($id) {
-        $model = FinancialProjectModel::find($id);
+    public function deleteProjectAction(int $id) {
+        ProjectRepository::remove($id);
+        return $this->jsonSuccess([
+            'url' => url('./money/project')
+        ]);
+    }
+
+    public function confirmEarningsAction(int $id) {
+        try {
+            $model = ProjectRepository::get($id);
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./money/project', $ex->getMessage());
+        }
         return $this->show('confirm_project', compact('model'));
     }
 
-    public function saveEarningsAction() {
-        $project = FinancialProjectModel::find(app('request')->get('id'));
-        $model = new LogModel();
-        $model->money = floatval(app('request')->get('money'));
-        $model->account_id = $project->account_id;
-        $model->project_id = $project->id;
-        $model->type = LogModel::TYPE_INCOME;
-        $model->user_id = auth()->id();
-        $model->happened_at = date('Y-m-d H:i:s');
-        $model->remark = sprintf('理财项目 %s 收益', $project->name);
-        if ($model->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./money/project')
-            ]);
+    public function saveEarningsAction(int $id, float $money) {
+        try {
+            $model = ProjectRepository::earnings($id, $money);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => url('./money/project')
+        ]);
     }
 
     public function productAction() {
@@ -124,30 +133,35 @@ class MoneyController extends Controller {
         return $this->editProductAction(0);
     }
 
-    public function editProductAction($id) {
-        $model = FinancialProductModel::findOrNew($id);
+    public function editProductAction(int $id) {
+        try {
+            $model = $id > 0 ? ProductRepository::get($id) : new FinancialProductModel();
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./money/product', $ex->getMessage());
+        }
         return $this->show('create_product', compact('model'));
     }
 
-    public function saveProductAction() {
-        $model = new FinancialProductModel();
-        if ($model->load() && $model->set('user_id', auth()->id())->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./money/product')
-            ]);
+    public function saveProductAction(Request $request) {
+        try {
+            $model = ProductRepository::save($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
-    }
-
-    public function deleteProductAction($id) {
-        FinancialProductModel::auth()->where('id', $id)->delete();
         return $this->jsonSuccess([
             'url' => url('./money/product')
         ]);
     }
 
-    public function changeProductAction($id) {
-        FinancialProductModel::auth()->where('id', $id)->updateBool('status');
+    public function deleteProductAction(int $id) {
+        ProductRepository::remove($id);
+        return $this->jsonSuccess([
+            'url' => url('./money/product')
+        ]);
+    }
+
+    public function changeProductAction(int $id) {
+        ProductRepository::change($id);
         return $this->jsonSuccess([
             'url' => url('./money/product')
         ]);

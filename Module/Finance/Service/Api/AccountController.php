@@ -2,19 +2,21 @@
 declare(strict_types=1);
 namespace Module\Finance\Service\Api;
 
-use Module\Finance\Domain\Repositories\BudgetRepository;
+use Module\Finance\Domain\Repositories\AccountRepository;
 use Zodream\Infrastructure\Http\Request;
 
-class BudgetController extends Controller {
+class AccountController extends Controller {
 
-    public function indexAction() {
-        $model_list = BudgetRepository::getList();
-        return $this->renderPage($model_list);
+    public function indexAction(int $id = 0) {
+        if ($id > 0) {
+            return $this->detailAction($id);
+        }
+        return $this->renderData(AccountRepository::all());
     }
 
     public function detailAction(int $id) {
         try {
-            $model = BudgetRepository::get($id);
+            $model = AccountRepository::get($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -23,7 +25,7 @@ class BudgetController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = BudgetRepository::save($request->get());
+            $model = AccountRepository::save($request->get());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -31,18 +33,13 @@ class BudgetController extends Controller {
     }
 
     public function deleteAction(int $id) {
-        BudgetRepository::softDelete($id);
+        AccountRepository::softDelete($id);
         return $this->renderData(true);
     }
 
-    public function refreshAction() {
-        BudgetRepository::refreshSpent();
-        return $this->renderData(true);
-    }
-
-    public function statisticsAction(int $id) {
+    public function changeAction(int $id) {
         try {
-            $model = BudgetRepository::statistics($id);
+            $model = AccountRepository::change($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

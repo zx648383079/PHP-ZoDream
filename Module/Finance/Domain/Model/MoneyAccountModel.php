@@ -11,6 +11,7 @@ use Module\Finance\Domain\Entities\AccountEntity;
  * @property string $name
  * @property float $money
  * @property float $frozen_money
+ * @property float $total
  * @property boolean $status
  * @property string $remark
  * @property integer $user_id

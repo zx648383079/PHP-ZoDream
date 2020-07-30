@@ -17,10 +17,11 @@ class RegisterController extends RestController {
 
     public function indexAction(Request $request) {
         try {
-            if ($request->has('mobile')) {
+            $mobile = $request->get('mobile');
+            if (!empty($mobile)) {
                 AuthRepository::registerMobile(
                     $request->get('name'),
-                    $request->get('mobile'),
+                    $mobile,
                     $request->get('code'),
                     $request->get('password'),
                     $request->get('rePassword') ?: $request->get('confirm_password'),

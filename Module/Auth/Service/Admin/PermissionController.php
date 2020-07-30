@@ -3,6 +3,7 @@ namespace Module\Auth\Service\Admin;
 
 
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
+use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 
 class PermissionController extends Controller {
 

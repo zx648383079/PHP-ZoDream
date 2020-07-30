@@ -3,6 +3,7 @@ namespace Module\Finance\Domain\Repositories;
 
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
+use Exception;
 
 class LogRepository {
 
@@ -21,6 +22,55 @@ class LogRepository {
             })->when(!empty($end_at), function ($query) use ($end_at) {
                 $query->where('happened_at', '<=', $end_at);
             })->orderBy('happened_at', 'desc')->page();
+    }
+
+    /**
+     * 获取
+     * @param int $id
+     * @return LogModel
+     * @throws Exception
+     */
+    public static function get(int $id) {
+        $model = LogModel::auth()->where('id', $id)->first();
+        if (empty($model)) {
+            throw new Exception('产品不存在');
+        }
+        return $model;
+    }
+
+    /**
+     * 保存
+     * @param array $data
+     * @return LogModel
+     * @throws Exception
+     */
+    public static function save(array $data) {
+        if (isset($data['id']) && $data['id'] > 0) {
+            $model = LogModel::auth()->where('id', $data['id'])->first();
+            if (empty($model)) {
+                throw new Exception('不存在');
+            }
+        } else {
+            $model = new LogModel();
+        }
+        $model->load($data);
+        $model->user_id = auth()->id();
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        if ($model->budget_id > 0) {
+            BudgetRepository::get($model->budget_id)->refreshSpent();
+        }
+        return $model;
+    }
+
+    /**
+     * 删除产品
+     * @param int $id
+     * @return mixed
+     */
+    public static function remove(int $id) {
+        return LogModel::auth()->where('id', $id)->delete();
     }
 
     public static function batchEdit($keywords,

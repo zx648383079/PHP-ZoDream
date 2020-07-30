@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Admin;
-
 
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Http\Request;
 
 class UserController extends Controller {
@@ -17,10 +17,8 @@ class UserController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null) {
-        $user_list = UserModel::when(!empty($keywords), function ($query) {
-            OAuthModel::searchWhere($query, 'name');
-        })->orderBy('id', 'desc')->page();
+    public function indexAction(string $keywords = '') {
+        $user_list = UserRepository::getAll($keywords);
         return $this->show(compact('user_list'));
     }
 
@@ -74,13 +72,12 @@ class UserController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
-        if ($id == auth()->id()) {
-            return $this->jsonFailure('不能删除自己！');
+    public function deleteAction(int $id) {
+        try {
+            UserRepository::remove($id);
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        $user = UserModel::find($id);
-        $user->delete();
-        event(new CancelAccount($user, time()));
         return $this->jsonSuccess([
             'url' => $this->getUrl('user')
         ]);

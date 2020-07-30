@@ -1,35 +1,27 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
-use Module\Finance\Domain\Model\AccountSimpleModel;
-use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
+use Module\Finance\Domain\Model\FinancialProductModel;
 
-class AccountRepository {
-
-    /**
-     * 获取简单的select
-     * @return array|null
-     */
-    public static function getItems() {
-        return AccountSimpleModel::auth()->orderBy('id', 'asc')->get();
-    }
+class ProductRepository {
 
     /**
-     * @return MoneyAccountModel[]
+     * @return FinancialProductModel[]
      */
     public static function all() {
-        return MoneyAccountModel::auth()->orderBy('id', 'desc')->all();
+        return FinancialProductModel::auth()->orderBy('id', 'desc')->all();
     }
 
     /**
      * 获取
      * @param int $id
-     * @return MoneyAccountModel
+     * @return FinancialProductModel
      * @throws Exception
      */
     public static function get(int $id) {
-        $model = MoneyAccountModel::auth()->where('id', $id)->first();
+        $model = FinancialProductModel::auth()->where('id', $id)->first();
         if (empty($model)) {
             throw new Exception('产品不存在');
         }
@@ -39,17 +31,17 @@ class AccountRepository {
     /**
      * 保存
      * @param array $data
-     * @return MoneyAccountModel
+     * @return FinancialProductModel
      * @throws Exception
      */
     public static function save(array $data) {
         if (isset($data['id']) && $data['id'] > 0) {
-            $model = MoneyAccountModel::auth()->where('id', $data['id'])->first();
+            $model = FinancialProductModel::auth()->where('id', $data['id'])->first();
             if (empty($model)) {
                 throw new Exception('不存在');
             }
         } else {
-            $model = new MoneyAccountModel();
+            $model = new FinancialProductModel();
         }
         $model->load($data);
         $model->user_id = auth()->id();
@@ -60,24 +52,18 @@ class AccountRepository {
     }
 
     /**
-     * 软删除产品
+     * 删除产品
      * @param int $id
      * @return mixed
      */
-    public static function softDelete(int $id) {
-        return MoneyAccountModel::auth()->where('id', $id)->update([
-            'deleted_at' => time()
-        ]);
-    }
-
     public static function remove(int $id) {
-        return MoneyAccountModel::auth()->where('id', $id)->delete();
+        return FinancialProductModel::auth()->where('id', $id)->delete();
     }
 
     /**
      * 改变状态
      * @param int $id
-     * @return MoneyAccountModel
+     * @return FinancialProductModel
      * @throws Exception
      */
     public static function change(int $id) {
@@ -88,4 +74,5 @@ class AccountRepository {
         }
         return $model;
     }
+
 }

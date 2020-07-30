@@ -2,11 +2,35 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
+use Exception;
 
 class AccountRepository {
+
+    /**
+     * 充值账户
+     * @param int $user_id
+     * @param float $money
+     * @param string $remark
+     * @param int $type
+     * @throws Exception
+     */
+    public static function recharge(int $user_id, float $money, string $remark, int $type = 0) {
+        $money = abs($money);
+        if ($money <= 0) {
+            throw new Exception('金额输入不正确');
+        }
+        if ($type > 0) {
+            $money *= -1;
+        }
+        if (!AccountLogModel::change($user_id,
+            AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
+            throw new Exception('操作失败，金额不足');
+        }
+    }
 
     public static function cancel(UserModel $user, string $reason) {
         $user->status = UserModel::STATUS_FROZEN;

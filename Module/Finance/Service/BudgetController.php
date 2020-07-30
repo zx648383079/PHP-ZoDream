@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
 use Module\Finance\Domain\Repositories\BudgetRepository;
-
+use Zodream\Infrastructure\Http\Request;
 
 class BudgetController extends Controller {
 
@@ -16,27 +17,28 @@ class BudgetController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
-        $model = BudgetModel::findOrNew($id);
+    public function editAction(int $id) {
+        try {
+            $model = $id > 0 ? BudgetRepository::get($id) : new BudgetModel();
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./budget', $ex->getMessage());
+        }
         return $this->show('create', compact('model'));
     }
 
-    public function saveAction() {
-        $model = new BudgetModel();
-        if ($model->load() && $model->set('user_id', auth()->id())
-                ->autoIsNew()->save()) {
-            $model->refreshSpent();
-            return $this->jsonSuccess([
-                'url' => url('./budget')
-            ]);
+    public function saveAction(Request $request) {
+        try {
+            $model = BudgetRepository::save($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => url('./budget')
+        ]);
     }
 
-    public function deleteAction($id) {
-        BudgetModel::auth()->where('id', $id)->update([
-            'deleted_at' => time()
-        ]);
+    public function deleteAction(int $id) {
+        BudgetRepository::softDelete($id);
         return $this->jsonSuccess([
             'url' => url('./budget')
         ]);
@@ -49,11 +51,13 @@ class BudgetController extends Controller {
         ]);
     }
 
-    public function statisticsAction($id) {
-        $model = BudgetModel::find($id);
-        $log_list = $model->getLogs();
-        $sum = array_sum($log_list);
-        $budget_sum = count($log_list) * $model->budget;
-        return $this->show(compact('model', 'log_list', 'sum', 'budget_sum'));
+    public function statisticsAction(int $id) {
+        try {
+            $data = BudgetRepository::statistics($id);
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./budget', $ex->getMessage());
+        }
+        $data['model'] = $data['data'];
+        return $this->show($data);
     }
 }
