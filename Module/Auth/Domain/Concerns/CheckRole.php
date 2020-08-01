@@ -1,5 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Concerns;
+
+use Zodream\Route\Controller\RestController;
 
 /**
  * 验证权限
@@ -13,6 +16,9 @@ trait CheckRole {
         }
         if (auth()->user()->isAdministrator() || auth()->user()->hasRole($role)) {
             return true;
+        }
+        if ($this instanceof RestController) {
+            return $this->renderFailure(__('Not Role!'), 403, 403);
         }
         return $this->redirectWithMessage('/',
             __('Not Role!')

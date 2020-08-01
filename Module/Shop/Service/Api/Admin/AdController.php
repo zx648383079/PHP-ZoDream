@@ -1,5 +1,5 @@
 <?php
-namespace Module\Shop\Service\Admin;
+namespace Module\Shop\Service\Api\Admin;
 
 
 use Module\Shop\Domain\Models\Advertisement\AdModel;
@@ -16,17 +16,13 @@ class AdController extends Controller {
             })->when(!empty($position_id), function ($query) use ($position_id) {
                 $query->where('position_id', intval($position_id));
             })->page();
-        return $this->show(compact('model_list'));
+        return $this->renderPage($model_list);
     }
 
-    public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
-    }
 
-    public function editAction($id) {
-        $model = AdModel::findOrNew($id);
-        $position_list = AdPositionModel::all();
-        return $this->show(compact('model', 'position_list'));
+    public function detailAction($id) {
+        $model = AdModel::find($id);
+        return $this->render($model);
     }
 
     public function saveAction() {
@@ -36,49 +32,37 @@ class AdController extends Controller {
             $model->content = app('request')->get('content_url');
         }
         if ($model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('ad')
-            ]);
+            return $this->render($model);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         AdModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
-            'url' => $this->getUrl('ad')
-        ]);
+        return $this->renderData(true);
     }
 
 
     public function positionAction() {
-        $model_list = AdPositionModel::all();
-        return $this->show(compact('model_list'));
+        $model_list = AdPositionModel::query()->page();
+        return $this->renderPage($model_list);
     }
 
-    public function createPositionAction() {
-        return $this->runMethodNotProcess('editPosition', ['id' => null]);
-    }
-
-    public function editPositionAction($id) {
-        $model = AdPositionModel::findOrNew($id);
-        return $this->show(compact('model'));
+    public function detailPositionAction($id) {
+        $model = AdPositionModel::find($id);
+        return $this->render($model);
     }
 
     public function savePositionAction() {
         $model = new AdPositionModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
-                'url' => $this->getUrl('ad/position')
-            ]);
+            return $this->render($model);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deletePositionAction($id) {
         AdPositionModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
-            'url' => $this->getUrl('ad/positionad/position')
-        ]);
+        return $this->renderData(true);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service\Api;
 
+use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Repositories\TagRepository;
@@ -8,6 +9,8 @@ use Zodream\Route\Controller\RestController;
 
 
 class TagController extends RestController {
+
+    use CheckRole;
 
     protected function rules() {
         return [

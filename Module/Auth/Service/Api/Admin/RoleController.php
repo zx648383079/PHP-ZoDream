@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Service\Api\Admin;
 
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
@@ -9,11 +10,7 @@ use Zodream\Route\Controller\RestController;
 
 class RoleController extends RestController {
 
-    protected function rules() {
-        return [
-            '*' => 'administrator'
-        ];
-    }
+    use AdminRole;
 
     public function indexAction(string $keywords = '') {
         $role_list = RoleModel::when(!empty($keywords), function ($query) {

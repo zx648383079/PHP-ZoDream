@@ -15,7 +15,6 @@ use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Scene\BindingScene;
 use Module\WeChat\Domain\Scene\CheckInScene;
 use Module\WeChat\Domain\Scene\ZaJinHuaScene;
-use Module\WeChat\Service\Admin\Controller;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\ThirdParty\WeChat\MenuItem;
 use Zodream\ThirdParty\WeChat\MessageResponse;
@@ -97,7 +96,7 @@ class EditorInput {
         return static::instance($model->type)->renderMenu($model, $menu);
     }
 
-    public static function invoke($type, $action, Request $request, Controller $controller) {
+    public static function invoke($type, $action, Request $request, $controller) {
         $instance = static::instance($type);
         if (method_exists($instance, $action)) {
             return $instance->$action($request, $controller);

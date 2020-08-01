@@ -4,32 +4,30 @@ namespace Module\OpenPlatform\Domain\Concerns;
 
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Model\PlatformOptionModel;
-use Module\OpenPlatform\Module;
 
 /**
- * 编辑配置
+ * rest 编辑配置
  * @package Module\OpenPlatform\Domain\Concerns
  */
-trait EditPlatformOption {
+trait ApiPlatformOption {
 
-    public function optionAction() {
-        $url = preg_replace('#option[^/]*#', '', url()->current());
+    public function platformAction() {
         $items = PlatformModel::findWidthAuth();
-        return $this->renderFile(Module::viewFile('Option/index.php'), compact('items', 'url'));
+        return $this->renderData($items);
     }
 
-    public function editOptionAction($platform_id) {
+    public function optionAction($platform_id) {
         $this->layout = false;
         $platform = PlatformModel::findWithAuth($platform_id);
         if (empty($platform)) {
-            return '';
+            return $this->renderFailure('不存在');
         }
         $data = PlatformOptionModel::getStores($platform_id, $this->platformOption());
-        return $this->renderFile(Module::viewFile('Option/edit.php'), compact('data'));
+        return $this->renderData($data);
     }
 
     public function saveOptionAction($platform_id, $option) {
         PlatformOptionModel::saveOption($platform_id, $option);
-        return $this->jsonSuccess(null, '保存成功');
+        return $this->renderData(true);
     }
 }

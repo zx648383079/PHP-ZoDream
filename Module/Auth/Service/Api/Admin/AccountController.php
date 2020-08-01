@@ -2,17 +2,14 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 use Zodream\Route\Controller\RestController;
 
 class AccountController extends RestController {
 
-    protected function rules() {
-        return [
-            '*' => 'administrator'
-        ];
-    }
+    use AdminRole;
 
     public function indexAction(int $id) {
         $log_list = AccountLogModel::where('user_id', $id)->orderBy('id', 'desc')

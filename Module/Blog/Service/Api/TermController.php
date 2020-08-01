@@ -1,11 +1,14 @@
 <?php
 namespace Module\Blog\Service\Api;
 
+use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Blog\Domain\Model\TermModel;
 use Module\Blog\Domain\Repositories\TermRepository;
 use Zodream\Route\Controller\RestController;
 
 class TermController extends RestController {
+
+    use CheckRole;
 
     protected function rules() {
         return [

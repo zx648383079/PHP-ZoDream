@@ -1,5 +1,5 @@
 <?php
-namespace Module\WeChat\Service\Admin;
+namespace Module\WeChat\Service\Api;
 
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\UserModel;
@@ -9,18 +9,13 @@ use Zodream\ThirdParty\WeChat\User;
 
 class UserController extends Controller {
 
-    protected function rules() {
-        return [
-            '*' => 'w'
-        ];
-    }
 
     public function indexAction($backlist = null) {
         $model_list = FansModel::with('user')->where('wid', $this->weChatId())
             ->when(!empty($backlist), function ($query) {
                 $query->where('is_black', 1);
             })->page();
-        return $this->show(compact('model_list'));
+        return $this->renderPage($model_list);
     }
 
     public function refreshAction() {
@@ -43,9 +38,6 @@ class UserController extends Controller {
             }
             $next_openid = $openid_list['next_openid'];
         }
-        return $this->jsonSuccess([
-            'refresh' => true
-        ]);
+        return $this->renderData(true);
     }
-
 }
