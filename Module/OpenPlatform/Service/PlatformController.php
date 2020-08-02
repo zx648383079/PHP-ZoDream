@@ -2,6 +2,7 @@
 namespace Module\OpenPlatform\Service;
 
 use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Repositories\OpenRepository;
 use Zodream\Infrastructure\Http\Request;
 
 class PlatformController extends Controller {
@@ -24,30 +25,14 @@ class PlatformController extends Controller {
     }
 
     public function saveAction(Request $request) {
-        $id = intval($request->get('id'));
-        $data = $request->get();
-        unset($data['appid']);
-        unset($data['secret']);
-        unset($data['rules']);
-        unset($data['status']);
-        if ($id > 0) {
-            $model = PlatformModel::where('user_id', auth()->id())
-                ->where('id', $id)->one();
-        } else {
-            $model = new PlatformModel();
-            $model->user_id = auth()->id();
-            $model->generateNewId();
-            $model->status = PlatformModel::STATUS_WAITING;
+        try {
+            OpenRepository::savePlatform($request->get());
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
-        if (empty($model)) {
-            return $this->jsonFailure('应用不存在');
-        }
-        if ($model->load() && $model->save()) {
-            return $this->jsonSuccess([
-                'url' => url('./platform')
-            ]);
-        }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->jsonSuccess([
+            'url' => url('./platform')
+        ]);
     }
 
     public function deleteAction($id) {

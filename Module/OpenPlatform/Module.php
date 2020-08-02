@@ -13,11 +13,17 @@ use Zodream\Service\Api;
 
 class Module extends BaseModule {
 
+    private static $isBooted = false;
+
     public function getMigration() {
         return new CreateOpenPlatformTables();
     }
 
     public function invokeRoute($path) {
+        if (self::$isBooted) {
+            return;
+        }
+        self::$isBooted = true;
         config()->set('app.rewrite', false); // 禁用重写
         $path = trim($path, '/');
         if (empty($path)) {

@@ -1,0 +1,69 @@
+<?php
+namespace Module\OpenPlatform\Domain\Repositories;
+
+use Exception;
+use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Model\UserTokenModel;
+use Zodream\Helpers\Time;
+
+class OpenRepository {
+
+    /**
+     * 前台保存应用
+     * @param array $data
+     * @return PlatformModel
+     * @throws Exception
+     */
+    public static function savePlatform(array $data) {
+        $id = isset($data['id']) ? intval($data['id']) : 0;
+        unset($data['appid']);
+        unset($data['secret']);
+        unset($data['rules']);
+        unset($data['status']);
+        if ($id > 0) {
+            $model = PlatformModel::where('user_id', auth()->id())
+                ->where('id', $id)->one();
+        } else {
+            $model = new PlatformModel();
+            $model->user_id = auth()->id();
+            $model->generateNewId();
+            $model->status = PlatformModel::STATUS_WAITING;
+        }
+        if (empty($model)) {
+            throw new Exception('应用不存在');
+        }
+        if (!$model->load() || !$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    /**
+     * 创建token
+     * @param int $platform_id
+     * @return UserTokenModel
+     * @throws Exception
+     */
+    public static function createToken(int $platform_id) {
+        if ($platform_id < 0) {
+            throw new Exception('请选择应用');
+        }
+        $platform = PlatformModel::where('id', $platform_id)->where('allow_self', 1)->where('status', 1)->first();
+        if (!$platform) {
+            throw new Exception('请选择应用');
+        }
+        $model = UserTokenModel::create([
+            'user_id' => auth()->id(),
+            'platform_id' => $platform->id,
+            'token' => md5(sprintf('%s:%s', auth()->id(), Time::millisecond())),
+            'expired_at' => time() + 86400,
+            'is_self' => 1,
+            'created_at' => time(),
+            'updated_at' => time(),
+        ]);
+        if (empty($model)) {
+            throw new Exception('创建失败');
+        }
+        return $model;
+    }
+}
