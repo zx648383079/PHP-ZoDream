@@ -120,6 +120,11 @@ $this->registerCssFile([
          false,
          'fa fa-dharmachakra',
          [
+            [
+                '颜色RGB',
+                './home/color',
+                'fa fa-cookie'
+            ],
              [
                  '时间戳',
                  './home/time',

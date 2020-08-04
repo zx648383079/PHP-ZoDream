@@ -110,6 +110,136 @@ function matchReplace(content: string, reg: RegExp, cb: (matches: string[]) => s
     return str;
 }
 
+class Color {
+    constructor(
+        public r?: number,
+        public g?: number, 
+        public b?: number, 
+        public a: number = 1) {
+    }
+
+    public hex(num: number): string {
+        if (num > 255) {
+            num = 255
+        }
+        return ('0' + num.toString(16)).slice(-2);
+    }
+
+    public toHex(): string {
+        return '#' + this.hex(this.r) + this.hex(this.g) + this.hex(this.b);
+    }
+
+    public toRGB() {
+        return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+    }
+
+    public toRGBA() {
+        let a = this.a.toString();
+        if (a.length > 5) {
+            a = this.a.toFixed(3);
+        }
+        return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + a + ')';
+    }
+
+    public toARGB() {
+        return '#' + this.hex(Math.round(this.a * 256 - 1)) + this.hex(this.r) + this.hex(this.g) + this.hex(this.b);
+    }
+
+    public toHSL() {
+        let r = this.r / 255, g = this.g / 255, b = this.b / 255;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h: number, s: number, l = (max + min) / 2;
+        if (max === min) {
+            h = s = 0;
+        } else {
+            let d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+        return 'hsl(' + Math.round(h * 360) + ',' + Math.round(s * 100) + "%" + ',' + Math.round(l * 100) + "%" + ')';
+    }
+
+    public static from(content: string): Color {
+        const first = content.charAt(0);
+        if (first === '#') {
+            if (content.length === 8) {
+                return Color.fromARGB(content);
+            }
+            return Color.fromHex(content);
+        }
+        if (first == 'h') {
+            return Color.fromHSL(content);
+        }
+        return Color.fromRGBA(content);
+    }
+
+    public static fromHSL(val: string): Color {
+        let hsl = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g.exec(val);
+        let h = parseInt(hsl[1]) / 360, s = parseInt(hsl[2]) / 100, l = parseInt(hsl[3]) / 100;
+        if (s === 0) {
+            return new Color(Math.round(l * 255), Math.round(l * 255), Math.round(l * 255));
+        }
+        let hue2rgb = function hue2rgb(p: number, q: number, t: number) {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1 / 6) return p + (q - p) * 6 * t;
+            if (t < 1 / 2) return q;
+            if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+            return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        const r = hue2rgb(p, q, h + 1 / 3);
+        const g = hue2rgb(p, q, h);
+        const b = hue2rgb(p, q, h - 1 / 3);
+        return new Color(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+    }
+
+    public static fromRGBA(val: string): Color {
+        let rgba = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.exec(val);
+        return new Color(parseInt(rgba[1]), parseInt(rgba[2]), parseInt(rgba[3]), parseFloat(rgba[4] || '1'));
+    }
+
+    public static fromARGB(val: string): Color {
+        let argb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(val);
+        return new Color(parseInt(argb[2], 16), parseInt(argb[3], 16), parseInt(argb[4], 16), parseInt(argb[1], 16) / 255);
+    }
+
+    public static fromHex(val: string): Color {
+        let rgx = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        let hex = val.replace(rgx, function (_, r: string, g: string, b: string) {
+            return r + r + g + g + b + b;
+        });
+        let rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return new Color(parseInt(rgb[1], 16), parseInt(rgb[2], 16), parseInt(rgb[3], 16));
+    }
+}
+
+function colorConverter(content: string): string {
+    if (content.length < 1) {
+        return '';
+    }
+    const color = Color.from(content.trim().toLowerCase());
+    return [
+        'HEX: ' + color.toHex(),
+        'RGB: ' + color.toRGB(),
+        'RGBA: ' + color.toRGBA(),
+        'ARGB: ' + color.toARGB(),
+        'HSL: ' + color.toHSL(),
+    ].join('\n');
+}
+
 function converter(content: string, type: string): string| number {
     let result: string| number = '';
     switch (type) {
@@ -121,6 +251,9 @@ function converter(content: string, type: string): string| number {
             break;
         case 'ascii_encode':
             result = asciiEncode(content);
+            break;
+        case 'color_converter':
+            result = colorConverter(content.trim());
             break;
         case 'ascii_decode':
             result = asciiDecode(content);

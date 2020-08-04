@@ -64,6 +64,7 @@
     .tip-header {
         font-size: 120%;
         color: #444;
+        margin-top: 16px;
     }
     p {
         line-height: 28px;
@@ -91,8 +92,16 @@
             border-radius: 0;
         }
     }
-    table td, 
-    table th {
-        text-align: left;
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        word-break: break-all;
+        td, 
+        th {
+            text-align: left;
+            border: 1px solid #dbdbdb;
+            padding: 5px 12px;
+            margin: 0;
+        }
     }
 }

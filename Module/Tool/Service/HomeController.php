@@ -59,4 +59,8 @@ class HomeController extends Controller {
     public function asciiAction() {
         return $this->show();
     }
+
+    public function colorAction() {
+        return $this->show();
+    }
 }
