@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\RestController;
@@ -52,5 +53,14 @@ class AccountController extends RestController {
         $user = auth()->user();
         AccountRepository::cancel($user, $reason);
         return $this->render($user);
+    }
+
+    public function loginLogAction($keywords = null) {
+        $model_list = LoginLogModel::where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) {
+                LoginLogModel::searchWhere($query, 'ip');
+            })
+            ->orderBy('id desc')->page();
+        return $this->renderPage($model_list);
     }
 }

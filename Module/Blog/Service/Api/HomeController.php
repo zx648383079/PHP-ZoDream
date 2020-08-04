@@ -66,4 +66,8 @@ class HomeController extends RestController {
         })->limit(4)->get();
         return $this->render(compact('data'));
     }
+
+    public function subtotalAction() {
+        return $this->render(BlogRepository::subtotal());
+    }
 }

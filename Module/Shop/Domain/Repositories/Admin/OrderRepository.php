@@ -13,7 +13,7 @@ class OrderRepository {
         $data = OrderModel::groupBy('status')->asArray()
             ->get('status, COUNT(*) AS count');
         $data = array_column($data, 'count', 'status');
-        $args = [
+        $keys = [
             'un_pay' => OrderModel::STATUS_UN_PAY,
             'shipped' => OrderModel::STATUS_SHIPPED,
             'finish' => OrderModel::STATUS_FINISH,
@@ -22,27 +22,62 @@ class OrderRepository {
             'paid_un_ship' => OrderModel::STATUS_PAID_UN_SHIP,
             'received' => OrderModel::STATUS_RECEIVED
         ];
-        foreach ($args as $key => $status) {
-            $args[$key] = isset($data[$status])
-                ? intval($data[$status]) : 0;
+        $args = [];
+        foreach ($keys as $key => $status) {
+            $args[] = [
+                'name' => $key,
+                'status' => $status,
+                'count' => isset($data[$status])
+                    ? intval($data[$status]) : 0,
+                'label' => OrderModel::$status_list[$status]
+            ];
         }
-        $args['uncomment'] = OrderGoodsModel::auth()
-            ->where('status', OrderModel::STATUS_RECEIVED)->count();
-        $args['refunding'] = OrderRefundModel::auth()
-            ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count();
-        $args['legwork'] = LegworkOrder::where('runner', 0)
-            ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count();
-        $args['bulletin'] = BulletinModel::unreadCount();
+        $args[] = [
+            'name' => 'uncomment',
+            'count' => OrderGoodsModel::auth()
+                ->where('status', OrderModel::STATUS_RECEIVED)->count(),
+            'label' => '未评价'
+        ];
+        $args[] = [
+            'name' => 'refunding',
+            'count' => OrderRefundModel::auth()
+                ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count(),
+            'label' => '退款中'
+        ];
+        $args[] = [
+            'name' => 'legwork',
+            'label' => '待接单',
+            'count' => LegworkOrder::where('runner', 0)
+                ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count()
+        ];
+        $args[] = [
+            'name' => 'bulletin',
+            'label' => '未读消息',
+            'count' => BulletinModel::unreadCount()
+        ];
         return $args;
     }
 
     public static function checkNew() {
         return [
-            'paid_un_ship' => OrderModel::where('status', OrderModel::STATUS_PAID_UN_SHIP)
-            ->count(),
-            'legwork' => LegworkOrder::where('runner', 0)
-                ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count(),
-            'bulletin' => BulletinModel::unreadCount()
+            [
+                'name' => 'paid_un_ship',
+                'label' => '待发货',
+                'status' => OrderModel::STATUS_PAID_UN_SHIP,
+                'count' => OrderModel::where('status', OrderModel::STATUS_PAID_UN_SHIP)
+                    ->count()
+            ],
+            [
+                'name' => 'legwork',
+                'label' => '待接单',
+                'count' => LegworkOrder::where('runner', 0)
+                    ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count()
+            ],
+            [
+                'name' => 'bulletin',
+                'label' => '未读消息',
+                'count' => BulletinModel::unreadCount()
+            ],
         ];
     }
 }

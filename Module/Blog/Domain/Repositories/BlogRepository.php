@@ -6,7 +6,9 @@ use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
+use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
+use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Model\Query;
 use Zodream\Html\Page;
 
@@ -207,5 +209,36 @@ class BlogRepository {
             throw new Exception($model->getFirstError());
         }
         return $model;
+    }
+
+    public static function subtotal() {
+        $term_count = TermModel::query()->count();
+        $blog_id = BlogModel::where('user_id', auth()->id())->pluck('id');
+        $blog_count = count($blog_id);
+        $view_count = BlogModel::where('user_id', auth()->id())->sum('click_count');
+        $comment_count = CommentModel::whereIn('blog_id', $blog_id)
+            ->count();
+        return [
+            [
+                'name' => '分类',
+                'icon' => 'fa-folder',
+                'count' => $term_count
+            ],
+            [
+                'name' => '文章',
+                'icon' => 'fa-file',
+                'count' => $blog_count
+            ],
+            [
+                'name' => '评论',
+                'icon' => 'fa-comment',
+                'count' => $comment_count
+            ],
+            [
+                'name' => '浏览量',
+                'icon' => 'fa-eye',
+                'count' => $view_count
+            ],
+        ];
     }
 }

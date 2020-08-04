@@ -8,9 +8,7 @@ use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
-use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\PayLogModel;
-use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class OrderController extends Controller {

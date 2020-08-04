@@ -1411,18 +1411,17 @@ function bindCheck() {
             }
             let success = true;
             let lines = [];
-            $.each(data.data, function(k: string, count) {
-                const box = $('.column-item[data-name="'+ k +'"]');
+            $.each(data.data, function(_, item) {
+                const box = $('.column-item[data-name="'+ item.name +'"]');
                 let ele = box.find('.count');
                 if (ele.length < 1) {
                     success = false;
                     return;
                 }
-                if (count > ele.text()) {
-                    lines.push('您有新的' + box.find('.name').text());
+                if (item.count > ele.text()) {
+                    lines.push('您有新的' + item.label);
                 }
-                ele.text(count);
-                
+                ele.text(item.count);
             });
             if (lines.length > 0) {
                 alert(lines.join("\n"));
