@@ -28,9 +28,10 @@ class AtNode extends Node {
     }
 
     private function atUser($user, $content) {
-        $url = url('./thread', ['user' => $user, 'id' => $this->page->getModel()->id]);
+        $thread = $this->page->getModel();
+        $url = url('./thread', ['user' => $user, 'id' => $thread->thread_id]);
         return <<<HTML
-<a href="{$url}">@{$content}</a> 
+<a href="{$url}#post-{$thread->id}">@{$content}</a> 
 HTML;
     }
 

@@ -64,6 +64,11 @@ class CreateSEOTables extends Migration {
                     'type' => 'basic_editor'
                 ],
                 [
+                    'name' => '预计开站时间',
+                    'code' => 'site_close_retry',
+                    'type' => 'text'
+                ],
+                [
                     'name' => '开启灰度',
                     'code' => 'site_gray',
                     'type' => 'switch',

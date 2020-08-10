@@ -763,6 +763,7 @@ footer {
             right: 0;
             bottom: 0;
             font-size: 30px;
+            opacity: 0;
         }
         &:hover {
             background: #6b7184;
@@ -777,6 +778,7 @@ footer {
             .go-btn {
                 bottom: 20px;
                 font-size: 40px;
+                opacity: 1;
             }
         }
     }

@@ -134,6 +134,10 @@ class OAuthModel extends Model {
         /** @var OAuthModel $model */
         $model = static::where('vendor', $type)
             ->where('identity', $openid)->first();
+        if (!empty($model) && $model->user_id < 1) {
+            $model->delete();
+            $model = null;
+        }
         if (!empty($model)) {
             if (!empty($unionId)) {
                 $model->unionid = $unionId;
@@ -142,6 +146,28 @@ class OAuthModel extends Model {
             // 这里可以验证用户是否存在，不存在删除记录
             return UserModel::find($model->user_id);
         }
+        $model = static::findWithUnion($unionId, $type, $platform_id);
+        if (empty($model)) {
+            return null;
+        }
+        if ($model->user_id < 1) {
+            $model->delete();
+            return null;
+        }
+        $user = UserModel::find($model->user_id);
+        // 这里可以验证用户是否存在，不存在删除所有此用户记录
+        self::bindUser($user, $openid, $unionId, $type, $model->nickname, $platform_id);
+        return $user;
+    }
+
+    /**
+     * @param string $unionId
+     * @param string $type
+     * @param int $platform_id
+     * @return static
+     */
+    public static function findWithUnion($unionId,
+                                         $type = self::TYPE_QQ, $platform_id = 0) {
         if (empty($unionId)) {
             return null;
         }
@@ -149,14 +175,7 @@ class OAuthModel extends Model {
         if ($type === self::TYPE_WX || $type === self::TYPE_WX_MINI) {
             $types = [self::TYPE_WX, self::TYPE_WX_MINI];
         }
-        $model = static::whereIn('vendor', $types)
+        return static::whereIn('vendor', $types)
             ->where('unionid', $unionId)->first();
-        if (empty($model)) {
-            return null;
-        }
-        $user = UserModel::find($model->user_id);
-        // 这里可以验证用户是否存在，不存在删除所有此用户记录
-        self::bindUser($user, $openid, $unionId, $type, $model->nickname, $platform_id);
-        return $user;
     }
 }

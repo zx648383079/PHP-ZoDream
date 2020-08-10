@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
@@ -8,19 +9,20 @@ use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\OpenPlatform\Domain\Platform;
 use Zodream\Infrastructure\Http\Output\RestResponse;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
 use Module\Auth\Service\OauthController as BaseController;
 
 class OauthController extends RestController {
 
-    public function indexAction($type = 'qq', $redirect_uri = '') {
+    public function indexAction(string $type = 'qq', string $redirect_uri = '') {
         url()->setModulePath(config()->getModulePath(self::class));
         session(['platform' => app('platform')]);
         return (new BaseController())->indexAction($type, $redirect_uri);
     }
 
-    public function miniAction($code, $nickname, $avatar = '', $gender = 2) {
+    public function miniAction(string $code, string $nickname, string $avatar = '', int $gender = 2) {
         /** @var Platform $platform */
         $platform = app('platform');
         $mini = new MiniOAuth($platform->option('mini_auth'));
@@ -40,6 +42,9 @@ class OauthController extends RestController {
                 }, isset($data['unionid']) ? $data['unionid'] : null,
                 $platform->id()
             );
+            AuthRepository::updateOAuthData(OAuthModel::TYPE_WX_MINI,
+                $data['openid'],  $data['session_key'],isset($data['unionid']) ? $data['unionid'] : null,
+                $platform->id());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -58,17 +63,42 @@ class OauthController extends RestController {
      * @return RestResponse
      * @throws \Exception
      */
-    public function miniLoginAction($code) {
+    public function miniLoginAction(string $code) {
         /** @var Platform $platform */
         $platform = app('platform');
         $mini = new MiniOAuth($platform->option('mini_auth'));
         try {
             $data = $mini->login($code);
+            AuthRepository::updateOAuthData(OAuthModel::TYPE_WX_MINI,
+                $data['openid'],  $data['session_key'],isset($data['unionid']) ? $data['unionid'] : null,
+                $platform->id());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->render([
             'openid' => $data['openid']
         ]);
+    }
+
+    public function miniDecryptAction(Request $request, string $data, string $iv) {
+        /** @var Platform $platform */
+        $platform = app('platform');
+        $mini = new MiniOAuth($platform->option('mini_auth'));
+        try {
+            $sessionKey = OAuthModel::where('vendor', OAuthModel::TYPE_WX_MINI)
+                ->where('platform_id', $platform->id())
+                ->when(auth()->guest(), function ($query) use ($request) {
+                    $query->where('platform_id', $request->get('openid'));
+                }, function ($query) {
+                    $query->where('user_id', auth()->id());
+                })->value('data');
+            if (empty($sessionKey)) {
+                throw new \Exception('请使用wx.login');
+            }
+            $data = $mini->set('sessionKey', $sessionKey)->decrypt($data, $iv);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData($data);
     }
 }

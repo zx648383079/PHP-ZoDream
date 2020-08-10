@@ -79,6 +79,10 @@ class ThreadModel extends Model {
             ->orderBy('id', 'desc')->first();
     }
 
+    public function getIsNewAttribute() {
+	    return $this->last_post->getAttributeSource('updated_at') > time() - 86400;
+    }
+
     public function canDigest() {
         if (auth()->guest()) {
             return false;

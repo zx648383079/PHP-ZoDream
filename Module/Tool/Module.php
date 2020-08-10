@@ -21,5 +21,6 @@ class Module extends BaseModule {
         $map->add(url('./home/css'), time());
         $map->add(url('./home/json'), time());
         $map->add(url('./home/time'), time());
+        $map->add(url('./home/color'), time());
     }
 }

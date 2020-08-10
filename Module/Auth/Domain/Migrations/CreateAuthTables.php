@@ -5,6 +5,8 @@ use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
+use Module\Auth\Domain\Model\CreditLogModel;
+use Module\Auth\Domain\Model\EquityCardModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\MailLogModel;
@@ -35,6 +37,7 @@ class CreateAuthTables extends Migration {
             $table->set('avatar')->varchar(255);
             $table->set('birthday')->date()->defaultVal(date('Y-m-d'));
             $table->set('money')->int()->defaultVal(0)->unsigned();
+            $table->set('credits')->int()->defaultVal(0)->unsigned()->defaultVal('积分');
             $table->set('parent_id')->int(10, true, true)->defaultVal(0);
             $table->set('token')->varchar(60);
             $table->set('status')->tinyint(2)->defaultVal(UserModel::STATUS_ACTIVE);
@@ -56,6 +59,14 @@ class CreateAuthTables extends Migration {
             $table->set('content')->text()->notNull();
         })->append(LoginQrModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('token')->varchar(32)->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->timestamp('expired_at');
+            $table->timestamps();
+        })->append(EquityCardModel::tableName(), function(Table $table) {
+            $table->setComment('有期限的权益卡');
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->defaultVal(0);
             $table->set('token')->varchar(32)->notNull();
             $table->set('status')->tinyint(1)->defaultVal(0);
@@ -116,10 +127,21 @@ class CreateAuthTables extends Migration {
             $table->setComment('账户资金变动表');
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int()->unsigned()->defaultVal(0);
-            $table->set('type')->tinyint(2)->unsigned()->defaultVal(99);
+            $table->set('type')->tinyint(1)->unsigned()->defaultVal(99);
             $table->set('item_id')->int()->defaultVal(0);
             $table->set('money')->int()->notNull()->comment('本次发生金额');
             $table->set('total_money')->int()->notNull()->comment('当前账户余额');
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->set('remark')->varchar()->notNull();
+            $table->timestamps();
+        })->append(CreditLogModel::tableName(), function (Table $table) {
+            $table->setComment('账户积分变动表');
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->unsigned()->defaultVal(0);
+            $table->set('type')->tinyint(1)->unsigned()->defaultVal(99);
+            $table->set('item_id')->int()->defaultVal(0);
+            $table->set('credits')->int()->notNull()->comment('本次发生积分');
+            $table->set('total_credits')->int()->notNull()->comment('当前账户积分');
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('remark')->varchar()->notNull();
             $table->timestamps();

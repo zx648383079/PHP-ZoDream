@@ -358,4 +358,46 @@ class AuthRepository {
             'role_id' => 1
         ]);
     }
+
+    public static function updateOAuthData($type, $openid, $data, $unionId = null, $platform_id = 0) {
+        $model = OAuthModel::where('vendor', $type)
+            ->where('platform_id', $platform_id)
+            ->where('identity', $openid)->first();
+        if (!empty($model)) {
+            $model->data = $data;
+            return $model->save();
+        }
+        if (empty($unionId)) {
+            return OAuthModel::create([
+                'user_id' => 0,
+                'nickname' => '',
+                'vendor' => $type,
+                'identity' => $openid,
+                'unionid' => $unionId.'',
+                'data' => $data,
+                'platform_id' => $platform_id,
+            ]);
+        }
+        $model = OAuthModel::findWithUnion($unionId, $type, $platform_id);
+        if (empty($model)) {
+            return OAuthModel::create([
+                'user_id' => 0,
+                'nickname' => '',
+                'vendor' => $type,
+                'identity' => $openid,
+                'unionid' => $unionId.'',
+                'data' => $data,
+                'platform_id' => $platform_id,
+            ]);
+        }
+        return OAuthModel::create([
+            'user_id' => $model->user_id,
+            'nickname' => $model->nickname,
+            'vendor' => $type,
+            'identity' => $openid,
+            'unionid' => $unionId.'',
+            'data' => $data,
+            'platform_id' => $platform_id,
+        ]);
+    }
 }

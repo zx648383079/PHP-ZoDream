@@ -32,14 +32,22 @@ $this->extend('layouts/header');
                 <span>回复：<?=$thread->post_count?></span>
             </div>
             <div class="title">
+                <?php if($thread->is_closed):?>
+                    <i class="fa fa-lock" title="主题已关闭"></i>
+                <?php else:?>
+                    <i class="fa fa-file"></i>
+                <?php endif;?>
                 <?php if($thread->classify):?>
-                [
+                <em class="tag-item">[
                     <a href=""><?=$thread->classify->name?></a>
-                ]
+                ]</em>
                 <?php endif;?>
                 <?=$this->text($thread->title)?>
                 <?php if($thread->is_digest):?>
                 <i class="fa fa-fire"></i>
+                <?php endif;?>
+                <?php if($thread->is_new):?>
+                  <a href="<?=$this->url('./thread', ['id' => $thread->id])?>#post-<?=$thread->last_post->id?>" class="new-tag">New</a>
                 <?php endif;?>
             </div>
         </div>

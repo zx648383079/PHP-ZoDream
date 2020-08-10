@@ -20,15 +20,22 @@ use Zodream\Template\View;
 <?php foreach($thread_list as $item):?>
     <div class="thread-item<?=$item->is_highlight ? ' thread-highlight' : ''?>">
         <div class="name">
-            <i class="fa fa-file"></i>
+            <?php if($item->is_closed):?>
+                <i class="fa fa-lock" title="主题已关闭"></i>
+            <?php else:?>
+                <i class="fa fa-file"></i>
+            <?php endif;?>
             <?php if($item->classify):?>
-            [
+            <em class="tag-item">[
             <a href="<?=$this->url('./forum', ['id' => $item->forum_id, 'classify' => $item->classify_id])?>"><?=$item->classify->name?></a>
-            ]
+            ]</em>
             <?php endif;?>
             <a class="title" href="<?=$this->url('./thread', ['id' => $item->id])?>"><?=$this->text($item->title)?></a>
             <?php if($item->is_digest):?>
             <i class="fa fa-fire"></i>
+            <?php endif;?>
+            <?php if($item->is_new):?>
+            <a href="<?=$this->url('./thread', ['id' => $item->id])?>#post-<?=$item->last_post->id?>" class="new-tag">New</a>
             <?php endif;?>
         </div>
         <div class="time">
