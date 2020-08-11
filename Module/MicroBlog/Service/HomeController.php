@@ -42,14 +42,14 @@ class HomeController extends ModuleController {
         if (!MicroRepository::canPublish()) {
             return $this->jsonFailure('发送过于频繁！');
         }
-        $model = MicroRepository::create($request->get('content'), $request->get('file'));
-        if (!$model) {
-            return $this->jsonFailure('发送失败');
+        try {
+            MicroRepository::create($request->get('content'), $request->get('file'));
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
             'url' => url('./')
         ]);
-
     }
 
     public function recommendAction($id) {

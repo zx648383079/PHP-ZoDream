@@ -12,6 +12,19 @@
                 resize: none;
             }
         }
+        .input-row {
+            input {
+                border: none;
+                width: 100%;
+                line-height: 30px;
+            }
+            textarea {
+                border: none;
+                width: 100%;
+                resize: vertical;
+                min-height: 80px;
+            }
+        }
         .lang-input {
             display: inline-block;
             input {
@@ -30,6 +43,10 @@
             .tools {
                 float: left;
             }
+            select {
+                height: 28px;
+                line-height: 28px;
+            }
         }
         .title {
             .tip {
@@ -43,6 +60,13 @@
                     padding: 0 2px;
                 }
             }
+        }
+        .btn {
+            background-color: #55baf1;
+            color: #fff;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 25px 0 22px;
         }
     }
     .micro-item {
@@ -363,4 +387,27 @@
 }
 .dialog-upload {
     z-index: 99;
+}
+
+.pic-box {
+    .img-item {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        position: relative;
+        background-color: #f4f4f4;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .fa-times {
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: block;
+            width: 20px;
+            height: 20px;
+            font-size: 20px;
+        }
+    }
 }

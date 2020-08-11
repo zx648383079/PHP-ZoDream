@@ -196,6 +196,23 @@ function bindMicroPage() {
     });
 }
 
+function bindSharePage() {
+    $('.micro-publish').on('submit', 'form', function() {
+        let $this = $(this);
+        postJson($this.attr('action'), $this.serialize(), data => {
+            parseAjax(data);
+        });
+        return false;
+    }).on('input propertychange', 'textarea[name=content]', function() {
+        let $this = $(this);
+        let tip = $this.closest('.micro-publish').find('.tip');
+        let len = ($this.val() as string).length;
+        tip.toggle(len > 0).find('em').text(len);
+    }).on('click', '.pic-box .fa-times', function() {
+        $(this).closest('.img-item').remove();
+    });
+}
+
 function bindCode() {
     $('.micro-publish').on('submit', 'form', function() {
         let $this = $(this);

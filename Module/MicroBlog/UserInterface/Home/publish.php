@@ -10,7 +10,7 @@ use Zodream\Template\View;
             已输入<em>0</em>字
         </div>
     </div>
-    <form action="<?=$this->url('./create')?>" method="post">
+    <form action="<?=$this->url('./create', false)?>" method="post">
         <div class="input">
             <textarea name="content" required></textarea>
         </div>
@@ -24,7 +24,7 @@ use Zodream\Template\View;
             <select>
                 <option value="">公开</option>
             </select>
-            <button>发布</button>
+            <button class="btn">发布</button>
         </div>
     </form>
 </div>

@@ -29,7 +29,7 @@ class MicroRepository {
             'source' => $source
         ]);
         if (!$model) {
-            return $model;
+            throw new Exception('发送失败');
         }
         self::at($content, $model->id);
         if (empty($images)) {
@@ -300,5 +300,21 @@ class MicroRepository {
         foreach ($matches[1] as $name) {
 
         }
+    }
+
+    /**
+     * 创建分享
+     * @param $title
+     * @param $summary
+     * @param $url
+     * @param $pics
+     * @param $content
+     * @return MicroBlogModel
+     * @throws Exception
+     */
+    public static function share($title, $summary, $url, $pics, $content) {
+        $content = sprintf('%s<a href="%s" target="_blank">%s</a>%s',
+            Html::text($content), Html::text($url), Html::text($title), Html::text($summary));
+        return static::create($content, $pics);
     }
 }

@@ -17,7 +17,7 @@ use Zodream\Template\View;
                 <i class="fa fa-image"></i>
             </div>
             <input type="checkbox" name="is_forward">同时转发到我的微博
-            <a class="btn" href="<?=$this->url('./comment/save', ['micro_id' => $id])?>">评论</a>
+            <a class="btn" href="<?=$this->url('./comment/save', ['micro_id' => $id, false])?>">评论</a>
         </div>
     </div>
 </div>
