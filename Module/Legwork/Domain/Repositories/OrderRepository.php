@@ -12,12 +12,15 @@ use Module\Shop\Domain\Repositories\PaymentRepository;
 class OrderRepository {
 
 
-    public static function getList($status = 0) {
+    public static function getList($status = 0, $id = 0) {
         return OrderModel::query()->with('service')->where('user_id', auth()->id())
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             }, function ($query) {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
+            })
+            ->when($id > 0, function ($query) use ($id) {
+                $query->where('id', $id);
             })
             ->orderBy('id', 'desc')->page();
     }

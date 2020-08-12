@@ -17,6 +17,7 @@ class RunnerRepository {
                 'user_id',
                 'service_id',
                 'order_amount',
+                'amount',
                 'status',
                 'pay_at',
                 'created_at',

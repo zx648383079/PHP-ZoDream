@@ -68,9 +68,10 @@ abstract class ModuleController extends BaseController {
      * 将多项表单转为数组
      * @param array $data
      * @param null $default
+     * @param callable|null $check
      * @return array
      */
-    public static function formArr(array $data, $default = null) {
+    public static function formArr(array $data, $default = null, callable $check = null) {
         if (empty($data)) {
             return [];
         }
@@ -83,6 +84,9 @@ abstract class ModuleController extends BaseController {
             $item = [];
             foreach ($data as $key => $args) {
                 $item[$key] = isset($args[$i]) ? $args[$i] : $default;
+            }
+            if (!empty($check) && call_user_func($check, $item) === false) {
+                continue;
             }
             $items[] = $item;
         }

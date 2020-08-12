@@ -1,6 +1,7 @@
 <?php
 namespace Module\Legwork\Domain\Migrations;
 
+use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
 use Module\Legwork\Domain\Model\ServiceModel;
@@ -43,6 +44,10 @@ class CreateLegworkTables extends Migration {
             $table->set('content')->text()->notNull()->comment('内容');
             $table->set('form')->text()->comment('表单设置');
             $table->timestamps();
+        })->append(CategoryModel::tableName(), function (Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('name')->varchar(100)->notNull()->comment('分类名');
+            $table->set('icon')->varchar(200);
         })->autoUp();
     }
 }

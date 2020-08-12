@@ -135,3 +135,55 @@ $shadow: rgba(33,33,33,.7);
     line-height: 30px;
     color: #ccc;
 }
+
+.note-row {
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 10px;
+    .item-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        height: auto;
+        font-size: 20px;
+        color: #686868;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        word-break: break-all;
+    }
+    .fa-times {
+        position: absolute;
+        border: 3px solid;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        right: -10px;
+        background-color: #fff;
+        top: -10px;
+        text-decoration: none;
+        color: #ccc;
+        line-height: 35px;
+    }
+    .item-time {
+        padding: 0 10px;
+        color: #ccc;
+        font-size: 12px;
+        span {
+            &:last-child {
+                float: right;
+            }
+        }
+    }
+    &:hover {
+        box-shadow: 5px 5px 7px $shadow;
+        &::before {
+            box-shadow: none;
+        }
+        .fa-times {
+            color: #f00;
+        }
+    }
+}

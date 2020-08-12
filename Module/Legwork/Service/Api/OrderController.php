@@ -30,6 +30,7 @@ class OrderController extends RestController {
     }
 
     public function payAction($id) {
+        /** @var OrderModel $order */
         $order = OrderModel::query()->where('user_id', auth()->id())->where('id', $id)
             ->first();
         if (empty($order)) {

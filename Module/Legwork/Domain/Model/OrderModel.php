@@ -2,6 +2,7 @@
 namespace Module\Legwork\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Helpers\Json;
 
 /**
@@ -94,6 +95,14 @@ class OrderModel extends Model {
 
     public function service() {
         return $this->hasOne(ServiceSimpleModel::class, 'id', 'service_id');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function runnerUser() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'runner');
     }
 
     public function getStatusLabelAttribute() {

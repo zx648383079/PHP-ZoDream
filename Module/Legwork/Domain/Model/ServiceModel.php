@@ -41,16 +41,20 @@ class ServiceModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => 'Name',
-            'cat_id' => 'Cat Id',
-            'thumb' => 'Thumb',
-            'brief' => 'Brief',
-            'price' => 'Price',
-            'content' => 'Content',
-            'form' => 'Form',
+            'name' => '服务名',
+            'cat_id' => '服务分类',
+            'thumb' => '缩略图',
+            'brief' => '说明',
+            'price' => '单价',
+            'content' => '内容',
+            'form' => '表单',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
     }
 
     public function getFormAttribute() {

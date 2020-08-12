@@ -4,7 +4,6 @@ namespace Module\Blog\Service\Admin;
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\ModuleController;
 
-
 class Controller extends ModuleController {
 
     use CheckRole;
