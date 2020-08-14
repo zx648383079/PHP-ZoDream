@@ -602,6 +602,55 @@ footer {
     }
 }
 
+.agreement-box {
+    margin-bottom: 30px;
+    a {
+        color: #1570a6;
+    }
+    .title {
+        color: #b63b00;
+        font-size: 2em;
+        display: inline-block;
+        vertical-align: top;
+        margin: .7em .3em .7em -.02em;
+    }
+    .nav-list {
+        margin-top: .3em;
+        li {
+            background-color: #a10000;
+            cursor: pointer;
+            font-size: .9em;
+            color: #fff;
+            width: 90%;
+            padding: 5%;
+            margin-bottom: 5px;
+            list-style: none;
+        }
+        a {
+            color: #fff;
+        }
+    }
+    .nav-panel {
+        margin-top: .3em;
+        padding-bottom: .9rem;
+        margin-bottom: .7rem;
+        .nav-header {
+            color: #a10000;
+            font-size: 1.6em;
+            border: 1px solid #a10000;
+            border-left: 2em solid #a10000;
+            padding: .2em;
+        }
+        .nav-desc {
+            padding-top: 0.5em;
+            line-height: 1.5em;
+            ul {
+                margin-left: 3em;
+            }
+        }
+    }
+}
+
 @media (max-width: 640px) {
     .metro-grid {
         a {

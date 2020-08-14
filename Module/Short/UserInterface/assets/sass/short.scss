@@ -1,0 +1,26 @@
+.short-box {
+    padding-top: 10vh;
+    text-align: center;
+    input {
+        width: 80%;
+        line-height: 40px;
+        border: 1px solid #bdbcbc;
+        font-size: 15px;
+        color: grey;
+        outline: 0;
+    }
+    .btn {
+        line-height: 40px;
+    }
+
+    .short-code {
+        display: none;
+        text-align: left;
+        margin-top: 50px;
+        line-height: 40px;
+        pre {
+            background: rgba(127, 127, 127, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.18);
+        }
+    }
+}

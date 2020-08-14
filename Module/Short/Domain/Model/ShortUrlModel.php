@@ -16,8 +16,12 @@ use Domain\Model\Model;
  * @property integer $expired_at
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $complete_short_url
  */
 class ShortUrlModel extends Model {
+
+    protected $append = ['complete_short_url'];
+
     public static function tableName() {
         return 'short_url';
     }
@@ -49,5 +53,9 @@ class ShortUrlModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getCompleteShortUrlAttribute() {
+        return url('./'.$this->short_url, [], true, false);
     }
 }
