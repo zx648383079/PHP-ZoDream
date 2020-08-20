@@ -1,9 +1,10 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Models\Advertisement\AdModel;
+use Module\Shop\Domain\Repositories\AdRepository;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\ShopRepository;
 
 class HomeController extends Controller {
 
@@ -12,9 +13,9 @@ class HomeController extends Controller {
         $new_list = GoodsModel::where('is_new', 1)->limit(8)->all();
         $best_list = GoodsModel::where('is_new', 1)->limit(8)->all();
         $cat_list = CategoryModel::where('parent_id', 0)->limit(10)->all();
-        $banners = AdModel::banners();
-        $goods_count = GoodsModel::query()->count();
+        $banners = AdRepository::mobileBanners();
+        $site = ShopRepository::siteInfo();
         return $this->show(compact('hot_list', 'new_list',
-            'best_list', 'cat_list', 'banners', 'goods_count'));
+            'best_list', 'cat_list', 'banners', 'site'));
     }
 }

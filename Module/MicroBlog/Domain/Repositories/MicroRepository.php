@@ -32,6 +32,7 @@ class MicroRepository {
             throw new Exception('发送失败');
         }
         self::at($content, $model->id);
+        self::topic($content, $model->id);
         if (empty($images)) {
             return $model;
         }
@@ -293,8 +294,27 @@ class MicroRepository {
         return $model;
     }
 
+    /**
+     * at 人
+     * @param $content
+     * @param $id
+     */
     public static function at($content, $id) {
         if (!preg_match_all('/@(\S+?)\s/', $content, $matches)) {
+            return;
+        }
+        foreach ($matches[1] as $name) {
+
+        }
+    }
+
+    /**
+     * 话题
+     * @param $content
+     * @param $id
+     */
+    public static function topic($content, $id) {
+        if (!preg_match_all('/#(\S+?)#\s/', $content, $matches)) {
             return;
         }
         foreach ($matches[1] as $name) {

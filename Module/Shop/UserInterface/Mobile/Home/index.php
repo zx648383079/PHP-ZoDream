@@ -20,7 +20,7 @@ $this->registerCssFile('@slider.css')
     </a>
     <a class="search-entry" href="<?=$this->url('./mobile/search')?>">
         <i class="fa fa-search"></i>
-        <span>搜索商品, 共<?=$goods_count?>款好物</span>
+        <span>搜索商品, 共<?=$site['goods']?>款好物</span>
     </a>
     <?php if(auth()->guest()):?>
         <a href="<?=$this->url('./mobile/member/login')?>">登录</a>

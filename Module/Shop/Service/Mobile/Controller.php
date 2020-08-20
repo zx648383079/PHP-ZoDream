@@ -9,12 +9,16 @@ use Module\Shop\Domain\Models\CategoryModel;
 class Controller extends ModuleController {
 
     public $layout = '/Mobile/layouts/main';
+    protected $disallow = true;
 
     protected function getUrl($path, $args = []) {
         return url('./mobile/'.$path, $args);
     }
 
     protected function runActionMethod($action, $vars = array()) {
+        if (app()->isDebug() || !$this->disallow) {
+            return parent::runActionMethod($action, $vars);
+        }
         return $this->redirect('/');
     }
 

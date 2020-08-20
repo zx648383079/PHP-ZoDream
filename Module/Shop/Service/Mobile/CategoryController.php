@@ -3,13 +3,14 @@ namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\ShopRepository;
 
 class CategoryController extends Controller {
 
     public function indexAction() {
         $cat_list = CategoryModel::where('parent_id', 0)->all();
-        $goods_count = GoodsModel::query()->count();
-        return $this->show(compact('cat_list', 'goods_count'));
+        $site = ShopRepository::siteInfo();
+        return $this->show(compact('cat_list', 'site'));
     }
 
     public function childrenAction($id) {

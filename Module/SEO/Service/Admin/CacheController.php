@@ -7,7 +7,7 @@ class CacheController extends Controller {
 
     public function indexAction() {
         $storeItems = SEORepository::storeItems();
-        return $this->show(compact($storeItems));
+        return $this->show(compact('storeItems'));
     }
 
     public function clearAction($store = []) {

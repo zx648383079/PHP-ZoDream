@@ -19,7 +19,7 @@ class Controller extends ModuleController {
     }
 
     protected function runActionMethod($action, $vars = array()) {
-        if (!$this->disallow) {
+        if (app()->isDebug() || !$this->disallow) {
             return parent::runActionMethod($action, $vars);
         }
         return $this->redirect('/');
