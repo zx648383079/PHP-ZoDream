@@ -8,6 +8,7 @@ namespace Module\Shop\Domain\Models;
  * Time: 19:07
  */
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
 use Zodream\Helpers\Time;
@@ -126,7 +127,7 @@ class OrderModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(config('auth.model'), 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function goods() {
