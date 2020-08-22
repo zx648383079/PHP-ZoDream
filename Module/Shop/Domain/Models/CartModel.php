@@ -24,6 +24,7 @@ use Zodream\Service\Factory;
  * @property integer $user_id
  * @property integer $goods_id
  * @property integer $amount
+ * @property bool $is_checked
  * @property float $price
  * @property float $total
  * @property GoodsModel $goods

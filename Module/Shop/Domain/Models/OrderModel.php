@@ -264,7 +264,7 @@ class OrderModel extends Model {
     }
 
     public static function generateSeriesNumber() {
-        return time();
+        return time().'';
     }
 
 

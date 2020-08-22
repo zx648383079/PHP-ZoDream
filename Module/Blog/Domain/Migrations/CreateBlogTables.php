@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Migrations;
 
 use Module\Blog\Domain\Model\BlogLogModel;
+use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
@@ -45,6 +46,11 @@ class CreateBlogTables extends Migration {
             $table->set('weather')->varchar(20)->defaultVal('')->comment('天气');
             $table->softDeletes();
             $table->timestamps();
+        })->append(BlogMetaModel::tableName(), function(Table $table) {
+            $table->set('id')->pk()->ai();
+            $table->set('blog_id')->int()->notNull();
+            $table->set('name')->varchar(100)->notNull();
+            $table->set('content')->text()->notNull();
         })->append(TermModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(40)->notNull();
