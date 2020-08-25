@@ -6,6 +6,8 @@ use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
+use Module\Forum\Domain\Parsers\Parser;
+use Module\Forum\Domain\Repositories\ThreadRepository;
 use Zodream\Infrastructure\Http\Request;
 
 class ThreadController extends Controller {
@@ -18,6 +20,7 @@ class ThreadController extends Controller {
             'reply' => '@',
             'digest' => '@',
             'highlight' => '@',
+            'do' => '@',
             '*' => '*'
         ];
     }
@@ -205,5 +208,46 @@ class ThreadController extends Controller {
         return $this->jsonSuccess([
             'refresh' => true
         ]);
+    }
+
+    public function collectAction($id) {
+        try {
+            $res = ThreadRepository::toggleCollect($id);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($res);
+    }
+
+    public function agreeAction($id) {
+        try {
+            $res = ThreadRepository::agreePost($id, true);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($res);
+    }
+
+    public function disagreeAction($id) {
+        try {
+            $res = ThreadRepository::agreePost($id, false);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess($res);
+    }
+
+    public function doAction(Request $request, $id) {
+        try {
+            $model = ThreadPostModel::find($id);
+            $html = Parser::converterWithRequest($model, $request);
+        } catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
+        }
+        return $this->jsonSuccess([
+            'id' => $id,
+            'content' => $html
+        ]);
+
     }
 }

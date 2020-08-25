@@ -372,6 +372,12 @@ Editor.plugin('fa-link', '插入链接', function(tag) {
     }
     this.insert('<a href=""></a>', 9, true);
 });
+Editor.plugin('fa-chart-bar', '插入投票', function(tag) {
+    if (tag) {
+        return;
+    }
+    this.insert('<vote>\n\t说明\n\t<v>选项1</v>\n\t<v>选项2</v>\n</vote>', 7, true);
+});
 Editor.plugin('fa-trash', '清空', function() {
     this.clear(true);
 });
@@ -388,6 +394,19 @@ $(function() {
             return;
         }
         postJson($this.attr('href'), parseAjax);
+    }).on('click', 'a[data-action=confirm]', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        if (!confirm($this.data('message'))) {
+            return;
+        }
+        postJson($this.attr('href'), res => {
+            if (res.code != 200) {
+                parseAjax(res);
+                return;
+            }
+            $('#post-' + res.data.id + ' .content').html(res.data.content);
+        });
     });
     $('.thread-list').on('click', '.thread-item a', function(e) {
         e.stopPropagation();

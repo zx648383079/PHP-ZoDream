@@ -24,6 +24,7 @@ class AccountLogModel extends Model {
     const TYPE_ADMIN = 9; // 管理员充值
     const TYPE_AFFILIATE = 15; // 分销
     const TYPE_BUY_BLOG = 21;
+    const TYPE_FORUM_BUY = 25;
     const TYPE_DEFAULT = 99;
     const TYPE_CHECK_IN = 30;
     const TYPE_BANK = 31;

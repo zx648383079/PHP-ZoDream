@@ -313,6 +313,28 @@
     font-size: 12px;
 }
 
+.vote-box {
+    padding: 10px;
+    .vote-item {
+        line-height: 30px;
+    }
+    .vote-progress {
+        display: inline-block;
+        width: 200px;
+        border: 1px solid #ccc;
+        height: 14px;
+        position: relative;
+        .vote-value {
+            width: 0%;
+            background-color: #ebc9c9;
+            height: 12px;
+            overflow: hidden;
+            line-height: 12px;
+            font-size: 12px;
+        }
+    }
+}
+
 
 @media (max-width: 640px) {
     .forum-group,

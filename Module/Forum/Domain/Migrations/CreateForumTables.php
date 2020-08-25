@@ -6,6 +6,7 @@ use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
+use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Zodream\Database\Migrations\Migration;
@@ -39,6 +40,7 @@ class CreateForumTables extends Migration {
             $table->set('user_id')->int()->notNull()->comment('发送用户');
             $table->set('view_count')->int()->defaultVal(0)->comment('查看数');
             $table->set('post_count')->int()->defaultVal(0)->comment('回帖数');
+            $table->set('collect_count')->int()->defaultVal(0)->comment('关注数');
             $table->set('is_highlight')->bool()->defaultVal(0)
                 ->comment('是否高亮');
             $table->set('is_digest')->bool()->defaultVal(0)
@@ -56,7 +58,19 @@ class CreateForumTables extends Migration {
                 ->defaultVal(0)->comment('回复的层级');
             $table->set('is_invisible')->bool()->defaultVal(0)
                 ->comment('是否通过审核');
+            $table->set('agree_count')->int()->defaultVal(0)
+                ->comment('赞成数');
+            $table->set('disagree_count')->int()->defaultVal(0)
+                ->comment('不赞成数');
             $table->timestamps();
+        })->append(ThreadLogModel::tableName(), function(Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('item_type')->tinyint(3)->defaultVal(0);
+            $table->set('item_id')->int(10)->notNull();
+            $table->set('user_id')->int(10)->notNull();
+            $table->set('action')->int(10)->notNull();
+            $table->set('data')->varchar(255)->defaultVal('')->comment('执行的参数');
+            $table->timestamp('created_at');
         })->append(BlackWordModel::tableName(), function(Table $table) {
             $table->setComment('违禁词');
             $table->set('id')->pk(true);
@@ -72,7 +86,6 @@ class CreateForumTables extends Migration {
             $table->setComment('表情分类');
             $table->set('id')->pk(true);
             $table->set('name')->varchar()->notNull();
-        });
-        parent::up();;
+        })->autoUp();
     }
 }

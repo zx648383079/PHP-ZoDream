@@ -14,6 +14,7 @@ use Zodream\Helpers\Time;
  * @property integer $user_id
  * @property integer $view_count
  * @property integer $post_count
+ * @property integer $collect_count
  * @property integer $is_highlight
  * @property integer $is_digest
  * @property integer $is_closed
@@ -33,6 +34,7 @@ class ThreadModel extends Model {
             'user_id' => 'required|int',
             'view_count' => 'int',
             'post_count' => 'int',
+            'collect_count' => 'int',
             'is_highlight' => 'int:0,9',
             'is_digest' => 'int:0,9',
             'is_closed' => 'int:0,9',
@@ -50,6 +52,7 @@ class ThreadModel extends Model {
             'user_id' => 'User Id',
             'view_count' => 'View Count',
             'post_count' => 'Post Count',
+            'collect_count' => 'Collect Count',
             'is_highlight' => '是否高亮',
             'is_digest' => '是否精华',
             'is_closed' => '是否关闭',

@@ -14,6 +14,8 @@ use Zodream\Helpers\Time;
  * @property string $ip
  * @property integer $grade
  * @property integer $is_invisible
+ * @property integer $agree_count
+ * @property integer $disagree_count
  * @property integer $created_at
  * @property integer $updated_at
 */
@@ -30,6 +32,8 @@ class ThreadPostModel extends Model {
             'ip' => 'required|string:0,120',
             'grade' => 'int',
             'is_invisible' => 'int:0,9',
+            'agree_count' => 'int',
+            'disagree_count' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -44,6 +48,8 @@ class ThreadPostModel extends Model {
             'ip' => 'Ip',
             'grade' => '层级',
             'is_invisible' => '是否通过审核',
+            'agree_count' => 'Agree Count',
+            'disagree_count' => 'Disagree Count',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

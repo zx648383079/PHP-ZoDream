@@ -3,12 +3,16 @@ namespace Module\Forum\Domain\Parsers;
 
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Template\Domain\Pages\Page;
+use Module\Template\Domain\Weights\INode;
 use Zodream\Helpers\Time;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Traits\SingletonPattern;
 
 class Parser extends Page {
 
     use SingletonPattern;
+
+    const UID_KEY = 'index';
 
     /**
      * @var ThreadPostModel
@@ -16,6 +20,10 @@ class Parser extends Page {
     protected $model;
 
     private $uid = 0;
+    /**
+     * @var Request
+     */
+    public $request;
 
     protected function uid() {
         return $this->uid ++;
@@ -31,10 +39,45 @@ class Parser extends Page {
     }
 
     /**
+     * 判断是当前部件的请求
+     * @param INode|int $uid
+     * @param string $key
+     * @return bool
+     */
+    public function isUnderAction($uid, $key = Parser::UID_KEY) {
+        if (empty($this->request)) {
+            return false;
+        }
+        if (!$this->request->has($key)) {
+            return false;
+        }
+        if ($uid instanceof INode) {
+            $uid = $uid->attr(self::UID_KEY);
+        }
+        return intval($this->request->get($key)) === $uid;
+    }
+
+    /**
      * @return ThreadPostModel
      */
     public function getModel(): ThreadPostModel {
         return $this->model;
+    }
+
+    /**
+     * 主题id
+     * @return int
+     */
+    public function threadId() {
+        return $this->getModel()->thread_id;
+    }
+
+    /**
+     * 回帖id
+     * @return int
+     */
+    public function postId() {
+        return $this->getModel()->id;
     }
 
     protected function loadNodes() {
@@ -46,7 +89,8 @@ class Parser extends Page {
             'img' => ImgNode::class,
             'video' => VideoNode::class,
             'audio' => AudioNode::class,
-            'at' => AtNode::class
+            'at' => AtNode::class,
+            'vote' => VoteNode::class,
         ];
         foreach ($data as $key => $item) {
             $this->register($key, $item);
@@ -69,7 +113,7 @@ class Parser extends Page {
                 sprintf('#<%s(\s+([^\<\>]+))?>([\s\S]*?)</%s>#i', $node, $node),
                 function ($match) use ($node, &$maps) {
                     $attributes = $this->parseAttributes($match[2]);
-                    $attributes['index'] = $this->uid();
+                    $attributes[self::UID_KEY] = $this->uid();
                     $node = $this->node($node, $attributes);
                     $attributes['content'] = $node->isNest()
                         ? $this->parseText($match[3])
@@ -102,6 +146,18 @@ class Parser extends Page {
             return array_column($matches, 2, 1);
         }
         return [];
+    }
+
+    /**
+     * 转换并处理请求
+     * @param ThreadPostModel $model
+     * @param Request $request
+     * @return string|string[]
+     */
+    public static function converterWithRequest(ThreadPostModel $model, Request $request) {
+        $instance = new static();
+        $instance->request = $request;
+        return $instance->parse($model);
     }
 
     public static function converter($html) {
