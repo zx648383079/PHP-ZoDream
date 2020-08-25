@@ -22,6 +22,15 @@ $this->title = '文章列表';
                 <?php endforeach;?>
             </select>
         </div>
+        <div class="input-group">
+            <label>类型</label>
+            <select name="type">
+                <option value="0">全部</option>
+                <?php foreach(['原创', '转载'] as $key => $item):?>
+                <option value="<?=$key + 1?>" <?=$key + 1 == $type ? 'selected' : ''?>><?=$item?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/blog/create')?>">新增文章</a>

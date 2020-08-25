@@ -89,6 +89,9 @@ function bindBlog(id: number, type: number, langs = {}) {
     }
     $('.book-body .toggle-open').click(function() {
         $(this).closest('.book-body').toggleClass('open');
+        checkSize();
+    }).on('click', 'a', function(e) {
+        e.stopPropagation();
     });
     $('.rule-box button').click(function() {
         let $this = $(this);
@@ -152,8 +155,9 @@ function bindBlog(id: number, type: number, langs = {}) {
             if (side.headers.length < 1) {
                 return;
             }
-            side.box.toggle($(window).width() > 767);
+            side.box.toggle(bookBody.hasClass('open') && $(window).width() > 767);
         };
+    const bookBody = $('.book-body');
     checkSize();
     $(window).resize(function () {
         checkSize();

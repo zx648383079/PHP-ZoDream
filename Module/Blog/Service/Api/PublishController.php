@@ -2,6 +2,7 @@
 namespace Module\Blog\Service\Api;
 
 use Infrastructure\Uploader;
+use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
@@ -34,6 +35,7 @@ class PublishController extends RestController {
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
         $data = $model->toArray();
         $data['tags'] = $tags;
+        $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
         return $this->render($data);
     }
 

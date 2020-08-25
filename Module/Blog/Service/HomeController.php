@@ -3,6 +3,7 @@ namespace Module\Blog\Service;
 
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
+use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
@@ -61,7 +62,8 @@ class HomeController extends Controller {
         $cat_list = TermRepository::get();
         $tags = TagRepository::getTags($blog->id);
         $relation_list = TagRepository::getRelationBlogs($blog->id);
-        return $this->show(compact('blog', 'cat_list', 'languages', 'tags', 'relation_list'));
+        $metaItems = BlogMetaModel::getMetaWithDefault($id);
+        return $this->show(compact('blog', 'cat_list', 'languages', 'tags', 'relation_list', 'metaItems'));
     }
 
     public function logAction($blog) {

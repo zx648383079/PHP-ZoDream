@@ -4,6 +4,7 @@ use Zodream\Template\View;
 use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Helpers\Json;
 use Infrastructure\HtmlExpand;
+use Module\Blog\Domain\CCLicenses;
 /** @var $this View */
 /** @var $blog BlogModel */
 $this->title = $this->text($blog->title);
@@ -74,7 +75,7 @@ $this->set([
 </div>
 
 
-<div class="book-body open">
+<div class="book-body<?= $blog->type == 1 && $metaItems['is_hide'] ?  '' : ' open' ?>">
     <a class="book-fork" href="https://github.com/zx648383079/PHP-ZoDream">
         <img src="/assets/images/forkme.png" alt="Fork Me On Github">
     </a>
@@ -85,18 +86,18 @@ $this->set([
         </div>
         <?php endif;?>
         <?php if($blog->user):?>
-        <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>"><i class="fa fa-edit"></i><b><?=$this->text($blog->user->name)?></b></a>
+        <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>" title="<?=__('Author')?>"><i class="fa fa-edit"></i><b><?=$this->text($blog->user->name)?></b></a>
         <?php endif;?>
         <?php if($blog->term):?>
-        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($blog->term->name)?></b></a>
+        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>" title="<?=__('Category')?>"><i class="fa fa-bookmark"></i><b><?=__($blog->term->name)?></b></a>
         <?php endif;?>
         <?php if(!empty($blog->programming_language)):?>
-        <a class="language" href="<?=$this->url('./', ['programming_language' => $blog->programming_language], false)?>"><i class="fa fa-code"></i><b><?=$blog->programming_language?></b></a>
+        <a class="language" href="<?=$this->url('./', ['programming_language' => $blog->programming_language], false)?>" title="<?=__('Programming Language')?>"><i class="fa fa-code"></i><b><?=$blog->programming_language?></b></a>
         <?php endif;?>
-        <span class="time"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
+        <span class="time" title="<?=__('Publish Date')?>"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
         <?php if($blog->type == 1):?>
         <span class="type">
-            <a href="<?=HtmlExpand::toUrl($blog->source_url)?>" title="<?=__('Reprint Tip')?>">
+            <a href="<?=HtmlExpand::toUrl($metaItems['source_url'])?>" title="<?=__('Reprint Tip')?>">
                 <i class="fa fa-link"></i><b><?=__('Reprint')?></b>
             </a>
         </span>
@@ -108,13 +109,40 @@ $this->set([
             <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=$this->url('./', ['id' => $blog->id])?></a>
         </p>
     </article>
-    <div class="book-bottom">
+    <div class="toggle-open">
         <?php if($blog->type == 1):?>
+        <a href="<?=HtmlExpand::toUrl($metaItems['source_url'])?>" target="_blank" title="<?=__('Reprint Tip')?>"><?=__('Click here to view source')?></a>
+        <?php else:?>
+        <?=__('Click here to view')?>
+        <?php endif;?>
+        <i class="fa fa-angle-double-down" title="<?=__('Click here to view')?>"></i>
+    </div>
+    <div class="book-bottom">
+        <?php if($blog->type == 1 || !empty($metaItems['cc_license'])):?>
         <div class="book-source">
-            <span><?=__('Reprinted in:')?></span>
-            <a href="<?=HtmlExpand::toUrl($blog->source_url)?>" target="_blank" title="<?=__('Reprint Tip')?>">
-                <?=$this->text($blog->source_url)?>
-            </a>
+            <?php if(!empty($metaItems['source_author'])):?>
+            <p>
+                <span><?=__('Source author:')?></span>
+                <strong><?=$this->text($metaItems['source_author'])?></strong>
+            </p>
+            <?php endif;?>
+            <?php if($blog->type == 1):?>
+            <p>
+                <span><?=__('Reprinted in:')?></span>
+                <a href="<?=HtmlExpand::toUrl($metaItems['source_url'])?>" target="_blank" title="<?=__('Reprint Tip')?>">
+                    <?=$this->text($metaItems['source_url'])?>
+                </a>
+            </p>
+            <?php endif;?>
+            <?php if(!empty($metaItems['cc_license'])):?>
+            <p>
+                <span><?=__('Copyright:')?></span>
+                <span>
+                    <?=__('This document is licensed under the "{license}" Creative Commons License.', ['license' => CCLicenses::render($metaItems['cc_license'])])?>
+                </span>
+            </p>
+            <?php endif;?>
+            
         </div>
         <?php endif;?>
         <?php if($tags):?>
@@ -125,9 +153,6 @@ $this->set([
             <?php endforeach;?>
         </div>
         <?php endif;?>
-    </div>
-    <div class="toggle-open">
-        <?=__('Click here to view')?> <i class="fa fa-angle-double-down"></i>
     </div>
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
@@ -171,7 +196,7 @@ $this->set([
 <?php endif;?>
 
 
-<?php if($blog->comment_status > 0):?>
+<?php if($metaItems['comment_status'] > 0):?>
 <div id="comments" class="book-footer comment">
     
 </div>

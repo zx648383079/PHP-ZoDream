@@ -204,7 +204,6 @@ class BlogRepository {
             throw new Exception($model->getFirstError());
         }
         $model->user_id = auth()->id();
-        $model->comment_status = 0;
         if (!$model->save()) {
             throw new Exception($model->getFirstError());
         }

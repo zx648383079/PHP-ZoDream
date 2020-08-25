@@ -2,6 +2,7 @@
 namespace Module\Blog\Service\Api;
 
 use Module\Blog\Domain\Model\BlogContentModel;
+use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
@@ -37,6 +38,7 @@ class HomeController extends RestController {
         }
         $data = $blog->toArray();
         $data['content'] = $blog->toHtml();
+        $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
         return $this->render($data);
     }
 

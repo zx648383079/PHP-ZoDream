@@ -16,10 +16,10 @@ function bindEdit(configs: any) {
     let editor: any,
         box = $('#editor-container');
     UE.delEditor('editor-container');
-    $('select[name=type]').change(function () { 
-        $('#source_url').closest('.input-group').toggle($(this).val() == 1);
+    $('select[name=type]').on('change', function () { 
+        $('.if_type_1').toggle($(this).val() == 1);
     }).trigger('change');
-    $("#edit_type").change(function() {
+    $("#edit_type").on('change',function() {
         if ($(this).val() == 1) {
             if (editor) {
                 editor.destroy();
@@ -31,7 +31,7 @@ function bindEdit(configs: any) {
         }
         editor = UE.getEditor('editor-container', configs);
     }).trigger('change');
-    $('#open_type').change(function() {
+    $('#open_type').on('change', function() {
         let val = $(this).val() as number;
         let ruleInput = $('#open_rule');
         let ruleBox = ruleInput.closest('.input-group');

@@ -2,7 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
+use Zodream\Html\Dark\Theme;
 use Module\Blog\Domain\Weather;
+use Module\Blog\Domain\CCLicenses;
+
 /** @var $this View */
 $lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 'Go', 'C#', 'ASP.NET', '.NET Core', 'Python', 'C', 'C++', 'Java', 'Kotlin', 'Swift', 'Objective-C', 'Dart', 'Flutter'];
 $weather_list = Weather::getList();
@@ -45,19 +48,24 @@ $this->registerJs($js);
                 <?=Form::select('term_id', [$term_list], true)?>
                 <?=Form::select('programming_language', array_merge(['' => '请选择'], array_combine($lang_list, $lang_list)))?>
                 <?=Form::select('type', ['原创', '转载'])?>
-                <?=Form::text('source_url')?>
+                <div class="if_type_1">
+                    <?=Theme::text('meta[source_url]', $metaItems['source_url'], '原文链接')?>
+                    <?=Theme::text('meta[source_author]', $metaItems['source_author'], '原文作者')?>
+                    <?=Theme::switch('meta[is_hide]', $metaItems['is_hide'], '是否隐藏')?>
+                </div>
                 <?=Form::file('thumb')?>
                 <?=Form::select('open_type', ['公开', '仅登录', 5 => '密码', 6 => '购买', 2 => '草稿'])?>
                 <?=Form::text('open_rule')?>
                 <?php endif;?>
                 <?=Form::select('edit_type', ['Ueditor', 'MarkDown'])?>
-                <?=Form::select('weather', array_merge(['' => '请选择'], $weather_list))?>
+                <?=Theme::select('meta[weather]', array_merge(['' => '请选择'], $weather_list), $metaItems['weather'], '天气')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
-                <?=Form::file('audio_url')->allow('audio/*')?>
-                <?=Form::file('video_url')->isFile('video/*')?>
+                <?=Theme::file('meta[audio_url]', $metaItems['audio_url'], '音频')->allow('audio/*')?>
+                <?=Theme::file('meta[video_url]', $metaItems['video_url'], '视频')->isFile('video/*')?>
+                <?=Theme::select('meta[cc_license]', [CCLicenses::getList(), 'label', 'name', ['' => '请选择']], $metaItems['cc_license'], '版权协议')?>
+                <?=Theme::switch('meta[comment_status]', $metaItems['comment_status'], '评论状态')?>
                 <?php if($model->parent_id < 1):?>
-                <?=Form::checkbox('comment_status')?>
                 <div class="input-group">
                     <label>标签</label>
                     <div>

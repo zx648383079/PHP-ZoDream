@@ -19,16 +19,11 @@ use Domain\Entities\Entity;
  * @property integer $user_id
  * @property integer $term_id
  * @property integer $type
- * @property string $source_url
- * @property string $audio_url
- * @property string $video_url
  * @property integer $recommend
  * @property integer $comment_count
  * @property integer $click_count
- * @property integer $comment_status
  * @property integer $open_type
  * @property string $open_rule
- * @property string $weather
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -65,16 +60,11 @@ class BlogEntity extends Entity {
             'user_id' => 'int',
             'term_id' => 'int',
             'type' => 'int:0,127',
-            'source_url' => 'string:0,100',
-            'audio_url' => 'string:0,100',
-            'video_url' => 'string:0,100',
             'recommend' => 'int',
             'comment_count' => 'int',
             'click_count' => 'int',
-            'comment_status' => 'int:0,127',
             'open_type' => 'int:0,127',
             'open_rule' => 'string:0,20',
-            'weather' => 'string:0,20',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

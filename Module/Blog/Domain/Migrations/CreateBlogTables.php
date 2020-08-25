@@ -34,16 +34,11 @@ class CreateBlogTables extends Migration {
             $table->set('user_id')->int(10)->unsigned();
             $table->set('term_id')->int(10)->unsigned();
             $table->set('type')->bool()->unsigned()->defaultVal(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
-            $table->set('source_url')->varchar(100)->defaultVal('')->comment('原文链接');
-            $table->set('audio_url')->varchar(100)->defaultVal('')->comment('音频链接');
-            $table->set('video_url')->varchar(100)->defaultVal('')->comment('视频链接');
             $table->set('recommend')->int(10)->unsigned()->defaultVal(0);
             $table->set('comment_count')->int(10)->unsigned()->defaultVal(0);
             $table->set('click_count')->int(10)->unsigned()->defaultVal(0);
-            $table->set('comment_status')->tinyint(1)->unsigned()->defaultVal(0);
             $table->set('open_type')->tinyint(1)->unsigned()->defaultVal(0)->comment('公开类型');
             $table->set('open_rule')->varchar(20)->defaultVal('')->comment('类型匹配的值');
-            $table->set('weather')->varchar(20)->defaultVal('')->comment('天气');
             $table->softDeletes();
             $table->timestamps();
         })->append(BlogMetaModel::tableName(), function(Table $table) {

@@ -18,14 +18,9 @@ namespace Module\Blog\Domain\Model;
  * @property integer $type
  * @property integer $open_type
  * @property string $open_rule
- * @property string weather
- * @property string $source_url
- * @property string $audio_url
- * @property string $video_url
  * @property integer $recommend
  * @property integer $comment_count
  * @property integer $click_count
- * @property integer $comment_status
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
