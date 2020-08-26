@@ -8,7 +8,6 @@ use Module\Forum\Domain\Model\ThreadPostModel;
 
 class ThreadRepository {
 
-
     /**
      * 收藏
      * @param $id

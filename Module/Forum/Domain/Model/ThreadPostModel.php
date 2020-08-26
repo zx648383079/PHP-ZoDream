@@ -18,6 +18,7 @@ use Zodream\Helpers\Time;
  * @property integer $disagree_count
  * @property integer $created_at
  * @property integer $updated_at
+ * @property ThreadModel $thread
 */
 class ThreadPostModel extends Model {
 	public static function tableName() {
@@ -59,6 +60,10 @@ class ThreadPostModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
+    public function thread() {
+        return $this->hasOne(ThreadModel::class, 'id', 'thread_id');
+    }
+
     public function getUpdatedAtAttribute() {
         return Time::isTimeAgo($this->getAttributeValue('updated_at'), 2678400);
     }
@@ -68,6 +73,15 @@ class ThreadPostModel extends Model {
             return false;
         }
         return auth()->id() == $this->user_id;
+    }
+
+    public function getIsPublicPostAttribute() {
+	    if (auth()->guest()) {
+	        return !$this->thread->is_private_post;
+        }
+	    $user_id = auth()->id();
+	    return !$this->thread->is_private_post
+            || $this->user_id == $user_id || $this->thread->user_id == $user_id;
     }
 
 }

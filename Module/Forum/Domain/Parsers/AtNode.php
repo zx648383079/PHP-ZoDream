@@ -39,12 +39,29 @@ HTML;
         if ($id < 1) {
             return false;
         }
-        $model = ThreadPostModel::find($id);
+        /** @var ThreadPostModel $model */
+        $model = ThreadPostModel::query()->where('id', $id)
+        ->where('thread_id', $this->page->threadId())->first();
         if (empty($model)) {
             return false;
         }
-        $text = Str::substr($this->page->cleanText($model->content), 0, 100, true);
+        $model->setRelation('thread', $this->page->getModel()->thread);
         $user = $this->atUser($model->user_id, $name);
+        if (!$model->is_public_post) {
+            return <<<HTML
+<div class="quote">
+    <blockquote>
+        {$user}
+        <div class="quote-body">
+            <div class="hide-locked-node">
+                    <i class="fa fa-lock"></i> 本帖内容仅楼主可见
+            </div>
+        </div>
+    </blockquote>
+</div>
+HTML;
+        }
+        $text = Str::substr($this->page->cleanText($model->content), 0, 100, true);
         return <<<HTML
 <div class="quote">
     <blockquote>

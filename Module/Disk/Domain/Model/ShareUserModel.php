@@ -1,7 +1,7 @@
 <?php
 namespace Module\Disk\Domain\Model;
 
-use Zodream\Database\Model\Model;
+use Domain\Model\Model;
 
 /**
  * Class ShareUserModel

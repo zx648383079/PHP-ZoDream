@@ -2,7 +2,7 @@
 namespace Module\Disk\Domain\Model;
 
 
-use Zodream\Database\Model\Model;
+use Domain\Model\Model;
 
 /**
  * Class FileModel 文件数据

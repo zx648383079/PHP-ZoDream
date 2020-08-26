@@ -4,6 +4,7 @@ namespace Module\Forum\Domain\Migrations;
 use Module\Forum\Domain\Model\BlackWordModel;
 use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
+use Module\Forum\Domain\Model\FileModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -47,6 +48,7 @@ class CreateForumTables extends Migration {
                 ->comment('是否精华');
             $table->set('is_closed')->bool()->defaultVal(0)
                 ->comment('是否关闭');
+            $table->set('is_private_post')->bool()->defaultVal(0)->comment('是否仅楼主可见');
             $table->timestamps();
         })->append(ThreadPostModel::tableName(), function(Table $table) {
             $table->set('id')->pk(true);

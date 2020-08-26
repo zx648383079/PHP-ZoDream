@@ -2,7 +2,7 @@
 namespace Module\Disk\Domain\Model;
 
 use Module\Auth\Domain\Model\UserModel;
-use Zodream\Database\Model\Model;
+use Domain\Model\Model;
 
 
 /**

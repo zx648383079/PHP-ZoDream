@@ -17,7 +17,7 @@ class CreateDiskTables extends Migration {
      * @return void
      */
     public function up() {
-        Schema::createTable(DiskModel::tableName(), function(Table $table) {
+        $this->append(DiskModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('file_id')->int(10)->defaultVal(0);
@@ -27,8 +27,7 @@ class CreateDiskTables extends Migration {
             $table->set('parent_id')->int(10)->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();
-        });
-        Schema::createTable(FileModel::tableName(), function(Table $table) {
+        })->append(FileModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('extension')->varchar(20);
@@ -38,8 +37,7 @@ class CreateDiskTables extends Migration {
                 ->comment('预览图');
             $table->set('size')->int(10)->defaultVal(0);
             $table->timestamps();
-        });
-        Schema::createTable(ShareModel::tableName(), function(Table $table) {
+        })->append(ShareModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('name')->varchar(100)->notNull();
             $table->set('mode')->tinyint(2)->defaultVal(ShareModel::SHARE_PUBLIC);
@@ -50,29 +48,14 @@ class CreateDiskTables extends Migration {
             $table->set('down_count')->int(10)->defaultVal(0);
             $table->set('save_count')->int(10)->defaultVal(0);
             $table->timestamps();
-        });
-        Schema::createTable(ShareFileModel::tableName(), function(Table $table) {
+        })->append(ShareFileModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('disk_id')->int(10)->notNull();
             $table->set('share_id')->int(10)->notNull();
-        });
-        Schema::createTable(ShareUserModel::tableName(), function(Table $table) {
+        })->append(ShareUserModel::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int(10)->notNull();
             $table->set('share_id')->int(10)->notNull();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down() {
-        Schema::dropTable(DiskModel::tableName());
-        Schema::dropTable(FileModel::tableName());
-        Schema::dropTable(ShareFileModel::tableName());
-        Schema::dropTable(ShareModel::tableName());
-        Schema::dropTable(ShareUserModel::tableName());
+        })->autoUp();
     }
 }

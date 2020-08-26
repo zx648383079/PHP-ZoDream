@@ -2,10 +2,17 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Forum\Domain\Parsers\Parser;
+use Module\Forum\Domain\Model\ThreadPostModel;
+use Module\Forum\Domain\Model\ThreadModel;
 /** @var $this View */
+/** @var ThreadModel $thread */
 ?>
 <div class="post-list">
     <?php foreach($post_list as $item):?>
+    <?php
+        /** @var ThreadPostModel $item */
+      $item->setRelation('thread', $thread);
+        ?>
     <div id="post-<?=$item->id?>" class="post-item" data-id="<?=$item->id?>">
         <div class="post-user">
             <div class="name"><?=$this->text($item->user->name)?></div>
@@ -55,7 +62,13 @@ use Module\Forum\Domain\Parsers\Parser;
                 </div>
             </div>
             <div class="content">
-                <?=Parser::converter($item)?>
+                <?php if(!$item->is_public_post):?>
+                <div class="hide-locked-node">
+                    <i class="fa fa-lock"></i> 本帖内容仅楼主可见
+                </div>
+                <?php else:?>
+                    <?=Parser::converter($item)?>
+                <?php endif;?>
             </div>
             <div class="footer">
                 <a href="javascript:;" data-action="reply">回复</a>

@@ -24,6 +24,7 @@ class ThreadLogModel extends Model {
     const ACTION_DISAGREE = 2;
     const ACTION_BUY = 3;
     const ACTION_VOTE = 4;
+    const ACTION_DOWNLOAD = 5;
 
 
 	public static function tableName() {

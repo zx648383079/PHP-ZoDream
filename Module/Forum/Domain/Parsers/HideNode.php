@@ -39,6 +39,9 @@ HTML;
         if ($this->price <= 0) {
             return true;
         }
+        if (auth()->id() == $this->page->getModel()->user_id) {
+            return true;
+        }
         $count = ThreadLogModel::query()->where('item_type', ThreadLogModel::TYPE_THREAD_POST)
             ->where('item_id', $this->page->postId())
             ->where('action', ThreadLogModel::ACTION_BUY)

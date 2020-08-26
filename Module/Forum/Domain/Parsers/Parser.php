@@ -58,6 +58,13 @@ class Parser extends Page {
     }
 
     /**
+     * 执行完了，可以清除了
+     */
+    public function notUnderAction() {
+        $this->request = null;
+    }
+
+    /**
      * @return ThreadPostModel
      */
     public function getModel(): ThreadPostModel {

@@ -18,6 +18,7 @@ use Zodream\Helpers\Time;
  * @property integer $is_highlight
  * @property integer $is_digest
  * @property integer $is_closed
+ * @property integer $is_private_post
  * @property integer $created_at
  * @property integer $updated_at
 */
@@ -38,6 +39,7 @@ class ThreadModel extends Model {
             'is_highlight' => 'int:0,9',
             'is_digest' => 'int:0,9',
             'is_closed' => 'int:0,9',
+            'is_private_post' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -56,6 +58,7 @@ class ThreadModel extends Model {
             'is_highlight' => '是否高亮',
             'is_digest' => '是否精华',
             'is_closed' => '是否关闭',
+            'is_private_post' => '是否仅楼主可见',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

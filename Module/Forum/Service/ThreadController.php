@@ -2,6 +2,7 @@
 namespace Module\Forum\Service;
 
 
+use Module\Forum\Domain\Error\StopNextException;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
@@ -47,7 +48,8 @@ class ThreadController extends Controller {
         return $this->show(compact('thread', 'path', 'post_list'));
     }
 
-    public function createAction($title, $content, $forum_id, $classify_id = 0) {
+    public function createAction($title, $content,
+                                 $forum_id, $classify_id = 0, $is_private_post = 0) {
         if (empty($title)) {
             return $this->jsonFailure('标题不能为空');
         }
@@ -60,6 +62,7 @@ class ThreadController extends Controller {
             'forum_id' => $forum_id,
             'classify_id' => intval($classify_id),
             'user_id' => auth()->id(),
+            'is_private_post' => $is_private_post
         ]);
         if (empty($thread)) {
             return $this->jsonFailure('发帖失败');
@@ -241,13 +244,15 @@ class ThreadController extends Controller {
         try {
             $model = ThreadPostModel::find($id);
             $html = Parser::converterWithRequest($model, $request);
-        } catch (\Exception $ex) {
+        } catch (StopNextException $ex) {
+            return app('response');
+        }
+        catch (\Exception $ex) {
             return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
             'id' => $id,
             'content' => $html
         ]);
-
     }
 }
