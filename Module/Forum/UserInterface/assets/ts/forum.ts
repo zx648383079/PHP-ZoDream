@@ -407,6 +407,16 @@ $(function() {
             }
             $('#post-' + res.data.id + ' .content').html(res.data.content);
         });
+    }).on('submit', 'form[data-action=ajax]', function() {
+        let $this = $(this);
+        postJson($this.attr('action'), $this.serialize(), res => {
+            if (res.code != 200) {
+                parseAjax(res);
+                return;
+            }
+            $('#post-' + res.data.id + ' .content').html(res.data.content);
+        });
+        return false;
     });
     $('.thread-list').on('click', '.thread-item a', function(e) {
         e.stopPropagation();

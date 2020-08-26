@@ -25,15 +25,6 @@ use Module\Forum\Domain\Parsers\Parser;
             <div class="last-time">最后编辑于 <?=$item->updated_at?></div>
             <div class="content">
                 <?=Parser::converter($item)?>
-
-                <form class="vote-box" action="" method="POST">
-                    这是说明
-                    <div class="vote-item">
-                        <input type="checkbox" name="" id="">
-                        <label for="">选项一</label>
-                    </div>
-                    <button>提交</button>
-                </form>
             </div>
             <div class="action">
                 

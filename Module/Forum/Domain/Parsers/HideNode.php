@@ -40,10 +40,10 @@ HTML;
             return true;
         }
         $count = ThreadLogModel::query()->where('item_type', ThreadLogModel::TYPE_THREAD_POST)
-            ->where('item_id', $this->page->getModel()->id)
+            ->where('item_id', $this->page->postId())
             ->where('action', ThreadLogModel::ACTION_BUY)
             ->where('user_id', auth()->id())
-            ->where('data', $this->attr(Parser::UID_KEY))->count();
+            ->where('node_index', $this->attr(Parser::UID_KEY))->count();
         if ($count > 0) {
             return true;
         }
@@ -53,10 +53,10 @@ HTML;
         $res = AccountLogModel::changeAsync(auth()->id(), AccountLogModel::TYPE_FORUM_BUY, function () {
             return ThreadLogModel::create([
                 'item_type' => ThreadLogModel::TYPE_THREAD_POST,
-                'item_id' => $this->page->getModel()->id,
+                'item_id' => $this->page->postId(),
                 'action' => ThreadLogModel::ACTION_BUY,
                 'user_id' => auth()->id(),
-                'data' => $this->attr(Parser::UID_KEY)
+                'node_index' => $this->attr(Parser::UID_KEY)
             ]);
         }, -$this->price, 0, '购买帖子隐藏内容');
         if (!$res) {

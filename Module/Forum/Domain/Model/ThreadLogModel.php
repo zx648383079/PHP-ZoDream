@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property integer $item_id
  * @property integer $user_id
  * @property integer $action
+ * @property integer $node_index
  * @property string $data
  * @property integer $created_at
  */
@@ -35,6 +36,7 @@ class ThreadLogModel extends Model {
             'item_id' => 'required|int',
             'user_id' => 'required|int',
             'action' => 'required|int',
+            'node_index' => 'int:0,127',
             'data' => 'string',
             'created_at' => 'int',
         ];
@@ -47,6 +49,7 @@ class ThreadLogModel extends Model {
             'item_id' => 'Item Id',
             'user_id' => 'User Id',
             'action' => 'Action',
+            'node_index' => 'Node Index',
             'data' => 'Data',
             'created_at' => 'Created At',
         ];

@@ -69,6 +69,7 @@ class CreateForumTables extends Migration {
             $table->set('item_id')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
+            $table->set('node_index')->tinyint(1)->defaultVal(0)->comment('每一个回帖内部的节点');
             $table->set('data')->varchar(255)->defaultVal('')->comment('执行的参数');
             $table->timestamp('created_at');
         })->append(BlackWordModel::tableName(), function(Table $table) {
