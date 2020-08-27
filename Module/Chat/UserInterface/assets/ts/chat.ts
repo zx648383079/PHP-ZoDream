@@ -1471,26 +1471,24 @@ function registerChat() {
 function registerWsChat(baseUri: string) {
     let room = new ChatRoom($('.dialog-chat'));
     let socket = new Ws(baseUri);
-    socket.OnConnect(() => {
+    socket.onConnect(() => {
 
-    });
-    socket.OnDisconnect(() => {
+    }).onDisconnect(() => {
 
-    });
-    socket.On('message', () => {
+    }).on('message', () => {
 
     });
 
     room.on(EVENT_REFRESH_USERS, (box: ChatUserBox) => {
-        socket.Emit(EVENT_REFRESH_USERS, true);
+        socket.emit(EVENT_REFRESH_USERS, true);
     }).on(EVENT_REFRESH_GROUPS, (box: ChatUserBox) => {
-        socket.Emit(EVENT_REFRESH_GROUPS, true);
+        socket.emit(EVENT_REFRESH_GROUPS, true);
     }).on(EVENT_SEARCH_USERS, (keywords: string, box: ChatSearchBox) => {
-        socket.Emit(EVENT_SEARCH_USERS, keywords);
+        socket.emit(EVENT_SEARCH_USERS, keywords);
     }).on(EVENT_GET_MESSAGE, (user: IUser, page: number, per_page: number, box: ChatMessageBox) => {
-        socket.Emit(EVENT_GET_MESSAGE, {page, per_page, user: user.id});
+        socket.emit(EVENT_GET_MESSAGE, {page, per_page, user: user.id});
     }).on(EVENT_SEND_MESSAGE, (content: string, user: IUser, box: ChatMessageBox) => {
-        socket.Emit(EVENT_SEND_MESSAGE, {content, user: user.id});
+        socket.emit(EVENT_SEND_MESSAGE, {content, user: user.id});
     }).on(EVENT_APPLY_USER, (user: IUser, group: number, remark: string, box: ChatApplyBox) => {
         postJson(BASE_URI + 'friend/apply', {
             user: user.id,
@@ -1520,4 +1518,213 @@ function registerWsChat(baseUri: string) {
     $('#toggle-btn').click(function() {
         room.toggleMode();
     });
+}
+
+enum WsMessageType {
+    STRING,
+    INT,
+    BOOL,
+    JSON = 4,
+}
+
+interface IWsOption {
+    prefix?: string;
+    separator?: string;
+}
+
+interface IWsMessageListeners {
+    [key: string]: Function[];
+}
+
+class Ws {
+    constructor(endpoint: string, protocols?: any) {
+        if (!window['WebSocket']) {
+            throw '不支持ws';
+        }
+        if (endpoint.indexOf("ws") == -1) {
+            endpoint = "ws://" + endpoint;
+        }
+        if (protocols && protocols.length > 0) {
+            this.conn = new WebSocket(endpoint, protocols);
+        }
+        else {
+            this.conn = new WebSocket(endpoint);
+        }
+        this.conn.onopen = () => {
+            this.fireConnect();
+            this.isReady = true;
+            return null;
+        };
+        this.conn.onclose = () => {
+            this.fireDisconnect();
+            return null;
+        };
+        this.conn.onmessage = (evt: MessageEvent<any>) => {
+            this.messageReceivedFromConn(evt);
+        };
+    }
+
+    private option: IWsOption = {
+        prefix: 'ws-message:',
+        separator: ';',
+    };
+
+    private conn: WebSocket;
+
+    private isReady: boolean = false;
+
+    private connectListeners: Function[] = [];
+
+    private disconnectListeners: Function[] = [];
+
+    private nativeMessageListeners: Function[] = [];
+
+    private messageListeners: IWsMessageListeners = {};
+
+    public isNumber(obj: any): boolean {
+        return !isNaN(obj - 0) && obj !== null && obj !== "" && obj !== false;
+    }
+
+    public isString(obj: any): boolean {
+        return Object.prototype.toString.call(obj) == "[object String]";
+    }
+
+    public isBoolean(obj: any) {
+        return typeof obj === 'boolean' ||
+            (typeof obj === 'object' && typeof obj.valueOf() === 'boolean');
+    }
+
+    public isJSON(obj: string) {
+        return typeof obj === 'object';
+    }
+
+    public toMsg(event: string, websocketMessageType: WsMessageType, dataMessage: string) {
+        return this.option.prefix + event + this.option.separator + String(websocketMessageType) + this.option.separator + dataMessage;
+    }
+    public encodeMessage(event: string, data: any) {
+        let m = '';
+        let t = WsMessageType.STRING;
+        if (this.isNumber(data)) {
+            t = WsMessageType.INT;
+            m = data.toString();
+        }
+        else if (this.isBoolean(data)) {
+            t = WsMessageType.BOOL;
+            m = data.toString();
+        }
+        else if (this.isString(data)) {
+            t = WsMessageType.STRING
+            m = data.toString();
+        }
+        else if (this.isJSON(data)) {
+            t = WsMessageType.JSON;
+            m = JSON.stringify(data);
+        }
+        else if (data !== null && typeof(data) !== "undefined" ) {
+            console.log("unsupported type of input argument passed, try to not include this argument to the 'Emit'");
+        }
+        return this.toMsg(event, t, m);
+    }
+    public decodeMessage(event, websocketMessage) {
+        //iris-websocket-message;user;4;themarshaledstringfromajsonstruct
+        const skipLen = this.option.prefix.length + this.option.separator.length + event.length + 2;
+        if (websocketMessage.length < skipLen + 1) {
+            return null;
+        }
+        const websocketMessageType = parseInt(websocketMessage.charAt(skipLen - 2));
+        const theMessage = websocketMessage.substring(skipLen, websocketMessage.length);
+        if (websocketMessageType === WsMessageType.INT) {
+            return parseInt(theMessage);
+        }
+        if (websocketMessageType == WsMessageType.BOOL) {
+            return Boolean(theMessage);
+        }
+        if (websocketMessageType == WsMessageType.STRING) {
+            return theMessage;
+        }
+        if (websocketMessageType == WsMessageType.JSON) {
+            return JSON.parse(theMessage);
+        }
+        return null;
+    }
+    public getWebsocketCustomEvent(websocketMessage: string) {
+        const websocketMessagePrefixAndSepIdx = this.option.prefix.length + this.option.separator.length - 1;
+        if (websocketMessage.length < websocketMessagePrefixAndSepIdx) {
+            return '';
+        }
+        const s = websocketMessage.substring(websocketMessagePrefixAndSepIdx, websocketMessage.length);
+        return s.substring(0, s.indexOf(this.option.separator));
+    }
+    public getCustomMessage(event: string, websocketMessage: any) {
+        const eventIdx = websocketMessage.indexOf(event + this.option.separator);
+        return websocketMessage.substring(eventIdx + event.length + this.option.separator.length + 2, websocketMessage.length);
+    }
+    public messageReceivedFromConn(evt: MessageEvent<string>) {
+        const message = evt.data;
+        if (message.indexOf(this.option.prefix) != -1) {
+            var event_1 = this.getWebsocketCustomEvent(message);
+            if (event_1 != "") {
+                // it's a custom message
+                this.fireMessage(event_1, this.getCustomMessage(event_1, message));
+                return;
+            }
+        }
+        this.fireNativeMessage(message);
+    }
+    public onConnect(fn: Function) {
+        if (this.isReady) {
+            fn();
+        }
+        this.connectListeners.push(fn);
+        return this;
+    }
+    public fireConnect() {
+        this.connectListeners.forEach(cb => {
+            cb();
+        });
+    }
+    public onDisconnect(fn: Function) {
+        this.disconnectListeners.push(fn);
+        return this;
+    }
+    public fireDisconnect() {
+        this.disconnectListeners.forEach(cb => {
+            cb();
+        });
+    }
+    public onMessage(cb: Function) {
+        this.nativeMessageListeners.push(cb);
+        return this;
+    }
+    public fireNativeMessage(websocketMessage: any) {
+        this.nativeMessageListeners.forEach(cb => {
+            cb(websocketMessage);
+        });
+        return this;
+    }
+    public on(event: string, cb: Function) {
+        if (this.messageListeners[event] == null || this.messageListeners[event] == undefined) {
+            this.messageListeners[event] = [];
+        }
+        this.messageListeners[event].push(cb);
+        return this;
+    }
+    public fireMessage(event: string, message: any) {
+        const listeners = this.messageListeners[event];
+        if (!listeners) {
+            return;
+        }
+        listeners.forEach(cb => {
+            cb(message);
+        });
+    }
+    public disconnect() {
+        this.conn.close();
+    }
+    public emitMessage(websocketMessage: any) {
+        this.conn.send(websocketMessage);
+    }
+    public emit(event: string, data: any) {
+        this.emitMessage(this.encodeMessage(event, data));
+    }
 }
