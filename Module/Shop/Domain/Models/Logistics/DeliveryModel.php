@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Models\Logistics;
 
 
 use Domain\Model\Model;
+use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\ShippingModel;
 
@@ -25,6 +26,7 @@ use Module\Shop\Domain\Models\ShippingModel;
  * @property string $best_time
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $logistics_content
  */
 class DeliveryModel extends Model {
     public static function tableName() {
@@ -40,6 +42,7 @@ class DeliveryModel extends Model {
             'shipping_name' => 'string:0,30',
             'shipping_fee' => '',
             'logistics_number' => 'string:0,30',
+            'logistics_content' => '',
             'name' => 'required|string:0,30',
             'region_id' => 'required|int',
             'region_name' => 'required|string:0,255',
@@ -61,6 +64,7 @@ class DeliveryModel extends Model {
             'shipping_name' => 'Shipping Name',
             'shipping_fee' => 'Shipping Fee',
             'logistics_number' => 'Logistics Number',
+            'logistics_content' => '物流信息',
             'name' => 'Name',
             'region_id' => 'Region Id',
             'region_name' => 'Region Name',
@@ -107,13 +111,17 @@ class DeliveryModel extends Model {
             return false;
         }
         foreach ($order->goods as $goods) {
+            /** @var $goods OrderGoodsModel */
             DeliveryGoodsModel::create([
                 'delivery_id' => $model->id,
                 'order_goods_id' => $goods->id,
                 'goods_id' => $goods->goods_id,
                 'name' => $goods->name,
+                'thumb' => $goods->thumb,
                 'series_number' => $goods->series_number,
                 'amount' => $goods->amount,
+                'product_id' => $goods->product_id,
+                'type_remark' => $goods->type_remark,
             ]);
         }
         return true;

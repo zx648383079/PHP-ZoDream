@@ -47,6 +47,7 @@ class OrderModel extends Model {
     const STATUS_UN_PAY = 10;
     const STATUS_PAYING = 12;
     const STATUS_PAID_UN_SHIP = 20;
+    const STATUS_SHIPPING = 38; // 发货中，部分发货
     const STATUS_SHIPPED = 40;
     const STATUS_RECEIVED = 60;
     const STATUS_FINISH = 80;

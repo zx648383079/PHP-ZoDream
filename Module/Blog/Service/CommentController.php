@@ -40,7 +40,7 @@ class CommentController extends ModuleController {
         try {
             $comment = CommentRepository::create($request->get('name,email,url,content,parent_id,blog_id'));
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess($comment);
     }

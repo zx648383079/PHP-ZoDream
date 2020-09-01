@@ -10,6 +10,7 @@ use Module\Shop\Domain\Models\Scene\Goods;
  * @property integer $id
  * @property integer $order_id
  * @property integer $goods_id
+ * @property integer $product_id
  * @property integer $user_id
  * @property string $name
  * @property string $series_number
@@ -32,6 +33,7 @@ class OrderGoodsModel extends Model {
         return [
             'order_id' => 'required|int',
             'goods_id' => 'required|int',
+            'product_id' => 'int',
             'user_id' => 'required|int',
             'name' => 'required|string:0,100',
             'series_number' => 'required|string:0,100',
@@ -51,6 +53,7 @@ class OrderGoodsModel extends Model {
             'id' => 'Id',
             'order_id' => 'Order Id',
             'goods_id' => 'Goods Id',
+            'product_id' => 'Product Id',
             'user_id' => 'User Id',
             'name' => 'Name',
             'series_number' => 'Series Number',

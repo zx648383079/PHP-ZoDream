@@ -21,6 +21,6 @@ namespace Module\Blog\Domain\Model;
  * @property integer $disagree
  * @property integer $position
  */
-class CommentPageModel extends CommentModel {
-    protected $append = ['reply_count', 'replies'];
+class CommentFullModel extends CommentModel {
+    protected $append = ['blog'];
 }

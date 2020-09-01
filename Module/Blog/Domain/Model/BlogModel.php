@@ -121,7 +121,7 @@ class BlogModel extends BlogEntity {
     }
 
     public function getHotComment() {
-	    return CommentModel::find()
+	    return CommentModel::query()
             ->where(['blog_id' => $this->id])
             ->orderBy('created_at desc')->limit(5)->all();
     }
@@ -141,8 +141,9 @@ class BlogModel extends BlogEntity {
      * @return bool
      */
     public static function canComment($id) {
-        return static::where('comment_status', 1)
-                ->where('id', $id)->count() > 0;
+        return BlogMetaModel::where('name', 'comment_status')
+                ->where('content', 1)
+                ->where('blog_id', $id)->count() > 0;
     }
 
     /**

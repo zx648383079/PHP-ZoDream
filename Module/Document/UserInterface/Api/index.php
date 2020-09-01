@@ -238,7 +238,7 @@ $this->registerJs($js, View::JQUERY_READY);
                 <?php endforeach;?>
             </select>
             <select name="lang">
-                <?php foreach(['csharp' => 'c#', 'go', 'ts', 'dart', 'java', 'kotlin'] as $k => $item):?>
+                <?php foreach($languages as $k => $item):?>
                 <option value="<?=is_int($k) ? $item : $k?>"><?=$item?></option>
                 <?php endforeach;?>
             </select>

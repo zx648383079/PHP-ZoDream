@@ -233,6 +233,7 @@ class CreateShopTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('order_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
+            $table->set('product_id')->int()->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
             $table->set('series_number')->varchar(100)->notNull();
@@ -351,6 +352,7 @@ class CreateShopTables extends Migration {
             $table->set('shipping_name')->varchar(30)->defaultVal(0);
             $table->set('shipping_fee')->decimal(8, 2)->defaultVal(0);
             $table->set('logistics_number')->varchar(30)->defaultVal('')->comment('物流单号');
+            $table->set('logistics_content')->text()->comment('物流信息');
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
             $table->set('region_name')->varchar()->notNull();
@@ -363,9 +365,12 @@ class CreateShopTables extends Migration {
             $table->set('delivery_id')->int()->notNull();
             $table->set('order_goods_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
+            $table->set('product_id')->int()->defaultVal(0);
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
+            $table->set('thumb')->varchar()->notNull();
             $table->set('series_number')->varchar(100)->notNull();
             $table->set('amount')->int()->defaultVal(1);
+            $table->set('type_remark')->varchar()->defaultVal('')->comment('商品类型备注信息');
         });
     }
 

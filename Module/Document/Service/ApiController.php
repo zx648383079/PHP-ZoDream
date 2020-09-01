@@ -22,7 +22,9 @@ class ApiController extends Controller {
         $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
         $response_json = FieldModel::getDefaultData($id);
         $response_fields = (new Tree($response_fields))->makeTreeForHtml();
-        return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields', 'response_json'));
+        $languages = (new CodeParser())->getLanguages();
+        return $this->show(compact('project', 'tree_list', 'api',
+            'header_fields', 'request_fields', 'response_fields', 'response_json', 'languages'));
     }
 
 
