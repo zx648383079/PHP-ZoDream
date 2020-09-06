@@ -21,12 +21,12 @@ class Controller extends ModuleController {
     }
 
     public function prepare() {
+        CMSRepository::resetSite();
         $cat_menu = CategoryModel::tree()->makeTreeForHtml();
         $cat_menu = array_filter($cat_menu, function ($item) {
             return $item['type'] < 1;
         });
         $form_list = ModelModel::where('type', 1)->get('id,name');
-        CMSRepository::resetSite();
         $this->send(compact('cat_menu', 'form_list'));
     }
 

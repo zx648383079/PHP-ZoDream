@@ -12,6 +12,7 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'站点';
     <?=Form::select('theme', [$themes, 'description', 'name'])?>
     <?=Form::select('match_type', ['域名', '路径'])?>
     <?=Form::text('match_rule')?>
+    <?=Form::file('logo')?>
     <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>
    

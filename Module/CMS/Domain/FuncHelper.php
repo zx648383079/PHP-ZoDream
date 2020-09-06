@@ -3,11 +3,11 @@ namespace Module\CMS\Domain;
 
 use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
-use Module\CMS\Module;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
@@ -17,6 +17,7 @@ use Zodream\Html\Tree;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Helpers\Tree as TreeHelper;
+use Zodream\Helpers\Html as HtmlHelper;
 
 class FuncHelper {
 
@@ -370,7 +371,7 @@ class FuncHelper {
      * @return array|string
      * @throws \Exception
      */
-    public static function content($id, $name = null, $category = null) {
+    public static function content($id, $name = null, $category = 0) {
         if (is_array($id)) {
             isset($id['name']) && $name = $id['name'];
             $category = static::getVal($id, ['category', 'cat_id', 'cat', 'channel']);
@@ -417,7 +418,6 @@ class FuncHelper {
                     function (Builder $query, $pre, $i) use ($category, $user, $model) {
                         if (!empty($pre) && isset($pre['id'])) {
                             $query->where('id', $pre['id']);
-                            return;
                         }
                         if ($i > 0 && empty($pre)) {
                             return false;
@@ -463,7 +463,9 @@ class FuncHelper {
     }
 
     public static function channelActive($id) {
-        $id = intval($id);
+        if (!is_numeric($id)) {
+            $id = static::getChannelId($id);
+        }
         $current = intval(static::$current['channel']);
         if (self::isChildren($id, $current) >= 0) {
             return ' active';
@@ -488,6 +490,15 @@ class FuncHelper {
             return [];
         }
         return LinkageModel::idTree($id);
+    }
+
+    public static function linkageText($id) {
+        if (empty($id)) {
+            return '';
+        }
+        return static::getOrSet(__FUNCTION__, $id, function () use ($id) {
+            return LinkageDataModel::where('id', $id)->value('full_name');
+        });
     }
 
     public static function range($start, $end, $step = 1) {
@@ -526,6 +537,36 @@ class FuncHelper {
         return url('./form/save', compact('id'));
     }
 
+    /**
+     * 追加数据，只针对附属表的数据追加
+     * @param $data
+     * @param mixed ...$fields
+     * @throws \Exception
+     */
+    public static function extendContent(&$data, ...$fields) {
+        if (empty($data)) {
+            return;
+        }
+        $items = [];
+        foreach ($data as $item) {
+            $items[] = $item['id'];
+        }
+        $args = CMSRepository::scene()->extendQuery()->whereIn('id', $items)
+            ->select('id', ...$fields)->pluck(null, 'id');
+        $arr = $data instanceof Page ? $data->getPage() : $data;
+        foreach ($arr as &$item) {
+            foreach ($fields as $field) {
+                $item[$field] = $args[$item['id']][$field];
+            }
+        }
+        unset($item);
+        if ($data instanceof Page) {
+            $data->setPage($arr);
+        } else {
+            $data = $arr;
+        }
+    }
+
     public static function contentUrl(array $data) {
         $args = [
             'id' => $data['id'],
@@ -550,6 +591,49 @@ class FuncHelper {
             return url(substr($data, 0, strlen($data) - 6), $args, true, false);
         }
         return url($data, $args);
+    }
+
+    public static function search($name, $val = '') {
+        $data = app('request')->get();
+        unset($data['page']);
+        if (empty($val)) {
+            unset($data[$name]);
+        }
+        $data[$name] = $val;
+        return url('./category/list', $data);
+    }
+
+    public static function searchActive($name, $val = '') {
+        $request = app('request');
+        if ($request->get($name, '') === (string)$val) {
+            return ' active';
+        }
+        return '';
+    }
+
+    public static function searchHidden() {
+        $data = app('request')->get();
+        unset($data['page'], $data['keywords']);
+        $html = '';
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+            if (!is_array($value)) {
+                $html .= Html::input('hidden', [
+                    'name' => HtmlHelper::text($key),
+                    'value' => HtmlHelper::text($value),
+                ]);
+                continue;
+            }
+            foreach ($value as $val) {
+                $html .= Html::input('hidden', [
+                    'name' => HtmlHelper::text($key).'[]',
+                    'value' => HtmlHelper::text($val),
+                ]);
+            }
+        }
+        return $html;
     }
 
     public static function registerFunc(ParserCompiler $compiler, $class, $method = null) {
@@ -591,6 +675,11 @@ class FuncHelper {
             'option',
             'contentUrl',
             'url',
+            'search',
+            'searchActive',
+            'searchHidden',
+            'linkageText',
+            'extendContent',
         ]);
         static::registerBlock($compiler, 'channels', 'channel');
         static::registerBlock($compiler, 'contents', 'content');

@@ -2,6 +2,8 @@
 namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
+use Zodream\Helpers\Html;
+use Zodream\Infrastructure\Http\Request;
 
 class CategoryController extends Controller {
 
@@ -20,12 +22,15 @@ class CategoryController extends Controller {
             compact('cat', 'page', 'title'));
     }
 
-    public function listAction($id, $keywords = null) {
+    public function listAction(Request $request, $id) {
         FuncHelper::$current['channel'] = $id;
         $cat = FuncHelper::channel($id, true);
-        $page = FuncHelper::contents(compact('keywords'));
+        $queries = $request->get();
+        unset($queries['id']);
+        $page = FuncHelper::contents($queries);
         $title = $cat['title'].'列表页';
+        $keywords = isset($queries['keywords']) ? Html::text($queries['keywords']) : '';
         return $this->show($cat->list_template,
-            compact('cat', 'page',  'title'));
+            compact('cat', 'page',  'title', 'keywords'));
     }
 }

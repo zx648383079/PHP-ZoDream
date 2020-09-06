@@ -60,6 +60,7 @@ class CMSRepository {
         }
         $default = $model_list[0];
         $url = app('request')->uri();
+        $path = ltrim($url->getPath(), '/');
         foreach ($model_list as $item) {
             if ($item->is_default) {
                 $default = $item;
@@ -71,7 +72,7 @@ class CMSRepository {
                 continue;
             }
             if ($item->match_type == SiteModel::MATCH_TYPE_PATH) {
-                if (strpos($url->getPath(), $item->match_rule) === 0) {
+                if (strpos($path, ltrim($item->match_rule, '/')) === 0) {
                     return self::$cacheSite = $item;
                 }
                 continue;
@@ -136,6 +137,7 @@ class CMSRepository {
         $old = self::$cacheSite;
         self::$cacheSite = $site;
         Schema::dropTable(CategoryModel::tableName());
+        Schema::dropTable(ContentModel::tableName());
         foreach ($model_list as $item) {
             CMSRepository::scene()->setModel($item)->removeTable();
         }

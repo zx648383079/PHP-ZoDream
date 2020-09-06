@@ -18,30 +18,44 @@ var silder = $(".banner .slider").slider({
         </div>
     </div>
 </div>
-<div class="panel">
+<div class="panel tab-panel">
     <div class="panel-header">
         <i class="fa fa-boxes"></i>
         最近热播
-        <a href="" class="more">
+        <a href="{channel:movie,url}" class="more">
             更多
             <i class="fa fa-chevron-right"></i>
         </a>
         <div class="tab-header">
-            <a href="" class="active">电影</a>
-            <a href="">电视剧</a>
+            <a href="{channel:movie,url}" class="active">电影</a>
+            <a href="{channel:tv,url}">电视剧</a>
         </div>
         
     </div>
     <div class="panel-body">
-        {contents:category=movie num=10}
-        <a class="video-item" href="{url:$content}">
-            <div class="thumb">
-                <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
-                <span class="play-icon"></span>
-                <span class="tag">高清</span>
-            </div>
-            <div class="title">{$content.title}</div>
-        </a>
-        {/contents}
+        <div class="tab-item active">
+            {contents:category=movie field=id,cat_id,model_id,title,thumb,definition num=10}
+            <a class="video-item" href="{url:$content}">
+                <div class="thumb">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                    <span class="play-icon"></span>
+                    <span class="tag">{linkageText:$content.definition}</span>
+                </div>
+                <div class="title">{$content.title}</div>
+            </a>
+            {/contents}
+        </div>
+        <div class="tab-item">
+            {contents:category=tv field=id,cat_id,model_id,title,thumb,definition num=10}
+            <a class="video-item" href="{url:$content}">
+                <div class="thumb">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                    <span class="play-icon"></span>
+                    <span class="tag">{linkageText:$content.definition}</span>
+                </div>
+                <div class="title">{$content.title}</div>
+            </a>
+            {/contents}
+        </div>
     </div>
 </div>

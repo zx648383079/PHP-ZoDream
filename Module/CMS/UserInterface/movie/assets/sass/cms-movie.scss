@@ -23,6 +23,19 @@ a {
     line-height: 50px;
     margin: 0 -10px;
     position: relative;
+    .nav-toggle {
+        display: none;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        font-size: inherit;
+        text-rendering: auto;
+        font-size: 2rem;
+        font-style: normal;
+        margin-left: 10px;
+        &::before {
+            content: "\f0c9";
+        }
+    }
     li {
         display: inline-block;
         a {
@@ -62,6 +75,46 @@ a {
         border-style: solid;
         border-color: transparent transparent #ccc transparent;
     }
+    .search-bar {
+        float: right;
+        .search-input {
+            display: none;
+            position: absolute;
+            background: #333;
+            width: 250px;
+            right: 0;
+            border: solid 1px #000;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            width: 100%;
+            input {
+                position: relative;
+                flex: 1 1 auto;
+                width: 1%;
+                margin-bottom: 0;
+                height: 40px;
+                border: none;
+                outline: none;
+            }
+            button {
+                line-height: 36px;
+                background-color: #000;
+                color: #fff;
+                width: 60px;
+                border: none;
+                outline: none;
+                cursor: pointer;
+            }
+        }
+        &.active {
+            .search-input {
+                display: block;
+            }
+        }
+    }
 }
 
 .panel {
@@ -79,6 +132,17 @@ a {
             float: right;
             color: #999;
             font-size: 14px;
+        }
+    }
+}
+
+.tab-panel {
+    .panel-body {
+        .tab-item {
+            display: none;
+            &.active {
+                display: block;
+            }
         }
     }
 }
@@ -348,6 +412,60 @@ footer {
         float: none;
         .btn {
             padding: 0 10px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-bar {
+        >ul {
+            display: none;
+        }
+        .nav-toggle {
+            display: inline-block;
+        }
+        li {
+            a {
+                display: block;
+            }
+        }
+        &.open {
+            float: none;
+            .nav-toggle {
+                position: absolute;
+                right: 10px;
+                top: 0;
+                &::before {
+                    content: "\f00d";
+                }
+            }
+            >ul {
+                display: block;
+                >li {
+                    display: block;
+                    border-bottom: 1px #ccc dashed;
+                    >a {
+                        margin: 0;
+                    }
+                    .sub-menu {
+                        box-shadow: inset 0px 5px 5px -5px #000,
+                                    inset 0px -5px 5px -5px #000;
+                        display: block;
+                        position: static;
+                    }
+                }
+            }
+            .search-bar {
+                float: initial;
+                .search-icon {
+                    display: none;
+                }
+                .search-input {
+                    display: block;
+                    position: static;
+                    width: 100%;
+                }
+            }
         }
     }
 }

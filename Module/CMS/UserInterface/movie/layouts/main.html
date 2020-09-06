@@ -11,9 +11,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width, initial-scale=1">
-        <title>{this.title}-zodream</title>
-        <meta name="Keywords" content="{this.keywords}" />
-        <meta name="Description" content="{this.description}" />
+        <title>{this.title}-{option:title}</title>
+        <meta name="Keywords" content="{option:keywords}" />
+        <meta name="Description" content="{option:description}" />
         <meta name="author" content="zodream" />
         <link rel="icon" href="/assets/images/favicon.png">
        {header:}
@@ -49,6 +49,20 @@
                             </li>
                             
                             {/channels}
+                            {if:isset($cat)}
+                            <li class="search-bar">
+                                <a class="search-icon" href="javascript:;">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                                <div class="search-input">
+                                    <form action="{url:./category/list}" method="get">
+                                        <input type="text" name="keywords" placeholder="请输入搜索关键字" value="{if:isset($keywords),$keywords}">
+                                        <button>搜索</button>
+                                        {searchHidden:}
+                                    </form>
+                                </div>
+                            </li>
+                            {/if}
                         </ul>
                     </div>
             </header>

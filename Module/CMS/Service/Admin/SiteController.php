@@ -51,7 +51,7 @@ class SiteController extends Controller {
 
     public function defaultAction($id) {
         $model = SiteModel::find($id);
-        $model->is_default = true;
+        $model->is_default = 1;
         $model->save();
         SiteModel::where('id', '<>', $id)->update([
             'is_default' => 0
