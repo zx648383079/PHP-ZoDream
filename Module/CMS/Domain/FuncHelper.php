@@ -418,6 +418,7 @@ class FuncHelper {
                     function (Builder $query, $pre, $i) use ($category, $user, $model) {
                         if (!empty($pre) && isset($pre['id'])) {
                             $query->where('id', $pre['id']);
+                            return;
                         }
                         if ($i > 0 && empty($pre)) {
                             return false;

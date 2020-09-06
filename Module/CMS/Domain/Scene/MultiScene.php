@@ -82,7 +82,13 @@ class MultiScene extends BaseScene {
     }
 
     public function initTable() {
-        Schema::createTable($this->getMainTable(), function (Table $table) {
+        $extend_list = array_filter($this->fieldList(), function ($item) {
+            return $item->is_main < 1;
+        });
+        $field_list = array_filter($this->fieldList(), function ($item) {
+            return $item->is_main > 0 && $item->is_system < 1;
+        });
+        Schema::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
             $table->set('cat_id')->int()->notNull();
@@ -94,11 +100,16 @@ class MultiScene extends BaseScene {
             $table->set('description')->varchar();
             $table->set('status')->bool()->defaultVal(0);
             $table->set('view_count')->int()->defaultVal(0);
+            foreach ($field_list as $item) {
+                static::converterTableField($table->set($item->field), $item);
+            }
             $table->timestamps();
         });
-        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($content) {
+        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($extend_list) {
             $table->set('id')->int(10)->pk()->ai();
-            static::converterTableField($table->set('content'), $content);
+            foreach ($extend_list as $item) {
+                static::converterTableField($table->set($item->field), $item);
+            }
             $table->setComment($this->model->name);
         });
     }

@@ -74,8 +74,9 @@ class SingleScene extends BaseScene {
     }
 
     public function initTable() {
-        $field_list = ModelFieldModel::where('model_id', $this->model->id)->where('is_main', 0)
-            ->get();
+        $field_list = array_filter($this->fieldList(), function ($item) {
+            return $item->is_main < 1;
+        });
         return Schema::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
             $table->set('id')->int(10)->pk(true);
             foreach ($field_list as $item) {
