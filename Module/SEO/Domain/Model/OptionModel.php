@@ -54,18 +54,6 @@ class OptionModel extends Model {
         return $this->hasMany(static::class, 'parent_id', 'id');
     }
 
-    public function getFormatValueAttribute(){
-        $value = $this->getAttributeSource('value');
-        if ($this->type === 'switch') {
-            return (is_numeric($value) && $value == 1) ||
-                (is_bool($value) && $value) || $value === 'true';
-        }
-        if ($this->type === 'json') {
-            return empty($value) ? [] : Json::decode($value);
-        }
-        return $value;
-    }
-
     /**
      * FIND ALL TO ASSOC ARRAY
      * @param $code

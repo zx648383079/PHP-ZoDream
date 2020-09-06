@@ -31,7 +31,7 @@ class MultiScene extends BaseScene {
      * 初始化建立表
      * @return mixed
      */
-    public function initTable() {
+    public function initModel() {
         ModelFieldModel::query()->insert([
             [
                 'name' => '标题',
@@ -70,7 +70,7 @@ class MultiScene extends BaseScene {
                 'type' => 'image'
             ],
         ]);
-        $content = ModelFieldModel::create([
+        ModelFieldModel::create([
             'name' => '内容',
             'field' => 'content',
             'model_id' => $this->model->id,
@@ -78,6 +78,10 @@ class MultiScene extends BaseScene {
             'is_system' => 1,
             'type' => 'editor',
         ]);
+        return $this->initTable();
+    }
+
+    public function initTable() {
         Schema::createTable($this->getMainTable(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('title')->varchar(100)->notNull();
@@ -215,7 +219,7 @@ class MultiScene extends BaseScene {
         if (empty($fields)) {
             $fields = '*';
         }
-        return $this->addWhere($this->query(), $params)
+        return $this->addQuery($this->query(), $params)
             ->when(!empty($keywords), function ($query) use ($keywords) {
             $this->addSearchQuery($query, $keywords);
         })->select($fields)

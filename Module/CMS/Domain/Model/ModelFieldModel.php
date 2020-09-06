@@ -1,8 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Model;
-use Module\CMS\Domain\Fields\BaseField;
+
 use Zodream\Helpers\Json;
-use Zodream\Helpers\Str;
 
 /**
  *

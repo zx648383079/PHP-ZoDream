@@ -88,6 +88,11 @@ $this->registerCssFile([
         'expand' => url()->hasUri('form')
     ],
     [
+        '站点管理',
+        './@admin/site',
+        'fa fa-building',
+    ],
+    [
         '主题管理',
         false,
         'fa fa-drum',

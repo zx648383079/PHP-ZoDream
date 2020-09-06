@@ -92,3 +92,9 @@ function bindEditModel() {
         type1.trigger('click');
     }
 }
+
+function bindEditOption() {
+    $('.option-box .input-group .fa-times').on('click', function() {
+        $(this).closest('.input-group').remove();
+    });
+}

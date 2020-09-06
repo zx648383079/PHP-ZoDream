@@ -23,7 +23,7 @@ class SingleScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function initTable() {
+    public function initModel() {
         ModelFieldModel::query()->insert([
             [
                 'name' => '标题',
@@ -62,7 +62,7 @@ class SingleScene extends BaseScene {
                 'type' => 'image'
             ],
         ]);
-        $content = ModelFieldModel::create([
+        ModelFieldModel::create([
             'name' => '内容',
             'field' => 'content',
             'model_id' => $this->model->id,
@@ -70,9 +70,17 @@ class SingleScene extends BaseScene {
             'is_system' => 1,
             'type' => 'editor',
         ]);
-        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($content) {
-            $table->set('id')->int(10)->pk()->ai();
-            static::converterTableField($table->set('content'), $content);
+        return $this->initTable();
+    }
+
+    public function initTable() {
+        $field_list = ModelFieldModel::where('model_id', $this->model->id)->where('is_main', 0)
+            ->get();
+        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
+            $table->set('id')->int(10)->pk(true);
+            foreach ($field_list as $item) {
+                static::converterTableField($table->set($item->field), $item);
+            }
             $table->setComment($this->model->name);
         });
     }

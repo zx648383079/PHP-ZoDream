@@ -1,6 +1,8 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
+use Module\CMS\Domain\Repositories\CMSRepository;
+
 /**
  * Class ContentModel
  * @package Domain\Model\CMS
@@ -22,7 +24,7 @@ class ContentModel extends BaseModel {
     protected $extend_data = null;
 
     public static function tableName() {
-        return 'cms_content_'.static::site();
+        return 'cms_content_'.CMSRepository::siteId();
     }
 
     protected function rules() {
@@ -58,48 +60,5 @@ class ContentModel extends BaseModel {
 
     public function category() {
         return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
-    }
-
-    public function save() {
-        $data = array();
-        foreach ($this->category
-                     ->model->getFields() as $field) {
-            $value = $this->get($field->field);
-            if ($field->validateValue($value)) {
-                $data[$field->field] = $value;
-                continue;
-            }
-            $this->setError($field->field, $field->error_message);
-        }
-        $isNew = $this->isNewRecord;
-        $result = parent::save();
-        if (empty($result)) {
-            return $result;
-        }
-        $record = $this->category
-            ->model
-            ->getContentExtendQuery();
-        if ($isNew) {
-            return $record->insert($data);
-        }
-        return $record->where(['id' => $this->id])
-            ->update($data);
-    }
-
-    public function getExtendValue($key, $default = null) {
-        if (is_array($this->extend_data)) {
-            return isset($this->extend_data[$key]) ? $this->extend_data[$key] : $default;
-        }
-        if (!$this->id) {
-            $this->extend_data = [];
-            return $default;
-        }
-        $this->extend_data = $this->category->model->getContentExtendQuery()
-            ->where('id', $this->id)->one();
-        if (empty($this->extend_data)) {
-            $this->extend_data = [];
-            return $default;
-        }
-        return isset($this->extend_data[$key]) ? $this->extend_data[$key] : $default;
     }
 }

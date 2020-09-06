@@ -1,14 +1,14 @@
 <?php
 namespace Module\CMS\Service\Admin;
 
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\ThemeManager;
-use Module\CMS\Module;
 use Zodream\Helpers\Json;
 use Zodream\Image\ImageStatic;
 
 class ThemeController extends Controller {
     public function indexAction() {
-        $current = Module::theme();
+        $current = CMSRepository::theme();
         $themes = (new ThemeManager)->getAllThemes();
         foreach ($themes as $key => $item) {
             if ($item['name'] === $current) {
@@ -25,7 +25,6 @@ class ThemeController extends Controller {
     }
 
     public function applyAction($theme) {
-        ThemeManager::clear();
         (new ThemeManager())->apply($theme);
         return $this->jsonSuccess([
             'url' => $this->getUrl('theme')

@@ -5,6 +5,7 @@ use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Column;
@@ -22,9 +23,9 @@ abstract class BaseScene implements SceneInterface {
      */
     protected $model;
 
-    public function setModel(ModelModel $model, $site = 1) {
+    public function setModel(ModelModel $model, $site = 0) {
         $this->model = $model;
-        $this->site = $site;
+        $this->site = $site > 0 ? $site : CMSRepository::siteId();
         return $this;
     }
 

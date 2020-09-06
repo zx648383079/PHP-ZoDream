@@ -378,6 +378,12 @@ Editor.plugin('fa-chart-bar', '插入投票', function(tag) {
     }
     this.insert('<vote>\n\t说明\n\t<v>选项1</v>\n\t<v>选项2</v>\n</vote>', 7, true);
 });
+Editor.plugin('fa-clone', '插入分页', function(tag) {
+    if (tag) {
+        return;
+    }
+    this.insert('<page/>', 7, true);
+});
 Editor.plugin('fa-trash', '清空', function() {
     this.clear(true);
 });

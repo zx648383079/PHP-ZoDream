@@ -4,6 +4,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 use Zodream\Helpers\Json;
 
@@ -53,6 +54,7 @@ class CategoryController extends Controller {
         if (!$model->save()) {
             return $this->jsonFailure($model->getFirstError());
         }
+        CMSRepository::generateCategoryTable($model);
         return $this->jsonSuccess([
             'url' => $this->getUrl('category')
         ]);
@@ -68,7 +70,7 @@ class CategoryController extends Controller {
             $model_list = ModelModel::whereIn('id', $modelIds)
                 ->get();
             foreach ($model_list as $model) {
-                $scene = Module::scene()->setModel($model);
+                $scene = CMSRepository::scene()->setModel($model);
                 $ids = $scene->query()->whereIn('cat_id', $items)->pluck('id');
                 $scene->remove($ids);
             }

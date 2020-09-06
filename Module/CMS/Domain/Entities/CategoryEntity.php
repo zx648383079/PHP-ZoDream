@@ -2,6 +2,7 @@
 namespace Module\CMS\Domain\Entities;
 
 use Domain\Entities\Entity;
+use Module\CMS\Domain\Repositories\CMSRepository;
 
 /**
  * Class CategoryEntity
@@ -33,7 +34,7 @@ class CategoryEntity extends Entity {
     const TYPE_LINK = 2; //外链
 
     public static function tableName() {
-        return 'cms_category';
+        return 'cms_category_'.CMSRepository::siteId();
     }
 
     protected function rules() {

@@ -2,6 +2,7 @@
 namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 
 class ContentController extends Controller {
@@ -18,7 +19,7 @@ class ContentController extends Controller {
             return $this->redirect('./');
         }
         FuncHelper::$current['model'] = $model->id;
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $data = $scene->find($id);
         $parent = null;
         if (empty($data)) {
@@ -27,10 +28,10 @@ class ContentController extends Controller {
         $data['view_count'] ++;
         $scene->update($id, ['view_count' => $data['view_count']]);
         if ($data['parent_id'] > 0 && $cat->model) {
-            $parent = Module::scene()
+            $parent = CMSRepository::scene()
                 ->setModel($cat->model)->find($data['parent_id']);
         }
-        Module::scene()->setModel($model);
+        CMSRepository::scene()->setModel($model);
         $title = $data['title'];
         if (!empty($parent)) {
             $title = sprintf('%s %s', $parent['title'], $data['title']);

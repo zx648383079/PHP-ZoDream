@@ -4,6 +4,7 @@ namespace Module\CMS\Service\Admin;
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\ModuleController;
 
 
@@ -25,6 +26,7 @@ class Controller extends ModuleController {
             return $item['type'] < 1;
         });
         $form_list = ModelModel::where('type', 1)->get('id,name');
+        CMSRepository::resetSite();
         $this->send(compact('cat_menu', 'form_list'));
     }
 

@@ -2,6 +2,7 @@
 namespace Module\SEO\Domain;
 
 use Module\SEO\Domain\Model\OptionModel;
+use Zodream\Helpers\Json;
 use Zodream\Infrastructure\Traits\SingletonPattern;
 
 class Option {
@@ -33,7 +34,7 @@ class Option {
         /** @var OptionModel[]  $items */
         $items = OptionModel::query()->orderBy('position', 'desc')->get('code', 'value', 'type');
         foreach ($items as $item) {
-            $data[$item->code] = $item->getFormatValueAttribute();
+            $data[$item->code] = static::formatOption($item->getAttributeSource('value'), $item->type);
         }
         return $data;
     }
@@ -70,6 +71,17 @@ class Option {
             $default = $arguments[0];
         }
         return self::value($name, $default);
+    }
+
+    public static function formatOption(string $value, string $type) {
+        if ($type === 'switch') {
+            return (is_numeric($value) && $value == 1) ||
+                (is_bool($value) && $value) || $value === 'true';
+        }
+        if ($type === 'json') {
+            return empty($value) ? [] : Json::decode($value);
+        }
+        return $value;
     }
 
 }

@@ -3,6 +3,7 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\SingleScene;
 use Module\CMS\Module;
 use Zodream\Infrastructure\Http\Response;
@@ -45,7 +46,7 @@ class ModelController extends Controller {
             return $this->jsonFailure($model->getFirstError());
         }
         if ($id < 1) {
-            Module::scene()->setModel($model)->initTable();
+            CMSRepository::scene()->setModel($model)->initModel();
         }
         return $this->jsonSuccess([
             'url' => $this->getUrl('model')
@@ -59,7 +60,7 @@ class ModelController extends Controller {
         }
         $model->delete();
         ModelFieldModel::where('model_id', $id)->delete();
-        Module::scene()->setModel($model)->removeTable();
+        CMSRepository::removeModel($model);
         return $this->jsonSuccess([
             'url' => $this->getUrl('model')
         ]);
@@ -106,13 +107,13 @@ class ModelController extends Controller {
         $old = $field->getOldAttribute('field');
         if ($field->is_main > 0
             && $field->is_system < 1
-            && Module::scene() instanceof SingleScene) {
+            && CMSRepository::scene() instanceof SingleScene) {
             $field->is_main = 0;
         }
         if (!$field->save()) {
             return $this->jsonFailure($field->getFirstError());
         }
-        $scene = Module::scene()->setModel(ModelModel::find($field->model_id));
+        $scene = CMSRepository::scene()->setModel(ModelModel::find($field->model_id));
         if ($id > 0) {
             $field->setOldAttribute([
                 'field' => $old
@@ -132,7 +133,7 @@ class ModelController extends Controller {
             return $this->jsonFailure('系统自带字段禁止删除');
         }
         $field->delete();
-        Module::scene()->setModel(ModelModel::find($field->model_id))
+        CMSRepository::scene()->setModel(ModelModel::find($field->model_id))
             ->removeField($field);
         return $this->jsonSuccess([
             'url' => $this->getUrl('model/field', ['id' => $field->model_id])

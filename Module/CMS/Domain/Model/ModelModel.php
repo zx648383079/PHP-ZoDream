@@ -1,9 +1,6 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
-use Zodream\Database\Query\Query;
-use Zodream\Database\Query\Record;
-use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Json;
 
 /**

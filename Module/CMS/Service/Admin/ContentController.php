@@ -5,6 +5,7 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 use Zodream\Infrastructure\Http\Response;
 
@@ -16,7 +17,7 @@ class ContentController extends Controller {
             $model_id = $cat->model_id;
         }
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $model_list = $scene->search($keywords,
             compact('cat_id', 'parent_id'), 'id desc');
         return $this->show(compact('model_list', 'cat', 'keywords', 'parent_id', 'model'));
@@ -39,7 +40,7 @@ class ContentController extends Controller {
     public function editAction($id, $cat_id, $model_id, $parent_id = 0) {
         $cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [
             'parent_id' => $parent_id
         ];
@@ -52,7 +53,7 @@ class ContentController extends Controller {
     public function saveAction($id, $cat_id, $model_id) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $data = app('request')->get();
         if ($id > 0) {
             $scene->update($id, $data);
@@ -77,7 +78,7 @@ class ContentController extends Controller {
     public function deleteAction($id, $cat_id, $model_id) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()
+        $scene = CMSRepository::scene()
             ->setModel($model);
         $data = $scene->find($id);
         if (!empty($data)) {

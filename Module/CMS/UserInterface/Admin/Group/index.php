@@ -9,26 +9,26 @@ $this->title = '分组列表';
 <hr/>
 
 <div>
-    <div class="col-xs-12">
-        <table class="table table-hover">
-            <thead>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>名称</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach($model_list as $item): ?>
             <tr>
-                <td>名称</td>
-                <td>操作</td>
+                <td><?=$item->name?></td>
+                <td>
+                    <a class="btn btn-default" href="<?=$this->url('./@admin/group/edit', ['id' => $item->id])?>">编辑</a>
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/group/delete', ['id' => $item->id])?>">删除</a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <?php foreach($model_list as $item): ?>
-                <tr>
-                    <td><?=$item->name?></td>
-                    <td>
-                        <a class="btn btn-default" href="<?=$this->url('./@admin/group/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/group/delete', ['id' => $item->id])?>">删除</a>
-                    </td>
-                </tr>
-            <?php endforeach?>
-            </tbody>
-        </table>
-    </div>
+        <?php endforeach?>
+        </tbody>
+    </table>
 </div>
-
+<div align="center">
+    <?=$model_list->getLink()?>
+</div>

@@ -3,12 +3,13 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 
 class FormController extends Controller {
     public function indexAction($id, $keywords = null) {
         $model = ModelModel::find($id);
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $model_list = $scene->search($keywords, [
             'model_id' => $id
         ], 'id desc');
@@ -28,7 +29,7 @@ class FormController extends Controller {
      */
     public function editAction($id, $model_id) {
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [];
         $tab_list = ModelFieldModel::tabGroups($model_id);
         return $this->show(compact('id', 'model_id', 'model', 'scene', 'data', 'tab_list'));
@@ -36,7 +37,7 @@ class FormController extends Controller {
 
     public function saveAction($id, $model_id) {
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $data = app('request')->get();
         if ($id > 0) {
             $scene->update($id, $data);
@@ -53,7 +54,7 @@ class FormController extends Controller {
 
     public function deleteAction($id, $model_id) {
         $model = ModelModel::find($model_id);
-        $scene = Module::scene()->setModel($model)->remove($id);
+        CMSRepository::scene()->setModel($model)->remove($id);
         return $this->jsonSuccess([
             'url' => $this->getUrl('form', ['id' => $model_id])
         ]);

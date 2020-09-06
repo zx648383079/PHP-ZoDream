@@ -1,10 +1,9 @@
 <?php
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
-use Module\CMS\Module;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
 
@@ -27,7 +26,7 @@ class Model extends BaseField {
     public function toInput($value, ModelFieldModel $field) {
         $option = $field->setting('option');
         $model = ModelModel::find($option['model']);
-        $items = Module::scene()->setModel($model)
+        $items = CMSRepository::scene()->setModel($model)
             ->query()->where('model_id', $model->id)->pluck('title', 'id');
         return Theme::select($field->field, $items, $value, $field->name, $field->is_required > 0);
     }
@@ -35,6 +34,6 @@ class Model extends BaseField {
     public function toText($value, ModelFieldModel $field) {
         $option = $field->setting('option');
         $model = ModelModel::find($option['model']);
-        return Module::scene()->setModel($model)->query()->where('id', $value)->value('title');
+        return CMSRepository::scene()->setModel($model)->query()->where('id', $value)->value('title');
     }
 }

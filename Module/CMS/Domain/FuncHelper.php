@@ -6,6 +6,7 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Query\Builder;
@@ -45,7 +46,17 @@ class FuncHelper {
         if (empty($code)) {
             return null;
         }
-        return Option::value($code);
+        if (in_array($code, ['title', 'keywords', 'description', 'logo'])) {
+            return CMSRepository::site()->$code;
+        }
+        $options = static::getOrSet(__FUNCTION__, 'all', function () {
+            $items = [];
+            foreach (CMSRepository::site()->options as $item) {
+                $items[$item['code']] = Option::formatOption($item['value'], $item['type']);
+            }
+            return $items;
+        });
+        return isset($options[$code]) ? $options[$code] : null;
     }
 
     public static function channels(array $params = null) {
@@ -147,7 +158,7 @@ class FuncHelper {
             md5(Json::encode($data)),
             function () use ($data) {
             if (isset($data[1]['model_id'])) {
-                $scene = Module::scene()->setModel(self::model($data[1]['model_id']));
+                $scene = CMSRepository::scene()->setModel(self::model($data[1]['model_id']));
                 return $scene->search(...$data);
             }
             $category = $data[1]['cat_id'];
@@ -158,7 +169,7 @@ class FuncHelper {
             }
             $children[] = $category;
             $data[1]['cat_id'] = $children;
-            $scene = Module::scene()->setModel($cat->model);
+            $scene = CMSRepository::scene()->setModel($cat->model);
             return $scene->search(...$data);
         });
     }
@@ -231,7 +242,7 @@ class FuncHelper {
     public static function previous($name = null) {
         $data = static::getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
-            $scene = Module::scene()->setModel($cat->model);
+            $scene = CMSRepository::scene()->setModel($cat->model);
             return $scene->query()->where('id', '<', static::$current['content'])
                 ->orderBy('id', 'desc')->first();
         });
@@ -241,7 +252,7 @@ class FuncHelper {
     public static function next($name = null) {
         $data = static::getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
-            $scene = Module::scene()->setModel($cat->model);
+            $scene = CMSRepository::scene()->setModel($cat->model);
             return $scene->query()->where('id', '>', static::$current['content'])
                 ->orderBy('id', 'asc')->first();
         });
@@ -379,7 +390,7 @@ class FuncHelper {
         $data = static::getOrSet(__FUNCTION__, sprintf('%s:%s', $category, $id),
             function () use ($id, $category) {
                 $cat = static::channel($category, true);
-                $scene = Module::scene()->setModel($cat->model);
+                $scene = CMSRepository::scene()->setModel($cat->model);
             return $scene->find($id);
         });
         return self::getContentValue($name, $data);
@@ -401,7 +412,7 @@ class FuncHelper {
         }
         $data = static::getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category, $model->id, $user),
             function () use ($model, $category, $user) {
-                $scene = Module::scene()->setModel($model);
+                $scene = CMSRepository::scene()->setModel($model);
                 return $scene->find(
                     function (Builder $query, $pre, $i) use ($category, $user, $model) {
                         if (!empty($pre) && isset($pre['id'])) {

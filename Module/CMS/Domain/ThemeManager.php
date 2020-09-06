@@ -7,6 +7,7 @@ use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Module;
 use Module\Forum\Domain\Model\ForumModel;
@@ -166,7 +167,7 @@ class ThemeManager {
         $data = [];
         $model_list = ModelModel::query()->all();
         foreach ($model_list as $model) {
-            $scene = Module::scene()->setModel($model);
+            $scene = CMSRepository::scene()->setModel($model);
             $cats = CategoryModel::where('model_id', $model->id)->pluck('id');
             if (empty($cats)) {
                 continue;
@@ -311,7 +312,7 @@ class ThemeManager {
             throw new Exception('数据错误');
         }
         $this->setCache([$model->table => $model->id, $model->id => $model], 'model');
-        Module::scene()->setModel($model)->initTable();
+        CMSRepository::scene()->setModel($model)->initModel();
         foreach ($fields as $field) {
             $field['model_id'] = $model->id;
             $this->runActionField($field);
@@ -345,7 +346,7 @@ class ThemeManager {
         if (!$model) {
             throw new Exception('数据错误');
         }
-        $scene = Module::scene()->setModel($this->getCacheId($model->model_id, 'model'));
+        $scene = CMSRepository::scene()->setModel($this->getCacheId($model->model_id, 'model'));
         $scene->addField($model);
     }
 
@@ -398,9 +399,8 @@ class ThemeManager {
         }
         unset($data['type'], $data['action']);
         $cat = $this->getCacheId($data['cat_id'], 'channel');
-        $field_list = ModelFieldModel::where('model_id', $cat->model_id)->all();
-        $scene = Module::scene()->setModel($this->getCacheId($cat->model_id, 'model'));
-        $scene->insert($data, $field_list);
+        $scene = CMSRepository::scene()->setModel($this->getCacheId($cat->model_id, 'model'));
+        $scene->insert($data);
     }
 
     protected function insertGroup($item) {
@@ -417,21 +417,18 @@ class ThemeManager {
     }
 
     protected function runActionOption($data) {
+        $newOptions = [];
         foreach ($data['data'] as $item) {
-            OptionModel::insertOrUpdate($item['code'], $item['value'], function () use ($item) {
-                if (isset($item['items'])) {
-                    $item['default_value'] = implode("\n", $item['items']);
-                }
-                if (isset($item['default'])) {
-                    $item['default_value'] = $item['default'];
-                }
-                if (isset($item['parent_id']) && !is_numeric($item['parent_id'])) {
-                    $item['parent_id'] = $this->getOptionParent($item['parent_id']);
-                }
-                unset($item['default'], $item['items'], $item['id']);
-                return $item;
-            });
+            if (isset($item['items'])) {
+                $item['default_value'] = implode("\n", $item['items']);
+            }
+            if (isset($item['default'])) {
+                $item['default_value'] = $item['default'];
+            }
+            unset($item['default'], $item['items'], $item['id']);
+            $options[] = $item;
         }
+        CMSRepository::site()->saveOption($newOptions);
     }
 
     protected function getOptionParent($code) {
@@ -472,7 +469,7 @@ class ThemeManager {
         ];
         $model_list = ModelModel::query()->all();
         foreach ($model_list as $model) {
-            $scene = Module::scene()->setModel($model);
+            $scene = CMSRepository::scene()->setModel($model);
             Schema::dropTable($scene->getExtendTable());
             if ($scene instanceof MultiScene) {
                 Schema::dropTable($scene->getMainTable());

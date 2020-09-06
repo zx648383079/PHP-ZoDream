@@ -26,6 +26,12 @@ interface SceneInterface {
     public function initTable();
 
     /**
+     * 初始化表数据并建立表
+     * @return mixed
+     */
+    public function initModel();
+
+    /**
      * 删除表
      * @return mixed
      */

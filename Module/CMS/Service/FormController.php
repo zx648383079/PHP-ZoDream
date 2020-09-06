@@ -4,6 +4,7 @@ namespace Module\CMS\Service;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 
 class FormController extends Controller {
@@ -11,7 +12,7 @@ class FormController extends Controller {
     public function indexAction() {
         $model = $this->getModel();
         $field_list = ModelFieldModel::where('model_id', $model->id)->all();
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         return $this->show(compact('model', 'field_list', 'scene'));
     }
 
@@ -20,7 +21,7 @@ class FormController extends Controller {
         if (empty($model) || $model->type < 1) {
             return $this->jsonFailure('表单数据错误');
         }
-        $scene = Module::scene()->setModel($model);
+        $scene = CMSRepository::scene()->setModel($model);
         $id = 0;
         if ($model->setting('is_only')) {
             if (auth()->guest()) {
