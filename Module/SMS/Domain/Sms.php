@@ -1,4 +1,10 @@
 <?php
+/*
+ * @Author: zodream
+ * @Date: 2020-06-13 13:48:44
+ * @LastEditors: zodream
+ * @LastEditTime: 2020-09-08 22:39:56
+ */
 namespace Module\SMS\Domain;
 
 
@@ -27,7 +33,7 @@ class Sms {
             'status' => 0,
             'created_at' => time()
         ]);
-        // TODO
+        // TODO 调用短信接口
         $log->status = 1;
         $log->save();
     }

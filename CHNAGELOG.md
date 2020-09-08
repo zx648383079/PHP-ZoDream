@@ -1,6 +1,18 @@
+<!--
+ * @Author: zodream
+ * @Date: 2020-07-25 16:19:53
+ * @LastEditors: zodream
+ * @LastEditTime: 2020-09-08 22:37:32
+-->
 # Change Log
 
 ## 2020
+
+### 09-08
+
+1. CMS 多站点
+2. 博客版权显示
+3. 论坛购买
 
 ### 08-12
 
