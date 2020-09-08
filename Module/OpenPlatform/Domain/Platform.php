@@ -63,7 +63,7 @@ class Platform {
     protected function getSignContent(array $data) {
         $data['appid'] = $this->app['appid'];
         $data['secret'] = $this->app['secret'];
-        if (!strpos($this->app['sign_key'], '+') > 0) {
+        if (strpos($this->app['sign_key'], '+') === false) {
             ksort($data);
             return implode('', array_keys($data)).$this->app['sign_key'];
         }
@@ -165,7 +165,7 @@ class Platform {
             return preg_match('#'. $rule.'#i', $path, $match);
         }
         if ($first !== '~') {
-            return substr($rule, 1) === $path;
+            return $rule === $path;
         }
         return preg_match('#'.substr($rule, 1).'#i', $path, $match);
     }
