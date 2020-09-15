@@ -23,6 +23,13 @@ table {
     }
 }
 
+.money-td {
+    text-align: right;
+    button {
+        float: left;
+    }
+}
+
 .on-edit {
     display: none;
 }

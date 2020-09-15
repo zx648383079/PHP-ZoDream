@@ -8,6 +8,7 @@ use Zodream\Database\Model\Query;
  * Class LogModel
  * @package Module\Finance\Domain\Model
  * @property integer $id
+ * @property integer $parent_id
  * @property integer $type
  * @property float $money
  * @property float $frozen_money
@@ -16,11 +17,12 @@ use Zodream\Database\Model\Query;
  * @property integer $project_id
  * @property integer $budget_id
  * @property string $remark
+ * @property string $happened_at
  * @property string $out_trade_no
  * @property integer $user_id
+ * @property string $trading_object
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $happened_at
  */
 class LogPageModel extends LogModel {
 

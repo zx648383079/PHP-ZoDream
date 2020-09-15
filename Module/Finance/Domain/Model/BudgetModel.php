@@ -2,6 +2,7 @@
 namespace Module\Finance\Domain\Model;
 
 use Module\Finance\Domain\Entities\BudgetEntity;
+use Zodream\Helpers\Time;
 
 /**
  * 预算
@@ -34,11 +35,10 @@ class BudgetModel extends BudgetEntity {
             $start_at = date('Y-m-d 00:00:00', $time);
             $end_at = date('Y-m-d 23:59:59', strtotime('Sunday'));
         } elseif ($this->cycle == self::CYCLE_MONTH) {
-            $start_at = date('Y-m-01 00:00:00');
-            $end_at = date('Y-m-31 00:00:00');
+            list($start_at, $end_at) = Time::month(time(), 'Y-m-d H:i:s');
         } else {
             $start_at = date('Y-01-01 00:00:00');
-            $end_at = date('Y-12-31 00:00:00');
+            $end_at = date('Y-m-t 00:00:00', strtotime(date('Y-12-01 00:00:00')));
         }
         if ($this->updated_at >= strtotime($start_at) && $this->updated_at <= strtotime($end_at)) {
             return $this->spent;

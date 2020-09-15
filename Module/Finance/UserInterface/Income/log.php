@@ -23,7 +23,7 @@ $this->registerJs($js);
         </div>
         <div class="input-group">
             <select class="form-control" name="type">
-                <?php foreach([0 => '全部', 2 => '收入', 1 => '支出'] as $key => $item):?>
+                <?php foreach([0 => '全部', 2 => '收入', 1 => '支出', 3 => '借出', 4 => '借入'] as $key => $item):?>
                 <?php if($type == $key):?>
                     <option value="<?=$key?>" selected><?=$item?></option>
                 <?php else:?>
@@ -74,17 +74,26 @@ $this->registerJs($js);
                         <?=$item->account->name?>
                     <?php endif;?>
                 </td>
-                <td>
+                <td class="money-td">
                     <?php if ($item->type != 1):?>
-                    <button type='button' class='btn btn-danger btn-xs'>支出</button>
+                    <button type='button' class='btn btn-danger btn-xs'>
+                    <?= ['支出', '收入', '借出', '借入'][$item->type] ?>
+                    </button>
                     <?php endif;?>
-                    <?=$item->money?>
+                    <span><?=$item->money?></span>
                 </td>
                 <td>
                     <?=$item->remark?></td>
                 <td>
                     <div class="no-edit">
                         <a class="btn btn-default" href="<?=$this->url('./income/add_log', ['clone_id' => $item->id])?>">克隆</a>
+                        <?php if($item->type == 2):?>
+                            <a class="btn btn-default" href="<?=$this->url('./income/add_log', ['parent_id' => $item->id])?>">还款</a>
+                            <a class="btn btn-default" href="<?=$this->url('./income/add_log', ['parent_id' => $item->id])?>">坏账</a>
+                        <?php endif;?>
+                        <?php if($item->type == 3):?>
+                            <a class="btn btn-default" href="<?=$this->url('./income/add_log', ['parent_id' => $item->id])?>">还款</a>
+                        <?php endif;?>
                     </div>
                     <div class="on-edit">
                         <a class="btn btn-default" href="<?=$this->url('./income/edit_log', ['id' => $item->id])?>">编辑</a>

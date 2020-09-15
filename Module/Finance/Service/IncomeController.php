@@ -43,6 +43,7 @@ class IncomeController extends Controller {
     }
 
     public function addLogAction(Request $request) {
+        // TODO 借出还款、坏账
         return $this->editLogAction(0, $request);
     }
 
@@ -54,7 +55,9 @@ class IncomeController extends Controller {
             }
             if ($request->has('clone_id')) {
                 $model = LogRepository::get(intval($request->get('clone_id')));
-                $model->id = null;
+                $model->id = 0;
+            } elseif ($request->has('parent_id')) {
+                $model->parent_id = $request->get('parent_id');
             }
         } catch (\Exception $ex) {
             return $this->redirectWithMessage('./income/log', $ex->getMessage());

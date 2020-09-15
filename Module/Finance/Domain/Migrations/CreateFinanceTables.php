@@ -63,7 +63,9 @@ class CreateFinanceTables extends Migration {
         Schema::createTable(LogModel::tableName(), function(Table $table) {
             $table->setComment('资金变动记录');
             $table->set('id')->pk()->ai();
-            $table->set('type')->bool()->defaultVal('0')->comment('1 收入  0 支出');
+            $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('type')->tinyint(1)
+                ->defaultVal(1)->comment('1 收入  0 支出 2 借出 3 借入');
             $table->set('money')->decimal(10, 2)->defaultVal(0)->comment('金额');
             $table->set('frozen_money')->decimal(10, 2)->defaultVal(0)->comment('冻结金额');
             $table->set('account_id')->int()->notNull()->comment('资金账户');
@@ -75,6 +77,8 @@ class CreateFinanceTables extends Migration {
             $table->set('out_trade_no')->varchar(100)->defaultVal('')
                 ->comment('外部导入的交易单号');
             $table->set('user_id')->int()->notNull();
+            $table->set('trading_object')->varchar(100)
+                ->defaultVal('')->comment('交易对象');
             $table->timestamps();
         });
         Schema::createTable(ConsumptionChannelModel::tableName(), function(Table $table) {
