@@ -5,6 +5,8 @@ namespace Module\Auth\Service\Api\Admin;
 use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
+use Module\Auth\Domain\Repositories\RoleRepository;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
 class PermissionController extends RestController {
@@ -26,10 +28,11 @@ class PermissionController extends RestController {
         return $this->render($model);
     }
 
-    public function saveAction() {
-        $model = new PermissionModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveAction(Request $request) {
+        try {
+            $model = RoleRepository::savePermission($request->get());
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }
@@ -38,5 +41,10 @@ class PermissionController extends RestController {
         PermissionModel::where('id', $id)->delete();
         RolePermissionModel::where('permission_id', $id)->delete();
         return $this->renderData(true);
+    }
+
+    public function allAction() {
+        $data = PermissionModel::query()->get('id', 'name', 'display_name');
+        return $this->renderData($data);
     }
 }

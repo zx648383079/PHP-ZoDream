@@ -4,6 +4,7 @@ namespace Module\Auth\Service\Api;
 use Infrastructure\Uploader;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Infrastructure\Http\Request;
@@ -76,6 +77,15 @@ class UserController extends RestController {
             'email' => $user->email,
             'avatar' => $user->avatar
         ]);
+    }
+
+    /**
+     * 获取用户的角色和权限
+     * @return RestResponse
+     * @throws \Exception
+     */
+    public function roleAction() {
+        return $this->render(RoleRepository::userRolePermission(auth()->id()));
     }
 
 }

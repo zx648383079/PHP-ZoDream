@@ -65,4 +65,9 @@ class AdController extends Controller {
         AdPositionModel::where('id', $id)->delete();
         return $this->renderData(true);
     }
+
+    public function positionAllAction() {
+        $model_list = AdPositionModel::query()->get('id', 'name');
+        return $this->renderData($model_list);
+    }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
+use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
@@ -21,7 +22,9 @@ class UserController extends RestController {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($model);
+        $data = $model->toArray();
+        $data['roles'] = UserRoleModel::where('user_id', $id)->pluck('role_id');
+        return $this->render($data);
     }
 
     public function saveAction(Request $request) {

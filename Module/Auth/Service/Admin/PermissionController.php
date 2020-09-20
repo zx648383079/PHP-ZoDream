@@ -4,6 +4,8 @@ namespace Module\Auth\Service\Admin;
 
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
+use Module\Auth\Domain\Repositories\RoleRepository;
+use Zodream\Infrastructure\Http\Request;
 
 class PermissionController extends Controller {
 
@@ -29,10 +31,11 @@ class PermissionController extends Controller {
         return $this->show(compact('model'));
     }
 
-    public function saveAction() {
-        $model = new PermissionModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+    public function saveAction(Request $request) {
+        try {
+            RoleRepository::savePermission($request->get());
+        }catch (\Exception $ex) {
+            return $this->jsonFailure($ex->getMessage());
         }
         return $this->jsonSuccess([
             'url' => $this->getUrl('permission')

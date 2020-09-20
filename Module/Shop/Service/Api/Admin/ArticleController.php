@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
+use Zodream\Html\Tree;
 
 class ArticleController extends Controller {
 
@@ -54,5 +55,11 @@ class ArticleController extends Controller {
     public function deleteCategoryAction($id) {
         ArticleCategoryModel::where('id', $id)->delete();
         return $this->renderData(true);
+    }
+
+    public function categoryTreeAction() {
+        $tree = new Tree(ArticleCategoryModel::query()
+            ->orderBy('position', 'asc')->get('id', 'name', 'parent_id'));
+        return $this->renderData($tree->makeTreeForHtml());
     }
 }

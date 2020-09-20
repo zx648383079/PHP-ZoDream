@@ -5,6 +5,7 @@ use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
 
@@ -19,20 +20,22 @@ class RoleController extends RestController {
         return $this->renderPage($role_list);
     }
 
-    public function editAction(int $id) {
+    public function detailAction(int $id) {
         $model = RoleModel::find($id);
         if (empty($model)) {
             return $this->renderFailure('不存在');
         }
-        return $this->render($model);
+        $data = $model->toArray();
+        $data['permissions'] = $model->perm_ids;
+        return $this->render($data);
     }
 
     public function saveAction(Request $request) {
-        $model = new RoleModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
+        try {
+            $model = RoleRepository::saveRole($request->get(), $request->get('permissions'));
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->setPermission($request->get('perms'));
         return $this->render($model);
     }
 
@@ -41,5 +44,10 @@ class RoleController extends RestController {
         UserRoleModel::where('role_id', $id)->delete();
         RolePermissionModel::where('role_id', $id)->delete();
         return $this->renderData(true);
+    }
+
+    public function allAction() {
+        $data = RoleModel::query()->get('id', 'name', 'display_name');
+        return $this->renderData($data);
     }
 }

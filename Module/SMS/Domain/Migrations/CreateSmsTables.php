@@ -27,6 +27,7 @@ class CreateSmsTables extends Migration {
             $table->set('signature_id')->int()->defaultVal(0)->comment('签名');
             $table->set('template_id')->int()->defaultVal(0)->comment('模板内容');
             $table->set('mobile')->varchar(20)->comment('接受手机号');
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('短信的类型');
             $table->set('content')->varchar('255')->comment('发送的内容');
             $table->set('status')->tinyint(1)->notNull()->defaultVal(0)->comment('发送状态');
             $table->set('ip')->varchar('120')->comment('发送者ip');

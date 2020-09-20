@@ -36,6 +36,7 @@ class Sms {
         // TODO 调用短信接口
         $log->status = 1;
         $log->save();
+        return true;
     }
 
     public function sendCode($mobile) {
