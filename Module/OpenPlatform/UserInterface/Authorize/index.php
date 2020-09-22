@@ -40,7 +40,7 @@ $this->title = '我的授权信息';
             <td><?=$item->platform->name?></td>
             <td><?=$item->is_self > 0 ? $item->token : '[不允许查看]'?></td>
             <td>
-                <?=$item->expired_at >= time() ? '已过期' : '正常'?>
+                <?=$item->expired_at < time() ? '已过期' : '正常'?>
             </td>
             <td>
                 <?=$this->time($item->expired_at)?>

@@ -1,6 +1,7 @@
 <?php
 namespace Module\OpenPlatform\Service\Api;
 
+use Module\OpenPlatform\Domain\Model\TokenPageModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
 use Zodream\Route\Controller\RestController;
@@ -14,7 +15,9 @@ class AuthorizeController extends RestController {
     }
 
     public function indexAction() {
-        $model_list = UserTokenModel::with('platform')->where('user_id', auth()->id())->orderBy('id', 'desc')->page();
+        $model_list = TokenPageModel::with('platform')
+            ->where('user_id', auth()->id())
+            ->orderBy('id', 'desc')->page();
         return $this->renderPage($model_list);
     }
 

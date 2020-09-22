@@ -40,4 +40,9 @@ class PlatformController extends RestController {
         PlatformModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->renderData(true);
     }
+
+    public function allAction() {
+        $data = PlatformModel::where('user_id', auth()->id())->get('id', 'name');
+        return $this->renderData($data);
+    }
 }

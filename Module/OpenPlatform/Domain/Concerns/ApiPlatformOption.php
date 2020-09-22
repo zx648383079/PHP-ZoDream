@@ -17,7 +17,6 @@ trait ApiPlatformOption {
     }
 
     public function optionAction($platform_id) {
-        $this->layout = false;
         $platform = PlatformModel::findWithAuth($platform_id);
         if (empty($platform)) {
             return $this->renderFailure('不存在');
