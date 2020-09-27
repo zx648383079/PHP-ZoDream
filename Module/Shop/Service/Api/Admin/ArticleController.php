@@ -8,7 +8,7 @@ use Zodream\Html\Tree;
 
 class ArticleController extends Controller {
 
-    public function indexAction($keywords = null, $cat_id = 0) {
+    public function indexAction($keywords = '', $cat_id = 0) {
         $model_list = ArticleModel::with('category')
             ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {

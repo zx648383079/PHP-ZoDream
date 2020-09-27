@@ -5,8 +5,13 @@ use Module\Shop\Domain\Models\RegionModel;
 
 class RegionController extends Controller {
 
-    public function indexAction($parent = 0) {
-        $model_list = RegionModel::where('parent_id', $parent)->page();
+    public function indexAction($parent = 0, $keywords = '') {
+        $model_list = RegionModel::where('parent_id', $parent)
+            ->when(!empty($keywords), function ($query) {
+            $query->where(function ($query) {
+                RegionModel::search($query, 'name');
+            });
+        })->page();
         return $this->renderPage($model_list);
     }
 

@@ -42,4 +42,10 @@ class ShippingController extends Controller {
         ShippingRegionModel::where('shipping_id', $id)->delete();
         return $this->renderData(true);
     }
+
+    public function allAction() {
+        return $this->renderData(
+            ShippingModel::query()->get('id', 'name')
+        );
+    }
 }
