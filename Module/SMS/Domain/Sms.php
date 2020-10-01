@@ -1,10 +1,4 @@
 <?php
-/*
- * @Author: zodream
- * @Date: 2020-06-13 13:48:44
- * @LastEditors: zodream
- * @LastEditTime: 2020-09-08 22:39:56
- */
 namespace Module\SMS\Domain;
 
 

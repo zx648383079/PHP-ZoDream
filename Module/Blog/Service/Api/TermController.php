@@ -38,4 +38,8 @@ class TermController extends RestController {
         TermModel::where('id', $id)->delete();
         return $this->renderData(true);
     }
+
+    public function allAction() {
+        return $this->renderData(TermModel::query()->get('id', 'name'));
+    }
 }
