@@ -3,12 +3,13 @@ namespace Module\Shop\Service\Api\Admin;
 
 
 use Module\Shop\Domain\Models\Advertisement\AdModel;
+use Module\Shop\Domain\Models\Advertisement\AdPageModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
 
 class AdController extends Controller {
 
     public function indexAction($keywords = null, $position_id = 0) {
-        $model_list = AdModel::with('position')
+        $model_list = AdPageModel::with('position')
             ->when(!empty($keywords), function ($query) {
                 $query->where(function ($query) {
                     AdModel::search($query, 'name');

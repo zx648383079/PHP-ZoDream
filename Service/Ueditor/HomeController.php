@@ -70,7 +70,7 @@ class HomeController extends Controller {
 			 $list = array(); 
 			 $i < $len && $i >= 0 && $i >= $start; 
 			 $i --){
-			$list[] = $files[$i];
+		    $list[] = $files[$i];
 		}
 		//倒序
 		//for ($i = $end, $list = array(); $i < $len && $i < $end; $i++){
