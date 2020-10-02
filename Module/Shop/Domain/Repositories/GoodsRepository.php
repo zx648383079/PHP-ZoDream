@@ -35,8 +35,8 @@ class GoodsRepository {
     public static function searchComplete(array $id = [],
                                   $category = 0,
                                   $brand = 0,
-                                  $keywords = null,
-                                  $per_page = 20, $sort = null, $order = null): Page {
+                                  $keywords = '',
+                                  $per_page = 20, $sort = '', $order = '', $trash = false): Page {
         return GoodsPageModel::sortBy($sort, $order)->with('category', 'brand')
             ->when(!empty($id), function ($query) use ($id) {
                 $query->whereIn('id', array_map('intval', $id));
@@ -47,6 +47,8 @@ class GoodsRepository {
                 $query->where('cat_id', intval($category));
             })->when($brand > 0, function ($query) use ($brand) {
                 $query->where('brand_id', intval($brand));
+            })->when($trash, function ($query) {
+                $query->where('deleted_at', '>', 0);
             })->page($per_page);
     }
 

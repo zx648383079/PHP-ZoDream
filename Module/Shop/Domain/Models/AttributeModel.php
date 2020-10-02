@@ -21,7 +21,7 @@ class AttributeModel extends AttributeEntity {
     public static $search_list = ['不需要检索', '关键字检索', '范围检索'];
     public static $type_list = ['唯一属性', '单选属性', '复选属性'];
 
-    protected $append = ['attr_items'];
+    protected $append = ['group'];
 
     public function group() {
         return $this->hasOne(AttributeGroupModel::class, 'id', 'group_id');

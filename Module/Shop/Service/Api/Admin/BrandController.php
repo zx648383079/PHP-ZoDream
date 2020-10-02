@@ -39,4 +39,10 @@ class BrandController extends Controller {
         });
         return $this->renderData(true);
     }
+
+    public function allAction() {
+        return $this->renderData(
+            BrandModel::query()->get('id', 'name')
+        );
+    }
 }

@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Zodream\Html\Tree;
 
 class CategoryController extends Controller {
 
@@ -40,6 +41,13 @@ class CategoryController extends Controller {
             ]);
         });
         return $this->renderData(true);
+    }
+
+    public function allAction() {
+        return $this->renderData(
+            (new Tree(CategoryModel::query()->get('id', 'name', 'parent_id')))
+            ->makeTreeForHtml()
+        );
     }
 
 }

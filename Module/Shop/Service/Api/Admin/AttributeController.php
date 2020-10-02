@@ -44,8 +44,13 @@ class AttributeController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteCategoryAction($id) {
+    public function deleteGroupAction($id) {
         AttributeGroupModel::where('id', $id)->delete();
         return $this->renderData(true);
+    }
+
+    public function groupAllAction() {
+        $data = AttributeGroupModel::where('id', $id)->get('id', 'name');
+        return $this->renderData($data);
     }
 }
