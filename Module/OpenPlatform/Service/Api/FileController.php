@@ -4,6 +4,8 @@ namespace Module\OpenPlatform\Service\Api;
 use Exception;
 use Infrastructure\Environment;
 use Infrastructure\Uploader;
+use Zodream\Domain\Upload\BaseUpload;
+use Zodream\Domain\Upload\Upload;
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 use Zodream\Route\Controller\RestController;
@@ -46,11 +48,46 @@ class FileController extends RestController {
     }
 
     public function imageAction() {
-        return $this->upload('file', array(
-            'pathFormat' => $this->configs['imagePathFormat'],
-            'maxSize' => $this->configs['imageMaxSize'],
-            'allowFiles' => $this->configs['imageAllowFiles']
-        ));
+        $upload = new Upload();
+        if (!$upload->upload('file')) {
+            return $this->renderFailure('请选择上传文件');
+        }
+        $allowType = array_map(function ($item) {
+            return substr($item, 1);
+        }, $this->configs['imageAllowFiles']);
+        $files = [];
+        $upload->each(function (BaseUpload $file) use ($allowType, &$files) {
+            if (!$file->checkSize($this->configs['imageMaxSize'])) {
+                $file->setError('超出最大尺寸限制');
+                return;
+            }
+            if (!$file->checkType($allowType)) {
+                $file->setError('不允许上传此类型文件');
+                return;
+            }
+            if (!$file->validateDimensions()) {
+                $file->setError('图片尺寸有误');
+                return;
+            }
+            $file->setFile(public_path($file->getRandomName($this->configs['imagePathFormat'])));
+            if (!$file->save()) {
+                return;
+            }
+            $files[] = [
+                'url' => url()->asset($file->getFile()->getRelative(public_path())),
+                'title' => $file->getFile()->getName(),
+                'original' => $file->getName(),
+                'type' => '.'.$file->getType(),
+                'size' => $file->getSize()
+            ];
+        });
+        if (empty($files)) {
+            return $this->renderFailure($upload->getError()[0]);
+        }
+        if ($upload->count() > 1) {
+            return $this->renderData($files);
+        }
+        return $this->render($files[0]);
     }
 
     public function videoAction() {
