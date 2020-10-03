@@ -67,6 +67,19 @@ class GoodsController extends Controller {
         return $this->renderData(true);
     }
 
+    public function toggleAction($id, $name) {
+        if ($id < 1 || !in_array($name, ['is_best', 'is_hot', 'is_new'])) {
+            return $this->renderFailure('信息错误！');
+        }
+        GoodsModel::where('id', $id)->updateBool($name);
+        return $this->renderData(true);
+    }
+
+    public function generateSnAction() {
+        $sn = GoodsRepository::generateSn();
+        return $this->renderData($sn);
+    }
+
     public function clearAction() {
         GoodsModel::where('deleted_at', '>', 0)->delete();
         return $this->renderData(true);

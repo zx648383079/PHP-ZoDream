@@ -50,7 +50,7 @@ class AttributeController extends Controller {
     }
 
     public function groupAllAction() {
-        $data = AttributeGroupModel::where('id', $id)->get('id', 'name');
+        $data = AttributeGroupModel::query()->get('id', 'name');
         return $this->renderData($data);
     }
 }

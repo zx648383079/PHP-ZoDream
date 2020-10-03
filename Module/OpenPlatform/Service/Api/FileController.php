@@ -18,6 +18,12 @@ class FileController extends RestController {
         ];
     }
 
+    protected function methods() {
+        return [
+            'index' => ['POST'],
+        ];
+    }
+
     public function init() {
         $this->configs = config()->file('Ueditor')['ueditor'];
     }
