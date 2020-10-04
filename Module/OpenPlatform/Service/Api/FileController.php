@@ -82,7 +82,7 @@ class FileController extends RestController {
             ];
         });
         if (empty($files)) {
-            return $this->renderFailure($upload->getError()[0]);
+            return $this->renderFailure(implode(',', $upload->getError()));
         }
         if ($upload->count() > 1) {
             return $this->renderData($files);
