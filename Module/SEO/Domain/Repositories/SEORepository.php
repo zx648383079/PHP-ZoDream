@@ -74,13 +74,13 @@ class SEORepository {
 
     public static function saveNewOption($data) {
         if (empty($data) || !is_array($data) || !isset($data['name'])) {
-            return;
+            throw new Exception('名称不能为空');
         }
         if (empty($data['name'])) {
-            return;
+            throw new Exception('名称不能为空');
         }
         if (OptionModel::where('name', $data['name'])->count() > 0) {
-            return;
+            throw new Exception('名称已存在');
         }
         if ($data['type'] == 'group') {
             return OptionModel::create([
@@ -89,12 +89,12 @@ class SEORepository {
             ]);
         }
         if (empty($data['code']) || $data['parent_id'] < 1) {
-            return;
+            throw new Exception('别名不能为空');
         }
         if (OptionModel::where('code', $data['code'])->count() > 0) {
-            return;
+            throw new Exception('别名已存在');
         }
-        OptionModel::create($data);
+        return OptionModel::create($data);
     }
 
     public static function saveOption($data) {

@@ -16,7 +16,9 @@ class SettingController extends Controller {
     }
 
     public function saveAction(Request $request) {
-        SEORepository::saveNewOption($request->get('field'));
+        try {
+            SEORepository::saveNewOption($request->get('field'));
+        } catch (\Exception $ex) {}
         SEORepository::saveOption($request->get('option'));
         event(new OptionUpdated());
         return $this->jsonSuccess([

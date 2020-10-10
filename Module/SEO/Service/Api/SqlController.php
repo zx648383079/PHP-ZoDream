@@ -7,7 +7,7 @@ class SqlController extends Controller {
 
     public function indexAction() {
         $items = SEORepository::sqlFiles();
-        return $this->renderData(compact('items'));
+        return $this->renderData($items);
     }
 
     public function backUpAction() {

@@ -4,19 +4,26 @@ namespace Module\SEO\Service\Api;
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Events\OptionUpdated;
 use Module\SEO\Domain\Repositories\SEORepository;
+use phpDocumentor\Reflection\Types\This;
 use Zodream\Infrastructure\Http\Request;
 
 class SettingController extends Controller {
 
     public function indexAction() {
-        $group_list = OptionModel::where('parent_id', 0)
+        /** @var OptionModel[] $group_list */
+        $group_list = OptionModel::with('children')->where('parent_id', 0)
             ->where('type', 'group')
             ->orderBy('position', 'asc', 'id', 'asc')->all();
+        foreach ($group_list as $group) {
+            $group->setAppend('children');
+        }
         return $this->renderData($group_list);
     }
 
     public function saveAction(Request $request) {
-        SEORepository::saveNewOption($request->get('field'));
+        try {
+            SEORepository::saveNewOption($request->get('field'));
+        } catch (\Exception $ex) {}
         SEORepository::saveOption($request->get('option'));
         event(new OptionUpdated());
         return $this->renderData(true);
@@ -38,8 +45,23 @@ class SettingController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
+    public function saveOptionAction(Request $request) {
+        $id = intval($request->get('id'));
+        if ($id > 0) {
+            return $this->updateAction($id);
+        }
+        try {
+            $model = SEORepository::saveNewOption($request->get('field'));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        event(new OptionUpdated());
+        return $this->render($model);
+    }
+
     public function deleteAction($id) {
         OptionModel::where('id', $id)->delete();
+        OptionModel::where('parent_id', $id)->delete();
         event(new OptionUpdated());
         return $this->renderData(true);
     }

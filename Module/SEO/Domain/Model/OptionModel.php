@@ -51,7 +51,13 @@ class OptionModel extends Model {
     }
 
     public function children() {
-        return $this->hasMany(static::class, 'parent_id', 'id');
+        return $this->hasMany(static::class, 'parent_id', 'id')
+            ->where('type', '!=', 'hide');
+    }
+
+    public function setAppend($name) {
+        $this->append = (array)$name;
+        return $this;
     }
 
     /**

@@ -77,6 +77,7 @@ class Module extends BaseModule {
             }
             return $data;
         } catch (\Exception $ex) {
+            logger($ex);
             app('response')->setStatusCode(404);
             return RestResponse::createWithAuto([
                 'code' => 404,
