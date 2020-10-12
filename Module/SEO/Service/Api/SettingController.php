@@ -51,7 +51,7 @@ class SettingController extends Controller {
             return $this->updateAction($id);
         }
         try {
-            $model = SEORepository::saveNewOption($request->get('field'));
+            $model = SEORepository::saveNewOption($request->get());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
