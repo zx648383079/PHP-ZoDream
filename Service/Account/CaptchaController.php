@@ -6,6 +6,7 @@ namespace Service\Account;
 use Zodream\Image\Captcha;
 use Zodream\Image\SlideCaptcha;
 
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Service\Factory;
 
 class CaptchaController extends Controller {
@@ -15,16 +16,17 @@ class CaptchaController extends Controller {
 		);
 	}
 	
-	function indexAction() {
-		$level = intval(app('request')->get('level'));
+	function indexAction(Request $request) {
+		$level = intval($request->get('level'));
 		if (empty($level)) {
 			$level = Factory::session('level');
 		}
 		$captcha = new Captcha();
 		$captcha->setConfigs([
-            'width' => 200,
+            'width' => intval($request->get('width', 100)),
+            'height' => intval($request->get('height', 30)),
             'fontSize' => 20,
-            'fontFamily' => 'D:\Documents\Company\xtime\data\fonts\Ubuntu_regular.ttf'
+            'fontFamily' => (string)Factory::root()->file('data/fonts/YaHei.ttf')
         ]);
 		return Factory::response()->image($captcha->generate($level));
 	}
@@ -39,8 +41,9 @@ class CaptchaController extends Controller {
     }
 
 	function slideAction() {
-        $img = new SlideCaptcha(Factory::public_path()->file('assets/images/banner.jpg'));
-        $img->scale(300, 130);
+        $img = new SlideCaptcha();
+        $img->instance()->open(public_path('assets/images/banner.jpg'));
+        $img->instance()->scale(300, 130);
         $img->setShape('E:\Desktop\1.jpg');
         $img->generate();
 
@@ -51,8 +54,8 @@ class CaptchaController extends Controller {
         foreach ($points as $point) {
             $html .= sprintf('<div class="slide-img" style="background-position: %spx %spx"></div>', $point[0], $point[1]);
         }
-        $width = $img->getWidth();
-        $height = $img->getHeight();
+        $width = $img->instance()->getWidth();
+        $height = $img->instance()->getHeight();
         $bg_data = $bg->toBase64();
         Factory::session()->set('slider_x', $img->getPoint()[0]);
         $html = <<<HTML
