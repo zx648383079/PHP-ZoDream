@@ -56,9 +56,9 @@ class BulletinModel extends Model {
 	        return '[系统通知]';
         }
 	    if ($this->user) {
-	        return mb_substr($this->user->name, 0, 1);
+            return $this->user->name;
         }
-	    return '[用户已删除]';
+        return '[用户已删除]';
     }
 
     public function getIconAttribute() {
@@ -66,7 +66,7 @@ class BulletinModel extends Model {
             return '系';
         }
         if ($this->user) {
-            return $this->user->name;
+            return mb_substr($this->user->name, 0, 1);
         }
         return 'NULL';
     }
