@@ -67,6 +67,10 @@ class AccountLogModel extends Model {
         ];
     }
 
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
     /**
      * 退款，并更改用户金额
      * @return bool|mixed

@@ -63,11 +63,15 @@ class HomeController extends Controller {
      */
     public function loginAction(Request $request, $email = null) {
         try {
+            // 判断 ip 是否登录次数过多
+            // 判断 账号 是否登录失败过多
+            // 验证 验证码
             AuthRepository::login(
                 $email,
                 $request->get('password'),
                 $request->has('rememberMe'));
         } catch (\Exception $ex) {
+            // 是否需要显示验证码
             if (!empty($email)) {
                 LoginLogModel::addLoginLog($email, 0, false);
             }

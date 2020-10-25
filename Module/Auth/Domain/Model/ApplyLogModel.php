@@ -5,33 +5,29 @@ namespace Module\Auth\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class CreditLogModel
+ * Class ApplyLogModel
  * @property integer $id
  * @property integer $user_id
  * @property integer $type
- * @property integer $item_id
- * @property integer $credits
- * @property integer $total_credits
- * @property integer $status
+ * @property integer $money
  * @property string $remark
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
-class CreditLogModel extends Model {
+class ApplyLogModel extends Model {
 
-    public static function tableName() {
-        return 'user_credit_log';
+	public static function tableName() {
+        return 'user_apply_log';
     }
 
     protected function rules() {
         return [
-            'user_id' => 'int',
+            'user_id' => 'required|int',
             'type' => 'int:0,127',
-            'item_id' => 'int',
-            'credits' => 'required|int',
-            'total_credits' => 'required|int',
+            'money' => 'int',
+            'remark' => 'string:0,255',
             'status' => 'int:0,127',
-            'remark' => 'required|string:0,255',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -42,14 +38,15 @@ class CreditLogModel extends Model {
             'id' => 'Id',
             'user_id' => 'User Id',
             'type' => 'Type',
-            'item_id' => 'Item Id',
-            'credits' => 'Credits',
-            'total_credits' => 'Total Credits',
-            'status' => 'Status',
+            'money' => 'Money',
             'remark' => 'Remark',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
 }

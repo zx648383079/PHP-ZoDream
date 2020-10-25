@@ -16,6 +16,15 @@ class UserController extends RestController {
         return $this->renderPage(UserRepository::getAll($keywords));
     }
 
+    public function profileAction(int $id) {
+        try {
+            $model = UserRepository::get($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
     public function detailAction(int $id) {
         try {
             $model = UserRepository::get($id);

@@ -5,24 +5,28 @@ namespace Module\Auth\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class ActionLogModel
+ * Class AdminLogModel
  * @property integer $id
  * @property string $ip
  * @property integer $user_id
+ * @property integer $item_type
+ * @property integer $item_id
  * @property string $action
  * @property string $remark
  * @property integer $created_at
  */
-class ActionLogModel extends Model {
+class AdminLogModel extends Model {
 
 	public static function tableName() {
-        return 'user_action_log';
+        return 'user_admin_log';
     }
 
     protected function rules() {
         return [
             'ip' => 'required|string:0,120',
             'user_id' => 'required|int',
+            'item_type' => 'int:0,127',
+            'item_id' => 'int',
             'action' => 'required|string:0,30',
             'remark' => 'string:0,255',
             'created_at' => 'int',
@@ -34,6 +38,8 @@ class ActionLogModel extends Model {
             'id' => 'Id',
             'ip' => 'Ip',
             'user_id' => 'User Id',
+            'item_type' => 'Item Type',
+            'item_id' => 'Item Id',
             'action' => 'Action',
             'remark' => 'Remark',
             'created_at' => 'Created At',
@@ -44,22 +50,4 @@ class ActionLogModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-
-    /**
-     * 用户操作记录
-     * @param int $user_id
-     * @param $action
-     * @param string $remark
-     * @return ActionLogModel
-     * @throws \Exception
-     */
-	public static function addLog($user_id, $action, $remark = '') {
-		return static::create([
-            'ip' => app('request')->ip(),
-            'user_id' => $user_id,
-            'action' => $action,
-            'remark' => $remark,
-            'created_at' => time()
-        ]);
-	}
 }

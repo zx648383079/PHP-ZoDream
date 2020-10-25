@@ -3,6 +3,8 @@ namespace Module\Auth\Domain\Migrations;
 
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
+use Module\Auth\Domain\Model\AdminLogModel;
+use Module\Auth\Domain\Model\ApplyLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\CreditLogModel;
@@ -162,6 +164,25 @@ class CreateAuthTables extends Migration {
             $table->set('action')->varchar(30)->notNull();
             $table->set('remark')->varchar()->defaultVal('');
             $table->timestamp('created_at');
+        })->append(AdminLogModel::tableName(), function (Table $table) {
+            $table->setComment('管理员操作记录');
+            $table->set('id')->pk()->ai();
+            $table->set('ip')->varchar(120)->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('item_type')->tinyint()->defaultVal(0);
+            $table->set('item_id')->int()->defaultVal(0);
+            $table->set('action')->varchar(30)->notNull();
+            $table->set('remark')->varchar()->defaultVal('');
+            $table->timestamp('created_at');
+        })->append(ApplyLogModel::tableName(), function (Table $table) {
+            $table->setComment('用户申请记录');
+            $table->set('id')->pk()->ai();
+            $table->set('user_id')->int()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('money')->int()->defaultVal(0);
+            $table->set('remark')->varchar()->defaultVal('');
+            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->timestamps();
         })->append(MailLogModel::tableName(), function (Table $table) {
             $table->setComment('发送邮件记录');
             $table->set('id')->pk()->ai();

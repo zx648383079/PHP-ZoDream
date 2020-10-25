@@ -98,7 +98,7 @@ class GoodsController extends Controller {
     public function attributeAction($group_id, $goods_id = 0) {
         $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position asc')->orderBy('type asc')->asArray()->all();
         foreach ($attr_list as &$item) {
-            $item['default_value'] = empty($item['default_value']) || $item['input_type'] < 1 ? [] : explode(PHP_EOL, $item['default_value']);
+            $item['default_value'] = empty($item['default_value']) || $item['input_type'] < 1 ? [] : explode(PHP_EOL, trim($item['default_value']));
             $item['attr_items'] = GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $item['id'])->all();
         }
         unset($item);
