@@ -60,7 +60,7 @@ class OauthController extends Controller {
         }
         $domain = parse_url($redirect_uri, PHP_URL_HOST);
         if ($domain === 'localhost') {
-            $domain = false;
+            $domain = '';
         }
         Cookie::set($platform->getCookieTokenKey(), json_encode([
             'code' => 400,
@@ -76,7 +76,7 @@ class OauthController extends Controller {
         }
         $domain = parse_url($redirect_uri, PHP_URL_HOST);
         if ($domain === 'localhost') {
-            $domain = false;
+            $domain = '';
         }
         Cookie::set($platform->getCookieTokenKey(), json_encode([
             'code' => 200,

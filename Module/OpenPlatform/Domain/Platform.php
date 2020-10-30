@@ -6,6 +6,7 @@ use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Model\PlatformOptionModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Zodream\Database\Model\UserModel as UserObject;
+use Zodream\Domain\Access\JWTAuth;
 use Zodream\Helpers\Arr;
 use Zodream\Infrastructure\Http\Output\RestResponse;
 
@@ -177,7 +178,7 @@ class Platform {
      * @throws \Exception
      */
     public function generateToken(UserObject $user) {
-        $token = auth()->createToken($user);
+        $token = app(JWTAuth::class)->createToken($user);
         UserTokenModel::create([
             'user_id' => $user->getIdentity(),
             'platform_id' => $this->id(),
