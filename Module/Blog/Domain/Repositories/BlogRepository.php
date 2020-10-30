@@ -3,11 +3,14 @@ namespace Module\Blog\Domain\Repositories;
 
 use Exception;
 use Infrastructure\HtmlExpand;
+use Module\Blog\Domain\Events\BlogUpdate;
+use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
+use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Model\Query;
 use Zodream\Html\Page;
@@ -186,28 +189,73 @@ class BlogRepository {
         }, 3600);
     }
 
-    /**
-     * 发布博客
-     * @param array $data
-     * @return BlogModel
-     * @throws Exception
-     */
-    public static function publish(array $data) {
-        if (!isset($data['title']) || empty($data['title'])) {
-            throw new Exception('请输入标题');
+    public static function sourceBlog($id, $language = '') {
+        $model = BlogModel::getOrNew($id, $language);
+        if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
+            throw new Exception('博客不存在');
         }
-        $model = BlogModel::where('title', $data['title'])->where('user_id', auth()->id())->first();
-        if (!$model) {
-            $model = new BlogModel();
-        }
+        $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
+        $data = $model->toArray();
+        $data['tags'] = $tags;
+        $data['open_rule'] = $model->open_rule;
+        return array_merge($data, BlogMetaModel::getMetaWithDefault($id));
+    }
+
+    public static function save(array $data, $id = 0) {
+        unset($data['id']);
+        $model = BlogModel::findOrNew($id);
+        $isNew = $model->isNewRecord;
         if (!$model->load($data, ['user_id'])) {
-            throw new Exception($model->getFirstError());
+            throw new Exception('数据有误');
         }
+        // 需要同步的字段
+        $async_column = [
+            'user_id',
+            'term_id',
+            'programming_language',
+            'type',
+            'thumb',
+            'open_type',
+            'open_rule',];
         $model->user_id = auth()->id();
-        if (!$model->save()) {
+        if ($model->parent_id > 0) {
+            $parent = BlogModel::find($model->parent_id);
+            if (empty($model->language) || $model->language == 'zh') {
+                $model->language = 'en';
+            }
+            foreach ($async_column as $key) {
+                $model->{$key} = $parent->{$key};
+            }
+        }
+        $model->parent_id = intval($model->parent_id);
+        if (!$model->saveIgnoreUpdate()) {
             throw new Exception($model->getFirstError());
         }
+        if ($model->parent_id < 1) {
+            TagRelationshipModel::bind($model->id,
+                isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : [], $isNew);
+            $data = [];
+            foreach ($async_column as $key) {
+                $data[$key] = $model->getAttributeSource($key);
+            }
+            BlogModel::where('parent_id', $model->id)->update($data);
+        }
+        BlogMetaModel::saveMeta($model->id, $data);
+        event(new BlogUpdate($model, $isNew, time()));
         return $model;
+    }
+
+    public static function remove($id) {
+        $model = BlogModel::where('id', $id)->where('user_id', auth()->id())
+            ->first();
+        if (empty($model)) {
+            throw new Exception('文章不存在');
+        }
+        $model->delete();
+        if ($model->parent_id < 1) {
+            BlogModel::where('parent_id', $id)->delete();
+        }
+        BlogMetaModel::deleteMeta($id);
     }
 
     public static function subtotal() {

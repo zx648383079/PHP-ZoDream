@@ -12,6 +12,16 @@ use Zodream\Route\Controller\RestController;
 
 class PublishController extends RestController {
 
+    protected function methods()
+    {
+        return [
+            'index' => ['POST', 'PUT', 'PATCH'],
+            'detail' => ['GET', 'HEAD', 'OPTIONS'],
+            'upload' => ['POST'],
+            'delete' => ['DELETE'],
+        ];
+    }
+
     protected function rules() {
         return [
             '*' => '@',
@@ -20,7 +30,7 @@ class PublishController extends RestController {
 
     public function indexAction(Request $request) {
         try {
-            $model = BlogRepository::publish($request->get());
+            $model = BlogRepository::save($request->get(), $request->get('id'));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -28,15 +38,12 @@ class PublishController extends RestController {
     }
 
     public function detailAction($id, $language = '') {
-        $model = BlogModel::getOrNew($id, $language);
-        if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
-            return $this->renderFailure('博客不存在');
+        try {
+            $model = BlogRepository::sourceBlog($id, $language);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
-        $data = $model->toArray();
-        $data['tags'] = $tags;
-        $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
-        return $this->render($data);
+        return $this->render($model);
     }
 
     public function uploadAction() {
@@ -53,13 +60,10 @@ class PublishController extends RestController {
     }
 
     public function deleteAction($id) {
-        $model = BlogModel::where('id', $id)->where('user_id', auth()->id());
-        if (empty($model)) {
-            return $this->renderFailure('文章不存在');
-        }
-        $model->delete();
-        if ($model->parent_id < 1) {
-            BlogModel::where('parent_id', $id)->delete();
+        try {
+            BlogRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
     }

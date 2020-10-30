@@ -14,17 +14,19 @@ use Zodream\Helpers\Json;
  */
 class BlogMetaModel extends BlogMetaEntity {
 
+    const META_DEFAULT = [
+        'is_hide' => 0, // 如果是转载文章是否只显示部分，并链接到原文
+        'source_url' => '', // 原文链接
+        'source_author' => '', // 原文作者
+        'cc_license' => '', // 版权协议
+        'weather' => '', // 天气
+        'audio_url' => '', // 音频
+        'video_url' => '', // 视频
+        'comment_status' => 0, // 是否允许评论
+    ];
+
     public static function getMetaWithDefault($id) {
-        return static::getMeta($id, [
-            'is_hide' => 0, // 如果是转载文章是否只显示部分，并链接到原文
-            'source_url' => '', // 原文链接
-            'source_author' => '', // 原文作者
-            'cc_license' => '', // 版权协议
-            'weather' => '', // 天气
-            'audio_url' => '', // 音频
-            'video_url' => '', // 视频
-            'comment_status' => 0, // 是否允许评论
-        ]);
+        return static::getMeta($id, self::META_DEFAULT);
     }
 
     public static function getMeta($id, array $default = []) {
@@ -39,9 +41,13 @@ class BlogMetaModel extends BlogMetaEntity {
         if (empty($data)) {
             return;
         }
+        $metaKeys = array_keys(self::META_DEFAULT);
         $items = static::getMeta($blog_id);
         $add = [];
         foreach ($data as $name => $content) {
+            if (!in_array($name, $metaKeys)) {
+                continue;
+            }
             if (is_null($content)) {
                 $content = '';
             } elseif (is_array($content)) {
