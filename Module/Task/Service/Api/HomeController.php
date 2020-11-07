@@ -4,8 +4,11 @@ namespace Module\Task\Service\Api;
 use Module\Task\Domain\Model\TaskDayModel;
 use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
+use Module\Task\Domain\Repositories\DayRepository;
 use Module\Task\Domain\Repositories\TaskRepository;
+use Zodream\Infrastructure\Http\Request;
 use Zodream\Route\Controller\RestController;
+use Zodream\Validate\ValidationException;
 
 class HomeController extends RestController {
 
@@ -13,110 +16,91 @@ class HomeController extends RestController {
         return ['*' => '@'];
     }
 
-    public function indexAction(int $status = 0, int $id = 0) {
+    public function indexAction(int $status = 0, int $id = 0, int $parent_id = 0, string $keywords = '') {
         if ($id > 0) {
             return $this->detailAction($id);
         }
-        $data = TaskModel::where('user_id', auth()->id())
-            ->when($status > 0, function ($query) use ($status) {
-                if ($status > 1) {
-                    return $query->where('status', TaskModel::STATUS_COMPLETE);
-                }
-                return $query->where('status', '>=', 5);
-            })
-            ->orderBy('id', 'desc')->page();
+        $data = TaskRepository::getList($keywords, $status, $parent_id);
         return $this->renderPage($data);
     }
 
     public function detailAction($id) {
-        $model = TaskModel::findOrNew($id);
-        if ($id > 0 && $model->user_id !== auth()->id()) {
-            return $this->renderFailure('任务不存在');
-        }
-        if (empty($model->every_time)) {
-            $model->every_time = 25;
+        try {
+            $model = TaskRepository::detail($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }
 
-    public function saveAction($id = 0, $status = false) {
-        $data = app('request')
-            ->get('name,every_time,description');
-        $model = TaskModel::findOrNew($id);
-        if ($id > 0 && $model->user_id !== auth()->id()) {
-            return $this->renderFailure('任务不存在');
+    public function saveAction(Request $request, $id = 0, $status = false) {
+        try {
+            $data = $request->validate([
+                'parent_id' => 'int',
+                'name' => 'required|string:0,100',
+                'description' => 'string:0,255',
+                'every_time' => 'int:0,9999',
+                'space_time' => 'int:0,127',
+                'duration' => 'int:0,127',
+                'start_at' => 'int',
+            ]);
+            $model = TaskRepository::save($data, $id, $status);
+        } catch (ValidationException $ex) {
+            return $this->renderFailure($ex->validator->firstError());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->set($data)->user_id = auth()->id();
-        if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
-        && $status != TaskModel::STATUS_COMPLETE) {
-            $model->status = 0;
-        }
-        if ($model->save()) {
-            return $this->render($model);
-        }
-        return $this->renderFailure($model->getFirstError());
+        return $this->render($model);
     }
 
     public function deleteAction($id, $stop = false) {
         try {
-            TaskRepository::stopTask($id);
-        } catch (\Exception $ex) {}
-        if (!$stop) {
-            TaskModel::where('id', $id)->delete();
+            TaskRepository::remove($id, $stop);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 
     public function todayAction($time = null) {
         if (empty($time)) {
             $time = date('Y-m-d');
         }
-        $data = TaskDayModel::with('task')
-            ->where('user_id', auth()->id())
-            ->where('amount', '>', 0)
-            ->where('today', $time)->page();
+        $data = DayRepository::getList($time);
         return $this->renderPage($data);
     }
 
     public function detailDayAction($id) {
-        $model = TaskDayModel::findOrNew($id);
-        if ($model->isNewRecord) {
-            $model->amount = 1;
+        try {
+            $model = DayRepository::detail($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }
 
     public function saveDayAction($task_id, $id = 0, $amount = 1) {
-        $task = TaskModel::where('user_id', auth()->id())
-            ->where('id', $task_id)->first();
-        if (empty($task)) {
-            return $this->renderFailure('任务不存在');
+        try {
+            $model = DayRepository::save($task_id, $id, $amount);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($id > 0) {
-            TaskDayModel::where('id', $id)->update([
-                'task_id' => $task_id,
-                'amount' => $amount
-            ]);
-        } else {
-            TaskDayModel::add($task, $amount);
-        }
-        return $this->render(['data' => true]);
+        return $this->render($model);
     }
 
     public function deleteDayAction($id) {
         try {
-            TaskRepository::stop($id);
-        } catch (\Exception $ex) {}
-        TaskDayModel::where('id', $id)->delete();
-        return $this->render(['data' => true]);
+            DayRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 
 
-    public function playAction($id) {
+    public function playAction($id, $child_id = 0) {
         try {
-            $day = TaskRepository::start($id);
+            $day = TaskRepository::start($id, $child_id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

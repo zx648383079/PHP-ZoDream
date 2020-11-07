@@ -2,6 +2,7 @@
 namespace Module\Task\Domain\Model;
 
 use Module\Task\Domain\Entities\TaskEntity;
+use Zodream\Helpers\Time;
 
 /**
  * Class TaskModel
@@ -23,9 +24,21 @@ use Module\Task\Domain\Entities\TaskEntity;
  */
 class TaskModel extends TaskEntity {
 
-
-
     protected $append = ['last_at'];
+
+    public function children() {
+        return $this->hasMany(static::class, 'parent_id', 'id');
+    }
+
+    public function getStartAtAttribute() {
+        $time = $this->getAttributeSource('start_at');
+        return $time < 1 ? '' : Time::format($time, 'Y-m-d');
+    }
+
+    public function setStartAtAttribute($value) {
+        $this->__attributes['start_at'] = empty($value) || is_numeric($value) ? intval($value)
+            : strtotime($value);
+    }
 
     public function getTimeAttribute() {
         if ($this->status != self::STATUS_RUNNING) {

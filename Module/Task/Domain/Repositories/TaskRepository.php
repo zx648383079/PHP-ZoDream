@@ -8,6 +8,60 @@ use Exception;
 
 class TaskRepository {
 
+    public static function getList($keywords = '', $status = 0, $parent_id = 0) {
+        return TaskModel::where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) {
+                TaskModel::searchWhere($query, 'name');
+            })
+            ->when($status > 0, function ($query) use ($status) {
+                if ($status > 1) {
+                    return $query->where('status', TaskModel::STATUS_COMPLETE);
+                }
+                return $query->where('status', '>=', 5);
+            })
+            ->where('parent_id', $parent_id)
+            ->orderBy('status', 'desc')
+            ->orderBy('id', 'desc')->page();
+    }
+
+    public static function detail($id) {
+        $model = TaskModel::findWithAuth($id);
+        if (empty($model)) {
+            throw new Exception('任务不存在');
+        }
+        $model->children;
+        return $model;
+    }
+
+    public static function save(array $data, $id = 0, $status = -1) {
+        $model = $id > 0 ? TaskModel::findWithAuth($id) : new TaskModel();
+        if (empty($model)) {
+            throw new Exception('任务不存在');
+        }
+        $model->set($data)->user_id = auth()->id();
+        if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
+            && $status != TaskModel::STATUS_COMPLETE) {
+            $model->status = 0;
+        }
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function remove($id, $stop = false) {
+        $model = TaskModel::findWithAuth($id);
+        if (empty($model)) {
+            throw new Exception('任务不存在');
+        }
+        try {
+            static::stopTask($id);
+        } catch (\Exception $ex) {}
+        if (!$stop) {
+            $model->delete();
+        }
+    }
+
     public static function getActiveTask() {
         return TaskModel::where('user_id', auth()->id())
             ->orderBy('status', 'desc')
@@ -18,10 +72,11 @@ class TaskRepository {
     /**
      * 开始
      * @param $id
+     * @param int $child_id
      * @return TaskDayModel
      * @throws Exception
      */
-    public static function start($id) {
+    public static function start($id, $child_id = 0) {
         $other = TaskDayModel::where('user_id', auth()->id())
             ->where('id', '<>', $id)->where('status', '>', TaskDayModel::STATUS_NONE)
             ->pluck('id');
@@ -59,6 +114,12 @@ class TaskRepository {
                 $day->save();
                 $day->task->status = TaskModel::STATUS_RUNNING;
                 $day->task->save();
+                if ($log->child_id > 0) {
+                    TaskModel::where('id', $log->child_id)
+                        ->update([
+                            'status' => TaskModel::STATUS_RUNNING
+                        ]);
+                }
                 return $day;
             }
         }
@@ -68,6 +129,7 @@ class TaskRepository {
         $log = TaskLogModel::create([
             'user_id' => auth()->id(),
             'task_id' => $day->task_id,
+            'child_id' => $child_id,
             'created_at' => time(),
             'day_id' => $day->id
         ]);
@@ -78,6 +140,12 @@ class TaskRepository {
         $day->save();
         $day->task->status = TaskModel::STATUS_RUNNING;
         $day->task->save();
+        if ($log->child_id > 0) {
+            TaskModel::where('id', $log->child_id)
+                ->update([
+                    'status' => TaskModel::STATUS_RUNNING
+                ]);
+        }
         return $day;
     }
 
@@ -107,6 +175,13 @@ class TaskRepository {
         $day->task->time_length += $time;
         $day->task->status = TaskModel::STATUS_NONE;
         $day->task->save();
+        if ($log->child_id > 0) {
+            TaskModel::query()->where('id', $log->child_id)
+                ->update([
+                    'time_length=time_length+'.$time,
+                    'status' => TaskModel::STATUS_NONE
+                ]);
+        }
         if ($log->status === TaskLogModel::STATUS_FINISH) {
             $day->success_amount ++;
         } else {
@@ -173,6 +248,12 @@ class TaskRepository {
         $day->save();
         $day->task->status = TaskModel::STATUS_PAUSE;
         $day->task->save();
+        if ($log->child_id > 0) {
+            TaskModel::where('id', $log->child_id)
+                ->update([
+                    'status' => TaskModel::STATUS_PAUSE
+                ]);
+        }
         return $day;
     }
 
@@ -209,6 +290,13 @@ class TaskRepository {
         $day->amount --;
         $day->status = TaskDayModel::STATUS_NONE;
         $day->save();
+        if ($log->child_id > 0) {
+            TaskModel::where('id', $log->child_id)
+                ->update([
+                    'time_length=time_length+'.$time,
+                    'status' => TaskModel::STATUS_NONE
+                ]);
+        }
         return $day;
     }
 
@@ -246,6 +334,15 @@ class TaskRepository {
                 ? TaskLogModel::STATUS_FINISH : TaskLogModel::STATUS_FAILURE;
         $log->save();
         $task->time_length += $time;
+        $task->status = TaskModel::STATUS_NONE;
+        $task->save();
+        if ($task->parent_id > 0) {
+            TaskModel::query()->where('id', $task->parent_id)
+                ->update([
+                    'time_length=time_length+'.$time,
+                    'status' => TaskModel::STATUS_NONE
+                ]);
+        }
         if ($log->day_id < 1) {
             return;
         }

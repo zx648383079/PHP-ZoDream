@@ -40,7 +40,10 @@ class TaskLogModel extends TaskLogEntity {
      * @return static
      */
     public static function findRunning($task_id) {
-        return self::where('task_id', $task_id)
+        return self::where(function ($query) use ($task_id) {
+                $query->where('task_id', $task_id)
+                    ->orWhere('child_id', $task_id);
+            })
             ->whereIn('status', [self::STATUS_NONE, self::STATUS_PAUSE])
             ->orderBy('id', 'desc')
             ->first();
