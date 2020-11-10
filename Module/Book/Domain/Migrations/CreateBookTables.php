@@ -119,8 +119,7 @@ class CreateBookTables extends Migration {
             $table->set('agree')->smallInt(5)->defaultVal(0);
             $table->set('disagree')->smallInt(5)->defaultVal(0);
             $table->timestamps();
-        });
-        parent::up();
+        })->autoUp();
     }
 
     public function seed() {

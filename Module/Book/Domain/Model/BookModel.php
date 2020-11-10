@@ -9,6 +9,7 @@ namespace Module\Book\Domain\Model;
  */
 use Domain\Model\Model;
 use Module\Book\Domain\Entities\BookEntity;
+use Module\Book\Domain\Repositories\BookRepository;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
 
@@ -60,7 +61,7 @@ class BookModel extends BookEntity {
     public function getCoverAttribute() {
         $cover = $this->getAttributeSource('cover');
         if (empty($cover)) {
-            $cover = '/assets/images/book_default.jpg';
+            $cover = BookRepository::DEFAULT_COVER;
         }
         return url()->asset($cover);
     }

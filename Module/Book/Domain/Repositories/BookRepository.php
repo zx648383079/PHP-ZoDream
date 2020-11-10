@@ -8,6 +8,8 @@ use Module\Book\Domain\Model\BookPageModel;
 
 class BookRepository {
 
+    const DEFAULT_COVER = '/assets/images/book_default.jpg';
+
     public static function getList($id = null,
                                    $category = null,
                                    $keywords = null,
