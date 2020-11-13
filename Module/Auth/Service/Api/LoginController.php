@@ -21,6 +21,12 @@ class LoginController extends RestController {
             || $request->get('remember');
         try {
             $mobile = $request->get('mobile');
+            $captcha = $request->get('captcha');
+            AuthRepository::loginPreCheck($request->ip(), !empty($mobile) ?
+                $mobile : $request->get('email'), $captcha);
+            if (!empty($captcha)) {
+
+            }
             if (!empty($mobile)) {
                 $code = $request->get('code');
                 if (!empty($code)) {

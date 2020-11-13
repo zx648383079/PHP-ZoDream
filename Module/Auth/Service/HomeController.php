@@ -1,9 +1,11 @@
 <?php
 namespace Module\Auth\Service;
 
+use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Zodream\Image\Captcha;
 use Zodream\Infrastructure\Http\Request;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\Service\Factory;
@@ -34,15 +36,16 @@ class HomeController extends Controller {
             ]);
         }
         $time = strtotime(date('Y-m-d 00:00:00'));
-        $num = LoginLogModel::failureCount($request->ip(), $time);
-        if ($num > 2) {
-            $num = intval($num / 3);
-            $this->send('code', $num);
-            Factory::session()->set('level', $num);
+        $count = LoginLogModel::failureCount($request->ip(), $time);
+        $isCaptcha = false;
+        if ($count > 2) {
+            $count = intval($count / 3);
+            Factory::session()->set('level', $count);
+            $isCaptcha = true;
         }
         $redirect_uri = $request->get('redirect_uri');
         $title = '用户登录';
-        return $this->show(compact('redirect_uri', 'title'));
+        return $this->show(compact('redirect_uri', 'title', 'isCaptcha'));
     }
 
     public function checkAction($name, $value) {
@@ -63,9 +66,14 @@ class HomeController extends Controller {
      */
     public function loginAction(Request $request, $email = null) {
         try {
-            // 判断 ip 是否登录次数过多
-            // 判断 账号 是否登录失败过多
-            // 验证 验证码
+            $captcha = $request->get('captcha');
+            AuthRepository::loginPreCheck($request->ip(), $email, $captcha);
+            if (!empty($captcha)) {
+                $verifier = new Captcha();
+                if (!$verifier->verify($captcha)) {
+                    throw AuthException::invalidCaptcha();
+                }
+            }
             AuthRepository::login(
                 $email,
                 $request->get('password'),
@@ -75,13 +83,12 @@ class HomeController extends Controller {
             if (!empty($email)) {
                 LoginLogModel::addLoginLog($email, 0, false);
             }
-            return $this->jsonFailure($ex->getMessage());
+            return $this->jsonFailure($ex->getMessage(), $ex->getCode());
         }
         $redirect_uri = $request->get('redirect_uri');
         return $this->jsonSuccess([
             'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
         ], '登录成功！');
-
     }
 
     public function logoutAction() {

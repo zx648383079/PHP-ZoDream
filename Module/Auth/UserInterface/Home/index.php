@@ -22,6 +22,13 @@ $this->extend('layouts/header')
                         <input type="password" name="password" placeholder="请输入密码" required autocomplete="off">
                         <i class="fa fa-lock" aria-hidden="true" ></i>
                     </div>
+                    <div class="input-group captcha-input" <?=$isCaptcha ? '' : 'style="display:none"'?>>
+                        <input type="text" name="captcha" placeholder="请输入验证码" autocomplete="off">
+                        <a href="javascript:;" class="btn" title="点击刷新">
+                            <img src="<?= $isCaptcha ? $this->url('./captcha', ['v' => time()], false) : ''?>" data-src="<?=$this->url('./captcha?', false)?>" alt="刷新重试">
+                        </a>
+                        <i class="fa fa-key" aria-hidden="true" ></i>
+                    </div>
 
                     <div class="input-group">
                         <div class="checkbox">

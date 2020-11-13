@@ -7,6 +7,10 @@ $(function() {
         $(this).closest('.input-group').addClass('input-focus').removeClass('error');
     }).on('blur', '.input-group input', function() {
         $(this).closest('.input-group').removeClass('input-focus');
+    }).on('click', '.captcha-input .btn', function(e) {
+        e.preventDefault();
+        const img = $(this).find('img');
+        img.attr('src', img.data('src') + '?v=' + Math.random());
     }).submit(function() {
         let _this = $(this);
         if (_this.find('.error').length > 0) {
@@ -14,8 +18,11 @@ $(function() {
             return false;
         }
         let loading = Dialog.loading();
-        postJson(_this.attr('action'), _this.serialize(), function(data) {
+        postJson(_this.attr('action'), _this.serialize(), (data) => {
             loading.close();
+            if (data.code === 1009) {
+                _this.find('.captcha-input').show().find('.btn').trigger('click');
+            }
             parseAjax(data);
         });
         return false;

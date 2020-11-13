@@ -22,6 +22,34 @@ class AuthRepository {
 
     const UNSET_PASSWORD = 'no_password';
 
+    public static function loginPreCheck($ip, $account, $captcha = '') {
+        $today = strtotime(date('Y-m-d 00:00:00'));
+        // 判断 ip 是否登录次数过多
+        $count = LoginLogModel::where('ip', $ip)
+            ->where('status', 0)
+            ->where('created_at', '>=', $today)->count();
+        if ($count > 20) {
+            throw AuthException::ipDisallow();
+        }
+        if (empty($account)) {
+            return;
+        }
+        // 判断 账号 是否登录失败过多
+        $count = LoginLogModel::where('user', $account)
+            ->where('status', 0)
+            ->where('created_at', '>=', $today)->count();
+        if ($count > 10) {
+            throw AuthException::accountDisallow();
+        }
+        if ($count < 3) {
+            return;
+        }
+        // 验证 验证码
+        if (empty($captcha)) {
+            throw AuthException::invalidCaptcha();
+        }
+    }
+
     /**
      * 登录
      * @param $email

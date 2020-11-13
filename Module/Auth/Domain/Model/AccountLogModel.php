@@ -137,7 +137,7 @@ class AccountLogModel extends Model {
         $log = static::log($user_id, $type, $item_id, $money, $new_money, $remark, $status);
         if (auth()->id() === $user_id) {
             // 自动更新当前用户信息
-            auth()->user()->moeny = $new_money;
+            auth()->user()->money = $new_money;
         }
         return $log->id;
     }

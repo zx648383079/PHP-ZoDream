@@ -121,6 +121,8 @@ return [
     'Your Site Name' => '显示的网站名称',
     'feedback_tip' => '本站及其框架接受任何友好建议，欢迎任何友好朋友在此留下意见。',
     'Not Role!' => '无权限访问！',
+    'Too many failures' => '失败次数过多，请24小时之后再试',
+    'captcha error' => '请输入正确的验证码',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [
