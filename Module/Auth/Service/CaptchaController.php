@@ -15,7 +15,8 @@ class CaptchaController extends Controller {
 	
 	function indexAction(Request $request) {
 		$level = intval($request->get('level'));
-		if (empty($level)) {
+		$captchaKey = $request->get('captcha_token');
+		if (empty($level) && empty($captchaKey)) {
 			$level = Factory::session('level');
 		}
 		$captcha = new Captcha();
@@ -25,7 +26,10 @@ class CaptchaController extends Controller {
             'fontSize' => 20,
             'fontFamily' => (string)Factory::root()->file('data/fonts/YaHei.ttf')
         ]);
-		$captcha->createCode(true);
+		$captcha->createCode(empty($captchaKey));
+		if (!empty($captchaKey)) {
+		    cache()->store('captcha')->set($captchaKey, strtolower($captcha->getCode()), 600);
+        }
 		return Factory::response()->image($captcha->generate($level));
 	}
 

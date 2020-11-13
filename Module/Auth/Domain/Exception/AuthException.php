@@ -6,11 +6,11 @@ use Exception;
 class AuthException {
 
     public static function ipDisallow() {
-        return new Exception(__('Too many failures'), 1001);
+        return new Exception(__('Too many failures'), 1011);
     }
 
     public static function accountDisallow() {
-        return new Exception(__('Too many failures'), 1002);
+        return new Exception(__('Too many failures'), 1010);
     }
 
     public static function invalidCaptcha() {
