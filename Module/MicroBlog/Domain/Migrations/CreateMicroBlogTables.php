@@ -2,9 +2,11 @@
 namespace Module\MicroBlog\Domain\Migrations;
 
 use Module\MicroBlog\Domain\Model\AttachmentModel;
+use Module\MicroBlog\Domain\Model\BlogTopicModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
+use Module\MicroBlog\Domain\Model\TopicModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -47,7 +49,15 @@ class CreateMicroBlogTables extends Migration {
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
             $table->timestamp('created_at');
-        });
-        parent::up();
+        })->append(TopicModel::tableName(), function(Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('name')->varchar(200)->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->timestamps();
+        })->append(BlogTopicModel::tableName(), function(Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('micro_id')->int()->notNull();
+            $table->set('topic_id')->int()->notNull();
+        })->autoUp();
     }
 }

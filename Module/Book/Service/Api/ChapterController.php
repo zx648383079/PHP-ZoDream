@@ -2,6 +2,7 @@
 namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Model\BookChapterModel;
+use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookLogModel;
 use Zodream\Route\Controller\RestController;
 
@@ -23,7 +24,7 @@ class ChapterController extends RestController {
         if (empty($chapter)) {
             return $this->renderFailure('id 错误！');
         }
-        BookLogModel::logBook($chapter->book_id);
+        BookClickLogModel::logBook($chapter->book_id);
         $data = $chapter->toArray();
         $data['content'] = $chapter->body->content;
         $data['previous'] = $chapter->previous;

@@ -53,4 +53,9 @@ class BookListModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
+    public function items() {
+        return $this->hasMany(ListItemModel::class, 'list_id', 'id')->with('book')
+            ->limit(4);
+    }
+
 }
