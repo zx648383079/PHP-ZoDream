@@ -10,8 +10,8 @@ use Domain\Model\Model;
  * @property integer $book_id
  * @property string $remark
  * @property integer $star
- * @property integer $agree
- * @property integer $disagree
+ * @property integer $agree_count
+ * @property integer $disagree_count
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -27,8 +27,8 @@ class ListItemModel extends Model {
             'book_id' => 'required|int',
             'remark' => 'string:0,200',
             'star' => 'int:0,127',
-            'agree' => 'int:0,99999',
-            'disagree' => 'int:0,99999',
+            'agree_count' => 'int:0,99999',
+            'disagree_count' => 'int:0,99999',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -41,8 +41,8 @@ class ListItemModel extends Model {
             'book_id' => 'Book Id',
             'remark' => 'Remark',
             'star' => 'Star',
-            'agree' => 'Agree',
-            'disagree' => 'Disagree',
+            'agree_count' => 'Agree',
+            'disagree_count' => 'Disagree',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

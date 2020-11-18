@@ -37,6 +37,8 @@ class CreateChatTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('type')->tinyint(2)->notNull()->defaultVal(0);
             $table->set('content')->varchar(200)->notNull()->comment('内容');
+            $table->set('item_id')->int()->notNull()
+                ->defaultVal(0)->comment('附加id');
             $table->set('receive_id')->int()->notNull()
                 ->defaultVal(0)->comment('接收用户');
             $table->set('group_id')->int()->notNull()

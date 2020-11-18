@@ -1,7 +1,6 @@
 <?php
 namespace Module\Book\Service;
 
-use Module\Book\Domain\Model\BookModel;
 
 class HistoryController extends Controller {
 

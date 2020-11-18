@@ -9,24 +9,26 @@ use Zodream\Route\Controller\RestController;
 
 class ListController extends RestController {
 
-    protected function rules()
-    {
+    protected function rules() {
         return [
-            'save' => '@',
-            '*' => '*'
+            'index' => '*',
+            'detail' => '*',
+            '*' => '@'
         ];
     }
 
-    public function indexAction() {
-        $data = BookListModel::with('user', 'items')->orderBy('created_at', 'desc')->page();
+    public function indexAction($keywords = '') {
+        $data = ListRepository::getList($keywords);
         return $this->renderPage($data);
     }
 
     public function detailAction($id) {
-        $list = BookListModel::find($id);
-        $list->user;
-        $list->items = ListItemModel::with('book')->where('list_id', $id)->get();
-        return $this->render($list);
+        try {
+            $model = ListRepository::detail($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
     }
 
     public function saveAction(Request $request) {
@@ -38,6 +40,42 @@ class ListController extends RestController {
                 'items' => ''
             ]);
             $model = ListRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
+    public function deleteAction($id) {
+        try {
+            ListRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function collectAction($id) {
+        try {
+            $model = ListRepository::collect($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
+    public function agreeAction($id) {
+        try {
+            $model = ListRepository::agree($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
+    public function disagreeAction($id) {
+        try {
+            $model = ListRepository::disagree($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -75,8 +75,8 @@ class CreateBookTables extends Migration {
         })->append(BookLogModel::tableName(), function(Table $table) {
             $table->setComment('小说记录统计');
             $table->set('id')->pk(true);
-            $table->set('type')->tinyint(3)->defaultVal(0);
-            $table->set('id_value')->int(10)->notNull();
+            $table->set('item_type')->tinyint(3)->defaultVal(0);
+            $table->set('item_id')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
             $table->set('action')->int(10)->notNull();
             $table->timestamp('created_at');
@@ -116,8 +116,8 @@ class CreateBookTables extends Migration {
             $table->set('book_id')->int()->notNull();
             $table->set('remark')->varchar(200)->defaultVal('');
             $table->set('star')->tinyint(1)->defaultVal(10);
-            $table->set('agree')->smallInt(5)->defaultVal(0);
-            $table->set('disagree')->smallInt(5)->defaultVal(0);
+            $table->set('agree_count')->smallInt(5)->defaultVal(0);
+            $table->set('disagree_count')->smallInt(5)->defaultVal(0);
             $table->timestamps();
         })->autoUp();
     }

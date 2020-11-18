@@ -7,6 +7,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Repositories\HistoryRepository;
 use Module\Book\Domain\Setting;
 use Zodream\Disk\File;
 use Zodream\Disk\Stream;
@@ -54,7 +55,7 @@ class BookController extends Controller {
         $cat = BookCategoryModel::find($book->cat_id);
         $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(8)->all();
         $new_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $book->id)->where('size < 50000')->orderBy('click_count', 'desc')->limit(8)->all();
-        BookHistoryModel::log($chapter);
+        HistoryRepository::log($chapter);
         $setting = new Setting();
         $setting->load()->save();
         return $this->show(compact('book', 'cat', 'chapter', 'like_book', 'new_book', 'setting'));

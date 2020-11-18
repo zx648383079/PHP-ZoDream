@@ -40,9 +40,37 @@ class BookRepository {
             : $query->page($per_page);
     }
 
+    public static function detail($id) {
+        $model = BookModel::find($id);
+        if (empty($model)) {
+            throw new \Exception('小说不存在');
+        }
+        $model->category;
+        $model->author;
+        $model->on_shelf = HistoryRepository::hasBook($model->id);
+        return $model;
+    }
+
     public static function chapters($book) {
         return BookChapterModel::where('book_id', $book)
             ->orderBy('position', 'asc')
             ->orderBy('created_at', 'asc')->all();
+    }
+
+    public static function chapter($id, $book = 0) {
+        $chapter = $id > 0 ?
+            BookChapterModel::find($id) : BookChapterModel::where('book_id', $book)
+                ->orderBy('position', 'asc')
+                ->orderBy('created_at', 'asc')
+                ->first();
+        if (empty($chapter)) {
+            throw new \Exception('id 错误！');
+        }
+        BookClickLogModel::logBook($chapter->book_id);
+        $data = $chapter->toArray();
+        $data['content'] = $chapter->body->content;
+        $data['previous'] = $chapter->previous;
+        $data['next'] = $chapter->next;
+        return $data;
     }
 }

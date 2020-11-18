@@ -123,6 +123,7 @@ return [
     'Not Role!' => '无权限访问！',
     'Too many failures' => '失败次数过多，请24小时之后再试',
     'captcha error' => '请输入正确的验证码',
+    'Please Login User!' => '请先登录！',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

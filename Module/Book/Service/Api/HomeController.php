@@ -3,7 +3,6 @@ namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Repositories\BookRepository;
-use Zodream\Database\DB;
 use Zodream\Route\Controller\RestController;
 
 class HomeController extends RestController {
@@ -18,12 +17,12 @@ class HomeController extends RestController {
     }
 
     public function detailAction($id) {
-        $id = intval($id);
-        $book = BookModel::with('category', 'author')->where('id', $id)->first();
-        if (empty($book)) {
-            return $this->renderFailure('id 错误！');
+        try {
+            $model = BookRepository::detail($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($book);
+        return $this->render($model);
     }
 
     public function hotAction() {
