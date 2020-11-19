@@ -20,7 +20,7 @@ class HomeController extends Controller {
         if (empty($url)) {
             return $this->renderFailure('网址必传');
         }
-        $token = md5(sprintf('%s-%s-%s', $url, time(), auth()->id()));
+        $token = md5(sprintf('%s-%s-%s', is_array($url) ? implode('-', $url) : $url, time(), auth()->id()));
         cache()->store('disk')->set($token, auth()->id(), 3600);
         $cb = function ($url) use ($token) {
             if (empty($url)) {
