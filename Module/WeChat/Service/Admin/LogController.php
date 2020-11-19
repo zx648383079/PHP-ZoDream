@@ -22,14 +22,14 @@ class LogController extends Controller {
 
     public function markAction($id) {
         MessageHistoryModel::where('id', $id)->updateBool('mark');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
 
     public function deleteAction($id) {
         MessageHistoryModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

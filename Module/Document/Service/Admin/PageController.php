@@ -34,14 +34,14 @@ class PageController extends Controller {
     public function saveAction() {
         $model = new PageModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         if ($model->parent_id < 1) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('project', ['id' => $model->project_id])
             ]);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('page', ['id' => $model->id])
         ]);
     }
@@ -49,7 +49,7 @@ class PageController extends Controller {
 
     public function deleteAction($id) {
         PageModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('')
         ]);
     }

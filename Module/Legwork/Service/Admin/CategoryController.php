@@ -27,19 +27,19 @@ class CategoryController extends Controller {
     public function saveAction($id = 0) {
         $model = CategoryModel::findOrNew($id);
         if (!$model->load()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('category')
         ]);
     }
 
     public function deleteAction($id) {
         CategoryModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

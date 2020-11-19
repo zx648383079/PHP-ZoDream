@@ -39,7 +39,7 @@ class AddressController extends Controller {
 
     public function infoAction($id) {
         $address = AddressRepository::get($id);
-        return $this->jsonSuccess($address);
+        return $this->renderData($address);
     }
 
     public function saveAction() {
@@ -47,9 +47,9 @@ class AddressController extends Controller {
         try {
             $address = AddressRepository::save($data);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -58,9 +58,9 @@ class AddressController extends Controller {
         try {
             AddressRepository::remove($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -69,9 +69,9 @@ class AddressController extends Controller {
         try {
             AddressRepository::setDefault($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

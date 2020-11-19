@@ -51,11 +51,11 @@ class ThreadController extends Controller {
     public function createAction($title, $content,
                                  $forum_id, $classify_id = 0, $is_private_post = 0) {
         if (empty($title)) {
-            return $this->jsonFailure('标题不能为空');
+            return $this->renderFailure('标题不能为空');
         }
         $forum_id = intval($forum_id);
         if ($forum_id < 1) {
-            return $this->jsonFailure('请选择版块');
+            return $this->renderFailure('请选择版块');
         }
         $thread = ThreadModel::create([
             'title' => $title,
@@ -65,7 +65,7 @@ class ThreadController extends Controller {
             'is_private_post' => $is_private_post
         ]);
         if (empty($thread)) {
-            return $this->jsonFailure('发帖失败');
+            return $this->renderFailure('发帖失败');
         }
         ThreadPostModel::create([
             'content' => $content,
@@ -75,7 +75,7 @@ class ThreadController extends Controller {
             'ip' => app('request')->ip()
         ]);
         ForumModel::updateCount($thread->forum_id, 'thread_count');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./forum', ['id' => $forum_id])
         ]);
     }
@@ -98,7 +98,7 @@ class ThreadController extends Controller {
     public function updateAction($id, Request $request) {
         $thread = ThreadModel::find($id);
         if ($thread->user_id !== auth()->id()) {
-            return $this->jsonFailure('无权限');
+            return $this->renderFailure('无权限');
         }
         if ($request->has('title')) {
             $thread->title = $request->get('title');
@@ -114,22 +114,22 @@ class ThreadController extends Controller {
         ])->update([
             'content' => $request->get('content')
         ]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./thread', ['id' => $id])
         ], '更新成功');
     }
 
     public function replyAction($content, $thread_id) {
         if (empty($content)) {
-            return $this->jsonFailure('请输入内容');
+            return $this->renderFailure('请输入内容');
         }
         $thread_id = intval($thread_id);
         if ($thread_id < 1) {
-            return $this->jsonFailure('请选择帖子');
+            return $this->renderFailure('请选择帖子');
         }
         $thread = ThreadModel::find($thread_id);
         if (empty($thread)) {
-            return $this->jsonFailure('请选择帖子');
+            return $this->renderFailure('请选择帖子');
         }
         $max = ThreadPostModel::where('thread_id', $thread_id)->max('grade');
         $post = ThreadPostModel::create([
@@ -140,12 +140,12 @@ class ThreadController extends Controller {
             'ip' => app('request')->ip()
         ]);
         if (empty($post)) {
-            return $this->jsonFailure('发表失败');
+            return $this->renderFailure('发表失败');
         }
         ForumModel::updateCount($thread->forum_id, 'post_count');
         ThreadModel::query()->where('id', $thread_id)
             ->updateOne('post_count');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./thread', ['id' => $thread_id, 'page' => ceil($post->grade / 20)])
         ]);
     }
@@ -153,14 +153,14 @@ class ThreadController extends Controller {
     public function digestAction($id) {
         $thread = ThreadModel::find($id);
         if (empty($thread)) {
-            return $this->jsonFailure('请选择帖子');
+            return $this->renderFailure('请选择帖子');
         }
         if (!$thread->canDigest()) {
-            return $this->jsonFailure('无权限');
+            return $this->renderFailure('无权限');
         }
         ThreadModel::query()->where('id', $id)
             ->updateBool('is_digest');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -168,14 +168,14 @@ class ThreadController extends Controller {
     public function highlightAction($id) {
         $thread = ThreadModel::find($id);
         if (empty($thread)) {
-            return $this->jsonFailure('请选择帖子');
+            return $this->renderFailure('请选择帖子');
         }
         if (!$thread->canHighlight()) {
-            return $this->jsonFailure('无权限');
+            return $this->renderFailure('无权限');
         }
         ThreadModel::query()->where('id', $id)
             ->updateBool('is_highlight');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -183,14 +183,14 @@ class ThreadController extends Controller {
     public function closeAction($id) {
         $thread = ThreadModel::find($id);
         if (empty($thread)) {
-            return $this->jsonFailure('请选择帖子');
+            return $this->renderFailure('请选择帖子');
         }
         if (!$thread->canClose()) {
-            return $this->jsonFailure('无权限');
+            return $this->renderFailure('无权限');
         }
         ThreadModel::query()->where('id', $id)
             ->updateBool('is_closed');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -198,17 +198,17 @@ class ThreadController extends Controller {
     public function removePostAction($id) {
         $item = ThreadPostModel::find($id);
         if (empty($item)) {
-            return $this->jsonFailure('请选择回帖');
+            return $this->renderFailure('请选择回帖');
         }
         $thread = ThreadModel::find($item->thread_id);
         if (empty($thread)) {
-            return $this->jsonFailure('请选择帖子');
+            return $this->renderFailure('请选择帖子');
         }
         if (!$thread->canRemovePost($item)) {
-            return $this->jsonFailure('无权限');
+            return $this->renderFailure('无权限');
         }
         $item->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -217,27 +217,27 @@ class ThreadController extends Controller {
         try {
             $res = ThreadRepository::toggleCollect($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($res);
+        return $this->renderData($res);
     }
 
     public function agreeAction($id) {
         try {
             $res = ThreadRepository::agreePost($id, true);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($res);
+        return $this->renderData($res);
     }
 
     public function disagreeAction($id) {
         try {
             $res = ThreadRepository::agreePost($id, false);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($res);
+        return $this->renderData($res);
     }
 
     public function doAction(Request $request, $id) {
@@ -248,9 +248,9 @@ class ThreadController extends Controller {
             return app('response');
         }
         catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'id' => $id,
             'content' => $html
         ]);

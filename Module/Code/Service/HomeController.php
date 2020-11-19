@@ -48,13 +48,13 @@ class HomeController extends ModuleController {
 
     public function createAction(Request $request) {
         if (!CodeRepository::canPublish()) {
-            return $this->jsonFailure('发送过于频繁！');
+            return $this->renderFailure('发送过于频繁！');
         }
         $model = CodeRepository::create($request->get('content'), $request->get('tags'), $request->get('language'));
         if (!$model) {
-            return $this->jsonFailure('发送失败');
+            return $this->renderFailure('发送失败');
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./')
         ]);
 
@@ -67,9 +67,9 @@ class HomeController extends ModuleController {
         try {
             $model = CodeRepository::recommend($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function collectAction($id) {
@@ -79,9 +79,9 @@ class HomeController extends ModuleController {
         try {
             $model = CodeRepository::collect($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function deleteAction($id) {
@@ -91,16 +91,16 @@ class HomeController extends ModuleController {
         try {
             $model = CodeRepository::delete($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function suggestionAction($keywords = null) {
         $data = TagModel::when(!empty($keywords), function($query) {
             TagModel::searchWhere($query, ['content']);
         })->groupBy('content')->limit(4)->pluck('content');
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function findLayoutFile() {

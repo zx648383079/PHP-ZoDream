@@ -13,8 +13,8 @@ class HomeController extends Controller {
     public function checkInAction() {
         $model = CheckInModel::checkIn(auth()->id(), CheckInModel::METHOD_APP);
         if ($model) {
-            return $this->jsonSuccess($model);
+            return $this->renderData($model);
         }
-        return $this->jsonFailure('签到失败');
+        return $this->renderFailure('签到失败');
     }
 }

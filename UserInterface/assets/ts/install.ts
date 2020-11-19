@@ -5,7 +5,7 @@ function bindDB() {
         let db = $(this).val().toString().trim();
         postJson(BASE_URI + 'dbs', $('form').serialize(), res => {
             if (res.code === 200) {
-                res.messages = res.data.indexOf(db) >= 0 ? '数据库不为空，将覆盖已有表' : '数据库不存在，将自动创建';
+                res.message = res.data.indexOf(db) >= 0 ? '数据库不为空，将覆盖已有表' : '数据库不存在，将自动创建';
             }
             parseAjax(res);
         });

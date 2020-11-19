@@ -34,15 +34,15 @@ class PageController extends Controller {
         $model->load();
         $model->setRule($request->get('rule'));
         if (!$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('page')
         ]);
     }
 
     public function deleteAction($id) {
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('page')
         ]);
     }

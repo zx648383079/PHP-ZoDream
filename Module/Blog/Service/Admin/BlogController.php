@@ -49,9 +49,9 @@ class BlogController extends Controller {
             $data = array_merge($request->get('meta', []), $data);
             BlogRepository::save($data, $id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $id < 1 ? $this->getUrl('blog') : -1
         ]);
     }
@@ -60,9 +60,9 @@ class BlogController extends Controller {
         try {
             BlogRepository::remove($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

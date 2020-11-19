@@ -32,9 +32,9 @@ class OrderController extends Controller {
         try {
             OrderRepository::receive($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -43,9 +43,9 @@ class OrderController extends Controller {
         try {
             OrderRepository::cancel($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
            'refresh' => true
         ]);
     }
@@ -54,9 +54,9 @@ class OrderController extends Controller {
         try {
             OrderRepository::repurchase($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('cart')
         ]);
     }

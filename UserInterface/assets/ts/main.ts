@@ -4,8 +4,7 @@ declare var UPLOAD_URI: string;
 interface IResponse {
     code: number,
     status: string,
-    errors?: string|Array<any>,
-    messages?: string|Array<any>,
+    message?: string|Array<any>,
     data?: any,
     url?: string,
 }
@@ -53,10 +52,10 @@ function parseAjax(data: IResponse) {
         return;
     }
     if (data.code != 200) {
-        Dialog.tip(data.errors || '操作执行失败！');
+        Dialog.tip(data.message || '操作执行失败！');
         return;
     }
-    Dialog.tip(data.messages || '操作执行完成！');
+    Dialog.tip(data.message || '操作执行完成！');
     if (data.data && data.data.refresh) {
         setTimeout(() => {
             if (typeof parseAjaxUri == 'function') {

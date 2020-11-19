@@ -20,7 +20,7 @@ class HomeController extends ModuleController {
                 });
             })->orderBy('id desc')->page();
         if (app('request')->isAjax()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'html' => $this->renderHtml('page', compact('model_list', 'keywords')),
                 'has_more' => $model_list->hasMore()
             ]);
@@ -32,7 +32,7 @@ class HomeController extends ModuleController {
         $data = NoteModel::when(!empty($keywords), function($query) {
             NoteModel::searchWhere($query, ['content']);
         })->groupBy('content')->limit(4)->pluck('content');
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function findLayoutFile() {

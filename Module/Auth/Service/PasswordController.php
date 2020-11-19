@@ -30,9 +30,9 @@ class PasswordController extends Controller {
                 $request->get('email')
             );
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./')
         ], '密码重置成功');
     }
@@ -43,9 +43,9 @@ class PasswordController extends Controller {
                 md5($email. Str::random(). Time::millisecond())
                 );
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess(null, sprintf('邮件已成功发送至 %s 请注意查收！', $email));
+        return $this->renderData(null, sprintf('邮件已成功发送至 %s 请注意查收！', $email));
     }
 
 

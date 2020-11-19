@@ -269,8 +269,8 @@ function checkTask(baseUri: string, element: JQuery) {
         if (data.code == 200 && data.data) {
             timer.dialog && timer.dialog.trigger(TASK_HIDE_TIMER);
             refreshPanel(baseUri);
-            Dialog.notify('提示', data.messages);
-            alert(data.messages);
+            Dialog.notify('提示', data.message as string);
+            alert(data.message);
         }
     });
 }

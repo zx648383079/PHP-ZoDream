@@ -15,44 +15,44 @@ class MinerController extends Controller {
     public function hireAction($id) {
         try {
             PlayerModel::hireMiner($id);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ]);
         } catch (Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
     }
 
     public function fireAction($id) {
         try {
             PlayerModel::fireMiner($id);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ]);
         } catch (Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
     }
 
     public function workAction($id, $area_id) {
         try {
             PlayerModel::workMiner($id, $area_id);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ]);
         } catch (Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
     }
 
     public function balanceAction($id) {
         try {
             PlayerModel::balanceMiner($id);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ]);
         } catch (Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
     }
 }

@@ -24,10 +24,10 @@ class UploadController extends Controller {
             ->setFile($this->cacheFolder->file($md5))
             ->save();
         if (!$result) {
-            return $this->jsonFailure($upload->getError());
+            return $this->renderFailure($upload->getError());
         }
         Factory::log()->info($name);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'name' => $upload->getName(),
             'size' => $upload->getSize(),
             'type' => $upload->getType()

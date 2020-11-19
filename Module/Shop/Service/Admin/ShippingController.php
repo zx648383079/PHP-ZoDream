@@ -31,10 +31,10 @@ class ShippingController extends Controller {
     public function saveAction() {
         $model = new ShippingModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         ShippingGroupModel::batchSave($model->id, app('request')->get('shipping'));
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('shipping')
         ]);
     }
@@ -43,7 +43,7 @@ class ShippingController extends Controller {
         ShippingModel::where('id', $id)->delete();
         ShippingGroupModel::where('shipping_id', $id)->delete();
         ShippingRegionModel::where('shipping_id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('shipping')
         ]);
     }

@@ -15,7 +15,7 @@ class MicroController extends Controller {
 
     public function deleteAction($id) {
         MicroBlogModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('micro')
         ]);
     }

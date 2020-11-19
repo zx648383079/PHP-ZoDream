@@ -23,7 +23,7 @@ class CodeController extends Controller {
 
     public function deleteAction($id) {
         CodeModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('code')
         ]);
     }

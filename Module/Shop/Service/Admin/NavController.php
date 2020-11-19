@@ -31,7 +31,7 @@ class NavController extends Controller {
 
     public function deleteAction($id) {
         NavigationModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('nav')
         ]);
     }

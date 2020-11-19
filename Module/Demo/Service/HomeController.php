@@ -81,6 +81,6 @@ class HomeController extends Controller {
             $item['url'] = url('./', ['id' => $item['id']]);
         }
         unset($item);
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 }

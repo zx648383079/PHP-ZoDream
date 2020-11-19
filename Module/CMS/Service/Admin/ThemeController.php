@@ -26,14 +26,14 @@ class ThemeController extends Controller {
 
     public function applyAction($theme) {
         (new ThemeManager())->apply($theme);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('theme')
         ]);
     }
 
     public function backAction() {
         (new ThemeManager())->pack();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('theme')
         ]);
     }

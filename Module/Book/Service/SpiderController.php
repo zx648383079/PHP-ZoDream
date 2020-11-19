@@ -73,22 +73,22 @@ class SpiderController extends Controller {
 
     public function searchAction($keywords) {
         if (empty($keywords)) {
-            return $this->jsonFailure('请输入搜索内容');
+            return $this->renderFailure('请输入搜索内容');
         }
         if (!Validator::url()->validate($keywords)) {
-            return $this->jsonSuccess((new ZhiShuShenQi())->search($keywords));
+            return $this->renderData((new ZhiShuShenQi())->search($keywords));
         }
         $spider = SiteCrawl::getSpider(new Uri($keywords));
         if (empty($spider)) {
-            return $this->jsonFailure('爬虫不存在');
+            return $this->renderFailure('爬虫不存在');
         }
         $book = $spider->book($keywords);
         if (empty($book)) {
-            return $this->jsonFailure('爬取失败');
+            return $this->renderFailure('爬取失败');
         }
         $book['url'] = $keywords;
         unset($book['chapters']);
-        return $this->jsonSuccess([$book]);
+        return $this->renderData([$book]);
     }
 
     public function asyncAction() {
@@ -96,13 +96,13 @@ class SpiderController extends Controller {
         try {
             $progress = $this->getProgress();
             if (empty($progress)) {
-                return $this->jsonFailure('不能存在进程');
+                return $this->renderFailure('不能存在进程');
             }
-            return $this->jsonSuccess($progress());
+            return $this->renderData($progress());
         } catch (Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     private function getProgress() {

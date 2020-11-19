@@ -39,7 +39,7 @@ class PostController extends Controller {
         $model = PostModel::findOrNew($id);
         $isNew = $model->isNewRecord;
         if (!$model->load(null, ['user_id'])) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->user_id = auth()->id();
         $file = PostRepository::file($model);
@@ -47,11 +47,11 @@ class PostController extends Controller {
             $model->size = $file->size();
         }
         if (!$model->saveIgnoreUpdate()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         TagRelationshipModel::bind($model->id, app('request')->get('tag', []), $isNew);
         PostRepository::unzipFile($model);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $isNew ? $this->getUrl('post') : -1
         ]);
     }
@@ -59,10 +59,10 @@ class PostController extends Controller {
     public function deleteAction($id) {
         $model = PostModel::where('id', $id)->where('user_id', auth()->id());
         if (empty($model)) {
-            return $this->jsonFailure('文章不存在');
+            return $this->renderFailure('文章不存在');
         }
         $model->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -71,8 +71,8 @@ class PostController extends Controller {
         try {
             $file = PostRepository::saveFile();
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($file);
+        return $this->renderData($file);
     }
 }

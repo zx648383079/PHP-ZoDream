@@ -23,16 +23,16 @@ class LinkageController extends Controller {
     public function saveAction() {
         $model = new LinkageModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('linkage')
         ]);
     }
 
     public function deleteAction($id) {
         LinkageModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('linkage')
         ]);
     }
@@ -66,9 +66,9 @@ class LinkageController extends Controller {
     public function saveDataAction() {
         $model = new LinkageDataModel();
         if (!$model->load() || !$model->autoIsNew()->createFullName()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
         ]);
     }
@@ -76,13 +76,13 @@ class LinkageController extends Controller {
     public function deleteDataAction($id) {
         $model = LinkageDataModel::find($id);
         $model->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
         ]);
     }
 
     public function treeAction($id) {
-        return $this->jsonSuccess(LinkageModel::idTree($id));
+        return $this->renderData(LinkageModel::idTree($id));
     }
 
 }

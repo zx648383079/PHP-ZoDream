@@ -25,10 +25,10 @@ class SiteController extends Controller {
     public function saveAction() {
         $model = new SiteModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         CMSRepository::generateSite($model);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }
@@ -37,14 +37,14 @@ class SiteController extends Controller {
         $model = SiteModel::find($id);
         $model->delete();
         CMSRepository::removeSite($model);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }
 
     public function changeAction($id) {
         CMSRepository::resetSite($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }
@@ -56,7 +56,7 @@ class SiteController extends Controller {
         SiteModel::where('id', '<>', $id)->update([
             'is_default' => 0
         ]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }
@@ -86,7 +86,7 @@ class SiteController extends Controller {
         }
         $model->options = $options;
         $model->save();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site/option', ['id' => $id])
         ]);
     }

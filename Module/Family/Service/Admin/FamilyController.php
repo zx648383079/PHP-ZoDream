@@ -65,12 +65,12 @@ class FamilyController extends Controller {
         $model = FamilyModel::findOrNew($id);
         $isNew = $model->isNewRecord;
         if (!$model->load(null, ['user_id'])) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->parent_id = intval($model->parent_id);
         $model->mother_id = intval($model->mother_id);
         if (!$model->saveIgnoreUpdate()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $spouseItems = self::formArr($request->get('spouse', []));
         foreach ($spouseItems as $item) {
@@ -90,7 +90,7 @@ class FamilyController extends Controller {
             FamilySpouseModel::query()->insert($item);
         }
         $model->save();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('family'),
             'id' => $model->id,
             'name' => $model->name
@@ -99,7 +99,7 @@ class FamilyController extends Controller {
 
     public function deleteAction($id) {
 
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('family')
         ]);
     }
@@ -107,18 +107,18 @@ class FamilyController extends Controller {
     public function spouseAction($id) {
         $model = FamilyModel::find($id);
         if (empty($model)) {
-            return $this->jsonFailure('族人不存在');
+            return $this->renderFailure('族人不存在');
         }
         $items = FamilySpouseModel::where('family_id', $model->id)->pluck('spouse_id');
         $items[] = $model->spouse_id;
         $items = FamilyModel::whereIn('id', $items)->get();
-        return $this->jsonSuccess($items);
+        return $this->renderData($items);
     }
 
     public function deleteSpouseAction($id) {
         $model = FamilySpouseModel::find($id);
         if (empty($model)) {
-            return $this->jsonFailure('失败');
+            return $this->renderFailure('失败');
         }
         FamilyModel::where('id', $model->family_id)
             ->where('spouse_id', $model->spouse_id)
@@ -126,6 +126,6 @@ class FamilyController extends Controller {
                 'spouse_id' => 0
             ]);
         $model->delete();
-        return $this->jsonSuccess(true);
+        return $this->renderData(true);
     }
 }

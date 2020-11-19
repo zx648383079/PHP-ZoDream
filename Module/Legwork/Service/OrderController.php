@@ -23,9 +23,9 @@ class OrderController extends Controller {
         try {
             $order = OrderRepository::create($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./order', ['id' => $order->id])
         ]);
     }
@@ -38,9 +38,9 @@ class OrderController extends Controller {
         try {
             OrderRepository::comment($id, $rank);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -49,9 +49,9 @@ class OrderController extends Controller {
         try {
             OrderRepository::cancel($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

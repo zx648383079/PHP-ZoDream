@@ -35,9 +35,9 @@ class CaptchaController extends Controller {
 	    $x = floor(app('request')->get('x'));
 	    $c = Factory::session('slider_x');
 	    if (abs($x - $c) < 5) {
-	        return $this->jsonSuccess();
+	        return $this->renderData();
         }
-        return $this->jsonFailure($c);
+        return $this->renderFailure($c);
     }
 
 	function slideAction() {

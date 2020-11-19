@@ -32,11 +32,11 @@ class ArticleController extends Controller {
     public function saveAction() {
         $model = new ArticleModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('article')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
 
@@ -58,16 +58,16 @@ class ArticleController extends Controller {
     public function saveCategoryAction() {
         $model = new ArticleCategoryModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('article/category')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteCategoryAction($id) {
         ArticleCategoryModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('article/category')
         ]);
     }

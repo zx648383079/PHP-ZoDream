@@ -20,6 +20,6 @@ class HomeController extends Controller {
         $data = ServiceModel::when(!empty($keywords), function ($query) {
             ServiceModel::searchWhere($query, 'name');
         })->limit(4)->pluck('name');
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 }

@@ -42,10 +42,10 @@ class ForumController extends Controller {
     public function saveAction() {
         $model = new ForumModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $this->saveClassify($model->id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('forum')
         ]);
 
@@ -53,7 +53,7 @@ class ForumController extends Controller {
 
     public function deleteAction($id) {
         ForumModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('forum')
         ]);
     }

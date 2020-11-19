@@ -9,7 +9,7 @@ class ConverterController extends Controller {
 
     public function indexAction($content, $type) {
         $result = $this->converter($content, $type);
-        return $this->jsonSuccess(compact('content', 'type', 'result'));
+        return $this->renderData(compact('content', 'type', 'result'));
     }
 
     protected function converter($content, $type) {

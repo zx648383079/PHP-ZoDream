@@ -43,7 +43,7 @@ class UserController extends Controller {
             }
             $next_openid = $openid_list['next_openid'];
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

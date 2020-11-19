@@ -20,21 +20,21 @@ class CollectController extends Controller {
         if (!CollectModel::exist($id)) {
             CollectModel::add($id);
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function deleteAction($id) {
         CollectModel::remove($id);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function toggleAction($id) {
         $id = intval($id);
         if (CollectModel::exist($id)) {
             CollectModel::remove($id);
-            return $this->jsonSuccess(false);
+            return $this->renderData(false);
         }
         CollectModel::add($id);
-        return $this->jsonSuccess(true);
+        return $this->renderData(true);
     }
 }

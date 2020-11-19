@@ -32,16 +32,16 @@ class ProjectController extends Controller {
         $model = new ProjectModel();
         $model->user_id = auth()->id();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('project', ['id' => $model->id])
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         ProjectModel::where('id', $id)->where('user_id', auth()->id())->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('')
         ]);
     }

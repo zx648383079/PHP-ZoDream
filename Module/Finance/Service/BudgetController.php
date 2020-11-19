@@ -30,23 +30,23 @@ class BudgetController extends Controller {
         try {
             $model = BudgetRepository::save($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./budget')
         ]);
     }
 
     public function deleteAction(int $id) {
         BudgetRepository::softDelete($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./budget')
         ]);
     }
 
     public function refreshAction() {
         BudgetRepository::refreshSpent();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./budget')
         ]);
     }

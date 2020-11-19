@@ -23,7 +23,7 @@ class ThreadController extends Controller {
     public function deleteAction($id) {
         ThreadModel::where('id', $id)->delete();
         ThreadPostModel::where('thread_id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('thread')
         ]);
     }

@@ -48,19 +48,19 @@ class MenuController extends Controller {
             $model->load();
             EditorInput::save($model, $request);
             if (!$model->autoIsNew()->save()) {
-                return $this->jsonFailure($model->getFirstError());
+                return $this->renderFailure($model->getFirstError());
             }
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('menu')
         ]);
     }
 
     public function deleteAction($id) {
         MenuModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -79,9 +79,9 @@ class MenuController extends Controller {
                     return $menu->toMenu();
                 }, $menu_list)));
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

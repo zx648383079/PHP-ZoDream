@@ -17,7 +17,7 @@ class HomeController extends Controller {
     }
 
     public function checkNewAction() {
-        return $this->jsonSuccess(OrderRepository::checkNew());
+        return $this->renderData(OrderRepository::checkNew());
     }
 
 

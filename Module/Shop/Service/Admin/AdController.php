@@ -36,16 +36,16 @@ class AdController extends Controller {
             $model->content = app('request')->get('content_url');
         }
         if ($model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('ad')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         AdModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('ad')
         ]);
     }
@@ -68,16 +68,16 @@ class AdController extends Controller {
     public function savePositionAction() {
         $model = new AdPositionModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('ad/position')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deletePositionAction($id) {
         AdPositionModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('ad/positionad/position')
         ]);
     }

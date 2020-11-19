@@ -25,16 +25,16 @@ class DiscountController extends Controller {
         $model = new ActivityModel();
         $model->type = ActivityModel::TYPE_DISCOUNT;
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/discount')
         ], '保存成功！');
     }
 
     public function deleteAction($id) {
         ActivityModel::where('type', ActivityModel::TYPE_DISCOUNT)->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/discount')
         ]);
     }

@@ -24,11 +24,11 @@ class AccountController extends Controller {
 
     public function deleteConnectAction($id) {
         if (empty($id) || $id < 1) {
-            return $this->jsonFailure('请选择解绑的平台');
+            return $this->renderFailure('请选择解绑的平台');
         }
         OAuthModel::where('user_id', auth()->id())
             ->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -59,9 +59,9 @@ class AccountController extends Controller {
         try {
             $user = AuthRepository::updateProfile($request);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('user')
         ]);
 
@@ -72,24 +72,24 @@ class AccountController extends Controller {
         $password = app('request')->get('password');
         $confirm_password = app('request')->get('confirm_password');
         if (empty($password)) {
-            return $this->jsonFailure('请输入密码');
+            return $this->renderFailure('请输入密码');
         }
         if ($password != $confirm_password) {
-            return $this->jsonFailure('两次密码不一致！');
+            return $this->renderFailure('两次密码不一致！');
         }
         /** @var UserModel $model */
         $model = auth()->user();
         if (!$model->validatePassword($old_password)) {
-            return $this->jsonFailure('密码不正确！');
+            return $this->renderFailure('密码不正确！');
         }
         $model->setPassword($password);
         if ($model->save()) {
             auth()->user()->logout();
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
 

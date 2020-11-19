@@ -37,9 +37,9 @@ class RoleController extends Controller {
         try {
             RoleRepository::saveRole($request->get(), $request->get('perms'));
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('role')
         ]);
     }
@@ -48,7 +48,7 @@ class RoleController extends Controller {
         RoleModel::where('id', $id)->delete();
         UserRoleModel::where('role_id', $id)->delete();
         RolePermissionModel::where('role_id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('role')
         ]);
     }

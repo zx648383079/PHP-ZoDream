@@ -49,7 +49,7 @@ class BulletinController extends Controller {
                 'status' => BulletinUserModel::READ,
                 'updated_at' => time()
             ]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

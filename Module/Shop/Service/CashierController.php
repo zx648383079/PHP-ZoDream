@@ -35,9 +35,9 @@ class CashierController extends Controller {
         try {
             $order = CartRepository::checkout($address, $shipping, $payment, $cart, $type);
         } catch (Exception $e) {
-            return $this->jsonFailure($e->getMessage());
+            return $this->renderFailure($e->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./cashier/pay', ['id' => $order->id])
         ], '提交订单成功！');
     }
@@ -47,12 +47,12 @@ class CashierController extends Controller {
             $goods_list = CartRepository::getGoodsList($cart, $type);
             $order = CartRepository::preview($goods_list, $address, $shipping, $payment);
         } catch (Exception $e) {
-            return $this->jsonFailure($e->getMessage());
+            return $this->renderFailure($e->getMessage());
         }
         $this->layout = false;
         $data = $order->toArray();
         $data['checkout'] = $this->renderHtml('total', compact('order'));
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function editAddressAction($id = 0, $prev = 0) {

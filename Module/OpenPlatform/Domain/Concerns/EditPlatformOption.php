@@ -30,6 +30,6 @@ trait EditPlatformOption {
 
     public function saveOptionAction($platform_id, $option) {
         PlatformOptionModel::saveOption($platform_id, $option);
-        return $this->jsonSuccess(null, '保存成功');
+        return $this->renderData(null, '保存成功');
     }
 }

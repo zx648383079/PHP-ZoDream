@@ -69,7 +69,7 @@ class GoodsController extends Controller {
     public function saveAction($id, $product = null, $gallery = null, $attr = null) {
         $model = new GoodsModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         if ($id < 1) {
             GoodsAttributeModel::where('goods_id', '<', 1)->update([
@@ -85,7 +85,7 @@ class GoodsController extends Controller {
         if (!empty($attr)) {
             AttributeUniqueModel::batchSave($model, $attr);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
@@ -99,14 +99,14 @@ class GoodsController extends Controller {
                 'deleted_at' => time()
             ]);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
 
     public function clearAction() {
         GoodsModel::where('deleted_at', '>', 0)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
@@ -117,22 +117,22 @@ class GoodsController extends Controller {
         })->update([
             'deleted_at' => 0
         ]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
 
     public function toggleAction($id, $name) {
         if ($id < 1 || !in_array($name, ['is_best', 'is_hot', 'is_new'])) {
-            return $this->jsonFailure('信息错误！');
+            return $this->renderFailure('信息错误！');
         }
         GoodsModel::where('id', $id)->updateBool($name);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function generateSnAction() {
         $sn = GoodsRepository::generateSn();
-        return $this->jsonSuccess($sn);
+        return $this->renderData($sn);
     }
 
     public function attributeAction($group_id, $goods_id = 0) {
@@ -143,30 +143,30 @@ class GoodsController extends Controller {
         }
         unset($item);
         $product_list = ProductModel::where('goods_id', $goods_id)->orderBy('id asc')->all();
-        return $this->jsonSuccess(compact('attr_list', 'product_list'));
+        return $this->renderData(compact('attr_list', 'product_list'));
     }
 
     public function saveAttributeAction() {
         $model = new GoodsAttributeModel();
         if (!$model->load()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->autoIsNew();
         if (!$model->checkValue()) {
-            return $this->jsonFailure('属性值已存在！');
+            return $this->renderFailure('属性值已存在！');
         }
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess($model->toArray());
+        return $this->renderData($model->toArray());
     }
 
     public function editAttributeAction($attr, $goods_id = 0) {
         $models = GoodsAttributeModel::batchSave($attr, $goods_id);
         if (empty($models)) {
-            return $this->jsonFailure('更新失败！');
+            return $this->renderFailure('更新失败！');
         }
-        return $this->jsonSuccess(count($models) == 1 ? reset($models) : $models);
+        return $this->renderData(count($models) == 1 ? reset($models) : $models);
     }
 
     public function deleteAttributeAction($attribute_id = 0, $value = 0, $goods_id = 0, $id = 0) {
@@ -175,7 +175,7 @@ class GoodsController extends Controller {
         } else {
             GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $attribute_id)->where('value', $value)->delete();
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function cardAction($id, $keywords = null) {
@@ -201,7 +201,7 @@ class GoodsController extends Controller {
     public function createCardAction($id, $amount = 1) {
         GoodsCardModel::generate($id, $amount);
         GoodsCardModel::refreshStock($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -210,7 +210,7 @@ class GoodsController extends Controller {
         $model = GoodsCardModel::find($id);
         $model->delete();
         GoodsCardModel::refreshStock($model->goods_id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -243,7 +243,7 @@ class GoodsController extends Controller {
                 'item_id' => $new_id
             ]);
         });
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -268,7 +268,7 @@ class GoodsController extends Controller {
             $query->whereIn('id', $selected);
             })->orderBy('id', 'desc')->page();
         if (app('request')->wantsJson()) {
-            return $this->jsonSuccess($model_list);
+            return $this->renderData($model_list);
         }
         if (!$simple) {
             $cat_list = CategoryModel::tree()->makeTreeForHtml();
@@ -283,6 +283,6 @@ class GoodsController extends Controller {
         if ($request->isJson()) {
             GoodsRepository::importJson($request->get());
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 }

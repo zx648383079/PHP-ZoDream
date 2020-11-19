@@ -1,7 +1,7 @@
 <?php
 namespace Module\Disk\Service;
 
-use Module\Disk\Domain\Model\DiskModel;
+use Module\Disk\Domain\Repositories\DiskRepository;
 use Zodream\Service\Factory;
 
 /**
@@ -12,17 +12,15 @@ use Zodream\Service\Factory;
 class DownloadController extends Controller {
     
     public function indexAction($id) {
-        $model = DiskModel::find($id);
-        if (empty($model)) {
-            return $this->jsonFailure('ID ERROR!');
+        $response = Factory::response();
+        try {
+            $data = DiskRepository::driver()->file($id);
+        } catch (\Exception $ex) {
+            $response->header->setContentDisposition('error.txt');
+            return $response->custom($ex->getMessage(), 'txt');
         }
-        $file = $this->diskFolder->file($model->file->location);
-        if (!$file->exist()) {
-            return $this->jsonFailure('FILE ERROR!');
-        }
-        $file->setExtension($model->file->extension)
-            ->setName($model->name);
-        return Factory::response()
-            ->file($file);
+        $data['path']->setExtension($data['extension'])
+            ->setName($data['name']);
+        return $response->file($data['path']);
     }
 }

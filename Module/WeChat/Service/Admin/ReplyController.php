@@ -63,20 +63,20 @@ class ReplyController extends Controller {
         try {
             EditorInput::save($model, $request);
             if (!$model->autoIsNew()->save()) {
-                return $this->jsonFailure($model->getFirstError());
+                return $this->renderFailure($model->getFirstError());
             }
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
         ReplyModel::cacheReply($model->wid, true);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('reply')
         ]);
     }
 
     public function deleteAction($id) {
         ReplyModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -107,25 +107,25 @@ class ReplyController extends Controller {
             $openid = UserModel::where('id', $user_id)->value('openid');
         }
         $res = empty($openid) ? $api->sendAll($data, $type) : $api->send([$openid], $data, $type);
-        return $this->jsonSuccess('', '发送成功');
+        return $this->renderData('', '发送成功');
     }
 
     private function sendTemplate($user_id, $template_id, $url, $data) {
         if ($user_id < 1) {
-            return $this->jsonFailure('模板消息只能发给单个用户');
+            return $this->renderFailure('模板消息只能发给单个用户');
         }
         $openid = UserModel::where('id', $user_id)->value('openid');
         if (empty($openid)) {
-            return $this->jsonFailure('用户未关注公众号');
+            return $this->renderFailure('用户未关注公众号');
         }
         /** @var Template $api */
         $api = WeChatModel::find($this->weChatId())
             ->sdk(Template::class);
         $res = $api->send($openid, $template_id, url($url), TemplateModel::strToArr($data));
         if ($res) {
-            return $this->jsonSuccess('', '发送成功');
+            return $this->renderData('', '发送成功');
         }
-        return $this->jsonFailure('发送失败');
+        return $this->renderFailure('发送失败');
     }
 
     public function templateAction() {
@@ -139,7 +139,7 @@ class ReplyController extends Controller {
             ->sdk(Template::class);
         $data = $api->allTemplate();
         if (!isset($data['template_list'])) {
-            return $this->jsonFailure('同步失败');
+            return $this->renderFailure('同步失败');
         }
         TemplateModel::where('wid', $this->weChatId())->delete();
         foreach ($data['template_list'] as $item) {
@@ -151,7 +151,7 @@ class ReplyController extends Controller {
                 'example' => $item['example'],
             ]);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -159,17 +159,17 @@ class ReplyController extends Controller {
     public function templateFieldAction($id) {
         $model = TemplateModel::where('template_id', $id)->first();
         if (empty($model)) {
-            return $this->jsonFailure('模板不存在');
+            return $this->renderFailure('模板不存在');
         }
-        return $this->jsonSuccess($model->getFields());
+        return $this->renderData($model->getFields());
     }
 
     public function templatePreviewAction($id, $data) {
         $model = TemplateModel::where('template_id', $id)->first();
         if (empty($model)) {
-            return $this->jsonFailure('模板不存在');
+            return $this->renderFailure('模板不存在');
         }
-        return $this->jsonSuccess($model->preview($data));
+        return $this->renderData($model->preview($data));
     }
 
     /**
@@ -186,7 +186,7 @@ class ReplyController extends Controller {
                 $this->getActionName(Str::studly($action)),
                 $request, $this);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
     }
 }

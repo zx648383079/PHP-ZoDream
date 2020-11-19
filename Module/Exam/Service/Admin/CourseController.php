@@ -36,16 +36,16 @@ class CourseController extends Controller {
     public function saveAction() {
         $model = new CourseModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('course')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         CourseModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('course')
         ]);
     }

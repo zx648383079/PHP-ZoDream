@@ -22,7 +22,7 @@ class MediaController extends Controller {
             MediaModel::searchWhere($query, 'title');
             })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb')->page();
         if (app('request')->isAjax() && !app('request')->isPjax()) {
-            return $this->jsonSuccess($model_list);
+            return $this->renderData($model_list);
         }
         return $this->show(compact('model_list', 'type'));
     }
@@ -49,11 +49,11 @@ class MediaController extends Controller {
         $model = new MediaModel();
         $model->wid = $this->weChatId();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('media')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
@@ -63,7 +63,7 @@ class MediaController extends Controller {
                 ->sdk(Media::class)->deleteMedia($model->media_id);
         }
         $model->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -72,13 +72,13 @@ class MediaController extends Controller {
         $model = MediaModel::find($id);
         if ($model->media_id &&
             ($model->material_type == MediaModel::MATERIAL_PERMANENT || $model->expired_at > time())) {
-            return $this->jsonFailure('不能重复创建');
+            return $this->renderFailure('不能重复创建');
         }
         if (!$model->async(WeChatModel::find($this->weChatId())
             ->sdk(Media::class))) {
-            return $this->jsonFailure('创建失败');
+            return $this->renderFailure('创建失败');
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

@@ -30,7 +30,7 @@ class CouponController extends Controller {
 
     public function deleteAction($id) {
         CouponModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/coupon')
         ]);
     }

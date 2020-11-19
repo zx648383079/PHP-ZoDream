@@ -81,16 +81,16 @@ class IncomeController extends Controller {
         try {
             $model = LogRepository::save($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./income/log')
         ]);
     }
 
     public function deleteLogAction(int $id) {
         LogRepository::remove($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./income/log')
         ]);
     }
@@ -110,7 +110,7 @@ class IncomeController extends Controller {
             $request->get('project_id'),
             $request->get('channel_id'),
             $request->get('budget_id'));
-        return $this->jsonSuccess([], sprintf('更新%d条数据', $row));
+        return $this->renderData([], sprintf('更新%d条数据', $row));
     }
 
     public function importAction() {
@@ -118,12 +118,12 @@ class IncomeController extends Controller {
         $upload->setDirectory(Factory::root()->directory('data/cache'));
         $upload->upload('file');
         if (!$upload->checkType('csv') || !$upload->save()) {
-            return $this->jsonFailure('文件不支持，仅支持gb2312编码的csv文件');
+            return $this->renderFailure('文件不支持，仅支持gb2312编码的csv文件');
         }
         $upload->each(function (BaseUpload $file) {
             LogRepository::import($file->getFile());
         });
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -166,7 +166,7 @@ class IncomeController extends Controller {
         if (!empty($data)) {
             LogModel::query()->insert($data);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./income/log')
         ]);
     }
@@ -180,16 +180,16 @@ class IncomeController extends Controller {
         try {
             $model = ChannelRepository::save($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./income/channel')
         ]);
     }
 
     public function deleteChannelAction(int $id) {
         ChannelRepository::remove($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./income/channel')
         ]);
     }

@@ -436,7 +436,7 @@ class Navigation {
                 Dialog.tip('保存成功');
                 return;
             }
-            Dialog.tip(res.errors);
+            Dialog.tip(res.message);
         }, 'json');
     }
 

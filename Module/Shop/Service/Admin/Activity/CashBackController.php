@@ -34,16 +34,16 @@ class CashBackController extends Controller {
         $model = new ActivityModel();
         $model->type = ActivityModel::TYPE_CASH_BACK;
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/cash_back')
         ], '保存成功！');
     }
 
     public function deleteAction($id) {
         ActivityModel::where('type', ActivityModel::TYPE_CASH_BACK)->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/cash_back')
         ]);
     }

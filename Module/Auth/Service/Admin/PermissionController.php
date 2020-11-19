@@ -35,9 +35,9 @@ class PermissionController extends Controller {
         try {
             RoleRepository::savePermission($request->get());
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('permission')
         ]);
     }
@@ -45,7 +45,7 @@ class PermissionController extends Controller {
     public function deleteAction($id) {
         PermissionModel::where('id', $id)->delete();
         RolePermissionModel::where('permission_id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('permission')
         ]);
     }

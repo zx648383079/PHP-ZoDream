@@ -11,18 +11,20 @@ class RecordController extends RestController {
         return ['*' => '@'];
     }
 
-    public function indexAction($type, $date = null, $ignore = false) {
-        $time = empty($date) ? time() : strtotime($date);
+
+
+    public function indexAction($type, $date = null) {
+        $time = strtotime(date('Y-m-d 00:00:00', empty($date) ? time() : strtotime($date)));
         if ($type === 'week') {
-            list($start_at, $end_at) = Time::week($time);
-        } elseif ($type = 'month') {
-            list($start_at, $end_at) = Time::month($time);
+            list($start_at, $end_at) = Time::week($time, false);
+        } elseif ($type === 'month') {
+            list($start_at, $end_at) = Time::month($time, false);
         } else {
             $start_at = $time;
-            $end_at = $time + 86400;
+            $end_at = $time + 86399;
         }
-        $day_list = ReviewRepository::statistics($start_at, $end_at, $ignore);
-        return $this->render(['data' => $day_list]);
+        $log_list = ReviewRepository::logList($start_at, $end_at);
+        return $this->renderPage($log_list);
     }
 
 }

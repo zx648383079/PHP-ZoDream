@@ -31,9 +31,9 @@ class CashierController extends Controller {
         try {
             $order = CartRepository::checkout($address, $shipping, $payment, $cart, $type);
         } catch (Exception $e) {
-            return $this->jsonFailure($e->getMessage());
+            return $this->renderFailure($e->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('cashier/pay', ['id' => $order->id])
         ]);
     }
@@ -43,9 +43,9 @@ class CashierController extends Controller {
             $goods_list = CartRepository::getGoodsList($cart, $type);
             $order = CartRepository::preview($goods_list, $address, $shipping, $payment);
         } catch (Exception $e) {
-            return $this->jsonFailure($e->getMessage());
+            return $this->renderFailure($e->getMessage());
         }
-        return $this->jsonSuccess($order);
+        return $this->renderData($order);
     }
 
     public function payAction($id) {

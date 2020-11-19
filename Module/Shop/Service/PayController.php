@@ -21,12 +21,12 @@ class PayController extends Controller {
             $data = PaymentRepository::payOrder($order, $payment);
         } catch (\Exception $ex) {
             if (app('request')->isAjax()) {
-                return $this->jsonFailure($ex->getMessage());
+                return $this->renderFailure($ex->getMessage());
             }
             return $ex->getMessage();
         }
         if (app('request')->isAjax()) {
-            return $this->jsonSuccess($data);
+            return $this->renderData($data);
         }
         if (isset($data['url'])) {
             return $this->redirect($data['url']);

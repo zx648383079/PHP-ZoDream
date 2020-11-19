@@ -32,22 +32,22 @@ class ServiceController extends Controller {
     public function saveAction($id = 0, $form = []) {
         $model = ServiceModel::findOrNew($id);
         if (!$model->load()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->form = self::formArr($form, null, function ($item) {
             return !empty($item['name']);
         });
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('service')
         ]);
     }
 
     public function deleteAction($id) {
         ServiceModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

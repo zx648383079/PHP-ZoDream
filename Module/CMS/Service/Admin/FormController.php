@@ -45,9 +45,9 @@ class FormController extends Controller {
             $scene->insert($data);
         }
         if ($scene->hasError()) {
-            return $this->jsonFailure($scene->getFirstError());
+            return $this->renderFailure($scene->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('form', ['id' => $model_id])
         ]);
     }
@@ -55,7 +55,7 @@ class FormController extends Controller {
     public function deleteAction($id, $model_id) {
         $model = ModelModel::find($model_id);
         CMSRepository::scene()->setModel($model)->remove($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('form', ['id' => $model_id])
         ]);
     }

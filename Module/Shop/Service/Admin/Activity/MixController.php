@@ -31,7 +31,7 @@ class MixController extends Controller {
         $model->end_at = $request->get('end_at');
         $goods_list = self::formArr($request->get('configure'), 0);
         if (empty($goods_list)) {
-            return $this->jsonFailure('请选择商品');
+            return $this->renderFailure('请选择商品');
         }
         $model->scope_type = ActivityModel::SCOPE_GOODS;
         $model->scope = array_column($goods_list, 'goods_id');
@@ -40,16 +40,16 @@ class MixController extends Controller {
             'price' => $request->get('price')
         ];
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/mix')
         ], '保存成功！');
     }
 
     public function deleteAction($id) {
         ActivityModel::where('type', ActivityModel::TYPE_MIX)->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/mix')
         ]);
     }

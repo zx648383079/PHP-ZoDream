@@ -28,7 +28,7 @@ class HomeController extends Controller {
             return $this->redirect($request->get('redirect_uri', '/'));
         } catch (\Exception $ex) {}
         if ($request->isAjax() && $request->isGet()) {
-            return $this->json([
+            return $this->renderResponse([
                 'code' => 302,
                 'status' => __('failure'),
                 'errors' => '重定向',
@@ -50,10 +50,10 @@ class HomeController extends Controller {
 
     public function checkAction($name, $value) {
         if (!in_array($name, ['name', 'email'])) {
-            return $this->jsonFailure('查询失败！');
+            return $this->renderFailure('查询失败！');
         }
         $count = UserModel::where([$name => $value])->count('id');
-        return $this->jsonSuccess($count > 0);
+        return $this->renderData($count > 0);
     }
 
     /**
@@ -83,10 +83,10 @@ class HomeController extends Controller {
             if (!empty($email) && $ex->getCode() < 1009) {
                 LoginLogModel::addLoginLog($email, 0, false);
             }
-            return $this->jsonFailure($ex->getMessage(), $ex->getCode());
+            return $this->renderFailure($ex->getMessage(), $ex->getCode());
         }
         $redirect_uri = $request->get('redirect_uri');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
         ], '登录成功！');
     }

@@ -17,6 +17,6 @@ class HomeController extends Controller {
         $data = ThreadSimpleModel::when(!empty($keywords), function ($query) {
             ThreadModel::searchWhere($query, 'title');
          })->limit(4)->get();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 }

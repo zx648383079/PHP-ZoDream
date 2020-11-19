@@ -19,13 +19,13 @@ class FormController extends Controller {
     public function saveAction() {
         $model = $this->getModel();
         if (empty($model) || $model->type < 1) {
-            return $this->jsonFailure('表单数据错误');
+            return $this->renderFailure('表单数据错误');
         }
         $scene = CMSRepository::scene()->setModel($model);
         $id = 0;
         if ($model->setting('is_only')) {
             if (auth()->guest()) {
-                return $this->jsonFailure('请先登录！');
+                return $this->renderFailure('请先登录！');
             }
             $id = $scene->query()
                 ->where('model_id', $model->id)
@@ -39,9 +39,9 @@ class FormController extends Controller {
             $res = $scene->insert($data);
         }
         if (!$res) {
-            return $this->jsonFailure($scene->getFirstError());
+            return $this->renderFailure($scene->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => './'
         ]);
     }

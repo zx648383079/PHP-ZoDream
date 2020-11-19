@@ -26,7 +26,7 @@ class MessageController extends Controller {
                 ->where('user_id', $user)->where('created_at', '>=', intval($time))->get();
         }
         $time = time();
-        return $this->jsonSuccess(compact('message', 'apply', 'messages', 'time'));
+        return $this->renderData(compact('message', 'apply', 'messages', 'time'));
     }
 
 }

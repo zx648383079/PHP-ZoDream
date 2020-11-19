@@ -40,14 +40,14 @@ class HomeController extends ModuleController {
 
     public function createAction(Request $request) {
         if (!MicroRepository::canPublish()) {
-            return $this->jsonFailure('发送过于频繁！');
+            return $this->renderFailure('发送过于频繁！');
         }
         try {
             MicroRepository::create($request->get('content'), $request->get('file'));
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./')
         ]);
     }
@@ -59,9 +59,9 @@ class HomeController extends ModuleController {
         try {
             $model = MicroRepository::recommend($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function collectAction($id) {
@@ -71,9 +71,9 @@ class HomeController extends ModuleController {
         try {
             $model = MicroRepository::collect($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function forwardMiniAction($id) {
@@ -89,9 +89,9 @@ class HomeController extends ModuleController {
         try {
             $model = MicroRepository::forward($id, $content, $is_comment);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function deleteAction($id) {
@@ -101,9 +101,9 @@ class HomeController extends ModuleController {
         try {
             $model = MicroRepository::delete($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function findLayoutFile() {

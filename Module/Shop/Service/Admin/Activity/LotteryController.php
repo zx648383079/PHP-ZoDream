@@ -26,16 +26,16 @@ class LotteryController extends Controller {
         $model->load();
         $model->type = ActivityModel::TYPE_LOTTERY;
         if (!$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/lottery')
         ], '保存成功！');
     }
 
     public function deleteAction($id) {
         ActivityModel::where('type', ActivityModel::TYPE_LOTTERY)->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/lottery')
         ]);
     }

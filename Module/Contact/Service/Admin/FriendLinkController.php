@@ -20,7 +20,7 @@ class FriendLinkController extends Controller {
 	    $model->status = 1;
 	    $model->save();
 	    cache()->delete(FriendLink::KEY);
-	    return $this->jsonSuccess([
+	    return $this->renderData([
 	       'refresh' => true
         ]);
     }
@@ -30,7 +30,7 @@ class FriendLinkController extends Controller {
         $model->status = 0;
         $model->save();
         cache()->delete(FriendLink::KEY);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -39,7 +39,7 @@ class FriendLinkController extends Controller {
         $model = FriendLinkModel::find($id);
         $model->delete();
         cache()->delete(FriendLink::KEY);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

@@ -47,9 +47,9 @@ class CommentController extends ModuleController {
                 $code_id,
                 $parent_id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./comment', ['id' => $code_id])
         ]);
     }
@@ -61,9 +61,9 @@ class CommentController extends ModuleController {
         try {
             $model = CodeRepository::disagree($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function agreeAction($id) {
@@ -73,9 +73,9 @@ class CommentController extends ModuleController {
         try {
             $model = CodeRepository::agree($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function deleteAction($id) {
@@ -85,9 +85,9 @@ class CommentController extends ModuleController {
         try {
             $model = CodeRepository::deleteComment($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function redirectWithAuth() {

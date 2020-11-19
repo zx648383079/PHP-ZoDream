@@ -22,16 +22,16 @@ class MinerController extends Controller {
     public function saveAction() {
         $model = new MinerModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./@admin/miner')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         MinerModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./@admin/miner')
         ]);
     }

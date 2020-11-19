@@ -31,7 +31,7 @@ class EmulateController extends Controller {
         } else {
             $reply->replyMessage($content);
         }
-        return $this->jsonSuccess($reply->getResponse());
+        return $this->renderData($reply->getResponse());
     }
 
     public function mediaAction($id) {

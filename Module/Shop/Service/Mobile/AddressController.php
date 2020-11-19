@@ -36,9 +36,9 @@ class AddressController extends Controller {
         try {
             $address = AddressRepository::save($data);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('address')
         ]);
     }
@@ -47,9 +47,9 @@ class AddressController extends Controller {
         try {
             AddressRepository::remove($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('address')
         ]);
     }
@@ -58,8 +58,8 @@ class AddressController extends Controller {
         try {
             AddressRepository::setDefault($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess(true);
+        return $this->renderData(true);
     }
 }

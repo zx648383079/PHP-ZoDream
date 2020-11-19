@@ -57,17 +57,17 @@ class ServerController extends Controller {
         $url = new Uri($service);
         $serviceModel = ServiceModel::findByUrl($url);
         if (empty($serviceModel)) {
-            return $this->jsonFailure('无效的 service');
+            return $this->renderFailure('无效的 service');
         }
         $model = TicketModel::where('service', $service)
             ->where('ticket', $ticket)->one();
         if (empty($model) || $model->isExpired()) {
-            return $this->jsonFailure('无效的 ticket');
+            return $this->renderFailure('无效的 ticket');
 //            return join(PHP_EOL, [
 //                'no',
 //            ]);
         }
-        return $this->jsonSuccess($model->user_id);
+        return $this->renderData($model->user_id);
 //        return join(PHP_EOL, [
 //            'yes', // 'no'
 //            auth()->id()
@@ -83,7 +83,7 @@ class ServerController extends Controller {
         $model = TicketModel::where('service', $service)
             ->where('ticket', $ticket)->one();
         if (empty($model)) {
-            return $this->json([
+            return $this->renderResponse([
                 'serviceResponse' => [
                     'authenticationFailure' => [
                         'code' => 401,
@@ -93,7 +93,7 @@ class ServerController extends Controller {
 
             ], 'xml');
         }
-        return $this->json([
+        return $this->renderResponse([
             'serviceResponse' => [
                 'authenticationSuccess' => [
                     'user' => auth()->id()
@@ -116,7 +116,7 @@ class ServerController extends Controller {
         if (!$ticket->save()) {
             return;
         }
-        return $this->json([
+        return $this->renderResponse([
             'serviceResponse' => [
                 'proxySuccess' => [
                     'proxyTicket' => $ticket->ticket,
@@ -160,7 +160,7 @@ class ServerController extends Controller {
             $iou = null;
         }
         $attr = $ticket->user->getCASAttributes() || [];
-        return $this->json([
+        return $this->renderResponse([
             'serviceResponse' => [
                 'authenticationSuccess' => [
                     'user' => $ticket->user_id,
@@ -179,7 +179,7 @@ class ServerController extends Controller {
     }
 
     public function samlValidateAction($TARGET) {
-        return $this->json([
+        return $this->renderResponse([
             'localName' => 'Envelope',
             'NameIdentifier' => [
                 [

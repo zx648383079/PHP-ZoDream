@@ -33,17 +33,17 @@ class ClanController extends Controller {
         $model->load();
         $model->user_id = auth()->id();
         if ($model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('clan')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         ClanModel::where('id', $id)->delete();
         FamilyModel::where('clan_id', $id)->update(['clan_id' => 0]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('clan')
         ]);
     }
@@ -72,17 +72,17 @@ class ClanController extends Controller {
         $model->load();
         $model->user_id = auth()->id();
         if ($model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('clan/meta', ['clan_id' => $model->clan_id])
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteMetaAction($id) {
         $model = ClanMetaModel::find($id);
         $model->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('clan/meta', ['clan_id' => $model->clan_id])
         ]);
     }

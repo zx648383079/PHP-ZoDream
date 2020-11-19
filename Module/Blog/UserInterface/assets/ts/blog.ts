@@ -97,10 +97,10 @@ function bindBlog(id: number, type: number, langs = {}) {
         let $this = $(this);
         $.post($this.data('url'), formData($this.closest('.rule-box')), res => {
             if (res.code != 200) {
-                alert(res.errors);
+                alert(res.message);
                 return;
             }
-            alert(res.messages);
+            alert(res.message);
             setTimeout(() => {
                 if (res.data.refresh) {
                     window.location.reload();
@@ -209,7 +209,7 @@ function bindBlogComment(id: number, langs = {}) {
                 return;
             }
             if (data.code != 200) {
-                alert(data.errors);
+                alert(data.message);
                 return;
             }
             $this.find('b').text(data.data);
@@ -225,7 +225,7 @@ function bindBlogComment(id: number, langs = {}) {
                 return;
             }
             if (data.code != 200) {
-                alert(data.errors);
+                alert(data.message);
                 return;
             }
             $this.find('b').text(data.data);

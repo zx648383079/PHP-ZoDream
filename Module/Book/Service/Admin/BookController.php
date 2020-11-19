@@ -40,17 +40,17 @@ class BookController extends Controller {
     public function saveAction() {
         $model = new BookModel();
         if (!$model->load()) {
-            return $this->jsonFailure('输入数据有误！');
+            return $this->renderFailure('输入数据有误！');
         }
         if ($model->isExist()) {
-            return $this->jsonFailure('书籍已存在！');
+            return $this->renderFailure('书籍已存在！');
         }
         $model->autoIsNew();
         $isNew = $model->isNewRecord;
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $isNew ? $this->getUrl('book') : -1
         ]);
     }
@@ -62,7 +62,7 @@ class BookController extends Controller {
             BookChapterModel::where('book_id', $id)->delete();
             BookChapterBodyModel::whereIn('id', $ids)->delete();
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('book')
         ]);
     }
@@ -94,18 +94,18 @@ class BookController extends Controller {
     public function saveChapterAction() {
         $model = new BookChapterModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('book/chapter', ['book' => $model->book_id])
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteChapterAction($id) {
         $model = BookChapterModel::find($id);
         $model->delete();
         BookChapterBodyModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('book/chapter', ['book' => $model->book_id])
         ]);
     }
@@ -113,7 +113,7 @@ class BookController extends Controller {
     public function refreshAction() {
         $this->deleteNoBookChapter();
         $this->refreshBookSize();
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     protected function refreshBookSize() {

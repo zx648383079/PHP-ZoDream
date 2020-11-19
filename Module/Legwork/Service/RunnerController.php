@@ -30,9 +30,9 @@ class RunnerController extends Controller {
         try {
             RunnerRepository::taking($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ], '已成功接单');
     }
@@ -41,9 +41,9 @@ class RunnerController extends Controller {
         try {
             RunnerRepository::taken($id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ], '本次服务已完成');
     }

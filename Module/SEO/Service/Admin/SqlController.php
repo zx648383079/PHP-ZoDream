@@ -14,13 +14,13 @@ class SqlController extends Controller {
         try {
             SEORepository::backUpSql(true);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess(null, '备份完成');
+        return $this->renderData(null, '备份完成');
     }
 
     public function clearAction() {
         SEORepository::clearSql();
-        return $this->jsonSuccess(null, '已删除所有备份');
+        return $this->renderData(null, '已删除所有备份');
     }
 }

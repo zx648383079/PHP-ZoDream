@@ -34,7 +34,7 @@ class FriendController extends Controller {
             $data[$key]['count'] = count($data[$key]['users']);
             $data[$key]['online_count'] = 0;
         }
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function searchAction($keywords = null) {
@@ -45,7 +45,7 @@ class FriendController extends Controller {
         $data = UserModel::when(!empty($keywords), function ($query) {
             FriendModel::searchWhere($query, 'name');
         })->whereNotIn('id', $exclude)->page();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function messageAction($user) {
@@ -54,7 +54,7 @@ class FriendController extends Controller {
         })->orWhere(function($query) use ($user) {
             $query->where('receive_id', $user)->where('user_id', auth()->id());
         })->page();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function sendMessageAction($user, $content) {
@@ -63,7 +63,7 @@ class FriendController extends Controller {
             'content' => $content,
             'user_id' => auth()->id()
         ]);
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function agreeAction($user, $name, $group = 0) {
@@ -74,7 +74,7 @@ class FriendController extends Controller {
             ->where('apply_user', $user)->where('status', 0)
             ->orderBy('id', 'desc')->first();
         if (empty($apply)) {
-            return $this->jsonFailure('无申请记录');
+            return $this->renderFailure('无申请记录');
         }
         ApplyModel::where('user_id', auth()->id())
             ->where('apply_user', $user)->where('status', 0)->update([
@@ -93,7 +93,7 @@ class FriendController extends Controller {
             'user_id' => $apply->user_id,
             'belong_id' => $user
         ]);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function applyAction($user, $group = 0, $remark = null) {
@@ -101,7 +101,7 @@ class FriendController extends Controller {
             $group = FriendGroupModel::where('user_id', auth()->id())->orderBy('id asc')->value('id');
         }
         if (!ApplyModel::canApply($user)) {
-            return $this->jsonFailure('不能重复申请');
+            return $this->renderFailure('不能重复申请');
         }
         $model = ApplyModel::create([
             'group_id' => $group,
@@ -110,7 +110,7 @@ class FriendController extends Controller {
             'apply_user' => auth()->id(),
             'status' => 0,
         ]);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function applyLogAction() {
@@ -123,19 +123,19 @@ class FriendController extends Controller {
             $data[$key]['user'] = $item->user;
             $data[$key]['applier'] = $item->applier;
         }
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function deleteAction($user) {
         FriendModel::where('user_id', $user)->where('belong_id', auth()->id())->delete();
         FriendModel::where('belong_id', $user)->where('user_id', auth()->id())->delete();
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function moveAction($user, $group) {
         FriendModel::where('user_id', $user)->where('belong_id', auth()->id())->update([
             'group_id' => $group
         ]);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 }

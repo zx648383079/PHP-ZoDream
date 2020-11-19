@@ -17,7 +17,7 @@ class NoteController extends Controller {
 
     public function deleteAction($id) {
         NoteModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('note')
         ]);
     }

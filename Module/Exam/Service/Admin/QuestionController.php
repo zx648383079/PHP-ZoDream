@@ -52,11 +52,11 @@ class QuestionController extends Controller {
     public function saveAction(Request $request) {
         $model = new QuestionModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         QuestionOptionModel::batchSave($model,
             self::formArr($request->get('option', [])));
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('question')
         ]);
     }
@@ -65,7 +65,7 @@ class QuestionController extends Controller {
         QuestionModel::where('id', $id)->delete();
         QuestionAnswerModel::where('question_id', $id)->delete();
         QuestionOptionModel::where('question_id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
            'url' => $this->getUrl('question')
         ]);
     }
@@ -73,9 +73,9 @@ class QuestionController extends Controller {
     public function checkAction($title, $id = 0) {
         $model = QuestionModel::where('title', $title)->where('id', '<>', intval($id))->first();
         if (!$model) {
-            return $this->jsonSuccess(false);
+            return $this->renderData(false);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'id' => $model->id,
             'title' => $model->title,
             'url' => url('./question', ['id' => $model->id])
@@ -84,18 +84,18 @@ class QuestionController extends Controller {
 
     public function importAction($title, Request $request) {
         if (empty($title)) {
-            return $this->jsonFailure('请输入标题');
+            return $this->renderFailure('请输入标题');
         }
         if (QuestionModel::where('title', $title)
                 ->where('course_id', $request->get('course_id'))->count() > 0) {
-            return $this->jsonFailure('已存在同名题目');
+            return $this->renderFailure('已存在同名题目');
         }
         $model = new QuestionModel();
         if (!$model->load() || !$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         QuestionOptionModel::batchSave($model, $request->get('option', []));
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('question')
         ]);
     }

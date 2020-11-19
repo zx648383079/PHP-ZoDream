@@ -76,34 +76,34 @@ class OrderController extends Controller {
                 app('request')->get('logistics_number'),
                 app('request')->get('shipping_id')
                 ) || !OrderLogModel::shipping($order)) {
-                return $this->jsonFailure('发货失败');
+                return $this->renderFailure('发货失败');
             }
         }
         if ($operate == 'pay') {
             if (!OrderLogModel::pay($order, app('request')->get('remark'))) {
-                return $this->jsonFailure('支付失败');
+                return $this->renderFailure('支付失败');
             }
         }
         if ($operate == 'cancel') {
             if (!OrderLogModel::cancel($order, app('request')->get('remark'))) {
-                return $this->jsonFailure('取消失败');
+                return $this->renderFailure('取消失败');
             }
         }
         if ($operate == 'refund') {
             if (!PaymentRepository::refund($order,
                 app('request')->get('refund_type'),
                 app('request')->get('money'))) {
-                return $this->jsonFailure('退款失败');
+                return $this->renderFailure('退款失败');
             }
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('order/info', ['id' => $id])
         ]);
     }
 
     public function cronAction() {
         new ExpiredOrder();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

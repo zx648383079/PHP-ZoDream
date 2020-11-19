@@ -31,17 +31,17 @@ class ClientController extends Controller {
      */
     public function logoutAction($ticket) {
         if (!Client::handleLogoutRequests()) {
-            return $this->jsonFailure('IP error');
+            return $this->renderFailure('IP error');
         }
         $model = ClientTicketModel::findByTicket($ticket);
         Factory::session()->destroySession($model->session_id);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     protected function validate($ticket) {
         $userClass = Config::auth('model');
         if (empty($userClass)) {
-            return $this->jsonFailure('user is error!', 401);
+            return $this->renderFailure('user is error!', 401);
         }
         $id = Client::validate($ticket);
         if (empty($id)) {

@@ -53,7 +53,7 @@ class HomeController extends Controller {
         try {
             return (new SqlController())->schemaAction();
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ class HomeController extends Controller {
             ModuleGenerator::renderConfigs($file, $data);
         }
         config()->reset();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./module')
         ]);
     }
@@ -118,7 +118,7 @@ class HomeController extends Controller {
             AuthRepository::createAdmin($user['email'], $user['password']);
         } catch (\Exception $ex) {
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./complete')
         ]);
     }

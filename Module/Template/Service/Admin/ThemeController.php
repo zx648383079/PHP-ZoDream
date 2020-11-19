@@ -26,7 +26,7 @@ class ThemeController extends Controller {
         foreach ($data as $item) {
             ThemeModel::install($item);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

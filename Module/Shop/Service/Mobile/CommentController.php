@@ -48,7 +48,7 @@ class CommentController extends Controller {
             ->where('status', OrderModel::STATUS_RECEIVED)->where('id', intval($goods))
             ->first();
         if (empty($goods)) {
-            return $this->jsonFailure('可评价的商品不存在');
+            return $this->renderFailure('可评价的商品不存在');
         }
         $model = CommentModel::create([
             'user_id' => $goods->user_id,
@@ -59,7 +59,7 @@ class CommentController extends Controller {
             'rank' => $rank
         ]);
         if (empty($model)) {
-            return $this->jsonFailure('评价失败');
+            return $this->renderFailure('评价失败');
         }
         if (!empty($images)) {
             CommentImageModel::query()->insert(array_map(function ($item) use ($model) {
@@ -78,7 +78,7 @@ class CommentController extends Controller {
         if ($count < 1) {
             OrderLogModel::finish(OrderModel::find($goods->order_id));
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('comment')
         ]);
     }

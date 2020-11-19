@@ -30,7 +30,7 @@ class ApiController extends Controller {
 
     public function mockAction($id) {
         $response_json = FieldModel::getMockData($id);
-        return $this->jsonSuccess($response_json);
+        return $this->renderData($response_json);
     }
 
     public function codeAction($id, $lang, $kind = FieldModel::KIND_RESPONSE) {
@@ -40,7 +40,7 @@ class ApiController extends Controller {
         } else {
             $content = $coder->formatField($id, $kind, '', $lang);
         }
-        return $this->jsonSuccess($content);
+        return $this->renderData($content);
     }
 
 }

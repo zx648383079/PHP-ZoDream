@@ -7,7 +7,7 @@ class ServerController extends Controller {
 
     public function indexAction() {
         $server = new Server();
-        return $this->json($server->handle());
+        return $this->renderResponse($server->handle());
     }
 
 

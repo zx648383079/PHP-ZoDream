@@ -15,6 +15,6 @@ class HomeController extends Controller {
         $data = CourseModel::when(!empty($keywords), function ($query) {
             CourseModel::searchWhere($query, 'name');
          })->limit(4)->get();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 }

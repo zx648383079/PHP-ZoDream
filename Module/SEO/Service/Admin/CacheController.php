@@ -12,6 +12,6 @@ class CacheController extends Controller {
 
     public function clearAction($store = []) {
         SEORepository::clearCache($store);
-        return $this->jsonSuccess(null, '清理完成');
+        return $this->renderData(null, '清理完成');
     }
 }

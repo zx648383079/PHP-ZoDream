@@ -1,7 +1,7 @@
 <?php
 namespace Module\Disk\Service;
 
-use Module\Disk\Domain\Model\ShareModel;
+use Module\Disk\Domain\Repositories\ShareRepository;
 
 class HomeController extends Controller {
 
@@ -12,7 +12,7 @@ class HomeController extends Controller {
     }
 
     public function indexAction() {
-        $model_list = ShareModel::with('user')->where('mode', 'public')->orderBy('created_at desc')->page();
+        $model_list = ShareRepository::publicList();
         return $this->show(compact('model_list'));
     }
 }

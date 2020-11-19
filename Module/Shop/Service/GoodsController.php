@@ -24,12 +24,12 @@ class GoodsController extends Controller {
 
     public function recommendAction($id) {
         $goods_list = GoodsSimpleModel::limit(7)->all();
-        return $this->jsonSuccess(compact('goods_list'));
+        return $this->renderData(compact('goods_list'));
     }
 
     public function hotAction($id) {
         $goods_list = GoodsSimpleModel::limit(7)->all();
-        return $this->jsonSuccess(compact('goods_list'));
+        return $this->renderData(compact('goods_list'));
     }
 
     public function commentAction($id, $page = -1) {

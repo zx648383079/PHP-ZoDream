@@ -61,7 +61,7 @@ class ContentController extends Controller {
             $scene->insert($data);
         }
         if ($scene->hasError()) {
-            return $this->jsonFailure($scene->getFirstError());
+            return $this->renderFailure($scene->getFirstError());
         }
         $queries = [
             'cat_id' => $cat_id,
@@ -70,7 +70,7 @@ class ContentController extends Controller {
         if (isset($data['parent_id']) && $data['parent_id'] > 0) {
             $queries['parent_id'] = $data['parent_id'];
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('content', $queries)
         ]);
     }
@@ -91,7 +91,7 @@ class ContentController extends Controller {
         if (isset($data['parent_id']) && $data['parent_id'] > 0) {
             $queries['parent_id'] = $data['parent_id'];
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('content', $queries)
         ]);
     }

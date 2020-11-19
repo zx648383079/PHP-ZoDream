@@ -32,7 +32,7 @@ class ModelController extends Controller {
     public function saveAction($id = 0) {
         $model = ModelModel::findOrNew($id);
         if (!$model->load()) {
-            return $this->jsonFailure('表单错误');
+            return $this->renderFailure('表单错误');
         }
         if (!app('request')->has('setting')) {
             $model->setting = null;
@@ -40,15 +40,15 @@ class ModelController extends Controller {
         if ($id > 0) {
             $model->deleteAttribute('table');
         } elseif (ModelModel::where('`table`', $model->table)->count() > 0) {
-            return $this->jsonFailure('表名已存在');
+            return $this->renderFailure('表名已存在');
         }
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         if ($id < 1) {
             CMSRepository::scene()->setModel($model)->initModel();
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('model')
         ]);
     }
@@ -56,12 +56,12 @@ class ModelController extends Controller {
     public function deleteAction($id) {
         $model = ModelModel::find($id);
         if (empty($model)) {
-            return $this->jsonFailure('模型不存在');
+            return $this->renderFailure('模型不存在');
         }
         $model->delete();
         ModelFieldModel::where('model_id', $id)->delete();
         CMSRepository::removeModel($model);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('model')
         ]);
     }
@@ -102,7 +102,7 @@ class ModelController extends Controller {
                 ->where('id', '<>', $id)
                 ->where('model_id', $field->model_id)
                 ->count() > 0) {
-            return $this->jsonFailure('字段已存在');
+            return $this->renderFailure('字段已存在');
         }
         $old = $field->getOldAttribute('field');
         if ($field->is_main > 0
@@ -111,7 +111,7 @@ class ModelController extends Controller {
             $field->is_main = 0;
         }
         if (!$field->save()) {
-            return $this->jsonFailure($field->getFirstError());
+            return $this->renderFailure($field->getFirstError());
         }
         $scene = CMSRepository::scene()->setModel(ModelModel::find($field->model_id));
         if ($id > 0) {
@@ -122,7 +122,7 @@ class ModelController extends Controller {
         } else {
             $scene->addField($field);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('model/field', ['id' => $field->model_id])
         ]);
     }
@@ -130,22 +130,22 @@ class ModelController extends Controller {
     public function deleteFieldAction($id) {
         $field = ModelFieldModel::find($id);
         if ($field->is_system > 0) {
-            return $this->jsonFailure('系统自带字段禁止删除');
+            return $this->renderFailure('系统自带字段禁止删除');
         }
         $field->delete();
         CMSRepository::scene()->setModel(ModelModel::find($field->model_id))
             ->removeField($field);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('model/field', ['id' => $field->model_id])
         ]);
     }
 
     public function toggleFieldAction($id, $name) {
         if (!in_array($name, ['is_disable'])) {
-            return $this->jsonFailure('禁止操作此字段');
+            return $this->renderFailure('禁止操作此字段');
         }
         ModelFieldModel::query()->where('id', $id)->updateBool($name);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -165,7 +165,7 @@ class ModelController extends Controller {
     private function saveSystemField($model) {
         $model->name = app('request')->get('name');
         $model->save();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('model/field', ['id' => $model->model_id])
         ]);
     }

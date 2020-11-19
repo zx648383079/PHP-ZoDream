@@ -25,16 +25,16 @@ class TemplateController extends Controller {
     public function saveAction() {
         $model = new MediaTemplateModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('template')
             ]);
         }
-        return $this->jsonFailure($model->getError());
+        return $this->renderFailure($model->getError());
     }
 
     public function deleteAction($id) {
         MediaTemplateModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

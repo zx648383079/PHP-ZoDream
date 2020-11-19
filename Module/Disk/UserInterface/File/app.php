@@ -13,6 +13,6 @@ use Zodream\Template\View;
     </div>
     <a class="app-url" href="">直接下载</a>
     <div class="app-qr">
-        <img src="<?=url('./file/qr', ['id' => $disk->file->id])?>">
+        <img src="<?=url('./file/qr', ['id' => $disk['id']])?>">
     </div>
 </div>

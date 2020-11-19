@@ -26,10 +26,10 @@ class RegisterController extends Controller {
                 $request->get('rePassword'),
                 $request->has('agree'));
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
         $redirect_uri = $request->get('redirect_uri');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
         ], '注册成功！');
     }

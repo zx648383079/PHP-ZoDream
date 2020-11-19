@@ -20,9 +20,9 @@ class HomeController extends Controller {
         try {
             $model = ShortRepository::create($source_url);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'source_url' => $model->source_url,
             'short_url' => $model->complete_short_url
         ]);

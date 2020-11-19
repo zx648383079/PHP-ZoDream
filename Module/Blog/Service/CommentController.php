@@ -40,9 +40,9 @@ class CommentController extends ModuleController {
         try {
             $comment = CommentRepository::create($request->get('name,email,url,content,parent_id,blog_id'));
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($comment);
+        return $this->renderData($comment);
     }
 
     public function disagreeAction($id) {
@@ -51,11 +51,11 @@ class CommentController extends ModuleController {
         }
         $id = intval($id);
         if (!CommentModel::canAgree($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+            return $this->renderFailure('一个用户只能操作一次！');
         }
         $model = CommentModel::find($id);
         $model->agreeThis(false);
-        return $this->jsonSuccess($model->disagree);
+        return $this->renderData($model->disagree);
     }
 
     public function agreeAction($id) {
@@ -64,11 +64,11 @@ class CommentController extends ModuleController {
         }
         $id = intval($id);
         if (!CommentModel::canAgree($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+            return $this->renderFailure('一个用户只能操作一次！');
         }
         $model = CommentModel::find($id);
         $model->agreeThis();
-        return $this->jsonSuccess($model->agree);
+        return $this->renderData($model->agree);
     }
 
     public function reportAction($id) {

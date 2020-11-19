@@ -60,7 +60,7 @@ class ShareController extends Controller {
     public function listAction($share, $id = 0, $offset = 0, $length = 20) {
         $model = ShareModel::find($share);
         if (empty($model) || !$this->canView($model)) {
-            return $this->jsonFailure('分享不存在！');
+            return $this->renderFailure('分享不存在！');
         }
         if (empty($id)) {
             $data = ShareFileModel::alias('s')
@@ -69,13 +69,13 @@ class ShareController extends Controller {
                 ->where('s.share_id', $model->id)
                 ->select('d.*', 'f.extension', 'f.size')
                 ->limit($length)->offset($offset)->asArray()->all();
-            return $this->jsonSuccess($data);
+            return $this->renderData($data);
         }
         $data = DiskModel::alias('d')
             ->where('d.parent_id', $id)
             ->select('d.*', 'f.extension', 'f.size')
             ->limit($length)->offset($offset)->asArray()->all();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function userAction($id) {
@@ -108,16 +108,16 @@ class ShareController extends Controller {
             ->where('s.user_id', auth()->id())
             ->select('s.name', 's.id', 's.mode', 's.created_at',
                 's.view_count', 's.down_count', 's.save_count')->asArray()->all();
-        return $this->jsonSuccess($models);
+        return $this->renderData($models);
     }
 
     public function cancelAction() {
         $id = app('request')->get('id');
         $row = ShareModel::auth()->whereIn('id', (array)$id)->delete();
         if (empty($row)) {
-            return $this->jsonFailure('服务器错误!');
+            return $this->renderFailure('服务器错误!');
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }
@@ -125,18 +125,18 @@ class ShareController extends Controller {
     public function saveAction($id, $file, $parent = 0) {
         $model = ShareModel::find($id);
         if (!$this->canView($model)) {
-            return  $this->jsonFailure('无法保存分享!');
+            return  $this->renderFailure('无法保存分享!');
         }
         if (auth()->id() == $model->user_id) {
-            return  $this->jsonFailure('自己分享的不能保存!');
+            return  $this->renderFailure('自己分享的不能保存!');
         }
         $disk = null;
         if ($parent > 0 && !($disk = DiskModel::find($parent))) {
-            return $this->jsonFailure('保存的文件夹不存在！');
+            return $this->renderFailure('保存的文件夹不存在！');
         }
         $files = $model->getFile($file);
         DiskModel::saveDiskTo($files, $disk);
-        return $this->jsonSuccess(null, '保存成功！');
+        return $this->renderData(null, '保存成功！');
     }
 
     protected function canView(ShareModel $model) {

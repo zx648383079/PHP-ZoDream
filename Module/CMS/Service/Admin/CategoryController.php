@@ -45,17 +45,17 @@ class CategoryController extends Controller {
     public function saveAction() {
         $model = new CategoryModel();
         if (!$model->load()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->autoIsNew();
         if ($model->isNewRecord && empty($model->setting)) {
             $model->setting = serialize([]);
         }
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         CMSRepository::generateCategoryTable($model);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('category')
         ]);
     }
@@ -76,7 +76,7 @@ class CategoryController extends Controller {
             }
         }
         CategoryModel::whereIn('id', $items)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('category')
         ]);
     }

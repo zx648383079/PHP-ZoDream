@@ -22,16 +22,16 @@ class ProductController extends Controller {
     public function saveAction() {
         $model = new BankProductModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./@admin/product')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         BankProductModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./@admin/product')
         ]);
     }

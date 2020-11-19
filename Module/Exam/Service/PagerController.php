@@ -28,7 +28,7 @@ class PagerController extends Controller {
         $pager = $this->getPager();
         $pager->finish();
         session([self::CACHE_KEY => $pager]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ], '交卷成功！');
     }
@@ -39,7 +39,7 @@ class PagerController extends Controller {
             $pager->answer($id, $item['answer'], isset($item['dynamic']) ? $item['dynamic'] : null);
         }
         session([self::CACHE_KEY => $pager]);
-        return $this->jsonSuccess(true);
+        return $this->renderData(true);
     }
 
     /**

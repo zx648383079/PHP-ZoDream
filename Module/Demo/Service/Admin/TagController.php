@@ -11,7 +11,7 @@ class TagController extends Controller {
                 TagModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
         if (app('request')->isAjax() && !app('request')->header('X-PJAX')) {
-            return $this->jsonSuccess($model_list);
+            return $this->renderData($model_list);
         }
         return $this->show(compact('model_list'));
     }
@@ -28,17 +28,17 @@ class TagController extends Controller {
     public function saveAction() {
         $model = new TagModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('tag')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         TagModel::where('id', $id)->delete();
         TagRelationshipModel::where('tag_id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('tag')
         ]);
     }

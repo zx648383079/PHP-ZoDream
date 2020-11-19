@@ -30,7 +30,7 @@ class SettingController extends Controller {
             'loop' => intval($data['loop']),
             'plus' => $plus
         ]), '签到');
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

@@ -29,11 +29,11 @@ class AttributeController extends Controller {
     public function saveAction() {
         $model = new AttributeModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('attribute', ['group_id' => $model->group_id])
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
 
@@ -54,16 +54,16 @@ class AttributeController extends Controller {
     public function saveGroupAction() {
         $model = new AttributeGroupModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('attribute/group')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteCategoryAction($id) {
         AttributeGroupModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('attribute/group')
         ]);
     }

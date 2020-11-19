@@ -10,11 +10,11 @@ use Zodream\Infrastructure\Http\Request;
 class WeightController extends Controller {
 
     public function indexAction() {
-        return $this->jsonSuccess(WeightModel::all());
+        return $this->renderData(WeightModel::all());
     }
 
     public function settingAction($id) {
-        return $this->jsonSuccess(PageWeightModel::find($id));
+        return $this->renderData(PageWeightModel::find($id));
     }
 
     public function createAction() {
@@ -31,7 +31,7 @@ class WeightController extends Controller {
         $data = $model->toArray();
         $data['html'] = (new Page($pageModel, true))
             ->renderWeight($model);
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function refreshAction($id) {
@@ -39,7 +39,7 @@ class WeightController extends Controller {
         $data = $model->toArray();
         $data['html'] = (new Page(PageModel::find($model->page_id), true))
             ->renderWeight($model);
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function saveAction($id) {
@@ -48,12 +48,12 @@ class WeightController extends Controller {
         $data = $model->toArray();
         $data['html'] = (new Page(PageModel::find($model->page_id), true))
             ->renderWeight($model);
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function destroyAction($id) {
         PageWeightModel::removeSelfAndChild(intval($id));
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function thumbAction($id) {
@@ -63,6 +63,6 @@ class WeightController extends Controller {
     public function editDialogAction($id) {
         $model = PageWeightModel::find($id);
         $html = (new Weight($model))->newWeight()->renderConfig($model);
-        return $this->jsonSuccess(compact('html'));
+        return $this->renderData(compact('html'));
     }
 }

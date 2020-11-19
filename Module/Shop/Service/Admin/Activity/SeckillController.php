@@ -29,16 +29,16 @@ class SeckillController extends Controller {
         $model->scope = 'all';
         $model->configure = 'null';
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('activity/seckill')
             ], '保存成功！');
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         ActivityModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/seckill')
         ]);
     }
@@ -60,16 +60,16 @@ class SeckillController extends Controller {
     public function saveTimeAction() {
         $model = new ActivityTimeModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('activity/seckill/time')
             ], '保存成功！');
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteTimeAction($id) {
         ActivityTimeModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/seckill')
         ]);
     }
@@ -105,19 +105,19 @@ class SeckillController extends Controller {
 
     public function changeGoodsAction($id, $name, $value) {
         if (!in_array($name, ['price', 'amount', 'every_amount'])) {
-            return $this->jsonFailure('');
+            return $this->renderFailure('');
         }
         SeckillGoodsModel::where('id', $id)->update([
             $name => floor($value)
         ]);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/seckill')
         ]);
     }
 
     public function deleteGoodsAction($id) {
         SeckillGoodsModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/seckill')
         ]);
     }

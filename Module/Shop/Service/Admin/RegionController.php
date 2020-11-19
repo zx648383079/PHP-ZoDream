@@ -23,9 +23,9 @@ class RegionController extends Controller {
     public function saveAction() {
         $model = new RegionModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('region', ['parent' => $model->parent_id])
         ]);
     }
@@ -37,12 +37,12 @@ class RegionController extends Controller {
             RegionModel::whereIn('parent_id', $next)->delete();
             $next = $items;
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('region')
         ]);
     }
 
     public function treeAction() {
-        return $this->jsonSuccess(RegionModel::cacheTree());
+        return $this->renderData(RegionModel::cacheTree());
     }
 }

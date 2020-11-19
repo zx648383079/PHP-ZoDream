@@ -29,7 +29,7 @@ class TbkController extends Controller {
             app('request')->get('start_time'),
             app('request')->get('end_time'));
         if (empty($data)) {
-            return $this->jsonFailure('没有商品');
+            return $this->renderFailure('没有商品');
         }
         foreach ($data as $item) {
             GoodsModel::create([
@@ -46,7 +46,7 @@ class TbkController extends Controller {
                 'stock' => $item['total_amount'],
             ]);
         }
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
 
@@ -55,7 +55,7 @@ class TbkController extends Controller {
         if (app('request')->isPost()) {
             $data = app('request')->get('option.'.self::CODE);
             OptionModel::insertOrUpdate(self::CODE, Json::encode($data), '淘宝客');
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'refresh' => true
             ]);
         }

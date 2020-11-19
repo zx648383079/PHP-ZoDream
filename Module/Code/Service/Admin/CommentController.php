@@ -21,7 +21,7 @@ class CommentController extends Controller {
 
     public function deleteAction($id) {
         CommentModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('comment')
         ]);
     }

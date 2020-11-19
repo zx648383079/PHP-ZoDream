@@ -9,9 +9,9 @@ class GroupController extends Controller {
     public function indexAction() {
         $ids = GroupUserModel::where('user_id', auth()->id())->pluck('group_id');
         if (empty($ids)) {
-            return $this->jsonSuccess([]);
+            return $this->renderData([]);
         }
         $data = GroupModel::whereIn('id', $ids)->all();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 }

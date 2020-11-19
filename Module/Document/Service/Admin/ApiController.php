@@ -59,7 +59,7 @@ class ApiController extends Controller {
         $id = intval(app('request')->get('id'));
         $model = new ApiModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         if ($id < 1) {
             FieldModel::whereIn('id', ApiModel::clearStore())->update([
@@ -67,11 +67,11 @@ class ApiController extends Controller {
             ]);
         }
         if ($model->parent_id < 1) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('project', ['id' => $model->project_id])
             ]);
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('api', ['id' => $model->id])
         ]);
     }
@@ -79,7 +79,7 @@ class ApiController extends Controller {
 
     public function deleteAction($id) {
         ApiModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('')
         ]);
     }
@@ -95,7 +95,7 @@ class ApiController extends Controller {
 
     public function mockAction($id) {
         $response_json = FieldModel::getMockData($id);
-        return $this->jsonSuccess($response_json);
+        return $this->renderData($response_json);
     }
 
     public function debugResultAction() {

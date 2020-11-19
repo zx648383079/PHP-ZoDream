@@ -22,7 +22,7 @@ class SearchController extends Controller {
             $query->where('brand_id', intval($brand_id));
         })->page();
         if (app('request')->isAjax()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'html' => $this->renderHtml('page', compact('goods_list', 'keywords')),
                 'has_more' => $goods_list->hasMore()
             ]);

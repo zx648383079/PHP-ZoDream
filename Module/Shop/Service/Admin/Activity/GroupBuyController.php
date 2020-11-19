@@ -29,16 +29,16 @@ class GroupBuyController extends Controller {
         $configure['step'] = self::formArr($configure['step']);
         $model->configure = $configure;
         if (!$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/group_buy')
         ], '保存成功！');
     }
 
     public function deleteAction($id) {
         ActivityModel::where('type', ActivityModel::TYPE_GROUP_BUY)->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/group_buy')
         ]);
     }

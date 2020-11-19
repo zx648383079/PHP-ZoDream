@@ -25,16 +25,16 @@ class BrandController extends Controller {
     public function saveAction() {
         $model = new BrandModel();
         if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('brand')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         BrandModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('brand')
         ]);
     }
@@ -45,7 +45,7 @@ class BrandController extends Controller {
                 'brand_id' => $new_id
             ]);
         });
-        return $this->jsonSuccess([
+        return $this->renderData([
             'refresh' => true
         ]);
     }

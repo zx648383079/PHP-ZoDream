@@ -23,19 +23,19 @@ class PlatformController extends Controller {
         unset($data['secret']);
         $model = PlatformModel::find($id);
         if (empty($model)) {
-            return $this->jsonFailure('应用不存在');
+            return $this->renderFailure('应用不存在');
         }
         if ($model->load() && $model->save()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => $this->getUrl('platform')
             ]);
         }
-        return $this->jsonFailure($model->getFirstError());
+        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteAction($id) {
         PlatformModel::where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('platform')
         ]);
     }

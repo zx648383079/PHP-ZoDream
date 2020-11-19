@@ -48,9 +48,9 @@ class CommentController extends ModuleController {
                 $parent_id,
                 $is_forward);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./comment', ['id' => $micro_id])
         ]);
     }
@@ -62,9 +62,9 @@ class CommentController extends ModuleController {
         try {
             $model = MicroRepository::disagree($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function agreeAction($id) {
@@ -74,9 +74,9 @@ class CommentController extends ModuleController {
         try {
             $model = MicroRepository::agree($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function deleteAction($id) {
@@ -86,9 +86,9 @@ class CommentController extends ModuleController {
         try {
             $model = MicroRepository::deleteComment($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
 

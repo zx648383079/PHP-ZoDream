@@ -51,23 +51,23 @@ class UserController extends Controller {
         ];
         $data = $request->get('name,email,sex,avatar,birthday,password,confirm_password');
         if ($id < 1 && $data['password'] != $data['confirm_password']) {
-            return $this->jsonFailure('两次密码不一致！');
+            return $this->renderFailure('两次密码不一致！');
         }
         if (empty($data['password'])) {
             unset($data['password'], $data['confirm_password']);
         }
         $model = UserModel::findOrNew($id);
         if (!$model->load($data) || !$model->validate($rule)) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         if (!empty($data['password'])) {
             $model->setPassword($data['password']);
         }
         if (!$model->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->setRole($request->get('roles'));
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('user')
         ]);
     }
@@ -76,9 +76,9 @@ class UserController extends Controller {
         try {
             UserRepository::remove($id);
         }catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('user')
         ]);
     }
@@ -98,17 +98,17 @@ class UserController extends Controller {
     public function rechargeSaveAction($user_id, $money, $remark, $type = 0) {
         $money = abs(intval($money));
         if ($money <= 0) {
-            return $this->jsonFailure('金额输入不正确');
+            return $this->renderFailure('金额输入不正确');
         }
         if ($type > 0) {
             $money *= -1;
         }
         if (AccountLogModel::change($user_id,
             AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./@admin/user/account', ['id' => $user_id])
             ], '充值成功');
         }
-        return $this->jsonFailure('操作失败，金额不足');
+        return $this->renderFailure('操作失败，金额不足');
     }
 }

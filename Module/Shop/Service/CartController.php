@@ -19,19 +19,19 @@ class CartController extends Controller {
         try {
             CartRepository::addGoods($goods, $amount);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess(null, '加入购物车成功！');
+        return $this->renderData(null, '加入购物车成功！');
     }
 
     public function updateAction($id, $amount) {
         Module::cart()->update($id, $amount);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function deleteAction($id) {
         Module::cart()->remove($id);
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function miniAction() {

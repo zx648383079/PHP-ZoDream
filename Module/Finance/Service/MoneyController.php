@@ -45,23 +45,23 @@ class MoneyController extends Controller {
         try {
             $model = AccountRepository::save($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/account')
         ]);
     }
 
     public function changeAccountAction(int $id) {
         AccountRepository::change($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/account')
         ]);
     }
 
     public function deleteAccountAction(int $id) {
         AccountRepository::softDelete($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/account')
         ]);
     }
@@ -90,16 +90,16 @@ class MoneyController extends Controller {
         try {
             $model = ProjectRepository::save($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/project')
         ]);
     }
 
     public function deleteProjectAction(int $id) {
         ProjectRepository::remove($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/project')
         ]);
     }
@@ -117,9 +117,9 @@ class MoneyController extends Controller {
         try {
             $model = ProjectRepository::earnings($id, $money);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/project')
         ]);
     }
@@ -146,23 +146,23 @@ class MoneyController extends Controller {
         try {
             $model = ProductRepository::save($request->get());
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/product')
         ]);
     }
 
     public function deleteProductAction(int $id) {
         ProductRepository::remove($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/product')
         ]);
     }
 
     public function changeProductAction(int $id) {
         ProductRepository::change($id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./money/product')
         ]);
     }

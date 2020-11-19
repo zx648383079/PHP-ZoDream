@@ -20,7 +20,7 @@ class RegionController extends Controller {
     }
 
     public function treeAction() {
-        return $this->jsonSuccess(RegionModel::cacheTree());
+        return $this->renderData(RegionModel::cacheTree());
     }
 
     public function importAction($file = null) {

@@ -19,23 +19,23 @@ class AuthorizeController extends Controller {
         try {
             $model = OpenRepository::createToken($platform_id);
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./authorize')
         ]);
     }
 
     public function deleteAction($id) {
         UserTokenModel::where('id', $id)->where('user_id', auth()->id())->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./authorize')
         ]);
     }
 
     public function clearAction() {
         UserTokenModel::where('user_id', auth()->id())->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./authorize')
         ]);
     }

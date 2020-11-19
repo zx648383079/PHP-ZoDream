@@ -2,7 +2,7 @@
 namespace Module\Disk\Service;
 
 use Module\Disk\Domain\Model\DiskModel;
-
+use Module\Disk\Domain\Repositories\TrashRepository;
 
 
 /**
@@ -17,39 +17,23 @@ class TrashController extends Controller {
         return $this->show();
     }
 
-    public function listAction($offset = 0, $length = 20) {
-        $data = DiskModel::auth()
-            ->alias('d')
-            ->left('disk_file f', 'd.file_id', 'f.id')
-            ->where('d.deleted_at', '>', 100)
-            ->select('d.*', 'f.extension', 'f.size')
-            ->offset($offset)->limit($length)
-            ->asArray()->all();
-        return $this->jsonSuccess($data);
+    public function listAction() {
+        $data = TrashRepository::getList();
+        return $this->renderData($data);
     }
 
-    public function resetAction() {
-        $id = app('request')->get('id');
-        $model_list = DiskModel::auth()->whereIn('id', (array)$id)->where('deleted_at', '>', 0)->all();
-        foreach ($model_list as $item) {
-            $item->resetThis();
-        }
-        return $this->jsonSuccess();
+    public function resetAction($id) {
+        TrashRepository::reset($id);
+        return $this->renderData(true);
     }
 
-    public function deleteAction() {
-        $id = app('request')->get('id');
-        $model_list = DiskModel::auth()->whereIn('id', (array)$id)->where('deleted_at', '>', 0)->all();
-        foreach ($model_list as $item) {
-            $item->deleteThis();
-        }
-        return $this->jsonSuccess();
+    public function deleteAction($id) {
+        TrashRepository::remove($id);
+        return $this->renderData(true);
     }
 
     public function clearAction() {
-        DiskModel::auth()
-            ->where('deleted_at', '>', 0)
-            ->delete();
-        return $this->jsonSuccess();
+        TrashRepository::clear();
+        return $this->renderData(true);
     }
 }

@@ -42,14 +42,14 @@ class PageController extends Controller {
             $model->answer = $item['answer'];
             $model->save();
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function checkAction($id) {
         /** @var PageEvaluateModel $model */
         $model = PageEvaluateModel::where('user_id', auth()->id())->where('id', $id)->first();
         if ($model->status > 0) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ], '交卷成功！');
         }
@@ -71,7 +71,7 @@ class PageController extends Controller {
             $item->save();
         }
         $model->save();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./')
         ], '交卷成功！');
     }

@@ -64,9 +64,9 @@ class PageController extends Controller {
     public function saveAction() {
         $model = new PageModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site/page', ['id' => $model->site_id])
         ]);
     }
@@ -74,11 +74,11 @@ class PageController extends Controller {
     public function deleteAction($id) {
         $model = PageModel::find($id);
         if (empty($model)) {
-            return $this->jsonFailure('页面不存在');
+            return $this->renderFailure('页面不存在');
         }
         PageWeightModel::where('page_id', $id)->delete();
         $model->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site/page', ['id' => $model->site_id])
         ]);
     }

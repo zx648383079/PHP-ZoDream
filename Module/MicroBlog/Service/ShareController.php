@@ -29,7 +29,7 @@ class ShareController extends ModuleController {
 
     public function saveAction(Request $request) {
         if (!MicroRepository::canPublish()) {
-            return $this->jsonFailure('发送过于频繁！');
+            return $this->renderFailure('发送过于频繁！');
         }
         try {
             MicroRepository::share($request->get('title'),
@@ -37,9 +37,9 @@ class ShareController extends ModuleController {
                 $request->get('url'),
                 $request->get('pics'), $request->get('content'));
         } catch (\Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => url('./')
         ]);
     }

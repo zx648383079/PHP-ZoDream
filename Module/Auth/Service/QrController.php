@@ -27,31 +27,31 @@ class QrController extends Controller {
     public function checkAction() {
         $id = session('login_qr');
         if (empty($id)) {
-            return $this->jsonFailure('unknow error');
+            return $this->renderFailure('unknow error');
         }
         $model = LoginQrModel::find($id);
         if (empty($model)) {
-            return $this->jsonFailure('USER_TIPS_QR_OVERTIME', 204);
+            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204);
         }
         if ($model->user_id > 0
             && $model->status == LoginQrModel::STATUS_SUCCESS) {
             $user = UserModel::findIdentity($model->user_id);
             $user->login();
             $user->logLogin(true, LoginLogModel::MODE_QR);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('/')
             ], '登陆成功');
         }
         if ($model->isExpired()) {
-            return $this->jsonFailure('USER_TIPS_QR_OVERTIME', 204);
+            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204);
         }
         if ($model->status == LoginQrModel::STATUS_UN_SCAN) {
-            return $this->jsonFailure('QR_UN_SCANNED', 201);
+            return $this->renderFailure('QR_UN_SCANNED', 201);
         }
         if ($model->status == LoginQrModel::STATUS_UN_CONFIRM) {
-            return $this->jsonFailure('QR_UN_CONFIRM', 202);
+            return $this->renderFailure('QR_UN_CONFIRM', 202);
         }
-        return $this->jsonFailure('QR_REJECT', 203);
+        return $this->renderFailure('QR_REJECT', 203);
     }
 
     /**

@@ -16,11 +16,11 @@ class HouseController extends Controller {
     public function buyAction($id) {
         try {
             PlayerModel::buyHouse($id);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('./')
             ]);
         } catch (Exception $ex) {
-            return $this->jsonFailure($ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
 
     }

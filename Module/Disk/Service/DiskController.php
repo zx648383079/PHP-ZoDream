@@ -34,7 +34,7 @@ class DiskController extends Controller {
 
     public function listAction($id = 0, $type = null, $offset = 0, $length = 20) {
         if (intval($length) < 1) {
-            return $this->jsonFailure('长度不对！');
+            return $this->renderFailure('长度不对！');
         }
         $data = DiskModel::auth()
             ->alias('d')
@@ -53,26 +53,26 @@ class DiskController extends Controller {
             $item['url'] = $this->getUrl($item);
         }
         unset($item);
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function deleteAction(Request $request) {
         $id = $request->get('id');
         if (empty($id)) {
-            return $this->jsonFailure('不能为空！');
+            return $this->renderFailure('不能为空！');
         }
         $model_list = DiskModel::auth()->where('deleted_at', 0)
             ->whereIn('id', (array)$id)->all();
         foreach ($model_list as $item) {
             $item->softDeleteThis();
         }
-        return $this->jsonSuccess();
+        return $this->renderData();
     }
 
     public function shareAction(Request $request) {
         $data = $request->get('id,user,mode 0,end_at');
         if (empty($data['id'])) {
-            return $this->jsonFailure('不能为空！');
+            return $this->renderFailure('不能为空！');
         }
         if (!empty($data['user'])) {
             $data['mode'] = 2;
@@ -80,7 +80,7 @@ class DiskController extends Controller {
         $disk = DiskModel::find(current($data['id']));
         $user = auth()->id();
         if ($disk->user_id != $user) {
-            return $this->jsonFailure('请不要进行危险操作！');
+            return $this->renderFailure('请不要进行危险操作！');
         }
         $model = new ShareModel();
         $model->name = Str::substr($disk->name, 0, 36).(count($data['id']) > 1 ? '等'.count($data['id']).'个文件' : null);
@@ -93,7 +93,7 @@ class DiskController extends Controller {
             $model->death_at = time();
         }
         if (!$model->save()) {
-            return $this->jsonFailure('分享失败');
+            return $this->renderFailure('分享失败');
         }
         $data['url'] = url('./share', ['id' => $model->id]);
         $transaction = Command::getInstance()->beginTransaction();
@@ -124,9 +124,9 @@ class DiskController extends Controller {
         } catch (Exception $ex) {
             $model->delete();
             $transaction->rollBack();
-            return $this->jsonFailure('分享失败！');
+            return $this->renderFailure('分享失败！');
         }
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     /**
@@ -140,41 +140,41 @@ class DiskController extends Controller {
         $model->user_id = auth()->id();
         $model->file_id = 0;
         if ($model->isSameName()) {
-            return $this->jsonFailure('文件已重名');
+            return $this->renderFailure('文件已重名');
         }
         if (!$model->addAsLast()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess($model->toArray());
+        return $this->renderData($model->toArray());
     }
 
     function renameAction(Request $request) {
         $data = $request->get('id,name');
         $model = DiskModel::find($data['id']);
         if (empty($model)) {
-            return $this->jsonFailure('选择错误的文件！');
+            return $this->renderFailure('选择错误的文件！');
         }
         $model->name = $data['name'];
         $model->updated_at = time();
         if ($model->isSameName()) {
-            return $this->jsonFailure('文件已重名');
+            return $this->renderFailure('文件已重名');
         }
         if (!$model->save()) {
-            return $this->jsonFailure('修改失败！');
+            return $this->renderFailure('修改失败！');
         }
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     function checkAction(Request $request) {
         $data = $request->get('md5,name,parent_id');
         if (empty($data['md5']) || empty($data['name'])) {
-            return $this->jsonFailure('不能为空！');
+            return $this->renderFailure('不能为空！');
         }
         $model = FileModel::where('md5', $data['md5'])->one();
         if (empty($model)) {
             // 保存文件名等待上传获取
             Factory::session()->set('file_'.$data['md5'], $data['name']);
-            return $this->jsonFailure('MD5 Error', 2);
+            return $this->renderFailure('MD5 Error', 2);
         }
         $disk = new DiskModel();
         $disk->user_id = auth()->id();
@@ -182,23 +182,23 @@ class DiskController extends Controller {
         $disk->name = $model->name;
         $disk->parent_id = intval($data['parent_id']);
         if (!$disk->addAsLast()) {
-            return $this->jsonFailure($model->getFirstError(), 3);
+            return $this->renderFailure($model->getFirstError(), 3);
         }
         $disk->type = $model->type;
         $disk->size = $model->size;
         $disk->url = $this->getUrl($disk);
-        return $this->jsonSuccess($disk);
+        return $this->renderData($disk);
     }
 
     public function addAction(Request $request) {
         $data = $request->get('name,md5,size,parent_id 0,type,temp');
         $file = $this->cacheFolder->file($data['md5']);
         if (!$file->exist() || $file->size() != $data['size']) {
-            return $this->jsonFailure('FILE ERROR!');
+            return $this->renderFailure('FILE ERROR!');
         }
         $data['location'] = md5($data['name'].time()).FileSystem::getExtension($data['name'], true);
         if (!$file->move($this->diskFolder->file($data['location']))) {
-            return $this->jsonFailure('MOVE FILE ERROR!');
+            return $this->renderFailure('MOVE FILE ERROR!');
         }
         $fileModel = FileModel::create([
             'name' => $data['name'],
@@ -208,7 +208,7 @@ class DiskController extends Controller {
             'size' => $data['size'],
         ]);
         if (empty($fileModel)) {
-            return $this->jsonFailure('添加失败');
+            return $this->renderFailure('添加失败');
         }
         $model = new DiskModel();
         $model->user_id = auth()->id();
@@ -216,25 +216,25 @@ class DiskController extends Controller {
         $model->name = $fileModel->name;
         $model->parent_id = $data['parent_id'];
         if (!$model->addAsLast()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
         $model->type = FileModel::getType($data['type']);
         $model->size = $data['size'];
         $model->url = $this->getUrl($model);
-        return $this->jsonSuccess($model);
+        return $this->renderData($model);
     }
 
     public function folderAction($id) {
         $data = DiskModel::auth()->where('parent_id', $id)->where('file_id', 0)
             ->select('id,name,parent_id')->asArray()->all();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function moveAction(Request $request) {
         $id = $request->get('id');
         $parent_id = intval($request->get('parent'));
         if (empty($id)) {
-            return $this->jsonFailure('没有移动对象');
+            return $this->renderFailure('没有移动对象');
         }
         $disk = $parent_id > 0 ? DiskModel::find($parent_id) : new DiskModel([
            'id' => $parent_id,
@@ -242,21 +242,21 @@ class DiskController extends Controller {
            'right_id' => DiskModel::auth()->max('right_id') + 1
         ]);
         if (empty($disk) || $disk->file_id > 0) {
-            return $this->jsonFailure('移动目标不是文件夹');
+            return $this->renderFailure('移动目标不是文件夹');
         }
         $model_list = DiskModel::auth()->where('deleted_at', 0)
             ->whereIn('id', (array)$id)->all();
         foreach ($model_list as $item) {
             $item->moveTo($disk);
         }
-        return $this->jsonSuccess('成功');
+        return $this->renderData('成功');
     }
 
     public function copyAction(Request $request) {
         $id = $request->get('id');
         $parent_id = intval(app('request')->get('parent'));
         if (empty($id)) {
-            return $this->jsonFailure('没有移动对象');
+            return $this->renderFailure('没有移动对象');
         }
         $disk = $parent_id > 0 ? DiskModel::find($parent_id) : new DiskModel([
             'id' => $parent_id,
@@ -264,21 +264,21 @@ class DiskController extends Controller {
             'right_id' => DiskModel::auth()->max('right_id') + 1
         ]);
         if (empty($disk) || $disk->file_id > 0) {
-            return $this->jsonFailure('移动目标不是文件夹');
+            return $this->renderFailure('移动目标不是文件夹');
         }
         $model_list = DiskModel::auth()->where('deleted_at', 0)
             ->whereIn('id', (array)$id)->all();
         foreach ($model_list as $item) {
             $item->copyTo($disk);
         }
-        return $this->jsonSuccess('成功');
+        return $this->renderData('成功');
     }
 
     public function usersAction($name = null) {
         $data = UserModel::where('id', '<>', auth()->id())->when(!empty($name), function ($query) {
             DiskModel::searchWhere($query, 'name', false, 'name');
         })->get('name', 'id');
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function importAction(Request $request) {

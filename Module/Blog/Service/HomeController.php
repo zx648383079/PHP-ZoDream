@@ -81,45 +81,45 @@ class HomeController extends Controller {
         BlogModel::where('id', $id)->updateOne('click_count');
         $blog = BlogModel::query()->where('id', $id)->asArray()
             ->first('click_count', 'recommend', 'comment_count');
-        return $this->jsonSuccess($blog);
+        return $this->renderData($blog);
     }
 
     public function recommendAction($id) {
         $id = intval($id);
         if (!BlogModel::canRecommend($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+            return $this->renderFailure('一个用户只能操作一次！');
         }
         $model = BlogModel::find($id);
         $model->recommendThis();
-        return $this->jsonSuccess($model->recommend);
+        return $this->renderData($model->recommend);
     }
 
     public function suggestionAction($keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
            BlogModel::searchWhere($query, 'title');
         })->limit(4)->get();
-        return $this->jsonSuccess($data);
+        return $this->renderData($data);
     }
 
     public function openAction(int $id) {
         $model = BlogModel::find($id);
         if (!$model) {
-            return $this->jsonFailure('文章不存在');
+            return $this->renderFailure('文章不存在');
         }
         if ($model->can_read) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'refresh' => true
             ], '文章可正常阅读');
         }
         if ($model->open_type == BlogModel::OPEN_LOGIN) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'url' => url('auth', ['redirect_uri' => url()->previous()])
             ], '请先登陆');
         }
         if ($model->open_type == BlogModel::OPEN_PASSWORD) {
             $password = app('request')->get('password');
             if ($password !== $model->open_rule) {
-                return $this->jsonFailure('阅读密码错误');
+                return $this->renderFailure('阅读密码错误');
             }
             session(['BLOG_PWD' => $password]);
             if (!auth()->guest()) {
@@ -130,13 +130,13 @@ class HomeController extends Controller {
                     'action' => BlogLogModel::ACTION_REAL_RULE
                 ]);
             }
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'refresh' => true
             ], '密码正确');
         }
         if ($model->open_type == BlogModel::OPEN_BUY) {
             if (auth()->guest()) {
-                return $this->jsonSuccess([
+                return $this->renderData([
                     'url' => url('auth', ['redirect_uri' => url()->previous()])
                 ], '请先登陆');
             }
@@ -144,7 +144,7 @@ class HomeController extends Controller {
                 auth()->id(), AccountLogModel::TYPE_BUY_BLOG,
                 $model->id, intval($model->open_rule), '购买文章阅读权限');
             if (!$res) {
-                return $this->jsonFailure('账户余额不足');
+                return $this->renderFailure('账户余额不足');
             }
             BlogLogModel::create([
                 'user_id' => auth()->id(),
@@ -152,11 +152,11 @@ class HomeController extends Controller {
                 'id_value' => $model->id,
                 'action' => BlogLogModel::ACTION_REAL_RULE
             ]);
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'refresh' => true
             ], '购买成功');
         }
-        return $this->jsonFailure('未知');
+        return $this->renderFailure('未知');
     }
 
 }

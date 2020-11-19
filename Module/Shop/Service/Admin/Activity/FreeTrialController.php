@@ -27,16 +27,16 @@ class FreeTrialController extends Controller {
         $model->scope_type = ActivityModel::SCOPE_GOODS;
         $model->type = ActivityModel::TYPE_FREE_TRIAL;
         if (!$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/free_trial')
         ], '保存成功！');
     }
 
     public function deleteAction($id) {
         ActivityModel::where('type', ActivityModel::TYPE_FREE_TRIAL)->where('id', $id)->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('activity/free_trial')
         ]);
     }

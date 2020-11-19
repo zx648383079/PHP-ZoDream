@@ -14,12 +14,12 @@ class HomeController extends Controller {
 	protected function jsonReturn($data) {
 		$callback = app('request')->get('callback');
 		if (is_null($callback)) {
-			return $this->json($data, 'JSON');
+			return $this->renderResponse($data, 'JSON');
 		}
 		if (preg_match('/^[\w_]+$/', $callback)) {
-			return $this->json($data, 'JSONP');
+			return $this->renderResponse($data, 'JSONP');
 		}
-		return $this->json(array(
+		return $this->renderResponse(array(
 			'state'=> 'callback参数不合法'
 		));
 	}

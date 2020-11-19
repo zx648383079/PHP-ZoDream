@@ -60,9 +60,9 @@ class SiteController extends Controller {
             'user_id' => auth()->id()
         ]);
         if (!$model->load('', ['user_id']) || !$model->autoIsNew()->save()) {
-            return $this->jsonFailure($model->getFirstError());
+            return $this->renderFailure($model->getFirstError());
         }
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site/page', ['id' => $model->id])
         ]);
     }
@@ -70,13 +70,13 @@ class SiteController extends Controller {
     public function deleteAction($id) {
         $model = SiteModel::findWithAuth($id);
         if (empty($model)) {
-            return $this->jsonFailure('站点不存在');
+            return $this->renderFailure('站点不存在');
         }
         $ids =  PageModel::where('site_id', $id)->pluck('id');
         PageWeightModel::whereIn('page_id', $ids)->delete();
         PageModel::where('site_id', $id)->delete();
         $model->delete();
-        return $this->jsonSuccess([
+        return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }

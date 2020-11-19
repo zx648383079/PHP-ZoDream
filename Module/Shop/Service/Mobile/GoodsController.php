@@ -23,7 +23,7 @@ class GoodsController extends Controller {
         $goods = GoodsModel::where('id', $id)->first('id', 'price', 'stock');
         $price = GoodsRepository::finalPrice($goods, $amount, $properties);
         $box = AttributeModel::getProductAndPriceWithProperties($properties, $id);
-        return $this->jsonSuccess([
+        return $this->renderData([
             'price' => $price,
             'total' => $price * $amount,
             'stock' => !empty($box['product']) ? $box['product']->stock : $goods->stock
@@ -35,7 +35,7 @@ class GoodsController extends Controller {
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->page();
         if (app('request')->isAjax()) {
-            return $this->jsonSuccess([
+            return $this->renderData([
                 'html' => $this->renderHtml('page', compact('comment_list', 'id')),
                 'has_more' => $goods_list->hasMore()
             ]);
