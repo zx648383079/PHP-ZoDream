@@ -11,7 +11,7 @@ class ChapterController extends RestController {
             return $this->detailAction($id);
         }
         $chapter_list  = BookRepository::chapters($book);
-        return $this->renderPage($chapter_list);
+        return $this->renderData($chapter_list);
     }
 
     public function detailAction($id, $book = 0) {
