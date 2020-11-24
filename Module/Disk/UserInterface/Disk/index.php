@@ -128,7 +128,7 @@ $this->registerJs($js)
                     </div>
                 </div>
                 <div>
-                    <span>{{item.size | size}}</span>
+                    <span v-if="item.file">{{item.file.size | size}}</span>
                 </div>
                 <div>
                     <span class="hover-hide">{{item.updated_at | time}}</span>

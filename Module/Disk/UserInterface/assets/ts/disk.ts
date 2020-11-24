@@ -1,4 +1,6 @@
-Vue.filter('time', function (value) {
+// import Vue from "vue";
+
+Vue.filter('time', function (value: any) {
     if (!value) {
         return;
     }
@@ -9,7 +11,7 @@ Vue.filter('time', function (value) {
     date.setTime(parseInt(value) * 1000);
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '+date.getHours() + ':' + date.getMinutes();
 });
-Vue.filter('size', function (value) {
+Vue.filter('size', function (value: any) {
     if (!value) {
         return "--";
     }
@@ -22,7 +24,7 @@ Vue.filter('size', function (value) {
         i = Math.floor(Math.log(value) / Math.log(k));
     return (value / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
 });
-Vue.filter('status', function (value) {
+Vue.filter('status', function (value: number) {
     switch (value) {
         case 0:
             return "文件校验中";
@@ -169,7 +171,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         folderBox = $('#folderModal').dialog(),
         player = null,
         downloadFile = function (url) {
-            let download = $(".downloadFrame");
+            let download: any = $(".downloadFrame");
             if (download.length < 1) {
                 download = document.createElement("iframe");
                 download.className = "downloadFrame";
@@ -199,8 +201,10 @@ function require_disk(baseUrl: string, md5Url: string) {
             orderKey: null,
             order: null,
             category: null,
-            offset: 0,
-            num: 20,
+            page: 1,
+            perPage: 20,
+            hasMore: true,
+            isLoading: false,
             crumb: [
                 {id: 0, name: "全部文件"}
             ]
@@ -215,52 +219,55 @@ function require_disk(baseUrl: string, md5Url: string) {
         },
         methods: {
             // 获取数据
-            getList: function () {
+            goPage: function (page: number) {
                 this.checkCount = 0;
                 this.isAllChecked = false;
                 let parent = this.getParent();
                 let tag = this.getTag(parent);
-                let isMore = this.offset > 0 && (this.offset + this.num) > this.files.length;
-                if (dataCache.hasOwnProperty(tag) && !isMore) {
+                if (dataCache.hasOwnProperty(tag) && !this.hasMore) {
                     this.addData(dataCache[tag]);
                     return;
                 }
                 let loading = Dialog.loading();
-                $.getJSON(baseUrl + 'disk/list?id=' + parent +
-                    "&type=" + this.category +
-                    "&offset=" + this.offset +
-                    "&length=" + this.num, function (data) {
+                $.getJSON(baseUrl + 'disk/list', {
+                    id: parent,
+                    type: this.category,
+                    page,
+                    per_page: this.perPage
+                }, (data) => {
                     if (data.code != 200) {
                         return;
                     }
-                    if (isMore && dataCache.hasOwnProperty(tag)) {
+                    if (page > 1 && dataCache.hasOwnProperty(tag)) {
                         Array.prototype.push.apply(dataCache[tag], data.data);
                     } else {
                         dataCache[tag] = data.data;
                     }
-                    vue.addData(data.data, !isMore);
+                    this.hasMore = data.paging.more;
+                    this.page = page;
+                    this.isLoading = false;
+                    vue.addData(data.data, page < 2);
                     loading.close();
                 });
             },
-            getMore: function (num) {
-                if (num === void 0) {
-                    num = 20;
+            tapMore: function () {
+                if (!this.hasMore) {
+                    return;
                 }
-                this.num = num;
-                this.getList();
+                this.goPage(this.page + 1);
+            },
+            tapRefresh: function() {
+                this.goPage(1);
             },
             // 根据ID 获取缓存中的标签
-            getTag: function (id) {
+            getTag: function (id?: any) {
                 if (id === void 0) {
                     id = this.getParent();
                 }
                 return "c" + this.category + id;
             },
             // 添加数据
-            addData: function (data, isNew) {
-                if (isNew === void 0) {
-                    isNew = true;
-                }
+            addData: function (data, isNew = true) {
                 if (isNew) {
                     this.files.splice(0);
                 }
@@ -269,7 +276,6 @@ function require_disk(baseUrl: string, md5Url: string) {
                     item.checked = false;
                     this.files.push(item);
                 }
-                this.offset = this.files.length;
             },
             // 排序
             setOrder: function (key) {
@@ -296,23 +302,22 @@ function require_disk(baseUrl: string, md5Url: string) {
                     this.files[i].checked = this.isAllChecked;
                 }
             },
-            enter: function (item) {
-                if (item.file_id == 0) {
+            enter: function (item: any) {
+                if (item.file_id == 0 || !item.file) {
                     this.crumb.push(item);
-                    this.offset = 0;
-                    this.getList();
+                    this.tapRefresh();
                     return;
                 }
-                if (item.type == 3 || item.type == 7) {
-                    window.open(item.url, "_blank");
+                if (item.file.type == 3 || item.file.type == 7) {
+                    window.open(item.file.url, "_blank");
                     return;
                 }
-                if (item.type == 5) {
+                if (item.file.type == 5) {
                     getPlayer().list.add({
                         name: item.name,
                         artist: '未知',
-                        url: item.url,
-                        cover: '/assets/images/favicon.png',
+                        url: item.file.url,
+                        cover: item.file.thumb || '/assets/images/favicon.png',
                     });
                     player.skipBack();
                     player.play();
@@ -321,9 +326,8 @@ function require_disk(baseUrl: string, md5Url: string) {
                 this.check(item);
             },
             top: function () {
-               this.crumb.pop();
-                this.offset = 0;
-                this.getList();
+                this.crumb.pop();
+                this.tapRefresh();
             },
             level: function (item) {
                 if (item.id == 0) {
@@ -336,13 +340,11 @@ function require_disk(baseUrl: string, md5Url: string) {
                         }
                     }
                 }
-                this.offset = 0;
-                this.getList();
+                this.tapRefresh();
             },
             refresh: function () {
                 this.deleteCache();
-                this.offset = 0;
-                this.getList();
+                this.tapRefresh();
             },
             check: function (item) {
                 item.checked = !item.checked;
@@ -555,7 +557,7 @@ function require_disk(baseUrl: string, md5Url: string) {
                 this.category = category;
                 this.offset = 0;
                 this.crumb.splice(1);
-                this.getList();
+                this.tapRefresh();
             }
         }
     });
@@ -604,7 +606,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         $(".tree-box li").removeClass("active");
         let father = $(this);
         let parent = father.parent();
-        fileParent = parent.attr("data-id");
+        fileParent = parent.attr("data-id") as any;
         parent.addClass("active")
         if (father.hasClass("empty")) {
             return;
@@ -909,8 +911,10 @@ function require_my_share(baseUrl: string) {
             isAllChecked: false,
             orderKey: null,
             order: null,
-            offset: 0,
-            num: 20,
+            page: 1,
+            perPage: 20,
+            hasMore: true,
+            isLoading: false,
         },
         computed: {
             sortFiles: function() {
@@ -919,25 +923,32 @@ function require_my_share(baseUrl: string) {
         },
         methods: {
             // 获取数据
-            getList: function () {
+            goPage: function (page: number) {
                 this.checkCount = 0;
                 this.isAllChecked = false;
                 let loading = Dialog.loading();
-                $.getJSON(baseUrl + "share/mylist?offset=" + this.offset +
-                    "&length=" + this.num, function (data) {
+                $.getJSON(baseUrl + 'share/mylist', {
+                    page,
+                    per_page: this.perPage
+                }, (data) => {
                     if (data.code != 200) {
                         return;
                     }
                     vue.addData(data.data);
+                    this.hasMore = data.paging.more;
+                    this.page = page;
+                    this.isLoading = false;
                     loading.close();
                 });
             },
-            getMore: function (num) {
-                if (num === void 0) {
-                    num = 20;
+            tapMore: function () {
+                if (!this.hasMore) {
+                    return;
                 }
-                this.num = num;
-                this.getList();
+                this.goPage(this.page + 1);
+            },
+            tapRefresh: function() {
+                this.goPage(1);
             },
             // 添加数据
             addData: function (data) {
@@ -1020,7 +1031,7 @@ function require_my_share(baseUrl: string) {
             }
         }
     });
-    vue.getList();
+    vue.tapRefresh();
 }
 
 function require_trash(baseUrl: string) {
@@ -1032,8 +1043,9 @@ function require_trash(baseUrl: string) {
             isAllChecked: false,
             orderKey: null,
             order: null,
-            offset: 0,
-            num: 20,
+            page: 1,
+            perPage: 20,
+            hasMore: true,
         },
         computed: {
             sortFiles: function() {
@@ -1042,25 +1054,32 @@ function require_trash(baseUrl: string) {
         },
         methods: {
             // 获取数据
-            getList: function () {
+            goPage: function (page: number) {
                 this.checkCount = 0;
                 this.isAllChecked = false;
                 let loading = Dialog.loading();
-                $.getJSON(baseUrl + "trash/list?offset=" + this.offset +
-                    "&length=" + this.num, function (data) {
+                $.getJSON(baseUrl + "trash/list", {
+                    page,
+                    per_page: this.perPage
+                }, function (data) {
                     if (data.code != 200) {
                         return;
                     }
+                    this.hasMore = data.paging.more;
+                    this.page = page;
+                    this.isLoading = false;
                     vue.addData(data.data);
                     loading.close();
                 });
             },
-            getMore: function (num) {
-                if (num === void 0) {
-                    num = 20;
+            tapMore: function () {
+                if (!this.hasMore) {
+                    return;
                 }
-                this.num = num;
-                this.getList();
+                this.goPage(this.page + 1);
+            },
+            tapRefresh: function() {
+                this.goPage(1);
             },
             // 添加数据
             addData: function (data) {
@@ -1171,7 +1190,7 @@ function require_trash(baseUrl: string) {
             }
         }
     });
-    vue.getList();
+    vue.tapRefresh();
 }
 
 function require_share(baseUri: string, shareId: number) {
@@ -1199,8 +1218,9 @@ function require_share(baseUri: string, shareId: number) {
             isList: true,
             orderKey: null,
             order: null,
-            offset: 0,
-            num: 20,
+            page: 1,
+            perPage: 20,
+            hasMore: true,
             crumb: [
                 {id: 0, name: "全部文件"}
             ]
@@ -1215,39 +1235,45 @@ function require_share(baseUri: string, shareId: number) {
         },
         methods: {
             // 获取数据
-            getList: function () {
+            goPage: function (page: number) {
                 this.checkCount = 0;
                 this.isAllChecked = false;
                 let parent = this.getParent();
                 let tag = this.getTag(parent);
-                let isMore = this.offset > 0 && (this.offset + this.num) > this.files.length;
-                if (dataCache.hasOwnProperty(tag) && !isMore) {
+                if (dataCache.hasOwnProperty(tag) && !this.hasMore) {
                     this.addData(dataCache[tag]);
                     return;
                 }
                 let loading = Dialog.loading();
-                $.getJSON(baseUri+ "share/list?id=" + parent +
-                    "&share=" + shareId+
-                    "&offset=" + this.offset +
-                    "&length=" + this.num, function (data) {
+                $.getJSON(baseUri+ 'share/list', {
+                        id: parent,
+                        share: shareId,
+                        page,
+                        per_page: this.perPage
+                    }, (data) => {
                     if (data.code != 200) {
                         return;
                     }
-                    if (isMore) {
+                    if (page > 1) {
                         Array.prototype.push.apply(dataCache[tag], data.data);
                     } else {
                         dataCache[tag] = data.data;
                     }
-                    vue.addData(data.data, !isMore);
+                    this.hasMore = data.paging.more;
+                    this.page = page;
+                    this.isLoading = false;
+                    vue.addData(data.data, page < 2);
                     loading.hide();
                 });
             },
-            getMore: function (num) {
-                if (num === void 0) {
-                    num = 20;
+            tapMore: function () {
+                if (!this.hasMore) {
+                    return;
                 }
-                this.num = num;
-                this.getList();
+                this.goPage(this.page + 1);
+            },
+            tapRefresh: function() {
+                this.goPage(1);
             },
             // 根据ID 获取缓存中的标签
             getTag: function (id) {
@@ -1303,12 +1329,12 @@ function require_share(baseUri: string, shareId: number) {
               }
                 this.crumb.push(item);
                 this.offset = 0;
-                this.getList();
+                this.tapRefresh();
             },
             top: function () {
                this.crumb.pop();
                 this.offset = 0;
-                this.getList();
+                this.tapRefresh();
             },
             level: function (item) {
                 if (item.id == 0) {
@@ -1322,11 +1348,11 @@ function require_share(baseUri: string, shareId: number) {
                     }
                 }
                 this.offset = 0;
-                this.getList();
+                this.tapRefresh();
             },
             refresh: function () {
                 this.deleteCache();
-                this.getList();
+                this.tapRefresh();
             },
             check: function (item) {
                 item.checked = !item.checked;
@@ -1424,7 +1450,7 @@ function require_share(baseUri: string, shareId: number) {
             }
         }
     });
-    vue.getList();
+    vue.tapRefresh();
 
     /* -------------------------------------------   */
     // 模态框事件
@@ -1436,7 +1462,7 @@ function require_share(baseUri: string, shareId: number) {
         $(".zd_tree li").removeClass("active");
         var father = $(this);
         var parent = father.parent();
-        fileParent = parent.attr("data-id");
+        fileParent = parent.attr("data-id") as any;
         parent.addClass("active")
         if (father.hasClass("empty")) {
             return;

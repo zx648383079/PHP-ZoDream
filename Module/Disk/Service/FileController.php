@@ -163,6 +163,23 @@ class FileController extends Controller {
         return $response->file($data['path']);
     }
 
+    public function videoAction($id) {
+        $response = Factory::response();
+        try {
+            $this->enableThrow();
+            $data = DiskRepository::driver()->file($id);
+            if ($data['type'] !== FileModel::TYPE_VIDEO) {
+                throw new \Exception('不是视频');
+            }
+        } catch (\Exception $ex) {
+            $response->header->setContentDisposition('error.mp4');
+            return $response->custom($ex->getMessage(), 'mp4');
+        }
+        $data['path']->setExtension($data['extension'])
+            ->setName($data['name']);
+        return $response->file($data['path']);
+    }
+
     public function imageAction($id) {
         $response = Factory::response();
         try {

@@ -7,6 +7,7 @@ use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
+use Module\Disk\Domain\Repositories\DiskRepository;
 use Zodream\Database\Command;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
@@ -32,28 +33,9 @@ class DiskController extends Controller {
     }
 
 
-    public function listAction($id = 0, $type = null, $offset = 0, $length = 20) {
-        if (intval($length) < 1) {
-            return $this->renderFailure('长度不对！');
-        }
-        $data = DiskModel::auth()
-            ->alias('d')
-            ->left('disk_file f', 'd.file_id', 'f.id')
-            ->when(!empty($type), function ($query) use ($type) {
-                return FileModel::searchType($query, $type);
-            })
-            ->where( 'parent_id', $id)
-            ->where('deleted_at', 0)
-            ->orderBy('file_id', 'asc')
-            ->orderBy('left_id', 'asc')
-            ->select('d.*', 'f.extension', 'f.size')
-            ->limit($length)->offset($offset)->asArray()->all();
-        foreach ($data as &$item) {
-            $item['type'] = FileModel::getType($item['extension']);
-            $item['url'] = $this->getUrl($item);
-        }
-        unset($item);
-        return $this->renderData($data);
+    public function listAction($id = 0, $path = '', $type = '') {
+        $data = DiskRepository::driver()->catalog($id, $path);
+        return $this->renderPage($data);
     }
 
     public function deleteAction(Request $request) {
