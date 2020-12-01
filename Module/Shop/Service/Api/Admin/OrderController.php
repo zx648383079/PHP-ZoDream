@@ -9,12 +9,13 @@ use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\PayLogModel;
+use Module\Shop\Domain\Models\Scene\Order;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class OrderController extends Controller {
 
     public function indexAction($series_number = null, $status = 0, $log_id = null) {
-        $model_list = OrderModel::with('user', 'goods', 'address')
+        $model_list = Order::with('user', 'goods', 'address')
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             })
