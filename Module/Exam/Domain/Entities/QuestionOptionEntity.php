@@ -17,7 +17,7 @@ class QuestionOptionEntity extends Entity {
         return 'exam_question_option';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'content' => 'required|string:0,255',
             'question_id' => 'required|int',

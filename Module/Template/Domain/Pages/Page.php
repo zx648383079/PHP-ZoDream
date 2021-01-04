@@ -25,7 +25,7 @@ class Page implements IPage {
     }
 
     protected function loadNodes() {
-        $data = config()->getConfigByFile('weight');
+        $data = config('view.weight', []);
         foreach ($data as $key => $item) {
             $this->register($key, $item);
         }

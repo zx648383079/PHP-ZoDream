@@ -1,8 +1,8 @@
 <?php
 namespace Module\Counter\Domain\Events;
 
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Traits\Attributes;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+use Zodream\Infrastructure\Concerns\Attributes;
 
 /**
  * Class CounterState

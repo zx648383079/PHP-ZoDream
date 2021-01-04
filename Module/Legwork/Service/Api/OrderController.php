@@ -3,12 +3,11 @@ namespace Module\Legwork\Service\Api;
 
 use Module\Legwork\Domain\Model\OrderModel;
 use Module\Legwork\Domain\Repositories\OrderRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class OrderController extends RestController {
+class OrderController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

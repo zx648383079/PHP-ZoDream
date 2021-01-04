@@ -4,8 +4,7 @@ namespace Module\WeChat\Service\Api;
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\Response;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\Menu;
 use Zodream\ThirdParty\WeChat\MenuItem;
 

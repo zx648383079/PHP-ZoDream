@@ -5,7 +5,7 @@ use Module\SEO\Domain\Listeners\SiteMapListener;
 
 class SitemapController extends Controller {
 
-    protected function methods()
+    public function methods()
     {
          return [
              'index' => ['POST']

@@ -3,9 +3,8 @@ namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Model\BookRoleModel;
 use Module\Book\Domain\Model\RoleRelationModel;
-use Zodream\Route\Controller\RestController;
 
-class RoleController extends RestController {
+class RoleController extends Controller {
 
     public function indexAction($book) {
         $data = BookRoleModel::where('book_id', $book)->page();

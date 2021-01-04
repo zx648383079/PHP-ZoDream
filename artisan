@@ -1,17 +1,24 @@
 #!/usr/bin/env php
 <?php
-use Zodream\Service\Console;
-use Zodream\Route\Router;
+
+use Zodream\Infrastructure\Contracts\Kernel;
+use Zodream\Infrastructure\Contracts\Router;
+use Zodream\Service\Application;
 
 require_once __DIR__.'/Service/Bootstrap.php';
-$app = new Console(APP_DIR);
-app(Router::class)
-    ->group([
-        'namespace' => 'Service\Install'
-    ], function ($router) {
-        $router->any('i', 'HomeController@initAction');
-        $router->any('init', 'HomeController@initAction');
-        $router->any('install', 'HomeController@initAction');
-        //$router->any('route:cache', 'HomeController@initAction');
-    });
-$app->autoResponse();
+
+$app = new Application(APP_DIR);
+$app->singleton(
+    Kernel::class,
+    \Zodream\Service\Console\Kernel::class);
+
+$router = $app->make(Router::class);
+
+$router->group([
+    'namespace' => 'Service\Install'
+], function ($router) {
+    $router->any('i', 'HomeController@initAction');
+    $router->any('init', 'HomeController@initAction');
+    $router->any('install', 'HomeController@initAction');
+});
+$app->listen();

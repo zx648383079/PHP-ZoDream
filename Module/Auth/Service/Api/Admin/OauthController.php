@@ -1,14 +1,11 @@
 <?php
 namespace Module\Auth\Service\Api\Admin;
 
-
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\OpenPlatform\Domain\Concerns\ApiPlatformOption;
-use Zodream\Route\Controller\RestController;
 
-class OauthController extends RestController {
+class OauthController extends Controller {
 
-    use AdminRole, ApiPlatformOption;
+    use ApiPlatformOption;
 
     protected function platformOption() {
         return [

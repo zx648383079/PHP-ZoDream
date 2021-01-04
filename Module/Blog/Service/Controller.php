@@ -2,7 +2,6 @@
 namespace Module\Blog\Service;
 
 use Module\ModuleController;
-use Zodream\Service\Factory;
 
 abstract class Controller extends ModuleController {
     public $layout = true;
@@ -12,6 +11,6 @@ abstract class Controller extends ModuleController {
         if ($this->layout === false) {
             return false;
         }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path('UserInterface/Home/layouts/main.php');
     }
 }

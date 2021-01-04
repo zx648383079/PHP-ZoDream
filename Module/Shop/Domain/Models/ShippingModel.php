@@ -28,7 +28,7 @@ class ShippingModel extends Model {
         return 'shop_shipping';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'code' => 'required|string:0,30',

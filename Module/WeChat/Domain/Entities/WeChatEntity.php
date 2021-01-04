@@ -9,7 +9,7 @@ class WeChatEntity extends Entity {
         return 'wechat';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,40',
             'token' => 'required|string:0,32',

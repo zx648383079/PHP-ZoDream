@@ -9,7 +9,7 @@ class SearchController extends Controller {
 
     public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0) {
         if (empty($keywords) && $cat_id < 1 && $brand_id < 1) {
-            return $this->runMethodNotProcess('empty');
+            return $this->emptyAction();
         }
         /** @var Page $goods_list */
         $goods_list = GoodsModel::when(!empty($keywords), function ($query) {
@@ -21,7 +21,7 @@ class SearchController extends Controller {
         })->when(!empty($brand_id), function ($query) use ($brand_id) {
             $query->where('brand_id', intval($brand_id));
         })->page();
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             return $this->renderData([
                 'html' => $this->renderHtml('page', compact('goods_list', 'keywords')),
                 'has_more' => $goods_list->hasMore()
@@ -35,6 +35,6 @@ class SearchController extends Controller {
             '女装', '童装', '玩具'
         ];
         $hot_list = $history_list;
-        return $this->show(compact('history_list', 'hot_list'));
+        return $this->show('empty', compact('history_list', 'hot_list'));
     }
 }

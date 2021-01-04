@@ -23,7 +23,7 @@ class AffiliateLogModel extends Model {
         return 'shop_affiliate_log';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'item_type' => 'int:0,127',

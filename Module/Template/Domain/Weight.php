@@ -8,7 +8,7 @@ use Module\Template\Domain\Model\WeightModel;
 use Module\Template\Module;
 use Module\Template\Service\BaseWeight;
 use Zodream\Helpers\Str;
-use Zodream\Service\Factory;
+
 use Zodream\Template\ViewFactory;
 
 class Weight {

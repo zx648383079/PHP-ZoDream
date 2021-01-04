@@ -30,7 +30,7 @@ class CommentEntity extends Entity {
         return 'blog_comment';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'content' => 'required',
             'name' => 'string:0,45',

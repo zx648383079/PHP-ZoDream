@@ -16,7 +16,7 @@ class TaskController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -27,11 +27,11 @@ class TaskController extends Controller {
         if (empty($model->every_time)) {
             $model->every_time = 25;
         }
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction($id, $status = false) {
-        $data = app('request')
+        $data = request()
             ->get('name,every_time,description');
         $model = TaskModel::findOrNew($id);
         if ($id > 0 && $model->user_id !== auth()->id()) {
@@ -82,7 +82,7 @@ class TaskController extends Controller {
     }
 
     public function createDayAction() {
-        return $this->runMethodNotProcess('editDay', ['id' => 0]);
+        return $this->editDayAction(0);
     }
 
     public function editDayAction($id) {
@@ -96,7 +96,7 @@ class TaskController extends Controller {
         if ($model->isNewRecord) {
             $model->amount = 1;
         }
-        return $this->show(compact('model', 'task_list'));
+        return $this->show('editDay', compact('model', 'task_list'));
     }
 
     public function saveDayAction($task_id, $id = 0, $amount = 1) {
@@ -187,7 +187,7 @@ class TaskController extends Controller {
         foreach ($task_list as $item) {
             TaskDayModel::add($item, 1);
         }
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     public function stopTaskAction($id) {

@@ -6,14 +6,14 @@ use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
 use Zodream\Domain\Upload\UploadFile;
-use Zodream\Service\Factory;
+
 
 class PostRepository {
 
     public static function saveFile() {
-        $folder = Factory::root()->directory('data/demo');
+        $folder = app_path()->directory('data/demo');
         $folder->create();
-        $file = app('request')->files('file');
+        $file = request()->file('file');
         if (empty($file)) {
             return '';
         }
@@ -26,14 +26,14 @@ class PostRepository {
     }
 
     public static function file(PostModel $model) {
-        return Factory::root()->file('data/demo/'. $model->file);
+        return app_path()->file('data/demo/'. $model->file);
     }
 
     public static function folder($id) {
         if ($id instanceof PostModel) {
             $id = $id->id;
         }
-        return Factory::root()->directory('data/demo/'. $id);
+        return app_path()->directory('data/demo/'. $id);
     }
 
     public static function unzipFile(PostModel $model) {

@@ -50,11 +50,11 @@ class LogModel extends Model {
 	 * @return mixed
 	 */
 	public static function addLog($data, $action) {
-		return (new static)->add(array(
+		return static::create(array(
 			'event' => $action,
 			'data' => is_string($data) ? $data : json_encode($data),
 			'url' => url()->current(),
-			'ip' => app('request')->ip(),
+			'ip' => request()->ip(),
 			'create_at' => time(),
 			'user' => auth()->guest() ? null : auth()->user()['name']
 		));
@@ -68,7 +68,7 @@ class LogModel extends Model {
 	 */
 	public static function hasLog($action, $data = null) {
 	    $where = [
-	        'ip' => app('request')->ip()
+	        'ip' => request()->ip()
         ];
 		if (!auth()->guest()) {
 		    $where['user'] = [auth()->user()['name'], 'or'];

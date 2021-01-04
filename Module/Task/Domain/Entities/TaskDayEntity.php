@@ -26,7 +26,7 @@ class TaskDayEntity extends Entity {
         return 'task_day';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',

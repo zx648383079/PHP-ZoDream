@@ -12,7 +12,7 @@ class ForumController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -36,7 +36,7 @@ class ForumController extends Controller {
             $classify_list = ForumClassifyModel::where('forum_id', $id)
                 ->orderBy('id', 'asc')->all();
         }
-        return $this->show(compact('model', 'forum_list', 'classify_list'));
+        return $this->show('edit', compact('model', 'forum_list', 'classify_list'));
     }
 
     public function saveAction() {
@@ -59,7 +59,7 @@ class ForumController extends Controller {
     }
 
     protected function saveClassify($forum_id) {
-        $data = $this->getClassify(app('request')->get('classify'),
+        $data = $this->getClassify(request()->get('classify'),
             'name', 'id', 'icon', 'position');
         $exits = ForumClassifyModel::where('forum_id', $forum_id)->pluck('id');
         if (!empty($exits)) {

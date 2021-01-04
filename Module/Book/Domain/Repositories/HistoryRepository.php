@@ -22,7 +22,7 @@ class HistoryRepository {
             static::record($chapter->book_id, $chapter->id);
             return;
         }
-        $history = app('request')->cookie(BookHistoryModel::tableName());
+        $history = request()->cookie(BookHistoryModel::tableName());
         $history = empty($history) ? [] : unserialize($history);
         $history[$chapter->book_id] = $chapter->id;
         if (count($history) > 10) {
@@ -60,7 +60,7 @@ class HistoryRepository {
     }
 
     public static function getHistoryId() {
-        $history = app('request')->cookie(BookHistoryModel::tableName());
+        $history = request()->cookie(BookHistoryModel::tableName());
         return empty($history) ? [] : unserialize($history);
     }
 

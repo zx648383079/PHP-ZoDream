@@ -1,11 +1,9 @@
 <?php
 namespace Module\Book\Service\Api;
 
-use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Repositories\CategoryRepository;
-use Zodream\Route\Controller\RestController;
 
-class CategoryController extends RestController {
+class CategoryController extends Controller {
 
     public function indexAction() {
         return $this->renderData(CategoryRepository::getList());

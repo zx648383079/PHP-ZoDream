@@ -3,7 +3,7 @@ namespace Service\Install;
 
 use Infrastructure\Environment;
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Module\Gzo\Domain\GenerateModel;
 use Zodream\Module\Gzo\Domain\Generator\ModuleGenerator;
 use Zodream\Module\Gzo\Service\ModuleController;
@@ -11,7 +11,7 @@ use Zodream\Module\Gzo\Service\SqlController;
 
 class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '*',
             'init' => 'cli'
@@ -68,7 +68,7 @@ class HomeController extends Controller {
         ModuleGenerator::renderConfigs('config', [
             'db' => $data['db']
         ]);
-        GenerateModel::schema(app('request')->get('db.database'))
+        GenerateModel::schema(request()->get('db.database'))
             ->create();
         unset($data['view']);
         while (false !== ($file = readdir($handle))) {
@@ -136,14 +136,13 @@ class HomeController extends Controller {
 		return $this->showContent('<title>TEST</title><br>测试结果：<b>'.(empty($content) ?  '不':'').'支持采集</b>');
 	}
 
-	public function initAction() {
-        $request = app('request');
-        $host = $request->read('localhost', '请输入数据主机：');
-        $port = $request->read('3306', '请输入数据主机端口：');
-        $database = $request->read('zodream', '请输入数据库：');
-        $user = $request->read('root', '请输入数据库账号：');
-        $password = $request->read('', '请输入数据库密码：');
-        $prefix = $request->read('', '请输入表前缀：');
+	public function initAction(Request $request) {
+        $host = $request->post('请输入数据主机：', 'localhost');
+        $port = $request->post('请输入数据主机端口：', '3306');
+        $database = $request->post('请输入数据库：', 'zodream');
+        $user = $request->post('请输入数据库账号：', 'root');
+        $password = $request->post('请输入数据库密码：', '');
+        $prefix = $request->post('请输入表前缀：', '');
         $db = compact('host', 'port', 'database', 'user', 'password', 'prefix');
         config([
             'db' => $db

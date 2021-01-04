@@ -3,13 +3,12 @@ namespace Module\Legwork\Service\Api;
 
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Legwork\Domain\Repositories\RunnerRepository;
-use Zodream\Route\Controller\RestController;
 
-class RunnerController extends RestController {
+class RunnerController extends Controller {
 
     use CheckRole;
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'shop_admin'
         ];

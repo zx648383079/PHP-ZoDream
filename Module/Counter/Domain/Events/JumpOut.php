@@ -87,7 +87,7 @@ class JumpOut {
 
 
     public static function create(string $url) {
-        $request = app('request');
+        $request = request();
         return new static($request->ip(),
             $request->referrer(),
             $url,

@@ -5,14 +5,12 @@ use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Repositories\TagRepository;
-use Zodream\Route\Controller\RestController;
 
-
-class TagController extends RestController {
+class TagController extends Controller {
 
     use CheckRole;
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator',
             'index' => '*'

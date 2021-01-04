@@ -26,7 +26,7 @@ class NavigationModel extends Model {
     }
 
 
-    protected function rules() {
+    public function rules() {
         return [
             'type' => 'string:0,10',
             'name' => 'required|string:0,100',

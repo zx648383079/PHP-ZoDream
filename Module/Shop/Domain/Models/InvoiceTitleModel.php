@@ -25,7 +25,7 @@ class InvoiceTitleModel extends Model {
         return 'shop_invoice_title';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'title_type' => 'int:0,9',
             'type' => 'int:0,9',

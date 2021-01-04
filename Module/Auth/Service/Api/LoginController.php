@@ -8,12 +8,11 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class LoginController extends RestController {
+class LoginController extends Controller {
 
-    protected function methods() {
+    public function methods() {
         return [
             'index' => ['POST'],
         ];

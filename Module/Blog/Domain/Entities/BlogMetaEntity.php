@@ -16,7 +16,7 @@ class BlogMetaEntity extends Entity {
         return 'blog_meta';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'blog_id' => 'required|int',
             'name' => 'required|string:0,100',

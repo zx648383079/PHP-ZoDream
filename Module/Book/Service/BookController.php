@@ -12,11 +12,12 @@ use Module\Book\Domain\Setting;
 use Zodream\Disk\File;
 use Zodream\Disk\Stream;
 
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Output;
+
 
 class BookController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'txt' => '@',
             'zip' => '@',
@@ -25,7 +26,7 @@ class BookController extends Controller {
     }
 
     public function indexAction($id) {
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect(['./mobile/book', 'id' => $id]);
         }
         $book = BookModel::find($id);
@@ -43,7 +44,7 @@ class BookController extends Controller {
     }
 
     public function readAction($id) {
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect(['./mobile/book/read', 'id' => $id]);
         }
         $chapter = BookChapterModel::find($id);
@@ -74,13 +75,13 @@ class BookController extends Controller {
             'like_book', 'hot_book', 'author_book'));
     }
 
-    public function txtAction($id) {
+    public function txtAction($id, Output $output) {
         $book = BookModel::find($id);
         $file = $this->getBookFile($book);
-        return Factory::response()->file($file);
+        return $output->file($file);
     }
 
-    public function zipAction($id) {
+    public function zipAction($id, Output $output) {
         $book = BookModel::find($id);
         $file = $this->getBookFile($book);
         $zipFile = new File($file->getFullName().'.zip');
@@ -89,11 +90,11 @@ class BookController extends Controller {
         $zip->addFile((string)$file, 'all.txt');
         $zip->close();
         $zipFile->setName($book->name.'.zip');
-        return Factory::response()->file($zipFile);
+        return $output->file($zipFile);
     }
 
     protected function getBookFile(BookModel $book) {
-        $file = Factory::root()->file('data/cache/book_'. $book->id);
+        $file = app_path()->file('data/cache/book_'. $book->id);
         if (!$file->exist() || $file->modifyTime() < time() - 3600) {
             $stream = new Stream($file);
             $stream->open('w');

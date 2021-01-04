@@ -55,7 +55,7 @@ class ActionLogModel extends Model {
      */
 	public static function addLog($user_id, $action, $remark = '') {
 		return static::create([
-            'ip' => app('request')->ip(),
+            'ip' => request()->ip(),
             'user_id' => $user_id,
             'action' => $action,
             'remark' => $remark,

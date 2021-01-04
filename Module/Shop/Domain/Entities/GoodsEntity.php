@@ -21,7 +21,7 @@ class GoodsEntity extends Entity {
         return 'shop_goods';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'cat_id' => 'required|int',
             'brand_id' => 'required|int',

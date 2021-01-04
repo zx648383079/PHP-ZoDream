@@ -2,12 +2,9 @@
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
-use Module\CMS\Module;
-use Zodream\Infrastructure\Http\Response;
 
 class ContentController extends Controller {
     public function indexAction($cat_id, $model_id = 0, $keywords = null, $parent_id = 0) {
@@ -24,8 +21,7 @@ class ContentController extends Controller {
     }
 
     public function createAction($cat_id, $model_id, $parent_id = 0) {
-        $id = 0;
-        return $this->runMethodNotProcess('edit', compact('id', 'cat_id', 'model_id', 'parent_id'));
+        return $this->editAction(0, $cat_id, $model_id, $parent_id);
     }
 
     /**
@@ -34,7 +30,6 @@ class ContentController extends Controller {
      * @param $cat_id
      * @param $model_id
      * @param int $parent_id
-     * @return Response
      * @throws \Exception
      */
     public function editAction($id, $cat_id, $model_id, $parent_id = 0) {
@@ -45,7 +40,7 @@ class ContentController extends Controller {
             'parent_id' => $parent_id
         ];
         $tab_list = ModelFieldModel::tabGroups($model->id);
-        return $this->show(compact('id',
+        return $this->show('edit', compact('id',
             'cat_id', 'cat', 'scene', 'model',
             'data', 'tab_list'));
     }
@@ -54,7 +49,7 @@ class ContentController extends Controller {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
-        $data = app('request')->get();
+        $data = request()->get();
         if ($id > 0) {
             $scene->update($id, $data);
         } else {

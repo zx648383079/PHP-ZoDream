@@ -15,7 +15,7 @@ class HomeController extends Controller {
         $user = null,
         $tag = null, $id = 0) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail', compact('id'));
+            return $this->detailAction($id);
         }
         $post_list  = PostModel::with('user', 'category')
             ->when($category > 0, function ($query) use ($category) {
@@ -64,7 +64,7 @@ class HomeController extends Controller {
         $post->click_count ++;
         $post->save();
         $tags = TagRepository::getTags($post->id);
-        return $this->show(compact('post', 'tags'));
+        return $this->show('detail', compact('post', 'tags'));
     }
 
     public function catalogAction($id) {

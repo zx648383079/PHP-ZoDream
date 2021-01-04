@@ -1,12 +1,10 @@
 <?php
 namespace Module\Shop\Domain\Plugin\Payment;
 
-
 use Module\Shop\Domain\Plugin\BasePayment;
 use Zodream\Disk\File;
 use Zodream\Http\Http;
 use Zodream\Infrastructure\Support\Process;
-use Zodream\Service\Factory;
 
 class Boc extends BasePayment {
 
@@ -220,7 +218,7 @@ class Boc extends BasePayment {
      * @return File
      */
     private function getTempFile($name) {
-        return Factory::root()->directory('data/cache')->file($name);
+        return app_path()->directory('data/cache')->file($name);
     }
 
     /**

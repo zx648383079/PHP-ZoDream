@@ -4,12 +4,12 @@ namespace Module\MicroBlog\Service;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\ModuleController;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+
 
 class ShareController extends ModuleController {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@',
         ];
@@ -48,6 +48,6 @@ class ShareController extends ModuleController {
         if ($this->action !== 'index') {
             return false;
         }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 }

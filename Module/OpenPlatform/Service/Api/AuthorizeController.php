@@ -4,11 +4,10 @@ namespace Module\OpenPlatform\Service\Api;
 use Module\OpenPlatform\Domain\Model\TokenPageModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
-use Zodream\Route\Controller\RestController;
 
-class AuthorizeController extends RestController {
+class AuthorizeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

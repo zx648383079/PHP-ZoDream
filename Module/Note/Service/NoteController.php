@@ -27,7 +27,7 @@ class NoteController extends ModuleController {
 
     public function deleteAction($id) {
         NoteModel::where('id', $id)->delete();
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             return $this->renderData();
         }
         return $this->redirect('./');

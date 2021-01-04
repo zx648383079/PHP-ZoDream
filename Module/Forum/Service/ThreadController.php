@@ -9,11 +9,11 @@ use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Parsers\Parser;
 use Module\Forum\Domain\Repositories\ThreadRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class ThreadController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'create' => '@',
             'edit' => '@',
@@ -72,7 +72,7 @@ class ThreadController extends Controller {
             'user_id' => auth()->id(),
             'thread_id' => $thread->id,
             'grade' => 0,
-            'ip' => app('request')->ip()
+            'ip' => request()->ip()
         ]);
         ForumModel::updateCount($thread->forum_id, 'thread_count');
         return $this->renderData([
@@ -137,7 +137,7 @@ class ThreadController extends Controller {
             'user_id' => auth()->id(),
             'thread_id' => $thread_id,
             'grade' => intval($max) + 1,
-            'ip' => app('request')->ip()
+            'ip' => request()->ip()
         ]);
         if (empty($post)) {
             return $this->renderFailure('发表失败');

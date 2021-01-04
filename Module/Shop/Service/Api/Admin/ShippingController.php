@@ -32,7 +32,7 @@ class ShippingController extends Controller {
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->renderFailure($model->getFirstError());
         }
-        ShippingGroupModel::batchSave($model->id, app('request')->get('shipping'));
+        ShippingGroupModel::batchSave($model->id, request()->get('shipping'));
         return $this->render($model);
     }
 

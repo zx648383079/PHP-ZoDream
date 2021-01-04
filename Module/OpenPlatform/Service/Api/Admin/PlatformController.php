@@ -1,14 +1,10 @@
 <?php
 namespace Module\OpenPlatform\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class PlatformController extends RestController {
-
-    use AdminRole;
+class PlatformController extends Controller {
 
     public function indexAction() {
         $model_list = PlatformModel::orderBy('status', 'desc')->page();

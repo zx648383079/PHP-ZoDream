@@ -2,7 +2,7 @@
 namespace Module\SMS\Service\Api\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
-use Zodream\Route\Controller\RestController;
+use Module\SMS\Service\Api\Controller as RestController;
 
 class Controller extends RestController {
 

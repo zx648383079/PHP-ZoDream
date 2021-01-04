@@ -8,7 +8,7 @@ class Controller extends ModuleController {
 
     public $layout = '/Admin/layouts/main';
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

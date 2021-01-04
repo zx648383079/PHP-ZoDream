@@ -10,7 +10,7 @@ class Hmac {
 
 
     public function getKeyAndSign() {
-        $header = app('request')->header('Authorization');
+        $header = request()->header('Authorization');
         if (empty($header)) {
             return [null, null];
         }

@@ -3,7 +3,7 @@ namespace Module\Auth\Domain\Model\Bulletin;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Zodream\Service\Factory;
+
 
 /**
  * Class BulletinModel

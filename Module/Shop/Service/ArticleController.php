@@ -8,7 +8,7 @@ class ArticleController extends Controller {
 
     public function indexAction($id = null) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail', compact('id'));
+            return $this->detailAction($id);
         }
         return $this->show();
     }
@@ -17,7 +17,7 @@ class ArticleController extends Controller {
         $article = ArticleModel::find($id);
         $category = $article->category;
         $cat_list = ArticleCategoryModel::where('parent_id', $category->parent_id)->all();
-        return $this->sendWithShare()->show(compact('article', 'category', 'cat_list'));
+        return $this->sendWithShare()->show('detail', compact('article', 'category', 'cat_list'));
     }
 
     public function categoryAction($id) {

@@ -3,10 +3,9 @@ declare(strict_types=1);
 namespace Module\Contact\Service\Api;
 
 use Module\Contact\Domain\Repositories\ContactRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class HomeController extends RestController {
+class HomeController extends Controller {
 
     public function feedbackAction(Request $request) {
         try {

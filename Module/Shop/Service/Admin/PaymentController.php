@@ -16,14 +16,14 @@ class PaymentController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = PaymentModel::findOrNew($id);
         $pay_list = PaymentRepository::getPlugins();
         $shipping_list = ShippingModel::select('id', 'name')->all();
-        return $this->show(compact('model', 'pay_list', 'shipping_list'));
+        return $this->show('edit', compact('model', 'pay_list', 'shipping_list'));
     }
 
     public function saveAction() {

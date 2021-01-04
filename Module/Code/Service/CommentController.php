@@ -8,7 +8,7 @@ use Zodream\Service\Config;
 
 class CommentController extends ModuleController {
 
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '*',
             'save' => '*',
@@ -55,7 +55,7 @@ class CommentController extends ModuleController {
     }
 
     public function disagreeAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -67,7 +67,7 @@ class CommentController extends ModuleController {
     }
 
     public function agreeAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -79,7 +79,7 @@ class CommentController extends ModuleController {
     }
 
     public function deleteAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {

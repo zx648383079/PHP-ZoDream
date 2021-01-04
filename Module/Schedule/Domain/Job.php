@@ -199,7 +199,7 @@ class Job {
      * @throws Exception
      */
     public function canRunInBackground() {
-        return app('request')->isLinux() && !is_callable($this->command) && $this->runInBackground === false;
+        return request()->isLinux() && !is_callable($this->command) && $this->runInBackground === false;
     }
     /**
      * This will prevent the Job from overlapping.

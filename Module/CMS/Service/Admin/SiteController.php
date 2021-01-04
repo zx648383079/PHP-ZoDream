@@ -13,13 +13,13 @@ class SiteController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = SiteModel::findOrNew($id);
         $themes = (new ThemeManager)->getAllThemes();
-        return $this->show(compact('model', 'themes'));
+        return $this->show('edit', compact('model', 'themes'));
     }
 
     public function saveAction() {

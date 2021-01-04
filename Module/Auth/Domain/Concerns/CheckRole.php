@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Concerns;
 
-use Zodream\Route\Controller\RestController;
+use Zodream\Route\Controller\Controller as RestController;
 
 /**
  * 验证权限

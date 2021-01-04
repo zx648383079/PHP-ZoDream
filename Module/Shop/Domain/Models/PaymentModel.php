@@ -24,7 +24,7 @@ class PaymentModel extends Model {
         return 'shop_payment';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'code' => 'required|string:0,30',

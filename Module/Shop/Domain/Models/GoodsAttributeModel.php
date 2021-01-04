@@ -19,7 +19,7 @@ class GoodsAttributeModel extends Model {
         return 'shop_goods_attribute';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'goods_id' => 'int',
             'attribute_id' => 'required|int',

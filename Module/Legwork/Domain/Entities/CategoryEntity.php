@@ -8,7 +8,7 @@ class CategoryEntity extends Entity {
         return 'legwork_category';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,100',
             'icon' => 'string:0,200',

@@ -31,7 +31,7 @@ class OrderGoodsModel extends Model {
         return 'shop_order_goods';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'order_id' => 'required|int',
             'goods_id' => 'required|int',

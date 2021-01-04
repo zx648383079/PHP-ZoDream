@@ -13,7 +13,7 @@ class AttributeController extends Controller {
     }
 
     public function createAction($group_id = 0) {
-        return $this->runMethodNotProcess('edit', ['id' => null, 'group_id' => $group_id]);
+        return $this->editAction(0, $group_id);
     }
 
     public function editAction($id, $group_id = 0) {
@@ -23,7 +23,7 @@ class AttributeController extends Controller {
             $model->group_id = $group_id;
         }
         $type_list = AttributeGroupModel::all();
-        return $this->show(compact('model', 'type_list'));
+        return $this->show('edit', compact('model', 'type_list'));
     }
 
     public function saveAction() {
@@ -43,12 +43,12 @@ class AttributeController extends Controller {
     }
 
     public function createGroupAction() {
-        return $this->runMethodNotProcess('editGroup', ['id' => null]);
+        return $this->editGroupAction(0);
     }
 
     public function editGroupAction($id) {
         $model = AttributeGroupModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('editGroup', compact('model'));
     }
 
     public function saveGroupAction() {

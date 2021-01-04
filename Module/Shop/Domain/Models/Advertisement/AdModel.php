@@ -35,7 +35,7 @@ class AdModel extends Model {
         return 'shop_ad';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'position_id' => 'required|int',

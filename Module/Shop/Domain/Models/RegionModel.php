@@ -19,7 +19,7 @@ class RegionModel extends Model {
         return 'shop_region';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'parent_id' => 'int',

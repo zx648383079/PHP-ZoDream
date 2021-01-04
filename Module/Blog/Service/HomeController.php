@@ -13,7 +13,7 @@ use Module\Blog\Domain\Repositories\TermRepository;
 
 class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'recommend' => '@',
             '*' => '*'
@@ -25,7 +25,7 @@ class HomeController extends Controller {
         $user = null, $language = null, $programming_language = null,
         $tag = null, $id = 0) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail', compact('id'));
+            return $this->detailAction($id);
         }
         $blog_list  = BlogRepository::getList($sort, $category, $keywords,
             $user, $language, $programming_language, $tag);
@@ -63,7 +63,7 @@ class HomeController extends Controller {
         $tags = TagRepository::getTags($blog->id);
         $relation_list = TagRepository::getRelationBlogs($blog->id);
         $metaItems = BlogMetaModel::getMetaWithDefault($id);
-        return $this->show(compact('blog', 'cat_list', 'languages', 'tags', 'relation_list', 'metaItems'));
+        return $this->show('detail', compact('blog', 'cat_list', 'languages', 'tags', 'relation_list', 'metaItems'));
     }
 
     public function logAction($blog) {
@@ -117,7 +117,7 @@ class HomeController extends Controller {
             ], '请先登陆');
         }
         if ($model->open_type == BlogModel::OPEN_PASSWORD) {
-            $password = app('request')->get('password');
+            $password = request()->get('password');
             if ($password !== $model->open_rule) {
                 return $this->renderFailure('阅读密码错误');
             }

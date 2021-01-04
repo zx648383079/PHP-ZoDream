@@ -7,7 +7,6 @@ use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Template\Domain\Weights\Node;
 use Zodream\Disk\File;
 use Zodream\Helpers\Disk;
-use Zodream\Service\Factory;
 
 class FileNode extends Node {
 
@@ -38,7 +37,7 @@ HTML;
         $url = url('./thread/do', ['id' => $this->page->postId(),
             Parser::UID_KEY => $this->attr(Parser::UID_KEY)], true, false);
         if (auth()->guest()) {
-            $url = url('/auth', ['redirect_uri' => url()->to()]);
+            $url = url('/auth', ['redirect_uri' => url()->full()]);
             return <<<HTML
 <div class="file-down-node">
     <p><i class="fa fa-file-archive"></i> [<a href="{$url}">登录</a>]</p>
@@ -57,7 +56,7 @@ HTML;
 </div>
 HTML;
         }
-        Factory::response()->file($file);
+        app('response')->file($file);
         throw new StopNextException('下载文件');
     }
 

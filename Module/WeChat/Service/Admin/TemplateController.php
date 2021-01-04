@@ -6,20 +6,20 @@ use Module\WeChat\Domain\Model\MediaTemplateModel;
 
 class TemplateController extends Controller {
     public function indexAction($type = 0) {
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             $this->layout = false;
         }
         $model_list = MediaTemplateModel::where('type', intval($type))->page();
-        return $this->show(app('request')->isAjax() ? 'page' : 'index', compact('model_list'));
+        return $this->show(request()->isAjax() ? 'page' : 'index', compact('model_list'));
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = MediaTemplateModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {

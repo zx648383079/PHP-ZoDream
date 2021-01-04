@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Infrastructure;
 
 use Service\Home\ToController;
@@ -7,11 +8,11 @@ use Parsedown;
 
 class HtmlExpand {
 
-    public static function toUrl($url) {
-        if (strpos($url, '//') === false) {
+    public static function toUrl(string $url): string {
+        if (!str_contains($url, '//')) {
             return $url;
         }
-        if (strpos($url, url()->getHost()) !== false) {
+        if (str_contains($url, request()->host())) {
             return $url;
         }
         return ToController::to($url);
@@ -23,10 +24,10 @@ class HtmlExpand {
             $content = (new Parsedown())->setSafeMode(true)->text($content);
         }
         return preg_replace_callback('/<a[^\<\>]+?href="([^"<>\s]+)"/', function ($match) {
-            if (strpos($match[1], '//') === false) {
+            if (!str_contains($match[1], '//')) {
                 return $match[0];
             }
-            if (strpos($match[1], url()->getHost()) !== false) {
+            if (str_contains($match[1], request()->host())) {
                 return $match[0];
             }
             return str_replace($match[1], static::toUrl($match[1]), $match[0]);

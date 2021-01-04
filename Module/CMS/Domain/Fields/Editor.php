@@ -5,7 +5,7 @@ use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
-use Zodream\Service\Factory;
+
 
 class Editor extends BaseField {
 
@@ -29,7 +29,7 @@ class Editor extends BaseField {
         $js = <<<JS
 var ue = UE.getEditor('{$id}', {$options});
 JS;
-        Factory::view()->registerJsFile('/assets/ueditor/ueditor.config.js')
+        view()->registerJsFile('/assets/ueditor/ueditor.config.js')
             ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
         return <<<HTML
 <div>{$field->name}</div>

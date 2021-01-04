@@ -1,11 +1,8 @@
 <?php
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
-use Zodream\Html\Dark\Theme;
-use Zodream\Service\Factory;
 use Zodream\Template\View;
 
 class Location extends BaseField {
@@ -91,7 +88,7 @@ locationDialog.find('.search-box button').click(function () {
     map.centerAndZoom(val, 11);
 });
 JS;
-        Factory::view()->registerJsFile('http://api.map.baidu.com/api?v=2.0&ak=ngBpWunS4vnarcr0l4S3sSkXscssGqnw')
+        view()->registerJsFile('http://api.map.baidu.com/api?v=2.0&ak=ngBpWunS4vnarcr0l4S3sSkXscssGqnw')
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div id="show-location-box" class="dialog dialog-box" data-type="dialog" style="z-index:1000;">

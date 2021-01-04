@@ -8,7 +8,7 @@ class AddressEntity extends Entity {
         return 'shop_address';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'region_id' => 'required|int',

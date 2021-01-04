@@ -46,7 +46,7 @@ class BlogEntity extends Entity {
         return 'blog';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'title' => 'required|string:0,200',
             'description' => 'string:0,255',

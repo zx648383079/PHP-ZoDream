@@ -7,7 +7,7 @@ use Module\Book\Domain\Model\BookModel;
 class CategoryController extends Controller {
 
     public function indexAction($id) {
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect(['./mobile/category', 'id' => $id]);
         }
         $cat = BookCategoryModel::find($id);

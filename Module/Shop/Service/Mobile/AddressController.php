@@ -8,7 +8,7 @@ use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -20,7 +20,7 @@ class AddressController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -28,11 +28,11 @@ class AddressController extends Controller {
         if (!$model) {
             $this->redirect($this->getUrl('address'));
         }
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {
-        $data = app('request')->get();
+        $data = request()->get();
         try {
             $address = AddressRepository::save($data);
         } catch (\Exception $ex) {

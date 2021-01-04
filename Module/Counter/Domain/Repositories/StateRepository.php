@@ -57,7 +57,7 @@ class StateRepository {
                 ->where(function ($query) {
                     $query->where('referrer', '==', '')
                         ->orWhere('referrer', 'not like',
-                            sprintf('%%%s%%', url()->getHost()));
+                            sprintf('%%%s%%', request()->host()));
                 }), 'url');
         }, 60);
         return new Page($items);
@@ -155,7 +155,7 @@ class StateRepository {
             $query = LogModel::query()
                 ->where('referrer', '!=', '')
                 ->where('referrer', 'not like',
-                    sprintf('%%%s%%', url()->getHost()));
+                    sprintf('%%%s%%', request()->host()));
         }
         if (empty($query)) {
             $query = LogModel::query();

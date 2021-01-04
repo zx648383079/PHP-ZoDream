@@ -8,7 +8,7 @@ use Module\Shop\Domain\Models\OrderModel;
 
 class InvoiceController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

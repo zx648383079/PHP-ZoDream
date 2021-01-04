@@ -4,7 +4,7 @@ namespace Module\Shop\Domain\Plugin;
 use Zodream\Disk\File;
 use Zodream\Helpers\Str;
 use Exception;
-use Zodream\Service\Factory;
+
 
 /**
  * Class Manager
@@ -56,7 +56,7 @@ class Manager {
         if (!isset(self::NAME_MAP[$type])) {
             return [];
         }
-        $data = Factory::root()->directory(self::NAME_MAP[$type])
+        $data = app_path()->directory(self::NAME_MAP[$type])
             ->children();
         $items = [];
         foreach ($data as $item) {

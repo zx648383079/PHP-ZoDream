@@ -16,7 +16,7 @@ class HomeController extends Controller {
             || $player->status === Player::STATUS_WINNER) {
             $player->clear();
         }
-        if (app('request')->isPjax()) {
+        if (request()->isPjax()) {
             $this->layout = false;
         }
         return $this->show(compact('player'));
@@ -30,7 +30,7 @@ class HomeController extends Controller {
         } catch (Exception $ex) {
             $message = $ex->getMessage();
         }
-        if (app('request')->isPjax()) {
+        if (request()->isPjax()) {
             $this->layout = false;
         }
         return $this->show('index', compact('player', 'message'));

@@ -10,7 +10,7 @@ use Module\Shop\Domain\Models\CertificationModel;
 
 class AccountController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

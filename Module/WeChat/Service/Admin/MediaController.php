@@ -8,7 +8,7 @@ use Zodream\ThirdParty\WeChat\Media;
 
 class MediaController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'w'
         ];
@@ -21,14 +21,14 @@ class MediaController extends Controller {
         })->when(!empty($keywords), function ($query) {
             MediaModel::searchWhere($query, 'title');
             })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb')->page();
-        if (app('request')->isAjax() && !app('request')->isPjax()) {
+        if (request()->isAjax() && !request()->isPjax()) {
             return $this->renderData($model_list);
         }
         return $this->show(compact('model_list', 'type'));
     }
 
     public function createAction($type = null) {
-        return $this->runMethodNotProcess('edit', ['id' => null, 'type' => $type]);
+        return $this->editAction(0, $type);
     }
 
     public function editAction($id, $type = null) {

@@ -3,7 +3,7 @@ namespace Module\Exam\Domain;
 
 use Module\Exam\Domain\Model\QuestionModel;
 use Exception;
-use Zodream\Infrastructure\Interfaces\ArrayAble;
+use Zodream\Infrastructure\Contracts\ArrayAble;
 
 class Pager implements ArrayAble {
 

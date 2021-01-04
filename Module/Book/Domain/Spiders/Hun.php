@@ -4,7 +4,7 @@ namespace Module\Book\Domain\Spiders;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
-use Zodream\Service\Factory;
+
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 

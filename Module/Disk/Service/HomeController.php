@@ -5,7 +5,7 @@ use Module\Disk\Domain\Repositories\ShareRepository;
 
 class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '*'
         ];

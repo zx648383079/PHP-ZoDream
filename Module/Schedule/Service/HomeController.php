@@ -6,8 +6,8 @@ use Module\Schedule\Domain\ScheduleAble;
 use Zodream\Infrastructure\Queue\QueueManager;
 use Zodream\Infrastructure\Queue\Worker;
 use Zodream\Infrastructure\Queue\WorkerOptions;
+use Zodream\Route\ModuleRoute;
 use Zodream\Route\Router;
-use Zodream\Service\Factory;
 
 class HomeController extends Controller {
     public function indexAction($name = 'schedule') {
@@ -23,7 +23,7 @@ class HomeController extends Controller {
     }
 
     protected function registerSchedule(Scheduler $scheduler, $name = 'schedule') {
-        $data = Factory::config()->getConfigByFile($name);
+        $data = config($name);
         foreach ($data as $item) {
             if (is_callable($item)) {
                 call_user_func($item, $scheduler);
@@ -40,7 +40,7 @@ class HomeController extends Controller {
         }
         $modules = config('modules');
         foreach ($modules as $module) {
-            $instance = Router::moduleInstance($module);
+            $instance = ModuleRoute::moduleInstance($module);
             if (!$instance instanceof ScheduleAble) {
                 continue;
             }

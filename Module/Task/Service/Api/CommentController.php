@@ -3,11 +3,10 @@ namespace Module\Task\Service\Api;
 
 use Module\Task\Domain\Repositories\CommentRepository;
 use Zodream\Domain\Upload\UploadFile;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Validate\ValidationException;
 
-class CommentController extends RestController {
+class CommentController extends Controller {
 
     public function rules() {
         return ['*' => '@'];
@@ -26,7 +25,7 @@ class CommentController extends RestController {
                 'content' => 'string:0,255',
                 'type' => 'int:0,127',
             ]);
-            $file = $request->files('file');
+            $file = $request->file('file');
             if (!empty($file)) {
                 $upload = new UploadFile($file);
                 if (!$upload->checkSize(2048000)) {

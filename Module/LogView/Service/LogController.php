@@ -9,7 +9,7 @@ use Module\LogView\Domain\Tag;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 
-use Zodream\Service\Factory;
+
 
 class LogController extends Controller {
 
@@ -40,13 +40,13 @@ class LogController extends Controller {
         if (!$upload->checkType(['log'])) {
             return $this->redirectWithMessage('./', '文件不支持！');
         }
-        $folder = Factory::root()->directory('data/upload');
+        $folder = app_path()->directory('data/upload');
         $folder->create();
         $upload->setDirectory($folder);
         if (!$upload->save()) {
             return $this->redirectWithMessage('./',  end($upload->getError()));
         }
-        $name = app('request')->get('name');
+        $name = request()->get('name');
         if (empty($name)) {
             $name = $upload->get()->getName();
         }
@@ -74,7 +74,7 @@ class LogController extends Controller {
     }
 
     public function tagAction($name) {
-        $value = app('request')->get('value');
+        $value = request()->get('value');
         Tag::toggle($name, $value);
         return $this->renderData();
     }

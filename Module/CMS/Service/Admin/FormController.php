@@ -17,14 +17,13 @@ class FormController extends Controller {
     }
 
     public function createAction($model_id) {
-        return $this->runMethodNotProcess('edit', ['id' => null, 'model_id' => $model_id]);
+        return $this->editAction(0, $model_id);
     }
 
     /**
      * 为了适配可能出现的多表
      * @param $id
      * @param $model_id
-     * @return \Zodream\Infrastructure\Http\Response
      * @throws \Exception
      */
     public function editAction($id, $model_id) {
@@ -32,13 +31,13 @@ class FormController extends Controller {
         $scene = CMSRepository::scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [];
         $tab_list = ModelFieldModel::tabGroups($model_id);
-        return $this->show(compact('id', 'model_id', 'model', 'scene', 'data', 'tab_list'));
+        return $this->show('edit', compact('id', 'model_id', 'model', 'scene', 'data', 'tab_list'));
     }
 
     public function saveAction($id, $model_id) {
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
-        $data = app('request')->get();
+        $data = request()->get();
         if ($id > 0) {
             $scene->update($id, $data);
         } else {

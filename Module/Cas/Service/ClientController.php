@@ -5,7 +5,7 @@ use Module\Cas\Domain\Client;
 use Module\Cas\Domain\Model\ClientTicketModel;
 
 use Zodream\Service\Config;
-use Zodream\Service\Factory;
+
 
 class ClientController extends Controller {
 
@@ -18,7 +18,7 @@ class ClientController extends Controller {
         }
         ClientTicketModel::create([
             'ticket' => $ticket,
-            'session_id' => Factory::session()->id()
+            'session_id' => session()->id()
         ]);
         return $this->redirect('/');
     }
@@ -34,7 +34,7 @@ class ClientController extends Controller {
             return $this->renderFailure('IP error');
         }
         $model = ClientTicketModel::findByTicket($ticket);
-        Factory::session()->destroySession($model->session_id);
+        session()->destroySession($model->session_id);
         return $this->renderData();
     }
 

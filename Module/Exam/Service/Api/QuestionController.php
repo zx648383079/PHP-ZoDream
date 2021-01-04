@@ -3,9 +3,8 @@ namespace Module\Exam\Service\Api;
 
 use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Pager;
-use Zodream\Route\Controller\RestController;
 
-class QuestionController extends RestController {
+class QuestionController extends Controller {
 
     public function indexAction($id = 0, $course = 0) {
         if ($id > 0) {

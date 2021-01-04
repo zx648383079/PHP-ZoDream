@@ -5,7 +5,7 @@ use Zodream\Image\QrCode;
 
 class AffiliateController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

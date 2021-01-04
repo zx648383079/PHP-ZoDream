@@ -5,7 +5,7 @@ use Module\Blog\Domain\Model\TermModel;
 
 class TermController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator',
             'index' => '@'
@@ -18,12 +18,12 @@ class TermController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = TermModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {

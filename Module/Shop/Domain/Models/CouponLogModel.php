@@ -21,7 +21,7 @@ class CouponLogModel extends Model {
         return 'shop_coupon_log';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'coupon_id' => 'required|int',
             'serial_number' => 'string:0,30',

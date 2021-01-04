@@ -23,7 +23,7 @@ class ProductModel extends Model {
         return 'shop_product';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'goods_id' => 'required|int',
             'price' => '',

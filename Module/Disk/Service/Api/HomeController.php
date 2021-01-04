@@ -1,8 +1,10 @@
 <?php
 namespace Module\Disk\Service\Api;
 
+use Exception;
 use Module\Disk\Domain\Repositories\DiskRepository;
 use Zodream\Http\Uri;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class HomeController extends Controller {
 
@@ -13,8 +15,8 @@ class HomeController extends Controller {
     /**
      * 进行网址访问许可
      * @param $url
-     * @return \Zodream\Infrastructure\Http\Output\RestResponse
-     * @throws \Exception
+     * @return Output
+     * @throws Exception
      */
     public function allowAction($url) {
         if (empty($url)) {

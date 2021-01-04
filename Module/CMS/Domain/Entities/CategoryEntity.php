@@ -37,7 +37,7 @@ class CategoryEntity extends Entity {
         return 'cms_category_'.CMSRepository::siteId();
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,100',
             'title' => 'required|string:0,100',

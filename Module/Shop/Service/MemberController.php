@@ -6,7 +6,7 @@ use Module\Shop\Domain\Repositories\OrderRepository;
 
 class MemberController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'login' => '?',
             '*' => '@'
@@ -20,7 +20,7 @@ class MemberController extends Controller {
     }
 
     public function loginAction() {
-        $redirect_uri = app('request')->get('redirect_uri');
+        $redirect_uri = request()->get('redirect_uri');
         if (empty($redirect_uri)) {
             $redirect_uri = url('./');
         }

@@ -2,7 +2,6 @@
 namespace Module\SEO\Domain;
 
 use Zodream\Helpers\Time;
-use Zodream\Service\Factory;
 use IteratorAggregate;
 use ArrayIterator;
 
@@ -45,7 +44,7 @@ class SiteMap implements IteratorAggregate {
             }
             return $args;
         }, $this->data);
-        Factory::public_path()->addFile('sitemap.xml', $this->formatXml($data));
+        public_path()->addFile('sitemap.xml', $this->formatXml($data));
     }
 
     private function urlItem(array $data) {

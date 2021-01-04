@@ -8,9 +8,9 @@ class ListController extends Controller {
 
     public function indexAction($id = 0) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail', compact('id'));
+            return $this->detailAction($id);
         }
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect('./mobile/list');
         }
         $model_list = BookListModel::with('user')->orderBy('created_at', 'desc')->page();
@@ -21,6 +21,6 @@ class ListController extends Controller {
         BookListModel::where('id', $id)->updateOne('click_count');
         $list = BookListModel::find($id);
         $items = ListItemModel::with('book')->where('list_id', $id)->get();
-        return $this->show(compact('list', 'items'));
+        return $this->show('detail', compact('list', 'items'));
     }
 }

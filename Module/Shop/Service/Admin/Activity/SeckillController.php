@@ -15,12 +15,12 @@ class SeckillController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ActivityModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {
@@ -49,12 +49,12 @@ class SeckillController extends Controller {
     }
 
     public function createTimeAction() {
-        return $this->runMethodNotProcess('editTime', ['id' => null]);
+        return $this->editTimeAction(0);
     }
 
     public function editTimeAction($id) {
         $model = ActivityTimeModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('editTime', compact('model'));
     }
 
     public function saveTimeAction() {

@@ -10,19 +10,19 @@ use Zodream\Template\View;
 
 class CounterMiddleware implements MiddlewareInterface {
 
-    public function handle($payload, callable $next) {
+    public function handle($context, callable $next) {
         $this->boot();
-        return $next($payload);
+        return $next($context);
     }
 
     private function boot() {
-        if (app()->isDebug() || app('request')->isCli()) {
+        if (app()->isDebug() || request()->isCli()) {
             return;
         }
         $event = event();
         $event->listen(Visit::class, VisitListener::class)
             ->listen(JumpOut::class, JumpOutListener::class);
-        $uri = app('request')->uri()->getPath();
+        $uri = request()->uri()->getPath();
         if (strpos($uri, '/counter') === 0
             || strpos($uri, '/auth') === 0
             || strpos($uri, '/to') === 0

@@ -8,8 +8,8 @@ use Module\Finance\Domain\Repositories\LogRepository;
 use Zodream\Database\Relation;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+
 
 
 class LogController extends Controller {
@@ -63,7 +63,7 @@ class LogController extends Controller {
 
     public function importAction() {
         $upload = new Upload();
-        $upload->setDirectory(Factory::root()->directory('data/cache'));
+        $upload->setDirectory(app_path()->directory('data/cache'));
         $upload->upload('file');
         if (!$upload->checkType('csv') || !$upload->save()) {
             return $this->jsonFailure('文件不支持，仅支持gb2312编码的csv文件');

@@ -2,14 +2,13 @@
 namespace Service\Admin;
 
 
-use Zodream\Infrastructure\Interfaces\ArrayAble;
 use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 
     public $layout = 'main';
 	
-	protected function rules() {
+	public function rules() {
 		return [
 		    '*' => '@'
         ];

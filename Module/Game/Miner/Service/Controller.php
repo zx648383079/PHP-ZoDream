@@ -7,7 +7,7 @@ class Controller extends ModuleController {
 
     public $layout = 'main';
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

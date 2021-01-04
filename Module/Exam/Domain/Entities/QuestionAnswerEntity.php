@@ -19,7 +19,7 @@ class QuestionAnswerEntity extends Entity {
         return 'exam_question_answer';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'question_id' => 'required|int',
             'user_id' => 'required|int',

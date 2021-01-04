@@ -4,14 +4,14 @@ namespace Module\WeChat\Service\Admin;
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\ThirdParty\WeChat\Menu;
 use Zodream\ThirdParty\WeChat\MenuItem;
 
 class MenuController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'w'
         ];
@@ -23,12 +23,12 @@ class MenuController extends Controller {
     }
 
     public function addAction($parent_id = 0) {
-        return $this->runMethodNotProcess('edit', ['id' => null, 'parent_id' => $parent_id]);
+        return $this->editAction(0, $parent_id);
     }
 
     public function editAction($id, $parent_id = 0) {
         $model = MenuModel::findOrNew($id);
-        $request = app('request');
+        $request = request();
         if ($request->has('type')) {
             $this->layout = false;
             $model->type = $request->get('type');
@@ -38,7 +38,7 @@ class MenuController extends Controller {
             $model->parent_id = $parent_id;
         }
         $menu_list = MenuModel::where('parent_id', 0)->all();
-        return $this->show(compact('model', 'menu_list'));
+        return $this->show('edit', compact('model', 'menu_list'));
     }
 
     public function saveAction(Request $request) {

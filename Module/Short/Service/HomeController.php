@@ -2,11 +2,11 @@
 namespace Module\Short\Service;
 
 use Module\Short\Domain\Repositories\ShortRepository;
-use Zodream\Service\Factory;
+
 
 class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -29,7 +29,7 @@ class HomeController extends Controller {
     }
 
     public function findLayoutFile() {
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 
 }

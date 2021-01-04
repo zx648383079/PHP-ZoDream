@@ -6,7 +6,7 @@ use Module\Shop\Domain\Models\OrderModel;
 
 class RefundController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

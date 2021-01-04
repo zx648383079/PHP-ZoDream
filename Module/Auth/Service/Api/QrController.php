@@ -6,22 +6,18 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Zodream\Http\Uri;
 use Zodream\Image\QrCode;
-use Zodream\Infrastructure\Http\Output\RestResponse;
-use Zodream\Infrastructure\Http\Response;
-use Zodream\Route\Controller\RestController;
 
-class QrController extends RestController {
+class QrController extends Controller {
 
-    protected function methods() {
+    public function methods() {
         return [
             'index' => ['POST'],
             'authorize' => ['POST']
         ];
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'refresh' => '?',
             'check' => '?',
@@ -31,7 +27,6 @@ class QrController extends RestController {
 
     /**
      * 刷新二维码
-     * @return RestResponse
      * @throws \Exception
      */
     public function refreshAction() {
@@ -75,7 +70,6 @@ class QrController extends RestController {
     /**
      * 验证token
      * @param $token
-     * @return RestResponse
      * @throws \Exception
      */
     public function indexAction($token) {
@@ -91,7 +85,6 @@ class QrController extends RestController {
      * @param $token
      * @param bool $confirm
      * @param bool $reject
-     * @return RestResponse
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {

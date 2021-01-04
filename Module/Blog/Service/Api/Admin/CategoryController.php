@@ -1,13 +1,9 @@
 <?php
 namespace Module\Blog\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Blog\Domain\Model\TermModel;
-use Zodream\Route\Controller\RestController;
 
-class CategoryController extends RestController {
-
-    use AdminRole;
+class CategoryController extends Controller {
 
     public function indexAction($keywords = null) {
         $term_list = TermModel::withCount('blog')

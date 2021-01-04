@@ -18,7 +18,7 @@ class Module extends BaseModule {
         if (strpos($path, 'preview') !== 1) {
             return;
         }
-        $uri = app('request')->uri()->getPath();
+        $uri = request()->uri()->getPath();
         if (!preg_match('#preview/view/\d+/id/(\d+)/file/(.*)$#', $uri, $match)) {
             return;
         }

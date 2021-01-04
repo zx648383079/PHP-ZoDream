@@ -2,7 +2,7 @@
 namespace Module\WeChat\Domain;
 
 use Module\WeChat\Domain\Model\MediaModel;
-use Zodream\Infrastructure\Interfaces\ArrayAble;
+use Zodream\Infrastructure\Contracts\ArrayAble;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 
 class EmulateResponse extends MessageResponse implements ArrayAble {

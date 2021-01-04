@@ -22,7 +22,7 @@ class TaskCommentEntity extends Entity {
         return 'task_comment';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',

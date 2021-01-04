@@ -27,14 +27,14 @@ class BookController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = BookModel::findOrNew($id);
         $cat_list = BookCategoryModel::select('id', 'name')->all();
         $author_list = BookAuthorModel::select('id', 'name')->all();
-        return $this->show(compact('model', 'cat_list', 'author_list'));
+        return $this->show('edit', compact('model', 'cat_list', 'author_list'));
     }
 
     public function saveAction() {
@@ -80,7 +80,7 @@ class BookController extends Controller {
     }
 
     public function createChapterAction($book) {
-        return $this->runMethodNotProcess('editChapter', ['id' => null, 'book' => $book]);
+        return $this->editChapterAction(0, $book);
     }
 
     public function editChapterAction($id, $book = 0) {
@@ -88,7 +88,7 @@ class BookController extends Controller {
         if ($model->book_id < 1) {
             $model->book_id = intval($book);
         }
-        return $this->show(compact('model'));
+        return $this->show('editChapter', compact('model'));
     }
 
     public function saveChapterAction() {

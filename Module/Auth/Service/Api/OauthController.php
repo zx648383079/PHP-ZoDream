@@ -8,13 +8,11 @@ use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\OpenPlatform\Domain\Platform;
-use Zodream\Infrastructure\Http\Output\RestResponse;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
 use Module\Auth\Service\OauthController as BaseController;
 
-class OauthController extends RestController {
+class OauthController extends Controller {
 
     public function indexAction(string $type = 'qq', string $redirect_uri = '') {
         url()->setModulePath(config()->getModulePath(self::class));

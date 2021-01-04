@@ -34,7 +34,7 @@ class GoodsController extends Controller {
         /** @var Page $goods_list */
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->page();
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             return $this->renderData([
                 'html' => $this->renderHtml('page', compact('comment_list', 'id')),
                 'has_more' => $goods_list->hasMore()

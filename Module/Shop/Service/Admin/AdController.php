@@ -20,20 +20,20 @@ class AdController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = AdModel::findOrNew($id);
         $position_list = AdPositionModel::all();
-        return $this->show(compact('model', 'position_list'));
+        return $this->show('edit', compact('model', 'position_list'));
     }
 
     public function saveAction() {
         $model = new AdModel();
         $model->load();
         if ($model->type % 2 > 0) {
-            $model->content = app('request')->get('content_url');
+            $model->content = request()->get('content_url');
         }
         if ($model->autoIsNew()->save()) {
             return $this->renderData([
@@ -57,12 +57,12 @@ class AdController extends Controller {
     }
 
     public function createPositionAction() {
-        return $this->runMethodNotProcess('editPosition', ['id' => null]);
+        return $this->editPositionAction(0);
     }
 
     public function editPositionAction($id) {
         $model = AdPositionModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('editPosition', compact('model'));
     }
 
     public function savePositionAction() {

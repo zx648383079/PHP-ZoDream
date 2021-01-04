@@ -8,7 +8,7 @@ class ArticleController extends Controller {
 
     public function indexAction($id = 0, $category = 0, $keywords = null) {
         if ($id > 0) {
-            return $this->runMethodNotProcess('detail', compact('id'));
+            return $this->detailAction($id);
         }
         $model_list = ArticleModel::with('category')
             ->when($category > 0, function ($query) use ($category) {

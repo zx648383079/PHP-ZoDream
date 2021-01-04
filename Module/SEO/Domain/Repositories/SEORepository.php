@@ -7,7 +7,7 @@ use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
 use Zodream\Module\Gzo\Domain\GenerateModel;
-use Zodream\Service\Factory;
+
 
 class SEORepository {
 
@@ -16,7 +16,7 @@ class SEORepository {
     }
 
     public static function sqlFolder() {
-        return Factory::root()->directory('data/sql');
+        return app_path()->directory('data/sql');
     }
 
     public static function clearSql() {
@@ -57,7 +57,7 @@ class SEORepository {
 
     public static function clearCache(array $store = []) {
         if (empty($store)) {
-            cache()->delete();
+            cache()->flush();
             return;
         }
         foreach ($store as $item) {
@@ -65,10 +65,10 @@ class SEORepository {
                 continue;
             }
             if ($item === 'default') {
-                cache()->delete();
+                cache()->flush();
                 continue;
             }
-            cache()->store($item)->delete();
+            cache()->store($item)->flush();
         }
     }
 

@@ -20,7 +20,7 @@ class TermEntity extends Entity {
         return 'blog_term';
     }
 
-	protected function rules() {
+	public function rules() {
         return [
             'name' => 'required|string:1,200',
             'keywords' => 'string:0,200',

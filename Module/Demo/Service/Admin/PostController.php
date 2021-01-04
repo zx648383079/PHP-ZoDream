@@ -22,7 +22,7 @@ class PostController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -32,7 +32,7 @@ class PostController extends Controller {
         }
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
-        return $this->show(compact('model', 'cat_list', 'tags'));
+        return $this->show('edit', compact('model', 'cat_list', 'tags'));
     }
 
     public function saveAction($id = null) {
@@ -49,7 +49,7 @@ class PostController extends Controller {
         if (!$model->saveIgnoreUpdate()) {
             return $this->renderFailure($model->getFirstError());
         }
-        TagRelationshipModel::bind($model->id, app('request')->get('tag', []), $isNew);
+        TagRelationshipModel::bind($model->id, request()->get('tag', []), $isNew);
         PostRepository::unzipFile($model);
         return $this->renderData([
             'url' => $isNew ? $this->getUrl('post') : -1

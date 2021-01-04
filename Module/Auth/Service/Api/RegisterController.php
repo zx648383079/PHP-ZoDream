@@ -4,12 +4,11 @@ namespace Module\Auth\Service\Api;
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class RegisterController extends RestController {
+class RegisterController extends Controller {
 
-    protected function methods() {
+    public function methods() {
         return [
             'index' => ['POST'],
         ];

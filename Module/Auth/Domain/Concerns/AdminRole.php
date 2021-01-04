@@ -10,7 +10,7 @@ trait AdminRole {
 
     use CheckRole;
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator'
         ];

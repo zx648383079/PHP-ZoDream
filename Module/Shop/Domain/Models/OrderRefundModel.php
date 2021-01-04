@@ -39,7 +39,7 @@ class OrderRefundModel extends Model {
         return 'shop_order_refund';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'order_id' => 'required|int',

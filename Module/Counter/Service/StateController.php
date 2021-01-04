@@ -8,7 +8,7 @@ use Module\Counter\Domain\Model\PageLogModel;
 use Module\Counter\Domain\Model\StayTimeLogModel;
 use Module\Counter\Domain\Model\VisitorLogModel;
 use Module\ModuleController as Controller;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class StateController extends Controller {
 

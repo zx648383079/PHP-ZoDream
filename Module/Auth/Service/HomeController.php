@@ -6,14 +6,13 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Image\Captcha;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Http\Response;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Output;
+use Zodream\Service\Http\Request;
 
 
 class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '*'
         ];
@@ -28,7 +27,7 @@ class HomeController extends Controller {
             return $this->redirect($request->get('redirect_uri', '/'));
         } catch (\Exception $ex) {}
         if ($request->isAjax() && $request->isGet()) {
-            return $this->renderResponse([
+            return $this->render([
                 'code' => 302,
                 'status' => __('failure'),
                 'errors' => '重定向',
@@ -40,7 +39,7 @@ class HomeController extends Controller {
         $isCaptcha = false;
         if ($count > 2) {
             $count = intval($count / 3);
-            Factory::session()->set('level', $count);
+            session()->set('level', $count);
             $isCaptcha = true;
         }
         $redirect_uri = $request->get('redirect_uri');
@@ -61,7 +60,7 @@ class HomeController extends Controller {
      * @method GET, POST
      * @param $email
      * @param Request $request
-     * @return Response
+     * @return Output
      * @throws \Exception
      */
     public function loginAction(Request $request, $email = null) {

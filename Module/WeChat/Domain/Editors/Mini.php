@@ -4,7 +4,7 @@ namespace Module\WeChat\Domain\Editors;
 use Module\WeChat\Domain\Model\EditorModel;
 use Zodream\Helpers\Json;
 use Zodream\Html\Dark\Theme;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\ThirdParty\WeChat\MenuItem;
 use Zodream\ThirdParty\WeChat\MessageResponse;

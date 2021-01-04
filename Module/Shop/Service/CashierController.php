@@ -71,7 +71,7 @@ class CashierController extends Controller {
     }
 
     public function saveAddressAction() {
-        $data = app('request')->get();
+        $data = request()->get();
         try {
             $address = AddressRepository::save($data);
         } catch (\Exception $ex) {

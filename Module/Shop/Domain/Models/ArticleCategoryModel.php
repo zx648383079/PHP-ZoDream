@@ -18,7 +18,7 @@ class ArticleCategoryModel extends Model {
         return 'shop_article_category';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,100',
             'keywords' => 'string:0,200',

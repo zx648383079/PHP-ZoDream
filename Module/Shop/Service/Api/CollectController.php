@@ -6,7 +6,7 @@ use Module\Shop\Domain\Models\Scene\Collect;
 
 class CollectController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

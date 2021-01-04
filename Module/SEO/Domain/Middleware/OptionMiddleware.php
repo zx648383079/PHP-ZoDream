@@ -8,12 +8,12 @@ use Zodream\Service\Middleware\MiddlewareInterface;
 
 class OptionMiddleware implements MiddlewareInterface {
 
-    public function handle($payload, callable $next) {
+    public function handle($context, callable $next) {
         $this->gray();
-        if (strpos($payload, 'admin') === false && Option::value('site_close')) {
+        if (strpos($context, 'admin') === false && Option::value('site_close')) {
             return $this->showClose();
         }
-        return $next($payload);
+        return $next($context);
     }
 
     private function showClose() {

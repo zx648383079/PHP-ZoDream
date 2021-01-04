@@ -23,7 +23,7 @@ class DeliveryGoodsModel extends Model {
         return 'shop_delivery_goods';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'delivery_id' => 'required|int',
             'order_goods_id' => 'required|int',

@@ -2,13 +2,12 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\ModuleController;
-use Zodream\Service\Factory;
 
 class Controller extends ModuleController {
 
     public $layout = '/Admin/layouts/main';
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -21,13 +20,13 @@ class Controller extends ModuleController {
     public function weChatId($id = null) {
         static $wid;
         if (!is_null($id)) {
-            Factory::session([
+            session([
                 'wid' => $id
             ]);
             return $wid = $id;
         }
         if (empty($wid)) {
-            $wid = Factory::session('wid');
+            $wid = session('wid');
         }
         return $wid;
     }

@@ -2,9 +2,8 @@
 namespace Module\Exam\Service\Api;
 
 use Module\Exam\Domain\Model\CourseModel;
-use Zodream\Route\Controller\RestController;
 
-class CourseController extends RestController {
+class CourseController extends Controller {
 
     public function indexAction($id) {
         $course = CourseModel::find($id);

@@ -1,14 +1,11 @@
 <?php
 namespace Module\Task\Service\Api;
 
-use Module\Task\Domain\Repositories\CommentRepository;
 use Module\Task\Domain\Repositories\ShareRepository;
-use Zodream\Domain\Upload\UploadFile;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Validate\ValidationException;
 
-class ShareController extends RestController {
+class ShareController extends Controller {
 
     public function rules() {
         return ['*' => '@'];
@@ -76,5 +73,14 @@ class ShareController extends RestController {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function usersAction($id) {
+        try {
+            $data = ShareRepository::users($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData($data);
     }
 }

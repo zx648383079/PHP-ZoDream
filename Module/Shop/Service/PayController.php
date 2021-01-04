@@ -20,12 +20,12 @@ class PayController extends Controller {
         try {
             $data = PaymentRepository::payOrder($order, $payment);
         } catch (\Exception $ex) {
-            if (app('request')->isAjax()) {
+            if (request()->isAjax()) {
                 return $this->renderFailure($ex->getMessage());
             }
             return $ex->getMessage();
         }
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             return $this->renderData($data);
         }
         if (isset($data['url'])) {
@@ -42,7 +42,7 @@ class PayController extends Controller {
             return PaymentRepository::callback(PaymentModel::find($payment));
         } catch (\Exception $ex) {
             logger(sprintf('(%s):%s|>>%s', url()->full(),
-                app('request')->input(),
+                request()->input(),
                 $ex->getMessage()));
             return 'failure';
         }

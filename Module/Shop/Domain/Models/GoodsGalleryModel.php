@@ -14,7 +14,7 @@ class GoodsGalleryModel extends Model {
         return 'shop_goods_gallery';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'goods_id' => 'required|int',
             'image' => 'required|string:0,255',

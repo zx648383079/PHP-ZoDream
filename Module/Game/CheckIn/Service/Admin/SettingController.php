@@ -16,7 +16,7 @@ class SettingController extends Controller {
     }
 
     public function saveAction() {
-        $data = app('request')->get('option.checkin');
+        $data = request()->get('option.checkin');
         $plus = [];
         foreach ($data['day'] as $i => $item) {
             if (!isset($data['plus'][$i]) || intval($data['plus'][$i]) <= 0 || intval($item) <= 0) {

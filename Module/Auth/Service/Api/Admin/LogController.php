@@ -2,14 +2,10 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\AdminLogModel;
-use Zodream\Route\Controller\RestController;
 
-class LogController extends RestController {
-
-    use AdminRole;
+class LogController extends Controller {
 
     public function indexAction(int $user_id = 0) {
         $log_list = AdminLogModel::with('user')

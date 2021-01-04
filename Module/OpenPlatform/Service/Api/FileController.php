@@ -7,20 +7,18 @@ use Infrastructure\Uploader;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 use Zodream\Html\Page;
-use Zodream\Infrastructure\Http\Output\RestResponse;
-use Zodream\Route\Controller\RestController;
 
-class FileController extends RestController {
+class FileController extends Controller {
 
     private $configs = [];
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
     }
 
-    protected function methods() {
+    public function methods() {
         return [
             'index' => ['POST'],
         ];
@@ -118,7 +116,6 @@ class FileController extends RestController {
      * 列出文件
      * @param string $allow
      * @param string $path
-     * @return RestResponse
      * @throws Exception
      */
     public function files($allow = '.*', $path = 'assets') {
@@ -138,7 +135,6 @@ class FileController extends RestController {
      * @param $fieldName
      * @param $config
      * @param string $base64
-     * @return RestResponse
      * @throws Exception
      */
     protected function upload($fieldName, $config, $base64 = 'upload') {

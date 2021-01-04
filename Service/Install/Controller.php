@@ -9,7 +9,7 @@ abstract class Controller extends BaseController {
 
     public $layout = 'main';
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => function() {
                 if (is_file('install.off')) {

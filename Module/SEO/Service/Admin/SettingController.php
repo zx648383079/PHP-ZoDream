@@ -4,7 +4,7 @@ namespace Module\SEO\Service\Admin;
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Events\OptionUpdated;
 use Module\SEO\Domain\Repositories\SEORepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class SettingController extends Controller {
 

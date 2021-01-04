@@ -6,7 +6,7 @@ use Module\Short\Domain\Model\ShortLogModel;
 use Module\Short\Domain\Model\ShortUrlModel;
 use Zodream\Helpers\Str;
 use Zodream\Http\Uri;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class ShortRepository {
 

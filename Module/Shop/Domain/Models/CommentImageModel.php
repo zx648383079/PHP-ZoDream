@@ -23,7 +23,7 @@ class CommentImageModel extends Model {
         return 'shop_comment_image';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'comment_id' => 'required|int',
             'image' => 'required|string:0,255',

@@ -7,8 +7,8 @@ use Module\Template\Module;
 use phpDocumentor\Reflection\Types\Self_;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Traits\Attributes;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Concerns\Attributes;
+
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
 
@@ -50,7 +50,7 @@ class Page {
         $this->page = $page instanceof PageModel
             ? $page :
             PageModel::where('name', $page)->one();
-        $this->directory = Factory::root()
+        $this->directory = app_path()
             ->directory(Module::templateFolder());
         $this->setIsEditMode($isEditMode);
 

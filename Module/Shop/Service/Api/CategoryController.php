@@ -16,7 +16,7 @@ class CategoryController extends Controller {
     public function infoAction($id) {
         $model = CategoryModel::find(intval($id));
         $data = $model->toArray();
-        $extra = app('request')->get('extra');
+        $extra = request()->get('extra');
         if (!empty($extra)) {
             $extra = explode(',', $extra);
             if (in_array('goods_list', $extra)) {

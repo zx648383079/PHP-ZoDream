@@ -4,7 +4,7 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
-use Zodream\Service\Factory;
+
 use Zodream\Template\View;
 
 class Date extends BaseField {
@@ -29,7 +29,7 @@ $('[name={$field->field}]').datetimer({
     format: '{$format}'
 });
 JS;
-        Factory::view()->registerCssFile('@datetimer.css')
+        view()->registerCssFile('@datetimer.css')
             ->registerJsFile('@jquery.datetimer.min.js')
             ->registerJs($js, View::JQUERY_READY);
         return Theme::text($field->field, $value, $field->name);

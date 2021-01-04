@@ -2,7 +2,7 @@
 namespace Module\Contact\Service\Api\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
-use Zodream\Route\Controller\RestController;
+use Module\Contact\Service\Api\Controller as RestController;
 
 class Controller extends RestController {
 

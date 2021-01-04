@@ -73,26 +73,26 @@ class OrderController extends Controller {
         $order = OrderModel::find($id);
         if ($operate == 'shipping') {
             if (!DeliveryModel::createByOrder($order,
-                app('request')->get('logistics_number'),
-                app('request')->get('shipping_id')
+                request()->get('logistics_number'),
+                request()->get('shipping_id')
                 ) || !OrderLogModel::shipping($order)) {
                 return $this->renderFailure('发货失败');
             }
         }
         if ($operate == 'pay') {
-            if (!OrderLogModel::pay($order, app('request')->get('remark'))) {
+            if (!OrderLogModel::pay($order, request()->get('remark'))) {
                 return $this->renderFailure('支付失败');
             }
         }
         if ($operate == 'cancel') {
-            if (!OrderLogModel::cancel($order, app('request')->get('remark'))) {
+            if (!OrderLogModel::cancel($order, request()->get('remark'))) {
                 return $this->renderFailure('取消失败');
             }
         }
         if ($operate == 'refund') {
             if (!PaymentRepository::refund($order,
-                app('request')->get('refund_type'),
-                app('request')->get('money'))) {
+                request()->get('refund_type'),
+                request()->get('money'))) {
                 return $this->renderFailure('退款失败');
             }
         }

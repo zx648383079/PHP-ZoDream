@@ -2,11 +2,10 @@
 namespace Module\Game\CheckIn\Service\Api;
 
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
-use Zodream\Route\Controller\RestController;
 
-class HomeController extends RestController {
+class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '@',
         ];

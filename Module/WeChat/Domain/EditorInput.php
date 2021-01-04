@@ -15,7 +15,7 @@ use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Scene\BindingScene;
 use Module\WeChat\Domain\Scene\CheckInScene;
 use Module\WeChat\Domain\Scene\ZaJinHuaScene;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\MenuItem;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 

@@ -32,7 +32,7 @@ class FormController extends Controller {
                 ->where('user_id', auth()->id())
                 ->value('id');
         }
-        $data = app('request')->get();
+        $data = request()->get();
         if ($id > 0) {
             $res = $scene->update($id, $data);
         } else {
@@ -51,9 +51,9 @@ class FormController extends Controller {
      * @throws \Exception
      */
     protected function getModel() {
-        if (app('request')->has('id')) {
-            return FuncHelper::model(intval(app('request')->get('id')));
+        if (request()->has('id')) {
+            return FuncHelper::model(intval(request()->get('id')));
         }
-        return FuncHelper::model(app('request')->get('model'));
+        return FuncHelper::model(request()->get('model'));
     }
 }

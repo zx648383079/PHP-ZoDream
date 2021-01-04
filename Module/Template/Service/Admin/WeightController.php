@@ -5,7 +5,7 @@ use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Page;
 use Module\Template\Domain\Weight;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class WeightController extends Controller {
 
@@ -18,10 +18,10 @@ class WeightController extends Controller {
     }
 
     public function createAction() {
-        $page_id = intval(app('request')->get('page_id'));
+        $page_id = intval(request()->get('page_id'));
         $pageModel = PageModel::find($page_id);
-        $weight_id = intval(app('request')->get('weight_id'));
-        $parent_id = intval(app('request')->get('parent_id'));
+        $weight_id = intval(request()->get('weight_id'));
+        $parent_id = intval(request()->get('parent_id'));
         $model = PageWeightModel::create([
             'page_id' => $pageModel->id,
             'theme_weight_id' => $weight_id,

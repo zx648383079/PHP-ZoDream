@@ -20,7 +20,7 @@ class TaskShareEntity extends Entity {
         return 'task_share';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',

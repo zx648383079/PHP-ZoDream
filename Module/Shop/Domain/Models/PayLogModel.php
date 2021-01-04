@@ -43,7 +43,7 @@ class PayLogModel extends Model {
         return 'shop_pay_log';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'payment_id' => 'required|int',
             'payment_name' => 'string:0,30',

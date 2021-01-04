@@ -28,7 +28,7 @@ class SeckillGoodsModel extends Model {
         return 'shop_seckill_goods';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'act_id' => 'required|int',
             'time_id' => 'required|int',

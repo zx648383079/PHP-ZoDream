@@ -2,7 +2,7 @@
 namespace Module\Disk\Service;
 
 use Module\Disk\Domain\Repositories\DiskRepository;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 /**
  * 下载
@@ -11,8 +11,7 @@ use Zodream\Service\Factory;
  */
 class DownloadController extends Controller {
     
-    public function indexAction($id) {
-        $response = Factory::response();
+    public function indexAction($id, Output $response) {
         try {
             $data = DiskRepository::driver()->file($id);
         } catch (\Exception $ex) {

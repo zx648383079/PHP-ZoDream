@@ -24,7 +24,7 @@ class PageEvaluateEntity extends Entity {
     public static function tableName() {
         return 'exam_page_evaluate';
     }
-    protected function rules() {
+    public function rules() {
         return [
             'page_id' => 'required|int',
             'user_id' => 'required|int',

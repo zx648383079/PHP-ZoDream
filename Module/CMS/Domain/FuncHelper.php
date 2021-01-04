@@ -221,9 +221,9 @@ class FuncHelper {
         if (empty($params)) {
             $params = [];
         }
-        $params['page'] = max(intval(app('request')->get('page')), 1);
+        $params['page'] = max(intval(request()->get('page')), 1);
         if (!isset($params['per_page'])) {
-            $params['per_page'] = intval(app('request')->get('per_page', 20));
+            $params['per_page'] = intval(request()->get('per_page', 20));
         }
         return static::contents($params);
     }
@@ -595,7 +595,7 @@ class FuncHelper {
     }
 
     public static function search($name, $val = '') {
-        $data = app('request')->get();
+        $data = request()->get();
         unset($data['page']);
         if (empty($val)) {
             unset($data[$name]);
@@ -605,7 +605,7 @@ class FuncHelper {
     }
 
     public static function searchActive($name, $val = '') {
-        $request = app('request');
+        $request = request();
         if ($request->get($name, '') === (string)$val) {
             return ' active';
         }
@@ -613,7 +613,7 @@ class FuncHelper {
     }
 
     public static function searchHidden() {
-        $data = app('request')->get();
+        $data = request()->get();
         unset($data['page'], $data['keywords']);
         $html = '';
         foreach ($data as $key => $value) {

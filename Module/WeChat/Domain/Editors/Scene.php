@@ -6,7 +6,7 @@ use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Scene\SceneInterface;
 use Zodream\Html\Dark\Theme;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\MenuItem;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 

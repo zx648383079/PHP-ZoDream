@@ -14,8 +14,7 @@ class PageController extends Controller {
     }
 
     public function createAction($project_id = 0, $parent_id = 0) {
-        $id = 0;
-        return $this->runMethodNotProcess('edit', compact('id', 'project_id', 'parent_id'));
+        return $this->editAction(0, $project_id, $parent_id);
     }
 
     public function editAction($id, $project_id = 0, $parent_id = 0) {
@@ -28,7 +27,7 @@ class PageController extends Controller {
         }
         $project = ProjectModel::find($model->project_id);
         $tree_list = PageModel::getTree($model->project_id);
-        return $this->show(compact('model', 'project', 'tree_list'));
+        return $this->show('edit', compact('model', 'project', 'tree_list'));
     }
 
     public function saveAction() {

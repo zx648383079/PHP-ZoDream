@@ -17,7 +17,7 @@ class GoodsCardModel extends Model {
         return 'shop_goods_card';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'goods_id' => 'required|int',
             'card_no' => 'required|string:0,255',

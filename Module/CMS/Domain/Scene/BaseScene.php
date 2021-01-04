@@ -10,7 +10,7 @@ use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Column;
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Traits\ErrorTrait;
+use Zodream\Infrastructure\Concerns\ErrorTrait;
 
 abstract class BaseScene implements SceneInterface {
 

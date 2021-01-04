@@ -10,7 +10,7 @@ use Module\Shop\Domain\Repositories\GoodsRepository;
 class HomeController extends Controller {
 
     public function indexAction() {
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect('./mobile');
         }
         $banners = AdModel::banners(false);

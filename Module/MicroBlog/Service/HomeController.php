@@ -4,13 +4,12 @@ namespace Module\MicroBlog\Service;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Config;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+
 
 class HomeController extends ModuleController {
 
-    protected function rules() {
+    public function rules() {
         return [
             'recommend' => '@',
             'create' => '@',
@@ -52,8 +51,8 @@ class HomeController extends ModuleController {
         ]);
     }
 
-    public function recommendAction($id) {
-        if (!app('request')->isAjax()) {
+    public function recommendAction($id, Request $request) {
+        if (!$request->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -64,8 +63,8 @@ class HomeController extends ModuleController {
         return $this->renderData($model);
     }
 
-    public function collectAction($id) {
-        if (!app('request')->isAjax()) {
+    public function collectAction($id, Request $request) {
+        if (!$request->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -82,8 +81,8 @@ class HomeController extends ModuleController {
         return $this->show(compact('blog'));
     }
 
-    public function forwardAction($id, $content, $is_comment = false) {
-        if (!app('request')->isAjax()) {
+    public function forwardAction(Request $request, $id, $content, $is_comment = false) {
+        if (!$request->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -94,8 +93,8 @@ class HomeController extends ModuleController {
         return $this->renderData($model);
     }
 
-    public function deleteAction($id) {
-        if (!app('request')->isAjax()) {
+    public function deleteAction($id, Request $request) {
+        if (!$request->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -103,17 +102,17 @@ class HomeController extends ModuleController {
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     public function findLayoutFile() {
-        if ($this->action !== 'index') {
+        if ($this->httpContext('action') !== 'index') {
             return false;
         }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 
     public function redirectWithAuth() {
-        return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);
+        return $this->redirect([config('auth.home'), 'redirect_uri' => url('./')]);
     }
 }

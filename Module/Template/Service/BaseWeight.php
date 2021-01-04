@@ -58,7 +58,7 @@ HTML;
     }
 
     public function parseConfigs() {
-        return app('request')->get();
+        return request()->get();
     }
 
     /**

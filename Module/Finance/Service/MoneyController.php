@@ -8,7 +8,7 @@ use Module\Finance\Domain\Model\MoneyAccountModel;
 use Module\Finance\Domain\Repositories\AccountRepository;
 use Module\Finance\Domain\Repositories\ProductRepository;
 use Module\Finance\Domain\Repositories\ProjectRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class MoneyController extends Controller {
 
@@ -72,7 +72,7 @@ class MoneyController extends Controller {
     }
 
     public function addProjectAction() {
-        return $this->runMethodNotProcess('editProject', ['id' => 0]);
+        return $this->editProjectAction(0);
     }
 
     public function editProjectAction($id) {

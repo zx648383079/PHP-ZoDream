@@ -17,7 +17,7 @@ class TaskShareUserEntity extends Entity {
         return 'task_share_user';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'share_id' => 'required|int',

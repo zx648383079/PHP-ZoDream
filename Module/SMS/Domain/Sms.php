@@ -4,7 +4,7 @@ namespace Module\SMS\Domain;
 
 use Module\SMS\Domain\Model\SmsLogModel;
 use Zodream\Helpers\Str;
-use Zodream\Service\Factory;
+
 
 class Sms {
 
@@ -23,7 +23,7 @@ class Sms {
         $log = SmsLogModel::create([
             'mobile' => $mobile,
             'content' => $content,
-            'ip' => app('request')->ip(),
+            'ip' => request()->ip(),
             'status' => 0,
             'created_at' => time()
         ]);
@@ -38,7 +38,7 @@ class Sms {
         if (!$this->send($mobile, $code)) {
             return false;
         }
-        Factory::session()->set(self::KEY, [
+        session()->set(self::KEY, [
             self::TIME_KEY => time(),
             self::MOBILE_KEY => $mobile,
             self::CODE_KEY => $code
@@ -47,14 +47,14 @@ class Sms {
     }
 
     public function verifyCode($mobile, $code) {
-        $log = Factory::session(self::KEY);
+        $log = session(self::KEY);
         return !empty($log) && isset($log[self::CODE_KEY])
             && $log[self::MOBILE_KEY] == $mobile
             && $log[self::CODE_KEY] == $code;
     }
 
     public function verifySpace() {
-        $log = Factory::session(self::KEY);
+        $log = session(self::KEY);
         if (empty($log)) {
             return true;
         }
@@ -63,7 +63,7 @@ class Sms {
 
     public function verifyIp() {
         $time = strtotime(date('Y-m-d'));
-        $count = SmsLogModel::where('ip', app('request')->ip())->where('created_at', '>=', $time)->count();
+        $count = SmsLogModel::where('ip', request()->ip())->where('created_at', '>=', $time)->count();
         return $count < $this->configs['everyone'];
     }
 

@@ -6,13 +6,11 @@ use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Zodream\Infrastructure\Http\Output\RestResponse;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class UserController extends RestController {
+class UserController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'check' => '*',
             '*' => '@',
@@ -26,7 +24,6 @@ class UserController extends RestController {
 
     /**
      * 上传用户头像
-     * @return RestResponse
      * @throws \Exception
      */
     public function avatarAction() {
@@ -48,7 +45,6 @@ class UserController extends RestController {
     /**
      * 更新用户信息
      * @param Request $request
-     * @return RestResponse
      * @throws \Exception
      */
     public function updateAction(Request $request) {
@@ -64,7 +60,6 @@ class UserController extends RestController {
     /**
      * 验证邮箱是否注册
      * @param $email
-     * @return RestResponse
      * @throws \Exception
      */
     public function checkAction($email) {
@@ -81,7 +76,6 @@ class UserController extends RestController {
 
     /**
      * 获取用户的角色和权限
-     * @return RestResponse
      * @throws \Exception
      */
     public function roleAction() {

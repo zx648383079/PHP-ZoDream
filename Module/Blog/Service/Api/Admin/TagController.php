@@ -1,14 +1,10 @@
 <?php
 namespace Module\Blog\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
-use Zodream\Route\Controller\RestController;
 
-class TagController extends RestController {
-
-    use AdminRole;
+class TagController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list = TagModel::when(!empty($keywords), function ($query) {

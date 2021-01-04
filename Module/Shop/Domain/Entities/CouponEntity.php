@@ -42,7 +42,7 @@ class CouponEntity extends Entity {
         return 'shop_coupon';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'thumb' => 'string:0,255',

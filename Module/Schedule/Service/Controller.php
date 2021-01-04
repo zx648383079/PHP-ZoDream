@@ -4,7 +4,7 @@ namespace Module\Schedule\Service;
 use Module\ModuleController;
 
 class Controller extends ModuleController {
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'cli'
         ];

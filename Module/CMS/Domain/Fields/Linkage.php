@@ -6,7 +6,7 @@ use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
-use Zodream\Service\Factory;
+
 use Zodream\Template\View;
 
 class Linkage extends BaseField {
@@ -34,7 +34,7 @@ $('#linkage-{$field->id}').multiSelect({
 });
 JS;
 
-        Factory::view()->registerJsFile('@jquery.multi-select.min.js')
+        view()->registerJsFile('@jquery.multi-select.min.js')
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div class="input-group">

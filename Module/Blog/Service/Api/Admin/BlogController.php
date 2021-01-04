@@ -1,21 +1,12 @@
 <?php
 namespace Module\Blog\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
-use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
-use Module\Blog\Domain\Model\TagRelationshipModel;
-use Module\Blog\Domain\Model\TermModel;
-use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Repositories\BlogRepository;
-use Module\Blog\Domain\Repositories\TagRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class BlogController extends RestController {
-
-    use AdminRole;
+class BlogController extends Controller {
 
     public function indexAction($keywords = '', $term_id = 0, $type = 0) {
         $blog_list = BlogPageModel::with('term')

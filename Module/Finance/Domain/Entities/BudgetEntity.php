@@ -25,7 +25,7 @@ class BudgetEntity extends Entity {
         return 'finance_budget';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,50',
             'budget' => '',

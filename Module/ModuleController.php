@@ -1,12 +1,17 @@
 <?php
 namespace Module;
 
-use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Helpers\Json;
-use Zodream\Route\Controller\ModuleController as BaseController;
+use Zodream\Route\Controller\Controller as BaseController;
+use Zodream\Route\Controller\Middleware\RequestMiddleware;
 
 abstract class ModuleController extends BaseController {
+
+    public function __construct()
+    {
+        $this->middleware(RequestMiddleware::class);
+    }
 
     public function getConfig() {
         return [];

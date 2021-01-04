@@ -12,7 +12,7 @@ class CashBackController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -27,7 +27,7 @@ class CashBackController extends Controller {
         if (!isset($configure['star'])) {
             $configure['star'] = 0;
         }
-        return $this->show(compact('model', 'configure'));
+        return $this->show('edit', compact('model', 'configure'));
     }
 
     public function saveAction() {

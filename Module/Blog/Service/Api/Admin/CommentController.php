@@ -1,14 +1,10 @@
 <?php
 namespace Module\Blog\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\CommentFullModel;
-use Zodream\Route\Controller\RestController;
 
-class CommentController extends RestController {
-
-    use AdminRole;
+class CommentController extends Controller {
 
     public function indexAction($blog_id = 0, $keywords = '', $email = '', $name = '') {
         $comment_list = CommentFullModel::with('blog')

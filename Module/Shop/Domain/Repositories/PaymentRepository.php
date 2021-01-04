@@ -55,7 +55,7 @@ class PaymentRepository {
             'currency_money' => $log->currency_money,
             'return_url' => $return_url,
             'notify_url' => $notify_url,
-            'ip' => app('request')->ip()
+            'ip' => request()->ip()
         ]);
         if ($data['currency_money'] <= 0) {
             throw new \Exception('订单金额有误');
@@ -70,7 +70,7 @@ class PaymentRepository {
      */
     public static function callback(PaymentModel $payment) {
         $res = self::getPayee($payment)
-            ->callback(app('request')->get());
+            ->callback(request()->get());
         $res['output'] = isset($res['output']) ? $res['output'] : '';
         if ($res['status'] !== 'SUCCESS') {
             return $res['output'];

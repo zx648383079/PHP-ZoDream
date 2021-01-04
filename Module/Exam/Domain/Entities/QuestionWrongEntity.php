@@ -18,7 +18,7 @@ class QuestionWrongEntity extends Entity {
         return 'exam_question_wrong';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'question_id' => 'required|int',
             'user_id' => 'required|int',

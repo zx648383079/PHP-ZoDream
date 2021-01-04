@@ -3,7 +3,7 @@ namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
 use Zodream\Helpers\Html;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class CategoryController extends Controller {
 

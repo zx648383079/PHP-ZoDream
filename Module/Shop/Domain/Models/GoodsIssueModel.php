@@ -16,7 +16,7 @@ class GoodsIssueModel extends Model {
         return 'shop_goods_issue';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'goods_id' => 'required|int',
             'question' => 'required|string:0,255',

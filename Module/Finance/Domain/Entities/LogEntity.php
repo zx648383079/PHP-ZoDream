@@ -38,7 +38,7 @@ class LogEntity extends Entity {
         return 'finance_log';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'parent_id' => 'int',
             'type' => 'int:0,127',

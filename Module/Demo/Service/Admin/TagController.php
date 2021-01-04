@@ -10,19 +10,19 @@ class TagController extends Controller {
         $model_list = TagModel::when(!empty($keywords), function ($query) {
                 TagModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
-        if (app('request')->isAjax() && !app('request')->header('X-PJAX')) {
+        if (request()->isAjax() && !request()->header('X-PJAX')) {
             return $this->renderData($model_list);
         }
         return $this->show(compact('model_list'));
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = TagModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {

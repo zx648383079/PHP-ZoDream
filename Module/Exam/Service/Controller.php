@@ -2,12 +2,12 @@
 namespace Module\Exam\Service;
 
 use Module\ModuleController;
-use Zodream\Service\Factory;
+
 
 class Controller extends ModuleController {
     public $layout = true;
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -17,6 +17,6 @@ class Controller extends ModuleController {
         if ($this->layout === false) {
             return false;
         }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 }

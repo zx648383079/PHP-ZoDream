@@ -2,7 +2,7 @@
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Template\Domain\Weights\Node;
-use Zodream\Service\Factory;
+
 
 class ImgNode extends Node {
 

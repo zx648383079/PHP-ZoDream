@@ -5,7 +5,7 @@
   "homepage": "https://zodream.cn",
   "license": "MIT",
   "require" : {
-    "php" : ">=7.1",
+    "php" : ">=8.0",
     "zodream/zodream" : "dev-master",
     "zodream/disk" : "dev-master",
     "zodream/gzo" : "dev-master",
@@ -58,6 +58,9 @@
     }
   },
   "scripts": {
+    "post-autoload-dump": [
+      "@php artisan package:discover"
+    ],
     "post-root-package-install": [
       "@php artisan gzo/composer/init"
     ]

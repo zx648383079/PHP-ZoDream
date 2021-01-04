@@ -17,7 +17,7 @@ class SpiderController extends Controller {
 
 
 
-    protected function rules() {
+    public function rules() {
         return [
             'search' => '@',
             'async' => '@',

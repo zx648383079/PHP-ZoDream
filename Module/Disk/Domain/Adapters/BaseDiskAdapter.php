@@ -1,8 +1,6 @@
 <?php
 namespace Module\Disk\Domain\Adapters;
 
-use Zodream\Service\Factory;
-
 abstract class BaseDiskAdapter {
 
     protected $configs = [];
@@ -38,6 +36,6 @@ abstract class BaseDiskAdapter {
         if (empty($path)) {
             throw new \Exception('文件夹错误');
         }
-        return Factory::root()->directory($path);
+        return app_path()->directory($path);
     }
 }

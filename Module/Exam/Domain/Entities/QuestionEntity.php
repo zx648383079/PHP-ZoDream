@@ -23,7 +23,7 @@ class QuestionEntity extends Entity {
         return 'exam_question';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'title' => 'required|string:0,255',
             'image' => 'string:0,200',

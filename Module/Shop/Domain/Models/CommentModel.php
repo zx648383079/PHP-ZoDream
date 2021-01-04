@@ -30,7 +30,7 @@ class CommentModel extends Model {
         return 'shop_comment';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'item_type' => 'int:0,99',

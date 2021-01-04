@@ -15,7 +15,7 @@ use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Zodream\Infrastructure\Cookie;
 
-use Zodream\Service\Factory;
+
 
 /**
  * Class CartModel
@@ -41,7 +41,7 @@ class CartModel extends Model implements ICartItem {
         return 'shop_cart';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'type' => 'int:0,9',
             'user_id' => 'required|int',

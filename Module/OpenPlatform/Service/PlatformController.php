@@ -3,7 +3,7 @@ namespace Module\OpenPlatform\Service;
 
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PlatformController extends Controller {
 
@@ -13,7 +13,7 @@ class PlatformController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -21,7 +21,7 @@ class PlatformController extends Controller {
         if ($id > 0 && $model->user_id !== auth()->id()) {
             return $this->redirectWithMessage('./', '应用错误！');
         }
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction(Request $request) {

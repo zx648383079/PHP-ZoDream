@@ -11,7 +11,7 @@ use Zodream\Route\Controller\Module as BaseModule;
 class Module extends BaseModule implements ScheduleAble {
 
     public function boot() {
-        app()->register('cart', Cart::class);
+        app()->scoped('cart', Cart::class);
     }
 
     public function getMigration() {

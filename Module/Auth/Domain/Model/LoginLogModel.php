@@ -59,7 +59,7 @@ class LoginLogModel extends Model {
      */
 	public static function addLoginLog($user, $user_id = 0, $status = false, $mode = self::MODE_WEB) {
 		return static::create([
-            'ip' => app('request')->ip(),
+            'ip' => request()->ip(),
             'user' => $user,
             'user_id' => intval($user_id),
             'status' => $status ? 1 : 0,

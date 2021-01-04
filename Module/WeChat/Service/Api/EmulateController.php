@@ -10,7 +10,7 @@ use Module\WeChat\Module;
 
 class EmulateController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '*'
         ];

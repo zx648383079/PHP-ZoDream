@@ -102,10 +102,10 @@ abstract class BaseSpider implements GetBookInterface {
         }
         if (empty($this->start)) {
             $this->debug(sprintf('《%s》 已存在书库', $book->name));
-            if (!app('request')->isCli()) {
+            if (!request()->isCli()) {
                 return null;
             }
-            $arg = app('request')->read('', '是否继续(Y/N):');
+            $arg = request()->read('', '是否继续(Y/N):');
             if (strtolower($arg) != 'y') {
                 return null;
             }
@@ -179,7 +179,7 @@ abstract class BaseSpider implements GetBookInterface {
     }
 
     protected function debug($content) {
-        if (!app('request')->isCli()) {
+        if (!request()->isCli()) {
             return;
         }
         echo $content,PHP_EOL;

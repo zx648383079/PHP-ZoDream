@@ -4,7 +4,7 @@ namespace Module\Counter\Domain\Model;
 use Domain\Model\Model;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
-use Zodream\Service\Factory;
+
 
 /**
  * Class LogModel
@@ -87,7 +87,7 @@ class LogModel extends Model {
         $model->os_version = $os[1];
         $model->referrer = Url::referrer();
         $model->url = url()->current();
-        $model->session_id = Factory::session()->id();
+        $model->session_id = session()->id();
         $model->user_agent = app('request')->server('HTTP_USER_AGENT', '-');
         $model->created_at = Time::format();
         return $model->save();
@@ -295,7 +295,7 @@ class LogModel extends Model {
             $where = (array)$where;
         }
         $allUrls = static::where($where)->select('url')->all();
-        $where[] = 'referrer NOT LIKE "%'.url()->getHost().'%"';
+        $where[] = 'referrer NOT LIKE "%'.app('request')->host().'%"';
         $args = static::select('referrer,COUNT(*) as count')->load([
             'where' => $where,
             'groupBy' => 1,

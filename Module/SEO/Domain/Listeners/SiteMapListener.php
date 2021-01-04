@@ -23,7 +23,7 @@ class SiteMapListener {
                 $urls = [$urls];
             }
             $api = new Search([
-                'site' => url()->getHost(),
+                'site' => request()->host(),
                 'token' => config('baidu.ziyuan')
             ]);
             $res = $api->putBaiDu($urls);

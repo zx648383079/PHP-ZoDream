@@ -7,7 +7,7 @@ use Module\Family\Domain\Model\FamilyModel;
 
 class ClanController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator',
             'index' => '@'
@@ -20,12 +20,12 @@ class ClanController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ClanModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {
@@ -55,7 +55,7 @@ class ClanController extends Controller {
     }
 
     public function createMetaAction($clan_id) {
-        return $this->runMethodNotProcess('editMeta', ['id' => null, 'clan_id' => $clan_id]);
+        return $this->editMetaAction(0, $clan_id);
     }
 
     public function editMetaAction($id, $clan_id = 0) {
@@ -64,7 +64,7 @@ class ClanController extends Controller {
             $model->clan_id = $clan_id;
             $model->position = 10;
         }
-        return $this->show(compact('model'));
+        return $this->show('editMeta', compact('model'));
     }
 
     public function saveMetaAction() {

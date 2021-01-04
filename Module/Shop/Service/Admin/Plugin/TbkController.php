@@ -20,14 +20,14 @@ class TbkController extends Controller {
     }
 
     public function importAction() {
-        if (!app('request')->isPost()) {
+        if (!request()->isPost()) {
             return $this->show();
         }
-        $adzone_id = app('request')->get('adzone_id');
+        $adzone_id = request()->get('adzone_id');
         $data = $this->getApi()->links(
             $adzone_id,
-            app('request')->get('start_time'),
-            app('request')->get('end_time'));
+            request()->get('start_time'),
+            request()->get('end_time'));
         if (empty($data)) {
             return $this->renderFailure('没有商品');
         }
@@ -52,8 +52,8 @@ class TbkController extends Controller {
 
 
     public function settingAction() {
-        if (app('request')->isPost()) {
-            $data = app('request')->get('option.'.self::CODE);
+        if (request()->isPost()) {
+            $data = request()->get('option.'.self::CODE);
             OptionModel::insertOrUpdate(self::CODE, Json::encode($data), '淘宝客');
             return $this->renderData([
                 'refresh' => true

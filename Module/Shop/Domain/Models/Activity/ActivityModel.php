@@ -45,7 +45,7 @@ class ActivityModel extends Model {
         return 'shop_activity';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,40',
             'thumb' => 'string:0,200',

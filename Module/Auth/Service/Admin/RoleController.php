@@ -6,11 +6,11 @@ use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\RoleRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class RoleController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator'
         ];
@@ -24,13 +24,13 @@ class RoleController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = RoleModel::findOrNew($id);
         $permission_list = PermissionModel::all();
-        return $this->show(compact('model', 'permission_list'));
+        return $this->show('edit', compact('model', 'permission_list'));
     }
 
     public function saveAction(Request $request) {

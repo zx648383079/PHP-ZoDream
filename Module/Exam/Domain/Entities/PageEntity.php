@@ -19,7 +19,7 @@ class PageEntity extends Entity {
         return 'exam_page';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,200',
             'rule_type' => 'required|int:0,127',

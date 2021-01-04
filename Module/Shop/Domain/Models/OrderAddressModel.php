@@ -19,7 +19,7 @@ class OrderAddressModel extends Model {
         return 'shop_order_address';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'order_id' => 'required|int',
             'name' => 'required|string:0,30',

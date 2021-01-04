@@ -2,11 +2,10 @@
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Zodream\Route\Controller\RestController;
 
-class LogoutController extends RestController {
+class LogoutController extends Controller {
     
-    protected function methods() {
+    public function methods() {
         return [
             'index' => ['POST'],
         ];

@@ -100,7 +100,7 @@ class Visit {
 
 
     public static function createCurrent() {
-        $request = app('request');
+        $request = request();
         return new static($request->ip(),
             $request->referrer(),
             $request->uri(),

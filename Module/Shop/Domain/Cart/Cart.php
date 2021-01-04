@@ -7,8 +7,8 @@ use Traversable;
 use Zodream\Helpers\Json;
 use IteratorAggregate;
 use Zodream\Infrastructure\Cookie;
-use Zodream\Infrastructure\Interfaces\JsonAble;
-use Zodream\Infrastructure\Interfaces\ArrayAble;
+use Zodream\Infrastructure\Contracts\JsonAble;
+use Zodream\Infrastructure\Contracts\ArrayAble;
 use ArrayIterator;
 
 class Cart implements IteratorAggregate, JsonAble, ArrayAble {
@@ -26,7 +26,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function id() {
-        $id = app('request')->cookie(self::COOKIE_KEY);
+        $id = request()->cookie(self::COOKIE_KEY);
         if (!empty($id)) {
             return $id;
         }

@@ -4,7 +4,7 @@ namespace Module\Shop\Service;
 
 class RefundController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

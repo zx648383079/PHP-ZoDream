@@ -14,7 +14,7 @@ use Module\Auth\Domain\Model\UserModel;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
 
@@ -124,7 +124,7 @@ class AuthRepository {
             throw new Exception('两次密码不一致');
         }
         $user = self::createUser($email, $name, $password);
-        event(new Register($user, app('request')->ip(), time()));
+        event(new Register($user, request()->ip(), time()));
         return self::doLogin($user);
     }
 
@@ -162,7 +162,7 @@ class AuthRepository {
         if (!$res) {
             return $res;
         }
-        $request = app('request');
+        $request = request();
         event(new Login($user, $request->server('HTTP_USER_AGENT'), $request->ip(), time()));
         auth()->user()->logLogin(true, $vendor);
         return $res;
@@ -210,7 +210,7 @@ class AuthRepository {
             throw new Exception('系统错误！');
         }
         self::successBindUser($type, $user, $nickname, $openid, $unionId, $platform_id);
-        event(new Register($user, app('request')->ip(), time()));
+        event(new Register($user, request()->ip(), time()));
         self::doLogin($user, false, $type);
         return $user;
     }
@@ -294,7 +294,7 @@ class AuthRepository {
             throw new Exception($mail->getError());//'邮件发送失败');
         }
         MailLogModel::create([
-            'ip' => app('request')->ip(),
+            'ip' => request()->ip(),
             'user_id' => $user->id,
             'type' => MailLogModel::TYPE_FIND,
             'code' => $code,
@@ -361,7 +361,7 @@ class AuthRepository {
      * @throws Exception
      */
     public static function loginByBasicAuthorization(): bool {
-        list($email, $password) = app('request')->basicToken();
+        list($email, $password) = request()->basicToken();
         try {
             return self::login($email, $password);
         } catch (Exception $ex) {

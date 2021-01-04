@@ -7,11 +7,11 @@ use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class UserController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator'
         ];
@@ -23,13 +23,13 @@ class UserController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = UserModel::findOrNew($id);
         $role_list = RoleModel::all();
-        return $this->show(compact('model', 'role_list'));
+        return $this->show('edit', compact('model', 'role_list'));
     }
 
     public function saveAction(Request $request) {

@@ -143,7 +143,7 @@ class DiskModel extends Model {
         // parent_id 不对
         $sql = sprintf('INSET INTO %s (name, file_id, user_id, left_id, right_id, parent_id, updated_at, created_at) SELECT name, file_id, %s, left_id + %s, right_id + %s, if(parent_id=%s,%s,parent_id) as pid, updated_at, created_at FROM %s WHERE user_id = %s AND left_id >= %s AND right_id <= %s AND deleted_at = 0',
             self::tableName(), $disk->user_id, $real_diff, $real_diff, $this->parent_id, $disk->id, self::tableName(), $this->user_id, $this->left_id, $this->right_id);
-        Command::getInstance()->execute($sql);
+        app('db')->execute($sql);
         // 修复 parent_id
         $data = DiskModel::where('left_id', '>', $left)->where('right_id', '<', $left + $diff + 1)->select('id', 'left_id', 'right_id', 'parent_id')
             ->orderBy('left_id', 'asc')->asArray()->all();

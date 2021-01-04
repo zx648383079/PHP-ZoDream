@@ -4,7 +4,7 @@ namespace Module\Short;
 use Module\Short\Domain\Migrations\CreateShortTables;
 use Module\Short\Domain\Repositories\ShortRepository;
 use Zodream\Http\Uri;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Http\Response;
 use Zodream\Route\Controller\Module as BaseModule;
 
@@ -25,7 +25,7 @@ class Module extends BaseModule {
         /** @var Response $response */
         $response = app('response');
         /** @var Request $request */
-        $request = app('request');
+        $request = request();
         try {
             $short = ShortRepository::click($path, $request);
             if (!$short->is_system) {

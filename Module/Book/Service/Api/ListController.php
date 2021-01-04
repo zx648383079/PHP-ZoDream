@@ -1,15 +1,12 @@
 <?php
 namespace Module\Book\Service\Api;
 
-use Module\Book\Domain\Model\BookListModel;
-use Module\Book\Domain\Model\ListItemModel;
 use Module\Book\Domain\Repositories\ListRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class ListController extends RestController {
+class ListController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '*',
             'detail' => '*',

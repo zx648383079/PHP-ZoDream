@@ -3,9 +3,8 @@ namespace Module\Task\Service\Api;
 
 use Module\Task\Domain\Repositories\ReviewRepository;
 use Zodream\Helpers\Time;
-use Zodream\Route\Controller\RestController;
 
-class ReviewController extends RestController {
+class ReviewController extends Controller {
 
     public function rules() {
         return ['*' => '@'];

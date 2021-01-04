@@ -6,7 +6,7 @@ use Zodream\Route\Controller\RestController;
 
 abstract class Controller extends RestController {
 
-	protected function rules() {
+	public function rules() {
 		return array(
 			'*' => '@'
 		);

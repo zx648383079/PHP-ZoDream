@@ -2,7 +2,7 @@
 namespace Module\OpenPlatform\Service\Admin;
 
 use Module\OpenPlatform\Domain\Model\PlatformModel;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PlatformController extends Controller {
 

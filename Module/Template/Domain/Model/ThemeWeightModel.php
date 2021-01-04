@@ -4,7 +4,7 @@ namespace Module\Template\Domain\Model;
 use Domain\Model\Model;
 use Module\Template\Module;
 use Zodream\Disk\Directory;
-use Zodream\Service\Factory;
+
 
 /**
  * 安装的部件列表

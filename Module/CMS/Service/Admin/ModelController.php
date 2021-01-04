@@ -15,7 +15,7 @@ class ModelController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -26,7 +26,7 @@ class ModelController extends Controller {
         $model_list = ModelModel::query()
             ->where('type', 0)
             ->whereNotIn('id', [$id])->get(['id', 'name']);
-        return $this->show(compact('model', 'model_list'));
+        return $this->show('edit', compact('model', 'model_list'));
     }
 
     public function saveAction($id = 0) {
@@ -34,7 +34,7 @@ class ModelController extends Controller {
         if (!$model->load()) {
             return $this->renderFailure('表单错误');
         }
-        if (!app('request')->has('setting')) {
+        if (!request()->has('setting')) {
             $model->setting = null;
         }
         if ($id > 0) {
@@ -73,8 +73,7 @@ class ModelController extends Controller {
     }
 
     public function createFieldAction($model_id) {
-        $id = null;
-        return $this->runMethodNotProcess('editField', compact('id', 'model_id'));
+        return $this->editFieldAction(0, $model_id);
     }
 
     public function editFieldAction($id, $model_id = null) {
@@ -89,7 +88,7 @@ class ModelController extends Controller {
         if (empty($model->tab_name) || !in_array($model->tab_name, $tab_list)) {
             $model->tab_name = $tab_list[$model->is_main > 0? 0 : 1];
         }
-        return $this->show(compact('model', 'tab_list'));
+        return $this->show('editField', compact('model', 'tab_list'));
     }
 
     public function saveFieldAction($id = 0) {
@@ -163,7 +162,7 @@ class ModelController extends Controller {
      * @throws \Exception
      */
     private function saveSystemField($model) {
-        $model->name = app('request')->get('name');
+        $model->name = request()->get('name');
         $model->save();
         return $this->renderData([
             'url' => $this->getUrl('model/field', ['id' => $model->model_id])

@@ -1,7 +1,7 @@
 <?php
 namespace Service\Home;
 
-use Zodream\Service\Factory;
+
 
 class HomeController extends Controller {
     public function indexAction() {
@@ -21,7 +21,7 @@ class HomeController extends Controller {
     }
 
     public function notFoundAction() {
-        Factory::view()->setDirectory(Factory::root()
+        view()->setDirectory(app_path()
             ->directory('UserInterface/Home'));
         app('response')->setStatusCode(404);
         return $this->show('/404');

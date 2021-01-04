@@ -22,7 +22,7 @@ class BankCardModel extends Model {
         return 'shop_bank_card';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'bank' => 'required|string:0,50',

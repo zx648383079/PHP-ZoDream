@@ -13,7 +13,7 @@ use Zodream\Route\Controller\Module as BaseModule;
 class Module extends BaseModule {
 
     public function boot() {
-        app()->register(SceneInterface::class, SingleScene::class);
+        app()->scoped(SceneInterface::class, SingleScene::class);
     }
 
     public function getMigration() {

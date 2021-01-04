@@ -9,6 +9,7 @@ namespace Domain\Model;
 use Zodream\Database\Command;
 use Zodream\Database\Model\Model as BaseModel;
 use Zodream\Database\Query\Builder;
+use Zodream\Infrastructure\Contracts\Database;
 
 
 abstract class Model extends BaseModel {
@@ -23,7 +24,7 @@ abstract class Model extends BaseModel {
      */
     public static function search(Builder $query, $columns, $saveLog = true, $key = 'keywords') {
         $columns = (array)$columns;
-        $keywords = explode(' ', app('request')->get($key));
+        $keywords = explode(' ', request()->get($key));
         foreach ($keywords as $item) {
             $item = trim(trim($item), '%');
             if (empty($item)) {
@@ -97,8 +98,10 @@ abstract class Model extends BaseModel {
             call_user_func($cb, $id, $i);
             $i ++;
         }
-        Command::getInstance()->execute(sprintf('ALTER TABLE %s AUTO_INCREMENT = %s;',
-            Command::getInstance()->addPrefix(static::tableName()), $i));
+        /** @var Database $db */
+        $db = app('db');
+        $db->execute(sprintf('ALTER TABLE %s AUTO_INCREMENT = %s;',
+            $db->addPrefix(static::tableName()), $i));
     }
 
 }

@@ -10,7 +10,7 @@ use Module\Shop\Domain\Repositories\OrderRepository;
 
 class OrderController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

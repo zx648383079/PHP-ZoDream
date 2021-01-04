@@ -26,7 +26,7 @@ class BookEntity extends Entity {
         return 'book';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,100',
             'cover' => 'string:0,200',

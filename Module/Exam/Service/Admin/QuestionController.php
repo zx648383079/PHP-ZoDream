@@ -5,7 +5,7 @@ use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\QuestionAnswerModel;
 use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class QuestionController extends Controller {
 
@@ -23,7 +23,7 @@ class QuestionController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -34,7 +34,7 @@ class QuestionController extends Controller {
             $option_list = QuestionOptionModel::where('question_id', $model->id)
                 ->orderBy('id', 'asc')->get();
         }
-        return $this->show(compact('model', 'cat_list', 'option_list'));
+        return $this->show('edit', compact('model', 'cat_list', 'option_list'));
     }
 
     public function optionAction($id, $type = 0) {

@@ -18,7 +18,7 @@ class ActivityTimeModel extends Model {
         return 'shop_activity_time';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'title' => 'required|string:0,40',
             'start_at' => '',

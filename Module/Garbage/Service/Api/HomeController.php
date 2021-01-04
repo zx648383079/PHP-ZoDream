@@ -2,10 +2,8 @@
 namespace Module\Garbage\Service\Api;
 
 use Zodream\Helpers\Json;
-use Zodream\Route\Controller\RestController;
-use Zodream\Service\Factory;
 
-class HomeController extends RestController {
+class HomeController extends Controller {
 
     public function indexAction($keywords) {
         $keywords = trim($keywords);
@@ -64,7 +62,7 @@ class HomeController extends RestController {
     }
 
     protected function getGarbage($name = null) {
-        $file = Factory::root()->file('Module/Garbage/garbage.json');
+        $file = app_path()->file('Module/Garbage/garbage.json');
         $data = Json::decode($file->read());
         return empty($name) ? $data : $data[$name];
     }

@@ -2,17 +2,12 @@
 namespace Module\Blog\Service\Api;
 
 use Infrastructure\Uploader;
-use Module\Blog\Domain\Model\BlogMetaModel;
-use Module\Blog\Domain\Model\BlogModel;
-use Module\Blog\Domain\Model\TermModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
-use Module\Blog\Domain\Repositories\TagRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class PublishController extends RestController {
+class PublishController extends Controller {
 
-    protected function methods()
+    public function methods()
     {
         return [
             'index' => ['POST', 'PUT', 'PATCH'],
@@ -22,7 +17,7 @@ class PublishController extends RestController {
         ];
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@',
         ];

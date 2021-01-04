@@ -3,7 +3,7 @@ namespace Module\Shop\Service\Admin\Activity;
 
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class MixController extends Controller {
 
@@ -13,13 +13,13 @@ class MixController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ActivityModel::findOrNew($id);
         $configure = $model->mix_configure;
-        return $this->show(compact('model', 'configure'));
+        return $this->show('edit', compact('model', 'configure'));
     }
 
     public function saveAction(Request $request, $id = 0) {

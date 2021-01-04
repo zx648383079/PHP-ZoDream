@@ -3,11 +3,10 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Repositories\BulletinRepository;
-use Zodream\Route\Controller\RestController;
 
-class BulletinController extends RestController {
+class BulletinController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@',
         ];

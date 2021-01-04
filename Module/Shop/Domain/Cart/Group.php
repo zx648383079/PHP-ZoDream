@@ -3,7 +3,7 @@ namespace Module\Shop\Domain\Cart;
 
 
 use Module\Shop\Domain\Models\ShippingModel;
-use Zodream\Infrastructure\Interfaces\ArrayAble;
+use Zodream\Infrastructure\Contracts\ArrayAble;
 use ArrayIterator;
 
 class Group implements \IteratorAggregate, ArrayAble {

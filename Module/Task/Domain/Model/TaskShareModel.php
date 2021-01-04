@@ -1,6 +1,7 @@
 <?php
 namespace Module\Task\Domain\Model;
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Task\Domain\Entities\TaskShareEntity;
 
 /**
@@ -18,6 +19,10 @@ class TaskShareModel extends TaskShareEntity {
     public function task() {
         return $this->hasOne(TaskModel::class, 'id', 'task_id')
             ->with('children');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getUrlAttribute() {

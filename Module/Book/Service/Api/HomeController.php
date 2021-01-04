@@ -3,9 +3,8 @@ namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Repositories\BookRepository;
-use Zodream\Route\Controller\RestController;
 
-class HomeController extends RestController {
+class HomeController extends Controller {
 
     public function indexAction(
         $id = 0, $category = null, $keywords = null, $top = null, $status = 0, $author = 0, $page = 1, $per_page = 20) {

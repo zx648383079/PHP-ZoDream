@@ -8,7 +8,7 @@ class BrandEntity extends Entity {
         return 'shop_brand';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,100',
             'keywords' => 'string:0,200',

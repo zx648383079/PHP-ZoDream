@@ -21,7 +21,7 @@ class AccountEntity extends Entity {
         return 'finance_money_account';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,35',
             'money' => 'numeric',

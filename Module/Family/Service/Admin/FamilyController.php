@@ -4,7 +4,7 @@ namespace Module\Family\Service\Admin;
 use Module\Family\Domain\Model\ClanModel;
 use Module\Family\Domain\Model\FamilyModel;
 use Module\Family\Domain\Model\FamilySpouseModel;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class FamilyController extends Controller {
 
@@ -26,8 +26,7 @@ class FamilyController extends Controller {
     }
 
     public function createAction($mother = 0, $father = 0, $clan_id = 0) {
-        $id = 0;
-        return $this->runMethodNotProcess('edit', compact('id', 'mother', 'father', 'clan_id'));
+        return $this->editAction(0, $mother, $father, $clan_id);
     }
 
     public function editAction($id, $mother = 0, $father = 0, $clan_id = 0) {
@@ -58,7 +57,7 @@ class FamilyController extends Controller {
                 });
             }
         }
-        return $this->show(compact('model', 'clan_list', 'parent_list', 'spouse_list'));
+        return $this->show('edit', compact('model', 'clan_list', 'parent_list', 'spouse_list'));
     }
 
     public function saveAction(Request $request, $id = null) {

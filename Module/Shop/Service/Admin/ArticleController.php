@@ -20,13 +20,13 @@ class ArticleController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ArticleModel::findOrNew($id);
         $cat_list = ArticleCategoryModel::all();
-        return $this->show(compact('model', 'cat_list'));
+        return $this->show('edit', compact('model', 'cat_list'));
     }
 
     public function saveAction() {
@@ -45,14 +45,14 @@ class ArticleController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function createCategoryAction() {
-        return $this->runMethodNotProcess('editCategory', ['id' => null]);
+    public function createCategoryAction($parent_id = 0) {
+        return $this->editCategoryAction(0, $parent_id);
     }
 
     public function editCategoryAction($id, $parent_id = 0) {
         $cat_list = ArticleCategoryModel::all();
         $model = ArticleCategoryModel::findOrNew($id);
-        return $this->show(compact('cat_list', 'model'));
+        return $this->show('editCategory', compact('cat_list', 'model'));
     }
 
     public function saveCategoryAction() {

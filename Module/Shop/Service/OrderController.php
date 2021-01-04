@@ -10,7 +10,7 @@ use Module\Shop\Domain\Repositories\OrderRepository;
 
 class OrderController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -18,7 +18,7 @@ class OrderController extends Controller {
 
     public function indexAction($status = 0) {
         $order_list = OrderRepository::getList(intval($status));
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             $this->layout = false;
             return $this->show('page', compact('order_list'));
         }

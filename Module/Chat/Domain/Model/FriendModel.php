@@ -3,7 +3,6 @@ namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Zodream\Service\Factory;
 
 /**
  * Class FriendModel
@@ -63,7 +62,7 @@ class FriendModel extends Model {
 
     public function sendMessage() {
         $message = new MessageModel();
-        $message->user_id = Factory::user()->getId();
+        $message->user_id = auth()->id();
         $message->receive_id = $this->user_id;
         $message->type = MessageModel::TYPE_TEXT;
         $message->created_at = time();

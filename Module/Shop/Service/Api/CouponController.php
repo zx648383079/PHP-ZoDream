@@ -8,7 +8,7 @@ use Module\Shop\Domain\Repositories\CouponRepository;
 
 class CouponController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '*',
             '*' => '@'

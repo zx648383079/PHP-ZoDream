@@ -10,6 +10,7 @@ use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
+use Zodream\Http\Uri;
 
 class CMSRepository {
 
@@ -27,7 +28,7 @@ class CMSRepository {
         if (!empty(self::$cacheTheme)) {
             return self::$cacheTheme;
         }
-        $preview = app('request')->get('preview');
+        $preview = request()->get('preview');
         if (!empty($preview)) {
             return self::$cacheTheme = $preview;
         }
@@ -59,7 +60,7 @@ class CMSRepository {
             throw new \Exception('无任何站点');
         }
         $default = $model_list[0];
-        $url = app('request')->uri();
+        $url = new Uri(request()->url());
         $path = ltrim($url->getPath(), '/');
         foreach ($model_list as $item) {
             if ($item->is_default) {
@@ -72,7 +73,7 @@ class CMSRepository {
                 continue;
             }
             if ($item->match_type == SiteModel::MATCH_TYPE_PATH) {
-                if (strpos($path, ltrim($item->match_rule, '/')) === 0) {
+                if (str_starts_with($path, ltrim($item->match_rule, '/'))) {
                     return self::$cacheSite = $item;
                 }
                 continue;

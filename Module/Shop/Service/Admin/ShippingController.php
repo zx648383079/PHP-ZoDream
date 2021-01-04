@@ -14,7 +14,7 @@ class ShippingController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -25,7 +25,7 @@ class ShippingController extends Controller {
             $group_list = ShippingGroupModel::where('shipping_id', $model->id)
                 ->get();
         }
-        return $this->show(compact('model', 'shipping_list', 'group_list'));
+        return $this->show('edit', compact('model', 'shipping_list', 'group_list'));
     }
 
     public function saveAction() {
@@ -33,7 +33,7 @@ class ShippingController extends Controller {
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->renderFailure($model->getFirstError());
         }
-        ShippingGroupModel::batchSave($model->id, app('request')->get('shipping'));
+        ShippingGroupModel::batchSave($model->id, request()->get('shipping'));
         return $this->renderData([
             'url' => $this->getUrl('shipping')
         ]);

@@ -8,7 +8,7 @@ class ArticleEntity extends Entity {
         return 'shop_article';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'cat_id' => 'required|int',
             'title' => 'required|string:0,100',

@@ -11,12 +11,12 @@ class MinerController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = MinerModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {

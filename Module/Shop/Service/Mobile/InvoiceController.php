@@ -24,10 +24,10 @@ class InvoiceController extends Controller {
 
     public function editAction($id = 0) {
         $model = new InvoiceTitleModel();
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 }

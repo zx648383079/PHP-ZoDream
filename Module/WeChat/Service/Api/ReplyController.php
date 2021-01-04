@@ -8,7 +8,7 @@ use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Mass;
 use Zodream\ThirdParty\WeChat\Template;

@@ -1,13 +1,16 @@
 <?php
 namespace Module\WeChat\Service\Api;
-
-use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\Route\Controller\RestController;
-use Zodream\Service\Factory;
+use Zodream\Route\Controller\Controller as RestController;
+use Zodream\Route\Controller\Middleware\RequestMiddleware;
 
 class Controller extends RestController {
 
-    protected function rules() {
+    public function __construct()
+    {
+        $this->middleware(RequestMiddleware::class);
+    }
+
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -19,7 +22,7 @@ class Controller extends RestController {
             return $wid = $id;
         }
         if (empty($wid)) {
-            $wid = app('request')->get('wid');
+            $wid = request('wid');
         }
         return $wid;
     }

@@ -5,11 +5,11 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class CommentController extends ModuleController {
 
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '*',
             'save' => '*',
@@ -46,7 +46,7 @@ class CommentController extends ModuleController {
     }
 
     public function disagreeAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         $id = intval($id);
@@ -59,7 +59,7 @@ class CommentController extends ModuleController {
     }
 
     public function agreeAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         $id = intval($id);

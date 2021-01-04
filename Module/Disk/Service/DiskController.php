@@ -14,13 +14,12 @@ use Zodream\Disk\File;
 use Zodream\Disk\FileObject;
 use Zodream\Disk\FileSystem;
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Exception;
 
 class DiskController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'import' => 'cli',
             '*' => '@'
@@ -48,7 +47,7 @@ class DiskController extends Controller {
         foreach ($model_list as $item) {
             $item->softDeleteThis();
         }
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     public function shareAction(Request $request) {
@@ -78,7 +77,7 @@ class DiskController extends Controller {
             return $this->renderFailure('分享失败');
         }
         $data['url'] = url('./share', ['id' => $model->id]);
-        $transaction = Command::getInstance()->beginTransaction();
+        $transaction = app('db')->beginTransaction();
         try {
             $disks = [];
             foreach ((array)$data['id'] as $item) {
@@ -155,7 +154,7 @@ class DiskController extends Controller {
         $model = FileModel::where('md5', $data['md5'])->one();
         if (empty($model)) {
             // 保存文件名等待上传获取
-            Factory::session()->set('file_'.$data['md5'], $data['name']);
+            session()->set('file_'.$data['md5'], $data['name']);
             return $this->renderFailure('MD5 Error', 2);
         }
         $disk = new DiskModel();
@@ -174,12 +173,12 @@ class DiskController extends Controller {
 
     public function addAction(Request $request) {
         $data = $request->get('name,md5,size,parent_id 0,type,temp');
-        $file = $this->cacheFolder->file($data['md5']);
+        $file = DiskRepository::driver()->cacheFolder()->file($data['md5']);
         if (!$file->exist() || $file->size() != $data['size']) {
             return $this->renderFailure('FILE ERROR!');
         }
         $data['location'] = md5($data['name'].time()).FileSystem::getExtension($data['name'], true);
-        if (!$file->move($this->diskFolder->file($data['location']))) {
+        if (!$file->move(DiskRepository::driver()->root()->file($data['location']))) {
             return $this->renderFailure('MOVE FILE ERROR!');
         }
         $fileModel = FileModel::create([
@@ -236,7 +235,7 @@ class DiskController extends Controller {
 
     public function copyAction(Request $request) {
         $id = $request->get('id');
-        $parent_id = intval(app('request')->get('parent'));
+        $parent_id = intval($request->get('parent'));
         if (empty($id)) {
             return $this->renderFailure('没有移动对象');
         }
@@ -268,7 +267,7 @@ class DiskController extends Controller {
        if (empty($file)) {
            return '路径错误';
        }
-       $folder = Factory::root()->directory($file);
+       $folder = app_path()->directory($file);
        if (!$folder->exist()) {
            return '路径错误';
        }

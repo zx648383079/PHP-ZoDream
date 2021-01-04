@@ -6,23 +6,21 @@ use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
-
-
-use Zodream\Service\Factory;
+use Zodream\Service\Http\Request;
 
 class ShareController extends Controller {
 
     const PASSWORD_KEY = 'share_password';
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '*'
         ];
     }
     
-    public function indexAction($id) {
-        if (app('request')->isPost()) {
-            Factory::session()->set(self::PASSWORD_KEY, app('request')->get('password'));
+    public function indexAction($id, Request $request) {
+        if ($request->isPost()) {
+            session()->set(self::PASSWORD_KEY, $request->get('password'));
         }
         $model = ShareModel::find($id);
         if (empty($model)) {
@@ -111,8 +109,7 @@ class ShareController extends Controller {
         return $this->renderData($models);
     }
 
-    public function cancelAction() {
-        $id = app('request')->get('id');
+    public function cancelAction($id) {
         $row = ShareModel::auth()->whereIn('id', (array)$id)->delete();
         if (empty($row)) {
             return $this->renderFailure('服务器错误!');
@@ -147,7 +144,7 @@ class ShareController extends Controller {
             return true;
         }
         if ($model->mode == ShareModel::SHARE_PROTECTED) {
-            return Factory::session(self::PASSWORD_KEY) == $model->password;
+            return session(self::PASSWORD_KEY) == $model->password;
         }
         if (auth()->guest()) {
             return false;

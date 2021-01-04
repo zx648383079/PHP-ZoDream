@@ -3,7 +3,7 @@ namespace Module\Note\Service;
 
 use Module\ModuleController;
 use Module\Note\Domain\Model\NoteModel;
-use Zodream\Service\Factory;
+
 
 class HomeController extends ModuleController {
 
@@ -19,7 +19,7 @@ class HomeController extends ModuleController {
                     NoteModel::search($query, 'content');
                 });
             })->orderBy('id desc')->page();
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             return $this->renderData([
                 'html' => $this->renderHtml('page', compact('model_list', 'keywords')),
                 'has_more' => $model_list->hasMore()
@@ -39,6 +39,6 @@ class HomeController extends ModuleController {
         if ($this->layout === false) {
             return false;
         }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 }

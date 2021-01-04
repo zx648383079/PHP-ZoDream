@@ -12,13 +12,13 @@ class AuctionController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ActivityModel::findOrNew($id);
         $configure = $model->configure;
-        return $this->show(compact('model', 'configure'));
+        return $this->show('edit', compact('model', 'configure'));
     }
 
     public function saveAction() {

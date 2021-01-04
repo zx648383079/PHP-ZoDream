@@ -4,7 +4,7 @@ namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\BudgetModel;
 use Module\Finance\Domain\Repositories\BudgetRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class BudgetController extends Controller {
 

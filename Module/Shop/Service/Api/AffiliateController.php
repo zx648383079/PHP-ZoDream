@@ -7,7 +7,7 @@ use Module\Shop\Domain\Models\AffiliateLogModel;
 
 class AffiliateController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

@@ -17,7 +17,7 @@ class CollectModel extends Model {
         return 'shop_collect';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'goods_id' => 'required|int',

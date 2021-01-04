@@ -5,18 +5,18 @@ use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\ModuleController;
 use Zodream\Infrastructure\Error\Exception;
-use Zodream\Service\Factory;
+
 use Zodream\Template\Engine\ParserCompiler;
 
 class Controller extends ModuleController {
 
     public function prepare() {
-        $dir = Factory::view()->getDirectory()
+        $dir = view()->getDirectory()
             ->directory(CMSRepository::theme());
         if (!$dir->exist()) {
             throw new Exception('THEME IS ERROR!');
         }
-        Factory::view()
+        view()
             ->setDirectory($dir)
             ->setEngine(FuncHelper::register(new ParserCompiler()))
             ->setConfigs([

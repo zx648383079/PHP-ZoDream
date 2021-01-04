@@ -5,7 +5,7 @@ use Module\Auth\Domain\Model\UserMetaModel;
 
 use Zodream\Infrastructure\Cookie;
 
-use Zodream\Infrastructure\Traits\Attributes;
+use Zodream\Infrastructure\Concerns\Attributes;
 
 class Setting {
 
@@ -30,7 +30,7 @@ class Setting {
             $this->isNew = false;
         }
         foreach ($this->__attributes as $key => $item) {
-            $this->__attributes[$key] = app('request')->cookie($key, $item);
+            $this->__attributes[$key] = request()->cookie($key, $item);
             if ($this->__attributes[$key] != $item) {
                 $this->isChange = true;
             }
@@ -51,7 +51,7 @@ class Setting {
 
     public function apply() {
         foreach ($this->__attributes as $key => $item) {
-            if ($item == app('request')->cookie($key)) {
+            if ($item == request()->cookie($key)) {
                 continue;
             }
             Cookie::forever($key, $item);

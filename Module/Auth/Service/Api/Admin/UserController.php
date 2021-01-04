@@ -2,15 +2,11 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class UserController extends RestController {
-
-    use AdminRole;
+class UserController extends Controller {
 
     public function indexAction(string $keywords = '') {
         return $this->renderPage(UserRepository::getAll($keywords));

@@ -12,13 +12,13 @@ class NavController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = NavigationModel::findOrNew($id);
         $type_list = NavigationModel::$type_list;
-        return $this->show(compact('model', 'type_list'));
+        return $this->show('edit', compact('model', 'type_list'));
     }
 
     public function saveAction() {

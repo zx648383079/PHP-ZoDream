@@ -16,7 +16,7 @@ class Controller extends ModuleController {
     }
 
     protected function getTimeInput(): array {
-        $request = app('request');
+        $request = request();
         $start_at = $request->get('start_at', 'today');
         $end_at = $request->get('end_at');
         $time = strtotime(date('Y-m-d 00:00:00'));

@@ -2,16 +2,12 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Repositories\RoleRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class PermissionController extends RestController {
-
-    use AdminRole;
+class PermissionController extends Controller {
 
     public function indexAction(string $keywords = '') {
         $permission_list = PermissionModel::when(!empty($keywords), function ($query) {

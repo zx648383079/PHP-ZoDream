@@ -19,13 +19,13 @@ class ProjectController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ProjectModel::findOrDefault($id, ['type' => 1]);
         $project_list = ProjectModel::select('name', 'id')->all();
-        return $this->show(compact('model', 'project_list'));
+        return $this->show('edit', compact('model', 'project_list'));
     }
 
     public function saveAction() {

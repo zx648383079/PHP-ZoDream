@@ -4,7 +4,7 @@ namespace Module\Auth\Service;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PasswordController extends Controller {
 

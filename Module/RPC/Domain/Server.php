@@ -52,10 +52,10 @@ class Server {
 
 
     public function validate() {
-        if (!app('request')->isPost()) {
+        if (!request()->isPost()) {
             throw new JsonRPCException('', -32600);
         }
-        $request = Json::decode(app('request')->input());
+        $request = Json::decode(request()->input());
         if (empty($request)) {
             throw new JsonRPCException('', -32700);
         }

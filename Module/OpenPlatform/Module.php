@@ -7,9 +7,11 @@ use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
 use Module\OpenPlatform\Domain\Platform;
 use Zodream\Disk\File;
 use Zodream\Domain\Access\JWTAuth;
-use Zodream\Infrastructure\Http\Output\RestResponse;
+use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Infrastructure\Contracts\Response\JsonResponse;
 use Zodream\Route\Controller\Module as BaseModule;
-use Zodream\Service\Api;
+use Zodream\Route\Response\Rest;
+use Zodream\Route\Response\RestResponse;
 
 class Module extends BaseModule {
 
@@ -19,12 +21,12 @@ class Module extends BaseModule {
         return new CreateOpenPlatformTables();
     }
 
-    public function invokeRoute($path) {
+    public function invokeRoute($path, HttpContext $context) {
         if (self::$isBooted) {
             return;
         }
         self::$isBooted = true;
-        config()->set('app.rewrite', false); // 禁用重写
+        config()->set('route.rewrite', false); // 禁用重写
         $path = trim($path, '/');
         if (empty($path)) {
             return;
@@ -36,30 +38,26 @@ class Module extends BaseModule {
         }
         if (empty($path)) {
             // 参数里指定路径
-            $path = app('request')->get('method');
+            $path = $context['request']->get('method');
         }
-        $uris = explode('/', $path, 2);
-        if (empty($uris[0])) {
-            return;
-        }
-        $module = config('modules.'.$uris[0]);
+        list($path, $modulePath, $module) = $context->make('route')->tryMatchModule($path);
         if (empty($module)) {
             return;
         }
-        url()->setModulePath($uris[0]);
-        return $this->invokeWithPlatform($module, $uris, $path);
+        url()->setModulePath($modulePath);
+        return $this->invokeWithPlatform($module, $path, $context);
     }
 
     /**
      * @param $module
-     * @param $uris
      * @param $path
+     * @param HttpContext $context
      * @return RestResponse|mixed
      * @throws \Exception
      */
-    protected function invokeWithPlatform($module, $uris, $path) {
-        app()->instance('app::class', Api::class);
-        app()->register('auth', JWTAuth::class);
+    protected function invokeWithPlatform($module, $path, HttpContext $context) {
+        app()->scoped('auth', JWTAuth::class);
+        app()->scoped(JsonResponse::class, Rest::class);
         try {
             $platform = Platform::createAuto();
             if (!$platform->verifyRule($module, $path)) {
@@ -71,14 +69,15 @@ class Module extends BaseModule {
             $platform->useCustomToken();
             Platform::enterPlatform($platform);
             event()->listen(TokenCreated::class, TokenListener::class);
-            $data = $this->invokeModule($module, isset($uris[1]) ? 'api/' . $uris[1] : 'api');
+            $data = $this->invokeModule($module, !empty($path) ? 'api/' . $path : 'api');
+            $context['response']->allowCors();
             if ($data instanceof RestResponse) {
                 return $platform->ready($data);
             }
             return $data;
         } catch (\Exception $ex) {
             logger($ex);
-            app('response')->setStatusCode(404);
+            $context['response']->statusCode(404);
             return RestResponse::createWithAuto([
                 'code' => 404,
                 'message' => $ex->getMessage()

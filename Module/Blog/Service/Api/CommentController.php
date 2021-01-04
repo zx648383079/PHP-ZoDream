@@ -1,16 +1,13 @@
 <?php
 namespace Module\Blog\Service\Api;
 
-use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
+class CommentController extends Controller {
 
-class CommentController extends RestController {
-
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '*',
             'save' => '*',

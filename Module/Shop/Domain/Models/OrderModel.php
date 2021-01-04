@@ -73,7 +73,7 @@ class OrderModel extends Model {
         return 'shop_order';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'series_number' => 'required|string:0,100',
             'user_id' => 'required|int',

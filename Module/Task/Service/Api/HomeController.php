@@ -6,11 +6,10 @@ use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Repositories\DayRepository;
 use Module\Task\Domain\Repositories\TaskRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Validate\ValidationException;
 
-class HomeController extends RestController {
+class HomeController extends Controller {
 
     public function rules() {
         return ['*' => '@'];

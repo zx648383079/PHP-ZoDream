@@ -9,7 +9,7 @@ class RunnerController extends Controller {
 
     use CheckRole;
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'shop_admin'
         ];

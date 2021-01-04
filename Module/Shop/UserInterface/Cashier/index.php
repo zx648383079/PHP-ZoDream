@@ -91,8 +91,8 @@ $this->registerJs($js)
                     <?php $this->extend('./total');?>
                 </div>
             </div>
-            <input type="hidden" name="cart" value="<?=$this->text(app('request')->get('cart'))?>">
-            <input type="hidden" name="type" value="<?=$this->text(app('request')->get('type'))?>">
+            <input type="hidden" name="cart" value="<?=$this->text(request()->get('cart'))?>">
+            <input type="hidden" name="type" value="<?=$this->text(request()->get('type'))?>">
             <?=Form::close()?>
         </div>
     </div>

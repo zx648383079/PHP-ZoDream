@@ -844,6 +844,7 @@ $acolor: $fg;
     button {
         line-height: 30px;
         background: $activeColor;
+        color: $white;
         padding: 0 20px;
         border: none;
     }

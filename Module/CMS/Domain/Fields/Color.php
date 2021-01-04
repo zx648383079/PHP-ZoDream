@@ -4,7 +4,7 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Column;
 use Zodream\Html\Dark\Theme;
-use Zodream\Service\Factory;
+
 
 class Color extends BaseField {
 
@@ -19,7 +19,7 @@ class Color extends BaseField {
     }
 
     public function toInput($value, ModelFieldModel $field) {
-        Factory::view()->registerJsFile('@jscolor.min.js');
+        view()->registerJsFile('@jscolor.min.js');
         return Theme::text($field->field, $value, $field->name)->class('jscolor');
     }
 }

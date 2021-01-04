@@ -33,7 +33,7 @@ class InvoiceModel extends Model {
         return 'shop_invoice';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'title_type' => 'int:0,9',
             'type' => 'int:0,9',

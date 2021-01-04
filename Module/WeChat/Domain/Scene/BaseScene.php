@@ -2,7 +2,7 @@
 namespace Module\WeChat\Domain\Scene;
 
 use Module\WeChat\Module;
-use Zodream\Infrastructure\Traits\Attributes;
+use Zodream\Infrastructure\Concerns\Attributes;
 
 abstract class BaseScene implements SceneInterface {
 

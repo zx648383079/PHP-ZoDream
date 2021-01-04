@@ -5,12 +5,10 @@ namespace Module\Auth\Service\Api;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
-use Zodream\Infrastructure\Http\Output\RestResponse;
-use Zodream\Route\Controller\RestController;
 
-class AccountController extends RestController {
+class AccountController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -46,7 +44,6 @@ class AccountController extends RestController {
     /**
      * 注销账户
      * @param $reason
-     * @return RestResponse
      * @throws \Exception
      */
     public function cancelAction(string $reason) {

@@ -4,7 +4,7 @@ namespace Module\Legwork\Service;
 use Module\Legwork\Domain\Model\OrderModel;
 use Module\Legwork\Domain\Model\ServiceModel;
 use Module\Legwork\Domain\Repositories\OrderRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class OrderController extends Controller {
 

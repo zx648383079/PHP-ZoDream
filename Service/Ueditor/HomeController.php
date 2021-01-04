@@ -2,24 +2,27 @@
 namespace Service\Ueditor;
 
 use Infrastructure\Environment;
-use Zodream\Infrastructure\Http\Response;
-use Zodream\Service\Config;
+use Zodream\Infrastructure\Contracts\Response\JsonResponse;
+use Zodream\Route\Response\Json;
 
 use Infrastructure\Uploader;
+use Zodream\Service\Http\Request;
 
 class HomeController extends Controller {
 
 	protected $configs = array();
 
 	protected function jsonReturn($data) {
-		$callback = app('request')->get('callback');
+	    /** @var Json $json */
+        $json = $this->httpContext()->make(JsonResponse::class);
+		$callback = $this->httpContext()->make('request')->get('callback');
 		if (is_null($callback)) {
-			return $this->renderResponse($data, 'JSON');
+			return $json->renderResponse($data, 'JSON');
 		}
 		if (preg_match('/^[\w_]+$/', $callback)) {
-			return $this->renderResponse($data, 'JSONP');
+			return $json->renderResponse($data, 'JSONP');
 		}
-		return $this->renderResponse(array(
+		return $this->render(array(
 			'state'=> 'callback参数不合法'
 		));
 	}
@@ -37,7 +40,6 @@ class HomeController extends Controller {
      * @param $fieldName
      * @param $config
      * @param string $base64
-     * @return Response
      */
 	protected function upload($fieldName, $config, $base64 = 'upload') {
 		$upload = new Uploader($fieldName, $config, $base64);
@@ -47,9 +49,10 @@ class HomeController extends Controller {
 	protected function fileList($allowFiles, $listSize, $path) {
 		$allowFiles = substr(str_replace('.', '|', join('', $allowFiles)), 1);
 
+		$request = $this->httpContext()->make('request');
 		/* 获取参数 */
-		$size = app('request')->get('size', $listSize);
-		$start = app('request')->get('start', 0);
+		$size = $request->get('size', $listSize);
+		$start = $request->get('start', 0);
 		$end = $start + $size;
 
 		/* 获取文件列表 */
@@ -84,15 +87,15 @@ class HomeController extends Controller {
 		));
 	}
 
-	public function indexAction() {
-		$action = strtolower(app('request')->get('action'));
-		if (is_null($action) || !$this->hasMethod($action)) {
+	public function indexAction(Request $request) {
+		$action = strtolower($request->get('action'));
+		if (is_null($action) || !method_exists($this, $action. 'Action')) {
 			return $this->jsonReturn(array(
 				'state'=> '请求地址出错'
 			));
 		}
-		$this->configs = Config::ueditor();
-		return $this->runMethodNotProcess($action);
+		$this->configs = config('ueditor');
+		return $this->callMethod($action. 'Action');
 	}
 	
 	function configAction() {
@@ -173,7 +176,7 @@ class HomeController extends Controller {
 		
 		/* 抓取远程图片 */
 		$list = array();
-		$source = app('request')->get($fieldName, app('request')->get($fieldName));
+		$source = request()->get($fieldName, request()->get($fieldName));
 		foreach ($source as $imgUrl) {
 			$item = new Uploader($imgUrl, $config, 'remote');
 			$info = $item->getFileInfo();

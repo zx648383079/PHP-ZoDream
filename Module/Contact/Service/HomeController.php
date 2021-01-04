@@ -4,11 +4,11 @@ namespace Module\Contact\Service;
 
 use Module\Contact\Domain\Repositories\ContactRepository;
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends ModuleController {
 
-    protected function rules() {
+    public function rules() {
         return [
             'unsubscribe' => '*',
             '*' => 'p'

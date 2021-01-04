@@ -12,12 +12,12 @@ class LinkageController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = LinkageModel::findOrNew($id);
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {
@@ -45,8 +45,7 @@ class LinkageController extends Controller {
     }
 
     public function createDataAction($linkage_id, $parent_id = null) {
-        $id = 0;
-        return $this->runMethodNotProcess('editData', compact('id', 'linkage_id', 'parent_id'));
+        return $this->editDataAction(0, $linkage_id, $parent_id);
     }
 
     public function editDataAction($id, $linkage_id = null, $parent_id = null) {
@@ -60,7 +59,7 @@ class LinkageController extends Controller {
         if (!$model->parent_id) {
             $model->parent_id = $parent_id;
         }
-        return $this->show(compact('model'));
+        return $this->show('editData', compact('model'));
     }
 
     public function saveDataAction() {

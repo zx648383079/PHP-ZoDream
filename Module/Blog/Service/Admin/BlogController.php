@@ -9,7 +9,7 @@ use Module\Blog\Domain\Model\TermModel;
 use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\TagRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class BlogController extends Controller {
 
@@ -28,7 +28,7 @@ class BlogController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id, $language = null) {
@@ -39,7 +39,7 @@ class BlogController extends Controller {
         $term_list = TermModel::select('id', 'name')->all();
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
         $metaItems = BlogMetaModel::getMetaWithDefault($id);
-        return $this->show(compact('model', 'term_list', 'tags', 'metaItems'));
+        return $this->show('edit', compact('model', 'term_list', 'tags', 'metaItems'));
     }
 
     public function saveAction(Request $request, $id = 0) {

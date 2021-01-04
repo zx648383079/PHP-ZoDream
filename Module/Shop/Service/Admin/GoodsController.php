@@ -20,7 +20,7 @@ use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\ProductModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Zodream\Helpers\Json;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class GoodsController extends Controller {
 
@@ -53,7 +53,7 @@ class GoodsController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -63,7 +63,7 @@ class GoodsController extends Controller {
         $brand_list = BrandModel::select('id', 'name')->all();
         $group_list = AttributeGroupModel::all();
         $gallery_list = GoodsGalleryModel::where('goods_id', $id)->all();
-        return $this->show(compact('model', 'cat_list', 'brand_list', 'group_list', 'gallery_list'));
+        return $this->show('edit', compact('model', 'cat_list', 'brand_list', 'group_list', 'gallery_list'));
     }
 
     public function saveAction($id, $product = null, $gallery = null, $attr = null) {
@@ -267,7 +267,7 @@ class GoodsController extends Controller {
             })->when($just_selected, function ($query) use ($selected) {
             $query->whereIn('id', $selected);
             })->orderBy('id', 'desc')->page();
-        if (app('request')->wantsJson()) {
+        if (request()->wantsJson()) {
             return $this->renderData($model_list);
         }
         if (!$simple) {

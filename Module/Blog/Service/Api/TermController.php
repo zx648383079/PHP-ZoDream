@@ -4,13 +4,12 @@ namespace Module\Blog\Service\Api;
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Blog\Domain\Model\TermModel;
 use Module\Blog\Domain\Repositories\TermRepository;
-use Zodream\Route\Controller\RestController;
 
-class TermController extends RestController {
+class TermController extends Controller {
 
     use CheckRole;
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'administrator',
             'index' => '*'

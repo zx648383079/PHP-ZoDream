@@ -2,11 +2,10 @@
 namespace Module\Legwork\Service\Api;
 
 use Module\Legwork\Domain\Model\ServiceModel;
-use Zodream\Route\Controller\RestController;
 
-class HomeController extends RestController {
+class HomeController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

@@ -23,7 +23,7 @@ class ShippingRegionModel extends Model {
 
     protected $primaryKey = false;
 
-    protected function rules() {
+    public function rules() {
         return [
             'shipping_id' => 'required|int',
             'group_id' => 'required|int',

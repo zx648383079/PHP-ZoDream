@@ -8,7 +8,7 @@ class CategoryEntity extends Entity {
         return 'shop_category';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,100',
             'keywords' => 'string:0,200',

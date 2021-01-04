@@ -24,7 +24,7 @@ class ShippingGroupModel extends Model {
         return 'shop_shipping_group';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'shipping_id' => 'required|int',
             'first_step' => '',

@@ -19,7 +19,7 @@ class CourseEntity extends Entity {
         return 'exam_course';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'thumb' => 'string:0,200',

@@ -15,7 +15,7 @@ class CategoryController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -39,7 +39,7 @@ class CategoryController extends Controller {
                 return true;
             });
         }
-        return $this->show(compact('model', 'model_list', 'cat_list', 'group_list'));
+        return $this->show('edit', compact('model', 'model_list', 'cat_list', 'group_list'));
     }
 
     public function saveAction() {

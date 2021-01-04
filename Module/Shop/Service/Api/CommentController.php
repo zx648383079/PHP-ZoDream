@@ -15,7 +15,7 @@ class CommentController extends Controller {
     }
 
     public function createAction() {
-        $data = app('request')->validate([
+        $data = request()->validate([
             'item_type' => 'int:0,99',
             'item_id' => 'required|int',
             'title' => 'required|string:0,255',

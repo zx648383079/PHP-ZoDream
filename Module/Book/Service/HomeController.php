@@ -7,7 +7,7 @@ use Module\Book\Domain\Model\BookModel;
 class HomeController extends Controller {
 
     public function indexAction() {
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect('./mobile');
         }
         $recommend_book = BookModel::ofClassify()->limit(4)->all();

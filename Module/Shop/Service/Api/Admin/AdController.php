@@ -30,7 +30,7 @@ class AdController extends Controller {
         $model = new AdModel();
         $model->load();
         if ($model->type % 2 > 0) {
-            $model->content = app('request')->get('content_url');
+            $model->content = request()->get('content_url');
         }
         if ($model->autoIsNew()->save()) {
             return $this->render($model);

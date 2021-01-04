@@ -5,7 +5,7 @@ use Module\Shop\Domain\Models\CollectModel;
 
 class CollectController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

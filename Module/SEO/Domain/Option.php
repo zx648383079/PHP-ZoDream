@@ -3,7 +3,7 @@ namespace Module\SEO\Domain;
 
 use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Helpers\Json;
-use Zodream\Infrastructure\Traits\SingletonPattern;
+use Zodream\Infrastructure\Concerns\SingletonPattern;
 
 class Option {
 

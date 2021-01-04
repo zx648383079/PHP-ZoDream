@@ -5,7 +5,7 @@ use Module\WeChat\Domain\Model\MessageHistoryModel;
 
 class LogController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'w'
         ];

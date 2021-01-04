@@ -4,11 +4,11 @@ namespace Module\Demo\Service;
 use Module\Demo\Domain\Model\LogModel;
 use Module\Demo\Domain\Model\PostModel;
 use Module\Demo\Domain\Repositories\PostRepository;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class DownloadController extends Controller {
-    public function indexAction(Request $request, $id) {
+    public function indexAction(Request $request, $id, Output $output) {
         $post = PostModel::find($id);
         if (empty($post)) {
             return $this->redirect('./');
@@ -24,7 +24,7 @@ class DownloadController extends Controller {
         $post->download_count ++;
         $post->save();
         $file = PostRepository::file($post);
-        return Factory::response()
+        return $output
             ->file($file);
     }
 

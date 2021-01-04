@@ -2,11 +2,11 @@
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class RegisterController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'post' => 'p',
             '*' => '?'

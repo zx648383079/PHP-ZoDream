@@ -8,7 +8,7 @@ use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Mass;
 use Zodream\ThirdParty\WeChat\Template;
@@ -22,7 +22,7 @@ class ReplyController extends Controller {
         EventEnum::Click => '菜单事件',
     ];
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'w'
         ];
@@ -38,19 +38,19 @@ class ReplyController extends Controller {
     }
 
     public function addAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = ReplyModel::findOrNew($id);
-        $request = app('request');
+        $request = request();
         if ($request->has('type')) {
             $this->layout = false;
             $model->type = $request->get('type');
             return $this->show('/Admin/layouts/editor', compact('model'));
         }
         $event_list = $this->event_list;
-        return $this->show(compact('model', 'event_list'));
+        return $this->show('edit', compact('model', 'event_list'));
     }
 
     public function saveAction(Request $request) {

@@ -1,11 +1,9 @@
 <?php
 namespace Module\Book\Service\Api;
 
-use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Repositories\HistoryRepository;
-use Zodream\Route\Controller\RestController;
 
-class HistoryController extends RestController {
+class HistoryController extends Controller {
 
     public function indexAction() {
         $book_list = HistoryRepository::getHistory();

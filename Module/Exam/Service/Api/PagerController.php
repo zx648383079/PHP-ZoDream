@@ -2,9 +2,8 @@
 namespace Module\Exam\Service\Api;
 
 use Module\Exam\Domain\Pager;
-use Zodream\Route\Controller\RestController;
 
-class PagerController extends RestController {
+class PagerController extends Controller {
 
     public function indexAction($course, $type = 0) {
         $pager = Pager::create($course, intval($type));

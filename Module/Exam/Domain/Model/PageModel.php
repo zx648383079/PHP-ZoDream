@@ -110,7 +110,7 @@ class PageModel extends PageEntity {
                 $sql = sprintf('INSERT INTO %s (page_id, evaluate_id, question_id, content, user_id, created_at) 
                                         SELECT page_id, %s, question_id, content, %s, %s  FROM %s where evaluate_id = %s', PageQuestionModel::tableName(),
                     $model->id, $user_id, time(), PageQuestionModel::tableName(), $other);
-                Command::getInstance()->update($sql);
+                db()->execute($sql);
                 return $model;
             }
         }

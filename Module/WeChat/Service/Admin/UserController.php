@@ -9,7 +9,7 @@ use Zodream\ThirdParty\WeChat\User;
 
 class UserController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => 'w'
         ];

@@ -2,9 +2,8 @@
 namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Repositories\BookRepository;
-use Zodream\Route\Controller\RestController;
 
-class ChapterController extends RestController {
+class ChapterController extends Controller {
 
     public function indexAction($id = 0, $book = 0) {
         if ($id > 0) {

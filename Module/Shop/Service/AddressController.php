@@ -7,7 +7,7 @@ use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -15,7 +15,7 @@ class AddressController extends Controller {
 
     public function indexAction() {
         $model_list = AddressRepository::getList();
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             $this->layout = false;
             return $this->show('page', compact('model_list'));
         }
@@ -23,18 +23,18 @@ class AddressController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
-        if (app('request')->isAjax()) {
+        if (request()->isAjax()) {
             return $this->infoAction($id);
         }
         $model = $id > 0 ? AddressRepository::get($id) : new Address();
         if (!$model) {
             $this->redirect('./address');
         }
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function infoAction($id) {
@@ -43,7 +43,7 @@ class AddressController extends Controller {
     }
 
     public function saveAction() {
-        $data = app('request')->get();
+        $data = request()->get();
         try {
             $address = AddressRepository::save($data);
         } catch (\Exception $ex) {

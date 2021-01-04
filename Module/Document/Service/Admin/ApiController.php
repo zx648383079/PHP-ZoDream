@@ -24,8 +24,7 @@ class ApiController extends Controller {
     }
 
     public function createAction($project_id = 0, $parent_id = 0) {
-        $id = 0;
-        return $this->runMethodNotProcess('edit', compact('id', 'project_id', 'parent_id'));
+        return $this->editAction(0, $project_id, $parent_id);
     }
 
     public function editAction($id, $project_id = 0, $parent_id = 0) {
@@ -44,7 +43,7 @@ class ApiController extends Controller {
         $request_fields = $this->getFieldList($id, FieldModel::KIND_REQUEST);
         $header_fields = $this->getFieldList($id, FieldModel::KIND_HEADER);
         $response_fields = (new Tree($response_fields))->makeTreeForHtml();
-        return $this->show(compact('model', 'project', 'tree_list', 'response_fields', 'request_fields', 'header_fields'));
+        return $this->show('edit', compact('model', 'project', 'tree_list', 'response_fields', 'request_fields', 'header_fields'));
     }
 
     private function getFieldList($id, $kind) {
@@ -56,7 +55,7 @@ class ApiController extends Controller {
     }
 
     public function saveAction() {
-        $id = intval(app('request')->get('id'));
+        $id = intval(request()->get('id'));
         $model = new ApiModel();
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->renderFailure($model->getFirstError());
@@ -100,16 +99,16 @@ class ApiController extends Controller {
 
     public function debugResultAction() {
         $this->layout = false;
-        $url = new Uri(app('request')->get('url'));
-        $method = app('request')->get('method');
-        $data = app('request')->get('request');
+        $url = new Uri(request()->get('url'));
+        $method = request()->get('method');
+        $data = request()->get('request');
         $real_data = [];
         if (!empty($data) && isset($data['key'])) {
             foreach ($data['key'] as $i => $item) {
                 $real_data[$item] = $data['value'][$i];
             }
         }
-        $header = app('request')->get('header');
+        $header = request()->get('header');
         $headers = [
             'request' => [],
             'response' => []
@@ -138,7 +137,7 @@ class ApiController extends Controller {
 
     public function createFieldAction($kind = 0, $parent_id = 0, $api_id = 0) {
         $id = 0;
-        return $this->runMethodNotProcess('editField', compact('id', 'kind', 'parent_id', 'api_id'));
+        return $this->editFieldAction(0, $kind, $parent_id, $api_id);
     }
 
     public function editFieldAction($id, $kind = 0, $parent_id = 0, $api_id = 0) {
@@ -149,7 +148,7 @@ class ApiController extends Controller {
             $model->parent_id = $parent_id;
             $model->api_id = $api_id;
         }
-        return $this->show(compact('model'));
+        return $this->show('editField', compact('model'));
     }
 
     public function saveFieldAction() {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Finance\Service\Api;
 
 use Module\Finance\Domain\Repositories\BudgetRepository;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class BudgetController extends Controller {
 

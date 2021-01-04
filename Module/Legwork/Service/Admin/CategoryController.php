@@ -13,7 +13,7 @@ class CategoryController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -21,7 +21,7 @@ class CategoryController extends Controller {
         if (empty($model)) {
             return $this->redirectWithMessage($this->getUrl('category'), '分类不存在！');
         }
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction($id = 0) {

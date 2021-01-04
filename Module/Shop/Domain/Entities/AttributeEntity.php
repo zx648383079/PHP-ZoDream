@@ -21,7 +21,7 @@ class AttributeEntity extends Entity {
         return 'shop_attribute';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'name' => 'required|string:0,30',
             'group_id' => 'required|int',

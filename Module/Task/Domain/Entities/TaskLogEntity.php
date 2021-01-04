@@ -28,7 +28,7 @@ class TaskLogEntity extends Entity {
         return 'task_log';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',

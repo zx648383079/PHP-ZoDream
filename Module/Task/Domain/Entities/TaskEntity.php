@@ -30,7 +30,7 @@ class TaskEntity extends Entity {
         return 'task';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'parent_id' => 'int',

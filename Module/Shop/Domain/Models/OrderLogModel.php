@@ -17,7 +17,7 @@ class OrderLogModel extends Model {
         return 'shop_order_log';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'order_id' => 'required|int',
             'user_id' => 'required|int',

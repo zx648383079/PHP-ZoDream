@@ -3,12 +3,11 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Helpers\Str;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Route\Controller\RestController;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
-class PasswordController extends RestController {
+class PasswordController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'update' => '@',
         ];

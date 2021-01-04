@@ -80,7 +80,7 @@ class Client {
     }
 
     protected static function isLogoutRequest() {
-        return app('request')->get('logoutRequest');
+        return request()->get('logoutRequest');
     }
 
 
@@ -100,7 +100,7 @@ class Client {
         if (!is_array($allowed_clients)) {
             $allowed_clients = [static::getServerHostname()];
         }
-        $client_ip = app('request')->server('REMOTE_ADDR');
+        $client_ip = request()->server('REMOTE_ADDR');
         $client = gethostbyaddr($client_ip);
         foreach ($allowed_clients as $allowed_client) {
             if (($client == $allowed_client)

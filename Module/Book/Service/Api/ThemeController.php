@@ -2,9 +2,8 @@
 namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Setting;
-use Zodream\Route\Controller\RestController;
 
-class ThemeController extends RestController {
+class ThemeController extends Controller {
 
     public function indexAction() {
         $setting = new Setting();

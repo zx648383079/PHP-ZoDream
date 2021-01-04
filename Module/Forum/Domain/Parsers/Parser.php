@@ -5,8 +5,8 @@ use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Template\Domain\Pages\Page;
 use Module\Template\Domain\Weights\INode;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Infrastructure\Traits\SingletonPattern;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+use Zodream\Infrastructure\Concerns\SingletonPattern;
 
 class Parser extends Page {
 

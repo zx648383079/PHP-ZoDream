@@ -1,6 +1,7 @@
 <?php
 namespace Module\Task\Domain\Repositories;
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Model\TaskShareModel;
 use Module\Task\Domain\Model\TaskShareUserModel;
@@ -10,7 +11,7 @@ class ShareRepository {
     public static function getList() {
         $ids = TaskShareUserModel::where('user_id', auth()->id())
             ->where('deleted_at', 0)->pluck('share_id');
-        return TaskShareModel::with('task')
+        return TaskShareModel::with('task', 'user')
             ->whereIn('id', $ids)->orderBy('id', 'desc')->page();
     }
 
@@ -32,7 +33,7 @@ class ShareRepository {
     }
 
     public static function create(array $data) {
-        $task = TaskModel::findWithAuth($data['id']);
+        $task = TaskModel::findWithAuth($data['task_id']);
         if (empty($task)) {
             throw new \Exception('任务错误');
         }
@@ -60,6 +61,33 @@ class ShareRepository {
         return $share;
     }
 
+    public static function users($id) {
+        $share = TaskShareModel::find($id);
+        if (empty($share)) {
+            throw new \Exception('数据错误');
+        }
+        $userIds = TaskShareUserModel::where('share_id', $id)
+            ->where('deleted_at', 0)->pluck('user_id');
+        $userIds[] = $share->user_id;
+        if (!in_array(auth()->id(), $userIds)) {
+            throw new \Exception('无权限操作');
+        }
+        $items = UserSimpleModel::whereIn('id', $userIds)->get();
+        $admin = $roles = $users = [];
+        foreach ($items as $item) {
+            if ($item->id === $share->user_id) {
+                $item->role_name = '所有者';
+                $admin[] = $item;
+                continue;
+            }
+            if ($share->user_id === auth()->id()) {
+                $item->editable = true;
+            }
+            $users[] = $item;
+        }
+        return array_merge($admin, $roles, $users);
+    }
+
     public static function addUser(TaskShareModel $share, $user_id) {
         $log = TaskShareUserModel::where('share_id', $share->id)
             ->where('user_id', $user_id)->first();
@@ -79,12 +107,19 @@ class ShareRepository {
     }
 
     public static function remove($id) {
-        $share = TaskShareModel::findWithAuth($id);
+        $share = TaskShareModel::find($id);
         if (empty($share)) {
-            throw new \Exception('无权限操作');
+            throw new \Exception('分享错误');
         }
-        $share->delete();
-        TaskShareUserModel::where('share_id', $share->id)->delete();
+        if ($share->user_id == auth()->id()) {
+            $share->delete();
+            TaskShareUserModel::where('share_id', $share->id)->delete();
+            return;
+        }
+        TaskShareUserModel::where('share_id', $share->id)
+            ->where('user_id', auth()->id())->update([
+                'deleted_at' => time()
+            ]);
     }
 
     public static function removeUser($id, $user_id) {

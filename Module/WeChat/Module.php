@@ -11,7 +11,7 @@ use Zodream\Route\Controller\Module as BaseModule;
 class Module extends BaseModule {
 
     public function boot() {
-        app()->register(MessageReply::class);
+        app()->scoped(MessageReply::class);
     }
 
     public function getMigration() {

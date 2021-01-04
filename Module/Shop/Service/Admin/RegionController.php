@@ -11,13 +11,12 @@ class RegionController extends Controller {
     }
 
     public function createAction($parent_id = 0) {
-        $id = 0;
-        return $this->runMethodNotProcess('edit', compact('id', 'parent_id'));
+        return $this->editAction(0, $parent_id);
     }
 
     public function editAction($id, $parent_id = 0) {
         $model = RegionModel::findOrDefault($id, compact('parent_id'));
-        return $this->show(compact('model'));
+        return $this->show('edit', compact('model'));
     }
 
     public function saveAction() {

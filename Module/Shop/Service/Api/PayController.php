@@ -8,7 +8,7 @@ use Zodream\Database\DB;
 
 class PayController extends Controller {
 
-    protected function methods() {
+    public function methods() {
         return ['index' => ['POST']];
     }
 

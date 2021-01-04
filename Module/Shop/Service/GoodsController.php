@@ -11,7 +11,7 @@ use Module\Shop\Domain\Repositories\CommentRepository;
 class GoodsController extends Controller {
 
     public function indexAction($id) {
-        if (app('request')->isMobile()) {
+        if (request()->isMobile()) {
             return $this->redirect(['./mobile/goods', 'id' => $id]);
         }
         $goods = GoodsModel::find($id);

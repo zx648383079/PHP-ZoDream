@@ -7,7 +7,7 @@ use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];
@@ -30,7 +30,7 @@ class AddressController extends Controller {
     }
 
     public function createAction() {
-        $data = app('request')->validate([
+        $data = request()->validate([
             'name' => '',
             'region_id' => 'int',
             'region_name' => '',
@@ -47,7 +47,7 @@ class AddressController extends Controller {
     }
 
     public function updateAction() {
-        $data = app('request')->validate([
+        $data = request()->validate([
             'id' => 'int',
             'name' => '',
             'region_id' => 'int',

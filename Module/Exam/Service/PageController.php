@@ -8,7 +8,7 @@ use Module\Exam\Domain\Model\PageQuestionModel;
 
 class PageController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '@'
         ];

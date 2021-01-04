@@ -17,7 +17,7 @@ class ServiceController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => 0]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
@@ -26,7 +26,7 @@ class ServiceController extends Controller {
             return $this->redirectWithMessage($this->getUrl('service'), '服务不存在！');
         }
         $cat_list = CategoryModel::query()->get();
-        return $this->show(compact('model', 'cat_list'));
+        return $this->show('edit', compact('model', 'cat_list'));
     }
 
     public function saveAction($id = 0, $form = []) {

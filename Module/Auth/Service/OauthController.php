@@ -11,7 +11,7 @@ use Zodream\ThirdParty\OAuth\BaseOAuth;
 
 class OauthController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             '*' => '*'
         ];

@@ -19,7 +19,7 @@ class PageQuestionEntity extends Entity {
     public static function tableName() {
         return 'exam_page_question';
     }
-    protected function rules() {
+    public function rules() {
         return [
             'page_id' => 'required|int',
             'evaluate_id' => 'required|int',

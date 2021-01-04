@@ -5,23 +5,23 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
 use Zodream\Image\QrCode;
-use Zodream\Infrastructure\Http\Response;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class QrController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'authorize' => '@',
             '*' => '?',
         ];
     }
 
-    public function indexAction() {
+    public function indexAction(Output $output) {
         $model = LoginQrModel::createNew();
         $image = new QrCode();
         $image->encode($model->url);
         session()->set('login_qr', $model->id);
-        return app('response')->image($image);
+        return $output->image($image);
     }
 
     public function checkAction() {
@@ -58,7 +58,6 @@ class QrController extends Controller {
      * @param $token
      * @param bool $confirm
      * @param bool $reject
-     * @return Response
      * @throws \Exception
      */
     public function authorizeAction($token, $confirm = false, $reject = false) {

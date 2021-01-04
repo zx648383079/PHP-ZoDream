@@ -33,7 +33,7 @@ class DeliveryModel extends Model {
         return 'shop_delivery';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'user_id' => 'required|int',
             'order_id' => 'required|int',

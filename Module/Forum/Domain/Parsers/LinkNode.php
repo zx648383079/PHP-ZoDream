@@ -3,7 +3,7 @@ namespace Module\Forum\Domain\Parsers;
 
 use Infrastructure\HtmlExpand;
 use Module\Template\Domain\Weights\Node;
-use Zodream\Service\Factory;
+
 
 class LinkNode extends Node {
 

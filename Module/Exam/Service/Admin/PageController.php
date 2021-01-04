@@ -6,7 +6,7 @@ use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\PageEvaluateModel;
 use Module\Exam\Domain\Model\PageModel;
 use Module\Exam\Domain\Model\PageQuestionModel;
-use Zodream\Infrastructure\Http\Request;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PageController extends Controller {
 
@@ -20,13 +20,13 @@ class PageController extends Controller {
     }
 
     public function createAction() {
-        return $this->runMethodNotProcess('edit', ['id' => null]);
+        return $this->editAction(0);
     }
 
     public function editAction($id) {
         $model = PageModel::findOrNew($id);
         $cat_list = CourseModel::tree()->makeTreeForHtml();
-        return $this->show(compact('model', 'cat_list'));
+        return $this->show('edit', compact('model', 'cat_list'));
     }
 
     public function saveAction(Request $request) {

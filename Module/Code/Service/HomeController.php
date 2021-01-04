@@ -5,13 +5,11 @@ use Module\Code\Domain\Model\CodeModel;
 use Module\Code\Domain\Model\TagModel;
 use Module\Code\Domain\Repositories\CodeRepository;
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Config;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends ModuleController {
 
-    protected function rules() {
+    public function rules() {
         return [
             'recommend' => '@',
             'create' => '@',
@@ -61,7 +59,7 @@ class HomeController extends ModuleController {
     }
 
     public function recommendAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -73,7 +71,7 @@ class HomeController extends ModuleController {
     }
 
     public function collectAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -85,7 +83,7 @@ class HomeController extends ModuleController {
     }
 
     public function deleteAction($id) {
-        if (!app('request')->isAjax()) {
+        if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
@@ -93,7 +91,7 @@ class HomeController extends ModuleController {
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     public function suggestionAction($keywords = null) {
@@ -104,13 +102,13 @@ class HomeController extends ModuleController {
     }
 
     public function findLayoutFile() {
-        if ($this->action !== 'index') {
+        if ($this->httpContext()->make('action') !== 'index') {
             return false;
         }
-        return Factory::root()->file('UserInterface/Home/layouts/main.php');
+        return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 
     public function redirectWithAuth() {
-        return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);
+        return $this->redirect([config('auth.home'), 'redirect_uri' => url('./')]);
     }
 }

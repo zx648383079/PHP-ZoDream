@@ -9,7 +9,7 @@ use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Scene\SceneInterface;
 use Zodream\Infrastructure\Pipeline\InterruptibleProcessor;
 use Zodream\Infrastructure\Pipeline\PipelineBuilder;
-use Zodream\Infrastructure\Traits\EventTrait;
+use Zodream\Infrastructure\Concerns\EventTrait;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 use Zodream\ThirdParty\WeChat\MessageResponse;

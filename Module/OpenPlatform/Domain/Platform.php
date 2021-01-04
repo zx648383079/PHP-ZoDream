@@ -8,7 +8,7 @@ use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Zodream\Database\Model\UserModel as UserObject;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Helpers\Arr;
-use Zodream\Infrastructure\Http\Output\RestResponse;
+use Zodream\Route\Response\RestResponse;
 
 class Platform {
 
@@ -78,7 +78,7 @@ class Platform {
                 $args[] = $data[$key];
                 continue;
             }
-            $args[] = app('request')->get($key);
+            $args[] = request()->get($key);
         }
         return implode('', $args);
     }
@@ -117,17 +117,17 @@ class Platform {
     }
 
     public function verifyRest() {
-        if (!$this->verify($_POST, app('request')->get('sign'))) {
+        if (!$this->verify($_POST, request()->get('sign'))) {
             return false;
         }
         if ($this->app['encrypt_type'] < 1) {
             return true;
         }
-        $data = $this->decrypt(app('request')->get('encrypt'));
+        $data = $this->decrypt(request()->get('encrypt'));
         if (empty($data)) {
             return false;
         }
-        app('request')->append($data);
+        request()->append($data);
         return true;
     }
 
@@ -229,7 +229,7 @@ class Platform {
     }
 
     public static function createAuto($key = 'appid') {
-        return static::create(app('request')->get($key));
+        return static::create(request()->get($key));
     }
 
     public static function createId($id) {

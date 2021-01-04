@@ -6,34 +6,35 @@ namespace Service\Account;
 use Zodream\Image\Captcha;
 use Zodream\Image\SlideCaptcha;
 
-use Zodream\Infrastructure\Http\Request;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Input as Request;
+use Zodream\Infrastructure\Contracts\Http\Output;
+
 
 class CaptchaController extends Controller {
-	protected function rules() {
+	public function rules() {
 		return array(
 			'*' => '*'
 		);
 	}
 	
-	function indexAction(Request $request) {
+	function indexAction(Request $request, Output $output) {
 		$level = intval($request->get('level'));
 		if (empty($level)) {
-			$level = Factory::session('level');
+			$level = session('level');
 		}
 		$captcha = new Captcha();
 		$captcha->setConfigs([
             'width' => intval($request->get('width', 100)),
             'height' => intval($request->get('height', 30)),
             'fontSize' => 20,
-            'fontFamily' => (string)Factory::root()->file('data/fonts/YaHei.ttf')
+            'fontFamily' => (string)app_path()->file('data/fonts/YaHei.ttf')
         ]);
-		return Factory::response()->image($captcha->generate($level));
+		return $output->image($captcha->generate($level));
 	}
 
 	function slideCheckAction() {
-	    $x = floor(app('request')->get('x'));
-	    $c = Factory::session('slider_x');
+	    $x = floor(request()->get('x'));
+	    $c = session('slider_x');
 	    if (abs($x - $c) < 5) {
 	        return $this->renderData();
         }
@@ -57,7 +58,7 @@ class CaptchaController extends Controller {
         $width = $img->instance()->getWidth();
         $height = $img->instance()->getHeight();
         $bg_data = $bg->toBase64();
-        Factory::session()->set('slider_x', $img->getPoint()[0]);
+        session()->set('slider_x', $img->getPoint()[0]);
         $html = <<<HTML
 <style>
 .slide-box {

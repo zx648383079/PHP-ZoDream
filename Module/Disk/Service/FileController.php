@@ -10,11 +10,12 @@ use Zodream\Image\Base\Font;
 use Zodream\Image\Base\Point;
 use Zodream\Image\Image;
 use Zodream\Image\QrCode;
-use Zodream\Service\Factory;
+use Zodream\Infrastructure\Contracts\Http\Output;
+use Zodream\Infrastructure\Contracts\HttpContext;
 
 class FileController extends Controller {
 
-    protected function rules() {
+    public function rules() {
         return [
             'index' => '@',
             '*' => '*',
@@ -41,8 +42,7 @@ class FileController extends Controller {
         return $this->show($name, compact('disk'));
     }
 
-    public function plistAction($id) {
-        $response = Factory::response();
+    public function plistAction($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -60,8 +60,7 @@ class FileController extends Controller {
             url('./download', ['id' => $id]), '', '', ''), 'plist');
     }
 
-    public function qrAction($id) {
-        $response = Factory::response();
+    public function qrAction($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -80,8 +79,7 @@ class FileController extends Controller {
         return $response->image($image);
     }
 
-    public function m3u8Action($id) {
-        $response = Factory::response();
+    public function m3u8Action($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -127,27 +125,26 @@ class FileController extends Controller {
                 ->set('segment_time', 5)
                 ->output($baseFolder->file($fileId.'-%03d.ts'))->ready()->start()->join()->stop();
         }
-        return Factory::response()->file($m3u8File);
+        return $response->file($m3u8File);
     }
 
-    public function invokeMethod($action, array $vars = array()) {
+    public function invokeMethod(HttpContext $context, string $action, array $vars = []) {
         if (strpos($action, '.ts')) {
-            return $this->tsAction($action);
+            return $this->tsAction($action, $context['response']);
         }
-        return parent::invokeMethod($action, $vars);
+        return $context['route']->tryInvokeAction($this, $action, $vars, $context);
     }
 
-    public function tsAction($name) {
+    public function tsAction($name, Output $response) {
         $length = strlen($name);
         $id = substr($name, 0, $length - 6);
         $name = substr($name, $length - 6);
         $file = DiskRepository::driver()->cacheFolder()
             ->file(sprintf('%s/%s-%s', $id, $id, $name));
-        return Factory::response()->file($file);
+        return $response->file($file);
     }
 
-    public function musicAction($id) {
-        $response = Factory::response();
+    public function musicAction($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -163,8 +160,7 @@ class FileController extends Controller {
         return $response->file($data['path']);
     }
 
-    public function videoAction($id) {
-        $response = Factory::response();
+    public function videoAction($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -180,8 +176,7 @@ class FileController extends Controller {
         return $response->file($data['path']);
     }
 
-    public function imageAction($id) {
-        $response = Factory::response();
+    public function imageAction($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -189,7 +184,7 @@ class FileController extends Controller {
             $image = new Image();
             $image->instance()->create(new Box(200, 100), '#fff');
             $image->instance()->text($ex->getMessage(),
-                new Font((string)Factory::root()->file('data/fonts/YaHei.ttf'), 30, '#333'),
+                new Font((string)app_path()->file('data/fonts/YaHei.ttf'), 30, '#333'),
                 new Point(30, 50));
             return $response->image($image);
         }
@@ -198,8 +193,7 @@ class FileController extends Controller {
         return $response->setParameter($data['path']);
     }
 
-    public function thumbAction($id) {
-        $response = Factory::response();
+    public function thumbAction($id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -210,13 +204,15 @@ class FileController extends Controller {
             $image = new Image();
             $image->instance()->create(new Box(200, 100), '#fff');
             $image->instance()->text($ex->getMessage(),
-                new Font((string)Factory::root()->file('data/fonts/YaHei.ttf'), 30, '#333'),
+                new Font((string)app_path()->file('data/fonts/YaHei.ttf'), 30, '#333'),
                 new Point(30, 50));
             return $response->image($image);
         }
         $video = $data['path'];
         $fileId = md5($data['id']);
-        $thumbFile = DiskRepository::driver()->cacheFolder()->file($fileId.'_thumb.jpg');
+        $thumbFile = DiskRepository::driver()
+            ->cacheFolder()
+            ->file($fileId.'_thumb.jpg');
         if (!$thumbFile->exist()) {
             FFmpeg::factory(null, $video)
                 ->overwrite()
@@ -233,7 +229,7 @@ class FileController extends Controller {
         if (!auth()->guest()) {
             return;
         }
-        $token = app('request')->get('token');
+        $token = request()->get('token');
         if (!empty($token) && cache()->store('disk')->has($token)) {
             return;
         }

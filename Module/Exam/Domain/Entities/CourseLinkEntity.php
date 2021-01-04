@@ -17,7 +17,7 @@ class CourseLinkEntity extends Entity {
 
     protected $primaryKey = '';
 
-    protected function rules() {
+    public function rules() {
         return [
             'course_id' => 'required|int',
             'link_id' => 'required|int',

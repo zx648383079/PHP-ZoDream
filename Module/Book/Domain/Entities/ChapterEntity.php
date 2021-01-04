@@ -26,7 +26,7 @@ class ChapterEntity extends Entity {
         return 'book_chapter';
     }
 
-    protected function rules() {
+    public function rules() {
         return [
             'book_id' => 'int',
             'title' => 'required|string:0,200',
