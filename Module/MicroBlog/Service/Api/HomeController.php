@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Module\MicroBlog\Service;
+namespace Module\MicroBlog\Service\Api;
 
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends Controller {
-
     public function rules() {
         return [
             'recommend' => '@',
@@ -18,8 +17,8 @@ class HomeController extends Controller {
     }
 
     public function indexAction(string $sort = 'new', string $keywords = '', int $id = 0) {
-        $blog_list = MicroRepository::getList($sort, $keywords, $id);
-        return $this->show(compact('blog_list', 'keywords'));
+        $items = MicroRepository::getList($sort, $keywords, $id);
+        return $this->renderPage($items);
     }
 
     public function createAction(Request $request) {
@@ -27,68 +26,51 @@ class HomeController extends Controller {
             return $this->renderFailure('发送过于频繁！');
         }
         try {
-            MicroRepository::create($request->get('content'), $request->get('file'));
+            $model = MicroRepository::create($request->get('content'), $request->get('file'));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData([
-            'url' => url('./')
-        ]);
+        return $this->render($model);
     }
 
-    public function recommendAction($id, Request $request) {
-        if (!$request->isAjax()) {
-            return $this->redirect('./');
-        }
+    public function recommendAction($id) {
         try {
             $model = MicroRepository::recommend($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($model);
+        return $this->render($model);
     }
 
-    public function collectAction($id, Request $request) {
-        if (!$request->isAjax()) {
-            return $this->redirect('./');
-        }
+    public function collectAction($id) {
         try {
             $model = MicroRepository::collect($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($model);
+        return $this->render($model);
     }
 
-    public function forwardMiniAction($id) {
-        $this->layout = false;
+    public function detailAction($id) {
         $blog = MicroBlogModel::find($id);
-        return $this->show(compact('blog'));
+        return $this->render($blog);
     }
 
-    public function forwardAction(Request $request, $id, $content, $is_comment = false) {
-        if (!$request->isAjax()) {
-            return $this->redirect('./');
-        }
+    public function forwardAction($id, $content, $is_comment = false) {
         try {
             $model = MicroRepository::forward($id, $content, $is_comment);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($model);
+        return $this->render($model);
     }
 
-    public function deleteAction($id, Request $request) {
-        if (!$request->isAjax()) {
-            return $this->redirect('./');
-        }
+    public function deleteAction($id) {
         try {
-            $model = MicroRepository::delete($id);
+            MicroRepository::delete($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
     }
-
-
 }

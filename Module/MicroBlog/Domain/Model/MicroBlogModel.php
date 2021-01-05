@@ -21,7 +21,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
 */
 class MicroBlogModel extends Model {
 
-    protected $append = ['is_recommended', 'attachment', 'is_collected'];
+    protected $append = ['editable', 'is_recommended', 'attachment', 'is_collected'];
 
 	public static function tableName() {
         return 'micro_blog';
@@ -93,5 +93,12 @@ class MicroBlogModel extends Model {
                 'id_value' => $this->id,
                 'action' => LogModel::ACTION_COLLECT
             ])->count() > 0;
+    }
+
+    public function getEditableAttribute() {
+        if (auth()->guest()) {
+            return false;
+        }
+        return auth()->id() === $this->user_id;
     }
 }

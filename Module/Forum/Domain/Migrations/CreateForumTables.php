@@ -4,7 +4,6 @@ namespace Module\Forum\Domain\Migrations;
 use Module\Forum\Domain\Model\BlackWordModel;
 use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
-use Module\Forum\Domain\Model\FileModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -84,11 +83,13 @@ class CreateForumTables extends Migration {
             $table->set('id')->pk(true);
             $table->set('cat_id')->int()->notNull();
             $table->set('name')->varchar()->notNull();
-            $table->set('icon')->varchar()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('content')->varchar()->notNull();
         })->append(EmojiCategoryModel::tableName(), function(Table $table) {
             $table->setComment('表情分类');
             $table->set('id')->pk(true);
             $table->set('name')->varchar()->notNull();
+            $table->set('icon')->varchar()->defaultVal('');
         })->autoUp();
     }
 }

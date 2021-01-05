@@ -1,5 +1,6 @@
 <?php
-namespace Module\MicroBlog\Service;
+declare(strict_types=1);
+namespace Module\MicroBlog\Service\Api;
 
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
@@ -13,16 +14,13 @@ class ShareController extends Controller {
         ];
     }
 
-    public function indexAction(string $appid, string $title = '',
-                                string $summary = '', string $url = '',
-                                string $pics = '', $sharesource = '') {
+    public function indexAction(string $appid, string $url = '') {
         try {
             OpenRepository::checkUrl($appid, $url);
         } catch (\Exception $ex) {
-            return $this->redirectWithMessage('./', $ex->getMessage());
+            return $this->renderFailure($ex->getMessage());
         }
-        $pics = empty($pics) ? [] : explode(',', $pics);
-        return $this->show(compact('title', 'summary', 'url', 'pics', 'appid', 'sharesource'));
+        return $this->renderData(true);
     }
 
     public function saveAction(Request $request) {
@@ -30,15 +28,14 @@ class ShareController extends Controller {
             return $this->renderFailure('发送过于频繁！');
         }
         try {
-            MicroRepository::share($request->get('title'),
+            OpenRepository::checkUrl($request->get('appid'), $request->get('url'));
+            $model = MicroRepository::share($request->get('title'),
                 $request->get('summary'),
                 $request->get('url'),
                 $request->get('pics'), $request->get('content'));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData([
-            'url' => url('./')
-        ]);
+        return $this->render($model);
     }
 }

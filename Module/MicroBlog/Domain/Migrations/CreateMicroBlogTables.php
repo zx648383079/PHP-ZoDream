@@ -21,6 +21,7 @@ class CreateMicroBlogTables extends Migration {
             $table->set('id')->pk()->ai();
             $table->set('user_id')->int(10);
             $table->set('content')->varchar(140)->notNull();
+            $table->set('open_type')->tinyint(1)->defaultVal(0);
             $table->set('recommend_count')->int(10)->defaultVal(0)->comment('推荐数');
             $table->set('collect_count')->int(10)->defaultVal(0)->comment('收藏数');
             $table->set('forward_count')->int(10)->defaultVal(0)->comment('转发数');

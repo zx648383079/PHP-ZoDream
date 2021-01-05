@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
 use Module\Auth\Domain\Model\UserModel;
@@ -11,6 +12,24 @@ use Zodream\Helpers\Html;
 
 class MicroRepository {
 
+    public static function getList(string $sort = 'new', string $keywords = '', int $id = 0) {
+        return MicroBlogModel::with('user', 'attachment')
+            ->when($id > 0, function($query) use ($id) {
+                $query->where('id', $id);
+            })
+            ->when(!empty($sort), function ($query) use ($sort) {
+                if ($sort == 'new') {
+                    return $query->orderBy('created_at', 'desc');
+                }
+                if ($sort == 'recommend') {
+                    return $query->orderBy('recommend_count', 'desc');
+                }
+            })->when(!empty($keywords) && $id < 1, function ($query) {
+                MicroBlogModel::searchWhere($query, ['content']);
+            })
+            ->page();
+    }
+
     /**
      * 不允许频繁发布
      * @return bool
@@ -22,7 +41,7 @@ class MicroRepository {
         return !$time || $time < time() - 300;
     }
 
-    public static function create($content, $images = null, $source = 'web') {
+    public static function create($content, $images = [], $source = 'web') {
         $model = MicroBlogModel::create([
             'user_id' => auth()->id(),
             'content' => Html::text($content),
