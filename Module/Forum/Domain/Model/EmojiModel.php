@@ -9,7 +9,8 @@ use Domain\Model\Model;
  * @property integer $id
  * @property integer $cat_id
  * @property string $name
- * @property string $icon
+ * @property integer $type
+ * @property string $content
  */
 class EmojiModel extends Model {
 
@@ -23,7 +24,8 @@ class EmojiModel extends Model {
         return [
             'cat_id' => 'required|int',
             'name' => 'required|string:0,255',
-            'icon' => 'required|string:0,255',
+            'type' => 'int:0,127',
+            'content' => 'required|string:0,255',
         ];
     }
 
@@ -32,7 +34,8 @@ class EmojiModel extends Model {
             'id' => 'Id',
             'cat_id' => 'Cat Id',
             'name' => 'Name',
-            'icon' => 'Icon',
+            'type' => 'Type',
+            'content' => 'Content',
         ];
     }
 

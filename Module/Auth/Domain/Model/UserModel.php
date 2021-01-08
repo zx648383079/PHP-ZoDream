@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Model;
 
 
@@ -42,9 +43,9 @@ class UserModel extends BaseModel {
         '女'
     ];
 
-    protected $hidden = ['password', 'token', 'status'];
+    protected array $hidden = ['password', 'token', 'status'];
 
-    protected $append = ['sex_label'];
+    protected array $append = ['sex_label'];
 
 	public $roles = [];
 

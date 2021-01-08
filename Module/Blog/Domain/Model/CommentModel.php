@@ -27,7 +27,7 @@ use Module\Blog\Domain\Entities\CommentEntity;
  */
 class CommentModel extends CommentEntity {
 
-    protected $hidden = ['email', 'url', 'ip', 'agent'];
+    protected array $hidden = ['email', 'url', 'ip', 'agent'];
 
     public function replies() {
 	    return $this->hasMany(static::class, 'parent_id');

@@ -20,7 +20,7 @@ use Domain\Model\Model;
  */
 class ShortUrlModel extends Model {
 
-    protected $append = ['complete_short_url'];
+    protected array $append = ['complete_short_url'];
 
     public static function tableName() {
         return 'short_url';

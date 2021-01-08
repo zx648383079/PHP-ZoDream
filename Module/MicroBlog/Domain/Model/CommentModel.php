@@ -18,7 +18,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class CommentModel extends Model {
 
-    protected $append = ['agree_type', 'reply_count'];
+    protected array $append = ['agree_type', 'reply_count'];
 
 	public static function tableName() {
         return 'micro_comment';

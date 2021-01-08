@@ -38,7 +38,7 @@ use Zodream\Helpers\Time;
  */
 class BookModel extends BookEntity {
 
-    protected $append = ['category', 'author',
+    protected array $append = ['category', 'author',
         'chapter_count', 'first_chapter', 'last_chapter'];
 
     public $classify_list = [

@@ -18,7 +18,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class BulletinModel extends Model {
 
-    protected $append = ['user', 'user_name', 'icon'];
+    protected array $append = ['user', 'user_name', 'icon'];
 
 	public static function tableName() {
         return 'bulletin';

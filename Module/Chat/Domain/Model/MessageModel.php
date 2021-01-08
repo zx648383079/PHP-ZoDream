@@ -30,7 +30,7 @@ class MessageModel extends Model {
     const STATUS_READ = 1;  //已读
     const STATUS_RECEIVED = 2; // 接受
 
-    protected $append = ['user', 'receive'];
+    protected array $append = ['user', 'receive'];
 
     public static function tableName() {
         return 'chat_message';

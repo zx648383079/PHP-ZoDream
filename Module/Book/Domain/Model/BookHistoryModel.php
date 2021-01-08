@@ -18,7 +18,7 @@ use Zodream\Infrastructure\Cookie;
  */
 class BookHistoryModel extends Model {
 
-    protected $append = ['book', 'chapter'];
+    protected array $append = ['book', 'chapter'];
 
     public static function tableName() {
         return 'book_history';

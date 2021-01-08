@@ -48,7 +48,7 @@ class OrderModel extends Model {
         self::STATUS_REFUNDED => '已退款'
     ];
 
-    protected $append = ['service', 'status_label'];
+    protected array $append = ['service', 'status_label'];
 
     public static function tableName() {
         return 'leg_order';

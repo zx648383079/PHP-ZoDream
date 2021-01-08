@@ -18,7 +18,7 @@ use Domain\Model\Model;
  */
 class TokenPageModel extends UserTokenModel {
 
-    protected $append = ['platform', 'status'];
+    protected array $append = ['platform', 'status'];
 
     public function getTokenAttribute() {
         return $this->is_self > 0 ? $this->getAttributeSource('token') : '[不允许查看]';

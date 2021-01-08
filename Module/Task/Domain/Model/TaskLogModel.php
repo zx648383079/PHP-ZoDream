@@ -18,7 +18,7 @@ use Module\Task\Domain\Entities\TaskLogEntity;
  */
 class TaskLogModel extends TaskLogEntity {
 
-    protected $append = ['time'];
+    protected array $append = ['time'];
 
     public function task() {
         return $this->hasOne(TaskModel::class, 'id', 'task_id');

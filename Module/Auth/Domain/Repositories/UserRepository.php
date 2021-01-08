@@ -23,6 +23,12 @@ class UserRepository {
         })->orderBy('id', 'desc')->page();
     }
 
+    public static function searchUser(string $keywords = '') {
+        return UserSimpleModel::when(!empty($keywords), function ($query) {
+            UserSimpleModel::searchWhere($query, 'name');
+        })->orderBy('id', 'desc')->page();
+    }
+
     /**
      * @param int $id
      * @return bool|UserModel

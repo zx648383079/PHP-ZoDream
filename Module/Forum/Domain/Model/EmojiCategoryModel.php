@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * @package Module\Forum\Domain\Model
  * @property integer $id
  * @property string $name
+ * @property string $icon
  */
 class EmojiCategoryModel extends Model {
 
@@ -20,6 +21,7 @@ class EmojiCategoryModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,255',
+            'icon' => 'string:0,255',
         ];
     }
 
@@ -27,6 +29,7 @@ class EmojiCategoryModel extends Model {
         return [
             'id' => 'Id',
             'name' => 'Name',
+            'icon' => 'Icon',
         ];
     }
 }

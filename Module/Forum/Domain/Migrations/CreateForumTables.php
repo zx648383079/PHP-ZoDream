@@ -6,6 +6,7 @@ use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
+use Module\Forum\Domain\Model\ForumModeratorModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
@@ -32,6 +33,11 @@ class CreateForumTables extends Migration {
             $table->set('icon')->varchar(100)->defaultVal('');
             $table->set('forum_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
+        })->append(ForumModeratorModel::tableName(), function(Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('user_id')->int()->notNull();
+            $table->set('forum_id')->int()->defaultVal(0);
+            $table->set('role_id')->int()->defaultVal(0);
         })->append(ThreadModel::tableName(), function(Table $table) {
             $table->set('id')->pk(true);
             $table->set('forum_id')->int()->notNull();
@@ -83,7 +89,7 @@ class CreateForumTables extends Migration {
             $table->set('id')->pk(true);
             $table->set('cat_id')->int()->notNull();
             $table->set('name')->varchar()->notNull();
-            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('type')->tinyint(1)->defaultVal(0)->comment('图片或文字');
             $table->set('content')->varchar()->notNull();
         })->append(EmojiCategoryModel::tableName(), function(Table $table) {
             $table->setComment('表情分类');

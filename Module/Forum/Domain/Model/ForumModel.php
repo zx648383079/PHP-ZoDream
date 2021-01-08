@@ -2,6 +2,7 @@
 namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Html\Tree;
 use Zodream\Helpers\Tree as TreeHelper;
 
@@ -58,6 +59,15 @@ class ForumModel extends Model {
 
     public function children() {
 	    return $this->hasMany(static::class, 'parent_id', 'id');
+    }
+
+    public function moderators() {
+	    return $this->belongsToMany(UserSimpleModel::class, ForumModeratorModel::class,
+            'forum_id', 'user_id');
+    }
+
+    public function classifies() {
+        return $this->hasMany(ForumClassifyModel::class, 'forum_id', 'id');
     }
 
     public function getTodayCountAttribute() {

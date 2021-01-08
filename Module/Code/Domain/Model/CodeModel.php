@@ -20,7 +20,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class CodeModel extends Model {
 
-    protected $append = ['is_recommended', 'tags', 'is_collected'];
+    protected array $append = ['is_recommended', 'tags', 'is_collected'];
 
 	public static function tableName() {
         return 'code_code';

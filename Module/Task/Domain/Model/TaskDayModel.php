@@ -22,7 +22,7 @@ use Zodream\Helpers\Time;
  */
 class TaskDayModel extends TaskDayEntity {
 
-    protected $append = ['task', 'log'];
+    protected array $append = ['task', 'log'];
 
     public function scopeMonth($query, $time) {
         return $this->scopeTime($query, date('Y-m-01', $time),

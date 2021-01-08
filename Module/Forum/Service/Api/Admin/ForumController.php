@@ -33,6 +33,8 @@ class ForumController extends Controller {
                 'parent_id' => 'int',
                 'type' => 'int:0,99',
                 'position' => 'int:0,999',
+                'classifies' => '',
+                'moderators' => '',
             ]);
             return $this->render(
                 ForumRepository::save($data)

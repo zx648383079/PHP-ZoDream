@@ -50,4 +50,9 @@ class UserController extends Controller {
         return $this->renderData(true);
     }
 
+    public function searchAction(string $keywords = '') {
+        return $this->renderPage(
+            UserRepository::searchUser($keywords)
+        );
+    }
 }

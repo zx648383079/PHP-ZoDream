@@ -17,7 +17,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class CommentModel extends Model {
 
-    protected $append = ['is_agree', 'reply_count'];
+    protected array $append = ['is_agree', 'reply_count'];
 
 	public static function tableName() {
         return 'code_comment';

@@ -21,7 +21,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
 */
 class MicroBlogModel extends Model {
 
-    protected $append = ['editable', 'is_recommended', 'attachment', 'is_collected'];
+    protected array $append = ['editable', 'is_recommended', 'attachment', 'is_collected'];
 
 	public static function tableName() {
         return 'micro_blog';

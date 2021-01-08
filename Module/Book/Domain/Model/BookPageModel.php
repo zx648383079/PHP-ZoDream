@@ -36,5 +36,5 @@ use Zodream\Helpers\Time;
  */
 class BookPageModel extends BookModel {
 
-    protected $append = ['category', 'author'];
+    protected array $append = ['category', 'author'];
 }

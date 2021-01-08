@@ -37,7 +37,7 @@ class BlogPageModel extends BlogModel {
         'comment_count',
         'click_count', 'recommend', 'created_at'];
 
-    protected $append = ['url', 'term', 'user'];
+    protected array $append = ['url', 'term', 'user'];
 
     public static function query() {
         return parent::query()->select(self::SIMPLE_MODE);

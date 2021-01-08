@@ -16,6 +16,6 @@ namespace Module\Task\Domain\Model;
  */
 class LogPageModel extends TaskLogModel {
 
-    protected $append = ['time', 'task'];
+    protected array $append = ['time', 'task'];
 
 }

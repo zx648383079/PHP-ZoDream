@@ -19,7 +19,7 @@ namespace Module\Forum\Domain\Model;
 */
 class ThreadSimpleModel extends ThreadModel {
 
-    protected $append = ['url'];
+    protected array $append = ['url'];
 
     public function getUrlAttribute() {
 	    return url('./thread', ['id' => $this->id]);

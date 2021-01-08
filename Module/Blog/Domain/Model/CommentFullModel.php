@@ -22,5 +22,5 @@ namespace Module\Blog\Domain\Model;
  * @property integer $position
  */
 class CommentFullModel extends CommentModel {
-    protected $append = ['blog'];
+    protected array $append = ['blog'];
 }

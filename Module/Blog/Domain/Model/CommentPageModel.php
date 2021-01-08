@@ -22,5 +22,5 @@ namespace Module\Blog\Domain\Model;
  * @property integer $position
  */
 class CommentPageModel extends CommentModel {
-    protected $append = ['reply_count', 'replies'];
+    protected array $append = ['reply_count', 'replies'];
 }

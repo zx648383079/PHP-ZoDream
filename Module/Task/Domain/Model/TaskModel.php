@@ -24,7 +24,7 @@ use Zodream\Helpers\Time;
  */
 class TaskModel extends TaskEntity {
 
-    protected $append = ['last_at'];
+    protected array $append = ['last_at'];
 
     public function children() {
         return $this->hasMany(static::class, 'parent_id', 'id');

@@ -17,7 +17,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class FriendModel extends Model {
 
-    protected $append = ['user'];
+    protected array $append = ['user'];
 
     public static function tableName() {
         return 'chat_friend';
