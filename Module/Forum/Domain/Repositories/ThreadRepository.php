@@ -8,6 +8,35 @@ use Module\Forum\Domain\Model\ThreadPostModel;
 
 class ThreadRepository {
 
+    public static function getList(string $keywords = '', int $forum_id = 0) {
+        return ThreadModel::with('user', 'forum')->when(!empty($forum_id), function ($query) use ($forum_id) {
+                $query->where('forum_id', intval($forum_id));
+            })
+            ->when(!empty($keywords), function ($query) {
+                ThreadModel::searchWhere($query, 'title');
+            })->page();
+    }
+
+    public static function get(int $id) {
+        return ThreadModel::findOrThrow($id, '数据有误');
+    }
+
+    public static function save(array $data) {
+        $id = isset($data['id']) ? $data['id'] : 0;
+        unset($data['id']);
+        $model = ThreadModel::findOrNew($id);
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function remove(int $id) {
+        ThreadModel::where('id', $id)->delete();
+        ThreadPostModel::where('thread_id', $id)->delete();
+    }
+
     /**
      * 收藏
      * @param $id

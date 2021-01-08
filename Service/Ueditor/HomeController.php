@@ -14,8 +14,8 @@ class HomeController extends Controller {
 
 	protected function jsonReturn($data) {
 	    /** @var Json $json */
-        $json = $this->httpContext()->make(JsonResponse::class);
-		$callback = $this->httpContext()->make('request')->get('callback');
+        $json = $this->httpContext(JsonResponse::class);
+		$callback = $this->httpContext('request')->get('callback');
 		if (is_null($callback)) {
 			return $json->renderResponse($data, 'JSON');
 		}
