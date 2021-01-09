@@ -156,7 +156,7 @@ class Environment {
 	 */
 	public static function getFiles($path, $allowFiles = '.*', &$files = array()) {
 	    if (!is_dir($path)) {
-			return null;
+			return [];
 		}
 	    if(substr($path, strlen($path) - 1) != '/') {
 			$path .= '/';

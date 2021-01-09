@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Service\Api;
 
 use Exception;
@@ -25,7 +26,7 @@ class FileController extends Controller {
     }
 
     public function init() {
-        $this->configs = config()->file('Ueditor')['ueditor'];
+        $this->configs = config('ueditor');
     }
 
     public function indexAction() {
@@ -71,12 +72,14 @@ class FileController extends Controller {
             if (!$file->save()) {
                 return;
             }
+            $url = url()->asset($file->getFile()->getRelative(public_path()));
             $files[] = [
-                'url' => url()->asset($file->getFile()->getRelative(public_path())),
+                'url' => $url,
                 'title' => $file->getFile()->getName(),
                 'original' => $file->getName(),
                 'type' => '.'.$file->getType(),
-                'size' => $file->getSize()
+                'size' => $file->getSize(),
+                'thumb' => $url
             ];
         });
         if (empty($files)) {
@@ -114,17 +117,18 @@ class FileController extends Controller {
 
     /**
      * 列出文件
-     * @param string $allow
+     * @param array $allow
      * @param string $path
      * @throws Exception
      */
-    public function files($allow = '.*', $path = 'assets') {
+    public function files(array $allow = ['.*'], string $path = 'assets') {
         $allow = substr(str_replace('.', '|', implode('', $allow)), 1);
         $path = public_path($path)->getFullName();
         $files = Environment::getfiles($path, $allow);
         $page = new Page($files);
         $page->map(function ($item) {
            $item['url'] = url()->asset($item['url']);
+           $item['thumb'] = $item['url'];
            return $item;
         });
         return $this->renderPage($page);
@@ -143,12 +147,14 @@ class FileController extends Controller {
         if ($res['state'] !== 'SUCCESS') {
             return $this->renderFailure($res['state']);
         }
+        $url = url()->asset($res['url']);
         return $this->render([
-            'url' => url()->asset($res['url']),
+            'url' => $url,
             'title' => $res['title'],
             'original' => $res['original'],
             'type' => $res['type'],
-            'size' => $res['size']
+            'size' => $res['size'],
+            'thumb' => url()->asset('assets/images/thumb.jpg')
         ]);
     }
 }

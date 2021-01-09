@@ -16,8 +16,9 @@ class HomeController extends Controller {
 
     public function detailAction($id) {
         $forum = ForumModel::find($id);
-        $forum->classifies = ForumClassifyModel::where('forum_id', $id)
-            ->orderBy('id', 'asc')->all();
+        $forum->classifies;
+        $forum->moderators;
+        $forum->path = ForumModel::findPath($id);
         return $this->render($forum);
     }
 

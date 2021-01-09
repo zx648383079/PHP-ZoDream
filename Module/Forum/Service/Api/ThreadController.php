@@ -34,15 +34,10 @@ class ThreadController extends Controller {
         return $this->renderPage($items);
     }
 
-    public function postAction($thread, $user = 0) {
-        $post_list = ThreadPostModel::with('user')
-            ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', $user);
-            })
-            ->where('thread_id', $thread)
-            ->orderBy('grade', 'asc')
-            ->orderBy('created_at', 'asc')->page();
-        return $this->renderPage($post_list);
+    public function postAction(int $thread, int $user = 0) {
+        return $this->renderPage(
+            ThreadRepository::postList($thread, $user)
+        );
     }
 
     public function createAction($title, $content,
@@ -77,6 +72,11 @@ class ThreadController extends Controller {
 
     public function detailAction($id) {
         $thread = ThreadModel::find($id);
+        $thread->forum;
+        $thread->path = array_merge(ForumModel::findPath($thread->forum_id), [$thread->forum]);
+        $thread->digestable = $thread->canDigest();
+        $thread->highlightable = $thread->canHighlight();
+        $thread->closeable = $thread->canClose();
         return $this->render($thread);
     }
 

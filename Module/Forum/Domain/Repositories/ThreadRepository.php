@@ -5,6 +5,7 @@ use Exception;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
+use Module\Forum\Domain\Parsers\Parser;
 
 class ThreadRepository {
 
@@ -35,6 +36,21 @@ class ThreadRepository {
     public static function remove(int $id) {
         ThreadModel::where('id', $id)->delete();
         ThreadPostModel::where('thread_id', $id)->delete();
+    }
+
+    public static function postList(int $thread_id, int $user_id = 0) {
+        $items = ThreadPostModel::with('user', 'thread')
+            ->when($user_id > 0, function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })
+            ->where('thread_id', $thread_id)
+            ->orderBy('grade', 'asc')
+            ->orderBy('created_at', 'asc')->page();
+        foreach ($items as $item) {
+            $item->content = Parser::converter($item);
+            $item->deleteable = $item->thread->canRemovePost($item);
+        }
+        return $items;
     }
 
     /**

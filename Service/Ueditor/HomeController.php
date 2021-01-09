@@ -49,7 +49,7 @@ class HomeController extends Controller {
 	protected function fileList($allowFiles, $listSize, $path) {
 		$allowFiles = substr(str_replace('.', '|', join('', $allowFiles)), 1);
 
-		$request = $this->httpContext()->make('request');
+		$request = $this->httpContext('request');
 		/* 获取参数 */
 		$size = $request->get('size', $listSize);
 		$start = $request->get('start', 0);
