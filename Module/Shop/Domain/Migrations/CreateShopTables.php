@@ -451,6 +451,7 @@ class CreateShopTables extends Migration {
         })->append(ShippingGroupModel::tableName(), function (Table $table) {
             $table->set('id')->pk()->ai();
             $table->set('shipping_id')->int()->notNull();
+            $table->set('is_all')->bool()->defaultVal(0);
             $table->set('first_step')->float(10, 3)->defaultVal(0);
             $table->set('first_fee')->decimal(10, 2)->defaultVal(0);
             $table->set('additional')->float(10, 3)->defaultVal(0);

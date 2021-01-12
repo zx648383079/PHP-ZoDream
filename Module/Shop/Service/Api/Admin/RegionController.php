@@ -41,4 +41,11 @@ class RegionController extends Controller {
     public function treeAction() {
         return $this->renderData(RegionModel::cacheTree());
     }
+
+    public function searchAction(string $keywords) {
+        $model_list = RegionModel::when(!empty($keywords), function ($query) {
+                RegionModel::searchWhere($query, 'name');
+            })->page();
+        return $this->renderPage($model_list);
+    }
 }

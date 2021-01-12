@@ -38,6 +38,8 @@ class HomeController extends Controller {
         $data = $blog->toArray();
         $data['content'] = $blog->toHtml();
         $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
+        $data['previous'] = $blog->previous;
+        $data['next'] = $blog->next;
         return $this->render($data);
     }
 
