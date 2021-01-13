@@ -5,6 +5,7 @@ use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Models\ShippingRegionModel;
 use Module\Shop\Domain\Repositories\ShippingRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ShippingController extends Controller {
 
@@ -23,23 +24,27 @@ class ShippingController extends Controller {
     }
 
     public function detailAction($id) {
-        $model = ShippingModel::find($id);
-        return $this->render($model);
+        try {
+            return $this->render(
+                ShippingRepository::get($id)
+            );
+        } catch (\Exception $exception) {
+            return $this->renderFailure($exception->getMessage());
+        }
     }
 
-    public function saveAction() {
-        $model = new ShippingModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveAction(Input $input) {
+        try {
+            return $this->render(
+                ShippingRepository::save($input->get())
+            );
+        } catch (\Exception $exception) {
+            return $this->renderFailure($exception->getMessage());
         }
-        ShippingGroupModel::batchSave($model->id, request()->get('shipping'));
-        return $this->render($model);
     }
 
     public function deleteAction($id) {
-        ShippingModel::where('id', $id)->delete();
-        ShippingGroupModel::where('shipping_id', $id)->delete();
-        ShippingRegionModel::where('shipping_id', $id)->delete();
+        ShippingRepository::remove($id);
         return $this->renderData(true);
     }
 

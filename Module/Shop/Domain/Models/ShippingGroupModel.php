@@ -18,6 +18,7 @@ use Domain\Model\Model;
  * @property float $additional
  * @property float $additional_fee
  * @property float $free_step
+ * @property int $is_all
  */
 class ShippingGroupModel extends Model {
     public static function tableName() {
@@ -32,6 +33,7 @@ class ShippingGroupModel extends Model {
             'additional' => '',
             'additional_fee' => '',
             'free_step' => '',
+            'is_all' => '',
         ];
     }
 
@@ -44,7 +46,13 @@ class ShippingGroupModel extends Model {
             'additional' => '续件/续重',
             'additional_fee' => '续费',
             'free_step' => '免费标准',
+            'is_all' => '全地区',
         ];
+    }
+
+    public function regions() {
+        return $this->belongsToMany(RegionModel::class,
+            ShippingRegionModel::class, 'group_id', 'region_id');
     }
 
     public function getRegionIdsAttribute() {

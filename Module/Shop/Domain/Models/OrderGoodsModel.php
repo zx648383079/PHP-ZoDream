@@ -25,7 +25,7 @@ use Module\Shop\Domain\Models\Scene\Goods;
  */
 class OrderGoodsModel extends Model {
 
-    protected $append = ['status_label'];
+    protected array $append = ['status_label'];
 
     public static function tableName() {
         return 'shop_order_goods';
