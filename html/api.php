@@ -1,7 +1,8 @@
 <?php
 
-use Zodream\Service\Api;
+use Zodream\Service\Application;
 
 require_once dirname(__DIR__).'/Service/Bootstrap.php';
-$app = new Api(APP_DIR, 'Api');
-$app->autoResponse();
+$app = new Application(APP_DIR);
+$app->instance('app.module', 'Api');
+$app->listen();

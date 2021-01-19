@@ -1,7 +1,7 @@
 <?php
-use Tracy\Debugger;
-use Zodream\Service\Web;
+use Zodream\Service\Application;
 
 require_once dirname(__DIR__).'/Service/Bootstrap.php';
-$app = new Web(APP_DIR, 'Account');
-$app->autoResponse();
+$app = new Application(APP_DIR);
+$app->instance('app.module', 'Account');
+$app->listen();
