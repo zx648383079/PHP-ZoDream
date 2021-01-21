@@ -29,5 +29,5 @@ use Module\Shop\Domain\Models\OrderModel;
  */
 class Order extends OrderModel {
 
-    protected $append = ['goods', 'status_label'];
+    protected array $append = ['goods', 'status_label'];
 }

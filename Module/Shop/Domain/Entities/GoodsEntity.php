@@ -15,7 +15,7 @@ class GoodsEntity extends Entity {
     const SORT_ID = 4;
     const SORT_HOT = 5;
 
-    protected $append = ['shop'];
+    protected array $append = ['shop'];
 
     public static function tableName() {
         return 'shop_goods';

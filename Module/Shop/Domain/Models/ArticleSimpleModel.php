@@ -21,7 +21,7 @@ use Module\Shop\Domain\Entities\ArticleEntity;
  */
 class ArticleSimpleModel extends ArticleEntity {
 
-    protected $append = ['category'];
+    protected array $append = ['category'];
 
     const THUMB_MODE = ['id', 'title', 'thumb', 'cat_id', 'created_at', 'updated_at'];
 

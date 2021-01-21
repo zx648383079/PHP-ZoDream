@@ -43,9 +43,9 @@ use Module\Shop\Domain\Entities\GoodsEntity;
 class GoodsPageModel extends GoodsEntity {
 
 
-    protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'shop', 'category', 'brand', 'is_best', 'is_new', 'is_hot', 'stock'];
+    protected array $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'shop', 'category', 'brand', 'is_best', 'is_new', 'is_hot', 'stock'];
 
-    protected $append = ['category', 'brand'];
+    protected array $append = ['category', 'brand'];
 
     public function category() {
         return $this->hasOne(CategorySimpleModel::class, 'id', 'cat_id');

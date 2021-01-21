@@ -6,6 +6,8 @@ use Module\Career\Domain\Entities\CompanyEntity;
 use Module\Career\Domain\Entities\CompanyHrEntity;
 use Module\Career\Domain\Entities\EducationalExperienceEntity;
 use Module\Career\Domain\Entities\InfluenceEntity;
+use Module\Career\Domain\Entities\InterviewEntity;
+use Module\Career\Domain\Entities\InterviewLogEntity;
 use Module\Career\Domain\Entities\JobEntity;
 use Module\Career\Domain\Entities\JobExpectationsEntity;
 use Module\Career\Domain\Entities\JobLogEntity;
@@ -134,8 +136,27 @@ class CreateCareerTables extends Migration {
             $table->timestamps();
         })->append(JobLogEntity::tableName(), function(Table $table) {
             $table->set('id')->pk(true);
-            $table->set('job_id')->varchar()->notNull();
+            $table->set('job_id')->int()->notNull();
             $table->set('user_id')->int()->notNull();
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('状态');
+            $table->timestamps();
+        })->append(InterviewEntity::tableName(), function(Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('job_id')->int()->notNull();
+            $table->set('company_id')->int()->notNull();
+            $table->set('hr_id')->int()->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('address')->varchar()->notNull();
+            $table->set('interview_at')->int()->notNull()->comment('面试时间');
+            $table->set('end_at')->int()->notNull()->comment('面试通知截止时间');
+            $table->set('status')->tinyint(1)->defaultVal(0)->comment('状态');
+            $table->timestamps();
+        })->append(InterviewLogEntity::tableName(), function(Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('interview_id')->int()->notNull();
+            $table->set('user_id')->int()->notNull();
+            $table->set('type')->tinyint(1)->defaultVal(0);
+            $table->set('data')->varchar()->defaultVal('')->comment('附加数据');
             $table->set('status')->tinyint(1)->defaultVal(0)->comment('状态');
             $table->timestamps();
         })->autoUp();

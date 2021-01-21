@@ -2,7 +2,6 @@
 namespace Service\Home;
 
 
-
 class HomeController extends Controller {
     public function indexAction() {
         return $this->show();

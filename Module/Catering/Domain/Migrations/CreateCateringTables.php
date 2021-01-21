@@ -1,15 +1,15 @@
 <?php
 namespace Module\Catering\Domain\Migrations;
 
+use Module\Catering\Domain\Entities\AddressEntity;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
-use Module\Catering\Domain\Model\BulletinModel;
 
 
 class CreateCateringTables extends Migration {
 
     public function up() {
-        $this->append(BulletinModel::tableName(), function(Table $table) {
+        $this->append(AddressEntity::tableName(), function(Table $table) {
             $table->set('id')->pk()->ai()->defaultVal('');
             $table->set('title')->varchar(100)->defaultVal('');
             $table->set('content')->varchar(255)->defaultVal('');

@@ -24,7 +24,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class CommentModel extends Model {
 
-    protected $append = ['user', 'images', 'goods'];
+    protected array $append = ['user', 'images', 'goods'];
 
     public static function tableName() {
         return 'shop_comment';

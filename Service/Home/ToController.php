@@ -2,7 +2,6 @@
 namespace Service\Home;
 
 use Module\Counter\Domain\Events\JumpOut;
-use Zodream\Infrastructure\Http\Response;
 
 class ToController extends Controller {
     public $layout = false;
@@ -12,7 +11,6 @@ class ToController extends Controller {
      * @path /to
      * @method get
      * @param string $url
-     * @return Response
      * @throws \Exception
      */
     public function indexAction(string $url = null) {

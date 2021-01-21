@@ -36,9 +36,9 @@ class GoodsSimpleModel extends GoodsEntity {
 
     const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'cat_id', 'brand_id', 'status'];
 
-    protected $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'shop', 'url', 'wap_url'];
+    protected array $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'shop', 'url', 'wap_url'];
 
-    protected $append = ['shop', 'url', 'wap_url'];
+    protected array $append = ['shop', 'url', 'wap_url'];
 
     public function getUrlAttribute() {
         return url('./goods', ['id' => $this->id]);

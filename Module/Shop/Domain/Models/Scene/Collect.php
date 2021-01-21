@@ -14,7 +14,7 @@ use Module\Shop\Domain\Models\GoodsSimpleModel;
  */
 class Collect extends CollectModel {
 
-    protected $append = ['goods'];
+    protected array $append = ['goods'];
 
     public function goods() {
         return $this->hasOne(GoodsSimpleModel::class, 'id', 'goods_id');
