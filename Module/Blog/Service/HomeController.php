@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service;
 
 use Module\Auth\Domain\Model\AccountLogModel;
@@ -21,7 +22,7 @@ class HomeController extends Controller {
     }
 
     public function indexAction(
-        $sort = 'new', $category = null, $keywords = null,
+        string $sort = 'new', $category = null, $keywords = null,
         $user = null, $language = null, $programming_language = null,
         $tag = null, $id = 0) {
         if ($id > 0) {

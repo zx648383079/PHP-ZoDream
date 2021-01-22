@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Api;
 
 use Module\Blog\Domain\Model\BlogContentModel;
@@ -17,9 +18,10 @@ class HomeController extends Controller {
         ];
     }
 
-    public function indexAction($id = 0, $sort = 'new', $category = null, $keywords = null,
-                                $user = null, $language = null, $programming_language = null,
-                                $tag = null, $per_page = 20) {
+    public function indexAction(int $id = 0, string $sort = 'new', int $category = 0,
+                                string $keywords = '',
+                                int $user = 0, string $language = '', string $programming_language = '',
+                                string $tag = '', int $per_page = 20) {
         if ($id > 0) {
             return $this->detailAction($id);
         }

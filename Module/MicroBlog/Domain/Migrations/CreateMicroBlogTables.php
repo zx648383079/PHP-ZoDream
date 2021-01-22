@@ -18,7 +18,7 @@ class CreateMicroBlogTables extends Migration {
      */
     public function up() {
         $this->append(MicroBlogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int(10);
             $table->set('content')->varchar(140)->notNull();
             $table->set('open_type')->tinyint(1)->defaultVal(0);
@@ -30,12 +30,12 @@ class CreateMicroBlogTables extends Migration {
             $table->set('source')->varchar(30)->defaultVal('')->comment('来源');
             $table->timestamps();
         })->append(AttachmentModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('micro_id')->int()->notNull();
             $table->set('thumb')->varchar()->notNull();
             $table->set('file')->varchar()->notNull();
         })->append(CommentModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('content')->varchar()->notNull();
             $table->set('parent_id')->int(10);
             $table->set('user_id')->int(10)->defaultVal(0);
@@ -44,7 +44,7 @@ class CreateMicroBlogTables extends Migration {
             $table->set('disagree')->int(10)->defaultVal(0);
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('type')->tinyint(3)->defaultVal(0);
             $table->set('id_value')->int(10)->notNull();
             $table->set('user_id')->int(10)->notNull();
