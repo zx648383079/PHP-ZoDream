@@ -4,7 +4,6 @@ namespace Module\SEO\Service\Api;
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Events\OptionUpdated;
 use Module\SEO\Domain\Repositories\SEORepository;
-use phpDocumentor\Reflection\Types\This;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class SettingController extends Controller {

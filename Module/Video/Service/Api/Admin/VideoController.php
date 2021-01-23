@@ -12,6 +12,16 @@ class VideoController extends Controller {
         );
     }
 
+    public function detailAction(int $id) {
+        try {
+            return $this->render(
+                VideoRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function changeAction(int $id, int $status) {
         try {
             $this->render(

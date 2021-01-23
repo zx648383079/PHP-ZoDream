@@ -2,6 +2,8 @@
 namespace Module\Video\Domain\Models;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Video\Domain\Repositories\VideoRepository;
 
 /**
  * 短视频
@@ -23,6 +25,9 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class VideoModel extends Model {
+
+    protected array $append = ['is_liked'];
+
     public static function tableName() {
         return 'video_video';
     }
@@ -64,5 +69,17 @@ class VideoModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function music() {
+        return $this->hasOne(MusicModel::class, 'id', 'music_id');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function getIsLikedAttribute() {
+        return VideoRepository::isLiked($this->id);
     }
 }

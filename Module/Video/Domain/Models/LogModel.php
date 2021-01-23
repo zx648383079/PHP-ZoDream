@@ -14,6 +14,10 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class LogModel extends Model {
+
+    const TYPE_VIDEO = 0;
+    const ACTION_LIKE = 0;
+
     public static function tableName() {
         return 'video_log';
     }

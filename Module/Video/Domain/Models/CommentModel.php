@@ -2,6 +2,7 @@
 namespace Module\Video\Domain\Models;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * 短视频
@@ -43,6 +44,10 @@ class CommentModel extends Model {
             'disagree' => 'Disagree',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
 }
