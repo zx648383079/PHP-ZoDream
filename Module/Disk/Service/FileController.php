@@ -80,6 +80,7 @@ class FileController extends Controller {
     }
 
     public function m3u8Action($id, Output $response) {
+        $response->allowCors();
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -136,12 +137,33 @@ class FileController extends Controller {
     }
 
     public function tsAction($name, Output $response) {
+        $response->allowCors();
         $length = strlen($name);
         $id = substr($name, 0, $length - 6);
         $name = substr($name, $length - 6);
         $file = DiskRepository::driver()->cacheFolder()
             ->file(sprintf('%s/%s-%s', $id, $id, $name));
         return $response->file($file);
+    }
+
+    /**
+     * 输出字幕
+     * @param $id
+     * @param Output $response
+     * @return mixed
+     */
+    public function subtitlesAction($id, Output $response) {
+        try {
+            $this->enableThrow();
+            $data = DiskRepository::driver()->file($id);
+        } catch (\Exception $ex) {
+            $response->header->setContentDisposition('error.ass');
+            return $response->custom($ex->getMessage(), 'ass');
+        }
+        $data['path']->setExtension($data['extension'])
+            ->setName($data['name']);
+        $response->file($data['path']);
+        return $response->header('Content-Type', 'text/'.$data['extension']);
     }
 
     public function musicAction($id, Output $response) {
@@ -216,13 +238,13 @@ class FileController extends Controller {
         if (!$thumbFile->exist()) {
             FFmpeg::factory(null, $video)
                 ->overwrite()
-                ->thumb('200x200', '02:02:00')
+                ->thumb('200x200', '00:02:00')
                 ->output($thumbFile)
                 ->ready()->start()->join()->stop();
         }
         $response->header->setContentType('jpeg')
             ->setContentDisposition($data['name'].'_thumb.jpg');
-        return $response->setParameter($data['path']);
+        return $response->setParameter($thumbFile);
     }
 
     private function enableThrow() {

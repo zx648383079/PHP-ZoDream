@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
 use Module\Disk\Domain\Model\FileModel;
@@ -10,7 +11,7 @@ use Zodream\Html\Page;
 
 class Location extends BaseDiskAdapter implements IDiskAdapter {
 
-    public function catalog($id, $path) {
+    public function catalog($id, $path): Page {
         $root = $this->root();
         $folder = empty($id) ? $root : $root->directory($id);
         $items = $folder->children();
@@ -95,7 +96,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
             throw new \Exception('文件不存在');
         }
         $ext = strtolower($file->getExtension());
-        return [
+        $data = [
             'id' => $id,
             'name' => $file->getName(),
             'size' => $file->size(),
@@ -103,5 +104,47 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
             'type' => FileModel::getType($ext),
             'path' => $file,
         ];
+        if ($data['type'] === FileModel::TYPE_VIDEO) {
+            $subtitles = $this->getSubtitles($file);
+            if (!empty($subtitles)) {
+                $data['subtitles'] = array_map(function (File $item) use ($root) {
+                    return [
+                        'id' => $item->getRelative($root),
+                        'lang' => 'zh-cn',
+                        'label' => '简体中文',
+                    ];
+                }, $subtitles);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 获取字幕
+     * @param File $file
+     * @return array
+     */
+    protected function getSubtitles(File $file) {
+        $extItems = config('disk.subtitles');
+        if (empty($extItems)) {
+            return [];
+        }
+        if (!is_array($extItems)) {
+            $extItems = explode('|', $extItems);
+        }
+        $items = [];
+        $name = $file->getNameWithoutExtension();
+        $file->getDirectory()->map(function ($item) use (&$items, $name, $extItems) {
+            if (!$item instanceof File) {
+                return;
+            }
+            if (empty($item->getExtension()) || !in_array(strtolower($item->getExtension()), $extItems)) {
+                return;
+            }
+            if ($name === $item->getNameWithoutExtension()) {
+                $items[] = $item;
+            }
+        });
+        return $items;
     }
 }

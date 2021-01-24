@@ -20,6 +20,18 @@ class VideoController extends Controller {
         );
     }
 
+    /**
+     * 无尽模式
+     * @param string $keywords
+     * @param int $user
+     * @param int $music
+     */
+    public function moreAction(string $keywords = '', int $user = 0, int $music = 0) {
+        return $this->renderPage(
+            VideoRepository::moreList($keywords, $user, $music)
+        );
+    }
+
     public function detailAction(int $id) {
         try {
             return $this->render(

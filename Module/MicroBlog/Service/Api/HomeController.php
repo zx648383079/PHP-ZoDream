@@ -53,6 +53,8 @@ class HomeController extends Controller {
 
     public function detailAction($id) {
         $blog = MicroBlogModel::find($id);
+        $blog->user;
+        $blog->attachment;
         return $this->render($blog);
     }
 

@@ -34,6 +34,12 @@ class DiskController extends Controller {
 
     public function listAction($id = 0, $path = '', $type = '') {
         $data = DiskRepository::driver()->catalog($id, $path);
+        $data->map(function ($file) {
+            if (isset($file['file']) && isset($file['file']['url']) && !empty($file['file']['url'])) {
+                $file['file']['url'] = url('./file', ['id' => $file['id']]);
+            }
+            return $file;
+        });
         return $this->renderPage($data);
     }
 

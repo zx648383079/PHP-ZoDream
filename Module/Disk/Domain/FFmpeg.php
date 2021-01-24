@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain;
 
 use Exception;
@@ -9,7 +10,7 @@ class FFmpeg {
     /**
      * @var string
      */
-    protected static $driver		=	'ffmpeg';
+    public static $driver = 'ffmpeg';
     /**
      *
      */
@@ -329,8 +330,8 @@ class FFmpeg {
      *   @return	static
      *   @access	public
      */
-    public function frameRate( $r ) {
-        if( !empty( $r ) && preg_match( '/^([0-9]+\/[0-9]+)$/' , $r ) XOR is_numeric( $r ) ) {
+    public function frameRate($r) {
+        if(!empty($r) && (is_numeric($r) || preg_match( '/^([0-9]+\/[0-9]+)$/', $r)))  {
             $this->set('r', $r,false);
         }
         return $this;

@@ -245,8 +245,7 @@ class MicroRepository {
             'user_id' => auth()->id(),
             'type' => LogModel::TYPE_COMMENT,
             'id_value' => $id,
-            'action' => ['in', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]]
-        ])->first();
+        ])->whereIn('action', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE])->first();
     }
 
     public static function agree($id) {

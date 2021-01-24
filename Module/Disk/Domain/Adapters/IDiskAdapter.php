@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
+
+use Zodream\Html\Page;
 
 interface IDiskAdapter {
 
-    public function catalog($id, $path);
+    public function catalog($id, $path): Page;
 
     public function remove($id);
 

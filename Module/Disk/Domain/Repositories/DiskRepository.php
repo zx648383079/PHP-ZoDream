@@ -4,6 +4,7 @@ namespace Module\Disk\Domain\Repositories;
 use Module\Disk\Domain\Adapters\BaseDiskAdapter;
 use Module\Disk\Domain\Adapters\Database;
 use Module\Disk\Domain\Adapters\IDiskAdapter;
+use Module\Disk\Domain\FFmpeg;
 
 class DiskRepository {
 
@@ -21,6 +22,9 @@ class DiskRepository {
             'cache' => 'data/disk/cache/',
             'disk' => 'data/disk/file/'
         ]);
+        if (isset($configs['ffmpeg'])) {
+            FFmpeg::$driver = $configs['ffmpeg'];
+        }
         $driver = $configs['driver'];
         return static::$driver = new $driver($configs);
     }

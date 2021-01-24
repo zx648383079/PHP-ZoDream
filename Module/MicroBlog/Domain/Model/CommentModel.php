@@ -54,7 +54,7 @@ class CommentModel extends Model {
     }
 
     public function replies() {
-	    return $this->hasMany(static::class, 'parent_id');
+	    return $this->hasMany(static::class, 'parent_id')->with('user');
     }
 
     public function micro() {
@@ -70,8 +70,7 @@ class CommentModel extends Model {
             'user_id' => auth()->id(),
             'type' => LogModel::TYPE_COMMENT,
             'id_value' => $this->id,
-            'action' => ['in', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]]
-        ])->first('action');
+        ])->whereIn('action', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE])->first('action');
 	    return !$log ? 0 : $log->action;
     }
 }

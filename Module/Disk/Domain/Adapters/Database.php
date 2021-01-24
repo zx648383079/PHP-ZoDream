@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
+use Zodream\Html\Page;
 
 class Database extends BaseDiskAdapter implements IDiskAdapter {
 
-    public function catalog($id, $path) {
+    public function catalog($id, $path): Page {
         return DiskModel::with('file')
             ->auth()->where('parent_id', $id)
             ->where('deleted_at', 0)

@@ -22,7 +22,7 @@ JS;
 
         view()->registerJsFile([
             '@video.min.js',
-            '@videojs-contrib-hls.min.js'
+            '@videojs-http-streaming.min.js'
         ])->registerCssFile('@video-js.min.css')
             ->registerJs($js);
         return <<<HTML

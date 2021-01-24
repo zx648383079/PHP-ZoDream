@@ -16,7 +16,7 @@ class CommentController extends Controller {
 
     public function indexAction(string $keywords = '', int $video = 0, int $user = 0) {
         return $this->renderPage(
-            CommentRepository::getList($keywords, $video, $user)
+            CommentRepository::getAllList($keywords, $video, $user)
         );
     }
 

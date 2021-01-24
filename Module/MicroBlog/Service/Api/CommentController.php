@@ -18,7 +18,7 @@ class CommentController extends Controller {
 
     public function indexAction($id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
         list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
-        $comment_list = CommentModel::with('replies')
+        $comment_list = CommentModel::with('replies', 'user')
             ->where([
                 'micro_id' => intval($id),
                 'parent_id' => intval($parent_id)
@@ -27,9 +27,9 @@ class CommentController extends Controller {
     }
 
     public function saveAction($content,
-                               $micro_id,
-                               $parent_id = 0,
-                               $is_forward = false) {
+                               int $micro_id,
+                               int $parent_id = 0,
+                               bool $is_forward = false) {
         try {
             $model = MicroRepository::comment($content,
                 $micro_id,

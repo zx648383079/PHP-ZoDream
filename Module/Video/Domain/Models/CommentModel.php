@@ -50,4 +50,7 @@ class CommentModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
+    public function replies() {
+        return $this->hasMany(static::class, 'parent_id')->with('user');
+    }
 }

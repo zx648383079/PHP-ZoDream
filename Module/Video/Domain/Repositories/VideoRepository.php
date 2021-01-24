@@ -17,6 +17,23 @@ class VideoRepository {
         })->page();
     }
 
+    /**
+     * 无尽模式
+     * @param string $keywords
+     * @param int $user
+     * @param int $music
+     * @return mixed
+     */
+    public static function moreList(string $keywords = '', int $user = 0, int $music = 0) {
+        return VideoModel::with('user', 'music')->when(!empty($keywords), function ($query) {
+            VideoModel::searchWhere($query, ['content']);
+        })->when(!empty($user), function ($query) use ($user) {
+            $query->where('user_id', $user);
+        })->when(!empty($music), function ($query) use ($music) {
+            $query->where('music_id', $music);
+        })->page();
+    }
+
     public static function get(int $id) {
         $model = VideoModel::findOrThrow($id, '数据有误');
         $model->user;

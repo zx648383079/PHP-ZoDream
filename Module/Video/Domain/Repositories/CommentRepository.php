@@ -17,6 +17,16 @@ class CommentRepository {
         })->page();
     }
 
+    public static function getAllList(string $keywords = '', int $video = 0, int $user = 0) {
+        return CommentModel::with('user', 'replies')->when(!empty($keywords), function ($query) {
+            CommentModel::searchWhere($query, ['content']);
+        })->when($video > 0, function ($query) use ($video) {
+            $query->where('video_id', $video);
+        })->when(!empty($user), function ($query) use ($user) {
+            $query->where('user_id', $user);
+        })->page();
+    }
+
     public static function remove(int $id) {
         CommentModel::where('id', $id)->orWhere('parent_id', $id)->delete();
     }
