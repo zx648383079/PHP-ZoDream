@@ -5,6 +5,7 @@ use Module\Disk\Domain\App\Ipa;
 use Module\Disk\Domain\FFmpeg;
 use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Repositories\DiskRepository;
+use Module\Disk\Domain\WebVTT;
 use Zodream\Image\Base\Box;
 use Zodream\Image\Base\Font;
 use Zodream\Image\Base\Point;
@@ -153,17 +154,18 @@ class FileController extends Controller {
      * @return mixed
      */
     public function subtitlesAction($id, Output $response) {
+        $response->allowCors();
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
         } catch (\Exception $ex) {
-            $response->header->setContentDisposition('error.ass');
-            return $response->custom($ex->getMessage(), 'ass');
+            $vtt = new WebVTT('error', [0, 60, $ex->getMessage()]);
+            return $response->export($vtt);
         }
         $data['path']->setExtension($data['extension'])
             ->setName($data['name']);
-        $response->file($data['path']);
-        return $response->header('Content-Type', 'text/'.$data['extension']);
+        $vtt = new WebVTT($data['name'], WebVTT::parseCuesFromFile($data['path'], $data['extension']));
+        return $response->export($vtt);
     }
 
     public function musicAction($id, Output $response) {
@@ -206,7 +208,7 @@ class FileController extends Controller {
             $image = new Image();
             $image->instance()->create(new Box(200, 100), '#fff');
             $image->instance()->text($ex->getMessage(),
-                new Font((string)app_path()->file('data/fonts/YaHei.ttf'), 30, '#333'),
+                new Font((string)app_path()->file(config('disk.font')), 30, '#333'),
                 new Point(30, 50));
             return $response->image($image);
         }
@@ -226,7 +228,7 @@ class FileController extends Controller {
             $image = new Image();
             $image->instance()->create(new Box(200, 100), '#fff');
             $image->instance()->text($ex->getMessage(),
-                new Font((string)app_path()->file('data/fonts/YaHei.ttf'), 30, '#333'),
+                new Font((string)app_path()->file(config('disk.font')), 30, '#333'),
                 new Point(30, 50));
             return $response->image($image);
         }
@@ -238,7 +240,7 @@ class FileController extends Controller {
         if (!$thumbFile->exist()) {
             FFmpeg::factory(null, $video)
                 ->overwrite()
-                ->thumb('200x200', '00:02:00')
+                ->thumb('', 4)
                 ->output($thumbFile)
                 ->ready()->start()->join()->stop();
         }

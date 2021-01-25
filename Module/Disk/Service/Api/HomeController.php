@@ -22,19 +22,37 @@ class HomeController extends Controller {
         if (empty($url)) {
             return $this->renderFailure('网址必传');
         }
-        $token = md5(sprintf('%s-%s-%s', is_array($url) ? implode('-', $url) : $url, time(), auth()->id()));
-        cache()->store('disk')->set($token, auth()->id(), 3600);
-        $cb = function ($url) use ($token) {
-            if (empty($url)) {
-                return '';
-            }
-            $uri = new Uri($url);
-            $uri->addData('token', $token);
-            return (string)$uri;
-        };
-        if (!is_array($url)) {
-            return $this->renderData($cb($url));
+        try {
+            return $this->renderData(
+                DiskRepository::allowUrl($url)
+            );
+        } catch (Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData(array_map($cb, $url));
+    }
+
+    public function fileAction($id) {
+        try {
+            $disk = DiskRepository::driver()->file($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        foreach ([
+            'thumb', 'url', 'subtitles'
+                 ] as $key) {
+            if (!isset($disk[$key]) || empty($disk[$key])) {
+                continue;
+            }
+            if ($key !== 'subtitles') {
+                $disk[$key] = DiskRepository::allowUrl($disk[$key]);
+                continue;
+            }
+            $disk[$key] = array_map(function ($item) {
+                $item['url'] = DiskRepository::allowUrl(url('./file/subtitles', ['id' => $item['id']]));
+                return $item;
+            }, $disk[$key]);
+        }
+        unset($disk['path']);
+        return $this->render($disk);
     }
 }

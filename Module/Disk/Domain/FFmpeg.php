@@ -10,22 +10,22 @@ class FFmpeg {
     /**
      * @var string
      */
-    public static $driver = 'ffmpeg';
+    public static string $driver = 'ffmpeg';
     /**
      *
      */
-    private $STD = ' 2<&1';
+    private string $STD = ' 2<&1';
     /**
      *
      */
-    private $quickMethods = array(
+    private array $quickMethods = array(
         'sameq'
     );
 
     /**
      *
      */
-    private $as		=	array(
+    private array $as		=	array(
         'b'			=>	'bitrate',
         'r'			=>	'frameRate',
         'fs'		=>	'fileSizeLimit',
@@ -47,7 +47,7 @@ class FFmpeg {
     /**
      *
      */
-    private $FFmpegOptionsAS = array(
+    private array $FFmpegOptionsAS = array(
         'position'			=>	'ss',
         'duration'			=>	't',
         'filename'			=>	'i',
@@ -59,11 +59,11 @@ class FFmpeg {
     /**
      *
      */
-    private $options	=	array();
+    private array $options	=	array();
     /**
      *
      */
-    private $fixForceFormat = array(
+    private array $fixForceFormat = array(
         'ogv'	=>	'ogg',
         'jpeg'	=>	'mjpeg',
         'jpg'	=>	'mjpeg',
@@ -77,7 +77,7 @@ class FFmpeg {
      * @param null $input
      * @return static
      */
-    public static function factory($driver = null, $input = null) {
+    public static function factory(?string $driver = null, $input = null) {
         return new static($driver, $input);
     }
 
@@ -124,7 +124,7 @@ class FFmpeg {
      * @param bool $input
      * @throws Exception
      */
-    public function __construct($driver = null, $input = false ) {
+    public function __construct(?string $driver = null, $input = false ) {
         $this->setDriver( $driver );
         if (!empty($input)) {
             $this->input( $input );
@@ -243,11 +243,11 @@ class FFmpeg {
      */
     public function thumb ($size, $start, $videoFrames = 1) {
         //$input = false;
-        if (!is_numeric( $videoFrames ) OR $videoFrames <= 0) {
+        if (!is_numeric($videoFrames) || $videoFrames <= 0) {
             $videoFrames = 1;
         }
         $this->audioDisable ();
-        $this->size ($size);
+        $this->size($size);
         $this->position ($start);
         $this->videoFrames ($videoFrames);
         $this->frameRate (1);
@@ -341,7 +341,7 @@ class FFmpeg {
      *   @return	static
      *   @access	public
      */
-    public function size( $s ) {
+    public function size($s) {
         if (!empty($s) && preg_match( '/^([0-9]+x[0-9]+)$/', $s)) {
             $this->set('s', $s,false);
         }
@@ -354,8 +354,8 @@ class FFmpeg {
      *   @return	static
      *   @access	public
      */
-    public function position( $ss ) {
-        return $this->set('ss',$ss,false);
+    public function position($ss) {
+        return $this->set('ss', $ss, false);
     }
     /**
      * 当用作输入选项（之前-i）时，限制从输入文件读取的数据的持续时间。 当用作输出选项时（在输出url之前），在持续时间达到持续时间后停止输出。
@@ -493,7 +493,7 @@ class FFmpeg {
      *   @param	string	ffmpeg
      *   @access	public
      */
-    public function setDriver($driver) {
+    public function setDriver(?string $driver) {
         if (!empty($driver)) {
             self::$driver = $driver;
         }
@@ -501,13 +501,13 @@ class FFmpeg {
     }
     /**
      *	@param string	$key
-     *	@param string	$value
-     *	@param boolen	$append
+     *	@param mixed	$value
+     *	@param bool	$append
      *	@return static
      */
-    public function set( $key, $value = null , $append = false ) {
+    public function set(string $key, $value = null, bool $append = false ) {
         $key = preg_replace( '/^(\-+)/' , '' , $key );
-        if(empty( $key ) ) {
+        if(empty($key) ) {
             return $this;
         }
         if( array_key_exists( $key , $this->FFmpegOptionsAS ) ) {
@@ -532,7 +532,7 @@ class FFmpeg {
      *	@param string	$key
      *	@return static
      */
-    public function _unset( $key ) {
+    public function _unset(string $key ) {
         if( array_key_exists( $key , $this->options ) ) {
             unset( $this->options[ $key ] ) ;
         }
@@ -552,7 +552,7 @@ class FFmpeg {
      *   @return	static
      *   @access	public
      */
-    public function logLevel( $level = 'verbose' ) {
+    public function logLevel(string $level = 'verbose') {
         $level = strtolower( $level );
         if( in_array( $level, array('quiet', 'panic', 'fatal', 'error', 'warning', 'info', 'verbose', 'debug') ) ) {
             return $this->set('loglevel',$level );

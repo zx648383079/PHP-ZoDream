@@ -88,22 +88,18 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         // TODO: Implement move() method.
     }
 
-    public function file($id)
+    public function file($id): array
     {
         $root = $this->root();
         $file = $root->file($id);
         if (!$file->exist()) {
             throw new \Exception('文件不存在');
         }
-        $ext = strtolower($file->getExtension());
-        $data = [
+        $data = array_merge($this->formatFile($file, $id), [
             'id' => $id,
             'name' => $file->getName(),
-            'size' => $file->size(),
-            'extension' => $ext,
-            'type' => FileModel::getType($ext),
             'path' => $file,
-        ];
+        ]);
         if ($data['type'] === FileModel::TYPE_VIDEO) {
             $subtitles = $this->getSubtitles($file);
             if (!empty($subtitles)) {

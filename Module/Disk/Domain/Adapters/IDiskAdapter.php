@@ -22,5 +22,5 @@ interface IDiskAdapter {
 
     public function move(array $data);
 
-    public function file($id);
+    public function file($id): array;
 }

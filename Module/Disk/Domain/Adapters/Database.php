@@ -4,6 +4,7 @@ namespace Module\Disk\Domain\Adapters;
 
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
+use Zodream\Disk\File;
 use Zodream\Html\Page;
 
 class Database extends BaseDiskAdapter implements IDiskAdapter {
@@ -53,7 +54,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         // TODO: Implement move() method.
     }
 
-    public function file($id)
+    public function file($id): array
     {
         $model = DiskModel::find($id);
         if (empty($model)) {
@@ -66,13 +67,26 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         if (!$file->exist()) {
             throw new \Exception('文件不存在');
         }
-        return [
+        $data = array_merge($this->formatFile($model->file, $model->id), [
             'id' => $id,
             'name' => $model->name,
-            'size' => $model->file->size(),
-            'extension' => $model->file->extension,
-            'type' => $model->file->type,
             'path' => $file,
+        ]);
+        return $data;
+    }
+
+    private function formatFile(FileModel $item, $fileId) {
+        $data = [
+            'size' => $item->size,
+            'extension' => strtolower($item->extension),
+            'type' => $item->type,
         ];
+        if ($data['type'] === FileModel::TYPE_IMAGE) {
+            $data['thumb'] = $data['url'] = url('./file/image', ['id' => $fileId]);
+        } elseif ($data['type'] === FileModel::TYPE_VIDEO) {
+            $data['thumb'] = url('./file/thumb', ['id' => $fileId]);
+            $data['url'] = url('./file/m3u8', ['id' => $fileId]);
+        }
+        return $data;
     }
 }
