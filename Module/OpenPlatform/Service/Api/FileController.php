@@ -5,6 +5,7 @@ namespace Module\OpenPlatform\Service\Api;
 use Exception;
 use Infrastructure\Environment;
 use Infrastructure\Uploader;
+use Module\Disk\Domain\FFmpeg;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 use Zodream\Html\Page;
@@ -148,13 +149,34 @@ class FileController extends Controller {
             return $this->renderFailure($res['state']);
         }
         $url = url()->asset($res['url']);
+        $ext = strtolower(strrchr($res['original'], '.'));
+        $thumb = url()->asset('assets/images/thumb.jpg');
+        if (in_array($ext, $this->configs['imageAllowFiles'])) {
+            $thumb = $ext;
+        } elseif (in_array($ext, $this->configs['videoAllowFiles'])) {
+            try {
+                $videoFile = public_path($res['url']);
+                $thumbFile = $videoFile->getDirectory()
+                    ->file($videoFile->getNameWithoutExtension().'_thumb.jpg');
+                if (!$thumbFile->exist()) {
+                    FFmpeg::factory(config('disk.ffmpeg'), $videoFile)
+                        ->overwrite()
+                        ->thumb('', 4)
+                        ->output($thumbFile)
+                        ->ready()->start()->join()->stop();
+                }
+                if ($thumbFile->exist()) {
+                    $thumb = url()->asset($thumbFile->getRelative(public_path()));
+                }
+            } catch (Exception) {}
+        }
         return $this->render([
             'url' => $url,
             'title' => $res['title'],
             'original' => $res['original'],
             'type' => $res['type'],
             'size' => $res['size'],
-            'thumb' => url()->asset('assets/images/thumb.jpg')
+            'thumb' => $thumb,
         ]);
     }
 }

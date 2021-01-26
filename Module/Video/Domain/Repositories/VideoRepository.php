@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Repositories;
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Video\Domain\Models\LogModel;
 use Module\Video\Domain\Models\VideoModel;
 
@@ -113,5 +114,17 @@ class VideoRepository {
             throw new \Exception('无权删除此视频');
         }
         $model->delete();
+    }
+
+    public static function user(int $id): array {
+        $user = UserSimpleModel::findOrThrow($id, '用户不存在');
+        $data = $user->toArray();
+        $res = VideoModel::query()->where('user_id', $id)
+            ->asArray()
+            ->first('COUNT(id) as video_count, SUM(like_count) as like_count');
+        foreach ($res as $k => $v) {
+            $data[$k] = intval($v);
+        }
+        return $data;
     }
 }

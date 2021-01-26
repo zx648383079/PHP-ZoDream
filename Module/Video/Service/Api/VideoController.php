@@ -82,4 +82,14 @@ class VideoController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function userAction(int $id) {
+        try {
+            return $this->render(
+                VideoRepository::user($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }
