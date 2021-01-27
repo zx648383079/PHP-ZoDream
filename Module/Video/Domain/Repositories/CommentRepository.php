@@ -18,7 +18,8 @@ class CommentRepository {
     }
 
     public static function getAllList(string $keywords = '', int $video = 0, int $user = 0) {
-        return CommentModel::with('user', 'replies')->when(!empty($keywords), function ($query) {
+        return CommentModel::with('user', 'replies')->where('parent_id', 0)
+            ->when(!empty($keywords), function ($query) {
             CommentModel::searchWhere($query, ['content']);
         })->when($video > 0, function ($query) use ($video) {
             $query->where('video_id', $video);
@@ -38,7 +39,7 @@ class CommentRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        VideoModel::query()->where('id', $model->id)
+        VideoModel::query()->where('id', $model->video_id)
             ->updateOne('comment_count');
         return $model;
     }
