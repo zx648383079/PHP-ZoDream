@@ -18,7 +18,7 @@ use Zodream\Helpers\Json;
  */
 class AttributeUniqueModel extends AttributeEntity {
 
-    protected $append = ['attr_item'];
+    protected array $append = ['attr_item'];
 
     /**
      * 补录默认选中的唯一属性

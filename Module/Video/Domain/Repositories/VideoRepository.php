@@ -8,13 +8,15 @@ use Module\Video\Domain\Models\VideoModel;
 
 class VideoRepository {
 
-    public static function getList(string $keywords = '', int $user = 0, int $music = 0) {
+    public static function getList(string $keywords = '', int $user = 0, int $music = 0, $id = null) {
         return VideoModel::with('user', 'music')->when(!empty($keywords), function ($query) {
             VideoModel::searchWhere($query, ['content']);
         })->when(!empty($user), function ($query) use ($user) {
             $query->where('user_id', $user);
         })->when(!empty($music), function ($query) use ($music) {
             $query->where('music_id', $music);
+        })->when(!empty($id), function ($query) use ($id) {
+            $query->whereIn('id', (array)$id);
         })->page();
     }
 

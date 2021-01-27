@@ -14,9 +14,9 @@ class VideoController extends Controller {
         ];
     }
 
-    public function indexAction(string $keywords = '', int $user = 0, int $music = 0) {
+    public function indexAction(string $keywords = '', int $user = 0, int $music = 0, $id = null) {
         return $this->renderPage(
-            VideoRepository::getList($keywords, $user, $music)
+            VideoRepository::getList($keywords, $user, $music, $id)
         );
     }
 
