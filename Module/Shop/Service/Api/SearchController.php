@@ -10,7 +10,7 @@ class SearchController extends Controller {
     }
 
     public function keywordsAction() {
-        $data = [];
+        $data = GoodsModel::query()->limit(5)->pluck('name');
         return $this->render(compact('data'));
     }
 

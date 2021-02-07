@@ -64,6 +64,14 @@ class GoodsModel extends GoodsEntity {
         return $this->price * $amount;
     }
 
+    public function getPictureAttribute() {
+        $thumb = $this->getAttributeSource('picture');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
     public function getIsCollectAttribute() {
         if (auth()->guest()) {
             return false;

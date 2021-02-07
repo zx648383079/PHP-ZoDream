@@ -32,6 +32,11 @@ class GoodsController extends Controller {
         return $this->render($goods_list);
     }
 
+    public function hotAction($id) {
+        $goods_list = GoodsRepository::getRecommendQuery('is_hot')->limit(7)->get();
+        return $this->render($goods_list);
+    }
+
     public function homeAction() {
         $hot_products = GoodsRepository::getRecommendQuery('is_hot')->all();
         $new_products = GoodsRepository::getRecommendQuery('is_new')->all();

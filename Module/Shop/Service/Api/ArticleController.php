@@ -3,6 +3,7 @@ namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
+use Module\Shop\Domain\Repositories\ArticleRepository;
 
 class ArticleController extends Controller {
 
@@ -24,6 +25,14 @@ class ArticleController extends Controller {
     public function detailAction($id) {
         $article = ArticleModel::find($id);
         return $this->render($article);
+    }
+
+    public function helpAction() {
+        return $this->renderData(ArticleRepository::getHelps());
+    }
+
+    public function noticeAction() {
+        return $this->renderData(ArticleRepository::getNotices());
     }
 
     public function categoryAction($parent_id = 0) {

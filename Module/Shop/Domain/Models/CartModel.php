@@ -13,9 +13,6 @@ use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Item;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
-use Zodream\Infrastructure\Cookie;
-
-
 
 /**
  * Class CartModel
@@ -35,7 +32,7 @@ class CartModel extends Model implements ICartItem {
 
     use Item;
 
-    protected $append = ['goods'];
+    protected array $append = ['goods'];
 
     public static function tableName() {
         return 'shop_cart';

@@ -10,6 +10,7 @@ class StoreController extends Controller {
             'id' => $id,
             'name' => '我的店铺',
             'logo' => url()->asset('assets/images/zd.jpg'),
+            'qr' => url()->asset('assets/images/wx.jpg'),
             'collect_count' => 1,
             'is_collected' => false
         ]);
