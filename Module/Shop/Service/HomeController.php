@@ -4,7 +4,9 @@ namespace Module\Shop\Service;
 
 use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\CommentModel;
+use Module\Shop\Domain\Repositories\BrandRepository;
 use Module\Shop\Domain\Repositories\CategoryRepository;
+use Module\Shop\Domain\Repositories\CommentRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 
 class HomeController extends Controller {
@@ -18,7 +20,8 @@ class HomeController extends Controller {
     }
 
     public function brandAction() {
-        return $this->renderData([]);
+        $brand_list = BrandRepository::recommend();
+        return $this->renderData(compact('brand_list'));
     }
 
     public function newAction() {
@@ -38,7 +41,7 @@ class HomeController extends Controller {
     }
 
     public function commentAction() {
-        $comment_goods = CommentModel::with('goods', 'user')->where('item_type', 0)->limit(6)->all();
+        $comment_goods = CommentRepository::recommend();
         return $this->renderData(compact('comment_goods'));
     }
 }

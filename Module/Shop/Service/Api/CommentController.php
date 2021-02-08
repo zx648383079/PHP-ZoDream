@@ -37,4 +37,8 @@ class CommentController extends Controller {
             ->orderBy('id', 'desc')->limit(2)->get();
         return $this->render($args);
     }
+
+    public function recommendAction() {
+        return $this->renderData(CommentRepository::recommend());
+    }
 }

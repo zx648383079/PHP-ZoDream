@@ -57,4 +57,8 @@ class CommentRepository {
         return $args;
     }
 
+    public static function recommend() {
+        return CommentModel::with('goods', 'user')->where('item_type', 0)->limit(6)->all();
+    }
+
 }

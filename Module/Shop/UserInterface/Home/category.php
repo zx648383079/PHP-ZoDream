@@ -24,7 +24,7 @@ use Zodream\Template\View;
             <img src="<?=$item['banner']?>" alt="">
         </div>
         <div class="goods-list">
-            <?php foreach($item['goods'] as $goods):?>
+            <?php foreach($item['goods_list'] as $goods):?>
             <a href="<?=$this->url('./goods', ['id' => $goods['id']])?>" class="goods-item item-hover">
                 <div class="thumb">
                     <img src="<?=$goods->thumb?>" alt="">

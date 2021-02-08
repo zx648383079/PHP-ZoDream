@@ -13,7 +13,7 @@ class CategoryRepository {
             if (!empty($item['children'])) {
                 $item['children'] = array_values($item['children']);
             }
-            $item['goods'] = GoodsRepository::getRecommendQuery('is_hot')
+            $item['goods_list'] = GoodsRepository::getRecommendQuery('is_hot')
                 ->whereIn('cat_id', CategoryModel::getChildrenWithParent($item['id']))
                 ->limit(4)->all();
             $item['url'] = url('./category', ['id' => $item['id']]);

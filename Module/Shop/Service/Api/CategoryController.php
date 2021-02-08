@@ -3,6 +3,7 @@ namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
+use Module\Shop\Domain\Repositories\CategoryRepository;
 
 class CategoryController extends Controller {
 
@@ -28,6 +29,10 @@ class CategoryController extends Controller {
             }
         }
         return $this->render($data);
+    }
+
+    public function floorAction() {
+        return $this->renderData(CategoryRepository::getHomeFloor());
     }
 
     public function levelAction() {

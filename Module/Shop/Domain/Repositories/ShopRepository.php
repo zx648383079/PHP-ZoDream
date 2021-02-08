@@ -11,6 +11,7 @@ class ShopRepository {
             'name' => '聚百客综合商店',
             'version' => '0.1',
             'logo' => url()->asset('assets/upload/image/shop_logo.png'),
+            'qr' => url()->asset('assets/images/wx.jpg'),
             'category' => CategoryModel::query()->count(),
             'brand' => BrandModel::query()->count(),
             'goods' => GoodsModel::query()->count(),

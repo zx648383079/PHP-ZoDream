@@ -18,8 +18,8 @@ class OrderController extends Controller {
         ];
     }
 
-    public function indexAction($id = 0,
-                                $status = 0) {
+    public function indexAction(int $id = 0,
+                                int|array $status = 0) {
         if ($id > 0) {
             return $this->infoAction($id);
         }

@@ -14,11 +14,11 @@ class OrderRepository {
 
     /**
      * @param int|int[] $status
-     * @param null $keywords
+     * @param string $keywords
      * @return Page<Order>
      * @throws Exception
      */
-    public static function getList($status = 0, $keywords = null) {
+    public static function getList(int|array $status = 0, string $keywords = '') {
         return Order::with('goods')
             ->where('user_id', auth()->id())
             ->when(!empty($status), function ($query) use ($status) {
