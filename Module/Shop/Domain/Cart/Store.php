@@ -51,14 +51,22 @@ class Store {
     }
 
     public function frozenGoods($goods_id, $product_id, $amount) {
-        $store = GoodsModel::query()->where('id', $goods_id)->value('stock');
-        if ($store < $amount) {
+        $store = GoodsModel::query()->where('id', $goods_id)
+            ->where('status', GoodsModel::STATUS_SALE)->value('stock');
+        if (empty($store) || $store < $amount) {
             return false;
         }
         GoodsModel::query()->where('id', $goods_id)
             ->updateOne('stock', -$amount);
         $this->data[$goods_id][$product_id] = $amount;
         return true;
+    }
+
+    public function checkGoods($goods_id, $product_id, $amount) {
+        $store = GoodsModel::query()->where('id', $goods_id)
+            ->where('status', GoodsModel::STATUS_SALE)
+            ->value('stock');
+        return empty($store) || $store < $amount;
     }
 
     /**

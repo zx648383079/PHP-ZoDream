@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Module\Shop\Domain\Cart\Cart;
 use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Store;
 use Module\Shop\Domain\Models\AddressModel;
@@ -221,5 +222,25 @@ class CartRepository {
                 max(1, isset($item['amount']) ? intval($item['amount']) : 1));
         }
         return $data;
+    }
+
+    /**
+     * 清空失效的商品
+     * @return Cart
+     * @throws Exception
+     */
+    public static function removeInvalid() {
+        $cart = Module::cart();
+        $ids = [];
+        foreach ($cart as $group) {
+            foreach ($group as $item) {
+                /** @var CartModel $item */
+                if ($item->invalid()) {
+                    $ids[] = $item->getId();
+                }
+            }
+        }
+        $cart->remove($ids);
+        return $cart;
     }
 }

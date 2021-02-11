@@ -1,16 +1,25 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\RegionModel;
+use Module\Shop\Domain\Repositories\RegionRepository;
 
 class RegionController extends Controller {
 
-    public function indexAction($id = 0) {
-        $data = RegionModel::where('parent_id', intval($id))->all();
-        return $this->render(compact('data'));
+    public function indexAction(int $id = 0, string $keywords = '') {
+        return $this->renderData(
+            RegionRepository::getList($id, $keywords)
+        );
     }
 
     public function treeAction() {
-        return $this->render(['data' => RegionModel::cacheTree()]);
+        return $this->renderData(RegionModel::cacheTree());
+    }
+
+    public function pathAction(int $id) {
+        return $this->renderData(
+            RegionRepository::getPath($id)
+        );
     }
 }

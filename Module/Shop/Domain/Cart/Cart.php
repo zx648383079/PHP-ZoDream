@@ -2,11 +2,8 @@
 namespace Module\Shop\Domain\Cart;
 
 use Module\Shop\Domain\Models\CartModel;
-use Module\Shop\Domain\Models\GoodsModel;
-use Traversable;
 use Zodream\Helpers\Json;
 use IteratorAggregate;
-use Zodream\Infrastructure\Cookie;
 use Zodream\Infrastructure\Contracts\JsonAble;
 use Zodream\Infrastructure\Contracts\ArrayAble;
 use ArrayIterator;
@@ -31,7 +28,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
             return $id;
         }
         $id = md5(uniqid(null, true));
-        Cookie::set(self::COOKIE_KEY, $id, 0, '/');
+        response()->cookie(self::COOKIE_KEY, $id, 0, '/');
         return $id;
     }
 

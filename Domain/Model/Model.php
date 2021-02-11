@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Domain\Model;
 /**
  * Created by PhpStorm.
@@ -16,15 +17,17 @@ abstract class Model extends BaseModel {
     /**
      * 生成搜索查询语句
      * @param Builder $query
-     * @param $columns
+     * @param string|array $columns
      * @param bool $saveLog
      * @param string $key
+     * @param string $value
      * @return Builder
      * @throws \Exception
      */
-    public static function search(Builder $query, $columns, $saveLog = true, $key = 'keywords') {
+    public static function search(Builder $query, string|array $columns, bool $saveLog = true,
+                                  string $key = 'keywords', string $value = '') {
         $columns = (array)$columns;
-        $keywords = explode(' ', request()->get($key));
+        $keywords = explode(' ', empty($key) ? $value : request()->get($key));
         foreach ($keywords as $item) {
             $item = trim(trim($item), '%');
             if (empty($item)) {
@@ -49,8 +52,18 @@ abstract class Model extends BaseModel {
         return $query;
     }
 
-    public static function searchWhere(Builder $query, $columns, $saveLog = true, $key = 'keywords') {
-        $query->where(function ($query) use ($columns, $saveLog, $key) {
+    /**
+     * 查询语句并用（） 包起来
+     * @param Builder $query
+     * @param string|array $columns
+     * @param bool $saveLog
+     * @param string $key
+     * @param string $value
+     * @return Builder
+     */
+    public static function searchWhere(Builder $query, string|array $columns, bool $saveLog = true,
+                                       string $key = 'keywords', string $value = '') {
+        return $query->where(function ($query) use ($columns, $saveLog, $key) {
             static::search($query, $columns, $saveLog, $key);
         });
     }
@@ -63,8 +76,8 @@ abstract class Model extends BaseModel {
      * @param string $default_order
      * @return array
      */
-    public static function checkSortOrder($sort, $order,
-                                          array $sort_list, $default_order = 'desc') {
+    public static function checkSortOrder(string $sort, bool|int|string $order,
+                                          array $sort_list, string $default_order = 'desc') {
         if (is_bool($order)) {
             $order = $order ? 'desc' : 'asc';
         } elseif (is_numeric($order)) {
@@ -84,7 +97,7 @@ abstract class Model extends BaseModel {
      * @param string $key
      * @throws \Exception
      */
-    public static function refreshPk(callable $cb, $key = 'id') {
+    public static function refreshPk(callable $cb, string $key = 'id') {
         $data = static::orderBy($key, 'asc')->pluck($key);
         $i = 1;
         foreach ($data as $id) {

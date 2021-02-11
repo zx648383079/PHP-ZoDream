@@ -56,7 +56,7 @@ class CartController extends Controller {
         return $this->render(Module::cart());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int|array $id) {
         Module::cart()->remove($id);
         return $this->render(Module::cart());
     }
@@ -64,6 +64,16 @@ class CartController extends Controller {
     public function clearAction() {
         Module::cart()->clear();
         return $this->render(Module::cart());
+    }
+
+    public function deleteInvalidAction() {
+        try {
+            return $this->render(
+                CartRepository::removeInvalid()
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function recommendAction() {

@@ -2,19 +2,12 @@
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\AddressModel;
-use Module\Shop\Domain\Models\CartModel;
-use Module\Shop\Domain\Models\GoodsModel;
-use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
-use Module\Shop\Domain\Models\Scene\Goods;
-use Module\Shop\Domain\Models\Scene\Order;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\CouponRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
-use Module\Shop\Module;
 use Exception;
-use Zodream\Database\DB;
 
 class CashierController extends Controller {
 
