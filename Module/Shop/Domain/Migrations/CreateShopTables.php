@@ -48,6 +48,7 @@ use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Models\ShippingRegionModel;
 use Module\Shop\Domain\Models\WarehouseGoodsModel;
+use Module\Shop\Domain\Models\WarehouseLogModel;
 use Module\Shop\Domain\Models\WarehouseModel;
 use Module\Shop\Domain\Models\WarehouseRegionModel;
 use Zodream\Database\Migrations\Migration;
@@ -65,7 +66,7 @@ class CreateShopTables extends Migration {
 
         $this->createArticle();
         $this->append(AddressModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
             $table->set('user_id')->int()->notNull();
@@ -74,7 +75,7 @@ class CreateShopTables extends Migration {
             $table->timestamps();
         })->append(CouponModel::tableName(), function(Table $table) {
             $table->setComment('优惠券');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('thumb')->varchar()->defaultVal('');
             $table->set('type')->tinyint(2)->defaultVal(0)->comment('优惠类型');
@@ -90,7 +91,7 @@ class CreateShopTables extends Migration {
             $table->timestamps();
         })->append(CouponLogModel::tableName(), function(Table $table) {
             $table->setComment('优惠券记录');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('coupon_id')->int()->notNull();
             $table->set('serial_number')->varchar(30)->defaultVal('');
             $table->set('user_id')->int()->defaultVal(0);
@@ -99,7 +100,7 @@ class CreateShopTables extends Migration {
             $table->timestamps();
         })->append(InvoiceModel::tableName(), function(Table $table) {
             $table->setComment('开票记录');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('title_type')->tinyint(1)->defaultVal(0)->comment('发票抬头类型');
             $table->set('type')->tinyint(1)->defaultVal(0)->comment('发票类型');
             $table->set('title')->varchar(100)->notNull()->comment('抬头');
@@ -121,7 +122,7 @@ class CreateShopTables extends Migration {
             $table->timestamps();
         })->append(InvoiceTitleModel::tableName(), function(Table $table) {
             $table->setComment('用户发票抬头');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('title_type')->tinyint(1)->defaultVal(0)->comment('发票抬头类型');
             $table->set('type')->tinyint(1)->defaultVal(0)->comment('发票类型');
             $table->set('title')->varchar(100)->notNull()->comment('抬头');
@@ -176,7 +177,7 @@ class CreateShopTables extends Migration {
 
 
         $this->append(NavigationModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('type')->varchar(10)->notNull()->defaultVal('middle');
             $table->set('name')->varchar(100)->notNull();
             $table->set('url')->varchar(200);
@@ -190,7 +191,7 @@ class CreateShopTables extends Migration {
         $this->createLogistics();
         $this->createPay();
         $this->append(RegionModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('full_name')->varchar(100)->defaultVal('');
@@ -209,7 +210,7 @@ class CreateShopTables extends Migration {
      */
     public function createOrder(): void {
         $this->append(OrderModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('series_number')->varchar(100)->notNull();
             $table->set('user_id')->int()->notNull();
             $table->set('status')->int()->defaultVal(0);
@@ -230,7 +231,7 @@ class CreateShopTables extends Migration {
             $table->timestamp('finish_at')->comment('完成时间');
             $table->timestamps();
         })->append(OrderGoodsModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('order_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->set('product_id')->int()->defaultVal(0);
@@ -248,14 +249,14 @@ class CreateShopTables extends Migration {
             $table->set('comment_id')->int()->defaultVal(0)->comment('评论id');
             $table->set('type_remark')->varchar()->defaultVal('')->comment('商品类型备注信息');
         })->append(OrderLogModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('order_id')->int()->notNull();
             $table->set('user_id')->int()->notNull();
             $table->set('status')->int()->defaultVal(1);
             $table->set('remark')->varchar()->defaultVal('');
             $table->timestamp('created_at');
         })->append(OrderAddressModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('order_id')->int()->notNull();
             $table->set('name')->varchar(30)->notNull();
             $table->set('region_id')->int()->notNull();
@@ -264,13 +265,13 @@ class CreateShopTables extends Migration {
             $table->set('address')->varchar()->notNull();
             $table->set('best_time')->varchar()->defaultVal('');
         })->append(OrderCouponModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('order_id')->int()->notNull();
             $table->set('coupon_id')->int()->notNull();
             $table->set('name')->varchar()->defaultVal('');
             $table->set('type')->varchar()->defaultVal('');
         })->append(OrderActivityModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('order_id')->int()->notNull();
             $table->set('product_id')->int()->defaultVal(0);
             $table->set('type')->int()->notNull();
@@ -279,7 +280,7 @@ class CreateShopTables extends Migration {
             $table->set('name')->varchar()->defaultVal('');
         })->append(OrderRefundModel::tableName(), function (Table $table) {
             $table->setComment('订单售后服务');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('order_id')->int()->notNull();
             $table->set('order_goods_id')->int()->defaultVal(0);
@@ -344,7 +345,7 @@ class CreateShopTables extends Migration {
      */
     public function createLogistics(): void {
         $this->append(DeliveryModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('order_id')->int()->notNull();
             $table->set('status')->int()->defaultVal(0);
@@ -361,7 +362,7 @@ class CreateShopTables extends Migration {
             $table->set('best_time')->varchar()->defaultVal('');
             $table->timestamps();
         })->append(DeliveryGoodsModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('delivery_id')->int()->notNull();
             $table->set('order_goods_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
@@ -379,7 +380,7 @@ class CreateShopTables extends Migration {
      */
     public function createArticle(): void {
         $this->append(ArticleModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('cat_id')->int()->notNull();
             $table->set('title')->varchar(100)->notNull()->comment('文章名');
             $table->set('keywords')->varchar(200)->comment('关键字');
@@ -391,7 +392,7 @@ class CreateShopTables extends Migration {
             $table->set('content')->text()->notNull()->comment('内容');
             $table->timestamps();
         })->append(ArticleCategoryModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->notNull()->comment('文章分类名');
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('description')->varchar(200)->comment('关键字');
@@ -405,11 +406,11 @@ class CreateShopTables extends Migration {
      */
     public function createAttribute(): void {
         $this->append(AttributeGroupModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->timestamps();
         })->append(AttributeModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('group_id')->int()->notNull();
             $table->set('type')->tinyint(1)->defaultVal(0);
@@ -418,13 +419,13 @@ class CreateShopTables extends Migration {
             $table->set('default_value')->varchar()->notNull()->defaultVal('');
             $table->set('position')->tinyint(3)->defaultVal(99);
         })->append(GoodsAttributeModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('goods_id')->int()->defaultVal(0);
             $table->set('attribute_id')->int()->notNull();
             $table->set('value')->varchar()->notNull();
             $table->set('price')->decimal(10, 2)->defaultVal(0)->comment('附加服务，多选不算在');
         })->append(ProductModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('goods_id')->int()->notNull();
             $table->set('price')->decimal(10, 2)->defaultVal(0);
             $table->set('market_price')->decimal(10, 2)->defaultVal(0);
@@ -440,7 +441,7 @@ class CreateShopTables extends Migration {
      */
     public function createShipping(): void {
         $this->append(ShippingModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('code')->varchar(30)->notNull();
             $table->set('method')->tinyint(2)->defaultVal(0)->comment('计费方式');
@@ -449,7 +450,7 @@ class CreateShopTables extends Migration {
             $table->set('position')->tinyint(2)->defaultVal(50);
             $table->timestamps();
         })->append(ShippingGroupModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('shipping_id')->int()->notNull();
             $table->set('is_all')->bool()->defaultVal(0);
             $table->set('first_step')->float(10, 3)->defaultVal(0);
@@ -469,7 +470,7 @@ class CreateShopTables extends Migration {
      */
     public function createComment(): void {
         $this->append(CommentModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('item_type')->tinyint(2)->defaultVal(0);
             $table->set('item_id')->int()->notNull();
@@ -478,7 +479,7 @@ class CreateShopTables extends Migration {
             $table->set('rank')->tinyint(2)->defaultVal(10);
             $table->timestamps();
         })->append(CommentImageModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('comment_id')->int()->notNull();
             $table->set('image')->varchar()->notNull();
             $table->timestamps();
@@ -490,7 +491,7 @@ class CreateShopTables extends Migration {
      */
     public function createGoods(): void {
         $this->append(CategoryModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->notNull()->comment('分类名');
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('description')->varchar(200)->comment('关键字');
@@ -500,12 +501,12 @@ class CreateShopTables extends Migration {
             $table->set('parent_id')->int()->defaultVal(0);
             $table->set('position')->tinyint(3)->defaultVal(99);
         })->append(CollectModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->timestamp('created_at');
         })->append(BrandModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->notNull()->comment('分类名');
             $table->set('keywords')->varchar(200)->comment('关键字');
             $table->set('description')->varchar(200)->comment('关键字');
@@ -513,7 +514,7 @@ class CreateShopTables extends Migration {
             $table->set('app_logo')->varchar(200)->comment('LOGO');
             $table->set('url')->varchar(200)->comment('官网');
         })->append(GoodsModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('cat_id')->int()->notNull();
             $table->set('brand_id')->int()->notNull();
             $table->set('name')->varchar(100)->notNull()->comment('商品名');
@@ -543,13 +544,13 @@ class CreateShopTables extends Migration {
             $table->softDeletes();
             $table->timestamps();
         })->append(GoodsCardModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('goods_id')->int()->notNull();
             $table->set('card_no')->varchar()->notNull();
             $table->set('card_pwd')->varchar()->notNull();
             $table->set('order_id')->int()->defaultVal(0);
         })->append(CartModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
@@ -559,12 +560,12 @@ class CreateShopTables extends Migration {
             $table->set('selected_activity')->int()->defaultVal(0)->comment('选择的活动');
             $table->set('expired_at')->int(10)->defaultVal(0)->comment('过期时间');
         })->append(GoodsIssueModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('goods_id')->int()->notNull();
             $table->set('question')->varchar()->notNull();
             $table->set('answer')->varchar()->defaultVal('');
         })->append(GoodsGalleryModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('goods_id')->int()->notNull();
             $table->set('image')->varchar()->notNull();
         });
@@ -572,7 +573,7 @@ class CreateShopTables extends Migration {
 
     protected function createWarehouse(): void {
         $this->append(WarehouseModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('tel')->varchar(30)->notNull();
             $table->set('address')->varchar()->defaultVal('');
@@ -580,15 +581,25 @@ class CreateShopTables extends Migration {
             $table->set('warehouse_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->set('product_id')->int()->defaultVal(0);
+            $table->set('amount')->int()->defaultVal(0);
         })->append(WarehouseRegionModel::tableName(), function (Table $table) {
             $table->set('warehouse_id')->int()->notNull();
             $table->set('region_id')->int()->notNull();
+        })->append(WarehouseLogModel::tableName(), function (Table $table) {
+            $table->set('id')->pk(true);
+            $table->set('warehouse_id')->int()->notNull();
+            $table->set('goods_id')->int()->notNull();
+            $table->set('product_id')->int()->notNull();
+            $table->set('amount')->int()->notNull();
+            $table->set('order_id')->int()->notNull();
+            $table->set('remark')->int()->notNull();
+            $table->timestamp('created_at');
         });
     }
 
     protected function createAd(): void {
         $this->append(AdModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('position_id')->int()->notNull();
             $table->set('type')->tinyint(1)->defaultVal(1);
@@ -598,7 +609,7 @@ class CreateShopTables extends Migration {
             $table->timestamp('end_at');
             $table->timestamps();
         })->append(AdPositionModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('width')->varchar(20)->notNull();
             $table->set('height')->varchar(20)->notNull();
@@ -609,7 +620,7 @@ class CreateShopTables extends Migration {
 
     protected function createActivity() {
         $this->append(ActivityModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(40)->notNull();
             $table->set('thumb')->varchar(200)->defaultVal('');
             $table->set('description')->varchar()->defaultVal('');
@@ -622,12 +633,12 @@ class CreateShopTables extends Migration {
             $table->timestamp('end_at');
             $table->timestamps();
         })->append(ActivityTimeModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('title')->varchar(40)->notNull();
             $table->set('start_at')->time();
             $table->set('end_at')->time();
         })->append(SeckillGoodsModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('act_id')->int()->unsigned()->notNull();
             $table->set('time_id')->int()->unsigned()->notNull();
             $table->set('goods_id')->int()->unsigned()->notNull();
@@ -639,7 +650,7 @@ class CreateShopTables extends Migration {
 
     private function createPay(): void {
         $this->append(PaymentModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('code')->varchar(30)->notNull();
             $table->set('icon')->varchar(100)->defaultVal('');

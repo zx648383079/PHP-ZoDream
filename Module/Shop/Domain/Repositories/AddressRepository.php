@@ -8,7 +8,8 @@ use Exception;
 class AddressRepository {
 
     public static function getList() {
-        return Address::with('region')->where('user_id', auth()->id())->orderBy('id desc')->page();;
+        return Address::with('region')->where('user_id', auth()->id())
+            ->orderBy('id desc')->page();;
     }
 
     public static function get($id) {

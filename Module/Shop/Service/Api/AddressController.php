@@ -31,6 +31,7 @@ class AddressController extends Controller {
 
     public function createAction() {
         $data = request()->validate([
+            'id' => 'int',
             'name' => '',
             'region_id' => 'int',
             'region_name' => '',
