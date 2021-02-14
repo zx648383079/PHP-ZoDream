@@ -7,12 +7,6 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class OrderController extends Controller {
 
-    public function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
-
     public function indexAction($status = 0) {
         $data = OrderRepository::getList($status);
         return $this->renderPage($data);

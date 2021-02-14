@@ -5,12 +5,6 @@ use Module\Legwork\Domain\Model\ServiceModel;
 
 class HomeController extends Controller {
 
-    public function rules() {
-        return [
-            '*' => '@'
-        ];
-    }
-
     public function indexAction($category = 0) {
         $data = ServiceModel::where('cat_id', $category)
             ->orderBy('id', 'asc')

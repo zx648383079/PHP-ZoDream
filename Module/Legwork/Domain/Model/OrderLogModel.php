@@ -22,7 +22,7 @@ class OrderLogModel extends Model {
         return [
             'order_id' => 'required|int',
             'user_id' => 'required|int',
-            'status' => 'int',
+            'status' => 'int:0,127',
             'remark' => 'string:0,255',
             'created_at' => 'int',
         ];

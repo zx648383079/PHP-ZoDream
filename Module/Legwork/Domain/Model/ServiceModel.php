@@ -8,6 +8,7 @@ use Zodream\Helpers\Json;
  * Class ServiceModel
  * @package Module\Legwork\Domain\Model
  * @property integer $id
+ * @property integer $user_id
  * @property string $name
  * @property integer $cat_id
  * @property string $thumb
@@ -15,6 +16,7 @@ use Zodream\Helpers\Json;
  * @property float $price
  * @property string $content
  * @property string $form
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -26,6 +28,7 @@ class ServiceModel extends Model {
 
     protected function rules() {
         return [
+            'user_id' => 'required|int',
             'name' => 'required|string:0,100',
             'cat_id' => 'int',
             'thumb' => 'string:0,200',
@@ -33,6 +36,7 @@ class ServiceModel extends Model {
             'price' => '',
             'content' => 'required',
             'form' => '',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -41,13 +45,15 @@ class ServiceModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'name' => '服务名',
-            'cat_id' => '服务分类',
-            'thumb' => '缩略图',
-            'brief' => '说明',
-            'price' => '单价',
-            'content' => '内容',
-            'form' => '表单',
+            'user_id' => 'User Id',
+            'name' => 'Name',
+            'cat_id' => 'Cat Id',
+            'thumb' => 'Thumb',
+            'brief' => 'Brief',
+            'price' => 'Price',
+            'content' => 'Content',
+            'form' => 'Form',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

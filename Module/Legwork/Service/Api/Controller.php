@@ -7,6 +7,12 @@ use Zodream\Route\Controller\Middleware\RequestMiddleware;
 
 abstract class Controller extends BaseController {
 
+    public function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
+
     public function __construct()
     {
         $this->middleware(RequestMiddleware::class);

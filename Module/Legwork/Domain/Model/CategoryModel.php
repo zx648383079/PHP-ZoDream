@@ -13,8 +13,7 @@ use Module\Legwork\Domain\Entities\CategoryEntity;
  * @property integer $id
  * @property string $name
  * @property string $icon
- * @property integer $parent_id
- * @property array $children
+ * @property string $description
  */
 class CategoryModel extends CategoryEntity {
 

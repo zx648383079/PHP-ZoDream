@@ -9,14 +9,16 @@ use Zodream\Helpers\Json;
  * Class OrderModel
  * @package Module\Legwork\Domain\Model
  * @property integer $id
+ * @property integer $provider_id
  * @property integer $user_id
  * @property integer $service_id
- * @property string $remark
  * @property integer $amount
+ * @property string $remark
  * @property float $order_amount
- * @property integer $runner
+ * @property integer $waiter_id
  * @property integer $status
- * @property integer $service_rank
+ * @property integer $service_score
+ * @property integer $waiter_score
  * @property integer $pay_at
  * @property integer $taking_at
  * @property integer $taken_at
@@ -56,14 +58,16 @@ class OrderModel extends Model {
 
     protected function rules() {
         return [
+            'provider_id' => 'required|int',
             'user_id' => 'required|int',
             'service_id' => 'required|int',
+            'amount' => 'int:0,9999',
             'remark' => 'required',
-            'amount' => 'int',
             'order_amount' => '',
-            'runner' => 'int',
+            'waiter_id' => 'int',
             'status' => 'int:0,127',
-            'service_rank' => 'int:0,127',
+            'service_score' => 'int:0,127',
+            'waiter_score' => 'int:0,127',
             'pay_at' => 'int',
             'taking_at' => 'int',
             'taken_at' => 'int',
@@ -76,14 +80,16 @@ class OrderModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
+            'provider_id' => 'Provider Id',
             'user_id' => 'User Id',
             'service_id' => 'Service Id',
             'amount' => 'Amount',
             'remark' => 'Remark',
             'order_amount' => 'Order Amount',
-            'runner' => 'Runner',
+            'waiter_id' => 'Waiter Id',
             'status' => 'Status',
-            'service_rank' => 'Service Rank',
+            'service_score' => 'Service Score',
+            'waiter_score' => 'Waiter Score',
             'pay_at' => 'Pay At',
             'taking_at' => 'Taking At',
             'taken_at' => 'Taken At',
