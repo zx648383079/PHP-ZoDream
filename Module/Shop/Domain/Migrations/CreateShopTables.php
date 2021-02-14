@@ -2,6 +2,7 @@
 namespace Module\Shop\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
+use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
@@ -52,7 +53,7 @@ use Module\Shop\Domain\Models\WarehouseLogModel;
 use Module\Shop\Domain\Models\WarehouseModel;
 use Module\Shop\Domain\Models\WarehouseRegionModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
+use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
 
 class CreateShopTables extends Migration {
@@ -304,40 +305,59 @@ class CreateShopTables extends Migration {
 
     public function seed() {
         RoleRepository::newRole('shop_admin', '商城管理员');
-        $count = AdPositionModel::query()->whereIn('id', [1,2])->count();
-        if ($count < 1) {
-            AdPositionModel::query()
-                ->insert([
-                    [
-                        'id' => 1,
-                        'name' => 'PC 首页 banner',
-                        'width' => '100%',
-                        'height' => '100%',
-                        'template' => '{url}',
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => 'Mobile 首页 banner',
-                        'width' => '100%',
-                        'height' => '100%',
-                        'template' => '{url}',
-                    ]
-                ]);
+        Option::group('商城设置', function () {
+            return [
+                [
+                    'name' => '开启游客购买',
+                    'code' => 'shop_guest_buy',
+                    'type' => 'switch',
+                    'value' => 0,
+                ],
+                [
+                    'name' => '开启仓库',
+                    'code' => 'shop_warehouse',
+                    'type' => 'switch',
+                    'value' => 0,
+                ],
+                [
+                    'name' => '扣库存时间',
+                    'code' => 'shop_store',
+                    'type' => 'radio',
+                    'value' => 0,
+                    'default_value' => "不扣库存\n下单时\n支付时\n发货时"
+                ],
+            ];
+        });
+        $this->findOrNewById(AdPositionModel::query(), [
+            'id' => 1,
+            'name' => 'PC 首页 banner',
+            'width' => '100%',
+            'height' => '100%',
+            'template' => '{url}',
+        ]);
+        $this->findOrNewById(AdPositionModel::query(), [
+            'id' => 2,
+            'name' => 'Mobile 首页 banner',
+            'width' => '100%',
+            'height' => '100%',
+            'template' => '{url}',
+        ]);
+        $this->findOrNewById(ArticleCategoryModel::query(), [
+            'id' => 1,
+            'name' => '通知中心',
+        ]);
+        $this->findOrNewById(ArticleCategoryModel::query(), [
+            'id' => 2,
+            'name' => '帮助中心',
+        ]);
+    }
+
+    private function findOrNewById(Builder $query, array $data) {
+        $count = $query->where('id', $data['id'])->count();
+        if ($count > 0) {
+            return;
         }
-        $count = ArticleCategoryModel::query()->whereIn('id', [1, 2])->count();
-        if ($count < 1) {
-            ArticleCategoryModel::query()
-                ->insert([
-                    [
-                        'id' => 1,
-                        'name' => '通知中心',
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => '帮助中心',
-                    ],
-                ]);
-        }
+        $query->insert($data);
     }
 
     /**
@@ -554,10 +574,13 @@ class CreateShopTables extends Migration {
             $table->set('type')->tinyint(1)->defaultVal(0);
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
+            $table->set('product_id')->int()->notNull();
             $table->set('amount')->int()->defaultVal(1);
             $table->set('price')->decimal(8, 2);
             $table->set('is_checked')->bool()->defaultVal(0)->comment('是否选中');
             $table->set('selected_activity')->int()->defaultVal(0)->comment('选择的活动');
+            $table->set('attribute_id')->varchar()->defaultVal('')->comment('选择的属性');
+            $table->set('attribute_value')->varchar()->defaultVal('')->comment('选择的属性值');
             $table->set('expired_at')->int(10)->defaultVal(0)->comment('过期时间');
         })->append(GoodsIssueModel::tableName(), function (Table $table) {
             $table->set('id')->pk(true);
@@ -576,7 +599,12 @@ class CreateShopTables extends Migration {
             $table->set('id')->pk(true);
             $table->set('name')->varchar(30)->notNull();
             $table->set('tel')->varchar(30)->notNull();
+            $table->set('link_user')->varchar(30)->defaultVal('');
             $table->set('address')->varchar()->defaultVal('');
+            $table->set('longitude')->varchar(50)->comment('经度');
+            $table->set('latitude')->varchar(50)->comment('纬度');
+            $table->set('remark')->varchar()->defaultVal('');
+            $table->timestamps();
         })->append(WarehouseGoodsModel::tableName(), function (Table $table) {
             $table->set('warehouse_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();

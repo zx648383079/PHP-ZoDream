@@ -84,4 +84,8 @@ class Option {
         return $value;
     }
 
+    public static function group(string|array $name, callable $cb) {
+        return OptionModel::group($name, $cb);
+    }
+
 }

@@ -28,7 +28,7 @@ class CreateSEOTables extends Migration {
         if (OptionModel::query()->count() > 0) {
             return;
         }
-        OptionModel::group('基本', function ($parent_id) {
+        OptionModel::group('基本', function () {
             return [
                 [
                     'name' => '站点名',
@@ -50,7 +50,7 @@ class CreateSEOTables extends Migration {
                 ],
             ];
         });
-        OptionModel::group('高级', function ($parent_id) {
+        OptionModel::group('高级', function () {
             return [
                 [
                     'name' => '关站',

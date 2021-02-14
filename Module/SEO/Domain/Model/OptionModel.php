@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\SEO\Domain\Model;
 
 use Domain\Model\Model;
@@ -65,7 +66,7 @@ class OptionModel extends Model {
      * @param $code
      * @return string
      */
-    public static function findCode($code) {
+    public static function findCode(string $code): string {
         return static::where('code', $code)->value('value');
     }
 
@@ -75,7 +76,7 @@ class OptionModel extends Model {
      * @param array $default
      * @return array
      */
-    public static function findCodeJson($code, $default = []) {
+    public static function findCodeJson(string $code, array $default = []) {
         $value = static::findCode($code);
         if (empty($value)) {
             return $default;
@@ -86,12 +87,12 @@ class OptionModel extends Model {
     /**
      * 更新或插入设置
      * @param string $code
-     * @param static $value
+     * @param string $value
      * @param callable|string $name
      * @return bool
      * @throws \Exception
      */
-    public static function insertOrUpdate($code, $value, $name) {
+    public static function insertOrUpdate(string $code, string $value, callable|string $name) {
         $id = static::where('code', $code)->value('id');
         if (!empty($id)) {
             static::where('id', $id)->update([
@@ -123,13 +124,13 @@ class OptionModel extends Model {
      * @return bool
      * @throws \Exception
      */
-    public static function group($name, callable $cb) {
+    public static function group(string|array $name, callable $cb) {
         if (!is_array($name)) {
             $name = compact('name');
         }
         $name['type'] = 'group';
         $name['parent_id'] = 0;
-        $id = static::query()->insert($name);
+        $id = static::findOrNewByName($name);
         if ($id < 1) {
             return false;
         }
@@ -141,10 +142,46 @@ class OptionModel extends Model {
         if (!is_array($item)) {
             $items = [$items];
         }
-        static::query()->insert(array_map(function ($item) use ($id) {
+        foreach ($items as $item) {
             $item['parent_id'] = $id;
-            return $item;
-        }, $items));
+            static::findOrNewByCode($item);
+        }
         return true;
+    }
+
+    private static function findOrNewByName(array $data) {
+        $data = array_merge([
+            'type' => 'group',
+            'parent_id' => 0,
+            'visibility' => 1,
+        ], $data);
+        unset($data['id']);
+        $id = static::where('name', $data['name'])
+            ->where('type', $data['type'])
+            ->where('parent_id', $data['parent_id'])->value('id');
+        if (!empty($id)) {
+            return $id;
+        }
+        return static::query()->insert($data);
+    }
+
+    private static function findOrNewByCode(array $data) {
+        $data = array_merge([
+            'parent_id' => '0',
+            'type' => 'text',
+            'visibility' => 1,
+            'default_value' => '',
+            'value' => '',
+        ], $data);
+        unset($data['id']);
+        if (!isset($data['code']) || empty($data['code'])) {
+            return 0;
+        }
+        $id = static::where('code', $data['code'])->value('id');
+        if (!empty($id)) {
+            static::where('id', $id)->update($data);
+            return $id;
+        }
+        return static::query()->insert($data);
     }
 }
