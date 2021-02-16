@@ -107,8 +107,12 @@ class OrderModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-    public function runnerUser() {
-        return $this->hasOne(UserSimpleModel::class, 'id', 'runner');
+    public function waiter() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'waiter_id');
+    }
+
+    public function provider() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'provider_id');
     }
 
     public function getStatusLabelAttribute() {

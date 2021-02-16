@@ -20,6 +20,10 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class ProviderModel extends Model {
+    const STATUS_NONE = 0;
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 2;
+
     public static function tableName() {
         return 'leg_provider';
     }
@@ -55,5 +59,12 @@ class ProviderModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function categories() {
+        return $this->belongsToMany(CategoryModel::class,
+            CategoryProviderModel::class,
+            'user_id', 'cat_id',
+            'user_id');
     }
 }

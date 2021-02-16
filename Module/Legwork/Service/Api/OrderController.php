@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Service\Api;
 
 use Module\Legwork\Domain\Model\OrderModel;
@@ -7,9 +8,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class OrderController extends Controller {
 
-    public function indexAction($status = 0) {
-        $data = OrderRepository::getList($status);
-        return $this->renderPage($data);
+    public function indexAction(int $status = 0) {
+        return $this->renderPage(OrderRepository::getList($status));
     }
 
     public function createAction(Request $request) {
@@ -19,12 +19,14 @@ class OrderController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(compact('data'));
+        return $this->renderData($data);
     }
 
     public function payAction($id) {
         /** @var OrderModel $order */
-        $order = OrderModel::query()->where('user_id', auth()->id())->where('id', $id)
+        $order = OrderModel::query()
+            ->where('user_id', auth()->id())
+            ->where('id', $id)
             ->first();
         if (empty($order)) {
             return $this->renderFailure('订单不存在');
@@ -46,9 +48,7 @@ class OrderController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 
     public function cancelAction($id) {
@@ -57,8 +57,6 @@ class OrderController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 }

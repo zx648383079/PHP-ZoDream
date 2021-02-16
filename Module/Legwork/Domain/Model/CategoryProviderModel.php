@@ -12,6 +12,10 @@ use Domain\Model\Model;
  */
 class CategoryProviderModel extends Model {
 
+    const STATUS_NONE = 0;
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 2;
+
     public static function tableName() {
         return 'leg_category_provider';
     }

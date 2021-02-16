@@ -9,7 +9,7 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class OrderController extends Controller {
 
     public function indexAction($status = 0, $id = 0) {
-        $order_list = OrderRepository::getList($status, $id);
+        $order_list = OrderRepository::getSelfList($status, $id);
         $status_list = OrderModel::$status_list;
         return $this->show(compact('order_list', 'status_list', 'status'));
     }

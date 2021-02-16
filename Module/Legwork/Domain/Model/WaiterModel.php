@@ -20,6 +20,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class WaiterModel extends Model {
+
+    const STATUS_NONE = 0;
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 2;
+
     public static function tableName() {
         return 'leg_waiter';
     }

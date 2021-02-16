@@ -21,6 +21,9 @@ use Zodream\Helpers\Json;
  * @property integer $updated_at
  */
 class ServiceModel extends Model {
+    const STATUS_NONE = 0;
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 2;
 
     public static function tableName() {
         return 'leg_service';

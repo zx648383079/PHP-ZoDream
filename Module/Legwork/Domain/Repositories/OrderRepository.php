@@ -12,8 +12,36 @@ use Module\Shop\Domain\Repositories\PaymentRepository;
 class OrderRepository {
 
 
-    public static function getList($status = 0, $id = 0) {
-        return OrderModel::query()->with('service')->where('user_id', auth()->id())
+    public static function getList(int $status = 0, int $id = 0, int $user_id = 0,
+                                   int $service_id = 0,
+                                   int $provider_id = 0, int $waiter_id = 0) {
+        return OrderModel::query()->with('service', 'user', 'provider', 'waiter')
+            ->when($status > 0, function ($query) use ($status) {
+                $query->where('status', $status);
+            }, function ($query) {
+                $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
+            })
+            ->when($id > 0, function ($query) use ($id) {
+                $query->where('id', $id);
+            })
+            ->when($user_id > 0, function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })
+            ->when($service_id > 0, function ($query) use ($service_id) {
+                $query->where('service_id', $service_id);
+            })
+            ->when($provider_id > 0, function ($query) use ($provider_id) {
+                $query->where('provider_id', $provider_id);
+            })
+            ->when($waiter_id > 0, function ($query) use ($waiter_id) {
+                $query->where('waiter_id', $waiter_id);
+            })
+            ->orderBy('id', 'desc')->page();
+    }
+
+    public static function getSelfList(int $status = 0, int $id = 0) {
+        return OrderModel::query()->with('service')
+            ->where('user_id', auth()->id())
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             }, function ($query) {
@@ -47,7 +75,9 @@ class OrderRepository {
 
     public static function comment($id, $rank = 10) {
         /** @var OrderModel $order */
-        $order = OrderModel::query()->where('user_id', auth()->id())->where('id', $id)
+        $order = OrderModel::query()
+            ->where('user_id', auth()->id())
+            ->where('id', $id)
             ->first();
         if (empty($order)) {
             throw new Exception('订单不存在');
@@ -57,7 +87,7 @@ class OrderRepository {
             && $order->status != OrderModel::STATUS_PAID_UN_TAKING) {
             throw new Exception('此订单无法评价');
         }
-        $order->service_rank = intval($rank);
+        $order->service_score = intval($rank);
         OrderLogModel::finish($order);
         return $order;
     }
