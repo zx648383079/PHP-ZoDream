@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Service\Api\Provider;
 
-use Module\Legwork\Domain\Repositories\CategoryRepository;
+use Module\Legwork\Domain\Repositories\ProviderRepository;
 use Module\Legwork\Domain\Repositories\ServiceRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
@@ -51,9 +51,9 @@ class ServiceController extends Controller {
         return $this->renderData(true);
     }
 
-    public function categoryAction(string $keywords = '', int $status = 0) {
+    public function categoryAction(string $keywords = '', int $category = 0, int $status = 0, bool $all = false) {
         return $this->renderPage(
-            CategoryRepository::providerList($keywords, $status)
+            ProviderRepository::categoryList($keywords, $category, $status, $all)
         );
     }
 

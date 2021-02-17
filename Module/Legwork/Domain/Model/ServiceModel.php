@@ -2,6 +2,7 @@
 namespace Module\Legwork\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Helpers\Json;
 
 /**
@@ -66,13 +67,33 @@ class ServiceModel extends Model {
         return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
     }
 
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function provider() {
+        return $this->hasOne(ProviderModel::class, 'user_id', 'user_id');
+    }
+
     public function getFormAttribute() {
         $setting = $this->getAttributeValue('form');
         return empty($setting) ? [] : Json::decode($setting);
     }
 
     public function setFormAttribute($value) {
-        $this->__attributes['form'] = is_array($value) ?
-            Json::encode($value) : $value;
+        if (is_array($value)) {
+            $items = [];
+            foreach ($value as $item) {
+                if (empty($item['name'])) {
+                    continue;
+                }
+                if (empty($item['label'])) {
+                    $item['label'] = $item['name'];
+                }
+                $items[] = $item;
+            }
+            $value = Json::encode($items);
+        }
+        $this->__attributes['form'] = $value;
     }
 }

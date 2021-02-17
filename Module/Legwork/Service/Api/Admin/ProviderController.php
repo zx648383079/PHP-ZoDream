@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Service\Api\Admin;
 
+use Module\Legwork\Domain\Repositories\CategoryRepository;
 use Module\Legwork\Domain\Repositories\ProviderRepository;
 
 class ProviderController extends Controller {
@@ -27,5 +28,11 @@ class ProviderController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function categoryAction(int $id, string $keywords = '', int $status = 0) {
+        return $this->renderPage(
+            CategoryRepository::providerList($id, $keywords, $status)
+        );
     }
 }

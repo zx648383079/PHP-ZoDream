@@ -9,7 +9,7 @@ class HomeController extends Controller {
 
     public function indexAction(string $keywords = '', int $category = 0) {
         return $this->renderPage(
-            ServiceRepository::getList($keywords, $category, 0, 1)
+            ServiceRepository::getList($keywords, $category, 0, 1, false)
         );
     }
 

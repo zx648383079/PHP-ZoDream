@@ -6,9 +6,9 @@ use Module\Legwork\Domain\Repositories\ProviderRepository;
 
 class OrderController extends Controller {
 
-    public function indexAction(int $status = 0, int $id = 0, int $user_id = 0, int $waiter_id = 0) {
+    public function indexAction(string $keywords = '', int $status = 0, int $id = 0, int $user_id = 0, int $waiter_id = 0) {
         return $this->renderPage(
-            ProviderRepository::orderList($status, $id, $user_id, $waiter_id)
+            ProviderRepository::orderList($keywords, $status, $id, $user_id, $waiter_id)
         );
     }
 

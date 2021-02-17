@@ -12,14 +12,24 @@ use Module\Shop\Domain\Repositories\PaymentRepository;
 class OrderRepository {
 
 
-    public static function getList(int $status = 0, int $id = 0, int $user_id = 0,
+    public static function getList(string $keywords = '', int $status = 0, int $id = 0, int $user_id = 0,
                                    int $service_id = 0,
                                    int $provider_id = 0, int $waiter_id = 0) {
-        return OrderModel::query()->with('service', 'user', 'provider', 'waiter')
+        return OrderModel::query()
+            ->with('service', 'user', 'provider', 'waiter')
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             }, function ($query) {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
+            })
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                    ->where('status', ServiceModel::STATUS_ALLOW)
+                    ->pluck('id');
+                if (empty($serviceId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('service_id', $serviceId);
             })
             ->when($id > 0, function ($query) use ($id) {
                 $query->where('id', $id);
@@ -39,13 +49,22 @@ class OrderRepository {
             ->orderBy('id', 'desc')->page();
     }
 
-    public static function getSelfList(int $status = 0, int $id = 0) {
-        return OrderModel::query()->with('service')
+    public static function getSelfList(string $keywords = '', int $status = 0, int $id = 0) {
+        return OrderModel::query()->with('service', 'provider', 'waiter')
             ->where('user_id', auth()->id())
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             }, function ($query) {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
+            })
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                    ->where('status', ServiceModel::STATUS_ALLOW)
+                    ->pluck('id');
+                if (empty($serviceId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('service_id', $serviceId);
             })
             ->when($id > 0, function ($query) use ($id) {
                 $query->where('id', $id);

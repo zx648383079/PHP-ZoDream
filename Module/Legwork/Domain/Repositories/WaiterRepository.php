@@ -5,6 +5,8 @@ namespace Module\Legwork\Domain\Repositories;
 use Exception;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
+use Module\Legwork\Domain\Model\ServiceModel;
+use Module\Legwork\Domain\Model\ServiceSimpleModel;
 use Module\Legwork\Domain\Model\ServiceWaiterModel;
 use Module\Legwork\Domain\Model\WaiterModel;
 
@@ -30,6 +32,9 @@ class WaiterRepository {
     }
 
     public static function applyService(int|array $id) {
+        if (!WaiterRepository::isWaiter(auth()->id())) {
+            throw new Exception('您的身份还在审核中。。。');
+        }
         $exist = ServiceWaiterModel::where('user_id', auth()->id())
             ->pluck('service_id');
         $items = (array)$id;
@@ -83,9 +88,38 @@ class WaiterRepository {
             ->count() > 0;
     }
 
-    public static function orderList(int $status = 0) {
+    public static function serviceList(string $keywords = '', int $category = 0, bool $all = false) {
+        $links = ServiceWaiterModel::query()->where('user_id', auth()->id())
+            ->asArray()
+            ->pluck(null, 'service_id');
+        $page = ServiceSimpleModel::when(!empty($keywords), function ($query) {
+                ServiceModel::searchWhere($query, ['name']);
+            })->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })->when(!$all, function ($query) use ($links) {
+                $query->whereIn('id', array_keys($links));
+            })
+            ->where('status', ServiceModel::STATUS_ALLOW)
+            ->page();
+        foreach ($page as $item) {
+            $item['status'] = isset($links[$item['id']])
+                ? $links[$item['id']]['status'] : -1;
+        }
+        return $page;
+    }
+
+    public static function orderList(string $keywords = '', int $status = 0) {
         return OrderModel::query()->with('service')
             ->where('waiter_id', auth()->id())
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                    ->where('status', ServiceModel::STATUS_ALLOW)
+                    ->pluck('id');
+                if (empty($serviceId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('service_id', $serviceId);
+            })
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             }, function ($query) {
@@ -126,11 +160,21 @@ class WaiterRepository {
         throw new Exception('结束单失败');
     }
 
-    public static function waitTakingList() {
+    public static function waitTakingList(string $keywords = '') {
+        $query = OrderModel::query();
         $serviceId = ServiceWaiterModel::where('user_id', auth()->id())
             ->where('status', ServiceWaiterModel::STATUS_ALLOW)
             ->pluck('service_id');
-        return OrderModel::with('service')
+        if (!empty($serviceId) && !empty($keywords)) {
+            $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                ->where('status', ServiceModel::STATUS_ALLOW)
+                ->whereIn('id', $serviceId)
+                ->pluck('id');
+        }
+        if (empty($serviceId)) {
+            $query->isEmpty();
+        }
+        return $query->with('service')
             ->where('waiter_id', 0)
             ->whereIn('service_id', $serviceId)
             ->where('status', OrderModel::STATUS_PAID_UN_TAKING)

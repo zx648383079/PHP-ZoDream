@@ -33,13 +33,4 @@ class HomeController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
     }
-
-    public function applyAction(int|array $id) {
-        try {
-            WaiterRepository::applyService($id);
-            return $this->renderData(true);
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-    }
 }

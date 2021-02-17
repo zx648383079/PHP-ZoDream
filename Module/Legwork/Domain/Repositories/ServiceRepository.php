@@ -4,11 +4,17 @@ namespace Module\Legwork\Domain\Repositories;
 
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Legwork\Domain\Model\ServiceModel;
+use Module\Legwork\Domain\Model\ServiceSimpleModel;
 use Module\Legwork\Domain\Model\ServiceWaiterModel;
 
 class ServiceRepository {
-    public static function getList(string $keywords = '', int $cat_id = 0, int $user_id = 0, int $status = 0) {
-        return ServiceModel::query()->when(!empty($keywords), function ($query) {
+
+    public static function getList(string $keywords = '', int $cat_id = 0, int $user_id = 0, int $status = 0, bool $full = true) {
+        $query = ServiceModel::query();
+        if (!$full) {
+            $query = ServiceSimpleModel::query();
+        }
+        return $query->with('category', 'user')->when(!empty($keywords), function ($query) {
             ServiceModel::searchWhere($query, ['name']);
         })->when($user_id > 0, function ($query) use ($user_id) {
             $query->where('user_id', $user_id);
@@ -20,7 +26,7 @@ class ServiceRepository {
     }
 
     public static function getSelfList(string $keywords = '') {
-        return ServiceModel::query()->when(!empty($keywords), function ($query) {
+        return ServiceModel::query()->with('category')->when(!empty($keywords), function ($query) {
             ServiceModel::searchWhere($query, ['name']);
         })->where('user_id', auth()->id())->page();
     }
@@ -43,6 +49,8 @@ class ServiceRepository {
         if (empty($model)) {
             throw new \Exception('无权限操作');
         }
+        $model->category;
+        $model->provider;
         return $model;
     }
 
@@ -82,13 +90,17 @@ class ServiceRepository {
     }
 
     public static function waiterList(int $id, string $keywords = '', int $status = 0) {
-        $userId = ServiceWaiterModel::where('service_id', $id)
+        $links = ServiceWaiterModel::query()->where('service_id', $id)
             ->when($status > 0, function ($query) {
                 $query->where('status', 1);
-            })->pluck('user_id');
-        return UserSimpleModel::query()->when(!empty($keywords), function ($query) {
+            })->asArray()->pluck(null, 'user_id');
+        $page = UserSimpleModel::query()->when(!empty($keywords), function ($query) {
             UserSimpleModel::searchWhere($query, ['name']);
-        })->whereIn('id', $userId)->page();
+        })->whereIn('id', array_keys($links))->page();
+        foreach ($page as $item) {
+            $item['status'] = $links[$item['id']]['status'];
+        }
+        return $page;
     }
 
     public static function waiterChange(int $id, int|array $user_id, int $status = 0) {

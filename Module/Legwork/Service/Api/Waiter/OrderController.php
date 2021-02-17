@@ -6,9 +6,9 @@ use Module\Legwork\Domain\Repositories\WaiterRepository;
 
 class OrderController extends Controller {
 
-    public function indexAction(int $status = 0) {
+    public function indexAction(string $keywords = '', int $status = 0) {
         return $this->renderPage(
-            WaiterRepository::orderList($status)
+            WaiterRepository::orderList($keywords, $status)
         );
     }
 
@@ -30,9 +30,9 @@ class OrderController extends Controller {
         return $this->renderData(true);
     }
 
-    public function waitingAction() {
+    public function waitingAction(string $keywords = '') {
         return $this->renderPage(
-            WaiterRepository::waitTakingList()
+            WaiterRepository::waitTakingList($keywords)
         );
     }
 }

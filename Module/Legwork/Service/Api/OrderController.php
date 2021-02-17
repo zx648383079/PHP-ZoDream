@@ -8,8 +8,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class OrderController extends Controller {
 
-    public function indexAction(int $status = 0) {
-        return $this->renderPage(OrderRepository::getList($status));
+    public function indexAction(string $keywords = '', int $status = 0) {
+        return $this->renderPage(OrderRepository::getSelfList($keywords, $status));
     }
 
     public function createAction(Request $request) {
@@ -39,7 +39,7 @@ class OrderController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(compact('data'));
+        return $this->renderData($data);
     }
 
     public function commentAction($id, $rank = 10) {

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\CategoryProviderModel;
 
@@ -31,14 +32,18 @@ class CategoryRepository {
         CategoryModel::where('id', $id)->delete();
     }
 
-    public static function providerList(string $keywords = '', int $status = 0) {
-        $catId = CategoryProviderModel::where('user_id', auth()->id())
+    public static function providerList(int $id, string $keywords = '', int $status = 0) {
+        $links = CategoryProviderModel::where('cat_id', $id)
             ->when($status > 0, function ($query) {
                 $query->where('status', 1);
-            })->pluck('cat_id');
-        return CategoryModel::query()->when(!empty($keywords), function ($query) {
-            CategoryModel::searchWhere($query, ['name']);
-        })->whereIn('id', $catId)->page();
+            })->pluck(null, 'user_id');
+        $page = UserSimpleModel::query()->when(!empty($keywords), function ($query) {
+            UserSimpleModel::searchWhere($query, ['name']);
+        })->whereIn('id', array_keys($links))->page();
+        foreach ($page as $item) {
+            $item['status'] = $links[$item['id']]['status'];
+        }
+        return $page;
     }
 
     public static function all() {

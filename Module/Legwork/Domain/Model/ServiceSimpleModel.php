@@ -21,6 +21,7 @@ use Zodream\Helpers\Json;
 class ServiceSimpleModel extends ServiceModel {
 
    public static function query() {
-       return parent::query()->select('id', 'name', 'brief', 'price');
+       return parent::query()->select('id',
+           'name', 'brief', 'price', 'cat_id', 'user_id');
    }
 }

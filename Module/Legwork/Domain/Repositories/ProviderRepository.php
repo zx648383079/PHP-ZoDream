@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
 use Exception;
+use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\CategoryProviderModel;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
@@ -92,13 +93,22 @@ class ProviderRepository {
         ProviderModel::where('id', $id)->delete();
     }
 
-    public static function orderList(int $status = 0, int $id = 0, int $user_id = 0, int $waiter_id = 0) {
+    public static function orderList(string $keywords = '', int $status = 0, int $id = 0, int $user_id = 0, int $waiter_id = 0) {
         return OrderModel::query()->with('service')
             ->where('provider_id', auth()->id())
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             }, function ($query) {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
+            })
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                    ->where('status', ServiceModel::STATUS_ALLOW)
+                    ->pluck('id');
+                if (empty($serviceId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('service_id', $serviceId);
             })
             ->when($id > 0, function ($query) use ($id) {
                 $query->where('id', $id);
@@ -147,5 +157,30 @@ class ProviderRepository {
     public static function hasService(int $id): bool {
         return ServiceModel::where('id', $id)->where('user_id', auth()->id())
             ->count() > 0;
+    }
+
+    public static function categoryList(
+        string $keywords = '', int $category = 0, int $status = 0, bool $all = false) {
+        $links = CategoryProviderModel::query()
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })
+            ->when($status > 0, function ($query) {
+                $query->where('status', 1);
+            })
+            ->where('user_id', auth()->id())
+            ->asArray()
+            ->pluck(null, 'cat_id');
+        $page = CategoryModel::when(!empty($keywords), function ($query) {
+                CategoryModel::searchWhere($query, ['name']);
+            })->when(!$all, function ($query) use ($links) {
+                $query->whereIn('id', array_keys($links));
+            })
+            ->page();
+        foreach ($page as $item) {
+            $item['status'] = isset($links[$item['id']])
+                ? $links[$item['id']]['status'] : -1;
+        }
+        return $page;
     }
 }

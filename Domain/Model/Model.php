@@ -63,8 +63,8 @@ abstract class Model extends BaseModel {
      */
     public static function searchWhere(Builder $query, string|array $columns, bool $saveLog = true,
                                        string $key = 'keywords', string $value = '') {
-        return $query->where(function ($query) use ($columns, $saveLog, $key) {
-            static::search($query, $columns, $saveLog, $key);
+        return $query->where(function ($query) use ($columns, $saveLog, $key, $value) {
+            static::search($query, $columns, $saveLog, $key, $value);
         });
     }
 
