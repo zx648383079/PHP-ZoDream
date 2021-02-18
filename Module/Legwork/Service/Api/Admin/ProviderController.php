@@ -32,7 +32,7 @@ class ProviderController extends Controller {
 
     public function categoryAction(int $id, string $keywords = '', int $status = 0) {
         return $this->renderPage(
-            CategoryRepository::providerList($id, $keywords, $status)
+            ProviderRepository::categoryList($keywords, 0, $status, false, $id)
         );
     }
 }

@@ -7,6 +7,7 @@ use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\CategoryProviderModel;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
+use Module\Legwork\Domain\Model\OrderSimpleModel;
 use Module\Legwork\Domain\Model\ProviderModel;
 use Module\Legwork\Domain\Model\ServiceModel;
 
@@ -94,7 +95,7 @@ class ProviderRepository {
     }
 
     public static function orderList(string $keywords = '', int $status = 0, int $id = 0, int $user_id = 0, int $waiter_id = 0) {
-        return OrderModel::query()->with('service')
+        return OrderSimpleModel::query()->with('service', 'user', 'waiter')
             ->where('provider_id', auth()->id())
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
@@ -160,7 +161,10 @@ class ProviderRepository {
     }
 
     public static function categoryList(
-        string $keywords = '', int $category = 0, int $status = 0, bool $all = false) {
+        string $keywords = '', int $category = 0, int $status = 0, bool $all = false, $user_id = 0) {
+        if (empty($user_id)) {
+            $user_id = auth()->id();
+        }
         $links = CategoryProviderModel::query()
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
@@ -168,7 +172,7 @@ class ProviderRepository {
             ->when($status > 0, function ($query) {
                 $query->where('status', 1);
             })
-            ->where('user_id', auth()->id())
+            ->where('user_id', $user_id)
             ->asArray()
             ->pluck(null, 'cat_id');
         $page = CategoryModel::when(!empty($keywords), function ($query) {
@@ -179,7 +183,7 @@ class ProviderRepository {
             ->page();
         foreach ($page as $item) {
             $item['status'] = isset($links[$item['id']])
-                ? $links[$item['id']]['status'] : -1;
+                ? intval($links[$item['id']]['status']) : -1;
         }
         return $page;
     }

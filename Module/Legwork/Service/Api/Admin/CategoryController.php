@@ -47,4 +47,10 @@ class CategoryController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function providerAction(int $id, string $keywords = '', int $status = 0) {
+        return $this->renderPage(
+            CategoryRepository::providerList($id, $keywords, $status)
+        );
+    }
 }

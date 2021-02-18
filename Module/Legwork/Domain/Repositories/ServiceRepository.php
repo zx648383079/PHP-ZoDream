@@ -98,7 +98,7 @@ class ServiceRepository {
             UserSimpleModel::searchWhere($query, ['name']);
         })->whereIn('id', array_keys($links))->page();
         foreach ($page as $item) {
-            $item['status'] = $links[$item['id']]['status'];
+            $item['status'] = intval($links[$item['id']]['status']);
         }
         return $page;
     }

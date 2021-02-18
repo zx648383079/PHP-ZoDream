@@ -5,6 +5,7 @@ namespace Module\Legwork\Domain\Repositories;
 use Exception;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
+use Module\Legwork\Domain\Model\OrderSimpleModel;
 use Module\Legwork\Domain\Model\ServiceModel;
 use Module\Legwork\Domain\Model\ServiceSimpleModel;
 use Module\Legwork\Domain\Model\ServiceWaiterModel;
@@ -103,7 +104,7 @@ class WaiterRepository {
             ->page();
         foreach ($page as $item) {
             $item['status'] = isset($links[$item['id']])
-                ? $links[$item['id']]['status'] : -1;
+                ? intval($links[$item['id']]['status']) : -1;
         }
         return $page;
     }
@@ -161,7 +162,7 @@ class WaiterRepository {
     }
 
     public static function waitTakingList(string $keywords = '') {
-        $query = OrderModel::query();
+        $query = OrderSimpleModel::query();
         $serviceId = ServiceWaiterModel::where('user_id', auth()->id())
             ->where('status', ServiceWaiterModel::STATUS_ALLOW)
             ->pluck('service_id');
