@@ -2,6 +2,7 @@
 namespace Module\Book\Domain\Migrations;
 
 use Module\Book\Domain\Model\BookAuthorModel;
+use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
@@ -35,14 +36,16 @@ class CreateBookTables extends Migration {
                 ->defaultVal(0)->comment('点击数');
             $table->timestamp('over_at')->comment('完本日期');
             $table->set('source')->varchar(200)->defaultVal('')->comment('来源');
+            $table->set('status')->tinyint(1)->defaultVal(0);
             $table->softDeletes();
             $table->timestamps();
         })->append(BookChapterModel::tableName(), function(Table $table) {
             $table->setComment('小说章节');
             $table->set('id')->pk(true);
-            $table->set('book_id')->int()->defaultVal(0);
-            $table->set('title')->varchar(200)->comment('标题');
+            $table->set('book_id')->int()->notNull();
+            $table->set('title')->varchar(200)->notNull()->comment('标题');
             $table->set('parent_id')->int()->defaultVal(0);
+            $table->set('price')->int()->defaultVal(0);
             $table->set('status')->tinyint(1)->defaultVal(0);
             $table->set('position')->tinyint(4)->defaultVal(99);
             $table->set('size')->int()->unsigned()->defaultVal(0)->comment('字数');
@@ -55,14 +58,17 @@ class CreateBookTables extends Migration {
             $table->set('content')->longtext()->comment('内容');
         })->append(BookCategoryModel::tableName(), function(Table $table) {
             $table->setComment('小说分类');
-            $table->set('id')->pk()->ai();
+            $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->unique()->notNull()->comment('分类名');
             $table->timestamp('created_at');
         })->append(BookAuthorModel::tableName(), function(Table $table) {
             $table->setComment('小说作者');
             $table->set('id')->pk(true);
             $table->set('name')->varchar(100)->unique()->notNull()->comment('作者名');
-            $table->set('avatar')->varchar(200)->comment('作者头像');
+            $table->set('avatar')->varchar(200)->defaultVal('')->comment('作者头像');
+            $table->set('description')->varchar(200)->defaultVal('')->comment('简介');
+            $table->set('user_id')->int()->defaultVal(0);
+            $table->set('status')->tinyint(1)->defaultVal(0);
             $table->timestamps();
         })->append(BookHistoryModel::tableName(), function(Table $table) {
             $table->setComment('小说阅读历史');
@@ -72,6 +78,13 @@ class CreateBookTables extends Migration {
             $table->set('chapter_id')->int()->defaultVal(0);
             $table->set('progress')->tinyint(1)->defaultVal(0);
             $table->timestamps();
+        })->append(BookBuyLogModel::tableName(), function(Table $table) {
+            $table->setComment('小说购买记录');
+            $table->set('id')->pk(true);
+            $table->set('book_id')->int(10)->notNull();
+            $table->set('chapter_id')->int(10)->notNull();
+            $table->set('user_id')->int(10)->notNull();
+            $table->timestamp('created_at');
         })->append(BookLogModel::tableName(), function(Table $table) {
             $table->setComment('小说记录统计');
             $table->set('id')->pk(true);
@@ -141,7 +154,7 @@ class CreateBookTables extends Migration {
             ['name' => '网游'],
         ]);
         BookAuthorModel::query()->insert([
-           ['name' => '未知']
+           ['name' => '未知', 'status' => 1]
         ]);
 
     }

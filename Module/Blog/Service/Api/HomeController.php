@@ -8,6 +8,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
+use Module\Blog\Domain\Repositories\OptionRepository;
 
 class HomeController extends Controller {
 
@@ -74,5 +75,9 @@ class HomeController extends Controller {
 
     public function subtotalAction() {
         return $this->render(BlogRepository::subtotal());
+    }
+
+    public function editOptionAction() {
+        return $this->render(OptionRepository::all());
     }
 }

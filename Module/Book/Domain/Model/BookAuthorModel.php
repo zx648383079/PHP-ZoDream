@@ -10,10 +10,17 @@ use Domain\Model\Model;
  * @property integer $id
  * @property string $name
  * @property string $avatar
+ * @property string $description
+ * @property integer $user_id
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
 class BookAuthorModel extends Model {
+
+    const STATUS_NONE = 0;
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 2;
 
     public static function tableName() {
         return 'book_author';
@@ -23,6 +30,9 @@ class BookAuthorModel extends Model {
         return [
             'name' => 'required|string:0,100',
             'avatar' => 'string:0,200',
+            'description' => 'string:0,200',
+            'user_id' => 'int',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

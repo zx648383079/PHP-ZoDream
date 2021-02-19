@@ -6,7 +6,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Html\Tree;
 
-class TermRepository {
+class CategoryRepository {
 
     /**
      * @var bool|TermModel[]
@@ -53,5 +53,10 @@ class TermRepository {
      */
     public static function tree() {
         return (new Tree(self::get()))->makeTreeForHtml();
+    }
+
+    public static function all() {
+        return (new Tree(TermModel::query()
+            ->get('id', 'name', 'parent_id')))->makeTreeForHtml();
     }
 }

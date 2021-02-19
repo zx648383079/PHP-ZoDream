@@ -14,8 +14,6 @@ use Zodream\Html\Page;
  */
 class BookClickLogModel extends Model {
 
-    public $timestamps = false;
-
     public static function tableName() {
         return 'book_click_log';
     }

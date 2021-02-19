@@ -113,7 +113,7 @@ class BookController extends Controller {
     public function refreshAction() {
         $this->deleteNoBookChapter();
         $this->refreshBookSize();
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     protected function refreshBookSize() {

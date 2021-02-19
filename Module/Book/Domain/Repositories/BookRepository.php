@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Repositories;
 
+use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookModel;
@@ -51,6 +52,30 @@ class BookRepository {
         return $model;
     }
 
+    public static function save(array $data) {
+        $model = new BookModel();
+        if (!$model->load($data)) {
+            throw new \Exception('输入数据有误！');
+        }
+        if ($model->isExist()) {
+            throw new \Exception('书籍已存在！');
+        }
+        $model->autoIsNew();
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function remove(int $id) {
+        BookModel::where('id', $id)->delete();
+        $ids = BookChapterModel::where('book_id', $id)->pluck('id');
+        if (!empty($ids)) {
+            BookChapterModel::where('book_id', $id)->delete();
+            BookChapterBodyModel::whereIn('id', $ids)->delete();
+        }
+    }
+
     public static function chapters($book) {
         return BookChapterModel::where('book_id', $book)
             ->orderBy('position', 'asc')
@@ -72,5 +97,35 @@ class BookRepository {
         $data['previous'] = $chapter->previous;
         $data['next'] = $chapter->next;
         return $data;
+    }
+
+    public static function refreshBook() {
+        static::deleteNoBookChapter();
+        static::refreshBookSize();
+    }
+
+    protected static function refreshBookSize() {
+        $ids = BookModel::pluck('id');
+        foreach ($ids as $id) {
+            //$ids = BookChapterModel::where('book_id', $id)->pluck('id');
+            //$length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
+            $length = BookChapterModel::where('book_id', $id)->sum('size');
+            BookModel::where('id', $id)
+                ->update([
+                    'size' => $length
+                ]);
+        }
+    }
+
+    protected static function deleteNoBookChapter(): void {
+        $ids = BookChapterModel::query()->alias('c')
+            ->left('book b', 'b.id', '=', 'c.book_id')
+            ->where('b.id')
+            ->select('c.id')
+            ->pluck();
+        if (!empty($ids)) {
+            BookChapterModel::whereIn('id', $ids)->delete();
+            BookChapterBodyModel::whereIn('id', $ids)->delete();
+        }
     }
 }

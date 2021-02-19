@@ -3,9 +3,9 @@ namespace Module\Blog\Service\Api;
 
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Blog\Domain\Model\TermModel;
-use Module\Blog\Domain\Repositories\TermRepository;
+use Module\Blog\Domain\Repositories\CategoryRepository;
 
-class TermController extends Controller {
+class CategoryController extends Controller {
 
     use CheckRole;
 
@@ -17,7 +17,7 @@ class TermController extends Controller {
     }
 
     public function indexAction() {
-        return $this->renderData(TermRepository::get());
+        return $this->renderData(CategoryRepository::get());
     }
 
     public function detailAction($id) {
@@ -39,6 +39,6 @@ class TermController extends Controller {
     }
 
     public function allAction() {
-        return $this->renderData(TermModel::query()->get('id', 'name'));
+        return $this->renderData(CategoryRepository::all());
     }
 }

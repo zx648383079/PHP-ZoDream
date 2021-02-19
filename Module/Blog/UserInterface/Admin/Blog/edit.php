@@ -3,12 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 use Zodream\Html\Dark\Theme;
-use Module\Blog\Domain\Weather;
-use Module\Blog\Domain\CCLicenses;
+use Module\Blog\Domain\Repositories\OptionRepository;
 
 /** @var $this View */
-$lang_list = ['Html', 'Css', 'Sass', 'Less', 'TypeScript', 'JavaScript', 'PHP', 'Go', 'C#', 'ASP.NET', '.NET Core', 'Python', 'C', 'C++', 'Java', 'Kotlin', 'Swift', 'Objective-C', 'Dart', 'Flutter'];
-$weather_list = Weather::getList();
+$lang_list = OptionRepository::languages();
 $this->title = ($model->id > 0 ? '编辑' : '新增'). '文章';
 $configs = request()->isMobile() ?
     '{toolbars: [[\'fullscreen\', \'source\', \'undo\', \'redo\', \'bold\', \'italic\', \'underline\', \'customstyle\', \'link\',\'simpleupload\', \'insertvideo\']],}' : '{}';
@@ -58,12 +56,12 @@ $this->registerJs($js);
                 <?=Form::text('open_rule')?>
                 <?php endif;?>
                 <?=Form::select('edit_type', ['Ueditor', 'MarkDown'])?>
-                <?=Theme::select('meta[weather]', array_merge(['' => '请选择'], $weather_list), $metaItems['weather'], '天气')?>
+                <?=Theme::select('meta[weather]', [OptionRepository::weathers(), 'name', 'value', ['' => '请选择']], $metaItems['weather'], '天气')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
                 <?=Theme::file('meta[audio_url]', $metaItems['audio_url'], '音频')->allow('audio/*')?>
                 <?=Theme::file('meta[video_url]', $metaItems['video_url'], '视频')->isFile('video/*')?>
-                <?=Theme::select('meta[cc_license]', [CCLicenses::getList(), 'label', 'name', ['' => '请选择']], $metaItems['cc_license'], '版权协议')?>
+                <?=Theme::select('meta[cc_license]', [OptionRepository::licenses(), 'name', 'value', ['' => '请选择']], $metaItems['cc_license'], '版权协议')?>
                 <?=Theme::switch('meta[comment_status]', $metaItems['comment_status'], '评论状态')?>
                 <?php if($model->parent_id < 1):?>
                 <div class="input-group">

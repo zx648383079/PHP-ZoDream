@@ -13,10 +13,11 @@ use Domain\Entities\Entity;
  * @property integer $classify
  * @property integer $cat_id
  * @property integer $size
- * @property string $source
  * @property integer $click_count
  * @property integer $recommend_count
  * @property integer $over_at
+ * @property string $source
+ * @property integer $status
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -26,20 +27,21 @@ class BookEntity extends Entity {
         return 'book';
     }
 
-    public function rules() {
+    protected function rules() {
         return [
             'name' => 'required|string:0,100',
             'cover' => 'string:0,200',
             'description' => 'string:0,200',
             'author_id' => 'int',
             'user_id' => 'int',
-            'classify' => 'int',
-            'cat_id' => 'int:0,999',
+            'classify' => 'int:0,127',
+            'cat_id' => 'int:0,127',
             'size' => 'int',
-            'source' => 'string:0,200',
             'click_count' => 'int',
             'recommend_count' => 'int',
             'over_at' => 'int',
+            'source' => 'string:0,200',
+            'status' => 'int:0,127',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

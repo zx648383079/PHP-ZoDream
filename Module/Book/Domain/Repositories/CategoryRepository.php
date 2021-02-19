@@ -22,4 +22,23 @@ class CategoryRepository {
         }
         return $items;
     }
+
+    public static function get(int $id) {
+        return BookCategoryModel::findOrThrow($id, '数据有误');
+    }
+
+    public static function save(array $data) {
+        $id = isset($data['id']) ? $data['id'] : 0;
+        unset($data['id']);
+        $model = BookCategoryModel::findOrNew($id);
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function remove(int $id) {
+        BookCategoryModel::where('id', $id)->delete();
+    }
 }
