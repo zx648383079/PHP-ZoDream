@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Domain\Model\ModelHelper;
 use Module\ModuleController;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 
@@ -15,7 +16,7 @@ class GoodsController extends Controller {
         if (is_numeric($id) && $id > 0) {
             return $this->infoAction($id);
         }
-        $page = GoodsRepository::search(ModuleController::parseArrInt($id), $category, $brand, $keywords, $per_page, $sort, $order);
+        $page = GoodsRepository::search(ModelHelper::parseArrInt($id), $category, $brand, $keywords, $per_page, $sort, $order);
         return $this->renderPage($page);
     }
 

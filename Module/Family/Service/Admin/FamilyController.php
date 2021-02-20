@@ -1,6 +1,7 @@
 <?php
 namespace Module\Family\Service\Admin;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Family\Domain\Model\ClanModel;
 use Module\Family\Domain\Model\FamilyModel;
@@ -70,7 +71,7 @@ class FamilyController extends Controller {
         if (!$model->saveIgnoreUpdate()) {
             return $this->renderFailure($model->getFirstError());
         }
-        $spouseItems = self::formArr($request->get('spouse', []));
+        $spouseItems = ModelHelper::formArr($request->get('spouse', []));
         foreach ($spouseItems as $item) {
             if ($item['spouse_id'] < 1) {
                 continue;

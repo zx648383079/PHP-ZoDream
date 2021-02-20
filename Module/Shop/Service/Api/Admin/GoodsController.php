@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Models\AttributeModel;
@@ -12,12 +13,11 @@ use Zodream\Helpers\Json;
 
 class GoodsController extends Controller {
 
-    public function indexAction($id = 0,
-                                $category = 0,
-                                $brand = 0,
-                                $keywords = '',
-
-                                $per_page = 20, $sort = '', $order = '', $trash = false) {
+    public function indexAction(int $id = 0,
+                                int $category = 0,
+                                int $brand = 0,
+                                string $keywords = '',
+                                int $per_page = 20, string $sort = '', string $order = '', bool $trash = false) {
         if (!is_array($id) && $id > 0) {
             return $this->detailAction($id);
         }
@@ -104,5 +104,11 @@ class GoodsController extends Controller {
         unset($item);
         $product_list = ProductModel::where('goods_id', $goods_id)->orderBy('id asc')->all();
         return $this->render(compact('attr_list', 'product_list'));
+    }
+
+    public function searchAction(int $category = 0,
+                           int $brand = 0,
+                           string $keywords = '') {
+        return $this->renderPage(GoodsRepository::search([], $category, $brand, $keywords));
     }
 }

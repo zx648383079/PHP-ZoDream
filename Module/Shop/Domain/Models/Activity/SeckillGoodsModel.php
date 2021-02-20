@@ -18,7 +18,7 @@ use Module\Shop\Domain\Models\GoodsSimpleModel;
  */
 class SeckillGoodsModel extends Model {
 
-    protected $append = ['goods', 'status'];
+    protected array $append = ['goods', 'status'];
 
     const STATUS_DISABLE = 0; // 已抢光
     const STATUS_BUY = 1;     // 可以买

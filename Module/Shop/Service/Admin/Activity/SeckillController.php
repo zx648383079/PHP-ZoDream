@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Domain\Model\ModelHelper;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
@@ -80,9 +81,9 @@ class SeckillController extends Controller {
     }
 
     public function updateGoodsAction($act_id, $time_id, $goods) {
-        $goods = static::parseArrInt($goods);
+        $goods = ModelHelper::parseArrInt($goods);
         $exist = SeckillGoodsModel::where('act_id', $act_id)->where('time_id', $time_id)->pluck('goods_id');
-        list($add, $_, $del) = static::splitId($goods, $exist);
+        list($add, $_, $del) = ModelHelper::splitId($goods, $exist);
         if (!empty($add)) {
             SeckillGoodsModel::query()->insert(array_map(function ($goods) use ($act_id, $time_id) {
                 return [

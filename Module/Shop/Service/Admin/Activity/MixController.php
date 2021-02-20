@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Domain\Model\ModelHelper;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -29,7 +30,7 @@ class MixController extends Controller {
         $model->description = $request->get('description');
         $model->start_at = $request->get('start_at');
         $model->end_at = $request->get('end_at');
-        $goods_list = self::formArr($request->get('configure'), 0);
+        $goods_list = ModelHelper::formArr($request->get('configure'), 0);
         if (empty($goods_list)) {
             return $this->renderFailure('请选择商品');
         }

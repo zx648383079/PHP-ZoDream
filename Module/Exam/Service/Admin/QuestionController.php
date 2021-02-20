@@ -1,6 +1,7 @@
 <?php
 namespace Module\Exam\Service\Admin;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\QuestionAnswerModel;
@@ -54,7 +55,7 @@ class QuestionController extends Controller {
             return $this->renderFailure($model->getFirstError());
         }
         QuestionOptionModel::batchSave($model,
-            self::formArr($request->get('option', [])));
+            ModelHelper::formArr($request->get('option', [])));
         return $this->renderData([
             'url' => $this->getUrl('question')
         ]);

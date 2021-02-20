@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Model\Concerns;
 
 
+use Domain\Model\ModelHelper;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Zodream\Database\Relation;
@@ -46,33 +47,20 @@ trait UserRoleTrait {
      * @param $roles
      */
     public function setRole($roles) {
-        $data = [];
-        foreach ((array)$roles as $id) {
-            $id = intval($id);
-            if ($id < 1 || in_array($id, $data)) {
-                continue;
-            }
-            $data[] = $id;
-        }
-        if (empty($data) && empty($this->role_ids)) {
-            return;
-        }
-        $diff = empty($data) ? [] : array_diff($data, $this->role_ids);
-        $del_diff = empty($this->role_ids) ? [] : array_diff($this->role_ids, $data);
-        if (!empty($del_diff)) {
+        list($add, $_, $del) = ModelHelper::splitId((array)$roles, $this->role_ids);
+        if (!empty($del)) {
             UserRoleModel::where('user_id', $this->id)
-                ->whereIn('role_id', $del_diff)
+                ->whereIn('role_id', $del)
                 ->delete();
         }
-        if (empty($diff)) {
-            return;
+        if (!empty($add)) {
+            UserRoleModel::query()->insert(array_map(function ($id) {
+                return [
+                    'user_id' => $this->id,
+                    'role_id' => $id
+                ];
+            }, $add));
         }
-        UserRoleModel::query()->insert(array_map(function ($id) {
-            return [
-                'user_id' => $this->id,
-                'role_id' => $id
-            ];
-        }, $diff));
     }
 
     /**

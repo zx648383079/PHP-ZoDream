@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Domain\Model\ModelHelper;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
 
@@ -26,7 +27,7 @@ class PresaleController extends Controller {
         $model->load();
         $model->type = ActivityModel::TYPE_PRE_SALE;
         $model->scope_type = ActivityModel::SCOPE_GOODS;
-        $configure['step'] = self::formArr($configure['step']);
+        $configure['step'] = ModelHelper::formArr($configure['step']);
         if (!$model->autoIsNew()->save()) {
             return $this->renderFailure($model->getFirstError());
         }

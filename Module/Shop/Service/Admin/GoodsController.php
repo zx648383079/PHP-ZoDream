@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Admin;
 
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\AttributeGroupModel;
 use Module\Shop\Domain\Models\AttributeModel;
@@ -253,7 +254,7 @@ class GoodsController extends Controller {
         $brand_id = 0, $selected = [],
         $just_selected = false,
         $simple = false) {
-        $selected = static::parseArrInt($selected);
+        $selected = ModelHelper::parseArrInt($selected);
         $simple = !!$simple;
         $model_list = GoodsSimpleModel::when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');

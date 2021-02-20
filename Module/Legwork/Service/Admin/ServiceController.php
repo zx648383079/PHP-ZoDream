@@ -1,6 +1,7 @@
 <?php
 namespace Module\Legwork\Service\Admin;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\ServiceModel;
@@ -35,7 +36,7 @@ class ServiceController extends Controller {
         if (!$model->load()) {
             return $this->renderFailure($model->getFirstError());
         }
-        $model->form = self::formArr($form, null, function ($item) {
+        $model->form = ModelHelper::formArr($form, null, function ($item) {
             return !empty($item['name']);
         });
         if (!$model->save()) {

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Admin\Activity;
 
+use Domain\Model\ModelHelper;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Service\Admin\Controller;
 
@@ -26,7 +27,7 @@ class GroupBuyController extends Controller {
         $model->load();
         $model->type = ActivityModel::TYPE_GROUP_BUY;
         $model->scope_type = ActivityModel::SCOPE_GOODS;
-        $configure['step'] = self::formArr($configure['step']);
+        $configure['step'] = ModelHelper::formArr($configure['step']);
         $model->configure = $configure;
         if (!$model->autoIsNew()->save()) {
             return $this->renderFailure($model->getFirstError());

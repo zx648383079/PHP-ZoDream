@@ -199,7 +199,6 @@ class CreateShopTables extends Migration {
         });
         $this->createShipping();
         $this->createWarehouse();
-
         $this->createActivity();
         parent::up();
     }
@@ -616,11 +615,12 @@ class CreateShopTables extends Migration {
         })->append(WarehouseLogModel::tableName(), function (Table $table) {
             $table->set('id')->pk(true);
             $table->set('warehouse_id')->int()->notNull();
+            $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->set('product_id')->int()->notNull();
             $table->set('amount')->int()->notNull();
             $table->set('order_id')->int()->notNull();
-            $table->set('remark')->int()->notNull();
+            $table->set('remark')->varchar()->defaultVal('');
             $table->timestamp('created_at');
         });
     }

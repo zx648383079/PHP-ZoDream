@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
-
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
@@ -15,16 +16,16 @@ use Zodream\Html\Page;
 class GoodsRepository {
 
     public static function search(array $id = [],
-                                  $category = 0,
-                                  $brand = 0,
-                                  $keywords = null,
-                                  $per_page = 20, $sort = null, $order = null): Page {
+                                  int $category = 0,
+                                  int $brand = 0,
+                                  string $keywords = '',
+                                  int $per_page = 20, $sort = null, $order = null): Page {
         return GoodsSimpleModel::sortBy($sort, $order)
             ->when(!empty($id), function ($query) use ($id) {
                 $query->whereIn('id', array_map('intval', $id));
             })
             ->when(!empty($keywords), function ($query) {
-                GoodsEntity::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
             })->when($brand > 0, function ($query) use ($brand) {
@@ -42,7 +43,7 @@ class GoodsRepository {
                 $query->whereIn('id', array_map('intval', $id));
             })
             ->when(!empty($keywords), function ($query) {
-                GoodsEntity::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', intval($category));
             })->when($brand > 0, function ($query) use ($brand) {

@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Model\RBAC;
 
 
 use Domain\Model\Model;
+use Domain\Model\ModelHelper;
 
 /**
  * Class RoleModel
@@ -70,33 +71,20 @@ class RoleModel extends Model {
      * @throws \Exception
      */
     public function setPermission($perms) {
-        $data = [];
-        foreach ((array)$perms as $id) {
-            $id = intval($id);
-            if ($id < 1 || in_array($id, $data)) {
-                continue;
-            }
-            $data[] = $id;
-        }
-        if (empty($data) && empty($this->perm_ids)) {
-            return;
-        }
-        $diff = empty($data) ? [] : array_diff($data, $this->perm_ids);
-        $del_diff = empty($this->perm_ids) ? [] : array_diff($this->perm_ids, $data);
-        if (!empty($del_diff)) {
+        list($add, $_, $del) = ModelHelper::splitId((array)$perms, $this->perm_ids);
+        if (!empty($del)) {
             RolePermissionModel::where('role_id', $this->id)
-                ->whereIn('permission_id', $del_diff)
+                ->whereIn('permission_id', $del)
                 ->delete();
         }
-        if (empty($diff)) {
-            return;
+        if (!empty($add)) {
+            RolePermissionModel::query()->insert(array_map(function ($id) {
+                return [
+                    'role_id' => $this->id,
+                    'permission_id' => $id
+                ];
+            }, $add));
         }
-        RolePermissionModel::query()->insert(array_map(function ($id) {
-            return [
-                'role_id' => $this->id,
-                'permission_id' => $id
-            ];
-        }, $diff));
     }
 
     /**
