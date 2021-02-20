@@ -2,12 +2,13 @@
 namespace Module\Book\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 
 class CategoryController extends Controller {
     public function indexAction($keywords = null) {
         $model_list = BookCategoryModel::withCount('book')->when(!empty($keywords), function ($query) {
-            BookCategoryModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->all();
         return $this->show(compact('model_list'));
     }

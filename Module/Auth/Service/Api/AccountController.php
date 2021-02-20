@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
@@ -55,7 +56,7 @@ class AccountController extends Controller {
     public function loginLogAction($keywords = null) {
         $model_list = LoginLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                LoginLogModel::searchWhere($query, 'ip');
+                SearchModel::searchWhere($query, 'ip');
             })
             ->orderBy('id desc')->page();
         return $this->renderPage($model_list);

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Demo\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Demo\Domain\Model\TagModel;
 use Module\Demo\Domain\Model\TagRelationshipModel;
 
@@ -8,7 +9,7 @@ class TagController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list = TagModel::when(!empty($keywords), function ($query) {
-                TagModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
         if (request()->isAjax() && !request()->header('X-PJAX')) {
             return $this->renderData($model_list);

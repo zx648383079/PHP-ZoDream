@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Video\Domain\Models\LogModel;
 use Module\Video\Domain\Models\VideoModel;
@@ -10,7 +11,7 @@ class VideoRepository {
 
     public static function getList(string $keywords = '', int $user = 0, int $music = 0, $id = null) {
         return VideoModel::with('user', 'music')->when(!empty($keywords), function ($query) {
-            VideoModel::searchWhere($query, ['content']);
+            SearchModel::searchWhere($query, ['content']);
         })->when(!empty($user), function ($query) use ($user) {
             $query->where('user_id', $user);
         })->when(!empty($music), function ($query) use ($music) {
@@ -29,7 +30,7 @@ class VideoRepository {
      */
     public static function moreList(string $keywords = '', int $user = 0, int $music = 0) {
         return VideoModel::with('user', 'music')->when(!empty($keywords), function ($query) {
-            VideoModel::searchWhere($query, ['content']);
+            SearchModel::searchWhere($query, ['content']);
         })->when(!empty($user), function ($query) use ($user) {
             $query->where('user_id', $user);
         })->when(!empty($music), function ($query) use ($music) {

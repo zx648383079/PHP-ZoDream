@@ -2,6 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
@@ -36,7 +37,7 @@ class AccountController extends Controller {
     public function loginLogAction($keywords = null) {
         $model_list = LoginLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                LoginLogModel::searchWhere($query, 'ip');
+                SearchModel::searchWhere($query, 'ip');
             })
             ->orderBy('id desc')->page();
         return $this->show(compact('model_list'));
@@ -45,7 +46,7 @@ class AccountController extends Controller {
     public function logAction($keywords = null) {
         $model_list = ActionLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                LoginLogModel::searchWhere($query, 'ip');
+                SearchModel::searchWhere($query, 'ip');
             })
             ->orderBy('id desc')->page();
         return $this->show(compact('model_list'));

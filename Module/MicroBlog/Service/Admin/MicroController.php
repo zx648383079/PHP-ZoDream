@@ -1,6 +1,7 @@
 <?php
 namespace Module\MicroBlog\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 
 class MicroController extends Controller {
@@ -8,7 +9,7 @@ class MicroController extends Controller {
     public function indexAction($keywords = null) {
         $model_list  = MicroBlogModel::with('user')
             ->when(!empty($keywords), function ($query) {
-                MicroBlogModel::searchWhere($query, ['content']);
+                SearchModel::searchWhere($query, ['content']);
             })->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list'));
     }

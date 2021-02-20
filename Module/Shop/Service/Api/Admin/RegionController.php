@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\RegionModel;
 
 class RegionController extends Controller {
@@ -8,9 +9,7 @@ class RegionController extends Controller {
     public function indexAction($parent = 0, $keywords = '') {
         $model_list = RegionModel::where('parent_id', $parent)
             ->when(!empty($keywords), function ($query) {
-            $query->where(function ($query) {
-                RegionModel::search($query, 'name');
-            });
+            SearchModel::searchWhere($query, 'name');
         })->page();
         return $this->renderPage($model_list);
     }
@@ -40,12 +39,5 @@ class RegionController extends Controller {
 
     public function treeAction() {
         return $this->renderData(RegionModel::cacheTree());
-    }
-
-    public function searchAction(string $keywords) {
-        $model_list = RegionModel::when(!empty($keywords), function ($query) {
-                RegionModel::searchWhere($query, 'name');
-            })->page();
-        return $this->renderPage($model_list);
     }
 }

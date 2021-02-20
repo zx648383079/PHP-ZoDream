@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Service;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
@@ -97,7 +98,7 @@ class HomeController extends Controller {
 
     public function suggestionAction($keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
-           BlogModel::searchWhere($query, 'title');
+            SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();
         return $this->renderData($data);
     }

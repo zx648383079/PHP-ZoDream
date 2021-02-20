@@ -1,6 +1,7 @@
 <?php
 namespace Module\Exam\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\PageEvaluateModel;
@@ -12,9 +13,7 @@ class PageController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list = PageModel::when(!empty($keywords), function ($query) {
-            $query->where(function ($query) {
-                PageModel::search($query, 'name');
-            });
+            SearchModel::searchWhere($query, 'name');
         })->orderBy('end_at', 'desc')->page();
         return $this->show(compact('model_list', 'keywords'));
     }
@@ -51,9 +50,7 @@ class PageController extends Controller {
         $page = PageModel::find($id);
         $model_list = PageEvaluateModel::with('user')
             ->when(!empty($keywords), function ($query) {
-            $users = UserModel::where(function ($query) {
-                    PageEvaluateModel::search($query, 'name');
-                })->pluck('id');
+            $users = SearchModel::searchWhere(UserModel::query(), 'name')->pluck('id');
             if (empty($users)) {
                 $query->isEmpty();
                 return;

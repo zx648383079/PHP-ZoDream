@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
@@ -14,7 +15,7 @@ use Module\Legwork\Domain\Model\WaiterModel;
 class WaiterRepository {
     public static function getList(string $keywords = '') {
         return WaiterModel::query()->when(!empty($keywords), function ($query) {
-            WaiterModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->page();
     }
 
@@ -94,7 +95,7 @@ class WaiterRepository {
             ->asArray()
             ->pluck(null, 'service_id');
         $page = ServiceSimpleModel::when(!empty($keywords), function ($query) {
-                ServiceModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
             })->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
             })->when(!$all, function ($query) use ($links) {
@@ -113,7 +114,7 @@ class WaiterRepository {
         return OrderModel::query()->with('service')
             ->where('waiter_id', auth()->id())
             ->when(!empty($keywords), function ($query) use ($keywords) {
-                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                $serviceId = SearchModel::searchWhere(ServiceModel::query(), ['name'])
                     ->where('status', ServiceModel::STATUS_ALLOW)
                     ->pluck('id');
                 if (empty($serviceId)) {
@@ -167,7 +168,7 @@ class WaiterRepository {
             ->where('status', ServiceWaiterModel::STATUS_ALLOW)
             ->pluck('service_id');
         if (!empty($serviceId) && !empty($keywords)) {
-            $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+            $serviceId = SearchModel::searchWhere(ServiceModel::query(), ['name'])
                 ->where('status', ServiceModel::STATUS_ALLOW)
                 ->whereIn('id', $serviceId)
                 ->pluck('id');

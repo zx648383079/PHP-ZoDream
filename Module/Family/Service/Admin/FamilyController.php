@@ -1,6 +1,7 @@
 <?php
 namespace Module\Family\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Family\Domain\Model\ClanModel;
 use Module\Family\Domain\Model\FamilyModel;
 use Module\Family\Domain\Model\FamilySpouseModel;
@@ -11,9 +12,7 @@ class FamilyController extends Controller {
     public function indexAction(Request $request, $keywords = null, $clan_id = null) {
         $model_list = FamilyModel::with('clan')
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    FamilyModel::search($query, 'name');
-                });
+                SearchModel::searchWhere($query, 'name');
             })->when(!empty($clan_id), function ($query) use ($clan_id) {
                 $query->where('clan_id', intval($clan_id));
             })->orderBy('id', 'desc')->page();

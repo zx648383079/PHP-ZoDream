@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\GoodsModel;
 
 class SearchController extends Controller {
@@ -16,7 +17,7 @@ class SearchController extends Controller {
 
     public function tipsAction($keywords) {
         $data = GoodsModel::when(!empty($keywords), function ($query) {
-                GoodsModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
             })->limit(10)->pluck('name');
         return $this->render(compact('data'));
     }

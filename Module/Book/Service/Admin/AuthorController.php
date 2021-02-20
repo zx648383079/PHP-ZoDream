@@ -2,12 +2,13 @@
 namespace Module\Book\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 
 class AuthorController extends Controller {
     public function indexAction($keywords = null) {
         $model_list = BookAuthorModel::when(!empty($keywords), function ($query) {
-            BookAuthorModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->page();
         return $this->show(compact('model_list'));
     }

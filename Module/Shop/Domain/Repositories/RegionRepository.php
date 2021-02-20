@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\RegionModel;
 
 class RegionRepository {
@@ -9,7 +10,7 @@ class RegionRepository {
     public static function getList(int $parent = 0, string $keywords = '') {
         return RegionModel::where('parent_id', $parent)
             ->when(!empty($keywords), function ($query) {
-                RegionModel::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })->all();
     }
 
@@ -31,5 +32,14 @@ class RegionRepository {
             $child = $model->parent_id;
         }
         return array_reverse($path);
+    }
+
+    public static function search(string $keywords = '', int|array $id = 0) {
+        return SearchModel::searchOption(
+            RegionModel::query(),
+            ['name'],
+            $keywords,
+            $id === 0 ? [] : compact('id')
+        );
     }
 }

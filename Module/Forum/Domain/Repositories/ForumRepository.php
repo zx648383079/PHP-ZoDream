@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;
@@ -11,7 +12,7 @@ class ForumRepository {
     public static function getList(string $keywords = '', int $parent = 0) {
         return ForumModel::where('parent_id', $parent)
             ->when(!empty($keywords), function ($query) {
-                ForumModel::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })->page();
     }
 

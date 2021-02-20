@@ -1,6 +1,7 @@
 <?php
 namespace Module\SMS\Service\Api\Admin;
 
+use Domain\Model\SearchModel;
 use Module\SMS\Domain\Model\SmsTemplateModel;
 
 class TemplateController extends Controller {
@@ -8,7 +9,7 @@ class TemplateController extends Controller {
     public function indexAction($type = 0, $keywords = '') {
         $model_list = SmsTemplateModel::query()
             ->when(!empty($keywords), function ($query) {
-                SmsTemplateModel::searchWhere($query, ['name']);
+                SearchModel::searchWhere($query, ['name']);
             })->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type);
             })->page();

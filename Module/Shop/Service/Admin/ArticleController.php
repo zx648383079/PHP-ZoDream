@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
 
@@ -10,9 +11,7 @@ class ArticleController extends Controller {
     public function indexAction($keywords = null, $cat_id = 0) {
         $model_list = ArticleModel::with('category')
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    ArticleModel::search($query, 'title');
-                });
+                SearchModel::searchWhere($query, 'title');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->page();

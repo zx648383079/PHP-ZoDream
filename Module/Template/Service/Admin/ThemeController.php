@@ -1,6 +1,7 @@
 <?php
 namespace Module\Template\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Module;
 use Zodream\Image\ImageStatic;
@@ -10,7 +11,7 @@ class ThemeController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list = ThemeModel::when(!empty($keywords), function ($query) {
-            ThemeModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->orderBy('id', 'desc')
             ->page();
         return $this->show(compact('model_list', 'keywords'));

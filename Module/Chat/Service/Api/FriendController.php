@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Chat\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Chat\Domain\Model\ApplyModel;
 use Module\Chat\Domain\Model\FriendGroupModel;
@@ -44,7 +45,7 @@ class FriendController extends Controller {
             ->pluck('user_id');
         $exclude[] = auth()->id();
         $data = UserModel::when(!empty($keywords), function ($query) {
-            FriendModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->whereNotIn('id', $exclude)->page();
         return $this->renderData($data);
     }

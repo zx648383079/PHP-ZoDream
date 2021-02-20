@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Repositories\BookRepository;
 
@@ -31,7 +32,7 @@ class HomeController extends Controller {
 
     public function suggestAction($keywords) {
         $data = BookModel::when(!empty($keywords), function ($query) {
-            BookModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->limit(4)->pluck('name');
         return $this->render($data);
     }

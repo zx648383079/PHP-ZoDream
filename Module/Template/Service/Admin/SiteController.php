@@ -1,6 +1,7 @@
 <?php
 namespace Module\Template\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
@@ -30,7 +31,7 @@ class SiteController extends Controller {
     public function createAction($theme_id = 0, $keywords = null) {
         if ($theme_id < 1) {
             $model_list = ThemeModel::when(!empty($keywords), function ($query) {
-                ThemeModel::searchWhere($query, ['name']);
+                SearchModel::searchWhere($query, ['name']);
             })->orderBy('id', 'desc')
                 ->page();
             return $this->show('theme', compact('model_list', 'keywords'));

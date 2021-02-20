@@ -1,6 +1,7 @@
 <?php
 namespace Module\Exam\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\QuestionAnswerModel;
 use Module\Exam\Domain\Model\QuestionModel;
@@ -12,9 +13,7 @@ class QuestionController extends Controller {
     public function indexAction($keywords = null, $course = 0) {
         $model_list = QuestionModel::with('course')
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    QuestionModel::search($query, 'name');
-                });
+                SearchModel::searchWhere($query, 'name');
             })->when(!empty($course), function ($query) use ($course) {
                 $query->where('course_id', intval($course));
             })->where('parent_id', 0)->orderBy('id', 'desc')->page();

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Demo\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Demo\Domain\Model\PostModel;
 use Module\Demo\Domain\Model\TagRelationshipModel;
 use Module\Demo\Domain\Model\CategoryModel;
@@ -13,7 +14,7 @@ class PostController extends Controller {
         $post_list = PostModel::with('category')
             ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                PostModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->orderBy('id', 'desc')->page();

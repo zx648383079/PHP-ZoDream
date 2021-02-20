@@ -1,6 +1,7 @@
 <?php
 namespace Module\Legwork\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\ServiceModel;
 
@@ -8,7 +9,7 @@ class ServiceController extends Controller {
 
     public function indexAction($keywords = '', $cat_id = 0) {
         $model_list = ServiceModel::with('category')->when(!empty($keywords), function ($query) {
-                ServiceModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
             })->when($cat_id > 0, function ($query) use ($cat_id) {
                 $query->where('cat_id', $cat_id);
         })->orderBy('id', 'desc')->page();

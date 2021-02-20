@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookListModel;
 use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\ListItemModel;
@@ -10,7 +11,7 @@ class ListRepository {
     public static function getList($keywords = '') {
         return BookListModel::with('user', 'items')
             ->when(!empty($keywords), function ($query) {
-                BookListModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
             })->orderBy('created_at', 'desc')->page();
     }
 

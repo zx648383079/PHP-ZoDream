@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Video\Domain\Models\CommentModel;
 use Module\Video\Domain\Models\VideoModel;
 
@@ -9,7 +10,7 @@ class CommentRepository {
 
     public static function getList(string $keywords = '', int $video = 0, int $user = 0) {
         return CommentModel::with('user')->when(!empty($keywords), function ($query) {
-            CommentModel::searchWhere($query, ['content']);
+            SearchModel::searchWhere($query, ['content']);
         })->when($video > 0, function ($query) use ($video) {
             $query->where('video_id', $video);
         })->when(!empty($user), function ($query) use ($user) {
@@ -20,7 +21,7 @@ class CommentRepository {
     public static function getAllList(string $keywords = '', int $video = 0, int $user = 0) {
         return CommentModel::with('user', 'replies')->where('parent_id', 0)
             ->when(!empty($keywords), function ($query) {
-            CommentModel::searchWhere($query, ['content']);
+                SearchModel::searchWhere($query, ['content']);
         })->when($video > 0, function ($query) use ($video) {
             $query->where('video_id', $video);
         })->when(!empty($user), function ($query) use ($user) {

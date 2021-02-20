@@ -1,6 +1,7 @@
 <?php
 namespace Module\Note\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Note\Domain\Model\NoteModel;
 
 class NoteController extends Controller {
@@ -8,9 +9,7 @@ class NoteController extends Controller {
     public function indexAction(string $keywords = '') {
         $model_list = NoteModel::with('user')
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    NoteModel::search($query, 'content');
-                });
+                SearchModel::searchWhere($query, 'content');
             })->orderBy('id desc')->page();
         return $this->show(compact('model_list'));
     }

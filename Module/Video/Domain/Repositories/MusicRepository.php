@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Video\Domain\Models\MusicModel;
 
 class MusicRepository {
 
     public static function getList(string $keywords = '') {
         return MusicModel::query()->when(!empty($keywords), function ($query) {
-            MusicModel::searchWhere($query, ['name', 'singer']);
+            SearchModel::searchWhere($query, ['name', 'singer']);
         })->page();
     }
 

@@ -22,4 +22,8 @@ class RegionController extends Controller {
             RegionRepository::getPath($id)
         );
     }
+
+    public function searchAction(string $keywords = '', int|array $id = 0) {
+        return $this->renderData(RegionRepository::search($keywords, $id));
+    }
 }

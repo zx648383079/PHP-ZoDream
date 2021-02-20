@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
@@ -20,7 +21,7 @@ class BookRepository {
                                    $page = 1, $per_page = 20) {
         $query = BookPageModel::with('category', 'author')->ofClassify()
             ->when(!empty($keywords), function ($query) {
-                BookModel::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })
             ->when(is_array($id), function ($query) use ($id) {
                 $query->whereIn('id', $id);

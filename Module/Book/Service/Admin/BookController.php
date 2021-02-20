@@ -2,6 +2,7 @@
 namespace Module\Book\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
@@ -13,7 +14,7 @@ class BookController extends Controller {
         $model_list = BookModel::with('category', 'author')
             //->withCount('chapter')
             ->when(!empty($keywords), function ($query) {
-                BookModel::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($author_id), function ($query) use ($author_id) {

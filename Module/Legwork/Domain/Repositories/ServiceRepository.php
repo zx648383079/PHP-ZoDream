@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Legwork\Domain\Model\ServiceModel;
 use Module\Legwork\Domain\Model\ServiceSimpleModel;
@@ -15,7 +16,7 @@ class ServiceRepository {
             $query = ServiceSimpleModel::query();
         }
         return $query->with('category', 'user')->when(!empty($keywords), function ($query) {
-            ServiceModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->when($user_id > 0, function ($query) use ($user_id) {
             $query->where('user_id', $user_id);
         })->when($cat_id > 0, function ($query) use ($cat_id) {
@@ -27,7 +28,7 @@ class ServiceRepository {
 
     public static function getSelfList(string $keywords = '') {
         return ServiceModel::query()->with('category')->when(!empty($keywords), function ($query) {
-            ServiceModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->where('user_id', auth()->id())->page();
     }
 
@@ -95,7 +96,7 @@ class ServiceRepository {
                 $query->where('status', 1);
             })->asArray()->pluck(null, 'user_id');
         $page = UserSimpleModel::query()->when(!empty($keywords), function ($query) {
-            UserSimpleModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->whereIn('id', array_keys($links))->page();
         foreach ($page as $item) {
             $item['status'] = intval($links[$item['id']]['status']);

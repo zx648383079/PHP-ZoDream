@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
@@ -25,7 +26,7 @@ class MicroRepository {
                     return $query->orderBy('recommend_count', 'desc');
                 }
             })->when(!empty($keywords) && $id < 1, function ($query) {
-                MicroBlogModel::searchWhere($query, ['content']);
+                SearchModel::searchWhere($query, ['content']);
             })
             ->page();
     }

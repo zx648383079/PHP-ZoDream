@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Service\Api\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
@@ -11,7 +12,7 @@ class RoleController extends Controller {
 
     public function indexAction(string $keywords = '') {
         $role_list = RoleModel::when(!empty($keywords), function ($query) {
-            RoleModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->page();
         return $this->renderPage($role_list);
     }

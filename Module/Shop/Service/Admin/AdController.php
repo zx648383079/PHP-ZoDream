@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
 
@@ -10,9 +11,7 @@ class AdController extends Controller {
     public function indexAction($keywords = null, $position_id = 0) {
         $model_list = AdModel::with('position')
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    AdModel::search($query, 'name');
-                });
+                SearchModel::searchWhere($query, 'name');
             })->when(!empty($position_id), function ($query) use ($position_id) {
                 $query->where('position_id', intval($position_id));
             })->page();

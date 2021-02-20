@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
@@ -17,7 +18,7 @@ class BlogController extends Controller {
         $blog_list = BlogPageModel::with('term')
             ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                BlogModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
             })->when(!empty($term_id), function ($query) use ($term_id) {
                 $query->where('term_id', intval($term_id));
             })->when($type > 0, function ($query) use ($type) {

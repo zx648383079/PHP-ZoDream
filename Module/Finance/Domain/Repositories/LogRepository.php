@@ -1,6 +1,7 @@
 <?php
 namespace Module\Finance\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
@@ -12,7 +13,7 @@ class LogRepository {
             ->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type - 1);
             })->when(!empty($keywords), function ($query) {
-                LogModel::searchWhere($query, 'remark');
+                SearchModel::searchWhere($query, 'remark');
             })->when($account > 0, function ($query) use ($account) {
                 $query->where('account_id', $account);
             })->when($budget > 0, function ($query) use ($budget) {
@@ -89,7 +90,7 @@ class LogRepository {
         }
         return LogModel::query()->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-            LogModel::searchWhere($query, 'remark');
+                SearchModel::searchWhere($query, 'remark');
         })->update($data);
     }
 

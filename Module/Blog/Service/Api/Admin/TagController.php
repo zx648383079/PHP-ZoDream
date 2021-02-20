@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service\Api\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 
@@ -8,7 +9,7 @@ class TagController extends Controller {
 
     public function indexAction($keywords = null) {
         $model_list = TagModel::when(!empty($keywords), function ($query) {
-                TagModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
         return $this->renderPage($model_list);
     }

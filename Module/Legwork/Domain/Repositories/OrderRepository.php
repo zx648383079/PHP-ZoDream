@@ -1,6 +1,7 @@
 <?php
 namespace Module\Legwork\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Legwork\Domain\Model\OrderLogModel;
 use Module\Legwork\Domain\Model\OrderModel;
@@ -23,7 +24,7 @@ class OrderRepository {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
             })
             ->when(!empty($keywords), function ($query) use ($keywords) {
-                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                $serviceId = SearchModel::searchWhere(ServiceModel::query(), ['name'])
                     ->where('status', ServiceModel::STATUS_ALLOW)
                     ->pluck('id');
                 if (empty($serviceId)) {

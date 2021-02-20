@@ -2,6 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Repositories\RoleRepository;
@@ -17,7 +18,7 @@ class PermissionController extends Controller {
 
     public function indexAction($keywords = null) {
         $permission_list = PermissionModel::when(!empty($keywords), function ($query) {
-            PermissionModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->page();
         return $this->show(compact('permission_list'));
     }

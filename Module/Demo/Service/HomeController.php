@@ -2,6 +2,7 @@
 namespace Module\Demo\Service;
 
 
+use Domain\Model\SearchModel;
 use Module\Demo\Domain\Model\CategoryModel;
 use Module\Demo\Domain\Model\PostModel;
 use Module\Demo\Domain\Model\TagModel;
@@ -36,7 +37,7 @@ class HomeController extends Controller {
                     return $query->orderBy('download_count', 'desc');
                 }
             })->when(!empty($keywords), function ($query) {
-                PostModel::searchWhere($query, ['title']);
+                SearchModel::searchWhere($query, ['title']);
             })->when(!empty($tag), function ($query) use ($tag) {
                 $ids = TagModel::getPostByName($tag);
                 if (empty($ids)) {
@@ -75,7 +76,7 @@ class HomeController extends Controller {
 
     public function suggestionAction($keywords) {
         $data = PostModel::when(!empty($keywords), function ($query) {
-            PostModel::searchWhere($query, 'title');
+            SearchModel::searchWhere($query, 'title');
         })->limit(4)->asArray()->get('id', 'title');
         foreach($data as &$item) {
             $item['url'] = url('./', ['id' => $item['id']]);

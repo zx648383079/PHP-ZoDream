@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Service;
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookModel;
 
@@ -8,7 +9,7 @@ class SearchController extends Controller {
 
     public function indexAction($keywords) {
         $book_list = BookModel::ofClassify()->when(!empty($keywords), function ($query) {
-            BookModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->page();
         return $this->show(compact('book_list', 'keywords'));
     }

@@ -2,6 +2,7 @@
 namespace Module\Auth\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 
@@ -10,9 +11,7 @@ class BulletinController extends Controller {
     public function indexAction($keywords = null) {
         $model_list = BulletinUserModel::with('bulletin')
             ->when(!empty($keywords), function ($query) {
-                $ids = BulletinModel::where(function ($query) {
-                    BulletinModel::search($query, 'title');
-                })->pluck('id');
+                $ids = SearchModel::searchWhere(BulletinModel::query(), 'title')->pluck('id');
                 if (empty($ids)) {
                     $query->isEmpty();
                     return;

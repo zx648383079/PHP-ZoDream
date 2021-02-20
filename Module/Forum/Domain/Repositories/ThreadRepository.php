@@ -1,6 +1,7 @@
 <?php
 namespace Module\Forum\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
@@ -14,7 +15,7 @@ class ThreadRepository {
                 $query->where('forum_id', intval($forum_id));
             })
             ->when(!empty($keywords), function ($query) {
-                ThreadModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
             })->page();
     }
 

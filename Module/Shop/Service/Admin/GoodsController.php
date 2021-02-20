@@ -2,6 +2,7 @@
 namespace Module\Shop\Service\Admin;
 
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\AttributeGroupModel;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\AttributeUniqueModel;
@@ -27,9 +28,7 @@ class GoodsController extends Controller {
     public function indexAction($keywords = null, $sort = null, $cat_id = 0, $brand_id = 0, $trash = false) {
         $model_list = GoodsModel::with('category', 'brand')
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    GoodsModel::search($query, 'name');
-                });
+                SearchModel::searchWhere($query, 'name');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($brand_id), function ($query) use ($brand_id) {
@@ -257,9 +256,7 @@ class GoodsController extends Controller {
         $selected = static::parseArrInt($selected);
         $simple = !!$simple;
         $model_list = GoodsSimpleModel::when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    GoodsModel::search($query, 'name');
-                });
+                SearchModel::searchWhere($query, 'name');
             })->when(!empty($cat_id), function ($query) use ($cat_id) {
                 $query->where('cat_id', intval($cat_id));
             })->when(!empty($brand_id), function ($query) use ($brand_id) {

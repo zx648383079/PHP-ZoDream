@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\BlackWordModel;
 
 class WordRepository {
 
     public static function getList(string $keywords = '') {
         return BlackWordModel::query()->when(!empty($keywords), function ($query) {
-            BlackWordModel::searchWhere($query, ['words', 'replace_words']);
+            SearchModel::searchWhere($query, ['words', 'replace_words']);
         })->page();
     }
 

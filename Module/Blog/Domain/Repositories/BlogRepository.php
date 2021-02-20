@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\Events\BlogUpdate;
@@ -89,7 +90,7 @@ class BlogRepository {
                 }
                 return $query;
             })->when(!empty($keywords), function ($query) {
-                BlogModel::searchWhere($query, ['title', 'programming_language']);
+                SearchModel::searchWhere($query, ['title', 'programming_language']);
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
             }, function ($query) {

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\CategoryProviderModel;
@@ -9,7 +10,7 @@ use Module\Legwork\Domain\Model\CategoryProviderModel;
 class CategoryRepository {
     public static function getList(string $keywords = '') {
         return CategoryModel::query()->when(!empty($keywords), function ($query) {
-            CategoryModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->page();
     }
 
@@ -38,7 +39,7 @@ class CategoryRepository {
                 $query->where('status', 1);
             })->pluck(null, 'user_id');
         $page = UserSimpleModel::query()->when(!empty($keywords), function ($query) {
-            UserSimpleModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->whereIn('id', array_keys($links))->page();
         foreach ($page as $item) {
             $item['status'] = $links[$item['id']]['status'];

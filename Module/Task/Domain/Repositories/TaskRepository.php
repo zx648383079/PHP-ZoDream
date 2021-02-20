@@ -1,6 +1,7 @@
 <?php
 namespace Module\Task\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Task\Domain\Model\TaskDayModel;
 use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
@@ -11,7 +12,7 @@ class TaskRepository {
     public static function getList($keywords = '', $status = 0, $parent_id = 0) {
         return TaskModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
-                TaskModel::searchWhere($query, 'name');
+                SearchModel::searchWhere($query, 'name');
             })
             ->when($status > 0, function ($query) use ($status) {
                 if ($status > 1) {

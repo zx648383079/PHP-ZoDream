@@ -1,6 +1,7 @@
 <?php
 namespace Module\WeChat\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -14,7 +15,7 @@ class MediaController extends Controller {
             ->when(!empty($type), function ($query) use ($type) {
             $query->where('type', $type);
         })->when(!empty($keywords), function ($query) {
-            MediaModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
         })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb')->page();
         return $this->renderPage($model_list);
     }

@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 
 class AuthorRepository {
     public static function getList(string $keywords = '') {
         return BookAuthorModel::query()->when(!empty($keywords), function ($query) {
-            BookAuthorModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->page();
     }
 
@@ -31,9 +32,11 @@ class AuthorRepository {
     }
 
     public static function search(string $keywords = '', int|array $id = 0) {
-        $perPage = max(20, is_array($id) ? count($id) : 20);
-        return BookAuthorModel::query()->when(!empty($keywords), function ($query) {
-            BookAuthorModel::searchWhere($query, ['name']);
-        })->limit($perPage)->get(['id', 'name', 'avatar']);
+        return SearchModel::searchOption(
+            BookAuthorModel::query()->select('id', 'name', 'avatar'),
+            ['name'],
+            $keywords,
+            $id === 0 ? [] : compact('id')
+        );
     }
 }

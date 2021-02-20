@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
 
 class EmojiRepository {
     public static function getList(string $keywords = '', int $cat_id = 0) {
         return EmojiModel::query()->when(!empty($keywords), function ($query) {
-            EmojiModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->when($cat_id > 0, function ($query) use ($cat_id) {
             $query->where('cat_id', $cat_id);
         })->page();
@@ -35,7 +36,7 @@ class EmojiRepository {
 
     public static function catList(string $keywords = '') {
         return EmojiCategoryModel::query()->when(!empty($keywords), function ($query) {
-            EmojiCategoryModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->get();
     }
 

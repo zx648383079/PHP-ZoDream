@@ -1,6 +1,7 @@
 <?php
 namespace Module\Disk\Service;
 
+use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
@@ -263,7 +264,7 @@ class DiskController extends Controller {
 
     public function usersAction($name = null) {
         $data = UserModel::where('id', '<>', auth()->id())->when(!empty($name), function ($query) {
-            DiskModel::searchWhere($query, 'name', false, 'name');
+            SearchModel::searchWhere($query, 'name', false, 'name');
         })->get('name', 'id');
         return $this->renderData($data);
     }

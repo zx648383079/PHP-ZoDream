@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 
@@ -9,7 +10,7 @@ class ChapterRepository {
     public static function getList(int $book, string $keywords = '') {
         return BookChapterModel::where('book_id', $book)
             ->when(!empty($keywords), function ($query) {
-                BookChapterModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
             })
             ->orderBy('position', 'asc')
             ->orderBy('created_at', 'asc')->page();

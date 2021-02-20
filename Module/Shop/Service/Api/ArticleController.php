@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
 use Module\Shop\Domain\Repositories\ArticleRepository;
@@ -16,7 +17,7 @@ class ArticleController extends Controller {
                 $query->where('cat_id', $category);
             })
             ->when(!empty($keywords), function ($query) {
-                ArticleModel::searchWhere($query, 'title');
+                SearchModel::searchWhere($query, 'title');
             })
             ->select(ArticleModel::THUMB_MODE)->page();
         return $this->renderPage($model_list);
@@ -42,7 +43,7 @@ class ArticleController extends Controller {
 
     public function suggestAction($keywords) {
         $data = ArticleModel::when(!empty($keywords), function ($query) {
-            ArticleModel::searchWhere($query, 'title');
+            SearchModel::searchWhere($query, 'title');
         })->limit(4)->get('id', 'title');
         return $this->render(compact('data'));
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Exam\Service;
 
+use Domain\Model\SearchModel;
 use Module\Exam\Domain\Model\CourseModel;
 
 class HomeController extends Controller {
@@ -13,7 +14,7 @@ class HomeController extends Controller {
 
     public function suggestionAction($keywords = null) {
         $data = CourseModel::when(!empty($keywords), function ($query) {
-            CourseModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
          })->limit(4)->get();
         return $this->renderData($data);
     }

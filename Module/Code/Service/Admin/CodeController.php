@@ -1,6 +1,7 @@
 <?php
 namespace Module\Code\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Code\Domain\Model\CodeModel;
 use Module\Code\Domain\Model\TagModel;
 
@@ -9,9 +10,7 @@ class CodeController extends Controller {
     public function indexAction($keywords = null) {
         $model_list  = CodeModel::with('user')
             ->when(!empty($keywords), function ($query) {
-                $ids = TagModel::where(function($query) {
-                    TagModel::search($query, ['content']);
-                })->pluck('code_id');
+                $ids = SearchModel::searchWhere(TagModel::query(), ['content'])->pluck('code_id');
                 if (empty($ids)) {
                     $query->isEmpty();
                     return;

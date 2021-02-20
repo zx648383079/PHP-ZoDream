@@ -1,6 +1,7 @@
 <?php
 namespace Module\Code\Service;
 
+use Domain\Model\SearchModel;
 use Module\Code\Domain\Model\CodeModel;
 use Module\Code\Domain\Model\TagModel;
 use Module\Code\Domain\Repositories\CodeRepository;
@@ -31,9 +32,7 @@ class HomeController extends ModuleController {
                     return $query->orderBy('recommend_count', 'desc');
                 }
             })->when(!empty($keywords) && $id < 1, function ($query) {
-                $ids = TagModel::where(function($query) {
-                    TagModel::search($query, ['content']);
-                })->pluck('code_id');
+                $ids = SearchModel::searchWhere(TagModel::query(), ['content'])->pluck('code_id');
                 if (empty($ids)) {
                     $query->isEmpty();
                     return;

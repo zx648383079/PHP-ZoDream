@@ -1,6 +1,7 @@
 <?php
 namespace Module\SMS\Service\Api\Admin;
 
+use Domain\Model\SearchModel;
 use Module\SMS\Domain\Model\SmsSignatureModel;
 
 class SignatureController extends Controller {
@@ -8,7 +9,7 @@ class SignatureController extends Controller {
     public function indexAction($keywords = '') {
         $model_list = SmsSignatureModel::query()
             ->when(!empty($keywords), function ($query) {
-                SmsSignatureModel::searchWhere($query, ['name']);
+                SearchModel::searchWhere($query, ['name']);
             })->page();
         return $this->renderPage($model_list);
     }

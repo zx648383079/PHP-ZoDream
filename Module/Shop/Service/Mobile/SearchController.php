@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Zodream\Html\Page;
@@ -13,9 +14,7 @@ class SearchController extends Controller {
         }
         /** @var Page $goods_list */
         $goods_list = GoodsModel::when(!empty($keywords), function ($query) {
-            $query->where(function ($query) {
-                GoodsModel::search($query, 'name');
-            });
+            SearchModel::searchWhere($query, 'name');
         })->when(!empty($cat_id), function ($query) use ($cat_id) {
             $query->whereIn('cat_id', CategoryModel::getChildrenWithParent($cat_id));
         })->when(!empty($brand_id), function ($query) use ($brand_id) {

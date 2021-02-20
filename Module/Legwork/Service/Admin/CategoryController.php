@@ -1,13 +1,14 @@
 <?php
 namespace Module\Legwork\Service\Admin;
 
+use Domain\Model\SearchModel;
 use Module\Legwork\Domain\Model\CategoryModel;
 
 class CategoryController extends Controller {
 
     public function indexAction($keywords = '') {
         $model_list = CategoryModel::when(!empty($keywords), function ($query) {
-            CategoryModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
         return $this->show(compact('model_list', 'keywords'));
     }

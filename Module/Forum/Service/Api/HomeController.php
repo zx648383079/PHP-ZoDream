@@ -1,6 +1,7 @@
 <?php
 namespace Module\Forum\Service\Api;
 
+use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadSimpleModel;
@@ -24,7 +25,7 @@ class HomeController extends Controller {
 
     public function suggestionAction($keywords = null) {
         $data = ThreadSimpleModel::when(!empty($keywords), function ($query) {
-            ThreadModel::searchWhere($query, 'title');
+            SearchModel::searchWhere($query, 'title');
          })->limit(4)->get();
         return $this->renderData($data);
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Note\Service;
 
+use Domain\Model\SearchModel;
 use Module\ModuleController;
 use Module\Note\Domain\Model\NoteModel;
 
@@ -15,9 +16,7 @@ class HomeController extends ModuleController {
                 $query->where('id', $id);
             })
             ->when(!empty($keywords), function ($query) {
-                $query->where(function ($query) {
-                    NoteModel::search($query, 'content');
-                });
+                SearchModel::searchWhere($query, 'content');
             })->orderBy('id desc')->page();
         if (request()->isAjax()) {
             return $this->renderData([

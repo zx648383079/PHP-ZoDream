@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
@@ -18,9 +19,7 @@ class BulletinRepository {
     public static function getList(string $keywords = '', int $status = 0) {
         return BulletinUserModel::with('bulletin')
             ->when(!empty($keywords), function ($query) {
-                $ids = BulletinModel::where(function ($query) {
-                    BulletinModel::search($query, 'title');
-                })->pluck('id');
+                $ids = SearchModel::searchWhere(BulletinModel::query(), 'title')->pluck('id');
                 if (empty($ids)) {
                     $query->isEmpty();
                     return;

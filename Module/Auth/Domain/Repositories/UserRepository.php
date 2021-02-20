@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Repositories;
 
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Model\UserModel;
@@ -19,13 +20,13 @@ class UserRepository {
 
     public static function getAll(string $keywords = '') {
         return UserModel::when(!empty($keywords), function ($query) {
-            UserSimpleModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->orderBy('id', 'desc')->page();
     }
 
     public static function searchUser(string $keywords = '') {
         return UserSimpleModel::when(!empty($keywords), function ($query) {
-            UserSimpleModel::searchWhere($query, 'name');
+            SearchModel::searchWhere($query, 'name');
         })->orderBy('id', 'desc')->page();
     }
 

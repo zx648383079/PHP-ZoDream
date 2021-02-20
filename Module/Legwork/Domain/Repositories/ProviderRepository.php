@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\CategoryProviderModel;
@@ -14,7 +15,7 @@ use Module\Legwork\Domain\Model\ServiceModel;
 class ProviderRepository {
     public static function getList(string $keywords = '') {
         return ProviderModel::query()->with('categories')->when(!empty($keywords), function ($query) {
-            ProviderModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
         })->page();
     }
 
@@ -103,7 +104,7 @@ class ProviderRepository {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
             })
             ->when(!empty($keywords), function ($query) use ($keywords) {
-                $serviceId = ServiceModel::searchWhere(ServiceModel::query(), ['name'])
+                $serviceId = SearchModel::searchWhere(ServiceModel::query(), ['name'])
                     ->where('status', ServiceModel::STATUS_ALLOW)
                     ->pluck('id');
                 if (empty($serviceId)) {
@@ -176,7 +177,7 @@ class ProviderRepository {
             ->asArray()
             ->pluck(null, 'cat_id');
         $page = CategoryModel::when(!empty($keywords), function ($query) {
-                CategoryModel::searchWhere($query, ['name']);
+            SearchModel::searchWhere($query, ['name']);
             })->when(!$all, function ($query) use ($links) {
                 $query->whereIn('id', array_keys($links));
             })
