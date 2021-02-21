@@ -2,10 +2,10 @@
 namespace Module\Shop\Domain\Repositories\Admin;
 
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
+use Module\Legwork\Domain\Repositories\LegworkRepository;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\OrderRefundModel;
-use Module\Legwork\Domain\Model\OrderModel as LegworkOrder;
 
 class OrderRepository {
 
@@ -47,8 +47,7 @@ class OrderRepository {
         $args[] = [
             'name' => 'legwork',
             'label' => '待接单',
-            'count' => LegworkOrder::where('runner', 0)
-                ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count()
+            'count' => LegworkRepository::waitTaking()
         ];
         $args[] = [
             'name' => 'bulletin',
@@ -70,8 +69,7 @@ class OrderRepository {
             [
                 'name' => 'legwork',
                 'label' => '待接单',
-                'count' => LegworkOrder::where('runner', 0)
-                    ->where('status', LegworkOrder::STATUS_PAID_UN_TAKING)->count()
+                'count' => LegworkRepository::waitTaking()
             ],
             [
                 'name' => 'bulletin',

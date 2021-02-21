@@ -2,6 +2,7 @@
 namespace Module\Shop\Domain\Entities;
 
 use Domain\Entities\Entity;
+use Module\Shop\Domain\Models\ProductModel;
 use Zodream\Database\Model\Query;
 
 class GoodsEntity extends Entity {
@@ -90,6 +91,10 @@ class GoodsEntity extends Entity {
 
     public function brand() {
         return $this->hasOne(BrandEntity::class, 'id', 'brand_id');
+    }
+
+    public function products() {
+        return $this->hasMany(ProductModel::class, 'goods_id', 'id');
     }
 
     public function getShopAttribute() {

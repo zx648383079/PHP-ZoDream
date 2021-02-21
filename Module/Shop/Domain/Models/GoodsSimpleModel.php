@@ -36,7 +36,7 @@ class GoodsSimpleModel extends GoodsEntity {
 
     const THUMB_MODE = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'cat_id', 'brand_id', 'status'];
 
-    protected array $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'shop', 'url', 'wap_url'];
+    protected array $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'weight', 'stock', 'market_price', 'shop', 'url', 'wap_url', 'products'];
 
     protected array $append = ['shop', 'url', 'wap_url'];
 

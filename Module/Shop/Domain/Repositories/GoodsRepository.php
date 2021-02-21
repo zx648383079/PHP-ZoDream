@@ -9,6 +9,7 @@ use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsPageModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
+use Module\Shop\Domain\Models\ProductModel;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
@@ -236,5 +237,32 @@ class GoodsRepository {
             }
         }
         return $sn;
+    }
+
+    public static function searchWithProduct(string $keywords = '', int $category = 0, int $brand = 0) {
+        if (!empty($keywords) && $category < 1 && $brand < 1) {
+            $product = ProductModel::where('series_number', $keywords)
+                ->first();
+            if (!empty($product)) {
+                $goods = GoodsSimpleModel::where('id', $product->goods_id)
+                    ->first();
+                $goods->products = [$product];
+                return new Page([$goods]);
+            }
+            $goods = GoodsSimpleModel::where('series_number', $keywords)
+                ->first();
+            if (!empty($product)) {
+                $goods->products;
+                return new Page([$goods]);
+            }
+        }
+        return GoodsSimpleModel::with('products')
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'name');
+            })->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', intval($category));
+            })->when($brand > 0, function ($query) use ($brand) {
+                $query->where('brand_id', intval($brand));
+            })->page();
     }
 }

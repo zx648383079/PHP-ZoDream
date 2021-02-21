@@ -14,8 +14,6 @@ use Domain\Model\Model;
  */
 class WarehouseGoodsModel extends Model {
 
-    protected $primaryKey = '';
-
     public static function tableName() {
         return 'shop_warehouse_goods';
     }
@@ -31,6 +29,7 @@ class WarehouseGoodsModel extends Model {
 
     protected function labels() {
         return [
+            'id' => 'ID',
             'warehouse_id' => 'Warehouse Id',
             'goods_id' => 'Goods Id',
             'product_id' => 'Product Id',

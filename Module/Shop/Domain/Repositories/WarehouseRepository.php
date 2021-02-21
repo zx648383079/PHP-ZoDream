@@ -101,6 +101,38 @@ class WarehouseRepository {
                 $query->where('goods_id', $goods);
             })->when($product > 0, function ($query) use ($product) {
                 $query->where('product_id', $product);
-            })->page();
+            })->orderBy('id', 'desc')->page();
+    }
+
+    public static function goodsChange(array $data) {
+        if ($data['amount'] === 0) {
+            throw new \Exception('请输入不为0 的数量');
+        }
+        if (!isset($data['product_id'])) {
+            $data['product_id'] = 0;
+        }
+        $model = WarehouseGoodsModel::where('warehouse_id', $data['warehouse_id'])
+            ->where('goods_id', $data['goods_id'])->where('product_id', $data['product_id'])
+            ->first();
+        if (empty($model)) {
+            WarehouseGoodsModel::query()->insert([
+                'warehouse_id' => $data['warehouse_id'],
+                'goods_id' => $data['goods_id'],
+                'product_id' => $data['product_id'],
+                'amount' => $data['amount'],
+            ]);
+        } else {
+            WarehouseGoodsModel::query()->where('warehouse_id', $data['warehouse_id'])
+                ->where('goods_id', $data['goods_id'])->where('product_id', $data['product_id'])
+                ->updateOne('amount', $data['amount']);
+        }
+        return WarehouseLogModel::create([
+            'warehouse_id' => $data['warehouse_id'],
+            'goods_id' => $data['goods_id'],
+            'product_id' => $data['product_id'],
+            'amount' => $data['amount'],
+            'user_id' => auth()->id(),
+            'remark' => $data['remark']
+        ]);
     }
 }

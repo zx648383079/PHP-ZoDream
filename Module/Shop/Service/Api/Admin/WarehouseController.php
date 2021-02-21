@@ -59,17 +59,14 @@ class WarehouseController extends Controller {
     public function goodsChangeAction(Input $input) {
         try {
             $data = $input->validate([
-                'id' => 'int',
-                'name' => 'required|string:0,30',
-                'tel' => 'required|string:0,30',
-                'link_user' => 'string:0,30',
-                'address' => 'string:0,255',
-                'longitude' => 'string:0,50',
-                'latitude' => 'string:0,50',
+                'warehouse_id' => 'required|int',
+                'goods_id' => 'required|int',
+                'product_id' => 'int',
+                'amount' => 'required|int',
                 'remark' => 'string:0,255',
             ]);
             return $this->render(
-                WarehouseRepository::save($data)
+                WarehouseRepository::goodsChange($data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

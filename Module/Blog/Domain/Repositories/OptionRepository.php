@@ -4,7 +4,6 @@ namespace Module\Blog\Domain\Repositories;
 
 use Module\Blog\Domain\CCLicenses;
 use Module\Blog\Domain\Weather;
-use Module\Book\Domain\Repositories\CategoryRepository;
 
 class OptionRepository {
 

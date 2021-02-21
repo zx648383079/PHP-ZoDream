@@ -605,6 +605,7 @@ class CreateShopTables extends Migration {
             $table->set('remark')->varchar()->defaultVal('');
             $table->timestamps();
         })->append(WarehouseGoodsModel::tableName(), function (Table $table) {
+            $table->set('id')->pk(true);
             $table->set('warehouse_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
             $table->set('product_id')->int()->defaultVal(0);
@@ -617,9 +618,9 @@ class CreateShopTables extends Migration {
             $table->set('warehouse_id')->int()->notNull();
             $table->set('user_id')->int()->notNull();
             $table->set('goods_id')->int()->notNull();
-            $table->set('product_id')->int()->notNull();
+            $table->set('product_id')->int()->defaultVal(0);
             $table->set('amount')->int()->notNull();
-            $table->set('order_id')->int()->notNull();
+            $table->set('order_id')->int()->defaultVal(0);
             $table->set('remark')->varchar()->defaultVal('');
             $table->timestamp('created_at');
         });

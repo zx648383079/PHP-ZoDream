@@ -28,9 +28,9 @@ class WarehouseLogModel extends Model {
             'warehouse_id' => 'required|int',
             'goods_id' => 'required|int',
             'user_id' => 'required|int',
-            'product_id' => 'required|int',
+            'product_id' => 'int',
             'amount' => 'required|int',
-            'order_id' => 'required|int',
+            'order_id' => 'int',
             'remark' => 'string',
             'created_at' => 'int',
         ];
