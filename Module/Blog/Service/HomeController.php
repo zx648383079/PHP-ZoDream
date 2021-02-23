@@ -10,8 +10,8 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
+use Module\Blog\Domain\Repositories\CategoryRepository;
 use Module\Blog\Domain\Repositories\TagRepository;
-use Module\Blog\Domain\Repositories\TermRepository;
 
 class HomeController extends Controller {
 
@@ -31,13 +31,13 @@ class HomeController extends Controller {
         }
         $blog_list  = BlogRepository::getList($sort, $category, $keywords,
             $user, $language, $programming_language, $tag);
-        $cat_list = TermRepository::get();
+        $cat_list = CategoryRepository::get();
         $comment_list = CommentModel::with('blog')
             ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->all();
         $new_list = BlogRepository::getNew(4);
         $term = null;
         if ($category > 0) {
-            $term = TermRepository::get($category);
+            $term = CategoryRepository::get($category);
         }
         return $this->show(compact('blog_list',
             'cat_list', 'sort', 'category', 'keywords',
@@ -57,11 +57,11 @@ class HomeController extends Controller {
             (auth()->guest() || $blog->user_id != auth()->id())) {
             return $this->redirect('./');
         }
-        $blog->term = TermRepository::get($blog->term_id);
+        $blog->term = CategoryRepository::get($blog->term_id);
         $parent_id = $blog->parent_id > 0 ? $blog->parent_id : $blog->id;
         $languages = BlogModel::where('parent_id', $parent_id)->asArray()->get('id', 'language');
         array_unshift($languages, ['id' => $parent_id, 'language' => 'zh']);
-        $cat_list = TermRepository::get();
+        $cat_list = CategoryRepository::get();
         $tags = TagRepository::getTags($blog->id);
         $relation_list = TagRepository::getRelationBlogs($blog->id);
         $metaItems = BlogMetaModel::getMetaWithDefault($id);
