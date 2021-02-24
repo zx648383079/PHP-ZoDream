@@ -46,7 +46,7 @@ class CommentRepository {
         if (empty($comment)) {
             throw new Exception('评论失败！');
         }
-        BlogModel::where('id', $data['blog_id'])->updateOne('comment_count');
+        BlogModel::where('id', $data['blog_id'])->updateIncrement('comment_count');
         return $comment;
     }
 

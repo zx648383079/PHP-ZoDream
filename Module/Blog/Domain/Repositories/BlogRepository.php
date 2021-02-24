@@ -15,6 +15,7 @@ use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Model\Query;
+use Zodream\Helpers\Time;
 use Zodream\Html\Page;
 
 class BlogRepository {
@@ -145,14 +146,14 @@ class BlogRepository {
             ->select(['id', 'title', 'parent_id', 'created_at'])
         );
         foreach ($items as $item) {
-            $year = date('Y', $item['created_at']);
+            $year = Time::format($item['created_at'], 'Y');
             if (!isset($data[$year])) {
                 $data[$year] = [
                     'year' => $year,
                     'children' => []
                 ];
             }
-            $item['date'] = date('m-d', $item['created_at']);
+            $item['date'] = Time::format($item['created_at'], 'm-d');
             $data[$year]['children'][] = $item;
         }
         return array_values($data);

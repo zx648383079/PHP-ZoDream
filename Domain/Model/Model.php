@@ -7,9 +7,7 @@ namespace Domain\Model;
  * Date: 2016/3/18
  * Time: 21:41
  */
-use Zodream\Database\Command;
 use Zodream\Database\Model\Model as BaseModel;
-use Zodream\Database\Query\Builder;
 use Zodream\Infrastructure\Contracts\Database;
 
 

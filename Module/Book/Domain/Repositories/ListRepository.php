@@ -30,7 +30,7 @@ class ListRepository {
         $model->user;
         $model->items = $items;
         BookListModel::query()->where('id', $model->id)
-            ->updateOne('click_count', 1);
+            ->updateIncrement('click_count', 1);
         return $model;
     }
 

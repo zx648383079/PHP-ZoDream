@@ -4,7 +4,6 @@ namespace Module\Book\Domain\Repositories;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Zodream\Html\Page;
-use Zodream\Infrastructure\Cookie;
 
 class HistoryRepository {
 
@@ -28,7 +27,7 @@ class HistoryRepository {
         if (count($history) > 10) {
             $history = array_splice($history, 0, 10);
         }
-        Cookie::forever(BookHistoryModel::tableName(), serialize($history));
+        response()->cookie(BookHistoryModel::tableName(), serialize($history), 365 * 86400);
     }
 
     public static function record($book, $chapter, $progress = 0) {

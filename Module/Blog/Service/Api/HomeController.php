@@ -34,7 +34,7 @@ class HomeController extends Controller {
 
     public function detailAction($id) {
         $id = intval($id);
-        BlogModel::where('id', $id)->updateOne('click_count');
+        BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogModel::find($id);
         if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
             return $this->renderFailure('id 错误！');
@@ -49,7 +49,7 @@ class HomeController extends Controller {
 
     public function contentAction($id) {
         $id = intval($id);
-        BlogModel::where('id', $id)->updateOne('click_count');
+        BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogContentModel::find($id);
         if (empty($blog)) {
             return $this->renderFailure('id 错误！');

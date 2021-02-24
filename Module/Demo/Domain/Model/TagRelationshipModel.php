@@ -40,7 +40,7 @@ class TagRelationshipModel extends Model {
 	    $add = empty($exist) ? $tags : array_diff($tags, $exist);
 	    if (!empty($del)) {
             static::where('post_id', $post_id)->whereIn('tag_id', $del)->delete();
-            TagModel::query()->whereIn('id', $del)->updateOne('post_count', -1);
+            TagModel::query()->whereIn('id', $del)->updateIncrement('post_count', -1);
         }
         if (empty($add)) {
 	        return;
@@ -48,7 +48,7 @@ class TagRelationshipModel extends Model {
         static::query()->insert(array_map(function ($tag_id) use ($post_id) {
             return compact('tag_id', 'post_id');
         }, $add));
-        TagModel::query()->whereIn('id', $add)->updateOne('post_count', 1);
+        TagModel::query()->whereIn('id', $add)->updateIncrement('post_count', 1);
     }
 
 }

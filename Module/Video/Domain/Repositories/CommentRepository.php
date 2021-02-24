@@ -41,7 +41,7 @@ class CommentRepository {
             throw new \Exception($model->getFirstError());
         }
         VideoModel::query()->where('id', $model->video_id)
-            ->updateOne('comment_count');
+            ->updateIncrement('comment_count');
         return $model;
     }
 

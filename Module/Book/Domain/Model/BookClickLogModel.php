@@ -49,7 +49,7 @@ class BookClickLogModel extends Model {
         if (!$model->save()) {
             return;
         }
-        BookModel::where('id', $id)->updateOne('click_count');
+        BookModel::query()->where('id', $id)->updateIncrement('click_count');
     }
 
     public static function getLogs($type) {

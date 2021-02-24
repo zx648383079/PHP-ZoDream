@@ -147,6 +147,6 @@ class ForumModel extends Model {
         $path = TreeHelper::getTreeParent(static::cacheAll(), $id);
         $path[] = $id;
         return static::whereIn('id', $path)
-            ->updateOne($key);
+            ->updateIncrement($key);
     }
 }

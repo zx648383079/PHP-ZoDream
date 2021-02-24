@@ -127,7 +127,7 @@ class ThreadController extends Controller {
         }
         ForumModel::updateCount($thread->forum_id, 'post_count');
         ThreadModel::query()->where('id', $thread_id)
-            ->updateOne('post_count');
+            ->updateIncrement('post_count');
         return $this->render($post);
     }
 

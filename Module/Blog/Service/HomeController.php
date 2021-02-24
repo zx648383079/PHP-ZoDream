@@ -80,7 +80,7 @@ class HomeController extends Controller {
 
     public function counterAction($blog) {
         $id = intval($blog);
-        BlogModel::where('id', $id)->updateOne('click_count');
+        BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogModel::query()->where('id', $id)->asArray()
             ->first('click_count', 'recommend', 'comment_count');
         return $this->renderData($blog);

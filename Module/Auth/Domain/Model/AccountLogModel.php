@@ -78,7 +78,7 @@ class AccountLogModel extends Model {
      */
     public function refund() {
         UserModel::query()->where('id', $this->user_id)
-            ->updateOne('money', - $this->money);
+            ->updateDecrement('money', $this->money);
         $this->status = self::STATUS_REFUND;
         return $this->save();
     }

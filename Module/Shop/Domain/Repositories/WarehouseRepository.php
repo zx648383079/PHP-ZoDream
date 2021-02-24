@@ -124,7 +124,7 @@ class WarehouseRepository {
         } else {
             WarehouseGoodsModel::query()->where('warehouse_id', $data['warehouse_id'])
                 ->where('goods_id', $data['goods_id'])->where('product_id', $data['product_id'])
-                ->updateOne('amount', $data['amount']);
+                ->updateIncrement('amount', $data['amount']);
         }
         return WarehouseLogModel::create([
             'warehouse_id' => $data['warehouse_id'],

@@ -83,7 +83,7 @@ HTML;
 
     private function hideHtml() {
         $name = auth()->guest() ? '游客' : auth()->user()->name;
-        $url = auth()->guest() ? url('/auth', ['redirect_uri' => url()->to()])
+        $url = auth()->guest() ? url('/auth', ['redirect_uri' => url()->full()])
             : 'javascript:;';
         return <<<HTML
 <div class="hide-locked-node">

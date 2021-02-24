@@ -43,7 +43,7 @@ class TagRelationshipModel extends Model {
         );
 	    if (!empty($del)) {
             static::where('blog_id', $blog_id)->whereIn('tag_id', $del)->delete();
-            TagModel::query()->whereIn('id', $del)->updateOne('blog_count', -1);
+            TagModel::query()->whereIn('id', $del)->updateDecrement('blog_count');
         }
         if (empty($add)) {
 	        return;
@@ -51,7 +51,7 @@ class TagRelationshipModel extends Model {
         static::query()->insert(array_map(function ($tag_id) use ($blog_id) {
             return compact('tag_id', 'blog_id');
         }, $add));
-        TagModel::query()->whereIn('id', $add)->updateOne('blog_count', 1);
+        TagModel::query()->whereIn('id', $add)->updateIncrement('blog_count', 1);
     }
 
 }

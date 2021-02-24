@@ -192,7 +192,7 @@ class CheckInModel extends Model {
         static::query()->where('user_id', $user_id)
             ->where('created_at', '>=', $first->getAttributeValue('created_at'))
             ->where('created_at', '<', $last->getAttributeValue('created_at'))
-            ->updateOne('running', $running);
+            ->updateIncrement('running', $running);
         return true;
     }
 

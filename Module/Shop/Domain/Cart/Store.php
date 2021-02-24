@@ -57,7 +57,7 @@ class Store {
             return false;
         }
         GoodsModel::query()->where('id', $goods_id)
-            ->updateOne('stock', -$amount);
+            ->updateIncrement('stock', -$amount);
         $this->data[$goods_id][$product_id] = $amount;
         return true;
     }
@@ -87,7 +87,7 @@ class Store {
         foreach ($this->data as $goods_id => $items) {
             foreach ($items as $amount) {
                 GoodsModel::query()->where('id', $goods_id)
-                    ->updateOne('stock', $amount);
+                    ->updateIncrement('stock', $amount);
             }
         }
         $this->data = [];

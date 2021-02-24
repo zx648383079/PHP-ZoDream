@@ -82,7 +82,7 @@ class DiskModel extends Model {
         $this->where('user_id', $this->user_id)
             ->where('left_id', '>', $this->left_id)
             ->where('right_id', '<', $this->right_id)
-            ->updateOne([
+            ->updateIncrement([
             'left_id',
             'right_id',
         ], $difLeft);
@@ -95,7 +95,7 @@ class DiskModel extends Model {
         $this->where('user_id', $this->user_id)
             ->where('left_id', '<', $this->left_id)
             ->where('right_id', '>', $this->right_id)
-            ->updateOne('right_id', $this->left_id - $this->right_id - 1);
+            ->updateIncrement('right_id', $this->left_id - $this->right_id - 1);
         return true;
     }
 
@@ -113,7 +113,7 @@ class DiskModel extends Model {
         $diff = $this->right_id - $this->left_id + 1;
 //        self::where('user_id', $disk->user_id)
 //            ->where('left_id', '>=', $disk->right_id)
-//            ->updateOne('left_id', $diff);
+//            ->updateIncrement('left_id', $diff);
 //        $disk->left_id += $diff;
         // 起始的左值
         $left = $disk->left_id < $this->right_id ? $disk->right_id : $disk->left_id + 1;
@@ -121,7 +121,7 @@ class DiskModel extends Model {
             // 排除临时创造的错误值
             self::where('user_id', $disk->user_id)
                 ->where('right_id', '>=', $disk->right_id)
-                ->updateOne('right_id', $diff);
+                ->updateIncrement('right_id', $diff);
             $disk->right_id += $diff;
         } else {
             // 假的就更新左值方便下一次用
@@ -178,10 +178,10 @@ class DiskModel extends Model {
         $num = $this->left_id - $this->right_id - 1;
         $this->where('user_id', $this->user_id)
             ->where('right_id', '>', $this->right_id)
-            ->updateOne('right_id', $num);
+            ->updateIncrement('right_id', $num);
         $this->where('user_id', $this->user_id)
             ->where('left_id', '>', $this->right_id)
-            ->updateOne('left_id', $num);
+            ->updateIncrement('left_id', $num);
     }
 
     /**
@@ -239,10 +239,10 @@ class DiskModel extends Model {
         $this->right_id = $left + 2;
         self::where('user_id', $this->user_id)
             ->where('left_id', '>', $left)
-            ->updateOne('left_id', 2);
+            ->updateIncrement('left_id', 2);
         self::where('user_id', $this->user_id)
             ->where('right_id', '>', $left)
-            ->updateOne('right_id', 2);
+            ->updateIncrement('right_id', 2);
         return $this->save();
     }
 

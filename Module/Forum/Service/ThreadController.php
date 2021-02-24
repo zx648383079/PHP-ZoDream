@@ -29,7 +29,7 @@ class ThreadController extends Controller {
     public function indexAction($id, $user = 0, $page = 1) {
         if ($page < 2 && $user < 1) {
             ThreadModel::query()->where('id', $id)
-                ->updateOne('view_count');
+                ->updateIncrement('view_count');
         }
         $thread = ThreadModel::find($id);
         if (empty($thread)) {
@@ -144,7 +144,7 @@ class ThreadController extends Controller {
         }
         ForumModel::updateCount($thread->forum_id, 'post_count');
         ThreadModel::query()->where('id', $thread_id)
-            ->updateOne('post_count');
+            ->updateIncrement('post_count');
         return $this->renderData([
             'url' => url('./thread', ['id' => $thread_id, 'page' => ceil($post->grade / 20)])
         ]);
