@@ -1,21 +1,29 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Repositories\AdRepository;
 
 class AdController extends Controller {
 
-    public function indexAction($id = 0, $position = 0) {
+    public function indexAction(int $id = 0, int|string $position = 0) {
         if ($id > 0) {
-            return $this->render(AdModel::find(intval($id)));
+            return $this->detailAction($id);
         }
-        return $this->render(AdModel::getAds(intval($position)));
+        return $this->renderData(
+            AdRepository::getList('', $position)
+        );
+    }
+
+    public function detailAction(int $id) {
+        try {
+            return $this->render(AdRepository::get($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function bannerAction() {
-        return $this->render([
-            'data' => AdRepository::mobileBanners()
-        ]);
+        return $this->renderData(AdRepository::mobileBanners());
     }
 }

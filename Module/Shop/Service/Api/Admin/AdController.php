@@ -1,73 +1,106 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
 
-use Domain\Model\SearchModel;
-use Module\Shop\Domain\Models\Advertisement\AdModel;
-use Module\Shop\Domain\Models\Advertisement\AdPageModel;
-use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
+use Module\Shop\Domain\Repositories\Admin\AdRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AdController extends Controller {
 
-    public function indexAction($keywords = null, $position_id = 0) {
-        $model_list = AdPageModel::with('position')
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'name');
-            })->when(!empty($position_id), function ($query) use ($position_id) {
-                $query->where('position_id', intval($position_id));
-            })->page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '', int|string $position_id = 0) {
+        return $this->renderPage(
+            AdRepository::getList($keywords, $position_id)
+        );
     }
 
 
-    public function detailAction($id) {
-        $model = AdModel::find($id);
-        return $this->render($model);
-    }
-
-    public function saveAction() {
-        $model = new AdModel();
-        $model->load();
-        if ($model->type % 2 > 0) {
-            $model->content = request()->get('content_url');
+    public function detailAction(int $id) {
+        try {
+            return $this->render(
+                AdRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($model->autoIsNew()->save()) {
-            return $this->render($model);
-        }
-        return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
-        AdModel::where('id', $id)->delete();
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,30',
+                'position_id' => 'required|int',
+                'type' => 'int:0,9',
+                'url' => 'required|string:0,255',
+                'content' => 'required|string:0,255',
+                'start_at' => '',
+                'end_at' => '',
+                'content_url' => '',
+            ]);
+            return $this->render(
+                AdRepository::save($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deleteAction(int $id) {
+        try {
+            AdRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 
 
-    public function positionAction() {
-        $model_list = AdPositionModel::query()->page();
-        return $this->renderPage($model_list);
+    public function positionAction(string $keywords = '') {
+        return $this->renderPage(
+            AdRepository::positionList($keywords)
+        );
     }
 
-    public function detailPositionAction($id) {
-        $model = AdPositionModel::find($id);
-        return $this->render($model);
-    }
-
-    public function savePositionAction() {
-        $model = new AdPositionModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+    public function detailPositionAction(int $id) {
+        try {
+            return $this->render(
+                AdRepository::position($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
     }
 
-    public function deletePositionAction($id) {
-        AdPositionModel::where('id', $id)->delete();
+    public function savePositionAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,30',
+                'width' => 'required|string:0,20',
+                'height' => 'required|string:0,20',
+                'template' => 'required|string:0,255',
+            ]);
+            return $this->render(
+                AdRepository::positionSave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deletePositionAction(int $id) {
+        try {
+            AdRepository::positionRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 
     public function positionAllAction() {
-        $model_list = AdPositionModel::query()->get('id', 'name');
-        return $this->renderData($model_list);
+        return $this->renderData(
+            AdRepository::positionAll()
+        );
     }
 }

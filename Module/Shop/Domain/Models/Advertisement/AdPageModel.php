@@ -17,5 +17,5 @@ namespace Module\Shop\Domain\Models\Advertisement;
  */
 class AdPageModel extends AdModel {
 
-    protected $append = ['position'];
+    protected array $append = ['position'];
 }
