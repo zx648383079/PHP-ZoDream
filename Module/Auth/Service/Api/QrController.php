@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
@@ -39,10 +40,10 @@ class QrController extends Controller {
         ]);
     }
 
-    public function checkAction($token) {
+    public function checkAction(string $token) {
         $model = LoginQrModel::findIfToken($token);
         if (empty($model)) {
-            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204);
+            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204, 400);
         }
         if ($model->user_id > 0
             && $model->status == LoginQrModel::STATUS_SUCCESS) {
@@ -56,15 +57,15 @@ class QrController extends Controller {
             return $this->render($data);
         }
         if ($model->isExpired()) {
-            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204);
+            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204, 400);
         }
         if ($model->status == LoginQrModel::STATUS_UN_SCAN) {
-            return $this->renderFailure('QR_UN_SCANNED', 201);
+            return $this->renderFailure('QR_UN_SCANNED', 201, 400);
         }
         if ($model->status == LoginQrModel::STATUS_UN_CONFIRM) {
-            return $this->renderFailure('QR_UN_CONFIRM', 202);
+            return $this->renderFailure('QR_UN_CONFIRM', 202, 400);
         }
-        return $this->renderFailure('QR_REJECT', 203);
+        return $this->renderFailure('QR_REJECT', 203, 400);
     }
 
     /**
