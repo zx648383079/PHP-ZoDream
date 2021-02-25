@@ -6,6 +6,7 @@ use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Zodream\Database\Query\Builder;
 
 class RoleRepository {
 
@@ -37,7 +38,7 @@ class RoleRepository {
      * 新增权限
      * @param $name
      * @param $display_name
-     * @param array $permission
+     * @param array $permission [name => display_name]
      * @throws Exception
      * @return integer
      */
@@ -130,7 +131,4 @@ class RoleRepository {
         }
         return $model;
     }
-
-
-
 }

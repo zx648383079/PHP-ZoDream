@@ -16,36 +16,35 @@ class CreateCodeTables extends Migration {
      */
     public function up() {
         $this->append(CodeModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('user_id')->int(10);
-            $table->set('content')->text()->notNull();
-            $table->set('language')->varchar(20)->defaultVal('')->comment('语言');
-            $table->set('recommend_count')->int(10)->defaultVal(0)->comment('推荐数');
-            $table->set('collect_count')->int(10)->defaultVal(0)->comment('收藏数');
-            $table->set('comment_count')->int(10)->defaultVal(0)->comment('评论数');
-            $table->set('source')->varchar()->defaultVal('')->comment('来源');
+            $table->id();
+            $table->uint('user_id');
+            $table->column('content')->text();
+            $table->column('language')->varchar(20)->default('')->comment('语言');
+            $table->uint('recommend_count')->default(0)->comment('推荐数');
+            $table->uint('collect_count')->default(0)->comment('收藏数');
+            $table->uint('comment_count')->default(0)->comment('评论数');
+            $table->column('source')->varchar()->default('')->comment('来源');
             $table->timestamps();
         })->append(TagModel::tableName(), function (Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('code_id')->int()->notNull();
-            $table->set('content')->varchar()->notNull();
+            $table->id();
+            $table->uint('code_id');
+            $table->column('content')->varchar();
         })->append(CommentModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('content')->varchar()->notNull();
-            $table->set('parent_id')->int(10);
-            $table->set('user_id')->int(10)->defaultVal(0);
-            $table->set('code_id')->int(10)->notNull();
-            $table->set('agree')->int(10)->defaultVal(0);
-            $table->set('disagree')->int(10)->defaultVal(0);
+            $table->id();
+            $table->column('content')->varchar();
+            $table->uint('parent_id');
+            $table->uint('user_id')->default(0);
+            $table->uint('code_id');
+            $table->uint('agree')->default(0);
+            $table->uint('disagree')->default(0);
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('type')->tinyint(3)->defaultVal(0);
-            $table->set('id_value')->int(10)->notNull();
-            $table->set('user_id')->int(10)->notNull();
-            $table->set('action')->int(10)->notNull();
+            $table->id();
+            $table->column('type')->tinyint(3)->unsigned()->default(0);
+            $table->uint('id_value');
+            $table->uint('user_id');
+            $table->uint('action');
             $table->timestamp('created_at');
-        });
-        parent::up();
+        })->autoUp();
     }
 }

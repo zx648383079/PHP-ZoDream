@@ -2,10 +2,9 @@
 namespace Module\CMS\Domain\Scene;
 
 
+use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\DB;
-use Zodream\Database\Query\Builder;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class MultiScene extends BaseScene {
@@ -88,30 +87,31 @@ class MultiScene extends BaseScene {
         $field_list = array_filter($this->fieldList(), function ($item) {
             return $item->is_main > 0 && $item->is_system < 1;
         });
-        Schema::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
-            $table->set('id')->pk()->ai();
-            $table->set('title')->varchar(100)->notNull();
-            $table->set('cat_id')->int()->notNull();
-            $table->set('model_id')->int()->notNull();
-            $table->set('parent_id')->int()->defaultVal(0);
-            $table->set('user_id')->int()->defaultVal(0);
-            $table->set('keywords')->varchar();
-            $table->set('thumb')->varchar();
-            $table->set('description')->varchar();
-            $table->set('status')->bool()->defaultVal(0);
-            $table->set('view_count')->int()->defaultVal(0);
+        CreateCmsTables::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
+            $table->id();
+            $table->column('title')->varchar(100);
+            $table->uint('cat_id');
+            $table->uint('model_id');
+            $table->uint('parent_id')->default(0);
+            $table->uint('user_id')->default(0);
+            $table->column('keywords')->varchar();
+            $table->column('thumb')->varchar();
+            $table->column('description')->varchar();
+            $table->column('status')->bool()->default(0);
+            $table->uint('view_count')->default(0);
             foreach ($field_list as $item) {
-                static::converterTableField($table->set($item->field), $item);
+                static::converterTableField($table->column($item->field), $item);
             }
             $table->timestamps();
         });
-        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($extend_list) {
-            $table->set('id')->int(10)->pk()->ai();
+        CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($extend_list) {
+            $table->column('id')->int(10)->pk(true);
             foreach ($extend_list as $item) {
-                static::converterTableField($table->set($item->field), $item);
+                static::converterTableField($table->column($item->field), $item);
             }
-            $table->setComment($this->model->name);
+            $table->comment($this->model->name);
         });
+        return true;
     }
 
     /**
@@ -119,8 +119,9 @@ class MultiScene extends BaseScene {
      * @return mixed
      */
     public function removeTable() {
-        Schema::dropTable($this->getMainTable());
-        return Schema::dropTable($this->getExtendTable());
+        CreateCmsTables::dropTable($this->getMainTable());
+        CreateCmsTables::dropTable($this->getExtendTable());
+        return true;
     }
 
     /**
@@ -131,11 +132,14 @@ class MultiScene extends BaseScene {
      */
     public function addField(ModelFieldModel $field) {
         if ($field->is_system > 0) {
-            return;
+            return true;
         }
         $table = new Table($this->getTableByMain($field->is_main));
-        static::converterTableField($table->set($field->field), $field);
-        return $table->alert();
+        static::converterTableField($table->column($field->field), $field);
+        CreateCmsTables::updateTable($table,
+            $table->columns()
+        );
+        return true;
     }
 
     /**
@@ -146,13 +150,15 @@ class MultiScene extends BaseScene {
      */
     public function updateField(ModelFieldModel $field) {
         if ($field->is_system > 0) {
-            return;
+            return true;
         }
         if ($field->is_main == $field->getOldAttribute('is_main')) {
             $table = new Table($this->getTableByMain($field->is_main));
-            static::converterTableField($table->set($field->field)
-                ->setOldField($field->getOldAttribute('field')), $field);
-            return $table->alert();
+            static::converterTableField($table->column($field->getOldAttribute('field'))->name($field->field), $field);
+            CreateCmsTables::updateTable($table,
+                updateColumns: $table->columns()
+            );
+            return true;
         }
         $old_table = $this->getTableByMain($field->getOldAttribute('is_main'));
         $table = $this->getTableByMain($field->is_main);
@@ -164,8 +170,11 @@ class MultiScene extends BaseScene {
             ]);
         }
         $table = new Table($old_table);
-        $table->set($field->getOldAttribute('field'));
-        return $table->dropColumn();
+        $table->column($field->getOldAttribute('field'));
+        CreateCmsTables::updateTable($table,
+            dropColumns: $table->columns()
+        );
+        return true;
     }
 
     /**
@@ -176,8 +185,11 @@ class MultiScene extends BaseScene {
      */
     public function removeField(ModelFieldModel $field) {
         $table = new Table($this->getTableByMain($field->is_main));
-        $table->set($field->field);
-        return $table->dropColumn();
+        $table->column($field->field);
+        CreateCmsTables::updateTable($table,
+            dropColumns: $table->columns()
+        );
+        return true;
     }
 
     public function insert(array $data) {

@@ -6,9 +6,9 @@ use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Zodream\Database\Contracts\Column;
 use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
-use Zodream\Database\Schema\Column;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Concerns\ErrorTrait;
 

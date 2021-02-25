@@ -4,7 +4,7 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
-use Zodream\Database\Schema\Column;
+use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 use Zodream\Template\View;

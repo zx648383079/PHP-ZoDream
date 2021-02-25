@@ -4,7 +4,7 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
-use Zodream\Database\Schema\Column;
+use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 class Model extends BaseField {

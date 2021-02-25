@@ -17,85 +17,85 @@ class CreateForumTables extends Migration {
 
     public function up() {
         $this->append(ForumModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('name')->varchar(100)->notNull();
-            $table->set('thumb')->varchar(100);
-            $table->set('description')->varchar();
-            $table->set('parent_id')->int()->defaultVal(0);
-            $table->set('thread_count')->int()->defaultVal(0)->comment('主题数');
-            $table->set('post_count')->int()->defaultVal(0)->comment('回帖数');
-            $table->set('type')->tinyint(2);
-            $table->set('position')->tinyint(3)->defaultVal(99);
+            $table->id();
+            $table->column('name')->varchar(100);
+            $table->column('thumb')->varchar(100)->default('');
+            $table->column('description')->varchar()->default('');
+            $table->uint('parent_id')->default(0);
+            $table->uint('thread_count')->default(0)->comment('主题数');
+            $table->uint('post_count')->default(0)->comment('回帖数');
+            $table->column('type')->tinyint(2)->unsigned()->default(0);
+            $table->column('position')->tinyint(3)->unsigned()->default(99);
             $table->timestamps();
         })->append(ForumClassifyModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('name')->varchar(20)->notNull();
-            $table->set('icon')->varchar(100)->defaultVal('');
-            $table->set('forum_id')->int()->defaultVal(0);
-            $table->set('position')->tinyint(3)->defaultVal(99);
+            $table->id();
+            $table->column('name')->varchar(20);
+            $table->column('icon')->varchar(100)->default('');
+            $table->uint('forum_id')->default(0);
+            $table->column('position')->tinyint(3)->default(99);
         })->append(ForumModeratorModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('user_id')->int()->notNull();
-            $table->set('forum_id')->int()->defaultVal(0);
-            $table->set('role_id')->int()->defaultVal(0);
+            $table->id();
+            $table->uint('user_id');
+            $table->uint('forum_id')->default(0);
+            $table->uint('role_id')->default(0);
         })->append(ThreadModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('forum_id')->int()->notNull();
-            $table->set('classify_id')->int()->defaultVal(0);
-            $table->set('title')->varchar(200)->notNull()->comment('主题');
-            $table->set('user_id')->int()->notNull()->comment('发送用户');
-            $table->set('view_count')->int()->defaultVal(0)->comment('查看数');
-            $table->set('post_count')->int()->defaultVal(0)->comment('回帖数');
-            $table->set('collect_count')->int()->defaultVal(0)->comment('关注数');
-            $table->set('is_highlight')->bool()->defaultVal(0)
+            $table->id();
+            $table->uint('forum_id');
+            $table->uint('classify_id')->default(0);
+            $table->column('title')->varchar(200)->comment('主题');
+            $table->uint('user_id')->comment('发送用户');
+            $table->uint('view_count')->default(0)->comment('查看数');
+            $table->uint('post_count')->default(0)->comment('回帖数');
+            $table->uint('collect_count')->default(0)->comment('关注数');
+            $table->column('is_highlight')->bool()->default(0)
                 ->comment('是否高亮');
-            $table->set('is_digest')->bool()->defaultVal(0)
+            $table->column('is_digest')->bool()->default(0)
                 ->comment('是否精华');
-            $table->set('is_closed')->bool()->defaultVal(0)
+            $table->column('is_closed')->bool()->default(0)
                 ->comment('是否关闭');
-            $table->set('is_private_post')->bool()->defaultVal(0)->comment('是否仅楼主可见');
+            $table->column('is_private_post')->bool()->default(0)->comment('是否仅楼主可见');
             $table->timestamps();
         })->append(ThreadPostModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('content')->mediumtext()->notNull();
-            $table->set('thread_id')->int()->notNull();
-            $table->set('user_id')->int()->notNull()->comment('用户');
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('grade')->smallInt(6)
-                ->defaultVal(0)->comment('回复的层级');
-            $table->set('is_invisible')->bool()->defaultVal(0)
+            $table->id();
+            $table->column('content')->mediumtext();
+            $table->uint('thread_id');
+            $table->uint('user_id')->comment('用户');
+            $table->column('ip')->varchar(120);
+            $table->short('grade')->unsigned()
+                ->default(0)->comment('回复的层级');
+            $table->column('is_invisible')->bool()->default(0)
                 ->comment('是否通过审核');
-            $table->set('agree_count')->int()->defaultVal(0)
+            $table->uint('agree_count')->default(0)
                 ->comment('赞成数');
-            $table->set('disagree_count')->int()->defaultVal(0)
+            $table->uint('disagree_count')->default(0)
                 ->comment('不赞成数');
             $table->timestamps();
         })->append(ThreadLogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk(true);
-            $table->set('item_type')->tinyint(3)->defaultVal(0);
-            $table->set('item_id')->int(10)->notNull();
-            $table->set('user_id')->int(10)->notNull();
-            $table->set('action')->int(10)->notNull();
-            $table->set('node_index')->tinyint(1)->defaultVal(0)->comment('每一个回帖内部的节点');
-            $table->set('data')->varchar(255)->defaultVal('')->comment('执行的参数');
+            $table->id();
+            $table->column('item_type')->tinyint(3)->default(0);
+            $table->uint('item_id');
+            $table->uint('user_id');
+            $table->uint('action');
+            $table->column('node_index')->tinyint(1)->default(0)->comment('每一个回帖内部的节点');
+            $table->column('data')->varchar(255)->default('')->comment('执行的参数');
             $table->timestamp('created_at');
         })->append(BlackWordModel::tableName(), function(Table $table) {
-            $table->setComment('违禁词');
-            $table->set('id')->pk(true);
-            $table->set('words')->varchar()->notNull();
-            $table->set('replace_words')->varchar()->defaultVal('');
+            $table->comment('违禁词');
+            $table->id();
+            $table->column('words')->varchar();
+            $table->column('replace_words')->varchar()->default('');
         })->append(EmojiModel::tableName(), function(Table $table) {
-            $table->setComment('表情');
-            $table->set('id')->pk(true);
-            $table->set('cat_id')->int()->notNull();
-            $table->set('name')->varchar()->notNull();
-            $table->set('type')->tinyint(1)->defaultVal(0)->comment('图片或文字');
-            $table->set('content')->varchar()->notNull();
+            $table->comment('表情');
+            $table->id();
+            $table->uint('cat_id');
+            $table->column('name')->varchar();
+            $table->column('type')->tinyint(1)->default(0)->comment('图片或文字');
+            $table->column('content')->varchar()->default('');
         })->append(EmojiCategoryModel::tableName(), function(Table $table) {
-            $table->setComment('表情分类');
-            $table->set('id')->pk(true);
-            $table->set('name')->varchar()->notNull();
-            $table->set('icon')->varchar()->defaultVal('');
+            $table->comment('表情分类');
+            $table->id();
+            $table->column('name')->varchar();
+            $table->column('icon')->varchar()->default('');
         })->autoUp();
     }
 }

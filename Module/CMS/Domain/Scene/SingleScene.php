@@ -1,10 +1,8 @@
 <?php
 namespace Module\CMS\Domain\Scene;
 
+use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
-use Zodream\Database\DB;
-use Zodream\Database\Query\Builder;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class SingleScene extends BaseScene {
@@ -77,13 +75,14 @@ class SingleScene extends BaseScene {
         $field_list = array_filter($this->fieldList(), function ($item) {
             return $item->is_main < 1;
         });
-        return Schema::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
-            $table->set('id')->int(10)->pk(true);
+        CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
+            $table->column('id')->int(10)->pk(true);
             foreach ($field_list as $item) {
-                static::converterTableField($table->set($item->field), $item);
+                static::converterTableField($table->column($item->field), $item);
             }
-            $table->setComment($this->model->name);
+            $table->comment($this->model->name);
         });
+        return true;
     }
 
     /**
@@ -91,7 +90,8 @@ class SingleScene extends BaseScene {
      * @return mixed
      */
     public function removeTable() {
-        return Schema::dropTable($this->getExtendTable());
+        CreateCmsTables::dropTable($this->getExtendTable());
+        return true;
     }
 
     /**
@@ -105,8 +105,11 @@ class SingleScene extends BaseScene {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        static::converterTableField($table->set($field->field), $field);
-        return $table->alert();
+        static::converterTableField($table->column($field->field), $field);
+        CreateCmsTables::updateTable($table,
+            $table->columns()
+        );
+        return true;
     }
 
     /**
@@ -120,9 +123,11 @@ class SingleScene extends BaseScene {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        static::converterTableField($table->set($field->field)
-            ->setOldField($field->getOldAttribute('field')), $field);
-        return $table->alert();
+        static::converterTableField($table->column($field->getOldAttribute('field'))->name($field->field), $field);
+        CreateCmsTables::updateTable($table,
+            updateColumns: $table->columns()
+        );
+        return true;
     }
 
     /**
@@ -133,8 +138,11 @@ class SingleScene extends BaseScene {
      */
     public function removeField(ModelFieldModel $field) {
         $table = new Table($this->getExtendTable());
-        $table->set($field->field);
-        return $table->dropColumn();
+        $table->column($field->field);
+        CreateCmsTables::updateTable($table,
+            dropColumns: $table->columns()
+        );
+        return true;
     }
 
     public function insert(array $data) {

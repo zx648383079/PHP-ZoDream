@@ -22,11 +22,11 @@ class CounterMiddleware implements MiddlewareInterface {
         $event = event();
         $event->listen(Visit::class, VisitListener::class)
             ->listen(JumpOut::class, JumpOutListener::class);
-        $uri = request()->uri()->getPath();
-        if (strpos($uri, '/counter') === 0
-            || strpos($uri, '/auth') === 0
-            || strpos($uri, '/to') === 0
-            || strpos($uri, '/admin.php') === 0
+        $uri = request()->path();
+        if (str_starts_with($uri, '/counter')
+            || str_starts_with($uri, '/auth')
+            || str_starts_with($uri, '/to')
+            || str_starts_with($uri, '/admin.php')
             || strpos($uri, '/admin') > 3) {
             return;
         }

@@ -14,55 +14,54 @@ class CreateChatTables extends Migration {
 
     public function up() {
         $this->append(FriendModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(100)->notNull()->comment('备注');
-            $table->set('group_id')->int()->notNull()->comment('分组');
-            $table->set('user_id')->int()->notNull()->comment('用户');
-            $table->set('belong_id')->int()->notNull()->comment('归属');
+            $table->id();
+            $table->column('name')->varchar(100)->comment('备注');
+            $table->uint('group_id')->comment('分组');
+            $table->uint('user_id')->comment('用户');
+            $table->uint('belong_id')->comment('归属');
             $table->timestamps();
         })->append(ApplyModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('group_id')->int()->notNull()->comment('目标分组');
-            $table->set('user_id')->int()->notNull()->comment('目标用户');
-            $table->set('remark')->varchar()->defaultVal('');
-            $table->set('apply_user')->int()->notNull()->comment('申请人');
-            $table->set('status')->tinyint(1)->defaultVal(0);
+            $table->id();
+            $table->uint('group_id')->int()->default(0)->comment('目标分组');
+            $table->uint('user_id')->comment('目标用户');
+            $table->column('remark')->varchar()->default('');
+            $table->uint('apply_user')->comment('申请人');
+            $table->uint('status', 2)->default(0);
             $table->timestamps();
         })->append(FriendGroupModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(100)->notNull()->comment('分组名');
-            $table->set('user_id')->int()->notNull()->comment('用户');
+            $table->id();
+            $table->column('name')->varchar(100)->comment('分组名');
+            $table->uint('user_id')->comment('用户');
             $table->timestamp('created_at');
         })->append(MessageModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('type')->tinyint(2)->notNull()->defaultVal(0);
-            $table->set('content')->varchar(200)->notNull()->comment('内容');
-            $table->set('item_id')->int()->notNull()
-                ->defaultVal(0)->comment('附加id');
-            $table->set('receive_id')->int()->notNull()
-                ->defaultVal(0)->comment('接收用户');
-            $table->set('group_id')->int()->notNull()
-                ->defaultVal(0)->comment('所属群');
-            $table->set('user_id')->int()->notNull()->comment('发送用户');
-            $table->set('status')->tinyint(1)->notNull()->defaultVal(0);
+            $table->id();
+            $table->column('type')->tinyint(2)->unsigned()->default(0);
+            $table->column('content')->varchar(200)->comment('内容');
+            $table->uint('item_id')
+                ->default(0)->comment('附加id');
+            $table->uint('receive_id')
+                ->default(0)->comment('接收用户');
+            $table->uint('group_id')
+                ->default(0)->comment('所属群');
+            $table->uint('user_id')->comment('发送用户');
+            $table->uint('status', 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
         })->append(GroupModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(100)->notNull()->comment('群名');
-            $table->set('logo')->varchar(100)->notNull()->comment('群LOGO');
-            $table->set('description')->varchar(100)->notNull()->defaultVal('')
+            $table->id();
+            $table->column('name')->varchar(100)->comment('群名');
+            $table->column('logo')->varchar(100)->comment('群LOGO');
+            $table->column('description')->varchar(100)->default('')
                 ->comment('群说明');
-            $table->set('user_id')->int()->notNull()->comment('用户');
+            $table->uint('user_id')->comment('用户');
             $table->timestamps();
         })->append(GroupUserModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('group_id')->int()->notNull()->comment('群');
-            $table->set('user_id')->int()->notNull()->comment('用户');
-            $table->set('name')->varchar(100)->notNull()->comment('群备注');
-            $table->set('role_id')->int()->notNull()->defaultVal(0)->comment('管理员等级');
+            $table->id();
+            $table->uint('group_id')->comment('群');
+            $table->uint('user_id')->comment('用户');
+            $table->column('name')->varchar(100)->comment('群备注');
+            $table->uint('role_id')->default(0)->comment('管理员等级');
             $table->timestamps();
-        });
-        parent::up();
+        })->autoUp();
     }
 }

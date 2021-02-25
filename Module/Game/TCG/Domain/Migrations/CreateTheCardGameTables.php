@@ -18,82 +18,81 @@ use Zodream\Database\Schema\Table;
 class CreateTheCardGameTables extends Migration {
     public function up() {
         $this->append(PlayerModel::tableName(), function (Table $table) {
-            $table->setComment('角色表');
-            $table->set('id')->pk();
-            $table->set('name')->varchar()->comment('游戏名');
-            $table->set('grade')->smallInt(4)->unsigned()->defaultVal(0)->comment('等级');
-            $table->set('coin')->int()->unsigned()->defaultVal(0)->comment('游戏金币');
-            $table->set('exp')->int()->unsigned()->defaultVal(0)->comment('经验');
+            $table->comment('角色表');
+            $table->id();
+            $table->column('name')->varchar()->comment('游戏名');
+            $table->uint('grade', 4)->default(0)->comment('等级');
+            $table->uint('coin')->default(0)->comment('游戏金币');
+            $table->uint('exp')->default(0)->comment('经验');
         })->append(GradeRuleModel::tableName(), function (Table $table) {
-            $table->setComment('等级规则表');
-            $table->set('id')->pk();
-            $table->set('name')->varchar()->comment('等级名');
-            $table->set('exp')->int()->unsigned()->defaultVal(0)->comment('所需经验');
+            $table->comment('等级规则表');
+            $table->id();
+            $table->column('name')->varchar()->comment('等级名');
+            $table->uint('exp')->default(0)->comment('所需经验');
         })->append(PlayerCardModel::tableName(), function (Table $table) {
-            $table->setComment('用户拥有卡牌表');
-            $table->set('id')->pk();
-            $table->set('user_id')->int()->comment('');
-            $table->set('card_id')->int()->comment('');
-            $table->set('grade')->smallInt(4)->unsigned()->defaultVal(0)->comment('等级');
-            $table->set('exp')->int()->unsigned()->defaultVal(0)->comment('经验');
-            $table->set('intellectual')->int()->unsigned()->comment('智力，提升己方的攻击防御');
-            $table->set('charm')->int()->unsigned()->comment('魅力，降低敌方的攻击防御');
-            $table->set('attack')->int()->unsigned()->comment('攻击');
-            $table->set('defense')->int()->unsigned()->comment('防御');
+            $table->comment('用户拥有卡牌表');
+            $table->id();
+            $table->uint('user_id')->comment('');
+            $table->uint('card_id')->comment('');
+            $table->uint('grade', 4)->default(0)->comment('等级');
+            $table->uint('exp')->default(0)->comment('经验');
+            $table->uint('intellectual')->comment('智力，提升己方的攻击防御');
+            $table->uint('charm')->comment('魅力，降低敌方的攻击防御');
+            $table->uint('attack')->comment('攻击');
+            $table->uint('defense')->comment('防御');
         })->append(CardModel::tableName(), function (Table $table) {
-            $table->setComment('卡牌表');
-            $table->set('id')->pk();
-            $table->set('name')->varchar()->comment('等级名');
-            $table->set('quality')->int()->comment('卡牌品质');
-            $table->set('basic_intellectual')->int()->unsigned()->comment('智力，提升己方的攻击防御');
-            $table->set('basic_charm')->int()->unsigned()->comment('魅力，降低敌方的攻击防御');
-            $table->set('basic_attack')->int()->unsigned()->comment('攻击');
-            $table->set('basic_defense')->int()->unsigned()->comment('防御');
-            $table->set('exp')->int()->unsigned()->defaultVal(0)->comment('转化经验');
-            $table->set('price')->int()->unsigned()->defaultVal(0)->comment('出售价格');
-            $table->set('max_grade')->int()->unsigned()->defaultVal(0)->comment('可以升级最大等级');
+            $table->comment('卡牌表');
+            $table->id();
+            $table->column('name')->varchar()->comment('等级名');
+            $table->uint('quality')->comment('卡牌品质');
+            $table->uint('basic_intellectual')->comment('智力，提升己方的攻击防御');
+            $table->uint('basic_charm')->comment('魅力，降低敌方的攻击防御');
+            $table->uint('basic_attack')->comment('攻击');
+            $table->uint('basic_defense')->comment('防御');
+            $table->uint('exp')->default(0)->comment('转化经验');
+            $table->uint('price')->default(0)->comment('出售价格');
+            $table->uint('max_grade')->default(0)->comment('可以升级最大等级');
         })->append(CardGradeRuleModel::tableName(), function (Table $table) {
-            $table->setComment('卡牌等级表');
-            $table->set('id')->pk();
-            $table->set('name')->varchar()->comment('等级名');
-            $table->set('attr_plus')->int()->unsigned()->defaultVal(0)->comment('属性增长%');
-            $table->set('exp')->int()->unsigned()->defaultVal(0)->comment('所需经验');
-            $table->set('price')->int()->unsigned()->defaultVal(0)->comment('所需价格');
+            $table->comment('卡牌等级表');
+            $table->id();
+            $table->column('name')->varchar()->comment('等级名');
+            $table->uint('attr_plus')->default(0)->comment('属性增长%');
+            $table->uint('exp')->default(0)->comment('所需经验');
+            $table->uint('price')->default(0)->comment('所需价格');
         })->append(SkillModel::tableName(), function (Table $table) {
-            $table->setComment('技能表');
-            $table->set('id')->pk();
-            $table->set('name')->varchar()->comment('等级名');
-            $table->set('description')->varchar()->defaultVal('')->comment('说明');
-            $table->set('effect')->varchar()->defaultVal('')->comment('使用效果');
+            $table->comment('技能表');
+            $table->id();
+            $table->column('name')->varchar()->comment('等级名');
+            $table->column('description')->varchar()->default('')->comment('说明');
+            $table->column('effect')->varchar()->default('')->comment('使用效果');
         })->append(PlayerSkillModel::tableName(), function (Table $table) {
-            $table->setComment('技能表');
-            $table->set('id')->pk();
-            $table->set('user_id')->int(10, true, true);
-            $table->set('name')->varchar()->comment('等级名');
-            $table->set('description')->varchar()->defaultVal('')->comment('说明');
-            $table->set('effect')->varchar()->defaultVal('')->comment('使用效果');
+            $table->comment('技能表');
+            $table->id();
+            $table->uint('user_id');
+            $table->column('name')->varchar()->comment('等级名');
+            $table->column('description')->varchar()->default('')->comment('说明');
+            $table->column('effect')->varchar()->default('')->comment('使用效果');
         })->append(StoreModel::tableName(), function (Table $table) {
-            $table->setComment('商店表');
-            $table->set('id')->pk();
-            $table->set('item_type')->int(10, true, true);
-            $table->set('item_id')->int(10, true, true);
-            $table->set('price')->int(10, true, true)->comment('价格');
+            $table->comment('商店表');
+            $table->id();
+            $table->uint('item_type', 4);
+            $table->uint('item_id');
+            $table->uint('price')->comment('价格');
         })->append(JackpotModel::tableName(), function (Table $table) {
-            $table->setComment('奖池表');
-            $table->set('id')->pk();
-            $table->set('item_type')->int(10, true, true);
-            $table->set('item_id')->int(10, true, true);
-            $table->set('chance')->smallInt(4)->comment('抽中几率/ 10000');
+            $table->comment('奖池表');
+            $table->id();
+            $table->uint('item_type', 4);
+            $table->uint('item_id');
+            $table->uint('chance', 4)->comment('抽中几率/ 10000');
         })->append(LogModel::tableName(), function (Table $table) {
-            $table->setComment('活动记录表');
-            $table->set('id')->pk();
-            $table->set('user_id')->int(10, true, true);
-            $table->set('event_type')->varchar(10)->notNull();
-            $table->set('item_type')->int(10, true, true)->defaultVal(0);
-            $table->set('item_id')->int(10, true, true)->defaultVal(0);
-            $table->set('remark')->varchar()->defaultVal('');
+            $table->comment('活动记录表');
+            $table->id();
+            $table->uint('user_id');
+            $table->column('event_type')->varchar(10);
+            $table->uint('item_type', 4)->default(0);
+            $table->uint('item_id')->default(0);
+            $table->column('remark')->varchar()->default('');
             $table->timestamp('created_at');
-        });
-        parent::up();
+        })->autoUp();
     }
 }

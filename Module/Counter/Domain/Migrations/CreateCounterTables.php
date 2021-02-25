@@ -16,79 +16,78 @@ class CreateCounterTables extends Migration {
 
     public function up() {
         $this->append(PageLogModel::tableName(), function(Table $table) {
-            $table->setComment('页面访问记录');
-            $table->set('id')->pk(true);
-            $table->set('url')->varchar(255)->notNull();
-            $table->set('visit_count')->int()->defaultVal(0);
+            $table->comment('页面访问记录');
+            $table->id();
+            $table->column('url')->varchar(255);
+            $table->uint('visit_count')->default(0);
         })->append(VisitorLogModel::tableName(), function(Table $table) {
-            $table->setComment('访客日志');
-            $table->set('id')->pk(true);
-            $table->set('user_id')->varchar(50)->defaultVal('');
-            $table->set('ip')->varchar(120)->notNull();
+            $table->comment('访客日志');
+            $table->id();
+            $table->uint('user_id')->varchar(50)->default('');
+            $table->column('ip')->varchar(120);
             $table->timestamp('first_at');
             $table->timestamp('last_at');
         })->append(JumpLogModel::tableName(), function(Table $table) {
-            $table->setComment('页面跳出记录');
-            $table->set('id')->pk(true);
-            $table->set('referrer')->varchar()->defaultVal('');
-            $table->set('url')->varchar()->notNull();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('session_id')->varchar(32)->defaultVal('');
-            $table->set('user_agent')->varchar(255)->defaultVal('')->comment('代理');
+            $table->comment('页面跳出记录');
+            $table->id();
+            $table->column('referrer')->varchar()->default('');
+            $table->column('url')->varchar();
+            $table->column('ip')->varchar(120);
+            $table->column('session_id')->varchar(32)->default('');
+            $table->column('user_agent')->varchar(255)->default('')->comment('代理');
             $table->timestamp('created_at');
         })->append(ClickLogModel::tableName(), function(Table $table) {
-            $table->setComment('页面点击记录');
-            $table->set('id')->pk(true);
-            $table->set('url')->varchar()->notNull();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('session_id')->varchar(32)->defaultVal('');
-            $table->set('user_agent')->varchar(255)->defaultVal('')->comment('代理');
-            $table->set('x')->varchar(100)->defaultVal(0);
-            $table->set('y')->varchar(100)->defaultVal(0);
-            $table->set('tag')->varchar(120)->notNull();
-            $table->set('tag_url')->varchar(120)->defaultVal('');
+            $table->comment('页面点击记录');
+            $table->id();
+            $table->column('url')->varchar();
+            $table->column('ip')->varchar(120);
+            $table->column('session_id')->varchar(32)->default('');
+            $table->column('user_agent')->varchar(255)->default('')->comment('代理');
+            $table->column('x')->varchar(100)->default(0);
+            $table->column('y')->varchar(100)->default(0);
+            $table->column('tag')->varchar(120);
+            $table->column('tag_url')->varchar(120)->default('');
             $table->timestamp('created_at');
         })->append(LoadTimeLogModel::tableName(), function(Table $table) {
-            $table->setComment('页面加载记录');
-            $table->set('id')->pk(true);
-            $table->set('url')->varchar()->notNull();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('session_id')->varchar(32)->defaultVal('');
-            $table->set('user_agent')->varchar(255)->defaultVal('')->comment('代理');
-            $table->set('load_time')->smallInt(5)->notNull();
+            $table->comment('页面加载记录');
+            $table->id();
+            $table->column('url')->varchar();
+            $table->column('ip')->varchar(120);
+            $table->column('session_id')->varchar(32)->default('');
+            $table->column('user_agent')->varchar(255)->default('')->comment('代理');
+            $table->short('load_time', 5)->unsigned();
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
-            $table->setComment('访问记录');
-            $table->set('id')->pk(true);
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('browser')->varchar(40)->defaultVal('')->comment('浏览器');
-            $table->set('browser_version')->varchar(20)->defaultVal('')->comment('浏览器版本');
-            $table->set('os')->varchar(20)->defaultVal('')->comment('操作系统');
-            $table->set('os_version')->varchar(20)->defaultVal('')->comment('操作系统版本');
-            $table->set('url')->varchar(255)->defaultVal('')->comment('请求网址');
-            $table->set('referrer')->varchar(255)->defaultVal('')->comment('来路');
-            $table->set('user_agent')->varchar(255)->defaultVal('')->comment('代理');
-            $table->set('country')->varchar(45)->defaultVal('');
-            $table->set('region')->varchar(45)->defaultVal('');
-            $table->set('city')->varchar(45)->defaultVal('');
-            $table->set('user_id')->int()->defaultVal(0);
-            $table->set('session_id')->varchar(32)->defaultVal('');
-            $table->set('language')->varchar(20)->defaultVal('');
-            $table->set('latitude')->varchar(30)->defaultVal('')->comment('纬度');
-            $table->set('longitude')->varchar(30)->defaultVal('')->comment('经度');
+            $table->comment('访问记录');
+            $table->id();
+            $table->column('ip')->varchar(120);
+            $table->column('browser')->varchar(40)->default('')->comment('浏览器');
+            $table->column('browser_version')->varchar(20)->default('')->comment('浏览器版本');
+            $table->column('os')->varchar(20)->default('')->comment('操作系统');
+            $table->column('os_version')->varchar(20)->default('')->comment('操作系统版本');
+            $table->column('url')->varchar(255)->default('')->comment('请求网址');
+            $table->column('referrer')->varchar(255)->default('')->comment('来路');
+            $table->column('user_agent')->varchar(255)->default('')->comment('代理');
+            $table->column('country')->varchar(45)->default('');
+            $table->column('region')->varchar(45)->default('');
+            $table->column('city')->varchar(45)->default('');
+            $table->uint('user_id')->default(0);
+            $table->column('session_id')->varchar(32)->default('');
+            $table->column('language')->varchar(20)->default('');
+            $table->column('latitude')->varchar(30)->default('')->comment('纬度');
+            $table->column('longitude')->varchar(30)->default('')->comment('经度');
             $table->timestamp('created_at');
         })->append(StayTimeLogModel::tableName(), function(Table $table) {
-            $table->setComment('页面停留时间');
-            $table->set('id')->pk(true);
-            $table->set('url')->varchar()->notNull();
-            $table->set('ip')->varchar(120)->notNull();
-            $table->set('user_agent')->varchar(255)->defaultVal('')->comment('代理');
-            $table->set('session_id')->varchar(32)->defaultVal('');
-            $table->set('status')->bool()->defaultVal(0)
+            $table->comment('页面停留时间');
+            $table->id();
+            $table->column('url')->varchar();
+            $table->column('ip')->varchar(120);
+            $table->column('user_agent')->varchar(255)->default('')->comment('代理');
+            $table->column('session_id')->varchar(32)->default('');
+            $table->column('status')->bool()->default(0)
                 ->comment('是否停留');
             $table->timestamp('enter_at');
             $table->timestamp('leave_at');
-        });
-        parent::up();
+        })->autoUp();
     }
 }

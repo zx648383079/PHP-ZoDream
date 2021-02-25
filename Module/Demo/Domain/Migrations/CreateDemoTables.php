@@ -14,44 +14,44 @@ class CreateDemoTables extends Migration {
 
     public function up() {
         $this->append(CategoryModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(40)->notNull();
-            $table->set('parent_id')->int(10)->defaultVal(0);
-            $table->set('keywords')->varchar()->defaultVal('');
-            $table->set('description')->varchar()->defaultVal('');
-            $table->set('thumb')->varchar()->defaultVal('');
+            $table->id();
+            $table->column('name')->varchar(40);
+            $table->uint('parent_id')->default(0);
+            $table->column('keywords')->varchar()->default('');
+            $table->column('description')->varchar()->default('');
+            $table->column('thumb')->varchar()->default('');
         })->append(PostModel::tableName(), function (Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('title')->varchar(200)->notNull();
-            $table->set('description')->varchar()->defaultVal('');
-            $table->set('keywords')->varchar()->defaultVal('');
-            $table->set('thumb')->varchar()->defaultVal('');
-            $table->set('content')->text();
-            $table->set('file')->varchar()->defaultVal('')->comment('下载文件');
-            $table->set('size')->int(10, true)->defaultVal(0);
-            $table->set('user_id')->int(10, true)->notNull();
-            $table->set('cat_id')->int(10, true)->notNull();
-            $table->set('comment_count')->int(10)->unsigned()->defaultVal(0);
-            $table->set('click_count')->int(10)->unsigned()->defaultVal(0);
-            $table->set('download_count')->int(10)->unsigned()->defaultVal(0);
+            $table->id();
+            $table->column('title')->varchar(200);
+            $table->column('description')->varchar()->default('');
+            $table->column('keywords')->varchar()->default('');
+            $table->column('thumb')->varchar()->default('');
+            $table->column('content')->text();
+            $table->column('file')->varchar()->default('')->comment('下载文件');
+            $table->uint('size')->default(0);
+            $table->uint('user_id');
+            $table->uint('cat_id');
+            $table->uint('comment_count')->default(0);
+            $table->uint('click_count')->default(0);
+            $table->uint('download_count')->default(0);
             $table->timestamps();
         })->append(LogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('item_type')->tinyint(1)->defaultVal(0);
-            $table->set('item_id')->int(10)->notNull();
-            $table->set('user_id')->int(10)->notNull();
-            $table->set('action')->int(10)->notNull();
-            $table->set('ip')->varchar(120)->defaultVal('');
+            $table->id();
+            $table->column('item_type')->tinyint(1)->default(0);
+            $table->uint('item_id');
+            $table->uint('user_id');
+            $table->uint('action');
+            $table->column('ip')->varchar(120)->default('');
             $table->timestamp('created_at');
         })->append(TagModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(40)->notNull();
-            $table->set('description')->varchar();
-            $table->set('post_count')->int()->defaultVal(0);
+            $table->id();
+            $table->column('name')->varchar(40);
+            $table->column('description')->varchar();
+            $table->column('post_count')->int()->default(0);
         })->append(TagRelationshipModel::tableName(), function(Table $table) {
-            $table->set('tag_id')->int()->notNull();
-            $table->set('post_id')->int()->notNull();
-            $table->set('position')->tinyint(1)->defaultVal(99);
+            $table->uint('tag_id');
+            $table->uint('post_id');
+            $table->column('position')->tinyint(1)->unsigned()->default(99);
         })->autoUp();
     }
 }

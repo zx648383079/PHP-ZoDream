@@ -10,18 +10,17 @@ class CreateSEOTables extends Migration {
 
     public function up() {
         $this->append(OptionModel::tableName(), function(Table $table) {
-            $table->setComment('全局设置');
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(20)->notNull();
-            $table->set('code')->varchar(20)->defaultVal('');
-            $table->set('parent_id')->int()->defaultVal(0);
-            $table->set('type')->varchar(20)->defaultVal('text');
-            $table->set('visibility')->bool()->defaultVal(1)->comment('是否对外显示');
-            $table->set('default_value')->varchar(255)->defaultVal('')->comment('默认值或候选值');
-            $table->set('value')->text();
-            $table->set('position')->tinyint(4)->defaultVal(99);
-        });
-        parent::up();
+            $table->comment('全局设置');
+            $table->id();
+            $table->column('name')->varchar(20);
+            $table->column('code')->varchar(20)->default('');
+            $table->uint('parent_id')->default(0);
+            $table->column('type')->varchar(20)->default('text');
+            $table->column('visibility')->bool()->default(1)->comment('是否对外显示');
+            $table->column('default_value')->varchar(255)->default('')->comment('默认值或候选值');
+            $table->column('value')->text()->nullable();
+            $table->uint('position', 2)->default(99);
+        })->autoUp();
     }
 
     public function seed() {

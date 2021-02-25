@@ -19,74 +19,73 @@ class CreateBlogTables extends Migration {
      */
     public function up() {
         $this->append(BlogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('title')->varchar(200)->notNull();
-            $table->set('description')->varchar()->defaultVal('');
-            $table->set('keywords')->varchar()->defaultVal('');
-            $table->set('parent_id')->int()->unsigned()->defaultVal(0);
-            $table->set('programming_language')->varchar(20)
-                ->defaultVal('')->comment('编程语言');
-            $table->set('language')->enum(['zh', 'en'])->defaultVal('zh')
+            $table->id();
+            $table->column('title')->varchar(200);
+            $table->column('description')->varchar()->default('');
+            $table->column('keywords')->varchar()->default('');
+            $table->uint('parent_id')->default(0);
+            $table->column('programming_language')->varchar(20)
+                ->default('')->comment('编程语言');
+            $table->column('language')->enum(['zh', 'en'])->default('zh')
                 ->comment('内容语言');
-            $table->set('thumb')->varchar()->defaultVal('');
-            $table->set('edit_type')->tinyint(1)->unsigned()->defaultVal(BlogModel::EDIT_HTML)->comment('编辑器类型');
-            $table->set('content')->text();
-            $table->set('user_id')->int(10)->unsigned();
-            $table->set('term_id')->int(10)->unsigned();
-            $table->set('type')->bool()->unsigned()->defaultVal(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
-            $table->set('recommend')->int(10)->unsigned()->defaultVal(0);
-            $table->set('comment_count')->int(10)->unsigned()->defaultVal(0);
-            $table->set('click_count')->int(10)->unsigned()->defaultVal(0);
-            $table->set('open_type')->tinyint(1)->unsigned()->defaultVal(0)->comment('公开类型');
-            $table->set('open_rule')->varchar(20)->defaultVal('')->comment('类型匹配的值');
+            $table->column('thumb')->varchar()->default('');
+            $table->column('edit_type')->tinyint(1)->unsigned()->default(BlogModel::EDIT_HTML)->comment('编辑器类型');
+            $table->column('content')->text();
+            $table->uint('user_id');
+            $table->uint('term_id');
+            $table->column('type')->bool()->unsigned()->default(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
+            $table->uint('recommend')->default(0);
+            $table->uint('comment_count')->default(0);
+            $table->uint('click_count')->default(0);
+            $table->column('open_type')->tinyint(1)->unsigned()->default(0)->comment('公开类型');
+            $table->column('open_rule')->varchar(20)->default('')->comment('类型匹配的值');
             $table->softDeletes();
             $table->timestamps();
         })->append(BlogMetaModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('blog_id')->int()->notNull();
-            $table->set('name')->varchar(100)->notNull();
-            $table->set('content')->text()->notNull();
+            $table->id();
+            $table->uint('blog_id');
+            $table->column('name')->varchar(100);
+            $table->column('content')->text();
         })->append(TermModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(40)->notNull();
-            $table->set('parent_id')->int(10)->defaultVal(0);
-            $table->set('keywords')->varchar()->defaultVal('');
-            $table->set('description')->varchar()->defaultVal('');
-            $table->set('thumb')->varchar()->defaultVal('');
-            $table->set('styles')->varchar()->defaultVal('')->comment('独立引入样式');
+            $table->id();
+            $table->string('name', 40);
+            $table->uint('parent_id');
+            $table->column('keywords')->varchar()->default('');
+            $table->column('description')->varchar()->default('');
+            $table->column('thumb')->varchar()->default('');
+            $table->column('styles')->varchar()->default('')->comment('独立引入样式');
         })->append(CommentModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('content')->varchar()->notNull();
-            $table->set('name')->varchar(30);
-            $table->set('email')->varchar(50);
-            $table->set('url')->varchar(50);
-            $table->set('parent_id')->int(10);
-            $table->set('position')->int(10)->defaultVal(1);
-            $table->set('user_id')->int(10)->defaultVal(0);
-            $table->set('blog_id')->int(10)->notNull();
-            $table->set('ip')->varchar(120);
-            $table->set('agent')->varchar(250);
-            $table->set('agree')->int(10)->defaultVal(0);
-            $table->set('disagree')->int(10)->defaultVal(0);
-            $table->set('approved')->bool()->defaultVal(2);
+            $table->id();
+            $table->column('content')->varchar();
+            $table->column('name')->varchar(30)->default('');
+            $table->column('email')->varchar(50)->default('');
+            $table->column('url')->varchar(50)->default('');
+            $table->uint('parent_id')->default(0);
+            $table->column('position')->int(10)->default(1);
+            $table->uint('user_id')->default(0);
+            $table->uint('blog_id');
+            $table->column('ip')->varchar(120)->default('');
+            $table->column('agent')->varchar(250)->default('');
+            $table->column('agree')->int(10)->default(0);
+            $table->column('disagree')->int(10)->default(0);
+            $table->column('approved')->bool()->default(2);
             $table->timestamp('created_at');
         })->append(BlogLogModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('type')->tinyint(3)->defaultVal(0);
-            $table->set('id_value')->int(10)->notNull();
-            $table->set('user_id')->int(10)->notNull();
-            $table->set('action')->int(10)->notNull();
+            $table->id();
+            $table->column('type')->tinyint(3)->default(0);
+            $table->uint('id_value');
+            $table->uint('user_id');
+            $table->uint('action');
             $table->timestamp('created_at');
         })->append(TagModel::tableName(), function(Table $table) {
-            $table->set('id')->pk()->ai();
-            $table->set('name')->varchar(40)->notNull();
-            $table->set('description')->varchar();
-            $table->set('blog_count')->int()->defaultVal(0);
+            $table->id();
+            $table->column('name')->varchar(40);
+            $table->column('description')->varchar()->default('');
+            $table->column('blog_count')->int()->default(0);
         })->append(TagRelationshipModel::tableName(), function(Table $table) {
-            $table->set('tag_id')->int()->notNull();
-            $table->set('blog_id')->int()->notNull();
-            $table->set('position')->tinyint(3)->defaultVal(99);
-        });
-        parent::up();
+            $table->uint('tag_id');
+            $table->uint('blog_id');
+            $table->column('position')->tinyint(3)->unsigned()->default(99);
+        })->autoUp();
     }
 }
