@@ -7,7 +7,11 @@ use Module\Shop\Domain\Models\Activity\ActivityModel;
 
 class ActivityRepository {
     public static function getList(int $type, string $keywords = '') {
-        return ActivityModel::query()->when(!empty($keywords), function ($query) {
+        $query = ActivityModel::query();
+        if (in_array($type, [ActivityModel::TYPE_AUCTION, ActivityModel::TYPE_BARGAIN])) {
+            $query->with('goods');
+        }
+        return $query->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
         })->where('type', $type)->orderBy('id', 'desc')->page();
     }

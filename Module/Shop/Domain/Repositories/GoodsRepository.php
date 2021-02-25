@@ -239,7 +239,7 @@ class GoodsRepository {
         return $sn;
     }
 
-    public static function searchWithProduct(string $keywords = '', int $category = 0, int $brand = 0) {
+    public static function searchWithProduct(string $keywords = '', int $category = 0, int $brand = 0, int|array $id = 0) {
         if (!empty($keywords) && $category < 1 && $brand < 1) {
             $product = ProductModel::where('series_number', $keywords)
                 ->first();
@@ -257,6 +257,13 @@ class GoodsRepository {
             }
         }
         return GoodsSimpleModel::with('products')
+            ->when(!empty($id), function ($query) use ($id) {
+                if (is_array($id)) {
+                    $query->whereIn('id', $id);
+                    return;
+                }
+                $query->where('id', $id);
+            })
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })->when($category > 0, function ($query) use ($category) {

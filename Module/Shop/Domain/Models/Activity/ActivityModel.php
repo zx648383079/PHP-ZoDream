@@ -81,6 +81,10 @@ class ActivityModel extends Model {
         ];
     }
 
+    public function goods() {
+        return $this->hasOne(GoodsSimpleModel::class, 'id', 'scope');
+    }
+
     public function setStartAtAttribute($value) {
         if (!is_numeric($value)) {
             $value = strtotime($value);

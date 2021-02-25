@@ -7,9 +7,9 @@ use Module\Shop\Domain\Repositories\Admin\ActivityRepository;
 use Module\Shop\Service\Api\Admin\Controller;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-class AuctionController extends Controller {
+class CashBackController extends Controller {
 
-    const ACTIVITY_TYPE = ActivityModel::TYPE_AUCTION;
+    const ACTIVITY_TYPE = ActivityModel::TYPE_CASH_BACK;
 
     public function indexAction(string $keywords = '') {
         return $this->renderPage(
@@ -34,12 +34,12 @@ class AuctionController extends Controller {
                 'name' => 'required|string:0,40',
                 'thumb' => 'string:0,200',
                 'description' => 'string:0,200',
-                'scope' => 'required|int',
+                'scope_type' => 'required|int',
+                'scope' => '',
                 'configure' => 'required',
                 'start_at' => '',
                 'end_at' => '',
             ]);
-            $data['scope_type'] = ActivityModel::SCOPE_GOODS;
             return $this->render(
                 ActivityRepository::save(self::ACTIVITY_TYPE, $data)
             );

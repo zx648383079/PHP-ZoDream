@@ -7,9 +7,9 @@ use Module\Shop\Domain\Repositories\Admin\ActivityRepository;
 use Module\Shop\Service\Api\Admin\Controller;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-class AuctionController extends Controller {
+class BargainController extends Controller {
 
-    const ACTIVITY_TYPE = ActivityModel::TYPE_AUCTION;
+    const ACTIVITY_TYPE = ActivityModel::TYPE_BARGAIN;
 
     public function indexAction(string $keywords = '') {
         return $this->renderPage(
