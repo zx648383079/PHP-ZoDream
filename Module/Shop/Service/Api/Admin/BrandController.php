@@ -1,48 +1,68 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
-
 
 use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\GoodsModel;
-use Zodream\Database\Command;
+use Module\Shop\Domain\Repositories\Admin\BrandRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class BrandController extends Controller {
 
-    public function indexAction() {
-        $model_list = BrandModel::page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '') {
+        return $this->renderPage(BrandRepository::getList($keywords));
     }
 
-    public function detailAction($id) {
-        $model = BrandModel::find($id);
-        return $this->render($model);
-    }
-
-    public function saveAction() {
-        $model = new BrandModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+    public function detailAction(int $id) {
+        try {
+            return $this->render(
+                BrandRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
-        BrandModel::where('id', $id)->delete();
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,100',
+                'keywords' => 'string:0,200',
+                'description' => 'string:0,200',
+                'logo' => 'string:0,200',
+                'app_logo' => 'string:0,200',
+                'url' => 'string:0,200',
+            ]);
+            return $this->render(
+                BrandRepository::save($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deleteAction(int $id) {
+        try {
+            BrandRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 
     public function refreshAction() {
-        BrandModel::refreshPk(function ($old_id, $new_id) {
-            GoodsModel::where('brand_id', $old_id)->update([
-                'brand_id' => $new_id
-            ]);
-        });
+        BrandRepository::refresh();
         return $this->renderData(true);
     }
 
     public function allAction() {
         return $this->renderData(
-            BrandModel::query()->get('id', 'name')
+            BrandRepository::all()
         );
+    }
+
+    public function searchAction(string $keywords = '', int|array $id = 0) {
+        return $this->renderData(BrandRepository::search($keywords, $id));
     }
 }

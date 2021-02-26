@@ -4,50 +4,71 @@ namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\Admin\CategoryRepository;
 use Zodream\Html\Tree;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {
 
     public function indexAction() {
-        $model_list = CategoryModel::tree()->makeTreeForHtml();
-        return $this->renderData($model_list);
+        return $this->renderData(
+            CategoryRepository::all(true)
+        );
     }
 
     public function detailAction($id) {
-        $model = CategoryModel::find($id);
-        return $this->render($model);
-    }
-
-    public function saveAction() {
-        $model = new CategoryModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+        try {
+            return $this->render(
+                CategoryRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
-        CategoryModel::where('id', $id)->delete();
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,100',
+                'keywords' => 'string:0,200',
+                'description' => 'string:0,200',
+                'icon' => 'string:0,200',
+                'parent_id' => 'int',
+                'position' => 'int:0,999',
+                'banner' => 'string:0,200',
+                'app_banner' => 'string:0,200',
+            ]);
+            return $this->render(
+                CategoryRepository::save($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deleteAction(int $id) {
+        try {
+            CategoryRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 
     public function refreshAction() {
-        CategoryModel::refreshPk(function ($old_id, $new_id) {
-            CategoryModel::where('parent_id', $old_id)->update([
-                'parent_id' => $new_id
-            ]);
-            GoodsModel::where('cat_id', $old_id)->update([
-                'cat_id' => $new_id
-            ]);
-        });
+        CategoryRepository::refresh();
         return $this->renderData(true);
     }
 
     public function allAction() {
         return $this->renderData(
-            (new Tree(CategoryModel::query()->get('id', 'name', 'parent_id')))
-            ->makeTreeForHtml()
+            CategoryRepository::all(false)
         );
+    }
+
+    public function searchAction(string $keywords = '', int|array $id = 0) {
+        return $this->renderData(CategoryRepository::search($keywords, $id));
     }
 
 }

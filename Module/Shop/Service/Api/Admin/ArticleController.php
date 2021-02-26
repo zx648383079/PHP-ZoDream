@@ -1,64 +1,104 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
-
-use Domain\Model\SearchModel;
-use Module\Shop\Domain\Models\ArticleCategoryModel;
-use Module\Shop\Domain\Models\ArticleModel;
-use Zodream\Html\Tree;
+use Module\Shop\Domain\Repositories\Admin\ArticleRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ArticleController extends Controller {
 
-    public function indexAction($keywords = '', $cat_id = 0) {
-        $model_list = ArticleModel::with('category')
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'title');
-            })->when(!empty($cat_id), function ($query) use ($cat_id) {
-                $query->where('cat_id', intval($cat_id));
-            })->page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '', int $cat_id = 0) {
+        return $this->renderPage(
+            ArticleRepository::getList($keywords, $cat_id)
+        );
     }
 
-    public function detailAction($id) {
-        $model = ArticleModel::find($id);
-        return $this->render($model);
-    }
-
-    public function saveAction() {
-        $model = new ArticleModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+    public function detailAction(int $id) {
+        try {
+            return $this->render(
+                ArticleRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
     }
 
-
-    public function categoryAction() {
-        $model_list = ArticleCategoryModel::query()->page();
-        return $this->renderPage($model_list);
-    }
-
-    public function detailCategoryAction($id) {
-        $model = ArticleCategoryModel::find($id);
-        return $this->render($model);
-    }
-
-    public function saveCategoryAction() {
-        $model = new ArticleCategoryModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'cat_id' => 'required|int',
+                'title' => 'required|string:0,100',
+                'keywords' => 'string:0,200',
+                'thumb' => 'string:0,200',
+                'description' => 'string:0,200',
+                'brief' => 'string:0,200',
+                'url' => 'string:0,200',
+                'file' => 'string:0,200',
+                'content' => 'required',
+            ]);
+            return $this->render(
+                ArticleRepository::save($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteCategoryAction($id) {
-        ArticleCategoryModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        try {
+            ArticleRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+
+    public function categoryAction(string $keywords = '') {
+        return $this->renderPage(
+            ArticleRepository::categoryList($keywords)
+        );
+    }
+
+    public function detailCategoryAction(int $id) {
+        try {
+            return $this->render(
+                ArticleRepository::category($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function saveCategoryAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,100',
+                'keywords' => 'string:0,200',
+                'description' => 'string:0,200',
+                'parent_id' => 'int',
+                'position' => 'int:0,999',
+            ]);
+            return $this->render(
+                ArticleRepository::categorySave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deleteCategoryAction(int $id) {
+        try {
+            ArticleRepository::categoryRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 
     public function categoryTreeAction() {
-        $tree = new Tree(ArticleCategoryModel::query()
-            ->orderBy('position', 'asc')->get('id', 'name', 'parent_id'));
-        return $this->renderData($tree->makeTreeForHtml());
+        return $this->renderData(ArticleRepository::categoryAll());
     }
 }

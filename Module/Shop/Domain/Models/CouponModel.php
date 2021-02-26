@@ -23,22 +23,6 @@ use Module\Shop\Domain\Entities\CouponEntity;
  */
 class CouponModel extends CouponEntity {
 
-    const TYPE_MONEY = 0;  // 优惠
-    const TYPE_DISCOUNT = 1; // 折扣
-
-    const RULE_NONE = 0;
-    const RULE_GOODS = 1;
-    const RULE_CATEGORY = 2;
-    const RULE_BRAND = 3;
-    const RULE_STORE = 4;
-
-    const SEND_RECEIVE = 0; // 前台领取
-    const SEND_GOODS = 1;   // 购买商品
-    const SEND_ORDER = 2;   // 订单金额
-    const SEND_SIGN = 3;    // 签到
-    const SEND_USER = 4;    // 按用户
-
-
     public function getThumbAttribute() {
         $thumb = $this->getAttributeSource('thumb');
         if (empty($thumb)) {

@@ -2,9 +2,6 @@
 namespace Domain\Model;
 
 
-
-
-
 /**
 * Class LogModel
 * @property integer $id
