@@ -106,7 +106,9 @@ class GoodsController extends Controller {
         return $this->render(compact('attr_list', 'product_list'));
     }
 
-    public function searchAction(string $keywords = '', int $category = 0, int $brand = 0, int|array $id = 0) {
+    public function searchAction(string $keywords = '',
+                                 int $category = 0, int $brand = 0,
+                                 int|array $id = 0) {
         return $this->renderPage(GoodsRepository::searchWithProduct($keywords, $category, $brand, $id));
     }
 }

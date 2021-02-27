@@ -6,6 +6,8 @@ use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
+use Zodream\Database\Relation;
 
 class ActivityRepository {
     public static function getList(int $type, string $keywords = '') {
@@ -24,8 +26,43 @@ class ActivityRepository {
         if (empty($model)) {
             throw new \Exception('数据有误');
         }
-
+        if ($type === ActivityModel::TYPE_MIX) {
+            return static::formatMix($model);
+        }
+        if ($type === ActivityModel::TYPE_LOTTERY) {
+            return static::formatLottery($model);
+        }
         return $model;
+    }
+
+    protected static function formatMix(ActivityModel $model) {
+        $data = $model->toArray();
+        if (!isset($data['configure']['goods'])) {
+            return $data;
+        }
+        $data['configure']['goods']  = Relation::create($data['configure']['goods'], [
+            'goods' => [
+                'query' => GoodsSimpleModel::query(),
+                'link' => ['goods_id', 'id'],
+                'type' => Relation::TYPE_ONE
+            ]
+        ]);
+        return $data;
+    }
+
+    protected static function formatLottery(ActivityModel $model) {
+        $data = $model->toArray();
+        if (!isset($data['configure']['items'])) {
+            return $data;
+        }
+        $data['configure']['items']  = Relation::create($data['configure']['items'], [
+            'goods' => [
+                'query' => GoodsSimpleModel::query(),
+                'link' => ['goods_id', 'id'],
+                'type' => Relation::TYPE_ONE
+            ]
+        ]);
+        return $data;
     }
 
     public static function save(int $type, array $data) {
