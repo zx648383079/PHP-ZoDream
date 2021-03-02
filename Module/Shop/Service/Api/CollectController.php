@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Models\CollectModel;
-use Module\Shop\Domain\Models\Scene\Collect;
+use Module\Shop\Domain\Repositories\CollectRepository;
 
 class CollectController extends Controller {
 
@@ -13,29 +13,36 @@ class CollectController extends Controller {
     }
 
     public function indexAction() {
-        $goods_list = Collect::with('goods')->page();
-        return $this->renderPage($goods_list);
+        return $this->renderPage(
+            CollectRepository::getList()
+        );
     }
 
-    public function addAction($id) {
-        if (!CollectModel::exist($id)) {
-            CollectModel::add($id);
+    public function addAction(int $id) {
+        try {
+            CollectRepository::add($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(['data' => true]);
+        return $this->renderData(true);
     }
 
-    public function deleteAction($id) {
-        CollectModel::remove($id);
-        return $this->render(['data' => false]);
-    }
-
-    public function toggleAction($id) {
-        $id = intval($id);
-        if (CollectModel::exist($id)) {
-            CollectModel::remove($id);
-            return $this->render(['data' => false]);
+    public function deleteAction(int|array $id) {
+        try {
+            CollectRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        CollectModel::add($id);
-        return $this->render(['data' => true]);
+        return $this->renderData(false);
+    }
+
+    public function toggleAction(int $id) {
+        try {
+            return $this->renderData(
+                CollectRepository::toggle($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }
