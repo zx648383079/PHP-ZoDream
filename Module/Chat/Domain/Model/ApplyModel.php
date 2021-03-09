@@ -8,13 +8,14 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * Class ApplyModel
  * @package Module\Chat\Domain\Model
  * @property integer $id
- * @property integer $group_id
- * @property integer $user_id
  * @property string $remark
- * @property integer $apply_user
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $classify_id
+ * @property integer $item_type
+ * @property integer $item_id
+ * @property integer $apply_user_id
  */
 class ApplyModel extends Model {
     public static function tableName() {
@@ -23,35 +24,38 @@ class ApplyModel extends Model {
 
     protected function rules() {
         return [
-            'group_id' => 'required|int',
-            'user_id' => 'required|int',
             'remark' => 'string:0,255',
-            'apply_user' => 'required|int',
-            'status' => 'int:0,9',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
+            'classify_id' => 'int',
+            'item_type' => 'int:0,127',
+            'item_id' => 'required|int',
+            'apply_user_id' => 'required|int',
         ];
     }
 
     protected function labels() {
         return [
             'id' => 'Id',
-            'group_id' => 'Group Id',
-            'user_id' => 'User Id',
             'remark' => 'Remark',
-            'apply_user' => 'Apply User',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'classify_id' => 'Classify Id',
+            'item_type' => 'Item Type',
+            'item_id' => 'Item Id',
+            'apply_user_id' => 'Apply User Id',
         ];
     }
+
 
     public function user() {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function applier() {
-        return $this->hasOne(UserSimpleModel::class, 'id', 'apply_user');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'apply_user_id');
     }
 
     public static function canApply($user_id) {

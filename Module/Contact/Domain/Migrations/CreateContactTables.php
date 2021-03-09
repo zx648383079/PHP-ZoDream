@@ -14,30 +14,30 @@ class CreateContactTables extends Migration {
         $this->append(FeedbackModel::tableName(), function (Table $table) {
             $table->comment('留言');
             $table->id();
-            $table->column('name')->varchar(20);
-            $table->column('email')->varchar(50)->default('');
-            $table->column('phone')->varchar(30)->default('');
-            $table->column('content')->varchar()->default('');
-            $table->column('status')->bool()->default(0);
+            $table->string('name', 20);
+            $table->string('email', 50)->default('');
+            $table->string('phone', 30)->default('');
+            $table->string('content')->default('');
+            $table->bool('status')->default(0);
+            $table->uint('user_id')->default(0);
             $table->timestamps();
         })->append(FriendLinkModel::tableName(), function (Table $table) {
             $table->comment('友情链接');
             $table->id();
-            $table->column('name')->varchar(20);
-            $table->column('url')->varchar(50);
-            $table->column('logo')->varchar(200)->default('');
-            $table->column('brief')->varchar()->default('');
-            $table->column('email')->varchar(100)->default('');
-            $table->column('status')->bool()->default(0);
+            $table->string('name', 20);
+            $table->string('url', 50);
+            $table->string('logo', 200)->default('');
+            $table->string('brief')->default('');
+            $table->string('email', 100)->default('');
+            $table->bool('status')->default(0);
+            $table->uint('user_id')->default(0);
             $table->timestamps();
         })->append(SubscribeModel::tableName(), function (Table $table) {
             $table->comment('邮箱订阅');
             $table->id();
-            $table->column('email')->varchar(50);
-            $table->column('status')->bool()->default(0);
+            $table->string('email', 50);
+            $table->bool('status')->default(0);
             $table->timestamps();
-        });
-        parent::up();
+        })->autoUp();
     }
-
 }

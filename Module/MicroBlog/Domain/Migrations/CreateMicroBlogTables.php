@@ -20,23 +20,23 @@ class CreateMicroBlogTables extends Migration {
         $this->append(MicroBlogModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
-            $table->column('content')->varchar(140);
+            $table->string('content', 140);
             $table->uint('open_type', 1)->default(0);
             $table->uint('recommend_count')->default(0)->comment('推荐数');
             $table->uint('collect_count')->default(0)->comment('收藏数');
             $table->uint('forward_count')->default(0)->comment('转发数');
             $table->uint('comment_count')->default(0)->comment('评论数');
             $table->uint('forward_id')->default(0)->comment('转发的源id');
-            $table->column('source')->varchar(30)->default('')->comment('来源');
+            $table->string('source', 30)->default('')->comment('来源');
             $table->timestamps();
         })->append(AttachmentModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('micro_id');
-            $table->column('thumb')->varchar();
-            $table->column('file')->varchar();
+            $table->string('thumb');
+            $table->string('file');
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('content')->varchar();
+            $table->string('content');
             $table->uint('parent_id');
             $table->uint('user_id')->default(0);
             $table->uint('micro_id');
@@ -52,7 +52,7 @@ class CreateMicroBlogTables extends Migration {
             $table->timestamp('created_at');
         })->append(TopicModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('name')->varchar(200);
+            $table->string('name', 200);
             $table->uint('user_id');
             $table->timestamps();
         })->append(BlogTopicModel::tableName(), function(Table $table) {

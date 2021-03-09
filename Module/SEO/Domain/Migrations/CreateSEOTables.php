@@ -12,13 +12,13 @@ class CreateSEOTables extends Migration {
         $this->append(OptionModel::tableName(), function(Table $table) {
             $table->comment('全局设置');
             $table->id();
-            $table->column('name')->varchar(20);
-            $table->column('code')->varchar(20)->default('');
+            $table->string('name', 20);
+            $table->string('code', 20)->default('');
             $table->uint('parent_id')->default(0);
-            $table->column('type')->varchar(20)->default('text');
-            $table->column('visibility')->bool()->default(1)->comment('是否对外显示');
-            $table->column('default_value')->varchar(255)->default('')->comment('默认值或候选值');
-            $table->column('value')->text()->nullable();
+            $table->string('type', 20)->default('text');
+            $table->bool('visibility')->default(1)->comment('是否对外显示');
+            $table->string('default_value')->default('')->comment('默认值或候选值');
+            $table->text('value')->nullable();
             $table->uint('position', 2)->default(99);
         })->autoUp();
     }

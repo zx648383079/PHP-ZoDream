@@ -21,47 +21,47 @@ class CreateTemplateTables extends Migration {
         $this->append(ThemeModel::tableName(), function(Table $table) {
             $table->comment('所有可用主题');
             $table->id();
-            $table->column('name')->varchar(30);
-            $table->column('description')->varchar(200)->default('');
-            $table->column('thumb')->varchar(100)->default('');
-            $table->column('path')->varchar(200);
+            $table->string('name', 30);
+            $table->string('description')->default('');
+            $table->string('thumb', 100)->default('');
+            $table->string('path');
         })->append(ThemePageModel::tableName(), function(Table $table) {
             $table->comment('所有主题下面页面框架');
             $table->id();
-            $table->column('name')->varchar(30);
-            $table->column('description')->varchar(200)->default('');
-            $table->column('thumb')->varchar(100)->default('');
+            $table->string('name', 30);
+            $table->string('description', 200)->default('');
+            $table->string('thumb', 100)->default('');
             $table->uint('theme_id');
-            $table->column('path')->varchar(200);
+            $table->string('path', 200);
         })->append(ThemeStyleModel::tableName(), function(Table $table) {
             $table->comment('所有主题下面部件集成样式');
             $table->id();
-            $table->column('name')->varchar(30);
-            $table->column('description')->varchar(200)->default('');
-            $table->column('thumb')->varchar(100)->default('');
+            $table->string('name', 30);
+            $table->string('description', 200)->default('');
+            $table->string('thumb', 100)->default('');
             $table->uint('theme_id');
-            $table->column('path')->varchar(200);
+            $table->string('path', 200);
         })->append(ThemeWeightModel::tableName(), function(Table $table) {
             $table->comment('所有主题组件');
             $table->id();
-            $table->column('name')->varchar(30);
-            $table->column('description')->varchar(200)->default('');
-            $table->column('thumb')->varchar(100)->default('');
+            $table->string('name', 30);
+            $table->string('description', 200)->default('');
+            $table->string('thumb', 100)->default('');
             $table->uint('type', 2)->default(0);
             $table->uint('adapt_to', 1)->default(0)->comment('适用pc、手机');
-            $table->column('editable')->bool()->default(1);
+            $table->bool('editable')->default(1);
             $table->uint('theme_id');
-            $table->column('path')->varchar(200);
+            $table->string('path', 200);
         })->append(SiteModel::tableName(), function(Table $table) {
             $table->comment('自定义站点');
             $table->id();
-            $table->column('name')->varchar(100);
+            $table->string('name', 100);
             $table->uint('user_id');
-            $table->column('title')->varchar(200)->default('New Page');
-            $table->column('keywords')->varchar(255)->default('');
-            $table->column('thumb')->varchar(255)->default('');
-            $table->column('description')->varchar(255)->default('');
-            $table->column('domain')->varchar(50)->default('');
+            $table->string('title', 200)->default('New Page');
+            $table->string('keywords')->default('');
+            $table->string('thumb')->default('');
+            $table->string('description')->default('');
+            $table->string('domain', 50)->default('');
             $table->uint('theme_id');
             $table->timestamps();
         })->append(PageModel::tableName(), function(Table $table) {
@@ -69,32 +69,31 @@ class CreateTemplateTables extends Migration {
             $table->id();
             $table->uint('site_id');
             $table->uint('type', 2)->default(0);
-            $table->column('name')->varchar(100);
-            $table->column('title')->varchar(200)->default('New Page');
-            $table->column('keywords')->varchar(255)->default('');
-            $table->column('thumb')->varchar(255)->default('');
-            $table->column('description')->varchar(255)->default('');
+            $table->string('name', 100);
+            $table->string('title', 200)->default('New Page');
+            $table->string('keywords')->default('');
+            $table->string('thumb')->default('');
+            $table->string('description')->default('');
             $table->uint('theme_page_id');
-            $table->column('settings')->text()->nullable();
+            $table->text('settings')->nullable();
             $table->uint('position', 2)->default(10);
             $table->softDeletes();
             $table->timestamps();
         })->append(PageWeightModel::tableName(), function(Table $table) {
             $table->comment('自定义页面组件及设置');
-            $table->column('id')->pk()->ai(1000);  // 预留id给页面预留不同入口
+            $table->id()->ai(1000);  // 预留id给页面预留不同入口
             $table->uint('page_id');
             $table->uint('site_id');
             $table->uint('theme_weight_id');
             $table->uint('parent_id');
             $table->uint('position', 5);
-            $table->column('title')->varchar(200);
-            $table->column('content')->text()->nullable();
-            $table->column('settings')->text()->nullable();
+            $table->string('title', 200);
+            $table->text('content')->nullable();
+            $table->text('settings')->nullable();
             $table->uint('theme_style_id')->default(0);
-            $table->column('is_share')->bool()->default(0);
+            $table->bool('is_share')->default(0);
             $table->timestamps();
-        });
-        parent::up();
+        })->autoUp();
     }
 
 }

@@ -13,6 +13,7 @@ use Domain\Model\Model;
  * @property string $brief
  * @property string $email
  * @property integer $status
+ * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -29,6 +30,7 @@ class FriendLinkModel extends Model {
             'brief' => 'string:0,255',
             'email' => 'string:0,100',
             'status' => 'int:0,9',
+            'user_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

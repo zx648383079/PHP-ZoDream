@@ -14,22 +14,22 @@ class CreateVideoTables extends Migration {
         $this->append(MusicModel::tableName(), function (Table $table) {
             $table->comment('背景音乐库');
             $table->id();
-            $table->column('name')->varchar()->comment('歌曲名');
-            $table->column('singer')->varchar(20)->default('')
+            $table->string('name')->comment('歌曲名');
+            $table->string('singer', 20)->default('')
                 ->comment('歌手');
             $table->uint('duration', 4)->default(0)->comment('歌曲长度');
-            $table->column('path')->varchar()->comment('歌曲路径');
+            $table->string('path')->comment('歌曲路径');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
         })->append(VideoModel::tableName(), function (Table $table) {
             $table->comment('短视频库');
             $table->id();
             $table->uint('user_id');
-            $table->column('cover')->varchar()->default('')
+            $table->string('cover')->default('')
                 ->comment('封面');
-            $table->column('content')->varchar()->default('')
+            $table->string('content')->default('')
                 ->comment('介绍');
-            $table->column('video_path')->varchar()
+            $table->string('video_path')
                 ->comment('视频路径');
             $table->uint('video_duration', 4)
                 ->default(0)->comment('视频长度');
@@ -48,7 +48,7 @@ class CreateVideoTables extends Migration {
             $table->timestamps();
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('content')->varchar();
+            $table->string('content');
             $table->uint('parent_id');
             $table->uint('user_id')->default(0);
             $table->uint('video_id');

@@ -15,19 +15,19 @@ class CreateDemoTables extends Migration {
     public function up() {
         $this->append(CategoryModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('name')->varchar(40);
+            $table->string('name', 40);
             $table->uint('parent_id')->default(0);
-            $table->column('keywords')->varchar()->default('');
-            $table->column('description')->varchar()->default('');
-            $table->column('thumb')->varchar()->default('');
+            $table->string('keywords')->default('');
+            $table->string('description')->default('');
+            $table->string('thumb')->default('');
         })->append(PostModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('title')->varchar(200);
-            $table->column('description')->varchar()->default('');
-            $table->column('keywords')->varchar()->default('');
-            $table->column('thumb')->varchar()->default('');
-            $table->column('content')->text();
-            $table->column('file')->varchar()->default('')->comment('下载文件');
+            $table->string('title', 200);
+            $table->string('description')->default('');
+            $table->string('keywords')->default('');
+            $table->string('thumb')->default('');
+            $table->text('content');
+            $table->string('file')->default('')->comment('下载文件');
             $table->uint('size')->default(0);
             $table->uint('user_id');
             $table->uint('cat_id');
@@ -37,21 +37,21 @@ class CreateDemoTables extends Migration {
             $table->timestamps();
         })->append(LogModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('item_type')->tinyint(1)->default(0);
+            $table->uint('item_type', 1)->default(0);
             $table->uint('item_id');
             $table->uint('user_id');
             $table->uint('action');
-            $table->column('ip')->varchar(120)->default('');
+            $table->string('ip', 120)->default('');
             $table->timestamp('created_at');
         })->append(TagModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('name')->varchar(40);
-            $table->column('description')->varchar();
-            $table->column('post_count')->int()->default(0);
+            $table->string('name', 40);
+            $table->string('description')->default('');
+            $table->uint('post_count')->default(0);
         })->append(TagRelationshipModel::tableName(), function(Table $table) {
             $table->uint('tag_id');
             $table->uint('post_id');
-            $table->column('position')->tinyint(1)->unsigned()->default(99);
+            $table->uint('position', 1)->default(99);
         })->autoUp();
     }
 }

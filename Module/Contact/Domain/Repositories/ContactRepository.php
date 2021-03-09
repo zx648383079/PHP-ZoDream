@@ -20,7 +20,9 @@ class ContactRepository {
      */
     public static function saveFeedback(array $data): FeedbackModel {
         $model = new FeedbackModel();
-        if (!$model->load($data) || !$model->save()) {
+        $model->load($data);
+        $model->user_id = auth()->id();
+        if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         return $model;
@@ -44,7 +46,9 @@ class ContactRepository {
 
     public static function applyFriendLink(array $data): FriendLinkModel {
         $model = new FriendLinkModel();
-        if (!$model->load($data) || !$model->save()) {
+        $model->load($data);
+        $model->user_id = auth()->id();
+        if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         BulletinModel::system(1, '友情链接申请',

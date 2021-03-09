@@ -18,7 +18,7 @@ class CreateDiskTables extends Migration {
     public function up() {
         $this->append(DiskModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('name')->varchar(100);
+            $table->string('name', 100);
             $table->uint('file_id')->default(0);
             $table->uint('user_id');
             $table->uint('left_id')->default(0);
@@ -28,19 +28,19 @@ class CreateDiskTables extends Migration {
             $table->timestamps();
         })->append(FileModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('name')->varchar(100);
-            $table->column('extension')->varchar(20);
-            $table->column('md5')->varchar(32);
-            $table->column('location')->varchar('200');
-            $table->column('thumb')->varchar('200')->default('')
+            $table->string('name', 100);
+            $table->string('extension', 20);
+            $table->char('md5', 32);
+            $table->string('location', 200);
+            $table->string('thumb', 200)->default('')
                 ->comment('预览图');
             $table->uint('size')->default(0);
             $table->timestamps();
         })->append(ShareModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('name')->varchar(100);
-            $table->column('mode')->tinyint(2)->default(ShareModel::SHARE_PUBLIC);
-            $table->column('password')->varchar(20)->default('');
+            $table->string('name', 100);
+            $table->uint('mode', 2)->default(ShareModel::SHARE_PUBLIC);
+            $table->string('password', 20)->default('');
             $table->uint('user_id');
             $table->timestamp('death_at');
             $table->uint('view_count')->default(0);

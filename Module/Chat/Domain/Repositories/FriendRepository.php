@@ -5,16 +5,16 @@ namespace Module\Chat\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\Chat\Domain\Model\FriendGroupModel;
+use Module\Chat\Domain\Model\FriendClassifyModel;
 use Module\Chat\Domain\Model\FriendModel;
 
 class FriendRepository {
 
     public static function all() {
-        $data = FriendGroupModel::with('users')
+        $data = FriendClassifyModel::with('users')
             ->where('user_id', auth()->id())->orderBy('id asc')->all();
         if (empty($data)) {
-            $data = [FriendGroupModel::create([
+            $data = [FriendClassifyModel::create([
                 'name' => '我的好友',
                 'user_id' => auth()->id(),
             ])];
@@ -39,8 +39,8 @@ class FriendRepository {
     }
 
     public static function search(string $keywords = '') {
-        $groups = FriendGroupModel::where('user_id', auth()->id())->pluck('id');
-        $exclude = empty($groups) ? [] : FriendModel::whereIn('group_id', $groups)
+        $groups = FriendClassifyModel::where('user_id', auth()->id())->pluck('id');
+        $exclude = empty($groups) ? [] : FriendModel::whereIn('classify_id', $groups)
             ->pluck('user_id');
         $exclude[] = auth()->id();
         return UserSimpleModel::when(!empty($keywords), function ($query) {
@@ -54,16 +54,16 @@ class FriendRepository {
     }
 
     public static function move(int $user, int $group) {
-        $groups = FriendGroupModel::where('user_id', auth()->id())->pluck('id');
+        $groups = FriendClassifyModel::where('user_id', auth()->id())->pluck('id');
         if (!in_array($group, $groups)) {
             throw new \Exception('分组错误');
         }
-        $count = FriendModel::whereIn('group_id', $groups)->where('user_id', $user)->count();
+        $count = FriendModel::whereIn('classify_id', $groups)->where('user_id', $user)->count();
         if ($count < 0) {
             throw new \Exception('好友错误');
         }
         FriendModel::where('user_id', $user)->where('belong_id', auth()->id())->update([
-            'group_id' => $group
+            'classify_id' => $group
         ]);
     }
 }

@@ -11,9 +11,9 @@ use Domain\Model\Model;
  * @property integer $user_id
  * @property integer $created_at
  */
-class FriendGroupModel extends Model {
+class FriendClassifyModel extends Model {
     public static function tableName() {
-        return 'chat_friend_group';
+        return 'chat_friend_classify';
     }
 
     protected function rules() {
@@ -34,7 +34,7 @@ class FriendGroupModel extends Model {
     }
 
     public function users() {
-        return $this->hasMany(FriendModel::class, 'group_id')
+        return $this->hasMany(FriendModel::class, 'classify_id')
             ->with('user')
             ->where('belong_id', auth()->id());
     }

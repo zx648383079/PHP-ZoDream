@@ -18,8 +18,8 @@ class CreateTaskTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->uint('parent_id')->default(0);
-            $table->column('name')->varchar(100);
-            $table->column('description')->varchar()->default('');
+            $table->string('name', 100);
+            $table->string('description')->default('');
             $table->uint('status', 2)->default(TaskModel::STATUS_NONE);
             $table->uint('every_time', 4)->default(0)->comment('每次计划时间');
             $table->uint('space_time', 2)->default(0)->comment('每次休息时间');
@@ -44,7 +44,7 @@ class CreateTaskTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->uint('task_id');
-            $table->column('today')->date();
+            $table->date('today');
             $table->uint('amount', 2)->default(1)->comment('剩余次数');
             $table->uint('success_amount', 2)->default(0)->comment('成功次数');
             $table->uint('pause_amount', 2)->default(0)->comment('暂停次数');
@@ -57,7 +57,7 @@ class CreateTaskTables extends Migration {
             $table->uint('user_id');
             $table->uint('task_id');
             $table->uint('log_id')->default(0)->comment('关联执行记录');
-            $table->column('content')->varchar();
+            $table->string('content');
             $table->uint('type', 2)->default(0);
             $table->uint('status', 2)->default(TaskDayModel::STATUS_NONE);
             $table->timestamps();
@@ -67,7 +67,7 @@ class CreateTaskTables extends Migration {
             $table->uint('user_id');
             $table->uint('task_id');
             $table->uint('share_type', 1)->default(0);
-            $table->column('share_rule')->varchar(20)->default('');
+            $table->string('share_rule', 20)->default('');
             $table->timestamps();
         })->append(TaskShareUserModel::tableName(), function (Table $table) {
             $table->comment('任务分享领取用户');

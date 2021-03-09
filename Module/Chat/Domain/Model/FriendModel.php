@@ -9,7 +9,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @package Domain\Model\Chat
  * @property integer $id
  * @property string $name
- * @property integer $group_id
+ * @property integer $classify_id
  * @property integer $user_id
  * @property integer $belong_id
  * @property integer $created_at
@@ -26,7 +26,7 @@ class FriendModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,100',
-            'group_id' => 'required|int',
+            'classify_id' => 'required|int',
             'user_id' => 'required|int',
             'belong_id' => 'required|int',
             'created_at' => 'int',
@@ -38,7 +38,7 @@ class FriendModel extends Model {
         return [
             'id' => 'Id',
             'name' => 'Name',
-            'group_id' => 'Group Id',
+            'classify_id' => 'Group Id',
             'user_id' => 'User Id',
             'belong_id' => 'Belong Id',
             'created_at' => 'Created At',

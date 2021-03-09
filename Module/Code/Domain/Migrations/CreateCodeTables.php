@@ -18,20 +18,20 @@ class CreateCodeTables extends Migration {
         $this->append(CodeModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
-            $table->column('content')->text();
-            $table->column('language')->varchar(20)->default('')->comment('语言');
+            $table->text('content');
+            $table->string('language', 20)->default('')->comment('语言');
             $table->uint('recommend_count')->default(0)->comment('推荐数');
             $table->uint('collect_count')->default(0)->comment('收藏数');
             $table->uint('comment_count')->default(0)->comment('评论数');
-            $table->column('source')->varchar()->default('')->comment('来源');
+            $table->string('source')->default('')->comment('来源');
             $table->timestamps();
         })->append(TagModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('code_id');
-            $table->column('content')->varchar();
+            $table->string('content');
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('content')->varchar();
+            $table->string('content');
             $table->uint('parent_id');
             $table->uint('user_id')->default(0);
             $table->uint('code_id');
@@ -40,7 +40,7 @@ class CreateCodeTables extends Migration {
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
             $table->id();
-            $table->column('type')->tinyint(3)->unsigned()->default(0);
+            $table->uint('type', 2)->unsigned()->default(0);
             $table->uint('id_value');
             $table->uint('user_id');
             $table->uint('action');

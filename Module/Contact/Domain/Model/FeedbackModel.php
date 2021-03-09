@@ -12,6 +12,7 @@ use Domain\Model\Model;
  * @property string $phone
  * @property string $content
  * @property integer $status
+ * @property integer $user_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -27,6 +28,7 @@ class FeedbackModel extends Model {
             'phone' => 'string:0,30',
             'content' => 'string:0,255',
             'status' => 'int:0,9',
+            'user_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

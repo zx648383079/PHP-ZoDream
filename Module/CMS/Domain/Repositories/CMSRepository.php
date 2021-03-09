@@ -1,7 +1,9 @@
 <?php
 namespace Module\CMS\Domain\Repositories;
 
+use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\CommentModel;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Model\SiteModel;
@@ -88,40 +90,52 @@ class CMSRepository {
 
     public static function generateSite(SiteModel $site) {
         self::$cacheSite = $site;
-        Schema::createTable(CategoryModel::tableName(), function (Table $table) {
+        CreateCmsTables::createTable(CategoryModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('name')->varchar(100)->notNull();
-            $table->column('title')->varchar(100)->notNull();
-            $table->column('type')->tinyint(1)->defaultVal(0);
-            $table->column('model_id')->int()->defaultVal(0);
-            $table->column('parent_id')->int()->defaultVal(0);
-            $table->column('keywords')->varchar()->defaultVal('');
-            $table->column('description')->varchar()->defaultVal('');
-            $table->column('thumb')->varchar(100)->defaultVal('')->comment('缩略图');
-            $table->column('image')->varchar(100)->defaultVal('')->comment('主图');
-            $table->column('content')->text();
-            $table->column('url')->varchar(100)->defaultVal('');
-            $table->column('position')->tinyint(3)->defaultVal(99);
-            $table->column('groups')->varchar()->defaultVal('');
-            $table->column('category_template')->varchar(20)->defaultVal('');
-            $table->column('list_template')->varchar(20)->defaultVal('');
-            $table->column('show_template')->varchar(20)->defaultVal('');
-            $table->column('setting')->text();
+            $table->string('name', 100);
+            $table->string('title', 100);
+            $table->uint('type', 1)->default(0);
+            $table->uint('model_id')->default(0);
+            $table->uint('parent_id')->default(0);
+            $table->string('keywords')->default('');
+            $table->string('description')->default('');
+            $table->string('thumb', 100)->default('')->comment('缩略图');
+            $table->string('image', 100)->default('')->comment('主图');
+            $table->column('content')->text()->nullable();
+            $table->string('url', 100)->default('');
+            $table->uint('position', 2)->default(99);
+            $table->string('groups')->default('');
+            $table->string('category_template', 20)->default('');
+            $table->string('list_template', 20)->default('');
+            $table->string('show_template', 20)->default('');
+            $table->column('setting')->text()->nullable();
             $table->timestamps();
         });
-        Schema::createTable(ContentModel::tableName(), function (Table $table) {
+        CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('title')->varchar(100)->notNull();
-            $table->column('cat_id')->int()->notNull();
-            $table->column('model_id')->int()->notNull();
-            $table->column('parent_id')->int()->defaultVal(0);
+            $table->string('title', 100);
+            $table->uint('cat_id');
+            $table->uint('model_id');
+            $table->uint('parent_id')->default(0);
             $table->uint('user_id')->default(0);
-            $table->column('keywords')->varchar();
-            $table->column('thumb')->varchar();
-            $table->column('description')->varchar();
-            $table->column('status')->bool()->defaultVal(0);
-            $table->column('view_count')->int()->defaultVal(0);
+            $table->string('keywords')->default('');
+            $table->string('thumb')->default('');
+            $table->string('description')->default('');
+            $table->bool('status')->default(0);
+            $table->uint('view_count')->default(0);
             $table->timestamps();
+        });
+        CreateCmsTables::createTable(CommentModel::tableName(), function (Table $table) {
+            $table->id();
+            $table->string('content');
+            $table->uint('parent_id')->default(0);
+            $table->uint('position')->default(1);
+            $table->uint('user_id');
+            $table->uint('model_id');
+            $table->uint('content_id');
+            $table->uint('agree_count')->default(0);
+            $table->uint('disagree_count')->default(0);
+            $table->timestamp('created_at');
         });
         (new ThemeManager())->apply($site->theme);
     }
@@ -137,8 +151,8 @@ class CMSRepository {
         $model_list = ModelModel::query()->get();
         $old = self::$cacheSite;
         self::$cacheSite = $site;
-        Schema::dropTable(CategoryModel::tableName());
-        Schema::dropTable(ContentModel::tableName());
+        CreateCmsTables::dropTable(CategoryModel::tableName());
+        CreateCmsTables::dropTable(ContentModel::tableName());
         foreach ($model_list as $item) {
             CMSRepository::scene()->setModel($item)->removeTable();
         }
