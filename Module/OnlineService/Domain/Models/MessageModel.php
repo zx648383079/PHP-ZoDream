@@ -4,6 +4,7 @@ namespace Module\OnlineService\Domain\Models;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class MessageModel
@@ -11,7 +12,7 @@ use Domain\Model\Model;
  * @property integer $id
  * @property integer $user_id
  * @property integer $session_id
- * @property integer $receive_id
+ * @property integer $send_type
  * @property integer $type
  * @property string $content
  * @property integer $status
@@ -19,6 +20,10 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class MessageModel extends Model {
+    const TYPE_TEXT = 0;
+    const TYPE_EMOJI = 1;
+    const TYPE_IMAGE = 2;
+
     public static function tableName() {
         return 'service_message';
     }
@@ -27,7 +32,7 @@ class MessageModel extends Model {
         return [
             'user_id' => 'int',
             'session_id' => 'required|int',
-            'receive_id' => 'int',
+            'send_type' => 'int:0,2',
             'type' => 'int:0,127',
             'content' => 'string:0,255',
             'status' => 'int:0,127',
@@ -41,12 +46,16 @@ class MessageModel extends Model {
             'id' => 'Id',
             'user_id' => 'User Id',
             'session_id' => 'Session Id',
-            'receive_id' => 'Receive Id',
+            'send_type' => '发送者身份',
             'type' => 'Type',
             'content' => 'Content',
             'status' => 'Status',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 }

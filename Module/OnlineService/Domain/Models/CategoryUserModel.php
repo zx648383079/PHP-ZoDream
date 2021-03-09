@@ -10,8 +10,6 @@ use Domain\Model\Model;
  * @package Module\OnlineService\Domain\Models
  * @property integer $cat_id
  * @property integer $user_id
- * @property integer $updated_at
- * @property integer $created_at
  */
 class CategoryUserModel extends Model {
     public static function tableName() {
@@ -24,8 +22,6 @@ class CategoryUserModel extends Model {
         return [
             'cat_id' => 'required|int',
             'user_id' => 'required|int',
-            'updated_at' => 'int',
-            'created_at' => 'int',
         ];
     }
 
@@ -33,8 +29,6 @@ class CategoryUserModel extends Model {
         return [
             'cat_id' => 'Cat Id',
             'user_id' => 'User Id',
-            'updated_at' => 'Updated At',
-            'created_at' => 'Created At',
         ];
     }
 }

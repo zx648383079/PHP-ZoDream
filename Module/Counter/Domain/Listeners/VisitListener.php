@@ -3,7 +3,7 @@ namespace Module\Counter\Domain\Listeners;
 
 use Module\Counter\Domain\Events\Visit;
 use Module\Counter\Domain\Model\LogModel;
-use Zodream\Infrastructure\Http\UserAgent;
+use Zodream\Infrastructure\Support\UserAgent;
 
 class VisitListener {
 

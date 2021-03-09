@@ -1,8 +1,8 @@
 <?php
 namespace Module\Task\Service\Api;
 
+use Domain\Repositories\FileRepository;
 use Module\Task\Domain\Repositories\CommentRepository;
-use Zodream\Domain\Upload\UploadFile;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Validate\ValidationException;
 
@@ -27,26 +27,11 @@ class CommentController extends Controller {
             ]);
             $file = $request->file('file');
             if (!empty($file)) {
-                $upload = new UploadFile($file);
-                if (!$upload->checkSize(2048000)) {
-                    throw new \Exception('超出最大尺寸限制');
-                }
-                if (!$upload->checkType(['png', 'jpg', 'jpeg', 'gif', 'bmp'])) {
-                    throw new \Exception('不允许上传此类型文件');
-                }
-                if (!$upload->validateDimensions()) {
-                    throw new \Exception('图片尺寸有误');
-                }
-                $upload->setFile(public_path($upload->getRandomName('/assets/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}')));
-                if (!$file->save()) {
-                    throw new \Exception('上传失败');
-                }
-                $data['content'] = url()->asset($upload->getFile()->getRelative(public_path()));
+                $item = FileRepository::uploadImage();
+                $data['content'] = $item['url'];
                 $data['type'] = 1;
             }
             $model = CommentRepository::create($data);
-        } catch (ValidationException $ex) {
-            return $this->renderFailure($ex->validator->firstError());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

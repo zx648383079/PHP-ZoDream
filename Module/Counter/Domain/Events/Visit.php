@@ -103,7 +103,7 @@ class Visit {
         $request = request();
         return new static($request->ip(),
             $request->referrer(),
-            $request->uri(),
+            $request->url(),
             $request->server('HTTP_USER_AGENT', '-'), time(),
             session()->id().'',
             auth()->id()

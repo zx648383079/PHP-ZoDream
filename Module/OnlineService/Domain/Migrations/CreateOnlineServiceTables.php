@@ -24,7 +24,6 @@ class CreateOnlineServiceTables extends Migration {
         })->append(CategoryUserModel::tableName(), function (Table $table) {
             $table->uint('cat_id');
             $table->uint('user_id');
-            $table->timestamps();
         })->append(SessionModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('user_id')->default(0);
@@ -44,8 +43,7 @@ class CreateOnlineServiceTables extends Migration {
             $table->id();
             $table->uint('user_id')->default(0)->comment('发送者');
             $table->uint('session_id');
-            $table->uint('receive_id')
-                ->default(0)->comment('接收用户');
+            $table->bool('send_type')->default(0)->comment('发送者的身份，0咨询者1客服');
             $table->uint('type', 2)->default(0)->comment('内容类型');
             $table->string('content')->default('');
             $table->uint('status', 2)->default(0);
