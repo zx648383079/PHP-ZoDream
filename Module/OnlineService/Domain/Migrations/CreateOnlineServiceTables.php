@@ -22,10 +22,15 @@ class CreateOnlineServiceTables extends Migration {
             $table->string('content');
             $table->uint('cat_id');
         })->append(CategoryUserModel::tableName(), function (Table $table) {
+            $table->id();
             $table->uint('cat_id');
             $table->uint('user_id');
+            $table->string('auth_reply')->default('');
+            $table->timestamps();
         })->append(SessionModel::tableName(), function (Table $table) {
             $table->id();
+            $table->string('name', 20)->default('');
+            $table->string('remark')->default('');
             $table->uint('user_id')->default(0);
             $table->uint('service_id')->default(0);
             $table->string('ip', 120);

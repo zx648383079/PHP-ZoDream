@@ -32,4 +32,8 @@ class EmojiCategoryModel extends Model {
             'icon' => 'Icon',
         ];
     }
+
+    public function items() {
+        return $this->hasMany(EmojiModel::class, 'cat_id', 'id');
+    }
 }

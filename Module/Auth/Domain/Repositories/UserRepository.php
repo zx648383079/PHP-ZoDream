@@ -95,4 +95,22 @@ class UserRepository {
         $user->delete();
         event(new CancelAccount($user, time()));
     }
+
+    /**
+     * 获取用户id
+     * @param string $keywords
+     * @param array $userId
+     * @param bool $checkEmpty true 为先判断 $userId 是否为空
+     * @return array
+     */
+    public static function searchUserId(string $keywords, array $userId = [], bool $checkEmpty = false): array {
+        if (empty($keywords)) {
+            return $userId;
+        }
+        if ($checkEmpty && empty($userId)) {
+            return [];
+        }
+        return SearchModel::searchWhere(UserModel::query(), ['name'], false, '', $keywords)
+            ->whereIn('id', $userId)->pluck('id');
+    }
 }

@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Module\Forum\Service\Api\Admin;
 
 use Module\Forum\Domain\Repositories\EmojiRepository;
+use Zodream\Domain\Upload\BaseUpload;
+use Zodream\Domain\Upload\Upload;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class EmojiController extends Controller {
@@ -86,6 +88,19 @@ class EmojiController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
+        return $this->renderData(true);
+    }
+
+    public function importAction() {
+        $upload = new Upload();
+        $upload->setDirectory(app_path()->directory('data/cache'));
+        $upload->upload('file');
+        if (!$upload->checkType('zip') || !$upload->save()) {
+            return $this->renderFailure('文件不支持，仅支持zip文件');
+        }
+        $upload->each(function (BaseUpload $file) {
+            EmojiRepository::import($file->getFile());
+        });
         return $this->renderData(true);
     }
 }

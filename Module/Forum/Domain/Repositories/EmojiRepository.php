@@ -5,14 +5,18 @@ namespace Module\Forum\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
+use Zodream\Disk\File;
+use Zodream\Disk\ZipStream;
+use Zodream\Helpers\Arr;
+use Zodream\Helpers\Json;
 
 class EmojiRepository {
     public static function getList(string $keywords = '', int $cat_id = 0) {
-        return EmojiModel::query()->when(!empty($keywords), function ($query) {
+        return EmojiModel::with('category')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
         })->when($cat_id > 0, function ($query) use ($cat_id) {
             $query->where('cat_id', $cat_id);
-        })->page();
+        })->orderBy('id', 'desc')->page();
     }
 
     public static function get(int $id) {
@@ -57,5 +61,67 @@ class EmojiRepository {
 
     public static function removeCategory(int $id) {
         EmojiCategoryModel::where('id', $id)->delete();
+    }
+
+    public static function findOrNewCategory(string $name, string $icon = '') {
+        if (empty($name)) {
+            return EmojiCategoryModel::query()->min('id');
+        }
+        $id = EmojiCategoryModel::where('name', $name)
+            ->value('id');
+        if ($id > 0) {
+            return $id;
+        }
+        $model = EmojiCategoryModel::create(compact('name', 'icon'));
+        return $model->id;
+    }
+
+    public static function import(File $file) {
+        $zip = new ZipStream($file, \ZipArchive::RDONLY);
+        $folder = $file->getDirectory()->directory('emoji'.time());
+        $folder->create();
+        $zip->extractTo($folder);
+        $zip->close();;
+        $items = $folder->glob('map.json');
+        foreach ($items as $item) {
+            static::importBatch($item);
+        }
+        $folder->delete();
+        $file->delete();
+    }
+
+    protected static function importBatch(File $file) {
+        $data = Json::decode($file->read());
+        if (!isset($data['items']) || empty($data['items'])) {
+            return;
+        }
+        $folder = 'assets/upload/emoji/';
+        $category = static::findOrNewCategory($data['name'],
+            isset($data['icon']) && !empty($data['icon']) ?
+                url()->asset($folder.$data['icon']) : '');
+        EmojiModel::query()->insert(array_map(function ($item) use ($category, $folder) {
+            $type = isset($item['type']) && $item['type'] === 'text' ? EmojiModel::TYPE_TEXT : EmojiModel::TYPE_IMAGE;
+            return [
+                'cat_id' => $category,
+                'name' => $item['title'],
+                'type' => $type,
+                'content' => $type === EmojiModel::TYPE_TEXT ? $item['title']
+                    : url()->asset($folder.$item['file']),
+            ];
+        }, $data['items']));
+        $newFolder = public_path()->directory($folder);
+        $newFolder->create();
+        $file->getDirectory()->map(function ($item) use ($newFolder) {
+            if ($item instanceof File && $item->getExtension() !== 'json') {
+                $item->move($newFolder->file($item->getName()));
+            }
+        });
+    }
+
+    public static function all() {
+        return cache()->getOrSet('emoji_tree', function () {
+           return Arr::format(EmojiCategoryModel::with('items')
+               ->orderBy('id', 'asc')->get());
+        });
     }
 }

@@ -4,9 +4,11 @@ namespace Module\OnlineService\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\OnlineService\Domain\Models\CategoryModel;
 use Module\OnlineService\Domain\Models\CategoryUserModel;
 use Module\OnlineService\Domain\Models\CategoryWordModel;
+use Zodream\Html\Page;
 
 class CategoryRepository {
     public static function getList(string $keywords = '') {
@@ -38,13 +40,25 @@ class CategoryRepository {
         return CategoryModel::query()->get();
     }
 
-    public static function userList(int $category, string $keywords = '') {
-        $userIds = CategoryUserModel::where('cat_id', $category)
+    public static function userList(int $category = 0, string $keywords = '') {
+        if (empty($keywords)) {
+            return CategoryUserModel::with('user', 'category')
+                ->when($category > 0, function ($query) use ($category) {
+                    $query->where('cat_id', $category);
+                })->page();
+        }
+        $userId = CategoryUserModel::when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })
             ->pluck('user_id');
-        return UserSimpleModel::whereIn('id', $userIds)
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query);
-            })->page();
+        $userId = UserRepository::searchUserId($keywords, $userId, true);
+        if (empty($userId)) {
+            return new Page(0);
+        }
+        return CategoryUserModel::with('user', 'category')
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })->whereIn('user_id', $userId)->page();
     }
 
     public static function userAdd(int $category, int|array $user) {
@@ -74,10 +88,10 @@ class CategoryRepository {
     }
 
     public static function wordList(int $category = 0, string $keywords = '') {
-        return CategoryWordModel::when($category > 0, function ($query) use ($category) {
+        return CategoryWordModel::with('category')->when($category > 0, function ($query) use ($category) {
             $query->where('cat_id', $category);
         })->when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query);
+            SearchModel::searchWhere($query, ['content']);
         })->page();
     }
 

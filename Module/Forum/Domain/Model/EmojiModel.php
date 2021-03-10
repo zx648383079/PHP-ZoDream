@@ -14,6 +14,9 @@ use Domain\Model\Model;
  */
 class EmojiModel extends Model {
 
+    const TYPE_IMAGE = 0;
+    const TYPE_TEXT = 1;
+
     public $timestamps = false;
 
     public static function tableName() {
@@ -37,6 +40,10 @@ class EmojiModel extends Model {
             'type' => 'Type',
             'content' => 'Content',
         ];
+    }
+
+    public function category() {
+        return $this->hasOne(EmojiCategoryModel::class, 'id', 'cat_id');
     }
 
 }

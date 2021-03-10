@@ -4,6 +4,7 @@ namespace Module\OnlineService\Domain\Models;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class CategoryUserModel
@@ -30,5 +31,13 @@ class CategoryUserModel extends Model {
             'cat_id' => 'Cat Id',
             'user_id' => 'User Id',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
     }
 }

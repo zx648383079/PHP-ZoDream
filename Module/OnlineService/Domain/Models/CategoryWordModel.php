@@ -32,4 +32,8 @@ class CategoryWordModel extends Model {
         ];
     }
 
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
+    }
+
 }
