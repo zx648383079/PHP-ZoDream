@@ -96,6 +96,10 @@ class UserRepository {
         event(new CancelAccount($user, time()));
     }
 
+    public static function getName(int $id) {
+        return UserModel::where('id', $id)->value('name');
+    }
+
     /**
      * 获取用户id
      * @param string $keywords

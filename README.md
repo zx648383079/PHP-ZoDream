@@ -61,6 +61,7 @@ gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface
 | [SEO系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/SEO) |   为基本功能，包括系统设置、缓存处理、站点地图等基本功能                                                                     | 已完成1.0                                                         | 已上线                            |
 | [Demo系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Demo) |  支持模板打包上传                                                                     | 已完成1.0                                                         | [demo](https://zodream.cn/demo)                        |
 | [反馈系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Contact) |  包括友情链接管理、反馈管理、订阅管理                                                                     | 已完成1.0                                                         | [demo](https://zodream.cn/)                        |
+| [在线客服系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OnlineService) |  只提供api，界面及管理后台见[Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream)                                                                     | 已完成1.0                                                         | 未上线                        |
 | [开发平台系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OpenPlatform) |  应用（包括客户端、接口）appid的申请管理                                                                     | 已完成1.0                                                         | [demo](https://zodream.cn/)                        |
 
 

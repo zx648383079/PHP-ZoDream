@@ -27,4 +27,8 @@ class CategoryModel extends Model {
             'name' => 'Name',
         ];
     }
+
+    public function words() {
+        return $this->hasMany(CategoryWordModel::class, 'cat_id', 'id');
+    }
 }

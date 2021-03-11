@@ -22,7 +22,7 @@ class HomeController extends Controller {
             if (!empty($file)) {
                 $items = FileRepository::uploadImages();
                 $data['content'] = array_column($items, 'url');
-                $data['type'] = MessageModel::TYPE_IMAGE;
+                $data['type'] = $input->get('type', MessageModel::TYPE_IMAGE);
             } else {
                 $data = $input->validate([
                     'content' => 'required|string:0,255',
@@ -42,7 +42,7 @@ class HomeController extends Controller {
     protected function messageList(int $sessionId, int $startTime = 0) {
         $data = ChatRepository::getList($sessionId, $startTime);
         $session_token = ChatRepository::encodeSession($sessionId);
-        $next_time = time();
+        $next_time = time() + 1;
         return compact('data', 'session_token', 'next_time');
     }
 }

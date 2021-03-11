@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Module\OnlineService\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\OnlineService\Domain\Models\CategoryModel;
 use Module\OnlineService\Domain\Models\CategoryUserModel;
@@ -108,5 +107,18 @@ class CategoryRepository {
 
     public static function wordRemove(int $id) {
         CategoryWordModel::where('id', $id)->delete();
+    }
+
+    public static function wordAll() {
+        return CategoryModel::with('words')
+            ->orderBy('id', 'asc')->get();
+    }
+
+    public static function hasService(int $userId): bool {
+        return CategoryUserModel::where('user_id', $userId)->count() > 0;
+    }
+
+    public static function hasWord(int $word): bool {
+        return CategoryWordModel::where('id', $word)->count() > 0;
     }
 }

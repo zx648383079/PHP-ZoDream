@@ -46,7 +46,7 @@ class CategoryController extends Controller {
         return $this->renderData(true);
     }
 
-    public function userAction(int $category, string $keywords = '') {
+    public function userAction(int $category = 0, string $keywords = '') {
         return $this->renderPage(
             CategoryRepository::userList($category, $keywords)
         );
@@ -98,5 +98,11 @@ class CategoryController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function wordAllAction() {
+         return $this->renderData(
+             CategoryRepository::wordAll()
+         );
     }
 }

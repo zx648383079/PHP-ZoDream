@@ -4,6 +4,7 @@ namespace Module\OnlineService\Domain\Models;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class SessionLogModel
@@ -39,5 +40,9 @@ class SessionLogModel extends Model {
             'status' => 'Status',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 }

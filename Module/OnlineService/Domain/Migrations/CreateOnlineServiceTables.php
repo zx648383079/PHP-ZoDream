@@ -25,7 +25,6 @@ class CreateOnlineServiceTables extends Migration {
             $table->id();
             $table->uint('cat_id');
             $table->uint('user_id');
-            $table->string('auth_reply')->default('');
             $table->timestamps();
         })->append(SessionModel::tableName(), function (Table $table) {
             $table->id();
@@ -36,6 +35,7 @@ class CreateOnlineServiceTables extends Migration {
             $table->string('ip', 120);
             $table->string('user_agent', 255);
             $table->uint('status', 1)->default(0);
+            $table->uint('service_word')->default(0)->comment('客服设置的自动回复');
             $table->timestamps();
         })->append(SessionLogModel::tableName(), function (Table $table) {
             $table->id();
