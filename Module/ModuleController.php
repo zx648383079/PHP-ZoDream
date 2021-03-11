@@ -1,10 +1,9 @@
 <?php
 namespace Module;
 
+use Module\Auth\Domain\Middlewares\RequestMiddleware;
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Zodream\Helpers\Json;
 use Zodream\Route\Controller\Controller as BaseController;
-use Zodream\Route\Controller\Middleware\RequestMiddleware;
 
 abstract class ModuleController extends BaseController {
 

@@ -8,6 +8,12 @@ $this->title = '项目：'.$project->name;
 
 <div class="zd-panel">
     <div class="zd-panel-head">
+        <div class="pull-right">
+            版本
+            <select>
+                <option value="0">main</option>
+            </select>
+        </div>
         <h3><?=$this->title?></h3>
     </div>
     <div class="zd-panel-body">
