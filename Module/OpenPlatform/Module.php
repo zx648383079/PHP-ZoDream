@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform;
 
 use Module\Auth\Domain\Events\TokenCreated;
@@ -15,7 +16,7 @@ use Zodream\Route\Response\RestResponse;
 
 class Module extends BaseModule {
 
-    private static $isBooted = false;
+    private static bool $isBooted = false;
 
     public function getMigration() {
         return new CreateOpenPlatformTables();
@@ -33,7 +34,7 @@ class Module extends BaseModule {
         }
         $version = app()->version().'/';
         // 去除API版本号
-        if (strpos($path, $version) === 0) {
+        if (str_starts_with($path, $version)) {
             $path = substr($path, strlen($version));
         }
         if (empty($path)) {

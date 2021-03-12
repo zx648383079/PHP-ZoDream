@@ -18,7 +18,7 @@ class Files extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->text()->comment($field->name);
+        $column->text()->nullable()->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

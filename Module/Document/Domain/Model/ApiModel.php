@@ -3,8 +3,6 @@ namespace Module\Document\Domain\Model;
 
 
 use Domain\Model\Model;
-use Zodream\Html\Tree;
-use Zodream\Http\Uri;
 
 /**
  * Class ApiModel
@@ -18,6 +16,7 @@ use Zodream\Http\Uri;
  * @property integer $parent_id
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $version_id
  */
 class ApiModel extends Model {
 
@@ -34,15 +33,17 @@ class ApiModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,35',
-            'method' => 'required|string:0,10',
+            'method' => 'string:0,10',
             'uri' => 'string:0,255',
             'project_id' => 'required|int',
             'description' => 'string:0,255',
             'parent_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
+            'version_id' => 'int',
         ];
     }
+
 
     protected function labels() {
         return [
@@ -52,6 +53,7 @@ class ApiModel extends Model {
             'uri' => '接口路径',
             'project_id' => '项目',
             'description' => '接口描述',
+            'version_id' => '版本',
             'parent_id' => '上级',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
@@ -60,11 +62,6 @@ class ApiModel extends Model {
 
     public function getUri($domain) {
         return sprintf('%s/%s', trim($domain, '/'), trim($this->uri, '/'));
-    }
-
-    public  static function getTree($project_id) {
-        $data = self::where('project_id', $project_id)->select('id', 'name', 'parent_id')->asArray()->all();
-        return (new Tree($data))->makeTree();
     }
 
     /**

@@ -5,15 +5,16 @@ use Zodream\Template\View;
 $this->title = '项目：'.$project->name;
 ?>
 
-
+<div class="version-bar">
+            版本
+    <select id="version">
+        <?php foreach($version_list as $item):?>
+        <option value="<?=$item['id']?>" <?=$version == $item['id'] ? 'selected' : '' ?>><?=$item['name']?></option>
+        <?php endforeach;?>
+    </select>
+</div>
 <div class="zd-panel">
     <div class="zd-panel-head">
-        <div class="pull-right">
-            版本
-            <select>
-                <option value="0">main</option>
-            </select>
-        </div>
         <h3><?=$this->title?></h3>
     </div>
     <div class="zd-panel-body">

@@ -22,12 +22,12 @@ class Text extends BaseField {
 
     public function converterField(Column $column, ModelFieldModel $field) {
         $option = $field->setting('option');
-        $type = 'varchar';
+        $type = 'string';
         if (!empty($option) && isset($option['type'])
             && in_array($option['type'], ['int', 'char', 'varchar'])) {
             $type = $option['type'];
         }
-        $column->{$type}();
+        $column->comment($field->name)->{$type}()->default($type === 'int' ? 0 : '');
     }
 
     public function toInput($value, ModelFieldModel $field) {

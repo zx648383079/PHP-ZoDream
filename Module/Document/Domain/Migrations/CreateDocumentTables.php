@@ -2,6 +2,7 @@
 namespace Module\Document\Domain\Migrations;
 
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\PageModel;
@@ -69,6 +70,10 @@ class CreateDocumentTables extends Migration {
             $table->text('remark')->nullable()->comment('备注');
             $table->timestamps();
         })->autoUp();
+    }
 
+    public function seed()
+    {
+        RoleRepository::newRole('doc_admin', '文档管理员');
     }
 }

@@ -15,8 +15,8 @@ class RequestMiddleware extends BaseMiddleware {
         }
         /** @var UserModel $user */
         $user = auth()->user();
-        if (!$user->hasRole($role)) {
-            return false;
+        if (!$user->isAdministrator() && !$user->hasRole($role)) {
+            return $context['controller']->redirectWithMessage('./', '无权限访问');
         }
         return parent::processCustomRule($role, $context);
     }

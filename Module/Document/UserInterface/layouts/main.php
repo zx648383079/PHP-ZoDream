@@ -28,7 +28,7 @@ if(isset($project_list)) {
             'fa fa-book'
         ];
     }
-} else {
+} elseif (isset($project)) {
     $menus = [
         [
             '返回首页',

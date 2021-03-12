@@ -2,9 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
+$this->title = 'error page';
 ?>
 
-<div class="container page-not-found">
+<div class="page-not-found">
 	<div class="content">
 		<img src="<?=$this->asset('images/404.png')?>">
 		<p><?=__(isset($message)? $message: 'error page')?></p>

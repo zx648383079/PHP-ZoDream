@@ -4,40 +4,40 @@ namespace Module\Document\Service\Admin;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\ProjectModel;
+use Module\Document\Domain\Repositories\ApiRepository;
+use Module\Document\Domain\Repositories\MockRepository;
+use Module\Document\Domain\Repositories\ProjectRepository;
 use Zodream\Html\Tree;
 use Zodream\Http\Http;
 use Zodream\Http\Uri;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 
 class ApiController extends Controller {
 
-    public function indexAction($id) {
-        $api = ApiModel::find($id);
-        $project = ProjectModel::find($api->project_id);
-        $tree_list = ApiModel::getTree($api->project_id);
-        $response_fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $id)->all();
-        $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
-        $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
-        $response_json = FieldModel::getDefaultData($id);
-        $response_fields = (new Tree($response_fields))->makeTreeForHtml();
-        return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields', 'response_json'));
+    public function indexAction(int $id) {
+        try {
+            $api = ApiRepository::getSelf($id);
+            $project = ProjectRepository::getSelf($api->project_id);
+            $tree_list = ApiRepository::tree($api->project_id, $api->version_id);
+            list($header_fields, $request_fields, $response_fields) = ApiRepository::fieldList($id);
+            $response_json = MockRepository::getDefaultData($id);
+            return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields', 'response_json'));
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage($this->getUrl(''), $ex->getMessage());
+        }
     }
 
-    public function createAction($project_id = 0, $parent_id = 0) {
-        return $this->editAction(0, $project_id, $parent_id);
+    public function createAction(int $project_id = 0, int $parent_id = 0, int $version_id = 0) {
+        return $this->editAction(0, $project_id, $parent_id, $version_id);
     }
 
-    public function editAction($id, $project_id = 0, $parent_id = 0) {
-        $model = ApiModel::findOrNew($id);
-        $model->id = intval($model->id);
-        if ($project_id > 0) {
-            $model->project_id = $project_id;
-        }
-        if ($parent_id > 0) {
-            $model->parent_id = $parent_id;
-        }
-        $project = ProjectModel::find($model->project_id);
-        $tree_list = ApiModel::getTree($model->project_id);
+    public function editAction(int $id, int $project_id = 0, int $parent_id = 0, int $version_id = 0) {
+        $model = $id > 0 ? ApiRepository::getSelf($id) : new ApiModel(
+            compact('project_id', 'parent_id', 'version_id')
+        );
+        $project = ProjectRepository::getSelf($model->project_id);
+        $tree_list = ApiRepository::tree($model->project_id, intval($model->version_id));
 
         $response_fields = $this->getFieldList($id, FieldModel::KIND_RESPONSE);
         $request_fields = $this->getFieldList($id, FieldModel::KIND_REQUEST);
@@ -54,20 +54,18 @@ class ApiController extends Controller {
         return $query->whereIn('id', ApiModel::getStore())->get();
     }
 
-    public function saveAction() {
-        $id = intval(request()->get('id'));
-        $model = new ApiModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        if ($id < 1) {
-            FieldModel::whereIn('id', ApiModel::clearStore())->update([
-                'api_id' => $model->id
-            ]);
+    public function saveAction(Input $input) {
+        try {
+            $model = ApiRepository::saveWeb($input->get());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         if ($model->parent_id < 1) {
             return $this->renderData([
-                'url' => $this->getUrl('project', ['id' => $model->project_id])
+                'url' => $this->getUrl('project', [
+                    'id' => $model->project_id,
+                    'version' => $model->version_id
+                ])
             ]);
         }
         return $this->renderData([
@@ -76,85 +74,59 @@ class ApiController extends Controller {
     }
 
 
-    public function deleteAction($id) {
-        ApiModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        try {
+            $model = ApiRepository::getSelf($id);
+            ProjectRepository::getSelf($model->project_id);
+            ApiRepository::removeSelf($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData([
-            'url' => $this->getUrl('')
+            'url' => $this->getUrl('project', [
+                'id' => $model->project_id,
+                'version' => $model->version_id
+            ])
         ]);
     }
 
-    public function debugAction($id) {
-        $api = ApiModel::find($id);
-        $project = ProjectModel::find($api->project_id);
-        $tree_list = ApiModel::getTree($api->project_id);
-        $request_fields = FieldModel::where('kind', FieldModel::KIND_REQUEST)->where('api_id', $id)->all();
-        $header_fields = FieldModel::where('kind', FieldModel::KIND_HEADER)->where('api_id', $id)->all();
+    public function debugAction(int $id) {
+        $api = ApiRepository::getSelf($id);
+        $project = ProjectRepository::getSelf($api->project_id);
+        $tree_list = ApiRepository::tree($api->project_id, $api->version_id);
+        list($header_fields, $request_fields, $_) = ApiRepository::fieldList($id);
         return $this->show(compact('project', 'tree_list', 'api', 'header_fields', 'request_fields', 'response_fields'));
     }
 
-    public function mockAction($id) {
-        $response_json = FieldModel::getMockData($id);
+    public function mockAction(int $id) {
+        $response_json = MockRepository::getMockData($id);
         return $this->renderData($response_json);
     }
 
-    public function debugResultAction() {
+    public function debugResultAction(Input $input) {
         $this->layout = false;
-        $url = new Uri(request()->get('url'));
-        $method = request()->get('method');
-        $data = request()->get('request');
-        $real_data = [];
-        if (!empty($data) && isset($data['key'])) {
-            foreach ($data['key'] as $i => $item) {
-                $real_data[$item] = $data['value'][$i];
-            }
-        }
-        $header = request()->get('header');
-        $headers = [
-            'request' => [],
-            'response' => []
-        ];
-        $real_header = [];
-        if (!empty($header) && isset($header['key'])) {
-            foreach ($header['key'] as $i => $item) {
-                $headers['request'][] = sprintf('%s: %s', $item, $header['value'][$i]);
-                $real_header[$item] = $header['value'][$i];
-            }
-        }
-        if ($method != 'POST') {
-            $url->setData($real_data);
-        }
-        $http = new Http($url);
-        $body = $http->header($header)
-            ->maps($real_data)->method($method)->setHeaderOption(true)
-            ->setOption(CURLOPT_RETURNTRANSFER, 1)
-            ->setOption(CURLOPT_FOLLOWLOCATION, 1)
-            ->setOption(CURLOPT_AUTOREFERER, 1)->getResponseText();
-        $info = $http->getResponseHeader();
-        $headers['response'] = explode(PHP_EOL, substr($body, 0, $info['header_size']));
-        $body = substr($body, $info['header_size']);
-        return $this->show(compact('body', 'headers', 'info'));
+        return $this->show(
+            MockRepository::request($input)
+        );
     }
 
-    public function createFieldAction($kind = 0, $parent_id = 0, $api_id = 0) {
-        $id = 0;
+    public function createFieldAction(int $kind = 0, int $parent_id = 0, int $api_id = 0) {
         return $this->editFieldAction(0, $kind, $parent_id, $api_id);
     }
 
-    public function editFieldAction($id, $kind = 0, $parent_id = 0, $api_id = 0) {
+    public function editFieldAction(int $id, int $kind = 0, int $parent_id = 0, int $api_id = 0) {
         $this->layout = false;
-        $model = FieldModel::findOrNew($id);
-        if (empty($id)) {
-            $model->kind = $kind;
-            $model->parent_id = $parent_id;
-            $model->api_id = $api_id;
-        }
+        $model = $id > 0 ? ApiRepository::fieldSelf($id) :
+            new FieldModel(compact('kind',  'parent_id', 'api_id'));
         return $this->show('editField', compact('model'));
     }
 
-    public function saveFieldAction() {
-        $model = new FieldModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->refreshFieldAction($model->kind, $model->api_id);
+    public function saveFieldAction(Input $input) {
+        try {
+            $model = ApiRepository::fieldSave($input->get());
+        } catch (\Exception $ex) {
+            return $this->refreshFieldAction($input->get('kind'),
+                $input->get('api_id'));
         }
         if ($model->api_id < 1) {
             ApiModel::preStore($model->id);
@@ -162,21 +134,18 @@ class ApiController extends Controller {
         return $this->refreshFieldAction($model->kind, $model->api_id);
     }
 
-    public function deleteFieldAction($id) {
-        $model = FieldModel::find($id);
+    public function deleteFieldAction(int $id) {
+        $model = ApiRepository::fieldSelf($id);
         if (empty($model)) {
             return '';
         }
-        $model->delete();
-        FieldModel::where('parent_id', $id)->update([
-            'parent_id' => 0
-        ]);
+        ApiRepository::fieldRemove($id);
         return $this->refreshFieldAction($model->kind, $model->api_id);
     }
 
-    public function importFieldAction($content, $kind = 1, $api_id = 0) {
+    public function importFieldAction(string $content, int $kind = 1, int $api_id = 0) {
         $api_id = intval($api_id);
-        $data = FieldModel::parseContent($content, $kind);
+        $data = MockRepository::parseContent($content, $kind);
         foreach ($data as $model) {
             $model->api_id = $api_id;
             if (!$model->check(ApiModel::getStore())) {
@@ -190,8 +159,7 @@ class ApiController extends Controller {
         return $this->refreshFieldAction($kind, $api_id);
     }
 
-    public function refreshFieldAction($kind = 1, $api_id = 0) {
-        $kind = intval($kind);
+    public function refreshFieldAction(int $kind = 1, int $api_id = 0) {
         $this->layout = false;
         if ($kind === FieldModel::KIND_RESPONSE) {
             $response_fields = $this->getFieldList($api_id, FieldModel::KIND_RESPONSE);

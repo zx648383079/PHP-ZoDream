@@ -16,7 +16,7 @@ class Radio extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->varchar()->comment($field->name);
+        $column->string()->default('')->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

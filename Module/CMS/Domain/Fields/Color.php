@@ -15,7 +15,7 @@ class Color extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->varchar(20)->comment($field->name);
+        $column->string(20)->default('')->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

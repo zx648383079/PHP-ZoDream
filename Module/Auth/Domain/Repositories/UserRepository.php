@@ -2,9 +2,11 @@
 namespace Module\Auth\Domain\Repositories;
 
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Events\CancelAccount;
+use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
@@ -83,8 +85,27 @@ class UserRepository {
         if (!$model->save()) {
             throw new Exception($model->getFirstError());
         }
-        $model->setRole($roles);
+        static::saveRoles($model->id, $roles);
         return $model;
+    }
+
+    public static function saveRoles(int $user, array $roles) {
+        list($add, $_, $del) = ModelHelper::splitId((array)$roles,
+            UserRoleModel::where('user_id', $user)->pluck('role_id')
+        );
+        if (!empty($del)) {
+            UserRoleModel::where('user_id', $user)
+                ->whereIn('role_id', $del)
+                ->delete();
+        }
+        if (!empty($add)) {
+            UserRoleModel::query()->insert(array_map(function ($id) use ($user) {
+                return [
+                    'user_id' => $user,
+                    'role_id' => $id
+                ];
+            }, $add));
+        }
     }
 
     public static function remove(int $id) {
@@ -94,6 +115,19 @@ class UserRepository {
         $user = UserModel::find($id);
         $user->delete();
         event(new CancelAccount($user, time()));
+    }
+
+    /**
+     * 缓存用户的权限
+     * @param int $user
+     * @return array [role => array, roles => string[], permissions => string[]]
+     * @throws Exception
+     */
+    public static function rolePermission(int $user): array {
+        return cache()
+            ->getOrSet('user_role_permission_'.$user, function () use ($user) {
+                return RoleRepository::userRolePermission($user);
+            }, 600);
     }
 
     public static function getName(int $id) {

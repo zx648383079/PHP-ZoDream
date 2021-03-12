@@ -33,7 +33,7 @@ if(isset($project_list)) {
         './@admin/project/create',
         'fa fa-plus'
     ];
-} else {
+} elseif (isset($project)) {
     $menus = [
         [
             '返回首页',

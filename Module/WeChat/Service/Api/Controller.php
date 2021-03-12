@@ -1,14 +1,9 @@
 <?php
 namespace Module\WeChat\Service\Api;
-use Zodream\Route\Controller\Controller as RestController;
+use Module\ModuleController as RestController;
 use Zodream\Route\Controller\Middleware\RequestMiddleware;
 
 class Controller extends RestController {
-
-    public function __construct()
-    {
-        $this->middleware(RequestMiddleware::class);
-    }
 
     public function rules() {
         return [

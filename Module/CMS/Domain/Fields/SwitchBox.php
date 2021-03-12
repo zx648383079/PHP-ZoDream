@@ -16,7 +16,7 @@ class SwitchBox extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->bool()->comment($field->name);
+        $column->bool()->default(0)->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

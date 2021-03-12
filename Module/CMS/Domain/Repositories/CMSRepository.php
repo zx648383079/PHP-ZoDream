@@ -101,14 +101,14 @@ class CMSRepository {
             $table->string('description')->default('');
             $table->string('thumb', 100)->default('')->comment('缩略图');
             $table->string('image', 100)->default('')->comment('主图');
-            $table->column('content')->text()->nullable();
+            $table->text('content')->nullable();
             $table->string('url', 100)->default('');
             $table->uint('position', 2)->default(99);
             $table->string('groups')->default('');
             $table->string('category_template', 20)->default('');
             $table->string('list_template', 20)->default('');
             $table->string('show_template', 20)->default('');
-            $table->column('setting')->text()->nullable();
+            $table->text('setting')->nullable();
             $table->timestamps();
         });
         CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {

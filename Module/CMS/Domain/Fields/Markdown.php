@@ -18,7 +18,7 @@ class Markdown extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        return $column->mediumtext()->comment($field->name);
+        return $column->mediumtext()->nullable()->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

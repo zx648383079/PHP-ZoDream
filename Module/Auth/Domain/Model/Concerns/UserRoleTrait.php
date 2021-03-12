@@ -1,32 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Model\Concerns;
 
-
-use Domain\Model\ModelHelper;
+use Exception;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
-use Zodream\Database\Relation;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Helpers\Str;
 
 trait UserRoleTrait {
-
-    /**
-     * Big block of caching functionality.
-     *
-     * @return RoleModel[]
-     * @throws \Exception
-     */
-    public function cachedRoles() {
-        $cacheKey = 'auth_roles_for_user_'.$this->id;
-        return cache()->getOrSet($cacheKey, function () {
-                $ids = $this->role_ids;
-                if (empty($ids)) {
-                    return [];
-                }
-                return RoleModel::whereIn('id', $ids)->get();
-//            return $this->roles()->get();
-        }, 60);
-    }
 
     public function roles() {
         return $this->belongsToMany(RoleModel::class,
@@ -43,35 +25,15 @@ trait UserRoleTrait {
     }
 
     /**
-     * 保存角色
-     * @param $roles
-     */
-    public function setRole($roles) {
-        list($add, $_, $del) = ModelHelper::splitId((array)$roles, $this->role_ids);
-        if (!empty($del)) {
-            UserRoleModel::where('user_id', $this->id)
-                ->whereIn('role_id', $del)
-                ->delete();
-        }
-        if (!empty($add)) {
-            UserRoleModel::query()->insert(array_map(function ($id) {
-                return [
-                    'user_id' => $this->id,
-                    'role_id' => $id
-                ];
-            }, $add));
-        }
-    }
-
-    /**
-     * Checks if the user has a role by its name.
+     * 验证用户是否具有指定角色身份
      *
-     * @param string|array $name       Role name or array of role names.
-     * @param bool         $requireAll All roles in the array are required.
+     * @param string|array $name Role name or array of role names.
+     * @param bool $requireAll All roles in the array are required.
      *
      * @return bool
+     * @throws Exception
      */
-    public function hasRole($name, $requireAll = false) {
+    public function hasRole(array|string $name, bool $requireAll = false): bool {
         if (is_array($name)) {
             foreach ($name as $roleName) {
                 $hasRole = $this->hasRole($roleName);
@@ -81,28 +43,22 @@ trait UserRoleTrait {
                     return false;
                 }
             }
-            // If we've made it this far and $requireAll is FALSE, then NONE of the roles were found
-            // If we've made it this far and $requireAll is TRUE, then ALL of the roles were found.
-            // Return the value of $requireAll;
             return $requireAll;
-        } else {
-            foreach ($this->cachedRoles() as $role) {
-                if ($role->name == $name) {
-                    return true;
-                }
-            }
         }
-        return false;
+        $data = UserRepository::rolePermission($this->id);
+        return in_array($name, $data['roles']);
     }
+
     /**
-     * Check if user has a permission by its name.
+     * 验证用户是否具有指定操作的权限
      *
      * @param string|array $permission Permission string or array of permissions.
-     * @param bool         $requireAll All permissions in the array are required.
+     * @param bool $requireAll All permissions in the array are required.
      *
      * @return bool
+     * @throws Exception
      */
-    public function can($permission, $requireAll = false) {
+    public function can(string|array $permission, bool $requireAll = false): bool {
         if (is_array($permission)) {
             foreach ($permission as $permName) {
                 $hasPerm = $this->can($permName);
@@ -112,57 +68,44 @@ trait UserRoleTrait {
                     return false;
                 }
             }
-            // If we've made it this far and $requireAll is FALSE, then NONE of the perms were found
-            // If we've made it this far and $requireAll is TRUE, then ALL of the perms were found.
-            // Return the value of $requireAll;
             return $requireAll;
-        } else {
-            foreach ($this->cachedRoles() as $role) {
-                // Validate against the Permission table
-                foreach ($role->cachedPermissions() as $perm) {
-                    if (Str::is( $permission, $perm->name) ) {
-                        return true;
-                    }
-                }
+        }
+        $data = UserRepository::rolePermission($this->id);
+        foreach ($data['permissions'] as $perm) {
+            if (Str::is($permission, $perm) ) {
+                return true;
             }
         }
         return false;
     }
+
     /**
      * Checks role(s) and permission(s).
      *
-     * @param string|array $roles       Array of roles or comma separated string
+     * @param string|array $roles Array of roles or comma separated string
      * @param string|array $permissions Array of permissions or comma separated string.
-     * @param array        $options     validate_all (true|false) or return_type (boolean|array|both)
+     * @param bool $validateAll 是否要验证所有
+     * @param int $returnType 返回值类型
+     * 0 为 bool 验证是否通过
+     * 1 为  [
+     *          roles => [role => bool],
+     *          permissions => [permission => bool]
+     * ]
      *
-     * @throws \InvalidArgumentException
-     *
+     * 2 为 [&0, &1]
      * @return array|bool
+     * @throws Exception
      */
-    public function ability($roles, $permissions, $options = []) {
+    public function ability(
+        string|array $roles,
+        string|array $permissions,
+        bool $validateAll = false, int $returnType = 0): array|bool {
         // Convert string to array if that's what is passed in.
         if (!is_array($roles)) {
             $roles = explode(',', $roles);
         }
         if (!is_array($permissions)) {
             $permissions = explode(',', $permissions);
-        }
-        // Set up default values and validate options.
-        if (!isset($options['validate_all'])) {
-            $options['validate_all'] = false;
-        } else {
-            if ($options['validate_all'] !== true && $options['validate_all'] !== false) {
-                throw new \InvalidArgumentException();
-            }
-        }
-        if (!isset($options['return_type'])) {
-            $options['return_type'] = 'boolean';
-        } else {
-            if ($options['return_type'] != 'boolean' &&
-                $options['return_type'] != 'array' &&
-                $options['return_type'] != 'both') {
-                throw new \InvalidArgumentException();
-            }
         }
         // Loop through roles and permissions and check each.
         $checkedRoles = [];
@@ -176,17 +119,17 @@ trait UserRoleTrait {
         // If validate all and there is a false in either
         // Check that if validate all, then there should not be any false.
         // Check that if not validate all, there must be at least one true.
-        if(($options['validate_all'] && !(in_array(false,$checkedRoles) || in_array(false,$checkedPermissions))) ||
-            (!$options['validate_all'] && (in_array(true,$checkedRoles) || in_array(true,$checkedPermissions)))) {
+        if(($validateAll && !(in_array(false,$checkedRoles) || in_array(false,$checkedPermissions))) ||
+            (!$validateAll && (in_array(true,$checkedRoles) || in_array(true,$checkedPermissions)))) {
             $validateAll = true;
         } else {
             $validateAll = false;
         }
         // Return based on option
-        if ($options['return_type'] == 'boolean') {
+        if ($returnType < 1) {
             return $validateAll;
         }
-        if ($options['return_type'] == 'array') {
+        if ($returnType === 1) {
             return ['roles' => $checkedRoles, 'permissions' => $checkedPermissions];
         }
         return [$validateAll, ['roles' => $checkedRoles, 'permissions' => $checkedPermissions]];
@@ -195,8 +138,10 @@ trait UserRoleTrait {
     /**
      * 是否是管理员
      * @return bool
+     * @throws Exception
      */
-    public function isAdministrator() {
+    public function isAdministrator(): bool
+    {
         return $this->hasRole('administrator');
     }
 

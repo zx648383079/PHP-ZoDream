@@ -20,7 +20,7 @@ class Email extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->varchar(100)->comment($field->name);
+        $column->string(100)->default('')->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

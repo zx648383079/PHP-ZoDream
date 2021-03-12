@@ -2,7 +2,7 @@
 namespace Module\Proxy\Service;
 
 use Module\Proxy\Domain\Spider;
-use Zodream\Route\Controller\Controller as RestController;
+use Module\ModuleController as RestController;
 
 class HomeController extends RestController {
 	

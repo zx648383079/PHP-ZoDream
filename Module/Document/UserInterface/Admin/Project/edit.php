@@ -5,27 +5,7 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = $model->id ?  '编辑项目:'.$model->name : '新建项目';
 $js = <<<JS
-// 新增环境
-$("body").on('click', '.js_addEnvBtn',function (event) {
-    event.stopPropagation();
-    var trObj = $(this).closest('tr');
-    trObj.before(trObj.clone(true)).find('input').val('');
-});
-
-//删除环境
-$("body").on('click', '.js_deleteEnvBtn',function (event) {
-    // 阻止事件冒泡
-    event.stopPropagation();
-
-    if($('.js_deleteEnvBtn').length <= 1){
-        Dialog.tip('至少要保留一个环境域名')
-        return false;
-    }
-    $(this).closest('tr').remove();
-});
-$("#type").change(function (e) { 
-    $("#environment-box").toggle($(this).val() == 1);
-});
+bindEditProject();
 JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>

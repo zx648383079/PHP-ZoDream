@@ -20,7 +20,7 @@ class Ip extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->varchar(120)->comment($field->name);
+        $column->string(120)->default('')->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

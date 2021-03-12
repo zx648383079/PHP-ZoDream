@@ -1,8 +1,7 @@
 <?php
 namespace Service\Admin;
 
-
-use Zodream\Route\Controller\Controller as BaseController;
+use Service\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 

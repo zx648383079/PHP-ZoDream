@@ -19,7 +19,7 @@ function postJson(url: string, data: any, callback?: (data: IResponse)=>any) {
         callback = data;
         data = {};
     }
-    $.post(url, data, callback, 'json');
+    $.post(url, data, callback || parseAjax, 'json');
 };
 function ajaxForm(url, data, callback?: (data: IResponse)=>any) {
     postJson(url, data, function(data) {
@@ -47,11 +47,11 @@ function formData(item: JQuery): string {
  * @param data 
  */
 function parseAjax(data: IResponse) {
-    if (data.code == 302) {
+    if (data.code === 302 || (data.code === 401 && data.url)) {
         window.location.href = data.url;
         return;
     }
-    if (data.code != 200) {
+    if (data.code !== 200) {
         Dialog.tip(data.message || '操作执行失败！');
         return;
     }

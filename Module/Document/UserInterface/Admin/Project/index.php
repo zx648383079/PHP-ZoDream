@@ -3,8 +3,22 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '项目:'.$project->name;
+$js = <<<JS
+bindProject({$project->id});
+JS;
+$this->registerJs($js, View::JQUERY_READY);
+?>
 ?>
 
+<div class="version-bar">
+            版本
+    <select id="version">
+        <?php foreach($version_list as $item):?>
+        <option value="<?=$item['id']?>" <?=$version == $item['id'] ? 'selected' : '' ?>><?=$item['name']?></option>
+        <?php endforeach;?>
+    </select>
+    <button class="btn">创建新版本</button>
+</div>
 <div class="page-header">
     <h3>项目主页</h3>
 

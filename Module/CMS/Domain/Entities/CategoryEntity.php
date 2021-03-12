@@ -81,6 +81,7 @@ class CategoryEntity extends Entity {
             'list_template' => '列表模板',
             'show_template' => '详情模板',
             'setting' => 'Setting',
+            'setting.open_comment' => '开启评论',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

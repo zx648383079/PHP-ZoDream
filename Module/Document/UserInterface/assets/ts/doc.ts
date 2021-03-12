@@ -86,6 +86,43 @@ function refreshJson(data: any) {
     $('.json-box').html('<pre><code class="language-json">'+ Prism.highlight(formatJson(data), Prism.languages.json) +'</code></pre>');
 }
 
+function bindEditProject() {
+    // 新增环境
+    $("body").on('click', '.js_addEnvBtn',function (event) {
+        event.stopPropagation();
+        const trObj = $(this).closest('tr');
+        trObj.before(trObj.clone(true)).find('input').val('');
+    });
+
+    //删除环境
+    $("body").on('click', '.js_deleteEnvBtn',function (event) {
+        // 阻止事件冒泡
+        event.stopPropagation();
+        if($('.js_deleteEnvBtn').length <= 1){
+            Dialog.tip('至少要保留一个环境域名')
+            return false;
+        }
+        $(this).closest('tr').remove();
+    });
+    $("#type").change(function (e) { 
+        $("#environment-box").toggle($(this).val() == 1);
+    });
+}
+
+function bindProject(project: number) {
+    $('.version-bar .btn').click(function() {
+        const name = prompt('请输入新版本号：');
+        if (!name || name.trim().length < 1) {
+            return;
+        }
+        postJson(BASE_URI + 'project/version_new', {
+            project,
+            version: $('.version-bar select').val(),
+            name,
+        });
+    });
+}
+
 function editApi(baseUri: string, apiId: number) {
     $('[name=parent_id]').change(function () { 
         $(".extent-box").toggle($(this).val() > 0);
@@ -159,21 +196,27 @@ $(function() {
             $("#debug-box .js_responseBox").html(html);
         });
     });
-    let coder = $('#coder-dialog').dialog();
-    coder.find('.dialog-header form').submit(function() {
-        let $this = $(this);
-        let val = $this.find('[name=lang]').val();
-        postJson($this.attr('action'), $this.serialize(), function(data) {
-            if (data.code != 200) {
-                parseAjax(data);
-                return;
-            }
-            coder.find('.dialog-body').html('<pre><code class="language-'+val+'">'+ Prism.highlight(data.data, Prism.languages[val]) +'</code></pre>');
-            coder.showCenter();
+    $('.version-bar select').change(function() {
+        const url = window.location.href;
+        window.location.href = url + (url.indexOf('?') > 0 ? '&' : '?') + 'version=' + $(this).val();
+    });
+    if ($('#coder-dialog').length > 0) {
+        let coder = $('#coder-dialog').dialog();
+        coder.find('.dialog-header form').submit(function() {
+            let $this = $(this);
+            let val = $this.find('[name=lang]').val();
+            postJson($this.attr('action'), $this.serialize(), function(data) {
+                if (data.code != 200) {
+                    parseAjax(data);
+                    return;
+                }
+                coder.find('.dialog-body').html('<pre><code class="language-'+val+'">'+ Prism.highlight(data.data, Prism.languages[val]) +'</code></pre>');
+                coder.showCenter();
+            });
+            return false;
         });
-        return false;
-    });
-    $('a[data-action="code"]').click(function() {
-        coder.show();
-    });
+        $('a[data-action="code"]').click(function() {
+            coder.show();
+        });
+    }
 });

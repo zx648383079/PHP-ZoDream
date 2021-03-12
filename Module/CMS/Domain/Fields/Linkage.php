@@ -20,7 +20,7 @@ class Linkage extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->int()->comment($field->name);
+        $column->uint()->default(0)->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel $field) {

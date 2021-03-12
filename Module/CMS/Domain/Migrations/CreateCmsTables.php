@@ -16,63 +16,63 @@ class CreateCmsTables extends Migration {
     public function up() {
         $this->append(ModelFieldModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('name')->varchar(100);
-            $table->column('field')->varchar(100);
+            $table->string('name', 100);
+            $table->string('field', 100);
             $table->uint('model_id');
-            $table->column('type')->varchar(20)->default('text');
-            $table->column('length')->varchar(10);
-            $table->column('position')->tinyint(3)->default(99);
-            $table->column('form_type')->tinyint(3)->default(0);
-            $table->column('is_main')->bool()->default(0);
-            $table->column('is_required')->bool()->default(1);
-            $table->column('is_search')->bool()->default(0)->comment('是否能搜索');
-            $table->column('is_disable')->bool()->default(0)->comment('禁用/启用');
-            $table->column('is_system')->bool()->default(0)
+            $table->string('type', 20)->default('text');
+            $table->uint('length', 10)->default(0);
+            $table->uint('position', 2)->default(99);
+            $table->uint('form_type', 2)->default(0);
+            $table->bool('is_main')->default(0);
+            $table->bool('is_required')->default(1);
+            $table->bool('is_search')->default(0)->comment('是否能搜索');
+            $table->bool('is_disable')->default(0)->comment('禁用/启用');
+            $table->bool('is_system')->default(0)
                 ->comment('系统自带禁止删除');
-            $table->column('match')->varchar();
-            $table->column('tip_message')->varchar();
-            $table->column('error_message')->varchar();
-            $table->column('tab_name')->varchar(4)->default('')->comment('编辑组名');
-            $table->column('setting')->text();
+            $table->string('match')->default('');
+            $table->string('tip_message')->default('');
+            $table->string('error_message')->default('');
+            $table->string('tab_name', 4)->default('')->comment('编辑组名');
+            $table->text('setting')->nullable();
         })->append(ModelModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('name')->varchar(100);
-            $table->column('table')->varchar(100);
-            $table->column('type')->tinyint(1)->default(0);
-            $table->column('position')->tinyint(3)->default(99);
+            $table->string('name', 100);
+            $table->string('table', 100);
+            $table->uint('type', 2)->default(0);
+            $table->uint('position', 2)->default(99);
             $table->uint('child_model')->default(0)->comment('分集模型');
-            $table->column('category_template')->varchar(20)->default('');
-            $table->column('list_template')->varchar(20)->default('');
-            $table->column('show_template')->varchar(20)->default('');
-            $table->column('setting')->text()->nullable();
+            $table->string('category_template', 20)->default('');
+            $table->string('list_template', 20)->default('');
+            $table->string('show_template', 20)->default('');
+            $table->text('setting')->nullable();
         })->append(GroupModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('name')->varchar(20);
-            $table->column('type')->tinyint(1)->default(0);
-            $table->column('description')->varchar();
+            $table->string('name', 20);
+            $table->uint('type', 2)->default(0);
+            $table->string('description')->default('');
         })->append(LinkageModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('name')->varchar(100);
-            $table->column('type')->tinyint(1)->default(0);
-            $table->column('code')->char(20)->unique();
+            $table->string('name', 100);
+            $table->uint('type', 2)->default(0);
+            $table->char('code', 20)->unique();
         })->append(LinkageDataModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('linkage_id');
-            $table->column('name')->varchar(100);
+            $table->string('name', 100);
             $table->uint('parent_id')->default(0);
-            $table->column('position')->tinyint(3)->default(99);
-            $table->column('full_name')->varchar(200);
+            $table->uint('position', 2)->default(99);
+            $table->string('full_name', 200)->default('');
         })->append(SiteModel::tableName(), function (Table $table) {
             $table->id();
-            $table->column('title')->varchar();
-            $table->column('keywords')->varchar()->default('');
-            $table->column('description')->varchar()->default('');
-            $table->column('logo')->varchar()->default('');
-            $table->column('theme')->varchar(100);
-            $table->column('match_type')->tinyint(1)->default(0);
-            $table->column('match_rule')->varchar(100)->default('');
-            $table->column('is_default')->bool()->default(0);
-            $table->column('options')->text()->nullable();
+            $table->string('title');
+            $table->string('keywords')->default('');
+            $table->string('description')->default('');
+            $table->string('logo')->default('');
+            $table->string('theme', 100);
+            $table->uint('match_type', 2)->default(0);
+            $table->string('match_rule', 100)->default('');
+            $table->bool('is_default')->default(0);
+            $table->text('options')->nullable();
             $table->timestamps();
         })->autoUp();
     }

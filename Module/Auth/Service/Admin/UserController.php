@@ -33,40 +33,11 @@ class UserController extends Controller {
     }
 
     public function saveAction(Request $request) {
-        $id = intval($request->get('id'));
-        $rule = $id > 0 ? [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'sex' => 'int',
-            'avatar' => 'string',
-            'birthday' => 'string',
-            'password' => 'string',
-        ] : [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'sex' => 'int',
-            'avatar' => 'string',
-            'birthday' => 'string',
-            'password' => 'required|string',
-        ];
-        $data = $request->get('name,email,sex,avatar,birthday,password,confirm_password');
-        if ($id < 1 && $data['password'] != $data['confirm_password']) {
-            return $this->renderFailure('两次密码不一致！');
+        try {
+            UserRepository::save($request->get(), $request->get('roles', []));
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (empty($data['password'])) {
-            unset($data['password'], $data['confirm_password']);
-        }
-        $model = UserModel::findOrNew($id);
-        if (!$model->load($data) || !$model->validate($rule)) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        if (!empty($data['password'])) {
-            $model->setPassword($data['password']);
-        }
-        if (!$model->save()) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        $model->setRole($request->get('roles'));
         return $this->renderData([
             'url' => $this->getUrl('user')
         ]);

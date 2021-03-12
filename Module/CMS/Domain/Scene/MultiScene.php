@@ -89,15 +89,15 @@ class MultiScene extends BaseScene {
         });
         CreateCmsTables::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
             $table->id();
-            $table->column('title')->varchar(100);
+            $table->string('title', 100);
             $table->uint('cat_id');
             $table->uint('model_id');
             $table->uint('parent_id')->default(0);
             $table->uint('user_id')->default(0);
-            $table->column('keywords')->varchar();
-            $table->column('thumb')->varchar();
-            $table->column('description')->varchar();
-            $table->column('status')->bool()->default(0);
+            $table->string('keywords')->default('');
+            $table->string('thumb')->default('');
+            $table->string('description')->default('');
+            $table->bool('status')->default(0);
             $table->uint('view_count')->default(0);
             foreach ($field_list as $item) {
                 static::converterTableField($table->column($item->field), $item);

@@ -3,10 +3,7 @@ namespace Module\Document\Domain\Model;
 
 
 use Domain\Model\Model;
-use Module\Document\Domain\MockRule;
-use Zodream\Helpers\Arr;
-use Zodream\Helpers\Json;
-use Zodream\Helpers\Xml;
+use Module\Document\Domain\Repositories\MockRepository;
 
 /**
  * Class FieldModel
@@ -89,7 +86,7 @@ class FieldModel extends Model {
     }
 
     public function getTypeLabelAttribute() {
-        return $this->type_list[$this->type];
+        return static::$type_list[$this->type];
     }
 
     public function setMock() {
@@ -97,29 +94,12 @@ class FieldModel extends Model {
             return $this;
         }
         $val = $this->getMockValueAttribute().'';
-        $this->default_value = self::format($this->type, $val);
+        $this->default_value = MockRepository::format($this->type, $val);
         return $this;
     }
 
     public function getMockValueAttribute() {
-        if (empty($this->mock)) {
-            return null;
-        }
-        $data = explode('|', $this->mock);
-        $type = $data[0];
-        if (!$type){
-            return $this->mock;
-        }
-        $rule = isset($data[1]) ? $data[1] : '';
-        $value = isset($data[2]) ? $data[2] : '';
-        $mock = new MockRule();
-        if ($type == 'array') {
-            $type = 'arr';
-        }
-        if(!method_exists($mock, $type)){
-            return $this->mock;
-        }
-        return $mock->$type($rule, $value);
+       return MockRepository::mockValue($this->mock);
     }
 
     public function save() {
@@ -149,168 +129,5 @@ class FieldModel extends Model {
                 ->where('id', '<>', $this->id)->count() < 1;
     }
 
-    /**
-     * 获取响应字段默认值数组
-     * @param int $api_id
-     * @param int $parent_id
-     * @return mixed
-     */
-    public static function getDefaultData($api_id, $parent_id = 0) {
-        $fields = self::where('kind', self::KIND_RESPONSE)->where('api_id', $api_id)->where('parent_id', $parent_id)->all();
-        $data = [];
-        foreach ($fields as $k => $v){
-            $name = $v['name'];
-            if($v['type'] == 'array'){
-                $data[$name][] = self::getDefaultData($api_id, $v['id']);
-                continue;
-            }
-            if($v['type'] == 'object'){
-                $data[$name] = self::getDefaultData($api_id, $v['id']);
-                continue;
-            }
-            if ($v['default_value'] === '' && $v['mock']) {
-                $v->setMock();
-            }
-            $data[$name] = self::format($v['type'], $v['default_value']);
-        }
-        return $data;
 
-    }
-
-    public static function format($type, $val) {
-        if ($type === 'number') {
-            return floatval($val);
-        }
-        if ($type === 'boolean') {
-            if (is_bool($val)) {
-                return $val;
-            }
-            return $val === 'true';
-        }
-        return $val;
-    }
-
-    /**
-     * 获取响应字段mock数组
-     * @param $api_id
-     * @param int $parent_id
-     * @return mixed
-     */
-    public static function getMockData($api_id, $parent_id = 0) {
-        $api_id = $api_id ? $api_id : 0;
-        $fields = self::where('kind', self::KIND_RESPONSE)->where('api_id', $api_id)->where('parent_id', $parent_id)->all();
-        $data = [];
-        foreach ($fields as $k => $v){
-            $name = $v['name'];
-            if ($v['type'] == 'array'){
-                $value = self::getMockData($api_id, $v['id']);
-                $data[$name][] = $value ? $value : array();
-                continue;
-            }
-            if($v['type'] == 'object'){
-                $value = self::getMockData($api_id, $v['id']);
-                $data[$name] = $value ? $value : (object)array();
-                continue;
-            }
-            $data[$name] = self::format($v->type, $v->getMockValueAttribute());
-        }
-        return $data;
-
-    }
-
-    /**
-     * @param string $content
-     * @param int $kind
-     * @return static[]
-     */
-    public static function parseContent($content, $kind = self::KIND_REQUEST) {
-        if ($kind == self::KIND_HEADER) {
-            return self::parseHeader($content);
-        }
-        if (substr($content, 0, 1) == '{') {
-            $args = Json::decode($content);
-        } elseif (substr($content, 0, 1) == '<') {
-            $args = Xml::specialDecode(preg_replace('/^[\s\S]*\<xml\>/', '<xml>', $content));
-        } else {
-            $args = [];
-            parse_str($content, $args);
-        }
-        $data = [];
-        foreach ($args as $key => $item) {
-            $model = new static([
-                'name' => $key,
-                'title' => $key,
-                'type' => 'string',
-                'kind' => $kind,
-                'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
-                'is_required' => !empty($item) ? 1 : 0
-            ]);
-            self::parseChildren($item, $model);
-            $data[] = $model;
-        }
-        return $data;
-    }
-
-    public static function parseChildren($content, FieldModel $model) {
-        if (is_null($content)) {
-            $model->type = 'null';
-        }
-        if (is_bool($content)) {
-            $model->type = 'boolean';
-            return;
-        }
-        if (is_float($content)) {
-            $model->type = 'float';
-            return;
-        }
-        if (is_double($content)) {
-            $model->type = 'double';
-            return;
-        }
-        if (is_numeric($content)) {
-            $model->type = strpos($content, '.') === false ? 'number' : 'float';
-            return;
-        }
-        if (!is_array($content)) {
-            return;
-        }
-        $model->default_value = '';
-        $model->type = Arr::isAssoc($content) ? 'object' : 'array';
-        $data = $model->type == 'array' ? reset($content) : $content;
-        foreach ($data as $key => $item) {
-            $child = new static([
-                'name' => $key,
-                'title' => $key,
-                'type' => 'string',
-                'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
-                'is_required' => !empty($item)
-            ]);
-            self::parseChildren($item, $child);
-            $model->children[] = $child;
-        }
-    }
-
-    public static function parseHeader($content) {
-        $data = [];
-        foreach (explode("\n", $content) as $line) {
-            if (strpos($line, ':') === false) {
-                continue;
-            }
-            list($key, $value) = explode(':', $line, 2);
-            $key = trim($key);
-            if (empty($key)) {
-                continue;
-            }
-            $value = trim($value);
-            $data[] = new static([
-                'name' => $key,
-                'title' => $key,
-                'default_value' => $value,
-                'type' => 'string',
-                'kind' => self::KIND_HEADER,
-                'is_required' => !empty($value)
-            ]);
-        }
-        return $data;
-    }
 }

@@ -25,7 +25,12 @@ class Textarea extends BaseField {
             && in_array($option['type'], ['char', 'varchar', 'text'])) {
             $type = $option['type'];
         }
-        $column->{$type}();
+        $column->comment($field->name)->{$type}();
+        if ($type === 'text') {
+            $column->nullable();
+        } else {
+            $column->default('');
+        }
     }
 
     public function toInput($value, ModelFieldModel $field) {

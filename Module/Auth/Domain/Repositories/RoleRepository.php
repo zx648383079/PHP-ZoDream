@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
 use Exception;
@@ -42,7 +43,7 @@ class RoleRepository {
      * @throws Exception
      * @return integer
      */
-    public static function newRole($name, $display_name, array $permission = []) {
+    public static function newRole(string $name, string $display_name, array $permission = []) {
         $id = RoleModel::query()->where('name', $name)->value('id');
         $existBind = [];
         if ($id < 1) {
@@ -80,9 +81,9 @@ class RoleRepository {
     /**
      * 获取用户的角色和权限
      * @param $user_id
-     * @return array
+     * @return array [role => array, roles => string[], permissions => string[]]
      */
-    public static function userRolePermission($user_id) {
+    public static function userRolePermission(int $user_id) {
         $role = null;
         $roles = [];
         $permissions = [];
@@ -91,7 +92,7 @@ class RoleRepository {
             return compact('role', 'roles', 'permissions');
         }
         $roles = RoleModel::whereIn('id', $roleId)->pluck('name');
-        $role = RoleModel::where('id', min($roleId))->first();
+        $role = RoleModel::where('id', min($roleId))->first()->toArray();
         if (in_array('administrator', $roles)) {
             $permissions = PermissionModel::query()->pluck('name');
         } else {
@@ -105,7 +106,7 @@ class RoleRepository {
         return compact('role', 'roles', 'permissions');
     }
 
-    public static function rolePermissions($role_id) {
+    public static function rolePermissions(int $role_id) {
         $permissionId = RolePermissionModel::where('role_id', $role_id)
             ->pluck('permission_id');
         if (!empty($permissionId)) {

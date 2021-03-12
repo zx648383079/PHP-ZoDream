@@ -20,7 +20,7 @@ class Model extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field) {
-        $column->int();
+        $column->uint()->default(0);
     }
 
     public function toInput($value, ModelFieldModel $field) {

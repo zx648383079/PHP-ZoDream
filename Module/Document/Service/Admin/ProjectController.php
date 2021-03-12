@@ -1,48 +1,69 @@
 <?php
 namespace Module\Document\Service\Admin;
 
-use Module\Document\Domain\Model\ApiModel;
-use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
-use Zodream\Helpers\Json;
+use Module\Document\Domain\Repositories\ApiRepository;
+use Module\Document\Domain\Repositories\PageRepository;
+use Module\Document\Domain\Repositories\ProjectRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 
 class ProjectController extends Controller {
 
-    public function indexAction($id) {
+    public function indexAction(int $id, int $version = 0) {
         $project = ProjectModel::findWithAuth($id);
         if (empty($project)) {
             return $this->redirect($this->getUrl(''));
         }
-        $tree_list = $project->type == ProjectModel::TYPE_API ? ApiModel::getTree($id) : PageModel::getTree($id);
-        return $this->show(compact('project', 'tree_list'));
+        $tree_list = $project->type == ProjectModel::TYPE_API ?
+            ApiRepository::tree($id, $version) : PageRepository::tree($id, $version);
+        $version_list = ProjectRepository::versionAll($id);
+        return $this->show(compact('project', 'tree_list', 'version_list', 'version'));
     }
 
     public function createAction() {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
-        $model = ProjectModel::findOrDefault($id, ['type' => 1]);
-        $project_list = ProjectModel::select('name', 'id')->all();
+    public function editAction(int $id) {
+        $model = $id > 0 ? ProjectRepository::getSelf($id) : new ProjectModel(['type' => 1]);
+        $project_list = ProjectRepository::allSelf();
         return $this->show('edit', compact('model', 'project_list'));
     }
 
-    public function saveAction() {
-        $model = new ProjectModel();
-        $model->user_id = auth()->id();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->renderData([
-                'url' => $this->getUrl('project', ['id' => $model->id])
-            ]);
+    public function saveAction(Input $input) {
+        try {
+            $model = ProjectRepository::save($input->get());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
+        return $this->renderData([
+            'url' => $this->getUrl('project', ['id' => $model->id])
+        ]);
     }
 
-    public function deleteAction($id) {
-        ProjectModel::where('id', $id)->where('user_id', auth()->id())->delete();
+    public function deleteAction(int $id) {
+        try {
+            ProjectRepository::removeSelf($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData([
             'url' => $this->getUrl('')
+        ]);
+    }
+
+    public function versionNewAction(int $project, int $version, string $name) {
+        try {
+            $version = ProjectRepository::createVersion($project, $version, $name);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData([
+            'url' => $this->getUrl('project', [
+                'id' => $project,
+                'version' => $version->id
+            ])
         ]);
     }
 }

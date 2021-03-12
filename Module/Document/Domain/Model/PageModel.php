@@ -3,7 +3,6 @@ namespace Module\Document\Domain\Model;
 
 
 use Domain\Model\Model;
-use Zodream\Html\Tree;
 
 /**
  * Class PageModel
@@ -15,6 +14,7 @@ use Zodream\Html\Tree;
  * @property string $content
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $version_id
  */
 class PageModel extends Model {
 
@@ -30,6 +30,7 @@ class PageModel extends Model {
             'content' => '',
             'created_at' => 'int',
             'updated_at' => 'int',
+            'version_id' => 'int',
         ];
     }
 
@@ -40,13 +41,10 @@ class PageModel extends Model {
             'project_id' => '项目',
             'content' => '文档内容',
             'parent_id' => '上级',
+            'version_id' => '版本',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
     }
 
-    public  static function getTree($project_id) {
-        $data = self::where('project_id', $project_id)->select('id', 'name', 'parent_id')->asArray()->all();
-        return (new Tree($data))->makeTree();
-    }
 }
