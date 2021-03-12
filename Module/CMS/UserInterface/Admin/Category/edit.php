@@ -60,7 +60,7 @@ $this->registerJs($js);
                 <?=Form::text('category_template')?>
                 <?=Form::text('list_template')?>
                 <?=Form::text('show_template')?>
-                <?=Form::switchg('setting.open_comment')?>
+                <?=Form::switch('setting.open_comment')?>
             </div>
         </div>
     </div>
