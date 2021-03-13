@@ -81,7 +81,7 @@ class CreateShopTables extends Migration {
             $table->string('thumb')->default('');
             $table->uint('type', 2)->default(0)->comment('优惠类型');
             $table->uint('rule', 2)->default(0)->comment('使用的商品');
-            $table->uint('rule_value', 2)->default(0)->comment('使用的商品');
+            $table->string('rule_value')->default('')->comment('使用的商品');
             $table->decimal('min_money', 8, 2)->default(0)->comment('满多少可用');
             $table->decimal('money', 8, 2)->default(0)->comment('几折或优惠金额');
             $table->uint('send_type')->default(0)->comment('发放类型');
@@ -543,7 +543,7 @@ class CreateShopTables extends Migration {
             $table->string('picture', 200)->comment('主图');
             $table->string('description', 200)->comment('关键字');
             $table->string('brief', 200)->comment('简介');
-            $table->text('content')->comment('内容');
+            $table->text('content')->nullable()->comment('内容');
             $table->decimal('price', 8, 2)->default(0);
             $table->decimal('market_price', 8, 2)->default(0);
             $table->uint('stock')->default(1);
@@ -655,8 +655,8 @@ class CreateShopTables extends Migration {
             $table->string('description')->default('');
             $table->uint('type', 2)->default(ActivityModel::TYPE_AUCTION);
             $table->uint('scope_type', 1)->default(0)->comment('商品范围类型');
-            $table->text('scope')->comment('商品范围值');
-            $table->text('configure')->comment('其他配置信息');
+            $table->text('scope')->nullable()->comment('商品范围值');
+            $table->text('configure')->nullable()->comment('其他配置信息');
             $table->bool('status')->default(1)->comment('开启关闭');
             $table->timestamp('start_at');
             $table->timestamp('end_at');

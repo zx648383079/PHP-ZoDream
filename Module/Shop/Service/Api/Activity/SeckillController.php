@@ -8,7 +8,7 @@ use Module\Shop\Service\Api\Controller;
 
 class SeckillController extends Controller {
 
-    public function indexAction($id = 0) {
+    public function indexAction(int $id = 0) {
         if (!is_array($id) && $id > 0) {
             return $this->infoAction($id);
         }
@@ -16,7 +16,7 @@ class SeckillController extends Controller {
         return $this->renderPage($page);
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         $data = ActivityModel::where('type', ActivityModel::TYPE_SEC_KILL)->where('id', $id)->first();
         if (empty($data)) {
             return $this->renderFailure('商品错误！');
@@ -24,7 +24,7 @@ class SeckillController extends Controller {
         return $this->render($data);
     }
 
-    public function goodsAction($act_id = 0, $time_id = 0, $time = null) {
+    public function goodsAction(int $act_id = 0, int $time_id = 0, string $time = '') {
         $data = SeckillGoodsModel::with('goods')
             ->when($act_id > 0, function ($query) use ($act_id) {
                 $query->where('act_id', $act_id);
@@ -42,6 +42,6 @@ class SeckillController extends Controller {
 
     public function timeAction() {
         $model_list = ActivityTimeModel::getTimeList();
-        return $this->render($model_list);
+        return $this->renderData($model_list);
     }
 }

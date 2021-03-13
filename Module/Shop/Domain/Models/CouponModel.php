@@ -12,7 +12,7 @@ use Module\Shop\Domain\Entities\CouponEntity;
  * @property string $thumb
  * @property integer $type
  * @property integer $rule
- * @property integer $rule_value
+ * @property string $rule_value
  * @property float $min_money
  * @property float $money
  * @property integer $send_type

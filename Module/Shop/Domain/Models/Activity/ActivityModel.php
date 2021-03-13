@@ -53,7 +53,7 @@ class ActivityModel extends Model {
             'type' => 'int:0,99',
             'scope_type' => 'int:0,9',
             'scope' => 'string',
-            'configure' => 'required',
+            'configure' => 'string',
             'status' => 'int',
             'start_at' => 'int',
             'end_at' => 'int',

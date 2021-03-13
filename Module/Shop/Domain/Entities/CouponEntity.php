@@ -11,7 +11,7 @@ use Domain\Entities\Entity;
  * @property string $thumb
  * @property integer $type
  * @property integer $rule
- * @property integer $rule_value
+ * @property string $rule_value
  * @property float $min_money
  * @property float $money
  * @property integer $send_type
@@ -48,7 +48,7 @@ class CouponEntity extends Entity {
             'thumb' => 'string:0,255',
             'type' => 'int:0,99',
             'rule' => 'int:0,99',
-            'rule_value' => 'int:0,99',
+            'rule_value' => '',
             'min_money' => '',
             'money' => '',
             'send_type' => 'int',

@@ -43,7 +43,7 @@ class ActivityTimeModel extends Model {
         return date('H:i', strtotime($this->getAttributeSource('end_at')));
     }
 
-    public static function getTimeList($length = 5, $start_at = null) {
+    public static function getTimeList(int $length = 5, string $start_at = '') {
         $model_list = static::query()->orderBy('start_at asc')->all();
         if (empty($model_list)) {
             return [];

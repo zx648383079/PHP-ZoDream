@@ -32,14 +32,14 @@ class CouponController extends Controller {
                 'thumb' => 'string:0,255',
                 'type' => 'int:0,99',
                 'rule' => 'int:0,99',
-                'rule_value' => 'int:0,99',
+                'rule_value' => '',
                 'min_money' => '',
                 'money' => '',
                 'send_type' => 'int',
                 'send_value' => 'int',
                 'every_amount' => 'int',
-                'start_at' => 'int',
-                'end_at' => 'int',
+                'start_at' => '',
+                'end_at' => '',
             ]);
             return $this->render(
                 CouponRepository::save($data)
