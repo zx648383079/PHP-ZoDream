@@ -5,6 +5,8 @@ use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
+use Module\Shop\Domain\Models\Activity\AuctionLogModel;
+use Module\Shop\Domain\Models\Activity\PresaleLogModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\Advertisement\AdModel;
@@ -674,6 +676,32 @@ class CreateShopTables extends Migration {
             $table->decimal('price', 8, 2)->default(0);
             $table->uint('amount', 5)->default(0);
             $table->uint('every_amount', 2)->default(0);
+        })->append(AuctionLogModel::tableName(), function (Table $table) {
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->decimal('bid', 8, 2)->default(0)
+                ->comment('出价');
+            $table->uint('amount')->default(1)->comment('出价数量');
+            $table->uint('status', 1)->default(AuctionLogModel::STATUS_NONE);
+            $table->timestamp('created_at');
+        })->append(PresaleLogModel::tableName(), function (Table $table) {
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->uint('order_id');
+            $table->uint('order_goods_id');
+            $table->decimal('order_amount', 8, 2)
+                ->default(0)->comment('预售总价');
+            $table->decimal('deposit', 8, 2)
+                ->default(0)->comment('预售定金');
+            $table->decimal('final_payment', 8, 2)
+                ->default(0)->comment('预售尾款');
+            $table->uint('status', 2)->default(0)->comment('判断预售订单处于那个状态');
+            $table->timestamp('predetermined_at')->comment('支付定金时间');
+            $table->timestamp('final_at')->comment('尾款支付时间');
+            $table->timestamp('ship_at')->comment('发货时间');
+            $table->timestamps();
         });
     }
 

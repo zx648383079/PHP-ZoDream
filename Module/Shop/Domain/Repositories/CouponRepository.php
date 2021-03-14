@@ -12,7 +12,7 @@ use Zodream\Html\Page;
 
 class CouponRepository {
 
-    public static function getCanReceive($category = 0) {
+    public static function getCanReceive(int $category = 0) {
         $time = time();
         return Coupon::where('send_type', 0)
             ->when($category > 0, function ($query) use ($category) {
@@ -23,7 +23,7 @@ class CouponRepository {
             ->page();
     }
 
-    public static function getMy($status) {
+    public static function getMy(int $status) {
         $ids = CouponLogModel::where('user_id', auth()->id())
             ->when($status < 1 || $status == 2, function ($query) {
                 $query->where('used_at', 0);
@@ -57,6 +57,21 @@ class CouponRepository {
         return array_filter($coupon_list, function($item) use ($goods_list) {
             return static::canUse($item, $goods_list);
         });
+    }
+
+    public static function receive(int $id) {
+        $coupon = CouponModel::where('id', $id)
+        ->where('send_type', CouponModel::SEND_RECEIVE)->first();
+        if (!$coupon) {
+            throw new \Exception('优惠券错误!');
+        }
+        if (!$coupon->can_receive) {
+            throw new \Exception('领取失败!');
+        }
+        CouponLogModel::create([
+            'user_id' => auth()->id(),
+            'coupon_id' => $coupon->id
+        ]);
     }
 
     /**

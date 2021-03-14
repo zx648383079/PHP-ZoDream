@@ -148,14 +148,13 @@ class AccountLogModel extends Model {
      * @param $type
      * @param callable $cb 最好返回 model
      * @param $money
-     * @param $total_money
      * @param $remark
      * @return bool|mixed
      * @throws \Exception
      */
     public static function changeAsync(
         $user_id, $type, callable $cb,
-        $money, $total_money, $remark) {
+        $money, $remark) {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }

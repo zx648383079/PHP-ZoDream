@@ -43,38 +43,4 @@ class ActivityTimeModel extends Model {
         return date('H:i', strtotime($this->getAttributeSource('end_at')));
     }
 
-    public static function getTimeList(int $length = 5, string $start_at = '') {
-        $model_list = static::query()->orderBy('start_at asc')->all();
-        if (empty($model_list)) {
-            return [];
-        }
-        $data = [];
-        $is_start = false;
-        $now = empty($start_at) ? strtotime(date('H:i')) : strtotime($start_at);
-        $next_time = [];
-        $next_day = date('Y-m-d ', $now + 86400);
-        $today = date('Y-m-d ', $now);
-        foreach ($model_list as $item) {
-            $item = $item->toArray();
-            $item['title'] = $item['start_at'];
-            $next_time[] = [
-                'title' => $item['start_at'],
-                'start_at' => $next_day.$item['start_at'],
-                'end_at' => $next_day.$item['end_at'],
-            ];
-            if (!$is_start) {
-                $is_start = strtotime($today.$item['end_at']) > $now;
-                if (!$is_start) {
-                    continue;
-                }
-            }
-            $data[] = [
-                'title' => $item['start_at'],
-                'start_at' => $today.$item['start_at'],
-                'end_at' => $today.$item['end_at'],
-            ];
-        }
-        $data = array_merge($data, $next_time);
-        return array_splice($data, 0, $length);
-    }
 }

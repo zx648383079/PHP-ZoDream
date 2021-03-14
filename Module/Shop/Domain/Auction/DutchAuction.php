@@ -2,23 +2,21 @@
 namespace Module\Shop\Domain\Auction;
 
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
-use Module\Shop\Domain\Models\Activity\AuctionModel;
-
 /**
  * 荷兰式拍卖即降价拍
  * @package Module\Auction\Domain\Mode
  */
 class DutchAuction extends BaseAuction implements AuctionInterface {
-    protected $hasPreAuction = false; //是否有预拍
+    protected bool $hasPreAuction = false; //是否有预拍
 
-    protected $preTime = 0; //预拍提前时间
+    protected int $preTime = 0; //预拍提前时间
 
-    protected $minus_time = 1; // 多少时间减
+    protected int $minusTime = 1; // 多少时间减
 
-    protected $minus_price = 1; // 多少钱
+    protected int $minusPrice = 1; // 多少钱
 
-    public function setData($data) {
-        parent::setData($data);
+    public function setLog($data) {
+        parent::setLog($data);
         if (!$this->isPreAuction()) {
             $this->data->bid = $this->getPrice();
         }
@@ -29,7 +27,7 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
      * 是否是预拍中
      * @return bool
      */
-    public function isPreAuction() {
+    public function isPreAuction(): bool {
         $time = time();
         return $this->hasPreAuction
             && $time >= $this->model->start_at - $this->preTime
@@ -40,13 +38,10 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
      * 根据时间判断是否能拍
      * @return boolean
      */
-    public function canAuction() {
+    public function canAuction(): bool {
         $time = time();
-        if ($this->model->status !== AuctionModel::STATUS_NONE) {
+        if ($this->isActivityEnd()) {
             throw new \Exception('拍卖结束');
-        }
-        if ($this->model->end_at > 0 && $this->model->end_at < $time) {
-            return false;
         }
         if ($this->hasPreAuction) {
             return $time >= $this->model->start_at - $this->preTime;
@@ -58,24 +53,24 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
      * 判断是否是一个有效的数量
      * @return boolean
      */
-    public function isValidPrice() {
-        return $this->data->number > 0 && $this->data->number <= $this->model->surplus;
+    public function isValidPrice(): bool {
+        return $this->data->amount > 0 && $this->data->amount <= $this->config('surplus', 1);
     }
 
     /**
      * 获取当前出的价格，没人出价时为0
      * @return float
      */
-    public function getPrice() {
-        return $this->model->initial_price -
-            (time() - $this->model->start_at) / $this->minus_time * $this->minus_price;
+    public function getPrice(): float {
+        return $this->config('begin_price') -
+            (time() - $this->model->start_at) / $this->minusTime * $this->minusPrice;
     }
 
     /**
      * 竞拍
      * @return boolean
      */
-    public function auction() {
+    public function auction(): bool {
         if (!$this->canAuction()) {
             return false;
         }
@@ -89,6 +84,7 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
             return false;
         }
         $this->saveToOrder();
+        return true;
     }
 
     /**
@@ -101,9 +97,9 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
             return;
         }
         $data = AuctionLogModel::where('bid', '>=', $this->getPrice())
-            ->where('number', '<=', $this->model->surplus)
+            ->where('amount', '<=', $this->config('surplus', 1))
             ->where('status', AuctionLogModel::STATUS_NONE)
-            ->orderBy('bid desc, number desc')->get();
+            ->orderBy(['bid' => 'desc', 'amount' => 'desc'])->get();
         if (empty($data)) {
             return;
         }

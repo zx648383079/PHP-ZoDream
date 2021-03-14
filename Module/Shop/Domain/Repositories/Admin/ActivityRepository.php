@@ -12,7 +12,7 @@ use Zodream\Database\Relation;
 class ActivityRepository {
     public static function getList(int $type, string $keywords = '') {
         $query = ActivityModel::query();
-        if (in_array($type, [ActivityModel::TYPE_AUCTION, ActivityModel::TYPE_BARGAIN])) {
+        if (in_array($type, [ActivityModel::TYPE_AUCTION, ActivityModel::TYPE_PRE_SALE, ActivityModel::TYPE_BARGAIN])) {
             $query->with('goods');
         }
         return $query->when(!empty($keywords), function ($query) {

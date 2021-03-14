@@ -41,6 +41,10 @@ class ActivityModel extends Model {
     const SCOPE_BRAND = 2;
     const SCOPE_CATEGORY = 3;
 
+    const STATUS_NONE = 0;
+    const STATUS_END = 1;
+    const STATUS_INVALID = 2;// 流拍
+
     public static function tableName() {
         return 'shop_activity';
     }

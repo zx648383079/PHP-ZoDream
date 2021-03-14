@@ -61,7 +61,7 @@ HTML;
                 'user_id' => auth()->id(),
                 'node_index' => $this->attr(Parser::UID_KEY)
             ]);
-        }, -$this->price, 0, '购买帖子隐藏内容');
+        }, -$this->price, '购买帖子隐藏内容');
         if (!$res) {
             throw new \Exception('支付失败，请检查您的账户余额');
             //return false;

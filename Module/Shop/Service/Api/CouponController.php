@@ -1,9 +1,6 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Models\CouponLogModel;
-use Module\Shop\Domain\Models\CouponModel;
-use Module\Shop\Domain\Models\Scene\Coupon;
 use Module\Shop\Domain\Repositories\CouponRepository;
 
 class CouponController extends Controller {
@@ -15,25 +12,22 @@ class CouponController extends Controller {
         ];
     }
 
-    public function indexAction($category = 0) {
+    public function indexAction(int $category = 0) {
         $coupon_list = CouponRepository::getCanReceive($category);
         return $this->renderPage($coupon_list);
     }
 
-    public function myAction($status = 0) {
+    public function myAction(int $status = 0) {
         $coupon_list = CouponRepository::getMy($status);
         return $this->renderPage($coupon_list);
     }
 
-    public function receiveAction($id) {
-        $coupon = CouponModel::find($id);
-        if (!$coupon || !$coupon->can_receive) {
-            return $this->renderFailure('领取失败!');
+    public function receiveAction(int $id) {
+        try {
+            CouponRepository::receive($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        CouponLogModel::create([
-            'user_id' => auth()->id(),
-            'coupon_id' => $coupon->id
-        ]);
-        return $this->render(['data' => true]);
+        return $this->renderData(true);
     }
 }
