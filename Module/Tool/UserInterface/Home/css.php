@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'CSS 美化';
+$this->title = 'CSS 美化/转SCSS';
 $js = <<<JS
 registerEditor('text/css');
 JS;
@@ -15,6 +15,7 @@ $this->registerJs($js);
     </div>
     <div class="actions">
         <button data-type="cssbeautify">美化</button>
+        <button data-type="csstoscss">转SCSS</button>
         <button data-type="clear">清空</button>
     </div>
     <div class="output-box">

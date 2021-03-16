@@ -304,6 +304,9 @@ function converter(content: string, type: string): string| number {
         case 'htmltowxml': 
             result = htmlFormat(this.HTMLtoWXML(content));
             break;
+        case 'csstoscss': 
+            result = this.cssToScss(content);
+            break;
         case 'htmlbeautify':
             result = htmlFormat(content);
             break;

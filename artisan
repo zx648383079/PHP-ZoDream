@@ -16,7 +16,7 @@ $router = $app->make(Router::class);
 
 $router->group([
     'namespace' => 'Service\Install'
-], function ($router) {
+], function (Router $router) {
     $router->any('i', 'HomeController@initAction');
     $router->any('init', 'HomeController@initAction');
     $router->any('install', 'HomeController@initAction');
