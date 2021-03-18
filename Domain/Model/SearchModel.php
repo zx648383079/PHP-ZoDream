@@ -2,20 +2,20 @@
 declare(strict_types=1);
 namespace Domain\Model;
 
-use Zodream\Database\Query\Builder;
+use Zodream\Database\Contracts\SqlBuilder;
 
 class SearchModel {
     /**
      * 生成搜索查询语句
-     * @param Builder $query
+     * @param SqlBuilder $query
      * @param string|array $columns
      * @param bool $saveLog
      * @param string $key
      * @param string $value
-     * @return Builder
+     * @return SqlBuilder
      * @throws \Exception
      */
-    public static function search(Builder $query, string|array $columns, bool $saveLog = true,
+    public static function search(SqlBuilder $query, string|array $columns, bool $saveLog = true,
                                   string $key = 'keywords', string $value = '') {
         $columns = (array)$columns;
         $keywords = explode(' ', empty($key) ? $value : request()->get($key));
@@ -45,14 +45,14 @@ class SearchModel {
 
     /**
      * 查询语句并用（） 包起来
-     * @param Builder $query
+     * @param SqlBuilder $query
      * @param string|array $columns
      * @param bool $saveLog
      * @param string $key
      * @param string $value
-     * @return Builder
+     * @return SqlBuilder
      */
-    public static function searchWhere(Builder $query, string|array $columns, bool $saveLog = true,
+    public static function searchWhere(SqlBuilder $query, string|array $columns, bool $saveLog = true,
                                        string $key = 'keywords', string $value = '') {
         return $query->where(function ($query) use ($columns, $saveLog, $key, $value) {
             static::search($query, $columns, $saveLog, $key, $value);
@@ -84,13 +84,13 @@ class SearchModel {
 
     /**
      * 根据搜索进行显示
-     * @param Builder $query
+     * @param SqlBuilder $query
      * @param string|array $columns
      * @param string $keywords
      * @param array $queries 这是主键
      * @return array
      */
-    public static function searchOption(Builder $query, string|array $columns,
+    public static function searchOption(SqlBuilder $query, string|array $columns,
                                         string $keywords = '', array $queries = []): array {
         $perPage = static::getPerPage($queries);
         if ($perPage < 1) {

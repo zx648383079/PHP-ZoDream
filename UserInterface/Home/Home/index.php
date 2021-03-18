@@ -26,28 +26,28 @@ $module_list = [
         'code',
         __('Code Block')
     ],
-    [
-        'exam',
-        __('Exam')
-    ],
+//    [
+//        'exam',
+//        __('Exam')
+//    ],
     [
         'demo',
         __('Template')
     ],
 ];
 $demo_list = [
-    [
-        'forum',
-        __('Forum')
-    ],
-    [
-        'micro',
-        __('Micro Blog')
-    ],
-    [
-        'book',
-        __('Book')
-    ],
+//    [
+//        'forum',
+//        __('Forum')
+//    ],
+//    [
+//        'micro',
+//        __('Micro Blog')
+//    ],
+//    [
+//        'book',
+//        __('Book')
+//    ],
     [
         'cms',
         __('CMS')

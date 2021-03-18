@@ -18,7 +18,7 @@ namespace Module\Blog\Domain\Model;
  * @property integer $type
  * @property integer $open_type
  * @property string $open_rule
- * @property integer $recommend
+ * @property integer $recommend_count
  * @property integer $comment_count
  * @property integer $click_count
  * @property integer $deleted_at
@@ -35,7 +35,7 @@ class BlogPageModel extends BlogModel {
         'parent_id',
         'open_type',
         'comment_count',
-        'click_count', 'recommend', 'created_at'];
+        'click_count', 'recommend_count', 'created_at'];
 
     protected array $append = ['url', 'term', 'user'];
 

@@ -10,6 +10,12 @@
 
 增加各模块内部的联动。
 
+
+### 忽略PHP版本检查
+```shell
+composer install --ignore-platform-reqs
+```
+
 ### 资源文件编译说明
 
 ```cmd

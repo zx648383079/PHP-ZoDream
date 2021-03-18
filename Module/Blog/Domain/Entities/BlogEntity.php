@@ -19,7 +19,7 @@ use Domain\Entities\Entity;
  * @property integer $user_id
  * @property integer $term_id
  * @property integer $type
- * @property integer $recommend
+ * @property integer $recommend_count
  * @property integer $comment_count
  * @property integer $click_count
  * @property integer $open_type
@@ -60,7 +60,7 @@ class BlogEntity extends Entity {
             'user_id' => 'int',
             'term_id' => 'int',
             'type' => 'int:0,127',
-            'recommend' => 'int',
+            'recommend_count' => 'int',
             'comment_count' => 'int',
             'click_count' => 'int',
             'open_type' => 'int:0,127',
@@ -92,7 +92,7 @@ class BlogEntity extends Entity {
             'open_type' => '公开类型',
             'open_rule' => '公开规则',
             'weather' => '天气',
-            'recommend' => '推荐',
+            'recommend_count' => '推荐',
             'comment_count' => '评论',
             'click_count' => '点击',
             'comment_status' => '评论状态',

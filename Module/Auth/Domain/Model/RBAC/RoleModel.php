@@ -17,7 +17,7 @@ use Domain\Model\ModelHelper;
  */
 class RoleModel extends Model {
     public static function tableName() {
-        return 'role';
+        return 'rbac_role';
     }
 
     protected function rules() {

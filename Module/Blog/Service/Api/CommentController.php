@@ -29,8 +29,7 @@ class CommentController extends Controller {
         return $this->render($comment->toArray());
     }
 
-    public function disagreeAction($id) {
-        $id = intval($id);
+    public function disagreeAction(int $id) {
         if (!CommentModel::canAgree($id)) {
             return $this->renderFailure('一个用户只能操作一次！');
         }
@@ -39,17 +38,16 @@ class CommentController extends Controller {
         return $this->render($comment->toArray());
     }
 
-    public function agreeAction($id) {
-        $id = intval($id);
+    public function agreeAction(int $id) {
         if (!CommentModel::canAgree($id)) {
-            return $this->jsonFailure('一个用户只能操作一次！');
+            return $this->renderFailure('一个用户只能操作一次！');
         }
         $comment = CommentModel::find($id);
         $comment->agreeThis();
         return $this->render($comment->toArray());
     }
 
-    public function reportAction($id) {
+    public function reportAction(int $id) {
 
     }
 }

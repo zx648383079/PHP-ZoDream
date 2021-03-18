@@ -32,7 +32,7 @@ class HomeController extends Controller {
         return $this->renderPage($blog_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $id = intval($id);
         BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogModel::find($id);
@@ -47,7 +47,7 @@ class HomeController extends Controller {
         return $this->render($data);
     }
 
-    public function contentAction($id) {
+    public function contentAction(int $id) {
         $id = intval($id);
         BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogContentModel::find($id);
@@ -57,8 +57,7 @@ class HomeController extends Controller {
         return $this->render($blog);
     }
 
-    public function recommendAction($id) {
-        $id = intval($id);
+    public function recommendAction(int $id) {
         if (!BlogModel::canRecommend($id)) {
             return $this->renderFailure('一个用户只能操作一次！');
         }
@@ -67,7 +66,7 @@ class HomeController extends Controller {
         return $this->render($blog);
     }
 
-    public function suggestAction($keywords) {
+    public function suggestAction(string $keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();

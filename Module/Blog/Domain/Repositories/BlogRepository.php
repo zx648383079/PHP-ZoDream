@@ -14,6 +14,7 @@ use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
+use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
 use Zodream\Html\Page;
@@ -43,6 +44,18 @@ class BlogRepository {
         return $page->setPage($items);
     }
 
+    public static function getSelfList(string $keywords = '', int $category = 0, int $type = 0) {
+        return BlogPageModel::with('term')
+            ->where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'title');
+            })->when($category > 0, function ($query) use ($category) {
+                $query->where('term_id', $category);
+            })->when($type > 0, function ($query) use ($type) {
+                $query->where('type', $type - 1);
+            })->orderBy('id', 'desc')->page();
+    }
+
     public static function getSimpleList($sort = 'new', $category = null, $keywords = null,
                                    $user = null, $language = null, $programming_language = null,
                                    $tag = null, $limit = 5) {
@@ -55,7 +68,7 @@ class BlogRepository {
     }
 
     /**
-     * @param Query $query
+     * @param SqlBuilder $query
      * @param string $sort
      * @param null $category
      * @param null $keywords
@@ -63,9 +76,9 @@ class BlogRepository {
      * @param null $language
      * @param null $programming_language
      * @param null $tag
-     * @return Query
+     * @return SqlBuilder
      */
-    private static function bindQuery(Query $query, $sort = 'new', $category = null, $keywords = null,
+    private static function bindQuery(SqlBuilder $query, $sort = 'new', $category = null, $keywords = null,
                                       $user = null, $language = null, $programming_language = null,
                                       $tag = null) {
         return $query->where('open_type', '<>', BlogModel::OPEN_DRAFT)
@@ -84,7 +97,7 @@ class BlogRepository {
                     return $query->orderBy('created_at', 'desc');
                 }
                 if ($sort === 'recommend' || $sort === 'best') {
-                    return $query->orderBy('recommend', 'desc');
+                    return $query->orderBy('recommend_count', 'desc');
                 }
                 if ($sort === 'hot') {
                     return $query->orderBy('comment_count', 'desc');
@@ -192,7 +205,7 @@ class BlogRepository {
         }, 3600);
     }
 
-    public static function sourceBlog($id, $language = '') {
+    public static function sourceBlog(int $id, string $language = '') {
         $model = BlogModel::getOrNew($id, $language);
         if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
             throw new Exception('博客不存在');
@@ -204,7 +217,7 @@ class BlogRepository {
         return array_merge($data, BlogMetaModel::getMetaWithDefault($id));
     }
 
-    public static function save(array $data, $id = 0) {
+    public static function save(array $data, int $id = 0) {
         unset($data['id']);
         $model = BlogModel::findOrNew($id);
         $isNew = $model->isNewRecord;
@@ -235,13 +248,13 @@ class BlogRepository {
             throw new Exception($model->getFirstError());
         }
         if ($model->parent_id < 1) {
-            TagRelationshipModel::bind($model->id,
-                isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : [], $isNew);
-            $data = [];
+            TagRepository::addTag($model->id,
+                isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : []);
+            $asyncData = [];
             foreach ($async_column as $key) {
-                $data[$key] = $model->getAttributeSource($key);
+                $asyncData[$key] = $model->getAttributeSource($key);
             }
-            BlogModel::where('parent_id', $model->id)->update($data);
+            BlogModel::where('parent_id', $model->id)->update($asyncData);
         }
         BlogMetaModel::saveMeta($model->id, $data);
         event(new BlogUpdate($model, $isNew, time()));

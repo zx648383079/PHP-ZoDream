@@ -14,16 +14,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class BlogController extends Controller {
 
-    public function indexAction($keywords = '', $term_id = 0, $type = 0) {
-        $blog_list = BlogPageModel::with('term')
-            ->where('user_id', auth()->id())
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'title');
-            })->when(!empty($term_id), function ($query) use ($term_id) {
-                $query->where('term_id', intval($term_id));
-            })->when($type > 0, function ($query) use ($type) {
-                $query->where('type', $type - 1);
-            })->orderBy('id', 'desc')->page();
+    public function indexAction(string $keywords = '', int $term_id = 0, int $type = 0) {
+        $blog_list = BlogRepository::getSelfList($keywords, $term_id, $type);
         $term_list = TermModel::select('id', 'name')->all();
         return $this->show(compact('blog_list', 'term_list', 'keywords', 'term_id', 'type'));
     }
@@ -32,7 +24,7 @@ class BlogController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id, $language = null) {
+    public function editAction(int $id, string $language = '') {
         $model = BlogModel::getOrNew($id, $language);
         if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
             return $this->redirectWithMessage($this->getUrl('blog'), '博客不存在！');
@@ -43,7 +35,7 @@ class BlogController extends Controller {
         return $this->show('edit', compact('model', 'term_list', 'tags', 'metaItems'));
     }
 
-    public function saveAction(Request $request, $id = 0) {
+    public function saveAction(Request $request, int $id = 0) {
         try {
             $data = $request->get();
             $data['tags'] = $request->get('tag', []);
@@ -57,7 +49,7 @@ class BlogController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             BlogRepository::remove($id);
         } catch (\Exception $ex) {

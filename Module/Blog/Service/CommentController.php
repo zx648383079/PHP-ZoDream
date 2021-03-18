@@ -18,12 +18,13 @@ class CommentController extends ModuleController {
         ];
     }
 
-    public function indexAction($blog_id) {
+    public function indexAction(int $blog_id) {
         $hot_comments = CommentRepository::getHot($blog_id, 4);
         return $this->show(compact('hot_comments', 'blog_id'));
     }
 
-    public function moreAction($blog_id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+    public function moreAction(int $blog_id, int $parent_id = 0,
+                               string $sort = 'created_at', string $order = 'desc') {
         list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
         $comment_list = CommentModel::with('replies')
             ->where([
@@ -45,7 +46,7 @@ class CommentController extends ModuleController {
         return $this->renderData($comment);
     }
 
-    public function disagreeAction($id) {
+    public function disagreeAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -55,10 +56,10 @@ class CommentController extends ModuleController {
         }
         $model = CommentModel::find($id);
         $model->agreeThis(false);
-        return $this->renderData($model->disagree);
+        return $this->renderData($model->disagree_count);
     }
 
-    public function agreeAction($id) {
+    public function agreeAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -68,14 +69,10 @@ class CommentController extends ModuleController {
         }
         $model = CommentModel::find($id);
         $model->agreeThis();
-        return $this->renderData($model->agree);
+        return $this->renderData($model->agree_count);
     }
 
-    public function reportAction($id) {
+    public function reportAction(int $id) {
 
-    }
-
-    public function logAction() {
-        CommentModel::alias('c');
     }
 }

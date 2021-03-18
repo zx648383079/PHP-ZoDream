@@ -17,8 +17,8 @@ namespace Module\Blog\Domain\Model;
  * @property integer $parent_id
  * @property integer $user_id
  * @property integer $blog_id
- * @property integer $agree
- * @property integer $disagree
+ * @property integer $agree_count
+ * @property integer $disagree_count
  * @property integer $position
  */
 class CommentPageModel extends CommentModel {

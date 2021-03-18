@@ -77,7 +77,7 @@ function bindBlog(id: number, type: number, langs = {}) {
         }
         $('.book-body .tools .comment b').text(data.data.comment_count);
         $('.book-body .tools .click b').text(data.data.click_count);
-        $('.book-body .tools .recommend-blog b').text(data.data.recommend);
+        $('.book-body .tools .recommend-blog b').text(data.data.recommend_count);
     });
     let commentBox = $('.book-footer');
     if (commentBox.length > 0) {

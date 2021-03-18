@@ -7,7 +7,8 @@ use Module\Blog\Domain\Model\CommentFullModel;
 
 class CommentController extends Controller {
 
-    public function indexAction($blog_id = 0, $keywords = '', $email = '', $name = '') {
+    public function indexAction(int $blog_id = 0,
+                                string $keywords = '', string $email = '', string $name = '') {
         $comment_list = CommentFullModel::with('blog')
             ->when(!empty($blog_id), function ($query) use ($blog_id) {
                 $query->where('blog_id', intval($blog_id));
@@ -21,7 +22,7 @@ class CommentController extends Controller {
         return $this->renderPage($comment_list);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         CommentModel::where('id', $id)->delete();
         return $this->renderData(true);
     }

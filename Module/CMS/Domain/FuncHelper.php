@@ -589,7 +589,7 @@ class FuncHelper {
             $args['preview'] = $_GET['preview'];
         }
         if (Str::endWith($data, ',false')) {
-            return url(substr($data, 0, strlen($data) - 6), $args, true, false);
+            return url(substr($data, 0, strlen($data) - 6), $args, false);
         }
         return url($data, $args);
     }

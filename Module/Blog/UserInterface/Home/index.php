@@ -132,7 +132,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
             <a class="language" href="<?=$this->url('./', ['programming_language' => $item->programming_language])?>"><i class="fa fa-code"></i><b><?=$item->programming_language?></b></a>
             <?php endif;?>
             <span class="comment"><i class="fa fa-comments"></i><b><?=$item->comment_count?></b></span>
-            <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item->recommend?></b></span>
+            <span class="agree"><i class="fas fa-thumbs-up"></i><b><?=$item->recommend_count?></b></span>
             <span class="click"><i class="fa fa-eye"></i><b><?=$item->click_count?></b></span>
         </dd>
     </dl>

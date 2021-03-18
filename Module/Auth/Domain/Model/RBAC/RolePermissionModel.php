@@ -15,7 +15,7 @@ class RolePermissionModel extends Model {
     protected $primaryKey = false;
 
     public static function tableName() {
-        return 'role_permission';
+        return 'rbac_role_permission';
     }
 
     protected function rules() {

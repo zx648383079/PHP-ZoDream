@@ -354,7 +354,7 @@ class CreateShopTables extends Migration {
     }
 
     private function findOrNewById(Builder $query, array $data) {
-        $count = $query->where('id', $data['id'])->count();
+        $count = (clone $query)->where('id', $data['id'])->count();
         if ($count > 0) {
             return;
         }
@@ -404,19 +404,19 @@ class CreateShopTables extends Migration {
             $table->id();
             $table->uint('cat_id');
             $table->string('title', 100)->comment('文章名');
-            $table->string('keywords', 200)->comment('关键字');
-            $table->string('thumb', 200)->comment('缩略图');
-            $table->string('description', 200)->comment('关键字');
-            $table->string('brief', 200)->comment('简介');
-            $table->string('url', 200)->comment('链接');
-            $table->string('file', 200)->comment('下载内容');
+            $table->string('keywords', 200)->default('')->comment('关键字');
+            $table->string('thumb', 200)->default('')->comment('缩略图');
+            $table->string('description', 200)->default('')->comment('关键字');
+            $table->string('brief', 200)->default('')->comment('简介');
+            $table->string('url', 200)->default('')->comment('链接');
+            $table->string('file', 200)->default('')->comment('下载内容');
             $table->text('content')->comment('内容');
             $table->timestamps();
         })->append(ArticleCategoryModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 100)->comment('文章分类名');
-            $table->string('keywords', 200)->comment('关键字');
-            $table->string('description', 200)->comment('关键字');
+            $table->string('keywords', 200)->default('')->comment('关键字');
+            $table->string('description', 200)->default('')->comment('关键字');
             $table->uint('parent_id')->default(0);
             $table->uint('position', 3)->default(99);
         });
@@ -644,7 +644,7 @@ class CreateShopTables extends Migration {
             $table->string('name', 30);
             $table->string('width', 20);
             $table->string('height', 20);
-            $table->string('template');
+            $table->string('template')->default('');
             $table->timestamps();
         });
     }

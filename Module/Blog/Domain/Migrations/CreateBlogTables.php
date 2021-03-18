@@ -34,7 +34,7 @@ class CreateBlogTables extends Migration {
             $table->uint('user_id');
             $table->uint('term_id');
             $table->bool('type')->default(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
-            $table->uint('recommend')->default(0);
+            $table->uint('recommend_count')->default(0);
             $table->uint('comment_count')->default(0);
             $table->uint('click_count')->default(0);
             $table->uint('open_type', 1)->default(0)->comment('公开类型');
@@ -66,8 +66,8 @@ class CreateBlogTables extends Migration {
             $table->uint('blog_id');
             $table->string('ip', 120)->default('');
             $table->string('agent')->default('');
-            $table->uint('agree')->default(0);
-            $table->uint('disagree')->default(0);
+            $table->uint('agree_count')->default(0);
+            $table->uint('disagree_count')->default(0);
             $table->bool('approved')->default(2);
             $table->timestamp('created_at');
         })->append(BlogLogModel::tableName(), function(Table $table) {

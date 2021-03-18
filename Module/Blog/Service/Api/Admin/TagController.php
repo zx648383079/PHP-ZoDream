@@ -4,17 +4,17 @@ namespace Module\Blog\Service\Api\Admin;
 use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
+use Module\Blog\Domain\Repositories\TagRepository;
 
 class TagController extends Controller {
 
-    public function indexAction($keywords = null) {
-        $model_list = TagModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, 'name');
-            })->orderBy('id', 'desc')->page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '') {
+        return $this->renderPage(
+            TagRepository::getList($keywords)
+        );
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = TagModel::findOrNew($id);
         return $this->render($model);
     }
@@ -27,15 +27,14 @@ class TagController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
-        TagModel::where('id', $id)->delete();
-        TagRelationshipModel::where('tag_id', $id)->delete();
+    public function deleteAction(int $id) {
+        TagRepository::remove($id);
         return $this->renderData(true);
     }
 
     public function allAction() {
         return $this->renderData(
-            TagModel::query()->get('id', 'name')
+            TagRepository::allList()
         );
     }
 }

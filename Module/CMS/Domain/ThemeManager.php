@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Domain;
 
+use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
@@ -9,12 +10,10 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
-use Module\CMS\Module;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\SEO\Domain\Model\OptionModel;
+use Zodream\Database\DB;
 use Zodream\Database\Relation;
-use Zodream\Database\Schema\Schema;
-use Zodream\Database\Schema\Table;
 use Zodream\Disk\Directory;
 use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Json;
@@ -335,10 +334,10 @@ class ThemeManager {
         }
         if (!isset($data['type'])) {
             $data['type'] = 'text';
-        } elseif (strpos($data['type'], '@model:') === 0) {
+        } elseif (str_starts_with($data['type'], '@model:')) {
             $data['setting']['option']['model'] = $this->getCacheId($data['type']);
             $data['type'] = 'model';
-        } elseif (strpos($data['type'], '@linkage:') === 0) {
+        } elseif (str_starts_with($data['type'], '@linkage:')) {
             $data['setting']['option']['linkage_id'] = $this->getCacheId($data['type']);
             $data['type'] = 'linkage';
         }
@@ -470,9 +469,9 @@ class ThemeManager {
         $model_list = ModelModel::query()->all();
         foreach ($model_list as $model) {
             $scene = CMSRepository::scene()->setModel($model);
-            Schema::dropTable($scene->getExtendTable());
+            CreateCmsTables::dropTable($scene->getExtendTable());
             if ($scene instanceof MultiScene) {
-                Schema::dropTable($scene->getMainTable());
+                CreateCmsTables::dropTable($scene->getMainTable());
                 continue;
             }
             if (in_array($scene->getMainTable(), $truncateTables)) {
@@ -480,8 +479,10 @@ class ThemeManager {
             }
             $truncateTables[] = $scene->getMainTable();
         }
+        $db = db();
+        $grammar = DB::schemaGrammar();
         foreach($truncateTables as $table) {
-            (new Table($table))->truncate();
+            $db->execute($grammar->compileTableTruncate($table));
         }
     }
 }

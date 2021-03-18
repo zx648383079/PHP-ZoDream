@@ -3,11 +3,18 @@ namespace Module\Blog\Domain\Repositories;
 
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
+use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Infrastructure\Support\Html;
+use Domain\Repositories\TagRepository as TagBase;
 
-class TagRepository {
+class TagRepository extends TagBase {
 
     private static $caches = [];
+
+    protected static function query(): SqlBuilder
+    {
+        return TagModel::query();
+    }
 
     public static function get() {
         return TagModel::query()->get();
@@ -67,5 +74,37 @@ class TagRepository {
             return Html::a($tag, ['./', 'tag' => $tag]);
         }, $tags), $content);
         return str_replace(array_keys($replace), array_values($replace), $content);
+    }
+
+    public static function addTag(int $blog, string|array $tags) {
+        static::bindTag(
+            TagRelationshipModel::query(),
+            $blog,
+            'blog_id',
+            $tags,
+            [
+                'blog_count' => 1
+            ]
+        );
+    }
+
+    public static function searchBlogTag(string $keywords): array {
+        return TagRepository::searchTag(
+            TagRelationshipModel::query(),
+            'blog_id',
+            $keywords
+        );
+    }
+
+    protected static function onAfterBind(array $tagId, array $addTag, array $delTag)
+    {
+        if (!empty($delTag)) {
+            TagModel::query()->whereIn('id', $delTag)->updateDecrement('blog_count');
+        }
+    }
+
+    public static function remove(int $id) {
+        TagModel::where('id', $id)->delete();
+        TagRelationshipModel::where('tag_id', $id)->delete();
     }
 }

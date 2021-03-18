@@ -39,7 +39,7 @@ class CreateAuthTables extends Migration {
             $table->string('avatar')->default('');
             $table->date('birthday')->default(date('Y-m-d'));
             $table->uint('money')->default(0);
-            $table->uint('credits')->default(0)->default('积分');
+            $table->uint('credits')->default(0)->comment('积分');
             $table->uint('parent_id')->default(0);
             $table->string('token', 60)->default(0);
             $table->uint('status', 2)->default(UserModel::STATUS_ACTIVE);

@@ -874,6 +874,16 @@ $acolor: $fg;
     text-align: center;
 }
 
+.video-box,
+.audio-box {
+    iframe,
+    video {
+        width: 100%;
+        height: 100vw;
+        max-height: 400px;
+    }
+}
+
 @media screen and (max-width: 1200px) {
     .book-skin {
         width: 100%;
@@ -971,7 +981,8 @@ $acolor: $fg;
                 display: block;
                 position: relative;
                 overflow-x: auto;
-                * {
+                p,
+                img {
                     word-break: normal;
                     width: auto;
                     white-space: pre-wrap;

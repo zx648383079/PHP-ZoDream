@@ -68,7 +68,7 @@ $this->title = '文章列表';
                 <?php endif;?>
             </td>
             <td>
-                推荐：<?=$item->recommend?>/
+                推荐：<?=$item->recommend_count?>/
                 评论：<a href="<?=$this->url('./@admin/comment', ['blog_id' => $item->id])?>">
                     <?=$item->comment_count?>
                 </a>

@@ -23,16 +23,16 @@ class PublishController extends Controller {
         ];
     }
 
-    public function indexAction(Request $request) {
+    public function indexAction(Request $request, int $id = 0) {
         try {
-            $model = BlogRepository::save($request->get(), $request->get('id'));
+            $model = BlogRepository::save($request->get(), $id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }
 
-    public function detailAction($id, $language = '') {
+    public function detailAction(int $id, string $language = '') {
         try {
             $model = BlogRepository::sourceBlog($id, $language);
         } catch (\Exception $ex) {
@@ -54,7 +54,7 @@ class PublishController extends Controller {
         return $this->render($data);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             BlogRepository::remove($id);
         } catch (\Exception $ex) {

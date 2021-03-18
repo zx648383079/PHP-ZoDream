@@ -25,7 +25,7 @@ class HomeController extends Controller {
     public function indexAction(
         string $sort = 'new', $category = null, $keywords = null,
         $user = null, $language = null, $programming_language = null,
-        $tag = null, $id = 0) {
+        $tag = null, int $id = 0) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
@@ -44,8 +44,7 @@ class HomeController extends Controller {
             'comment_list', 'new_list', 'term', 'tag', 'programming_language'));
     }
 
-    public function detailAction($id) {
-        $id = intval($id);
+    public function detailAction(int $id) {
         if ($id < 1) {
             return $this->redirect('./');
         }
@@ -82,7 +81,7 @@ class HomeController extends Controller {
         $id = intval($blog);
         BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogModel::query()->where('id', $id)->asArray()
-            ->first('click_count', 'recommend', 'comment_count');
+            ->first('click_count', 'recommend_count', 'comment_count');
         return $this->renderData($blog);
     }
 
@@ -93,7 +92,7 @@ class HomeController extends Controller {
         }
         $model = BlogModel::find($id);
         $model->recommendThis();
-        return $this->renderData($model->recommend);
+        return $this->renderData($model->recommend_count);
     }
 
     public function suggestionAction($keywords) {

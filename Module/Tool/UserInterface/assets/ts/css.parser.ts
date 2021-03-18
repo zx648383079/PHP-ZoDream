@@ -94,13 +94,20 @@
                 pos = endIndex;
                 return getTextBlock(line);
             }
+            // 有可能最后的属性没有 ; 结束符
+            const blockEnd = content.indexOf('}', pos);
+            if (blockEnd > 0 && (blockStart < 0 || blockStart > blockEnd)) {
+                const line = content.substring(pos, blockEnd);
+                pos = blockEnd - 1;
+                return getTextBlock(line);
+            }
             if (blockStart < 0) {
                 const line = content.substring(pos);
                 pos = content.length;
                 return getTextBlock(line);
             }
             const name = content.substring(pos, blockStart);
-            pos = blockStart + 1;
+            pos = blockStart;
             return {
                 type: BLOCK_TYPE.STYLE_GROUP,
                 name: name.split(',').map(i => i.trim()).filter(i => i.length > 0),
@@ -387,7 +394,7 @@
             }
             if (code === '.') {
                 appendTag();
-                tag = (args.length > 0 ? '&' : '') + code;
+                tag = (args.length > 0 && !isEmptyCode(name.charAt(pos - 2)) ? '&' : '') + code;
                 continue;
             }
             if (code === ':') {

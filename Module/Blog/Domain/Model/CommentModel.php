@@ -21,8 +21,8 @@ use Module\Blog\Domain\Entities\CommentEntity;
  * @property integer $parent_id
  * @property integer $user_id
  * @property integer $blog_id
- * @property integer $agree
- * @property integer $disagree
+ * @property integer $agree_count
+ * @property integer $disagree_count
  * @property integer $position
  */
 class CommentModel extends CommentEntity {
@@ -75,13 +75,13 @@ class CommentModel extends CommentEntity {
 
     public static function getHots() {
 	    return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
-            ->orderBy('c.agree desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
+            ->orderBy('c.agree_count desc')->select('c.id, c.name, c.content, c.agree_count, c.create_at, c.post_id, p.title')
             ->limit(5)->asArray()->all();
     }
 
     public static function getNew() {
         return static::find()->alias('c')->left('posts p', ['p.id' => 'c.post_id'])
-            ->orderBy('c.create_at desc')->select('c.id, c.name, c.content, c.agree, c.create_at, c.post_id, p.title')
+            ->orderBy('c.create_at desc')->select('c.id, c.name, c.content, c.agree_count, c.create_at, c.post_id, p.title')
             ->limit(5)->asArray()->all();
     }
 
@@ -102,9 +102,9 @@ class CommentModel extends CommentEntity {
      */
     public function agreeThis($isAgree = true) {
         if ($isAgree) {
-            $this->agree ++;
+            $this->agree_count ++;
         } else {
-            $this->disagree ++;
+            $this->disagree_count ++;
         }
         if (!$this->save()) {
             return false;

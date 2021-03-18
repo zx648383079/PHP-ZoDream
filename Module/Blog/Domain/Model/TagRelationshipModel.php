@@ -2,7 +2,6 @@
 namespace Module\Blog\Domain\Model;
 
 use Domain\Model\Model;
-use Domain\Model\ModelHelper;
 
 
 /**
@@ -34,24 +33,6 @@ class TagRelationshipModel extends Model {
             'blog_id' => 'Blog Id',
             'position' => 'Position',
         ];
-    }
-
-    public static function bind($blog_id, array $tags, $isNew) {
-	    list($add, $_, $del) = ModelHelper::splitId(
-	        $tags,
-	        $isNew ? [] : static::where('blog_id', $blog_id)->pluck('tag_id'),
-        );
-	    if (!empty($del)) {
-            static::where('blog_id', $blog_id)->whereIn('tag_id', $del)->delete();
-            TagModel::query()->whereIn('id', $del)->updateDecrement('blog_count');
-        }
-        if (empty($add)) {
-	        return;
-        }
-        static::query()->insert(array_map(function ($tag_id) use ($blog_id) {
-            return compact('tag_id', 'blog_id');
-        }, $add));
-        TagModel::query()->whereIn('id', $add)->updateIncrement('blog_count', 1);
     }
 
 }

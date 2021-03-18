@@ -157,7 +157,7 @@ $this->set([
     <div class="tools">
         <span class="comment"><i class="fa fa-comments"></i><b><?=$blog->comment_count?></b></span>
         <span class="click"><i class="fa fa-eye"></i><b><?=$blog->click_count?></b></span>
-        <span class="agree recommend-blog"><i class="fas fa-thumbs-up"></i><b><?=$blog->recommend?></b></span>
+        <span class="agree recommend-blog"><i class="fas fa-thumbs-up"></i><b><?=$blog->recommend_count?></b></span>
     </div>
 </div>
 

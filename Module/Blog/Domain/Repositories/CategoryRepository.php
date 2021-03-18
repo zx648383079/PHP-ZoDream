@@ -34,7 +34,7 @@ class CategoryRepository {
      * @param int $id
      * @return TermModel[]|TermModel|null
      */
-    public static function get($id = -1) {
+    public static function get(int $id = -1) {
         static::boot();
         if (!is_integer($id)) {
             $id = intval($id);

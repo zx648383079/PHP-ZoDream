@@ -16,7 +16,7 @@ use Domain\Model\Model;
  */
 class PermissionModel extends Model {
     public static function tableName() {
-        return 'permission';
+        return 'rbac_permission';
     }
 
     protected function rules() {

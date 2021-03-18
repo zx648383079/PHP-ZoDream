@@ -2,10 +2,13 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Video\Domain\Models\LogModel;
+use Module\Video\Domain\Models\TagModel;
 use Module\Video\Domain\Models\VideoModel;
+use Module\Video\Domain\Models\VideoTagModel;
 
 class VideoRepository {
 
@@ -129,5 +132,25 @@ class VideoRepository {
             $data[$k] = intval($v);
         }
         return $data;
+    }
+
+    public static function addTag(int $video, string|array $tags) {
+        TagRepository::bindTag(
+            VideoTagModel::query(),
+            $video,
+            'video_id',
+            $tags,
+            [
+                'created_at' => time(),
+            ],
+        );
+    }
+
+    public static function searchVideoTag(string $keywords): array {
+        return TagRepository::searchTag(
+            VideoTagModel::query(),
+            'video_id',
+            $keywords
+        );
     }
 }

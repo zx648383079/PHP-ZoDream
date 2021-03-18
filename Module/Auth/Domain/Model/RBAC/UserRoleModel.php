@@ -15,7 +15,7 @@ class UserRoleModel extends Model {
     protected $primaryKey = false;
 
     public static function tableName() {
-        return 'user_role';
+        return 'rbac_user_role';
     }
 
     protected function rules() {

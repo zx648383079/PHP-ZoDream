@@ -23,7 +23,7 @@ use Zodream\Helpers\Time;
  * @property integer $user_id
  * @property integer $term_id
  * @property integer $type
- * @property integer $recommend
+ * @property integer $recommend_count
  * @property integer $comment_count
  * @property integer $click_count
  * @property integer $open_type
@@ -167,7 +167,7 @@ class BlogModel extends BlogEntity {
      * @throws \Exception
      */
     public function recommendThis() {
-        $this->recommend++;
+        $this->recommend_count++;
         if (!$this->save()) {
             return false;
         }

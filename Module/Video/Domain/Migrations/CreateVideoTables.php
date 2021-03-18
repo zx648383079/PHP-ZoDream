@@ -4,7 +4,9 @@ namespace Module\Video\Domain\Migrations;
 use Module\Video\Domain\Models\CommentModel;
 use Module\Video\Domain\Models\LogModel;
 use Module\Video\Domain\Models\MusicModel;
+use Module\Video\Domain\Models\TagModel;
 use Module\Video\Domain\Models\VideoModel;
+use Module\Video\Domain\Models\VideoTagModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -62,6 +64,14 @@ class CreateVideoTables extends Migration {
             $table->uint('user_id');
             $table->uint('action');
             $table->timestamp('created_at');
+        })->append(TagModel::tableName(), function(Table $table) {
+            $table->id();
+            $table->string('name', 20);
+            $table->timestamp('created_at');
+        })->append(VideoTagModel::tableName(), function(Table $table) {
+            $table->comment('视频标签关联表');
+            $table->uint('tag_id');
+            $table->uint('video_id');
         })->autoUp();
     }
 }

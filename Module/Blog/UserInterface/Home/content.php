@@ -2,18 +2,24 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Infrastructure\HtmlExpand;
+use Infrastructure\Player;
 /** @var $this View */
 $html = $blog->toHtml();
 ?>
 <?php if($blog->can_read):?>
-    <?php if($blog->audio_url):?>
+    <?php if(isset($metaItems['audio_url']) && !empty($metaItems['audio_url'])):?>
     <div class="audio-box">
-        <audio src="<?=$blog->audio_url?>"></audio>
+        <?= Player::audioPlayer([
+                'url' => $metaItems['audio_url'],
+            'cover' => $blog->thumb,
+            'name' => $blog->title,
+            'artist' => $blog->user->name
+        ], $this) ?>
     </div>
     <?php endif;?>
-    <?php if($blog->video_url):?>
+    <?php if(isset($metaItems['video_url']) && !empty($metaItems['video_url'])):?>
     <div class="video-box">
-        <video src="<?=$blog->video_url?>"></video>
+        <?= Player::videoPlayer($metaItems['video_url'], $this) ?>
     </div>
     <?php endif;?>
    <?=$html?>

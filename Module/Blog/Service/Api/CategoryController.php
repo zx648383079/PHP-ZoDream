@@ -20,7 +20,7 @@ class CategoryController extends Controller {
         return $this->renderData(CategoryRepository::get());
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = TermModel::find($id);
         return $this->renderData($model);
     }
@@ -33,7 +33,7 @@ class CategoryController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         TermModel::where('id', $id)->delete();
         return $this->renderData(true);
     }

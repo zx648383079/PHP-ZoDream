@@ -21,7 +21,7 @@ class TagController extends Controller {
         return $this->renderData(TagRepository::get());
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = TagModel::find($id);
         return $this->render($model);
     }
@@ -34,7 +34,7 @@ class TagController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         TagModel::where('id', $id)->delete();
         TagRelationshipModel::where('tag_id', $id)->delete();
         return $this->renderData(true);

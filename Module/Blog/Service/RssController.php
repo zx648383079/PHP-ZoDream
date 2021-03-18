@@ -5,11 +5,11 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\ModuleController;
 use Zodream\Html\Rss\Rss;
 use Zodream\Html\Rss\RssItem;
-use Zodream\Infrastructure\Http\Response;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class RssController extends ModuleController {
 
-    public function indexAction(Response $response) {
+    public function indexAction(Output $response) {
         $key = '__ZoDream_rss__';
         if (cache()->has($key)) {
             return $response->xml(cache($key));

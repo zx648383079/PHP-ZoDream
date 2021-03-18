@@ -22,7 +22,7 @@ class HomeController extends Controller {
     public function notFoundAction() {
         view()->setDirectory(app_path()
             ->directory('UserInterface/Home'));
-        app('response')->setStatusCode(404);
+        response()->statusCode(404);
         return $this->show('/404');
     }
 }
