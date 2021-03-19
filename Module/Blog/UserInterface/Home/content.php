@@ -11,15 +11,18 @@ $html = $blog->toHtml();
     <div class="audio-box">
         <?= Player::audioPlayer([
                 'url' => $metaItems['audio_url'],
-            'cover' => $blog->thumb,
-            'name' => $blog->title,
-            'artist' => $blog->user->name
+                'cover' => $blog->thumb,
+                'name' => $blog->title,
+                'artist' => $blog->user->name
         ], $this) ?>
     </div>
     <?php endif;?>
     <?php if(isset($metaItems['video_url']) && !empty($metaItems['video_url'])):?>
     <div class="video-box">
-        <?= Player::videoPlayer($metaItems['video_url'], $this) ?>
+        <?= Player::videoPlayer([
+                'url' => $metaItems['video_url'],
+                'cover' => $blog->thumb,
+        ], $this) ?>
     </div>
     <?php endif;?>
    <?=$html?>

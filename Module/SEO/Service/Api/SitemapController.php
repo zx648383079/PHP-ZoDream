@@ -14,6 +14,6 @@ class SitemapController extends Controller {
 
     public function indexAction() {
         $map = SiteMapListener::create();
-        return $this->renderData($map->getIterator());
+        return $this->renderData($map->getIterator()->getArrayCopy());
     }
 }

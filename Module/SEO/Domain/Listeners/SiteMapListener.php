@@ -2,6 +2,8 @@
 namespace Module\SEO\Domain\Listeners;
 
 use Module\SEO\Domain\SiteMap;
+use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Route\ModuleRoute;
 use Zodream\Route\Router;
 use Zodream\ThirdParty\API\Search;
 
@@ -34,13 +36,20 @@ class SiteMapListener {
     }
 
     public static function create() {
+        $rewritable = config('route.rewrite');
+        $configure = require (string)config()->configPath('route');
+        if (!empty($configure) && isset($configure['rewrite'])) {
+            config()->set('route.rewrite', $configure['rewrite']);
+        }
         url()->useCustomScript();
 	    $map = new SiteMap();
         $map->add(url('/'), time());
-        $modules = config()->moduleConfigs('Home')['modules'];
+        $modules = config('route.modules');
+        /** @var ModuleRoute $route */
+        $route = app(ModuleRoute::class);
 	    foreach ($modules as $path => $module) {
-            app(Router::class)->module($path, function () use ($map, $module) {
-                $instance = app(Router::class)->moduleInstance($module);
+            $route->module($path, function () use ($map, $module, $route) {
+                $instance = $route->moduleInstance($module, app(HttpContext::class));
                 if (method_exists($instance, 'openLinks')) {
                     call_user_func([$instance, 'openLinks'], $map);
                 }
@@ -48,6 +57,7 @@ class SiteMapListener {
         }
         $map->toXml();
         url()->useCustomScript(false);
+        config()->set('route.rewrite', $rewritable);
         return $map;
     }
 }
