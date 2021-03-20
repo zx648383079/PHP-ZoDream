@@ -23,6 +23,8 @@ class CreateDocumentTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->string('name', 35)->comment('项目名');
+            $table->string('cover', 200)->default('')
+                ->comment('项目封面');
             $table->uint('type', 1)->default(0)->comment('文档类型');
             $table->string('description')->default('')->comment('描述');
             $table->text('environment')->nullable()->comment('环境域名,json字符串');

@@ -4,6 +4,7 @@ namespace Module\Document\Domain\Repositories;
 
 use Exception;
 use Module\Document\Domain\Model\PageModel;
+use Parsedown;
 use Zodream\Html\Tree;
 
 class PageRepository {
@@ -37,5 +38,15 @@ class PageRepository {
 
     public static function removeSelf(int $id) {
         PageModel::where('id', $id)->orWhere('parent_id', $id)->delete();
+    }
+
+    public static function getRead(int|PageModel $id): array {
+        $model = $id instanceof PageModel ? $id : static::get($id);
+        return array_merge(
+              $model->toArray(),
+              [
+                  'content' => (new Parsedown())->setSafeMode(true)->text($model->content)
+              ]
+        );
     }
 }

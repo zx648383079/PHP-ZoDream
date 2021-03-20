@@ -12,7 +12,7 @@ use Module\Document\Domain\Model\ProjectVersionModel;
 
 class ProjectRepository {
 
-    public static function getList(string $keywords = '') {
+    public static function getList(string $keywords = '', int $type = 0) {
         return ProjectModel::when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })->where(function ($query) {
@@ -22,16 +22,26 @@ class ProjectRepository {
                 }
                 $query->orWhere('user_id', auth()->id());
             })
+            ->when($type > 0, function ($query) use ($type) {
+                $query->where('type', $type - 1);
+            })
             ->orderBy('id', 'desc')->page();
     }
 
-    public static function getSelfList(string $keywords = '') {
+    public static function getSelfList(string $keywords = '', int $type = 0) {
         return ProjectModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
+            })->when($type > 0, function ($query) use ($type) {
+                $query->where('type', $type - 1);
             })->orderBy('id', 'desc')->page();
     }
 
+    /**
+     * @param int $id
+     * @return ProjectModel
+     * @throws Exception
+     */
     public static function get(int $id) {
         $model = ProjectModel::where('id', $id)
             ->where(function ($query) {
@@ -187,5 +197,38 @@ class ProjectRepository {
             ->get();
         array_unshift($items, ['id' => 0, 'name' => 'main']);
         return $items;
+    }
+
+    public static function catalog(int $id, int $version) {
+        $project = static::get($id);
+        return $project->type > 0 ? ApiRepository::tree($id, $version)
+            : PageRepository::tree($id, $version);
+    }
+
+    public static function canOpen(int $id): bool {
+        return ProjectModel::where('id', $id)
+            ->where(function ($query) {
+                $query->where('status', ProjectModel::STATUS_PUBLIC);
+                if (auth()->guest()) {
+                    return;
+                }
+                $query->orWhere('user_id', auth()->id());
+            })->count() > 0;
+    }
+
+    public static function page(int $project, int $id) {
+        $model = ProjectRepository::get($project);
+        if ($model->type < 1) {
+            $page = PageRepository::get($id);
+            if ($page->project_id !== $project) {
+                throw new Exception('文档错误');
+            }
+            return PageRepository::getRead($page);
+        }
+        $api = ApiRepository::get($id);
+        if ($api->project_id !== $project) {
+            throw new Exception('文档错误');
+        }
+        return ApiRepository::getRead($api);
     }
 }

@@ -97,4 +97,20 @@ class ApiRepository {
     public static function fieldRemove(int $id) {
         FieldModel::where('id', $id)->orWhere('parent_id', $id)->delete();
     }
+
+    public static function canOpen(int $id): bool {
+        $project_id = ApiModel::where('id', $id)
+            ->value('project_id');
+        return $project_id > 0 && ProjectRepository::canOpen($project_id);
+    }
+
+    public static function getRead(int|ApiModel $id): array {
+        $model = $id instanceof ApiModel ? $id : static::get($id);
+        list($header, $request, $response) = ApiRepository::fieldList($model->id);
+        $example = MockRepository::getDefaultData($model->id);
+        return array_merge(
+            $model->toArray(),
+            compact('header', 'request', 'response', 'example')
+        );
+    }
 }

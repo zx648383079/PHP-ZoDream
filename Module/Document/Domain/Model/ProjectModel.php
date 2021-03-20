@@ -11,6 +11,7 @@ use Zodream\Helpers\Json;
  * @property integer $id
  * @property integer $user_id
  * @property string $name
+ * @property string $cover
  * @property string $description
  * @property string $environment
  * @property integer $status
@@ -36,6 +37,7 @@ class ProjectModel extends Model {
             'user_id' => 'required|int',
             'name' => 'required|string:0,35',
             'description' => 'string:0,255',
+            'cover' => 'string:0,255',
             'environment' => '',
             'status' => 'int:0,9',
             'type' => 'int:0,9',
@@ -51,6 +53,7 @@ class ProjectModel extends Model {
             'user_id' => 'User Id',
             'name' => '项目名称',
             'description' => '项目描述',
+            'cover' => '项目封面',
             'environment' => '环境',
             'status' => '状态',
             'type' => '类型',
@@ -92,6 +95,11 @@ class ProjectModel extends Model {
             return;
         }
         $this->__attributes['environment'] = Json::encode($env);
+    }
+
+    public function getCoverAttribute() {
+        $thumb = $this->getAttributeSource('cover');
+        return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
     }
 
     public function canRead() {
