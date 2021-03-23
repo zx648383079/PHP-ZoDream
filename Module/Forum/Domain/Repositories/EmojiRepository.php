@@ -12,6 +12,7 @@ use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
 
 class EmojiRepository {
+
     public static function getList(string $keywords = '', int $cat_id = 0) {
         return EmojiModel::with('category')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
@@ -77,6 +78,27 @@ class EmojiRepository {
         return $model->id;
     }
 
+    /**
+     * 生成html
+     * @param string $content
+     * @return string
+     */
+    public static function render(string $content): string {
+        if (empty($content) || !str_contains($content, '[')) {
+            return $content;
+        }
+        $maps = static::maps();
+        return preg_replace_callback('/\[(.+?)\]/', function ($match) use ($maps) {
+            if (isset($maps[$match[1]])) {
+                return sprintf(
+                    '<img src="%s">',
+                    $maps[$match[1]]
+                );
+            }
+            return $match[0];
+        }, $content);
+    }
+
     public static function import(File $file) {
         $zip = new ZipStream($file, \ZipArchive::RDONLY);
         $folder = $file->getDirectory()->directory('emoji'.time());
@@ -134,5 +156,23 @@ class EmojiRepository {
            return Arr::format(EmojiCategoryModel::with('items')
                ->orderBy('id', 'asc')->get());
         });
+    }
+
+    public static function maps() {
+        static $cache;
+        if (!empty($cache)) {
+            return $cache;
+        }
+        $cache = [];
+        $data = static::all();
+        foreach ($data as $group) {
+            foreach ($group['items'] as $item) {
+                if ($item['type'] > 0) {
+                    continue;
+                }
+                $cache[$item['name']] = $item['content'];
+            }
+        }
+        return $cache;
     }
 }
