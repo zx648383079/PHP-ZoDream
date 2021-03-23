@@ -5,6 +5,7 @@ namespace Module\Forum\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
+use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Arr;
@@ -81,13 +82,23 @@ class EmojiRepository {
         $folder = $file->getDirectory()->directory('emoji'.time());
         $folder->create();
         $zip->extractTo($folder);
-        $zip->close();;
-        $items = $folder->glob('map.json');
-        foreach ($items as $item) {
-            static::importBatch($item);
-        }
+        $zip->close();
+        static::mapFolder($folder);
         $folder->delete();
         $file->delete();
+    }
+
+    protected static function mapFolder(Directory $folder) {
+        $file = $folder->file('map.json');
+        if ($file->exist()) {
+            static::importBatch($file);
+            return;
+        }
+        $folder->map(function ($file) {
+            if ($file instanceof Directory) {
+                static::mapFolder($file);
+            }
+        });
     }
 
     protected static function importBatch(File $file) {
