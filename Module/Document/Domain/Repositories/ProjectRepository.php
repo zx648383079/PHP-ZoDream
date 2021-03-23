@@ -71,7 +71,6 @@ class ProjectRepository {
         $model = $id > 0 ? self::getSelf($id) : new ProjectModel();
         $model->load($data);
         $model->user_id = auth()->id();
-        $model->status = 0;
         if (!$model->save()) {
             throw new Exception($model->getFirstError());
         }

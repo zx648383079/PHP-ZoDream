@@ -12,7 +12,7 @@ class PageRepository {
     public static function tree(int $project, int $version = 0) {
         $data = PageModel::where('project_id', $project)
             ->where('version_id', $version)
-            ->select('id', 'name', 'parent_id')
+            ->select('id', 'name', 'parent_id', 'type')
             ->orderBy('id', 'asc')->asArray()->get();
         return (new Tree($data))->makeTree();
     }

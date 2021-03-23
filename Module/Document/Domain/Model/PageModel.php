@@ -9,6 +9,7 @@ use Domain\Model\Model;
  * @package Module\Document\Domain\Model
  * @property integer $id
  * @property string $name
+ * @property integer $type
  * @property integer $project_id
  * @property integer $parent_id
  * @property string $content
@@ -25,6 +26,7 @@ class PageModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,35',
+            'type' => 'int:0,10',
             'project_id' => 'required|int',
             'parent_id' => 'int',
             'content' => '',

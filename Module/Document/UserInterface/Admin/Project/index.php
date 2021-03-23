@@ -8,7 +8,6 @@ bindProject({$project->id});
 JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
-?>
 
 <div class="version-bar">
             版本

@@ -16,7 +16,7 @@ $this->registerJs($js);
     <?= Form::text('name', true) ?>
     <?= Form::select('parent_id', [$tree_list, [0 => '-- 顶级 --']])?>
 
-    <div class="extent-box" <?=$model->parent_id < 1 ? ' style="display:none"' : ''?>>
+    <div class="extent-box" <?=$model->type > 0 ? ' style="display:none"' : ''?>>
         <?= Form::select('method', [$model->method_list])?>
         <?= Form::text('uri') ?>
         <?= Form::textarea('description') ?>

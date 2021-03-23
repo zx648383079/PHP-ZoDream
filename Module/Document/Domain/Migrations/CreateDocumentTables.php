@@ -41,6 +41,7 @@ class CreateDocumentTables extends Migration {
             $table->comment('项目接口表');
             $table->id();
             $table->string('name', 35)->comment('接口名');
+            $table->bool('type')->default(0)->comment('是否有内容,0为有内容');
             $table->string('method', 10)->default('POST')->comment('请求方式');
             $table->string('uri')->default('')->comment('接口地址');
             $table->uint('project_id')->comment('项目');
@@ -55,6 +56,7 @@ class CreateDocumentTables extends Migration {
             $table->uint('project_id')->comment('项目');
             $table->uint('version_id')->default(0)->comment('版本');
             $table->uint('parent_id')->default(0);
+            $table->bool('type')->default(0)->comment('是否有内容,0为有内容');
             $table->text('content')->nullable()->comment('内容');
             $table->timestamps();
         })->append(FieldModel::tableName(), function(Table $table) {

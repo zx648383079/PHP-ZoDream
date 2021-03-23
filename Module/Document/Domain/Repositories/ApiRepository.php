@@ -16,7 +16,7 @@ class ApiRepository {
     public static function tree(int $project, int $version = 0) {
         $data = ApiModel::where('project_id', $project)
             ->where('version_id', $version)
-            ->select('id', 'name', 'parent_id')
+            ->select('id', 'name', 'parent_id', 'type')
             ->orderBy('id', 'asc')->asArray()->get();
         return (new Tree($data))->makeTree();
     }
@@ -41,19 +41,117 @@ class ApiRepository {
     }
 
     public static function saveWeb(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
-        unset($data['id']);
-        $model = $id > 0 ? self::getSelf($id) : new ApiModel();
-        $model->load($data);
-        if (!$model->save()) {
-            throw new Exception($model->getFirstError());
-        }
-        if ($id < 1) {
+        $model = static::save($data);
+        if (!isset($data['id']) || $data['id'] < 1) {
             FieldModel::whereIn('id', ApiModel::clearStore())->update([
                 'api_id' => $model->id
             ]);
         }
         return $model;
+    }
+
+    public static function saveApi(array $data) {
+        $model = static::save($data);
+        $oldItems = [];
+        if (isset($data['id']) && $data['id'] > 0) {
+            $oldItems = FieldModel::where('api_id', $model->id)->get();
+        }
+        $doId = [];
+        $findId = function ($data) use ($oldItems, $doId) {
+            if (empty($oldItems)) {
+                return 0;
+            }
+            if (isset($data['id']) && $data['id'] > 0) {
+                return $data['id'];
+            }
+            foreach ($oldItems as $item) {
+                if (in_array($item['id'], $doId)) {
+                    continue;
+                }
+                $success = true;
+                foreach ([
+                    'name',
+                    'parent_id',
+                    'kind'
+                         ] as $key) {
+                    if ($item[$key] !== $data[$key]) {
+                        $success = false;
+                        break;
+                    }
+                }
+                if ($success) {
+                    return $item['id'];
+                }
+            }
+            return 0;
+        };
+        $saveField = function (callable $cb, $kind, $parent_id, $item) use ($model, &$doId, $findId) {
+            if (empty($item['name'])) {
+                return;
+            }
+            $item['kind'] = $kind;
+            $item['parent_id'] = $parent_id;
+            $id = static::saveField($model->id, $findId($item), $parent_id, $item);
+            if ($id < 1) {
+                return;
+            }
+            $doId[] = $id;
+            if (!isset($item['children']) || empty($item['children'])) {
+                return;
+            }
+            foreach ($item['children'] as $arg) {
+                $cb($kind, $id, $arg);
+            }
+        };
+        foreach ([
+            'header' => FieldModel::KIND_HEADER,
+            'request' => FieldModel::KIND_REQUEST,
+            'response' => FieldModel::KIND_RESPONSE
+                 ] as $key => $kind) {
+            if (!isset($data[$key]) || !is_array($data[$key])) {
+                continue;
+            }
+            foreach ($data[$key] as $item) {
+                $saveField($saveField, $kind, 0, $item);
+            }
+        }
+        $del = [];
+        foreach ($oldItems as $item)  {
+            if (in_array($item['id'], $doId)) {
+                continue;
+            }
+            $del[] = $item['id'];
+        }
+        if (!empty($del)) {
+            FieldModel::whereIn('id', $del)->delete();
+        }
+        return $model;
+    }
+
+    protected static function saveField(int $apiID, int $id, int $parentId, array $data): int {
+        unset($data['id']);
+        if ($id > 0) {
+            FieldModel::where('id', $id)
+                ->update(array_merge(
+                    $data,
+                    [
+                        'api_id' => $apiID,
+                        'parent_id' => $parentId,
+                        'updated_at' => time(),
+                    ]
+                ));
+            return $id;
+        } else {
+            return FieldModel::query()->insert(array_merge(
+                $data,
+                [
+                    'api_id' => $apiID,
+                    'parent_id' => $parentId,
+                    'updated_at' => time(),
+                    'created_at' => time()
+                ]
+            ));
+        }
     }
 
     public static function removeSelf(int $id) {

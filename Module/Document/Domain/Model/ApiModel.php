@@ -9,6 +9,7 @@ use Domain\Model\Model;
  * @package Module\Document\Domain\Model
  * @property integer $id
  * @property string $name
+ * @property integer $type
  * @property string $method
  * @property string $uri
  * @property integer $project_id
@@ -33,6 +34,7 @@ class ApiModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,35',
+            'type' => 'int:0,10',
             'method' => 'string:0,10',
             'uri' => 'string:0,255',
             'project_id' => 'required|int',

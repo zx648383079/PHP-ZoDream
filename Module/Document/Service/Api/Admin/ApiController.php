@@ -58,4 +58,10 @@ class ApiController extends Controller {
         );
     }
 
+    public function parseAction(string $content, int $kind = 1) {
+        return $this->renderData(
+            MockRepository::parseContent($content, $kind)
+        );
+    }
+
 }
