@@ -2,7 +2,8 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'CSS 美化/转SCSS';
+$this->title = 'CSS 美化/css2scss';
+$this->description = 'css beautify or css2scss';
 $js = <<<JS
 registerEditor('text/css');
 JS;
@@ -21,4 +22,12 @@ $this->registerJs($js);
     <div class="output-box">
         <textarea id="output" name="" placeholder="输出结果"></textarea>
     </div>
+</div>
+<div class="converter-tip">
+    <div class="tip-header">
+        css 转 scss
+    </div>
+    <p>
+        注意： css 转化成 scss, 不会提取颜色字体，尽可能的拆分 css 选择器，然后根据同类进行合并规则，当前并不会进行根据样式合并css选择器。
+    </p>
 </div>

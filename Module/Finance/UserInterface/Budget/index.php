@@ -24,25 +24,25 @@ $this->title = '生活预算';
                 </thead>
                 <tbody>
                 <?php foreach($model_list as $item): ?>
-                    <tr class="<?=$item->remain < 0 ? 'danger' : ''?>">
+                    <tr class="<?=$item['remain'] < 0 ? 'danger' : ''?>">
                         <td>
-                            <a href="<?=$this->url('./budget/statistics', ['id' => $item->id])?>" title="查看支出统计图">
-                                <?=$item->name?>
+                            <a href="<?=$this->url('./budget/statistics', ['id' => $item['id']])?>" title="查看支出统计图">
+                                <?=$item['name']?>
                             </a>
                         </td>
                         <td>
-                            <?=$item->budget?>
+                            <?=$item['budget']?>
                         </td>
                         <td>
-                            <?=$item->spent?>
+                            <?=$item['spent']?>
                         </td>
                         <td>
-                            <?=$item->remain?>
+                            <?=$item['remain']?>
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="<?=$this->url('./income/add_log', ['budget_id' => $item->id])?>">消费</a>
-                            <a class="btn btn-primary" href="<?=$this->url('./budget/edit', ['id' => $item->id])?>">编辑</a>
-                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./budget/delete', ['id' => $item->id])?>">删除</a>
+                            <a class="btn btn-primary" href="<?=$this->url('./income/add_log', ['budget_id' => $item['id']])?>">消费</a>
+                            <a class="btn btn-primary" href="<?=$this->url('./budget/edit', ['id' => $item['id']])?>">编辑</a>
+                            <a class="btn btn-danger" data-type="post" href="<?=$this->url('./budget/delete', ['id' => $item['id']])?>">删除</a>
                         </td>
                     </tr>
                 <?php endforeach?>

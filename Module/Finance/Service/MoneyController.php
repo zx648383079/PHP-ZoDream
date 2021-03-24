@@ -105,6 +105,7 @@ class MoneyController extends Controller {
     }
 
     public function confirmEarningsAction(int $id) {
+        $this->layout = false;
         try {
             $model = ProjectRepository::get($id);
         } catch (\Exception $ex) {

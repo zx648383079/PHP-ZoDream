@@ -3,11 +3,22 @@ namespace Module\Finance\Domain\Repositories;
 
 use Module\Finance\Domain\Model\BudgetModel;
 use Exception;
+use Zodream\Html\Page;
 
 class BudgetRepository {
 
     public static function getList() {
-        return BudgetModel::auth()->where('deleted_at', 0)->orderBy('id', 'desc')->page();
+        /** @var Page $page */
+        $page = BudgetModel::auth()->where('deleted_at', 0)->orderBy('id', 'desc')->page();
+        return $page->map(function (BudgetModel $item) {
+            $remain = $item->remain;
+            return array_merge($item->toArray(), compact('remain'));
+        });
+    }
+
+    public static function all() {
+        return BudgetModel::auth()->where('deleted_at', 0)
+            ->orderBy('id', 'desc')->get('id', 'name');
     }
 
     public static function refreshSpent() {
