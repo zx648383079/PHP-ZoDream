@@ -43,7 +43,7 @@ Temporary Items
 .apdisk
 
 # config
-Service/config/
+# Service/config/
 data/
 
 # composer
@@ -71,3 +71,5 @@ typings/
 node_modules/
 /html/json
 /package-lock.json
+
+html/assets/upload

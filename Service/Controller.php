@@ -1,12 +1,9 @@
 <?php
-namespace Service\Home;
+declare(strict_types=1);
+namespace Service;
 
 use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 
-    public $layout = 'main';
-
-    public function prepare() {
-    }
 }
