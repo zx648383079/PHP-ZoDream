@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Module\Disk\Domain;
 
 use Zodream\Disk\Stream;
-use Zodream\Infrastructure\Contracts\Response\ExpertObject;
+use Zodream\Infrastructure\Contracts\Response\ExportObject;
 
-class WebVTT implements ExpertObject {
+class WebVTT implements ExportObject {
 
     protected string $newLine = "\n";
     protected string $newBlock = "\n\n";

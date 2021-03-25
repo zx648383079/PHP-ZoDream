@@ -15,7 +15,7 @@ $this->registerJs($js);
         <a class="btn btn-success" href="<?=$this->url('./income/add_day_log')?>">一日三餐</a>
         <a class="btn btn-success" href="<?=$this->url('./income/batch_edit_log')?>">批量编辑</a>
         <a class="btn btn-success" data-type="import" href="javascript:;" data-url="<?=$this->url('./income/import')?>">导入</a>
-        <a class="btn btn-success" href="<?=$this->url('./income/export')?>">导出</a>
+        <a class="btn btn-success" href="<?=$this->url('./income/export', false)?>">导出</a>
     </div>
     <form class="form-horizontal" role="form">
         <div class="input-group">

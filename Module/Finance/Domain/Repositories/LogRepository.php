@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
+use Zodream\Html\Excel\Exporter;
 
 class LogRepository {
 
@@ -94,6 +96,34 @@ class LogRepository {
         })->update($data);
     }
 
+    public static function saveDay(string $day, int $account_id, int $channel_id = 0, int $budget_id = 0,
+                                   array $breakfast = [], array $lunch = [], array $dinner = []) {
+        $day = date('Y-m-d', strtotime($day));
+        $data = [];
+        foreach ([$breakfast, $lunch, $dinner] as $item) {
+            if (empty($item) || !isset($item['money']) || $item['money'] <= 0) {
+                continue;
+            }
+            $data[] = [
+                'type' => LogModel::TYPE_EXPENDITURE,
+                'money' => $item['money'],
+                'frozen_money' => 0,
+                'account_id' => intval($account_id),
+                'channel_id' => intval($channel_id),
+                'project_id' => 0,
+                'budget_id' => intval($budget_id),
+                'remark' => $item['remark'],
+                'trading_object' => isset($item['trading_object']) ? $item['trading_object'] : '',
+                'user_id' => auth()->id(),
+                'created_at' => time(),
+                'updated_at' => time(),
+                'happened_at' => sprintf('%s %s', $day, $item['time']),
+            ];
+        }
+        if (!empty($data)) {
+            LogModel::query()->insert($data);
+        }
+    }
     public static function import($file) {
         $file = (string)$file;
         if (!is_file($file)) {
@@ -109,15 +139,15 @@ class LogRepository {
         $account_id = 0;
         while (($data = fgetcsv($handle)) !== false) {
             if ($type === 0 && isset($data[0])) {
-                $type = strpos($data[0], '微信') !== false ? 1 : 2;
+                $type = str_contains($data[0], '微信') ? 1 : 2;
             }
             if ($status === 0) {
-                if (strpos($data[0], '---') === 0) {
+                if (str_starts_with($data[0], '---')) {
                     $status = 1;
                 }
                 continue;
             }
-            if (strpos($data[0], '---') === 0) {
+            if (str_starts_with($data[0], '---')) {
                 break;
             }
             $items = [];
@@ -180,5 +210,24 @@ class LogRepository {
         }
         fclose($handle);
         return true;
+    }
+
+    public static function export() {
+        return new Exporter('流水记录', [
+            'id' => 'ID',
+            'type' => '类型',
+            'money' => '金额',
+            'frozen_money' => '冻结金额',
+            'account_id' => '账户',
+            'channel_id' => '渠道',
+            'project_id' => '项目',
+            'budget_id' => '预算',
+            'remark' => '备注',
+            'out_trade_no' => '交易单号',
+            'created_at' => '记录时间',
+            'updated_at' => '更新时间',
+            'happened_at' => '发生时间',
+            'trading_object' => '交易对象',
+        ], LogModel::query());
     }
 }

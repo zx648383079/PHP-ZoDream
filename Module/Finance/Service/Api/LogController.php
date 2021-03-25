@@ -55,10 +55,7 @@ class LogController extends Controller {
             $request->get('project_id'),
             $request->get('channel_id'),
             $request->get('budget_id'));
-        return $this->render([
-            'data' => true,
-            'message' => sprintf('更新%d条数据', $row)
-        ]);
+        return $this->renderData(true, sprintf('更新%d条数据', $row));
     }
 
     public function importAction() {
@@ -75,36 +72,13 @@ class LogController extends Controller {
     }
 
     public function exportAction() {
-
+        return response()->export(LogRepository::export());
     }
 
     public function dayAction(
         string $day, int $account_id, int $channel_id = 0, int $budget_id = 0,
         array $breakfast = [], array $lunch = [], array $dinner = []) {
-        $day = date('Y-m-d', strtotime($day));
-        $data = [];
-        foreach ([$breakfast, $lunch, $dinner] as $item) {
-            if (empty($item) || !isset($item['money']) || $item['money'] <= 0) {
-                continue;
-            }
-            $data[] = [
-                'type' => LogModel::TYPE_EXPENDITURE,
-                'money' => $item['money'],
-                'frozen_money' => 0,
-                'account_id' => intval($account_id),
-                'channel_id' => intval($channel_id),
-                'project_id' => 0,
-                'budget_id' => intval($budget_id),
-                'remark' => $item['remark'],
-                'user_id' => auth()->id(),
-                'created_at' => time(),
-                'updated_at' => time(),
-                'happened_at' => sprintf('%s %s', $day, $item['time']),
-            ];
-        }
-        if (!empty($data)) {
-            LogModel::query()->insert($data);
-        }
+        LogRepository::saveDay($day, $account_id, $channel_id, $budget_id, $breakfast, $lunch, $dinner);
         return $this->renderData(true);
     }
 }
