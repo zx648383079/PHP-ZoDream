@@ -22,7 +22,16 @@ class PageController extends Controller {
 
     public function saveAction(Input $input) {
         try {
-            $model = PageRepository::save($input->get());
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,35',
+                'type' => 'int:0,10',
+                'project_id' => 'required|int',
+                'parent_id' => 'int',
+                'content' => '',
+                'version_id' => 'int',
+            ]);
+            $model = PageRepository::save($data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

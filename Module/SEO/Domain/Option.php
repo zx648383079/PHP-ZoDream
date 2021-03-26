@@ -34,7 +34,7 @@ class Option {
         /** @var OptionModel[]  $items */
         $items = OptionModel::query()->orderBy('position', 'desc')->get('code', 'value', 'type');
         foreach ($items as $item) {
-            $data[$item->code] = static::formatOption($item->getAttributeSource('value'), $item->type);
+            $data[$item->code] = static::formatOption((string)$item->getAttributeSource('value'), $item->type);
         }
         return $data;
     }
