@@ -1,20 +1,23 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\CheckIn\Service;
 
-use Module\Game\CheckIn\Domain\Model\CheckInModel;
+use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
 
 class HomeController extends Controller {
 
     public function indexAction() {
-        $model = CheckInModel::today()->where('user_id', auth()->id())->first();
+        $model = CheckinRepository::today();
         return $this->show(compact('model'));
     }
 
     public function checkInAction() {
-        $model = CheckInModel::checkIn(auth()->id(), CheckInModel::METHOD_APP);
-        if ($model) {
-            return $this->renderData($model);
+        try {
+            return $this->renderData(
+                CheckinRepository::check()
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure('签到失败');
     }
 }

@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\CheckIn\Service\Api;
 
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
+use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
 
 class HomeController extends Controller {
 
@@ -12,22 +14,25 @@ class HomeController extends Controller {
     }
 
     public function indexAction() {
-        $model = CheckInModel::today()->where('user_id', auth()->id())->first();
-        return $this->renderData($model);
+        return $this->renderData(
+            CheckinRepository::today()
+        );
     }
 
     public function checkInAction() {
-        $model = CheckInModel::checkIn(auth()->id(), CheckInModel::METHOD_APP);
-        if ($model) {
-            return $this->renderData($model);
+        try {
+            return $this->renderData(
+                CheckinRepository::check(CheckinRepository::formatMethod())
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure('签到失败');
     }
 
-    public function monthAction($month = null) {
-        $timestamp = empty($month) ? time() : strtotime($month);
-        $data = CheckInModel::month($timestamp)->where('user_id', auth()->id())->get();
-        return $this->renderData($data);
+    public function monthAction(string $month = '') {
+        return $this->renderData(
+            CheckinRepository::monthLog($month)
+        );
     }
 
 }

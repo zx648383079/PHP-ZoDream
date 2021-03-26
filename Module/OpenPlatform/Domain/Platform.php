@@ -30,6 +30,10 @@ class Platform {
         return $this->app['id'];
     }
 
+    public function type() {
+        return $this->app['type'];
+    }
+
     /**
      * 获取设置
      * @param string $store
@@ -64,7 +68,7 @@ class Platform {
     protected function getSignContent(array $data) {
         $data['appid'] = $this->app['appid'];
         $data['secret'] = $this->app['secret'];
-        if (strpos($this->app['sign_key'], '+') === false) {
+        if (!str_contains($this->app['sign_key'], '+')) {
             ksort($data);
             return implode('', array_keys($data)).$this->app['sign_key'];
         }
