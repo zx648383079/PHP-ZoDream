@@ -1,23 +1,30 @@
 <?php
+declare(strict_types=1);
 namespace Module\Exam\Service\Api;
 
-use Module\Exam\Domain\Model\CourseModel;
+use Module\Exam\Domain\Repositories\CourseRepository;
 
 class CourseController extends Controller {
 
-    public function indexAction($id) {
-        $course = CourseModel::find($id);
-        return $this->render($course);
+    public function indexAction(int $id) {
+        try {
+            return $this->render(
+                CourseRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
-    public function childrenAction($id) {
-        $data = CourseModel::with('children')
-            ->where('parent_id', intval($id))->get();
-        return $this->render(compact('data'));
+    public function childrenAction(int $id) {
+        return $this->renderData(
+            CourseRepository::children($id)
+        );
     }
 
     public function treeAction() {
-        $data = CourseModel::tree()->makeTree();
-        return $this->render(compact('data'));
+        return $this->render(
+            CourseRepository::all(true)
+        );
     }
 }

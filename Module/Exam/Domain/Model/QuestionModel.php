@@ -7,6 +7,23 @@ use Module\Exam\Domain\Model\CourseModel;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 
+/**
+ * Class QuestionModel
+ * @package Module\Exam\Domain\Model
+ * @property integer $id
+ * @property string $title
+ * @property string $image
+ * @property integer $course_id
+ * @property integer $parent_id
+ * @property integer $type
+ * @property integer $easiness
+ * @property string $content
+ * @property string  $dynamic
+ * @property string $answer
+ * @property string $analysis
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
 class QuestionModel extends QuestionEntity {
 
     public static $type_list = ['单选题', '多选题', '判断题', '简答题', '填空题'];

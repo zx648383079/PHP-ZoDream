@@ -7,14 +7,13 @@ use Module\Exam\Domain\Model\CourseModel;
 use Module\Exam\Domain\Model\PageEvaluateModel;
 use Module\Exam\Domain\Model\PageModel;
 use Module\Exam\Domain\Model\PageQuestionModel;
+use Module\Exam\Domain\Repositories\PageRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PageController extends Controller {
 
-    public function indexAction($keywords = null) {
-        $model_list = PageModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, 'name');
-        })->orderBy('end_at', 'desc')->page();
+    public function indexAction(string $keywords = '') {
+        $model_list = PageRepository::getList($keywords);
         return $this->show(compact('model_list', 'keywords'));
     }
 
@@ -40,7 +39,8 @@ class PageController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
+        PageRepository::remove($id);
         return $this->renderData([
             'url' => $this->getUrl('page')
         ]);

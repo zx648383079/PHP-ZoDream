@@ -1,24 +1,21 @@
 <?php
+declare(strict_types=1);
 namespace Module\Exam\Service\Api;
 
-use Module\Exam\Domain\Pager;
+use Module\Exam\Domain\Repositories\PagerRepository;
 
 class PagerController extends Controller {
 
-    public function indexAction($course, $type = 0) {
-        $pager = Pager::create($course, intval($type));
-        return $this->render($pager);
+    public function indexAction(int $course, int $type = 0) {
+        return $this->render(
+            PagerRepository::create($course, $type)
+        );
     }
 
-    public function checkAction($question) {
-        $pager = new Pager();
-        foreach ($question as $id => $item) {
-            $pager->append($id)
-                ->answer(isset($item['answer']) ? $item['answer'] : '',
-                    isset($item['dynamic']) ? $item['dynamic'] : null);
-        }
-        $pager->finish();
-        return $this->render($pager);
+    public function checkAction(array $question) {
+        return $this->render(
+            PagerRepository::check($question)
+        );
     }
 
 }

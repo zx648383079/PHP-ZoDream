@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Exam\Domain;
 
 use Module\Exam\Domain\Model\QuestionModel;
@@ -7,9 +8,9 @@ use Zodream\Infrastructure\Contracts\ArrayAble;
 
 class Pager implements ArrayAble {
 
-    private $items = [];
-    private $index = 0;
-    public $finished = false;
+    private array $items = [];
+    private int $index = 0;
+    public bool $finished = false;
 
     /**
      * @param array $items
