@@ -6,15 +6,20 @@ use Module\Exam\Domain\Repositories\PagerRepository;
 
 class PagerController extends Controller {
 
-    public function indexAction(int $course, int $type = 0) {
-        return $this->render(
-            PagerRepository::create($course, $type)
-        );
+    public function indexAction(int $course = 0, int $type = 0, int $id = 0) {
+        try {
+            return $this->render(
+                PagerRepository::create($course, $type, $id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+
     }
 
-    public function checkAction(array $question) {
+    public function checkAction(array $question, int $id) {
         return $this->render(
-            PagerRepository::check($question)
+            PagerRepository::check($question, $id)
         );
     }
 

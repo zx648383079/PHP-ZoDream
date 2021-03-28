@@ -8,6 +8,9 @@ use Zodream\Infrastructure\Contracts\ArrayAble;
 
 class Pager implements ArrayAble {
 
+    private int $id = 0;
+    private string $title = '';
+    private int $limitTime = 120;
     private array $items = [];
     private int $index = 0;
     public bool $finished = false;
@@ -18,6 +21,36 @@ class Pager implements ArrayAble {
      */
     public function setItems(array $items) {
         $this->items = $items;
+        return $this;
+    }
+
+    /**
+     * @param int $id
+     * @return Pager
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $title
+     * @return Pager
+     */
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @param int $time
+     * @return Pager
+     */
+    public function setLimitTime(int $time)
+    {
+        $this->limitTime = $time;
         return $this;
     }
 
@@ -180,6 +213,9 @@ class Pager implements ArrayAble {
             $items[] = $this->format($i);
         }
         $data = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'time' => $this->limitTime,
             'finished' => $this->finished,
             'data' => $items
         ];
@@ -193,15 +229,49 @@ class Pager implements ArrayAble {
         foreach ($this->items as $i => $item) {
             unset($this->items[$i]['model']);
         }
-        return ['items', 'index', 'finished'];
+        return ['id', 'title', 'limitTime', 'items', 'index', 'finished'];
     }
 
-    public static function create($course, $type = 0) {
+    public static function create(int $course, int $type = 0) {
         if ($type < 2) {
             return static::createId(QuestionModel::where('course_id', $course)
-                ->orderBy('id', 'asc')->pluck('id'), $type> 0);
+                ->orderBy('id', 'asc')->pluck('id'), $type > 0)
+                ->setTitle($type < 1 ? '顺序练习' : '随机练习');
         }
+        if ($type === 3) {
+            return static::createId(QuestionModel::where('course_id', $course)
+                ->where('easiness', '>', 5)
+                ->orderBy('id', 'asc')->pluck('id'), true)
+                ->setTitle('难题练习');
+        }
+        $rules = [];
+        foreach ([10, 5, 5, 3, 2] as $i => $amount) {
+            $rules[] = [
+                'course' => $course,
+                'type' => $i,
+                'amount' => $amount
+            ];
+        }
+        return static::createId(static::questionByRule($rules), false)
+            ->setTitle('全真模拟');
+    }
 
+    public static function questionByRule(array $data) {
+        $items = [];
+        foreach ($data as $item) {
+            if ($item['amount'] < 1) {
+                continue;
+            }
+            $args = QuestionModel::query()
+                ->where('course_id', $item['course'])
+                ->where('type', $item['type'])
+                ->whereNotIn('id', $items)
+                ->orderBy('RAND()')
+                ->limit($item['amount'])
+                ->pluck('id');
+            $items = array_merge($items, $args);
+        }
+        return $items;
     }
 
     public static function createId(array $items, $shuffle = false) {

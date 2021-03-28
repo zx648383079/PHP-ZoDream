@@ -46,17 +46,9 @@ class PageController extends Controller {
         ]);
     }
 
-    public function evaluateAction($id, $keywords = null) {
+    public function evaluateAction(int $id, string $keywords = '') {
         $page = PageModel::find($id);
-        $model_list = PageEvaluateModel::with('user')
-            ->when(!empty($keywords), function ($query) {
-            $users = SearchModel::searchWhere(UserModel::query(), 'name')->pluck('id');
-            if (empty($users)) {
-                $query->isEmpty();
-                return;
-            }
-            $query->whereIn('user_id', $users);
-        })->orderBy('created_at', 'desc')->page();
+        $model_list = PageRepository::evaluateList($id, $keywords);
         return $this->show(compact('model_list', 'page', 'keywords'));
     }
 

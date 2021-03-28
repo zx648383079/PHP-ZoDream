@@ -2,18 +2,38 @@
 declare(strict_types=1);
 namespace Module\Exam\Domain\Repositories;
 
+use Module\Exam\Domain\Model\PageModel;
 use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Pager;
 
 class PagerRepository {
 
-    public static function create(int $course, int $type = 0) {
-        return Pager::create($course, $type);
+    public static function create(int $course = 0, int $type = 0, int $id = 0) {
+        if ($course > 0) {
+            return Pager::create($course, $type);
+        }
+        if ($id < 1) {
+            throw new \Exception('请选择试卷');
+        }
+        $model = PageModel::findOrThrow($id, '书卷不存在');
+        if ($model->rule_type > 0) {
+            return Pager::createId($model->rule_value)
+                ->setTitle($model->name)
+                ->setLimitTime($model->limit_time);
+        }
+        return Pager::createId(
+                Pager::questionByRule($model->rule_value)
+            )
+            ->setTitle($model->name)
+            ->setLimitTime($model->limit_time);
     }
 
-    public static function check(array $data) {
+    public static function check(array $data, int $id) {
         $pager = new Pager();
         foreach ($data as $id => $item) {
+            if (isset($item['id']) && $item['id'] > 0) {
+                $id = $item['id'];
+            }
             $pager->append($id)
                 ->answer(isset($item['answer']) ? $item['answer'] : '',
                     isset($item['dynamic']) ? $item['dynamic'] : null);
@@ -38,6 +58,9 @@ class PagerRepository {
     public static function questionCheck(array $data) {
         $items = [];
         foreach ($data as $id => $item) {
+            if (isset($item['id']) && $item['id'] > 0) {
+                $id = $item['id'];
+            }
             $items[] = Pager::formatQuestion(QuestionModel::find($id),
                 isset($item['answer']) ? $item['answer'] : '',
                 isset($item['dynamic']) ? $item['dynamic'] : null);

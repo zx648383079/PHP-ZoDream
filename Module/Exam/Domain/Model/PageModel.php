@@ -45,6 +45,17 @@ class PageModel extends PageEntity {
     }
 
     public function setRuleValueAttribute($value) {
+        if (is_array($value) && $this->rule_type > 0) {
+            $value = array_map(function ($item) {
+                if (!is_array($item)) {
+                    return intval($item);
+                }
+                if (isset($item['id'])) {
+                    return intval($item['id']);
+                }
+                return $item;
+            }, $value);
+        }
         $this->__attributes['rule_value'] = is_array($value) ? Json::encode($value) : $value;
     }
 

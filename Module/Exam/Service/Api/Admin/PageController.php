@@ -28,7 +28,7 @@ class PageController extends Controller {
                 'id' => 'int',
                 'name' => 'required|string:0,200',
                 'rule_type' => 'required|int:0,127',
-                'rule_value' => 'required|string:0,255',
+                'rule_value' => 'required',
                 'start_at' => 'int',
                 'end_at' => 'int',
                 'limit_time' => 'int:0,99999',
@@ -45,6 +45,21 @@ class PageController extends Controller {
     public function deleteAction(int $id) {
         try {
             PageRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function evaluateAction(int $id, string $keywords = '') {
+        return $this->renderPage(
+            PageRepository::evaluateList($id, $keywords)
+        );
+    }
+
+    public function evaluateDeleteAction(int $id) {
+        try {
+            PageRepository::evaluateRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
