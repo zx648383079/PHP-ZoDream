@@ -3,6 +3,15 @@ namespace Module\Exam\Domain\Model;
 
 use Module\Exam\Domain\Entities\QuestionOptionEntity;
 
+/**
+ * Class QuestionOptionModel
+ * @package Module\Exam\Domain\Model
+ * @property integer $id
+ * @property string $content
+ * @property integer $question_id
+ * @property integer $type
+ * @property integer $is_right
+ */
 class QuestionOptionModel extends QuestionOptionEntity {
 
 

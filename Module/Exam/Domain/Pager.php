@@ -180,6 +180,7 @@ class Pager implements ArrayAble {
             $items[] = $this->format($i);
         }
         $data = [
+            'finished' => $this->finished,
             'data' => $items
         ];
         if ($this->finished) {
