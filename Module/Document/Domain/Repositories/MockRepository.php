@@ -20,10 +20,10 @@ class MockRepository {
         $url = new Uri($input->get('url'));
         $method = $input->get('method');
         $data = $input->get('request');
-        $real_data = [];
+        $realData = [];
         if (!empty($data) && isset($data['key'])) {
             foreach ($data['key'] as $i => $item) {
-                $real_data[$item] = $data['value'][$i];
+                $realData[$item] = $data['value'][$i];
             }
         }
         $header = $input->get('header');
@@ -31,19 +31,19 @@ class MockRepository {
             'request' => [],
             'response' => []
         ];
-        $real_header = [];
+        $realHeader = [];
         if (!empty($header) && isset($header['key'])) {
             foreach ($header['key'] as $i => $item) {
                 $headers['request'][] = sprintf('%s: %s', $item, $header['value'][$i]);
-                $real_header[$item] = $header['value'][$i];
+                $realHeader[$item] = $header['value'][$i];
             }
         }
         if ($method != 'POST') {
-            $url->setData($real_data);
+            $url->setData($realData);
         }
         $http = new Http($url);
-        $body = $http->header($header)
-            ->maps($real_data)->method($method)->setHeaderOption(true)
+        $body = $http->header($realHeader)
+            ->maps($realData)->method($method)->setHeaderOption(true)
             ->setOption(CURLOPT_RETURNTRANSFER, 1)
             ->setOption(CURLOPT_FOLLOWLOCATION, 1)
             ->setOption(CURLOPT_AUTOREFERER, 1)->getResponseText();
