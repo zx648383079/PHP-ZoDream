@@ -1,12 +1,14 @@
 <?php
 namespace Module\MicroBlog\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\BlogTopicModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Model\TopicModel;
+use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -60,5 +62,22 @@ class CreateMicroBlogTables extends Migration {
             $table->uint('micro_id');
             $table->uint('topic_id');
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'micro_manage' => '微博管理'
+        ]);
+        Option::group('微博客设置', function () {
+            return [
+                [
+                    'name' => '发布间隔/秒',
+                    'code' => 'micro_time_limit',
+                    'type' => 'text',
+                    'value' => 300,
+                ],
+            ];
+        });
     }
 }

@@ -36,7 +36,7 @@ class HomeController extends Controller {
         ]);
     }
 
-    public function recommendAction($id, Request $request) {
+    public function recommendAction(int $id, Request $request) {
         if (!$request->isAjax()) {
             return $this->redirect('./');
         }
@@ -48,7 +48,7 @@ class HomeController extends Controller {
         return $this->renderData($model);
     }
 
-    public function collectAction($id, Request $request) {
+    public function collectAction(int $id, Request $request) {
         if (!$request->isAjax()) {
             return $this->redirect('./');
         }
@@ -60,13 +60,13 @@ class HomeController extends Controller {
         return $this->renderData($model);
     }
 
-    public function forwardMiniAction($id) {
+    public function forwardMiniAction(int $id) {
         $this->layout = false;
         $blog = MicroBlogModel::find($id);
         return $this->show(compact('blog'));
     }
 
-    public function forwardAction(Request $request, $id, $content, $is_comment = false) {
+    public function forwardAction(Request $request, int  $id, string $content, bool $is_comment = false) {
         if (!$request->isAjax()) {
             return $this->redirect('./');
         }
@@ -78,12 +78,12 @@ class HomeController extends Controller {
         return $this->renderData($model);
     }
 
-    public function deleteAction($id, Request $request) {
+    public function deleteAction(int $id, Request $request) {
         if (!$request->isAjax()) {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::delete($id);
+            MicroRepository::removeSelf($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

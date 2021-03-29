@@ -5,15 +5,19 @@ namespace Module\MicroBlog\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
+use Module\MicroBlog\Domain\Model\BlogTopicModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
 use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Exception;
+use Module\SEO\Domain\Option;
 use Zodream\Helpers\Html;
 
 class MicroRepository {
 
-    public static function getList(string $sort = 'new', string $keywords = '', int $id = 0) {
+    public static function getList(
+        string $sort = 'new', string $keywords = '',
+        int $id = 0, int $user = 0, int $topic = 0) {
         return MicroBlogModel::with('user', 'attachment')
             ->when($id > 0, function($query) use ($id) {
                 $query->where('id', $id);
@@ -28,6 +32,17 @@ class MicroRepository {
             })->when(!empty($keywords) && $id < 1, function ($query) {
                 SearchModel::searchWhere($query, ['content']);
             })
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
+            ->when($topic > 0, function ($query) use ($topic) {
+                $itemId = BlogTopicModel::where('topic_id', $topic)
+                    ->pluck('micro_id');
+                if (empty($itemId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('id', $itemId);
+            })
             ->page();
     }
 
@@ -37,9 +52,13 @@ class MicroRepository {
      * @throws \Exception
      */
     public static function canPublish() {
+        $limit = Option::value('micro_time_limit', 300);
+        if (empty($limit) || $limit < 10) {
+            return true;
+        }
         $time = MicroBlogModel::where('user_id', auth()->id())
             ->max('created_at');
-        return !$time || $time < time() - 300;
+        return !$time || $time < time() - $limit;
     }
 
     public static function create($content, $images = [], $source = 'web') {
@@ -136,7 +155,7 @@ class MicroRepository {
         return $model;
     }
 
-    public static function delete($id) {
+    public static function removeSelf(int $id) {
         $model = MicroBlogModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');
@@ -148,6 +167,16 @@ class MicroRepository {
         CommentModel::where('micro_id', $id)->delete();
         AttachmentModel::where('micro_id', $id)->delete();
         return true;
+    }
+
+    public static function remove(int $id) {
+        $model = MicroBlogModel::find($id);
+        if (!$model) {
+            throw new Exception('id 错误');
+        }
+        $model->delete();
+        CommentModel::where('micro_id', $id)->delete();
+        AttachmentModel::where('micro_id', $id)->delete();
     }
 
     public static function deleteComment($id) {
@@ -336,9 +365,14 @@ class MicroRepository {
         if (!preg_match_all('/#(\S+?)#\s/', $content, $matches)) {
             return;
         }
+        $items = [];
         foreach ($matches[1] as $name) {
-
+            $name = trim($name);
+            if (!empty($name)) {
+                $items[] = $name;
+            }
         }
+        TopicRepository::bind($items, $id);
     }
 
     /**

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\OnlineService\Domain\Migrations;
 
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\OnlineService\Domain\Models\CategoryModel;
 use Module\OnlineService\Domain\Models\CategoryUserModel;
 use Module\OnlineService\Domain\Models\CategoryWordModel;
@@ -54,5 +55,12 @@ class CreateOnlineServiceTables extends Migration {
             $table->uint('status', 2)->default(0);
             $table->timestamps();
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'service_manage' => '客服管理'
+        ]);
     }
 }

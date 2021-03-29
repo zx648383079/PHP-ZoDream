@@ -1,6 +1,7 @@
 <?php
 namespace Module\Book\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookCategoryModel;
@@ -152,6 +153,9 @@ class CreateBookTables extends Migration {
     }
 
     public function seed() {
+        RoleRepository::newPermission([
+            'book_manage' => '书籍管理'
+        ]);
         if (BookCategoryModel::query()->count() > 0) {
             return;
         }

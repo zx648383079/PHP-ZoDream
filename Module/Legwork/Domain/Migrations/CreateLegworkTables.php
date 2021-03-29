@@ -1,6 +1,7 @@
 <?php
 namespace Module\Legwork\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Legwork\Domain\Model\CategoryModel;
 use Module\Legwork\Domain\Model\CategoryProviderModel;
 use Module\Legwork\Domain\Model\OrderLogModel;
@@ -100,5 +101,12 @@ class CreateLegworkTables extends Migration {
             $table->uint('user_id');
             $table->uint('status', 2)->default(0);
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'legwork_manage' => '服务管理'
+        ]);
     }
 }

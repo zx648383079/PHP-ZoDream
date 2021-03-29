@@ -1,6 +1,7 @@
 <?php
 namespace Module\SEO\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 use Module\SEO\Domain\Model\OptionModel;
@@ -24,6 +25,9 @@ class CreateSEOTables extends Migration {
     }
 
     public function seed() {
+        RoleRepository::newPermission([
+            'system_manage' => '系统配置'
+        ]);
         if (OptionModel::query()->count() > 0) {
             return;
         }

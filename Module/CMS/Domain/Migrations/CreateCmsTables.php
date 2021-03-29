@@ -1,6 +1,7 @@
 <?php
 namespace Module\CMS\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
@@ -78,6 +79,9 @@ class CreateCmsTables extends Migration {
     }
 
     public function seed() {
+        RoleRepository::newPermission([
+            'cms_manage' => 'CMS管理'
+        ]);
         if (SiteModel::query()->count() > 0) {
             return;
         }

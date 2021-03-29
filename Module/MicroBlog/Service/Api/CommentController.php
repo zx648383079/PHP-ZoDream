@@ -16,7 +16,7 @@ class CommentController extends Controller {
         ];
     }
 
-    public function indexAction($id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+    public function indexAction(int $id, int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
         list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
         $comment_list = CommentModel::with('replies', 'user')
             ->where([
@@ -26,7 +26,7 @@ class CommentController extends Controller {
         return $this->renderPage($comment_list);
     }
 
-    public function saveAction($content,
+    public function saveAction(string $content,
                                int $micro_id,
                                int $parent_id = 0,
                                bool $is_forward = false) {
@@ -41,7 +41,7 @@ class CommentController extends Controller {
         return $this->render($model);
     }
 
-    public function disagreeAction($id) {
+    public function disagreeAction(int $id) {
         try {
             $model = MicroRepository::disagree($id);
         }catch (\Exception $ex) {
@@ -50,7 +50,7 @@ class CommentController extends Controller {
         return $this->render($model);
     }
 
-    public function agreeAction($id) {
+    public function agreeAction(int $id) {
         try {
             $model = MicroRepository::agree($id);
         }catch (\Exception $ex) {
@@ -59,7 +59,7 @@ class CommentController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             $model = MicroRepository::deleteComment($id);
         }catch (\Exception $ex) {

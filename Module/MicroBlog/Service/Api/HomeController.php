@@ -16,8 +16,9 @@ class HomeController extends Controller {
         ];
     }
 
-    public function indexAction(string $sort = 'new', string $keywords = '', int $id = 0) {
-        $items = MicroRepository::getList($sort, $keywords, $id);
+    public function indexAction(string $sort = 'new',
+                                string $keywords = '', int $id = 0, int $user = 0, int $topic = 0) {
+        $items = MicroRepository::getList($sort, $keywords, $id, $user, $topic);
         return $this->renderPage($items);
     }
 
@@ -33,7 +34,7 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function recommendAction($id) {
+    public function recommendAction(int $id) {
         try {
             $model = MicroRepository::recommend($id);
         }catch (\Exception $ex) {
@@ -42,7 +43,7 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function collectAction($id) {
+    public function collectAction(int $id) {
         try {
             $model = MicroRepository::collect($id);
         }catch (\Exception $ex) {
@@ -51,14 +52,14 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $blog = MicroBlogModel::find($id);
         $blog->user;
         $blog->attachment;
         return $this->render($blog);
     }
 
-    public function forwardAction($id, $content, $is_comment = false) {
+    public function forwardAction(int $id, string $content, bool $is_comment = false) {
         try {
             $model = MicroRepository::forward($id, $content, $is_comment);
         }catch (\Exception $ex) {
@@ -67,9 +68,9 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
-            MicroRepository::delete($id);
+            MicroRepository::removeSelf($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

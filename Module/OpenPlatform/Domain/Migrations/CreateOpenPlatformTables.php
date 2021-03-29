@@ -1,6 +1,7 @@
 <?php
 namespace Module\OpenPlatform\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Model\PlatformOptionModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
@@ -46,5 +47,12 @@ class CreateOpenPlatformTables extends Migration {
             $table->text('value')->nullable()->comment('配置值');
             $table->timestamps();
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'open_manage' => '开放应用管理'
+        ]);
     }
 }

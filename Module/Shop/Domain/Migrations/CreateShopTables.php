@@ -305,7 +305,9 @@ class CreateShopTables extends Migration {
     }
 
     public function seed() {
-        RoleRepository::newRole('shop_admin', '商城管理员');
+        RoleRepository::newRole('shop_admin', '商城管理员', [
+            'shop_manage' => '商城管理'
+        ]);
         Option::group('商城设置', function () {
             return [
                 [

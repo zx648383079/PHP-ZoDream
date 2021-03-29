@@ -83,6 +83,9 @@ class CreateAuthTables extends Migration {
 
     public function seed() {
         RoleRepository::newRole('administrator', '超级管理员');
+        RoleRepository::newPermission([
+            'user_manage' => '会员管理'
+        ]);
     }
 
     public function createRole(): void {

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Forum\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Forum\Domain\Model\BlackWordModel;
 use Module\Forum\Domain\Model\EmojiCategoryModel;
 use Module\Forum\Domain\Model\EmojiModel;
@@ -97,5 +98,12 @@ class CreateForumTables extends Migration {
             $table->string('name', 20);
             $table->string('icon')->default('');
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'forum_manage' => '论坛管理'
+        ]);
     }
 }

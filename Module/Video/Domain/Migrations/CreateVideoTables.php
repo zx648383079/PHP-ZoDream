@@ -1,6 +1,7 @@
 <?php
 namespace Module\Video\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Video\Domain\Models\CommentModel;
 use Module\Video\Domain\Models\LogModel;
 use Module\Video\Domain\Models\MusicModel;
@@ -73,5 +74,12 @@ class CreateVideoTables extends Migration {
             $table->uint('tag_id');
             $table->uint('video_id');
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'video_manage' => '短视频管理'
+        ]);
     }
 }

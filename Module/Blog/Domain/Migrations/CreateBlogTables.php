@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
@@ -87,5 +88,12 @@ class CreateBlogTables extends Migration {
             $table->uint('blog_id');
             $table->uint('position', 2)->default(99);
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'blog_term_edit' => '博客分类管理'
+        ]);
     }
 }

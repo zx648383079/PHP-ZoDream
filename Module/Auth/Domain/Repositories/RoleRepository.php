@@ -36,7 +36,7 @@ class RoleRepository {
     }
 
     /**
-     * 新增权限
+     * 新增角色和权限
      * @param $name
      * @param $display_name
      * @param array $permission [name => display_name]
@@ -55,17 +55,9 @@ class RoleRepository {
             return $id;
         }
         $bindId = [];
-        $items = PermissionModel::whereIn('name', array_keys($permission))->pluck('id', 'name');
-        foreach ($permission as $key => $item) {
-            if (!isset($items[$key])) {
-                $pid = PermissionModel::query()->insert([
-                    'name' => $key,
-                    'display_name' => $item,
-                ]);
-            } else {
-                $pid = $items[$key];
-            }
-            if ($pid > 0 && !in_array($pid, $existBind)) {
+        $permissionId = static::newPermission($permission);
+        foreach ($permissionId as $pid) {
+            if (!in_array($pid, $existBind)) {
                 $bindId[] = [
                     'role_id' => $id,
                     'permission_id' => $pid,
@@ -76,6 +68,34 @@ class RoleRepository {
             RolePermissionModel::query()->insert($bindId);
         }
         return $id;
+    }
+
+    /**
+     * 新增权限
+     * @param array $permission
+     * @return array
+     * @throws Exception
+     */
+    public static function newPermission(array $permission = []): array {
+        if (empty($permission)) {
+            return [];
+        }
+        $idItems = [];
+        $items = PermissionModel::whereIn('name', array_keys($permission))->pluck('id', 'name');
+        foreach ($permission as $key => $item) {
+            if (!isset($items[$key])) {
+                $pid = PermissionModel::query()->insert([
+                    'name' => $key,
+                    'display_name' => $item,
+                ]);
+            } else {
+                $pid = $items[$key];
+            }
+            if ($pid > 0) {
+                $idItems[] = $pid;
+            }
+        }
+        return $idItems;
     }
 
     /**

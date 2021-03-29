@@ -2,6 +2,7 @@
 namespace Module\Exam\Domain\Migrations;
 
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Exam\Domain\Entities\CourseEntity;
 use Module\Exam\Domain\Entities\CourseLinkEntity;
 use Module\Exam\Domain\Entities\PageEntity;
@@ -105,5 +106,12 @@ class CreateExamTables extends Migration {
             $table->string('remark')->default('')->comment('评语');
             $table->timestamps();
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'exam_manage' => '题库管理'
+        ]);
     }
 }

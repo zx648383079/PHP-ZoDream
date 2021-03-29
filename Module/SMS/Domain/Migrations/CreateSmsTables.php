@@ -1,6 +1,7 @@
 <?php
 namespace Module\SMS\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SMS\Domain\Model\SmsLogModel;
 use Module\SMS\Domain\Model\SmsSignatureModel;
 use Module\SMS\Domain\Model\SmsTemplateModel;
@@ -36,5 +37,12 @@ class CreateSmsTables extends Migration {
             $table->string('ip', 120)->default('')->comment('发送者ip');
             $table->timestamps();
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'sms_manage' => '短信配置'
+        ]);
     }
 }
