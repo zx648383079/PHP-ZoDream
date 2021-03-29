@@ -398,7 +398,8 @@ class ThemeManager {
         }
         unset($data['type'], $data['action']);
         $cat = $this->getCacheId($data['cat_id'], 'channel');
-        $scene = CMSRepository::scene()->setModel($this->getCacheId($cat->model_id, 'model'));
+        $scene = CMSRepository::scene()
+            ->setModel($this->getCacheId($cat->model_id, 'model'));
         $scene->insert($data);
     }
 

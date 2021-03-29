@@ -286,7 +286,8 @@ abstract class BaseScene implements SceneInterface {
             if (!$isNew && !array_key_exists($field->field, $data)) {
                 continue;
             }
-            $value = static::newField($field->type)->filterInput(isset($data[$field->field]) ? $data[$field->field]
+            $value = static::newField($field->type)
+                ->filterInput(isset($data[$field->field]) ? $data[$field->field]
                 : null, $field);
             if ($field->is_main > 0) {
                 $main[$field->field] = $value;
