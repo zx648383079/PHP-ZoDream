@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Module\Forum\Domain\Repositories;
+namespace Module\SEO\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\Forum\Domain\Model\BlackWordModel;
+use Module\SEO\Domain\Model\BlackWordModel;
 
 class WordRepository {
 

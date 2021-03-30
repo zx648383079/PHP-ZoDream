@@ -74,7 +74,7 @@ class BulletinModel extends Model {
     /**
      * SEND MESSAGE TO ANY USERS
      *
-     * @param array|string $user
+     * @param array|int $user
      * @param string $title
      * @param string $content
      * @param int $type

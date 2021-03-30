@@ -1,5 +1,6 @@
 <?php
-namespace Module\SEO\Service\Api;
+declare(strict_types=1);
+namespace Module\SEO\Service\Api\Admin;
 
 use Module\SEO\Domain\Repositories\SEORepository;
 

@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
-namespace Module\Forum\Service\Api\Admin;
+namespace Module\SEO\Service\Api\Admin;
 
-use Module\Forum\Domain\Repositories\WordRepository;
+use Module\SEO\Domain\Repositories\AgreementRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-class WordController extends Controller {
+class AgreementController extends Controller {
 
     public function indexAction(string $keywords = '') {
         return $this->renderPage(
-            WordRepository::getList($keywords)
+            AgreementRepository::getList($keywords)
         );
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                WordRepository::get($id)
+                AgreementRepository::get($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -27,11 +27,14 @@ class WordController extends Controller {
         try {
             $data = $input->validate([
                 'id' => 'int',
-                'words' => 'required|string',
-                'replace_words' => 'string'
+                'name' => 'required|string:0,20',
+                'title' => 'required|string:0,100',
+                'description' => 'string:0,200',
+                'content' => 'required',
+                'status' => 'int:0,127',
             ]);
             return $this->render(
-                WordRepository::save($data)
+                AgreementRepository::save($data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -40,7 +43,7 @@ class WordController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            WordRepository::remove($id);
+            AgreementRepository::remove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

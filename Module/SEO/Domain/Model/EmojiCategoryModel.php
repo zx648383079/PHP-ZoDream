@@ -1,5 +1,6 @@
 <?php
-namespace Module\Forum\Domain\Model;
+declare(strict_types=1);
+namespace Module\SEO\Domain\Model;
 
 use Domain\Model\Model;
 
@@ -15,7 +16,7 @@ class EmojiCategoryModel extends Model {
     public $timestamps = false;
 
     public static function tableName() {
-        return 'bbs_emoji_category';
+        return 'seo_emoji_category';
     }
 
     protected function rules() {

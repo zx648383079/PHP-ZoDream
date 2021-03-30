@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\Forum\Service\Api\Admin;
+namespace Module\SEO\Service\Api\Admin;
 
-use Module\Forum\Domain\Repositories\EmojiRepository;
+use Module\SEO\Domain\Repositories\EmojiRepository;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 use Zodream\Infrastructure\Contracts\Http\Input;

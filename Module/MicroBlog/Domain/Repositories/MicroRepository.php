@@ -3,7 +3,11 @@ declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\SEO\Domain\Repositories\EmojiRepository;
+use Module\MicroBlog\Domain\LinkRule;
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\BlogTopicModel;
 use Module\MicroBlog\Domain\Model\CommentModel;
@@ -70,8 +74,15 @@ class MicroRepository {
         if (!$model) {
             throw new Exception('发送失败');
         }
-        self::at($content, $model->id);
-        self::topic($content, $model->id);
+        $extraRules = array_merge(
+            self::at($content, $model->id),
+            self::topic($content, $model->id),
+            EmojiRepository::renderRule($content)
+        );
+        if (!empty($extraRules)) {
+            $model->extra_rule = $extraRules;
+            $model->save();
+        }
         if (empty($images)) {
             return $model;
         }
@@ -121,10 +132,10 @@ class MicroRepository {
         }
         if ($is_forward) {
             if ($model->forward_id > 0) {
-                $sourceUser = UserModel::where('id', $model->id)->first('name');
+                $sourceUser = UserModel::where('id', $model->user_id)->first('name');
                 $content = sprintf('%s// @%s : %s', $content, $sourceUser->name, $model->content);
             }
-            MicroBlogModel::create([
+            $forwardModel = MicroBlogModel::create([
                 'user_id' => auth()->id(),
                 'content' => Html::text($content),
                 'forward_id' => $model->forward_id > 0 ? $model->forward_id :
@@ -132,6 +143,15 @@ class MicroRepository {
                 'forward_count' => 1,
                 'source' => 'web'
             ]);
+            $extraRules = array_merge(
+                self::at($content, 0),
+                self::topic($content, $forwardModel->id),
+                EmojiRepository::renderRule($content),
+            );
+            if (!empty($extraRules)) {
+                $forwardModel->extra_rule = $extraRules;
+                $forwardModel->save();
+            }
             $model->forward_count ++;
         }
         self::at($content, $model->id);
@@ -251,6 +271,15 @@ class MicroRepository {
         if (!$model) {
             throw new Exception('转发失败');
         }
+        $extraRules = array_merge(
+            self::at($content, $model->id),
+            self::topic($content, $model->id),
+            EmojiRepository::renderRule($content)
+        );
+        if (!empty($extraRules)) {
+            $model->extra_rule = $extraRules;
+            $model->save();
+        }
         if ($is_comment) {
             CommentModel::create([
                 'content' => $content,
@@ -346,14 +375,29 @@ class MicroRepository {
      * at 人
      * @param $content
      * @param $id
+     * @return array 返回罪恶
      */
-    public static function at($content, $id) {
-        if (!preg_match_all('/@(\S+?)\s/', $content, $matches)) {
-            return;
+    public static function at(string $content, int $id): array {
+        if (empty($content) || !str_contains($content, '@')) {
+            return [];
         }
-        foreach ($matches[1] as $name) {
-
+        if (!preg_match_all('/@(\S+?)\s/', $content, $matches, PREG_SET_ORDER)) {
+            return [];
         }
+        $names = array_column($matches, 0, 1);
+        $users = UserSimpleModel::whereIn('name', array_keys($names))->asArray()->get();
+        if (empty($users)) {
+            return [];
+        }
+        $rules = [];
+        foreach ($users as $user) {
+            $rules[] = LinkRule::formatUser($names[$user['name']], $user['id']);
+        }
+        if ($id > 0) {
+            BulletinModel::message(array_column($users, 'id'),
+                '我在微博提到了你', sprintf('快来看看吧【%d】', $id), 88);
+        }
+        return $rules;
     }
 
     /**
@@ -361,18 +405,35 @@ class MicroRepository {
      * @param $content
      * @param $id
      */
-    public static function topic($content, $id) {
-        if (!preg_match_all('/#(\S+?)#\s/', $content, $matches)) {
-            return;
+    public static function topic(string $content, int $id): array {
+        if (empty($content) || !str_contains($content, '#')) {
+            return [];
+        }
+        if (!preg_match_all('/#(\S+?)#\s/', $content, $matches, PREG_SET_ORDER)) {
+            return [];
         }
         $items = [];
-        foreach ($matches[1] as $name) {
-            $name = trim($name);
+        foreach ($matches as $match) {
+            $name = trim($match[1]);
             if (!empty($name)) {
-                $items[] = $name;
+                $items[$name][] = $match[0];
             }
         }
-        TopicRepository::bind($items, $id);
+        $topicItems = TopicRepository::bind(array_keys($items), $id);
+        if (empty($topicItems)) {
+            return [];
+        }
+        $topicItems = array_column($topicItems, 'name', 'id');
+        $rules = [];
+        foreach ($items as $name => $item) {
+            if (!isset($topicItems[$name])) {
+                continue;
+            }
+            foreach ($item as $i) {
+                $rules[] = LinkRule::formatTopic($i, $topicItems[$name]);
+            }
+        }
+        return $rules;
     }
 
     /**

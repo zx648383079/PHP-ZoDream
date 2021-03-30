@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Module\Forum\Domain\Repositories;
+namespace Module\SEO\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\Forum\Domain\Model\EmojiCategoryModel;
-use Module\Forum\Domain\Model\EmojiModel;
+use Infrastructure\LinkRule;
+use Module\SEO\Domain\Model\EmojiCategoryModel;
+use Module\SEO\Domain\Model\EmojiModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
@@ -97,6 +98,33 @@ class EmojiRepository {
             }
             return $match[0];
         }, $content);
+    }
+
+    /**
+     * 提取规则
+     * @param string $content
+     * @return array
+     */
+    public static function renderRule(string $content): array {
+        if (empty($content) || !str_contains($content, '[')) {
+            return [];
+        }
+        if (!preg_match_all('/\[(.+?)\]/', $content, $matches, PREG_SET_ORDER)) {
+            return [];
+        }
+        $maps = static::maps();
+        $rules = [];
+        $exist = [];
+        foreach ($matches as $match) {
+            if (in_array($match[1], $exist)) {
+                continue;
+            }
+            if (!isset($maps[$match[1]])) {
+                continue;
+            }
+            $rules[] = LinkRule::formatImage($match[0], $maps[$match[1]]);
+        }
+        return $rules;
     }
 
     public static function import(File $file) {

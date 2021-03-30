@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Model;
 
 use Domain\Model\Model;
+use Module\MicroBlog\Domain\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Zodream\Helpers\Json;
 
 
 /**
@@ -10,6 +13,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $id
  * @property integer $user_id
  * @property string $content
+ * @property string $extra_rule
  * @property integer $recommend_count
  * @property integer $forward_count
  * @property integer $comment_count
@@ -31,6 +35,7 @@ class MicroBlogModel extends Model {
         return [
             'user_id' => 'int',
             'content' => 'required|string:0,140',
+            'extra_rule' => '',
             'recommend_count' => 'int',
             'forward_count' => 'int',
             'comment_count' => 'int',
@@ -71,6 +76,15 @@ class MicroBlogModel extends Model {
 	    return $this->hasMany(AttachmentModel::class, 'micro_id', 'id');
     }
 
+    public function getExtraRuleAttribute() {
+	    $value = $this->getAttributeValue('extra_rule');
+	    return empty($value) ? [] : Json::decode($value);
+    }
+
+    public function setExtraRuleAttribute($value) {
+	    $this->__attributes['extra_rule'] = is_array($value) ? Json::encode($value) : $value;
+    }
+
     public function getIsRecommendedAttribute() {
 	    if (auth()->guest()) {
 	        return false;
@@ -100,5 +114,9 @@ class MicroBlogModel extends Model {
             return false;
         }
         return auth()->id() === $this->user_id;
+    }
+
+    public function getHtmlAttribute() {
+        return LinkRule::render($this->content, $this->extra_rule);
     }
 }

@@ -23,6 +23,8 @@ class CreateMicroBlogTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->string('content', 140);
+            $table->string('extra_rule', 500)->default('')
+                ->comment('内容的一些附加规则');
             $table->uint('open_type', 1)->default(0);
             $table->uint('recommend_count')->default(0)->comment('推荐数');
             $table->uint('collect_count')->default(0)->comment('收藏数');

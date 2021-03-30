@@ -2,6 +2,10 @@
 namespace Module\SEO\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
+use Module\SEO\Domain\Model\AgreementModel;
+use Module\SEO\Domain\Model\BlackWordModel;
+use Module\SEO\Domain\Model\EmojiCategoryModel;
+use Module\SEO\Domain\Model\EmojiModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 use Module\SEO\Domain\Model\OptionModel;
@@ -21,6 +25,32 @@ class CreateSEOTables extends Migration {
             $table->string('default_value')->default('')->comment('默认值或候选值');
             $table->text('value')->nullable();
             $table->uint('position', 2)->default(99);
+        })->append(BlackWordModel::tableName(), function(Table $table) {
+            $table->comment('违禁词');
+            $table->id();
+            $table->string('words');
+            $table->string('replace_words')->default('');
+        })->append(EmojiModel::tableName(), function(Table $table) {
+            $table->comment('表情');
+            $table->id();
+            $table->uint('cat_id');
+            $table->string('name', 30);
+            $table->uint('type', 1)->default(0)->comment('图片或文字');
+            $table->string('content')->default('');
+        })->append(EmojiCategoryModel::tableName(), function(Table $table) {
+            $table->comment('表情分类');
+            $table->id();
+            $table->string('name', 20);
+            $table->string('icon')->default('');
+        })->append(AgreementModel::tableName(), function(Table $table) {
+            $table->comment('服务协议');
+            $table->id();
+            $table->string('name', 20);
+            $table->string('title', 100);
+            $table->string('description', 200)->default('');
+            $table->column('content')->mediumText();
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
         })->autoUp();
     }
 

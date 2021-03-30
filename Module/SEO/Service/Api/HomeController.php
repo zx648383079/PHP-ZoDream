@@ -4,12 +4,6 @@ namespace Module\SEO\Service\Api;
 
 class HomeController extends Controller {
 
-    public function rules() {
-        return [
-            '*' => '*'
-        ];
-    }
-
     public function indexAction() {
         return $this->render([
             'name' => 'PHP-ZoDream',

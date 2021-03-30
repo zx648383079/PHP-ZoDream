@@ -26,7 +26,7 @@ class TopicRepository extends TagBase {
         BlogTopicModel::where('topic_id', $id)->delete();
     }
 
-    public static function bind(array $names, int $microId) {
+    public static function bind(array $names, int $microId): array {
         static::bindTag(
             BlogTopicModel::query(),
             $microId, 'micro_id',
@@ -37,5 +37,6 @@ class TopicRepository extends TagBase {
             ],
             'topic_id',
         );
+        return TopicModel::whereIn('name', $names)->asArray()->get();
     }
 }

@@ -2,9 +2,6 @@
 namespace Module\Forum\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
-use Module\Forum\Domain\Model\BlackWordModel;
-use Module\Forum\Domain\Model\EmojiCategoryModel;
-use Module\Forum\Domain\Model\EmojiModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;
@@ -80,23 +77,6 @@ class CreateForumTables extends Migration {
             $table->uint('node_index', 1)->default(0)->comment('每一个回帖内部的节点');
             $table->string('data')->default('')->comment('执行的参数');
             $table->timestamp('created_at');
-        })->append(BlackWordModel::tableName(), function(Table $table) {
-            $table->comment('违禁词');
-            $table->id();
-            $table->string('words');
-            $table->string('replace_words')->default('');
-        })->append(EmojiModel::tableName(), function(Table $table) {
-            $table->comment('表情');
-            $table->id();
-            $table->uint('cat_id');
-            $table->string('name', 30);
-            $table->uint('type', 1)->default(0)->comment('图片或文字');
-            $table->string('content')->default('');
-        })->append(EmojiCategoryModel::tableName(), function(Table $table) {
-            $table->comment('表情分类');
-            $table->id();
-            $table->string('name', 20);
-            $table->string('icon')->default('');
         })->autoUp();
     }
 
