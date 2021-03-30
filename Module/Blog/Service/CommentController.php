@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Service;
 
+use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
@@ -25,7 +26,7 @@ class CommentController extends ModuleController {
 
     public function moreAction(int $blog_id, int $parent_id = 0,
                                string $sort = 'created_at', string $order = 'desc') {
-        list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id']);
         $comment_list = CommentModel::with('replies')
             ->where([
             'blog_id' => intval($blog_id),

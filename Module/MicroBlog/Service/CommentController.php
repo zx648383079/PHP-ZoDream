@@ -2,6 +2,7 @@
 namespace Module\MicroBlog\Service;
 
 use Module\MicroBlog\Domain\Model\CommentModel;
+use Module\MicroBlog\Domain\Repositories\CommentRepository;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 
 class CommentController extends Controller {
@@ -15,7 +16,7 @@ class CommentController extends Controller {
         ];
     }
 
-    public function indexAction($id, $sort = 'created_at', $order = 'desc') {
+    public function indexAction(int $id, $sort = 'created_at', $order = 'desc') {
         $comment_list = CommentModel::where([
             'micro_id' => intval($id),
             'parent_id' => 0,
@@ -23,13 +24,8 @@ class CommentController extends Controller {
         return $this->show(compact('comment_list', 'id'));
     }
 
-    public function moreAction($id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
-        list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
-        $comment_list = CommentModel::with('replies')
-            ->where([
-            'micro_id' => intval($id),
-            'parent_id' => intval($parent_id)
-        ])->orderBy($sort, $order)->page();
+    public function moreAction(int $id, int $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+        $comment_list = CommentRepository::commentList($id, $parent_id, $sort, $order);
         if ($parent_id > 0) {
             return $this->show('rely', compact('comment_list', 'parent_id'));
         }
@@ -37,9 +33,9 @@ class CommentController extends Controller {
     }
 
     public function saveAction($content,
-                               $micro_id,
-                               $parent_id = 0,
-                               $is_forward = false) {
+                               int $micro_id,
+                               int $parent_id = 0,
+                               bool $is_forward = false) {
         try {
             $model = MicroRepository::comment($content,
                 $micro_id,
@@ -53,7 +49,7 @@ class CommentController extends Controller {
         ]);
     }
 
-    public function disagreeAction($id) {
+    public function disagreeAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -65,7 +61,7 @@ class CommentController extends Controller {
         return $this->renderData($model);
     }
 
-    public function agreeAction($id) {
+    public function agreeAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -77,7 +73,7 @@ class CommentController extends Controller {
         return $this->renderData($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }

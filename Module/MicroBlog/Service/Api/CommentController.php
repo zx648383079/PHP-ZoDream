@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\MicroBlog\Service\Api;
 
-use Module\MicroBlog\Domain\Model\CommentModel;
+use Module\MicroBlog\Domain\Repositories\CommentRepository;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 
 class CommentController extends Controller {
@@ -17,13 +17,9 @@ class CommentController extends Controller {
     }
 
     public function indexAction(int $id, int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
-        list($sort, $order) = CommentModel::checkSortOrder($sort, $order, ['created_at', 'id']);
-        $comment_list = CommentModel::with('replies', 'user')
-            ->where([
-                'micro_id' => intval($id),
-                'parent_id' => intval($parent_id)
-            ])->orderBy($sort, $order)->page();
-        return $this->renderPage($comment_list);
+        return $this->renderPage(
+            CommentRepository::commentList($id, $parent_id, $sort, $order)
+        );
     }
 
     public function saveAction(string $content,

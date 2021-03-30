@@ -29,7 +29,7 @@ class LogModel extends Model {
 
     protected function rules() {
         return [
-            'type' => 'int:0-3',
+            'type' => 'int:0,9',
             'id_value' => 'required|int',
             'user_id' => 'required|int',
             'action' => 'required|int',

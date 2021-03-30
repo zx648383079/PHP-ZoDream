@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\CommentPageModel;
@@ -20,7 +21,7 @@ class CommentRepository {
      */
     public static function getList($blog_id, $parent_id = 0, $is_hot = false, $sort = 'created_at',
                                    $order = 'desc', $per_page = 20) {
-        list($sort, $order) = CommentPageModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
         return CommentPageModel::with('replies')
             ->where([
                 'blog_id' => intval($blog_id),

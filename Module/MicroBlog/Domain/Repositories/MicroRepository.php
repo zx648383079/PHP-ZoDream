@@ -61,7 +61,7 @@ class MicroRepository {
         return !$time || $time < time() - $limit;
     }
 
-    public static function create($content, $images = [], $source = 'web') {
+    public static function create(string $content, array $images = [], string $source = 'web') {
         $model = MicroBlogModel::create([
             'user_id' => auth()->id(),
             'content' => Html::text($content),
@@ -102,10 +102,10 @@ class MicroRepository {
      * @return CommentModel
      * @throws Exception
      */
-    public static function comment($content,
-                                   $micro_id,
-                                   $parent_id = 0,
-                                   $is_forward = false) {
+    public static function comment(string $content,
+                                   int $micro_id,
+                                   int $parent_id = 0,
+                                   bool $is_forward = false) {
         $model = MicroBlogModel::find($micro_id);
         if (!$model) {
             throw new Exception('id 错误');
@@ -140,7 +140,7 @@ class MicroRepository {
         return $comment;
     }
 
-    public static function collect($id) {
+    public static function collect(int $id) {
         $model = MicroBlogModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');
@@ -179,7 +179,7 @@ class MicroRepository {
         AttachmentModel::where('micro_id', $id)->delete();
     }
 
-    public static function deleteComment($id) {
+    public static function deleteComment(int $id) {
         $comment = CommentModel::find($id);
         if (!$comment) {
             throw new Exception('id 错误');
@@ -194,9 +194,9 @@ class MicroRepository {
         return $model;
     }
 
-    public static function toggleLog($id,
-                                     $action = LogModel::ACTION_RECOMMEND,
-                                     $type = LogModel::TYPE_MICRO_BLOG) {
+    public static function toggleLog(int $id,
+                                     int $action = LogModel::ACTION_RECOMMEND,
+                                     int $type = LogModel::TYPE_MICRO_BLOG) {
         $log = LogModel::where([
             'user_id' => auth()->id(),
             'type' => $type,
@@ -207,7 +207,7 @@ class MicroRepository {
             $log->delete();
             return false;
         }
-        LogModel::create([
+        LogModel::createOrThrow([
             'type' => $type,
             'id_value' => $id,
             'action' => $action,
@@ -216,7 +216,7 @@ class MicroRepository {
         return true;
     }
 
-    public static function recommend($id) {
+    public static function recommend(int $id) {
         $model = MicroBlogModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');

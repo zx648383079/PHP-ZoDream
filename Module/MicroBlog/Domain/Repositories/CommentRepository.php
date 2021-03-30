@@ -22,4 +22,11 @@ class CommentRepository {
     public static function remove(int $id) {
         CommentModel::where('id', $id)->delete();
     }
+
+    public static function commentList(int $micro, int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id']);
+        return CommentModel::with('replies', 'user')
+            ->where('micro_id', $micro)
+            ->where('parent_id', $parent_id)->orderBy($sort, $order)->page();
+    }
 }

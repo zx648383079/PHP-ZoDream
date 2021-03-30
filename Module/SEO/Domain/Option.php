@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\SEO\Domain;
 
 use Module\SEO\Domain\Model\OptionModel;
@@ -11,9 +12,9 @@ class Option {
 
     use SingletonPattern;
 
-    private $data = [];
+    private array $data = [];
 
-    private $booted = false;
+    private bool $booted = false;
 
     public function __construct() {
         $this->boot();
