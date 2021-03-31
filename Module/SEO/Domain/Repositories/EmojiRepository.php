@@ -14,6 +14,8 @@ use Zodream\Helpers\Json;
 
 class EmojiRepository {
 
+    const CACHE_KEY = 'emoji_tree';
+
     public static function getList(string $keywords = '', int $cat_id = 0) {
         return EmojiModel::with('category')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
@@ -123,6 +125,7 @@ class EmojiRepository {
                 continue;
             }
             $rules[] = LinkRule::formatImage($match[0], $maps[$match[1]]);
+            $exist[] = $match[1];
         }
         return $rules;
     }
@@ -136,6 +139,7 @@ class EmojiRepository {
         static::mapFolder($folder);
         $folder->delete();
         $file->delete();
+        self::all(true);
     }
 
     protected static function mapFolder(Directory $folder) {
@@ -179,8 +183,11 @@ class EmojiRepository {
         });
     }
 
-    public static function all() {
-        return cache()->getOrSet('emoji_tree', function () {
+    public static function all(bool $refresh = false) {
+        if ($refresh) {
+            cache()->delete(self::CACHE_KEY);
+        }
+        return cache()->getOrSet(self::CACHE_KEY, function () {
            return Arr::format(EmojiCategoryModel::with('items')
                ->orderBy('id', 'asc')->get());
         });

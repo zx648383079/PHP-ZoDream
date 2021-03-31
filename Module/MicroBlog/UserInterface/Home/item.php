@@ -17,7 +17,7 @@ use Zodream\Template\View;
             <?php endif;?>
         </p>
             <div class="content">
-                <?=$blog->content?>
+                <?=$blog->html?>
             </div>
             <?php if($blog->attachment):?>
             <div class="attachment">

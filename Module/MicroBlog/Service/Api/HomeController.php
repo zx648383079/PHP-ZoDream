@@ -17,7 +17,8 @@ class HomeController extends Controller {
     }
 
     public function indexAction(string $sort = 'new',
-                                string $keywords = '', int $id = 0, int $user = 0, int $topic = 0) {
+                                string $keywords = '',
+                                int $id = 0, int $user = 0, int $topic = 0) {
         $items = MicroRepository::getList($sort, $keywords, $id, $user, $topic);
         return $this->renderPage($items);
     }

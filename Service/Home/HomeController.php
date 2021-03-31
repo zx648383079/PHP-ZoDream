@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Service\Home;
 
+
+use Module\SEO\Domain\Repositories\AgreementRepository;
 
 class HomeController extends Controller {
     public function indexAction() {
@@ -15,8 +18,9 @@ class HomeController extends Controller {
         return $this->show();
     }
 
-    public function agreementAction() {
-        return $this->show();
+    public function agreementAction(string $name = 'agreement') {
+        $model = AgreementRepository::getByName($name);
+        return $this->show(compact('model'));
     }
 
     public function notFoundAction() {

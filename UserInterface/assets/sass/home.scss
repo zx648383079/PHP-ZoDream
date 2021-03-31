@@ -603,9 +603,23 @@ footer {
 }
 
 .agreement-box {
+    margin-top: 30px;
     margin-bottom: 30px;
     a {
         color: #1570a6;
+    }
+    .update-date {
+        .date-value {
+            font-weight: bold;
+        }
+    }
+    .print-bar {
+        margin-top: 20px;
+        background-color: #ececec;
+        text-align: right;
+        .print-btn {
+            cursor: pointer;
+        }
     }
     .title {
         color: #b63b00;
@@ -644,6 +658,9 @@ footer {
         .nav-desc {
             padding-top: 0.5em;
             line-height: 1.5em;
+            .b {
+                font-weight: bold;
+            }
             ul {
                 margin-left: 3em;
             }

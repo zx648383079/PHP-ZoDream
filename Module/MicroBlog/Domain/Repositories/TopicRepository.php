@@ -21,6 +21,13 @@ class TopicRepository extends TagBase {
         })->orderBy('id', 'desc')->page($perPage);
     }
 
+    public static function get(int $id) {
+        $model = TopicModel::findOrThrow($id, '话题不存在');
+        $model->micro_count = BlogTopicModel::where('topic_id', $id)
+            ->count();
+        return $model;
+    }
+
     public static function remove(int $id) {
         TopicModel::where('id', $id)->delete();
         BlogTopicModel::where('topic_id', $id)->delete();

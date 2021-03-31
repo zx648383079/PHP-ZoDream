@@ -197,6 +197,7 @@ class MicroRepository {
         $model->delete();
         CommentModel::where('micro_id', $id)->delete();
         AttachmentModel::where('micro_id', $id)->delete();
+        BlogTopicModel::where('micro_id', $id)->delete();
     }
 
     public static function deleteComment(int $id) {
@@ -390,11 +391,16 @@ class MicroRepository {
             return [];
         }
         $rules = [];
+        $currentUser = auth()->id();
+        $userIds = [];
         foreach ($users as $user) {
-            $rules[] = LinkRule::formatUser($names[$user['name']], $user['id']);
+            if ($user['id'] != $currentUser) {
+                $userIds[] = $user['id'];
+            }
+            $rules[] = LinkRule::formatUser($names[$user['name']], intval($user['id']));
         }
-        if ($id > 0) {
-            BulletinModel::message(array_column($users, 'id'),
+        if ($id > 0 && !empty($userIds)) {
+            BulletinModel::message($userIds,
                 '我在微博提到了你', sprintf('快来看看吧【%d】', $id), 88);
         }
         return $rules;
@@ -409,7 +415,7 @@ class MicroRepository {
         if (empty($content) || !str_contains($content, '#')) {
             return [];
         }
-        if (!preg_match_all('/#(\S+?)#\s/', $content, $matches, PREG_SET_ORDER)) {
+        if (!preg_match_all('/#(\S+?)#(\s|$)/', $content, $matches, PREG_SET_ORDER)) {
             return [];
         }
         $items = [];
@@ -423,14 +429,14 @@ class MicroRepository {
         if (empty($topicItems)) {
             return [];
         }
-        $topicItems = array_column($topicItems, 'name', 'id');
+        $topicItems = array_column($topicItems, 'id', 'name');
         $rules = [];
         foreach ($items as $name => $item) {
             if (!isset($topicItems[$name])) {
                 continue;
             }
             foreach ($item as $i) {
-                $rules[] = LinkRule::formatTopic($i, $topicItems[$name]);
+                $rules[] = LinkRule::formatTopic($i, intval($topicItems[$name]));
             }
         }
         return $rules;

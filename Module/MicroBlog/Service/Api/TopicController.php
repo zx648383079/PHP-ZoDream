@@ -12,4 +12,14 @@ class TopicController extends Controller {
             TopicRepository::newList($keywords)
         );
     }
+
+    public function detailAction(int $id) {
+        try {
+            return $this->render(
+                TopicRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }
