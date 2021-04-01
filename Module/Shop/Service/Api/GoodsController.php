@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Domain\Model\ModelHelper;
@@ -8,19 +9,19 @@ use Module\Shop\Domain\Repositories\GoodsRepository;
 class GoodsController extends Controller {
 
     public function indexAction($id = 0,
-                                $category = 0,
-                                $brand = 0,
-                                $keywords = null,
-                                $per_page = 20, $sort = null, $order = null) {
+                                int $category = 0,
+                                int $brand = 0,
+                                string $keywords = '',
+                                int $per_page = 20, string $sort = '', string $order = '') {
 
         if (is_numeric($id) && $id > 0) {
-            return $this->infoAction($id);
+            return $this->infoAction(intval($id));
         }
         $page = GoodsRepository::search(ModelHelper::parseArrInt($id), $category, $brand, $keywords, $per_page, $sort, $order);
         return $this->renderPage($page);
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         $data = GoodsRepository::detail($id);
         if (empty($data)) {
             return $this->renderFailure('商品错误！');
@@ -28,12 +29,12 @@ class GoodsController extends Controller {
         return $this->render($data);
     }
 
-    public function recommendAction($id) {
+    public function recommendAction(int $id) {
         $goods_list = GoodsRepository::getRecommendQuery('is_best')->limit(3)->all();
         return $this->render($goods_list);
     }
 
-    public function hotAction($id) {
+    public function hotAction(int $id) {
         $goods_list = GoodsRepository::getRecommendQuery('is_hot')->limit(7)->get();
         return $this->render($goods_list);
     }

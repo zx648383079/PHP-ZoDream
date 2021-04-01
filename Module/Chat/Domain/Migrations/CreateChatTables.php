@@ -16,29 +16,32 @@ class CreateChatTables extends Migration {
     public function up() {
         $this->append(FriendModel::tableName(), function(Table $table) {
             $table->id();
-            $table->string('name', 100)->comment('备注');
-            $table->uint('classify_id')->comment('分组');
+            $table->string('name', 50)
+                ->default('')->comment('备注');
+            $table->uint('classify_id')->default(1)->comment('分组/1为默认分组，0为黑名单');
             $table->uint('user_id')->comment('用户');
             $table->uint('belong_id')->comment('归属');
+            $table->bool('status')->default(0)->comment('是否互相关注');
             $table->timestamps();
         })->append(ApplyModel::tableName(), function(Table $table) {
             $table->id();
-            $table->uint('classify_id')->default(0)->comment('目标分组');
             $table->uint('item_type', 2)->default(0)->comment('申请类别');
             $table->uint('item_id')->comment('申请内容');
             $table->string('remark')->default('');
-            $table->uint('apply_user_id')->comment('申请人');
+            $table->uint('user_id')->comment('申请人');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
         })->append(FriendClassifyModel::tableName(), function(Table $table) {
-            $table->id();
+            $table->id()->ai(10);
             $table->string('name', 100)->comment('分组名');
             $table->uint('user_id')->comment('用户');
             $table->timestamp('created_at');
         })->append(MessageModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('type', 2)->default(0);
-            $table->string('content')->comment('内容');
+            $table->string('content', 400)->comment('内容');
+            $table->string('extra_rule', 400)
+                ->default('')->comment('附加替换规则');
             $table->uint('item_id')
                 ->default(0)->comment('附加id');
             $table->uint('receive_id')
@@ -61,8 +64,11 @@ class CreateChatTables extends Migration {
             $table->id();
             $table->uint('group_id')->comment('群');
             $table->uint('user_id')->comment('用户');
-            $table->string('name', 100)->comment('群备注');
+            $table->string('name', 50)
+                ->default('')->comment('群备注');
             $table->uint('role_id')->default(0)->comment('管理员等级');
+            $table->uint('status', 1)
+                ->default(5)->comment('用户状态/禁言或');
             $table->timestamps();
         })->append(ChatHistoryModel::tableName(), function(Table $table) {
             $table->id();

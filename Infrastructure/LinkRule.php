@@ -21,6 +21,9 @@ class LinkRule {
         if (isset($rule['i'])) {
             return sprintf('<img src="%s" alt="%s">', $rule['i'], $rule['s']);
         }
+        if (isset($rule['f'])) {
+            return sprintf('<a href="%s" download>%s</a>', $rule['f'], $rule['s']);
+        }
         if (isset($rule['u'])) {
             return static::renderUser($rule);
         }
@@ -54,6 +57,13 @@ class LinkRule {
         return [
             's' => $word,
             'i' => $image
+        ];
+    }
+
+    public static function formatFile(string $word, string $file): array {
+        return [
+            's' => $word,
+            'f' => $file
         ];
     }
 

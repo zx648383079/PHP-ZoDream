@@ -1,17 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\Chat\Service;
 
-use Module\Chat\Domain\Model\GroupModel;
-use Module\Chat\Domain\Model\GroupUserModel;
+use Module\Chat\Domain\Repositories\GroupRepository;
 
 class GroupController extends Controller {
 
     public function indexAction() {
-        $ids = GroupUserModel::where('user_id', auth()->id())->pluck('group_id');
-        if (empty($ids)) {
-            return $this->renderData([]);
-        }
-        $data = GroupModel::whereIn('id', $ids)->all();
-        return $this->renderData($data);
+        return $this->renderData(
+            GroupRepository::all()
+        );
     }
 }

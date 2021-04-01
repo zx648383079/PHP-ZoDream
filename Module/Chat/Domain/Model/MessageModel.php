@@ -9,13 +9,15 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $id
  * @property integer $type  消息类型
  * @property string $content
+ * @property integer $item_id
  * @property integer $receive_id
  * @property integer $group_id
  * @property integer $user_id
  * @property integer $status
  * @property integer $deleted_at
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property string $extra_rule
  */
 class MessageModel extends Model {
 
@@ -38,15 +40,17 @@ class MessageModel extends Model {
 
     protected function rules() {
         return [
-            'type' => 'int:0,99',
-            'content' => 'required|string:0,200',
+            'type' => 'int:0,127',
+            'content' => 'required|string:0,400',
+            'item_id' => 'int',
             'receive_id' => 'int',
             'group_id' => 'int',
             'user_id' => 'required|int',
-            'status' => 'int:0,9',
+            'status' => 'int:0,127',
             'deleted_at' => 'int',
-            'created_at' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
+            'extra_rule' => 'string:0,400',
         ];
     }
 
@@ -55,13 +59,15 @@ class MessageModel extends Model {
             'id' => 'Id',
             'type' => 'Type',
             'content' => 'Content',
+            'item_id' => 'Item Id',
             'receive_id' => 'Receive Id',
             'group_id' => 'Group Id',
             'user_id' => 'User Id',
             'status' => 'Status',
             'deleted_at' => 'Deleted At',
-            'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_at' => 'Created At',
+            'extra_rule' => 'Extra Rule',
         ];
     }
 

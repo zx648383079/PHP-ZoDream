@@ -12,8 +12,9 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $classify_id
  * @property integer $user_id
  * @property integer $belong_id
- * @property integer $created_at
+ * @property integer $status
  * @property integer $updated_at
+ * @property integer $created_at
  */
 class FriendModel extends Model {
 
@@ -25,12 +26,13 @@ class FriendModel extends Model {
 
     protected function rules() {
         return [
-            'name' => 'required|string:0,100',
-            'classify_id' => 'required|int',
+            'name' => 'string:0,50',
+            'classify_id' => 'int',
             'user_id' => 'required|int',
             'belong_id' => 'required|int',
-            'created_at' => 'int',
+            'status' => 'int:0,127',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
 
@@ -38,11 +40,12 @@ class FriendModel extends Model {
         return [
             'id' => 'Id',
             'name' => 'Name',
-            'classify_id' => 'Group Id',
+            'classify_id' => 'Classify Id',
             'user_id' => 'User Id',
             'belong_id' => 'Belong Id',
-            'created_at' => 'Created At',
+            'status' => 'Status',
             'updated_at' => 'Updated At',
+            'created_at' => 'Created At',
         ];
     }
 

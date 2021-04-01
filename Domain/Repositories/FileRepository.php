@@ -12,7 +12,7 @@ use Zodream\Html\Page;
 
 class FileRepository {
 
-    private static $configs = [];
+    private static array $configs = [];
 
     public static function config(string $key = '', $default = null) {
         if (empty(static::$configs)) {
@@ -55,6 +55,7 @@ class FileRepository {
      * @param $fieldName
      * @param $config
      * @param string $base64
+     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
      * @throws Exception
      */
     public static function upload($fieldName, $config, $base64 = 'upload') {
@@ -95,6 +96,12 @@ class FileRepository {
         ];
     }
 
+    /**
+     * 上传文件
+     * @param string $fieldName
+     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @throws Exception
+     */
     public static function uploadFile(string $fieldName = 'file') {
         return static::upload(
             $fieldName, array(
@@ -105,6 +112,12 @@ class FileRepository {
         );
     }
 
+    /**
+     * 上传base64图片
+     * @param string $fieldName
+     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @throws Exception
+     */
     public static function uploadBase64(string $fieldName = 'file') {
         return static::upload(
             $fieldName, array(
@@ -115,6 +128,12 @@ class FileRepository {
         ), 'base64');
     }
 
+    /**
+     * 上传视频
+     * @param string $fieldName
+     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @throws Exception
+     */
     public static function uploadVideo(string $fieldName = 'file') {
         return static::upload(
             $fieldName, array(
@@ -124,10 +143,21 @@ class FileRepository {
         ));
     }
 
+    /**
+     * 上传语音
+     * @param string $fieldName
+     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @throws Exception
+     */
     public static function uploadAudio(string $fieldName = 'file') {
         return static::uploadVideo($fieldName);
     }
 
+    /**
+     * @param string $fieldName
+     * @return array ['url', 'title', 'original', 'type': 例如 .png, 'size', 'thumb']
+     * @throws Exception
+     */
     public static function uploadImage(string $fieldName = 'file') {
         $items = static::uploadImages($fieldName, 1);
         if (empty($items)) {
@@ -136,6 +166,12 @@ class FileRepository {
         return current($items);
     }
 
+    /**
+     * @param string $fieldName
+     * @param int $count
+     * @return array [['url', 'title', 'original', 'type': 例如 .png, 'size', 'thumb']]
+     * @throws Exception
+     */
     public static function uploadImages(string $fieldName = 'file', int $count = 0) {
         $upload = new Upload();
         if (!$upload->upload($fieldName)) {
