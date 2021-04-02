@@ -33,18 +33,11 @@ class HomeController extends Controller {
     }
 
     public function detailAction(int $id) {
-        $id = intval($id);
-        BlogModel::where('id', $id)->updateIncrement('click_count');
-        $blog = BlogModel::find($id);
-        if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
-            return $this->renderFailure('id 错误！');
+        try {
+            return $this->render(BlogRepository::detail($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $data = $blog->toArray();
-        $data['content'] = $blog->toHtml();
-        $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
-        $data['previous'] = $blog->previous;
-        $data['next'] = $blog->next;
-        return $this->render($data);
     }
 
     public function contentAction(int $id) {

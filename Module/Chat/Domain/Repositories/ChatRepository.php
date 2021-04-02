@@ -21,7 +21,7 @@ class ChatRepository {
         $messageIds = [];
         foreach ($page as $item) {
             if ($item['last_message'] > 0) {
-                $messageIds[] = $messageIds;
+                $messageIds[] = $item['last_message'];
             }
             if ($item['item_type'] < 1) {
                 $userIds[] = $item['item_id'];
@@ -100,7 +100,7 @@ class ChatRepository {
         if (empty($ids)) {
             return [];
         }
-        $users = MessageModel::whereIn('id', $ids)
+        $users = MessageModel::query()->whereIn('id', $ids)
             ->get();
         $items = [];
         foreach ($users as $item) {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Module\Chat\Service\Api;
 
 use Module\Chat\Domain\Repositories\FriendRepository;
-use Module\Chat\Domain\Repositories\MessageRepository;
 
 class FriendController extends Controller {
 

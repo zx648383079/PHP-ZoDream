@@ -4,7 +4,9 @@ namespace Module\Chat\Domain\Repositories;
 
 use Domain\Repositories\FileRepository;
 use Infrastructure\LinkRule;
+use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Chat\Domain\Model\ApplyModel;
+use Module\Chat\Domain\Model\GroupModel;
 use Module\Chat\Domain\Model\GroupUserModel;
 use Module\Chat\Domain\Model\MessageModel;
 use Module\SEO\Domain\Repositories\EmojiRepository;
@@ -41,12 +43,42 @@ class MessageRepository {
 
     public static function sendText(int $itemType, int $id, string $content) {
         $extraRules = array_merge(
+            [],
             // 只有群才能at 群人名
-            // self::at($content, $model->id),
+            $itemType > 0 ? self::at($content, $id) : [],
             EmojiRepository::renderRule($content)
         );
         return static::send($itemType, $id, auth()->id(),
             MessageModel::TYPE_TEXT, $content, $extraRules);
+    }
+
+    public static function at(string $content, int $group): array {
+        if (empty($content) || !str_contains($content, '@')) {
+            return [];
+        }
+        if (!preg_match_all('/@(\S+?)\s/', $content, $matches, PREG_SET_ORDER)) {
+            return [];
+        }
+        $names = array_column($matches, 0, 1);
+        $users = GroupUserModel::whereIn('name', array_keys($names))->asArray()->get();
+        if (empty($users)) {
+            return [];
+        }
+        $rules = [];
+        $currentUser = auth()->id();
+        $userIds = [];
+        foreach ($users as $user) {
+            if ($user['user_id'] != $currentUser) {
+                $userIds[] = $user['user_id'];
+            }
+            $rules[] = LinkRule::formatUser($names[$user['name']], intval($user['user_id']));
+        }
+        if (!empty($userIds)) {
+            $group = GroupModel::find($group);
+            BulletinModel::message($userIds,
+                sprintf('我在群【%s】提到了你', $group->name), sprintf('快来看看吧【%d】', $group->id), 88);
+        }
+        return $rules;
     }
 
     public static function sendImage(int $itemType, int $id, string $fieldKey = 'file') {
@@ -75,7 +107,7 @@ class MessageRepository {
         $file = FileRepository::uploadVideo($fieldKey);
         $word = '[视频]';
         return static::send($itemType, $id, auth()->id(),
-            MessageModel::TYPE_FILE, $word, [
+            MessageModel::TYPE_VIDEO, $word, [
                 LinkRule::formatFile($word, $file['url'])
             ]);
     }
@@ -84,7 +116,7 @@ class MessageRepository {
         $file = FileRepository::uploadVideo($fieldKey);
         $word = '[语音]';
         return static::send($itemType, $id, auth()->id(),
-            MessageModel::TYPE_FILE, $word, [
+            MessageModel::TYPE_VOICE, $word, [
                 LinkRule::formatFile($word, $file['url'])
             ]);
     }
@@ -127,14 +159,14 @@ class MessageRepository {
                 'user_id' => $user,
                 'status' => MessageModel::STATUS_NONE,
                 'deleted_at' => 0,
-                'extra_rule' => isset($data['extra_rule']) ? $data['extra_rule'] : '',
+                'extra_rule' => isset($item['extra_rule']) ? $item['extra_rule'] : '',
             ]);
             if (!empty($message)) {
                 $items[] = $message;
             }
         }
         if (empty($items)) {
-            throw new  \Exception('发送失败');
+            throw new \Exception('发送失败');
         }
         ChatRepository::addHistory($itemType, $id, $user, $items[count($items) - 1]['id'], count($items));
         return $items;
@@ -209,5 +241,24 @@ class MessageRepository {
             $items[$item['user_id']] = $item->toArray();
         }
         return $items;
+    }
+
+    /**
+     * 消息撤回
+     * @param int $id
+     * @throws \Exception
+     */
+    public static function revoke(int $id) {
+        $model = MessageModel::find($id);
+        if (!empty($model)) {
+            throw new \Exception('消息错误');
+        }
+        if ($model->user_id !== auth()->id()) {
+            throw new \Exception('操作错误');
+        }
+        if ($model->getAttributeSource('created_at') < time() - 120) {
+            throw new \Exception('超过两分钟无法撤回');
+        }
+        $model->delete();
     }
 }

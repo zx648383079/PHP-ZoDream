@@ -34,7 +34,8 @@ class Uploader {
         'ERROR_HTTP_LINK' => '链接不是http链接',
         'ERROR_HTTP_CONTENTTYPE' => '链接contentType不正确',
         'INVALID_URL' => '非法 URL',
-        'INVALID_IP' => '非法 IP'
+        'INVALID_IP' => '非法 IP',
+        'ERROR_FILE_AMOUNT' => '只支持单文件上传',
     );
 
     /**
@@ -68,8 +69,12 @@ class Uploader {
             $this->stateInfo = $this->getStateInfo('ERROR_FILE_NOT_FOUND');
             return;
         }
-        if ($this->file['error']) {
-            $this->stateInfo = $this->getStateInfo($file['error']);
+        if (is_array($file['error'])) {
+            $this->stateInfo = $this->getStateInfo('ERROR_FILE_AMOUNT');
+            return;
+        }
+        if ($file['error']) {
+            $this->stateInfo = $this->getStateInfo(is_array($file['error']) ? current($file['error']) : $file['error']);
             return;
         } else if (!is_file($file['tmp_name'])) {
             $this->stateInfo = $this->getStateInfo('ERROR_TMP_FILE_NOT_FOUND');
@@ -83,7 +88,6 @@ class Uploader {
         if (!$this->moveFile()) {
             return;
         }
-
         //移动文件
         if (!(move_uploaded_file($file['tmp_name'], $this->filePath) && 
             is_file($this->filePath))) { //移动失败

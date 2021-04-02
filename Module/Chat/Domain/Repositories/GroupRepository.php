@@ -5,8 +5,10 @@ namespace Module\Chat\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Chat\Domain\Model\ApplyModel;
+use Module\Chat\Domain\Model\ChatHistoryModel;
 use Module\Chat\Domain\Model\GroupModel;
 use Module\Chat\Domain\Model\GroupUserModel;
+use Module\Chat\Domain\Model\MessageModel;
 
 class GroupRepository {
 
@@ -106,5 +108,41 @@ class GroupRepository {
             ->where('item_id', $id)
             ->orderBy('status', 'asc')
             ->orderBy('id', 'desc')->page();
+    }
+
+    /**
+     * 创建群
+     * @param array $data
+     */
+    public static function create(array $data) {
+        $model = new GroupModel($data);
+        $model->user_id = auth()->id();
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        GroupUserModel::create([
+            'user_id' => $model->user_id,
+            'name' => auth()->user()->name,
+            'group_id' => $model->id,
+            'role_id' => 99,
+            'status' => 5,
+        ]);
+        return $model;
+    }
+
+    /**
+     * 解散群
+     * @param int $id
+     */
+    public static function disband(int $id) {
+        $model = GroupModel::find($id);
+        if ($model->user_id !== auth()->id()) {
+            throw new \Exception('无权限操作');
+        }
+        $model->delete();
+        GroupUserModel::where('group_id', $model->id)->delete();
+        MessageModel::where('group_id', $model->id)->delete();
+        ChatHistoryModel::where('item_id', $model->id)
+            ->where('item_type', 1)->delete();
     }
 }

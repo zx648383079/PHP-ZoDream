@@ -28,4 +28,52 @@ class MessageController extends Controller {
         }
     }
 
+    public function sendImageAction(int $type, int $id) {
+        try {
+            return $this->renderData(
+                MessageRepository::sendImage($type, $id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function sendVideoAction(int $type, int $id) {
+        try {
+            return $this->renderData(
+                MessageRepository::sendVideo($type, $id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function sendAudioAction(int $type, int $id) {
+        try {
+            return $this->renderData(
+                MessageRepository::sendAudio($type, $id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function sendFileAction(int $type, int $id) {
+        try {
+            return $this->renderData(
+                MessageRepository::sendFile($type, $id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function revokeAction(int $id) {
+        try {
+            MessageRepository::revoke($id);
+            return $this->renderData(true);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

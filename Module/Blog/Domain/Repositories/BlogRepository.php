@@ -21,6 +21,11 @@ use Zodream\Html\Page;
 
 class BlogRepository {
 
+    const LANGUAGE_MAP = [
+        'zh' => '中',
+        'en' => 'EN',
+    ];
+
     /**
      * @param string $sort
      * @param null $category
@@ -214,7 +219,29 @@ class BlogRepository {
         $data = $model->toArray();
         $data['tags'] = $tags;
         $data['open_rule'] = $model->open_rule;
+        $data['languages'] = BlogRepository::languageAll($model->parent_id > 0 ? $model->parent_id : $model->id);
         return array_merge($data, BlogMetaModel::getMetaWithDefault($id));
+    }
+
+    /**
+     * 显示在前台
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public static function detail(int $id) {
+        BlogModel::where('id', $id)->updateIncrement('click_count');
+        $blog = BlogModel::find($id);
+        if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
+            throw new Exception('id 错误！');
+        }
+        $data = $blog->toArray();
+        $data['content'] = $blog->toHtml();
+        $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
+        $data['previous'] = $blog->previous;
+        $data['next'] = $blog->next;
+        $data['languages'] = BlogRepository::languageList($blog->parent_id > 0 ? $blog->parent_id : $blog->id);
+        return $data;
     }
 
     public static function save(array $data, int $id = 0) {
@@ -272,6 +299,53 @@ class BlogRepository {
             BlogModel::where('parent_id', $id)->delete();
         }
         BlogMetaModel::deleteMeta($id);
+    }
+
+    /**
+     * 获取已有语言列表，显示在前台
+     * @param int $id
+     * @param bool $auto
+     * @return array|array[]
+     */
+    public static function languageList(int $id, bool $auto = false) {
+        if ($auto) {
+            $parent = BlogModel::where('id', $id)->value('parent_id');
+            if ($parent > 0) {
+                $id = $parent;
+            }
+        }
+        $languages = BlogModel::where('parent_id', $id)->asArray()->get('id', 'language');
+        return array_map(function (array $item) {
+            $item['id'] = intval($item['id']);
+            $item['label'] = isset(static::LANGUAGE_MAP[$item['language']]) ?
+                static::LANGUAGE_MAP[$item['language']] : strtoupper($item['language']);
+            return $item;
+        }, array_merge([
+            ['id' => $id, 'language' => 'zh']
+        ], $languages));
+    }
+
+    /**
+     * 获取所有的支持语言列表，显示在后台
+     * @param int $id
+     * @param bool $auto
+     * @return array
+     */
+    public static function languageAll(int $id, bool $auto = false) {
+        $items = array_column(static::languageList($id, $auto), null, 'language');
+        $data = [];
+        foreach (static::LANGUAGE_MAP as $language => $label) {
+            if (isset($items[$language])) {
+                $data[] = $items[$language];
+                continue;
+            }
+            $data[] = [
+                'language' => $language,
+                'label' => $label,
+                'id' => 0
+            ];
+        }
+        return $data;
     }
 
     public static function subtotal() {
