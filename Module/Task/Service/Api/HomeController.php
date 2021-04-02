@@ -41,7 +41,7 @@ class HomeController extends Controller {
                 'every_time' => 'int:0,9999',
                 'space_time' => 'int:0,127',
                 'duration' => 'int:0,127',
-                'start_at' => 'int',
+                'start_at' => '',
             ]);
             $model = TaskRepository::save($data, $id, $status);
         } catch (ValidationException $ex) {
