@@ -13,30 +13,41 @@ use Module\SEO\Domain\Repositories\EmojiRepository;
 
 class MessageRepository {
 
-    public static function ping(int $time = 0, int $user = 0) {
+    public static function ping(int $time = 0, int $type = 0, int $id = 0) {
         $message = MessageModel::where('receive_id', auth()->id())
-            ->when(!empty($time), function ($query) use ($time) {
-                $query->where('created_at', '>=', intval($time));
+            ->when($time > 0, function ($query) use ($time) {
+                $query->where('created_at', '>=', $time);
             })
             ->where('status', MessageModel::STATUS_NONE)->count();
-        $apply = ApplyModel::where('user_id', auth()->id())
-            ->when(!empty($time), function ($query) use ($time) {
-                $query->where('created_at', '>', intval($time));
+        $apply = ApplyModel::where('item_id', auth()->id())
+            ->where('item_type', 0)
+            ->when($time > 0, function ($query) use ($time) {
+                $query->where('created_at', '>', $time);
             })->where('status', 0)->count();
         $messages = [];
-        if ($user > 0) {
+        if ($id > 0) {
             $messages = MessageModel::with('user', 'receive')
-                ->where('receive_id', auth()->id())
-                ->where('user_id', $user)->where('created_at', '>=', intval($time))->get();
+                ->when($type > 0, function ($query) use ($id) {
+                    $query->where('group_id', $id);
+                }, function ($query) use ($id) {
+                    $query->where('group_id', 0)
+                        ->where('receive_id', auth()->id())
+                        ->where('user_id', $id);
+                })
+                ->where('created_at', '>=', $time)->get();
         }
         $time = time() + 1;
         return [
             'message_count' => $message,
             'apply_count' => $apply,
-            'messages' => [
-                $user => $messages,
+            'data' => empty($messages) ? [] : [
+                [
+                    'type' => $type,
+                    'id' => $id,
+                    'items' => $messages
+                ],
             ],
-            'time' => $time
+            'next_time' => $time
         ];
     }
 

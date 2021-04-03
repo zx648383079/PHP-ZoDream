@@ -12,9 +12,9 @@ class MessageController extends Controller {
         );
     }
 
-    public function pingAction(int $time = 0, int $user = 0) {
+    public function pingAction(int $start_time = 0, int $type = 0, int $id = 0) {
         return $this->render(
-            MessageRepository::ping($time, $user)
+            MessageRepository::ping($start_time, $type, $id)
         );
     }
 
