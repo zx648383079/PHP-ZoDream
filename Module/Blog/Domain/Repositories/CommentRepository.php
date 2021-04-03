@@ -3,6 +3,7 @@ namespace Module\Blog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogModel;
+use Module\Blog\Domain\Model\CommentFullModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\CommentPageModel;
 use Zodream\Html\Page;
@@ -19,8 +20,8 @@ class CommentRepository {
      * @param int $per_page
      * @return Page<CommentPageModel>
      */
-    public static function getList($blog_id, $parent_id = 0, $is_hot = false, $sort = 'created_at',
-                                   $order = 'desc', $per_page = 20) {
+    public static function getList(int $blog_id, int $parent_id = 0, $is_hot = false, $sort = 'created_at',
+                                   $order = 'desc', int $per_page = 20) {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
         return CommentPageModel::with('replies')
             ->where([
@@ -56,5 +57,49 @@ class CommentRepository {
             'blog_id' => intval($blog_id),
             'parent_id' => 0,
         ])->where('agree_count', '>', 0)->orderBy('agree_count desc')->limit($limit)->all();
+    }
+
+    /**
+     * 用于后台管理
+     * @param int $blog
+     * @param string $keywords
+     * @param string $email
+     * @param string $name
+     */
+    public static function commentList(int $blog = 0, string $keywords = '', string $email = '',
+                                   string $name = '') {
+        return CommentFullModel::with('blog')
+            ->when($blog > 0, function ($query) use ($blog) {
+                $query->where('blog_id', $blog);
+            })->when(!empty($email), function ($query) use ($email) {
+                $query->where('email', $email);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'content');
+            })->when(!empty($name), function ($query) {
+                SearchModel::searchWhere($query, 'name', false, 'name');
+            })->orderBy('id', 'desc')->page();
+    }
+
+    public static function remove(int $id) {
+        CommentModel::where('id', $id)->delete();
+    }
+
+    /**
+     * 前台删除，博主或发表人
+     * @param int $id
+     */
+    public static function removeSelf(int $id) {
+        $model = CommentModel::find($id);
+        if (empty($model)) {
+            throw new Exception('评论删除失败');
+        }
+        if ($model->user_id > 0 && $model->user_id === auth()->id()) {
+            $model->delete();
+            return;
+        }
+        if (!BlogRepository::isSelf($model->blog_id)) {
+            throw new Exception('评论删除失败');
+        }
+        $model->delete();
     }
 }

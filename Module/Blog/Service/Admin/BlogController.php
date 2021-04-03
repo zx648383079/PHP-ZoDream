@@ -1,13 +1,9 @@
 <?php
 namespace Module\Blog\Service\Admin;
 
-use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
-use Module\Blog\Domain\Model\BlogPageModel;
-use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
-use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\TagRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;

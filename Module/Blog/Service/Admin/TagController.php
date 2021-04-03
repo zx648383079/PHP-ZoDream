@@ -14,7 +14,7 @@ class TagController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $model_list = TagModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
@@ -28,7 +28,7 @@ class TagController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = TagModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -43,7 +43,7 @@ class TagController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         TagModel::where('id', $id)->delete();
         TagRelationshipModel::where('tag_id', $id)->delete();
         return $this->renderData([

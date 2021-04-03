@@ -27,19 +27,20 @@ class BlogRepository {
     ];
 
     /**
-     * @param string $sort
-     * @param null $category
-     * @param null $keywords
-     * @param null $user
-     * @param null $language
-     * @param null $programming_language
-     * @param null $tag
+     * @param string|array $sort
+     * @param int $category
+     * @param string $keywords
+     * @param int $user
+     * @param string $language
+     * @param string $programming_language
+     * @param string $tag
      * @param int $per_page
      * @return Page<BlogModel>
+     * @throws Exception
      */
-    public static function getList($sort = 'new', $category = null, $keywords = null,
-                                   $user = null, $language = null, $programming_language = null,
-                                   $tag = null, $per_page = 20) {
+    public static function getList(string|array $sort = 'new', int $category = 0, string $keywords = '',
+                                   int $user = 0, string $language = '', string $programming_language = '',
+                                   string $tag = '', int $per_page = 20) {
         /** @var Page $page */
         $page = self::bindQuery(BlogPageModel::with('term', 'user'),
             $sort, $category, $keywords,
@@ -61,9 +62,9 @@ class BlogRepository {
             })->orderBy('id', 'desc')->page();
     }
 
-    public static function getSimpleList($sort = 'new', $category = null, $keywords = null,
-                                   $user = null, $language = null, $programming_language = null,
-                                   $tag = null, $limit = 5) {
+    public static function getSimpleList(string|array $sort = 'new', int $category = 0, string $keywords = '',
+                                   int $user = 0, string $language = '', string $programming_language = '',
+                                   string $tag = '', int $limit = 5) {
         /** @var Page $page */
         $page = self::bindQuery(BlogSimpleModel::query(), $sort, $category, $keywords,
             $user, $language, $programming_language,
@@ -74,24 +75,26 @@ class BlogRepository {
 
     /**
      * @param SqlBuilder $query
-     * @param string $sort
-     * @param null $category
-     * @param null $keywords
-     * @param null $user
-     * @param null $language
-     * @param null $programming_language
-     * @param null $tag
+     * @param string|array $sort
+     * @param int $category
+     * @param string $keywords
+     * @param int $user
+     * @param string $language
+     * @param string $programming_language
+     * @param string $tag
      * @return SqlBuilder
      */
-    private static function bindQuery(SqlBuilder $query, $sort = 'new', $category = null, $keywords = null,
-                                      $user = null, $language = null, $programming_language = null,
-                                      $tag = null) {
+    private static function bindQuery(SqlBuilder $query, string|array $sort = 'new', int $category = 0,
+                                      string $keywords = '',
+                                      int $user = 0, string $language = '',
+                                      string $programming_language = '',
+                                      string $tag = '') {
         return $query->where('open_type', '<>', BlogModel::OPEN_DRAFT)
             ->when($category > 0, function ($query) use ($category) {
-                $query->where('term_id', intval($category));
+                $query->where('term_id', $category);
             })
             ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', intval($user));
+                $query->where('user_id', $user);
             })
             ->when(!empty($sort), function ($query) use ($sort) {
                 if (is_array($sort)) {
@@ -131,27 +134,27 @@ class BlogRepository {
      * @param int $limit
      * @return BlogSimpleModel[]
      */
-    public static function getNew($limit = 5) {
+    public static function getNew(int $limit = 5) {
         return self::getSimpleList('new',
-            0, null, 0, null, null, null, $limit);
+            0, '', 0, '', '', '', $limit);
     }
     /**
      * 获取热门文章
      * @param int $limit
      * @return BlogSimpleModel[]
      */
-    public static function getHot($limit = 5) {
+    public static function getHot(int $limit = 5) {
         return self::getSimpleList('hot',
-            0, null, 0, null, null, null, $limit);
+            0, '', 0, '', '', '', $limit);
     }
     /**
      * 获取推荐文章
      * @param int $limit
      * @return BlogSimpleModel[]
      */
-    public static function getBest($limit = 5) {
+    public static function getBest(int $limit = 5) {
         return self::getSimpleList('best',
-            0, null, 0, null, null, null, $limit);
+            0, '', 0, '', '', '', $limit);
     }
 
     public static function getArchives() {
@@ -288,7 +291,7 @@ class BlogRepository {
         return $model;
     }
 
-    public static function remove($id) {
+    public static function remove(int $id) {
         $model = BlogModel::where('id', $id)->where('user_id', auth()->id())
             ->first();
         if (empty($model)) {
@@ -299,6 +302,28 @@ class BlogRepository {
             BlogModel::where('parent_id', $id)->delete();
         }
         BlogMetaModel::deleteMeta($id);
+    }
+
+    /**
+     * 管理员删除
+     * @param int $id
+     */
+    public static function manageRemove(int $id) {
+        $model = BlogModel::where('id', $id)
+            ->first();
+        if (empty($model)) {
+            throw new Exception('文章不存在');
+        }
+        $model->delete();
+        if ($model->parent_id < 1) {
+            BlogModel::where('parent_id', $id)->delete();
+        }
+        BlogMetaModel::deleteMeta($id);
+    }
+
+    public static function isSelf(int $id): bool {
+        return  BlogModel::where('id', $id)->where('user_id', auth()->id())
+            ->count() > 0;
     }
 
     /**

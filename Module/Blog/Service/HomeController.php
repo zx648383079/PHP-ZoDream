@@ -23,9 +23,9 @@ class HomeController extends Controller {
     }
 
     public function indexAction(
-        string $sort = 'new', $category = null, $keywords = null,
-        $user = null, $language = null, $programming_language = null,
-        $tag = null, int $id = 0) {
+        string $sort = 'new', int $category = 0, string $keywords = '',
+        int $user = 0, string $language = '', string $programming_language = '',
+        string $tag = '', int $id = 0) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
@@ -67,26 +67,25 @@ class HomeController extends Controller {
         return $this->show('detail', compact('blog', 'cat_list', 'languages', 'tags', 'relation_list', 'metaItems'));
     }
 
-    public function logAction($blog) {
+    public function logAction(int $blog) {
         $this->layout = false;
         $log_list = BlogLogModel::with('user', 'blog')
-            ->where('id_value', intval($blog))
+            ->where('id_value', $blog)
             ->where('type', BlogLogModel::TYPE_BLOG)
             ->orderBy('created_at desc')
             ->page();
         return $this->show(compact('log_list'));
     }
 
-    public function counterAction($blog) {
-        $id = intval($blog);
+    public function counterAction(int $blog) {
+        $id = $blog;
         BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogModel::query()->where('id', $id)->asArray()
             ->first('click_count', 'recommend_count', 'comment_count');
         return $this->renderData($blog);
     }
 
-    public function recommendAction($id) {
-        $id = intval($id);
+    public function recommendAction(int $id) {
         if (!BlogModel::canRecommend($id)) {
             return $this->renderFailure('一个用户只能操作一次！');
         }
@@ -95,7 +94,7 @@ class HomeController extends Controller {
         return $this->renderData($model->recommend_count);
     }
 
-    public function suggestionAction($keywords) {
+    public function suggestionAction(string $keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();

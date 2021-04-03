@@ -1,27 +1,18 @@
 <?php
 namespace Module\Blog\Service\Admin;
 
-use Domain\Model\SearchModel;
-use Module\Blog\Domain\Model\CommentModel;
+use Module\Blog\Domain\Repositories\CommentRepository;
 
 class CommentController extends Controller {
 
-    public function indexAction($blog_id = null, $keywords = null, $email = null, $name = null) {
-        $comment_list = CommentModel::with('blog')
-            ->when(!empty($blog_id), function ($query) use ($blog_id) {
-                $query->where('blog_id', intval($blog_id));
-            })->when(!empty($email), function ($query) use ($email) {
-                $query->where('email', $email);
-            })->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'content');
-            })->when(!empty($name), function ($query) {
-                SearchModel::searchWhere($query, 'name', false, 'name');
-            })->orderBy('id', 'desc')->page();
+    public function indexAction(int $blog_id = 0, string $keywords = '', string $email = '',
+                                string $name = '') {
+        $comment_list = CommentRepository::commentList($blog_id, $keywords, $email, $name);
         return $this->show(compact('comment_list'));
     }
 
-    public function deleteAction($id) {
-        CommentModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        CommentRepository::remove($id);
         return $this->renderData([
             'url' => $this->getUrl('comment')
         ]);

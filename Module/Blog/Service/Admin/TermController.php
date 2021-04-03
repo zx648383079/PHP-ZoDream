@@ -12,7 +12,7 @@ class TermController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $term_list = TermModel::withCount('blog')->orderBy('id', 'desc')->all();
         return $this->show(compact('term_list'));
     }
@@ -21,7 +21,7 @@ class TermController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = TermModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -36,7 +36,7 @@ class TermController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         TermModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => $this->getUrl('term')

@@ -20,7 +20,7 @@ class TagRepository extends TagBase {
         return TagModel::query()->get();
     }
 
-    public static function getTags($blog_id) {
+    public static function getTags(int $blog_id) {
         if (isset(self::$caches[$blog_id])) {
             return self::$caches[$blog_id];
         }
@@ -32,7 +32,7 @@ class TagRepository extends TagBase {
         return self::$caches[$blog_id] = empty($tags) ? [] : $tags;
     }
 
-    public static function getRelationBlogs($blog_id) {
+    public static function getRelationBlogs(int $blog_id) {
         $tags = self::getTags($blog_id);
         if (empty($tags)) {
             return [];
