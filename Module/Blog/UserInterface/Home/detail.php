@@ -75,9 +75,9 @@ $this->set([
 </div>
 
 
-<div class="book-body<?= $blog->type == 1 && $metaItems['is_hide'] ?  '' : ' open' ?>">
+<div class="book-body book-fork-box<?= $blog->type == 1 && $metaItems['is_hide'] ?  '' : ' open' ?>">
     <a class="book-fork" href="https://github.com/zx648383079/PHP-ZoDream">
-        <img src="/assets/images/forkme.png" alt="Fork Me On Github">
+        <span>Fork Me On Github</span>
     </a>
     <div class="info">
         <?php if(count($languages) > 1):?>

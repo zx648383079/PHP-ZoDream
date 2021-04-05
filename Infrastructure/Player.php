@@ -7,6 +7,22 @@ use Zodream\Template\View;
 
 class Player {
 
+    public static function player(View $view, string $src, string $type = 'video') {
+        if ($type === 'video' && static::isFrame($src)) {
+            $type = 'iframe';
+        }
+        $data = Json::encode(compact('src', 'type'));
+        $js = <<<JS
+var player = $('#player').player({$data});
+JS;
+        $view->registerJs($js)
+            ->registerCssFile('@player.css')
+            ->registerJsFile('@jquery.player.min.js');
+        return <<<HTML
+<div id="player"></div>
+HTML;
+    }
+
     public static function audioPlayer(string|array $url, View $view): string {
         if (!is_array($url)) {
             $url = compact('url');
@@ -36,17 +52,19 @@ HTML;
         if (empty($url)) {
             return '';
         }
-        $host = parse_url($url, PHP_URL_HOST);
-        if (
-            in_array($host, [
-                'player.youku.com',
-                'player.bilibili.com',
-                'v.qq.com',
-            ])
-        ) {
+        if (static::isFrame($url)) {
             return static::createIframe($url);
         }
         return static::createVideo($url, $cover, $view);
+    }
+
+    protected static function isFrame(string $src) {
+        $host = parse_url($src, PHP_URL_HOST);
+        return in_array($host, [
+            'player.youku.com',
+            'player.bilibili.com',
+            'v.qq.com',
+        ]);
     }
 
     protected static function createVideo(string $url, string $cover, View $view): string {

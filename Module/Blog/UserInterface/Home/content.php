@@ -8,22 +8,11 @@ $html = $blog->toHtml();
 ?>
 <?php if($blog->can_read):?>
     <?php if(isset($metaItems['audio_url']) && !empty($metaItems['audio_url'])):?>
-    <div class="audio-box">
-        <?= Player::audioPlayer([
-                'url' => $metaItems['audio_url'],
-                'cover' => $blog->thumb,
-                'name' => $blog->title,
-                'artist' => $blog->user->name
-        ], $this) ?>
-    </div>
+        <?= Player::player($this, $metaItems['audio_url'], 'audio') ?>
     <?php endif;?>
     <?php if(isset($metaItems['video_url']) && !empty($metaItems['video_url'])):?>
-    <div class="video-box">
-        <?= Player::videoPlayer([
-                'url' => $metaItems['video_url'],
-                'cover' => $blog->thumb,
-        ], $this) ?>
-    </div>
+
+        <?= Player::player($this, $metaItems['video_url']) ?>
     <?php endif;?>
    <?=$html?>
 <?php else:?>
