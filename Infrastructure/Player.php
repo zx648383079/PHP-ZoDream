@@ -13,9 +13,9 @@ class Player {
         }
         $data = Json::encode(compact('src', 'type'));
         $js = <<<JS
-var player = $('#player').player({$data});
+$('#player').player({$data});
 JS;
-        $view->registerJs($js)
+        $view->registerJs($js, View::JQUERY_READY)
             ->registerCssFile('@player.css')
             ->registerJsFile('@jquery.player.min.js');
         return <<<HTML
