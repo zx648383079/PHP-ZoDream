@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
@@ -7,13 +8,13 @@ use Module\CMS\Module;
 
 class ContentController extends Controller {
 
-    public function indexAction($id, $category, $model) {
+    public function indexAction(int $id, int|string $category, int|string $model) {
         $cat = FuncHelper::channel($category, true);
         if (empty($cat)) {
             return $this->redirect('./');
         }
         FuncHelper::$current['channel'] = $cat->id;
-        FuncHelper::$current['content'] = intval($id);
+        FuncHelper::$current['content'] = $id;
         $model = FuncHelper::model($model);
         if (empty($model)) {
             return $this->redirect('./');

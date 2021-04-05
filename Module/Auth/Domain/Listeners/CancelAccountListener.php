@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Listeners;
-
 
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Model\AccountLogModel;

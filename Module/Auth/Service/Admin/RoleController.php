@@ -17,7 +17,7 @@ class RoleController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $role_list = RoleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
         })->page();
@@ -28,7 +28,7 @@ class RoleController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = RoleModel::findOrNew($id);
         $permission_list = PermissionModel::all();
         return $this->show('edit', compact('model', 'permission_list'));
@@ -45,10 +45,8 @@ class RoleController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
-        RoleModel::where('id', $id)->delete();
-        UserRoleModel::where('role_id', $id)->delete();
-        RolePermissionModel::where('role_id', $id)->delete();
+    public function deleteAction(int $id) {
+        RoleRepository::removeRole($id);
         return $this->renderData([
             'url' => $this->getUrl('role')
         ]);

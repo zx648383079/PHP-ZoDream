@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\LinkageDataModel;
@@ -15,7 +16,7 @@ class LinkageController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = LinkageModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -30,25 +31,25 @@ class LinkageController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         LinkageModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => $this->getUrl('linkage')
         ]);
     }
 
-    public function dataAction($id, $parent_id = 0) {
+    public function dataAction(int $id, int $parent_id = 0) {
         $model = LinkageModel::find($id);
         $model_list = LinkageDataModel::where('linkage_id', $id)->where('parent_id', $parent_id)->all();
         $parent = $parent_id > 0 ? LinkageDataModel::find($id) : null;
         return $this->show(compact('model_list', 'model', 'parent_id', 'parent'));
     }
 
-    public function createDataAction($linkage_id, $parent_id = null) {
+    public function createDataAction(int $linkage_id, int $parent_id = 0) {
         return $this->editDataAction(0, $linkage_id, $parent_id);
     }
 
-    public function editDataAction($id, $linkage_id = null, $parent_id = null) {
+    public function editDataAction(int $id, int $linkage_id = 0, int $parent_id = 0) {
         $model = LinkageDataModel::findOrNew($id);
         if (!$model->position) {
             $model->position = 99;
@@ -72,7 +73,7 @@ class LinkageController extends Controller {
         ]);
     }
 
-    public function deleteDataAction($id) {
+    public function deleteDataAction(int $id) {
         $model = LinkageDataModel::find($id);
         $model->delete();
         return $this->renderData([
@@ -80,7 +81,7 @@ class LinkageController extends Controller {
         ]);
     }
 
-    public function treeAction($id) {
+    public function treeAction(int $id) {
         return $this->renderData(LinkageModel::idTree($id));
     }
 

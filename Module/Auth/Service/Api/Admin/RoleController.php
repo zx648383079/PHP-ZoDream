@@ -37,9 +37,7 @@ class RoleController extends Controller {
     }
 
     public function deleteAction(int $id) {
-        RoleModel::where('id', $id)->delete();
-        UserRoleModel::where('role_id', $id)->delete();
-        RolePermissionModel::where('role_id', $id)->delete();
+        RoleRepository::removeRole($id);
         return $this->renderData(true);
     }
 

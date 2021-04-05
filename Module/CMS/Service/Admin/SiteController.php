@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\SiteModel;
@@ -16,7 +17,7 @@ class SiteController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = SiteModel::findOrNew($id);
         $themes = (new ThemeManager)->getAllThemes();
         return $this->show('edit', compact('model', 'themes'));
@@ -33,7 +34,7 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         $model = SiteModel::find($id);
         $model->delete();
         CMSRepository::removeSite($model);
@@ -42,14 +43,14 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function changeAction($id) {
+    public function changeAction(int $id) {
         CMSRepository::resetSite($id);
         return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }
 
-    public function defaultAction($id) {
+    public function defaultAction(int $id) {
         $model = SiteModel::find($id);
         $model->is_default = 1;
         $model->save();
@@ -61,12 +62,12 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function optionAction($id) {
+    public function optionAction(int $id) {
         $model = SiteModel::find($id);
         return $this->show(compact('model'));
     }
 
-    public function saveOptionAction($id, $option = [], $field = []) {
+    public function saveOptionAction(int $id, array $option = [], array $field = []) {
         $model = SiteModel::find($id);
         $options = $model->options;
         if (!empty($option)) {

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
 use Exception;
+use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
@@ -32,6 +33,7 @@ class RoleRepository {
             throw new Exception($model->getFirstError());
         }
         $model->setPermission($permission);
+        event(new ManageAction('role_edit', '', 11, $model->id));
         return $model;
     }
 
@@ -150,6 +152,18 @@ class RoleRepository {
         if (!$model->load($data) || !$model->autoIsNew()->save()) {
             throw new Exception($model->getFirstError());
         }
+        event(new ManageAction('permission_edit', $model->name, 12, $model->id));
         return $model;
+    }
+
+    public static function removeRole(int $id) {
+        $model = RoleModel::find($id);
+        if (empty($model)) {
+            return;
+        }
+        $model->delete();
+        UserRoleModel::where('role_id', $id)->delete();
+        RolePermissionModel::where('role_id', $id)->delete();
+        event(new ManageAction('role_remove', $model->name, 11, $model->id));
     }
 }

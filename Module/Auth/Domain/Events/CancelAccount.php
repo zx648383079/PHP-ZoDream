@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Events;
 
 
@@ -7,18 +8,13 @@ use Module\Auth\Domain\Model\UserModel;
 class CancelAccount {
 
     /**
-     * @var UserModel 用户模型
+     * CancelAccount constructor.
+     * @param UserModel $user 用户模型
+     * @param int $timestamp 注销时间戳
      */
-    protected $user;
-
-    /**
-     * @var int 注销时间戳
-     */
-    protected $timestamp;
-
-    public function __construct(UserModel $user, $timestamp) {
-        $this->user = $user;
-        $this->timestamp = $timestamp;
+    public function __construct(
+        protected UserModel $user,
+        protected int $timestamp) {
     }
 
 

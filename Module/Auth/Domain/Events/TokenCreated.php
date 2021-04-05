@@ -1,28 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Events;
-
 
 use Module\Auth\Domain\Model\UserModel;
 
 class TokenCreated {
 
-    /**
-     * @var UserModel 用户模型
-     */
-    protected $user;
-
-    /**
-     * @var string
-     */
-    protected $token;
-    /**
-     * @var int
-     */
-    protected $expiredAt;
-
-    public function __construct($token, UserModel $user, $tokenExpired = 20160) {
-        $this->token = $token;
-        $this->user = $user;
+    protected int $expiredAt;
+    public function __construct(
+        protected string $token,
+        protected UserModel $user,
+        int $tokenExpired = 20160) {
         $this->expiredAt = $tokenExpired + time();
     }
 

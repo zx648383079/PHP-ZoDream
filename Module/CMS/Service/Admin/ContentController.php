@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
+use Module\Auth\Domain\Events\ManageAction;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 
 class ContentController extends Controller {
-    public function indexAction($cat_id, $model_id = 0, $keywords = null, $parent_id = 0) {
-        $parent_id = intval($parent_id);
+    public function indexAction(int $cat_id, int $model_id = 0, string $keywords = '', int $parent_id = 0) {
         $cat = CategoryModel::find($cat_id);
         if ($model_id < 1) {
             $model_id = $cat->model_id;
@@ -20,7 +21,7 @@ class ContentController extends Controller {
         return $this->show(compact('model_list', 'cat', 'keywords', 'parent_id', 'model'));
     }
 
-    public function createAction($cat_id, $model_id, $parent_id = 0) {
+    public function createAction(int $cat_id, int $model_id, int $parent_id = 0) {
         return $this->editAction(0, $cat_id, $model_id, $parent_id);
     }
 
@@ -32,7 +33,7 @@ class ContentController extends Controller {
      * @param int $parent_id
      * @throws \Exception
      */
-    public function editAction($id, $cat_id, $model_id, $parent_id = 0) {
+    public function editAction(int $id, int $cat_id, int $model_id, int $parent_id = 0) {
         $cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
@@ -45,7 +46,7 @@ class ContentController extends Controller {
             'data', 'tab_list'));
     }
 
-    public function saveAction($id, $cat_id, $model_id) {
+    public function saveAction(int $id, int $cat_id, int $model_id) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
@@ -55,6 +56,7 @@ class ContentController extends Controller {
         } else {
             $scene->insert($data);
         }
+        event(new ManageAction('cms_content_edit', '', 33, $id));
         if ($scene->hasError()) {
             return $this->renderFailure($scene->getFirstError());
         }
@@ -70,7 +72,7 @@ class ContentController extends Controller {
         ]);
     }
 
-    public function deleteAction($id, $cat_id, $model_id) {
+    public function deleteAction(int $id, int $cat_id, int $model_id) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()

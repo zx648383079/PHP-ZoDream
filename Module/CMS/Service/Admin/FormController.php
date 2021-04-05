@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -7,7 +8,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Module;
 
 class FormController extends Controller {
-    public function indexAction($id, $keywords = null) {
+    public function indexAction(int $id, string $keywords = '') {
         $model = ModelModel::find($id);
         $scene = CMSRepository::scene()->setModel($model);
         $model_list = $scene->search($keywords, [
@@ -16,7 +17,7 @@ class FormController extends Controller {
         return $this->show(compact('model_list', 'keywords', 'model'));
     }
 
-    public function createAction($model_id) {
+    public function createAction(int $model_id) {
         return $this->editAction(0, $model_id);
     }
 
@@ -26,7 +27,7 @@ class FormController extends Controller {
      * @param $model_id
      * @throws \Exception
      */
-    public function editAction($id, $model_id) {
+    public function editAction(int $id, int $model_id) {
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [];
@@ -34,7 +35,7 @@ class FormController extends Controller {
         return $this->show('edit', compact('id', 'model_id', 'model', 'scene', 'data', 'tab_list'));
     }
 
-    public function saveAction($id, $model_id) {
+    public function saveAction(int $id, int $model_id) {
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
         $data = request()->get();
@@ -51,7 +52,7 @@ class FormController extends Controller {
         ]);
     }
 
-    public function deleteAction($id, $model_id) {
+    public function deleteAction(int $id, int $model_id) {
         $model = ModelModel::find($model_id);
         CMSRepository::scene()->setModel($model)->remove($id);
         return $this->renderData([

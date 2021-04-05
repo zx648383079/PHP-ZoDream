@@ -1,42 +1,24 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Events;
 
 
 use Module\Auth\Domain\Model\UserModel;
 
 class Login {
-    /**
-     * @var UserModel 用户模型
-     */
-    protected $user;
-
-    /**
-     * @var string Agent对象
-     */
-    protected $agent;
-
-    /**
-     * @var string IP地址
-     */
-    protected $ip;
-
-    /**
-     * @var int 登录时间戳
-     */
-    protected $timestamp;
 
     /**
      * Create a new event instance.
-     * @param $user
-     * @param $agent
-     * @param $ip
-     * @param $timestamp
+     * @param UserModel $user 用户模型
+     * @param string $agent Agent对象
+     * @param string $ip IP地址
+     * @param int $timestamp 登录时间戳
      */
-    public function __construct(UserModel $user, $agent, $ip, $timestamp) {
-        $this->user = $user;
-        $this->agent = $agent;
-        $this->ip = $ip;
-        $this->timestamp = $timestamp;
+    public function __construct(
+        protected UserModel $user,
+        protected string $agent,
+        protected string $ip,
+        protected int $timestamp) {
     }
 
     /**

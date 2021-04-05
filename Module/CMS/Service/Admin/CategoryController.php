@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\CategoryModel;
@@ -18,7 +19,7 @@ class CategoryController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = CategoryModel::findOrNew($id);
         if (!$model->position) {
             $model->position = 99;
@@ -60,7 +61,7 @@ class CategoryController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         $items = CategoryModel::getChildrenWithParent($id);
         $cat = CategoryModel::find($id);
         $modelIds = CategoryModel::whereIn('id', $items)

@@ -7,8 +7,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class CategoryController extends Controller {
 
-    public function indexAction($id) {
-        FuncHelper::$current['channel'] = intval($id);
+    public function indexAction(int $id) {
+        FuncHelper::$current['channel'] = $id;
         $cat = FuncHelper::channel($id, true);
         if (empty($cat)) {
             return $this->redirect('./');
@@ -22,7 +22,7 @@ class CategoryController extends Controller {
             compact('cat', 'page', 'title'));
     }
 
-    public function listAction(Request $request, $id) {
+    public function listAction(Request $request, int $id) {
         FuncHelper::$current['channel'] = $id;
         $cat = FuncHelper::channel($id, true);
         $queries = $request->get();

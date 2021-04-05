@@ -6,6 +6,7 @@ use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AccountRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
@@ -26,7 +27,7 @@ class UserController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = UserModel::findOrNew($id);
         $role_list = RoleModel::all();
         return $this->show('edit', compact('model', 'role_list'));
@@ -54,32 +55,26 @@ class UserController extends Controller {
         ]);
     }
 
-    public function accountAction($id) {
+    public function accountAction(int $id) {
         $user = UserModel::find($id);
         $log_list = AccountLogModel::where('user_id', $id)->orderBy('id', 'desc')
             ->page();
         return $this->show(compact('user', 'log_list'));
     }
 
-    public function rechargeAction($id) {
+    public function rechargeAction(int $id) {
         $user = UserModel::find($id);
         return $this->show(compact('user'));
     }
 
-    public function rechargeSaveAction($user_id, $money, $remark, $type = 0) {
-        $money = abs(intval($money));
-        if ($money <= 0) {
-            return $this->renderFailure('金额输入不正确');
+    public function rechargeSaveAction(int $user_id, float $money, string $remark, int $type = 0) {
+        try {
+            AccountRepository::recharge($user_id, $money, $remark, $type);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($type > 0) {
-            $money *= -1;
-        }
-        if (AccountLogModel::change($user_id,
-            AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
-            return $this->renderData([
-                'url' => url('./@admin/user/account', ['id' => $user_id])
-            ], '充值成功');
-        }
-        return $this->renderFailure('操作失败，金额不足');
+        return $this->renderData([
+            'url' => url('./@admin/user/account', ['id' => $user_id])
+        ], '充值成功');
     }
 }

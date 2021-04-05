@@ -1,28 +1,20 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Model\UserModel;
 
 class Register {
     /**
-     * @var UserModel 用户模型
+     * Register constructor.
+     * @param UserModel $user 用户模型
+     * @param string $ip IP地址
+     * @param int $timestamp 登
      */
-    protected $user;
-
-    /**
-     * @var string IP地址
-     */
-    protected $ip;
-
-    /**
-     * @var int 登录时间戳
-     */
-    protected $timestamp;
-
-    public function __construct(UserModel $user, $ip, $timestamp) {
-        $this->user = $user;
-        $this->ip = $ip;
-        $this->timestamp = $timestamp;
+    public function __construct(
+        protected UserModel $user,
+        protected string $ip,
+        protected int $timestamp) {
     }
 
     /**

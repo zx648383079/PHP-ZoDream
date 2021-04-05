@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\ThemeManager;
 use Zodream\Helpers\Json;
-use Zodream\Image\ImageStatic;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class ThemeController extends Controller {
     public function indexAction() {
@@ -24,7 +25,7 @@ class ThemeController extends Controller {
         return $this->show();
     }
 
-    public function applyAction($theme) {
+    public function applyAction(string $theme) {
         (new ThemeManager())->apply($theme);
         return $this->renderData([
             'url' => $this->getUrl('theme')
@@ -41,11 +42,16 @@ class ThemeController extends Controller {
     public function installAction() {
     }
 
-    public function coverAction($theme) {
+    public function coverAction(Output $output, string $theme) {
         $manager = new ThemeManager();
         $folder = $manager->getSrc()->directory($theme);
         $data = $folder->file('theme.json')->read();
         $data = Json::decode($data);
-        return app('response')->image(ImageStatic::make($folder->file($data['cover'])));
+        $file = $folder->file($data['cover']);
+        $output->header->setContentType($file->getExtension())
+            ->setContentDisposition($file->getName());
+        return $output->setParameter(
+            $file
+        );
     }
 }

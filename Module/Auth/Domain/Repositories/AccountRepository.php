@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\OAuthModel;
@@ -30,6 +31,9 @@ class AccountRepository {
             AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
             throw new Exception('操作失败，金额不足');
         }
+        event(new ManageAction('user_recharge',
+            sprintf('充值金额：%d', $money)
+            , 6, $user_id));
     }
 
     public static function cancel(UserModel $user, string $reason) {

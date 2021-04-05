@@ -4,23 +4,28 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
 $menus = [];
-foreach ($cat_menu as $item) {
-    $menus[] = [
-        sprintf('%s %s', $item['level'] > 0 ? 'ￂ'.
-            str_repeat('ｰ', $item['level'] - 1) : '', $item['title']),
-        ['./@admin/content', 'cat_id' => $item['id']],
-        'fa fa-file'
-    ];
+if (isset($cat_menu)){
+    foreach ($cat_menu as $item) {
+        $menus[] = [
+            sprintf('%s %s', $item['level'] > 0 ? 'ￂ'.
+                str_repeat('ｰ', $item['level'] - 1) : '', $item['title']),
+            ['./@admin/content', 'cat_id' => $item['id']],
+            'fa fa-file'
+        ];
+    }
 }
 
 $form_menu = [];
-foreach ($form_list as $item) {
-    $form_menu[] = [
-        $item['name'],
-        ['./@admin/form', 'id' => $item['id']],
-        'fa fa-paint-brush'
-    ];
+if (isset($form_list)) {
+    foreach ($form_list as $item) {
+        $form_menu[] = [
+            $item['name'],
+            ['./@admin/form', 'id' => $item['id']],
+            'fa fa-paint-brush'
+        ];
+    }
 }
+
 
 $this->registerCssFile([
         '@font-awesome.min.css',

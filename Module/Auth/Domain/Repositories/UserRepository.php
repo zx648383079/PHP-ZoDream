@@ -6,6 +6,7 @@ use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Events\CancelAccount;
+use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
@@ -86,6 +87,7 @@ class UserRepository {
             throw new Exception($model->getFirstError());
         }
         static::saveRoles($model->id, $roles);
+        event(new ManageAction('user_edit', $model->name, 5, $model->id));
         return $model;
     }
 
@@ -115,6 +117,7 @@ class UserRepository {
         $user = UserModel::find($id);
         $user->delete();
         event(new CancelAccount($user, time()));
+        event(new ManageAction('user_remove', $user->name, 5, $user->id));
     }
 
     /**
