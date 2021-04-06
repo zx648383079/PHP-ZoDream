@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
-
 
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -189,42 +189,6 @@ class MultiScene extends BaseScene {
         CreateCmsTables::updateTable($table,
             dropColumns: $table->columns()
         );
-        return true;
-    }
-
-    public function insert(array $data) {
-        $count = $this->query()
-            ->where('title', $data['title'])->count();
-        if ($count > 0) {
-            return $this->setError('title', '标题重复');
-        }
-        list($main, $extend) = $this->filterInput($data);
-        $main['updated_at'] = $main['created_at'] = time();
-        $main['cat_id'] = intval($data['cat_id']);
-        $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
-        $main['model_id'] = $this->model->id;
-        $main['user_id'] = auth()->id();
-        $id = $this->query()->insert($main);
-        $extend['id'] = $id;
-        $this->extendQuery()->insert($extend);
-        return true;
-    }
-
-    public function update($id, array $data) {
-        $count = $this->query()->where('id', '<>', $id)
-            ->where('title', $data['title'])->count();
-        if ($count > 0) {
-            return $this->setError('title', '标题重复');
-        }
-        list($main, $extend) = $this->filterInput($data);
-        $main['updated_at'] = time();
-        $main['model_id'] = $this->model->id;
-        $this->query()
-            ->where('id', $id)->update($main);
-        if (!empty($extend)) {
-            $this->extendQuery()
-                ->where('id', $id)->update($extend);
-        }
         return true;
     }
 

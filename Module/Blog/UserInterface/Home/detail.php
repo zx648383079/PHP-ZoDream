@@ -35,6 +35,7 @@ $this->set([
     ],
 ])->extend('layouts/header')
     ->registerJsFile('@jquery.sideNav.min.js')
+    ->registerJsFile('@clipboard.min.js')
     ->registerJs($js, View::JQUERY_READY);
 ?>
 <div class="book-title book-mobile-inline">

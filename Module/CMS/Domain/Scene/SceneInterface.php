@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Model\ModelFieldModel;

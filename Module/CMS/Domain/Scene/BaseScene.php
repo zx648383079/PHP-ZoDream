@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Fields\BaseField;
@@ -83,6 +84,44 @@ abstract class BaseScene implements SceneInterface {
         }));
     }
 
+    public function insert(array $data) {
+        $count = $this->query()
+            ->where('title', $data['title'])->count();
+        if ($count > 0) {
+            return $this->setError('title', '标题重复');
+        }
+        list($main, $extend) = $this->filterInput($data);
+        $main['updated_at'] = $main['created_at'] = time();
+        $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
+        $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
+        $main['model_id'] = $this->model->id;
+        $main['user_id'] = auth()->id();
+        $id = $this->query()->insert($main);
+        $extend['id'] = $id;
+        $this->extendQuery()->insert($extend);
+        return true;
+    }
+
+    public function update($id, array $data) {
+        if (isset($data['title'])) {
+            $count = $this->query()->where('id', '<>', $id)
+                ->where('title', $data['title'])->count();
+            if ($count > 0) {
+                return $this->setError('title', '标题重复');
+            }
+        }
+        list($main, $extend) = $this->filterInput($data, false);
+        $main['updated_at'] = time();
+        $main['model_id'] = $this->model->id;
+        $this->query()
+            ->where('id', $id)->update($main);
+        if (!empty($extend)) {
+            $this->extendQuery()
+                ->where('id', $id)->update($extend);
+        }
+        return true;
+    }
+
     /**
      * @return Builder
      */
@@ -104,11 +143,19 @@ abstract class BaseScene implements SceneInterface {
         return FuncHelper::fieldList($this->model->id);
     }
 
-    protected function getGroupFieldName() {
-        $field_list = $this->fieldList();
-        $main = ['id', 'cat_id', 'model_id', 'user_id',
+    /**
+     * 主表一些默认的字段名 这里的字段不会进行转化
+     * @return string[]
+     */
+    protected function mainDefaultField() {
+        return ['id', 'cat_id', 'model_id', 'user_id',
             'status', 'view_count',
             'updated_at', 'created_at', 'parent_id'];
+    }
+
+    protected function getGroupFieldName() {
+        $field_list = $this->fieldList();
+        $main = $this->mainDefaultField();
         $extra = [];
         foreach ($field_list as $item) {
             if ($item->is_main > 0) {
@@ -185,7 +232,7 @@ abstract class BaseScene implements SceneInterface {
         $hasExtra = false;
         list($mainNames, $extraNames) = $this->getGroupFieldName();
         foreach ($extraNames as $key) {
-            if (strpos($order, $key) !== false) {
+            if (str_contains($order, $key)) {
                 $hasExtra = true;
                 $order = str_replace($key, 'extra.' . $key, $order);
             }
@@ -277,11 +324,17 @@ abstract class BaseScene implements SceneInterface {
      * @throws \Exception
      */
     public function filterInput(array $data, $isNew = true) {
+        $extend = $main = [];
+        foreach ($this->mainDefaultField() as $key) {
+            if (!$isNew && !array_key_exists($key, $data)) {
+                continue;
+            }
+            $main[$key] = isset($data[$key]) ? $data[$key] : null;
+        }
         $field_list = $this->fieldList();
         if (empty($field_list)) {
-            return [[], []];
+            return [$main, $extend];
         }
-        $extend = $main = [];
         foreach ($field_list as $field) {
             if (!$isNew && !array_key_exists($field->field, $data)) {
                 continue;

@@ -162,6 +162,47 @@ function bindBlog(id: number, type: number, langs = {}) {
     $(window).resize(function () {
         checkSize();
     });
+    bindCopy();
+}
+
+function bindCopy() {
+    let trigger: JQuery;
+    const btn = document.createElement('div');
+    btn.classList.add('copy-btn');
+    btn.innerText = '复制';
+    document.body.append(btn);
+    const copyBtn = $(btn);
+    $('#content code').on('click mouseenter', function () {
+        const $this = $(this);
+        if ($this.css('display') !== 'block') {
+            return;
+        }
+        const offset = $this.offset();
+        copyBtn.css({
+            right: $(window).width() - offset.left - $this.width(),
+            top: offset.top,
+            display: 'block',
+        });
+        trigger = $this;
+    });
+    const resetCopy = () => {
+        setTimeout(() => {
+            copyBtn.text('复制');
+        }, 2000);
+    };
+    const clipboard = new ClipboardJS(btn, {
+        text: function () {
+          return trigger ? trigger.text() : '';
+        },
+    });
+    clipboard.on('success', function() {
+        copyBtn.text('复制成功');
+        resetCopy();
+    });
+    clipboard.on('error', function() {
+        copyBtn.text('复制失败');
+        resetCopy();
+    });
 }
 
 function bindBlogComment(id: number, langs = {}) {
