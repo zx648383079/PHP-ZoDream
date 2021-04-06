@@ -25,7 +25,12 @@ class ProductController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = ProductRepository::save($request->get());
+            $model = ProductRepository::save($request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,50',
+                'status' => 'int:0,9',
+                'remark' => '',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -34,7 +34,15 @@ class UserController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = UserRepository::save($request->get(), $request->get('roles', []));
+            $model = UserRepository::save($request->validate([
+                'id' => 'int',
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'sex' => 'int',
+                'avatar' => 'string',
+                'birthday' => 'string',
+                'password' => 'string',
+            ]), $request->get('roles', []));
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -36,7 +36,21 @@ class LogController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = LogRepository::save($request->get());
+            $model = LogRepository::save($request->validate([
+                'id' => 'int',
+                'parent_id' => 'int',
+                'type' => 'int:0,127',
+                'money' => '',
+                'frozen_money' => '',
+                'account_id' => 'required|int',
+                'channel_id' => 'int',
+                'project_id' => 'int',
+                'budget_id' => 'int',
+                'remark' => '',
+                'happened_at' => 'required',
+                'out_trade_no' => 'string:0,100',
+                'trading_object' => 'string:0,100',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -80,5 +94,10 @@ class LogController extends Controller {
         array $breakfast = [], array $lunch = [], array $dinner = []) {
         LogRepository::saveDay($day, $account_id, $channel_id, $budget_id, $breakfast, $lunch, $dinner);
         return $this->renderData(true);
+    }
+
+    public function countAction(int $type = 0, string $keywords = '', int $account = 0,
+                                int $budget = 0, string $start_at = '', string $end_at = '') {
+        return $this->renderData(LogRepository::count($type, $keywords, $account, $budget, $start_at, $end_at));
     }
 }

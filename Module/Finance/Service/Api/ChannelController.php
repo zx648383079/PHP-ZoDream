@@ -25,7 +25,10 @@ class ChannelController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = ChannelRepository::save($request->get());
+            $model = ChannelRepository::save($request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,50',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

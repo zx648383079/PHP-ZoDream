@@ -6,25 +6,33 @@ use Domain\Model\SearchModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
+use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Excel\Exporter;
 
 class LogRepository {
 
     public static function getList($type = 0, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null) {
-        return LogModel::auth()
-            ->when($type > 0, function ($query) use ($type) {
-                $query->where('type', $type - 1);
-            })->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'remark');
-            })->when($account > 0, function ($query) use ($account) {
-                $query->where('account_id', $account);
-            })->when($budget > 0, function ($query) use ($budget) {
-                $query->where('budget_id', $budget);
-            })->when(!empty($start_at), function ($query) use ($start_at) {
-                $query->where('happened_at', '>=', $start_at);
-            })->when(!empty($end_at), function ($query) use ($end_at) {
-                $query->where('happened_at', '<=', $end_at);
-            })->orderBy('happened_at', 'desc')->page();
+        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->orderBy('happened_at', 'desc')->page();
+    }
+
+    public static function count($type = 0, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null) {
+        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->count();
+    }
+
+    protected static function bindQuery(SqlBuilder $builder, $type = 0, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null): SqlBuilder {
+        return $builder->when($type > 0, function ($query) use ($type) {
+            $query->where('type', $type - 1);
+        })->when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, 'remark');
+        })->when($account > 0, function ($query) use ($account) {
+            $query->where('account_id', $account);
+        })->when($budget > 0, function ($query) use ($budget) {
+            $query->where('budget_id', $budget);
+        })->when(!empty($start_at), function ($query) use ($start_at) {
+            $query->where('happened_at', '>=', $start_at);
+        })->when(!empty($end_at), function ($query) use ($end_at) {
+            $query->where('happened_at', '<=', $end_at);
+        });
     }
 
     /**
@@ -62,7 +70,7 @@ class LogRepository {
             throw new Exception($model->getFirstError());
         }
         if ($model->budget_id > 0) {
-            BudgetRepository::get($model->budget_id)->refreshSpent();
+            BudgetRepository::get((int)$model->budget_id)->refreshSpent();
         }
         return $model;
     }

@@ -23,7 +23,13 @@ class BudgetController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = BudgetRepository::save($request->get());
+            $model = BudgetRepository::save($request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,50',
+                'budget' => '',
+                'spent' => '',
+                'cycle' => 'int:0,9',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

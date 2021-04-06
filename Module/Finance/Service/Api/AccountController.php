@@ -25,7 +25,14 @@ class AccountController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = AccountRepository::save($request->get());
+            $model = AccountRepository::save($request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,35',
+                'money' => 'numeric',
+                'status' => 'int:0,9',
+                'frozen_money' => 'numeric',
+                'remark' => '',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

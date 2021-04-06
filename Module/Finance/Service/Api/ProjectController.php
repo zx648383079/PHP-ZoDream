@@ -25,7 +25,22 @@ class ProjectController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = ProjectRepository::save($request->get());
+            $model = ProjectRepository::save($request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,35',
+                'alias' => 'required|string:0,50',
+                'money' => 'required',
+                'account_id' => 'int',
+                'earnings' => '',
+                'start_at' => '',
+                'end_at' => '',
+                'earnings_number' => '',
+                'product_id' => 'int',
+                'status' => 'int:0,9',
+                'deleted_at' => 'int',
+                'color' => 'int:0,9',
+                'remark' => '',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
