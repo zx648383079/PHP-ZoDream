@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Domain\Listeners;
 
 use Module\Counter\Domain\Events\Visit;

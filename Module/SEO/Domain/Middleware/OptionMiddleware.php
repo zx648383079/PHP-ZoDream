@@ -1,14 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace Module\SEO\Domain\Middleware;
 
 use Module\SEO\Domain\Option;
+use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Service\Middleware\MiddlewareInterface;
 
 class OptionMiddleware implements MiddlewareInterface {
 
-    public function handle($context, callable $next) {
+    public function handle(HttpContext $context, callable $next) {
         $this->gray();
-        if (!str_contains($context, 'admin') && Option::value('site_close')) {
+        if (!str_contains($context->path(), 'admin') && Option::value('site_close')) {
             return $this->showClose();
         }
         return $next($context);

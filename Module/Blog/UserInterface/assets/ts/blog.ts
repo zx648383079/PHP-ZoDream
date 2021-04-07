@@ -50,13 +50,13 @@ function bindBlogPage() {
     //     $('.book-search [name=keywords]').val($(this).text());
     //     $('.book-search form').submit();
     // });
-    $('.book-body .book-item').addClass('fade-pre-item').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-        $(this).removeClass('fade-item');
-    }).lazyload({
-        callback: function(item: JQuery, h, b, i: number) {
-            item.removeClass('fade-pre-item').css('animation-duration', Math.floor(i / 2) * .5 + 1.5 + 's').addClass('fade-item');
-        }
-    });
+    // $('.book-body .book-item').addClass('fade-pre-item').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+    //     $(this).removeClass('fade-item');
+    // }).lazyload({
+    //     callback: function(item: JQuery, h, b, i: number) {
+    //         item.removeClass('fade-pre-item').css('animation-duration', Math.floor(i / 2) * .5 + 1.5 + 's').addClass('fade-item');
+    //     }
+    // });
     
 }
 

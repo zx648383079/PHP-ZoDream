@@ -12,7 +12,6 @@ use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
-use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Database\Model\Query;
@@ -208,9 +207,13 @@ class BlogRepository {
     }
 
     public static function renderContent(BlogModel $blog) {
-        return cache()->store('pages')->getOrSet(sprintf('blog_%d_content', $blog->id), function () use ($blog) {
+        $cb = function () use ($blog) {
             return TagRepository::renderTags($blog->id, HtmlExpand::toHtml($blog->getAttributeValue('content'), $blog->edit_type == 1));
-        }, 3600);
+        };
+        if (app()->isDebug()) {
+            return $cb();
+        }
+        return cache()->store('pages')->getOrSet(sprintf('blog_%d_content', $blog->id), $cb, 3600);
     }
 
     public static function sourceBlog(int $id, string $language = '') {

@@ -1,17 +1,14 @@
 <?php
 namespace Module\Blog\Service\Api\Admin;
 
-use Domain\Model\SearchModel;
-use Module\Blog\Domain\Model\BlogModel;
-use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class BlogController extends Controller {
 
-    public function indexAction(string $keywords = '', int $term_id = 0, int $type = 0) {
+    public function indexAction(string $keywords = '', int $term = 0, int $type = 0) {
         return $this->renderPage(
-            BlogRepository::getSelfList($keywords, $term_id, $type)
+            BlogRepository::getSelfList($keywords, $term, $type)
         );
     }
 

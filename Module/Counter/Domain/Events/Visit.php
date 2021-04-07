@@ -1,52 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Domain\Events;
 
 class Visit {
-    /**
-     * @var string
-     */
-    protected $ip;
-    /**
-     * @var string
-     */
-    protected $referrer;
-    /**
-     * @var string
-     */
-    protected $url;
-    /**
-     * @var string
-     */
-    protected $userAgent;
-    /**
-     * @var int
-     */
-    protected $timestamp;
-    /**
-     * @var string
-     */
-    protected $sessionId;
-    /**
-     * @var int
-     */
-    protected $userId;
 
     public function __construct(
-        string $ip,
-        string $referrer,
-        string $url,
-        string $userAgent,
-        int $timestamp,
-        string $sessionId,
-        int $userId
+        protected string $ip,
+        protected string $referrer,
+        protected string $url,
+        protected string $userAgent,
+        protected int $timestamp,
+        protected string $sessionId,
+        protected int $userId
     ) {
-        $this->ip = $ip;
-        $this->referrer = (string)$referrer;
-        $this->url = (string)$url;
-        $this->userAgent = $userAgent;
-        $this->timestamp = $timestamp;
-        $this->sessionId = $sessionId;
-        $this->userId = $userId;
     }
 
     /**

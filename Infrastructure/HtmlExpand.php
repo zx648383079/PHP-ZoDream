@@ -4,7 +4,7 @@ namespace Infrastructure;
 
 use Service\Home\ToController;
 use Zodream\Helpers\Str;
-use Parsedown;
+use Zodream\Html\MarkDown;
 
 class HtmlExpand {
 
@@ -21,7 +21,7 @@ class HtmlExpand {
 
     public static function toHtml($content, $isMarkDown = false) {
         if ($isMarkDown) {
-            $content = (new Parsedown())->setSafeMode(true)->text($content);
+            $content = MarkDown::parse($content, true);
         }
         return preg_replace_callback('/<a[^\<\>]+?href="([^"<>\s]+)"/', function ($match) {
             if (!str_contains($match[1], '//')) {
@@ -35,7 +35,7 @@ class HtmlExpand {
     }
 
 
-	public static function getImage($content, $default = '/assets/home/images/default.jpg') {
+	public static function getImage($content, $default = '/assets/images/default.jpg') {
 		$match = array();
 		if (preg_match('/\<img[^<>]+src="([^"<>\s]+)"/i', $content, $match)) {
 			return $match[1];
@@ -43,7 +43,7 @@ class HtmlExpand {
 		return $default;
 	}
 
-	public static function getVideo($content, $default = '/assets/home/video/default.mp4') {
+	public static function getVideo($content, $default = '/assets/video/default.mp4') {
 		$match = array();
 		if (preg_match('/\<video[^<>]+src="([^"<>\s]+)"/i', $content, $match)) {
 			return $match[1];
