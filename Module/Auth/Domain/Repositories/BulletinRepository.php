@@ -75,6 +75,81 @@ class BulletinRepository {
         if (empty($model)) {
             throw new Exception('消息不存在');
         }
-        return $model->delete();
+        $model->delete();
+        $count = BulletinUserModel::where('user_id', '<>', auth()->id())
+            ->where('bulletin_id', $id)->count();
+        if ($count < 1) {
+            BulletinModel::where('id', $id)->delete();
+        }
+    }
+
+    /**
+     * SEND MESSAGE TO ANY USERS
+     *
+     * @param array|int $user
+     * @param string $title
+     * @param string $content
+     * @param int $type
+     * @param array $extraRule
+     * @return int
+     * @throws Exception
+     */
+    public static function message(array|int $user, string $title, string $content, int $type = 0, array $extraRule = []) {
+        return static::send($user, htmlspecialchars($title), htmlspecialchars($content), $type, auth()->id(), $extraRule);
+    }
+
+    /**
+     * 发送系统消息
+     * @param $user
+     * @param string $title
+     * @param string $content
+     * @param int $type
+     * @param array $extraRule
+     * @return int
+     * @throws Exception
+     */
+    public static function system(array|int $user, string $title, string $content, int $type = 99, array $extraRule = []) {
+        return static::send($user, $title, $content, $type, 0, $extraRule);
+    }
+
+    /**
+     * 发送消息
+     * @param array|int $user
+     * @param string $title
+     * @param string $content
+     * @param int $type
+     * @param int $sender
+     * @param array $extraRule
+     * @return int
+     * @throws Exception
+     */
+    public static function send(array|int $user, string $title, string $content, int $type = 0, int $sender = 0, array $extraRule = []) {
+        $bulletin = new BulletinModel();
+        $bulletin->title = $title;
+        $bulletin->content = $content;
+        $bulletin->type = $type;
+        $bulletin->create_at = time();
+        $bulletin->user_id = $sender;
+        $bulletin->extra_rule = $extraRule;
+        if (!$bulletin->save()) {
+            return 0;
+        }
+        $data = [];
+        foreach ((array)$user as $item) {
+            $data[] = [$bulletin->id, $item, time()];
+        }
+        return BulletinUserModel::query()->insert(['bulletin_id', 'user_id', 'created_at'], $data);
+    }
+
+    /**
+     * 获取未读消息
+     * @return int
+     * @throws \Exception
+     */
+    public static function unreadCount(): int {
+        if (auth()->guest()) {
+            return 0;
+        }
+        return BulletinUserModel::where('user_id', auth()->id())->where('status', 0)->count();
     }
 }

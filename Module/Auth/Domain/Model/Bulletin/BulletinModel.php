@@ -2,7 +2,9 @@
 namespace Module\Auth\Domain\Model\Bulletin;
 
 use Domain\Model\Model;
+use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Zodream\Helpers\Json;
 
 
 /**
@@ -10,6 +12,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $id
  * @property string $title
  * @property string $content
+ * @property string $extra_rule
  * @property integer $type
  * @property integer $user_id
  * @property integer $create_at
@@ -28,6 +31,7 @@ class BulletinModel extends Model {
         return [
             'title' => 'required|string:0,100',
             'content' => 'required|string:0,255',
+            'extra_rule' => '',
             'type' => 'int:0,99',
             'user_id' => 'required|int',
             'created_at' => 'int',
@@ -40,6 +44,7 @@ class BulletinModel extends Model {
             'id' => 'Id',
             'title' => 'Title',
             'content' => 'Content',
+            'extra_rule' => '额外规则',
             'type' => 'Type',
             'user_id' => 'User Id',
             'created_at' => 'Created At',
@@ -49,6 +54,15 @@ class BulletinModel extends Model {
 
     public function user() {
 	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function getExtraRuleAttribute() {
+        $value = $this->getAttributeValue('extra_rule');
+        return empty($value) ? [] : Json::decode($value);
+    }
+
+    public function setExtraRuleAttribute($value) {
+        $this->__attributes['extra_rule'] = is_array($value) ? Json::encode($value) : $value;
     }
 
     public function getUserNameAttribute() {
@@ -71,50 +85,7 @@ class BulletinModel extends Model {
         return 'NULL';
     }
 
-    /**
-     * SEND MESSAGE TO ANY USERS
-     *
-     * @param array|int $user
-     * @param string $title
-     * @param string $content
-     * @param int $type
-     * @return bool|int
-     * @throws \Exception
-     */
-	public static function message($user, $title, $content, $type = 0) {
-        return static::send($user, htmlspecialchars($title), htmlspecialchars($content), $type, auth()->id());
-	}
-
-    public static function system($user, $title, $content, $type = 99) {
-        return static::send($user, $title, $content, $type, 0);
-    }
-
-    public static function send($user, $title, $content, $type = 0, $sender = 0) {
-        $bulletin = new static();
-        $bulletin->title = $title;
-        $bulletin->content = $content;
-        $bulletin->type = $type;
-        $bulletin->create_at = time();
-        $bulletin->user_id = $sender;
-        if (!$bulletin->save()) {
-            return false;
-        }
-        $data = [];
-        foreach ((array)$user as $item) {
-            $data[] = [$bulletin->id, $item, time()];
-        }
-        return BulletinUserModel::query()->insert(['bulletin_id', 'user_id', 'created_at'], $data);
-    }
-
-    /**
-     * 获取未读消息
-     * @return int
-     * @throws \Exception
-     */
-    public static function unreadCount() {
-	    if (auth()->guest()) {
-	        return 0;
-        }
-	    return BulletinUserModel::where('user_id', auth()->id())->where('status', 0)->count();
+    public function getHtmlAttribute() {
+        return LinkRule::render($this->content, $this->extra_rule);
     }
 }

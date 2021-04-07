@@ -2,11 +2,16 @@
 declare(strict_types=1);
 namespace Infrastructure;
 
+use Zodream\Helpers\Json;
+
 class LinkRule {
 
-    public static function render(string $content, array $rules): string {
+    public static function render(string $content, array|string $rules): string {
         if (empty($content) || empty($rules)) {
             return $content;
+        }
+        if (!is_array($rules)) {
+            $rules = Json::decode($rules);
         }
         $search = [];
         $replace = [];
@@ -28,7 +33,7 @@ class LinkRule {
             return static::renderUser($rule);
         }
         if (isset($rule['l'])) {
-            return sprintf('<a href="%s">%s</a>', $rule['l'], $rule['s']);
+            return sprintf('<a href="%s">%s</a>', Deeplink::decode($rule['l']), $rule['s']);
         }
         return static::renderExtra($rule);
     }
@@ -67,10 +72,10 @@ class LinkRule {
         ];
     }
 
-    public static function formatLink(string $word, string $link): array {
+    public static function formatLink(string $word, string $link, array $params = []): array {
         return [
             's' => $word,
-            'l' => $link
+            'l' => Deeplink::encode($link, $params)
         ];
     }
 

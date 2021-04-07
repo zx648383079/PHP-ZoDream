@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Infrastructure\LinkRule;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
@@ -39,9 +40,13 @@ class AccountRepository {
     public static function cancel(UserModel $user, string $reason) {
         $user->status = UserModel::STATUS_FROZEN;
         $user->save();
-        BulletinModel::system(1, '账户注销申请',
-            sprintf('申请用户：%s，注销理由：%s <a href="%s">马上查看</a>', $user->name,
-                $reason, url('/auth/admin/user/edit', ['id' => $user->id])), 98);
+        BulletinRepository::system(1, '账户注销申请',
+            sprintf('申请用户：%s，注销理由：%s [马上查看]', $user->name,
+                $reason), 98,
+            [
+                LinkRule::formatLink('[马上查看]', 'b/user/'. $user->id)
+            ]
+        );
         return $user;
     }
 

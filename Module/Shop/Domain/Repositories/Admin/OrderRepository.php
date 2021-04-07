@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories\Admin;
 
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
+use Module\Auth\Domain\Repositories\BulletinRepository;
 use Module\Legwork\Domain\Repositories\LegworkRepository;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
@@ -52,7 +53,7 @@ class OrderRepository {
         $args[] = [
             'name' => 'bulletin',
             'label' => '未读消息',
-            'count' => BulletinModel::unreadCount()
+            'count' => BulletinRepository::unreadCount()
         ];
         return $args;
     }
@@ -74,7 +75,7 @@ class OrderRepository {
             [
                 'name' => 'bulletin',
                 'label' => '未读消息',
-                'count' => BulletinModel::unreadCount()
+                'count' => BulletinRepository::unreadCount()
             ],
         ];
     }

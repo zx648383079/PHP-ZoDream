@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Module\Contact\Domain\Repositories;
 
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
+use Infrastructure\LinkRule;
+use Module\Auth\Domain\Repositories\BulletinRepository;
 use Module\Contact\Domain\Model\FeedbackModel;
 use Module\Contact\Domain\Model\FriendLinkModel;
 use Module\Contact\Domain\Model\SubscribeModel;
@@ -51,8 +52,9 @@ class ContactRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        BulletinModel::system(1, '友情链接申请',
-            sprintf('<a href="%s">马上查看</a>', url('./@admin/friend_link')), 98);
+        BulletinRepository::system(1, '友情链接申请', '[马上查看]', 98, [
+            LinkRule::formatLink('[马上查看]', 'b/friend_link')
+        ]);
         return $model;
     }
 }

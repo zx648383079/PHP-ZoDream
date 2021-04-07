@@ -115,6 +115,7 @@ class CreateAuthTables extends Migration {
             $table->id();
             $table->string('title', 100);
             $table->string('content');
+            $table->string('extra_rule')->default('');
             $table->uint('type', 2)->default(0);
             $table->uint('user_id');
             $table->timestamps();

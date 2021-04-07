@@ -4,7 +4,7 @@ namespace Module\Chat\Domain\Repositories;
 
 use Domain\Repositories\FileRepository;
 use Infrastructure\LinkRule;
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
+use Module\Auth\Domain\Repositories\BulletinRepository;
 use Module\Chat\Domain\Model\ApplyModel;
 use Module\Chat\Domain\Model\GroupModel;
 use Module\Chat\Domain\Model\GroupUserModel;
@@ -86,8 +86,10 @@ class MessageRepository {
         }
         if (!empty($userIds)) {
             $group = GroupModel::find($group);
-            BulletinModel::message($userIds,
-                sprintf('我在群【%s】提到了你', $group->name), sprintf('快来看看吧【%d】', $group->id), 88);
+            BulletinRepository::message($userIds,
+                sprintf('我在群【%s】提到了你', $group->name), '[回复]', 88, [
+                    LinkRule::formatLink('[回复]', 'chat')
+                ]);
         }
         return $rules;
     }

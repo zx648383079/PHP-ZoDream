@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
-
 
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;

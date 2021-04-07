@@ -29,7 +29,7 @@ $this->registerJs($js);
         <a href="<?=$this->url('./@admin/bulletin/read', ['id' => $item->bulletin_id])?>" class="btn">查看</a>
         <?php endif;?>
     </div>
-    <div class="content"><?=$item->bulletin->content?></div>
+    <div class="content"><?=$item->bulletin->html?></div>
     <div class="footer">
         <span>发送者：<?=$item->bulletin->user_name?></span>
         <span>发送时间：<?=$item->created_at?></span>

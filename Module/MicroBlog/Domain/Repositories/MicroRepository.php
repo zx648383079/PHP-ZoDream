@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Auth\Domain\Repositories\BulletinRepository;
 use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\MicroBlog\Domain\LinkRule;
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
@@ -400,8 +400,10 @@ class MicroRepository {
             $rules[] = LinkRule::formatUser($names[$user['name']], intval($user['id']));
         }
         if ($id > 0 && !empty($userIds)) {
-            BulletinModel::message($userIds,
-                '我在微博提到了你', sprintf('快来看看吧【%d】', $id), 88);
+            BulletinRepository::message($userIds,
+                '我在微博提到了你', '[查看]', 88, [
+                    LinkRule::formatLink('[查看]', 'micro/'.$id)
+                ]);
         }
         return $rules;
     }
