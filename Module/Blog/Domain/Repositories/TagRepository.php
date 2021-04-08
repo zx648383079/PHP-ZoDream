@@ -45,36 +45,6 @@ class TagRepository extends TagBase {
         return BlogRepository::getSimpleList($ids);
     }
 
-    public static function renderTags(int $blog_id, string $content): string {
-        $tags = self::getTags($blog_id);
-        if (empty($tags)) {
-            return $content;
-        }
-        return self::replaceTags($content, array_column($tags, 'name'));
-    }
-
-    private static function replaceTags(string $content, array $tags) {
-        if (empty($tags)) {
-            return $content;
-        }
-        $replace = [];
-        $i = 0;
-        foreach ([
-                     '#<code[^\<\>]*>[\s\S]+?</code>#',
-                     '#<a[^\<\>]+>[\s\S]+?</a>#',
-                     '#<img[^\<\>]+>#'
-                 ] as $pattern) {
-            $content = preg_replace_callback($pattern, function ($match) use (&$replace, &$i) {
-                $tag = '[ZO'.$i ++.'OZ]';
-                $replace[$tag] = $match[0];
-                return $tag;
-            }, $content);
-        }
-        $content = str_replace($tags, array_map(function ($tag) {
-            return Html::a($tag, ['./', 'tag' => $tag]);
-        }, $tags), $content);
-        return str_replace(array_keys($replace), array_values($replace), $content);
-    }
 
     public static function addTag(int $blog, string|array $tags) {
         static::bindTag(
