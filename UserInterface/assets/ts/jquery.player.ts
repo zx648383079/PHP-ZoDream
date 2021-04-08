@@ -80,11 +80,16 @@ interface IPlayerOption {
             public element: JQuery,
             public options: IPlayerOption
         ) {
-            if (!this.options.src) {
+            if (this.element.data('booted')) {
+                return;
+            }
+            this.element.data('booted', true);
+            this.bindCustomEvent();
+            if (this.hasExist()) {
+                this.initExist();
                 return;
             }
             this.init();
-            this.bindCustomEvent();
         }
     
         private playerElement: HTMLVideoElement|HTMLAudioElement;
@@ -173,6 +178,61 @@ interface IPlayerOption {
                 this.playerBar.find('.full-icon .fa').attr('class', 'fa fa-compress');
             });
         }
+
+        private hasExist() {
+            if (!this.options.src) {
+                return true;
+            }
+            return this.element.has('iframe,video,audio').length;
+        }
+
+        /**
+         * 直接使用默认的
+         * @returns 
+         */
+        private initExist() {
+            const video = this.element.find('video');
+            if (video.length > 0) {
+                this.initVideoExist(video);
+                return;
+            }
+            const audio = this.element.find('audio');
+            if (audio.length > 0) {
+                this.initAudioExist(audio);
+                return;
+            }
+            this.element.addClass('video-player');
+        }
+
+        private initAudioExist(audio: JQuery) {
+            this.element.addClass('audio-player');
+            this.options.type = 'audio';
+            if (!this.options.src) {
+                this.options.src = audio.attr('src');
+            }
+            audio.removeAttr('controls');
+            this.playerElement = audio[0] as HTMLAudioElement;
+            this.element.append(this.playerBarHtml());
+            this.initBar(this.element);
+            this.bindAudioEvent();
+        }
+
+        private initVideoExist(video: JQuery) {
+            this.element.addClass('video-player');
+            this.options.type = 'video';
+            if (!this.options.src) {
+                this.options.src = video.attr('src');
+            }
+            video.removeAttr('controls').addClass('player-video');
+            this.playerElement = video[0] as HTMLVideoElement;
+            let bar = this.element.find('.player-bar');
+            if (bar.length < 1) {
+                bar = $(this.playerBarHtml());
+                video.after(bar);
+            }
+            this.initBar(bar);
+            this.bindVideoEvent();
+        }
     
         private init() {
             if (this.options.type === 'audio') {
@@ -235,8 +295,12 @@ interface IPlayerOption {
                 return;
             }
             this.booted = true;
-            this.playerElement = document.createElement('audio');
-            this.playerElement.src = this.options.src;
+            if (!this.playerElement) {
+                this.playerElement = document.createElement('audio');
+            }
+            if (this.options.src) {
+                this.playerElement.src = this.options.src;
+            }
             this.playerElement.addEventListener('timeupdate', () => {
                 if (isNaN(this.playerElement.duration) || !isFinite(this.playerElement.duration) || this.playerElement.duration <= 0) {
                     this.trigger(EVENT_TIME_UPDATE, 0, 0);
@@ -261,7 +325,9 @@ interface IPlayerOption {
                 return;
             }
             this.booted = true;
-            this.playerElement = this.element.find('.player-video')[0] as HTMLVideoElement;
+            if (!this.playerElement) {
+                this.playerElement = this.element.find('.player-video')[0] as HTMLVideoElement;
+            }
             this.playerElement.addEventListener('timeupdate', () => {
                 if (isNaN(this.playerElement.duration) || !isFinite(this.playerElement.duration) || this.playerElement.duration <= 0) {
                     this.trigger(EVENT_TIME_UPDATE, 0, 0);
@@ -292,7 +358,30 @@ interface IPlayerOption {
         
         private audioPlayer() {
             this.element.addClass('audio-player');
-            this.element.html(`<div class="icon" title="播放">
+            this.element.html(this.playerBarHtml());
+        }
+    
+        private videoMask() {
+            this.element.addClass('video-player');
+            this.element.html(`<div class="player-mask" title="此处有视频，点击即可播放">
+            <i class="fa fa-play"></i>
+        </div>`);
+        }
+    
+        private videoFrame() {
+            this.element.html(`
+            <iframe class="player-frame" src="${this.options.src}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>`);
+        }
+    
+        private videoPlayer() {
+            this.element.html(`<video class="player-video" src="${this.options.src}"></video>${this.playerBarHtml()}`);
+        }
+
+        private playerBarHtml() {
+            if (this.options.type === 'iframe') {
+                return '';
+            }
+            const html = `<div class="icon" title="播放">
             <i class="fa fa-play"></i>
         </div>
         <div class="slider">
@@ -310,47 +399,13 @@ interface IPlayerOption {
             <div class="progress" title="100">
                 <div class="progress-bar" style="width: 100%;"></div>
             </div>
-        </div>`);
-        }
-    
-        private videoMask() {
-            this.element.addClass('video-player');
-            this.element.html(`<div class="player-mask" title="此处有视频，点击即可播放">
-            <i class="fa fa-play"></i>
-        </div>`);
-        }
-    
-        private videoFrame() {
-            this.element.html(`
-            <iframe class="player-frame" src="${this.options.src}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>`);
-        }
-    
-        private videoPlayer() {
-            this.element.html(`<video class="player-video" src="${this.options.src}"></video>
-            <div class="player-bar">
-                <div class="icon" title="播放">
-                    <i class="fa fa-play"></i>
-                </div>
-                <div class="slider">
-                    <div class="progress" title="0">
-                        <div class="progress-bar"></div>
-                    </div>
-                </div>
-                <div class="time">
-                    00:00/00:00
-                </div>
-                <div class="volume-icon">
-                    <i class="fa fa-volume-up"></i>
-                </div>
-                <div class="volume-slider">
-                    <div class="progress" title="100">
-                        <div class="progress-bar" style="width: 100%;"></div>
-                    </div>
-                </div>
-                <div class="full-icon">
-                    <i class="fa fa-expand"></i>
-                </div>
-            </div>`);
+        </div>`;
+            if (this.options.type === 'audio') {
+                return html;
+            }
+            return `<div class="player-bar">${html}<div class="full-icon">
+            <i class="fa fa-expand"></i>
+        </div></div>`;
         }
     
         private formatMinute(time: number): string {
@@ -381,6 +436,12 @@ interface IPlayerOption {
         }
     }
     $.fn.player = function(option?: IPlayerOption) {
-        return new MediaPlayer(this, option);
+        if (this.length < 2) {
+            return new MediaPlayer(this, option);
+        }
+        this.each(function() {
+            const $this = $(this);
+            new MediaPlayer($this, $.extend({}, $this.data(), option));
+        });
     };
 })(jQuery);

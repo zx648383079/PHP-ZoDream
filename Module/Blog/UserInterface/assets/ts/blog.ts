@@ -61,6 +61,7 @@ function bindBlogPage() {
 }
 
 function bindBlog(id: number, type: number, langs = {}) {
+    $('img.lazy').lazyload({callback: 'img'});
     if (type != 1) {
         uParse('#content', {
             rootPath: '/assets/ueditor'

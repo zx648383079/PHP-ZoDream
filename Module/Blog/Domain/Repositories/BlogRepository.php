@@ -4,6 +4,7 @@ namespace Module\Blog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception;
+use Infrastructure\Bot;
 use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Model\BlogMetaModel;
@@ -207,13 +208,14 @@ class BlogRepository {
     }
 
     public static function renderContent(BlogModel $blog) {
-        $cb = function () use ($blog) {
-            return TagRepository::renderTags($blog->id, HtmlExpand::toHtml($blog->getAttributeValue('content'), $blog->edit_type == 1));
+        $imgLazy = !app('platform') && !Bot::isSpider();
+        $cb = function () use ($blog, $imgLazy) {
+            return TagRepository::renderTags($blog->id, HtmlExpand::toHtml($blog->getAttributeValue('content'), $blog->edit_type == 1, $imgLazy));
         };
         if (app()->isDebug()) {
             return $cb();
         }
-        return cache()->store('pages')->getOrSet(sprintf('blog_%d_content', $blog->id), $cb, 3600);
+        return cache()->store('pages')->getOrSet(sprintf('blog_%d_%s_content', $blog->id, $imgLazy), $cb, 3600);
     }
 
     public static function sourceBlog(int $id, string $language = '') {

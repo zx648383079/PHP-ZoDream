@@ -19,9 +19,13 @@ class HtmlExpand {
     }
 
 
-    public static function toHtml($content, $isMarkDown = false) {
+    public static function toHtml($content, bool $isMarkDown = false, bool $imgLazy = false) {
         if ($isMarkDown) {
-            $content = MarkDown::parse($content, true);
+            $content = MarkDown::parse($content, true, $imgLazy ? [
+                'class' => 'lazy',
+                'src' => 'data-src',
+                'default' => url()->asset('assets/images/loading.gif')
+            ] : []);
         }
         return preg_replace_callback('/<a[^\<\>]+?href="([^"<>\s]+)"/', function ($match) {
             if (!str_contains($match[1], '//')) {

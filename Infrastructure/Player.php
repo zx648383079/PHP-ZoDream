@@ -8,18 +8,35 @@ use Zodream\Template\View;
 class Player {
 
     public static function player(View $view, string $src, string $type = 'video') {
+        static $guid = 0;
         if ($type === 'video' && static::isFrame($src)) {
             $type = 'iframe';
         }
+        $html = Bot::isSpider() ? static::playerHtml($src, $type) : '';
         $data = Json::encode(compact('src', 'type'));
+        $id = ++ $guid;
         $js = <<<JS
-$('#player').player({$data});
+$('#player{$id}').player({$data});
 JS;
         $view->registerJs($js, View::JQUERY_READY)
             ->registerCssFile('@player.css')
             ->registerJsFile('@jquery.player.min.js');
         return <<<HTML
-<div id="player"></div>
+<div id="player{$id}">{$html}</div>
+HTML;
+    }
+
+    protected static function playerHtml(string $src, string $type = 'video') {
+        if ($type === 'audio') {
+            return <<<HTML
+<audio src="{$src}" controls="controls">Your browser does not support the audio element.</audio>
+HTML;
+        }
+        if ($type === 'iframe') {
+            return static::createIframe($src);
+        }
+        return <<<HTML
+<video class="player-video" src="{$src}" controls="controls">Your browser does not support the video element.</video>
 HTML;
     }
 
@@ -87,7 +104,7 @@ HTML;
 
     protected static function createIframe(string $url): string {
         return <<<HTML
-<iframe src="{$url}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<iframe class="player-frame" src="{$url}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 HTML;
     }
 }

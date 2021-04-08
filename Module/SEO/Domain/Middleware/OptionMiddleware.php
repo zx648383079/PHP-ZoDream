@@ -2,13 +2,20 @@
 declare(strict_types=1);
 namespace Module\SEO\Domain\Middleware;
 
+use Infrastructure\Bot;
 use Module\SEO\Domain\Option;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Service\Middleware\MiddlewareInterface;
 
 class OptionMiddleware implements MiddlewareInterface {
 
     public function handle(HttpContext $context, callable $next) {
+        /** @var Input $request */
+        $request = $context['request'];
+        if (Bot::disallowSpider($request->server('HTTP_USER_AGENT', '-'))) {
+            return response()->statusCode(400)->str('Robots not allowed ');
+        }
         $this->gray();
         if (!str_contains($context->path(), 'admin') && Option::value('site_close')) {
             return $this->showClose();
