@@ -25,7 +25,7 @@ class SearchModel {
                 continue;
             }
             foreach ($columns as $column) {
-                $query->orWhere($column, 'like', '%'.$item.'%');
+                $query->where($column, 'like', '%'.$item.'%');
             }
             if (!$saveLog) {
                 continue;

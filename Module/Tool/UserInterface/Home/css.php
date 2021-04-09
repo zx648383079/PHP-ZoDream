@@ -9,7 +9,8 @@ registerEditor('text/css');
 JS;
 $this->registerJs($js);
 ?>
-
+<h1>css beautify/css2scss</h1>
+<h3>在下面粘贴你的css 代码，然后点击响应按钮“css美化”或“css2scss”，转化结果会马上出现在下面第二个框中。</h3>
 <div class="converter-box large-box">
     <div class="input-box">
         <textarea id="input" name="" placeholder="请输入内容"></textarea>

@@ -61,7 +61,8 @@ function bindBlogPage() {
 }
 
 function bindBlog(id: number, type: number, langs = {}) {
-    $('img.lazy').lazyload({callback: 'img'});
+    bindLoadImg();
+
     if (type != 1) {
         uParse('#content', {
             rootPath: '/assets/ueditor'
@@ -164,6 +165,28 @@ function bindBlog(id: number, type: number, langs = {}) {
         checkSize();
     });
     bindCopy();
+}
+
+function bindLoadImg() {
+    $('img.lazy').lazyload({callback: 'img'});
+    const imgItems = $('#content img');
+    if (imgItems.length < 1) {
+        return;
+    }
+    const imageDialog = Dialog.create({
+        type: 'image',
+        onrequest(i: number) {
+            const item = imgItems.eq(i);
+            const src = item.data('src');
+            if (src) {
+                return src;
+            }
+            return item.attr('src');
+        }
+    });
+    imgItems.on('click', function() {
+        imageDialog.showIndex(imgItems.index(this));
+    });
 }
 
 function bindCopy() {
