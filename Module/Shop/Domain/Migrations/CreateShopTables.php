@@ -577,7 +577,7 @@ class CreateShopTables extends Migration {
             $table->uint('type', 1)->default(0);
             $table->uint('user_id');
             $table->uint('goods_id');
-            $table->uint('product_id');
+            $table->uint('product_id')->default(0);
             $table->uint('amount')->default(1);
             $table->decimal('price', 8, 2);
             $table->bool('is_checked')->default(0)->comment('是否选中');

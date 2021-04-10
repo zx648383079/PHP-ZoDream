@@ -3,6 +3,8 @@ namespace Module\Document\Domain\Model;
 
 
 use Domain\Model\Model;
+use Domain\Model\ModelHelper;
+use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
 
 /**
@@ -76,25 +78,20 @@ class ProjectModel extends Model {
             $this->__attributes['environment'] = $data;
             return;
         }
-        if (!isset($data['name'])) {
-            $data['name'] = [];
+        if (Arr::isAssoc($data)) {
+            $data = ModelHelper::formArr($data, '', function (array $item) {
+                return !empty($item['name']);
+            });
+        } else {
+            $data = array_filter($data, function (array $item) {
+                return !empty($item['name']);
+            });
         }
-        $env = [];
-        foreach ($data['name'] as $key => $item) {
-            if (empty($item)) {
-                continue;
-            }
-            $env[] = [
-                'name' => $item,
-                'title' => $data['title'][$key],
-                'domain' => $data['domain'][$key]
-            ];
-        }
-        if (empty($env)) {
+        if (empty($data)) {
             $this->setError('environment', '请至少填写一个环境域名');
             return;
         }
-        $this->__attributes['environment'] = Json::encode($env);
+        $this->__attributes['environment'] = Json::encode($data);
     }
 
     public function getCoverAttribute() {

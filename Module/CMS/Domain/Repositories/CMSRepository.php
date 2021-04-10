@@ -52,7 +52,10 @@ class CMSRepository {
      * @return SiteModel
      * @throws \Exception
      */
-    public static function site() {
+    public static function site($model = null) {
+        if (!empty($model)) {
+            static::$cacheSite = $model;
+        }
         if (!empty(self::$cacheSite)){
             return self::$cacheSite;
         }

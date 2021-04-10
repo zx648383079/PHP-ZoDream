@@ -272,4 +272,11 @@ class GoodsRepository {
                 $query->where('brand_id', intval($brand));
             })->page();
     }
+
+    public static function homeRecommend(): array {
+        $hot_products = GoodsRepository::getRecommendQuery('is_hot')->all();
+        $new_products = GoodsRepository::getRecommendQuery('is_new')->all();
+        $best_products = GoodsRepository::getRecommendQuery('is_best')->all();
+        return compact('hot_products', 'new_products', 'best_products');
+    }
 }

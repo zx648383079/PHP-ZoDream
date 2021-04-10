@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\CategoryModel;
@@ -7,15 +8,15 @@ use Module\Shop\Domain\Repositories\CategoryRepository;
 
 class CategoryController extends Controller {
 
-    public function indexAction($id = 0, $parent = 0) {
+    public function indexAction(int $id = 0, int $parent = 0) {
         if ($id > 0) {
             return $this->infoAction($id);
         }
-        return $this->render(CategoryModel::where('parent_id', intval($parent))->all());
+        return $this->render(CategoryRepository::getList($parent));
     }
 
-    public function infoAction($id) {
-        $model = CategoryModel::find(intval($id));
+    public function infoAction(int $id) {
+        $model = CategoryModel::find($id);
         $data = $model->toArray();
         $extra = request()->get('extra');
         if (!empty($extra)) {
@@ -36,11 +37,11 @@ class CategoryController extends Controller {
     }
 
     public function levelAction() {
-        return $this->render(CategoryModel::cacheLevel());
+        return $this->render(CategoryRepository::levelTree());
     }
 
     public function treeAction() {
-        return $this->render(CategoryModel::cacheTree());
+        return $this->render(CategoryRepository::tree());
     }
 
     private function formatCategory(array $data) {

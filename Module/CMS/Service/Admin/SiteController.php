@@ -4,11 +4,12 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Module\CMS\Domain\ThemeManager;
 
 class SiteController extends Controller {
-    public function indexAction() {
-        $model_list = SiteModel::orderBy('id', 'asc')->page();
+    public function indexAction(string $keywords = '') {
+        $model_list = SiteRepository::getList($keywords);
         $current = CMSRepository::siteId();
         return $this->show(compact('model_list', 'current'));
     }

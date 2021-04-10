@@ -88,7 +88,7 @@ class ModelHelper {
         foreach ($first as $i => $_) {
             $item = [];
             foreach ($data as $key => $args) {
-                $item[$key] = isset($args[$i]) ? $args[$i] : $default;
+                $item[$key] = $args[$i] ?? $default;
             }
             if (!empty($check) && call_user_func($check, $item) === false) {
                 continue;

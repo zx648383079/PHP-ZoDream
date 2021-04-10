@@ -7,6 +7,7 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\ModelRepository;
 
 class ContentController extends Controller {
     public function indexAction(int $cat_id, int $model_id = 0, string $keywords = '', int $parent_id = 0) {
@@ -40,7 +41,7 @@ class ContentController extends Controller {
         $data = $id > 0 ? $scene->find($id) : [
             'parent_id' => $parent_id
         ];
-        $tab_list = ModelFieldModel::tabGroups($model->id);
+        $tab_list = ModelRepository::fieldGroupByTab($model->id);
         return $this->show('edit', compact('id',
             'cat_id', 'cat', 'scene', 'model',
             'data', 'tab_list'));

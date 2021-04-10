@@ -34,4 +34,16 @@ class CategoryRepository {
             'name' => $name
         ]);
     }
+
+    public static function levelTree() {
+        return CategoryModel::cacheLevel();
+    }
+
+    public static function tree() {
+        return CategoryModel::cacheTree();
+    }
+
+    public static function getList(int $parent = 0) {
+        return CategoryModel::where('parent_id', $parent)->get();
+    }
 }

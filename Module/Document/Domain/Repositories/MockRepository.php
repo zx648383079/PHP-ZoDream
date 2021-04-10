@@ -62,8 +62,8 @@ class MockRepository {
         if (!$type){
             return $mock;
         }
-        $rule = isset($data[1]) ? $data[1] : '';
-        $value = isset($data[2]) ? $data[2] : '';
+        $rule = $data[1] ?? '';
+        $value = $data[2] ?? '';
         $mock = new MockRule();
         if ($type == 'array') {
             $type = 'arr';
@@ -169,7 +169,8 @@ class MockRepository {
                 'type' => 'string',
                 'kind' => $kind,
                 'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
-                'is_required' => !empty($item) ? 1 : 0
+                'is_required' => !empty($item) ? 1 : 0,
+                'level' => 0,
             ]);
             self::parseChildren($item, $model);
             $data[] = $model;
@@ -194,7 +195,7 @@ class MockRepository {
             return;
         }
         if (is_numeric($content)) {
-            $model->type = !str_contains($content, '.') ? 'number' : 'float';
+            $model->type = !str_contains((string)$content, '.') ? 'number' : 'float';
             return;
         }
         if (!is_array($content)) {
@@ -208,8 +209,9 @@ class MockRepository {
                 'name' => $key,
                 'title' => $key,
                 'type' => 'string',
-                'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
-                'is_required' => !empty($item)
+                'default_value' => is_null($item) || is_array($item) || strlen((string)$item) > 30 ? '' : $item,
+                'is_required' => !empty($item),
+                'level' => $model->level + 1,
             ]);
             self::parseChildren($item, $child);
             $model->children[] = $child;

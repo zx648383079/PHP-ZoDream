@@ -5,6 +5,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\ModelRepository;
 use Module\CMS\Module;
 
 class FormController extends Controller {
@@ -31,7 +32,7 @@ class FormController extends Controller {
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [];
-        $tab_list = ModelFieldModel::tabGroups($model_id);
+        $tab_list = ModelRepository::fieldGroupByTab($model_id);
         return $this->show('edit', compact('id', 'model_id', 'model', 'scene', 'data', 'tab_list'));
     }
 

@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Models\AttributeGroupModel;
 use Module\Shop\Domain\Models\AttributeModel;
+use Module\Shop\Domain\Repositories\AttributeRepository;
 
 class AttributeController extends Controller {
 
@@ -50,7 +51,8 @@ class AttributeController extends Controller {
     }
 
     public function groupAllAction() {
-        $data = AttributeGroupModel::query()->get('id', 'name');
-        return $this->renderData($data);
+        return $this->renderData(
+            AttributeRepository::groupAll()
+        );
     }
 }

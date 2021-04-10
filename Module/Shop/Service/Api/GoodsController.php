@@ -40,9 +40,8 @@ class GoodsController extends Controller {
     }
 
     public function homeAction() {
-        $hot_products = GoodsRepository::getRecommendQuery('is_hot')->all();
-        $new_products = GoodsRepository::getRecommendQuery('is_new')->all();
-        $best_products = GoodsRepository::getRecommendQuery('is_best')->all();
-        return $this->render(compact('hot_products', 'new_products', 'best_products'));
+        return $this->render(
+            GoodsRepository::homeRecommend()
+        );
     }
 }

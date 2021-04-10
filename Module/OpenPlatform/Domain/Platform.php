@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Domain;
 
 use Module\Auth\Domain\Model\UserModel;
@@ -8,6 +9,8 @@ use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Zodream\Database\Model\UserModel as UserObject;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Helpers\Arr;
+use Zodream\Infrastructure\Contracts\Http\Input;
+use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Route\Response\RestResponse;
 
 class Platform {
@@ -20,10 +23,13 @@ class Platform {
 
     private $app;
 
-    private $options = [];
+    private array $options = [];
+
+    private Input $request;
 
     public function __construct($app) {
         $this->app = $app;
+        $this->request = request();
     }
 
     public function id() {
@@ -40,21 +46,21 @@ class Platform {
      * @param string $name
      * @return array|string
      */
-    public function option($store, $name = null) {
+    public function option(string $store, $name = null) {
         if (!isset($this->options[$store])) {
             $this->options[$store] = PlatformOptionModel::options($this->id(), $store);
         }
         if (empty($name)) {
             return $this->options[$store];
         }
-        return isset($this->options[$store][$name]) ? $this->options[$store][$name] : '';
+        return $this->options[$store][$name] ?? '';
     }
 
-    public function getCookieTokenKey() {
+    public function getCookieTokenKey(): string {
         return $this->app['appid'].'token';
     }
 
-    public function sign(array $data) {
+    public function sign(array $data): string {
         if ($this->app['sign_type'] < 1) {
             return '';
         }
@@ -65,7 +71,7 @@ class Platform {
         return '';
     }
 
-    protected function getSignContent(array $data) {
+    protected function getSignContent(array $data): string {
         $data['appid'] = $this->app['appid'];
         $data['secret'] = $this->app['secret'];
         if (!str_contains($this->app['sign_key'], '+')) {
@@ -82,27 +88,27 @@ class Platform {
                 $args[] = $data[$key];
                 continue;
             }
-            $args[] = request()->get($key);
+            $args[] = $this->request->get($key);
         }
         return implode('', $args);
     }
 
-    public function verify(array $data, $sign) {
+    public function verify(array $data, $sign): bool {
         if ($this->app['sign_type'] < 1) {
             return true;
         }
-        return $this->sign($data) == $sign;
+        return $this->sign($data) === $sign;
     }
 
-    public function encrypt($data) {
+    public function encrypt(string $data): string {
         return '';
     }
 
-    public function decrypt($data) {
+    public function decrypt(string $data): array {
         return [];
     }
 
-    public function ready(RestResponse $response) {
+    public function ready(RestResponse $response): Output {
         $data = $response->getData();
         if (!Arr::isAssoc($data)) {
             $data = compact('data');
@@ -121,25 +127,29 @@ class Platform {
     }
 
     public function verifyRest() {
-        if (!$this->verify($_POST, request()->get('sign'))) {
+        if (!$this->verify($_POST, $this->request->get('sign'))) {
             return false;
         }
         if ($this->app['encrypt_type'] < 1) {
             return true;
         }
-        $data = $this->decrypt(request()->get('encrypt'));
+        $data = $this->decrypt($this->request->get('encrypt'));
         if (empty($data)) {
             return false;
         }
-        request()->append($data);
+        $this->request->append($data);
         return true;
     }
 
     public function verifyRule($module, $path) {
-        if (empty($this->rules)) {
+        if ($this->type() < 1 && !$this->verifyReferer()) {
+            return false;
+        }
+        $rules = $this->app['rules'];
+        if (empty($rules)) {
             return true;
         }
-        $rules = explode("\n", $this->rules);
+        $rules = explode("\n", $rules);
         foreach ($rules as $rule) {
             $rule = trim($rule);
             if (empty($rule)) {
@@ -158,21 +168,29 @@ class Platform {
         return true;
     }
 
-    private function verifyOneRule($rule, $module, $path) {
+    private function verifyReferer(): bool {
+        $url = $this->request->referrer();
+        if (empty($url)) {
+            return false;
+        }
+        return str_contains($url, $this->app['domain']);
+    }
+
+    private function verifyOneRule($rule, $module, $path): bool {
         if ($rule === '*') {
             return true;
         }
         $first = substr($rule, 0, 1);
         if ($first === '@') {
-            return strpos($module, substr($rule, 1)) !== false;
+            return str_contains($module, substr($rule, 1));
         }
         if ($first === '^') {
-            return preg_match('#'. $rule.'#i', $path, $match);
+            return preg_match('#'. $rule.'#i', $path, $match) === 1;
         }
         if ($first !== '~') {
             return $rule === $path;
         }
-        return preg_match('#'.substr($rule, 1).'#i', $path, $match);
+        return preg_match('#'.substr($rule, 1).'#i', $path, $match) === 1;
     }
 
     /**
@@ -224,7 +242,17 @@ class Platform {
         return $count > 0;
     }
 
-    public static function create($appId) {
+    public function __sleep(): array
+    {
+        return ['app', 'options'];
+    }
+
+    public function __wakeup(): void
+    {
+        $this->request = request();
+    }
+
+    public static function create(string $appId) {
         $platform = PlatformModel::findByAppId($appId);
         if (empty($platform)) {
             throw new \Exception(__('APP ID error'));
@@ -232,11 +260,11 @@ class Platform {
         return new static($platform);
     }
 
-    public static function createAuto($key = 'appid') {
+    public static function createAuto(string $key = 'appid') {
         return static::create(request()->get($key));
     }
 
-    public static function createId($id) {
+    public static function createId(string|int $id) {
         $platform = PlatformModel::find($id);
         if (empty($platform)) {
             throw new \Exception(__('id error'));

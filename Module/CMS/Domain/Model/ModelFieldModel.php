@@ -138,49 +138,4 @@ class ModelFieldModel extends BaseModel {
         return $this->hasOne(ModelModel::class, 'id', 'model_id');
     }
 
-    /**
-     * 获取所有的分组标签
-     * @param $model_id
-     * @return array
-     */
-    public static function tabItems($model_id) {
-        $tab_list = static::where('model_id', $model_id)->pluck('tab_name');
-        $data = ['基本', '高级'];
-        foreach ($tab_list as $item) {
-            $item = trim($item);
-            if (empty($item) || in_array($item, $data)) {
-                continue;
-            }
-            $data[] = $item;
-        }
-        return $data;
-    }
-
-    /**
-     * 对属性进行分组
-     * @param $model_id
-     * @return array
-     */
-    public static function tabGroups($model_id) {
-        $tab_list = self::tabItems($model_id);
-        $data = [];
-        foreach ($tab_list as $i => $item) {
-            $data[$item] = [
-                'active' => $i < 1,
-                'fields' => []
-            ];
-        }
-        $field_list = ModelFieldModel::where('model_id', $model_id)->orderBy([
-            'position' => 'asc',
-            'id' => 'asc'
-        ])->all();
-        foreach ($field_list as $item) {
-            $name = $item->tab_name;
-            if (empty($name) || !in_array($name, $tab_list)) {
-                $name = $item->is_main > 0 ? $tab_list[0] : $tab_list[1];
-            }
-            $data[$name]['fields'][] = $item;
-        }
-        return $data;
-    }
 }

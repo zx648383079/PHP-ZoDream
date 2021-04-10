@@ -4,6 +4,7 @@ namespace Module\Document\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Document\Domain\Repositories\MockRepository;
+use Zodream\Helpers\Arr;
 
 /**
  * Class FieldModel
@@ -130,4 +131,12 @@ class FieldModel extends Model {
     }
 
 
+    public function toArray()
+    {
+        $data = parent::toArray();
+        if ($this->type === 'array' || $this->type === 'object') {
+            $data['children'] = Arr::toArray($this->children);
+        }
+        return $data;
+    }
 }

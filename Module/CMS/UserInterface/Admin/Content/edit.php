@@ -9,16 +9,16 @@ $this->title = '编辑文章';
 <form data-type="ajax" action="<?=$this->url('./@admin/content/save')?>" method="post" class="form-table" role="form">
     <div class="zd-tab">
         <div class="zd-tab-head">
-            <?php foreach($tab_list as $key => $item):?>
+            <?php foreach($tab_list as $item):?>
             <div class="zd-tab-item<?=$item['active'] ? ' active' : ''?>">
-                <?=$key?>
+                <?=$item['name']?>
             </div>
             <?php endforeach;?>
         </div>
         <div class="zd-tab-body">
-        <?php foreach($tab_list as $key => $item):?>
-            <div class="zd-tab-item<?=$item['active'] ? ' active' : ''?>">
-                <?php foreach($item['fields'] as $item):?>
+        <?php foreach($tab_list as $group):?>
+            <div class="zd-tab-item<?=$group['active'] ? ' active' : ''?>">
+                <?php foreach($group['items'] as $item):?>
                     <?=$scene->toInput($item, $data)?>
                 <?php endforeach;?>
             </div>
