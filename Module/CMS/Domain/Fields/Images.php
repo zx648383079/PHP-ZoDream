@@ -9,7 +9,26 @@ class Images extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'allow',
+                    'label' => '允许格式',
+                    'type' => 'text',
+                    'value' => Image::DEFAULT_ALLOW,
+                ],
+                [
+                    'name' => 'length',
+                    'label' => '允许单张大小',
+                    'type' => 'text',
+                    'value' => '2M',
+                ],
+                [
+                    'name' => 'count',
+                    'label' => '允许几张',
+                    'type' => 'text',
+                    'value' => '*',
+                ],
+            ];
         }
         return implode('', [
             Theme::text('setting[option][allow]', '*', '允许格式'),

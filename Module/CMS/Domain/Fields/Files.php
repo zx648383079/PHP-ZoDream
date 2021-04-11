@@ -9,10 +9,29 @@ class Files extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'allow',
+                    'label' => '允许格式',
+                    'type' => 'text',
+                    'value' => File::DEFAULT_ALLOW,
+                ],
+                [
+                    'name' => 'length',
+                    'label' => '允许单个大小',
+                    'type' => 'text',
+                    'value' => '2M',
+                ],
+                [
+                    'name' => 'count',
+                    'label' => '允许数量',
+                    'type' => 'text',
+                    'value' => '*',
+                ],
+            ];
         }
         return implode('', [
-            Theme::text('setting[option][allow]', '*', '允许格式'),
+            Theme::text('setting[option][allow]', File::DEFAULT_ALLOW, '允许格式'),
             Theme::text('setting[option][length]', '2M', '允许单个大小'),
             Theme::text('setting[option][count]', '*', '允许数量'),
         ]);

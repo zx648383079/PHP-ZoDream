@@ -9,7 +9,39 @@ class Textarea extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'width',
+                    'label' => '宽度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'height',
+                    'label' => '高度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'is_mb_auto',
+                    'label' => '移动端自动宽度',
+                    'type' => 'switch',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'value',
+                    'label' => '默认值',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'type',
+                    'label' => '字段类型',
+                    'type' => 'text',
+                    'value' => 0,
+                    'items' => ['char', 'varchar', 'text']
+                ],
+            ];
         }
         return implode('', [
             Theme::text('setting[option][width]', '', '宽度'),
@@ -17,7 +49,6 @@ class Textarea extends BaseField {
             Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
             Theme::text('setting[option][value]', '', '默认值'),
             Theme::select('setting[option][type]', ['char', 'varchar', 'text'], 0, '字段类型'),
-            Theme::text('setting[option][length]', '', '字段长度'),
         ]);
     }
 

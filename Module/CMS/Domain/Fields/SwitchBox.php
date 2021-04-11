@@ -9,7 +9,13 @@ class SwitchBox extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'value',
+                    'label' => '默认值',
+                    'type' => 'switch',
+                ],
+            ];
         }
         return implode('', [
             Theme::checkbox('setting[option][value]', null, false, '默认值'),

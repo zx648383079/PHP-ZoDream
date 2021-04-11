@@ -168,7 +168,7 @@ class MockRepository {
                 'title' => $key,
                 'type' => 'string',
                 'kind' => $kind,
-                'default_value' => is_null($item) || is_array($item) || strlen($item) > 30 ? '' : $item,
+                'default_value' => is_null($item) || is_array($item) || strlen((string)$item) > 30 ? '' : $item,
                 'is_required' => !empty($item) ? 1 : 0,
                 'level' => 0,
             ]);

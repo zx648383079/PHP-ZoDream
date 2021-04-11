@@ -9,7 +9,51 @@ class Text extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'width',
+                    'label' => '宽度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'height',
+                    'label' => '高度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'is_mb_auto',
+                    'label' => '移动端自动宽度',
+                    'type' => 'switch',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'is_pwd',
+                    'label' => '密码框模式',
+                    'type' => 'switch',
+                    'value' => 0,
+                ],
+                [
+                    'name' => 'unique',
+                    'label' => '验证重复',
+                    'type' => 'switch',
+                    'value' => 0,
+                ],
+                [
+                    'name' => 'value',
+                    'label' => '默认值',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'type',
+                    'label' => '字段类型',
+                    'type' => 'text',
+                    'value' => 0,
+                    'items' => ['int', 'char', 'varchar']
+                ],
+            ];
         }
         return implode('', [
             Theme::text('setting[option][width]', '', '输入框宽度'),

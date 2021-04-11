@@ -103,6 +103,9 @@ class ContentRepository {
 
     public static function getForm(int $site, int $category, int $id = 0) {
         $data = $id < 1 ? compact('id') : static::get($site, $category, $id);
+        if ($id < 1) {
+            CategoryRepository::apply($site, $category);
+        }
         $data['form_data'] = static::form($data, CMSRepository::scene());
         return $data;
     }

@@ -11,7 +11,20 @@ class Markdown extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'width',
+                    'label' => '宽度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'height',
+                    'label' => '高度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+            ];
         }
         return implode('', [
             Theme::text('setting[option][width]', '', '宽度'),

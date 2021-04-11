@@ -10,7 +10,33 @@ class Editor extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'width',
+                    'label' => '宽度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'height',
+                    'label' => '高度',
+                    'type' => 'text',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'is_mb_auto',
+                    'label' => '移动端自动宽度',
+                    'type' => 'switch',
+                    'value' => '',
+                ],
+                [
+                    'name' => 'editor_mode',
+                    'label' => '编辑器模式',
+                    'type' => 'radio',
+                    'value' => 0,
+                    'items' => ['完整版', '精简版', '优化版']
+                ],
+            ];
         }
         return implode('', [
             Theme::text('setting[option][width]', '', '宽度'),

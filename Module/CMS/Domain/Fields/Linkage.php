@@ -13,10 +13,18 @@ class Linkage extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'linkage_id',
+                    'label' => '联动项',
+                    'type' => 'select',
+                    'value' => 0,
+                    'items' => LinkageModel::query()->get()
+                ],
+            ];
         }
         return implode('', [
-            Theme::select('setting[option][linkage_id]', [LinkageModel::query()->all()], 0, '联动项'),
+            Theme::select('setting[option][linkage_id]', [LinkageModel::query()->get()], 0, '联动项'),
         ]);
     }
 

@@ -11,13 +11,7 @@ class Url extends BaseField {
         if ($isJson) {
             return [];
         }
-        return implode('', [
-            Theme::text('setting[option][width]', '', '宽度'),
-            Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
-            Theme::checkbox('setting[option][unique]', null, 0, '验证重复'),
-            Theme::text('setting[option][value]', '', '默认值'),
-            Theme::text('setting[option][length]', '', '字段长度'),
-        ]);
+        return '';
     }
 
 

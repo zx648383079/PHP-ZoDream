@@ -9,7 +9,13 @@ class Select extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false) {
         if ($isJson) {
-            return [];
+            return [
+                [
+                    'name' => 'items',
+                    'label' => '选项',
+                    'type' => 'textarea',
+                ],
+            ];
         }
         return implode('', [
             Theme::textarea('setting[option][items]', '', '选项'),
