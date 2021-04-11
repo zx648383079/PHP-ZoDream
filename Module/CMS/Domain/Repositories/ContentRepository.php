@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Exception;
 use Module\Auth\Domain\Events\ManageAction;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Zodream\Database\Relation;
@@ -10,8 +12,18 @@ use Zodream\Helpers\Time;
 
 class ContentRepository {
     public static function getList(
-        int $site, int $category, string $keywords = '', int $parent = 0, int $page = 1, int $perPage = 20) {
-        $scene = CategoryRepository::apply($site, $category);
+        int $site, int $category, string $keywords = '',
+        int $parent = 0, int $modelId = 0, int $page = 1, int $perPage = 20) {
+        SiteRepository::apply($site);
+        if ($modelId < 1) {
+            $modelId = intval(CategoryModel::where('id', $category)
+                ->value('model_id'));
+            if ($modelId < 1) {
+                throw new Exception('栏目不包含模型');
+            }
+        }
+        $modelModel = ModelRepository::get($modelId);
+        $scene = CMSRepository::scene()->setModel($modelModel, $site);
         $column = static::searchField($scene);
         $page = $scene->search($keywords, [
             'cat_id' => $category,
@@ -25,10 +37,16 @@ class ContentRepository {
                     'query' => CategoryModel::query()->select('id', 'title'),
                     'link' => ['cat_id', 'id'],
                     'type' => Relation::TYPE_ONE
+                ],
+                'user' => [
+                    'query' => UserSimpleModel::query(),
+                    'link' => ['user_id', 'id'],
+                    'type' => Relation::TYPE_ONE
                 ]
             ]);
         }
         $data['column'] = $column;
+        $data['model'] = $modelModel;
         return $data;
     }
 
@@ -53,6 +71,10 @@ class ContentRepository {
             [
                 'name' => 'cat_id',
                 'label' => '分类',
+            ],
+            [
+                'name' => 'user_id',
+                'label' => '会员',
             ]
         ];
         foreach ($scene->fieldList() as $item) {
@@ -86,8 +108,8 @@ class ContentRepository {
         ]);
     }
 
-    public static function get(int $site, int $category, int $id = 0) {
-        $scene = CategoryRepository::apply($site, $category);
+    public static function get(int $site, int $category, int $modelId, int $id = 0) {
+        $scene = static::apply($site, $category, $modelId);
         return $scene->find($id);
     }
 
@@ -101,32 +123,46 @@ class ContentRepository {
         return $tabItems;
     }
 
-    public static function getForm(int $site, int $category, int $id = 0) {
-        $data = $id < 1 ? compact('id') : static::get($site, $category, $id);
+    public static function getForm(int $site, int $category, int $modelId = 0, int $id = 0) {
+        $data = $id < 1 ? compact('id') : static::get($site, $category, $modelId, $id);
         if ($id < 1) {
-            CategoryRepository::apply($site, $category);
+            static::apply($site, $category, $modelId);
         }
         $data['form_data'] = static::form($data, CMSRepository::scene());
         return $data;
     }
 
-    public static function save(int $site, int $category, array $data) {
+    public static function save(int $site, int $category, int $modelId, array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        $scene = CategoryRepository::apply($site, $category);
+        $scene = static::apply($site, $category, $modelId);
         if ($id > 0) {
             $scene->update($id, $data);
         } else {
-            $scene->insert($data);
+            $id = $scene->insert($data);
         }
         event(new ManageAction('cms_content_edit', '', 33, $id));
         if ($scene->hasError()) {
             throw new \Exception($scene->getFirstError());
         }
+        $data['id'] = $id;
+        return $data;
     }
 
-    public static function remove(int $site, int $category, int $id) {
-        $scene = CategoryRepository::apply($site, $category);
+    public static function remove(int $site, int $category, int $modelId, int $id) {
+        $scene = static::apply($site, $category, $modelId);
         $scene->remove($id);
+    }
+
+    public static function apply(int $site, int $category, int $modelId) {
+        SiteRepository::apply($site);
+        if ($modelId < 1) {
+            $modelId = intval(CategoryModel::where('id', $category)
+                ->value('model_id'));
+            if ($modelId < 1) {
+                throw new Exception('栏目不包含模型');
+            }
+        }
+        return CMSRepository::scene()->setModel(ModelRepository::get($modelId), $site);
     }
 }
