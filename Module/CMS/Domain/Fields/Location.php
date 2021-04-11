@@ -9,7 +9,10 @@ class Location extends BaseField {
     
     static $isInit = false;
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return '';
     }
 
@@ -19,8 +22,15 @@ class Location extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
-
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'location',
+                'value' => $value
+            ];
+        }
         $html = $this->getDialog();
         return <<<HTML
 <div class="input-group">

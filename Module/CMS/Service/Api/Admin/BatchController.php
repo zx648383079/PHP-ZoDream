@@ -16,6 +16,8 @@ class BatchController extends Controller {
             'category' => sprintf('%s::%s', CategoryRepository::class, 'all'),
             'group' => sprintf('%s::%s', GroupRepository::class, 'getList'),
             'model' => sprintf('%s::%s', ModelRepository::class, 'all'),
+            'field_type' => sprintf('%s::%s', ModelRepository::class, 'fieldType'),
+            'model_tab' => sprintf('%s::%s', ModelRepository::class, 'fieldTab'),
         ]));
     }
 

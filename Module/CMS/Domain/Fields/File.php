@@ -9,7 +9,10 @@ class File extends BaseField {
 
     const DEFAULT_ALLOW = '';
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::text('setting[option][allow]', self::DEFAULT_ALLOW, '允许格式'),
             Theme::text('setting[option][length]', '2M', '允许大小'),
@@ -22,7 +25,15 @@ class File extends BaseField {
         $column->string($field->length > 10 ? $field->length : 255)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'file',
+                'value' => $value
+            ];
+        }
         $option = $field->setting('option');
         return Theme::file($field->field, $value, $field->name, null,
             $field->is_required > 0)->options([

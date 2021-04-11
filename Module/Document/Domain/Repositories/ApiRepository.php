@@ -100,7 +100,7 @@ class ApiRepository {
                 return;
             }
             foreach ($item['children'] as $arg) {
-                $cb($kind, $id, $arg);
+                $cb($cb, $kind, $id, $arg);
             }
         };
         foreach ([
@@ -129,7 +129,7 @@ class ApiRepository {
     }
 
     protected static function saveField(int $apiID, int $id, int $parentId, array $data): int {
-        unset($data['id']);
+        unset($data['id'], $data['level'], $data['children']);
         if ($id > 0) {
             FieldModel::where('id', $id)
                 ->update(array_merge(
@@ -142,7 +142,7 @@ class ApiRepository {
                 ));
             return $id;
         } else {
-            return FieldModel::query()->insert(array_merge(
+            return intval(FieldModel::query()->insert(array_merge(
                 $data,
                 [
                     'api_id' => $apiID,
@@ -150,7 +150,7 @@ class ApiRepository {
                     'updated_at' => time(),
                     'created_at' => time()
                 ]
-            ));
+            )));
         }
     }
 

@@ -8,9 +8,9 @@ abstract class BaseField {
 
     abstract public function converterField(Column $column, ModelFieldModel $field);
 
-    abstract public function options(ModelFieldModel $field);
+    abstract public function options(ModelFieldModel $field, bool $isJson = false);
 
-    abstract public function toInput($value, ModelFieldModel $field);
+    abstract public function toInput($value, ModelFieldModel $field, bool $isJson = false);
 
     public function filterInput($value, ModelFieldModel $field) {
         return $value.'';

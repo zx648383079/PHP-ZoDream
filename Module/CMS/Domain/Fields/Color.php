@@ -8,7 +8,10 @@ use Zodream\Html\Dark\Theme;
 
 class Color extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return '';
     }
 
@@ -18,7 +21,15 @@ class Color extends BaseField {
         $column->string(20)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'color',
+                'value' => $value
+            ];
+        }
         view()->registerJsFile('@jscolor.min.js');
         return Theme::text($field->field, $value, $field->name)->class('jscolor');
     }

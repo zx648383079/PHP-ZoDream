@@ -30,6 +30,10 @@ abstract class BaseScene implements SceneInterface {
         return $this;
     }
 
+    public function modelId() {
+        return $this->model['id'];
+    }
+
     public function remove($id) {
         $main = null;
         foreach ([
@@ -309,12 +313,11 @@ abstract class BaseScene implements SceneInterface {
 
     }
 
-    public function toInput(ModelFieldModel $field, array $data) {
+    public function toInput(ModelFieldModel $field, array $data, bool $isJson = false) {
         if ($field->is_disable > 0) {
             return null;
         }
-        return self::newField($field->type)->toInput(isset($data[$field->field])
-            ? $data[$field->field] : '', $field);
+        return self::newField($field->type)->toInput($data[$field->field] ?? '', $field, $isJson);
     }
 
     /**

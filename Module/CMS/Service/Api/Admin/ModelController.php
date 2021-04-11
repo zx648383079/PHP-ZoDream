@@ -116,10 +116,9 @@ class ModelController extends Controller {
         return $this->renderData(true);
     }
 
-    public function fieldOptionAction(int $model) {
-        return $this->render([
-           'type_items' => ModelRepository::fieldType(),
-           'tab_items' => ModelRepository::fieldTab($model)
-        ]);
+    public function optionAction(string $type, int $id = 0) {
+        return $this->renderData(
+            ModelRepository::fieldOption($type, $id)
+        );
     }
 }

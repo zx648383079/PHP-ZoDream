@@ -209,6 +209,6 @@ class MultiScene extends BaseScene {
         return $this->addQuery($this->query(), $params, $order, $fields)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $this->addSearchQuery($query, $keywords);
-            })->page($per_page);
+            })->page($per_page, 'page', $page);
     }
 }

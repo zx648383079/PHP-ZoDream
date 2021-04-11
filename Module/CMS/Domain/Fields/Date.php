@@ -9,9 +9,25 @@ use Zodream\Template\View;
 
 class Date extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                [
+                    'name' => 'format',
+                    'label' => '不选择时间',
+                    'type' => 'switch',
+                    'value' => 1,
+                ],
+                [
+                    'name' => 'format',
+                    'label' => '格式化',
+                    'type' => 'text',
+                    'value' => 'yyyy-mm-dd'
+                ],
+            ];
+        }
         return implode('', [
-            Theme::radio('setting[option][has_time]', ['是', '否'], 1, '是否选择时间'),
+            Theme::radio('setting[option][format]', ['是', '否'], 1, '是否选择时间'),
             Theme::text('setting[option][format]', 'yyyy-mm-dd', '格式化'),
         ]);
     }
@@ -22,7 +38,15 @@ class Date extends BaseField {
         $column->string(30)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'date',
+                'value' => $value
+            ];
+        }
         $format = $field->setting('option', 'format');
         $js = <<<JS
 $('[name={$field->field}]').datetimer({

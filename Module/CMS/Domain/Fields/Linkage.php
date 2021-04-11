@@ -11,7 +11,10 @@ use Zodream\Template\View;
 
 class Linkage extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::select('setting[option][linkage_id]', [LinkageModel::query()->all()], 0, '联动项'),
         ]);
@@ -23,7 +26,15 @@ class Linkage extends BaseField {
         $column->uint()->default(0)->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'linkage',
+                'value' => $value
+            ];
+        }
         $value = intval($value);
         $url = url('./@admin/linkage/tree', ['id' => $field->setting('option', 'linkage_id')]);
         $js = <<<JS

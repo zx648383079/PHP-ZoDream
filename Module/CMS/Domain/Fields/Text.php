@@ -7,7 +7,10 @@ use Zodream\Html\Dark\Theme;
 
 class Text extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::text('setting[option][width]', '', '输入框宽度'),
             Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
@@ -30,7 +33,15 @@ class Text extends BaseField {
         $column->comment($field->name)->{$type}()->default($type === 'int' ? 0 : '');
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'text',
+                'value' => $value,
+            ];
+        }
         if ($field->setting('option', 'is_pwd')) {
             return Theme::password($field->field, $value, $field->name,
                 $field->is_required > 0);

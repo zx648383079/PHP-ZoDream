@@ -7,16 +7,17 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ContentController extends Controller {
 
-    public function indexAction(int $site, int $category, string $keywords = '', int $parent = 0) {
+    public function indexAction(int $site, int $category,
+                                string $keywords = '', int $parent = 0, int $page = 1, int $per_page = 20) {
         return $this->render(
-            ContentRepository::getList($site, $category, $keywords, $parent)
+            ContentRepository::getList($site, $category, $keywords, $parent, $page, $per_page)
         );
     }
 
     public function detailAction(int $site, int $category, int $id = 0) {
         try {
             return $this->render(
-                ContentRepository::get($site, $category, $id)
+                ContentRepository::getForm($site, $category, $id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

@@ -151,7 +151,7 @@ class ModelController extends Controller {
         ]);
     }
 
-    public function optionAction(int $type, int $id = 0) {
+    public function optionAction(string $type, int $id = 0) {
         $this->layout = false;
         $model = ModelFieldModel::findOrNew($id);
         $field = SingleScene::newField($type);

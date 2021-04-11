@@ -7,7 +7,10 @@ use Zodream\Html\Dark\Theme;
 
 class Radio extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::textarea('setting[option][items]', '', '选项'),
         ]);
@@ -19,7 +22,16 @@ class Radio extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'radio',
+                'value' => $value,
+                'items' => self::textToItems($field->setting('option', 'items'))
+            ];
+        }
         return Theme::radio($field->field, self::textToItems($field->setting('option', 'items')), $value, $field->name);
     }
 

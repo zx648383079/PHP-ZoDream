@@ -9,7 +9,10 @@ use Zodream\Html\Dark\Theme;
 
 class Model extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         $model_list = ModelModel::where('type', 0)->pluck('name', 'id');
         $option = $field->setting('option');
         return implode('', [
@@ -23,7 +26,15 @@ class Model extends BaseField {
         $column->uint()->default(0);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'model',
+                'value' => $value
+            ];
+        }
         $option = $field->setting('option');
         $model = ModelModel::find($option['model']);
         $items = CMSRepository::scene()->setModel($model)

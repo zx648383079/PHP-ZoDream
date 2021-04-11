@@ -7,7 +7,10 @@ use Zodream\Html\Dark\Theme;
 
 class Files extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::text('setting[option][allow]', '*', '允许格式'),
             Theme::text('setting[option][length]', '2M', '允许单个大小'),
@@ -21,7 +24,15 @@ class Files extends BaseField {
         $column->text()->nullable()->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'files',
+                'value' => $value
+            ];
+        }
         return Theme::file($field->field, $value, $field->name, null,
             $field->is_required > 0);
     }

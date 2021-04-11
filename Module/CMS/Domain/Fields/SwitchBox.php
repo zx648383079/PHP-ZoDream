@@ -7,7 +7,10 @@ use Zodream\Html\Dark\Theme;
 
 class SwitchBox extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::checkbox('setting[option][value]', null, false, '默认值'),
         ]);
@@ -19,7 +22,15 @@ class SwitchBox extends BaseField {
         $column->bool()->default(0)->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'switch',
+                'value' => $value,
+            ];
+        }
         return Theme::checkbox($field->field, null, $value, $field->name);
     }
 

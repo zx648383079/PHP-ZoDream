@@ -7,7 +7,10 @@ use Zodream\Html\Dark\Theme;
 
 class Textarea extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::text('setting[option][width]', '', '宽度'),
             Theme::text('setting[option][height]', '', '高度'),
@@ -33,7 +36,15 @@ class Textarea extends BaseField {
         }
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'textarea',
+                'value' => $value,
+            ];
+        }
         return Theme::textarea($field->field, $value, $field->name, null,
             $field->is_required > 0);
     }

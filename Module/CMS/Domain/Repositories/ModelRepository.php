@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Scene\SingleScene;
 
 class ModelRepository {
     public static function getList(string $keywords = '', int $type = 0) {
@@ -82,7 +83,7 @@ class ModelRepository {
         $field_list = ModelFieldModel::where('model_id', $model)->orderBy([
             'position' => 'asc',
             'id' => 'asc'
-        ])->all();
+        ])->get();
         foreach ($field_list as $item) {
             $name = $item->tab_name;
             if (empty($name) || !in_array($name, $tab_list)) {
@@ -118,5 +119,12 @@ class ModelRepository {
             $data[] = compact('name', 'value');
         }
         return $data;
+    }
+
+    public static function fieldOption(string $type, int $field) {
+        $model = ModelFieldModel::findOrNew($field);
+        $field = SingleScene::newField($type);
+        $data = $field->options($model, true);
+        return empty($data) || !is_array($data) ? [] : $data;
     }
 }

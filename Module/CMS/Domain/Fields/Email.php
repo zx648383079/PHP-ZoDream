@@ -7,7 +7,10 @@ use Zodream\Html\Dark\Theme;
 
 class Email extends BaseField {
 
-    public function options(ModelFieldModel $field) {
+    public function options(ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [];
+        }
         return implode('', [
             Theme::text('setting[option][width]', '', '宽度'),
             Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
@@ -23,7 +26,15 @@ class Email extends BaseField {
         $column->string(100)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+        if ($isJson) {
+            return [
+                'name' => $field->field,
+                'label' => $field->name,
+                'type' => 'email',
+                'value' => $value
+            ];
+        }
         return Theme::email($field->field, $value, $field->name);
     }
 }
