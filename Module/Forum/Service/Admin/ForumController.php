@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Service\Admin;
 
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
+use Module\Forum\Domain\Repositories\ForumRepository;
 
 class ForumController extends Controller {
 
@@ -15,7 +17,7 @@ class ForumController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = ForumModel::findOrDefault($id, [
             'position' => 9
         ]);
@@ -51,14 +53,18 @@ class ForumController extends Controller {
 
     }
 
-    public function deleteAction($id) {
-        ForumModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        try {
+            ForumRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData([
             'url' => $this->getUrl('forum')
         ]);
     }
 
-    protected function saveClassify($forum_id) {
+    protected function saveClassify(int $forum_id) {
         $data = $this->getClassify(request()->get('classify'),
             'name', 'id', 'icon', 'position');
         $exits = ForumClassifyModel::where('forum_id', $forum_id)->pluck('id');

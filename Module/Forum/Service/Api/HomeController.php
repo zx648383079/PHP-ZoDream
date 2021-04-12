@@ -1,32 +1,31 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Service\Api;
 
-use Domain\Model\SearchModel;
-use Module\Forum\Domain\Model\ForumClassifyModel;
-use Module\Forum\Domain\Model\ForumModel;
-use Module\Forum\Domain\Model\ThreadSimpleModel;
-use Module\Forum\Domain\Model\ThreadModel;
+use Module\Forum\Domain\Repositories\ForumRepository;
+use Module\Forum\Domain\Repositories\ThreadRepository;
 
 class HomeController extends Controller {
 
-    public function indexAction($parent_id = 0) {
-        $forum_list = ForumModel::with('children')
-            ->where('parent_id', $parent_id)->all();
-        return $this->renderData($forum_list);
+    public function indexAction(int $parent_id = 0) {
+        return $this->renderData(
+            ForumRepository::children($parent_id)
+        );
     }
 
-    public function detailAction($id) {
-        $forum = ForumModel::find($id);
-        $forum->classifies;
-        $forum->moderators;
-        $forum->path = ForumModel::findPath($id);
-        return $this->render($forum);
+    public function detailAction(int $id, bool $full = true) {
+        try {
+            return $this->render(
+                ForumRepository::getFull($id, $full)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
-    public function suggestionAction($keywords = null) {
-        $data = ThreadSimpleModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, 'title');
-         })->limit(4)->get();
-        return $this->renderData($data);
+    public function suggestionAction(string $keywords = '') {
+        return $this->renderData(
+            ThreadRepository::suggestion($keywords)
+        );
     }
 }

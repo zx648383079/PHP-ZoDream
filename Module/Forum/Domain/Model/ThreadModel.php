@@ -2,8 +2,7 @@
 namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Auth\Domain\Model\UserModel;
-use Zodream\Helpers\Time;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
 * Class ThreadModel
@@ -18,11 +17,15 @@ use Zodream\Helpers\Time;
  * @property integer $is_highlight
  * @property integer $is_digest
  * @property integer $is_closed
+ * @property integer $top_type
  * @property integer $is_private_post
  * @property integer $created_at
  * @property integer $updated_at
 */
 class ThreadModel extends Model {
+
+    protected array $append = ['user'];
+
 	public static function tableName() {
         return 'bbs_thread';
     }
@@ -40,6 +43,7 @@ class ThreadModel extends Model {
             'is_digest' => 'int:0,9',
             'is_closed' => 'int:0,9',
             'is_private_post' => 'int:0,9',
+            'top_type' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -59,6 +63,7 @@ class ThreadModel extends Model {
             'is_digest' => '是否精华',
             'is_closed' => '是否关闭',
             'is_private_post' => '是否仅楼主可见',
+            'top_type' => '置顶',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -73,47 +78,7 @@ class ThreadModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(UserModel::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-    public function getUpdatedAtAttribute() {
-        return Time::isTimeAgo($this->getAttributeValue('updated_at'), 2678400);
-    }
-
-    public function getLastPostAttribute() {
-        return ThreadPostModel::query()->where('thread_id', $this->id)
-            ->orderBy('id', 'desc')->first();
-    }
-
-    public function getIsNewAttribute() {
-	    return $this->last_post->getAttributeSource('updated_at') > time() - 86400;
-    }
-
-    public function canDigest() {
-        if (auth()->guest()) {
-            return false;
-        }
-        return auth()->user()->hasRole('administrator');
-    }
-
-    public function canHighlight() {
-        return $this->canDigest();
-    }
-
-    public function canClose() {
-        return $this->canDigest();
-    }
-
-    public function canRemovePost(ThreadPostModel $item) {
-	    if (auth()->guest()) {
-	        return false;
-        }
-	    if (auth()->id() == $this->user_id) {
-	        return true;
-        }
-	    if (auth()->id() == $item->user_id) {
-	        return true;
-        }
-	    return auth()->user()->hasRole('administrator');
-    }
 }

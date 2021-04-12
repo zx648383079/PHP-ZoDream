@@ -58,7 +58,7 @@ class OAuthModel extends Model {
 
 
     public function user() {
-        return $this->hasOne(UserModel::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     /**

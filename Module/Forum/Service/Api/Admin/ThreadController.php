@@ -8,13 +8,13 @@ class ThreadController extends Controller {
 
     public function indexAction(string $keywords = '', int $forum_id = 0) {
         return $this->renderPage(
-            ThreadRepository::getList($keywords, $forum_id)
+            ThreadRepository::manageList($keywords, $forum_id)
         );
     }
 
     public function deleteAction(int $id) {
         try {
-            ThreadRepository::remove($id);
+            ThreadRepository::manageRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

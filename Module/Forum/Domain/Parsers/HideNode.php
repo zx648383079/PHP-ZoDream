@@ -12,13 +12,15 @@ class HideNode extends Node {
      * @var Parser
      */
     protected $page;
-    protected $price = 0;
+    protected float $price = 0;
+    protected bool $isJson = false;
 
     public function isNest(): bool {
         return true;
     }
 
     public function render($type = null) {
+        $this->isJson = $type === 'json';
         $this->price = floatval($this->attr('price'));
         if ($this->isHide()) {
             return $this->hideHtml();
@@ -27,6 +29,12 @@ class HideNode extends Node {
             return $this->buyTip();
         }
         $content = $this->attr('content');
+        if ($this->isJson) {
+            return [
+                'tag' => 'hide',
+                'content' => $content
+            ];
+        }
         return <<<HTML
 <div class="hide-open-node">
     <div class="node-tip">本帖隐藏的内容</div>
@@ -71,18 +79,33 @@ HTML;
 
     private function buyTip() {
         $name = auth()->user()->name;
+        $confirm = sprintf('您将支付【%d】查看此处隐藏内容！', $this->price);
+        if ($this->isJson) {
+            return [
+                'tag' => 'hide_buy',
+                'price' => $this->price,
+                'name' => $name,
+                'confirm' => $confirm
+            ];
+        }
         $url = url('./thread/do', ['id' => $this->page->postId(),
             Parser::UID_KEY => $this->attr(Parser::UID_KEY)], true, false);
         return <<<HTML
 <div class="hide-locked-node">
     <i class="fa fa-lock"></i> {$name}，如果您要查看本帖隐藏内容请<a data-action="confirm" 
-    data-message="您将支付【{$this->price}】查看此处隐藏内容！" href="{$url}">购买[{$this->price}]</a>
+    data-message="{$confirm}" href="{$url}">购买[{$this->price}]</a>
 </div>
 HTML;
     }
 
     private function hideHtml() {
         $name = auth()->guest() ? '游客' : auth()->user()->name;
+        if ($this->isJson) {
+            return [
+                'tag' => 'hide',
+                'name' => $name
+            ];
+        }
         $url = auth()->guest() ? url('/auth', ['redirect_uri' => url()->full()])
             : 'javascript:;';
         return <<<HTML

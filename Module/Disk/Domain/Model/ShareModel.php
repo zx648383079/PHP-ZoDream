@@ -3,6 +3,7 @@ namespace Module\Disk\Domain\Model;
 
 use Module\Auth\Domain\Model\UserModel;
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 
 /**
@@ -66,7 +67,7 @@ class ShareModel extends Model {
     }
 
     public function user() {
-        return $this->hasOne(UserModel::class, 'id', 'user_id');
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getFile($id = null) {

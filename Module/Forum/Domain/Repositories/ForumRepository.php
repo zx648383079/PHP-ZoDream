@@ -6,6 +6,8 @@ use Domain\Model\SearchModel;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;
+use Module\Forum\Domain\Model\ThreadModel;
+use Zodream\Helpers\Tree as TreeHelper;
 
 class ForumRepository {
 
@@ -16,15 +18,30 @@ class ForumRepository {
             })->page();
     }
 
-    public static function get(int $id) {
+    public static function get(int $id, bool $full = true) {
         $model = ForumModel::findOrThrow($id, '数据有误');
-        $model->classifies;
-        $model->moderators;
+        if ($full) {
+            $model->classifies = ForumClassifyModel::where('forum_id', $id)
+                ->orderBy('id', 'asc')->get();
+            $model->moderators;
+        }
+        return $model;
+    }
+
+    public static function getFull(int $id, bool $full = true) {
+        $model = ForumModel::findOrThrow($id, '数据有误');
+        $model->classifies = ForumClassifyModel::where('forum_id', $id)
+            ->orderBy('id', 'asc')->get();
+        if ($full) {
+            $model->moderators;
+            $model->children = static::children($id, false);
+            $model->path = ForumModel::findPath($id);
+        }
         return $model;
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ForumModel::findOrNew($id);
         $model->load($data);
@@ -33,6 +50,7 @@ class ForumRepository {
         }
         if (isset($data['classifies'])) {
             foreach ($data['classifies'] as $item) {
+                $item['forum_id'] = $model->id;
                 static::saveClassify($item);
             }
         }
@@ -42,7 +60,7 @@ class ForumRepository {
         return $model;
     }
 
-    public static function saveModerator($users, $forum_id) {
+    public static function saveModerator(array $users, int $forum_id) {
         $exist = ForumModeratorModel::where('forum_id', $forum_id)
             ->pluck('user_id');
         $add = array_diff($users, $exist);
@@ -59,7 +77,7 @@ class ForumRepository {
     }
 
     public static function saveClassify(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ForumClassifyModel::findOrNew($id);
         $model->load($data);
@@ -75,5 +93,35 @@ class ForumRepository {
 
     public static function all() {
         return ForumModel::tree()->makeTreeForHtml();
+    }
+
+    public static function children(int $id, bool $hasChildren = true) {
+        $query = $hasChildren ? ForumModel::with('children') : ForumModel::query();
+        $data = $query
+            ->where('parent_id', $id)->get();
+        foreach ($data as $item) {
+            $item->last_thread = static::lastThread($item['id']);
+            if ($hasChildren) {
+                foreach ($item->children as $it) {
+                    $it->last_thread = static::lastThread($it['id']);
+                }
+            }
+        };
+        return $data;
+    }
+
+    private static function lastThread(int $id) {
+        return ThreadModel::with('user')
+            ->where('forum_id', $id)
+            ->orderBy('id', 'desc')->first('id', 'title', 'user_id', 'view_count',
+            'post_count',
+            'collect_count', 'updated_at');
+    }
+
+    public static function updateCount(int $id, string $key = 'thread_count', int $count = 1) {
+        $path = TreeHelper::getTreeParent(ForumModel::cacheAll(), $id);
+        $path[] = $id;
+        return ForumModel::whereIn('id', $path)
+            ->updateIncrement($key, $count);
     }
 }

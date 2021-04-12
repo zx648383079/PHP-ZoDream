@@ -21,6 +21,9 @@ use Zodream\Helpers\Time;
  * @property ThreadModel $thread
 */
 class ThreadPostModel extends Model {
+
+    protected array $hidden = ['ip'];
+
 	public static function tableName() {
         return 'bbs_thread_post';
     }
@@ -62,10 +65,6 @@ class ThreadPostModel extends Model {
 
     public function thread() {
         return $this->hasOne(ThreadModel::class, 'id', 'thread_id');
-    }
-
-    public function getUpdatedAtAttribute() {
-        return Time::isTimeAgo($this->getAttributeValue('updated_at'), 2678400);
     }
 
     public function canRemove() {

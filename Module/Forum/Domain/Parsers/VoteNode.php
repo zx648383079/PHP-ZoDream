@@ -16,21 +16,25 @@ class VoteNode extends Node {
      * @var Parser
      */
     protected $page;
-    protected $max = 1;
-    protected $items = [];
+    protected int $max = 1;
+    protected bool $isJson = false;
 
     public function render($type = null) {
+        $this->isJson = $type === 'json';
         $content = htmlspecialchars_decode($this->attr('content'));
         $this->max = max(intval($this->attr('max')), 1);
         if ($this->isShowForm()) {
-            return $this->formHtml($content);
+            return $this->isJson ? $this->formatJson($content) : $this->formHtml($content);
         }
         $subtotal = $this->getSubtotal();
+        if ($this->isJson) {
+            return $this->formatJson($content, $subtotal);
+        }
         $content = $this->replace($content, function ($label, $i) use ($subtotal) {
             $tip = '0/0';
             $width = '0';
             if (!empty($subtotal)) {
-                $count = isset($subtotal['items'][$i]) ? $subtotal['items'][$i] : 0;
+                $count = $subtotal['items'][$i] ?? 0;
                 $tip = sprintf('%d/%d', $count, $subtotal['total']);
                 $width = number_format($count * 100 / $subtotal['total'], 2);
             }
@@ -115,6 +119,29 @@ HTML;
         }
         ThreadLogModel::query()->insert($items);
         return true;
+    }
+
+
+    private function formatJson(string $content, array $subtotal = []): array {
+        $index = $this->attr(Parser::UID_KEY);
+        $items = [];
+        $content = $this->replace($content, function ($label, $i) use ($index, &$items, $subtotal) {
+            $items[] = [
+                'i' => $i,
+                'id' => sprintf('vote_%d_%d_%d', $this->page->postId(), $index, $i),
+                'value' => $label,
+                'count' => $subtotal['items'][$i] ?? 0,
+            ];
+            return '';
+        });
+        return [
+            'tag' => 'vote',
+            'content' => $content,
+            'items' => $items,
+            'max' => $this->max,
+            'editable' => empty($subtotal),
+            'total' => empty($subtotal) ? 0  : $subtotal['total'],
+        ];
     }
 
     private function formHtml($content) {

@@ -101,7 +101,7 @@ class ForumModel extends Model {
         return $data = static::query()->all();
     }
 
-    public static function findById($id) {
+    public static function findById(int $id) {
 	    foreach (static::cacheAll() as $item) {
 	        if ($item->id == $id) {
 	            return $item;
@@ -110,13 +110,13 @@ class ForumModel extends Model {
         return null;
     }
 
-    public static function getAllChildrenId($id) {
+    public static function getAllChildrenId(int $id) {
         $data = TreeHelper::getTreeChild(static::cacheAll(), $id);
         $data[] = $id;
         return $data;
     }
 
-    public static function findChildren($id) {
+    public static function findChildren(int $id) {
         $data = [];
         foreach (static::cacheAll() as $item) {
             if ($item->parent_id == $id) {
@@ -131,7 +131,7 @@ class ForumModel extends Model {
      * @return static[]
      * @throws \Exception
      */
-    public static function findPath($id) {
+    public static function findPath(int $id) {
         $path = TreeHelper::getTreeParent(static::cacheAll(), $id);
         $data = [];
         foreach ($path as $id) {
@@ -141,12 +141,5 @@ class ForumModel extends Model {
             }
         }
         return $data;
-    }
-
-    public static function updateCount($id, $key = 'thread_count') {
-        $path = TreeHelper::getTreeParent(static::cacheAll(), $id);
-        $path[] = $id;
-        return static::whereIn('id', $path)
-            ->updateIncrement($key);
     }
 }

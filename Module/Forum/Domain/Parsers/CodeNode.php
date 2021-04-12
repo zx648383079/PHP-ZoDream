@@ -8,6 +8,13 @@ class CodeNode extends Node {
     public function render($type = null) {
         $lang = $this->attr('lang');
         $content = $this->attr('content');
+        if ($type === 'json') {
+            return  [
+                'tag' => 'code',
+                'content' => $content,
+                'language' => $lang,
+            ];
+        }
         view()->registerCssFile('@prism.css')
             ->registerJsFile('@prism.js');
         return <<<HTML

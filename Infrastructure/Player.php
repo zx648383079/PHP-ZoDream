@@ -63,8 +63,8 @@ HTML;
     public static function videoPlayer(string|array $url, View $view): string {
         $cover = '';
         if (is_array($url)) {
-            $cover = isset($url['cover']) ? $url['cover'] : '';
-            $url = isset($url['url']) ? $url['url'] : '';
+            $cover = $url['cover'] ?? '';
+            $url = $url['url'] ?? '';
         }
         if (empty($url)) {
             return '';
@@ -81,6 +81,7 @@ HTML;
             'player.youku.com',
             'player.bilibili.com',
             'v.qq.com',
+            'open.iqiyi.com',
         ]);
     }
 

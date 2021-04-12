@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
+use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\Template\Domain\Weights\Node;
-
-class PageNode extends Node {
+class EmojiNode extends Node {
 
     public function isGlobe(): bool
     {
@@ -12,12 +12,13 @@ class PageNode extends Node {
     }
 
     public function render($type = null) {
-        $blocks = explode('<page/>', $this->attr('content'));
+        $content = $this->attr('content');
         if ($type === 'json') {
             return [
-                'content' => $blocks[0]
+                'content' => $content,
+                'extra_rule' => EmojiRepository::renderRule($content)
             ];
         }
-        return $blocks[0];
+        return EmojiRepository::render($content);
     }
 }

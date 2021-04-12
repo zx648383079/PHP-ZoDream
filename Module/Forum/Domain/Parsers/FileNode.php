@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Auth\Domain\Model\AccountLogModel;
@@ -14,21 +15,19 @@ class FileNode extends Node {
      * @var Parser
      */
     protected $page;
-    protected $price = 0;
+    protected float $price = 0;
+    protected bool $isJson = false;
 
     public function render($type = null) {
+        $this->isJson = $type === 'json';
         $content = $this->attr('content');
         $this->price = floatval($this->attr('price'));
         /** @var File $file */
         $file = public_path($content);
         if (!$file->exist()) {
-            return <<<HTML
-<div class="file-down-node">
-    <p><i class="fa fa-file-archive"></i> 【文件不存在】</p>
-</div>
-HTML;
+            return $this->fileNotFound();
         }
-        $size = Disk::size($file->size());
+        $size = $file->size();
         $count = ThreadLogModel::query()->where('item_type',
             ThreadLogModel::TYPE_THREAD_POST)
             ->where('item_id', $this->page->postId())
@@ -37,34 +36,85 @@ HTML;
         $url = url('./thread/do', ['id' => $this->page->postId(),
             Parser::UID_KEY => $this->attr(Parser::UID_KEY)], true, false);
         if (auth()->guest()) {
-            $url = url('/auth', ['redirect_uri' => url()->full()]);
-            return <<<HTML
-<div class="file-down-node">
-    <p><i class="fa fa-file-archive"></i> [<a href="{$url}">登录</a>]</p>
-    <p>{$size}, 下载次数: {$count}</p>
-</div>
-HTML;
+            return $this->loginTip($count, $size);
         }
         if (!$this->isBuy()) {
-            return $this->buyTip($size, $count, $url);
+            return $this->buyTip($size, $count, $url, $file->getName());
         }
         if (!$this->page->isUnderAction($this)) {
-            return <<<HTML
+            return $this->downloadBtn($url, $count, $size, $file->getName());
+        }
+        response()->file($file);
+        throw new StopNextException('下载文件');
+    }
+
+    private function downloadBtn($url, $count, $size, string $fileName) {
+        if ($this->isJson) {
+            return [
+                'tag' => 'file',
+                'count' => $count,
+                'size' => $size,
+                'name' => $fileName
+            ];
+        }
+        $size = Disk::size($size);
+        return <<<HTML
 <div class="file-down-node">
     <p><i class="fa fa-file-archive"></i> [<a href="{$url}" target="_blank">下载</a>]</p>
     <p>{$size}, 下载次数: {$count}</p>
 </div>
 HTML;
-        }
-        app('response')->file($file);
-        throw new StopNextException('下载文件');
     }
 
-    private function buyTip($size, $count, $url) {
+    private function loginTip(int $count, int $size) {
+        if ($this->isJson) {
+            return [
+                'tag' => 'file_login',
+                'count' => $count,
+                'size' => $size
+            ];
+        }
+        $url = url('/auth', ['redirect_uri' => url()->full()]);
+        $size = Disk::size($size);
+        return <<<HTML
+<div class="file-down-node">
+    <p><i class="fa fa-file-archive"></i> [<a href="{$url}">登录</a>]</p>
+    <p>{$size}, 下载次数: {$count}</p>
+</div>
+HTML;
+    }
+
+    private function fileNotFound() {
+        if ($this->isJson) {
+            return [
+                'tag' => 'file',
+                'error' => true
+            ];
+        }
+        return <<<HTML
+<div class="file-down-node">
+    <p><i class="fa fa-file-archive"></i> 【文件不存在】</p>
+</div>
+HTML;
+    }
+
+    private function buyTip($size, $count, $url, string $fileName) {
+        $confirm = sprintf('您将支付【%d】购买此处下载文件！', $this->price);
+        if ($this->isJson) {
+            return [
+                'tag' => 'file_buy',
+                'price' => $this->price,
+                'count' => $count,
+                'size' => $size,
+                'confirm' => $confirm,
+                'name' => $fileName
+            ];
+        }
+        $size = Disk::size($size);
         return <<<HTML
 <div class="file-down-node">
     <p><i class="fa fa-file-archive"></i> [<a data-action="confirm" 
-    data-message="您将支付【{$this->price}】购买此处下载文件！" href="{$url}">购买({$this->price})</a>]</p>
+    data-message="{$confirm}" href="{$url}">购买({$this->price})</a>]</p>
     <p>{$size}, 下载次数: {$count}</p>
 </div>
 HTML;

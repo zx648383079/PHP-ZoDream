@@ -10,6 +10,12 @@ class AudioNode extends Node {
 
     public function render($type = null) {
         $content = $this->attr('content');
+        if ($type === 'json') {
+            return [
+                'tag' => 'audio',
+                'src' => $content,
+            ];
+        }
         $this->boot();
         return <<<HTML
 <div class="aplayer" data-url="{$content}"></div>

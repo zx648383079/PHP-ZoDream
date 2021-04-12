@@ -31,20 +31,20 @@ use Module\Forum\Domain\Model\ThreadModel;
             </div>
             <div class="last-time">最后编辑于 <?=$item->updated_at?></div>
             <div class="content">
-                <?=Parser::converter($item)?>
+                <?=$item->content?>
             </div>
             <div class="action">
                 
             </div>
             <div class="footer">
                 <a href="javascript:;" data-action="reply">回复</a>
-                <?php if($thread->canDigest()):?>
+                <?php if($thread->digestable):?>
                 <a href="<?=$this->url('./thread/digest', ['id' => $thread->id])?>" data-action="toggle"><?= !$thread->is_digest ? '设为' : '取消'?>精华</a>
                 <?php endif;?>
-                <?php if($thread->canHighlight()):?>
+                <?php if($thread->highlightable):?>
                 <a href="<?=$this->url('./thread/highlight', ['id' => $thread->id])?>" data-action="toggle"><?= !$thread->is_highlight ? '设为' : '取消'?>高亮</a>
                 <?php endif;?>
-                <?php if($thread->canClose()):?>
+                <?php if($thread->closeable):?>
                 <a href="<?=$this->url('./thread/close', ['id' => $thread->id])?>" data-action="toggle"><?= !$thread->is_closed ? '设为' : '取消'?>关闭</a>
                 <?php endif;?>
             </div>
@@ -67,12 +67,12 @@ use Module\Forum\Domain\Model\ThreadModel;
                     <i class="fa fa-lock"></i> 本帖内容仅楼主可见
                 </div>
                 <?php else:?>
-                    <?=Parser::converter($item)?>
+                    <?=$item->content?>
                 <?php endif;?>
             </div>
             <div class="footer">
                 <a href="javascript:;" data-action="reply">回复</a>
-                <?php if($thread->canRemovePost($item)):?>
+                <?php if($thread->deleteable):?>
                 <a href="<?=$this->url('./thread/remove_post', ['id' => $item->id])?>" data-action="toggle">删除</a>
                 <?php endif;?>
             </div>

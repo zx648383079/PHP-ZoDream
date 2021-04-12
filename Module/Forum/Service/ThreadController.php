@@ -26,61 +26,34 @@ class ThreadController extends Controller {
         ];
     }
 
-    public function indexAction($id, $user = 0, $page = 1) {
+    public function indexAction(int $id, int $user = 0, int $page = 1) {
         if ($page < 2 && $user < 1) {
             ThreadModel::query()->where('id', $id)
                 ->updateIncrement('view_count');
         }
-        $thread = ThreadModel::find($id);
-        if (empty($thread)) {
-            return $this->redirectWithMessage('./');
+        try {
+            $thread = ThreadRepository::getFull($id);
+            $path = $thread->path;
+            $post_list = ThreadRepository::postList($id, $user);
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./', $ex->getMessage());
         }
-        $forum = ForumModel::findById($thread->forum_id);
-        $path = ForumModel::findPath($thread->forum_id);
-        $path[] = $forum;
-        $post_list = ThreadPostModel::with('user')
-            ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', $user);
-            })
-            ->where('thread_id', $id)
-            ->orderBy('grade', 'asc')
-            ->orderBy('created_at', 'asc')->page();
         return $this->show(compact('thread', 'path', 'post_list'));
     }
 
-    public function createAction($title, $content,
-                                 $forum_id, $classify_id = 0, $is_private_post = 0) {
-        if (empty($title)) {
-            return $this->renderFailure('标题不能为空');
+    public function createAction(string $title, string $content,
+                                 int $forum_id, int $classify_id = 0, int $is_private_post = 0) {
+        try {
+            ThreadRepository::create($title, $content, $forum_id, $classify_id, $is_private_post);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $forum_id = intval($forum_id);
-        if ($forum_id < 1) {
-            return $this->renderFailure('请选择版块');
-        }
-        $thread = ThreadModel::create([
-            'title' => $title,
-            'forum_id' => $forum_id,
-            'classify_id' => intval($classify_id),
-            'user_id' => auth()->id(),
-            'is_private_post' => $is_private_post
-        ]);
-        if (empty($thread)) {
-            return $this->renderFailure('发帖失败');
-        }
-        ThreadPostModel::create([
-            'content' => $content,
-            'user_id' => auth()->id(),
-            'thread_id' => $thread->id,
-            'grade' => 0,
-            'ip' => request()->ip()
-        ]);
-        ForumModel::updateCount($thread->forum_id, 'thread_count');
         return $this->renderData([
             'url' => url('./forum', ['id' => $forum_id])
         ]);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $thread = ThreadModel::find($id);
         if ($thread->user_id !== auth()->id()) {
             return $this->redirect('./');
@@ -95,125 +68,79 @@ class ThreadController extends Controller {
         return $this->show(compact('thread', 'post', 'classify_list'));
     }
 
-    public function updateAction($id, Request $request) {
-        $thread = ThreadModel::find($id);
-        if ($thread->user_id !== auth()->id()) {
-            return $this->renderFailure('无权限');
+    public function updateAction(int $id, Request $request) {
+        try {
+            $data = $request->validate([
+                'classify_id' => 'int',
+                'title' => 'string:0,200',
+                'is_private_post' => 'int:0,9',
+                'content' => 'required|string',
+            ]);
+            ThreadRepository::update($id, $data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($request->has('title')) {
-            $thread->title = $request->get('title');
-        }
-        if ($request->has('classify_id')) {
-            $thread->classify_id = $request->get('classify_id');
-        }
-        $thread->save();
-        $post = ThreadPostModel::where([
-            'user_id' => auth()->id(),
-            'thread_id' => $thread->id,
-            'grade' => 0,
-        ])->update([
-            'content' => $request->get('content')
-        ]);
         return $this->renderData([
             'url' => url('./thread', ['id' => $id])
         ], '更新成功');
     }
 
-    public function replyAction($content, $thread_id) {
-        if (empty($content)) {
-            return $this->renderFailure('请输入内容');
+    public function replyAction(string $content, int $thread_id) {
+        try {
+            $post = ThreadRepository::reply($content, $thread_id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $thread_id = intval($thread_id);
-        if ($thread_id < 1) {
-            return $this->renderFailure('请选择帖子');
-        }
-        $thread = ThreadModel::find($thread_id);
-        if (empty($thread)) {
-            return $this->renderFailure('请选择帖子');
-        }
-        $max = ThreadPostModel::where('thread_id', $thread_id)->max('grade');
-        $post = ThreadPostModel::create([
-            'content' => $content,
-            'user_id' => auth()->id(),
-            'thread_id' => $thread_id,
-            'grade' => intval($max) + 1,
-            'ip' => request()->ip()
-        ]);
-        if (empty($post)) {
-            return $this->renderFailure('发表失败');
-        }
-        ForumModel::updateCount($thread->forum_id, 'post_count');
-        ThreadModel::query()->where('id', $thread_id)
-            ->updateIncrement('post_count');
         return $this->renderData([
             'url' => url('./thread', ['id' => $thread_id, 'page' => ceil($post->grade / 20)])
         ]);
     }
 
-    public function digestAction($id) {
-        $thread = ThreadModel::find($id);
-        if (empty($thread)) {
-            return $this->renderFailure('请选择帖子');
+    public function digestAction(int $id) {
+        try {
+            ThreadRepository::threadAction($id, ['is_digest']);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!$thread->canDigest()) {
-            return $this->renderFailure('无权限');
-        }
-        ThreadModel::query()->where('id', $id)
-            ->updateBool('is_digest');
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function highlightAction($id) {
-        $thread = ThreadModel::find($id);
-        if (empty($thread)) {
-            return $this->renderFailure('请选择帖子');
+    public function highlightAction(int $id) {
+        try {
+            ThreadRepository::threadAction($id, ['is_highlight']);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!$thread->canHighlight()) {
-            return $this->renderFailure('无权限');
-        }
-        ThreadModel::query()->where('id', $id)
-            ->updateBool('is_highlight');
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function closeAction($id) {
-        $thread = ThreadModel::find($id);
-        if (empty($thread)) {
-            return $this->renderFailure('请选择帖子');
+    public function closeAction(int $id) {
+        try {
+            ThreadRepository::threadAction($id, ['is_closed']);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!$thread->canClose()) {
-            return $this->renderFailure('无权限');
-        }
-        ThreadModel::query()->where('id', $id)
-            ->updateBool('is_closed');
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function removePostAction($id) {
-        $item = ThreadPostModel::find($id);
-        if (empty($item)) {
-            return $this->renderFailure('请选择回帖');
+    public function removePostAction(int $id) {
+        try {
+            ThreadRepository::removePost($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $thread = ThreadModel::find($item->thread_id);
-        if (empty($thread)) {
-            return $this->renderFailure('请选择帖子');
-        }
-        if (!$thread->canRemovePost($item)) {
-            return $this->renderFailure('无权限');
-        }
-        $item->delete();
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function collectAction($id) {
+    public function collectAction(int $id) {
         try {
             $res = ThreadRepository::toggleCollect($id);
         } catch (\Exception $ex) {
@@ -222,7 +149,7 @@ class ThreadController extends Controller {
         return $this->renderData($res);
     }
 
-    public function agreeAction($id) {
+    public function agreeAction(int $id) {
         try {
             $res = ThreadRepository::agreePost($id, true);
         } catch (\Exception $ex) {
@@ -231,7 +158,7 @@ class ThreadController extends Controller {
         return $this->renderData($res);
     }
 
-    public function disagreeAction($id) {
+    public function disagreeAction(int $id) {
         try {
             $res = ThreadRepository::agreePost($id, false);
         } catch (\Exception $ex) {
@@ -240,12 +167,12 @@ class ThreadController extends Controller {
         return $this->renderData($res);
     }
 
-    public function doAction(Request $request, $id) {
+    public function doAction(Request $request, int $id) {
         try {
             $model = ThreadPostModel::find($id);
-            $html = Parser::converterWithRequest($model, $request);
+            $html = Parser::create($model, $request)->render();
         } catch (StopNextException $ex) {
-            return app('response');
+            return response();
         }
         catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

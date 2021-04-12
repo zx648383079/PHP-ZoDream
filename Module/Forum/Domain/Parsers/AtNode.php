@@ -13,7 +13,10 @@ class AtNode extends Node {
      */
     protected $page;
 
+    protected bool $isJson = false;
+
     public function render($type = null) {
+        $this->isJson = $type === 'json';
         $parent = intval($this->attr('parent'));
         $name = $this->attr('content');
         $html = $this->atPost($parent, $name);
@@ -22,13 +25,32 @@ class AtNode extends Node {
         }
         $user = UserModel::findByName($name);
         if (empty($user)) {
-            return sprintf('@%s ', $name);
+            return $this->noUser($name);
         }
         return $this->atUser($user->id, $name);
     }
 
+    private function noUser(string $name) {
+        if ($this->isJson) {
+            return [
+                'tag' => 'at',
+                'content' => '@'.$name
+            ];
+        }
+        return sprintf('@%s ', $name);
+    }
+
     private function atUser($user, $content) {
         $thread = $this->page->getModel();
+        if ($this->isJson) {
+            return [
+                'tag' => 'at',
+                'content' => '@'.$content,
+                'thread' => $thread->thread_id,
+                'user' => $user,
+                'post' => $thread->id
+            ];
+        }
         $url = url('./thread', ['user' => $user, 'id' => $thread->thread_id]);
         return <<<HTML
 <a href="{$url}#post-{$thread->id}">@{$content}</a> 
@@ -48,20 +70,13 @@ HTML;
         $model->setRelation('thread', $this->page->getModel()->thread);
         $user = $this->atUser($model->user_id, $name);
         if (!$model->is_public_post) {
-            return <<<HTML
-<div class="quote">
-    <blockquote>
-        {$user}
-        <div class="quote-body">
-            <div class="hide-locked-node">
-                    <i class="fa fa-lock"></i> 本帖内容仅楼主可见
-            </div>
-        </div>
-    </blockquote>
-</div>
-HTML;
+            return $this->disableSee($user);
         }
         $text = Str::substr($this->page->cleanText($model->content), 0, 100, true);
+        if ($this->isJson) {
+            $user['text'] = $text;
+            return $user;
+        }
         return <<<HTML
 <div class="quote">
     <blockquote>
@@ -73,5 +88,24 @@ HTML;
 </div>
 HTML;
 
+    }
+
+    private function disableSee($name) {
+        if ($this->isJson) {
+            $name['hide'] = false;
+            return $name;
+        }
+        return <<<HTML
+<div class="quote">
+    <blockquote>
+        {$name}
+        <div class="quote-body">
+            <div class="hide-locked-node">
+                 <i class="fa fa-lock"></i> 本帖内容仅楼主可见
+            </div>
+        </div>
+    </blockquote>
+</div>
+HTML;
     }
 }

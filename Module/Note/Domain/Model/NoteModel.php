@@ -3,6 +3,7 @@ namespace Module\Note\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Support\Html;
 
@@ -38,7 +39,7 @@ class NoteModel extends Model {
 	}
 
 	public function user() {
-	    return $this->hasOne(UserModel::class, 'id', 'user_id');
+	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getHtmlAttribute() {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Domain\Pages;
 
 use Module\Template\Domain\Weights\INode;
@@ -7,18 +8,18 @@ use Exception;
 
 class Page implements IPage {
 
-    protected $node_list = [];
+    protected array $nodeItems = [];
     /**
      * @var INode[]
      */
-    protected $node_instance = [];
+    protected array $nodeInstances = [];
 
-    protected $handle_list = [];
+    protected array $handleItems = [];
     /**
      *  数据缓存
      * @var array
      */
-    protected $handle_data = [];
+    protected array $handleData = [];
 
     public function __construct() {
         $this->loadNodes();
@@ -39,48 +40,66 @@ class Page implements IPage {
         return $driver;
     }
 
-    public function register(string $name, string $node) {
-        $this->node_list[Str::studly($name)] = $node;
+    public function register(string|int $name, string $node) {
+        $this->nodeItems[$this->formatName($name)] = $node;
         return $this;
     }
 
     public function instance($name): INode {
-        $name = Str::studly($name);
-        if (!isset($this->node_list[$name])) {
+        $name = $this->formatName($name);
+        if (!isset($this->nodeItems[$name])) {
             throw new Exception(
                 sprintf('"%s" node not register', $name)
             );
         }
-        $node = $this->node_list[$name];
-        if (!isset($this->node_instance[$node])) {
-            $this->node_instance[$node] = new $node($this);
+        $node = $this->nodeItems[$name];
+        if (!isset($this->nodeInstances[$node])) {
+            $this->nodeInstances[$node] = new $node($this);
         }
-        return clone $this->node_instance[$node];
+        return clone $this->nodeInstances[$node];
     }
 
     public function trigger(string $name) {
-        if (isset($this->handle_data[$name]) || array_key_exists($name, $this->handle_data)) {
-            return $this->handle_data[$name];
+        if (isset($this->handleData[$name]) || array_key_exists($name, $this->handleData)) {
+            return $this->handleData[$name];
         }
-        if (isset($this->handle_list[$name])) {
-            return $this->handle_data[$name] = call_user_func($this->handle_list[$name], $this);
+        if (isset($this->handleItems[$name])) {
+            return $this->handleData[$name] = call_user_func($this->handleItems[$name], $this);
         }
         return $this;
     }
 
     public function on(string $name, callable $func) {
-        $this->handle_list[$name] = $func;
+        $this->handleItems[$name] = $func;
         return $this;
     }
 
+    /**
+     * @param null $type
+     * @return mixed
+     */
     public function render($type = null) {
-        // TODO: Implement render() method.
+        return '';
     }
 
-    public function node(string $name, array $attributes = []): INode {
+    public function node(string|int $name, array $attributes = []): INode {
         $node = $this->instance($name);
         $node->attr($attributes);
         return $node;
+    }
+
+    public function eachNode(callable $cb, $isGoode = false) {
+        foreach ($this->nodeItems as $name => $_) {
+            $node = $this->node($name);
+            if ($isGoode === $node->isGlobe()) {
+                call_user_func($cb, $node, $name);
+            }
+        }
+        return $this;
+    }
+
+    protected function formatName(string|int $name): string|int {
+        return is_numeric($name) ? $name : Str::studly($name);
     }
 
     public function __call($name, $arguments) {

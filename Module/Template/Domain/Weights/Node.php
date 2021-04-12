@@ -29,7 +29,12 @@ class Node implements INode {
     }
 
     public function isNest(): bool {
-        return  false;
+        return false;
+    }
+
+    public function isGlobe(): bool
+    {
+        return false;
     }
 
     public function attr($key, $value = null) {
@@ -41,7 +46,7 @@ class Node implements INode {
             $this->attributes[$key] = $value;
             return $this;
         }
-        return isset($this->attributes[$key]) ? $this->attributes[$key] : null;
+        return $this->attributes[$key] ?? null;
     }
 
     public function render($type = null) {

@@ -51,6 +51,8 @@ class CreateForumTables extends Migration {
                 ->comment('是否精华');
             $table->bool('is_closed')->default(0)
                 ->comment('是否关闭');
+            $table->uint('top_type', 1)->default(0)
+                ->comment('置顶类型，1 本版置顶 2 分类置顶 3 全局置顶');
             $table->bool('is_private_post')->default(0)->comment('是否仅楼主可见');
             $table->timestamps();
         })->append(ThreadPostModel::tableName(), function(Table $table) {
