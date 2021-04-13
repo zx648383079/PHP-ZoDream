@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Domain\Scene;
 
 use Module\WeChat\Domain\Model\ReplyModel;

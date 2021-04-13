@@ -304,7 +304,11 @@ class ThreadRepository {
     }
 
 
-    public static function getFull(int $id) {
+    public static function getFull(int $id, bool $isSee = false) {
+        if ($isSee) {
+            ThreadModel::query()->where('id', $id)
+                ->updateIncrement('view_count');
+        }
         $model = static::get($id);
         $model->forum;
         $model->path = array_merge(ForumModel::findPath($model->forum_id), [$model->forum]);
@@ -317,6 +321,7 @@ class ThreadRepository {
         $model->is_new = static::isNew($model);
         return $model;
     }
+
 
 
     public static function reply(string $content, int $thread_id) {

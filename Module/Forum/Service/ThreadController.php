@@ -27,12 +27,8 @@ class ThreadController extends Controller {
     }
 
     public function indexAction(int $id, int $user = 0, int $page = 1) {
-        if ($page < 2 && $user < 1) {
-            ThreadModel::query()->where('id', $id)
-                ->updateIncrement('view_count');
-        }
         try {
-            $thread = ThreadRepository::getFull($id);
+            $thread = ThreadRepository::getFull($id, $page < 2 && $user < 1);
             $path = $thread->path;
             $post_list = ThreadRepository::postList($id, $user);
         } catch (\Exception $ex) {

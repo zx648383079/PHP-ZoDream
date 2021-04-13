@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Domain\Scene;
 
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
+use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Module;
 
@@ -15,13 +17,13 @@ class CheckInScene extends BaseScene implements SceneInterface {
         $user_id = Module::reply()->getUserId();
         if ($user_id < 1) {
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '请先绑定账户'
             ]);
         }
         $model = CheckInModel::checkIn($user_id, CheckInModel::METHOD_WX);
         return new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
+            'type' => EditorInput::TYPE_TEXT,
             'content' => empty($model) ? '今日已签到' : sprintf('签到成功，已连续签到%s天', $model->running)
         ]);
     }

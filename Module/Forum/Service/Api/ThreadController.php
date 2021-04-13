@@ -64,7 +64,7 @@ class ThreadController extends Controller {
     public function detailAction(int $id) {
         try {
             return $this->render(
-                ThreadRepository::getFull($id)
+                ThreadRepository::getFull($id, true)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

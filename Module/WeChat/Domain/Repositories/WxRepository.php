@@ -32,7 +32,7 @@ class WxRepository {
             'avatar' => $info['headimgurl'],
             'subscribe_time' => $info['subscribe_time'],
             'remark' => $info['remark'],
-            'union_id' => isset($info['unionid']) ? $info['unionid'] : '', // 测试号无此项
+            'union_id' => $info['unionid'] ?? '', // 测试号无此项
             'group_id' => $info['groupid'],
         ]);
         $user->save();

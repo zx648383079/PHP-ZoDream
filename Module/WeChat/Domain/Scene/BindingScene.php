@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Domain\Scene;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Module;
 use Module\WeChat\Domain\Model\UserModel as WxUserModel;
@@ -18,24 +20,24 @@ class BindingScene extends BaseScene implements SceneInterface {
 
     public function enter() {
         $content = Module::reply()->getMessage()->content;
-        if (strpos($content, '解绑') !== false) {
+        if (str_contains($content, '解绑')) {
             return $this->unbinding();
         }
         if (!$this->canEnter()) {
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '您已被禁止进行绑定，请24小时后重试'
             ]);
         }
         if (!$this->checkBinding()) {
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '您已绑定了其他账号，如需继续，请先解绑'
             ]);
         }
         $this->save();
         return new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
+            'type' => EditorInput::TYPE_TEXT,
             'content' => '请输入账号'
         ]);
     }
@@ -44,7 +46,7 @@ class BindingScene extends BaseScene implements SceneInterface {
         if (in_array($content, ['退出', 'exit'])) {
             $this->leave();
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '您已终止了绑定操作'
             ]);
         }
@@ -56,7 +58,7 @@ class BindingScene extends BaseScene implements SceneInterface {
             $this->leave();
             $this->disableEnter();
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '失败次数太多了，请24小时后再试'
             ]);
         }
@@ -67,7 +69,7 @@ class BindingScene extends BaseScene implements SceneInterface {
         if (empty($user)) {
             $this->failure ++;
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '您输入的密码错误'
             ]);
         }
@@ -77,7 +79,7 @@ class BindingScene extends BaseScene implements SceneInterface {
             OAuthModel::TYPE_WX, $nickname.'');
         $this->leave();
         return new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
+            'type' => EditorInput::TYPE_TEXT,
             'content' => empty($auth) ? '绑定失败，请重试' : '绑定成功'
         ]);
     }
@@ -87,13 +89,13 @@ class BindingScene extends BaseScene implements SceneInterface {
         if (empty($user)) {
             $this->failure ++;
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '账号不存在'
             ]);
         }
         $this->name = $name;
         return new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
+            'type' => EditorInput::TYPE_TEXT,
             'content' => '请输入密码'
         ]);
     }
@@ -113,13 +115,13 @@ class BindingScene extends BaseScene implements SceneInterface {
             $openid, OAuthModel::TYPE_WX);
         if (empty($auth)) {
             return new ReplyModel([
-                'type' => ReplyModel::TYPE_TEXT,
+                'type' => EditorInput::TYPE_TEXT,
                 'content' => '您的微信未绑定账号！'
             ]);
         }
         $auth->delete();
         return new ReplyModel([
-            'type' => ReplyModel::TYPE_TEXT,
+            'type' => EditorInput::TYPE_TEXT,
             'content' => '解绑成功！'
         ]);
     }
