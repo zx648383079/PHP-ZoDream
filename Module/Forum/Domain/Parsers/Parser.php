@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Forum\Domain\Model\ThreadPostModel;
-use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\Template\Domain\Pages\Page;
 use Module\Template\Domain\Weights\INode;
 use Zodream\Helpers\Time;
@@ -28,6 +27,8 @@ class Parser extends Page {
     public Input $request;
 
     protected string $content = '';
+
+    protected bool $openNotUnder = false;
 
     protected function uid(): int {
         return $this->uid ++;
@@ -60,7 +61,7 @@ class Parser extends Page {
      * @return bool
      */
     public function isUnderAction($uid, $key = Parser::UID_KEY) {
-        if (empty($this->request)) {
+        if (empty($this->request) || $this->openNotUnder) {
             return false;
         }
         if (!$this->request->has($key)) {
@@ -76,7 +77,7 @@ class Parser extends Page {
      * 执行完了，可以清除了
      */
     public function notUnderAction() {
-
+        $this->openNotUnder = true;
     }
 
     /**

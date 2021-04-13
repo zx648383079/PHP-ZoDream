@@ -80,6 +80,9 @@ HTML;
         if (auth()->guest()) {
             return false;
         }
+        if ($this->page->getModel()->thread->is_closed) {
+            return false;
+        }
         $count = ThreadLogModel::query()->where('item_type', ThreadLogModel::TYPE_THREAD_POST)
             ->where('item_id', $this->page->postId())
             ->where('action', ThreadLogModel::ACTION_VOTE)
@@ -104,7 +107,7 @@ HTML;
                 'node_index' => $this->attr(Parser::UID_KEY),
                 'data' => intval($data)
             ]);
-            return true;
+            return false;
         }
         $items = [];
         foreach ((array)$data as $i) {
@@ -118,19 +121,23 @@ HTML;
             ];
         }
         ThreadLogModel::query()->insert($items);
-        return true;
+        return false;
     }
 
 
-    private function formatJson(string $content, array $subtotal = []): array {
+    private function formatJson(string $content, ?array $subtotal = []): array {
         $index = $this->attr(Parser::UID_KEY);
         $items = [];
         $content = $this->replace($content, function ($label, $i) use ($index, &$items, $subtotal) {
+            $count = $subtotal['items'][$i] ?? 0;
+            $percentage = $count < 1 ? 0 : ($count * 100 / $subtotal['total']);
             $items[] = [
                 'i' => $i,
+                'no' => $i + 1,
                 'id' => sprintf('vote_%d_%d_%d', $this->page->postId(), $index, $i),
                 'value' => $label,
-                'count' => $subtotal['items'][$i] ?? 0,
+                'count' => $count,
+                'percentage' => str_contains((string)$percentage, '.') ? number_format($percentage, 2) : $percentage,
             ];
             return '';
         });
@@ -139,7 +146,7 @@ HTML;
             'content' => $content,
             'items' => $items,
             'max' => $this->max,
-            'editable' => empty($subtotal),
+            'editable' => is_array($subtotal) && empty($subtotal),
             'total' => empty($subtotal) ? 0  : $subtotal['total'],
         ];
     }

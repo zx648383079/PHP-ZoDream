@@ -151,7 +151,10 @@ class UserRepository {
         if ($checkEmpty && empty($userId)) {
             return [];
         }
-        return SearchModel::searchWhere(UserModel::query(), ['name'], false, '', $keywords)
-            ->whereIn('id', $userId)->pluck('id');
+        $query = SearchModel::searchWhere(UserModel::query(), ['name'], false, '', $keywords);
+        if (!empty($userId)) {
+            $query->whereIn('id', $userId);
+        }
+        return $query->pluck('id');
     }
 }

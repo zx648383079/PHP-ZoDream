@@ -201,23 +201,6 @@ footer {
         .metro-grid {
             margin: 0;
         }
-        .list-item {
-            display: grid;
-            grid-template-columns: 1fr 100px;
-            line-height: 40px;
-            padding-left: 20px;
-            .name {
-                height: 40px;
-                overflow: hidden;
-            }
-            .time {
-                text-align: right;
-                color: $secondaryFg;
-            }
-            &:hover {
-                box-shadow: $shadow 0 0 10px;  
-            }
-        }
         &.scoll-box {
             max-height: 300px;
             overflow-y: auto;
@@ -242,8 +225,40 @@ footer {
             }
         }
     }
+    .list-item {
+        position: relative;
+        margin: 0 .5rem;
+        .name {
+            display: inline-block;
+            height: 2.5rem;
+            overflow: hidden;
+            flex: 1;
+        }
+        .time {
+            color: $secondaryFg;
+            font-size: .8rem;
+            height: 2.5rem;
+            word-break: keep-all;
+            word-wrap: normal;
+        }
+        .item-title {
+            display: flex;
+            padding: 0 .5rem;
+            line-height: 2.5rem;
+        }
+        .item-meta {
+            padding: 0 .5rem .5rem;
+            color: #767676;
+            font-size: .8rem;
+        }
+        &:hover {
+            box-shadow: $shadow 0 0 .8rem;  
+        }
+        &:not(:last-of-type) {
+            border-bottom: 1px solid #ccc;
+        }
+    }
 }
-
 
 
 .btn-show {

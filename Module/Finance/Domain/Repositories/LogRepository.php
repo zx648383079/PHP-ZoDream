@@ -220,8 +220,12 @@ class LogRepository {
         return true;
     }
 
-    public static function export() {
-        return new Exporter('流水记录', [
+    public static function export(bool $urlEncode = false) {
+        $title = '流水记录';
+        if ($urlEncode) {
+            $title = urlencode($title);
+        }
+        return new Exporter($title, [
             'id' => 'ID',
             'type' => '类型',
             'money' => '金额',

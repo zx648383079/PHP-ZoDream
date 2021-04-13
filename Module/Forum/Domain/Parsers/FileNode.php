@@ -22,6 +22,9 @@ class FileNode extends Node {
         $this->isJson = $type === 'json';
         $content = $this->attr('content');
         $this->price = floatval($this->attr('price'));
+        if (str_contains($content, '//')) {
+            $content = parse_url($content, PHP_URL_PATH);
+        }
         /** @var File $file */
         $file = public_path($content);
         if (!$file->exist()) {

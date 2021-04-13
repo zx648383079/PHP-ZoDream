@@ -4,12 +4,14 @@ namespace Module\Forum\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Model\ThreadSimpleModel;
 use Module\Forum\Domain\Parsers\Parser;
+use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Page;
 
 class ThreadRepository {
@@ -57,18 +59,40 @@ class ThreadRepository {
     }
 
     public static function getList(int $forum,
-                                   int $classify = 0, string $keywords = '', int $user = 0) {
+                                   int $classify = 0, string $keywords = '', int $user = 0, int $type = 0) {
         $data = ThreadModel::with('user', 'classify')
             ->when($classify > 0, function ($query) use ($classify) {
                 $query->where('classify_id', $classify);
             })->whereIn('forum_id', ForumModel::getAllChildrenId($forum))
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'title');
+            ->when(!empty($keywords), function ($query) use ($type, $keywords) {
+                if ($type < 2) {
+                    SearchModel::searchWhere($query, 'title');
+                    return;
+                }
+                $userId = UserRepository::searchUserId($keywords);
+                if (empty($userId)) {
+                    $query->isEmpty();
+                    return;
+                }
+                $query->whereIn('user_id', $userId);
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })
             ->orderBy('id', 'desc')->page();
+        foreach ($data as $item) {
+            $item->last_post = static::lastPost($item->id);
+            $item->is_new = static::isNew($item);
+        }
+        return $data;
+    }
+
+    public static function topList(int $forum) {
+        $data = ThreadModel::with('user', 'classify')
+            ->where('forum_id', $forum)
+            ->where('top_type', '>', 0)
+            ->orderBy('top_type', 'desc')
+            ->orderBy('id', 'desc')->get();
         foreach ($data as $item) {
             $item->last_post = static::lastPost($item->id);
             $item->is_new = static::isNew($item);
@@ -256,6 +280,9 @@ class ThreadRepository {
         if ($thread->user_id !== auth()->id()) {
             throw new Exception('无权限');
         }
+        if ($thread->is_closed) {
+            throw new Exception('帖子已锁定，无法编辑');
+        }
         if (isset($data['title'])) {
             $thread->title = $data['title'];
         }
@@ -284,6 +311,7 @@ class ThreadRepository {
         $model->digestable = static::can($model, 'is_digest');
         $model->highlightable = static::can($model, 'is_highlight');
         $model->closeable = static::can($model, 'is_closed');
+        $model->topable = static::can($model, 'top_type');
         $model->classify;
         $model->last_post = static::lastPost($model->id, false);
         $model->is_new = static::isNew($model);
@@ -299,6 +327,9 @@ class ThreadRepository {
             throw new Exception('请选择帖子');
         }
         $thread = static::get($thread_id);
+        if ($thread->is_closed) {
+            throw new Exception('帖子已关闭');
+        }
         $max = ThreadPostModel::where('thread_id', $thread_id)->max('grade');
         $post = ThreadPostModel::create([
             'content' => $content,

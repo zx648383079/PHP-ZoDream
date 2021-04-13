@@ -36,6 +36,7 @@ class ForumRepository {
             $model->moderators;
             $model->children = static::children($id, false);
             $model->path = ForumModel::findPath($id);
+            $model->thread_top = ThreadRepository::topList($id);
         }
         return $model;
     }

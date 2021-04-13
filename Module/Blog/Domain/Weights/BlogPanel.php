@@ -17,16 +17,29 @@ class BlogPanel extends Node {
         $lang = (string)$this->attr('lang');
         $keywords = (string)$this->attr('keywords');
         $sort = (string)$this->attr('sort') ?: 'new';
-        return $this->cache()->getOrSet(
-            sprintf('%s-%s-%s-%s-%s-%s-%s-%s', self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, trans()->getLanguage())
-            , function () use ($category, $tag, $lang, $keywords, $sort, $limit) {
+        $cb = function () use ($category, $tag, $lang, $keywords, $sort, $limit) {
             $data = BlogRepository::getSimpleList($sort, $category, $keywords,
                 0, '', $lang,
                 $tag, $limit);
             return implode('', array_map(function (BlogModel $item) {
-                return sprintf('<div class="list-item"><a class="name" href="%s">%s</a><div class="time">%s</div></div>',
-                    url('/blog', ['id' => $item->id]), Html::text($item->title), $item->created_at);
+                $url = url('/blog', ['id' => $item->id]);
+                $title = Html::text($item->title);
+                $meta = Html::text($item->description);
+
+                return <<<HTML
+<div class="list-item">
+    <div class="item-title"><a class="name" href="{$url}">{$title}</a><div class="time">{$item->created_at}</div></div>
+    <div class="item-meta">{$meta}</div>
+</div>
+HTML;
             }, $data));
-        }, 600);
+        };
+        if (app()->isDebug()) {
+            return $cb();
+        }
+        return $this->cache()->getOrSet(sprintf('%s-%s-%s-%s-%s-%s-%s-%s',
+            self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, trans()->getLanguage()),
+            $cb, rand(600, 3600)
+        );
     }
 }

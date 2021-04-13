@@ -1,10 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Service\Api;
 
 use Module\Forum\Domain\Error\StopNextException;
-use Module\Forum\Domain\Model\ForumClassifyModel;
-use Module\Forum\Domain\Model\ForumModel;
-use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Parsers\Parser;
 use Module\Forum\Domain\Repositories\ThreadRepository;
@@ -26,9 +24,9 @@ class ThreadController extends Controller {
         ];
     }
 
-    public function indexAction(int $forum, int $classify = 0, string $keywords = '', int $user = 0) {
+    public function indexAction(int $forum, int $classify = 0, string $keywords = '', int $user = 0, int $type = 0) {
         return $this->renderPage(
-            ThreadRepository::getList($forum, $classify, $keywords, $user)
+            ThreadRepository::getList($forum, $classify, $keywords, $user, $type)
         );
     }
 

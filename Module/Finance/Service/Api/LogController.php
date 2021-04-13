@@ -86,7 +86,7 @@ class LogController extends Controller {
     }
 
     public function exportAction() {
-        return response()->export(LogRepository::export());
+        return response()->export(LogRepository::export(true));
     }
 
     public function dayAction(
