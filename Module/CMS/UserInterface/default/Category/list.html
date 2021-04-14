@@ -1,10 +1,31 @@
 {layout:main}
 
-<ul>
-    {for:$page,$item}
-    <li>
-        <a href="{url:$item}">{$item.title}</a>
-    </li>
-    {/for}
-</ul>
-{$page.getLink:}
+
+<div class="container">
+    <div class="search-bar">
+        搜索 “{$keywords}” 的结果
+    </div>
+    <ul class="search-body">
+        {for:$page,$item}
+        <li class="article-item" title="{$item.title}-{$item.description}">
+            <div class="thumb">
+                <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="">
+            </div>
+            <div class="info">
+                <div class="title">
+                        <a href="{url:$item}">{$item.title}</a>
+                </div>
+                <div class="desc">
+                        {this.text:$item.description,80}
+                </div>
+                <div class="tags">
+                    <span><i class="fa fa-calendar-alt"></i>{this.ago:$item.created_at}</span>
+                </div>
+            </div>
+        </li>
+        {/for}
+    </ul>
+
+    {$page.getLink:}
+</div>
+

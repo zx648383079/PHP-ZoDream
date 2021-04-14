@@ -103,7 +103,7 @@ abstract class BaseScene implements SceneInterface {
         $id = $this->query()->insert($main);
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);
-        return true;
+        return intval($id);
     }
 
     public function update($id, array $data) {
@@ -329,10 +329,10 @@ abstract class BaseScene implements SceneInterface {
     public function filterInput(array $data, $isNew = true) {
         $extend = $main = [];
         foreach ($this->mainDefaultField() as $key) {
-            if (!$isNew && !array_key_exists($key, $data)) {
+            if (!array_key_exists($key, $data)) {
                 continue;
             }
-            $main[$key] = isset($data[$key]) ? $data[$key] : null;
+            $main[$key] = $data[$key];
         }
         $field_list = $this->fieldList();
         if (empty($field_list)) {
@@ -343,8 +343,7 @@ abstract class BaseScene implements SceneInterface {
                 continue;
             }
             $value = static::newField($field->type)
-                ->filterInput(isset($data[$field->field]) ? $data[$field->field]
-                : null, $field);
+                ->filterInput($data[$field->field] ?? null, $field);
             if ($field->is_main > 0) {
                 $main[$field->field] = $value;
                 continue;

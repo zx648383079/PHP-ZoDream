@@ -27,6 +27,9 @@ class CategoryController extends Controller {
         $cat = FuncHelper::channel($id, true);
         $queries = $request->get();
         unset($queries['id']);
+        if (!isset($queries['field'])) {
+            $queries['field'] = FuncHelper::searchField($cat['id']);
+        }
         $page = FuncHelper::contents($queries);
         $title = $cat['title'].'列表页';
         $keywords = isset($queries['keywords']) ? Html::text($queries['keywords']) : '';

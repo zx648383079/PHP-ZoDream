@@ -1,4 +1,11 @@
 <div class="right-box">
+    {if:isset($cat)}
+    <form class="search-input-bar" action="{url:./category/list}" method="GET">
+        <input type="text" name="keywords" placeholder="请输入搜索关键字">
+        <button type="submit"><i class="fa fa-search"></i></button>
+        <input type="hidden" name="id" value="{$cat.id}">
+    </form>
+    {/if}
     <div class="panel">
         <div class="header">
             热门新闻

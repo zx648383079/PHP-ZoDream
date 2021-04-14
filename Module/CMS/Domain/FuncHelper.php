@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain;
 
 use Infrastructure\HtmlExpand;
@@ -21,15 +22,15 @@ use Zodream\Helpers\Html as HtmlHelper;
 
 class FuncHelper {
 
-    public static $current = [
+    public static array $current = [
         'channel' => 0,
         'content' => 0,
         'model' => 0,
     ];
 
-    protected static $index = [];
+    protected static array $index = [];
 
-    protected static $cache = [];
+    protected static array $cache = [];
 
     protected static function getOrSet($func, $key, $callback) {
         if (!isset(static::$cache[$func])) {
@@ -52,7 +53,7 @@ class FuncHelper {
         }
         $options = static::getOrSet(__FUNCTION__, 'all', function () {
             $items = [];
-            foreach (CMSRepository::site()->options as $item) {
+            foreach (CMSRepository::site()['options'] as $item) {
                 $items[$item['code']] = Option::formatOption($item['value'], $item['type']);
             }
             return $items;
@@ -282,10 +283,10 @@ class FuncHelper {
 
     /***
      * 获取字段集合
-     * @param $model_id
+     * @param string|int $model_id
      * @return mixed
      */
-    public static function fieldList($model_id) {
+    public static function fieldList(string|int $model_id) {
         return static::getOrSet(__FUNCTION__,
             $model_id,
             function () use ($model_id) {
@@ -328,6 +329,27 @@ class FuncHelper {
         }
         $name = empty($params['name']) ? 'name' : $params['name'];
         return $field[$name];
+    }
+
+    public static function searchField(string|int $category) {
+        return static::getOrSet(__FUNCTION__, $category,function () use ($category) {
+            $fields = ['id', 'cat_id', 'model_id', 'view_count',
+                'title', 'keywords', 'description', 'thumb',
+                'updated_at', 'created_at', 'parent_id'];
+            $cat = static::channel($category, true);
+            $scene = CMSRepository::scene()->setModel($cat->model);
+            if ($scene) {
+                foreach ($scene->fieldList() as $item) {
+                    if ($item->is_disable) {
+                        continue;
+                    }
+                    if (!$item->is_system && $item->is_search && !in_array($item->field, $fields)) {
+                        $fields[] = $item->field;
+                    }
+                }
+            }
+            return implode(',', $fields);
+        });
     }
 
     public static function markdown($content) {
@@ -449,7 +471,7 @@ class FuncHelper {
         if ($name === 'url') {
             return self::url($data);
         }
-        return isset($data[$name]) ? $data[$name] : null;
+        return $data[$name] ?? null;
     }
 
     public static function isChildren($parent_id, $id) {

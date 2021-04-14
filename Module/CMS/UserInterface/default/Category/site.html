@@ -199,6 +199,7 @@ bindNavigation({$navigation});
         <div class="panel-header">
             <i class="{$channel.thumb}"></i>
             <span>{$channel.title}</span>
+            <a class="more" href="{url:./category?id=:$channel.id}">更多&gt;</a>
         </div>
         <div class="panel-body">
             {contents:category=$channel.id num=20 field=id,cat_id,model_id,title,description,thumb,uri}

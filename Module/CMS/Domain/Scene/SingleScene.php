@@ -138,6 +138,9 @@ class SingleScene extends BaseScene {
      * @throws \Exception
      */
     public function removeField(ModelFieldModel $field) {
+        if ($field->is_system > 0) {
+            return true;
+        }
         $table = new Table($this->getExtendTable());
         $table->column($field->field);
         CreateCmsTables::updateTable($table,

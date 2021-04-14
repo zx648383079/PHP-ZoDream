@@ -141,7 +141,9 @@ class ContentRepository {
         } else {
             $id = $scene->insert($data);
         }
-        event(new ManageAction('cms_content_edit', '', 33, $id));
+        if ($id) {
+            event(new ManageAction('cms_content_edit', '', 33, $id));
+        }
         if ($scene->hasError()) {
             throw new \Exception($scene->getFirstError());
         }

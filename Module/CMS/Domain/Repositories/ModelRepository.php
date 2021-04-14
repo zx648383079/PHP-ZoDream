@@ -55,14 +55,26 @@ class ModelRepository {
         unset($data['id']);
         $model = ModelFieldModel::findOrNew($id);
         $model->load($data);
+        $scene = CMSRepository::scene();
+        if ($id > 0) {
+            $scene->setModel($model->model)->updateField($model);
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        if ($id < 1) {
+            $scene->setModel($model->model)->addField($model);
         }
         return $model;
     }
 
     public static function fieldRemove(int $id) {
-        ModelFieldModel::where('id', $id)->delete();
+        $model = ModelFieldModel::find($id);
+        if (!$model) {
+            return;
+        }
+        CMSRepository::scene()->setModel($model->model)->removeField($model);
+        $model->delete();
     }
 
     /**

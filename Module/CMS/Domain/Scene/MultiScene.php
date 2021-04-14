@@ -184,6 +184,9 @@ class MultiScene extends BaseScene {
      * @throws \Exception
      */
     public function removeField(ModelFieldModel $field) {
+        if ($field->is_system > 0) {
+            return true;
+        }
         $table = new Table($this->getTableByMain($field->is_main));
         $table->column($field->field);
         CreateCmsTables::updateTable($table,
