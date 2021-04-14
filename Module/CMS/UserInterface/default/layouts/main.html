@@ -11,12 +11,12 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width, initial-scale=1">
-        <title>{this.title}-zodream</title>
-        <meta name="Keywords" content="{this.keywords}" />
-        <meta name="Description" content="{this.description}" />
+        <title>{this.title}-{option:title}</title>
+        <meta name="Keywords" content="{this.keywords},{option:keywords}" />
+        <meta name="Description" content="{this.description},{option:description}" />
         <meta name="author" content="zodream" />
         <base href="{url:./,false}">
-        <link rel="icon" href="/assets/images/favicon.png">
+        <link rel="icon" href="{option:logo}">
        {header:}
    </head>
    <body>
@@ -24,7 +24,7 @@
             <div class="container">
                 <div class="logo">
                     <a href="{url:/}">
-                        <img src="/assets/images/wap_logo.png" alt="">
+                        <img src="{option:logo}">
                     </a>
                 </div>
                 <div class="nav-bar">
@@ -57,7 +57,7 @@
         <footer>
             <div class="container">
                 <div class="copyright">
-                    <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备16003508号</a>
+                    <a href="http://www.beian.miit.gov.cn" target="_blank">{option:icp_beian_no}</a>
                 </div>
             </div>
         </footer>

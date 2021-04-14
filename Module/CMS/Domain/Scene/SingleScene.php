@@ -74,7 +74,7 @@ class SingleScene extends BaseScene {
 
     public function initTable() {
         $field_list = array_filter($this->fieldList(), function ($item) {
-            return $item->is_main < 1;
+            return $item->is_system < 1;
         });
         CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
             $table->column('id')->int(10)->pk(true);

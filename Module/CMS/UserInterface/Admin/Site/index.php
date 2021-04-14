@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '站点列表';
 ?>
 
-<a class="btn btn-success" href="<?=$this->url('./@admin/sIte/create')?>">新增站点</a>
+<a class="btn btn-success" href="<?=$this->url('./@admin/site/create')?>">新增站点</a>
 <hr/>
 
 <div>

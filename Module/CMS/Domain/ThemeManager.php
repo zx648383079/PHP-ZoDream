@@ -10,6 +10,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
+use Module\CMS\Domain\Scene\SingleScene;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Database\DB;
@@ -223,7 +224,7 @@ class ThemeManager {
 
     protected function getCacheId($name, $prefix = null) {
         $key = empty($prefix) && substr($name, 0, 1) === '@' ? $name : sprintf('@%s:%s', $prefix, $name);
-        return isset($this->cache[$key]) ? $this->cache[$key] : 0;
+        return $this->cache[$key] ?? 0;
     }
 
     protected function runScript($data) {
@@ -266,7 +267,7 @@ class ThemeManager {
     }
 
     protected function runActionLinkage($data) {
-        $items = isset($data['data']) ? $data['data'] : [];
+        $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
         $model = LinkageModel::where('code', $data['code'])->first();
         if (empty($model)) {
@@ -281,7 +282,7 @@ class ThemeManager {
 
     public function runActionLinkageData(array $data, $parent_id, $prefix, $linkage_id) {
         foreach ($data as $item) {
-            $children = isset($item['children']) ? $item['children'] : [];
+            $children = $item['children'] ?? [];
             unset($item['children']);
             $item['parent_id'] = $parent_id;
             $item['linkage_id'] = $linkage_id;
@@ -341,16 +342,21 @@ class ThemeManager {
             $data['setting']['option']['linkage_id'] = $this->getCacheId($data['type']);
             $data['type'] = 'linkage';
         }
+        if (ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])
+        ->count() > 0) {
+            return;
+        }
+        $scene = CMSRepository::scene();
         $model = ModelFieldModel::create($data);
         if (!$model) {
             throw new Exception('数据错误');
         }
-        $scene = CMSRepository::scene()->setModel($this->getCacheId($model->model_id, 'model'));
+        $scene = $scene->setModel($this->getCacheId($model->model_id, 'model'));
         $scene->addField($model);
     }
 
     protected function runActionChannel($data) {
-        $type = isset($data['type']) ? $data['type'] : null;
+        $type = $data['type'] ?? null;
         if (empty($type)) {
 
         } elseif ($type === 'page') {
@@ -361,7 +367,7 @@ class ThemeManager {
             $data['model_id'] = $this->getCacheId($type);
             $data['type'] = CategoryModel::TYPE_CONTENT;
         }
-        $children = isset($data['children']) ? $data['children'] : [];
+        $children = $data['children'] ?? [];
         if (isset($data['setting']) && is_array($data['setting'])) {
             $data['setting'] = Json::encode($data['setting']);
         }

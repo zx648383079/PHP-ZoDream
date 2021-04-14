@@ -10,13 +10,22 @@
         },
         {
             "action": "option",
-            "data": [{
-                "name": "主题",
-                "code": "theme",
-                "type": "text",
-                "value": "movie",
-                "default": ""
-            }]
+            "data": [
+                {
+                    "name": "主题",
+                    "code": "theme",
+                    "type": "text",
+                    "value": "movie",
+                    "default": ""
+                },
+                {
+                    "name": "ICP备案号",
+                    "code": "icp_beian_no",
+                    "type": "text",
+                    "value": "",
+                    "default": ""
+                }
+            ]
         },
         {
             "action": "group",
@@ -68,7 +77,9 @@
                 {
                     "name": "清晰度",
                     "field": "definition",
-                    "type": "@linkage:definition"
+                    "type": "@linkage:definition",
+                    "is_main": true,
+                    "is_search": true
                 },
                 {
                     "name": "导演",
@@ -81,11 +92,27 @@
                 {
                     "name": "地区",
                     "field": "area",
-                    "type": "@linkage:area"
+                    "type": "@linkage:area",
+                    "is_main": true,
+                    "is_search": true
                 },
                 {
                     "name": "年份",
-                    "field": "age"
+                    "field": "age",
+                    "is_main": true,
+                    "is_search": true
+                },
+                {
+                    "name": "豆瓣评分",
+                    "field": "douban_score",
+                    "is_main": true,
+                    "is_search": true
+                },
+                {
+                    "name": "IMDB评分",
+                    "field": "imdb_score",
+                    "is_main": true,
+                    "is_search": true
                 }
             ]
         },

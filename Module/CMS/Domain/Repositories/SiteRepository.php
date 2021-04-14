@@ -4,6 +4,7 @@ namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\CMS\Domain\Model\SiteModel;
+use Module\CMS\Domain\ThemeManager;
 
 class SiteRepository {
     public static function getList(string $keywords = '') {
@@ -25,11 +26,16 @@ class SiteRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        if ($id < 1) {
+            CMSRepository::generateSite($model);
+        }
         return $model;
     }
 
     public static function remove(int $id) {
-        SiteModel::where('id', $id)->delete();
+        $model = static::get($id);
+        $model->delete();
+        CMSRepository::removeSite($model);
     }
 
     public static function setDefault(int $id) {
@@ -54,5 +60,9 @@ class SiteRepository {
 
     public static function apply(int $id) {
         CMSRepository::site(new SiteModel(compact('id')));
+    }
+
+    public static function themeList() {
+        return (new ThemeManager)->getAllThemes();
     }
 }

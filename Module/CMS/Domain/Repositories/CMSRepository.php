@@ -156,6 +156,7 @@ class CMSRepository {
         self::$cacheSite = $site;
         CreateCmsTables::dropTable(CategoryModel::tableName());
         CreateCmsTables::dropTable(ContentModel::tableName());
+        CreateCmsTables::dropTable(CommentModel::tableName());
         foreach ($model_list as $item) {
             CMSRepository::scene()->setModel($item)->removeTable();
         }

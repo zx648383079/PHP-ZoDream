@@ -83,11 +83,6 @@ class ModelRepository {
         $old = $id > 0 ? $model->get() : [];
         $model->load($data);
         $scene = CMSRepository::scene();
-        if ($model->is_main > 0
-            && $model->is_system < 1
-            && $scene instanceof SingleScene) {
-            $model->is_main = 0;
-        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }

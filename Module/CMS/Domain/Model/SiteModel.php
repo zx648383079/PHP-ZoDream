@@ -62,6 +62,14 @@ class SiteModel extends Model {
         ];
     }
 
+    public function getLogoAttribute() {
+        $cover = $this->getAttributeSource('logo');
+        if (empty($cover)) {
+            $cover = '/assets/images/favicon.png';
+        }
+        return url()->asset($cover);
+    }
+
     public function getOptionsAttribute() {
         $option = $this->getAttributeSource('options');
         if (empty($option)) {

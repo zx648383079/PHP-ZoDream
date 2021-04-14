@@ -30,7 +30,7 @@ class LoginLogModel extends Model {
             'ip' => 'required|string:0,120',
             'user_id' => 'int',
             'user' => 'string:0,100',
-            'status' => 'int:0-9',
+            'status' => 'int:0,127',
             'mode' => 'string:0,20',
             'created_at' => 'int',
         ];

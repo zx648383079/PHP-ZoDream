@@ -5,7 +5,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
-use Module\CMS\Domain\ThemeManager;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class SiteController extends Controller {
     public function indexAction(string $keywords = '') {
@@ -20,25 +20,34 @@ class SiteController extends Controller {
 
     public function editAction(int $id) {
         $model = SiteModel::findOrNew($id);
-        $themes = (new ThemeManager)->getAllThemes();
+        $themes = SiteRepository::themeList();
         return $this->show('edit', compact('model', 'themes'));
     }
 
-    public function saveAction() {
-        $model = new SiteModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveAction(Input $input) {
+        try {
+            SiteRepository::save($input->validate([
+                'id' => 'int',
+                'title' => 'required|string:0,255',
+                'keywords' => 'string:0,255',
+                'description' => 'string:0,255',
+                'logo' => 'string:0,255',
+                'theme' => 'required|string:0,100',
+                'match_type' => 'int:0,127',
+                'match_rule' => 'string:0,100',
+                'is_default' => 'int:0,127',
+                'options' => '',
+            ]));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        CMSRepository::generateSite($model);
         return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
     }
 
     public function deleteAction(int $id) {
-        $model = SiteModel::find($id);
-        $model->delete();
-        CMSRepository::removeSite($model);
+        SiteRepository::remove($id);
         return $this->renderData([
             'url' => $this->getUrl('site')
         ]);
@@ -52,12 +61,11 @@ class SiteController extends Controller {
     }
 
     public function defaultAction(int $id) {
-        $model = SiteModel::find($id);
-        $model->is_default = 1;
-        $model->save();
-        SiteModel::where('id', '<>', $id)->update([
-            'is_default' => 0
-        ]);
+        try {
+            SiteRepository::setDefault($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData([
             'url' => $this->getUrl('site')
         ]);

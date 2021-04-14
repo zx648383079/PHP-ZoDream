@@ -58,7 +58,7 @@ class FuncHelper {
             }
             return $items;
         });
-        return isset($options[$code]) ? $options[$code] : null;
+        return $options[$code] ?? null;
     }
 
     public static function channels(array $params = null) {

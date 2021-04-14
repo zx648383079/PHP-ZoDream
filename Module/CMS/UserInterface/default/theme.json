@@ -10,13 +10,22 @@
         },
         {
             "action": "option",
-            "data": [{
-                "name": "主题",
-                "code": "theme",
-                "type": "text",
-                "value": "default",
-                "default": ""
-            }]
+            "data": [
+                {
+                    "name": "主题",
+                    "code": "theme",
+                    "type": "text",
+                    "value": "default",
+                    "default": ""
+                },
+                {
+                    "name": "ICP备案号",
+                    "code": "icp_beian_no",
+                    "type": "text",
+                    "value": "",
+                    "default": ""
+                }
+            ]
         },
         {
             "action": "group",
