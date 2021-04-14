@@ -6,9 +6,9 @@ use Module\Forum\Domain\Repositories\ThreadRepository;
 
 class ThreadController extends Controller {
 
-    public function indexAction(string $keywords = '', int $forum_id = 0) {
+    public function indexAction(string $keywords = '', int $forum = 0) {
         return $this->renderPage(
-            ThreadRepository::manageList($keywords, $forum_id)
+            ThreadRepository::manageList($keywords, $forum)
         );
     }
 
