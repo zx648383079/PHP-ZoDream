@@ -116,6 +116,14 @@ class ModelController extends Controller {
         return $this->renderData(true);
     }
 
+    public function fieldToggleAction(int $id, array $action) {
+        try {
+            return $this->render(ModelRepository::fieldToggle($id, $action));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function optionAction(string $type, int $id = 0) {
         return $this->renderData(
             ModelRepository::fieldOption($type, $id)

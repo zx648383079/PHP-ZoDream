@@ -1,44 +1,38 @@
 <?php
+declare(strict_types=1);
 namespace Module\Contact\Service\Admin;
 
 
-use Module\Contact\Domain\Model\FriendLinkModel;
-use Module\Contact\Domain\Weights\FriendLink;
+use Module\Contact\Domain\Repositories\FriendLinkRepository;
 
 class FriendLinkController extends Controller {
 
 	public function indexAction() {
-	    $model_list = FriendLinkModel::orderBy([
-	        'status' => 'asc',
-	        'id' => 'desc'
-        ])->page();
+	    $model_list = FriendLinkRepository::getList();
         return $this->show(compact('model_list'));
 	}
 
-	public function verifyAction($id) {
-	    $model = FriendLinkModel::find($id);
-	    $model->status = 1;
-	    $model->save();
-	    cache()->delete(FriendLink::KEY);
+	public function verifyAction(int $id) {
+        try {
+            FriendLinkRepository::toggle($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
 	    return $this->renderData([
 	       'refresh' => true
         ]);
     }
 
-    public function removeAction($id) {
-        $model = FriendLinkModel::find($id);
-        $model->status = 0;
-        $model->save();
-        cache()->delete(FriendLink::KEY);
-        return $this->renderData([
-            'refresh' => true
-        ]);
+    public function removeAction(int $id) {
+        return $this->verifyAction($id);
     }
 
-    public function deleteAction($id) {
-        $model = FriendLinkModel::find($id);
-        $model->delete();
-        cache()->delete(FriendLink::KEY);
+    public function deleteAction(int $id) {
+        try {
+            FriendLinkRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData([
             'refresh' => true
         ]);

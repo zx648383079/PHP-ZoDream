@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Auth\Domain\Events\ManageAction;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Scene\SingleScene;
@@ -23,16 +24,30 @@ class ModelRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ModelModel::findOrNew($id);
+        if ($id > 0) {
+            unset($data['table']);
+        } elseif (ModelModel::where('`table`', $data['table'])->count() > 0) {
+            throw new \Exception('表名已存在');
+        }
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        event(new ManageAction('cms_model_edit', '', 32, $id));
+        if ($id < 1) {
+            CMSRepository::scene()->setModel($model)->initModel();
         }
         return $model;
     }
 
     public static function remove(int $id) {
-        ModelModel::where('id', $id)->delete();
+        $model = ModelModel::where('id', $id);
+        if (!$model) {
+            throw new \Exception('模型不存在');
+        }
+        $model->delete();
         ModelFieldModel::where('model_id', $id)->delete();
+        CMSRepository::removeModel($model);
     }
 
     public static function all(int $type = 0) {
@@ -54,15 +69,32 @@ class ModelRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ModelFieldModel::findOrNew($id);
+        if ($model->is_system > 0) {
+            $model->name = $data['name'];
+            $model->save();
+            return $model;
+        }
+        if (ModelFieldModel::where('`field`', $model->field)
+                ->where('id', '<>', $id)
+                ->where('model_id', $model->model_id)
+                ->count() > 0) {
+            throw new \Exception('字段已存在');
+        }
+        $old = $id > 0 ? $model->get() : [];
         $model->load($data);
         $scene = CMSRepository::scene();
-        if ($id > 0) {
-            $scene->setModel($model->model)->updateField($model);
+        if ($model->is_main > 0
+            && $model->is_system < 1
+            && $scene instanceof SingleScene) {
+            $model->is_main = 0;
         }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if ($id < 1) {
+        if ($id > 0) {
+            $model->setOldAttribute($old);
+            $scene->setModel($model->model)->updateField($model);
+        } else {
             $scene->setModel($model->model)->addField($model);
         }
         return $model;
@@ -71,10 +103,33 @@ class ModelRepository {
     public static function fieldRemove(int $id) {
         $model = ModelFieldModel::find($id);
         if (!$model) {
-            return;
+            throw new \Exception('字段不存在');
+        }
+        if ($model->is_system > 0) {
+            throw new \Exception('系统自带字段禁止删除');
         }
         CMSRepository::scene()->setModel($model->model)->removeField($model);
         $model->delete();
+        return $model;
+    }
+
+    public static function fieldToggle(int $id, array $data) {
+        $model = ModelFieldModel::find($id);
+        $maps = ['is_disable'];
+        foreach ($data as $action => $val) {
+            if (is_int($action)) {
+                if (empty($val)) {
+                    continue;
+                }
+                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
+            }
+            if (empty($action) || !in_array($action, $maps)) {
+                continue;
+            }
+            $model->{$action} = intval($val);
+        }
+        $model->save();
+        return $model;
     }
 
     /**

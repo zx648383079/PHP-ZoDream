@@ -15,7 +15,7 @@
                 <li>
                     <a href="{url:./}">返回所有应用</a>
                 </li>
-                {channels:parent=10 tree=1}
+                {channels:parent=app_market tree=1}
                 <li class="{channelActive:$channel.id,true}">
                     <a href="{url:./category/list?id=:$channel.id}">{$channel.title}</a>
                     {if:isset($channel.children)}
@@ -40,7 +40,7 @@
                 <div class="panel-body">
                     <div class="row">
                         {for:$page,$item}
-                        <div class="col-md-4 item">
+                        <div class="col-md-4 app-item">
                             <div class="thumb">
                                 <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
                             </div>

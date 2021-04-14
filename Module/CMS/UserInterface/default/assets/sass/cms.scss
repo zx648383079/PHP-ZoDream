@@ -653,6 +653,37 @@ footer {
         }
     }
 }
+
+.app-item,
+.game-item,
+.theme-item {
+    display: flex;
+    margin-bottom: .8rem;
+    .thumb {
+        width: 5rem;
+        img {
+            width: 5rem;
+            height: 5rem;
+        }
+    }
+    .info {
+        flex: 1;
+        padding-left: .5rem;
+        .title {
+            line-height: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .desc {
+            color: #666;
+            min-height: 2rem;
+        }
+        .tags {
+            font-size: .8rem;
+            color: #777;
+        }
+    }
+}
 .article-item {
     display: flex;
     margin-bottom: .8rem;
@@ -925,7 +956,7 @@ footer {
 
 .game-panel {
     .panel-body {
-        .item {
+        .game-item {
             display: inline-block;
             width: 150px;
             text-align: center;
@@ -994,7 +1025,7 @@ footer {
     }
 
     #content-list {
-        .item {
+        .article-item {
             grid-template-columns: 103px 1fr;
             height: 90px;
             .thumb {

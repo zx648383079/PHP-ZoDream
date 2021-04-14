@@ -19,27 +19,38 @@ class SearchModel {
                                   string $key = 'keywords', string $value = '') {
         $columns = (array)$columns;
         $keywords = explode(' ', empty($key) ? $value : request()->get($key));
+        $wordItems = [];
         foreach ($keywords as $item) {
-            $item = trim(trim($item), '%');
-            if (empty($item)) {
-                continue;
-            }
-            foreach ($columns as $column) {
-                $query->where($column, 'like', '%'.$item.'%');
-            }
-            if (!$saveLog) {
-                continue;
-            }
             $item = trim(str_replace('%', '', $item));
             if (empty($item)) {
                 continue;
             }
+            $wordItems[] = $item;
+        }
+        unset($keywords);
+        if (empty($keywords) || empty($columns)) {
+            return $query;
+        }
+        foreach ($columns as $column) {
+            if (empty($column)) {
+                continue;
+            }
+            $query->orWhere(function ($query) use ($column, $wordItems) {
+                foreach ($wordItems as $item) {
+                    $query->where($column, 'like', '%'.$item.'%');
+                }
+            });
+        }
+        if (!$saveLog) {
+            return $query;
+        }
+//        foreach ($wordItems as $item) {
 //            static::create([
 //                'keyword' => $item,
 //                'count' => 1,
 //                'created_at' => date('Y-m-d')
 //            ]);
-        }
+//        }
         return $query;
     }
 
