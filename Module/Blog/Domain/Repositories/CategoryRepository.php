@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
-
 
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;

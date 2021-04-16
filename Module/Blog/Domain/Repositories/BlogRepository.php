@@ -202,13 +202,29 @@ class BlogRepository {
         }
         $args = [];
         foreach ($items as $item) {
-            $args[] = isset($data[$item['id']]) ? $data[$item['id']] : $item;
+            $args[] = $data[$item['id']] ?? $item;
         }
         return $args;
     }
 
+    /**
+     * 自动判断是否延迟加载图片并缓存内容
+     * @param BlogModel $blog
+     * @return string
+     * @throws Exception
+     */
     public static function renderContent(BlogModel $blog) {
-        $imgLazy = !app('platform') && !Bot::isSpider();
+        return static::renderLazyContent($blog, !app('platform') && !Bot::isSpider());
+    }
+
+    /**
+     * 缓存博客内容编译
+     * @param BlogModel $blog
+     * @param bool $imgLazy 是否延迟加载图片
+     * @return string
+     * @throws Exception
+     */
+    public static function renderLazyContent(BlogModel $blog, bool $imgLazy = false) {
         $cb = function () use ($blog, $imgLazy) {
             return Html::render($blog->getAttributeValue('content'),  TagRepository::getTags($blog->id), $blog->edit_type == 1, $imgLazy);
         };
@@ -217,7 +233,6 @@ class BlogRepository {
         }
         return cache()->store('pages')->getOrSet(sprintf('blog_%d_%s_content', $blog->id, $imgLazy), $cb, 3600);
     }
-
 
     public static function sourceBlog(int $id, string $language = '') {
         $model = BlogModel::getOrNew($id, $language);
@@ -293,7 +308,7 @@ class BlogRepository {
             BlogModel::where('parent_id', $model->id)->update($asyncData);
         }
         BlogMetaModel::saveMeta($model->id, $data);
-        event(new BlogUpdate($model, $isNew, time()));
+        event(new BlogUpdate($model->id, $isNew ? 0 : 1, time()));
         return $model;
     }
 
@@ -308,6 +323,7 @@ class BlogRepository {
             BlogModel::where('parent_id', $id)->delete();
         }
         BlogMetaModel::deleteMeta($id);
+        event(new BlogUpdate($model->id, 2, time()));
     }
 
     /**
@@ -348,8 +364,7 @@ class BlogRepository {
         $languages = BlogModel::where('parent_id', $id)->asArray()->get('id', 'language');
         return array_map(function (array $item) {
             $item['id'] = intval($item['id']);
-            $item['label'] = isset(static::LANGUAGE_MAP[$item['language']]) ?
-                static::LANGUAGE_MAP[$item['language']] : strtoupper($item['language']);
+            $item['label'] = static::LANGUAGE_MAP[$item['language']] ?? strtoupper($item['language']);
             return $item;
         }, array_merge([
             ['id' => $id, 'language' => 'zh']
