@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Domain\Weights;
 
 use Module\Template\Domain\Pages\IPage;
@@ -9,7 +10,7 @@ class Node implements INode {
      * @var IPage
      */
     protected $page;
-    protected $attributes = [];
+    protected array $attributes = [];
 
     public function __construct(IPage $page) {
         $this->page = $page;
@@ -50,7 +51,6 @@ class Node implements INode {
     }
 
     public function render($type = null) {
-
         return '';
     }
 

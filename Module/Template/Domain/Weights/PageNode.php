@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Domain\Weights;
-
 
 use Module\Template\Domain\Pages\SinglePage;
 
@@ -16,7 +16,7 @@ class PageNode {
     /**
      * @var Node[]
      */
-    public $children = [];
+    public array $children = [];
 
     public $content;
 
@@ -44,7 +44,7 @@ class PageNode {
             return $this->content;
         }
         return implode('', array_map(function (Node $item) use ($type) {
-            return $item->generate($type);
+            return $item->render($type);
         }, $this->children));
     }
 

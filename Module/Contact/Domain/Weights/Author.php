@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Contact\Domain\Weights;
 
 use Module\Auth\Domain\Model\UserModel;
@@ -18,6 +19,7 @@ class Author extends Node implements INode {
     public function render($type = null) {
         return $this->cache()->getOrSet(self::KEY, function () {
             $user = $this->page->trigger(self::KEY);
+            $rss = url('/blog/rss');
             return <<<HTML
 <div class="person-box">
     <div class="avatar">
@@ -33,6 +35,10 @@ class Author extends Node implements INode {
         <a href="mailto:{$user->email}" title="发送邮件">
             <i class="fa fa-mail-bulk"></i>
             Email
+        </a>
+        <a href="{$rss}" target="_blank" title="订阅rss">
+            <i class="fa fa-rss"></i>
+            RSS
         </a>
     </div>
 </div>

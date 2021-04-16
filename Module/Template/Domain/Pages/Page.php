@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Domain\Pages;
 
 use Module\Template\Domain\Weights\INode;
+use Module\Template\Domain\Weights\Node;
 use Zodream\Helpers\Str;
 use Exception;
 
@@ -48,9 +49,7 @@ class Page implements IPage {
     public function instance($name): INode {
         $name = $this->formatName($name);
         if (!isset($this->nodeItems[$name])) {
-            throw new Exception(
-                sprintf('"%s" node not register', $name)
-            );
+            return $this->notFoundNode($name);
         }
         $node = $this->nodeItems[$name];
         if (!isset($this->nodeInstances[$node])) {
@@ -100,6 +99,15 @@ class Page implements IPage {
 
     protected function formatName(string|int $name): string|int {
         return is_numeric($name) ? $name : Str::studly($name);
+    }
+
+    protected function notFoundNode(string $name): INode {
+        if (app()->isDebug()) {
+            throw new Exception(
+                sprintf('"%s" node not register', $name)
+            );
+        }
+        return new Node($this);
     }
 
     public function __call($name, $arguments) {
