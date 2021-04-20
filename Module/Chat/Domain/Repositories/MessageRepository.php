@@ -164,15 +164,15 @@ class MessageRepository {
         $items = [];
         foreach ($data as $item) {
             $message = MessageModel::create([
-                'type' => isset($item['type']) ? $item['type'] : MessageModel::TYPE_TEXT,
+                'type' => $item['type'] ?? MessageModel::TYPE_TEXT,
                 'content' => $item['content'],
-                'item_id' => isset($item['item_id']) ? $item['item_id'] : 0,
+                'item_id' => $item['item_id'] ?? 0,
                 'receive_id' => $itemType < 1 ? $id : 0,
                 'group_id' => $itemType < 1 ? 0 : $id,
                 'user_id' => $user,
                 'status' => MessageModel::STATUS_NONE,
                 'deleted_at' => 0,
-                'extra_rule' => isset($item['extra_rule']) ? $item['extra_rule'] : '',
+                'extra_rule' => $item['extra_rule'] ?? '',
             ]);
             if (!empty($message)) {
                 $items[] = $message;

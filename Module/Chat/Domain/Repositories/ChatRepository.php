@@ -34,13 +34,13 @@ class ChatRepository {
         $groups = static::getGroup($groupIds);
         $messages = static::getLastMessage($messageIds);
         foreach ($page as $item) {
-            $item['message'] = isset($messages[$item['last_message']]) ? $messages[$item['last_message']] : null;
+            $item['message'] = $messages[$item['last_message']] ?? null;
             if ($item['item_type'] < 1) {
-                $item['user'] = isset($users[$item['item_id']]) ? $users[$item['item_id']] : null;
-                $item['friend'] = isset($friends[$item['item_id']]) ? $friends[$item['item_id']] : null;
+                $item['user'] = $users[$item['item_id']] ?? null;
+                $item['friend'] = $friends[$item['item_id']] ?? null;
                 continue;
             }
-            $item['group'] = isset($groups[$item['item_id']]) ? $groups[$item['item_id']] : null;
+            $item['group'] = $groups[$item['item_id']] ?? null;
         }
         return $page;
     }
