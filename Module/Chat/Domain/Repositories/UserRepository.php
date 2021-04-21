@@ -9,7 +9,7 @@ class UserRepository {
 
     public static function profile() {
         $user = auth()->user();
-        $new_count = MessageModel::where('user_id', $user->id)->where('status', MessageModel::STATUS_NONE)->count();
+        $new_count = MessageModel::where('receive_id', $user->id)->where('status', MessageModel::STATUS_NONE)->count();
         return [
             'name' => $user->name,
             'user' => [
