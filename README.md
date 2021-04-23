@@ -75,5 +75,29 @@ gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface
 
 官网：https://zodream.cn
 
-更新时间：2020/08/12
+## 前后端分离版本
+
+### 后端：
+
+[PHP-ZoDream](https://github.com/zx648383079/PHP-ZoDream)：完整版，使用 PHP 编程语言，自制框架
+
+[godream](https://github.com/zx648383079/godream)：博客及聊天室模块，使用 Go 编程语言，基于 gin 框架
+
+[netdream](https://github.com/zx648383079/netdream)：博客模块，使用 C# 编程语言，基于 Net Core 框架
+
+### 前端：
+
+[Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream)：大部分模块，包括管理后台，使用 typescript 语言，基于 angular 11 框架
+
+### 客户端
+
+[Flutter-Shop](https://github.com/zx648383079/Flutter-Shop): 商城模块，使用 dart 语言，基于 flutter 框架
+
+[Mini-Shop](https://github.com/zx648383079/Mini-Shop)：商城模块，使用 typescript 语言，微信小程序 依赖 gulp-vue2mini 代码转换
+
+[Vue-Shop](https://github.com/zx648383079/Mini-Shop)：商城模块，使用 typescript 语言，基于 vu2 框架，vue3版本等正式版再更新
+
+还有其他客户端，但是都不完善。
+
+更新时间：2021/04/23
 
