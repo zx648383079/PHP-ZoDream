@@ -20,7 +20,7 @@ class CheckinRepository {
 
     public static function check($method = CheckInModel::METHOD_WEB) {
         if (auth()->guest()) {
-            throw new \Exception('请先登录');
+            throw new \Exception('请先登录', 401);
         }
         $model = CheckInModel::checkIn(auth()->id(), $method);
         if (empty($model)) {

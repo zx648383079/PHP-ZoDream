@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\Game\CheckIn\Service\Api;
 
-use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
 
 class HomeController extends Controller {
@@ -10,6 +9,7 @@ class HomeController extends Controller {
     public function rules() {
         return [
             'index' => '@',
+            'checkIn' => '@',
         ];
     }
 

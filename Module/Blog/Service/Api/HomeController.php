@@ -41,7 +41,6 @@ class HomeController extends Controller {
     }
 
     public function contentAction(int $id) {
-        $id = intval($id);
         BlogModel::where('id', $id)->updateIncrement('click_count');
         $blog = BlogContentModel::find($id);
         if (empty($blog)) {
