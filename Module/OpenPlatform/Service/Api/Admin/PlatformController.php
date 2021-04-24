@@ -1,38 +1,54 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Service\Api\Admin;
 
-use Module\OpenPlatform\Domain\Model\PlatformModel;
+use Module\OpenPlatform\Domain\Repositories\PlatformRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PlatformController extends Controller {
 
-    public function indexAction() {
-        $model_list = PlatformModel::orderBy('status', 'desc')->page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '') {
+        return $this->renderPage(
+            PlatformRepository::getList($keywords)
+        );
     }
 
-    public function editAction($id) {
-        $model = PlatformModel::find($id);
-        return $this->render($model);
+    public function editAction(int $id) {
+        try {
+            return $this->render(PlatformRepository::get($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function saveAction(Request $request) {
-        $id = intval($request->get('id'));
-        $data = $request->get();
-        unset($data['appid']);
-        unset($data['secret']);
-        $model = PlatformModel::find($id);
-        if (empty($model)) {
-            return $this->renderFailure('应用不存在');
+        try {
+            $data = $request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,20',
+                'type' => 'int:0,9',
+                'domain' => 'required|string:0,50',
+                'sign_type' => 'int:0,9',
+                'sign_key' => 'string:0,32',
+                'encrypt_type' => 'int:0,9',
+                'public_key' => '',
+                'rules' => '',
+                'description' => '',
+                'allow_self' => 'int',
+                'status' => 'int:0,127',
+            ]);
+            return $this->render(PlatformRepository::save($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($model->load() && $model->save()) {
-            return $this->render($model);
-        }
-        return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
-        PlatformModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        try {
+            PlatformRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 }

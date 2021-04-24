@@ -28,7 +28,18 @@ class PlatformController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = OpenRepository::savePlatform($request->get());
+            $model = OpenRepository::savePlatform($request->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,20',
+                'type' => 'int:0,9',
+                'domain' => 'required|string:0,50',
+                'sign_type' => 'int:0,9',
+                'sign_key' => 'string:0,32',
+                'encrypt_type' => 'int:0,9',
+                'public_key' => '',
+                'description' => '',
+                'allow_self' => 'int',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

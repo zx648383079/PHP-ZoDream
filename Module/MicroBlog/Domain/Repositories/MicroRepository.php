@@ -65,16 +65,19 @@ class MicroRepository {
         return !$time || $time < time() - $limit;
     }
 
+
     public static function create(string $content, array $images = [], string $source = 'web') {
-        $model = MicroBlogModel::create([
+        return self::createWithRule($content, [], $images, $source);
+    }
+
+    public static function createWithRule(string $content, array $extraRules = [], array $images = [], string $source = 'web') {
+        $model = MicroBlogModel::createOrThrow([
             'user_id' => auth()->id(),
             'content' => Html::text($content),
             'source' => $source
         ]);
-        if (!$model) {
-            throw new Exception('发送失败');
-        }
         $extraRules = array_merge(
+            $extraRules,
             self::at($content, $model->id),
             self::topic($content, $model->id),
             EmojiRepository::renderRule($content)
@@ -446,17 +449,23 @@ class MicroRepository {
 
     /**
      * 创建分享
-     * @param $title
-     * @param $summary
-     * @param $url
-     * @param $pics
-     * @param $content
+     * @param string $title
+     * @param string $summary
+     * @param string $url
+     * @param string|array $pics
+     * @param string $content
+     * @param string $source
      * @return MicroBlogModel
-     * @throws Exception
      */
-    public static function share($title, $summary, $url, $pics, $content) {
-        $content = sprintf('%s<a href="%s" target="_blank">%s</a>%s',
-            Html::text($content), Html::text($url), Html::text($title), Html::text($summary));
-        return static::create($content, $pics);
+    public static function share(string $title, string $summary, string $url, string|array $pics, string $content, string $source = '') {
+        $tag = Html::text($title);
+        $content = sprintf("%s \n【%s】%s%s",
+            Html::text($content), $tag,
+            empty($source) ? '' : sprintf(' - 分享自 @%s ', Html::text($source))
+            , Html::text($summary));
+        $extraRule = [
+            LinkRule::formatLink($tag, $url)
+        ];
+        return static::createWithRule($content, $extraRule, (array)$pics);
     }
 }

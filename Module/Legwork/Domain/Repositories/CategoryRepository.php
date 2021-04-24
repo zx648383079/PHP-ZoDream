@@ -19,7 +19,7 @@ class CategoryRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = CategoryModel::findOrNew($id);
         $model->load($data);

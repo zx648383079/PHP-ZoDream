@@ -75,10 +75,7 @@ class LinkRule {
     public static function formatLink(string $word, string $link, array $params = []): array {
         return [
             's' => $word,
-            'l' => Deeplink::encode($link, $params)
+            'l' => str_contains($link, '://') && empty($params) ? $link : Deeplink::encode($link, $params)
         ];
     }
-
-
-
 }

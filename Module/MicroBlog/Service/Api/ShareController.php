@@ -14,9 +14,9 @@ class ShareController extends Controller {
         ];
     }
 
-    public function indexAction(string $appid, string $url = '') {
+    public function indexAction(string $shareappid, string $url = '') {
         try {
-            OpenRepository::checkUrl($appid, $url);
+            OpenRepository::checkUrl($shareappid, $url);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -28,11 +28,11 @@ class ShareController extends Controller {
             return $this->renderFailure('发送过于频繁！');
         }
         try {
-            OpenRepository::checkUrl($request->get('appid'), $request->get('url'));
+            OpenRepository::checkUrl($request->get('shareappid'), $request->get('url'));
             $model = MicroRepository::share($request->get('title'),
                 $request->get('summary'),
                 $request->get('url'),
-                $request->get('pics'), $request->get('content'));
+                $request->get('pics'), $request->get('content'), $request->get('sharesource'));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

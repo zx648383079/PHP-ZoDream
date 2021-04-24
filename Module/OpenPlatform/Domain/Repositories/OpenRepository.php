@@ -23,7 +23,7 @@ class OpenRepository {
         unset($data['status']);
         if ($id > 0) {
             $model = PlatformModel::where('user_id', auth()->id())
-                ->where('id', $id)->one();
+                ->where('id', $id)->first();
         } else {
             $model = new PlatformModel();
             $model->user_id = auth()->id();
@@ -33,7 +33,7 @@ class OpenRepository {
         if (empty($model)) {
             throw new Exception('应用不存在');
         }
-        if (!$model->load() || !$model->save()) {
+        if (!$model->load($data) || !$model->save()) {
             throw new Exception($model->getFirstError());
         }
         return $model;
@@ -85,6 +85,9 @@ class OpenRepository {
         $model = PlatformModel::findByAppId($appId);
         if (empty($model) || empty($model->domain)) {
             throw new Exception('应用无效');
+        }
+        if ($model->domain === '*') {
+            return $model;
         }
         $host = parse_url($url, PHP_URL_HOST);
         if ($host !== $model->domain) {
