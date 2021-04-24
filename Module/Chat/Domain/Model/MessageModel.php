@@ -1,9 +1,9 @@
 <?php
 namespace Module\Chat\Domain\Model;
 
+use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Zodream\Helpers\Json;
 
 /**
  * Class FriendModel
@@ -21,6 +21,8 @@ use Zodream\Helpers\Json;
  * @property string $extra_rule
  */
 class MessageModel extends Model {
+
+    use ExtraRule;
 
     const TYPE_TEXT = 0;
     const TYPE_IMAGE = 1;
@@ -80,13 +82,5 @@ class MessageModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'receive_id');
     }
 
-    public function getExtraRuleAttribute() {
-        $value = $this->getAttributeValue('extra_rule');
-        return empty($value) ? [] : Json::decode($value);
-    }
-
-    public function setExtraRuleAttribute($value) {
-        $this->__attributes['extra_rule'] = is_array($value) ? Json::encode($value) : $value;
-    }
 
 }

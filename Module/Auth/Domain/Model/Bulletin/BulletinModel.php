@@ -1,10 +1,10 @@
 <?php
 namespace Module\Auth\Domain\Model\Bulletin;
 
+use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Zodream\Helpers\Json;
 
 
 /**
@@ -20,6 +20,8 @@ use Zodream\Helpers\Json;
  * @property UserSimpleModel $user
  */
 class BulletinModel extends Model {
+
+    use ExtraRule;
 
     protected array $append = ['user', 'user_name', 'icon'];
 
@@ -54,15 +56,6 @@ class BulletinModel extends Model {
 
     public function user() {
 	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
-    }
-
-    public function getExtraRuleAttribute() {
-        $value = $this->getAttributeValue('extra_rule');
-        return empty($value) ? [] : Json::decode($value);
-    }
-
-    public function setExtraRuleAttribute($value) {
-        $this->__attributes['extra_rule'] = is_array($value) ? Json::encode($value) : $value;
     }
 
     public function getUserNameAttribute() {

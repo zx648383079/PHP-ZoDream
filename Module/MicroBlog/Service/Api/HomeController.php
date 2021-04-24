@@ -28,7 +28,7 @@ class HomeController extends Controller {
             return $this->renderFailure('发送过于频繁！');
         }
         try {
-            $model = MicroRepository::create($request->get('content'), $request->get('file'));
+            $model = MicroRepository::create($request->get('content'), $request->get('file', []));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -41,6 +41,8 @@ class CreateMicroBlogTables extends Migration {
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('content');
+            $table->string('extra_rule', 300)->default('')
+                ->comment('内容的一些附加规则');
             $table->uint('parent_id');
             $table->uint('user_id')->default(0);
             $table->uint('micro_id');
@@ -49,8 +51,8 @@ class CreateMicroBlogTables extends Migration {
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
             $table->id();
-            $table->uint('type', 2)->default(0);
-            $table->uint('id_value');
+            $table->uint('item_type', 2)->default(0);
+            $table->uint('item_id');
             $table->uint('user_id');
             $table->uint('action');
             $table->timestamp('created_at');

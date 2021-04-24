@@ -1,14 +1,17 @@
 <?php
 namespace Module\MicroBlog\Domain\Model;
 
+use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\MicroBlog\Domain\Repositories\LogRepository;
 
 
 /**
  * Class CommentModel
  * @property integer $id
  * @property string $content
+ * @property string $extra_rule
  * @property integer $parent_id
  * @property integer $user_id
  * @property integer $micro_id
@@ -17,6 +20,8 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class CommentModel extends Model {
+
+    use ExtraRule;
 
     protected array $append = ['agree_type', 'reply_count'];
 
@@ -27,6 +32,7 @@ class CommentModel extends Model {
     protected function rules() {
         return [
             'content' => 'required|string:0,255',
+            'extra_rule' => '',
             'parent_id' => 'int',
             'user_id' => 'int',
             'micro_id' => 'required|int',
@@ -40,6 +46,7 @@ class CommentModel extends Model {
         return [
             'id' => 'Id',
             'content' => 'Content',
+            'extra_rule' => 'Extra Rule',
             'parent_id' => 'Parent Id',
             'user_id' => 'User Id',
             'micro_id' => 'Micro Id',
@@ -66,11 +73,6 @@ class CommentModel extends Model {
     }
 
     public function getAgreeTypeAttribute() {
-	    $log = LogModel::where([
-            'user_id' => auth()->id(),
-            'type' => LogModel::TYPE_COMMENT,
-            'id_value' => $this->id,
-        ])->whereIn('action', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE])->first('action');
-	    return !$log ? 0 : $log->action;
+	    return LogRepository::commentAgreeType($this->id);
     }
 }

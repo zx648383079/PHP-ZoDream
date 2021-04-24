@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Model;
 
+use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Module\MicroBlog\Domain\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Zodream\Helpers\Json;
+use Module\MicroBlog\Domain\Repositories\LogRepository;
 
 
 /**
@@ -24,6 +25,8 @@ use Zodream\Helpers\Json;
  * @property integer $updated_at
 */
 class MicroBlogModel extends Model {
+
+    use ExtraRule;
 
     protected array $append = ['editable', 'is_recommended', 'attachment', 'is_collected'];
 
@@ -76,37 +79,12 @@ class MicroBlogModel extends Model {
 	    return $this->hasMany(AttachmentModel::class, 'micro_id', 'id');
     }
 
-    public function getExtraRuleAttribute() {
-	    $value = $this->getAttributeValue('extra_rule');
-	    return empty($value) ? [] : Json::decode($value);
-    }
-
-    public function setExtraRuleAttribute($value) {
-	    $this->__attributes['extra_rule'] = is_array($value) ? Json::encode($value) : $value;
-    }
-
     public function getIsRecommendedAttribute() {
-	    if (auth()->guest()) {
-	        return false;
-        }
-        return LogModel::where([
-                'user_id' => auth()->id(),
-                'type' => LogModel::TYPE_MICRO_BLOG,
-                'id_value' => $this->id,
-                'action' => LogModel::ACTION_RECOMMEND
-            ])->count() > 0;
+	    return LogRepository::isRecommend($this->id);
     }
 
     public function getIsCollectedAttribute() {
-	    if (auth()->guest()) {
-	        return false;
-        }
-        return LogModel::where([
-                'user_id' => auth()->id(),
-                'type' => LogModel::TYPE_MICRO_BLOG,
-                'id_value' => $this->id,
-                'action' => LogModel::ACTION_COLLECT
-            ])->count() > 0;
+	    return LogRepository::isCollect($this->id);
     }
 
     public function getEditableAttribute() {

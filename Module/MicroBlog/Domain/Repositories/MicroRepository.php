@@ -66,11 +66,11 @@ class MicroRepository {
     }
 
 
-    public static function create(string $content, array $images = [], string $source = 'web') {
-        return self::createWithRule($content, [], $images, $source);
+    public static function create(string $content, array $files = [], string $source = 'web') {
+        return self::createWithRule($content, [], $files, $source);
     }
 
-    public static function createWithRule(string $content, array $extraRules = [], array $images = [], string $source = 'web') {
+    public static function createWithRule(string $content, array $extraRules = [], array $files = [], string $source = 'web') {
         $model = MicroBlogModel::createOrThrow([
             'user_id' => auth()->id(),
             'content' => Html::text($content),
@@ -86,17 +86,22 @@ class MicroRepository {
             $model->extra_rule = $extraRules;
             $model->save();
         }
-        if (empty($images)) {
+        if (empty($files)) {
             return $model;
         }
         $data = [];
-        foreach ($images as $image) {
-            if (empty($image)) {
+        foreach ($files as $file) {
+            $thumb = $file;
+            if (is_array($file)) {
+                $thumb = $file['thumb'];
+                $file = $file['file'];
+            }
+            if (empty($file)) {
                 continue;
             }
             $data[] = [
-                'thumb' => $image,
-                'file' => $image,
+                'thumb' => $thumb,
+                'file' => $file,
                 'micro_id' => $model->id
             ];
         }
@@ -109,8 +114,8 @@ class MicroRepository {
 
     /**
      * 评论
-     * @param $content
-     * @param $micro_id
+     * @param string $content
+     * @param int $micro_id
      * @param int $parent_id
      * @param bool $is_forward 是否转发
      * @return CommentModel
@@ -124,14 +129,20 @@ class MicroRepository {
         if (!$model) {
             throw new Exception('id 错误');
         }
-        $comment = CommentModel::create([
-            'content' => Html::text($content),
+        $content = Html::text($content);
+        $comment = CommentModel::createOrThrow([
+            'content' => $content,
             'parent_id' => $parent_id,
             'user_id' => auth()->id(),
             'micro_id' => $model->id,
         ]);
-        if (!$comment) {
-            throw new Exception('评论失败');
+        $extraRules = array_merge(
+            self::at($content, 0, 1),
+            EmojiRepository::renderRule($content),
+        );
+        if (!empty($extraRules)) {
+            $comment->extra_rule = $extraRules;
+            $comment->save();
         }
         if ($is_forward) {
             if ($model->forward_id > 0) {
@@ -140,7 +151,7 @@ class MicroRepository {
             }
             $forwardModel = MicroBlogModel::create([
                 'user_id' => auth()->id(),
-                'content' => Html::text($content),
+                'content' => $content,
                 'forward_id' => $model->forward_id > 0 ? $model->forward_id :
                     $model->id,
                 'forward_count' => 1,
@@ -223,8 +234,8 @@ class MicroRepository {
                                      int $type = LogModel::TYPE_MICRO_BLOG) {
         $log = LogModel::where([
             'user_id' => auth()->id(),
-            'type' => $type,
-            'id_value' => $id,
+            'item_type' => $type,
+            'item_id' => $id,
             'action' => $action
         ])->first();
         if ($log) {
@@ -232,8 +243,8 @@ class MicroRepository {
             return false;
         }
         LogModel::createOrThrow([
-            'type' => $type,
-            'id_value' => $id,
+            'item_type' => $type,
+            'item_id' => $id,
             'action' => $action,
             'user_id' => auth()->id()
         ]);
@@ -287,6 +298,7 @@ class MicroRepository {
         if ($is_comment) {
             CommentModel::create([
                 'content' => $content,
+                'extra_rule' => $extraRules,
                 'user_id' => auth()->id(),
                 'micro_id' => $source->id,
             ]);
@@ -306,8 +318,8 @@ class MicroRepository {
     public static function getCommentLog($id) {
         return LogModel::where([
             'user_id' => auth()->id(),
-            'type' => LogModel::TYPE_COMMENT,
-            'id_value' => $id,
+            'item_type' => LogModel::TYPE_COMMENT,
+            'item_id' => $id,
         ])->whereIn('action', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE])->first();
     }
 
@@ -333,8 +345,8 @@ class MicroRepository {
             return $model;
         }
         LogModel::create([
-            'type' => LogModel::TYPE_COMMENT,
-            'id_value' => $id,
+            'item_type' => LogModel::TYPE_COMMENT,
+            'item_id' => $id,
             'action' => LogModel::ACTION_AGREE,
             'user_id' => auth()->id()
         ]);
@@ -365,8 +377,8 @@ class MicroRepository {
             return $model;
         }
         LogModel::create([
-            'type' => LogModel::TYPE_COMMENT,
-            'id_value' => $id,
+            'item_type' => LogModel::TYPE_COMMENT,
+            'item_id' => $id,
             'action' => LogModel::ACTION_DISAGREE,
             'user_id' => auth()->id()
         ]);
@@ -377,11 +389,12 @@ class MicroRepository {
 
     /**
      * at 人
-     * @param $content
-     * @param $id
-     * @return array 返回罪恶
+     * @param string $content
+     * @param int $itemId
+     * @return array 返回规则
+     * @throws Exception
      */
-    public static function at(string $content, int $id): array {
+    public static function at(string $content, int $itemId = 0, int $itemType = 0): array {
         if (empty($content) || !str_contains($content, '@')) {
             return [];
         }
@@ -402,19 +415,23 @@ class MicroRepository {
             }
             $rules[] = LinkRule::formatUser($names[$user['name']], intval($user['id']));
         }
-        if ($id > 0 && !empty($userIds)) {
+        if ($itemId < 1 || !empty($userIds)) {
+            return $rules;
+        }
+        if ($itemType < 1) {
             BulletinRepository::message($userIds,
                 '我在微博提到了你', '[查看]', 88, [
-                    LinkRule::formatLink('[查看]', 'micro/'.$id)
+                    LinkRule::formatLink('[查看]', 'micro/'.$itemId)
                 ]);
         }
         return $rules;
     }
 
     /**
-     * 话题
-     * @param $content
-     * @param $id
+     * 生成话题规则
+     * @param string $content
+     * @param int $id
+     * @return array
      */
     public static function topic(string $content, int $id): array {
         if (empty($content) || !str_contains($content, '#')) {

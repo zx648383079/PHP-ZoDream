@@ -124,6 +124,9 @@ class BulletinRepository {
      * @throws Exception
      */
     public static function send(array|int $user, string $title, string $content, int $type = 0, int $sender = 0, array $extraRule = []) {
+        if (empty($user)) {
+            return 0;
+        }
         $bulletin = new BulletinModel();
         $bulletin->title = $title;
         $bulletin->content = $content;
