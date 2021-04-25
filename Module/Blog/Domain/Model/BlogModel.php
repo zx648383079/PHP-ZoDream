@@ -109,13 +109,6 @@ class BlogModel extends BlogEntity {
         return false;
     }
 
-    /**
-     * @return string|void
-     */
-    public function getCreatedAtAttribute() {
-        return Time::isTimeAgo($this->getAttributeValue('created_at'), 2678400);
-    }
-
     public function toHtml() {
         return BlogRepository::renderContent($this);
     }

@@ -36,9 +36,6 @@ class CategoryRepository {
      */
     public static function get(int $id = -1) {
         static::boot();
-        if (!is_integer($id)) {
-            $id = intval($id);
-        }
         if ($id < 0) {
             return array_values(static::$caches);
         }

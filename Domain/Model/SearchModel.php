@@ -28,7 +28,7 @@ class SearchModel {
             $wordItems[] = $item;
         }
         unset($keywords);
-        if (empty($keywords) || empty($columns)) {
+        if (empty($wordItems) || empty($columns)) {
             return $query;
         }
         foreach ($columns as $column) {

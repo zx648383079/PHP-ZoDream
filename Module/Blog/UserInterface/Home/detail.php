@@ -95,7 +95,7 @@ $this->set([
         <?php if(!empty($blog->programming_language)):?>
         <a class="language" href="<?=$this->url('./', ['programming_language' => $blog->programming_language], false)?>" title="<?=__('Programming Language')?>"><i class="fa fa-code"></i><b><?=$blog->programming_language?></b></a>
         <?php endif;?>
-        <span class="time" title="<?=__('Publish Date')?>"><i class="fa fa-calendar-check"></i><b><?=$blog->created_at?></b></span>
+        <span class="time" title="<?=__('Publish Date')?>"><i class="fa fa-calendar-check"></i><b><?=$this->ago($blog->getAttributeSource('created_at'))?></b></span>
         <?php if($blog->type == 1):?>
         <span class="type">
             <a href="<?=HtmlExpand::toUrl($metaItems['source_url'])?>" title="<?=__('Reprint Tip')?>">
@@ -190,7 +190,13 @@ $this->set([
     </div>
     <div class="panel-body">
         <?php foreach($relation_list as $item):?>
-            <div class="list-item"><a class="name" href="<?=$this->url('./', ['id' => $item->id])?>"><?=$this->text($item->title)?></a><div class="time"><?=$item->created_at?></div></div>
+            <div class="list-item">
+                <div class="item-title">
+                    <a class="name" href="<?=$this->url('./', ['id' => $item->id])?>"><?=$this->text($item->title)?></a>
+                    <div class="time"><?=$this->ago($item->getAttributeSource('created_at'))?></div></div>
+                <div class="item-meta"><?=$this->text($item->description)?>
+                </div>
+            </div>
         <?php endforeach;?>
     </div>
 </div>

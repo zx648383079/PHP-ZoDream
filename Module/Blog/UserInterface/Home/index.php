@@ -121,7 +121,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
                 <i class="fa fa-lock" title="<?=__('Reading needs to meet the conditions')?>"></i>
             <?php endif;?>
             <a href="<?=$item->url?>" title="<?=$this->text($item->title)?>"><?=$this->text($item->title)?></a>
-            <span class="book-time"><?=$item->created_at?></span></dt>
+            <span class="book-time"><?=$this->ago($item->getAttributeSource('created_at'))?></span></dt>
         <dd>
             <p><?=$this->text($item->description)?></p>
             <a class="author" href="<?=$this->url('./', ['user' => $item->user_id])?>"><i class="fa fa-edit"></i><b><?=$this->text($item->user->name)?></b></a>

@@ -35,6 +35,7 @@ class Html {
             }, $content);
         }
         if (!empty($tags)) {
+            $tags = array_column($tags, 'name');
             $content = str_replace($tags, array_map(function ($tag) {
                 $url = url('./', ['tag' => $tag]);
                 return <<<HTML

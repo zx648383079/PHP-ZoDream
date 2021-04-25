@@ -11,6 +11,7 @@ use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\CategoryRepository;
+use Module\Blog\Domain\Repositories\CommentRepository;
 use Module\Blog\Domain\Repositories\TagRepository;
 
 class HomeController extends Controller {
@@ -32,8 +33,7 @@ class HomeController extends Controller {
         $blog_list  = BlogRepository::getList($sort, $category, $keywords,
             $user, $language, $programming_language, $tag);
         $cat_list = CategoryRepository::get();
-        $comment_list = CommentModel::with('blog')
-            ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->all();
+        $comment_list = CommentRepository::newList();
         $new_list = BlogRepository::getNew(4);
         $term = null;
         if ($category > 0) {

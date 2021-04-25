@@ -32,13 +32,13 @@ class TagRepository extends TagBase {
         return self::$caches[$blog_id] = empty($tags) ? [] : $tags;
     }
 
-    public static function getRelationBlogs(int $blog_id) {
-        $tags = self::getTags($blog_id);
+    public static function getRelationBlogs(int $blog) {
+        $tags = self::getTags($blog);
         if (empty($tags)) {
             return [];
         }
         $ids = TagRelationshipModel::whereIn('tag_id', array_column($tags, 'id'))
-            ->where('blog_id', '<>', $blog_id)->pluck('blog_id');
+            ->where('blog_id', '<>', $blog)->pluck('blog_id');
         if (empty($ids)) {
             return [];
         }

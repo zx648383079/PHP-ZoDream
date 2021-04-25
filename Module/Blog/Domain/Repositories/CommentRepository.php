@@ -102,4 +102,9 @@ class CommentRepository {
         }
         $model->delete();
     }
+
+    public static function newList() {
+        return CommentModel::with('blog')
+            ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->get();
+    }
 }
