@@ -99,5 +99,12 @@ gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface
 
 还有其他客户端，但是都不完善。
 
+
+## Thanks
+
+[![JetBrains](html/assets/images/jetbrains.svg)](https://www.jetbrains.com/?from=PHP-ZoDream)
+
+
+
 更新时间：2021/04/23
 
