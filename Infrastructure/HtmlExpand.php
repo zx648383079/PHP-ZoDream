@@ -24,7 +24,7 @@ class HtmlExpand {
             $content = MarkDown::parse($content, true, $imgLazy ? [
                 'class' => 'lazy',
                 'src' => 'data-src',
-                'default' => url()->asset('assets/images/loading.gif')
+                'default' => url()->asset('assets/images/loading.svg')
             ] : []);
         }
         return preg_replace_callback('/<a[^\<\>]+?href="([^"<>\s]+)"/', function ($match) {

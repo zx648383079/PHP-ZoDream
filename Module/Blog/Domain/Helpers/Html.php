@@ -14,7 +14,7 @@ class Html {
             return '';
         }
         $host = request()->host();
-        $defaultImage = $imgLazy ? url()->asset('assets/images/loading.gif') : '';
+        $defaultImage = $imgLazy ? url()->asset('assets/images/loading.svg') : '';
         $replace = [];
         $i = 0;
         foreach ([

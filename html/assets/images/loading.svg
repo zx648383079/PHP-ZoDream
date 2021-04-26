@@ -1,0 +1,40 @@
+<svg id="zre-draw" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+  <defs>
+    <style>
+      .zre-style {
+        fill: #fff;
+        stroke: #af5d0d;
+        stroke-width: 1px;
+        fill-rule: evenodd;
+        stroke-dasharray: 500;
+        stroke-dashoffset: 500;
+        animation: dash 5s linear infinite alternate,fill 5s linear infinite alternate;
+      }
+
+      @keyframes dash {
+        5% {
+          stroke-dashoffset: 500;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes fill {
+        0% {
+          fill: #fff;
+        }
+        50% {
+          fill: #fff;
+        }
+        100% {
+          fill: #af5d0d;
+        }
+      }
+    </style>
+  </defs>
+  <path id="e-down" class="zre-style" d="M110.244,129.7l9.5-11.51L75.211,95.965Z"/>
+  <path id="e-main" class="zre-style" d="M75.207,95.964L128.793,84.2,94.158,65.25Z"/>
+  <path id="z-main" class="zre-style" d="M20.043,26.181l59.219-1.572L35.765,71.25Z"/>
+  <path id="z-r" class="zre-style" d="M35.317,71.138L126,40.435l17.006,3.987Z"/>
+  <path id="r-line" class="zre-style" d="M54.541,129.371l-12.848-.494L89.625,23.625Z"/>
+</svg>
