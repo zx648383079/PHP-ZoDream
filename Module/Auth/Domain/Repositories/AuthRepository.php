@@ -164,7 +164,7 @@ class AuthRepository {
             return $res;
         }
         $request = request();
-        event(new Login($user, $request->server('HTTP_USER_AGENT'), $request->ip(), time()));
+        event(new Login($user, $request->server('HTTP_USER_AGENT', ''), $request->ip(), time()));
         auth()->user()->logLogin(true, $vendor);
         return $res;
     }

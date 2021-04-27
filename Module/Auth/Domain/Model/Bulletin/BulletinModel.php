@@ -5,6 +5,7 @@ use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Auth\Domain\Repositories\BulletinRepository;
 
 
 /**
@@ -60,7 +61,7 @@ class BulletinModel extends Model {
 
     public function getUserNameAttribute() {
 	    if ($this->user_id < 1) {
-	        return '[系统通知]';
+	        return BulletinRepository::SYSTEM_USER['name'];
         }
 	    if ($this->user) {
             return $this->user->name;
@@ -70,7 +71,7 @@ class BulletinModel extends Model {
 
     public function getIconAttribute() {
         if ($this->user_id < 1) {
-            return '系';
+            return BulletinRepository::SYSTEM_USER['icon'];
         }
         if ($this->user) {
             return mb_substr($this->user->name, 0, 1);

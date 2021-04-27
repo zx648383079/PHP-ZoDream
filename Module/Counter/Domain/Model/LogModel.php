@@ -42,7 +42,7 @@ class LogModel extends Model {
             'os_version' => 'string:0,20',
             'url' => 'string:0,255',
             'referrer' => 'string:0,255',
-            'user_agent' => 'string:0,255',
+            'user_agent' => 'string',
             'country' => 'string:0,45',
             'region' => 'string:0,45',
             'city' => 'string:0,45',

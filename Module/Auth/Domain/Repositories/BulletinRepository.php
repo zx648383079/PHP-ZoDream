@@ -6,17 +6,26 @@ use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 class BulletinRepository {
+
+    const SYSTEM_USER = [
+        'name' => '[系统通知]',
+        'icon' => '系',
+        'avatar' => '/assets/images/favicon.png',
+        'id' => 0
+    ];
 
     /**
      * 获取消息列表
      * @param string $keywords
      * @param int $status
+     * @param int $user
      * @return mixed
      * @throws Exception
      */
-    public static function getList(string $keywords = '', int $status = 0) {
+    public static function getList(string $keywords = '', int $status = 0, int $user = 0) {
         return BulletinUserModel::with('bulletin')
             ->when(!empty($keywords), function ($query) {
                 $ids = SearchModel::searchWhere(BulletinModel::query(), 'title')->pluck('id');
@@ -29,9 +38,35 @@ class BulletinRepository {
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status - 1);
             })
+            ->when($user != 0, function ($query) use ($user) {
+                $bulletinId = static::getUserBulletin($user);
+                if (empty($bulletinId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('bulletin_id', $bulletinId);
+            })
             ->where('user_id', auth()->id())
             ->orderBy('status', 'asc')
             ->orderBy('bulletin_id', 'desc')->page();
+    }
+
+    public static function userList() {
+        $systemUser = static::SYSTEM_USER;
+        $systemUser['avatar'] = url()->asset($systemUser['avatar']);
+        $bulletinId = BulletinUserModel::where('user_id', auth()->id())
+            ->pluck('bulletin_id');
+        if (empty($bulletinId)) {
+            return $systemUser;
+        }
+        $userId = BulletinModel::whereIn('id', $bulletinId)
+            ->where('user_id', '>', 0)
+            ->selectRaw('DISTINCT user_id')->pluck('user_id');
+        if (empty($userId)) {
+            return $systemUser;
+        }
+        $users = UserSimpleModel::whereIn('id', $userId)->get();
+        array_unshift($users, $systemUser);
+        return $users;
     }
 
     /**
@@ -81,6 +116,30 @@ class BulletinRepository {
         if ($count < 1) {
             BulletinModel::where('id', $id)->delete();
         }
+    }
+
+    protected static function getUserBulletin(int $user): array {
+        if ($user < 1) {
+            $user = 0;
+        }
+        $bulletinId = BulletinUserModel::where('user_id', auth()->id())
+            ->pluck('bulletin_id');
+        if (empty($bulletinId)) {
+            return [];
+        }
+        return BulletinModel::whereIn('id', $bulletinId)->where('user_id', $user)->pluck('id');
+    }
+
+    public static function removeUser(int $user) {
+        if ($user < 1) {
+            throw new Exception('系统消息无法删除');
+        }
+        $bulletinId = static::getUserBulletin($user);
+        if (empty($bulletinId)) {
+            return;
+        }
+        BulletinUserModel::where('user_id', auth()->id())
+            ->whereIn('bulletin_id', $bulletinId)->delete();
     }
 
     /**

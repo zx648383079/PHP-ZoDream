@@ -126,7 +126,7 @@ class Platform {
         return $response->setData($data);
     }
 
-    public function verifyRest() {
+    public function verifyRest(): bool {
         if (!$this->verify($_POST, $this->request->get('sign'))) {
             return false;
         }
@@ -141,7 +141,7 @@ class Platform {
         return true;
     }
 
-    public function verifyRule($module, $path) {
+    public function verifyRule(string $module, string $path): bool {
         if ($this->type() < 1 && !$this->verifyReferer()) {
             return false;
         }
@@ -199,7 +199,7 @@ class Platform {
      * @return string
      * @throws \Exception
      */
-    public function generateToken(UserObject $user) {
+    public function generateToken(UserObject $user): string {
         $token = app(JWTAuth::class)->createToken($user);
         UserTokenModel::create([
             'user_id' => $user->getIdentity(),
@@ -236,7 +236,8 @@ class Platform {
      * @param $token
      * @return bool
      */
-    public function verifyToken($token) {
+    public function verifyToken(string $token): bool
+    {
         $count = UserTokenModel::where('platform_id', $this->id())
             ->where('token', $token)->where('expired_at', '>', time())->count();
         return $count > 0;

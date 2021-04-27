@@ -41,27 +41,28 @@ class Module extends BaseModule {
             // 参数里指定路径
             $path = $context['request']->get('method');
         }
-        list($path, $modulePath, $module) = $context->make('route')->tryMatchModule($path);
+        list($nextPath, $modulePath, $module) = $context->make('route')->tryMatchModule($path);
         if (empty($module)) {
             return;
         }
         url()->setModulePath($modulePath);
-        return $this->invokeWithPlatform($module, $path, $context);
+        return $this->invokeWithPlatform($module, $nextPath, $path, $context);
     }
 
     /**
-     * @param $module
-     * @param $path
+     * @param string $module
+     * @param string $path 不包含模块路径
+     * @param string $fullPath 包含模块路径
      * @param HttpContext $context
      * @return RestResponse|mixed
      * @throws \Exception
      */
-    protected function invokeWithPlatform($module, $path, HttpContext $context) {
+    protected function invokeWithPlatform(string $module, string $path, string $fullPath, HttpContext $context) {
         app()->scoped('auth', JWTAuth::class);
         app()->scoped(JsonResponse::class, Rest::class);
         try {
             $platform = Platform::createAuto();
-            if (!$platform->verifyRule($module, $path)) {
+            if (!$platform->verifyRule($module, $fullPath)) {
                 throw new \Exception(__('The URL you requested was disabled'));
             }
             if (!$platform->verifyRest()) {
@@ -77,6 +78,13 @@ class Module extends BaseModule {
             }
             return $data;
         } catch (\Exception $ex) {
+            logger($ex);
+            $context['response']->statusCode(404);
+            return RestResponse::createWithAuto([
+                'code' => 404,
+                'message' => $ex->getMessage()
+            ]);
+        } catch (\TypeError $ex) {
             logger($ex);
             $context['response']->statusCode(404);
             return RestResponse::createWithAuto([

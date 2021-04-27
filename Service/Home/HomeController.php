@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Service\Home;
 
-
 use Module\SEO\Domain\Repositories\AgreementRepository;
 
 class HomeController extends Controller {
@@ -24,6 +23,9 @@ class HomeController extends Controller {
     }
 
     public function notFoundAction() {
+        if (request()->wantsJson()) {
+            return $this->renderFailure('page not found');
+        }
         view()->setDirectory(app_path()
             ->directory('UserInterface/Home'));
         response()->statusCode(404);

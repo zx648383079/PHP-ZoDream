@@ -12,9 +12,14 @@ class BulletinController extends Controller {
         ];
     }
 
-    public function indexAction(string $keywords = '', $status = 0) {
-        $model_list = BulletinRepository::getList($keywords, $status);
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '', int $status = 0, int $user = 0) {
+        return $this->renderPage(BulletinRepository::getList($keywords, $status, $user));
+    }
+
+    public function userAction() {
+        return $this->renderData(
+            BulletinRepository::userList()
+        );
     }
 
     public function infoAction(int $id) {
@@ -26,7 +31,7 @@ class BulletinController extends Controller {
         return $this->render($model);
     }
 
-    public function readAction($id) {
+    public function readAction(int $id) {
         try {
             BulletinRepository::read($id);
         } catch (\Exception $ex) {
@@ -43,6 +48,15 @@ class BulletinController extends Controller {
     public function deleteAction(int $id) {
         try {
             BulletinRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function deleteUserAction(int $id) {
+        try {
+            BulletinRepository::removeUser($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
