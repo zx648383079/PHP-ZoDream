@@ -56,13 +56,13 @@ class BulletinRepository {
         $bulletinId = BulletinUserModel::where('user_id', auth()->id())
             ->pluck('bulletin_id');
         if (empty($bulletinId)) {
-            return $systemUser;
+            return [$systemUser];
         }
         $userId = BulletinModel::whereIn('id', $bulletinId)
             ->where('user_id', '>', 0)
             ->selectRaw('DISTINCT user_id')->pluck('user_id');
         if (empty($userId)) {
-            return $systemUser;
+            return [$systemUser];
         }
         $users = UserSimpleModel::whereIn('id', $userId)->get();
         array_unshift($users, $systemUser);
