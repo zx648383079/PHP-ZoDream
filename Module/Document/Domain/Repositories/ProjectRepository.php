@@ -190,7 +190,7 @@ class ProjectRepository {
             ->get('id', 'name');
     }
 
-    public static function versionAll($id) {
+    public static function versionAll(int $id) {
         $items = ProjectVersionModel::where('project_id', $id)
             ->orderBy('id', 'asc')
             ->get();

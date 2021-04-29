@@ -199,7 +199,7 @@ class ApiRepository {
     public static function canOpen(int $id): bool {
         $project_id = ApiModel::where('id', $id)
             ->value('project_id');
-        return $project_id > 0 && ProjectRepository::canOpen($project_id);
+        return $project_id > 0 && ProjectRepository::canOpen(intval($project_id));
     }
 
     public static function getRead(int|ApiModel $id): array {

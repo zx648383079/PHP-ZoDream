@@ -262,7 +262,11 @@ class Platform {
     }
 
     public static function createAuto(string $key = 'appid') {
-        return static::create(request()->get($key));
+        $appId = request()->get($key);
+        if (empty($appId)) {
+            throw new \Exception(__('APP ID error'));
+        }
+        return static::create($appId);
     }
 
     public static function createId(string|int $id) {

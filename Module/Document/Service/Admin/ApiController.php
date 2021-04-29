@@ -1,15 +1,13 @@
 <?php
 namespace Module\Document\Service\Admin;
 
+use Domain\Model\ModelHelper;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
-use Module\Document\Domain\Model\ProjectModel;
 use Module\Document\Domain\Repositories\ApiRepository;
 use Module\Document\Domain\Repositories\MockRepository;
 use Module\Document\Domain\Repositories\ProjectRepository;
 use Zodream\Html\Tree;
-use Zodream\Http\Http;
-use Zodream\Http\Uri;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 
@@ -103,10 +101,12 @@ class ApiController extends Controller {
         return $this->renderData($response_json);
     }
 
-    public function debugResultAction(Input $input) {
+    public function debugResultAction(string $url, string $method, array $request = [], array $header = []) {
         $this->layout = false;
+        $request = ModelHelper::formArr($request);
+        $header = ModelHelper::formArr($header);
         return $this->show(
-            MockRepository::request($input)
+            MockRepository::request(compact('url', 'request', 'header', 'method'))
         );
     }
 

@@ -53,9 +53,21 @@ class ApiController extends Controller {
     }
 
     public function debugResultAction(Input $input) {
-        return $this->show(
-            MockRepository::request($input)
-        );
+        try {
+            $data = $input->validate([
+                'url' => 'required|string',
+                'method' => 'required|string',
+                'type' => '',
+                'raw_type' => '',
+                'header' => '',
+                'body' => '',
+            ]);
+            return $this->renderData(
+                MockRepository::request($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function parseAction(string $content, int $kind = 1) {

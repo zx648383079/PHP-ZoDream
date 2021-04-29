@@ -16,39 +16,65 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class MockRepository {
 
-    public static function request(Input $input) {
-        $url = new Uri($input->get('url'));
-        $method = $input->get('method');
-        $data = $input->get('request');
-        $realData = [];
-        if (!empty($data) && isset($data['key'])) {
-            foreach ($data['key'] as $i => $item) {
-                $realData[$item] = $data['value'][$i];
+    public static function request(array $input) {
+        $url = new Uri($input['url']);
+        if (empty($url->getHost())) {
+            throw new Exception('请输入完整网址');
+        }
+        $method = $input['method'] ?? 'GET';
+        $data = $input['request'] ?? [];
+        $header = $input['header'] ?? [];
+        $body = '';
+        if (isset($input['body'])) {
+            if ($input['type'] === 'form-data' || $input['type'] === 'x-www-form-urlencoded') {
+                $data = $input['body'];
+            } elseif ($input['type'] === 'raw') {
+                $maps = [
+                    'Text' => 'text/plain;charset=utf-8',
+                    'JavaScript' => 'application/x-javascript;charset=utf-8',
+                    'JSON' => 'application/json;charset=utf-8',
+                    'HTML' => 'text/html;charset=utf-8',
+                    'XML' => 'text/xml;charset=utf-8'
+                ];
+                $header['Content-Type'] = $maps[$input['raw_type']];
+                $body = $input['body'];
             }
         }
-        $header = $input->get('header');
+        $params = array_column($data, 'value', 'key');
         $headers = [
             'request' => [],
             'response' => []
         ];
         $realHeader = [];
         if (!empty($header) && isset($header['key'])) {
-            foreach ($header['key'] as $i => $item) {
-                $headers['request'][] = sprintf('%s: %s', $item, $header['value'][$i]);
-                $realHeader[$item] = $header['value'][$i];
+            foreach ($header as $item) {
+                $headers['request'][] = sprintf('%s: %s', $item['key'], $item['value']);
+                $realHeader[$item['key']] = $item['value'];
             }
         }
-        if ($method != 'POST') {
-            $url->setData($realData);
+        if ($method !== 'POST') {
+            $url->setData($params);
+            $params = [];
         }
         $http = new Http($url);
-        $body = $http->header($realHeader)
-            ->maps($realData)->method($method)->setHeaderOption(true)
+        if ($method === 'POST') {
+            if (!empty($params)) {
+                $http->maps($params);
+            } elseif (!empty($body)) {
+                $http->parameters($body);
+            }
+        }
+        $body = $http->header($realHeader)->method($method)
+            ->setHeaderOption(true)
             ->setOption(CURLOPT_RETURNTRANSFER, 1)
             ->setOption(CURLOPT_FOLLOWLOCATION, 1)
-            ->setOption(CURLOPT_AUTOREFERER, 1)->getResponseText();
+            ->setOption(CURLOPT_AUTOREFERER, 1)
+            ->getResponseText();
+        if (is_null($body)) {
+            $body = '';
+        }
         $info = $http->getResponseHeader();
-        $headers['response'] = explode(PHP_EOL, substr($body, 0, $info['header_size']));
+        $headers['response'] = explode(PHP_EOL, trim(substr($body, 0, $info['header_size'])));
         $body = substr($body, $info['header_size']);
         return compact('body', 'headers', 'info');
     }
