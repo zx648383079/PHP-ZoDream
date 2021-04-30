@@ -27,7 +27,21 @@ class ApiController extends Controller {
 
     public function saveAction(Input $input) {
         try {
-            $model = ApiRepository::saveApi($input->get());
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,35',
+                'type' => 'int:0,10',
+                'method' => 'string:0,10',
+                'uri' => 'string:0,255',
+                'project_id' => 'required|int',
+                'description' => 'string:0,255',
+                'parent_id' => 'int',
+                'version_id' => 'int',
+                'request' => '',
+                'response' => '',
+                'header' => '',
+            ]);
+            $model = ApiRepository::saveApi($data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

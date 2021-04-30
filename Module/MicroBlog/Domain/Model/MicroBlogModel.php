@@ -20,6 +20,7 @@ use Module\MicroBlog\Domain\Repositories\LogRepository;
  * @property integer $comment_count
  * @property integer $collect_count
  * @property integer $forward_id
+ * @property integer $open_type
  * @property string $source
  * @property integer $created_at
  * @property integer $updated_at
@@ -39,6 +40,7 @@ class MicroBlogModel extends Model {
             'user_id' => 'int',
             'content' => 'required|string:0,140',
             'extra_rule' => '',
+            'open_type' => 'int:0,127',
             'recommend_count' => 'int',
             'forward_count' => 'int',
             'comment_count' => 'int',
