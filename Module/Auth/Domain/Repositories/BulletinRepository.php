@@ -26,7 +26,7 @@ class BulletinRepository {
      * @throws Exception
      */
     public static function getList(string $keywords = '', int $status = 0, int $user = 0) {
-        return BulletinUserModel::with('bulletin')
+        $page = BulletinUserModel::with('bulletin')
             ->when(!empty($keywords), function ($query) {
                 $ids = SearchModel::searchWhere(BulletinModel::query(), 'title')->pluck('id');
                 if (empty($ids)) {
@@ -48,6 +48,26 @@ class BulletinRepository {
             ->where('user_id', auth()->id())
             ->orderBy('status', 'asc')
             ->orderBy('bulletin_id', 'desc')->page();
+        $systemUser = static::SYSTEM_USER;
+        $systemUser['avatar'] = url()->asset($systemUser['avatar']);
+        $deleteUser = [
+            'name' => '[用户已删除]',
+            'icon' => '删',
+            'avatar' => $systemUser['avatar'],
+            'id' => -9
+        ];
+        foreach ($page as $item) {
+            if ($item->bulletin->user) {
+                continue;
+            }
+            if ($item->bulletin->user_id < 1) {
+                $item->bulletin->user = $systemUser;
+                continue;
+            }
+            $deleteUser['id'] = $item->bulletin->user_id;
+            $item->bulletin->user = $deleteUser;
+        }
+        return $page;
     }
 
     public static function userList() {
