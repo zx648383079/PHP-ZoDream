@@ -227,10 +227,13 @@ class Color {
 }
 
 function colorConverter(content: string): string {
+    const colorDisplay = $('.converter-box');
     if (content.length < 1) {
+        colorDisplay.removeAttr('style');
         return '';
     }
     const color = Color.from(content.trim().toLowerCase());
+    colorDisplay.css('background-color', color.toRGBA());
     return [
         'HEX: ' + color.toHex(),
         'RGB: ' + color.toRGB(),
