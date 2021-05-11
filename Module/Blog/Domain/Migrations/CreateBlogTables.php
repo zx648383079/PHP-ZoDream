@@ -58,6 +58,8 @@ class CreateBlogTables extends Migration {
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('content');
+            $table->string('extra_rule', 300)->default('')
+                ->comment('内容的一些附加规则');
             $table->string('name', 30)->default('');
             $table->string('email', 50)->default('');
             $table->string('url', 50)->default('');
@@ -69,12 +71,12 @@ class CreateBlogTables extends Migration {
             $table->string('agent')->default('');
             $table->uint('agree_count')->default(0);
             $table->uint('disagree_count')->default(0);
-            $table->bool('approved')->default(2);
+            $table->uint('approved', 1)->default(2);
             $table->timestamp('created_at');
         })->append(BlogLogModel::tableName(), function(Table $table) {
             $table->id();
-            $table->uint('type', 1)->default(0);
-            $table->uint('id_value');
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_id');
             $table->uint('user_id');
             $table->uint('action');
             $table->timestamp('created_at');

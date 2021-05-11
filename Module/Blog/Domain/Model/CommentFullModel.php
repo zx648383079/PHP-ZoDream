@@ -12,8 +12,7 @@ namespace Module\Blog\Domain\Model;
  * @property integer $created_at 评论时间
  * @property integer $approved 评论是否被批准
  * @property integer $agent 评论者的USER AGENT
- * @property integer $type 评论类型(pingback/普通)
- * @property integer $karma
+ * @property string $extra_rule
  * @property integer $parent_id
  * @property integer $user_id
  * @property integer $blog_id

@@ -1,11 +1,9 @@
 <?php
 namespace Module\Blog\Domain\Model;
 
-use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Blog\Domain\Entities\BlogEntity;
 use Module\Blog\Domain\Repositories\BlogRepository;
-use Zodream\Helpers\Time;
 
 
 /**
@@ -90,8 +88,8 @@ class BlogModel extends BlogEntity {
             }
             return BlogLogModel::where([
                 'user_id' => auth()->id(),
-                'type' => BlogLogModel::TYPE_BLOG,
-                'id_value' => $this->id,
+                'item_type' => BlogLogModel::TYPE_BLOG,
+                'item_id' => $this->id,
                 'action' => BlogLogModel::ACTION_REAL_RULE
             ])->count() > 1;
         }
@@ -101,8 +99,8 @@ class BlogModel extends BlogEntity {
             }
             return BlogLogModel::where([
                     'user_id' => auth()->id(),
-                    'type' => BlogLogModel::TYPE_BLOG,
-                    'id_value' => $this->id,
+                    'item_type' => BlogLogModel::TYPE_BLOG,
+                    'item_id' => $this->id,
                     'action' => BlogLogModel::ACTION_REAL_RULE
                 ])->count() > 0;
         }
@@ -148,8 +146,8 @@ class BlogModel extends BlogEntity {
     public static function canRecommend($id) {
         return BlogLogModel::where([
                 'user_id' => auth()->id(),
-                'type' => BlogLogModel::TYPE_BLOG,
-                'id_value' => $id,
+                'item_type' => BlogLogModel::TYPE_BLOG,
+                'item_id' => $id,
                 'action' => BlogLogModel::ACTION_RECOMMEND
             ])->count() < 1;
     }
@@ -165,9 +163,9 @@ class BlogModel extends BlogEntity {
             return false;
         }
         return !!BlogLogModel::create([
-            'type' => BlogLogModel::TYPE_BLOG,
+            'item_type' => BlogLogModel::TYPE_BLOG,
             'action' => BlogLogModel::ACTION_RECOMMEND,
-            'id_value' => $this->id,
+            'item_id' => $this->id,
             'user_id' => auth()->id()
         ]);
     }

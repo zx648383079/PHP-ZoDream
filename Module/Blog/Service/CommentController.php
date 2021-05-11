@@ -64,7 +64,6 @@ class CommentController extends ModuleController {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
-        $id = intval($id);
         if (!CommentModel::canAgree($id)) {
             return $this->renderFailure('一个用户只能操作一次！');
         }

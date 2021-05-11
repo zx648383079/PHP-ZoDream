@@ -114,7 +114,7 @@ class CheckInModel extends Model {
             'user_id' => $user_id,
             'type' => 0,
             'method' => $method,
-            'ip' => app('request')->ip(),
+            'ip' => request()->ip(),
             'running' => $running,
             'money' => static::getCheckInMoney($running),
             'created_at' => time()

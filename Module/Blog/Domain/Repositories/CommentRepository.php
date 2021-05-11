@@ -25,8 +25,8 @@ class CommentRepository {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
         return CommentPageModel::with('replies')
             ->where([
-                'blog_id' => intval($blog_id),
-                'parent_id' => intval($parent_id)
+                'blog_id' => $blog_id,
+                'parent_id' => $parent_id
             ])->when($is_hot, function ($query) {
                 $query->where('agree_count', '>', 0)->orderBy('agree_count desc');
             })->orderBy($sort, $order)
@@ -44,19 +44,16 @@ class CommentRepository {
         $data['parent_id'] = intval($data['parent_id']);
         $last = CommentModel::where('blog_id', $data['blog_id'])->where('parent_id', $data['parent_id'])->orderBy('position desc')->one();
         $data['position'] = empty($last) ? 1 : ($last->position + 1);
-        $comment = CommentModel::create($data);
-        if (empty($comment)) {
-            throw new Exception('评论失败！');
-        }
+        $comment = CommentModel::createOrThrow($data);
         BlogModel::where('id', $data['blog_id'])->updateIncrement('comment_count');
         return $comment;
     }
 
     public static function getHot(int $blog_id, int $limit = 4) {
         return CommentModel::where([
-            'blog_id' => intval($blog_id),
+            'blog_id' => $blog_id,
             'parent_id' => 0,
-        ])->where('agree_count', '>', 0)->orderBy('agree_count desc')->limit($limit)->all();
+        ])->where('agree_count', '>', 0)->orderBy('agree_count desc')->limit($limit)->get();
     }
 
     /**

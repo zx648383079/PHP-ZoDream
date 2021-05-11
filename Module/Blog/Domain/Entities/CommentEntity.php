@@ -1,8 +1,8 @@
 <?php
 namespace Module\Blog\Domain\Entities;
 
+use Domain\Concerns\ExtraRule;
 use Domain\Entities\Entity;
-
 
 /**
  * Class CommentModel
@@ -14,17 +14,18 @@ use Domain\Entities\Entity;
  * @property string $ip 评论者IP
  * @property integer $created_at 评论时间
  * @property integer $approved 评论是否被批准
- * @property integer $agent 评论者的USER AGENT
- * @property integer $type 评论类型(pingback/普通)
- * @property integer $karma
+ * @property string $agent 评论者的USER AGENT
+ * @property string $extra_rule
  * @property integer $parent_id
+ * @property integer $position
  * @property integer $user_id
  * @property integer $blog_id
  * @property integer $agree_count
  * @property integer $disagree_count
- * @property integer $position
  */
 class CommentEntity extends Entity {
+
+    use ExtraRule;
 
 	public static function tableName() {
         return 'blog_comment';
@@ -32,22 +33,21 @@ class CommentEntity extends Entity {
 
     public function rules() {
         return [
-            'content' => 'required',
-            'name' => 'string:0,45',
-            'email' => 'string:0,100',
-            'url' => 'string:0,200',
-            'ip' => 'string:0,20',
-            'created_at' => 'int',
-            'karma' => 'int',
-            'approved' => 'string:0,20',
-            'agent' => 'string:0,255',
-            'type' => 'string:0,20',
+            'content' => 'required|string:0,255',
+            'extra_rule' => 'string:0,255',
+            'name' => 'string:0,30',
+            'email' => 'string:0,50',
+            'url' => 'string:0,50',
             'parent_id' => 'int',
+            'position' => 'int',
             'user_id' => 'int',
-            'blog_id' => 'int',
+            'blog_id' => 'required|int',
+            'ip' => 'string:0,120',
+            'agent' => 'string:0,255',
             'agree_count' => 'int',
             'disagree_count' => 'int',
-            'position' => 'int',
+            'approved' => 'int:0,127',
+            'created_at' => 'int',
         ];
     }
 
