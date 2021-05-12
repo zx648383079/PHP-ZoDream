@@ -22,7 +22,7 @@ use Zodream\Template\View;
                 <i class="fa fa-music"></i>
             </div>
             <select>
-                <option value="">公开</option>
+                <option value="0">公开</option>
             </select>
             <button class="btn">发布</button>
         </div>

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\OnlineService\Domain\Models;
 
 
+use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
@@ -15,11 +16,14 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $send_type
  * @property integer $type
  * @property string $content
+ * @property string $extra_rule
  * @property integer $status
  * @property integer $updated_at
  * @property integer $created_at
  */
 class MessageModel extends Model {
+
+    use ExtraRule;
     const TYPE_TEXT = 0;
     const TYPE_EMOJI = 1;
     const TYPE_IMAGE = 2;
@@ -35,6 +39,7 @@ class MessageModel extends Model {
             'send_type' => 'int:0,2',
             'type' => 'int:0,127',
             'content' => 'string:0,255',
+            'extra_rule' => 'string:0,255',
             'status' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',

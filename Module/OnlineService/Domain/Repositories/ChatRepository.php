@@ -2,16 +2,21 @@
 declare(strict_types=1);
 namespace Module\OnlineService\Domain\Repositories;
 
+use Infrastructure\LinkRule;
 use Module\OnlineService\Domain\Models\CategoryWordModel;
 use Module\OnlineService\Domain\Models\MessageModel;
 use Module\OnlineService\Domain\Models\SessionLogModel;
 use Module\OnlineService\Domain\Models\SessionModel;
+use Module\SEO\Domain\Repositories\EmojiRepository;
 
 class ChatRepository {
 
-    public static function getList(int $sessionId, int $startTime) {
+    public static function getList(int $sessionId, int $startTime, int $lastId = 0) {
         if (empty($startTime)) {
             $data = MessageModel::with('user')->where('session_id', $sessionId)
+                ->when($lastId > 0, function ($query) use ($lastId) {
+                    $query->where('id', '<', $lastId);
+                })
                 ->orderBy('created_at', 'desc')->limit(10)->get();
             $data = array_reverse($data);
         } else {
@@ -90,12 +95,20 @@ class ChatRepository {
         if (empty($content)) {
             return false;
         }
+        $extra_rule = [];
+        if ($type === 1) {
+            $extra_rule[] = LinkRule::formatImage('[图片]', $content);
+            $content = '[图片]';
+        } else {
+            $extra_rule = EmojiRepository::renderRule($content);
+        }
         return MessageModel::create([
             'user_id' => $userId < 0 ? auth()->id() : $userId,
             'session_id' => $sessionId,
             'send_type' => $sendType,
             'type' => $type,
             'content' => $content,
+            'extra_rule' => $extra_rule
         ]);
     }
 

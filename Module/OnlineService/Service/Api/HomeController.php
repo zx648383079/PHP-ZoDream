@@ -9,10 +9,10 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class HomeController extends Controller {
 
-    public function indexAction(string $session_token, int $start_time = 0) {
+    public function indexAction(string $session_token, int $start_time = 0, int $last_id = 0) {
         $sessionId = ChatRepository::sessionId($session_token);
         return $this->render(
-            $this->messageList($sessionId, $start_time)
+            $this->messageList($sessionId, $start_time, $last_id)
         );
     }
 
@@ -39,8 +39,8 @@ class HomeController extends Controller {
         }
     }
 
-    protected function messageList(int $sessionId, int $startTime = 0) {
-        $data = ChatRepository::getList($sessionId, $startTime);
+    protected function messageList(int $sessionId, int $startTime = 0, int $lastId = 0) {
+        $data = ChatRepository::getList($sessionId, $startTime, $lastId);
         $session_token = ChatRepository::encodeSession($sessionId);
         $next_time = time() + 1;
         return compact('data', 'session_token', 'next_time');

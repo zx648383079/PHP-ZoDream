@@ -52,6 +52,8 @@ class CreateOnlineServiceTables extends Migration {
             $table->bool('send_type')->default(0)->comment('发送者的身份，0咨询者1客服');
             $table->uint('type', 2)->default(0)->comment('内容类型');
             $table->string('content')->default('');
+            $table->string('extra_rule', 400)
+                ->default('')->comment('附加替换规则');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
         })->autoUp();

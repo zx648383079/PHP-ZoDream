@@ -12,8 +12,8 @@ class BulletinController extends Controller {
         ];
     }
 
-    public function indexAction(string $keywords = '', int $status = 0, int $user = 0) {
-        return $this->renderPage(BulletinRepository::getList($keywords, $status, $user));
+    public function indexAction(string $keywords = '', int $status = 0, int $user = 0, int $last_id = 0) {
+        return $this->renderPage(BulletinRepository::getList($keywords, $status, $user, $last_id));
     }
 
     public function userAction() {

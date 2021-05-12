@@ -25,7 +25,7 @@ class BulletinRepository {
      * @return mixed
      * @throws Exception
      */
-    public static function getList(string $keywords = '', int $status = 0, int $user = 0) {
+    public static function getList(string $keywords = '', int $status = 0, int $user = 0, int $lastId = 0) {
         $page = BulletinUserModel::with('bulletin')
             ->when(!empty($keywords), function ($query) {
                 $ids = SearchModel::searchWhere(BulletinModel::query(), 'title')->pluck('id');
@@ -44,6 +44,9 @@ class BulletinRepository {
                     return $query->isEmpty();
                 }
                 $query->whereIn('bulletin_id', $bulletinId);
+            })
+            ->when($lastId > 0, function ($query) use ($lastId) {
+                $query->where('id', '<', $lastId);
             })
             ->where('user_id', auth()->id())
             ->orderBy('status', 'asc')

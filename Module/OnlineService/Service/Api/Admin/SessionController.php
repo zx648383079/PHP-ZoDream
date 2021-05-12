@@ -52,12 +52,12 @@ class SessionController extends Controller {
         }
     }
 
-    public function messageAction(int $session_id, int $start_time = 0) {
+    public function messageAction(int $session_id, int $start_time = 0, int $last_id = 0) {
         if (!SessionRepository::hasRole($session_id)) {
             return $this->renderFailure('此会话不属于你，无法查看');
         }
         return $this->render(
-            $this->messageList($session_id, $start_time)
+            $this->messageList($session_id, $start_time, $last_id)
         );
     }
 
@@ -86,8 +86,8 @@ class SessionController extends Controller {
         }
     }
 
-    protected function messageList(int $sessionId, int $startTime = 0) {
-        $data = ChatRepository::getList($sessionId, $startTime);
+    protected function messageList(int $sessionId, int $startTime = 0, int $lastId = 0) {
+        $data = ChatRepository::getList($sessionId, $startTime, $lastId);
         $next_time = time() + 1;
         return compact('data', 'next_time');
     }
