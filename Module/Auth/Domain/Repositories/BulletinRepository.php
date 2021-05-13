@@ -4,11 +4,18 @@ namespace Module\Auth\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception;
+use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\SEO\Domain\Repositories\EmojiRepository;
 
 class BulletinRepository {
+
+    const TYPE_AT = 7;
+    const TYPE_COMMENT = 8;
+    const TYPE_AGREE = 6;
+    const TYPE_OTHER = 99;
 
     const SYSTEM_USER = [
         'name' => '[系统通知]',
@@ -92,6 +99,23 @@ class BulletinRepository {
         return $users;
     }
 
+    public static function create(array $data) {
+        if ($data['user'] < 1) {
+            throw new Exception('操作错误');
+        }
+        return static::message(intval($data['user']),
+            $data['title'] ?? '消息', $data['content'], static::TYPE_OTHER, EmojiRepository::renderRule($data['content']));
+    }
+
+    public static function doAction(int $id, array|string $action) {
+        if ($id < 0) {
+            throw new Exception('操作错误');
+        }
+        foreach ((array)$action as $key => $val) {
+            // 做一些屏蔽用户的操作
+        }
+    }
+
     /**
      * 取一条消息
      * @param int $id
@@ -163,6 +187,17 @@ class BulletinRepository {
         }
         BulletinUserModel::where('user_id', auth()->id())
             ->whereIn('bulletin_id', $bulletinId)->delete();
+    }
+
+    public static function sendAt(array|int $user, string $title, string $link) {
+        return static::sendLink($user, $title, $link, static::TYPE_AT);
+    }
+
+    public static function sendLink(array|int $user, string $title, string $link, int $type = self::TYPE_AT) {
+        $tag = '[查看]';
+        return static::message($user, $title, $tag, $type, [
+            LinkRule::formatLink($tag, $link)
+        ]);
     }
 
     /**

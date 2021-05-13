@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Repositories\BulletinRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class BulletinController extends Controller {
 
@@ -34,6 +35,29 @@ class BulletinController extends Controller {
     public function readAction(int $id) {
         try {
             BulletinRepository::read($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function sendAction(Input $input) {
+        try {
+            $model = BulletinRepository::create($input->validate([
+                'user' => 'required|int',
+                'title' => 'string',
+                'content' => 'required|string',
+                'type' => 'int',
+            ]));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
+    public function actionAction(int $id, array|string $action) {
+        try {
+            BulletinRepository::doAction($id, $action);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

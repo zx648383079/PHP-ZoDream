@@ -419,10 +419,7 @@ class MicroRepository {
             return $rules;
         }
         if ($itemType < 1) {
-            BulletinRepository::message($userIds,
-                '我在微博提到了你', '[查看]', 88, [
-                    LinkRule::formatLink('[查看]', 'micro/'.$itemId)
-                ]);
+            BulletinRepository::sendAt($userIds, '我在微博提到了你', 'micro/'.$itemId);
         }
         return $rules;
     }
