@@ -86,8 +86,8 @@ class CreateTemplateTables extends Migration {
             $table->uint('site_id');
             $table->uint('theme_weight_id');
             $table->uint('parent_id');
-            $table->uint('position', 5);
-            $table->string('title', 200);
+            $table->uint('position', 5)->default(99);
+            $table->string('title', 200)->default('');
             $table->text('content')->nullable();
             $table->text('settings')->nullable();
             $table->uint('theme_style_id')->default(0);

@@ -4,8 +4,8 @@ namespace Module\Template\Service\Admin;
 use Domain\Model\SearchModel;
 use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Module;
-use Zodream\Image\ImageStatic;
-use Zodream\Infrastructure\Http\Response;
+use Zodream\Image\Image;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class ThemeController extends Controller {
 
@@ -32,17 +32,18 @@ class ThemeController extends Controller {
         ]);
     }
 
-    public function assetAction(Response $response, $file, $folder = null) {
+    public function assetAction(Output $response, $file, $folder = null) {
         $dir = Module::templateFolder($folder);
         $file = $dir->isFile() ? $dir : $dir->file($file);
         if ($file->getExtension() === 'css' || $file->getExtension() === 'js') {
             return $response->custom($file->exist() ? $file->read() : '', $file->getExtension());
         }
-        $img = ImageStatic::make($file->exist() ?
+        $image = new Image();
+        $image->instance()->open($file->exist() ?
             $file : public_path('assets/images/thumb.jpg'));
-        if (!$img->getRealType()) {
-            $img = ImageStatic::make(public_path('assets/images/thumb.jpg'));
+        if (!$image->getRealType()) {
+           $image->instance()->open(public_path('assets/images/thumb.jpg'));
         }
-        return $response->image($img);
+        return $response->image($image);
     }
 }
