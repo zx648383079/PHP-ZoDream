@@ -10,12 +10,6 @@ use Module\WeChat\Module;
 
 class EmulateController extends Controller {
 
-    public function rules() {
-        return [
-            '*' => '*'
-        ];
-    }
-
     public function indexAction($id = 1) {
         $wx = WeChatSimpleModel::find(intval($id));
         if (empty($wx)) {

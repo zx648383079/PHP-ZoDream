@@ -73,7 +73,7 @@ class EditorInput {
         if (isset(self::$instanceItems[$type])) {
             return self::$instanceItems[$type];
         }
-        $name = isset(static::$type_class[$type]) ? static::$type_class[$type] : '';
+        $name = static::$type_class[$type] ?? '';
         if (empty($name) || !class_exists($name)) {
             throw new \Exception('editor input error');
         }

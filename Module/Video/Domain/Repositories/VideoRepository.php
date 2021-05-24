@@ -60,7 +60,7 @@ class VideoRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = $id > 0 ? VideoModel::findWithAuth($id) : new VideoModel();
         if (empty($model)) {

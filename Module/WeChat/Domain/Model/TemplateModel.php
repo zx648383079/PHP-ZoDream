@@ -52,7 +52,7 @@ class TemplateModel extends Model {
         $data = self::strToArr($data);
         return preg_replace_callback('/\{\s?\{([^\{]+)\.DATA\}\s?\}/', function ($match) use ($data) {
             $key = trim($match[1]);
-            return isset($data[$key]) ? $data[$key] : '';
+            return $data[$key] ?? '';
         }, $this->content);
     }
 
@@ -69,7 +69,7 @@ class TemplateModel extends Model {
             if (empty($arg[0])) {
                 continue;
             }
-            $args[$arg[0]] = isset($arg[1]) ? $arg[1] : '';
+            $args[$arg[0]] = $arg[1] ?? '';
         }
         return $args;
     }

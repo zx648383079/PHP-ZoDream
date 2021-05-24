@@ -1,5 +1,5 @@
 <?php
-namespace Module\WeChat\Service\Api;
+namespace Module\WeChat\Service\Api\Admin;
 
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\UserModel;

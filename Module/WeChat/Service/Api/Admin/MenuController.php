@@ -1,5 +1,5 @@
 <?php
-namespace Module\WeChat\Service\Api;
+namespace Module\WeChat\Service\Api\Admin;
 
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\MenuModel;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Domain\Repositories;
 
 use Module\WeChat\Domain\Model\FansModel;
