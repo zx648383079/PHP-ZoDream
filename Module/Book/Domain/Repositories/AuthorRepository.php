@@ -17,7 +17,7 @@ class AuthorRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = BookAuthorModel::findOrNew($id);
         $model->load($data);
@@ -38,5 +38,44 @@ class AuthorRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function profile(int $id) {
+        return static::appendProfile(static::get($id));
+    }
+
+    protected static function appendProfile(BookAuthorModel $model) {
+        $model->book_count = 0;
+        $model->word_count = 0;
+        $model->collect_count = 0;
+        return $model;
+    }
+
+    public static function profileByAuth() {
+        $model = BookAuthorModel::where('user_id', auth()->id())
+            ->first();
+        if (empty($model)) {
+            $user = auth()->user();
+            $model = new BookAuthorModel([
+                'name' => $user->name,
+                'avatar' => $user->avatar,
+            ]);
+        }
+        return static::appendProfile($model);
+    }
+
+    public static function authAuthor(): int {
+        $id = intval(BookAuthorModel::where('user_id', auth()->id())->value('id'));
+        if ($id > 0) {
+            return $id;
+        }
+        $user = auth()->user();
+        $model = static::save([
+            'name' => $user->name,
+            'avatar' => $user->avatar,
+            'description' => '',
+            'user_id' => $user->id,
+        ]);
+        return intval($model->id);
     }
 }

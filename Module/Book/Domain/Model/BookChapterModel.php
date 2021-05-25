@@ -20,13 +20,14 @@ use Module\Book\Domain\Entities\ChapterEntity;
  * @property boolean $is_vip vip章节
  * @property float $price 章节价格
  * @property integer $book_id
+ * @property integer $type
  * @property integer $parent_id
  * @property integer $status
- * @property string $source
+ * @property integer $position
  * @property integer $size
  * @property integer $deleted_at
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
  */
 class BookChapterModel extends ChapterEntity {
 

@@ -7,6 +7,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookPageModel;
+use Zodream\Html\Tree;
 
 class BookRepository {
 
@@ -42,6 +43,16 @@ class BookRepository {
             : $query->page($per_page);
     }
 
+    public static function getSelfList(string $keywords = '', int $category = 0) {
+        return BookPageModel::with('category', 'author')
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'name');
+            })->where('user_id', auth()->id())
+            ->orderBy('id', 'desc')->page();
+    }
+
     public static function detail($id) {
         $model = BookModel::find($id);
         if (empty($model)) {
@@ -50,6 +61,19 @@ class BookRepository {
         $model->category;
         $model->author;
         $model->on_shelf = HistoryRepository::hasBook($model->id);
+        return $model;
+    }
+
+    public static function getSelf(int $id) {
+        $model = BookModel::where('user_id', auth()->id())
+            ->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception('小说不存在');
+        }
+        $model->chapters = (new Tree(BookChapterModel::where('book_id', $model->id)
+            ->orderBy('parent_id', 'asc')
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')->get()))->makeTreeForHtml();
         return $model;
     }
 
@@ -66,6 +90,16 @@ class BookRepository {
             throw new \Exception($model->getFirstError());
         }
         return $model;
+    }
+
+    public static function saveSelf(array $data) {
+        if (isset($data['id']) && $data['id'] > 0 && BookModel::where('user_id', auth()->id())
+        ->where('id', $data['id'])->count() < 1) {
+            throw new \Exception('操作失败');
+        }
+        $data['user_id'] = auth()->id();
+        $data['author_id'] = AuthorRepository::authAuthor();
+        return static::save($data);
     }
 
     public static function remove(int $id) {
@@ -128,5 +162,20 @@ class BookRepository {
             BookChapterModel::whereIn('id', $ids)->delete();
             BookChapterBodyModel::whereIn('id', $ids)->delete();
         }
+    }
+
+    public static function isSelf(int $id): bool {
+        return BookModel::where('user_id', auth()->id())->where('id', $id)
+            ->count() > 0;
+    }
+
+    public static function overSelf(int $id) {
+        $model = BookModel::where('user_id', auth()->id())->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception('操作失败');
+        }
+        $model->over_at = time();
+        $model->save();
+        return $model;
     }
 }

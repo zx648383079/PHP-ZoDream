@@ -60,6 +60,7 @@ class CreateBookTables extends Migration {
             $table->comment('小说章节');
             $table->id();
             $table->uint('book_id');
+            $table->uint('type', 1)->default(0)->comment('章节类型，是分卷还是章节');
             $table->string('title', 200)->comment('标题');
             $table->uint('parent_id')->default(0);
             $table->uint('price')->default(0);

@@ -12,14 +12,14 @@ use Domain\Entities\Entity;
  * @property boolean $is_vip vip章节
  * @property float $price 章节价格
  * @property integer $book_id
+ * @property integer $type
  * @property integer $parent_id
  * @property integer $status
  * @property integer $position
- * @property string $source
  * @property integer $size
  * @property integer $deleted_at
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
  */
 class ChapterEntity extends Entity {
     public static function tableName() {
@@ -33,7 +33,8 @@ class ChapterEntity extends Entity {
             'parent_id' => 'int',
             'price' => 'int',
             'status' => 'int:0,127',
-            'position' => 'int:0,127',
+            'position' => 'int',
+            'type' => 'int:0,127',
             'size' => 'int',
             'source' => 'string:0,200',
             'deleted_at' => 'int',
