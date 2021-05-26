@@ -17,16 +17,16 @@ class Controller extends ModuleController {
         return url('./@admin/'.$path, $args);
     }
 
-    public function weChatId($id = null) {
-        static $wid;
-        if (!is_null($id)) {
+    public function weChatId(int $id = -1) {
+        static $wid = 0;
+        if ($id > 0) {
             session([
                 'wid' => $id
             ]);
             return $wid = $id;
         }
-        if (empty($wid)) {
-            $wid = session('wid');
+        if ($wid < 1) {
+            $wid = intval(session('wid'));
         }
         return $wid;
     }

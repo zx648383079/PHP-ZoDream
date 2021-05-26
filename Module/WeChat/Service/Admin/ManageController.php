@@ -2,6 +2,8 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Repositories\AccountRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 
 class ManageController extends Controller {
@@ -12,8 +14,8 @@ class ManageController extends Controller {
         ];
     }
 
-    public function indexAction() {
-        $model_list = WeChatModel::all();
+    public function indexAction(string $keywords = '') {
+        $model_list = AccountRepository::getList($keywords);
         $current_id = $this->weChatId();
         return $this->show(compact('model_list', 'current_id'));
     }
@@ -22,24 +24,24 @@ class ManageController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = WeChatModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
 
-    public function saveAction() {
-        $model = new WeChatModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->renderData([
-                'url' => $this->getUrl('manage')
-            ]);
+    public function saveAction(Input $input) {
+        try {
+            AccountRepository::save($input->get());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-
-        return $this->renderFailure($model->getFirstError());
+        return $this->renderData([
+            'url' => $this->getUrl('manage')
+        ]);
     }
 
-    public function deleteAction($id) {
-        WeChatModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        AccountRepository::remove($id);
         return $this->renderData([
             'refresh' => true
         ]);

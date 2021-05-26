@@ -1,27 +1,26 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
 use Module\WeChat\Domain\Model\MessageHistoryModel;
+use Module\WeChat\Domain\Repositories\LogRepository;
 
 class LogController extends Controller {
 
 
-    public function indexAction($mark = false) {
-        $log_list = MessageHistoryModel::where('wid', $this->weChatId())
-            ->when($mark !== false, function ($query) use ($mark) {
-                $query->where('mark', intval($mark));
-            })
-            ->page();
-        return $this->renderPage($log_list);
+    public function indexAction(bool $mark = false) {
+        return $this->renderPage(
+            LogRepository::getList($this->weChatId(), $mark)
+        );
     }
 
-    public function markAction($id) {
-        MessageHistoryModel::where('id', $id)->updateBool('mark');
+    public function markAction(int $id) {
+        LogRepository::mark($id);
         return $this->renderData(true);
     }
 
-    public function deleteAction($id) {
-        MessageHistoryModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        LogRepository::remove($id);
         return $this->renderData(true);
     }
 }

@@ -5,6 +5,8 @@ use Domain\Model\SearchModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Repositories\MediaRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\ThirdParty\WeChat\Media;
 
 class MediaController extends Controller {
@@ -15,13 +17,8 @@ class MediaController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null, $type = null) {
-        $model_list = MediaModel::where('wid', $this->weChatId())
-            ->when(!empty($type), function ($query) use ($type) {
-            $query->where('type', $type);
-        })->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'title');
-            })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb')->page();
+    public function indexAction(string $keywords = '', string $type = '') {
+        $model_list = MediaRepository::getList($keywords, $type);
         if (request()->isAjax() && !request()->isPjax()) {
             return $this->renderData($model_list);
         }
@@ -46,38 +43,35 @@ class MediaController extends Controller {
         return $this->show('edit', compact('model', 'model_list'));
     }
 
-    public function saveAction() {
-        $model = new MediaModel();
-        $model->wid = $this->weChatId();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->renderData([
-                'url' => $this->getUrl('media')
-            ]);
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->get();
+            $data['wid'] = $this->weChatId();
+            MediaRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
+        return $this->renderData([
+            'url' => $this->getUrl('media')
+        ]);
     }
 
-    public function deleteAction($id) {
-        $model = MediaModel::find($id);
-        if ($model->media_id && $model->material_type == MediaModel::MATERIAL_PERMANENT) {
-            WeChatModel::find($this->weChatId())
-                ->sdk(Media::class)->deleteMedia($model->media_id);
+    public function deleteAction(int $id) {
+        try {
+            MediaRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->delete();
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function asyncAction($id) {
-        $model = MediaModel::find($id);
-        if ($model->media_id &&
-            ($model->material_type == MediaModel::MATERIAL_PERMANENT || $model->expired_at > time())) {
-            return $this->renderFailure('不能重复创建');
-        }
-        if (!$model->async(WeChatModel::find($this->weChatId())
-            ->sdk(Media::class))) {
-            return $this->renderFailure('创建失败');
+    public function asyncAction(int $id) {
+        try {
+            MediaRepository::async($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
             'refresh' => true

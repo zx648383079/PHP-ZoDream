@@ -1,5 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\WeChat\Domain\Model\ReplyModel;
 use Zodream\Template\View;
 use Zodream\Html\Dark\Theme;
 use Zodream\Html\Dark\Form;
@@ -18,7 +20,7 @@ $this->title = '群发消息';
 <?=Form::open('./@admin/reply/send_all')?>
     <?=Theme::select('user_id', [$user_list, [0 => '发送全部']], $user_id, '接收方')?>
     <?php $this->extend('../layouts/editor', [
-        'tab_id' => [0, 1, 2, 3]
+            'model' => new ReplyModel(),
     ]); ?>
     <button type="submit" class="btn btn-success">确认发送</button>
     <a class="btn btn-danger" href="javascript:history.go(-1);">取消发送</a>

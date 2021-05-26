@@ -1,43 +1,36 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\MenuModel;
-use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Repositories\MenuRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\ThirdParty\WeChat\Menu;
-use Zodream\ThirdParty\WeChat\MenuItem;
 
 class MenuController extends Controller {
 
 
     public function indexAction() {
-        $menu_list = MenuModel::with('children')->where('parent_id', 0)->all();
-        return $this->renderData($menu_list);
+        return $this->renderData(
+            MenuRepository::getList($this->weChatId())
+        );
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = MenuModel::find($id);
         return $this->render($model);
     }
 
     public function saveAction(Request $request) {
-        $model = new MenuModel();
-        $model->wid = $this->weChatId();
         try {
-            $model->load();
-            EditorInput::save($model, $request);
-            if (!$model->autoIsNew()->save()) {
-                return $this->renderFailure($model->getFirstError());
-            }
+            $model = MenuRepository::save($this->weChatId(), $request);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
-        MenuModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        MenuRepository::remove($id);
         return $this->renderData(true);
     }
 
@@ -46,13 +39,8 @@ class MenuController extends Controller {
      * @throws \Exception
      */
     public function applyAction() {
-        $menu_list = MenuModel::with('children')->where('wid', $this->weChatId())->all();
         try {
-            WeChatModel::find($this->weChatId())
-                ->sdk(Menu::class)
-                ->create(MenuItem::menu(array_map(function (MenuModel $menu) {
-                    return $menu->toMenu();
-                }, $menu_list)));
+            MenuRepository::async($this->weChatId());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

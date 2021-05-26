@@ -6,7 +6,7 @@ use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\UserModel;
 
 class WxRepository {
-    public static function saveUser(array $info, string $wid) {
+    public static function saveUser(array $info, string|int $wid) {
         $fans = FansModel::where('openid', $info['openid'])
             ->where('wid', $wid)->first();
         if (empty($fans)) {

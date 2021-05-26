@@ -109,7 +109,7 @@ $this->registerCssFile([
             ],
             [
                 '黑名单',
-                ['./@admin/user', 'backlist' => 1],
+                ['./@admin/user', 'blacklist' => 1],
                 'fa fa-bomb'
             ]
         ]

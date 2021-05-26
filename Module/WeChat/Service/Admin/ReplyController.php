@@ -2,16 +2,12 @@
 namespace Module\WeChat\Service\Admin;
 
 use Module\WeChat\Domain\EditorInput;
-use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\ReplyModel;
-use Module\WeChat\Domain\Model\TemplateModel;
-use Module\WeChat\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Repositories\FollowRepository;
+use Module\WeChat\Domain\Repositories\ReplyRepository;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\EventEnum;
-use Zodream\ThirdParty\WeChat\Mass;
-use Zodream\ThirdParty\WeChat\Template;
 
 class ReplyController extends Controller {
 
@@ -28,11 +24,8 @@ class ReplyController extends Controller {
         ];
     }
 
-    public function indexAction($event = null) {
-        $reply_list = ReplyModel::where('wid', $this->weChatId())
-            ->when(!empty($event), function ($query) use ($event) {
-            $query->where('event', $event);
-        })->orderBy('id', 'desc')->page();
+    public function indexAction(string $event = '') {
+        $reply_list = ReplyRepository::getList($this->weChatId(), $event);
         $event_list = $this->event_list;
         return $this->show(compact('reply_list', 'event_list'));
     }
@@ -54,102 +47,48 @@ class ReplyController extends Controller {
     }
 
     public function saveAction(Request $request) {
-        $model = new ReplyModel();
-        $model->wid = $this->weChatId();
-        $model->load();
-        if ($model->event != EventEnum::Message) {
-            $model->keywords = null;
-        }
         try {
-            EditorInput::save($model, $request);
-            if (!$model->autoIsNew()->save()) {
-                return $this->renderFailure($model->getFirstError());
-            }
+            ReplyRepository::save($this->weChatId(), $request);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        ReplyModel::cacheReply($model->wid, true);
         return $this->renderData([
             'url' => $this->getUrl('reply')
         ]);
     }
 
-    public function deleteAction($id) {
-        ReplyModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        ReplyRepository::remove($id);
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function allAction($user_id = 0) {
-        $user_list = FansModel::query()->alias('f')
-            ->where('f.status', FansModel::STATUS_SUBSCRIBED)
-            ->leftJoin(UserModel::tableName().' u', 'f.id', 'u.id')
-            ->whereNotNull('u.id')
-            ->get('f.id,u.nickname as name');
+    public function allAction(int $user_id = 0) {
+        $user_list = FollowRepository::searchFans($this->weChatId());
         return $this->show(compact('user_id', 'user_list'));
     }
 
-    public function sendAllAction($user_id = 0, $editor = []) {
-        if ($editor['type'] === 3) {
-            return $this->sendTemplate($user_id, $editor['template_id'], $editor['template_url'], $editor['template_data']);
+    public function sendAllAction(int $user_id = 0, array $editor = []) {
+        try {
+            ReplyRepository::send($this->weChatId(), $user_id, $editor);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $data = '';
-        $type = Mass::TEXT;
-        if ($editor['type'] < 1) {
-            $data = $editor['text'];
-        }
-        /** @var Mass $api */
-        $api = WeChatModel::find($this->weChatId())
-            ->sdk(Mass::class);
-        $openid = null;
-        if ($user_id > 0) {
-            $openid = UserModel::where('id', $user_id)->value('openid');
-        }
-        $res = empty($openid) ? $api->sendAll($data, $type) : $api->send([$openid], $data, $type);
         return $this->renderData('', '发送成功');
     }
 
-    private function sendTemplate($user_id, $template_id, $url, $data) {
-        if ($user_id < 1) {
-            return $this->renderFailure('模板消息只能发给单个用户');
-        }
-        $openid = UserModel::where('id', $user_id)->value('openid');
-        if (empty($openid)) {
-            return $this->renderFailure('用户未关注公众号');
-        }
-        /** @var Template $api */
-        $api = WeChatModel::find($this->weChatId())
-            ->sdk(Template::class);
-        $res = $api->send($openid, $template_id, url($url), TemplateModel::strToArr($data));
-        if ($res) {
-            return $this->renderData('', '发送成功');
-        }
-        return $this->renderFailure('发送失败');
-    }
 
     public function templateAction() {
-        $model_list = TemplateModel::where('wid', $this->weChatId())->page();
+        $model_list = ReplyRepository::templateList($this->weChatId());
         return $this->show(compact('model_list'));
     }
 
     public function refreshTemplateAction() {
-        /** @var Template $api */
-        $api = WeChatModel::find($this->weChatId())
-            ->sdk(Template::class);
-        $data = $api->allTemplate();
-        if (!isset($data['template_list'])) {
-            return $this->renderFailure('同步失败');
-        }
-        TemplateModel::where('wid', $this->weChatId())->delete();
-        foreach ($data['template_list'] as $item) {
-            TemplateModel::create([
-                'wid' => $this->weChatId(),
-                'template_id' => $item['template_id'],
-                'title' => $item['title'],
-                'content' => $item['content'],
-                'example' => $item['example'],
-            ]);
+        try {
+            ReplyRepository::asyncTemplate($this->weChatId());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
             'refresh' => true
@@ -157,19 +96,23 @@ class ReplyController extends Controller {
     }
 
     public function templateFieldAction($id) {
-        $model = TemplateModel::where('template_id', $id)->first();
-        if (empty($model)) {
-            return $this->renderFailure('模板不存在');
+        try {
+            return $this->renderData(
+                ReplyRepository::template($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($model->getFields());
     }
 
-    public function templatePreviewAction($id, $data) {
-        $model = TemplateModel::where('template_id', $id)->first();
-        if (empty($model)) {
-            return $this->renderFailure('模板不存在');
+    public function templatePreviewAction(string $id, array $data) {
+        try {
+            return $this->renderData(
+                ReplyRepository::templatePreview($id, $data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($model->preview($data));
     }
 
     /**
@@ -177,13 +120,12 @@ class ReplyController extends Controller {
      * @param $type
      * @param $action
      * @param Request $request
-     * @return \Zodream\Infrastructure\Http\Response
      * @throws \Exception
      */
     public function editorAction($type, $action, Request $request) {
         try {
             return EditorInput::invoke($type,
-                $this->getActionName(Str::studly($action)),
+                Str::studly($action).config('app.action'),
                 $request, $this);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

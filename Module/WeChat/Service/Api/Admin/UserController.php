@@ -1,42 +1,22 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-use Module\WeChat\Domain\Model\FansModel;
-use Module\WeChat\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\WeChatModel;
-use Module\WeChat\Domain\Repositories\WxRepository;
-use Zodream\ThirdParty\WeChat\User;
+use Module\WeChat\Domain\Repositories\FollowRepository;
 
 class UserController extends Controller {
 
-
-    public function indexAction($backlist = null) {
-        $model_list = FansModel::with('user')->where('wid', $this->weChatId())
-            ->when(!empty($backlist), function ($query) {
-                $query->where('is_black', 1);
-            })->page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '', bool $blacklist = false) {
+        return $this->renderPage(
+            FollowRepository::getList($this->weChatId(), $keywords, $blacklist)
+        );
     }
 
     public function refreshAction() {
-        $total = 0;
-        $next_openid = null;
-        /** @var User $api */
-        $api = WeChatModel::find($this->weChatId())
-            ->sdk(User::class);
-        while (true) {
-            $openid_list = $api->userList($next_openid);
-            if (empty($openid_list['data']['openid'])) {
-                break;
-            }
-            $data = $api->usersInfo($openid_list['data']['openid']);
-            foreach ($data['user_info_list'] as $item) {
-                WxRepository::saveUser($item, $this->weChatId());
-            }
-            if (empty($openid_list['next_openid'])) {
-                break;
-            }
-            $next_openid = $openid_list['next_openid'];
+        try {
+            FollowRepository::async($this->weChatId());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
     }
