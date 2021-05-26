@@ -40,6 +40,13 @@ class BookChapterModel extends ChapterEntity {
         return $this->hasOne(BookSimpleModel::class, 'id', 'book_id');
     }
 
+    public function getIsBoughtAttribute() {
+        if ($this->type > 0 || $this->price <= 0) {
+            return true;
+        }
+        return false;
+    }
+
     public function getUrlAttribute() {
         return url('./book/read', ['id' => $this->id]);
     }

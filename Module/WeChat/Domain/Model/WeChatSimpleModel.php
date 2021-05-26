@@ -29,10 +29,17 @@ use Module\WeChat\Domain\Entities\WeChatEntity;
 class WeChatSimpleModel extends WeChatEntity {
 
     const SIMPLE_MODE = [
+        'id',
+        'name',
         'account',
-        'aes_key',
-        'username',
-        'password',
+        'original',
+        'type',
+        'avatar',
+        'qrcode',
+        'address',
+        'description',
+        'created_at',
+        'updated_at',
     ];
 
     public static function query() {

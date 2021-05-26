@@ -89,4 +89,24 @@ class ChapterRepository {
         BookChapterBodyModel::where('id', $id)->delete();
         BookRepository::refreshSize($model->book_id);
     }
+
+    /**
+     * 批量设置是否已购买
+     * @param $items
+     * @return mixed
+     */
+    public static function applyIsBought($items) {
+        $idItems = [];
+        foreach ($items as $item) {
+            if ($item['type'] < 1 && $item['price'] > 0) {
+                $idItems[] = $item['id'];
+            }
+        }
+        // TODO 获取已购买的id
+        $boughtItems = [];
+        foreach ($items as $item) {
+            $item['is_bought'] = $item['type'] > 0 || $item['price'] <= 0 || in_array($item['id'], $boughtItems);
+        }
+        return $items;
+    }
 }

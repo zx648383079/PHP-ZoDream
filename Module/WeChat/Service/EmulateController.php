@@ -9,8 +9,8 @@ use Module\WeChat\Module;
 
 class EmulateController extends Controller {
 
-    public function indexAction($id = 1) {
-        $wx = WeChatModel::find(intval($id));
+    public function indexAction(int $id = 1) {
+        $wx = WeChatModel::find($id);
         if (empty($wx)) {
             return $this->redirect('./');
         }
