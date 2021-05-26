@@ -4,6 +4,7 @@ namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookAuthorModel;
+use Module\Book\Domain\Model\BookModel;
 
 class AuthorRepository {
     public static function getList(string $keywords = '') {
@@ -48,6 +49,14 @@ class AuthorRepository {
         $model->book_count = 0;
         $model->word_count = 0;
         $model->collect_count = 0;
+        if ($model->id > 0) {
+            $data = BookModel::query()->where('author_id', $model->id)
+                ->selectRaw('COUNT(id) as count, SUM(size) as size')
+                ->asArray()
+                ->first();
+            $model->book_count = intval($data['count']);
+            $model->word_count = intval($data['size']);
+        }
         return $model;
     }
 

@@ -30,7 +30,7 @@ class HistoryRepository {
         response()->cookie(BookHistoryModel::tableName(), serialize($history), 365 * 86400);
     }
 
-    public static function record($book, $chapter, $progress = 0) {
+    public static function record(int $book, int $chapter, float $progress = 0) {
         if (auth()->guest()) {
             return;
         }
@@ -50,7 +50,7 @@ class HistoryRepository {
         ]);
     }
 
-    public static function removeBook($id) {
+    public static function removeBook(int $id) {
         if (auth()->guest()) {
             return;
         }

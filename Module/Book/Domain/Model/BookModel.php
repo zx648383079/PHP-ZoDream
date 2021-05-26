@@ -27,6 +27,7 @@ use Zodream\Helpers\Time;
  * @property integer $classify
  * @property integer $cat_id
  * @property integer $size
+ * @property integer $status
  * @property string $source
  * @property integer $click_count
  * @property integer $recommend_count
@@ -35,15 +36,15 @@ use Zodream\Helpers\Time;
  * @property integer $created_at
  * @property integer $updated_at
  * @method static Query ofClassify()
+ * @method static Query isOpen()
  */
 class BookModel extends BookEntity {
 
-    protected array $append = ['category', 'author',
-        'chapter_count', 'first_chapter', 'last_chapter'];
+    protected array $append = ['status_label'];
 
     public $classify_list = [
         '无分级',
-        '成人级',
+        18 => '成人级',
     ];
 
     public function chapter() {
@@ -76,6 +77,10 @@ class BookModel extends BookEntity {
         }
     }
 
+    public function scopeIsOpen($query) {
+        $query->where('status', 1);
+    }
+
 
     public function getUrlAttribute() {
         return url('./book', ['id' => $this->id]);
@@ -97,7 +102,14 @@ class BookModel extends BookEntity {
         return BookChapterModel::where('book_id', $this->id)->orderBy('id', 'asc')->one();
     }
 
-    public function getStatusAttribute() {
+    public function getStatusLabelAttribute() {
+        $status = $this->getAttributeSource('status');
+        if ($status < 1) {
+            return '审核中';
+        }
+        if ($status == 9) {
+            return '已屏蔽';
+        }
         return $this->over_at > 0 ? '已完本' : '连载中';
     }
 

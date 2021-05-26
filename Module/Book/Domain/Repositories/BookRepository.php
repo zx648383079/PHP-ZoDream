@@ -5,6 +5,7 @@ use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
+use Module\Book\Domain\Model\BookFullModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookPageModel;
 use Zodream\Html\Tree;
@@ -13,13 +14,25 @@ class BookRepository {
 
     const DEFAULT_COVER = '/assets/images/book_default.jpg';
 
-    public static function getList($id = null,
-                                   $category = null,
-                                   $keywords = null,
-                                   $top = null,
-                                   $status = 0,
-                                   $author = 0,
-                                   $page = 1, $per_page = 20) {
+    /**
+     * 前台请求
+     * @param array $id
+     * @param int $category
+     * @param string $keywords
+     * @param bool $top
+     * @param int $status
+     * @param int $author
+     * @param int $page
+     * @param int $per_page
+     * @return \Zodream\Html\Page
+     */
+    public static function getList($id = [],
+                                   int $category = 0,
+                                   string $keywords = '',
+                                   bool $top = false,
+                                   int $status = 0,
+                                   int $author = 0,
+                                   int $page = 1, int $per_page = 20) {
         $query = BookPageModel::with('category', 'author')->ofClassify()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
@@ -28,19 +41,40 @@ class BookRepository {
                 $query->whereIn('id', $id);
             })
             ->when($author > 0, function ($query) use ($author) {
-                $query->where('author_id', intval($author));
+                $query->where('author_id', $author);
             })
+            ->where('status', 1)
             ->when($status == 1, function ($query) {
                 $query->where('over_at', 0);
             })->when($status == 2, function ($query) {
                 $query->where('over_at > 0');
             })
             ->when($category > 0, function ($query) use ($category) {
-                $query->where('cat_id', intval($category));
+                $query->where('cat_id', $category);
             });
         return !empty($top) ?
             BookClickLogModel::getPage($query, $top, $page, $per_page)
             : $query->page($per_page);
+    }
+
+    public static function getManageList(string $keywords = '',
+                                         int $category = 0,
+                                         int $author = 0,
+                                         int $classify = 0,
+                                         int $status = -1) {
+        return BookPageModel::with('category', 'author')
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'name');
+            })->when($author > 0, function ($query) use ($author) {
+                $query->where('author_id', $author);
+            })
+            ->where('classify', $classify)
+            ->when($status >= 0, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderBy('id', 'desc')->page();
     }
 
     public static function getSelfList(string $keywords = '', int $category = 0) {
@@ -53,14 +87,24 @@ class BookRepository {
             ->orderBy('id', 'desc')->page();
     }
 
-    public static function detail($id) {
-        $model = BookModel::find($id);
+    public static function detail(int $id) {
+        $model = BookFullModel::find($id);
         if (empty($model)) {
+            throw new \Exception('小说不存在');
+        }
+        if ($model->status != 1) {
             throw new \Exception('小说不存在');
         }
         $model->category;
         $model->author;
         $model->on_shelf = HistoryRepository::hasBook($model->id);
+        return $model;
+    }
+
+    public static function getManage(int $id) {
+        $model = BookModel::findOrThrow($id, '小说不存在');
+        $model->category;
+        $model->author;
         return $model;
     }
 
@@ -73,7 +117,7 @@ class BookRepository {
         $model->chapters = (new Tree(BookChapterModel::where('book_id', $model->id)
             ->orderBy('parent_id', 'asc')
             ->orderBy('position', 'asc')
-            ->orderBy('id', 'asc')->get()))->makeTreeForHtml();
+            ->orderBy('id', 'asc')->get()))->makeTree();
         return $model;
     }
 
@@ -111,13 +155,14 @@ class BookRepository {
         }
     }
 
-    public static function chapters($book) {
-        return BookChapterModel::where('book_id', $book)
+    public static function chapters(int $book) {
+        return (new Tree(BookChapterModel::where('book_id', $book)
+            ->orderBy('parent_id', 'asc')
             ->orderBy('position', 'asc')
-            ->orderBy('created_at', 'asc')->all();
+            ->orderBy('created_at', 'asc')->get()))->makeTree();
     }
 
-    public static function chapter($id, $book = 0) {
+    public static function chapter(int $id, int $book = 0) {
         $chapter = $id > 0 ?
             BookChapterModel::find($id) : BookChapterModel::where('book_id', $book)
                 ->orderBy('position', 'asc')
@@ -128,7 +173,7 @@ class BookRepository {
         }
         BookClickLogModel::logBook($chapter->book_id);
         $data = $chapter->toArray();
-        $data['content'] = $chapter->body->content;
+        $data['content'] = $chapter->type < 1 ? $chapter->body->content : '';
         $data['previous'] = $chapter->previous;
         $data['next'] = $chapter->next;
         return $data;
@@ -144,12 +189,16 @@ class BookRepository {
         foreach ($ids as $id) {
             //$ids = BookChapterModel::where('book_id', $id)->pluck('id');
             //$length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
-            $length = BookChapterModel::where('book_id', $id)->sum('size');
-            BookModel::where('id', $id)
-                ->update([
-                    'size' => $length
-                ]);
+            static::refreshSize($id);
         }
+    }
+
+    public static function refreshSize(int $book) {
+        $length = BookChapterModel::where('book_id', $book)->sum('size');
+        BookModel::where('id', $book)
+            ->update([
+                'size' => $length
+            ]);
     }
 
     protected static function deleteNoBookChapter(): void {
@@ -177,5 +226,24 @@ class BookRepository {
         $model->over_at = time();
         $model->save();
         return $model;
+    }
+
+    public static function checkOpen(int $id) {
+        $isOpen = BookModel::isOpen()->where('id', $id)->count() > 0;
+        if (!$isOpen) {
+            throw new \Exception('书籍不存在');
+        }
+        return true;
+    }
+
+    public static function getHot() {
+        return BookModel::isOpen()
+            ->limit(4)->pluck('name');
+    }
+
+    public static function suggestion(string $keywords = '') {
+        return BookModel::isOpen()->when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, 'name');
+        })->limit(4)->pluck('name');
     }
 }

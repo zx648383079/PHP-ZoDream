@@ -29,7 +29,7 @@ $this->registerJsFile('@book_mobile.min.js')
     </div>
 	<div class="container">
 		<div class="chapte-box">
-			<?=$chapter->body->html?>
+			<?=$chapter->type < 1 ? $chapter->body->html : ''?>
         </div>
         <?php if($like_book):?>
         <div class="tuijian">

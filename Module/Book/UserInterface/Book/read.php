@@ -28,7 +28,7 @@ $this->extend('layouts/header2');
         </div>
     </div>
     <div class="read-content">
-        <?=$chapter->body->html?>
+        <?=$chapter->type < 1 ? $chapter->body->html : ''?>
     </div>
   </div>
 

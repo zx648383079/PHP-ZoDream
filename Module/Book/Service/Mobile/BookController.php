@@ -13,8 +13,11 @@ use Module\Book\Service\Controller;
 
 class BookController extends Controller {
 
-    public function indexAction($id, $page = null) {
-        $book = BookModel::find($id);
+    public function indexAction(int $id, $page = null) {
+        $book = BookModel::isOpen()->where('id', $id)->first();
+        if (!$book) {
+            return $this->redirectWithMessage('./', '书籍不存在');
+        }
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
         }
@@ -22,7 +25,7 @@ class BookController extends Controller {
         $chapter_list = BookChapterModel::where('book_id', $id)
             ->orderBy('position', 'asc')
             ->orderBy('created_at', 'asc')->page();
-        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)
+        $like_book = BookModel::ofClassify()->isOpen()->where('cat_id', $book->cat_id)
             ->where('id', '<>', $id)->orderBy('click_count', 'desc')->limit(8)->all();
         if (is_null($page)) {
             $new_chapter = BookChapterModel::where('book_id', $id)->orderBy('created_at', 'desc')->limit(3)->all();

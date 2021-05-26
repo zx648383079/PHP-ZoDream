@@ -42,7 +42,7 @@ $this->extend('layouts/header');
             <li class="zdj"><span>周点击：</span><font id="cms_wclicks"><?=$book->week_click?></font></li>
             <li><span>总字数：</span><font id="cms_ready_1"><?=$book->size?></font></li>
             <li><span>创作日期：</span><font id="cms_favorites"><?=$book->created_at?></font></li>
-            <li class="wj"><span>状态：</span><?=$book->status?></li>
+            <li class="wj"><span>状态：</span><?=$book->status_label?></li>
           </ul>
           <div class="praisesBTN"><a href="javascript:;" title="推荐本书！"><font id="cms_praises"><?=$book->recommend_count?></font> 推荐本书！</a></div>
         </div>

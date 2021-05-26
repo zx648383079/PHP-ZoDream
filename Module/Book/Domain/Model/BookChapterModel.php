@@ -73,11 +73,21 @@ class BookChapterModel extends ChapterEntity {
         if (!$row) {
             return $row;
         }
+        if ($this->type > 0) {
+            return true;
+        }
         $model = new BookChapterBodyModel([
             'id' => $this->id,
             'content' => $this->content
         ]);
         $model->isNewRecord = $is_new;
-        return $row && $model->save();
+        if ($model->save()) {
+            return true;
+        }
+        if (!$is_new) {
+            return true;
+        }
+        $model->setError('content', $model->getFirstError());
+        return false;
     }
 }

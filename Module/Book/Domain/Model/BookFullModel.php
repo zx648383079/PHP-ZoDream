@@ -9,6 +9,7 @@ namespace Module\Book\Domain\Model;
  */
 use Domain\Model\Model;
 use Module\Book\Domain\Entities\BookEntity;
+use Module\Book\Domain\Repositories\BookRepository;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
 
@@ -26,7 +27,6 @@ use Zodream\Helpers\Time;
  * @property integer $classify
  * @property integer $cat_id
  * @property integer $size
- * @property integer $status
  * @property string $source
  * @property integer $click_count
  * @property integer $recommend_count
@@ -35,7 +35,9 @@ use Zodream\Helpers\Time;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class BookPageModel extends BookModel {
+class BookFullModel extends BookModel {
 
-    protected array $append = ['category', 'author', 'status_label'];
+    protected array $append = ['category', 'author',
+        'chapter_count', 'first_chapter', 'last_chapter', 'status_label'];
+
 }

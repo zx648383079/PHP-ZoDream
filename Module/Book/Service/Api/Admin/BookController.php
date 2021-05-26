@@ -8,16 +8,19 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class BookController extends Controller {
 
-    public function indexAction(string $keywords = '', int $category = 0, int $author = 0, int $classify = 0) {
+    public function indexAction(string $keywords = '',
+                                int $category = 0,
+                                int $author = 0,
+                                int $classify = 0) {
         return $this->renderPage(
-            BookRepository::getList($keywords)
+            BookRepository::getManageList($keywords, $category, $author, $classify)
         );
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                BookRepository::detail($id)
+                BookRepository::getManage($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -37,6 +40,7 @@ class BookController extends Controller {
                 'size' => 'int',
                 'over_at' => 'int',
                 'source' => 'string:0,200',
+                'status' => 'int',
             ]);
             return $this->render(
                 BookRepository::save($data)

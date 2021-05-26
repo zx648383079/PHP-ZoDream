@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service\Api;
 
 use Module\Book\Domain\Repositories\ListRepository;
@@ -14,12 +15,12 @@ class ListController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = '') {
+    public function indexAction(string $keywords = '') {
         $data = ListRepository::getList($keywords);
         return $this->renderPage($data);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         try {
             $model = ListRepository::detail($id);
         } catch (\Exception $ex) {
@@ -43,7 +44,7 @@ class ListController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             ListRepository::remove($id);
         } catch (\Exception $ex) {
@@ -52,7 +53,7 @@ class ListController extends Controller {
         return $this->renderData(true);
     }
 
-    public function collectAction($id) {
+    public function collectAction(int $id) {
         try {
             $model = ListRepository::collect($id);
         } catch (\Exception $ex) {
@@ -61,7 +62,7 @@ class ListController extends Controller {
         return $this->render($model);
     }
 
-    public function agreeAction($id) {
+    public function agreeAction(int $id) {
         try {
             $model = ListRepository::agree($id);
         } catch (\Exception $ex) {
@@ -70,7 +71,7 @@ class ListController extends Controller {
         return $this->render($model);
     }
 
-    public function disagreeAction($id) {
+    public function disagreeAction(int $id) {
         try {
             $model = ListRepository::disagree($id);
         } catch (\Exception $ex) {

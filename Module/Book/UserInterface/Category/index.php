@@ -186,7 +186,7 @@ $this->registerJsFile('@jquery.zoom.min.js')
                   <div class="words"><?=$item->size?></div>
                   <div class="author">
                       <a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a>
-                  </div><div class="abover"><span><?=$item->status?></span>
+                  </div><div class="abover"><span><?=$item->status_label?></span>
                   </div><div class="time"><?=$item->last_at?></div></li>
           <?php endforeach;?>
          </ul>

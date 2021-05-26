@@ -29,7 +29,10 @@ class BookController extends Controller {
         if (request()->isMobile()) {
             return $this->redirect(['./mobile/book', 'id' => $id]);
         }
-        $book = BookModel::find($id);
+        $book = BookModel::isOpen()->where('id', $id)->first();
+        if (!$book) {
+            return $this->redirectWithMessage('./', '书籍不存在');
+        }
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
         }
@@ -37,9 +40,9 @@ class BookController extends Controller {
         $chapter_list = BookChapterModel::where('book_id', $id)
             ->orderBy('position', 'asc')
             ->orderBy('created_at', 'asc')->all();
-        $hot_book = BookModel::ofClassify()->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(15)->all();
-        $like_book = BookModel::ofClassify()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->orderBy('click_count', 'desc')->limit(10)->all();
-        $author_book = BookModel::ofClassify()->where('author_id', $book->author_id)->orderBy('created_at', 'desc')->all();
+        $hot_book = BookModel::ofClassify()->isOpen()->where('id', '<>', $book->id)->orderBy('click_count', 'desc')->limit(15)->all();
+        $like_book = BookModel::ofClassify()->isOpen()->where('cat_id', $book->cat_id)->where('id', '<>', $id)->orderBy('click_count', 'desc')->limit(10)->all();
+        $author_book = BookModel::ofClassify()->isOpen()->where('author_id', $book->author_id)->orderBy('created_at', 'desc')->all();
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
     }
 

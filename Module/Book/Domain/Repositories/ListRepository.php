@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
@@ -8,14 +9,14 @@ use Module\Book\Domain\Model\ListItemModel;
 
 class ListRepository {
 
-    public static function getList($keywords = '') {
+    public static function getList(string $keywords = '') {
         return BookListModel::with('user', 'items')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
             })->orderBy('created_at', 'desc')->page();
     }
 
-    public static function detail($id) {
+    public static function detail(int $id) {
         $model = BookListModel::find($id);
         if (empty($model)) {
             throw new \Exception('书单不存在');
@@ -107,7 +108,7 @@ class ListRepository {
         return $model;
     }
 
-    public static function remove($id) {
+    public static function remove(int $id) {
         $model = BookListModel::findWithAuth($id);
         if (empty($model)) {
             throw new \Exception('书单不存在');
@@ -148,7 +149,7 @@ class ListRepository {
         return 2;
     }
 
-    public static function collect($id) {
+    public static function collect(int $id) {
         $model = BookListModel::find($id);
         if (empty($model)) {
             throw new \Exception('书单不存在');
@@ -165,7 +166,7 @@ class ListRepository {
         return $model;
     }
 
-    public static function agree($id) {
+    public static function agree(int $id) {
         $model = ListItemModel::find($id);
         if (empty($model)) {
             throw new \Exception('书单不存在');
@@ -188,7 +189,7 @@ class ListRepository {
         return $model;
     }
 
-    public static function disagree($id) {
+    public static function disagree(int $id) {
         $model = ListItemModel::find($id);
         if (empty($model)) {
             throw new \Exception('书单不存在');

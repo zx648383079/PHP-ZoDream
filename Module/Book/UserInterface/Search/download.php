@@ -43,7 +43,7 @@ $this->extend('layouts/header');
                   </div>
                   <div class="words"><?=$item->format_size?></div>
                   <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
-                  <div class="abover"><span><?=$item->status?></span></div>
+                  <div class="abover"><span><?=$item->status_label?></span></div>
               </li>
           <?php endforeach;?>
       </ul>

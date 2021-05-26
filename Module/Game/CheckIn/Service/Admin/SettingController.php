@@ -1,22 +1,18 @@
 <?php
 namespace Module\Game\CheckIn\Service\Admin;
 
-use Module\SEO\Domain\Model\OptionModel;
-use Zodream\Helpers\Json;
+use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class SettingController extends Controller {
 
     public function indexAction() {
-        $data = OptionModel::findCodeJson('checkin', [
-            'basic' => 1,
-            'loop' => 0,
-            'plus' => []
-        ]);
+        $data = CheckinRepository::option();
         return $this->show(compact('data'));
     }
 
-    public function saveAction() {
-        $data = request()->get('option.checkin');
+    public function saveAction(Input $input) {
+        $data = $input->get('option.checkin');
         $plus = [];
         foreach ($data['day'] as $i => $item) {
             if (!isset($data['plus'][$i]) || intval($data['plus'][$i]) <= 0 || intval($item) <= 0) {
@@ -24,12 +20,7 @@ class SettingController extends Controller {
             }
             $plus[intval($item)] = intval($data['plus'][$i]);
         }
-        ksort($plus);
-        OptionModel::insertOrUpdate('checkin', Json::encode([
-            'basic' => intval($data['basic']),
-            'loop' => intval($data['loop']),
-            'plus' => $plus
-        ]), '签到');
+        CheckinRepository::optionSave(intval($data['basic']), intval($data['loop']), $plus);
         return $this->renderData([
             'refresh' => true
         ]);

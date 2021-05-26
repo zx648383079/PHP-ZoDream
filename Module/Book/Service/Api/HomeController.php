@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service\Api;
 
 use Domain\Model\SearchModel;
@@ -8,15 +9,18 @@ use Module\Book\Domain\Repositories\BookRepository;
 class HomeController extends Controller {
 
     public function indexAction(
-        $id = 0, $category = null, $keywords = null, $top = null, $status = 0, $author = 0, $page = 1, $per_page = 20) {
+        int|array $id = 0, int $category = 0,
+        string $keywords = '', bool $top = false,
+        int $status = 0, int $author = 0,
+        int $page = 1, int $per_page = 20) {
         if (!is_array($id) && $id > 0) {
-            return $this->detailAction($id);
+            return $this->detailAction(intval($id));
         }
         $book_list = BookRepository::getList($id, $category, $keywords, $top, $status, $author, $page, $per_page);
         return $this->renderPage($book_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         try {
             $model = BookRepository::detail($id);
         } catch (\Exception $ex) {
@@ -26,15 +30,15 @@ class HomeController extends Controller {
     }
 
     public function hotAction() {
-        $data = BookModel::limit(4)->pluck('name');
-        return $this->render($data);
+        return $this->renderData(
+            BookRepository::getHot()
+        );
     }
 
-    public function suggestAction($keywords) {
-        $data = BookModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, 'name');
-        })->limit(4)->pluck('name');
-        return $this->render($data);
+    public function suggestAction(string $keywords) {
+        return $this->renderData(
+            BookRepository::suggestion($keywords)
+        );
     }
 
 }

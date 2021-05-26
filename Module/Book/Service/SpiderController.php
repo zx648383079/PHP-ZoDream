@@ -55,7 +55,6 @@ class SpiderController extends Controller {
     /**
      * @param $url
      * @param $start
-     * @return \Zodream\Infrastructure\Http\Response
      * @throws \Exception
      */
     protected function crawlBook($url, $start = null) {
@@ -102,7 +101,6 @@ class SpiderController extends Controller {
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData();
     }
 
     private function getProgress() {

@@ -42,7 +42,7 @@ class BookController extends Controller {
         }
     }
 
-    public function chapterAction(int $id) {
+    public function chapterDetailAction(int $id) {
         try {
             return $this->render(
                 ChapterRepository::getSelf($id)

@@ -34,7 +34,7 @@ $this->extend('../layouts/header');
                             <li class="column-2 ">
                                 <div class="right">
                                     <a class="name" href="<?=$item->book->wap_url?>"><?=$item->book->name?></a>
-                                    <span style="float:right;font-size:0.8125em;color: #999;"><?=$item->book->status?></span>
+                                    <span style="float:right;font-size:0.8125em;color: #999;"><?=$item->book->status_label?></span>
                                     <p class="update">上次看到：<a href="<?=$item->wap_url?>"><?=$item->title?></a></p>
                                     <p class="info">作者：<?=
                                         $item->book->author ? $item->book->author->name : ''?>  <span class="words">字数：<?=$item->book->size?></span></p>

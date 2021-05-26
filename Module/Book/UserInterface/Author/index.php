@@ -102,7 +102,7 @@ $this->extend('layouts/header');
 		<?php foreach ($book_list as $item):?>
             <div class="bw_box">
                 <div class="t"><a href="<?=$item->url?>" target="_blank" title="<?=$item->name?>在线阅读txt下载"><?=$item->name?></a>
-                    <span>（<?=$item->size?>字-<?=$item->status?>）</span></div>
+                    <span>（<?=$item->size?>字-<?=$item->status_label?>）</span></div>
                 <div class="pic"><a href="<?=$item->url?>" target="_blank" title="<?=$item->name?>在线阅读txt下载">
                         <img src="/assets/images/book_default.jpg" data-original="<?=$item->cover?>" alt="<?=$item->name?>在线阅读txt下载"></a></div>
                 <div class="a_l">

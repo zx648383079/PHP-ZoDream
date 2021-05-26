@@ -4,6 +4,8 @@ namespace Module\Game\CheckIn\Domain\Repositories;
 
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Module\OpenPlatform\Domain\Platform;
+use Module\SEO\Domain\Model\OptionModel;
+use Zodream\Helpers\Json;
 
 class CheckinRepository {
 
@@ -48,5 +50,29 @@ class CheckinRepository {
             return CheckInModel::METHOD_WEB;
         }
         return intval($platform->type());
+    }
+
+    public static function statistics() {
+        $today_count = CheckInModel::today()->count();
+        $yesterday_count = CheckInModel::yesterday()->count();
+        $max_day = CheckInModel::today()->max('running');
+        $avg_day = round(CheckInModel::today()->avg('running'), 2);
+        $day_list = CheckInModel::today()->groupBy('running')->asArray()->get('COUNT(*) AS count,running as day');
+        return compact('today_count', 'yesterday_count', 'max_day', 'avg_day', 'day_list');
+    }
+
+    public static function option() {
+        return OptionModel::findCodeJson('checkin', [
+            'basic' => 1,
+            'loop' => 0,
+            'plus' => []
+        ]);
+    }
+
+    public static function optionSave(int $basic = 1, int $loop = 0, array $plus = []) {
+        ksort($plus);
+        OptionModel::insertOrUpdate('checkin', Json::encode(
+            compact('basic', 'loop', $plus)
+        ), '签到');
     }
 }

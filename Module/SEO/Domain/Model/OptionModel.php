@@ -67,7 +67,7 @@ class OptionModel extends Model {
      * @return string
      */
     public static function findCode(string $code): string {
-        return static::where('code', $code)->value('value');
+        return static::where('code', $code)->value('value').'';
     }
 
     /**

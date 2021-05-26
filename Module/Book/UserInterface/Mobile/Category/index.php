@@ -158,7 +158,7 @@ $this->extend('../layouts/header');
                 <?php foreach ($book_list as $item):?>
 					<li class="column-2 ">
 						<a class="name" href="<?=$item->wap_url?>"><?=$item->name?></a>
-						<span style="float:right;font-size:0.8125em;color: #999;"><?=$item->status?></span>
+						<span style="float:right;font-size:0.8125em;color: #999;"><?=$item->status_label?></span>
                         <?php if ($item->last_chapter):?>
                         <p class="update">最新章节：
                             <a href="<?=$item->last_chapter->wap_url?>"><?=$item->last_chapter->title?></a>

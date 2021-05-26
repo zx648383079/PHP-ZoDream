@@ -33,6 +33,7 @@ class ChapterRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        BookRepository::refreshSize($model->book_id);
         return $model;
     }
 
@@ -43,6 +44,7 @@ class ChapterRepository {
         }
         $model->delete();
         BookChapterBodyModel::where('id', $id)->delete();
+        BookRepository::refreshSize($model->book_id);
     }
 
     public static function getSelf(int $id) {
@@ -65,9 +67,13 @@ class ChapterRepository {
         if (!BookRepository::isSelf($model->book_id)) {
             throw new \Exception('操作无效');
         }
+        if ($model->isNewRecord && $model->position < 1) {
+            $model->position = intval(BookChapterModel::query()->where('book_id', $model->book_id)->max('position')) + 1;
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        BookRepository::refreshSize($model->book_id);
         return $model;
     }
 
@@ -81,5 +87,6 @@ class ChapterRepository {
         }
         $model->delete();
         BookChapterBodyModel::where('id', $id)->delete();
+        BookRepository::refreshSize($model->book_id);
     }
 }
