@@ -28,6 +28,7 @@ use Zodream\ThirdParty\WeChat\User;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $user_id
  */
 class WeChatModel extends WeChatEntity {
     /**

@@ -14,7 +14,7 @@ class Event implements InputInterface {
             '参数', '示例：参数');
     }
 
-    public function save(EditorModel $model, Request $request) {
+    public function save(EditorModel $model, Request|array $request) {
         return;
     }
 

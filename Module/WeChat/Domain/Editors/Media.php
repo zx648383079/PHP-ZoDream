@@ -37,7 +37,7 @@ class Media implements InputInterface {
 HTML;
     }
 
-    public function save(EditorModel $model, Request $request) {
+    public function save(EditorModel $model, Request|array $request) {
         return;
     }
 

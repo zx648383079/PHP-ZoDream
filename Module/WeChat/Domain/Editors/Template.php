@@ -26,8 +26,8 @@ class Template implements InputInterface {
 HTML;
     }
 
-    public function save(EditorModel $model, Request $request) {
-        $content = $request->get('editor', []);
+    public function save(EditorModel $model, Request|array $request) {
+        $content = is_array($request) ? $request['editor'] : $request->get('editor', []);
         $model->content = Json::encode($content);
         return;
     }

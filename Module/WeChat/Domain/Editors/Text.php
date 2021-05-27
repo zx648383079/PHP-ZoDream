@@ -14,7 +14,7 @@ class Text implements InputInterface {
         ]);
     }
 
-    public function save(EditorModel $model, Request $request) {
+    public function save(EditorModel $model, Request|array $request) {
         return;
     }
 

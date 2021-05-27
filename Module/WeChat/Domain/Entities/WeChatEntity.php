@@ -3,20 +3,44 @@ namespace Module\WeChat\Domain\Entities;
 
 use Domain\Entities\Entity;
 
+/**
+ * Class WeChatEntity
+ * @package Module\WeChat\Domain\Entities
+ * @property integer $id
+ * @property string $name
+ * @property string $token
+ * @property string $access_token
+ * @property string $account
+ * @property string $original
+ * @property integer $type
+ * @property string $appid
+ * @property string $secret
+ * @property string $aes_key
+ * @property string $avatar
+ * @property string $qrcode
+ * @property string $address
+ * @property string $description
+ * @property string $username
+ * @property string $password
+ * @property integer $status
+ * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $user_id
+ */
 class WeChatEntity extends Entity {
 
     public static function tableName() {
         return 'wechat';
     }
 
-    public function rules() {
+    protected function rules() {
         return [
             'name' => 'required|string:0,40',
             'token' => 'required|string:0,32',
             'access_token' => 'string:0,255',
             'account' => 'required|string:0,30',
             'original' => 'required|string:0,40',
-            'type' => 'required|int:0,9',
+            'type' => 'int:0,127',
             'appid' => 'required|string:0,50',
             'secret' => 'required|string:0,50',
             'aes_key' => 'string:0,43',
@@ -26,9 +50,10 @@ class WeChatEntity extends Entity {
             'description' => 'string:0,255',
             'username' => 'string:0,40',
             'password' => 'string:0,32',
-            'status' => 'int:0,9',
-            'created_at' => 'int',
+            'status' => 'int:0,127',
             'updated_at' => 'int',
+            'created_at' => 'int',
+            'user_id' => 'required|int',
         ];
     }
 
@@ -56,7 +81,7 @@ class WeChatEntity extends Entity {
             'password' => '微信官网登录密码',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
-
+            'user_id' => 'User Id',
             'api_url' => 'API地址'
         ];
     }

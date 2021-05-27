@@ -84,7 +84,7 @@ class EditorInput {
         return static::instance($model->type)->form($model);
     }
 
-    public static function save(EditorModel $model, Request $request) {
+    public static function save(EditorModel $model, Request|array $request) {
         return static::instance($model->type)->save($model, $request);
     }
 

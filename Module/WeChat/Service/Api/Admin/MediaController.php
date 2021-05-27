@@ -1,19 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-use Domain\Model\SearchModel;
-use Module\WeChat\Domain\Model\MediaModel;
-use Module\WeChat\Domain\Model\TemplateModel;
-use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Repositories\MediaRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
-use Zodream\ThirdParty\WeChat\Media;
 
 class MediaController extends Controller {
 
 
     public function indexAction(string $keywords = '', string $type = '') {
-        return $this->renderPage(MediaRepository::getList($keywords, $type));
+        return $this->renderPage(MediaRepository::getList(
+            $this->weChatId(),
+            $keywords, $type));
     }
 
     public function detailAction(int $id) {

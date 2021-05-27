@@ -25,6 +25,7 @@ use Module\WeChat\Domain\Entities\WeChatEntity;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $user_id
  */
 class WeChatSimpleModel extends WeChatEntity {
 
@@ -38,6 +39,7 @@ class WeChatSimpleModel extends WeChatEntity {
         'qrcode',
         'address',
         'description',
+        'user_id',
         'created_at',
         'updated_at',
     ];

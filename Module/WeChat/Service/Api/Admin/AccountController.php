@@ -9,14 +9,14 @@ class AccountController extends Controller {
 
     public function indexAction(string $keywords = '') {
         return $this->renderPage(
-            AccountRepository::getList($keywords)
+            AccountRepository::selfList($keywords)
         );
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                AccountRepository::get($id)
+                AccountRepository::getSelf($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

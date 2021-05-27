@@ -14,7 +14,7 @@ class Url implements InputInterface {
             '网址', '示例：网址');
     }
 
-    public function save(EditorModel $model, Request $request) {
+    public function save(EditorModel $model, Request|array $request) {
         return;
     }
 

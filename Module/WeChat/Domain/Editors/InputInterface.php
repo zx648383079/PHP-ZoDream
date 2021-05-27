@@ -9,7 +9,7 @@ use Zodream\ThirdParty\WeChat\MessageResponse;
 interface InputInterface {
     public function form(EditorModel $model);
 
-    public function save(EditorModel $model, Request $request);
+    public function save(EditorModel $model, Request|array $request);
 
     /**
      * @param EditorModel $model

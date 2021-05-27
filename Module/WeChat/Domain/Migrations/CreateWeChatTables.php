@@ -6,6 +6,7 @@ use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MediaTemplateModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
+use Module\WeChat\Domain\Model\QrcodeModel;
 use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\ReplyModel;
@@ -61,6 +62,18 @@ class CreateWeChatTables extends Migration {
             $table->string('title', 100)->comment('标题');
             $table->string('content')->comment('内容');
             $table->string('example')->comment('示例');
+        })->append(QrcodeModel::tableName(), function(Table $table) {
+            $table->comment('微信二维码');
+            $table->id();
+            $table->uint('wid')->comment('所属微信公众号ID');
+            $table->string('name')->comment('使用用途');
+            $table->bool('type')->default(0);
+            $table->string('scene_str')->default('')->comment('场景值');
+            $table->uint('scene_id')->default(0)->comment('场景值ID，临时二维码时为32位非0整型，永久二维码时最大值为100000');
+            $table->uint('expire_time')->default(0)->comment('过期事件/s');
+            $table->string('qr_url')->default('')->comment('二维码地址');
+            $table->string('url')->default('')->comment('解析后的地址');
+            $table->timestamps();
         })->autoUp();
     }
 
@@ -71,6 +84,7 @@ class CreateWeChatTables extends Migration {
     public function initWeChatTable() {
         $this->append(WeChatModel::tableName(), function(Table $table) {
             $table->id();
+            $table->uint('user_id');
             $table->string('name', 40)->comment('公众号名称');
             $table->string('token', 32)->comment('微信服务访问验证token');
             $table->string('access_token')->default('')->comment('访问微信服务验证token');

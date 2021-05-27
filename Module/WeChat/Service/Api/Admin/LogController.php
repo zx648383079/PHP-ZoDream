@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-use Module\WeChat\Domain\Model\MessageHistoryModel;
 use Module\WeChat\Domain\Repositories\LogRepository;
 
 class LogController extends Controller {

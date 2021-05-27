@@ -16,7 +16,7 @@ class Scene implements InputInterface {
             $model->getAttributeSource('content'), '场景');
     }
 
-    public function save(EditorModel $model, Request $request) {
+    public function save(EditorModel $model, Request|array $request) {
         return;
     }
 

@@ -8,7 +8,6 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class MenuController extends Controller {
 
-
     public function indexAction() {
         return $this->renderData(
             MenuRepository::getList($this->weChatId())
@@ -27,6 +26,15 @@ class MenuController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
+    }
+
+    public function batchSaveAction(array $data) {
+        try {
+            MenuRepository::batchSave($this->weChatId(), $data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 
     public function deleteAction(int $id) {
