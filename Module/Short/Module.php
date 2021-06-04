@@ -5,7 +5,6 @@ use Module\Short\Domain\Migrations\CreateShortTables;
 use Module\Short\Domain\Repositories\ShortRepository;
 use Zodream\Http\Uri;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Infrastructure\Http\Response;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule {
@@ -19,11 +18,10 @@ class Module extends BaseModule {
         if (empty($path)) {
             return;
         }
-        if ($path === 'home' || strpos($path, 'home/') === 0) {
+        if ($path === 'home' || str_starts_with($path, 'home/')) {
             return;
         }
-        /** @var Response $response */
-        $response = app('response');
+        $response = response();
         /** @var Request $request */
         $request = request();
         try {

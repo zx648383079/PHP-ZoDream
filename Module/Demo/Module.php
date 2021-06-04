@@ -4,6 +4,8 @@ namespace Module\Demo;
 use Module\Demo\Domain\Migrations\CreateDemoTables;
 use Module\Demo\Domain\Model\PostModel;
 use Module\Demo\Service\PreviewController;
+use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Route\BoundMethod;
 use Zodream\Route\Controller\Module as BaseModule;
 use Zodream\Route\Router;
 use Module\SEO\Domain\SiteMap;
@@ -14,11 +16,11 @@ class Module extends BaseModule {
         return new CreateDemoTables();
     }
 
-    public function invokeRoute($path) {
+    public function invokeRoute($path, HttpContext $context) {
         if (strpos($path, 'preview') !== 1) {
             return;
         }
-        $uri = request()->uri()->getPath();
+        $uri = request()->path();
         if (!preg_match('#preview/view/\d+/id/(\d+)/file/(.*)$#', $uri, $match)) {
             return;
         }
@@ -30,8 +32,9 @@ class Module extends BaseModule {
         if (empty($file)) {
             return;
         }
-        return app(Router::class)
-            ->invokeController(PreviewController::class, 'view', ['id' => $match[1], 'file' => $file]);
+        return BoundMethod::call(
+            sprintf('%s@%s%s', PreviewController::class, 'view', config('app.action')),
+            $context, ['id' => $match[1], 'file' => $file]);
     }
 
     public function openLinks(SiteMap $map) {
