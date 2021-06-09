@@ -52,6 +52,25 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
+    public function fastCreateAction(Request $request) {
+        try {
+            $data = $request->validate([
+                'parent_id' => 'int',
+                'name' => 'required|string:0,100',
+                'description' => 'string:0,255',
+                'every_time' => 'int:0,9999',
+                'space_time' => 'int:0,127',
+                'duration' => 'int:0,127',
+                'start_at' => '',
+            ]);
+            $task = TaskRepository::save($data);
+            $model = DayRepository::save($task->id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
     public function deleteAction($id, $stop = false) {
         try {
             TaskRepository::remove($id, $stop);
