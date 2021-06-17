@@ -169,7 +169,7 @@ class Parser extends Page {
                     $attributes[self::UID_KEY] = $this->uid();
                     $attributes['content'] = $node->isNest()
                         ? $this->parseJson($match[3], $type)
-                        : htmlspecialchars($match[3]);
+                        : $match[3];
                     $cacheKey = sprintf('<tag:%s-%s>', Time::millisecond(), $attributes['index']);
                     $extraRule[] = [
                         's' => $cacheKey,

@@ -229,16 +229,26 @@ class FuncHelper {
         return static::contents($params);
     }
 
-    public static function location() {
+    public static function locationPath() {
         $path = static::getOrSet(__FUNCTION__, __FUNCTION__, function () {
             $path = TreeHelper::getTreeParent(static::channels(), static::$current['channel']);
             $path[] = static::$current['channel'];
             return $path;
         });
-        return implode('', array_map(function ($id) {
-            return Html::li(Html::a(static::channel($id, 'title'),
-                static::channel($id, 'url')));
-        }, $path));
+        return array_map(function ($id) {
+            return [
+                'id' => $id,
+                'title' => static::channel($id, 'title'),
+                'url' => static::channel($id, 'url'),
+            ];
+        }, $path);
+    }
+
+    public static function location() {
+        return implode('', array_map(function ($item) {
+            return Html::li(Html::a($item['title'],
+                $item['url']));
+        }, static::locationPath()));
     }
 
     public static function previous($name = null) {

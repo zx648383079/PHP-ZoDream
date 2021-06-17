@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
@@ -7,12 +8,12 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class CategoryController extends Controller {
 
-    public function indexAction(int $id) {
-        FuncHelper::$current['channel'] = $id;
+    public function indexAction(int|string $id) {
         $cat = FuncHelper::channel($id, true);
         if (empty($cat)) {
             return $this->redirect('./');
         }
+        FuncHelper::$current['channel'] = $cat->id;
         $page = null;
         if ($cat->type < 1) {
             $page = FuncHelper::contents([]);

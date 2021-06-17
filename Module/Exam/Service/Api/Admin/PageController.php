@@ -51,9 +51,9 @@ class PageController extends Controller {
         return $this->renderData(true);
     }
 
-    public function evaluateAction(int $id, string $keywords = '') {
+    public function evaluateAction(int $page_id, string $keywords = '') {
         return $this->renderPage(
-            PageRepository::evaluateList($id, $keywords)
+            PageRepository::evaluateList($page_id, $keywords)
         );
     }
 

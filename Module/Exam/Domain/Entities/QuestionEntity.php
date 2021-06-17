@@ -4,19 +4,19 @@ namespace Module\Exam\Domain\Entities;
 use Domain\Entities\Entity;
 /**
 * Class QuestionModel
- * @property integer $id
+ * @property string $id
  * @property string $title
  * @property string $image
- * @property integer $course_id
- * @property integer $parent_id
- * @property integer $type
- * @property integer $easiness
+ * @property string $course_id
+ * @property string $parent_id
+ * @property string $type
+ * @property string $easiness
  * @property string $content
- * @property string  $dynamic
+ * @property string $dynamic
  * @property string $answer
- * @property string $analysis
- * @property integer $created_at
- * @property integer $updated_at
+ * @property string $updated_at
+ * @property string $created_at
+ * @property string $material_id
 */
 class QuestionEntity extends Entity {
 	public static function tableName() {
@@ -27,16 +27,16 @@ class QuestionEntity extends Entity {
         return [
             'title' => 'required|string:0,255',
             'image' => 'string:0,200',
-            'course_id' => 'required|int',
-            'parent_id' => 'int',
-            'type' => 'int:0,127',
-            'easiness' => 'int:0,10',
+            'course_id' => 'required',
+            'parent_id' => '',
+            'type' => '',
+            'easiness' => '',
             'content' => '',
             'dynamic' => '',
             'answer' => '',
-            'analysis' => '',
-            'created_at' => 'int',
-            'updated_at' => 'int',
+            'updated_at' => '',
+            'created_at' => '',
+            'material_id' => '',
         ];
     }
 
@@ -54,6 +54,7 @@ class QuestionEntity extends Entity {
             'analysis' => '解析',
             'created_at' => 'int',
             'updated_at' => 'int',
+            'material_id' => '资源',
         ];
     }
 

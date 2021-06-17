@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Exam\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Exam\Domain\Model\QuestionAnalysisModel;
 use Module\Exam\Domain\Model\QuestionAnswerModel;
 use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
@@ -24,21 +25,25 @@ class QuestionRepository {
 
     public static function getFull(int $id) {
         $model = static::get($id);
-        $model->option = QuestionOptionModel::where('question_id', $model->id)
-            ->orderBy('id', 'asc')->get();
+        $model->option_items;
+        $model->analysis_items;
+        $model->material;
         return $model;
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = QuestionModel::findOrNew($id);
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if (isset($data['option'])) {
-            QuestionOptionModel::batchSave($model, $data['option']);
+        if (isset($data['option_items'])) {
+            QuestionOptionModel::batchSave($model, $data['option_items']);
+        }
+        if (isset($data['analysis_items'])) {
+            QuestionAnalysisModel::batchSave($model, $data['analysis_items']);
         }
         return $model;
     }
@@ -47,6 +52,7 @@ class QuestionRepository {
         QuestionModel::where('id', $id)->delete();
         QuestionAnswerModel::where('question_id', $id)->delete();
         QuestionOptionModel::where('question_id', $id)->delete();
+        QuestionAnalysisModel::where('question_id', $id)->delete();
     }
 
     public static function search(string $keywords = '', int|array $id = 0) {

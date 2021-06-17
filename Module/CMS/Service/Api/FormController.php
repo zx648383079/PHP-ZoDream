@@ -1,5 +1,6 @@
 <?php
-namespace Module\CMS\Service;
+declare(strict_types=1);
+namespace Module\CMS\Service\Api;
 
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -12,7 +13,11 @@ class FormController extends Controller {
         $model = $this->getModel();
         $field_list = ModelFieldModel::where('model_id', $model->id)->all();
         $scene = CMSRepository::scene()->setModel($model);
-        return $this->show(compact('model', 'field_list', 'scene'));
+        $inputItems = [];
+        foreach ($field_list as $item) {
+            $inputItems[] = $scene->toInput($item, [], true);
+        }
+        return $this->renderData($inputItems);
     }
 
     public function saveAction() {
@@ -40,9 +45,7 @@ class FormController extends Controller {
         if (!$res) {
             return $this->renderFailure($scene->getFirstError());
         }
-        return $this->renderData([
-            'url' => './'
-        ]);
+        return $this->renderData(true);
     }
 
     /**

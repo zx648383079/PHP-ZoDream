@@ -3,7 +3,6 @@ namespace Module\Exam\Domain\Model;
 
 
 use Module\Exam\Domain\Entities\QuestionEntity;
-use Module\Exam\Domain\Model\CourseModel;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 
@@ -20,17 +19,29 @@ use Zodream\Helpers\Str;
  * @property string $content
  * @property string  $dynamic
  * @property string $answer
- * @property string $analysis
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $material_id
  */
 class QuestionModel extends QuestionEntity {
 
-    public static $type_list = ['单选题', '多选题', '判断题', '简答题', '填空题'];
+    public static array $type_list = ['单选题', '多选题', '判断题', '简答题', '填空题'];
 
 
     public function course() {
         return $this->hasOne(CourseModel::class, 'id', 'course_id');
+    }
+
+    public function material() {
+        return $this->hasOne(CourseModel::class, 'id', 'material_id');
+    }
+
+    public function optionItems() {
+        return $this->hasMany(QuestionOptionModel::class, 'id', 'question_id')->orderBy('id', 'asc');
+    }
+
+    public function analysisItems() {
+        return $this->hasMany(QuestionAnalysisModel::class, 'id', 'question_id')->orderBy('type', 'asc');
     }
 
     public function check($answer, $dynamic = null) {
@@ -105,11 +116,15 @@ class QuestionModel extends QuestionEntity {
                 '' : base64_encode(Json::encode($dynamicItems)),
             'type' => intval($this->type),
         ];
+        if ($this->material_id > 0 && $this->material) {
+            $data['material'] = $this->material;
+        }
         if ($hasAnswer) {
             $data['answer'] = $this->type == 4
                 ? $this->getType4Answer($dynamicItems)
                 : self::strReplace($this->answer, $dynamicItems);
-            $data['analysis'] = self::strReplace($this->analysis, $dynamicItems);
+            $data['analysis'] = self::strReplace(QuestionAnalysisModel::where('question_id', $this->id)->where('type', 0)
+                ->value('content'), $dynamicItems);
         }
         if ($this->type < 2) {
             $option_list = QuestionOptionModel::where('question_id', $this->id)
@@ -135,8 +150,8 @@ class QuestionModel extends QuestionEntity {
 
     private function getType4Answer($dynamic) {
         $items = [];
-        foreach (explode("\n", $this->answer) as $i => $line) {
-            $line = trim($line);
+        foreach ($this->optionItems() as $item) {
+            $line = trim($item->content);
             if (substr($line, 0, 1) === '=') {
                 $line = self::compilerValue(substr($line, 1), $dynamic);
             }

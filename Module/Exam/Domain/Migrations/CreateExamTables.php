@@ -8,8 +8,10 @@ use Module\Exam\Domain\Entities\CourseLinkEntity;
 use Module\Exam\Domain\Entities\PageEntity;
 use Module\Exam\Domain\Entities\PageEvaluateEntity;
 use Module\Exam\Domain\Entities\PageQuestionEntity;
+use Module\Exam\Domain\Entities\QuestionAnalysisEntity;
 use Module\Exam\Domain\Entities\QuestionAnswerEntity;
 use Module\Exam\Domain\Entities\QuestionEntity;
+use Module\Exam\Domain\Entities\QuestionMaterialEntity;
 use Module\Exam\Domain\Entities\QuestionOptionEntity;
 use Module\Exam\Domain\Entities\QuestionWrongEntity;
 use Zodream\Database\Migrations\Migration;
@@ -42,12 +44,12 @@ class CreateExamTables extends Migration {
             $table->string('image', 200)->default('');
             $table->uint('course_id');
             $table->uint('parent_id')->default(0);
+            $table->uint('material_id')->default(0)->comment('题目素材');
             $table->uint('type', 1)->default(0)->comment('题目类型');
             $table->uint('easiness', 1)->default(0)->comment('难易程度');
             $table->text('content')->nullable()->comment('题目内容');
             $table->text('dynamic')->nullable()->comment('动态内容');
             $table->text('answer')->nullable()->comment('题目答案');
-            $table->text('analysis')->nullable()->comment('题库解析');
             $table->timestamps();
         })->append(QuestionOptionEntity::tableName(), function (Table $table) {
             $table->comment('题选择选项');
@@ -56,6 +58,20 @@ class CreateExamTables extends Migration {
             $table->uint('question_id');
             $table->uint('type', 1)->default(0);
             $table->bool('is_right')->default(0)->comment('是否是正确答案');
+        })->append(QuestionMaterialEntity::tableName(), function (Table $table) {
+            $table->comment('题选素材库');
+            $table->id();
+            $table->uint('course_id');
+            $table->string('title');
+            $table->string('description');
+            $table->uint('type', 1)->default(0);
+            $table->text('content')->nullable();
+        })->append(QuestionAnalysisEntity::tableName(), function (Table $table) {
+            $table->comment('题选解析');
+            $table->id();
+            $table->uint('question_id');
+            $table->uint('type', 1)->default(0);
+            $table->text('content')->nullable();
         })->append(QuestionAnswerEntity::tableName(), function (Table $table) {
             $table->comment('用户回答');
             $table->id();

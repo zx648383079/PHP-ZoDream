@@ -28,15 +28,15 @@ class PagerRepository {
             ->setLimitTime($model->limit_time);
     }
 
-    public static function check(array $data, int $id) {
+    public static function check(array $data, int $id = 0) {
         $pager = new Pager();
         foreach ($data as $id => $item) {
             if (isset($item['id']) && $item['id'] > 0) {
                 $id = $item['id'];
             }
             $pager->append($id)
-                ->answer(isset($item['answer']) ? $item['answer'] : '',
-                    isset($item['dynamic']) ? $item['dynamic'] : null);
+                ->answer($item['answer'] ?? '',
+                    $item['dynamic'] ?? null);
         }
         $pager->finish();
         return $pager;

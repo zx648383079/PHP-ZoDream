@@ -17,7 +17,7 @@ class PagerController extends Controller {
 
     }
 
-    public function checkAction(array $question, int $id) {
+    public function checkAction(array $question, int $id = 0) {
         return $this->render(
             PagerRepository::check($question, $id)
         );
