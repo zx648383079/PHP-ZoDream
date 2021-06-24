@@ -6,11 +6,11 @@ use Domain\Entities\Entity;
 /**
  * Class QuestionMaterialEntity
  * @package Module\Exam\Domain\Entities
- * @property string $id
- * @property string $course_id
+ * @property integer $id
+ * @property integer $course_id
  * @property string $title
  * @property string $description
- * @property string $type
+ * @property integer $type
  * @property string $content
  */
 class QuestionMaterialEntity extends Entity {
@@ -20,10 +20,10 @@ class QuestionMaterialEntity extends Entity {
 
     protected function rules() {
         return [
-            'course_id' => 'required',
+            'course_id' => 'required|int',
             'title' => 'required|string:0,255',
             'description' => 'required|string:0,255',
-            'type' => '',
+            'type' => 'int:0,127',
             'content' => '',
         ];
     }

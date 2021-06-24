@@ -6,9 +6,9 @@ use Domain\Entities\Entity;
 /**
  * Class QuestionAnalysisEntity
  * @package Module\Exam\Domain\Entities
- * @property string $id
- * @property string $question_id
- * @property string $type
+ * @property integer $id
+ * @property integer $question_id
+ * @property integer $type
  * @property string $content
  */
 class QuestionAnalysisEntity extends Entity {
@@ -18,8 +18,8 @@ class QuestionAnalysisEntity extends Entity {
 
     protected function rules() {
         return [
-            'question_id' => 'required',
-            'type' => '',
+            'question_id' => 'required|int',
+            'type' => 'int:0,127',
             'content' => '',
         ];
     }

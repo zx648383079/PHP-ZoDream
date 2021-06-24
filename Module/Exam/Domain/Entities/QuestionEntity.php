@@ -4,39 +4,41 @@ namespace Module\Exam\Domain\Entities;
 use Domain\Entities\Entity;
 /**
 * Class QuestionModel
- * @property string $id
+ * @property integer $id
  * @property string $title
  * @property string $image
- * @property string $course_id
- * @property string $parent_id
- * @property string $type
- * @property string $easiness
+ * @property integer $course_id
+ * @property integer $type
+ * @property integer $easiness
  * @property string $content
  * @property string $dynamic
  * @property string $answer
- * @property string $updated_at
- * @property string $created_at
- * @property string $material_id
+ * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $material_id
+ * @property integer $user_id
+ * @property integer $status
 */
 class QuestionEntity extends Entity {
 	public static function tableName() {
         return 'exam_question';
     }
 
-    public function rules() {
+    protected function rules() {
         return [
             'title' => 'required|string:0,255',
             'image' => 'string:0,200',
-            'course_id' => 'required',
-            'parent_id' => '',
-            'type' => '',
-            'easiness' => '',
+            'course_id' => 'required|int',
+            'type' => 'int:0,127',
+            'easiness' => 'int:0,127',
             'content' => '',
             'dynamic' => '',
             'answer' => '',
-            'updated_at' => '',
-            'created_at' => '',
-            'material_id' => '',
+            'updated_at' => 'int',
+            'created_at' => 'int',
+            'material_id' => 'int',
+            'user_id' => 'required|int',
+            'status' => 'required|int:0,127',
         ];
     }
 
@@ -45,7 +47,6 @@ class QuestionEntity extends Entity {
             'title' => '题目',
             'image' => '图片',
             'course_id' => 'required|int',
-            'parent_id' => 'int',
             'type' => '类型',
             'easiness' => '难易程度',
             'content' => '内容',

@@ -10,15 +10,24 @@ use Module\Exam\Domain\Model\PageQuestionModel;
 use Module\Exam\Domain\Model\QuestionModel;
 
 class PageRepository {
-    public static function getList(string $keywords = '') {
+    public static function getList(string $keywords = '', int $user = 0) {
         return PageModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['title']);
+            })->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', auth()->id());
             })->orderBy('end_at', 'desc')->page();
     }
 
-    public static function get(int $id) {
+    public static function selfList(string $keywords = '') {
+        return static::getList($keywords, auth()->id());
+    }
+
+    public static function get(int $id, int $user = 0) {
         $model = PageModel::findOrThrow($id, '数据有误');
+        if ($user > 0 && $model->user_id !== $user) {
+            throw new \Exception('数据有误');
+        }
         $rules = $model->rule_value;
         if ($model->rule_type > 0 && !empty($rules)) {
             $model->rule_value = QuestionModel::whereIn('id', $rules)
@@ -27,21 +36,43 @@ class PageRepository {
         return $model;
     }
 
-    public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+    public static function getSelf(int $id) {
+        return static::get($id);
+    }
+
+    public static function save(array $data, int $user = 0) {
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = PageModel::findOrNew($id);
+        if ($id > 0 && $user > 0 && $model->user_id !== $user) {
+            throw new \Exception('无法保存');
+        }
         $model->load($data);
+        $model->user_id = auth()->id();
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         return $model;
     }
 
-    public static function remove(int $id) {
-        PageModel::where('id', $id)->delete();
+    public static function selfSave(array $data) {
+        return static::save($data, auth()->id());
+    }
+
+    public static function remove(int $id, int $user = 0) {
+        $model = PageModel::where('id', $id)->when($user > 0, function ($query) use ($user) {
+            $query->where('user_id', $user);
+        })->first();
+        if (!empty($model)) {
+            throw new \Exception('无权限删除');
+        }
+        $model->delete();
         PageQuestionModel::where('page_id', $id)->delete();
         PageEvaluateModel::where('page_id', $id)->delete();
+    }
+
+    public static function selfRemove(int $id) {
+        static::remove($id, auth()->id());
     }
 
     public static function evaluateList(int $id, string $keywords = '') {
@@ -60,7 +91,19 @@ class PageRepository {
             ->orderBy('created_at', 'desc')->page();
     }
 
-    public static function evaluateRemove(int $id) {
-        PageEvaluateModel::where('id', $id)->delete();
+    public static function evaluateRemove(int $id, int $user = 0) {
+        $model = PageEvaluateModel::findOrThrow($id, '无权限删除');
+        if ($user > 0 && !static::can($model->page_id)) {
+            throw new \Exception('无权限删除');
+        }
+        $model->delete();
+    }
+
+    public static function selfEvaluateRemove(int $id) {
+        static::evaluateRemove($id, auth()->id());
+    }
+
+    public static function can(int $id) {
+        return PageModel::where('id', $id)->where('user_id', auth()->id())->count() > 0;
     }
 }

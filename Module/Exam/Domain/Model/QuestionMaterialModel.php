@@ -7,11 +7,11 @@ use Module\Exam\Domain\Entities\QuestionMaterialEntity;
 /**
  * Class QuestionMaterialModel
  * @package Module\Exam\Domain\Model
- * @property string $id
- * @property string $course_id
+ * @property integer $id
+ * @property integer $course_id
  * @property string $title
  * @property string $description
- * @property string $type
+ * @property integer $type
  * @property string $content
  */
 class QuestionMaterialModel extends QuestionMaterialEntity {

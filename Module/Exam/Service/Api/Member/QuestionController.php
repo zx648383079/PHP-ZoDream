@@ -1,21 +1,23 @@
 <?php
 declare(strict_types=1);
-namespace Module\Exam\Service\Api\Admin;
+namespace Module\Exam\Service\Api\Member;
+
 
 use Module\Exam\Domain\Repositories\QuestionRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class QuestionController extends Controller {
+
     public function indexAction(string $keywords = '', int $course = 0) {
         return $this->renderPage(
-            QuestionRepository::getList($keywords, $course)
+            QuestionRepository::selfList($keywords, $course)
         );
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                QuestionRepository::getFull($id)
+                QuestionRepository::selfFull($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -30,7 +32,6 @@ class QuestionController extends Controller {
                 'image' => 'string:0,200',
                 'course_id' => 'required|int',
                 'material_id' => 'int',
-                'status' => 'int',
                 'type' => 'int:0,127',
                 'easiness' => 'int:0,10',
                 'content' => '',
@@ -40,7 +41,7 @@ class QuestionController extends Controller {
                 'option_items' => '',
             ]);
             return $this->render(
-                QuestionRepository::save($data)
+                QuestionRepository::selfSave($data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -49,14 +50,10 @@ class QuestionController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            QuestionRepository::remove($id);
+            QuestionRepository::selfRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
-    }
-
-    public function searchAction(string $keywords = '', int|array $id = 0) {
-        return $this->renderData(QuestionRepository::search($keywords, $id));
     }
 }

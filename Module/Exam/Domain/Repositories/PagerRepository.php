@@ -62,8 +62,8 @@ class PagerRepository {
                 $id = $item['id'];
             }
             $items[] = Pager::formatQuestion(QuestionModel::find($id),
-                isset($item['answer']) ? $item['answer'] : '',
-                isset($item['dynamic']) ? $item['dynamic'] : null);
+                $item['answer'] ?? '',
+                $item['dynamic'] ?? null);
         }
         return $items;
     }

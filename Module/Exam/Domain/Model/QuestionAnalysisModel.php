@@ -6,9 +6,9 @@ use Module\Exam\Domain\Entities\QuestionAnalysisEntity;
 /**
  * Class QuestionOptionModel
  * @package Module\Exam\Domain\Model
- * @property string $id
- * @property string $question_id
- * @property string $type
+ * @property integer $id
+ * @property integer $question_id
+ * @property integer $type
  * @property string $content
  */
 class QuestionAnalysisModel extends QuestionAnalysisEntity {

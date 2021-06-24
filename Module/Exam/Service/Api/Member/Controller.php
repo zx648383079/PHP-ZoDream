@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\Book\Service\Api\Member;
+namespace Module\Exam\Service\Api\Member;
 
-use Module\Book\Service\Api\Controller as BaseController;
+use Module\Exam\Service\Api\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 

@@ -43,13 +43,14 @@ class CreateExamTables extends Migration {
             $table->string('title');
             $table->string('image', 200)->default('');
             $table->uint('course_id');
-            $table->uint('parent_id')->default(0);
             $table->uint('material_id')->default(0)->comment('题目素材');
             $table->uint('type', 1)->default(0)->comment('题目类型');
             $table->uint('easiness', 1)->default(0)->comment('难易程度');
             $table->text('content')->nullable()->comment('题目内容');
             $table->text('dynamic')->nullable()->comment('动态内容');
             $table->text('answer')->nullable()->comment('题目答案');
+            $table->uint('user_id');
+            $table->uint('status', 1)->default(0);
             $table->timestamps();
         })->append(QuestionOptionEntity::tableName(), function (Table $table) {
             $table->comment('题选择选项');
@@ -97,6 +98,8 @@ class CreateExamTables extends Migration {
             $table->timestamp('start_at')->comment('开始时间');
             $table->timestamp('end_at')->comment('结束时间');
             $table->uint('limit_time', 4)->default(0)->comment('限时');
+            $table->uint('user_id');
+            $table->uint('status', 1)->default(0);
             $table->timestamps();
         })->append(PageQuestionEntity::tableName(), function (Table $table) {
             $table->comment('每次试卷题目及用户回答，如果为固定则复制开始的');

@@ -13,15 +13,16 @@ use Zodream\Helpers\Str;
  * @property string $title
  * @property string $image
  * @property integer $course_id
- * @property integer $parent_id
  * @property integer $type
  * @property integer $easiness
  * @property string $content
- * @property string  $dynamic
+ * @property string $dynamic
  * @property string $answer
- * @property integer $created_at
  * @property integer $updated_at
- * @property string $material_id
+ * @property integer $created_at
+ * @property integer $material_id
+ * @property integer $user_id
+ * @property integer $status
  */
 class QuestionModel extends QuestionEntity {
 
