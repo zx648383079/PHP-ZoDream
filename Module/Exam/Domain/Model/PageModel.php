@@ -15,8 +15,10 @@ use Zodream\Helpers\Json;
  * @property integer $start_at
  * @property integer $end_at
  * @property integer $limit_time
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $user_id
+ * @property integer $status
  */
 class PageModel extends PageEntity {
 

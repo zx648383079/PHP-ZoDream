@@ -28,12 +28,13 @@ class PageController extends Controller {
             $data = $input->validate([
                 'id' => 'int',
                 'name' => 'required|string:0,200',
-                'rule_type' => 'required|int:0,127',
-                'rule_value' => 'required',
+                'rule_type' => 'int:0,127',
+                'rule_value' => '',
                 'start_at' => 'int',
                 'end_at' => 'int',
                 'limit_time' => 'int:0,99999',
                 'rule' => '',
+                'question_items' => '',
             ]);
             return $this->render(
                 PageRepository::selfSave($data)

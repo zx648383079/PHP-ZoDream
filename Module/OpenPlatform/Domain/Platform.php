@@ -9,6 +9,9 @@ use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Zodream\Database\Model\UserModel as UserObject;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Helpers\Arr;
+use Zodream\Helpers\Json;
+use Zodream\Helpers\Security\Rsa;
+use Zodream\Helpers\Xml;
 use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Route\Response\RestResponse;
@@ -61,12 +64,16 @@ class Platform {
     }
 
     public function sign(array $data): string {
-        if ($this->app['sign_type'] < 1) {
+        $signType = intval($this->app['sign_type']);
+        if ($signType < 1) {
             return '';
         }
         $content = $this->getSignContent($data);
-        if ($this->app['sign_type'] == 1) {
+        if ($signType === 1) {
             return md5($content);
+        }
+        if ($signType === 2) {
+            return hash_hmac('sha256', $content, $this->app['secret']);
         }
         return '';
     }
@@ -101,11 +108,25 @@ class Platform {
     }
 
     public function encrypt(string $data): string {
-        return '';
+        $encryptType = intval($this->app['encrypt_type']);
+        $key = $this->app['public_key'];
+        if ($encryptType >= 1 && $encryptType <= 3) {
+            return (new Rsa())->setPadding(
+                $encryptType === 3 ? OPENSSL_CIPHER_DES : OPENSSL_PKCS1_PADDING
+            )->setPublicKey($key)->publicKeyEncrypt($data);
+        }
+        return $data;
     }
 
-    public function decrypt(string $data): array {
-        return [];
+    public function decrypt(string $data): string {
+        $encryptType = intval($this->app['encrypt_type']);
+        $key = $this->app['public_key'];
+        if ($encryptType >= 1 && $encryptType <= 3) {
+            return (new Rsa())->setPadding(
+                $encryptType === 3 ? OPENSSL_CIPHER_DES : OPENSSL_PKCS1_PADDING
+            )->setPublicKey($key)->decryptPrivateEncrypt($data);
+        }
+        return $data;
     }
 
     public function ready(RestResponse $response): Output {
@@ -136,6 +157,11 @@ class Platform {
         $data = $this->decrypt($this->request->get('encrypt'));
         if (empty($data)) {
             return false;
+        }
+        if (RestResponse::formatType() == RestResponse::TYPE_XML) {
+            $data = Xml::decode($data);
+        } else {
+            $data = Json::decode($data);
         }
         $this->request->append($data);
         return true;

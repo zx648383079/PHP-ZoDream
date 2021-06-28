@@ -66,6 +66,10 @@ class QuestionRepository {
     }
 
     public static function selfSave(array $data) {
+        if (isset($data['material'])) {
+            $m = MaterialRepository::save($data['material']);
+            $data['material_id'] = $m->id;
+        }
         return static::save($data, auth()->id());
     }
 

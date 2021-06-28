@@ -9,6 +9,9 @@ use Domain\Model\Model;
  * @property string $name
  * @property string $avatar
  * @property string $description
+ * @property string $character
+ * @property integer $x
+ * @property integer $y
  */
 class BookRoleModel extends Model {
 
@@ -22,6 +25,9 @@ class BookRoleModel extends Model {
             'name' => 'required|string:0,50',
             'avatar' => 'string:0,200',
             'description' => 'string:0,200',
+            'character' => 'string:0,20',
+            'x' => 'string:0,20',
+            'y' => 'string:0,20',
         ];
     }
 
@@ -32,7 +38,12 @@ class BookRoleModel extends Model {
             'name' => 'Name',
             'avatar' => 'Avatar',
             'description' => 'Description',
+            'character' => 'Character',
+            'x' => 'X',
+            'y' => 'Y',
         ];
     }
+
+
 
 }

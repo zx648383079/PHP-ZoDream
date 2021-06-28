@@ -56,7 +56,25 @@ class PageRepository {
     }
 
     public static function selfSave(array $data) {
-        return static::save($data, auth()->id());
+        $items = isset($data['question_items']) && !empty($data['question_items']) ? $data['question_items'] : [];
+        if (!empty($items)) {
+            $data['rule_type'] = 1;
+            $data['rule_value'] = '';
+        }
+        $model = static::save($data, auth()->id());
+        if (empty($items)) {
+            return $model;
+        }
+        $idItems = [];
+        foreach ($items as $item) {
+            $q = QuestionRepository::selfSave($item);
+            if ($q && $q->id) {
+                $idItems[] = $q->id;
+            }
+        }
+        $model->rule_value = $idItems;
+        $model->save();
+        return $model;
     }
 
     public static function remove(int $id, int $user = 0) {

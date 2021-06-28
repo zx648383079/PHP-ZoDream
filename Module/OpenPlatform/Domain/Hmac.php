@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Domain;
 
 
@@ -17,13 +18,13 @@ class Hmac {
         if (is_array($header)) {
             $header = current($header);
         }
-        if (strpos($header, self::AUTHORIZATION_PREFIX) !== 0) {
+        if (!str_starts_with($header, self::AUTHORIZATION_PREFIX)) {
             return [null, null];
         }
         if (!($decoded = base64_decode(substr($header, strlen(self::AUTHORIZATION_PREFIX))))) {
             return [null, null];
         }
-        if (strpos($decoded, ':') === false) {
+        if (!str_contains($decoded, ':')) {
             return [null, null];
         }
         return explode(':', $decoded, 2);

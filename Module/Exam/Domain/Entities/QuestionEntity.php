@@ -38,7 +38,7 @@ class QuestionEntity extends Entity {
             'created_at' => 'int',
             'material_id' => 'int',
             'user_id' => 'required|int',
-            'status' => 'required|int:0,127',
+            'status' => 'int:0,127',
         ];
     }
 

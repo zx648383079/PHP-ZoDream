@@ -17,9 +17,9 @@ class PagerController extends Controller {
 
     }
 
-    public function checkAction(array $question, int $id = 0) {
+    public function checkAction(array $question, int $id = 0, int $spent_time = 0) {
         return $this->render(
-            PagerRepository::check($question, $id)
+            PagerRepository::check($question, $id, $spent_time)
         );
     }
 

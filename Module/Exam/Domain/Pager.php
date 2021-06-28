@@ -118,7 +118,7 @@ class Pager implements ArrayAble {
 
     public function getReport() {
         $wrong = $right = 0;
-        foreach ($this->items as $i => $item) {
+        foreach ($this->items as $item) {
             if (!isset($item['right'])) {
                 continue;
             }
@@ -144,7 +144,7 @@ class Pager implements ArrayAble {
             $data[] = [
                 'order' => $i + 1,
                 'id' => $item['id'],
-                'right' => isset($item['right']) ? $item['right'] : 0
+                'right' => $item['right'] ?? 0
             ];
         }
         return $data;
@@ -159,7 +159,7 @@ class Pager implements ArrayAble {
         }
         $model = $this->getQuestion($i);
         $data = $model->format($i + 1,
-            isset($this->items[$i]['dynamic']) ? $this->items[$i]['dynamic'] : null,
+            $this->items[$i]['dynamic'] ?? null,
             $this->finished);
         foreach (['right', 'answer' => 'your_answer'] as $key => $name) {
             if (is_integer($key)) {

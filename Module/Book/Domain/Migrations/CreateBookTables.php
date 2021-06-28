@@ -124,6 +124,9 @@ class CreateBookTables extends Migration {
             $table->string('name', 50);
             $table->string('avatar', 200)->default('');
             $table->string('description', 200)->default('');
+            $table->string('character', 20)->default('')->comment('身份：主角或');
+            $table->string('x', 20)->default('');
+            $table->string('y', 20)->default('');
         })->append(RoleRelationModel::tableName(), function(Table $table) {
             $table->comment('小说角色关系');
             $table->id();

@@ -4,6 +4,7 @@ namespace Module\Book\Service\Api\Member;
 
 use Module\Book\Domain\Repositories\BookRepository;
 use Module\Book\Domain\Repositories\ChapterRepository;
+use Module\Book\Domain\Repositories\RoleRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class BookController extends Controller {
@@ -76,6 +77,62 @@ class BookController extends Controller {
     public function chapterDeleteAction(int $id) {
         try {
             ChapterRepository::removeSelf($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function roleAction(int $book) {
+        return $this->render(
+            RoleRepository::all($book)
+        );
+    }
+
+    public function roleSaveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'book_id' => 'required|int',
+                'name' => 'required|string:0,50',
+                'avatar' => 'string:0,200',
+                'description' => 'string:0,200',
+                'character' => 'string:0,20',
+                'x' => 'string:0,20',
+                'y' => 'string:0,20',
+                'link_id' => 'int',
+                'link_title' => 'string'
+            ]);
+            return $this->render(
+                RoleRepository::save($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function roleDeleteAction(int $id) {
+        try {
+            RoleRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function linkAddAction(int $from, int $to, string $title = '') {
+        try {
+            return $this->render(
+                RoleRepository::addLink($from, $to, $title)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function linkDeleteAction(int $from, int $to) {
+        try {
+            RoleRepository::removeLink($from, $to);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -11,24 +11,28 @@ use Domain\Entities\Entity;
  * @property integer $start_at
  * @property integer $end_at
  * @property integer $limit_time
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $user_id
+ * @property integer $status
  */
 class PageEntity extends Entity {
     public static function tableName() {
         return 'exam_page';
     }
 
-    public function rules() {
+    protected function rules() {
         return [
             'name' => 'required|string:0,200',
-            'rule_type' => 'required|int:0,127',
-            'rule_value' => 'required|string:0,255',
+            'rule_type' => 'int:0,127',
+            'rule_value' => 'string:0,255',
             'start_at' => 'int',
             'end_at' => 'int',
-            'limit_time' => 'int:0,99999',
-            'created_at' => 'int',
+            'limit_time' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
+            'user_id' => 'required|int',
+            'status' => 'int:0,127',
         ];
     }
 
@@ -43,6 +47,8 @@ class PageEntity extends Entity {
             'limit_time' => '限时',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'user_id' => 'User Id',
+            'status' => 'Status',
         ];
     }
 }
