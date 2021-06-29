@@ -66,6 +66,10 @@ class Pager implements ArrayAble {
         }
     }
 
+    public function count() {
+        return count($this->items);
+    }
+
     public function append($id) {
         $this->items[] = compact('id');
         return $this;
@@ -150,7 +154,7 @@ class Pager implements ArrayAble {
         return $data;
     }
 
-    private function format($i = -1) {
+    private function format(int $i = -1) {
         if ($i < 0) {
             $i = $this->index;
         }
@@ -188,7 +192,7 @@ class Pager implements ArrayAble {
      * @return bool|QuestionModel
      * @throws \Exception
      */
-    private function getQuestion($i = -1) {
+    private function getQuestion(int $i = -1) {
         if ($i < 0) {
             $i = $this->index;
         }

@@ -2,6 +2,7 @@
 namespace Module\Exam\Domain\Model;
 
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Exam\Domain\Entities\PageEntity;
 use Zodream\Database\Command;
 use Zodream\Helpers\Json;
@@ -21,6 +22,10 @@ use Zodream\Helpers\Json;
  * @property integer $status
  */
 class PageModel extends PageEntity {
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
 
     public function getStartAtAttribute() {
         return $this->formatTimeAttribute('start_at');
@@ -100,7 +105,7 @@ class PageModel extends PageEntity {
         return $data;
     }
 
-    public function createQuestion($user_id) {
+    public function createQuestion(int $user_id) {
         /** @var PageEvaluateModel $model */
         $model = PageEvaluateModel::where('user_id', $user_id)
             ->where('page_id', $this->id)->orderBy('id', 'desc')

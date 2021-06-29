@@ -56,6 +56,12 @@ class QuestionController extends Controller {
         return $this->renderData(true);
     }
 
+    public function checkAction(string $title, int $id = 0) {
+        return $this->renderData(
+            QuestionRepository::check($title, $id)
+        );
+    }
+
     public function searchAction(string $keywords = '', int|array $id = 0) {
         return $this->renderData(QuestionRepository::search($keywords, $id));
     }

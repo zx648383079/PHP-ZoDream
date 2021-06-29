@@ -11,12 +11,12 @@ use Module\Exam\Domain\Model\QuestionModel;
 
 class PageRepository {
     public static function getList(string $keywords = '', int $user = 0) {
-        return PageModel::query()
+        return PageModel::with('user')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', auth()->id());
-            })->orderBy('end_at', 'desc')->page();
+            })->orderBy('end_at', 'desc')->orderBy('id', 'desc')->page();
     }
 
     public static function selfList(string $keywords = '') {

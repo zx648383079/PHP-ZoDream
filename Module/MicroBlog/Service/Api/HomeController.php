@@ -4,6 +4,7 @@ namespace Module\MicroBlog\Service\Api;
 
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
+use Module\MicroBlog\Domain\Repositories\TopicRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends Controller {
@@ -76,5 +77,9 @@ class HomeController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function suggestAction(string $keywords = '') {
+        return $this->renderPage(TopicRepository::newList($keywords));
     }
 }

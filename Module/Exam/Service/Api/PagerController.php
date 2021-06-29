@@ -9,7 +9,7 @@ class PagerController extends Controller {
     public function indexAction(int $course = 0, int $type = 0, int $id = 0) {
         try {
             return $this->render(
-                PagerRepository::create($course, $type, $id)
+                PagerRepository::createOrThrow($course, $type, $id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

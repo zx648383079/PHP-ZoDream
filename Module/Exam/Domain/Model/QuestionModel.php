@@ -2,6 +2,7 @@
 namespace Module\Exam\Domain\Model;
 
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Exam\Domain\Entities\QuestionEntity;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -35,6 +36,10 @@ class QuestionModel extends QuestionEntity {
 
     public function material() {
         return $this->hasOne(CourseModel::class, 'id', 'material_id');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function optionItems() {

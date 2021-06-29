@@ -10,7 +10,7 @@ use Module\Exam\Domain\Model\QuestionOptionModel;
 
 class QuestionRepository {
     public static function getList(string $keywords = '', int $course = 0, int $user = 0) {
-        return QuestionModel::with('course')
+        return QuestionModel::with('course', 'user')
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
             })
@@ -22,7 +22,7 @@ class QuestionRepository {
     }
 
     public static function searchList(string $keywords = '', int $course = 0, int $user = 0) {
-        return QuestionModel::with('course')
+        return QuestionModel::with('course', 'user')
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
             })
@@ -31,7 +31,7 @@ class QuestionRepository {
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })->orderBy('id', 'desc')
-            ->select('id', 'title', 'course_id', 'type', 'easiness')->page();
+            ->select('id', 'title', 'course_id', 'user_id', 'type', 'easiness', 'created_at')->page();
     }
 
     public static function selfList(string $keywords = '', int $course = 0) {
@@ -110,6 +110,10 @@ class QuestionRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function check(string $title, int $id = 0) {
+        return QuestionModel::with('course', 'user')->where('title', $title)->where('id', '<>', $id)->orderBy('id', 'desc')->get();
     }
 
     public static function suggestion(string $keywords, int $course = 0) {

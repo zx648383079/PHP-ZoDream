@@ -31,6 +31,14 @@ class PagerRepository {
             ->setLimitTime($model->limit_time);
     }
 
+    public static function createOrThrow(int $course = 0, int $type = 0, int $id = 0) {
+        $pager = static::create($course, $type, $id);
+        if ($pager->count() < 1) {
+            throw new \Exception('无题目');
+        }
+        return $pager;
+    }
+
     public static function check(array $data, int $pageId = 0, int $spentTime = 0) {
         $pager = new Pager();
         $pager->setId($pageId);
@@ -57,7 +65,7 @@ class PagerRepository {
         if (!isset($model) || empty($model)) {
             throw new \Exception('题目不存在');
         }
-        return $model->format();
+        return $model->format(null, null, true);
     }
 
     public static function questionCheck(array $data) {
