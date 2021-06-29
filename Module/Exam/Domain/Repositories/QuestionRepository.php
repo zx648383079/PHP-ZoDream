@@ -21,6 +21,19 @@ class QuestionRepository {
             })->orderBy('id', 'desc')->page();
     }
 
+    public static function searchList(string $keywords = '', int $course = 0, int $user = 0) {
+        return QuestionModel::with('course')
+            ->when($course > 0, function ($query) use ($course) {
+                $query->where('course_id', $course);
+            })
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['title']);
+            })->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })->orderBy('id', 'desc')
+            ->select('id', 'title', 'course_id', 'type', 'easiness')->page();
+    }
+
     public static function selfList(string $keywords = '', int $course = 0) {
         return static::getList($keywords, $course, auth()->id());
     }
@@ -97,5 +110,15 @@ class QuestionRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function suggestion(string $keywords, int $course = 0) {
+        return QuestionModel::with('course')
+                ->when($course > 0, function ($query) use ($course) {
+                    $query->where('course_id', $course);
+                })
+                ->when(!empty($keywords), function ($query) {
+                    SearchModel::searchWhere($query, ['title']);
+                })->orderBy('id', 'desc')->limit(5)->get('id', 'title', 'course_id', 'type', 'easiness');
     }
 }

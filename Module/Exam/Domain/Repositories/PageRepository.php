@@ -13,7 +13,7 @@ class PageRepository {
     public static function getList(string $keywords = '', int $user = 0) {
         return PageModel::query()
             ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, ['title']);
+                SearchModel::searchWhere($query, ['name']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', auth()->id());
             })->orderBy('end_at', 'desc')->page();
@@ -123,5 +123,12 @@ class PageRepository {
 
     public static function can(int $id) {
         return PageModel::where('id', $id)->where('user_id', auth()->id())->count() > 0;
+    }
+
+    public static function suggestion(string $keywords) {
+        return PageModel::query()
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['name']);
+            })->orderBy('end_at', 'desc')->limit(5)->get();
     }
 }

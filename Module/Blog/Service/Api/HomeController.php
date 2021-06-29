@@ -62,7 +62,7 @@ class HomeController extends Controller {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();
-        return $this->render(compact('data'));
+        return $this->renderData($data);
     }
 
     public function subtotalAction() {
