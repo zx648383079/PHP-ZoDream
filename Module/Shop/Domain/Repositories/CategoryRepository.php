@@ -22,19 +22,6 @@ class CategoryRepository {
         return $floor_categories;
     }
 
-    public static function findOrNew($name) {
-        if (empty($name)) {
-            return 0;
-        }
-        $id = CategoryModel::query()->where('name', $name)->value('id');
-        if ($id > 0) {
-            return $id;
-        }
-        return CategoryModel::query()->insert([
-            'name' => $name
-        ]);
-    }
-
     public static function levelTree() {
         return CategoryModel::cacheLevel();
     }

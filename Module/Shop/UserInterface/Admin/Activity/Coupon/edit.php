@@ -17,7 +17,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Form::text('name', true)?>
     <?=Form::file('thumb')?>
     <?=Form::select('type', ['优惠', '折扣'])?>
-    <?=Form::select('rule', ['全场通用', '指定商品', '指定分类', '指定品牌', '指定店铺'])?>
+    <?=Form::select('rule', ['全场通用', '指定分类', '指定品牌', '指定商品', '指定店铺'])?>
     <div>
         
     </div>

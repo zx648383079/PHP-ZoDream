@@ -20,8 +20,9 @@ use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\ProductModel;
-use Module\Shop\Domain\Repositories\GoodsRepository;
+use Module\Shop\Domain\Repositories\Admin\GoodsRepository;
 use Zodream\Helpers\Json;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class GoodsController extends Controller {
@@ -66,84 +67,55 @@ class GoodsController extends Controller {
         return $this->show('edit', compact('model', 'cat_list', 'brand_list', 'group_list', 'gallery_list'));
     }
 
-    public function saveAction($id, $product = null, $gallery = null, $attr = null) {
-        $model = new GoodsModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        if ($id < 1) {
-            GoodsAttributeModel::where('goods_id', '<', 1)->update([
-                'goods_id' => $model->id
-            ]);
-        }
-        if (!empty($product)) {
-            ProductModel::batchSave(is_array($product) ? $product : Json::decode($product), $model->id);
-        }
-        if (!empty($gallery)) {
-            GoodsGalleryModel::batchSave($gallery, $model->id);
-        }
-        if (!empty($attr)) {
-            AttributeUniqueModel::batchSave($model, $attr);
+    public function saveAction(Input $input) {
+        try {
+            GoodsRepository::save($input->all());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
 
-    public function deleteAction($id, $trash = false) {
-        if ($trash) {
-            GoodsModel::where('deleted_at', '>', 0)
-                ->where('id', $id)->delete();
-        } else {
-            GoodsModel::where('id', $id)->update([
-                'deleted_at' => time()
-            ]);
-        }
+    public function deleteAction(int $id, bool $trash = false) {
+        GoodsRepository::remove($id, $trash);
         return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
 
     public function clearAction() {
-        GoodsModel::where('deleted_at', '>', 0)->delete();
+        GoodsRepository::clearTrash();
         return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
 
-    public function restoreAction($id = 0) {
-        GoodsModel::where('deleted_at', '>', 0)->when($id > 0, function ($query) use ($id) {
-            $query->where('id', intval($id));
-        })->update([
-            'deleted_at' => 0
-        ]);
+    public function restoreAction(int $id = 0) {
+        GoodsRepository::restoreTrash($id);
         return $this->renderData([
             'url' => $this->getUrl('goods')
         ]);
     }
 
-    public function toggleAction($id, $name) {
-        if ($id < 1 || !in_array($name, ['is_best', 'is_hot', 'is_new'])) {
-            return $this->renderFailure('信息错误！');
+    public function toggleAction(int $id, string $name) {
+        try {
+            GoodsRepository::goodsAction($id, [$name]);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        GoodsModel::where('id', $id)->updateBool($name);
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     public function generateSnAction() {
-        $sn = GoodsRepository::generateSn();
-        return $this->renderData($sn);
+        return $this->renderData(GoodsRepository::generateSn());
     }
 
-    public function attributeAction($group_id, $goods_id = 0) {
-        $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position asc')->orderBy('type asc')->asArray()->all();
-        foreach ($attr_list as &$item) {
-            $item['default_value'] = empty($item['default_value']) || $item['input_type'] < 1 ? [] : explode(PHP_EOL, $item['default_value']);
-            $item['attr_items'] = GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $item['id'])->all();
-        }
-        unset($item);
-        $product_list = ProductModel::where('goods_id', $goods_id)->orderBy('id asc')->all();
-        return $this->renderData(compact('attr_list', 'product_list'));
+    public function attributeAction(int $group_id, int $goods_id = 0) {
+        return $this->renderData(
+            GoodsRepository::attributeList($group_id, $goods_id)
+        );
     }
 
     public function saveAttributeAction() {
@@ -175,18 +147,15 @@ class GoodsController extends Controller {
         } else {
             GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $attribute_id)->where('value', $value)->delete();
         }
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
-    public function cardAction($id, $keywords = null) {
+    public function cardAction(int $id, string $keywords = '') {
         $model = GoodsModel::find($id);
         if (empty($model)) {
             return $this->redirect($this->getUrl('goods'));
         }
-        $card_list = GoodsCardModel::where('goods_id', $id)
-            ->when(!empty($keywords), function ($query) use ($keywords) {
-                $query->where('card_no', $keywords);
-            })->orderBy('order_id', 'asc')->orderBy('id', 'desc')->page();
+        $card_list = GoodsRepository::cardList($id, $keywords);
         return $this->show(compact('card_list', 'model', 'keywords'));
     }
 
@@ -198,51 +167,22 @@ class GoodsController extends Controller {
 
     }
 
-    public function createCardAction($id, $amount = 1) {
-        GoodsCardModel::generate($id, $amount);
-        GoodsCardModel::refreshStock($id);
+    public function createCardAction(int $id, int $amount = 1) {
+        GoodsRepository::cardGenerate($id, $amount);
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function deleteCardAction($id) {
-        $model = GoodsCardModel::find($id);
-        $model->delete();
-        GoodsCardModel::refreshStock($model->goods_id);
+    public function deleteCardAction(int $id) {
+        GoodsRepository::cardRemove($id);
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
     public function refreshAction() {
-        set_time_limit(0);
-        GoodsModel::refreshPk(function ($old_id, $new_id) {
-            GoodsAttributeModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            GoodsGalleryModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            GoodsIssueModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            ProductModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            CartModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            OrderGoodsModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            CollectModel::where('goods_id', $old_id)->update([
-                'goods_id' => $new_id
-            ]);
-            CommentModel::where('item_type', 0)->where('item_id', $old_id)->update([
-                'item_id' => $new_id
-            ]);
-        });
+        GoodsRepository::sortOut();
         return $this->renderData([
             'refresh' => true
         ]);
@@ -281,6 +221,6 @@ class GoodsController extends Controller {
         if ($request->isJson()) {
             GoodsRepository::importJson($request->get());
         }
-        return $this->renderData();
+        return $this->renderData(true);
     }
 }

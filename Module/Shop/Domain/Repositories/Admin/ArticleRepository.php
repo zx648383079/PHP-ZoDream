@@ -34,7 +34,7 @@ class ArticleRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ArticleModel::findOrNew($id);
         $model->load($data);

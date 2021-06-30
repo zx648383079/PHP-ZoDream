@@ -37,9 +37,9 @@ class ActivityModel extends Model {
     const TYPE_FREE_TRIAL = 10; // 试用
 
     const SCOPE_ALL = 0;
-    const SCOPE_GOODS = 1;
+    const SCOPE_GOODS = 3;
     const SCOPE_BRAND = 2;
-    const SCOPE_CATEGORY = 3;
+    const SCOPE_CATEGORY = 1;
 
     const STATUS_NONE = 0;
     const STATUS_END = 1;

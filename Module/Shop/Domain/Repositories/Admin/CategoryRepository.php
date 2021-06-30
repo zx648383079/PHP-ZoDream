@@ -20,7 +20,7 @@ class CategoryRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = CategoryModel::findOrNew($id);
         $model->load($data);
@@ -59,5 +59,18 @@ class CategoryRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function findOrNew(string $name) {
+        if (empty($name)) {
+            return 0;
+        }
+        $id = CategoryModel::query()->where('name', $name)->value('id');
+        if ($id > 0) {
+            return $id;
+        }
+        return CategoryModel::query()->insert([
+            'name' => $name
+        ]);
     }
 }

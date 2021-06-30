@@ -30,6 +30,7 @@ use Module\Shop\Domain\Models\GoodsAttributeModel;
 use Module\Shop\Domain\Models\GoodsCardModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsIssueModel;
+use Module\Shop\Domain\Models\GoodsMetaModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\InvoiceModel;
 use Module\Shop\Domain\Models\InvoiceTitleModel;
@@ -548,8 +549,9 @@ class CreateShopTables extends Migration {
             $table->string('description', 200)->comment('关键字');
             $table->string('brief', 200)->comment('简介');
             $table->text('content')->nullable()->comment('内容');
-            $table->decimal('price', 8, 2)->default(0);
-            $table->decimal('market_price', 8, 2)->default(0);
+            $table->decimal('price', 8, 2)->default(0)->comment('销售价');
+            $table->decimal('market_price', 8, 2)->default(0)->comment('原价/市场价');
+            $table->decimal('cost_price', 8, 2)->default(0)->comment('成本价');
             $table->uint('stock')->default(1);
             $table->uint('attribute_group_id')->default(0);
             $table->float('weight', 8, 3)->default(0);
@@ -566,6 +568,11 @@ class CreateShopTables extends Migration {
                 ->default(0)->comment('动态排序');
             $table->softDeletes();
             $table->timestamps();
+        })->append(GoodsMetaModel::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('goods_id');
+            $table->string('name', 50);
+            $table->text('content');
         })->append(GoodsCardModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('goods_id');

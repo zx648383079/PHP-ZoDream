@@ -54,4 +54,17 @@ class BrandRepository {
         );
     }
 
+    public static function findOrNew(string $name) {
+        if (empty($name)) {
+            return 0;
+        }
+        $id = BrandModel::query()->where('name', $name)->value('id');
+        if ($id > 0) {
+            return $id;
+        }
+        return BrandModel::query()->insert([
+            'name' => $name
+        ]);
+    }
+
 }

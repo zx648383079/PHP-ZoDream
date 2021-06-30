@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
+use Module\Shop\Domain\Models\GoodsMetaModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsPageModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
@@ -34,38 +35,19 @@ class GoodsRepository {
             })->page($per_page);
     }
 
-    public static function searchComplete(array $id = [],
-                                  $category = 0,
-                                  $brand = 0,
-                                  $keywords = '',
-                                  $per_page = 20, $sort = '', $order = '', $trash = false): Page {
-        return GoodsPageModel::sortBy($sort, $order)->with('category', 'brand')
-            ->when(!empty($id), function ($query) use ($id) {
-                $query->whereIn('id', array_map('intval', $id));
-            })
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'name');
-            })->when($category > 0, function ($query) use ($category) {
-                $query->where('cat_id', intval($category));
-            })->when($brand > 0, function ($query) use ($brand) {
-                $query->where('brand_id', intval($brand));
-            })->when($trash, function ($query) {
-                $query->where('deleted_at', '>', 0);
-            })->page($per_page);
-    }
-
     /**
      * 商品详情
      * @param $id
      * @return array|bool
      * @throws \Exception
      */
-    public static function detail($id) {
+    public static function detail(int $id) {
         $goods = GoodsModel::find($id);
         if (empty($goods)) {
             return false;
         }
         $data = $goods->toArray();
+        $data = array_merge($data, GoodsMetaModel::getOrDefault($id));
         $data['properties'] = $goods->properties;
         $data['category'] = $goods->category;
         $data['brand'] = $goods->brand;
@@ -182,96 +164,8 @@ class GoodsRepository {
             })->page($per_page);
     }
 
-    public static function importJson(array $data) {
-        if (empty($data)) {
-            throw new \Exception('数据错误');
-        }
-        if (isset($data['sn']) && self::hasSeriesNumber($data['sn'])) {
-            throw new \Exception('商品已存在');
-        }
-        $goods = GoodsModel::create([
-            'cat_id' => CategoryRepository::findOrNew($data['category']),
-            'brand_id' => BrandRepository::findOrNew($data['brand']),
-            'name' => $data['title'],
-            'series_number' => isset($data['sn']) ? $data['sn'] : self::generateSn(),
-            'keywords' => 'string:0,200',
-            'thumb' => $data['thumb'],
-            'picture' => $data['thumb'],
-            'description' => $data['description'],
-            'brief' => $data['description'],
-            'content' => $data['content'],
-            'price' => $data['price'],
-            'market_price' => $data['price'],
-            'stock' => 1,
-            'status' => GoodsModel::STATUS_SALE,
-        ]);
-        if (!$goods) {
-            throw new \Exception('创建失败');
-        }
-        if (empty($data['images'])) {
-            return $goods;
-        }
-        $items = [];
-        foreach ($data['images'] as $img) {
-            $items[] = [
-                'goods_id' => $goods->id,
-                'image' => $img,
-            ];
-        }
-        GoodsGalleryModel::query()->insert($items);
-        return $goods;
-    }
 
-    public static function hasSeriesNumber($sn) {
-        return GoodsModel::where('series_number', $sn)->count() > 0;
-    }
 
-    public static function generateSn() {
-        $sn = time();
-        $i = 0;
-        while ($i < 10) {
-            $i ++;
-            $sn = 'SN'.str_pad(Str::randomNumber(8), 8, '0', STR_PAD_LEFT );
-            if (!self::hasSeriesNumber($sn)) {
-                break;
-            }
-        }
-        return $sn;
-    }
-
-    public static function searchWithProduct(string $keywords = '', int $category = 0, int $brand = 0, int|array $id = 0) {
-        if (!empty($keywords) && $category < 1 && $brand < 1) {
-            $product = ProductModel::where('series_number', $keywords)
-                ->first();
-            if (!empty($product)) {
-                $goods = GoodsSimpleModel::where('id', $product->goods_id)
-                    ->first();
-                $goods->products = [$product];
-                return new Page([$goods]);
-            }
-            $goods = GoodsSimpleModel::where('series_number', $keywords)
-                ->first();
-            if (!empty($product)) {
-                $goods->products;
-                return new Page([$goods]);
-            }
-        }
-        return GoodsSimpleModel::with('products')
-            ->when(!empty($id), function ($query) use ($id) {
-                if (is_array($id)) {
-                    $query->whereIn('id', $id);
-                    return;
-                }
-                $query->where('id', $id);
-            })
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'name');
-            })->when($category > 0, function ($query) use ($category) {
-                $query->where('cat_id', intval($category));
-            })->when($brand > 0, function ($query) use ($brand) {
-                $query->where('brand_id', intval($brand));
-            })->page();
-    }
 
     public static function homeRecommend(): array {
         $hot_products = GoodsRepository::getRecommendQuery('is_hot')->all();

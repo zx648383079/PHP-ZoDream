@@ -4,6 +4,7 @@ namespace Module\Exam\Service\Admin;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Exam\Domain\Model\CourseModel;
+use Module\Exam\Domain\Model\QuestionAnalysisModel;
 use Module\Exam\Domain\Model\QuestionAnswerModel;
 use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
@@ -54,6 +55,11 @@ class QuestionController extends Controller {
         if (!$model->load() || !$model->autoIsNew()->save()) {
             return $this->renderFailure($model->getFirstError());
         }
+        QuestionAnalysisModel::batchSave($model, [
+            [
+                'content' => $request->get('analysis')
+            ]
+        ]);
         QuestionOptionModel::batchSave($model,
             ModelHelper::formArr($request->get('option', [])));
         return $this->renderData([
@@ -94,6 +100,11 @@ class QuestionController extends Controller {
         if (!$model->load() || !$model->save()) {
             return $this->renderFailure($model->getFirstError());
         }
+        QuestionAnalysisModel::batchSave($model, [
+            [
+                'content' => $request->get('analysis')
+            ]
+        ]);
         QuestionOptionModel::batchSave($model, $request->get('option', []));
         return $this->renderData([
             'url' => $this->getUrl('question')

@@ -244,7 +244,7 @@ class BlogRepository {
         $data['tags'] = $tags;
         $data['open_rule'] = $model->open_rule;
         $data['languages'] = BlogRepository::languageAll($model->parent_id > 0 ? $model->parent_id : $model->id);
-        return array_merge($data, BlogMetaModel::getMetaWithDefault($id));
+        return array_merge($data, BlogMetaModel::getOrDefault($id));
     }
 
     /**
@@ -261,7 +261,7 @@ class BlogRepository {
         }
         $data = $blog->toArray();
         $data['content'] = $blog->toHtml();
-        $data = array_merge($data, BlogMetaModel::getMetaWithDefault($id));
+        $data = array_merge($data, BlogMetaModel::getOrDefault($id));
         $data['previous'] = $blog->previous;
         $data['next'] = $blog->next;
         $data['languages'] = BlogRepository::languageList($blog->parent_id > 0 ? $blog->parent_id : $blog->id);
@@ -307,7 +307,7 @@ class BlogRepository {
             }
             BlogModel::where('parent_id', $model->id)->update($asyncData);
         }
-        BlogMetaModel::saveMeta($model->id, $data);
+        BlogMetaModel::saveBatch($model->id, $data);
         event(new BlogUpdate($model->id, $isNew ? 0 : 1, time()));
         return $model;
     }
@@ -322,7 +322,7 @@ class BlogRepository {
         if ($model->parent_id < 1) {
             BlogModel::where('parent_id', $id)->delete();
         }
-        BlogMetaModel::deleteMeta($id);
+        BlogMetaModel::deleteBatch($id);
         event(new BlogUpdate($model->id, 2, time()));
     }
 
@@ -340,7 +340,7 @@ class BlogRepository {
         if ($model->parent_id < 1) {
             BlogModel::where('parent_id', $id)->delete();
         }
-        BlogMetaModel::deleteMeta($id);
+        BlogMetaModel::deleteBatch($id);
     }
 
     public static function isSelf(int $id): bool {

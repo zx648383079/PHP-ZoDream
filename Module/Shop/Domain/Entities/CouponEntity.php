@@ -26,9 +26,9 @@ class CouponEntity extends Entity {
     const TYPE_DISCOUNT = 1; // 折扣
 
     const RULE_NONE = 0;
-    const RULE_GOODS = 1;
-    const RULE_CATEGORY = 2;
-    const RULE_BRAND = 3;
+    const RULE_GOODS = 3;
+    const RULE_CATEGORY = 1;
+    const RULE_BRAND = 2;
     const RULE_STORE = 4;
 
     const SEND_RECEIVE = 0; // 前台领取
