@@ -66,14 +66,16 @@ class ActivityRepository {
     }
 
     public static function save(int $type, array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ActivityModel::findOrNew($id);
         if ($data['scope_type'] < 1) {
             $data['scope'] = '';
         }
         if (isset($data['scope']) && is_array($data['scope'])) {
-            $data['scope'] = implode(',', $data['scope']);
+            $data['scope'] = implode(',', array_map(function ($item) {
+                return is_array($item) ? $item['id'] : $item;
+            }, $data['scope']));
         }
         $model->load($data);
         $model->type = $type;

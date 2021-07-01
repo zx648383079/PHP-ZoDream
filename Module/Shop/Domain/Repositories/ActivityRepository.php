@@ -7,6 +7,7 @@ use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
+use Module\Shop\Domain\Models\GoodsModel;
 use Zodream\Html\Page;
 
 class ActivityRepository {
@@ -134,5 +135,44 @@ class ActivityRepository {
             return false;
         }
         return $log;
+    }
+
+    /**
+     * 获取当前商品正在参加的活动
+     * @param GoodsModel $goods
+     * @return array
+     */
+    public static function goodsJoin(GoodsModel $goods) {
+        $time = time();
+        $items = ActivityModel::whereIn('type', [ActivityModel::TYPE_CASH_BACK, ActivityModel::TYPE_DISCOUNT])
+            ->where('start_at', '<=', $time)
+            ->where('end_at', '>', $time)->get();
+        if (empty($items)) {
+            return [];
+        }
+        return array_filter($items, function ($item) use ($goods) {
+            return ActivityRepository::canUseGoods($item, $goods);
+        });
+    }
+
+    public static function canUseGoods(ActivityModel $item, GoodsModel $goods) {
+        if (!in_array($item->type, [ActivityModel::TYPE_CASH_BACK, ActivityModel::TYPE_DISCOUNT])) {
+            return false;
+        }
+        if ($item->scope_type == ActivityModel::SCOPE_ALL) {
+            return true;
+        }
+        $range = explode(',', $item->scope);
+        if ($item->scope_type == ActivityModel::SCOPE_GOODS) {
+            return in_array($goods->id, $range);
+        }
+        if ($item->scope_type == ActivityModel::SCOPE_BRAND) {
+            return in_array($goods->brand_id, $range);
+        }
+        if ($item->scope_type != ActivityModel::SCOPE_CATEGORY) {
+            return true;
+        }
+        $args = array_intersect($range, CategoryRepository::path($goods->cat_id));
+        return !empty($args);
     }
 }

@@ -5,6 +5,7 @@ namespace Module\Shop\Service\Api;
 use Domain\Model\ModelHelper;
 use Module\ModuleController;
 use Module\Shop\Domain\Repositories\GoodsRepository;
+use Module\Shop\Domain\Repositories\SearchRepository;
 
 class GoodsController extends Controller {
 
@@ -12,13 +13,17 @@ class GoodsController extends Controller {
                                 int $category = 0,
                                 int $brand = 0,
                                 string $keywords = '',
-                                int $per_page = 20, string $sort = '', string $order = '') {
+                                int $per_page = 20, string $sort = '', string $order = '', bool $filter = false) {
 
         if (is_numeric($id) && $id > 0) {
             return $this->infoAction(intval($id));
         }
         $page = GoodsRepository::search(ModelHelper::parseArrInt($id), $category, $brand, $keywords, $per_page, $sort, $order);
-        return $this->renderPage($page);
+        $data = $page->toArray();
+        if ($filter) {
+            $data['filter'] = SearchRepository::filterItems([]);
+        }
+        return $this->render($data);
     }
 
     public function infoAction(int $id) {

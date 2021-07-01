@@ -92,6 +92,10 @@ class CouponRepository {
         return false;
     }
 
+    public static function canUseGoods(CouponEntity $item, GoodsModel $goods) {
+        return static::canUseCheckGoods($item->rule, explode(',', $item->rule_value), $goods);
+    }
+
     /**
      * 验证单个商品
      * @param $rule
@@ -106,10 +110,27 @@ class CouponRepository {
         if ($rule == CouponModel::RULE_BRAND) {
             return in_array($goods->brand_id, $range);
         }
-        if ($rule != CouponModel::RULE_GOODS) {
+        if ($rule != CouponModel::RULE_CATEGORY) {
             return true;
         }
-        $args = array_intersect($range, CategoryModel::getParentWidthSelf($goods->cat_id));
+        $args = array_intersect($range, CategoryRepository::path($goods->cat_id));
         return !empty($args);
+    }
+
+    /**
+     * 获取当前商品能领取使用的优惠券
+     * @param GoodsModel $goods
+     * @return array
+     */
+    public static function goodsCanReceive(GoodsModel $goods) {
+        $time = time();
+        $items = Coupon::where('send_type', 0)->where('start_at', '<=', $time)
+            ->where('end_at', '>', $time)->get();
+        if (empty($items)) {
+            return [];
+        }
+        return array_filter($items, function ($item) use ($goods) {
+            return CouponRepository::canUseGoods($item, $goods);
+        });
     }
 }

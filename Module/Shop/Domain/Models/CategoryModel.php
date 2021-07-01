@@ -136,7 +136,7 @@ class CategoryModel extends CategoryEntity {
         return $data;
     }
 
-    public static function getParentWidthSelf($id) {
+    public static function getParentWidthSelf(int $id) {
         $data = TreeHelper::getTreeParent(static::cacheLevel(), $id);
         $data[] = $id;
         return $data;

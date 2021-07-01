@@ -5,6 +5,20 @@ use Module\Shop\Domain\Models\CategoryModel;
 
 class CategoryRepository {
 
+    private static array $pathCache = [];
+
+    /**
+     * 根据分类id 获取当前分类的id 路径
+     * @param int $id
+     * @return array|mixed
+     */
+    public static function path(int $id) {
+        if (isset(static::$pathCache[$id])) {
+            return static::$pathCache[$id];
+        }
+        return static::$pathCache[$id] = CategoryModel::getParentWidthSelf($id);
+    }
+
     public static function getHomeFloor() {
         $categories_tree = CategoryModel::cacheTree();
         $floor_categories = [];

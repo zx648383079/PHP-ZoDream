@@ -4,6 +4,7 @@ namespace Module\Shop\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Shop\Domain\Entities\GoodsEntity;
+use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsMetaModel;
@@ -11,6 +12,7 @@ use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsPageModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Domain\Models\ProductModel;
+use Module\Shop\Domain\Models\Scene\Coupon;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
@@ -54,8 +56,9 @@ class GoodsRepository {
         $data['static_properties'] = $goods->static_properties;
         $data['is_collect'] = $goods->is_collect;
         $data['gallery'] = $goods->gallery;
-        // $data['countdown'] = self::getCountdown($id);
-        // $data['promotes'] = self::getPromoteList($id);
+        $data['countdown'] = self::getCountdown($goods);
+        $data['promotes'] = self::getPromoteList($goods);
+        $data['coupons'] = self::getCoupon($goods);
         return $data;
     }
 
@@ -68,7 +71,7 @@ class GoodsRepository {
         return $data;
     }
 
-    public static function getCountdown($id) {
+    public static function getCountdown(GoodsModel $goods) {
         return [
             'end_at' => time() + 3000,
             'name' => '秒杀',
@@ -76,18 +79,12 @@ class GoodsRepository {
         ];
     }
 
-    public static function getPromoteList($id) {
-        return [
-            [
-                'name' => '支付',
-                'items' => [
-                    [
-                        'name' => '优惠',
-                        'icon' => '领券',
-                    ]
-                ]
-            ]
-        ];
+    public static function getPromoteList(GoodsModel $goods) {
+        return ActivityRepository::goodsJoin($goods);
+    }
+
+    public static function getCoupon(GoodsModel $goods) {
+        return CouponRepository::goodsCanReceive($goods);
     }
 
     /**
@@ -97,7 +94,7 @@ class GoodsRepository {
      * @param null $properties
      * @return bool
      */
-    public static function canBuy($goods, $amount = 1, $properties = null) {
+    public static function canBuy($goods, int  $amount = 1, $properties = null) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::query()->where('id', $goods)
                 ->first('id', 'price', 'stock');
@@ -163,9 +160,6 @@ class GoodsRepository {
                 $query->where('brand_id', intval($brand));
             })->page($per_page);
     }
-
-
-
 
     public static function homeRecommend(): array {
         $hot_products = GoodsRepository::getRecommendQuery('is_hot')->all();

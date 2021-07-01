@@ -6,8 +6,8 @@ use Zodream\Helpers\Json;
 
 trait TableMeta {
 
-    protected static string $idKey = 'item_id';
-    protected static array $defaultItems = [];
+//    protected static string $idKey = 'item_id';
+//    protected static array $defaultItems = [];
 
     /**
      * 获取并合并默认的
@@ -15,7 +15,7 @@ trait TableMeta {
      * @return array
      */
     public static function getOrDefault(int $id) {
-        return static::get($id, static::$defaultItems);
+        return static::getMap($id, static::$defaultItems);
     }
 
     /**
@@ -24,7 +24,7 @@ trait TableMeta {
      * @param array $default
      * @return array
      */
-    public static function get(int $id, array $default = []) {
+    public static function getMap(int $id, array $default = []) {
         if ($id < 1) {
             return $default;
         }
