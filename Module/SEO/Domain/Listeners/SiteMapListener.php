@@ -49,6 +49,9 @@ class SiteMapListener {
         /** @var ModuleRoute $route */
         $route = app(ModuleRoute::class);
 	    foreach ($modules as $path => $module) {
+	        if (empty($module)) {
+	            continue;
+            }
             $route->module($path, function () use ($map, $module, $route) {
                 $instance = $route->moduleInstance($module, app(HttpContext::class));
                 if (method_exists($instance, 'openLinks')) {

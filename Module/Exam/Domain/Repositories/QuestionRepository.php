@@ -47,10 +47,13 @@ class QuestionRepository {
         if ($user > 0 && $model->user_id !== $user) {
             throw new \Exception('数据有误');
         }
-        $model->option_items;
-        $model->analysis_items;
-        $model->material;
-        return $model;
+        $data = $model->toArray();
+        $data['option_items'] = $model->option_items;
+        $data['analysis_items'] = $model->analysis_items;
+        if ($model->material_id > 0) {
+            $data['material'] = $model->material;
+        }
+        return $data;
     }
 
     public static function selfFull(int $id) {

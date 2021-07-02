@@ -42,12 +42,12 @@ class QuestionModel extends QuestionEntity {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-    public function optionItems() {
-        return $this->hasMany(QuestionOptionModel::class, 'id', 'question_id')->orderBy('id', 'asc');
+    public function option_items() {
+        return $this->hasMany(QuestionOptionModel::class, 'question_id',  'id')->orderBy('id', 'asc');
     }
 
-    public function analysisItems() {
-        return $this->hasMany(QuestionAnalysisModel::class, 'id', 'question_id')->orderBy('type', 'asc');
+    public function analysis_items() {
+        return $this->hasMany(QuestionAnalysisModel::class, 'question_id', 'id')->orderBy('type', 'asc');
     }
 
     public function check($answer, $dynamic = null) {

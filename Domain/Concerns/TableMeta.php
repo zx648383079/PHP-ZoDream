@@ -42,7 +42,7 @@ trait TableMeta {
             return;
         }
         $metaKeys = array_keys(static::$defaultItems);
-        $items = static::get($id);
+        $items = static::getMap($id);
         $add = [];
         foreach ($data as $name => $content) {
             if (!in_array($name, $metaKeys)) {
