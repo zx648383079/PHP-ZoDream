@@ -11,10 +11,12 @@ use Domain\Entities\Entity;
  * @property integer $start_at
  * @property integer $end_at
  * @property integer $limit_time
- * @property integer $updated_at
- * @property integer $created_at
  * @property integer $user_id
  * @property integer $status
+ * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $score
+ * @property integer $question_count
  */
 class PageEntity extends Entity {
     public static function tableName() {
@@ -25,14 +27,16 @@ class PageEntity extends Entity {
         return [
             'name' => 'required|string:0,200',
             'rule_type' => 'int:0,127',
-            'rule_value' => 'string:0,255',
+            'rule_value' => 'string:0,500',
             'start_at' => 'int',
             'end_at' => 'int',
             'limit_time' => 'int',
-            'updated_at' => 'int',
-            'created_at' => 'int',
             'user_id' => 'required|int',
             'status' => 'int:0,127',
+            'updated_at' => 'int',
+            'created_at' => 'int',
+            'score' => 'int',
+            'question_count' => 'int',
         ];
     }
 

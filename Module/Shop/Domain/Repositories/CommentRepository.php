@@ -1,16 +1,32 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\CommentModel;
 
 class CommentRepository {
+
+    public static function getList(int $item_id, string $keywords = '', int $item_type = 0) {
+        return CommentModel::with('user', 'images')
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'content');
+            })
+            ->where('item_type', $item_type)
+            ->where('item_id', $item_id)
+            ->orderBy('id', 'desc')->page();
+    }
+
+    public static function create(array $data) {
+        $data['user_id'] = auth()->id();
+        return CommentModel::createOrThrow($data);
+    }
     /**
      * 获取评论的统计信息
      * @param $item_id
      * @param int $item_type
      * @return array
      */
-    public static function count($item_id, $item_type = 0) {
+    public static function count(int $item_id, int $item_type = 0) {
         $data = CommentModel::where('item_type', $item_type)->where('item_id', $item_id)
             ->groupBy('`rank`')->asArray()
             ->get('`rank`,COUNT(*) AS `count`');
@@ -57,8 +73,7 @@ class CommentRepository {
         return $args;
     }
 
-    public static function recommend() {
-        return CommentModel::with('goods', 'user')->where('item_type', 0)->limit(6)->all();
+    public static function recommend(int $limit = 6) {
+        return CommentModel::with('goods', 'user', 'images')->where('item_type', 0)->limit($limit)->get();
     }
-
 }

@@ -2,7 +2,6 @@
 namespace Module\Shop\Domain\Auction;
 
 use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
@@ -78,10 +77,10 @@ abstract class BaseAuction {
     }
 
     /**
-     * @return ActionLogModel|null
+     * @return AuctionLogModel|null
      */
     protected function maxLog() {
-       return ActionLogModel::where('act_id', $this->model->id)
+       return AuctionLogModel::where('act_id', $this->model->id)
            ->orderBy('bid', 'desc')
            ->first();
     }
@@ -90,6 +89,6 @@ abstract class BaseAuction {
         if (empty($key)) {
             return $this->configure;
         }
-        return isset($this->configure[$key]) ? $this->configure[$key] : $default;
+        return $this->configure[$key] ?? $default;
     }
 }

@@ -13,8 +13,11 @@ use Module\Exam\Domain\Entities\PageQuestionEntity;
  * @property string $content
  * @property string $answer
  * @property integer $status
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $max_score
+ * @property integer $score
+ * @property integer $answer_type
  */
 class PageQuestionModel extends PageQuestionEntity {
 

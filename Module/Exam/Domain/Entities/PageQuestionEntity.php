@@ -12,14 +12,17 @@ use Domain\Entities\Entity;
  * @property string $content
  * @property string $answer
  * @property integer $status
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $max_score
+ * @property integer $score
+ * @property integer $answer_type
  */
 class PageQuestionEntity extends Entity {
     public static function tableName() {
         return 'exam_page_question';
     }
-    public function rules() {
+    protected function rules() {
         return [
             'page_id' => 'required|int',
             'evaluate_id' => 'required|int',
@@ -28,8 +31,11 @@ class PageQuestionEntity extends Entity {
             'content' => '',
             'answer' => '',
             'status' => 'int:0,127',
-            'created_at' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
+            'max_score' => 'int',
+            'score' => 'int',
+            'answer_type' => 'int:0,127',
         ];
     }
 

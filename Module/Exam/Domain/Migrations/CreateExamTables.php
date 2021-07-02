@@ -79,6 +79,8 @@ class CreateExamTables extends Migration {
             $table->uint('question_id');
             $table->uint('user_id');
             $table->text('content')->nullable()->comment('题目内容');
+            $table->uint('answer_type', 1)->default(0)->comment('回答类型/默认文字');
+            $table->text('answer')->nullable()->comment('用户回答');
             $table->uint('status', 2)->default(0)->comment('状态');
             $table->timestamps();
         })->append(QuestionWrongEntity::tableName(), function (Table $table) {
@@ -94,10 +96,12 @@ class CreateExamTables extends Migration {
             $table->id();
             $table->string('name', 200)->comment('试卷名');
             $table->uint('rule_type', 1)->default(0)->comment('试卷生存类型');
-            $table->string('rule_value')->default('')->comment('试卷组成规则');
+            $table->string('rule_value', 500)->default('')->comment('试卷组成规则');
             $table->timestamp('start_at')->comment('开始时间');
             $table->timestamp('end_at')->comment('结束时间');
             $table->uint('limit_time', 4)->default(0)->comment('限时');
+            $table->short('score')->default(0)->comment('总分数');
+            $table->short('question_count')->default(0)->comment('题目数');
             $table->uint('user_id');
             $table->uint('status', 1)->default(0);
             $table->timestamps();
@@ -108,9 +112,12 @@ class CreateExamTables extends Migration {
             $table->uint('evaluate_id');
             $table->uint('question_id');
             $table->uint('user_id');
+            $table->short('max_score')->default(0)->comment('满分');
+            $table->short('score')->default(0)->comment('获得的分数');
             $table->text('content')->nullable()->comment('题目内容');
+            $table->uint('answer_type', 1)->default(0)->comment('回答类型/默认文字');
             $table->text('answer')->nullable()->comment('用户回答');
-            $table->uint('status', 2)->default(0)->comment('状态');
+            $table->uint('status', 1)->default(0)->comment('状态');
             $table->timestamps();
         })->append(PageEvaluateEntity::tableName(), function (Table $table) {
             $table->comment('试卷评估结果');
@@ -121,7 +128,7 @@ class CreateExamTables extends Migration {
             $table->uint('right', 4)->default(0)->comment('正确数量');
             $table->uint('wrong', 4)->default(0)->comment('错误数量');
             $table->short('score')->default(0);
-            $table->uint('status', 2)->default(0)->comment('状态');
+            $table->uint('status', 1)->default(0)->comment('状态');
             $table->string('remark')->default('')->comment('评语');
             $table->timestamps();
         })->autoUp();

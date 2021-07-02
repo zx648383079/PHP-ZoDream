@@ -8,6 +8,7 @@ use Module\Exam\Domain\Model\PageEvaluateModel;
 use Module\Exam\Domain\Model\PageModel;
 use Module\Exam\Domain\Model\PageQuestionModel;
 use Module\Exam\Domain\Model\QuestionModel;
+use Zodream\Database\Relation;
 
 class PageRepository {
     public static function getList(string $keywords = '', int $user = 0) {
@@ -23,21 +24,32 @@ class PageRepository {
         return static::getList($keywords, auth()->id());
     }
 
-    public static function get(int $id, int $user = 0) {
+    public static function get(int $id, int $user = 0, bool $full = false) {
         $model = PageModel::findOrThrow($id, '数据有误');
         if ($user > 0 && $model->user_id !== $user) {
             throw new \Exception('数据有误');
         }
         $rules = $model->rule_value;
         if ($model->rule_type > 0 && !empty($rules)) {
-            $model->rule_value = QuestionModel::whereIn('id', $rules)
-                ->get('id', 'type', 'title');
+            return array_merge(
+                $model->toArray(),
+                [
+                    'rule_value' => static::formatQuestion($rules, $full)
+                ]
+            );
         }
         return $model;
     }
 
+    public static function formatQuestion(array $items, bool $full = false) {
+        $query = $full ?  QuestionModel::with('material', 'option_items') : QuestionModel::select('id', 'type', 'title');
+        return Relation::create($items, [
+            Relation::MERGE_RELATION_KEY => Relation::make($query, 'id', 'id')
+        ]);
+    }
+
     public static function getSelf(int $id) {
-        return static::get($id);
+        return static::get($id, auth()->id(), true);
     }
 
     public static function save(array $data, int $user = 0) {
@@ -49,6 +61,12 @@ class PageRepository {
         }
         $model->load($data);
         $model->user_id = auth()->id();
+        $model->score = 0;
+        $model->question_count = 0;
+        foreach ($model->rule_value as $item) {
+            $model->score += intval($item['score']);
+            $model->question_count += $model->rule_type < 1 ? intval($item['amount']) : 1;
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
@@ -66,10 +84,18 @@ class PageRepository {
             return $model;
         }
         $idItems = [];
+        $model->question_count = 0;
+        $model->score = 0;
         foreach ($items as $item) {
             $q = QuestionRepository::selfSave($item);
+            $score = intval($item['score']);
             if ($q && $q->id) {
-                $idItems[] = $q->id;
+                $model->question_count ++;
+                $model->score += $score;
+                $idItems[] = [
+                    'id' => $q->id,
+                    'score' => $score,
+                ];
             }
         }
         $model->rule_value = $idItems;

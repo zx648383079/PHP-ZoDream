@@ -122,12 +122,14 @@ class Pager implements ArrayAble {
 
     public function getReport() {
         $wrong = $right = 0;
+        $score = 0;
         foreach ($this->items as $item) {
             if (!isset($item['right'])) {
                 continue;
             }
             if ($item['right'] > 0) {
                 $right ++;
+                $score += intval($item['score']);
                 continue;
             }
             if ($item['right'] < 0) {
@@ -139,7 +141,7 @@ class Pager implements ArrayAble {
         if ($wrong > 0 || $right > 0) {
             $scale = round($right * 100 / ($wrong + $right), 2);
         }
-        return compact('wrong', 'right', 'scale');
+        return compact('wrong', 'right', 'scale', 'score');
     }
 
     public function getCard() {
@@ -165,7 +167,7 @@ class Pager implements ArrayAble {
         $data = $model->format($i + 1,
             $this->items[$i]['dynamic'] ?? null,
             $this->finished);
-        foreach (['right', 'answer' => 'your_answer'] as $key => $name) {
+        foreach (['right', 'answer' => 'your_answer', 'score' => 'max_score'] as $key => $name) {
             if (is_integer($key)) {
                 $key = $name;
             }
@@ -234,67 +236,5 @@ class Pager implements ArrayAble {
             unset($this->items[$i]['model']);
         }
         return ['id', 'title', 'limitTime', 'items', 'index', 'finished'];
-    }
-
-    public static function create(int $course, int $type = 0) {
-        if ($type < 2) {
-            return static::createId(QuestionModel::where('course_id', $course)
-                ->orderBy('id', 'asc')->pluck('id'), $type > 0)
-                ->setTitle($type < 1 ? '顺序练习' : '随机练习');
-        }
-        if ($type === 3) {
-            return static::createId(QuestionModel::where('course_id', $course)
-                ->where('easiness', '>', 5)
-                ->orderBy('id', 'asc')->pluck('id'), true)
-                ->setTitle('难题练习');
-        }
-        $rules = [];
-        foreach ([10, 5, 5, 3, 2] as $i => $amount) {
-            $rules[] = [
-                'course' => $course,
-                'type' => $i,
-                'amount' => $amount
-            ];
-        }
-        return static::createId(static::questionByRule($rules), false)
-            ->setTitle('全真模拟');
-    }
-
-    public static function questionByRule(array $data) {
-        $items = [];
-        foreach ($data as $item) {
-            if ($item['amount'] < 1) {
-                continue;
-            }
-            $args = QuestionModel::query()
-                ->where('course_id', $item['course'])
-                ->where('type', $item['type'])
-                ->whereNotIn('id', $items)
-                ->orderBy('RAND()')
-                ->limit($item['amount'])
-                ->pluck('id');
-            $items = array_merge($items, $args);
-        }
-        return $items;
-    }
-
-    public static function createId(array $items, $shuffle = false) {
-        if ($shuffle) {
-            shuffle($items);
-        }
-        return (new static())->setItems(array_map(function ($id) {
-            return compact('id');
-        }, $items));
-    }
-
-    public static function formatQuestion(QuestionModel $model,
-                                          $answer,
-                                          $dynamic = null) {
-        $data = $model->format(null,
-            $dynamic,
-            true);
-        $data['your_answer'] = $answer;
-        $data['right'] = $model->check($answer, $dynamic) ? 1 : -1;
-        return $data;
     }
 }

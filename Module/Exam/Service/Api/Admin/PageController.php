@@ -29,8 +29,8 @@ class PageController extends Controller {
                 'name' => 'required|string:0,200',
                 'rule_type' => 'required|int:0,127',
                 'rule_value' => 'required',
-                'start_at' => 'int',
-                'end_at' => 'int',
+                'start_at' => '',
+                'end_at' => '',
                 'limit_time' => 'int:0,99999',
                 'rule' => '',
             ]);

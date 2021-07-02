@@ -11,8 +11,10 @@ use Module\Exam\Domain\Entities\QuestionAnswerEntity;
  * @property integer $user_id
  * @property string $content
  * @property integer $status
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $answer_type
+ * @property string $answer
  */
 class QuestionAnswerModel extends QuestionAnswerEntity {
 

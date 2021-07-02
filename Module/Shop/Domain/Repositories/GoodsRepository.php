@@ -4,17 +4,11 @@ namespace Module\Shop\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Shop\Domain\Entities\GoodsEntity;
-use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\AttributeModel;
-use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsMetaModel;
 use Module\Shop\Domain\Models\GoodsModel;
-use Module\Shop\Domain\Models\GoodsPageModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
-use Module\Shop\Domain\Models\ProductModel;
-use Module\Shop\Domain\Models\Scene\Coupon;
 use Zodream\Database\Model\Query;
-use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 
 class GoodsRepository {
@@ -43,22 +37,25 @@ class GoodsRepository {
      * @return array|bool
      * @throws \Exception
      */
-    public static function detail(int $id) {
+    public static function detail(int $id, bool $full = true) {
         $goods = GoodsModel::find($id);
         if (empty($goods)) {
             return false;
         }
         $data = $goods->toArray();
         $data = array_merge($data, GoodsMetaModel::getOrDefault($id));
+        unset($data['cost_price']);
         $data['properties'] = $goods->properties;
         $data['category'] = $goods->category;
         $data['brand'] = $goods->brand;
         $data['static_properties'] = $goods->static_properties;
         $data['is_collect'] = $goods->is_collect;
         $data['gallery'] = $goods->gallery;
-        $data['countdown'] = self::getCountdown($goods);
-        $data['promotes'] = self::getPromoteList($goods);
-        $data['coupons'] = self::getCoupon($goods);
+        if ($full) {
+            $data['countdown'] = self::getCountdown($goods);
+            $data['promotes'] = self::getPromoteList($goods);
+            $data['coupons'] = self::getCoupon($goods);
+        }
         return $data;
     }
 

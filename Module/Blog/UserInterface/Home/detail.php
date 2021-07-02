@@ -7,7 +7,7 @@ use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\CCLicenses;
 /** @var $this View */
 /** @var $blog BlogModel */
-$this->title = $this->text($blog->title);
+$this->title = $this->text($metaItems['seo_title'] ?? $blog->title);
 $lang = [
     'side_title' => __('Catalog'),
     'reply_btn' => __('Reply'),
@@ -27,7 +27,7 @@ if ($blog->edit_type < 1) {
 }
 $this->set([
     'keywords' => $this->text($blog->keywords),
-    'description' => $this->text($blog->description),
+    'description' => $this->text($metaItems['seo_description'] ?? $blog->description),
     'layout_og' => [
         'type' => 'article',
         'image' => $blog->thumb,

@@ -35,6 +35,29 @@ class AuctionLogModel extends Model {
         return 'shop_auction_log';
     }
 
+    protected function rules() {
+        return [
+            'act_id' => 'required|int',
+            'user_id' => 'required|int',
+            'bid' => 'string',
+            'amount' => 'int',
+            'status' => 'int:0,127',
+            'created_at' => 'int',
+        ];
+    }
+
+    protected function labels() {
+        return [
+            'id' => 'Id',
+            'act_id' => 'Act Id',
+            'user_id' => 'User Id',
+            'bid' => 'Bid',
+            'amount' => 'Amount',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+        ];
+    }
+
     public function activity() {
         return $this->hasOne(ActivityModel::class, 'id', 'act_id');
     }

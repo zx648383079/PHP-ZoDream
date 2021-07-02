@@ -10,6 +10,7 @@ use Zodream\Helpers\Json;
 /**
  * Class ActivityModel
  * @package Module\Shop\Domain\Models\Activity
+ * @property integer $id
  * @property string $name
  * @property string $thumb
  * @property string $description

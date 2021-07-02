@@ -11,22 +11,26 @@ use Domain\Entities\Entity;
  * @property integer $user_id
  * @property string $content
  * @property integer $status
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $answer_type
+ * @property string $answer
  */
 class QuestionAnswerEntity extends Entity {
 	public static function tableName() {
         return 'exam_question_answer';
     }
 
-    public function rules() {
+    protected function rules() {
         return [
             'question_id' => 'required|int',
             'user_id' => 'required|int',
             'content' => '',
-            'status' => 'int:0,9',
-            'created_at' => 'int',
+            'status' => 'int:0,127',
             'updated_at' => 'int',
+            'created_at' => 'int',
+            'answer_type' => 'int:0,127',
+            'answer' => '',
         ];
     }
 
@@ -37,8 +41,10 @@ class QuestionAnswerEntity extends Entity {
             'user_id' => 'User Id',
             'content' => 'Content',
             'status' => 'Status',
-            'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_at' => 'Created At',
+            'answer_type' => 'Answer Type',
+            'answer' => 'Answer',
         ];
     }
 }

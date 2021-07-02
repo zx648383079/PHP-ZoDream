@@ -14,6 +14,14 @@ class AuctionController extends Controller {
         );
     }
 
+    public function detailAction(int $id) {
+        try {
+            return $this->render(ActivityRepository::auctionDetail($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function logAction(int $activity) {
         return $this->renderPage(
             ActivityRepository::auctionLogList($activity)

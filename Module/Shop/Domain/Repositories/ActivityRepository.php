@@ -18,13 +18,21 @@ class ActivityRepository {
         if (in_array($type, [ActivityModel::TYPE_AUCTION, ActivityModel::TYPE_PRE_SALE, ActivityModel::TYPE_BARGAIN])) {
             $query->with('goods');
         }
-        return $query->where('type', $type)
+        /** @var Page $page */
+        $page = $query->where('type', $type)
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })
             ->where('status', 0)
             ->where('start_at', '<=', $time)
             ->where('end_at', '>', $time)->page();
+        if ($type === ActivityModel::TYPE_AUCTION) {
+            $page->map(function ($item) {
+                return static::formatAuction($item);
+            });
+        }
+
+        return $page;
     }
 
     /**
@@ -51,6 +59,17 @@ class ActivityRepository {
             throw new \Exception('活动已结束或不存在');
         }
         return $model;
+    }
+
+    public static function auctionDetail(int $id) {
+        $model = ActivityModel::where('type', ActivityModel::TYPE_AUCTION)
+            ->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception('活动不存在');
+        }
+        $data = static::formatAuction($model);
+        $data['goods'] = GoodsRepository::detail(intval($model->scope), false);
+        return $data;
     }
 
 
@@ -115,6 +134,15 @@ class ActivityRepository {
         }
         $data = array_merge($data, $next_time);
         return array_splice($data, 0, $length);
+    }
+
+    public static function formatAuction(ActivityModel $item) {
+        $data = $item->toArray();
+        $source = AuctionLogModel::where('act_id', $item->id)
+            ->selectRaw('COUNT(*) as count,MAX(bid) as bid')->first();
+        $data['bid_count'] = intval($source['count']);
+        $data['bid'] = floatval($source['bid']);
+        return $data;
     }
 
     public static function auctionLogList(int $activity) {
