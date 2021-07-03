@@ -72,3 +72,4 @@ node_modules/
 /package-lock.json
 Module/Template/package-lock.json
 /html/assets/upload
+/*.cache

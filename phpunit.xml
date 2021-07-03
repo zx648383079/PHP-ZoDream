@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         syntaxCheck="false"
+         bootstrap="tests/bootstrap.php"
+        >
+    <testsuites>
+        <testsuite name="Zodream Tests">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./Domain/</directory>
+            <directory>./Infrastructure/</directory>
+            <directory>./Module/</directory>
+            <directory>./Service/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

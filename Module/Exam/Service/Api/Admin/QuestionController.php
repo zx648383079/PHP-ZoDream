@@ -32,7 +32,7 @@ class QuestionController extends Controller {
                 'material_id' => 'int',
                 'status' => 'int',
                 'type' => 'int:0,127',
-                'easiness' => 'int:0,10',
+                'easiness' => 'int:0,11',
                 'content' => '',
                 'dynamic' => '',
                 'answer' => '',
