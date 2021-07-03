@@ -63,7 +63,7 @@ class HomeController extends Controller {
         $cat_list = CategoryRepository::get();
         $tags = TagRepository::getTags($blog->id);
         $relation_list = TagRepository::getRelationBlogs($blog->id);
-        $metaItems = BlogMetaModel::getMetaWithDefault($id);
+        $metaItems = BlogMetaModel::getOrDefault($id);
         return $this->show('detail', compact('blog', 'cat_list', 'languages', 'tags', 'relation_list', 'metaItems'));
     }
 
