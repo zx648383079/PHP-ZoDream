@@ -4,12 +4,9 @@ namespace Service\Install;
 use Infrastructure\Environment;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Module\Gzo\Domain\GenerateModel;
 use Zodream\Module\Gzo\Domain\Generator\ModuleGenerator;
 use Zodream\Module\Gzo\Domain\Repositories\DatabaseRepository;
 use Zodream\Module\Gzo\Domain\Repositories\ModuleRepository;
-use Zodream\Module\Gzo\Service\ModuleController;
-use Zodream\Module\Gzo\Service\SqlController;
 
 class HomeController extends Controller {
 
@@ -50,10 +47,12 @@ class HomeController extends Controller {
         $configs = $request->get('db');
         $configs['database'] = 'information_schema';
         config([
-            'db' => $configs
+            'db' => [
+                'connections' => $configs
+            ]
         ]);
         try {
-            return (new SqlController())->schemaAction();
+            return $this->renderData(DatabaseRepository::schemas());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
