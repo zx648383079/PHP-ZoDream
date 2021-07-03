@@ -18,12 +18,12 @@ class PlatformController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = PlatformModel::find($id);
         if ($id > 0 && $model->user_id !== auth()->id()) {
             return $this->renderFailure('应用错误！');
         }
-        return $this->render($model);
+        return $this->renderData($model);
     }
 
     public function saveAction(Request $request) {
@@ -43,10 +43,10 @@ class PlatformController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($model);
+        return $this->renderData($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         PlatformModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->renderData(true);
     }

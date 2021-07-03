@@ -15,7 +15,7 @@ class PlatformController extends Controller {
 
     public function editAction(int $id) {
         try {
-            return $this->render(PlatformRepository::get($id));
+            return $this->renderData(PlatformRepository::get($id));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -37,7 +37,7 @@ class PlatformController extends Controller {
                 'allow_self' => 'int',
                 'status' => 'int:0,127',
             ]);
-            return $this->render(PlatformRepository::save($data));
+            return $this->renderData(PlatformRepository::save($data));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

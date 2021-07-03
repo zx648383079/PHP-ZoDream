@@ -63,6 +63,9 @@ class QuestionRepository {
     public static function save(array $data, int $user = 0) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
+        if ($id < 1 && static::checkRepeat($data)) {
+            throw new \Exception('请不要重复添加');
+        }
         $model = QuestionModel::findOrNew($id);
         if ($id > 0 && $user > 0 && $model->user_id !== $user) {
             throw new \Exception('无法保存');
@@ -81,6 +84,23 @@ class QuestionRepository {
         return $model;
     }
 
+    public static function checkRepeat(array $data): bool {
+        $userId = auth()->id();
+        return QuestionModel::where('type', $data['type'] ?? 0)
+            ->where('title', $data['title'])
+            ->when(isset($data['course_id']) && $data['course_id'] > 0, function ($query) use ($data) {
+                $query->where('course_id', $data['course_id']);
+            })
+            ->when(isset($data['content']), function ($query) use ($data) {
+                $query->where('content', $data['content']);
+            })
+            ->when(isset($data['image']), function ($query) use ($data) {
+                $query->where('image', $data['image']);
+            })
+            ->where('user_id', $userId)
+            ->count() > 0;
+    }
+
     public static function selfSave(array $data) {
         if (isset($data['material'])) {
             $m = MaterialRepository::save($data['material']);
@@ -93,7 +113,7 @@ class QuestionRepository {
         $model = QuestionModel::where('id', $id)->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
         })->first();
-        if (!empty($model)) {
+        if (empty($model)) {
             throw new \Exception('无权限删除');
         }
         $model->delete();

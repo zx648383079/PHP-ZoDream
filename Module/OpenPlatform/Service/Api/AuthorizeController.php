@@ -1,6 +1,7 @@
 <?php
 namespace Module\OpenPlatform\Service\Api;
 
+use Module\OpenPlatform\Domain\Model\PlatformSimpleModel;
 use Module\OpenPlatform\Domain\Model\TokenPageModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
@@ -29,7 +30,7 @@ class AuthorizeController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         UserTokenModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->renderData(true);
     }
@@ -37,5 +38,11 @@ class AuthorizeController extends Controller {
     public function clearAction() {
         UserTokenModel::where('user_id', auth()->id())->delete();
         return $this->renderData(true);
+    }
+
+    public function platformAction() {
+        return $this->renderData(
+            PlatformSimpleModel::where('allow_self', 1)->where('status', 1)->get()
+        );
     }
 }

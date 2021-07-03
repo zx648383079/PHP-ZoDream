@@ -61,14 +61,16 @@ class ActivityRepository {
         return $model;
     }
 
-    public static function auctionDetail(int $id) {
+    public static function auctionDetail(int $id, bool $full = false) {
         $model = ActivityModel::where('type', ActivityModel::TYPE_AUCTION)
             ->where('id', $id)->first();
         if (empty($model)) {
             throw new \Exception('活动不存在');
         }
         $data = static::formatAuction($model);
-        $data['goods'] = GoodsRepository::detail(intval($model->scope), false);
+        if ($full) {
+            $data['goods'] = GoodsRepository::detail(intval($model->scope), false);
+        }
         return $data;
     }
 
