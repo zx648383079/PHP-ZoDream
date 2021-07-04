@@ -20,12 +20,13 @@ use Exception;
 
 class CartRepository {
     /**
+     *
      * @param $goods
      * @param int $amount
      * @return GoodsModel
      * @throws Exception
      */
-    public static function checkGoods($goods, $amount = 1) {
+    public static function checkGoods($goods, int $amount = 1) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::find($goods);
         }
@@ -49,7 +50,7 @@ class CartRepository {
      * @return array [GoodsModel, ProductModel, 规格是否对]
      * @throws Exception
      */
-    public static function checkGoodsOrProduct($id, $amount = 1, $properties = null) {
+    public static function checkGoodsOrProduct(int $id, int $amount = 1, $properties = null) {
         $goods = GoodsDialogModel::find($id);
         if (empty($goods)) {
             throw new \Exception('商品不存在');
@@ -63,7 +64,7 @@ class CartRepository {
         return [$goods, null, true];
     }
 
-    public static function addGoods($goods, $amount = 1, $properties = null) {
+    public static function addGoods($goods, int $amount = 1, $properties = null) {
         $cartItem = Module::cart()->getGoods(is_numeric($goods) ? $goods : $goods->id);
         $totalAmount = $amount;
         if ($cartItem) {
@@ -74,7 +75,7 @@ class CartRepository {
         return true;
     }
 
-    public static function updateGoods($goods, $amount = 1, $properties = null) {
+    public static function updateGoods($goods, int $amount = 1, $properties = null) {
         $cartItem = Module::cart()->getGoods(is_numeric($goods) ? $goods : $goods->id);
         if ($amount < 1) {
             if ($cartItem) {
@@ -91,7 +92,7 @@ class CartRepository {
         return true;
     }
 
-    public static function updateAmount($id, $amount = 1) {
+    public static function updateAmount(int $id, int $amount = 1) {
         $cartItem = Module::cart()->get($id);
         if (empty($cartItem)) {
             throw new Exception('购物车不存此商品');
@@ -114,7 +115,7 @@ class CartRepository {
      * @return OrderModel
      * @throws \Exception
      */
-    public static function preview($goods_list, $address, $shipping, $payment, $isPreview = true) {
+    public static function preview(array $goods_list, int $address, int $shipping, int $payment, bool $isPreview = true) {
         if (empty($goods_list)) {
             throw new InvalidArgumentException('请选择结算的商品');
         }
@@ -161,7 +162,7 @@ class CartRepository {
      * @return OrderModel
      * @throws \Exception
      */
-    public static function checkout($address, $shipping, $payment, $cart = '', $type = 0) {
+    public static function checkout(int $address, int $shipping, int $payment, $cart = '', $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
         $store = new Store();
         if (!$store->frozen($goods_list)) {
@@ -196,7 +197,7 @@ class CartRepository {
      * @return ICartItem[]
      * @throws \Exception
      */
-    public static function getGoodsList($cart = '', $type = 0) {
+    public static function getGoodsList($cart = '', int $type = 0) {
         if ($type < 1) {
             $cart_ids = is_array($cart) ? $cart : explode('-', $cart);
             return Module::cart()->filter(function ($item) use ($cart_ids) {
@@ -214,7 +215,7 @@ class CartRepository {
             if (!isset($item['goods']) && !isset($item['goods_id'])) {
                 continue;
             }
-            $goods = GoodsModel::find(isset($item['goods_id']) ? $item['goods_id'] : $item['goods']);
+            $goods = GoodsModel::find($item['goods_id'] ?? $item['goods']);
             if (empty($goods)) {
                 continue;
             }

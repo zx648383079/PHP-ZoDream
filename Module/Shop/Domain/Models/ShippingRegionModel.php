@@ -40,8 +40,8 @@ class ShippingRegionModel extends Model {
     }
 
     public static function batchSave($shipping_id, $group_id, $data) {
-        $exist = static::where(compact('shipping_id', 'group_id'))
-            ->pluck('region_id');
+//        $exist = static::where(compact('shipping_id', 'group_id'))
+//            ->pluck('region_id');
         $items = [];
         foreach ($data as $region_id) {
             $items[] = compact('shipping_id', 'group_id', 'region_id');

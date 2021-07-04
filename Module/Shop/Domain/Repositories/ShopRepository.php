@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
 use Module\Shop\Domain\Models\BrandModel;
@@ -6,7 +7,7 @@ use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\GoodsModel;
 
 class ShopRepository {
-    public static function siteInfo() {
+    public static function siteInfo(): array {
         return [
             'name' => '聚百客综合商店',
             'version' => '0.1',

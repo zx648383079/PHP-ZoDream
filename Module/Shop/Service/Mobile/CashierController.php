@@ -7,6 +7,7 @@ use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Exception;
+use Module\Shop\Domain\Repositories\ShippingRepository;
 
 /**
  * 收银员
@@ -21,7 +22,7 @@ class CashierController extends Controller {
         }
         $address = AddressModel::where('user_id', auth()->id())->one();
         $order = OrderModel::preview($goods_list);
-        $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
+        $shipping_list = empty($address) ? [] : ShippingRepository::getByAddress($address);
         $payment_list = PaymentModel::all();
         return $this->show(compact('goods_list', 'address', 'order', 'shipping_list', 'payment_list', 'cart', 'type'));
     }

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Shop\Domain\Repositories;
+namespace Module\Shop\Domain\Repositories\Activity;
 
 use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
@@ -8,6 +8,7 @@ use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\CategoryRepository;
 use Zodream\Html\Page;
 
 class ActivityRepository {
@@ -15,9 +16,6 @@ class ActivityRepository {
     public static function getList(int $type, string $keywords = '') {
         $time = time();
         $query = ActivityModel::query();
-        if (in_array($type, [ActivityModel::TYPE_AUCTION, ActivityModel::TYPE_PRE_SALE, ActivityModel::TYPE_BARGAIN])) {
-            $query->with('goods');
-        }
         /** @var Page $page */
         $page = $query->where('type', $type)
             ->when(!empty($keywords), function ($query) {
@@ -26,12 +24,6 @@ class ActivityRepository {
             ->where('status', 0)
             ->where('start_at', '<=', $time)
             ->where('end_at', '>', $time)->page();
-        if ($type === ActivityModel::TYPE_AUCTION) {
-            $page->map(function ($item) {
-                return static::formatAuction($item);
-            });
-        }
-
         return $page;
     }
 
@@ -61,48 +53,6 @@ class ActivityRepository {
         return $model;
     }
 
-    public static function auctionDetail(int $id, bool $full = false) {
-        $model = ActivityModel::where('type', ActivityModel::TYPE_AUCTION)
-            ->where('id', $id)->first();
-        if (empty($model)) {
-            throw new \Exception('活动不存在');
-        }
-        $data = static::formatAuction($model);
-        if ($full) {
-            $data['goods'] = GoodsRepository::detail(intval($model->scope), false);
-        }
-        return $data;
-    }
-
-
-    public static function secKillGoodsList(int $act_id = 0, int $time_id = 0, string $time = '') {
-        $actIds = static::getActivityId(ActivityModel::TYPE_SEC_KILL);
-        if ($act_id > 0 && !in_array($act_id, $actIds)) {
-            return new Page(0);
-        }
-        return SeckillGoodsModel::with('goods')
-            ->when($act_id > 0, function ($query) use ($act_id) {
-                $query->where('act_id', $act_id);
-            }, function ($query) use ($actIds) {
-                $query->whereIn('act_id', $actIds);
-            })->when($time_id > 0, function ($query) use ($time_id) {
-                $query->where('time_id', $time_id);
-            })->when(!empty($time), function ($query) use ($time, $actIds) {
-                $time = strtotime($time);
-                $ids = ActivityModel::where('start_at', '<=', $time)
-                    ->whereIn('id', $actIds)
-                    ->where('end_at', '>', $time)->pluck('id');
-                if (empty($ids)) {
-                    return $query->isEmpty();
-                }
-                $time_ids = ActivityTimeModel::where('start_at', date('H:i', $time))->pluck('id');
-                if (empty($time_ids)) {
-                    return $query->isEmpty();
-                }
-                $query->whereIn('act_id', $ids)->whereIn('time_id', $time_ids);
-            })->page();
-    }
-
     public static function timeList(int $length = 5, string $start_at = '') {
         $model_list = ActivityTimeModel::orderBy('start_at', 'asc')->get();
         if (empty($model_list)) {
@@ -118,9 +68,10 @@ class ActivityRepository {
             $item = $item->toArray();
             $item['title'] = $item['start_at'];
             $next_time[] = [
-                'title' => $item['start_at'],
+                'title' => '明日'.$item['start_at'],
                 'start_at' => $next_day.$item['start_at'],
                 'end_at' => $next_day.$item['end_at'],
+                'status' => 2
             ];
             if (!$is_start) {
                 $is_start = strtotime($today.$item['end_at']) > $now;
@@ -132,39 +83,11 @@ class ActivityRepository {
                 'title' => $item['start_at'],
                 'start_at' => $today.$item['start_at'],
                 'end_at' => $today.$item['end_at'],
+                'status' => 1
             ];
         }
         $data = array_merge($data, $next_time);
         return array_splice($data, 0, $length);
-    }
-
-    public static function formatAuction(ActivityModel $item) {
-        $data = $item->toArray();
-        $source = AuctionLogModel::where('act_id', $item->id)
-            ->selectRaw('COUNT(*) as count,MAX(bid) as bid')->first();
-        $data['bid_count'] = intval($source['count']);
-        $data['bid'] = floatval($source['bid']);
-        return $data;
-    }
-
-    public static function auctionLogList(int $activity) {
-        return AuctionLogModel::with('user')
-            ->where('act_id', $activity)
-            ->orderBy('id', 'desc')
-            ->page();
-    }
-
-    public static function auctionBid(int $activity, float $money = 0) {
-        $log = new AuctionLogModel([
-            'act_id' => $activity,
-            'bid' => $money,
-            'user_id' => auth()->id()
-        ]);
-        $instance = $log->auction();
-        if (!$instance->auction()) {
-            return false;
-        }
-        return $log;
     }
 
     /**

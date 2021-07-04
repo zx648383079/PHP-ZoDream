@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Module\Shop\Domain\Entities\AddressEntity;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
@@ -18,63 +19,39 @@ class ShippingRepository {
         return $items;
     }
 
-    public static function get($id) {
-        $model = ShippingModel::findOrThrow($id);
-        $model->groups = ShippingGroupModel::with('regions')
-            ->where('shipping_id', $model->id)->get();
-        return $model;
+    public static function getByAddress(AddressEntity $address): array {
+        return static::getByRegion($address->region_id);
     }
 
-    public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
-        unset($data['id']);
-        $model = ShippingModel::findOrNew($id);
-        $model->load($data);
-        if (!$model->save()) {
-            throw new \Exception($model->getFirstError());
+    public static function getByRegion(int $regionId): array {
+        $groups = ShippingGroupModel::query()
+            ->when($regionId > 0, function ($query) use ($regionId) {
+                $itemId = ShippingRegionModel::query()
+                    ->whereIn('region_id', RegionRepository::getPathId($regionId))
+                    ->pluck('group_id');
+                if (empty($itemId)) {
+                    return;
+                }
+                $query->whereIn('id', $itemId);
+            })
+            ->orWhere('is_all', 1)
+            ->pluck(null, 'shipping_id');
+        if (empty($groups)) {
+            return [];
         }
-        if (!isset($data['groups'])) {
-            return $model;
+        $shipping_list = ShippingModel::query()->whereIn('id', array_keys($groups))
+            ->get();
+        if (empty($shipping_list)) {
+            return [];
         }
-        foreach ($data['groups'] as $item) {
-            $item['shipping_id'] = $model->id;
-            static::saveGroup($item);
+        foreach ($shipping_list as $item) {
+            if (!isset($groups[$item->id])) {
+                unset($item);
+                continue;
+            }
+            $item->settings = $groups[$item->id];
         }
-        return $model;
-    }
-
-    public static function saveGroup(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
-        unset($data['id']);
-        $model = ShippingGroupModel::findOrNew($id);
-        $model->load($data);
-        if (!$model->save()) {
-            throw new \Exception($model->getFirstError());
-        }
-        static::saveRegion($model->is_all ? [] : array_column($data['regions'], 'id'), $model->id, $model->shipping_id);
-    }
-
-    public static function saveRegion(array $items, $group_id, $shipping_id) {
-        $exist = ShippingRegionModel::where(compact('shipping_id', 'group_id'))
-            ->pluck('region_id');
-        $add = array_diff($items, $exist);
-        $remove = array_diff($exist, $items);
-        if (!empty($add)) {
-            ShippingRegionModel::query()
-                ->insert(array_map(function ($region_id) use ($group_id, $shipping_id) {
-                return compact('region_id', 'group_id', 'shipping_id');
-            }, $add));
-        }
-        if (!empty($remove)) {
-            ShippingRegionModel::where(compact('shipping_id', 'group_id'))
-                ->whereIn('region_id', $remove)->delete();
-        }
-    }
-
-    public static function remove($id) {
-        ShippingModel::where('id', $id)->delete();
-        ShippingGroupModel::where('shipping_id', $id)->delete();
-        ShippingRegionModel::where('shipping_id', $id)->delete();
+        return $shipping_list;
     }
 
     /**

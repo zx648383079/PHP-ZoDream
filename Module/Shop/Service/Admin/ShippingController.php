@@ -4,7 +4,7 @@ namespace Module\Shop\Service\Admin;
 use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Models\ShippingRegionModel;
-use Module\Shop\Domain\Repositories\ShippingRepository;
+use Module\Shop\Domain\Repositories\Admin\ShippingRepository;
 
 class ShippingController extends Controller {
 
@@ -39,10 +39,8 @@ class ShippingController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
-        ShippingModel::where('id', $id)->delete();
-        ShippingGroupModel::where('shipping_id', $id)->delete();
-        ShippingRegionModel::where('shipping_id', $id)->delete();
+    public function deleteAction(int $id) {
+        ShippingRepository::remove($id);
         return $this->renderData([
             'url' => $this->getUrl('shipping')
         ]);

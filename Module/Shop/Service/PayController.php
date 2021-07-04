@@ -9,7 +9,7 @@ use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class PayController extends Controller {
 
-    protected $disallow = false;
+    protected bool $disallow = false;
 
     public function indexAction($order, $payment) {
         $order = OrderModel::find($order);

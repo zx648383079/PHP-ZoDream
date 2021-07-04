@@ -34,6 +34,12 @@ class RegionRepository {
         return array_reverse($path);
     }
 
+    public static function getPathId(int $id) {
+        return array_map(function ($item) {
+            return intval($item['id']);
+        }, static::getPath($id));
+    }
+
     public static function search(string $keywords = '', int|array $id = 0) {
         return SearchModel::searchOption(
             RegionModel::query(),

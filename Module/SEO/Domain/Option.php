@@ -50,7 +50,7 @@ class Option {
     }
 
     public function get($code, $default = null) {
-        return isset($this->data[$code]) ? $this->data[$code] : $default;
+        return $this->data[$code] ?? $default;
     }
 
     public function __isset($code) {

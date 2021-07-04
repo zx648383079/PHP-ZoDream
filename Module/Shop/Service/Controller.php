@@ -8,7 +8,17 @@ use Module\Shop\Module;
 
 class Controller extends ModuleController {
     public $layout = 'main';
-    protected $disallow = true;
+    protected bool $disallow = true;
+
+    public function __construct() {
+        parent::__construct();
+        $this->middleware(function ($passable, callable $next) {
+            if (!app()->isDebug() && $this->disallow) {
+                return $this->redirectWithMessage('/', '禁止访问');
+            }
+            return $next($passable);
+        });
+    }
 
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();
@@ -16,13 +26,6 @@ class Controller extends ModuleController {
         $notice_list = ArticleRepository::getNotices();
         $this->send(compact('categories_tree', 'cart', 'notice_list'));
         return $this;
-    }
-
-    protected function runActionMethod($action, $vars = array()) {
-        if (app()->isDebug() || !$this->disallow) {
-            return parent::runActionMethod($action, $vars);
-        }
-        return $this->redirect('/');
     }
 
     public function redirectWithAuth() {

@@ -1,17 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
-use Module\Shop\Domain\Models\ShippingGroupModel;
-use Module\Shop\Domain\Models\ShippingModel;
-use Module\Shop\Domain\Models\ShippingRegionModel;
-use Module\Shop\Domain\Repositories\ShippingRepository;
+use Module\Shop\Domain\Repositories\Admin\ShippingRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ShippingController extends Controller {
 
-    public function indexAction() {
-        $model_list = ShippingModel::page();
-        return $this->renderPage($model_list);
+    public function indexAction(string $keywords = '') {
+        return $this->renderPage(
+            ShippingRepository::getList($keywords)
+        );
     }
 
     public function pluginAction() {
@@ -23,10 +22,10 @@ class ShippingController extends Controller {
         return $this->renderData($data);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         try {
             return $this->render(
-                ShippingRepository::get($id)
+                ShippingRepository::get($id, true)
             );
         } catch (\Exception $exception) {
             return $this->renderFailure($exception->getMessage());
@@ -43,14 +42,14 @@ class ShippingController extends Controller {
         }
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         ShippingRepository::remove($id);
         return $this->renderData(true);
     }
 
     public function allAction() {
         return $this->renderData(
-            ShippingModel::query()->get('id', 'name')
+            ShippingRepository::all()
         );
     }
 }

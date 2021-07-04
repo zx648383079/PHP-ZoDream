@@ -2,7 +2,17 @@
 namespace Module\Shop\Domain\Entities;
 
 use Domain\Entities\Entity;
-
+/**
+ * Class AddressModel
+ * @property integer $id
+ * @property string $name
+ * @property integer $region_id
+ * @property integer $user_id
+ * @property string $tel
+ * @property string $address
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
 class AddressEntity extends Entity {
     public static function tableName() {
         return 'shop_address';

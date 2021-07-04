@@ -8,6 +8,7 @@ use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\AddressRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Exception;
+use Module\Shop\Domain\Repositories\ShippingRepository;
 
 /**
  * 收银员
@@ -23,7 +24,7 @@ class CashierController extends Controller {
         $address = AddressRepository::getDefault();
         $order = OrderModel::preview($goods_list);
         $order->setAddress($address);
-        $shipping_list = empty($address) ? [] : ShippingModel::getByAddress($address);
+        $shipping_list = empty($address) ? [] : ShippingRepository::getByAddress($address);
         $payment_list = PaymentModel::all();
         return $this->sendWithShare()->show(compact('goods_list',
             'address', 'order', 'shipping_list',

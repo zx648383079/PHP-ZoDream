@@ -3,11 +3,14 @@ declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\GoodsMetaModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
+use Module\Shop\Domain\Models\ProductModel;
+use Module\Shop\Domain\Repositories\Activity\ActivityRepository;
 use Zodream\Database\Model\Query;
 use Zodream\Html\Page;
 
@@ -59,6 +62,13 @@ class GoodsRepository {
         return $data;
     }
 
+    public static function stock(int $goodsId, int $region = 0) {
+        $goods = GoodsModel::findOrThrow($goodsId, '商品已下架');
+        // 判断库存
+        // 判断快递是否支持
+        return $goods->toArray();
+    }
+
     public static function formatProperties(GoodsModel $goods) {
         if (empty($goods)) {
             return false;
@@ -91,19 +101,35 @@ class GoodsRepository {
      * @param null $properties
      * @return bool
      */
-    public static function canBuy($goods, int  $amount = 1, $properties = null) {
+    public static function canBuy($goods, int $amount = 1, $properties = null) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::query()->where('id', $goods)
                 ->first('id', 'price', 'stock');
         }
         if (empty($properties)) {
-            return $goods->stock >= $amount;
+            return static::checkStock($goods, $amount);
         }
         $box = AttributeModel::getProductAndPriceWithProperties($properties, $goods->id);
         if (empty($box['product'])) {
-            return $goods->stock >= $amount;
+            return static::checkStock($goods, $amount);
         }
-        return $box['product']->stock >= $amount;
+        return static::checkStock($box['product'], $amount);
+    }
+
+    public static function checkStock(ProductModel|GoodsEntity $model, int $amount = 0, int $regionId = 0): bool {
+        if ($amount < 1) {
+            return true;
+        }
+        if ($regionId < 1 || Option::value('shop_warehouse', 0) < 1) {
+            return $model->stock >= $amount;
+        }
+        $goodsId = $model->id;
+        $productId = 0;
+        if ($model instanceof ProductModel) {
+            $goodsId = $model->goods_id;
+            $productId = $model->id;
+        }
+        return WarehouseRepository::getStock($regionId, $goodsId, $productId) >= $amount;
     }
 
     /**
@@ -113,7 +139,7 @@ class GoodsRepository {
      * @param null $properties
      * @return float
      */
-    public static function finalPrice($goods, $amount = 1, $properties = null) {
+    public static function finalPrice($goods, int $amount = 1, $properties = null) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::query()->where('id', $goods)
                 ->first('id', 'price', 'stock');

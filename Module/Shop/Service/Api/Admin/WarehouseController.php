@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
-use Module\Shop\Domain\Repositories\WarehouseRepository;
+use Module\Shop\Domain\Repositories\Admin\WarehouseRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class WarehouseController extends Controller {
