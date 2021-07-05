@@ -8,6 +8,7 @@ use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Zodream\Database\Relation;
+use Zodream\Html\Page;
 
 class ActivityRepository {
     public static function getList(int $type, string $keywords = '') {
@@ -15,9 +16,20 @@ class ActivityRepository {
         if (in_array($type, [ActivityModel::TYPE_AUCTION, ActivityModel::TYPE_PRE_SALE, ActivityModel::TYPE_BARGAIN])) {
             $query->with('goods');
         }
-        return $query->when(!empty($keywords), function ($query) {
+        /** @var Page $page */
+        $page = $query->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
         })->where('type', $type)->orderBy('id', 'desc')->page();
+        $page->map(function ($item) {
+            if ($item->type === ActivityModel::TYPE_MIX) {
+                return static::formatMix($item);
+            }
+            if ($item->type === ActivityModel::TYPE_LOTTERY) {
+                return static::formatLottery($item);
+            }
+            return $item;
+        });
+        return $page;
     }
 
     public static function get(int $type, int $id) {

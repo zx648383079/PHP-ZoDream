@@ -45,7 +45,7 @@ class OpenRepository {
      * @return UserTokenModel
      * @throws Exception
      */
-    public static function createToken(int $platform_id) {
+    public static function createToken(int $platform_id, string $expired_at = '') {
         if ($platform_id < 0) {
             throw new Exception('请选择应用');
         }
@@ -57,7 +57,7 @@ class OpenRepository {
             'user_id' => auth()->id(),
             'platform_id' => $platform->id,
             'token' => md5(sprintf('%s:%s', auth()->id(), Time::millisecond())),
-            'expired_at' => time() + 86400,
+            'expired_at' => empty($expired_at) ? time() + 86400 : strtotime($expired_at),
             'is_self' => 1,
             'created_at' => time(),
             'updated_at' => time(),

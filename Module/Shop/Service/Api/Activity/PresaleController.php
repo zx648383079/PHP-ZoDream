@@ -13,4 +13,12 @@ class PresaleController extends Controller {
         );
     }
 
+    public function detailAction(int $id, bool $full = false) {
+        try {
+            return $this->render(PresaleRepository::get($id, $full));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
 }

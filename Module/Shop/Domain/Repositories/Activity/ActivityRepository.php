@@ -128,4 +128,16 @@ class ActivityRepository {
         $args = array_intersect($range, CategoryRepository::path($goods->cat_id));
         return !empty($args);
     }
+
+    public static function stepPrice(int $amount, array $stepItems, $def = 0) {
+        $price = $def;
+        $min = 0;
+        foreach ($stepItems as $item) {
+            if ($item['amount'] <= $amount && $min < $item['amount']) {
+                $min = $item['amount'];
+                $price = $item['price'];
+            }
+        }
+        return $price;
+    }
 }

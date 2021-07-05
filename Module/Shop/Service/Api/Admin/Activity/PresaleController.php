@@ -34,12 +34,15 @@ class PresaleController extends Controller {
                 'name' => 'required|string:0,40',
                 'thumb' => 'string:0,200',
                 'description' => 'string:0,200',
-                'scope' => 'required|int',
+                'scope' => 'required',
                 'configure' => 'required',
                 'start_at' => '',
                 'end_at' => '',
             ]);
             $data['scope_type'] = ActivityModel::SCOPE_GOODS;
+            if (is_array($data['scope'])) {
+                $data['scope'] = $data['scope']['id'];
+            }
             return $this->render(
                 ActivityRepository::save(self::ACTIVITY_TYPE, $data)
             );

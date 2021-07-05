@@ -21,9 +21,9 @@ class AuthorizeController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function saveAction(int $platform_id) {
+    public function saveAction(int $platform_id, string $expired_at = '') {
         try {
-            $model = OpenRepository::createToken($platform_id);
+            $model = OpenRepository::createToken($platform_id, $expired_at);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

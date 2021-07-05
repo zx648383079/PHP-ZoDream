@@ -46,8 +46,8 @@ class AuctionRepository {
         $data = $item->toArray();
         $source = AuctionLogModel::where('act_id', $item->id)
             ->selectRaw('COUNT(*) as count,MAX(bid) as bid')->first();
-        $data['bid_count'] = intval($source['count']);
-        $data['bid'] = floatval($source['bid']);
+        $data['log_count'] = intval($source['count']);
+        $data['price'] = floatval($source['bid']);
         return $data;
     }
 
