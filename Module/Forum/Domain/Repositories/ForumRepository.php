@@ -102,8 +102,10 @@ class ForumRepository {
             ->where('parent_id', $id)->get();
         foreach ($data as $item) {
             $item->last_thread = static::lastThread($item['id']);
+            $item->today_count = $item->getTodayCountAttribute();
             if ($hasChildren) {
                 foreach ($item->children as $it) {
+                    $it->today_count = $it->getTodayCountAttribute();
                     $it->last_thread = static::lastThread($it['id']);
                 }
             }

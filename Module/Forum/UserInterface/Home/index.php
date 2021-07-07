@@ -29,7 +29,7 @@ $this->set([
             <?php foreach($group['children'] as $item):?>
             <div class="forum-item">
                 <div class="thumb">
-                    <img src="<?=$this->asset('images/zd.jpg')?>" alt="">
+                    <img src="<?=$this->asset($item['thumb'] ?: 'images/zd.jpg')?>" alt="">
                 </div>
                 <div class="info">
                     <div class="name">
