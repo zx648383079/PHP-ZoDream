@@ -4,17 +4,17 @@ namespace Module\Shop\Domain\Repositories\Activity;
 
 use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
-use Module\Shop\Domain\Models\Activity\AuctionLogModel;
+use Module\Shop\Domain\Models\Activity\BargainLogModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Zodream\Html\Page;
 
-class AuctionRepository {
+class BargainRepository {
 
     public static function getList(string $keywords = '') {
         $time = time();
         $query = ActivityModel::query()->with('goods');
         /** @var Page $page */
-        $page = $query->where('type', ActivityModel::TYPE_AUCTION)
+        $page = $query->where('type', ActivityModel::TYPE_BARGAIN)
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })
@@ -28,8 +28,8 @@ class AuctionRepository {
     }
 
 
-    public static function auctionDetail(int $id, bool $full = false) {
-        $model = ActivityModel::where('type', ActivityModel::TYPE_AUCTION)
+    public static function get(int $id, bool $full = false) {
+        $model = ActivityModel::where('type', ActivityModel::TYPE_BARGAIN)
             ->where('id', $id)->first();
         if (empty($model)) {
             throw new \Exception('活动不存在');
@@ -44,31 +44,19 @@ class AuctionRepository {
 
     public static function formatItem(ActivityModel $item) {
         $data = $item->toArray();
-        $source = AuctionLogModel::where('act_id', $item->id)
+        $source = BargainLogModel::where('act_id', $item->id)
             ->selectRaw('COUNT(*) as count,MAX(bid) as bid')->first();
         $data['log_count'] = intval($source['count']);
         $data['price'] = floatval($source['bid']);
         return $data;
     }
 
-    public static function auctionLogList(int $activity) {
-        return AuctionLogModel::with('user')
+    public static function logList(int $activity) {
+        return BargainLogModel::with('user')
             ->where('act_id', $activity)
             ->orderBy('id', 'desc')
             ->page();
     }
 
-    public static function auctionBid(int $activity, float $money = 0) {
-        $log = new AuctionLogModel([
-            'act_id' => $activity,
-            'bid' => $money,
-            'user_id' => auth()->id()
-        ]);
-        $instance = $log->auction();
-        if (!$instance->auction()) {
-            return false;
-        }
-        return $log;
-    }
 
 }

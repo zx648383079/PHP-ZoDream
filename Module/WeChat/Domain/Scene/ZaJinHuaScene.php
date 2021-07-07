@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\WeChat\Domain\Scene;
 
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Game\ZaJinHua\Domain\Poker;
 use Module\WeChat\Domain\EditorInput;
@@ -172,7 +173,7 @@ class ZaJinHuaScene extends BaseScene implements SceneInterface {
     }
 
     protected function changeMoney($money, $remark) {
-        return AccountLogModel::change(Module::reply()->getUserId(),
-            AccountLogModel::TYPE_GAME, 0, $money, '【炸金花】'.$remark, 1);
+        return FundAccount::change(Module::reply()->getUserId(),
+            FundAccount::TYPE_GAME, 0, $money, '【炸金花】'.$remark, 1);
     }
 }

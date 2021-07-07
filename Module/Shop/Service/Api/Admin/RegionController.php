@@ -6,7 +6,7 @@ use Module\Shop\Domain\Models\RegionModel;
 
 class RegionController extends Controller {
 
-    public function indexAction($parent = 0, $keywords = '') {
+    public function indexAction(int $parent = 0, string $keywords = '') {
         $model_list = RegionModel::where('parent_id', $parent)
             ->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
@@ -14,7 +14,7 @@ class RegionController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = RegionModel::find($id);
         return $this->render($model);
     }
@@ -27,7 +27,7 @@ class RegionController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         $next = [$id];
         while (!empty($next)) {
             $items = RegionModel::whereIn('parent_id', $next)->pluck('id');

@@ -8,12 +8,12 @@ use Module\Shop\Domain\Repositories\AttributeRepository;
 
 class AttributeController extends Controller {
 
-    public function indexAction($group_id) {
+    public function indexAction(int $group_id) {
         $model_list = AttributeModel::with('group')->where('group_id', $group_id)->page();
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = AttributeModel::find($id);
         return $this->render($model);
     }
@@ -32,7 +32,7 @@ class AttributeController extends Controller {
         return $this->renderData($model_list);
     }
 
-    public function detailGroupAction($id) {
+    public function detailGroupAction(int $id) {
         $model = AttributeGroupModel::find($id);
         return $this->render($model);
     }
@@ -45,7 +45,7 @@ class AttributeController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteGroupAction($id) {
+    public function deleteGroupAction(int $id) {
         AttributeGroupModel::where('id', $id)->delete();
         return $this->renderData(true);
     }

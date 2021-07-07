@@ -4,6 +4,8 @@ namespace Module\Forum\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception;
+use Module\Auth\Domain\FundAccount;
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -59,7 +61,11 @@ class ThreadRepository {
     }
 
     public static function getList(int $forum,
-                                   int $classify = 0, string $keywords = '', int $user = 0, int $type = 0) {
+                                   int $classify = 0, string $keywords = '',
+                                   int $user = 0, int $type = 0, string $sort = '', string $order = '') {
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
+            'updated_at', 'created_at', 'post_count', 'top_type'
+        ]);
         $data = ThreadModel::with('user', 'classify')
             ->when($classify > 0, function ($query) use ($classify) {
                 $query->where('classify_id', $classify);
@@ -79,7 +85,7 @@ class ThreadRepository {
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy($sort, $order)->page();
         foreach ($data as $item) {
             $item->last_post = static::lastPost($item->id);
             $item->is_new = static::isNew($item);
@@ -112,8 +118,9 @@ class ThreadRepository {
         $query = $hasUser ? ThreadPostModel::with('user') : ThreadPostModel::query();
         return $query
             ->where('thread_id', $thread)
-            ->where('grade', 0)
-            ->orderBy('id', 'desc')->first('id', 'user_id', 'created_at');
+//            ->where('grade', 0)
+            ->orderBy('id', 'desc')
+            ->first('id', 'user_id', 'created_at');
     }
 
     public static function postList(
@@ -159,32 +166,14 @@ class ThreadRepository {
         if (empty($model)) {
             throw new Exception('帖子不存在');
         }
-        $count = ThreadLogModel::query()->where('item_type', ThreadLogModel::TYPE_THREAD)
-            ->where('item_id', $model->id)
-            ->where('user_id', auth()->id())
-            ->where('action', ThreadLogModel::ACTION_COLLECT)
-            ->count();
-        if ($count > 0) {
-            ThreadLogModel::query()->where('item_type', ThreadLogModel::TYPE_THREAD)
-                ->where('item_id', $model->id)
-                ->where('user_id', auth()->id())
-                ->where('action', ThreadLogModel::ACTION_COLLECT)->delete();
-            $model->collect_count -= $count;
-            $model->save();
-            return false;
-        }
-        $log = ThreadLogModel::create([
-            'item_type' => ThreadLogModel::TYPE_THREAD,
-            'item_id' => $model->id,
-            'user_id' => auth()->id(),
-            'action' => ThreadLogModel::ACTION_COLLECT,
-        ]);
-        if (!$log) {
-            throw new Exception('保存未成功');
-        }
-        $model->collect_count ++;
+        return static::toggleCollectThread($model);
+    }
+
+    public static function toggleCollectThread(ThreadModel $model) {
+        $yes = LogRepository::toggleAction($model->id, ThreadLogModel::TYPE_THREAD, ThreadLogModel::ACTION_COLLECT);
+        $model->collect_count += ($yes ? 1 : -1);
         $model->save();
-        return true;
+        return $yes;
     }
 
     /**
@@ -199,42 +188,18 @@ class ThreadRepository {
         if (empty($model)) {
             throw new Exception('回复不存在');
         }
-        $action = $agree ? ThreadLogModel::ACTION_AGREE : ThreadLogModel::ACTION_DISAGREE;
-        /** @var ThreadLogModel $log */
-        $log = ThreadLogModel::query()
-            ->where('item_type', ThreadLogModel::TYPE_THREAD_POST)
-            ->where('item_id', $model->id)
-            ->where('user_id', auth()->id())
-            ->whereIn('action',
-                [ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE])
-            ->first();
-        if ($log && $log->action == $action) {
-            throw new Exception('请勿重复点击');
+        $oldAction = -1;
+        $action = LogRepository::changeAction($model->id, ThreadLogModel::TYPE_THREAD_POST,
+            $agree ? ThreadLogModel::ACTION_AGREE :ThreadLogModel::ACTION_DISAGREE,
+            [ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE], $oldAction);
+        if ($oldAction === ThreadLogModel::ACTION_AGREE) {
+            $model->agree_count --;
+        } elseif ($oldAction === ThreadLogModel::ACTION_DISAGREE) {
+            $model->disagree_count --;
         }
-        if (empty($log)) {
-            $log = ThreadLogModel::create([
-                'item_type' => ThreadLogModel::TYPE_THREAD_POST,
-                'item_id' => $model->id,
-                'user_id' => auth()->id(),
-                'action' => $action,
-            ]);
-        } else {
-            $log->action = $action;
-            $log->created_at = time();
-            $log->save();
-            if ($agree) {
-                $model->disagree_count --;
-            } else {
-                $model->agree_count --;
-            }
-            $model->save();
-        }
-        if (!$log) {
-            throw new Exception('操作失败');
-        }
-        if ($agree) {
+        if ($action === ThreadLogModel::ACTION_AGREE) {
             $model->agree_count ++;
-        } else {
+        } elseif ($action === ThreadLogModel::ACTION_DISAGREE) {
             $model->disagree_count ++;
         }
         $model->save();
@@ -319,10 +284,22 @@ class ThreadRepository {
         $model->classify;
         $model->last_post = static::lastPost($model->id, false);
         $model->is_new = static::isNew($model);
+        $model->like_type = LogRepository::userActionValue($id, ThreadLogModel::TYPE_THREAD,
+            [ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE]);
+        $model->is_collected = LogRepository::userAction($id, ThreadLogModel::TYPE_THREAD,
+            ThreadLogModel::ACTION_COLLECT);
+        $model->is_reward = LogRepository::userAction($id, ThreadLogModel::TYPE_THREAD,
+            ThreadLogModel::ACTION_REWARD);
+        $model->reward_count = ThreadLogModel::where('item_type', ThreadLogModel::TYPE_THREAD)
+            ->where('item_id', $id)
+            ->where('action', ThreadLogModel::ACTION_REWARD)->count();
+        $model->reward_items = ThreadLogModel::with('user')
+            ->where('item_type', ThreadLogModel::TYPE_THREAD)
+            ->where('item_id', $id)
+            ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', 'desc')
+            ->limit(5)->get();
         return $model;
     }
-
-
 
     public static function reply(string $content, int $thread_id) {
         if (empty($content)) {
@@ -348,7 +325,10 @@ class ThreadRepository {
         }
         ForumRepository::updateCount($thread->forum_id, 'post_count');
         ThreadModel::query()->where('id', $thread_id)
-            ->updateIncrement('post_count');
+            ->update([
+                'post_count=post_count+1',
+                'updated_at' => time()
+            ]);
         return $post;
     }
 
@@ -362,6 +342,19 @@ class ThreadRepository {
         $thread = static::get($id);
         if (empty($thread)) {
             throw new Exception('请选择帖子');
+        }
+        if (in_array('like', $data) || array_key_exists('like', $data)) {
+            $thread->like_type = static::toggleLike($thread);
+            return $thread;
+        }
+        if (in_array('collect', $data) || array_key_exists('collect', $data)) {
+            $thread->is_collected = static::toggleCollectThread($thread);
+            return $thread;
+        }
+        if (isset($data['reward'])) {
+            static::rewardThread($thread, floatval($data['reward']));
+            $thread->is_reward = true;
+            return $thread;
         }
         $maps = ['is_highlight', 'is_digest', 'is_closed', 'top_type'];
         foreach ($data as $action => $val) {
@@ -443,5 +436,40 @@ class ThreadRepository {
         return ThreadSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();
+    }
+
+    public static function rewardList(int $item_id, int $item_type = 0) {
+        return ThreadLogModel::with('user')
+            ->where('item_type', $item_type)
+            ->where('item_id', $item_id)
+            ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', 'desc')
+            ->page();
+    }
+
+    private static function toggleLike(ThreadModel $thread)
+    {
+        return LogRepository::changeAction($thread->id, ThreadLogModel::TYPE_THREAD, ThreadLogModel::ACTION_AGREE, [
+            ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE
+        ]);
+    }
+
+    private static function rewardThread(ThreadModel $thread, float $money)
+    {
+        if ($thread->user_id == auth()->id()) {
+            throw new \Exception('不能自己打赏自己');
+        }
+        $res = FundAccount::payTo(auth()->id(),
+            FundAccount::TYPE_FORUM_BUY, function () use ($thread) {
+            return ThreadLogModel::create([
+                'item_type' => ThreadLogModel::TYPE_THREAD,
+                'item_id' => $thread->id,
+                'action' => ThreadLogModel::ACTION_REWARD,
+                'user_id' => auth()->id(),
+            ]);
+        }, -$money, sprintf('打赏帖子《%s》', $thread->title), $thread->user_id);
+        if (!$res) {
+            throw new \Exception('支付失败，请检查您的账户余额');
+        }
+        // TODO 把钱给用户
     }
 }

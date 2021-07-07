@@ -14,7 +14,7 @@ class PaymentController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = PaymentModel::find($id);
         return $this->render($model);
     }
@@ -36,7 +36,7 @@ class PaymentController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         PaymentModel::where('id', $id)->delete();
         return $this->renderData(true);
     }

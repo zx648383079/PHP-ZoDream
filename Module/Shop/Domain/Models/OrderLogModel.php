@@ -40,29 +40,29 @@ class OrderLogModel extends Model {
 
     public static function pay(OrderModel $order, $remark = '订单支付') {
         $order->pay_at = time();
-        return static::changeStatue($order, OrderModel::STATUS_PAID_UN_SHIP, $remark);;
+        return static::changeStatus($order, OrderModel::STATUS_PAID_UN_SHIP, $remark);;
     }
 
     public static function shipping(OrderModel $order, $remark = '订单发货') {
         $order->shipping_at = time();
-        return static::changeStatue($order, OrderModel::STATUS_SHIPPED, $remark);;
+        return static::changeStatus($order, OrderModel::STATUS_SHIPPED, $remark);;
     }
 
     public static function receive(OrderModel $order, $remark = '订单签收') {
         $order->receive_at = time();
-        return static::changeStatue($order, OrderModel::STATUS_RECEIVED, $remark);;
+        return static::changeStatus($order, OrderModel::STATUS_RECEIVED, $remark);;
     }
 
     public static function finish(OrderModel $order, $remark = '订单完成') {
         $order->finish_at = time();
-        return static::changeStatue($order, OrderModel::STATUS_FINISH, $remark);;
+        return static::changeStatus($order, OrderModel::STATUS_FINISH, $remark);;
     }
 
     public static function cancel(OrderModel $order, $remark = '订单取消') {
-        return static::changeStatue($order, OrderModel::STATUS_CANCEL, $remark);
+        return static::changeStatus($order, OrderModel::STATUS_CANCEL, $remark);
     }
 
-    public static function changeStatue(OrderModel $order, $status, $remark) {
+    public static function changeStatus(OrderModel $order, $status, $remark) {
         $order->status = $status;
         if (!$order->save()) {
             return false;

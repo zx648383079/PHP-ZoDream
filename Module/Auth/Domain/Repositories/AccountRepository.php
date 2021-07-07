@@ -4,8 +4,7 @@ namespace Module\Auth\Domain\Repositories;
 
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Events\ManageAction;
-use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\Bulletin\BulletinModel;
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Exception;
@@ -28,8 +27,8 @@ class AccountRepository {
         if ($type > 0) {
             $money *= -1;
         }
-        if (!AccountLogModel::change($user_id,
-            AccountLogModel::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
+        if (!FundAccount::change($user_id,
+            FundAccount::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
             throw new Exception('操作失败，金额不足');
         }
         event(new ManageAction('user_recharge',

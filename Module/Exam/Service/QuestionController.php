@@ -2,13 +2,13 @@
 namespace Module\Exam\Service;
 
 use Module\Exam\Domain\Model\QuestionModel;
-use Module\Exam\Domain\Pager;
+use Module\Exam\Domain\PageGenerator;
 
 class QuestionController extends Controller {
 
     const CACHE_KEY = 'exam_question';
 
-    public function indexAction($id = 0, $course = 0) {
+    public function indexAction(int $id = 0, int $course = 0) {
         if ($id > 0) {
             $model = QuestionModel::find($id);
         } elseif ($course > 0) {
@@ -26,14 +26,14 @@ class QuestionController extends Controller {
             'model', 'question', 'previous_url', 'next_url'));
     }
 
-    public function checkAction($question) {
+    public function checkAction(array $question) {
         $this->layout = false;
         $items = [];
         $results = session(self::CACHE_KEY, []);
         foreach ($question as $id => $item) {
-            $arg = Pager::formatQuestion(QuestionModel::find($id),
-                isset($item['answer']) ? $item['answer'] : '',
-                isset($item['dynamic']) ? $item['dynamic'] : null);
+            $arg = PageGenerator::formatQuestion(QuestionModel::find($id),
+                $item['answer'] ?? '',
+                $item['dynamic'] ?? null);
             $results[$arg['id']] = $arg['right'];
             $items[] = $arg;
         }

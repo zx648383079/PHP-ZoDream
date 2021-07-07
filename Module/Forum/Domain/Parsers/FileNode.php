@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Forum\Domain\Error\StopNextException;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -141,7 +142,7 @@ HTML;
         if (!$this->page->isUnderAction($this)) {
             return false;
         }
-        $res = AccountLogModel::changeAsync(auth()->id(), AccountLogModel::TYPE_FORUM_BUY, function () {
+        $res = FundAccount::payTo(auth()->id(), FundAccount::TYPE_FORUM_BUY, function () {
             return ThreadLogModel::create([
                 'item_type' => ThreadLogModel::TYPE_THREAD_POST,
                 'item_id' => $this->page->postId(),
@@ -149,7 +150,7 @@ HTML;
                 'user_id' => auth()->id(),
                 'node_index' => $this->attr(Parser::UID_KEY)
             ]);
-        }, -$this->price, '购买帖子下载内容');
+        }, -$this->price, '购买帖子下载内容', $this->page->getModel()->user_id);
         if (!$res) {
             throw new \Exception('支付失败，请检查您的账户余额');
             //return false;

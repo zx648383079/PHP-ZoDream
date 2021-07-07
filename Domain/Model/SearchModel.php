@@ -72,11 +72,11 @@ class SearchModel {
 
     /**
      * 过滤sort order
-     * @param $sort
-     * @param $order
-     * @param array $sort_list 允许的sort值
+     * @param string $sort
+     * @param bool|int|string $order
+     * @param string[] $sort_list 允许的sort值， 默认取第一个值
      * @param string $default_order
-     * @return array
+     * @return array [sort, order]
      */
     public static function checkSortOrder(string $sort, bool|int|string $order,
                                           array $sort_list, string $default_order = 'desc') {

@@ -16,7 +16,7 @@ class CategoryController extends Controller {
         );
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         try {
             return $this->render(
                 CategoryRepository::get($id)

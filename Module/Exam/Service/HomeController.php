@@ -6,13 +6,13 @@ use Module\Exam\Domain\Model\CourseModel;
 
 class HomeController extends Controller {
 
-    public function indexAction($id = 0) {
+    public function indexAction(int $id = 0) {
         $course_list = CourseModel::with('children')
             ->where('parent_id', intval($id))->get();
         return $this->show(compact('course_list'));
     }
 
-    public function suggestionAction($keywords = null) {
+    public function suggestionAction(string $keywords = '') {
         $data = CourseModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
          })->limit(4)->get();

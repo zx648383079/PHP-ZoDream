@@ -3,6 +3,7 @@ namespace Module\Game\Miner\Domain\Model;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Exception;
 
@@ -93,7 +94,7 @@ class PlayerModel extends Model {
         if (empty($miner)) {
             throw new Exception('矿工不存在');
         }
-        if (!AccountLogModel::change(
+        if (!FundAccount::change(
             auth()->id(), 42, $miner->id, -$miner->price,
             sprintf('购买矿工 %s', $miner->name),
             1
@@ -136,7 +137,7 @@ class PlayerModel extends Model {
             throw new Exception('矿场不存在');
         }
         if ($area->price > 0
-            && !AccountLogModel::change($model->user_id,
+            && !FundAccount::change($model->user_id,
                 44, $area->id, -$area->price, '购买矿场使用权')) {
             throw new Exception('账户余额不足');
         }
@@ -169,7 +170,7 @@ class PlayerModel extends Model {
         if ($model->house_id === $house->id) {
             throw new Exception('已有当前住宅');
         }
-        if (!AccountLogModel::change(
+        if (!FundAccount::change(
             auth()->id(), 41, $houseId, -$house->price,
             sprintf('购买住宅 %s', $house->name),
             1

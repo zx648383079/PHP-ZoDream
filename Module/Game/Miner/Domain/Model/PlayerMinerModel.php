@@ -3,6 +3,7 @@ namespace Module\Game\Miner\Domain\Model;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 
 /**
@@ -96,7 +97,7 @@ class PlayerMinerModel extends Model {
             return true;
         }
         $income = $this->income;
-        AccountLogModel::change(PlayerModel::findById($this->player_id)->user_id,
+        FundAccount::change(PlayerModel::findById($this->player_id)->user_id,
             43, $this->id, $income, sprintf('工作 %s 分钟的收益', $this->long_time));
         $this->start_at = time();
         $this->physical_strength = max(0, $this->physical_strength - $this->long_time);

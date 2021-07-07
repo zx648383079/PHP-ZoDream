@@ -2,6 +2,7 @@
 namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class ThreadLogModel
@@ -25,6 +26,7 @@ class ThreadLogModel extends Model {
     const ACTION_BUY = 3;
     const ACTION_VOTE = 4;
     const ACTION_DOWNLOAD = 5;
+    const ACTION_REWARD = 6; // 打赏
 
 
 	public static function tableName() {
@@ -56,5 +58,7 @@ class ThreadLogModel extends Model {
         ];
     }
 
-
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
 }

@@ -6,6 +6,7 @@ use Module\Forum\Domain\Error\StopNextException;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Parsers\Parser;
 use Module\Forum\Domain\Repositories\ThreadRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class ThreadController extends Controller {
@@ -24,9 +25,10 @@ class ThreadController extends Controller {
         ];
     }
 
-    public function indexAction(int $forum, int $classify = 0, string $keywords = '', int $user = 0, int $type = 0) {
+    public function indexAction(int $forum, int $classify = 0, string $keywords = '',
+                                int $user = 0, int $type = 0, string $sort = '', string $order = '') {
         return $this->renderPage(
-            ThreadRepository::getList($forum, $classify, $keywords, $user, $type)
+            ThreadRepository::getList($forum, $classify, $keywords, $user, $type, $sort, $order)
         );
     }
 
@@ -69,6 +71,12 @@ class ThreadController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
+    }
+
+    public function rewardAction(int $item_id, int $item_type = 0) {
+        return $this->renderPage(
+            ThreadRepository::rewardList($item_id, $item_type)
+        );
     }
 
     public function deleteAction(int $id) {

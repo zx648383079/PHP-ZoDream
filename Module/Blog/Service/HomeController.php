@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Blog\Service;
 
 use Domain\Model\SearchModel;
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
@@ -140,8 +141,8 @@ class HomeController extends Controller {
                     'url' => url('auth', ['redirect_uri' => url()->previous()])
                 ], '请先登陆');
             }
-            $res = AccountLogModel::change(
-                auth()->id(), AccountLogModel::TYPE_BUY_BLOG,
+            $res = FundAccount::change(
+                auth()->id(), FundAccount::TYPE_BUY_BLOG,
                 $model->id, intval($model->open_rule), '购买文章阅读权限');
             if (!$res) {
                 return $this->renderFailure('账户余额不足');

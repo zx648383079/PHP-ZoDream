@@ -6,11 +6,10 @@ use Module\Shop\Domain\Models\NavigationModel;
 class NavController extends Controller {
 
     public function indexAction() {
-        $model_list = NavigationModel::all();
-        return $this->renderData($model_list);
+        return $this->renderData(NavigationModel::all());
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = NavigationModel::find($id);
         return $this->render($model);
     }
@@ -23,7 +22,7 @@ class NavController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         NavigationModel::where('id', $id)->delete();
         return $this->renderData(true);
     }

@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Models\Logistics;
 
-
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\ShippingModel;
@@ -74,6 +74,18 @@ class DeliveryModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function order() {
+        return $this->hasOne(OrderModel::class, 'id', 'order_id');
+    }
+
+    public function goods() {
+        return $this->hasMany(DeliveryGoodsModel::class, 'delivery_id', 'id');
     }
 
     public static function createByOrder(OrderModel $order, $logistics_number, $shipping_id = 0) {

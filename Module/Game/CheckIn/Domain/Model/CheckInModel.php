@@ -3,6 +3,7 @@ namespace Module\Game\CheckIn\Domain\Model;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\Json;
@@ -120,8 +121,8 @@ class CheckInModel extends Model {
             'created_at' => time()
         ]);
         if ($model && $model->money > 0) {
-            AccountLogModel::change($user_id,
-                AccountLogModel::TYPE_CHECK_IN, 0,
+            FundAccount::change($user_id,
+                FundAccount::TYPE_CHECK_IN, 0,
                 $model->money, sprintf('连续签到%s天', $running), 1);
         }
         return $model;

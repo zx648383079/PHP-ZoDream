@@ -3,6 +3,7 @@ namespace Module\Game\Bank\Domain\Model;
 
 
 use Domain\Model\Model;
+use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
@@ -97,7 +98,7 @@ class BankLogModel extends Model {
         if (empty($log)) {
             return false;
         }
-        if (!AccountLogModel::change($user_id, AccountLogModel::TYPE_BANK, $log->id,
+        if (!FundAccount::change($user_id, FundAccount::TYPE_BANK, $log->id,
             -$money, sprintf('投资 %s 项目', $product->name), 1)) {
             $log->delete();
             return false;
@@ -113,8 +114,8 @@ class BankLogModel extends Model {
             $item->real_money = $item->money + $item->income;
             $item->status = static::STATUS_FINISH;
             $item->save();
-            AccountLogModel::change($item->user_id,
-                AccountLogModel::TYPE_BANK, $item->id,
+            FundAccount::change($item->user_id,
+                FundAccount::TYPE_BANK, $item->id,
                 $item->real_money,
                 sprintf('投资 %s 项目收益', $item->product->name), 1);
         }
