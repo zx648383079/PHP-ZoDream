@@ -32,11 +32,30 @@ class CounterMiddleware implements MiddlewareInterface {
             return;
         }
         $event->dispatch(Visit::createCurrent());
+        $this->useGoogle();
         $this->useBaidu();
     }
 
+    private function useGoogle() {
+        $key = config('thirdparty.google.analytics');
+        if (empty($key)) {
+            return;
+        }
+        $js = <<<JS
+window.dataLayer = window.dataLayer || [];
+  function gtag(){
+      dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+  gtag('config', '{$key}');
+JS;
+        view()->registerJsFile('https://www.googletagmanager.com/gtag/js?id='.$key, [
+                'position' => View::HTML_HEAD
+            ])->registerJs($js, View::HTML_HEAD);
+    }
+
     private function useBaidu() {
-        $key = config('baidu.tongji');
+        $key = config('thirdparty.baidu.tongji');
         if (empty($key)) {
             return;
         }
