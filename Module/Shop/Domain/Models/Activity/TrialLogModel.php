@@ -5,28 +5,28 @@ use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
- * Class BargainLogModel
+ * Class TrialLogModel
  * @package Module\Shop\Domain\Models\Activity
  * @property integer $id
- * @property integer $bargain_id
+ * @property integer $act_id
  * @property integer $user_id
- * @property float $amount
- * @property float $price
+ * @property integer $status
+ * @property integer $updated_at
  * @property integer $created_at
  */
-class BargainLogModel extends Model {
+class TrialLogModel extends Model {
 
     public static function tableName()
     {
-        return 'shop_bargain_log';
+        return 'shop_trial_log';
     }
 
     protected function rules() {
         return [
-            'bargain_id' => 'required|int',
+            'act_id' => 'required|int',
             'user_id' => 'required|int',
-            'amount' => 'string',
-            'price' => 'string',
+            'status' => 'int:0,127',
+            'updated_at' => 'int',
             'created_at' => 'int',
         ];
     }
@@ -34,13 +34,15 @@ class BargainLogModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'bargain_id' => 'Bargain Id',
+            'act_id' => 'Act Id',
             'user_id' => 'User Id',
-            'amount' => 'Amount',
-            'price' => 'Price',
+            'status' => 'Status',
+            'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
     }
+
+
 
     public function user()
     {

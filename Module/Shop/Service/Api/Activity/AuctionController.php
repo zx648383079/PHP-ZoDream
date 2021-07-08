@@ -7,6 +7,13 @@ use Module\Shop\Service\Api\Controller;
 
 class AuctionController extends Controller {
 
+    public function rules() {
+        return [
+            'bid' => '@',
+            '*' => '*'
+        ];
+    }
+
     public function indexAction(string $keywords = '') {
         return $this->renderPage(
             AuctionRepository::getList($keywords)

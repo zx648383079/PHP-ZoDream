@@ -38,4 +38,7 @@ class MixRepository {
         ]);
         return $data;
     }
+
+    public static function buy(int $id) {
+    }
 }

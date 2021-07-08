@@ -110,7 +110,7 @@ class ActivityRepository {
     }
 
     public static function timeSave(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = ActivityTimeModel::findOrNew($id);
         $model->load($data);
@@ -129,7 +129,7 @@ class ActivityRepository {
     }
 
     public static function goodsSave(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         if ($id > 0) {
             $model = SeckillGoodsModel::find($id);

@@ -46,4 +46,9 @@ class PresaleRepository {
         return $data;
     }
 
+    public static function buy(int $id, int $amount)
+    {
+
+    }
+
 }

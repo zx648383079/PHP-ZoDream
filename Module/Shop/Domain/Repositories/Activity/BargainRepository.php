@@ -5,6 +5,7 @@ namespace Module\Shop\Domain\Repositories\Activity;
 use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\BargainLogModel;
+use Module\Shop\Domain\Models\Activity\BargainUserModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Zodream\Html\Page;
 
@@ -44,10 +45,9 @@ class BargainRepository {
 
     public static function formatItem(ActivityModel $item) {
         $data = $item->toArray();
-        $source = BargainLogModel::where('act_id', $item->id)
-            ->selectRaw('COUNT(*) as count,MAX(bid) as bid')->first();
-        $data['log_count'] = intval($source['count']);
-        $data['price'] = floatval($source['bid']);
+        $data['log_count'] = BargainUserModel::where('act_id', $item->id)->count();
+        $data['join_log'] = BargainUserModel::where('act_id', $item->id)->where('user_id', auth()->id())
+            ->first();
         return $data;
     }
 
@@ -58,5 +58,60 @@ class BargainRepository {
             ->page();
     }
 
+    public static function getWithLog(int $id, string $log)
+    {
+        $data = static::get($id, true);
+        $data['log'] = BargainUserModel::where('act_id', $id)->where('id', $log)
+            ->first();
+        if (!empty($data['log'])) {
+            throw new \Exception('数据错误');
+        }
+        $data['price'] = $data['log']->price;
+        return $data;
+    }
+
+    public static function cutLogList(int $activity, string $log)
+    {
+        return BargainLogModel::with('user')
+            ->where('act_id', $activity)
+            ->where('bargain_id', $log)->orderBy('id', 'desc')->page();
+    }
+
+    public static function apply(int $id)
+    {
+        $log = BargainUserModel::where('act_id', $id)->where('user_id', auth()->id())
+            ->first();
+        if (!empty($log)) {
+            throw new \Exception('已参加');
+        }
+        $model = ActivityModel::where('type', ActivityModel::TYPE_BARGAIN)
+            ->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception('活动不存在');
+        }
+        return BargainUserModel::createOrThrow([
+            'act_id' => $id,
+            'user_id' => auth()->id(),
+            'goods_id' => $model->scope,
+            'price' => $model->goods->price,
+        ]);
+    }
+
+    public static function cut(int $id, string $log)
+    {
+        if (static::isCut($id, $log)) {
+            throw new \Exception('每人只能砍一次');
+        }
+        // 每人每天只能帮砍3次
+    }
+
+    private static function isCut(int $id, string $log, int $userId = -1): bool {
+        if ($userId < 0) {
+            $userId = auth()->id();
+        }
+        return BargainLogModel::where('act_id', $id)->where('user_id', $userId)
+            ->where('bargain_id', $log)
+            ->count();
+    }
 
 }

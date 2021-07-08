@@ -5,28 +5,34 @@ use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
- * Class BargainLogModel
+ * Class LotteryLogModel
  * @package Module\Shop\Domain\Models\Activity
  * @property integer $id
- * @property integer $bargain_id
+ * @property integer $act_id
  * @property integer $user_id
- * @property float $amount
- * @property float $price
+ * @property integer $item_type
+ * @property integer $item_id
+ * @property integer $amount
+ * @property integer $status
+ * @property integer $updated_at
  * @property integer $created_at
  */
-class BargainLogModel extends Model {
+class LotteryLogModel extends Model {
 
     public static function tableName()
     {
-        return 'shop_bargain_log';
+        return 'shop_lottery_log';
     }
 
     protected function rules() {
         return [
-            'bargain_id' => 'required|int',
+            'act_id' => 'required|int',
             'user_id' => 'required|int',
-            'amount' => 'string',
-            'price' => 'string',
+            'item_type' => 'int:0,127',
+            'item_id' => 'int',
+            'amount' => 'int',
+            'status' => 'int:0,127',
+            'updated_at' => 'int',
             'created_at' => 'int',
         ];
     }
@@ -34,10 +40,13 @@ class BargainLogModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
-            'bargain_id' => 'Bargain Id',
+            'act_id' => 'Act Id',
             'user_id' => 'User Id',
+            'item_type' => 'Item Type',
+            'item_id' => 'Item Id',
             'amount' => 'Amount',
-            'price' => 'Price',
+            'status' => 'Status',
+            'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
     }

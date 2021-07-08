@@ -6,8 +6,14 @@ use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
+use Module\Shop\Domain\Models\Activity\BargainLogModel;
+use Module\Shop\Domain\Models\Activity\BargainUserModel;
+use Module\Shop\Domain\Models\Activity\GroupBuyLogModel;
+use Module\Shop\Domain\Models\Activity\LotteryLogModel;
 use Module\Shop\Domain\Models\Activity\PresaleLogModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
+use Module\Shop\Domain\Models\Activity\TrialLogModel;
+use Module\Shop\Domain\Models\Activity\TrialReportModel;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
@@ -695,6 +701,7 @@ class CreateShopTables extends Migration {
             $table->uint('status', 1)->default(AuctionLogModel::STATUS_NONE);
             $table->timestamp('created_at');
         })->append(PresaleLogModel::tableName(), function (Table $table) {
+            $table->comment('预售记录');
             $table->id();
             $table->uint('act_id');
             $table->uint('user_id');
@@ -710,6 +717,66 @@ class CreateShopTables extends Migration {
             $table->timestamp('predetermined_at')->comment('支付定金时间');
             $table->timestamp('final_at')->comment('尾款支付时间');
             $table->timestamp('ship_at')->comment('发货时间');
+            $table->timestamps();
+        })->append(GroupBuyLogModel::tableName(), function (Table $table) {
+            $table->comment('团购记录');
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->uint('order_id');
+            $table->uint('order_goods_id');
+            $table->decimal('deposit', 8, 2)
+                ->default(0)->comment('定金');
+            $table->decimal('final_payment', 8, 2)
+                ->default(0)->comment('尾款');
+            $table->uint('status', 2)->default(0)->comment('判断预售订单处于那个状态');
+            $table->timestamp('predetermined_at')->comment('支付定金时间');
+            $table->timestamp('final_at')->comment('尾款支付时间');
+            $table->timestamps();
+        })->append(BargainUserModel::tableName(), function (Table $table) {
+            $table->comment('用户参与砍价');
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->uint('goods_id');
+            $table->decimal('price', 10, 2)->comment('当前价格');
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
+        })->append(BargainLogModel::tableName(), function (Table $table) {
+            $table->comment('用户帮砍记录');
+            $table->id();
+            $table->uint('bargain_id');
+            $table->uint('user_id');
+            $table->decimal('amount', 8, 2)->default(0)->comment('砍掉的价格');
+            $table->decimal('price', 8, 2)->default(0)
+                ->comment('砍掉之后剩余的价格');
+            $table->timestamp('created_at');
+        })->append(TrialLogModel::tableName(), function (Table $table) {
+            $table->comment('用户申请试用记录');
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
+        })->append(TrialReportModel::tableName(), function (Table $table) {
+            $table->comment('用户试用报告');
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->uint('goods_id');
+            $table->string('title');
+            $table->text('content')->nullable();
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
+        })->append(LotteryLogModel::tableName(), function (Table $table) {
+            $table->comment('用户抽奖记录');
+            $table->id();
+            $table->uint('act_id');
+            $table->uint('user_id');
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_id')->default(0);
+            $table->uint('amount')->default(0);
+            $table->uint('status', 1)->default(0);
             $table->timestamps();
         });
     }
