@@ -14,6 +14,7 @@ use Zodream\Helpers\Json;
  * @property string $title
  * @property string $image
  * @property integer $course_id
+ * @property integer $course_grade
  * @property integer $type
  * @property integer $easiness
  * @property string $content
@@ -156,7 +157,7 @@ class QuestionModel extends QuestionEntity {
 
     private function getType4Answer($dynamic) {
         $items = [];
-        foreach ($this->optionItems() as $item) {
+        foreach ($this->option_items as $item) {
             $line = trim($item->content);
             if (substr($line, 0, 1) === '=') {
                 $line = QuestionCompiler::compilerValue(substr($line, 1), $dynamic);

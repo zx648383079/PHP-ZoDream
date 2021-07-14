@@ -4,11 +4,12 @@ namespace Module\Note\Service;
 use Domain\Model\SearchModel;
 use Module\ModuleController;
 use Module\Note\Domain\Model\NoteModel;
+use Zodream\Disk\File;
 
 
 class HomeController extends ModuleController {
 
-    public $layout = true;
+    public File|string $layout = 'main';
 	
 	public function indexAction($keywords = null, $id = 0) {
 	    $model_list = NoteModel::with('user')
@@ -34,9 +35,9 @@ class HomeController extends ModuleController {
         return $this->renderData($data);
     }
 
-    public function findLayoutFile() {
-        if ($this->layout === false) {
-            return false;
+    public function findLayoutFile(): File|string {
+        if ($this->layout === '') {
+            return '';
         }
         return app_path()->file('UserInterface/Home/layouts/main.php');
     }

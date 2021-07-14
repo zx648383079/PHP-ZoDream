@@ -5,9 +5,10 @@ use Module\ModuleController;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Repositories\ArticleRepository;
 use Module\Shop\Module;
+use Zodream\Disk\File;
 
 class Controller extends ModuleController {
-    public $layout = 'main';
+    public File|string $layout = 'main';
     protected bool $disallow = true;
 
     public function __construct() {

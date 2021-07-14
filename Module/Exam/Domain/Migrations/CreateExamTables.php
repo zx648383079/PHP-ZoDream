@@ -4,7 +4,7 @@ namespace Module\Exam\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Exam\Domain\Entities\CourseEntity;
-use Module\Exam\Domain\Entities\CourseLinkEntity;
+use Module\Exam\Domain\Entities\CourseGradeEntity;
 use Module\Exam\Domain\Entities\PageEntity;
 use Module\Exam\Domain\Entities\PageEvaluateEntity;
 use Module\Exam\Domain\Entities\PageQuestionEntity;
@@ -14,6 +14,9 @@ use Module\Exam\Domain\Entities\QuestionEntity;
 use Module\Exam\Domain\Entities\QuestionMaterialEntity;
 use Module\Exam\Domain\Entities\QuestionOptionEntity;
 use Module\Exam\Domain\Entities\QuestionWrongEntity;
+use Module\Exam\Domain\Entities\UpgradeEntity;
+use Module\Exam\Domain\Entities\UpgradePathEntity;
+use Module\Exam\Domain\Entities\UpgradeUserEntity;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -32,17 +35,40 @@ class CreateExamTables extends Migration {
             $table->string('description', 200)->default('');
             $table->uint('parent_id')->default(0);
             $table->timestamps();
-        })->append(CourseLinkEntity::tableName(), function (Table $table) {
-            $table->comment('科目关联表');
-            $table->uint('course_id');
-            $table->uint('link_id');
-            $table->string('title', 100)->default('');
+        })->append(CourseGradeEntity::tableName(), function (Table $table) {
+            $table->comment('科目等级别名表');
+            $table->id();
+            $table->uint('course_id')->default(0);
+            $table->string('name', 30);
+            $table->uint('grade', 5)->default(1);
+        })->append(UpgradeEntity::tableName(), function (Table $table) {
+            $table->comment('晋级名称表');
+            $table->id();
+            $table->uint('course_id')->comment('所属科目');
+            $table->uint('course_grade', 5)->default(1);
+            $table->string('name', 100);
+            $table->string('icon', 100)->default('勋章图标');
+            $table->string('description');
+            $table->timestamps();
+        })->append(UpgradePathEntity::tableName(), function (Table $table) {
+            $table->comment('晋级路线表');
+            $table->id();
+            $table->uint('item_type', 1)->default(0)->comment('');
+            $table->uint('item_id');
+            $table->uint('course_grade', 5)->default(1);
+        })->append(UpgradeUserEntity::tableName(), function (Table $table) {
+            $table->comment('用户晋级记录表');
+            $table->id();
+            $table->uint('upgrade_id');
+            $table->uint('user_id');
+            $table->timestamp('created_at');
         })->append(QuestionEntity::tableName(), function (Table $table) {
             $table->comment('题库');
             $table->id();
             $table->string('title');
             $table->string('image', 200)->default('');
             $table->uint('course_id');
+            $table->uint('course_grade', 5)->default(1);
             $table->uint('material_id')->default(0)->comment('题目素材');
             $table->uint('type', 1)->default(0)->comment('题目类型');
             $table->uint('easiness', 1)->default(0)->comment('难易程度');
@@ -104,6 +130,8 @@ class CreateExamTables extends Migration {
             $table->short('question_count')->default(0)->comment('题目数');
             $table->uint('user_id');
             $table->uint('status', 1)->default(0);
+            $table->uint('course_id')->default(0);
+            $table->uint('course_grade', 5)->default(1);
             $table->timestamps();
         })->append(PageQuestionEntity::tableName(), function (Table $table) {
             $table->comment('每次试卷题目及用户回答，如果为固定则复制开始的');
@@ -139,5 +167,26 @@ class CreateExamTables extends Migration {
         RoleRepository::newPermission([
             'exam_manage' => '题库管理'
         ]);
+        $this->insertGrade();
+    }
+
+    private function insertGrade() {
+        if (CourseGradeEntity::where('course_id', 0)->count() > 0) {
+            return;
+        }
+        $items = [
+            '小学',
+            '初中',
+            '高中',
+            '大学',
+        ];
+        $data = [];
+        foreach ($items as $i => $name) {
+            $data[] = [
+                'name' => $name,
+                'grade' => $i + 1,
+            ];
+        }
+        CourseGradeEntity::query()->insert($data);
     }
 }

@@ -2,10 +2,11 @@
 namespace Module\LogView\Service;
 
 use Module\ModuleController;
+use Zodream\Disk\File;
 
 class Controller extends ModuleController {
 
-    public $layout = 'main';
+    public File|string $layout = 'main';
 
 
 

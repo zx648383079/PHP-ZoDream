@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Module\Chat\Service;
 
+use Zodream\Disk\File;
+
 class HomeController extends Controller {
 
-    public $layout = 'main';
+    public File|string $layout = 'main';
 
     public function indexAction() {
         $user = auth()->user();

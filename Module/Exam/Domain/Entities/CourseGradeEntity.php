@@ -4,33 +4,32 @@ namespace Module\Exam\Domain\Entities;
 use Domain\Entities\Entity;
 
 /**
- * Class CourseLinkEntity
+ * Class CourseGradeEntity
  * @package Module\Exam\Domain\Entities
+ * @property integer $id
  * @property integer $course_id
- * @property integer $link_id
- * @property string $title
+ * @property string $name
+ * @property integer $grade
  */
-class CourseLinkEntity extends Entity {
+class CourseGradeEntity extends Entity {
     public static function tableName() {
-        return 'exam_course_link';
+        return 'exam_course_grade';
     }
 
-    protected $primaryKey = '';
-
-    public function rules() {
+    protected function rules() {
         return [
             'course_id' => 'required|int',
-            'link_id' => 'required|int',
-            'title' => 'string:0,100',
+            'name' => 'required|string:0,30',
+            'grade' => 'int',
         ];
     }
 
     protected function labels() {
         return [
+            'id' => 'Id',
             'course_id' => 'Course Id',
-            'link_id' => 'Link Id',
-            'title' => 'Title',
+            'name' => 'Name',
+            'grade' => 'Grade',
         ];
     }
-
 }

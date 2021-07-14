@@ -16,6 +16,8 @@ use Domain\Entities\Entity;
  * @property integer $updated_at
  * @property integer $created_at
  * @property integer $score
+ * @property integer $course_id
+ * @property integer $course_grade
  * @property integer $question_count
  */
 class PageEntity extends Entity {
@@ -37,6 +39,8 @@ class PageEntity extends Entity {
             'created_at' => 'int',
             'score' => 'int',
             'question_count' => 'int',
+            'course_id' => 'int',
+            'course_grade' => 'int',
         ];
     }
 

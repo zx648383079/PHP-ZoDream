@@ -6,6 +6,7 @@ use Module\Code\Domain\Model\CodeModel;
 use Module\Code\Domain\Model\TagModel;
 use Module\Code\Domain\Repositories\CodeRepository;
 use Module\ModuleController;
+use Zodream\Disk\File;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends ModuleController {
@@ -100,7 +101,7 @@ class HomeController extends ModuleController {
         return $this->renderData($data);
     }
 
-    public function findLayoutFile() {
+    public function findLayoutFile(): File|string {
         if ($this->httpContext()->make('action') !== 'index') {
             return false;
         }

@@ -4,11 +4,12 @@ namespace Module\Shop\Service\Mobile;
 use Module\ModuleController;
 use Module\Shop\Domain\Models\ArticleModel;
 use Module\Shop\Domain\Models\CategoryModel;
+use Zodream\Disk\File;
 
 
 class Controller extends ModuleController {
 
-    public $layout = '/Mobile/layouts/main';
+    public File|string $layout = '/Mobile/layouts/main';
     protected $disallow = true;
 
     protected function getUrl($path, $args = []) {

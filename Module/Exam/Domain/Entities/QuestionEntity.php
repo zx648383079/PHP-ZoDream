@@ -8,6 +8,7 @@ use Domain\Entities\Entity;
  * @property string $title
  * @property string $image
  * @property integer $course_id
+ * @property integer $course_grade
  * @property integer $type
  * @property integer $easiness
  * @property string $content
@@ -29,6 +30,7 @@ class QuestionEntity extends Entity {
             'title' => 'required|string:0,255',
             'image' => 'string:0,200',
             'course_id' => 'required|int',
+            'course_grade' => 'int',
             'type' => 'int:0,127',
             'easiness' => 'int:0,127',
             'content' => '',

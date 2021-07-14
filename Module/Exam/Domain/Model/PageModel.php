@@ -21,6 +21,8 @@ use Zodream\Helpers\Json;
  * @property integer $updated_at
  * @property integer $created_at
  * @property integer $score
+ * @property integer $course_id
+ * @property integer $course_grade
  * @property integer $question_count
  */
 class PageModel extends PageEntity {

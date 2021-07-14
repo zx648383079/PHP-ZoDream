@@ -2,6 +2,7 @@
 namespace Module\Short\Service;
 
 use Module\Short\Domain\Repositories\ShortRepository;
+use Zodream\Disk\File;
 
 
 class HomeController extends Controller {
@@ -28,7 +29,7 @@ class HomeController extends Controller {
         ]);
     }
 
-    public function findLayoutFile() {
+    public function findLayoutFile(): File|string {
         return app_path()->file('UserInterface/Home/layouts/main.php');
     }
 

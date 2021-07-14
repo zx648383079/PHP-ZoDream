@@ -57,4 +57,37 @@ class CourseController extends Controller {
     public function searchAction(string $keywords = '', int|array $id = 0) {
         return $this->renderData(CourseRepository::search($keywords, $id));
     }
+
+    public function gradeAllAction(int $course = 0) {
+        return $this->renderData(CourseRepository::gradeAll($course));
+    }
+
+    public function gradeAction(string $keywords = '', int $course = 0) {
+        return $this->renderPage(CourseRepository::gradeList($keywords, $course));
+    }
+
+    public function gradeSaveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,30',
+                'grade' => 'int',
+                'course_id' => 'int',
+            ]);
+            return $this->render(
+                CourseRepository::gradeSave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function gradeDeleteAction(int $id) {
+        try {
+            CourseRepository::gradeRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Service\Home;
 
 use Module\Counter\Domain\Events\JumpOut;
+use Zodream\Disk\File;
 
 class ToController extends Controller {
-    public $layout = false;
+    public File|string $layout = '';
 
     /**
      * 跳出链接

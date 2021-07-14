@@ -2,10 +2,11 @@
 namespace Service\Admin;
 
 use Service\Controller as BaseController;
+use Zodream\Disk\File;
 
 abstract class Controller extends BaseController {
 
-    public $layout = 'main';
+    public File|string $layout = 'main';
 	
 	public function rules() {
 		return [

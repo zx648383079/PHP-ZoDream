@@ -6,11 +6,12 @@ use Module\LogView\Domain\Model\FileModel;
 use Module\LogView\Domain\Model\LogModel;
 use Module\LogView\Domain\Parser\IIS;
 use Module\LogView\Service\Controller;
+use Zodream\Disk\File;
 
 
 class FileController extends Controller {
 
-    public $layout = false;
+    public File|string $layout = '';
 
     public function rules() {
         return [

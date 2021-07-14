@@ -6,13 +6,14 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\ModuleController;
+use Zodream\Disk\File;
 
 
 class Controller extends ModuleController {
 
     use CheckRole;
 
-    public $layout = '/Admin/layouts/main';
+    public File|string $layout = '/Admin/layouts/main';
 
     public function rules() {
         return [

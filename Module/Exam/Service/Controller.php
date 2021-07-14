@@ -2,10 +2,11 @@
 namespace Module\Exam\Service;
 
 use Module\ModuleController;
+use Zodream\Disk\File;
 
 
 class Controller extends ModuleController {
-    public $layout = true;
+    public File|string $layout = 'main';
 
     public function rules() {
         return [
@@ -13,9 +14,9 @@ class Controller extends ModuleController {
         ];
     }
 
-    public function findLayoutFile() {
-        if ($this->layout === false) {
-            return false;
+    public function findLayoutFile(): File|string {
+        if ($this->layout === '') {
+            return '';
         }
         return app_path()->file('UserInterface/Home/layouts/main.php');
     }

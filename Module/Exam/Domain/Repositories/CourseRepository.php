@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Exam\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Exam\Domain\Entities\CourseGradeEntity;
 use Module\Exam\Domain\Model\CourseModel;
 use Zodream\Html\Tree;
 
@@ -53,5 +54,57 @@ class CourseRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function gradeAll(int $course) {
+        $items = CourseGradeEntity::when($course > 0, function ($query) use ($course) {
+                $query->where('course_id', $course);
+            })
+            ->orWhere('course_id', 0)
+            ->orderBy('course_id', 'asc')
+            ->orderBy('grade', 'asc')->get();
+        $data = [];
+        $exist = [];
+        foreach ($items as $item) {
+            if (in_array($item['grade'], $exist)) {
+                continue;
+            }
+            $data[] = [
+                'name' => $item['name'],
+                'value' => $item['grade'],
+            ];
+            $exist[] = $item['grade'];
+        }
+        usort($data, function ($a, $b) {
+            return $a['value'] > $b['value'] ? 1 : -1;
+        });
+        return $data;
+    }
+
+    public static function gradeList(string $keywords = '', int $course = 0) {
+        return CourseGradeEntity::query()
+            ->when($course > 0, function ($query) use ($course) {
+                $query->where('course_id', $course);
+            })
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['name']);
+            })->page();
+    }
+
+    public static function gradeSave(array $data)
+    {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = CourseGradeEntity::findOrNew($id);
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function gradeRemove(int $id)
+    {
+        CourseGradeEntity::where('id', $id)->delete();
     }
 }

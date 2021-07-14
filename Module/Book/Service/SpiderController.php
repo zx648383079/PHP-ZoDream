@@ -7,13 +7,14 @@ use Module\Book\Domain\SiteCrawl;
 use Module\Book\Domain\SpiderProgress;
 use Module\Book\Domain\Spiders\Txt;
 use Module\Book\Domain\Spiders\ZhiShuShenQi;
+use Zodream\Disk\File;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Spider\Support\Uri;
 use Zodream\Validate\Validator;
 
 class SpiderController extends Controller {
 
-    public $layout = false;
+    public File|string $layout = '';
 
 
 

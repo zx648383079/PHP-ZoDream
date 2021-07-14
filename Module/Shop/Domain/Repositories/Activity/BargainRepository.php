@@ -48,6 +48,7 @@ class BargainRepository {
         $data['log_count'] = BargainUserModel::where('act_id', $item->id)->count();
         $data['join_log'] = BargainUserModel::where('act_id', $item->id)->where('user_id', auth()->id())
             ->first();
+        $data['price'] = empty($data['join_log']) ? $item->goods->price : $data['join_log']['price'];
         return $data;
     }
 
@@ -97,12 +98,51 @@ class BargainRepository {
         ]);
     }
 
-    public static function cut(int $id, string $log)
+    public static function cut(int $id, string $logId)
     {
-        if (static::isCut($id, $log)) {
+        if (static::isCut($id, $logId)) {
             throw new \Exception('每人只能砍一次');
         }
         // 每人每天只能帮砍3次
+        $count = BargainLogModel::where('user_id', auth()->id())
+            ->where('created_at', '>=', strtotime(date('Y-m-d 00:00:00')))
+            ->count();
+        if ($count >= 3) {
+            throw new \Exception('每人每天只能帮砍3次');
+        }
+        $model = ActivityModel::where('type', ActivityModel::TYPE_BARGAIN)
+            ->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception('活动不存在');
+        }
+        $log = BargainUserModel::findOrThrow($logId, '数据错误');
+        $amount = static::bargainPrice($model, $log->price);
+        if ($amount <= 0) {
+            throw new \Exception('无法砍价');
+        }
+        $log->price -= $amount;
+        BargainLogModel::createOrThrow([
+            'bargain_id' => $log->id,
+            'user_id' => auth()->id(),
+            'amount' => $amount,
+            'price' => $log->price,
+        ]);
+        $log->save();
+        return $log;
+    }
+
+    private static function bargainPrice(ActivityModel $model, float $current): float {
+        if ($current <= 0) {
+            return 0;
+        }
+        $amount = floatval($model->configure['min']);
+        if ($amount <= 0) {
+            $amount = .01;
+        }
+        if ($current - $amount < 0) {
+            $amount = $current;
+        }
+        return $amount;
     }
 
     private static function isCut(int $id, string $log, int $userId = -1): bool {
