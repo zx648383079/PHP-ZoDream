@@ -29,6 +29,7 @@ class QuestionController extends Controller {
                 'title' => 'required|string:0,255',
                 'image' => 'string:0,200',
                 'course_id' => 'required|int',
+                'course_grade' => 'required|int',
                 'material_id' => 'int',
                 'status' => 'int',
                 'type' => 'int:0,127',
