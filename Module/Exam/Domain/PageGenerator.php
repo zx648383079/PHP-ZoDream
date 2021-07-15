@@ -64,12 +64,12 @@ class PageGenerator {
 
     public static function formatQuestion(QuestionModel $model,
                                           $answer,
-                                          $dynamic = null) {
+                                          $dynamic = null, bool $shuffle = true) {
         $data = $model->format(null,
             $dynamic,
-            true);
+            true, $shuffle);
         $data['your_answer'] = $answer;
-        $data['right'] = $model->check($answer, $dynamic) ? 1 : -1;
+        $data['right'] = QuestionChecker::check($model, $answer, $dynamic) == 1 ? 1 : -1;
         return $data;
     }
 

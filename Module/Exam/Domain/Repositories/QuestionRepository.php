@@ -10,7 +10,7 @@ use Module\Exam\Domain\Model\QuestionOptionModel;
 
 class QuestionRepository {
     public static function getList(string $keywords = '', int $course = 0, int $user = 0) {
-        return QuestionModel::with('course', 'user')
+        $data = QuestionModel::with('course', 'user')
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
             })
@@ -19,6 +19,12 @@ class QuestionRepository {
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })->orderBy('id', 'desc')->page();
+        $data->map(function ($item) {
+            $data = $item->toArray();
+            $data['course_grade_format'] = CourseRepository::formatGrade($item->course_id, $item->course_grade);
+            return $data;
+        });
+        return $data;
     }
 
     public static function searchList(string $keywords = '', int $course = 0, int $user = 0) {

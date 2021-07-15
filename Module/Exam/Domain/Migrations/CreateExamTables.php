@@ -47,8 +47,8 @@ class CreateExamTables extends Migration {
             $table->uint('course_id')->comment('所属科目');
             $table->uint('course_grade', 5)->default(1);
             $table->string('name', 100);
-            $table->string('icon', 100)->default('勋章图标');
-            $table->string('description');
+            $table->string('icon', 100)->default('')->comment('勋章图标');
+            $table->string('description')->default('');
             $table->timestamps();
         })->append(UpgradePathEntity::tableName(), function (Table $table) {
             $table->comment('晋级路线表');

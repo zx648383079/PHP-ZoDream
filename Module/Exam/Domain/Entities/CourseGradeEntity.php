@@ -32,4 +32,8 @@ class CourseGradeEntity extends Entity {
             'grade' => 'Grade',
         ];
     }
+
+    public function course() {
+        return $this->hasOne(CourseEntity::class, 'id', 'course_id');
+    }
 }

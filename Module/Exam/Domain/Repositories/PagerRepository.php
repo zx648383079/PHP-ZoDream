@@ -87,7 +87,7 @@ class PagerRepository {
         if (!isset($model) || empty($model)) {
             throw new \Exception('题目不存在');
         }
-        return $model->format(null, null, true);
+        return $model->format(null, null, false, false);
     }
 
     public static function questionCheck(array $data) {
@@ -98,7 +98,7 @@ class PagerRepository {
             }
             $items[] = PageGenerator::formatQuestion(QuestionModel::find($id),
                 $item['answer'] ?? '',
-                $item['dynamic'] ?? null);
+                $item['dynamic'] ?? null, false);
         }
         return $items;
     }

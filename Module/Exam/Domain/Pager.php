@@ -82,7 +82,7 @@ class Pager implements ArrayAble {
 
     public function judge($answer, $dynamic = null) {
         $model = $this->getQuestion();
-        $right = $model->check($answer, $dynamic) ? 1 : -1;
+        $right = QuestionChecker::check($model, $answer, $dynamic) == 1 ? 1 : -1;
         $this->merge(compact('answer', 'dynamic', 'right'));
         return $right > 0;
     }

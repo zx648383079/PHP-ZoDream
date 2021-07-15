@@ -51,63 +51,7 @@ class QuestionModel extends QuestionEntity {
         return $this->hasMany(QuestionAnalysisModel::class, 'question_id', 'id')->orderBy('type', 'asc');
     }
 
-    public function check($answer, $dynamic = null) {
-        if (!is_array($dynamic)) {
-            $dynamic = empty($dynamic) ? [] : Json::decode(base64_decode($dynamic));
-        }
-        if ($this->type < 1) {
-            return $this->checkType0($answer);
-        }
-        if ($this->type == 1) {
-            return $this->checkType1($answer);
-        }
-        if ($this->type == 2) {
-            return $this->checkType2($answer);
-        }
-        if ($this->type == 3) {
-            return $this->checkType3($answer, $dynamic);
-        }
-        if ($this->type == 4) {
-            return $this->checkType4($answer, $dynamic);
-        }
-        return false;
-    }
-
-    private function checkType4($answer, array $dynamic) {
-        $answer = (array)$answer;
-        foreach (explode("\n", $this->answer) as $i => $line) {
-            $line = trim($line);
-            if (substr($line, 0, 1) === '=') {
-                $line = self::compilerValue(substr($line, 1), $dynamic);
-            }
-            if (!isset($answer[$i]) || $answer[$i] !== $line) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private function checkType3($answer, array $dynamic) {
-        // 完全对比有问题
-        return self::strReplace($this->answer, $dynamic) === $answer;
-    }
-
-    private function checkType2($answer) {
-        return intval($this->answer) === intval($answer);
-    }
-
-    private function checkType1($answer) {
-        $answer = (array)$answer;
-        $items = QuestionOptionModel::where('question_id', $this->id)->where('is_right', 1)->pluck('id');
-        return count($answer) === count($items) && count(array_diff($answer, $items)) === 0;
-    }
-
-    private function checkType0($answer) {
-        return QuestionOptionModel::where('question_id', $this->id)
-            ->where('id', intval($answer))->where('is_right', 1)->count() === 1;
-    }
-
-    public function format($order = null, $dynamicItems = null, $hasAnswer = false) {
+    public function format($order = null, $dynamicItems = null, bool $hasAnswer = false, bool $shuffle = true) {
         if (empty($dynamicItems)) {
             $dynamicItems = QuestionCompiler::generate($this->dynamic);
         } elseif (is_string($dynamicItems)) {
@@ -136,7 +80,9 @@ class QuestionModel extends QuestionEntity {
         if ($this->type < 2) {
             $option_list = QuestionOptionModel::where('question_id', $this->id)
                 ->orderBy('id', 'asc')->get();
-            shuffle($option_list);
+            if ($shuffle) {
+                shuffle($option_list);
+            }
             $i = 0;
             foreach ($option_list as $item) {
                 $i ++;

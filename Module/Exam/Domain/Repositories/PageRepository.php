@@ -9,15 +9,25 @@ use Module\Exam\Domain\Model\PageModel;
 use Module\Exam\Domain\Model\PageQuestionModel;
 use Module\Exam\Domain\Model\QuestionModel;
 use Zodream\Database\Relation;
+use Zodream\Html\Page;
 
 class PageRepository {
-    public static function getList(string $keywords = '', int $user = 0) {
-        return PageModel::with('user')
+    public static function getList(string $keywords = '', int $user = 0, int $course = 0) {
+        /** @var Page $data */
+        $data = PageModel::with('user', 'course')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', auth()->id());
+            })->when($course > 0, function ($query) use ($course) {
+                $query->where('course_id', $course);
             })->orderBy('end_at', 'desc')->orderBy('id', 'desc')->page();
+        $data->map(function ($item) {
+            $data = $item->toArray();
+            $data['course_grade_format'] = CourseRepository::formatGrade($item->course_id, $item->course_grade);
+            return $data;
+        });
+        return $data;
     }
 
     public static function selfList(string $keywords = '') {
@@ -107,7 +117,7 @@ class PageRepository {
         $model = PageModel::where('id', $id)->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
         })->first();
-        if (!empty($model)) {
+        if (empty($model)) {
             throw new \Exception('无权限删除');
         }
         $model->delete();

@@ -26,7 +26,7 @@ class UpgradeEntity extends Entity {
             'course_grade' => 'int',
             'name' => 'required|string:0,100',
             'icon' => 'string:0,100',
-            'description' => 'required|string:0,255',
+            'description' => 'string:0,255',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];

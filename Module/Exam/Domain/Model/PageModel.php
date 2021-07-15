@@ -31,6 +31,10 @@ class PageModel extends PageEntity {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
+    public function course() {
+        return $this->hasOne(CourseModel::class, 'id', 'course_id');
+    }
+
     public function getStartAtAttribute() {
         return $this->formatTimeAttribute('start_at');
     }

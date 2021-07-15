@@ -6,9 +6,9 @@ use Module\Exam\Domain\Repositories\PageRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class PageController extends Controller {
-    public function indexAction(string $keywords = '') {
+    public function indexAction(string $keywords = '', int $user = 0, int $course = 0) {
         return $this->renderPage(
-            PageRepository::getList($keywords)
+            PageRepository::getList($keywords, $user, $course)
         );
     }
 
@@ -33,6 +33,8 @@ class PageController extends Controller {
                 'end_at' => '',
                 'limit_time' => 'int:0,99999',
                 'rule' => '',
+                'course_id' => 'int',
+                'course_grade' => 'int',
             ]);
             return $this->render(
                 PageRepository::save($data)
