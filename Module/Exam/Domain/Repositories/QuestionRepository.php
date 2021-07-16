@@ -9,7 +9,7 @@ use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
 
 class QuestionRepository {
-    public static function getList(string $keywords = '', int $course = 0, int $user = 0) {
+    public static function getList(string $keywords = '', int $course = 0, int $user = 0, int $grade = 0) {
         $data = QuestionModel::with('course', 'user')
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
@@ -18,6 +18,8 @@ class QuestionRepository {
                 SearchModel::searchWhere($query, ['title']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
+            })->when($grade > 0, function ($query) use ($grade) {
+                $query->where('course_grade', $grade);
             })->orderBy('id', 'desc')->page();
         $data->map(function ($item) {
             $data = $item->toArray();
@@ -27,8 +29,12 @@ class QuestionRepository {
         return $data;
     }
 
-    public static function searchList(string $keywords = '', int $course = 0, int $user = 0) {
-        return QuestionModel::with('course', 'user')
+    public static function searchList(string $keywords = '',
+                                      int $course = 0, int $user = 0, int $grade = 0, bool $full = false) {
+        $query = $full ? QuestionModel::with('course', 'user', 'option_items', 'analysis_items') :
+            QuestionModel::with('course', 'user')
+            ->select('id', 'title', 'course_id', 'user_id', 'type', 'easiness', 'created_at');
+        $data = $query
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
             })
@@ -36,8 +42,16 @@ class QuestionRepository {
                 SearchModel::searchWhere($query, ['title']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
-            ->select('id', 'title', 'course_id', 'user_id', 'type', 'easiness', 'created_at')->page();
+            })->when($grade > 0, function ($query) use ($grade) {
+                $query->where('course_grade', $grade);
+            })->orderBy('id', 'desc')->page();
+        if ($full) {
+            $data->map(function ($item) {
+                $item['editable'] = $item->user_id === auth()->id();
+                return $item;
+            });
+        }
+        return $data;
     }
 
     public static function selfList(string $keywords = '', int $course = 0) {

@@ -22,9 +22,13 @@ class CourseController extends Controller {
         );
     }
 
-    public function treeAction() {
-        return $this->render(
-            CourseRepository::all(true)
+    public function treeAction(bool $full = false) {
+        return $this->renderData(
+            CourseRepository::all($full)
         );
+    }
+
+    public function gradeAction(int $course = 0) {
+        return $this->renderData(CourseRepository::gradeAll($course));
     }
 }

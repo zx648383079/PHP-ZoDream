@@ -12,7 +12,7 @@ use Zodream\Database\Relation;
 use Zodream\Html\Page;
 
 class PageRepository {
-    public static function getList(string $keywords = '', int $user = 0, int $course = 0) {
+    public static function getList(string $keywords = '', int $user = 0, int $course = 0, int $grade = 0) {
         /** @var Page $data */
         $data = PageModel::with('user', 'course')
             ->when(!empty($keywords), function ($query) {
@@ -21,6 +21,8 @@ class PageRepository {
                 $query->where('user_id', auth()->id());
             })->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
+            })->when($grade > 0, function ($query) use ($grade) {
+                $query->where('course_grade', $grade);
             })->orderBy('end_at', 'desc')->orderBy('id', 'desc')->page();
         $data->map(function ($item) {
             $data = $item->toArray();
@@ -52,10 +54,14 @@ class PageRepository {
     }
 
     public static function formatQuestion(array $items, bool $full = false) {
-        $query = $full ?  QuestionModel::with('material', 'option_items') : QuestionModel::select('id', 'type', 'title');
-        return Relation::create($items, [
+        $query = $full ?  QuestionModel::with('material', 'option_items', 'analysis_items') : QuestionModel::select('id', 'type', 'title');
+        $data = Relation::create($items, [
             Relation::MERGE_RELATION_KEY => Relation::make($query, 'id', 'id')
         ]);
+        return $full ? array_map(function ($item) {
+            $item['editable'] = $item['user_id'] == auth()->id();
+            return $item;
+        }, $data) : $data;
     }
 
     public static function getSelf(int $id) {
@@ -97,20 +103,31 @@ class PageRepository {
         $model->question_count = 0;
         $model->score = 0;
         foreach ($items as $item) {
-            $q = QuestionRepository::selfSave($item);
+            $qId = isset($item['id']) ? intval($item['id']) : 0;
+            try {
+                $q = QuestionRepository::selfSave($item);
+                if ($q) {
+                    $qId = $q->id;
+                }
+            } catch (\Exception $ex) {}
             $score = intval($item['score']);
-            if ($q && $q->id) {
+            if ($qId > 0) {
                 $model->question_count ++;
                 $model->score += $score;
                 $idItems[] = [
-                    'id' => $q->id,
+                    'id' => $qId,
                     'score' => $score,
                 ];
             }
         }
         $model->rule_value = $idItems;
         $model->save();
-        return $model;
+        return array_merge(
+            $model->toArray(),
+            [
+                'rule_value' => static::formatQuestion($idItems, true)
+            ]
+        );
     }
 
     public static function remove(int $id, int $user = 0) {
