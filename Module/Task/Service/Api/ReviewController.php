@@ -10,7 +10,7 @@ class ReviewController extends Controller {
         return ['*' => '@'];
     }
 
-    public function indexAction($type, $date = null, $ignore = false) {
+    public function indexAction(string $type, string $date = '', bool $ignore = false) {
         $time = empty($date) ? time() : strtotime($date);
         if ($type === 'week') {
             list($start_at, $end_at) = Time::week($time);

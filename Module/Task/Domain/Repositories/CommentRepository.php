@@ -7,7 +7,7 @@ use Module\Task\Domain\Model\TaskModel;
 
 class CommentRepository {
 
-    public static function getList($task_id) {
+    public static function getList(int $task_id) {
         $task = TaskModel::find($task_id);
         if (empty($task)) {
             throw new \Exception('任务错误');
@@ -59,7 +59,7 @@ class CommentRepository {
 
 
 
-    public static function remove($id) {
+    public static function remove(int $id) {
         $comment = TaskCommentModel::find($id);
         if (empty($comment)) {
             throw new \Exception('无权限操作');

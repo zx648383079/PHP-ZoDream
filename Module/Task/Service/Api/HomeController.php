@@ -23,7 +23,7 @@ class HomeController extends Controller {
         return $this->renderPage($data);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         try {
             $model = TaskRepository::detail($id);
         } catch (\Exception $ex) {
@@ -32,7 +32,7 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function saveAction(Request $request, $id = 0, $status = false) {
+    public function saveAction(Request $request, int $id = 0, int $status = -1) {
         try {
             $data = $request->validate([
                 'parent_id' => 'int',
@@ -71,7 +71,7 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id, $stop = false) {
+    public function deleteAction(int $id, bool $stop = false) {
         try {
             TaskRepository::remove($id, $stop);
         } catch (\Exception $ex) {
@@ -80,7 +80,7 @@ class HomeController extends Controller {
         return $this->renderData(true);
     }
 
-    public function todayAction($time = null) {
+    public function todayAction(string $time = '') {
         if (empty($time)) {
             $time = date('Y-m-d');
         }
@@ -88,7 +88,7 @@ class HomeController extends Controller {
         return $this->renderPage($data);
     }
 
-    public function detailDayAction($id) {
+    public function detailDayAction(int $id) {
         try {
             $model = DayRepository::detail($id);
         } catch (\Exception $ex) {
@@ -97,7 +97,7 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function saveDayAction($task_id, $id = 0, $amount = 1) {
+    public function saveDayAction(int $task_id, int $id = 0, int $amount = 1) {
         try {
             $model = DayRepository::save($task_id, $id, $amount);
         } catch (\Exception $ex) {
@@ -106,7 +106,7 @@ class HomeController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteDayAction($id) {
+    public function deleteDayAction(int $id) {
         try {
             DayRepository::remove($id);
         } catch (\Exception $ex) {
@@ -116,7 +116,7 @@ class HomeController extends Controller {
     }
 
 
-    public function playAction($id, $child_id = 0) {
+    public function playAction(int $id, int $child_id = 0) {
         try {
             $day = TaskRepository::start($id, $child_id);
         } catch (\Exception $ex) {
@@ -125,7 +125,7 @@ class HomeController extends Controller {
         return $this->render($day);
     }
 
-    public function pauseAction($id) {
+    public function pauseAction(int $id) {
         try {
             $day = TaskRepository::pause($id);
         } catch (\Exception $ex) {
@@ -134,7 +134,7 @@ class HomeController extends Controller {
         return $this->render($day);
     }
 
-    public function stopAction($id) {
+    public function stopAction(int $id) {
         try {
             $day = TaskRepository::stop($id);
         } catch (\Exception $ex) {
@@ -143,14 +143,14 @@ class HomeController extends Controller {
         return $this->render($day);
     }
 
-    public function checkAction($id) {
+    public function checkAction(int $id) {
         try {
             $day = TaskRepository::check($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         if ($day === false) {
-            return $this->render(['data' => $day]);
+            return $this->renderData($day);
         }
         // 记录今天完成的任务次数，每4轮多休息
         $count = TaskLogModel::where('created_at', '>',
@@ -162,10 +162,13 @@ class HomeController extends Controller {
         if ($count % 4 === 0) {
             $tip = '本轮任务完成，请休息20-25分钟';
         }
-        return $this->render(array_merge($day->toArray(), compact('tip')));
+        return $this->render([
+            'data' => $day,
+            'message' => $tip
+        ]);
     }
 
-    public function batchAddAction($id) {
+    public function batchAddAction(int $id) {
         $task_list = TaskModel::where('user_id', auth()->id())
             ->whereIn('id', (array)$id)->get();
         if (empty($task_list)) {
@@ -174,10 +177,10 @@ class HomeController extends Controller {
         foreach ($task_list as $item) {
             TaskDayModel::add($item, 1);
         }
-        return $this->render(['data' => true]);
+        return $this->renderData(true);
     }
 
-    public function stopTaskAction($id) {
+    public function stopTaskAction(int $id) {
         try {
             $day = TaskDayModel::findWithAuth($id);
             if (empty($day)) {
@@ -193,7 +196,7 @@ class HomeController extends Controller {
         return $this->render($task);
     }
 
-    public function batchStopTaskAction($id) {
+    public function batchStopTaskAction(int|array $id) {
         try {
             foreach ((array)$id as $item) {
                 if ($item < 1) {
@@ -204,6 +207,6 @@ class HomeController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(['data' => true]);
+        return $this->renderData(true);
     }
 }

@@ -19,7 +19,7 @@ class TaskController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = TaskModel::findOrNew($id);
         if ($id > 0 && $model->user_id !== auth()->id()) {
             return $this->redirectWithMessage('./task', '任务不存在');
@@ -30,7 +30,7 @@ class TaskController extends Controller {
         return $this->show('edit', compact('model'));
     }
 
-    public function saveAction($id, $status = false) {
+    public function saveAction(int $id, int $status = -1) {
         $data = request()
             ->get('name,every_time,description');
         $model = TaskModel::findOrNew($id);
@@ -38,7 +38,7 @@ class TaskController extends Controller {
             return $this->renderFailure('任务不存在');
         }
         $model->set($data)->user_id = auth()->id();
-        if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
+        if ($status !== -1 && $model->status === TaskModel::STATUS_COMPLETE
         && $status != TaskModel::STATUS_COMPLETE) {
             $model->status = TaskModel::STATUS_NONE;
         }
@@ -50,7 +50,7 @@ class TaskController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id, $stop = false) {
+    public function deleteAction(int $id, bool $stop = false) {
         try {
             TaskRepository::stopTask($id);
         } catch (\Exception $ex) {}
@@ -85,7 +85,7 @@ class TaskController extends Controller {
         return $this->editDayAction(0);
     }
 
-    public function editDayAction($id) {
+    public function editDayAction(int $id) {
         $model = TaskDayModel::findOrNew($id);
         $task_list = TaskRepository::getActiveTask();
         if (empty($task_list)) {
@@ -99,7 +99,7 @@ class TaskController extends Controller {
         return $this->show('editDay', compact('model', 'task_list'));
     }
 
-    public function saveDayAction($task_id, $id = 0, $amount = 1) {
+    public function saveDayAction(int $task_id, int $id = 0, int $amount = 1) {
         $task = TaskModel::where('user_id', auth()->id())
             ->where('id', $task_id)->first();
         if (empty($task)) {
@@ -118,7 +118,7 @@ class TaskController extends Controller {
         ]);
     }
 
-    public function deleteDayAction($id) {
+    public function deleteDayAction(int $id) {
         try {
             TaskRepository::stop($id);
         } catch (\Exception $ex) {}
@@ -129,7 +129,7 @@ class TaskController extends Controller {
     }
 
 
-    public function playAction($id) {
+    public function playAction(int $id) {
         try {
             $day = TaskRepository::start($id);
         } catch (\Exception $ex) {
@@ -138,7 +138,7 @@ class TaskController extends Controller {
         return $this->renderData($day);
     }
 
-    public function pauseAction($id) {
+    public function pauseAction(int $id) {
         try {
             $day = TaskRepository::pause($id);
         } catch (\Exception $ex) {
@@ -147,7 +147,7 @@ class TaskController extends Controller {
         return $this->renderData($day);
     }
 
-    public function stopAction($id) {
+    public function stopAction(int $id) {
         try {
             $day = TaskRepository::stop($id);
         } catch (\Exception $ex) {
@@ -156,7 +156,7 @@ class TaskController extends Controller {
         return $this->renderData($day);
     }
 
-    public function checkAction($id) {
+    public function checkAction(int $id) {
         try {
             $day = TaskRepository::check($id);
         } catch (\Exception $ex) {
@@ -178,7 +178,7 @@ class TaskController extends Controller {
         return $this->renderData($day, $tip);
     }
 
-    public function batchAddAction($id) {
+    public function batchAddAction(int $id) {
         $task_list = TaskModel::where('user_id', auth()->id())
             ->whereIn('id', (array)$id)->get();
         if (empty($task_list)) {
@@ -190,7 +190,7 @@ class TaskController extends Controller {
         return $this->renderData(true);
     }
 
-    public function stopTaskAction($id) {
+    public function stopTaskAction(int $id) {
         try {
             $day = TaskDayModel::findWithAuth($id);
             if (empty($day)) {

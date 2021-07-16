@@ -11,7 +11,7 @@ class ShareController extends Controller {
         return ['*' => '@'];
     }
 
-    public function indexAction($id = 0) {
+    public function indexAction(int $id = 0) {
         if (!empty($id)) {
             return $this->detailAction($id);
         }
@@ -23,7 +23,7 @@ class ShareController extends Controller {
         return $this->render($page);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         try {
             $model = ShareRepository::detail($id);
         } catch (\Exception $ex) {
@@ -57,7 +57,7 @@ class ShareController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             ShareRepository::remove($id);
         } catch (\Exception $ex) {
@@ -66,7 +66,7 @@ class ShareController extends Controller {
         return $this->renderData(true);
     }
 
-    public function deleteUserAction($id, $user_id) {
+    public function deleteUserAction(int $id, int $user_id) {
         try {
             ShareRepository::removeUser($id, $user_id);
         } catch (\Exception $ex) {
@@ -75,7 +75,7 @@ class ShareController extends Controller {
         return $this->renderData(true);
     }
 
-    public function usersAction($id) {
+    public function usersAction(int $id) {
         try {
             $data = ShareRepository::users($id);
         } catch (\Exception $ex) {

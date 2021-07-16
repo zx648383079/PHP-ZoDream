@@ -10,7 +10,7 @@ class RecordController extends Controller {
         return $this->show(compact('type', 'date'));
     }
 
-    public function chartAction($type, $date = null, $chart = null, $ignore = false) {
+    public function chartAction($type, $date = null, $chart = null, bool $ignore = false) {
         $time = empty($date) ? time() : strtotime($date);
         if ($type === 'week') {
             list($start_at, $end_at) = Time::week($time);

@@ -9,7 +9,7 @@ use Exception;
 
 class TaskRepository {
 
-    public static function getList($keywords = '', $status = 0, $parent_id = 0) {
+    public static function getList(string $keywords = '', int $status = 0, int $parent_id = 0) {
         return TaskModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
@@ -34,13 +34,13 @@ class TaskRepository {
         return $model;
     }
 
-    public static function save(array $data, $id = 0, $status = -1) {
+    public static function save(array $data, int $id = 0, int $status = -1) {
         $model = $id > 0 ? TaskModel::findWithAuth($id) : new TaskModel();
         if (empty($model)) {
             throw new Exception('任务不存在');
         }
         $model->set($data)->user_id = auth()->id();
-        if ($status !== false && $model->status === TaskModel::STATUS_COMPLETE
+        if ($status !== -1 && $model->status === TaskModel::STATUS_COMPLETE
             && $status != TaskModel::STATUS_COMPLETE) {
             $model->status = 0;
         }
@@ -50,7 +50,7 @@ class TaskRepository {
         return $model;
     }
 
-    public static function remove($id, $stop = false) {
+    public static function remove(int $id, bool $stop = false) {
         $model = TaskModel::findWithAuth($id);
         if (empty($model)) {
             throw new Exception('任务不存在');
@@ -77,7 +77,7 @@ class TaskRepository {
      * @return TaskDayModel
      * @throws Exception
      */
-    public static function start($id, $child_id = 0) {
+    public static function start(int $id, int $child_id = 0) {
         $other = TaskDayModel::where('user_id', auth()->id())
             ->where('id', '<>', $id)->where('status', '>', TaskDayModel::STATUS_NONE)
             ->pluck('id');
@@ -172,7 +172,7 @@ class TaskRepository {
         self::addDayTime($day, $log, $time);
     }
 
-    private static function addDayTime(TaskDayModel $day, TaskLogModel $log, $time) {
+    private static function addDayTime(TaskDayModel $day, TaskLogModel $log, int $time) {
         $day->task->time_length += $time;
         $day->task->status = TaskModel::STATUS_NONE;
         $day->task->save();
@@ -198,7 +198,7 @@ class TaskRepository {
      * @return TaskDayModel
      * @throws Exception
      */
-    public static function stop($id) {
+    public static function stop(int $id) {
         $day = TaskDayModel::findWithAuth($id);
         if (empty($day)) {
             throw new Exception('任务不存在');
@@ -229,7 +229,7 @@ class TaskRepository {
      * @return TaskDayModel
      * @throws Exception
      */
-    public static function pause($id) {
+    public static function pause(int $id) {
         $day = TaskDayModel::findWithAuth($id);
         if (empty($day)) {
             throw new Exception('任务不存在');
@@ -264,7 +264,7 @@ class TaskRepository {
      * @return bool|TaskDayModel
      * @throws Exception
      */
-    public static function check($id) {
+    public static function check(int $id) {
         $day = TaskDayModel::findWithAuth($id);
         if (empty($day)) {
             throw new Exception('任务不存在');
@@ -307,7 +307,7 @@ class TaskRepository {
      * @return TaskModel
      * @throws Exception
      */
-    public static function stopTask($id) {
+    public static function stopTask(int $id) {
         $task = TaskModel::findWithAuth($id);
         if (empty($task) || $task->status == TaskModel::STATUS_COMPLETE) {
             throw new Exception('任务不存在');

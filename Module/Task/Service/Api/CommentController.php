@@ -12,7 +12,7 @@ class CommentController extends Controller {
         return ['*' => '@'];
     }
 
-    public function indexAction($task_id) {
+    public function indexAction(int $task_id) {
         return $this->renderPage(
             CommentRepository::getList($task_id)
         );
@@ -38,7 +38,7 @@ class CommentController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             CommentRepository::remove($id);
         } catch (\Exception $ex) {

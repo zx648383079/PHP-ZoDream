@@ -20,7 +20,7 @@ class ShareRepository {
             ->where('user_id', auth()->id())->orderBy('id', 'desc')->page();
     }
 
-    public static function isShareUser($taskIds, $user_id) {
+    public static function isShareUser(array|int $taskIds, int $user_id) {
         $shareIds = TaskShareModel::whereIn('task_id', (array)$taskIds)
             ->pluck('id');
         if (empty($shareIds)) {
@@ -49,7 +49,7 @@ class ShareRepository {
         return $share;
     }
 
-    public static function detail($id) {
+    public static function detail(int $id) {
         $share = TaskShareModel::find($id);
         if (empty($share)) {
             throw new \Exception('数据错误');
@@ -61,7 +61,7 @@ class ShareRepository {
         return $share;
     }
 
-    public static function users($id) {
+    public static function users(int $id) {
         $share = TaskShareModel::find($id);
         if (empty($share)) {
             throw new \Exception('数据错误');
@@ -88,7 +88,7 @@ class ShareRepository {
         return array_merge($admin, $roles, $users);
     }
 
-    public static function addUser(TaskShareModel $share, $user_id) {
+    public static function addUser(TaskShareModel $share, int $user_id) {
         $log = TaskShareUserModel::where('share_id', $share->id)
             ->where('user_id', $user_id)->first();
         if ($log && $log->deleted_at > 0) {
@@ -106,7 +106,7 @@ class ShareRepository {
         ]);
     }
 
-    public static function remove($id) {
+    public static function remove(int $id) {
         $share = TaskShareModel::find($id);
         if (empty($share)) {
             throw new \Exception('分享错误');
@@ -122,7 +122,7 @@ class ShareRepository {
             ]);
     }
 
-    public static function removeUser($id, $user_id) {
+    public static function removeUser(int $id, int $user_id) {
         $share = TaskShareModel::findWithAuth($id);
         if (empty($share)) {
             throw new \Exception('无权限操作');

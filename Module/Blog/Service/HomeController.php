@@ -69,7 +69,7 @@ class HomeController extends Controller {
     }
 
     public function logAction(int $blog) {
-        $this->layout = false;
+        $this->layout = '';
         $log_list = BlogLogModel::with('user', 'blog')
             ->where('id_value', $blog)
             ->where('type', BlogLogModel::TYPE_BLOG)

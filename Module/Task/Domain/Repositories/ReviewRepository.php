@@ -19,7 +19,7 @@ class ReviewRepository {
      * @return array
      * @throws Exception
      */
-    public static function statistics(string $start_at, string $end_at, $ignoreEmpty = false) {
+    public static function statistics(string $start_at, string $end_at, bool $ignoreEmpty = false) {
         $data = TaskDayModel::with('logs')->time($start_at, $end_at)
             ->where('user_id', auth()->id())
             ->orderBy('today', 'asc')->get();
@@ -27,7 +27,7 @@ class ReviewRepository {
         return self::formatStatistics($days, $data, $ignoreEmpty);
     }
 
-    public static function dayStatistics(string  $day) {
+    public static function dayStatistics(string $day) {
         $data = TaskDayModel::with('logs')
             ->where('today', $day)
             ->where('user_id', auth()->id())
@@ -43,7 +43,7 @@ class ReviewRepository {
      * @return Page<LogPageModel>|LogPageModel[]
      * @throws Exception
      */
-    public static function logList(int $start_at, int $end_at, $isAll = false) {
+    public static function logList(int $start_at, int $end_at, bool $isAll = false) {
         /** @var Query $query */
         $query = LogPageModel::with('task')
             ->where('created_at', '>=', $start_at)
@@ -62,7 +62,7 @@ class ReviewRepository {
      * @param $data
      * @return array
      */
-    public static function formatStatistics(array $days, array $data, $ignoreEmpty = false) {
+    public static function formatStatistics(array $days, array $data, bool $ignoreEmpty = false) {
         $day_list = [];
         foreach ($days as $day) {
             $day_list[$day] = [

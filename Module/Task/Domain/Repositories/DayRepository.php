@@ -6,7 +6,7 @@ use Module\Task\Domain\Model\TaskModel;
 
 class DayRepository {
 
-    public static function getList($day) {
+    public static function getList(string $day) {
         return TaskDayModel::with('task')
             ->where('user_id', auth()->id())
             ->where('amount', '>', 0)
@@ -15,7 +15,7 @@ class DayRepository {
             ->orderBy('id', 'asc')->page();
     }
 
-    public static function detail($id) {
+    public static function detail(int $id) {
         $model = TaskDayModel::findWithAuth($id);
         if (empty($model)) {
             throw new \Exception('不存在');
@@ -26,7 +26,7 @@ class DayRepository {
         return $model;
     }
 
-    public static function save($task_id, $id = 0, $amount = 1) {
+    public static function save(int $task_id, int $id = 0, int $amount = 1) {
         if ($id > 0) {
             $day = TaskDayModel::findWithAuth($id);
             if (empty($day)) {
@@ -43,7 +43,7 @@ class DayRepository {
         return static::add($task, $amount);
     }
 
-    public static function add(TaskModel $task, $amount = 1) {
+    public static function add(TaskModel $task, int $amount = 1) {
         $day = date('Y-m-d');
         $model = TaskDayModel::where('task_id', $task->id)
             ->where('today', $day)->first();
@@ -61,7 +61,7 @@ class DayRepository {
         ]);
     }
 
-    public static function remove($id) {
+    public static function remove(int $id) {
         $day = TaskDayModel::findWithAuth($id);
         if (empty($day)) {
             throw new \Exception('任务不存在');

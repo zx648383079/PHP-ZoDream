@@ -10,7 +10,7 @@ class RecordController extends Controller {
         return ['*' => '@'];
     }
 
-    public function indexAction($type, $date = null) {
+    public function indexAction(string $type, string $date = '') {
         $time = strtotime(date('Y-m-d 00:00:00', empty($date) ? time() : strtotime($date)));
         if ($type === 'week') {
             list($start_at, $end_at) = Time::week($time, false);
