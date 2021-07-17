@@ -152,20 +152,7 @@ class HomeController extends Controller {
         if ($day === false) {
             return $this->renderData($day);
         }
-        // 记录今天完成的任务次数，每4轮多休息
-        $count = TaskLogModel::where('created_at', '>',
-            strtotime(date('Y-m-d 00:00:00')))
-            ->where('status', TaskLogModel::STATUS_FINISH)
-            ->where('user_id', auth()->id())
-            ->count();
-        $tip = '本轮任务完成，请休息3-5分钟';
-        if ($count % 4 === 0) {
-            $tip = '本轮任务完成，请休息20-25分钟';
-        }
-        return $this->render([
-            'data' => $day,
-            'message' => $tip
-        ]);
+        return $this->renderData($day, TaskRepository::restTip($day));
     }
 
     public function batchAddAction(int $id) {

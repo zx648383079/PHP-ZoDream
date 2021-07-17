@@ -185,6 +185,9 @@ class TaskRepository {
         }
         if ($log->status === TaskLogModel::STATUS_FINISH) {
             $day->success_amount ++;
+            if ($day->amount > 0) {
+                $day->amount --;
+            }
         } else {
             $day->failure_amount ++;
         }
@@ -364,5 +367,19 @@ class TaskRepository {
     private static function cancelDay(TaskModel $task) {
         TaskDayModel::where('task_id', $task->id)
             ->where('today', '>', date('Ymd'))->delete();
+    }
+
+    public static function restTip(TaskDayModel $model) {
+        // 记录今天完成的任务次数，每4轮多休息
+        $count = TaskLogModel::where('created_at', '>',
+            strtotime(date('Y-m-d 00:00:00')))
+            ->where('status', TaskLogModel::STATUS_FINISH)
+            ->where('user_id', auth()->id())
+            ->count();
+        $tip = '本轮任务完成，请休息3-5分钟';
+        if ($count % 4 === 0) {
+            return '本轮任务完成，请休息20-25分钟';
+        }
+        return $tip;
     }
 }
