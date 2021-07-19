@@ -90,7 +90,7 @@ class CreateExamTables extends Migration {
             $table->id();
             $table->uint('course_id');
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->default('');
             $table->uint('type', 1)->default(0);
             $table->text('content')->nullable();
         })->append(QuestionAnalysisEntity::tableName(), function (Table $table) {

@@ -6,8 +6,9 @@ use Domain\Model\SearchModel;
 use Module\Exam\Domain\Model\QuestionMaterialModel;
 
 class MaterialRepository {
-    public static function getList(string $keywords = '', int $course = 0) {
-        return QuestionMaterialModel::query()
+    public static function getList(string $keywords = '', int $course = 0, bool $full = false) {
+        $query = $full ? QuestionMaterialModel::withCount('question') : QuestionMaterialModel::query();
+        return $query
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
             })

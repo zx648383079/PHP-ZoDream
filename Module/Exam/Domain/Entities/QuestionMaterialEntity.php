@@ -22,7 +22,7 @@ class QuestionMaterialEntity extends Entity {
         return [
             'course_id' => 'required|int',
             'title' => 'required|string:0,255',
-            'description' => 'required|string:0,255',
+            'description' => 'string:0,255',
             'type' => 'int:0,127',
             'content' => '',
         ];

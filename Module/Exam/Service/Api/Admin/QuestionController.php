@@ -6,9 +6,9 @@ use Module\Exam\Domain\Repositories\QuestionRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class QuestionController extends Controller {
-    public function indexAction(string $keywords = '', int $course = 0, int $user = 0, int $grade = 0) {
+    public function indexAction(string $keywords = '', int $course = 0, int $user = 0, int $grade = 0, int $material = 0) {
         return $this->renderPage(
-            QuestionRepository::getList($keywords, $course, $user, $grade)
+            QuestionRepository::getList($keywords, $course, $user, $grade, $material)
         );
     }
 
@@ -39,6 +39,7 @@ class QuestionController extends Controller {
                 'answer' => '',
                 'analysis_items' => '',
                 'option_items' => '',
+                'children' => '',
             ]);
             return $this->render(
                 QuestionRepository::save($data)

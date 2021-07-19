@@ -6,9 +6,9 @@ use Module\Exam\Domain\Repositories\MaterialRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class MaterialController extends Controller {
-    public function indexAction(string $keywords = '', int $course = 0) {
+    public function indexAction(string $keywords = '', int $course = 0, bool $full = false) {
         return $this->renderPage(
-            MaterialRepository::getList($keywords, $course)
+            MaterialRepository::getList($keywords, $course, $full)
         );
     }
 
@@ -28,7 +28,7 @@ class MaterialController extends Controller {
                 'id' => 'int',
                 'course_id' => 'required',
                 'title' => 'required|string:0,255',
-                'description' => 'required|string:0,255',
+                'description' => 'string:0,255',
                 'type' => '',
                 'content' => '',
             ]);

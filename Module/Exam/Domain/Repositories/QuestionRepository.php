@@ -9,7 +9,7 @@ use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
 
 class QuestionRepository {
-    public static function getList(string $keywords = '', int $course = 0, int $user = 0, int $grade = 0) {
+    public static function getList(string $keywords = '', int $course = 0, int $user = 0, int $grade = 0, int $material = 0) {
         $data = QuestionModel::with('course', 'user')
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
@@ -18,6 +18,8 @@ class QuestionRepository {
                 SearchModel::searchWhere($query, ['title']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
+            })->when($material > 0, function ($query) use ($material) {
+                $query->where('material_id', $material);
             })->when($grade > 0, function ($query) use ($grade) {
                 $query->where('course_grade', $grade);
             })->orderBy('id', 'desc')->page();
@@ -81,10 +83,17 @@ class QuestionRepository {
     }
 
     public static function save(array $data, int $user = 0) {
+        if (isset($data['type']) && $data['type'] == 5) {
+            return static::saveLarge($data, $user);
+        }
         $id = $data['id'] ?? 0;
         unset($data['id']);
         if ($id < 1 && static::checkRepeat($data)) {
             throw new \Exception('请不要重复添加');
+        }
+        if ((!isset($data['material_id']) || $data['material_id'] < 0) && isset($data['material']) && !empty($data['material'])) {
+            $material = MaterialRepository::save($data['material']);
+            $data['material_id'] = $material->id;
         }
         $model = QuestionModel::findOrNew($id);
         if ($id > 0 && $user > 0 && $model->user_id !== $user) {
@@ -167,5 +176,37 @@ class QuestionRepository {
                 ->when(!empty($keywords), function ($query) {
                     SearchModel::searchWhere($query, ['title']);
                 })->orderBy('id', 'desc')->limit(5)->get('id', 'title', 'course_id', 'type', 'easiness');
+    }
+
+    /**
+     * 保存答题
+     * @param array $data
+     * @param int $user
+     */
+    private static function saveLarge(array $data, int $user)
+    {
+        if (!isset($data['children']) || empty($data['children'])) {
+            throw new \Exception('大题下面必须包含小题');
+        }
+        $material = MaterialRepository::save([
+            'course_id' => $data['course_id'],
+            'title' => $data['title'],
+            'description' => '',
+            'type' => 0,
+            'content' => $data['content'],
+        ]);
+        foreach ($data['children'] as $item) {
+            $item['material_id'] = $material->id;
+            $item['course_id'] = $data['course_id'];
+            $data['course_grade'] = $data['course_grade'] ?? 1;
+            $data['easiness'] = $data['easiness'] ?? 1;
+            $data['dynamic'] = $data['dynamic'] ?? '';
+            $itemType = isset($item['type']) ? intval($item['type']) : 0;
+            if ($itemType === 4) {
+                $item['content'] = $item['title'];
+            }
+            static::save($item, $user);
+        }
+        return $material;
     }
 }

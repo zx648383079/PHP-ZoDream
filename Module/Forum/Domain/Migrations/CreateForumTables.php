@@ -69,6 +69,8 @@ class CreateForumTables extends Migration {
                 ->comment('赞成数');
             $table->uint('disagree_count')->default(0)
                 ->comment('不赞成数');
+            $table->uint('status', 1)->default(0)
+                ->comment('帖子的状态');
             $table->timestamps();
         })->append(ThreadLogModel::tableName(), function(Table $table) {
             $table->id();

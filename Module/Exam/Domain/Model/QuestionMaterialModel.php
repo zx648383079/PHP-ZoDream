@@ -16,4 +16,7 @@ use Module\Exam\Domain\Entities\QuestionMaterialEntity;
  */
 class QuestionMaterialModel extends QuestionMaterialEntity {
 
+    public function question() {
+        return $this->hasMany(QuestionModel::class, 'material_id', 'id');
+    }
 }
