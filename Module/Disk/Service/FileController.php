@@ -197,7 +197,7 @@ class FileController extends Controller {
         }
         $data['path']->setExtension($data['extension'])
             ->setName($data['name']);
-        return $response->file($data['path']);
+        return $response->file($data['path'], 0);
     }
 
     public function imageAction($id, Output $response) {

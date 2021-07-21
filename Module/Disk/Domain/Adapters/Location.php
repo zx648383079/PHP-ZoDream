@@ -24,8 +24,8 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
                 'id' => $fileId,
                 'name' => $item->getName(),
                 'file_id' => $item instanceof Directory ? 0 : 1,
-                'created_at' => Time::format($item instanceof Directory ? null : $item->createTime()),
-                'updated_at' => Time::format($item instanceof Directory ? null : $item->modifyTime()),
+                'created_at' => Time::format($item instanceof Directory ? 0 : $item->createTime()),
+                'updated_at' => Time::format($item instanceof Directory ? 0 : $item->modifyTime()),
                 'file' => $item instanceof Directory ? null : $this->formatFile($item, $fileId)
             ];
         }
@@ -42,7 +42,8 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
             $data['thumb'] = $data['url'] = url('./file/image', ['id' => $fileId]);
         } elseif ($data['type'] === FileModel::TYPE_VIDEO) {
             $data['thumb'] = url('./file/thumb', ['id' => $fileId]);
-            $data['url'] = url('./file/m3u8', ['id' => $fileId]);
+            // $data['url'] = url('./file/m3u8', ['id' => $fileId]);
+             $data['url'] = url('./file/video', ['id' => $fileId]);
         }
         return $data;
     }

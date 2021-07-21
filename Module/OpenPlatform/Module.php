@@ -45,7 +45,7 @@ class Module extends BaseModule {
         if (empty($module)) {
             return;
         }
-        url()->setModulePath($modulePath);
+        $context['module_path'] = $modulePath;
         return $this->invokeWithPlatform($module, $nextPath, $path, $context);
     }
 
