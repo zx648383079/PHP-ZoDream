@@ -13,6 +13,7 @@ use Zodream\Helpers\Time;
  * @property integer $user_id
  * @property string $ip
  * @property integer $grade
+ * @property integer $status
  * @property integer $is_invisible
  * @property integer $agree_count
  * @property integer $disagree_count
@@ -38,6 +39,7 @@ class ThreadPostModel extends Model {
             'is_invisible' => 'int:0,9',
             'agree_count' => 'int',
             'disagree_count' => 'int',
+            'status' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

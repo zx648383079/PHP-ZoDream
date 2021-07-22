@@ -27,6 +27,11 @@ class ThreadRepository {
             })->page();
     }
 
+    /**
+     * @param int $id
+     * @return ThreadModel
+     * @throws Exception
+     */
     public static function get(int $id) {
         return ThreadModel::findOrThrow($id, '数据有误');
     }
@@ -281,6 +286,7 @@ class ThreadRepository {
         $model->highlightable = static::can($model, 'is_highlight');
         $model->closeable = static::can($model, 'is_closed');
         $model->topable = static::can($model, 'top_type');
+        $model->editable = static::editable($model);
         $model->classify;
         $model->last_post = static::lastPost($model->id, false);
         $model->is_new = static::isNew($model);
@@ -299,6 +305,13 @@ class ThreadRepository {
             ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', 'desc')
             ->limit(5)->get();
         return $model;
+    }
+
+    public static function editable(ThreadModel $model): bool {
+        if (auth()->guest()) {
+            return false;
+        }
+        return $model->is_closed < 1 && $model->user_id === auth()->id();
     }
 
     public static function reply(string $content, int $thread_id) {
@@ -470,6 +483,16 @@ class ThreadRepository {
         if (!$res) {
             throw new \Exception('支付失败，请检查您的账户余额');
         }
-        // TODO 把钱给用户
+    }
+
+    public static function changePost(int $id, int $status) {
+        $model = ThreadPostModel::findOrThrow($id, '操作有无');
+        $thread = ThreadModel::findOrThrow($model->thread_id, '帖子不存在');
+        if (!static::editable($thread)) {
+            throw new Exception('无权限操作');
+        }
+        $model->status = $status;
+        $model->save();
+        return $model;
     }
 }

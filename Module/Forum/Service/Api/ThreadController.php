@@ -163,6 +163,14 @@ class ThreadController extends Controller {
         return $this->renderData(true);
     }
 
+    public function changePostAction(int $id, int $status = 0) {
+        try {
+            return $this->render(ThreadRepository::changePost($id, $status));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function collectAction(int $id) {
         try {
             $res = ThreadRepository::toggleCollect($id);
