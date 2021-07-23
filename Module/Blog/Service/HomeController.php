@@ -71,8 +71,8 @@ class HomeController extends Controller {
     public function logAction(int $blog) {
         $this->layout = '';
         $log_list = BlogLogModel::with('user', 'blog')
-            ->where('id_value', $blog)
-            ->where('type', BlogLogModel::TYPE_BLOG)
+            ->where('item_id', $blog)
+            ->where('item_type', BlogLogModel::TYPE_BLOG)
             ->orderBy('created_at desc')
             ->page();
         return $this->show(compact('log_list'));
@@ -126,8 +126,8 @@ class HomeController extends Controller {
             if (!auth()->guest()) {
                 BlogLogModel::create([
                     'user_id' => auth()->id(),
-                    'type' => BlogLogModel::TYPE_BLOG,
-                    'id_value' => $model->id,
+                    'item_type' => BlogLogModel::TYPE_BLOG,
+                    'item_id' => $model->id,
                     'action' => BlogLogModel::ACTION_REAL_RULE
                 ]);
             }
@@ -149,8 +149,8 @@ class HomeController extends Controller {
             }
             BlogLogModel::create([
                 'user_id' => auth()->id(),
-                'type' => BlogLogModel::TYPE_BLOG,
-                'id_value' => $model->id,
+                'item_type' => BlogLogModel::TYPE_BLOG,
+                'item_id' => $model->id,
                 'action' => BlogLogModel::ACTION_REAL_RULE
             ]);
             return $this->renderData([

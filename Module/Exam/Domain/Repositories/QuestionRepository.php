@@ -82,13 +82,13 @@ class QuestionRepository {
         return static::getFull($id, auth()->id());
     }
 
-    public static function save(array $data, int $user = 0) {
+    public static function save(array $data, int $user = 0, bool $check = false) {
         if (isset($data['type']) && $data['type'] == 5) {
             return static::saveLarge($data, $user);
         }
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        if ($id < 1 && static::checkRepeat($data)) {
+        if ($check && $id < 1 && static::checkRepeat($data)) {
             throw new \Exception('请不要重复添加');
         }
         if ((!isset($data['material_id']) || $data['material_id'] < 0) && isset($data['material']) && !empty($data['material'])) {
