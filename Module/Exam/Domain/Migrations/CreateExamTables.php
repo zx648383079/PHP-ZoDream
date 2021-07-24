@@ -69,6 +69,7 @@ class CreateExamTables extends Migration {
             $table->string('image', 200)->default('');
             $table->uint('course_id');
             $table->uint('course_grade', 5)->default(1);
+            $table->uint('parent_id')->default(0);
             $table->uint('material_id')->default(0)->comment('题目素材');
             $table->uint('type', 1)->default(0)->comment('题目类型');
             $table->uint('easiness', 1)->default(0)->comment('难易程度');

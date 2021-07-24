@@ -9,7 +9,8 @@ use Module\Exam\Domain\Model\QuestionModel;
 use Module\Exam\Domain\Model\QuestionOptionModel;
 
 class QuestionRepository {
-    public static function getList(string $keywords = '', int $course = 0, int $user = 0, int $grade = 0, int $material = 0) {
+    public static function getList(string $keywords = '', int $course = 0, int $user = 0,
+                                   int $grade = 0, int $material = 0, bool $filter = false) {
         $data = QuestionModel::with('course', 'user')
             ->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
@@ -22,6 +23,8 @@ class QuestionRepository {
                 $query->where('material_id', $material);
             })->when($grade > 0, function ($query) use ($grade) {
                 $query->where('course_grade', $grade);
+            })->when($filter, function ($query) {
+                $query->where('type', '<', 5);
             })->orderBy('id', 'desc')->page();
         $data->map(function ($item) {
             $data = $item->toArray();
@@ -69,11 +72,21 @@ class QuestionRepository {
         if ($user > 0 && $model->user_id !== $user) {
             throw new \Exception('数据有误');
         }
+        return self::formatItem($model);
+    }
+
+    private static function formatItem(QuestionModel $model) {
         $data = $model->toArray();
         $data['option_items'] = $model->option_items;
         $data['analysis_items'] = $model->analysis_items;
         if ($model->material_id > 0) {
             $data['material'] = $model->material;
+        }
+        if ($model->type == 5) {
+            $data['children'] = array_map(function ($item) {
+                return self::formatItem($item);
+            }, QuestionModel::where('parent_id', $model->id)
+                ->get());
         }
         return $data;
     }
@@ -82,14 +95,15 @@ class QuestionRepository {
         return static::getFull($id, auth()->id());
     }
 
-    public static function save(array $data, int $user = 0, bool $check = false) {
-        if (isset($data['type']) && $data['type'] == 5) {
-            return static::saveLarge($data, $user);
-        }
+    public static function save(array $data, int $user = 0, bool $check = false, bool $addKid = true) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
+        $isLarge = isset($data['type']) && $data['type'] == 5;
         if ($check && $id < 1 && static::checkRepeat($data)) {
             throw new \Exception('请不要重复添加');
+        }
+        if ($isLarge && (!isset($data['children']) || empty($data['children']))) {
+            throw new \Exception('大题下面必须包含小题');
         }
         if ((!isset($data['material_id']) || $data['material_id'] < 0) && isset($data['material']) && !empty($data['material'])) {
             $material = MaterialRepository::save($data['material']);
@@ -104,11 +118,25 @@ class QuestionRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if (isset($data['option_items'])) {
+        if (!$isLarge && isset($data['option_items'])) {
             QuestionOptionModel::batchSave($model, $data['option_items']);
         }
         if (isset($data['analysis_items'])) {
             QuestionAnalysisModel::batchSave($model, $data['analysis_items']);
+        }
+        if ($addKid && $isLarge) {
+            foreach ($data['children'] as $item) {
+                $item['parent_id'] = $model->id;
+                $item['course_id'] = $model->course_id;
+                $data['course_grade'] = $model->course_grade;
+                $data['easiness'] = $model->easiness;
+                $data['dynamic'] = $data['dynamic'] ?? '';
+                $itemType = isset($item['type']) ? intval($item['type']) : 0;
+                if ($itemType === 4) {
+                    $item['content'] = $item['title'];
+                }
+                static::save($item, $user);
+            }
         }
         return $model;
     }
@@ -130,12 +158,12 @@ class QuestionRepository {
             ->count() > 0;
     }
 
-    public static function selfSave(array $data) {
+    public static function selfSave(array $data, bool $addKid = true) {
         if (isset($data['material'])) {
             $m = MaterialRepository::save($data['material']);
             $data['material_id'] = $m->id;
         }
-        return static::save($data, auth()->id());
+        return static::save($data, auth()->id(), false, $addKid);
     }
 
     public static function remove(int $id, int $user = 0) {
@@ -146,9 +174,14 @@ class QuestionRepository {
             throw new \Exception('无权限删除');
         }
         $model->delete();
-        QuestionAnswerModel::where('question_id', $id)->delete();
-        QuestionOptionModel::where('question_id', $id)->delete();
-        QuestionAnalysisModel::where('question_id', $id)->delete();
+        $idItems = [$id];
+        if ($model->type == 5) {
+            $idItems = array_merge($idItems, QuestionModel::where('parent_id', $model->id)
+                ->pluck('id'));
+        }
+        QuestionAnswerModel::whereIn('question_id', $idItems)->delete();
+        QuestionOptionModel::whereIn('question_id', $idItems)->delete();
+        QuestionAnalysisModel::whereIn('question_id', $idItems)->delete();
     }
 
     public static function selfRemove(int $id) {
@@ -176,37 +209,5 @@ class QuestionRepository {
                 ->when(!empty($keywords), function ($query) {
                     SearchModel::searchWhere($query, ['title']);
                 })->orderBy('id', 'desc')->limit(5)->get('id', 'title', 'course_id', 'type', 'easiness');
-    }
-
-    /**
-     * 保存答题
-     * @param array $data
-     * @param int $user
-     */
-    private static function saveLarge(array $data, int $user)
-    {
-        if (!isset($data['children']) || empty($data['children'])) {
-            throw new \Exception('大题下面必须包含小题');
-        }
-        $material = MaterialRepository::save([
-            'course_id' => $data['course_id'],
-            'title' => $data['title'],
-            'description' => '',
-            'type' => 0,
-            'content' => $data['content'],
-        ]);
-        foreach ($data['children'] as $item) {
-            $item['material_id'] = $material->id;
-            $item['course_id'] = $data['course_id'];
-            $data['course_grade'] = $data['course_grade'] ?? 1;
-            $data['easiness'] = $data['easiness'] ?? 1;
-            $data['dynamic'] = $data['dynamic'] ?? '';
-            $itemType = isset($item['type']) ? intval($item['type']) : 0;
-            if ($itemType === 4) {
-                $item['content'] = $item['title'];
-            }
-            static::save($item, $user);
-        }
-        return $material;
     }
 }

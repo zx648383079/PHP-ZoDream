@@ -20,7 +20,7 @@ class VisitListener {
         $model->referrer = $visit->getReferrer();
         $model->url = $visit->getUrl();
         $model->session_id = $visit->getSessionId();
-        $model->user_agent = $visit->getUserAgent();
+        $model->user_agent = mb_substr($visit->getUserAgent(), 0, 255);
         $model->user_id = $visit->getUserId();
         $model->created_at = $visit->getTimestamp();
         $model->save();

@@ -15,6 +15,7 @@ use Zodream\Helpers\Json;
  * @property string $image
  * @property integer $course_id
  * @property integer $course_grade
+ * @property integer $parent_id
  * @property integer $type
  * @property integer $easiness
  * @property string $content
@@ -28,7 +29,7 @@ use Zodream\Helpers\Json;
  */
 class QuestionModel extends QuestionEntity {
 
-    public static array $type_list = ['单选题', '多选题', '判断题', '简答题', '填空题'];
+    public static array $type_list = ['单选题', '多选题', '判断题', '简答题', '填空题', '大题'];
 
 
     public function course() {
@@ -69,6 +70,9 @@ class QuestionModel extends QuestionEntity {
         ];
         if ($this->material_id > 0 && $this->material) {
             $data['material'] = $this->material;
+        }
+        if ($this->parent_id > 0) {
+            $data['parent'] = static::find($this->parent_id)->format(null, $dynamicItems, $hasAnswer, $shuffle);
         }
         if ($hasAnswer) {
             $data['answer'] = $this->type == 4

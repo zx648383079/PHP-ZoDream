@@ -54,14 +54,49 @@ class PageRepository {
     }
 
     public static function formatQuestion(array $items, bool $full = false) {
-        $query = $full ?  QuestionModel::with('material', 'option_items', 'analysis_items') : QuestionModel::select('id', 'type', 'title');
+        $query = $full ? QuestionModel::with('material', 'option_items', 'analysis_items') : QuestionModel::select('id', 'type', 'title');
         $data = Relation::create($items, [
             Relation::MERGE_RELATION_KEY => Relation::make($query, 'id', 'id')
         ]);
-        return $full ? array_map(function ($item) {
-            $item['editable'] = $item['user_id'] == auth()->id();
-            return $item;
-        }, $data) : $data;
+        if (!$full) {
+            return $data;
+        }
+        $parentItems = [];
+        foreach ($data as $i => $item) {
+            $data[$i]['editable'] = $item['editable'] = $item['user_id'] === auth()->id();
+            if ($item['parent_id'] < 1) {
+                continue;
+            }
+            if (!isset($parentItems)) {
+                $parentItems[$item['parent_id']] = [];
+            }
+            $parentItems[$item['parent_id']][] = $item;
+        }
+        if (empty($parentItems)) {
+            return $data;
+        }
+        $sourceItems = QuestionModel::with('material', 'analysis_items')
+            ->whereIn('id', array_keys($parentItems))->get();
+        $distItems = [];
+        foreach ($data as $item) {
+            if ($item['parent_id'] < 1) {
+                $distItems[] = $item;
+                continue;
+            }
+            if (!isset($parentItems[$item['parent_id']])) {
+                continue;
+            }
+            foreach ($sourceItems as $q) {
+                if ($q->id == $item['parent_id']) {
+                    $res = $q->toArray();
+                    $res['children'] = $parentItems[$item['parent_id']];
+                    $distItems[] = $res;
+                    unset($parentItems[$item['parent_id']]);
+                    continue;
+                }
+            }
+        }
+        return $distItems;
     }
 
     public static function getSelf(int $id) {
@@ -103,21 +138,11 @@ class PageRepository {
         $model->question_count = 0;
         $model->score = 0;
         foreach ($items as $item) {
-            $qId = isset($item['id']) ? intval($item['id']) : 0;
-            try {
-                $q = QuestionRepository::selfSave($item);
-                if ($q) {
-                    $qId = $q->id;
-                }
-            } catch (\Exception $ex) {}
-            $score = intval($item['score']);
-            if ($qId > 0) {
+            $qItems = static::saveQuestion($item);
+            foreach ($qItems as $q) {
                 $model->question_count ++;
-                $model->score += $score;
-                $idItems[] = [
-                    'id' => $qId,
-                    'score' => $score,
-                ];
+                $model->score += $q['score'];
+                $idItems[] = $q;
             }
         }
         $model->rule_value = $idItems;
@@ -128,6 +153,47 @@ class PageRepository {
                 'rule_value' => static::formatQuestion($idItems, true)
             ]
         );
+    }
+
+    private static function saveQuestion(array $data): array {
+        $qId = isset($data['id']) ? intval($data['id']) : 0;
+        $score = intval($data['score']);
+        $q = null;
+        try {
+            $q = QuestionRepository::selfSave($data, false);
+            if ($q) {
+                $qId = $q->id;
+            }
+        } catch (\Exception $ex) {}
+        if ($qId < 1) {
+            return [];
+        }
+        if (!isset($data['type']) || $data['type'] != 5) {
+            return [['id' => $qId, 'score' => $score]];
+        }
+        if (empty($q)) {
+            $q = QuestionModel::find($qId);
+        }
+        $items = [];
+        foreach ($data['children'] as $item) {
+            $item['parent_id'] = $qId;
+            $item['course_id'] = $q->course_id;
+            $data['course_grade'] = $q->course_grade;
+            $data['easiness'] = $q->easiness;
+            $data['dynamic'] = $data['dynamic'] ?? '';
+            $itemType = isset($item['type']) ? intval($item['type']) : 0;
+            if ($itemType === 4) {
+                $item['content'] = $item['title'];
+            }
+            try {
+                $kid = QuestionRepository::selfSave($item);
+                $items[] = [
+                    'id' => $kid->id,
+                    'score' => intval($item['score'])
+                ];
+            } catch (\Exception $ex) {}
+        }
+        return $items;
     }
 
     public static function remove(int $id, int $user = 0) {

@@ -9,11 +9,13 @@ class PageGenerator {
     public static function create(int $course, int $type = 0) {
         if ($type < 2) {
             return static::createId(QuestionModel::where('course_id', $course)
+                ->where('type', '<', 5)
                 ->orderBy('id', 'asc')->get('id'), $type > 0)
                 ->setTitle($type < 1 ? '顺序练习' : '随机练习');
         }
         if ($type === 3) {
             return static::createId(QuestionModel::where('course_id', $course)
+                ->where('type', '<', 5)
                 ->where('easiness', '>', 5)
                 ->orderBy('id', 'asc')->get('id'), true)
                 ->setTitle('难题练习');
@@ -38,6 +40,7 @@ class PageGenerator {
                 continue;
             }
             $args = QuestionModel::query()
+                ->where('type', '<', 5)
                 ->where('course_id', $item['course'])
                 ->where('type', $item['type'])
                 ->whereNotIn('id', $exist)
