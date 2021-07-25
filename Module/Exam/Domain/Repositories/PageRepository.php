@@ -110,6 +110,7 @@ class PageRepository {
         if ($id > 0 && $user > 0 && $model->user_id !== $user) {
             throw new \Exception('无法保存');
         }
+        unset($data['updated_at'], $data['created_at']);
         $model->load($data);
         $model->user_id = auth()->id();
         $model->score = 0;
@@ -182,7 +183,7 @@ class PageRepository {
             $data['easiness'] = $q->easiness;
             $data['dynamic'] = $data['dynamic'] ?? '';
             $itemType = isset($item['type']) ? intval($item['type']) : 0;
-            if ($itemType === 4) {
+            if ($itemType === 4 && empty($item['content'])) {
                 $item['content'] = $item['title'];
             }
             try {

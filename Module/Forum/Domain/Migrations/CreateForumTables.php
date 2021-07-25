@@ -3,6 +3,7 @@ namespace Module\Forum\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Forum\Domain\Model\ForumClassifyModel;
+use Module\Forum\Domain\Model\ForumLogModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -79,6 +80,14 @@ class CreateForumTables extends Migration {
             $table->uint('user_id');
             $table->uint('action');
             $table->uint('node_index', 1)->default(0)->comment('每一个回帖内部的节点');
+            $table->string('data')->default('')->comment('执行的参数');
+            $table->timestamp('created_at');
+        })->append(ForumLogModel::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('item_type', 2)->default(0);
+            $table->uint('item_id');
+            $table->uint('user_id');
+            $table->uint('action');
             $table->string('data')->default('')->comment('执行的参数');
             $table->timestamp('created_at');
         })->autoUp();

@@ -34,6 +34,8 @@ class PageController extends Controller {
                 'end_at' => '',
                 'limit_time' => 'int',
                 'rule' => '',
+                'course_id' => 'int',
+                'course_grade' => 'int',
                 'question_items' => '',
             ]);
             return $this->render(

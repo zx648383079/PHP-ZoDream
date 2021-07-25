@@ -5,16 +5,15 @@ namespace Module\Forum\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Module\Forum\Domain\Model\ForumLogModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Model\ThreadSimpleModel;
 use Module\Forum\Domain\Parsers\Parser;
-use Zodream\Database\Contracts\SqlBuilder;
-use Zodream\Html\Page;
+use Zodream\Helpers\Json;
 
 class ThreadRepository {
 
@@ -308,10 +307,10 @@ class ThreadRepository {
     }
 
     public static function editable(ThreadModel $model): bool {
-        if (auth()->guest()) {
+        if (auth()->guest() || $model->is_closed > 0) {
             return false;
         }
-        return $model->is_closed < 1 && $model->user_id === auth()->id();
+        return $model->user_id === auth()->id() || static::can($model, 'edit');
     }
 
     public static function reply(string $content, int $thread_id) {
@@ -386,6 +385,12 @@ class ThreadRepository {
             $thread->{$action} = intval($val);
         }
         $thread->save();
+        ForumLogModel::create([
+            'item_type' => ForumLogModel::TYPE_THREAD,
+            'item_id' => $thread->id,
+            'action' => 1,
+            'data' => Json::encode($data)
+        ]);
         return $thread;
     }
 
@@ -442,6 +447,11 @@ class ThreadRepository {
         ThreadPostModel::where('thread_id', $id)->delete();
         ForumRepository::updateCount($thread->forum_id, 'thread_count', -1);
         ForumRepository::updateCount($thread->forum_id, 'post_count', - $count);
+        ForumLogModel::create([
+            'item_type' => ForumLogModel::TYPE_THREAD,
+            'item_id' => $id,
+            'action' => ForumLogModel::ACTION_DELETE,
+        ]);
     }
 
 
@@ -493,6 +503,12 @@ class ThreadRepository {
         }
         $model->status = $status;
         $model->save();
+        ForumLogModel::create([
+            'item_type' => ForumLogModel::TYPE_POST,
+            'item_id' => $id,
+            'action' => ForumLogModel::ACTION_STATUS,
+            'data' => $status,
+        ]);
         return $model;
     }
 }
