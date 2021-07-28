@@ -123,7 +123,7 @@ class CreateExamTables extends Migration {
             $table->id();
             $table->string('name', 200)->comment('试卷名');
             $table->uint('rule_type', 1)->default(0)->comment('试卷生存类型');
-            $table->string('rule_value', 500)->default('')->comment('试卷组成规则');
+            $table->text('rule_value')->comment('试卷组成规则');
             $table->timestamp('start_at')->comment('开始时间');
             $table->timestamp('end_at')->comment('结束时间');
             $table->uint('limit_time', 4)->default(0)->comment('限时');

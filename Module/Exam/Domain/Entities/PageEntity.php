@@ -29,7 +29,7 @@ class PageEntity extends Entity {
         return [
             'name' => 'required|string:0,200',
             'rule_type' => 'int:0,127',
-            'rule_value' => 'string:0,500',
+            'rule_value' => '',
             'start_at' => 'int',
             'end_at' => 'int',
             'limit_time' => 'int',
