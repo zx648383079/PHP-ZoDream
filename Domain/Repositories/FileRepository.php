@@ -25,6 +25,12 @@ class FileRepository {
             static::$configs[$key] : $default;
     }
 
+    /**
+     * @param array|string[] $allow
+     * @param string $path
+     * @return Page<int, array{url: string, thumb: string, mtime: int}>
+     * @throws Exception
+     */
     public static function getList(array $allow = ['.*'], string $path = 'assets') {
         $allow = substr(str_replace('.', '|', implode('', $allow)), 1);
         $path = public_path($path)->getFullName();
@@ -52,13 +58,13 @@ class FileRepository {
 
     /**
      * 删除文件
-     * @param $fieldName
-     * @param $config
+     * @param string $fieldName
+     * @param array $config
      * @param string $base64
-     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function upload($fieldName, $config, $base64 = 'upload') {
+    public static function upload(string $fieldName, array $config, string $base64 = 'upload') {
         $upload = new Uploader($fieldName, $config, $base64);
         $res = $upload->getFileInfo();
         if ($res['state'] !== 'SUCCESS') {
@@ -99,7 +105,7 @@ class FileRepository {
     /**
      * 上传文件
      * @param string $fieldName
-     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
     public static function uploadFile(string $fieldName = 'file') {
@@ -115,7 +121,7 @@ class FileRepository {
     /**
      * 上传base64图片
      * @param string $fieldName
-     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
     public static function uploadBase64(string $fieldName = 'file') {
@@ -131,7 +137,7 @@ class FileRepository {
     /**
      * 上传视频
      * @param string $fieldName
-     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
     public static function uploadVideo(string $fieldName = 'file') {
@@ -146,7 +152,7 @@ class FileRepository {
     /**
      * 上传语音
      * @param string $fieldName
-     * @return array ['url', 'title', 'original', 'type' => '.png', 'size', 'thumb']
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
     public static function uploadAudio(string $fieldName = 'file') {
@@ -155,7 +161,7 @@ class FileRepository {
 
     /**
      * @param string $fieldName
-     * @return array ['url', 'title', 'original', 'type': 例如 .png, 'size', 'thumb']
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
     public static function uploadImage(string $fieldName = 'file') {
@@ -169,7 +175,7 @@ class FileRepository {
     /**
      * @param string $fieldName
      * @param int $count
-     * @return array [['url', 'title', 'original', 'type': 例如 .png, 'size', 'thumb']]
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}[]
      * @throws Exception
      */
     public static function uploadImages(string $fieldName = 'file', int $count = 0) {

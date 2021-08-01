@@ -1,6 +1,8 @@
 <?php
 namespace Infrastructure;
 
+use JetBrains\PhpStorm\ArrayShape;
+
 class Uploader {
     private $fileField; //文件域名
     private $file; //文件上传对象
@@ -44,7 +46,7 @@ class Uploader {
      * @param array $config 配置项
      * @param string $type 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
-    public function __construct($fileField, $config, $type = 'upload') {
+    public function __construct(string $fileField, array $config, string $type = 'upload') {
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
@@ -64,7 +66,7 @@ class Uploader {
      * @return mixed
      */
     private function upFile() {
-        $file = $this->file = isset($_FILES[$this->fileField]) ? $_FILES[$this->fileField] : null;
+        $file = $this->file = $_FILES[$this->fileField] ?? null;
         if (!$file) {
             $this->stateInfo = $this->getStateInfo('ERROR_FILE_NOT_FOUND');
             return;
@@ -117,7 +119,7 @@ class Uploader {
         $imgUrl = str_replace('&amp;', '&', $imgUrl);
 
         //http开头验证
-        if (strpos($imgUrl, 'http') !== 0) {
+        if (!str_starts_with($imgUrl, 'http')) {
             $this->stateInfo = $this->getStateInfo('ERROR_HTTP_LINK');
             return;
         }
@@ -175,7 +177,7 @@ class Uploader {
      * 移动图片
      * @param string $content
      */
-    private function moveImage($content) {
+    private function moveImage(string $content) {
         $this->fileSize = strlen($content);
         if (!$this->moveFile()) {
             return;
@@ -193,7 +195,7 @@ class Uploader {
      * 判断是否允许移动文件
      * @return bool
      */
-    private function moveFile() {
+    private function moveFile(): bool {
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
         $this->filePath = $this->getFilePath();
@@ -234,7 +236,7 @@ class Uploader {
      * 获取文件扩展名
      * @return string
      */
-    private function getFileExt() {
+    private function getFileExt(): string {
         return strtolower(strrchr($this->oriName, '.'));
     }
 
@@ -242,7 +244,7 @@ class Uploader {
      * 重命名文件
      * @return string
      */
-    private function getFullName() {
+    private function getFullName(): string {
         //替换日期事件
         $t = time();
         $d = explode('-', date('Y-y-m-d-H-i-s'));
@@ -275,7 +277,7 @@ class Uploader {
      * 获取文件名
      * @return string
      */
-    private function getFileName () {
+    private function getFileName (): string {
         return substr($this->filePath, strrpos($this->filePath, '/') + 1);
     }
 
@@ -283,7 +285,7 @@ class Uploader {
      * 获取文件完整路径
      * @return string
      */
-    private function getFilePath() {
+    private function getFilePath(): string {
         return public_path($this->fullName)->getFullName();
     }
 
@@ -291,7 +293,7 @@ class Uploader {
      * 文件类型检测
      * @return bool
      */
-    private function checkType() {
+    private function checkType(): bool {
         return in_array($this->getFileExt(), $this->config['allowFiles']);
     }
     
@@ -299,15 +301,15 @@ class Uploader {
      * 文件大小检测
      * @return bool
      */
-    public function checkSize() {
+    public function checkSize(): bool {
         return $this->fileSize <= $this->config['maxSize'];
     }
 
     /**
      * 获取当前上传成功文件的各项信息
-     * @return array
+     * @return array{state: string, url: string, title: string, original: string, type: string, size: int}
      */
-    public function getFileInfo() {
+    public function getFileInfo(): array {
         return array(
             'state' => $this->stateInfo,
             'url' => $this->fullName,
