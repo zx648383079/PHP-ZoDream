@@ -30,7 +30,7 @@ class SEORepository {
         set_time_limit(0);
         if ((!$file->exist() || $file->modifyTime() < (time() - 60))
             && !GenerateModel::schema()
-                ->export($file)) {
+                ->export($file, [], false)) {
             throw new Exception('导出失败！');
         }
         $zip_file = $root->file(date('Y-m-d').'.zip');
