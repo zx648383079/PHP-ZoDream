@@ -37,11 +37,11 @@ class OauthController extends Controller {
                         $gender == 1 ? UserModel::SEX_MALE : UserModel::SEX_FEMALE,
                         $avatar
                     ];
-                }, isset($data['unionid']) ? $data['unionid'] : null,
+                }, $data['unionid'] ?? null,
                 $platform->id()
             );
             AuthRepository::updateOAuthData(OAuthModel::TYPE_WX_MINI,
-                $data['openid'],  $data['session_key'],isset($data['unionid']) ? $data['unionid'] : null,
+                $data['openid'],  $data['session_key'], $data['unionid'] ?? null,
                 $platform->id());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

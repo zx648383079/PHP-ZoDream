@@ -20,6 +20,7 @@ use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\RoleRepository;
+use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -86,6 +87,16 @@ class CreateAuthTables extends Migration {
         RoleRepository::newPermission([
             'user_manage' => '会员管理'
         ]);
+        Option::group('高级', function () {
+            return [
+                [
+                    'name' => '关闭注册',
+                    'code' => 'auth_close',
+                    'type' => 'switch',
+                    'value' => 0
+                ],
+            ];
+        });
     }
 
     public function createRole(): void {

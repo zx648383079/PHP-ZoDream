@@ -1,7 +1,9 @@
 <?php
 namespace Module\Auth\Service;
 
+use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\SEO\Domain\Option;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class RegisterController extends Controller {
@@ -14,11 +16,17 @@ class RegisterController extends Controller {
     }
 
     public function indexAction() {
+        if (Option::value('auth_close') > 0) {
+            return $this->redirectWithMessage('/', __('Registration not allowed'));
+        }
         return $this->show();
     }
 
     public function postAction(Request $request) {
         try {
+            if (Option::value('auth_close') > 0) {
+                throw AuthException::disableRegister();
+            }
             AuthRepository::register(
                 $request->get('name'),
                 $request->get('email'),

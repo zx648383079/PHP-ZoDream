@@ -2,8 +2,10 @@
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
+use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Module\SEO\Domain\Option;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class RegisterController extends Controller {
@@ -16,6 +18,9 @@ class RegisterController extends Controller {
 
     public function indexAction(Request $request) {
         try {
+            if (Option::value('auth_close') > 0) {
+                throw AuthException::disableRegister();
+            }
             $mobile = $request->get('mobile');
             if (!empty($mobile)) {
                 AuthRepository::registerMobile(

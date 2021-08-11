@@ -12,6 +12,7 @@ use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\SEO\Domain\Option;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
@@ -194,6 +195,9 @@ class AuthRepository {
             self::successBindUser($type, $user, $nickname, $openid, $unionId, $platform_id);
             return $user;
         }
+        if (Option::value('auth_close') > 0) {
+            throw AuthException::disableRegister();
+        }
         if (!empty($email)
             && UserModel::validateEmail($email) ) {
             $email = null;
@@ -235,6 +239,9 @@ class AuthRepository {
         $user = auth()->user();
         if ($user->password !== self::UNSET_PASSWORD && !$user->validatePassword($oldPassword)) {
             throw new Exception('密码不正确！');
+        }
+        if ($user->validatePassword($password)) {
+            throw AuthException::samePassword();
         }
         $user->setPassword($password);
         if (!$user->save()) {
@@ -322,6 +329,9 @@ class AuthRepository {
         }
         if ($user->email !== $email) {
             throw new Exception('邮箱或安全码不正确');
+        }
+        if ($user->validatePassword($password)) {
+            throw AuthException::samePassword();
         }
         MailLogModel::where('user_id', $log->user_id)
             ->where('type', MailLogModel::TYPE_FIND)

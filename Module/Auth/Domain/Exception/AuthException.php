@@ -21,11 +21,19 @@ class AuthException {
         return new Exception(__('Email or password is incorrect'), 1003);
     }
 
+    public static function disableRegister() {
+        return new Exception(__('Registration not allowed'), 1006);
+    }
+
     public static function disableAccount() {
         return new Exception(__('Account is disabled'), 1004);
     }
 
     public static function invalidPassword() {
         return new Exception(__('Password is incorrect'), 1005);
+    }
+
+    public static function samePassword() {
+        return new Exception(__('Consistent with the original password'), 1007);
     }
 }

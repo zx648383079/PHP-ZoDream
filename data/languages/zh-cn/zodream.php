@@ -36,6 +36,8 @@ return [
     'Site Description' => '简介',
     'Apply Excharge Link' => '申请互换友链',
     'friend link tip' => '申请前请收录本站，接受新站，拒绝一切非法网站。',
+    'Registration not allowed' => '不允许注册',
+    'Consistent with the original password' => '与原密码一致',
     'About Us' => '关于本站',
     'Feedback' => '意见反馈',
     'Nick Name' => '称呼',
