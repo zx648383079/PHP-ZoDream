@@ -9,6 +9,7 @@ use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\OpenPlatform\Domain\Platform;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
+use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
 use Module\Auth\Service\OauthController as BaseController;
 
@@ -58,7 +59,7 @@ class OauthController extends Controller {
     /**
      * 获取openid
      * @param $code
-     * @return RestResponse
+     * @return Output
      * @throws \Exception
      */
     public function miniLoginAction(string $code) {
@@ -68,7 +69,7 @@ class OauthController extends Controller {
         try {
             $data = $mini->login($code);
             AuthRepository::updateOAuthData(OAuthModel::TYPE_WX_MINI,
-                $data['openid'],  $data['session_key'],isset($data['unionid']) ? $data['unionid'] : null,
+                $data['openid'],  $data['session_key'], $data['unionid'] ?? null,
                 $platform->id());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

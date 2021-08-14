@@ -53,12 +53,12 @@ class AccountController extends Controller {
         return $this->render($user);
     }
 
-    public function loginLogAction($keywords = null) {
+    public function loginLogAction(string $keywords = '') {
         $model_list = LoginLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
             })
-            ->orderBy('id desc')->page();
+            ->orderBy('id', 'desc')->page();
         return $this->renderPage($model_list);
     }
 }

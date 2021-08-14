@@ -1,7 +1,6 @@
 <?php
 namespace Module\Auth\Service\Api;
 
-
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\LoginLogModel;

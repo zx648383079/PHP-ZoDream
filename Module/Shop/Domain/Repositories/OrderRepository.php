@@ -4,6 +4,9 @@ namespace Module\Shop\Domain\Repositories;
 
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Repositories\BulletinRepository;
+use Module\Shop\Domain\Models\OrderActivityModel;
+use Module\Shop\Domain\Models\OrderAddressModel;
+use Module\Shop\Domain\Models\OrderCouponModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
@@ -139,5 +142,20 @@ class OrderRepository {
         $args['refunding'] = OrderRefundModel::auth()
             ->where('status', OrderRefundModel::STATUS_IN_REVIEW)->count();
         return $args;
+    }
+
+    public static function remove(int $id) {
+        $model = OrderModel::findWithAuth($id);
+        if (empty($model)) {
+            throw new Exception('订单不存在');
+        }
+        if ($model->status > OrderModel::STATUS_UN_PAY) {
+            throw new \Exception('不能删除此订单');
+        }
+        $model->delete();
+        OrderAddressModel::where('order_id', $model->id)->delete();
+        OrderGoodsModel::where('order_id', $model->id)->delete();
+        OrderActivityModel::where('order_id', $model->id)->delete();
+        OrderCouponModel::where('order_id', $model->id)->delete();
     }
 }

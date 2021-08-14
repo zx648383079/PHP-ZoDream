@@ -27,7 +27,7 @@ class OrderController extends Controller {
         return $this->renderPage($order_list);
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         $order = Order::findWithAuth($id);
         $address = OrderAddressModel::where('order_id', $id)->one();
         $data = $order->toArray();
@@ -39,7 +39,7 @@ class OrderController extends Controller {
         return $this->render(OrderRepository::getSubtotal());
     }
 
-    public function receiveAction($id) {
+    public function receiveAction(int $id) {
         try {
             $order = OrderRepository::receive($id);
         } catch (\Exception $ex) {
@@ -51,7 +51,7 @@ class OrderController extends Controller {
         return $this->render($data);
     }
 
-    public function cancelAction($id) {
+    public function cancelAction(int $id) {
         try {
             $order = OrderRepository::cancel($id);
         } catch (\Exception $ex) {
@@ -63,23 +63,30 @@ class OrderController extends Controller {
         return $this->render($data);
     }
 
-    public function repurchaseAction($id) {
+    public function deleteAction(int $id) {
+        try {
+            OrderRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function repurchaseAction(int $id) {
         try {
             OrderRepository::repurchase($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 
-    public function logisticsAction($id) {
+    public function logisticsAction(int $id) {
         $data = [];
         return $this->render(compact('data'));
     }
 
-    public function commentAction($status) {
+    public function commentAction(int $status) {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->when($status > 0, function ($query) {
                 $query->where('comment_id', '>', 0);
@@ -90,19 +97,19 @@ class OrderController extends Controller {
         return $this->renderPage($goods_list);
     }
 
-    public function commentGoodsAction($goods = 0, $order = 0) {
+    public function commentGoodsAction(int $goods = 0, int $order = 0) {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->where('comment_id', 0)
             ->where('status', OrderModel::STATUS_RECEIVED)
             ->when($goods > 0, function ($query) use ($goods) {
-                $query->where('id', intval($goods));
+                $query->where('id', $goods);
             }, function ($query) use ($order) {
-                $query->where('order_id', intval($order));
+                $query->where('order_id', $order);
             })->get();
         return $this->render($goods_list);
     }
 
-    public function commentSaveAction($goods, $content, $images = [], $rank = 5) {
+    public function commentSaveAction(int $goods, string $content, array $images = [], int $rank = 5) {
         $goods = OrderGoodsModel::where('user_id', auth()->id())
             ->where('comment_id', 0)
             ->where('status', OrderModel::STATUS_RECEIVED)->where('id', intval($goods))

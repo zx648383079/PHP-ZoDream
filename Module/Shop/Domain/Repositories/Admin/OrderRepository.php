@@ -240,8 +240,7 @@ class OrderRepository {
         ];
     }
 
-    public static function remove(int $id)
-    {
+    public static function remove(int $id) {
         $model = OrderModel::findOrThrow($id, '订单不存在');
         if ($model->status > OrderModel::STATUS_UN_PAY) {
             throw new \Exception('不能删除此订单');
