@@ -2,9 +2,6 @@
 namespace Module\Book\Domain;
 
 use Module\Auth\Domain\Model\UserMetaModel;
-
-use Zodream\Infrastructure\Cookie;
-
 use Zodream\Infrastructure\Concerns\Attributes;
 
 class Setting {
@@ -54,7 +51,7 @@ class Setting {
             if ($item == request()->cookie($key)) {
                 continue;
             }
-            Cookie::forever($key, $item);
+            response()->cookie($key, $item);
         }
         return $this;
     }
