@@ -4,8 +4,10 @@ namespace Module\Auth\Service\Api;
 use Infrastructure\Uploader;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\OptionRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class UserController extends Controller {
@@ -80,6 +82,18 @@ class UserController extends Controller {
      */
     public function roleAction() {
         return $this->render(RoleRepository::userRolePermission(auth()->id()));
+    }
+
+    public function optionAction() {
+        return $this->renderData(OptionRepository::get());
+    }
+
+    public function optionSaveAction(Input $input) {
+        try {
+            return $this->renderData(OptionRepository::save($input->get()));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
 }

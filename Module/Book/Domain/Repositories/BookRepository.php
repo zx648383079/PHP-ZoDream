@@ -193,6 +193,23 @@ class BookRepository {
         }
     }
 
+    public static function refreshPosition(int $book) {
+        $data = BookChapterModel::where('book_id', $book)
+            ->orderBy('parent_id', 'asc')
+            ->orderBy('position', 'asc')
+            ->orderBy('created_at', 'asc')->get('id', 'position');
+        $position = 0;
+        foreach ($data as $item) {
+            $position ++;
+            if (intval($item['position']) === $position) {
+                continue;
+            }
+            BookChapterModel::where('id', $item['id'])->update([
+               'position' => $position
+            ]);
+        }
+    }
+
     public static function refreshSize(int $book) {
         $length = BookChapterModel::where('book_id', $book)->sum('size');
         BookModel::where('id', $book)

@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Domain\Model;
 
+use Domain\Concerns\TableMeta;
 use Domain\Model\Model;
 
 
@@ -13,6 +14,13 @@ use Domain\Model\Model;
  * @property string $content
  */
 class UserMetaModel extends Model {
+
+    use TableMeta;
+
+    protected static string $idKey = 'user_id';
+    protected static array $defaultItems = [
+        'address_id' => 0, // 默认收货地址
+    ];
 
     public static function tableName() {
         return 'user_meta';

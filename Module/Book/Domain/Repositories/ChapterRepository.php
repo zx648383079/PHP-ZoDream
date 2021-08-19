@@ -109,4 +109,74 @@ class ChapterRepository {
         }
         return $items;
     }
+
+    public static function move(int $id, int $before = 0, int $after = 0) {
+        if ($before < 1 && $after < 1) {
+            throw new \Exception('请选择定位点');
+        }
+        if ($before > 0) {
+            static::moveBefore($id, $before);
+            return;
+        }
+        static::moveAfter($id, $after);
+    }
+
+    public static function moveBefore(int $id, int $before) {
+        list($model, $beforeModel) = self::checkPosition($id, $before);
+        if ($model->position < $beforeModel->position) {
+            BookChapterModel::query()->where('book_id', $model->book_id)
+                ->where('position', '>', $model->position)
+                ->where('position', '<', $beforeModel->position)
+                ->updateDecrement('position');
+            BookChapterModel::where('id', $id)->update([
+                'position' => $beforeModel->position - 1
+            ]);
+            return;
+        }
+        BookChapterModel::query()->where('book_id', $model->book_id)
+            ->where('position', '<', $model->position)
+            ->where('position', '>=', $beforeModel->position)
+            ->updateIncrement('position');
+        BookChapterModel::where('id', $id)->update([
+            'position' => $beforeModel->position
+        ]);
+    }
+
+    private static function checkPosition(int $id, int $twoId): array {
+        if ($id === $twoId) {
+            throw new \Exception('章节错误');
+        }
+        $model = BookChapterModel::findOrThrow($id, '章节不存在');
+        if ($model->position < 1) {
+            BookRepository::refreshPosition($model->book_id);
+        }
+        $model->position = intval(BookChapterModel::where('id', $id)->value('position'));
+        $twoModel = BookChapterModel::where('id', $twoId)->where('book_id', $model->book_id)
+            ->first('id', 'position');
+        if (empty($twoModel)) {
+            throw new \Exception('章节不存在');
+        }
+        return [$model, $twoModel];
+    }
+
+    public static function moveAfter(int $id, int $after) {
+        list($model, $afterModel) = self::checkPosition($id, $after);
+        if ($model->position < $afterModel->position) {
+            BookChapterModel::query()->where('book_id', $model->book_id)
+                ->where('position', '>', $model->position)
+                ->where('position', '<=', $afterModel->position)
+                ->updateDecrement('position');
+            BookChapterModel::where('id', $id)->update([
+                'position' => $afterModel->position
+            ]);
+            return;
+        }
+        BookChapterModel::query()->where('book_id', $model->book_id)
+            ->where('position', '<', $model->position)
+            ->where('position', '>', $afterModel->position)
+            ->updateIncrement('position');
+        BookChapterModel::where('id', $id)->update([
+            'position' => $afterModel->position + 1
+        ]);
+    }
 }

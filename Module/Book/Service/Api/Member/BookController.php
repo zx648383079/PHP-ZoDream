@@ -74,6 +74,24 @@ class BookController extends Controller {
         }
     }
 
+    public function moveAction(int $id, int $before = 0, int $after = 0) {
+        try {
+            ChapterRepository::move($id, $before, $after);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function refreshAction(int $id) {
+        try {
+            BookRepository::refreshPosition($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
     public function chapterDeleteAction(int $id) {
         try {
             ChapterRepository::removeSelf($id);

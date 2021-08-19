@@ -7,6 +7,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Repositories\DownloadRepository;
 use Module\Book\Domain\Repositories\HistoryRepository;
 use Module\Book\Domain\Setting;
 use Zodream\Disk\File;
@@ -46,7 +47,7 @@ class BookController extends Controller {
         return $this->show(compact('book', 'cat', 'chapter_list', 'like_book', 'hot_book', 'author_book'));
     }
 
-    public function readAction($id) {
+    public function readAction(int $id) {
         if (request()->isMobile()) {
             return $this->redirect(['./mobile/book/read', 'id' => $id]);
         }
@@ -65,7 +66,7 @@ class BookController extends Controller {
         return $this->show(compact('book', 'cat', 'chapter', 'like_book', 'new_book', 'setting'));
     }
 
-    public function downloadAction($id) {
+    public function downloadAction(int $id) {
         $book = BookModel::find($id);
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();
@@ -78,46 +79,21 @@ class BookController extends Controller {
             'like_book', 'hot_book', 'author_book'));
     }
 
-    public function txtAction($id, Output $output) {
-        $book = BookModel::find($id);
-        $file = $this->getBookFile($book);
-        return $output->file($file);
-    }
-
-    public function zipAction($id, Output $output) {
-        $book = BookModel::find($id);
-        $file = $this->getBookFile($book);
-        $zipFile = new File($file->getFullName().'.zip');
-        $zip = new \ZipArchive();
-        $zip->open((string)$zipFile,\ZipArchive::CREATE);
-        $zip->addFile((string)$file, 'all.txt');
-        $zip->close();
-        $zipFile->setName($book->name.'.zip');
-        return $output->file($zipFile);
-    }
-
-    protected function getBookFile(BookModel $book) {
-        $file = app_path()->file('data/cache/book_'. $book->id);
-        if (!$file->exist() || $file->modifyTime() < time() - 3600) {
-            $stream = new Stream($file);
-            $stream->open('w');
-
-            $chapter_list = BookChapterModel::where('book_id', $book->id)
-                ->orderBy('id', 'asc')
-                ->all();
-            foreach ($chapter_list as $item) {
-                $stream->writeLine($item->title);
-                $stream->writeLine('');
-                $content = BookChapterBodyModel::where('id', $item->id)->value('content');
-                $stream->writeLine($content);
-                $stream->writeLines([
-                    '',
-                    '',
-                ]);
-            }
-            $stream->close();
+    public function txtAction(int $id, Output $output) {
+        try {
+            return $output->file(DownloadRepository::txt($id));
+        } catch (\Exception $ex) {
+            $output->header->setContentDisposition('error.txt');
+            return $output->custom($ex->getMessage(), 'txt');
         }
-        $file->setName($book->name.'.txt');
-        return $file;
+    }
+
+    public function zipAction(int $id, Output $output) {
+        try {
+            return $output->file(DownloadRepository::zip($id));
+        } catch (\Exception $ex) {
+            $output->header->setContentDisposition('error.zip');
+            return $output->custom($ex->getMessage(), 'zip');
+        }
     }
 }

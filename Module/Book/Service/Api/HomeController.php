@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Module\Book\Service\Api;
 
-use Domain\Model\SearchModel;
-use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Repositories\BookRepository;
 
 class HomeController extends Controller {
