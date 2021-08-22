@@ -4,11 +4,11 @@ namespace Module\Career\Domain\Entities;
 use Domain\Entities\Entity;
 
 /**
- * 职业
+ * 行业
  * @package Module\Career\Domain\Entities
  */
-class CategoryEntity extends Entity {
+class IndustryEntity extends Entity {
     public static function tableName() {
-        return 'career_category';
+        return 'career_industry';
     }
 }
