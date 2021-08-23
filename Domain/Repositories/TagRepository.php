@@ -28,7 +28,7 @@ abstract class TagRepository {
                     $idItems[] = $item[static::$idKey];
                     continue;
                 }
-                $item = isset($item[static::$nameKey]) ? $item[static::$nameKey] : null;
+                $item = $item[static::$nameKey] ?? null;
             }
             if (empty($item)) {
                 continue;

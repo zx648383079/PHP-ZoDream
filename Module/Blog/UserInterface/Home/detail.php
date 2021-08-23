@@ -7,7 +7,17 @@ use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\CCLicenses;
 /** @var $this View */
 /** @var $blog BlogModel */
-$this->title = $this->text($metaItems['seo_title'] ?? $blog->title);
+
+function getSEOValue(string $key, array $metaItems, BlogModel $blog) {
+    $seoKey = 'seo_'.$key;
+    if (isset($metaItems[$seoKey]) && !empty($metaItems[$seoKey])) {
+        return $metaItems[$seoKey];
+    }
+    return $blog->{$key};
+}
+
+
+$this->title = $this->text(getSEOValue('title', $metaItems, $blog));
 $lang = [
     'side_title' => __('Catalog'),
     'reply_btn' => __('Reply'),
@@ -27,7 +37,7 @@ if ($blog->edit_type < 1) {
 }
 $this->set([
     'keywords' => $this->text($blog->keywords),
-    'description' => $this->text($metaItems['seo_description'] ?? $blog->description),
+    'description' => $this->text(getSEOValue('description', $metaItems, $blog)),
     'layout_og' => [
         'type' => 'article',
         'image' => $blog->thumb,

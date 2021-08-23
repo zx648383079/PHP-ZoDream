@@ -5,6 +5,30 @@ namespace Domain\Model;
 use Zodream\Database\Contracts\SqlBuilder;
 
 class SearchModel {
+
+    /**
+     * 根据关键词进行分词
+     * @param string $keywords
+     * @return array
+     */
+    public static function splitWord(string $keywords, array $replaceTags = []): array {
+        if ($keywords === '') {
+            return [];
+        }
+        if (!empty($replaceTags)) {
+            $keywords = str_ireplace(array_keys($replaceTags), array_values($replaceTags), $keywords);
+        }
+        $items = explode(' ', $keywords);
+        $data = [];
+        foreach ($items as $item) {
+            $item = trim($item);
+            if ($item === '') {
+                continue;
+            }
+            $data[] = $item;
+        }
+        return $data;
+    }
     /**
      * 生成搜索查询语句
      * @param SqlBuilder $query
@@ -18,15 +42,7 @@ class SearchModel {
     public static function search(SqlBuilder $query, string|array $columns, bool $saveLog = true,
                                   string $key = 'keywords', string $value = '') {
         $columns = (array)$columns;
-        $keywords = explode(' ', empty($key) ? $value : request()->get($key));
-        $wordItems = [];
-        foreach ($keywords as $item) {
-            $item = trim(str_replace('%', '', $item));
-            if (empty($item)) {
-                continue;
-            }
-            $wordItems[] = $item;
-        }
+        $wordItems = static::splitWord(empty($key) ? $value : request()->get($key), ['%' => '']);
         unset($keywords);
         if (empty($wordItems) || empty($columns)) {
             return $query;
