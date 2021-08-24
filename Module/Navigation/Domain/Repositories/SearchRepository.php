@@ -18,7 +18,8 @@ final class SearchRepository {
         if (empty($wordId)) {
             return static::renderPage();
         }
-        $ids = PageKeywordModel::whereIn('word_id', $wordId)->pluck('page_id');
+        $ids = PageKeywordModel::whereIn('word_id', $wordId)->orderBy('is_official', 'desc')
+            ->pluck('page_id');
         if (empty($ids)) {
             return static::renderPage();
         }

@@ -22,7 +22,13 @@ final class SiteController extends Controller {
     public function saveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'id' => 'int',
+                'schema' => 'string:0,10',
+                'domain' => 'required|string:0,100',
+                'name' => 'required|string:0,30',
+                'logo' => 'string:0,255',
+                'description' => 'string:0,255',
+                'cat_id' => 'int',
             ]);
             return $this->render(SiteRepository::save($data));
         } catch (\Exception $ex) {

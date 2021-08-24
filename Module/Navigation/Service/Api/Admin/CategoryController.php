@@ -11,18 +11,13 @@ final class CategoryController extends Controller {
         return $this->renderPage(CategoryRepository::getList($keywords));
     }
 
-    public function detailAction(int $id) {
-        try {
-            return $this->render(CategoryRepository::get($id));
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-    }
-
     public function saveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'id' => 'int',
+                'name' => 'required|string:0,30',
+                'icon' => 'string:0,255',
+                'parent_id' => 'int',
             ]);
             return $this->render(CategoryRepository::save($data));
         } catch (\Exception $ex) {
@@ -37,5 +32,9 @@ final class CategoryController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function allAction() {
+        return $this->renderData(CategoryRepository::all());
     }
 }

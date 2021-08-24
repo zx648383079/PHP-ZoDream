@@ -22,7 +22,13 @@ final class PageController extends Controller {
     public function saveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'id' => 'int',
+                'title' => 'required|string:0,30',
+                'description' => 'string:0,255',
+                'thumb' => 'string:0,255',
+                'link' => 'required|string:0,255',
+                'site_id' => 'string:0,255',
+                'page_rank' => 'string:0,255',
             ]);
             return $this->render(PageRepository::save($data));
         } catch (\Exception $ex) {

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Navigation\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Navigation\Domain\Models\CategoryModel;
 use Module\Navigation\Domain\Models\CollectGroupModel;
 use Module\Navigation\Domain\Models\CollectModel;
@@ -61,6 +62,7 @@ final class CreateNavigationTables extends Migration {
             $table->comment('网页包含关键字表');
             $table->uint('page_id');
             $table->uint('word_id');
+            $table->bool('is_official')->default(0)->comment('是否为关键词官网');
         })->append(CollectGroupModel::tableName(), function (Table $table) {
             $table->comment('收藏分组表');
             $table->id();
@@ -77,5 +79,11 @@ final class CreateNavigationTables extends Migration {
             $table->uint('position', 1)->default(5);
             $table->timestamps();
         })->autoUp();
+    }
+
+    public function seed() {
+        RoleRepository::newPermission([
+            'navigation_manage' => '导航管理'
+        ]);
     }
 }

@@ -4,6 +4,7 @@ namespace Module\Navigation\Domain\Repositories\Admin;
 
 use Domain\Model\SearchModel;
 use Module\Navigation\Domain\Models\CategoryModel;
+use Zodream\Html\Tree;
 
 final class CategoryRepository {
     public static function getList(string $keywords = '') {
@@ -29,5 +30,9 @@ final class CategoryRepository {
 
     public static function remove(int $id) {
         CategoryModel::where('id', $id)->delete();
+    }
+
+    public static function all() {
+        return (new Tree(CategoryModel::query()->get()))->makeTreeForHtml();
     }
 }

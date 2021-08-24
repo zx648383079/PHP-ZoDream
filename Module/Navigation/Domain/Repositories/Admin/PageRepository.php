@@ -8,7 +8,7 @@ use Module\Navigation\Domain\Models\PageModel;
 
 final class PageRepository {
     public static function getList(string $keywords = '', int $user = 0, int $site = 0, string $domain = '') {
-        return PageModel::query()->when(!empty($keywords), function ($query) {
+        return PageModel::with('site', 'user')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['title']);
         })->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
@@ -28,6 +28,7 @@ final class PageRepository {
         unset($data['id']);
         $model = PageModel::findOrNew($id);
         $model->load($data);
+        $model->site_id = SiteRepository::findIdByLink($model->link);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
