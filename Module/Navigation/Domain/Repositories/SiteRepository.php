@@ -16,7 +16,7 @@ final class SiteRepository {
                 SearchModel::searchWhere($query, ['name', 'domain']);
             })->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
-            })->when(empty($domain), function ($query) use ($domain) {
+            })->when(!empty($domain), function ($query) use ($domain) {
                 $query->where('domain', $domain);
             })->page();
     }
@@ -38,5 +38,10 @@ final class SiteRepository {
 
     public static function categories() {
         return (new Tree(CategoryModel::query()->orderBy('id', 'desc')->get()))->makeTree();
+    }
+
+    public static function recommend(int $category): array {
+        return SiteModel::where('cat_id', $category)->where('top_type', '>', 0)
+            ->orderBy('top_type', 'desc')->orderBy('id', 'asc')->get();
     }
 }

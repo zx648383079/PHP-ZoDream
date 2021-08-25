@@ -33,6 +33,7 @@ final class CreateNavigationTables extends Migration {
             $table->string('description')->default('');
             $table->uint('cat_id')->default(0);
             $table->uint('user_id')->default(0);
+            $table->uint('top_type', 1)->default(0)->comment('推荐类型');
             $table->timestamps();
         })->append(TagModel::tableName(), function (Table $table) {
             $table->comment('标签表');

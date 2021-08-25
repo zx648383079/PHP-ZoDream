@@ -29,6 +29,7 @@ final class PageController extends Controller {
                 'link' => 'required|string:0,255',
                 'site_id' => 'string:0,255',
                 'page_rank' => 'string:0,255',
+                'keywords' => '',
             ]);
             return $this->render(PageRepository::save($data));
         } catch (\Exception $ex) {

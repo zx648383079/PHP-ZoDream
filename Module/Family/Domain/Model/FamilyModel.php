@@ -73,12 +73,7 @@ class FamilyModel extends Model {
     }
 
     public function saveIgnoreUpdate() {
-        $isNew = $this->isNewRecord;
-        $row = $this->save();
-        if ($isNew) {
-            return $row;
-        }
-        return $row || isset($this->errors['data']);
+        return $this->save() || $this->isNotChangedError();
     }
 
 

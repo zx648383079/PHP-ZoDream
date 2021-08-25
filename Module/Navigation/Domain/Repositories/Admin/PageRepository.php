@@ -8,7 +8,7 @@ use Module\Navigation\Domain\Models\PageModel;
 
 final class PageRepository {
     public static function getList(string $keywords = '', int $user = 0, int $site = 0, string $domain = '') {
-        return PageModel::with('site', 'user')->when(!empty($keywords), function ($query) {
+        return PageModel::with('site', 'user', 'keywords')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['title']);
         })->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
@@ -28,11 +28,27 @@ final class PageRepository {
         unset($data['id']);
         $model = PageModel::findOrNew($id);
         $model->load($data);
+        if (static::exist($model)) {
+            throw new \Exception('网页已存在');
+        }
         $model->site_id = SiteRepository::findIdByLink($model->link);
-        if (!$model->save()) {
+        if (!$model->save() && !$model->isNotChangedError()) {
             throw new \Exception($model->getFirstError());
         }
+        KeywordRepository::bindTag(
+            PageKeywordModel::query(),
+            $model->id,
+            'page_id',
+            isset($data['keywords']) && !empty($data['keywords']) ? $data['keywords'] : [],
+            [],
+            'word_id'
+        );
         return $model;
+    }
+
+    public static function exist(PageModel $model): bool {
+        return PageModel::where('link', $model->link)
+                ->where('id', '<>', $model->id)->count() > 0;
     }
 
     public static function remove(int $id) {

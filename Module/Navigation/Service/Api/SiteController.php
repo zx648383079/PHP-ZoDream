@@ -10,6 +10,10 @@ final class SiteController extends Controller {
         return $this->renderPage(SiteRepository::getList($keywords, $category, $domain));
     }
 
+    public function recommendAction(int $category = 0) {
+        return $this->renderData(SiteRepository::recommend($category));
+    }
+
     public function detailAction(int $id) {
         try {
             return $this->render(SiteRepository::get($id));

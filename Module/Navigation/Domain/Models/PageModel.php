@@ -58,4 +58,9 @@ class PageModel extends Model {
     public function user() {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
+
+    public function keywords() {
+        return $this->belongsToMany(KeywordModel::class, PageKeywordModel::class,
+            'page_id', 'word_id');
+    }
 }

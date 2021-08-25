@@ -14,6 +14,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property string $description
  * @property integer $cat_id
  * @property integer $user_id
+ * @property integer $top_type
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -31,6 +32,7 @@ class SiteModel extends Model {
             'description' => 'string:0,255',
             'cat_id' => 'int',
             'user_id' => 'int',
+            'top_type' => 'int:0,100',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -46,6 +48,7 @@ class SiteModel extends Model {
             'description' => 'Description',
             'cat_id' => 'Cat Id',
             'user_id' => 'User Id',
+            'top_type' => 'Top Type',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
@@ -56,5 +59,10 @@ class SiteModel extends Model {
     }
     public function user() {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function tags() {
+        return $this->belongsToMany(TagModel::class, SiteTagModel::class,
+            'site_id', 'tag_id');
     }
 }

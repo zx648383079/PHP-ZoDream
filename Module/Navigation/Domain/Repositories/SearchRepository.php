@@ -43,6 +43,6 @@ final class SearchRepository {
     public static function suggest(string $keywords = '') {
         return KeywordModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'word');
-        })->where('type', 1)->limit(10)->get();
+        })->orderBy('type', 'desc')->limit(10)->pluck('word');
     }
 }

@@ -8,14 +8,14 @@ use Module\Navigation\Domain\Models\SiteTagModel;
 
 final class SiteRepository {
     public static function getList(string $keywords = '', int $category = 0, int $user = 0, string $domain = '') {
-        return SiteModel::with('category', 'user')->when(!empty($keywords), function ($query) {
+        return SiteModel::with('category', 'user', 'tags')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
         })->when($category > 0, function ($query) use ($category) {
             $query->where('cat_id', $category);
         })->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
         })->when(!empty($domain), function ($query) use ($domain) {
-            $query->whereLike('domain', $domain);
+            $query->whereLike('`domain`', $domain);
         })->page();
     }
 
@@ -28,10 +28,25 @@ final class SiteRepository {
         unset($data['id']);
         $model = SiteModel::findOrNew($id);
         $model->load($data);
-        if (!$model->save()) {
+        if (static::exist($model)) {
+            throw new \Exception('站点已存在！');
+        }
+        if (!$model->save() && !$model->isNotChangedError()) {
             throw new \Exception($model->getFirstError());
         }
+        TagRepository::bindTag(
+            SiteTagModel::query(),
+            $model->id,
+            'site_id',
+            isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : [],
+        );
         return $model;
+    }
+
+    public static function exist(SiteModel $model): bool {
+        return SiteModel::where('`schema`', $model->schema)
+            ->where('`domain`', $model->domain)
+            ->where('id', '<>', $model->id)->count() > 0;
     }
 
     public static function remove(int $id) {
@@ -44,6 +59,6 @@ final class SiteRepository {
             return 0;
         }
         $host = parse_url($link, PHP_URL_HOST);
-        return intval(SiteModel::query()->where('domain', $host)->max('id'));
+        return intval(SiteModel::query()->where('`domain`', $host)->max('id'));
     }
 }

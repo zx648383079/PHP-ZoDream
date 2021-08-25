@@ -29,6 +29,8 @@ final class SiteController extends Controller {
                 'logo' => 'string:0,255',
                 'description' => 'string:0,255',
                 'cat_id' => 'int',
+                'top_type' => 'int:0,100',
+                'tags' => ''
             ]);
             return $this->render(SiteRepository::save($data));
         } catch (\Exception $ex) {
