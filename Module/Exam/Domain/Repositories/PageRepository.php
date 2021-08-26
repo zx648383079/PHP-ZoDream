@@ -235,6 +235,7 @@ class PageRepository {
             throw new \Exception('无权限删除');
         }
         $model->delete();
+        PageQuestionModel::where('evaluate_id', $id)->delete();
     }
 
     public static function selfEvaluateRemove(int $id) {
@@ -250,5 +251,19 @@ class PageRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })->orderBy('end_at', 'desc')->limit(5)->get();
+    }
+
+    public static function evaluateDetail(int $id) {
+        $model = PageEvaluateModel::findOrThrow($id, '不存在');
+        $data = $model->toArray();
+        /** @var PageQuestionModel[] $items */
+        $items = PageQuestionModel::with('question')->where('evaluate_id', $id)->orderBy('id', 'asc')->get();
+        $data['user'] = $model->user;
+        $data['page'] = PageModel::where('id', $model->page_id)->first();
+        $data['data'] = [];
+        foreach ($items as $i => $item) {
+            $data['data'][] = $item->format($i + 1, $model->status > 0);
+        }
+        return $data;
     }
 }

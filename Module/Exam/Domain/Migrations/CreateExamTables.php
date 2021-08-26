@@ -147,6 +147,7 @@ class CreateExamTables extends Migration {
             $table->uint('answer_type', 1)->default(0)->comment('回答类型/默认文字');
             $table->text('answer')->nullable()->comment('用户回答');
             $table->uint('status', 1)->default(0)->comment('状态');
+            $table->string('remark')->default('')->comment('评语');
             $table->timestamps();
         })->append(PageEvaluateEntity::tableName(), function (Table $table) {
             $table->comment('试卷评估结果');

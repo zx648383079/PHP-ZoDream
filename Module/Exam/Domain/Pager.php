@@ -8,10 +8,12 @@ use Zodream\Infrastructure\Contracts\ArrayAble;
 
 class Pager implements ArrayAble {
 
-    private int $id = 0;
-    private string $title = '';
-    private int $limitTime = 120;
-    private array $items = [];
+    public int $id = 0;
+    public int $pageId = 0;
+    public string $title = '';
+    public int $startTime = 0;
+    public int $limitTime = 120;
+    public array $items = [];
     private int $index = 0;
     public bool $finished = false;
 
@@ -31,6 +33,12 @@ class Pager implements ArrayAble {
     public function setId(int $id)
     {
         $this->id = $id;
+        return $this;
+    }
+
+    public function setPageId(int $id)
+    {
+        $this->pageId = $id;
         return $this;
     }
 
@@ -220,8 +228,10 @@ class Pager implements ArrayAble {
         }
         $data = [
             'id' => $this->id,
+            'page_id' => $this->pageId,
             'title' => $this->title,
             'time' => $this->limitTime,
+            'start_time' => $this->startTime,
             'finished' => $this->finished,
             'data' => $items
         ];
@@ -235,6 +245,6 @@ class Pager implements ArrayAble {
         foreach ($this->items as $i => $item) {
             unset($this->items[$i]['model']);
         }
-        return ['id', 'title', 'limitTime', 'items', 'index', 'finished'];
+        return ['id', 'pageId', 'title', 'startTime', 'limitTime', 'items', 'index', 'finished'];
     }
 }

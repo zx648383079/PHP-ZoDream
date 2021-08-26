@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Exam\Domain\Repositories;
 
+use Module\Exam\Domain\Entities\PageEvaluateEntity;
 use Module\Exam\Domain\Entities\QuestionWrongEntity;
 use Module\Exam\Domain\Model\PageEvaluateModel;
 use Module\Exam\Domain\Model\PageModel;
@@ -25,7 +26,7 @@ class PagerRepository {
             return PageGenerator::createId(
                     PageGenerator::questionByRule($model->rule_value)
                 )
-                ->setId($id)
+                ->setPageId($id)
                 ->setTitle($model->name)
                 ->setLimitTime($model->limit_time);
         }
@@ -35,17 +36,23 @@ class PagerRepository {
             ->max('id');
         if ($lastId < 1) {
             return PageGenerator::createId($questionItems)
-                ->setId($id)
+                ->setPageId($id)
                 ->setTitle($model->name)
                 ->setLimitTime($model->limit_time);
         }
-        $questionItems = PageQuestionModel::query()
+        $lastQuestionItems = PageQuestionModel::query()
             ->where('evaluate_id', $lastId)
             ->where('page_id', $model->id)
             ->selectRaw('question_id as id, content as dynamic, max_score as score')->asArray()
             ->get();
-        return PageGenerator::createId($questionItems, false)
-            ->setId($id)
+        if (!empty($lastQuestionItems)) {
+            return PageGenerator::createId($lastQuestionItems, false)
+                ->setPageId($id)
+                ->setTitle($model->name)
+                ->setLimitTime($model->limit_time);
+        }
+        return PageGenerator::createId($questionItems)
+            ->setPageId($id)
             ->setTitle($model->name)
             ->setLimitTime($model->limit_time);
     }
@@ -55,6 +62,7 @@ class PagerRepository {
         if ($pager->count() < 1) {
             throw new \Exception('无题目');
         }
+        $pager->startTime = time();
         if ($id > 0) {
             static::saveEvaluate($pager);
         }
@@ -63,7 +71,7 @@ class PagerRepository {
 
     public static function check(array $data, int $pageId = 0, int $spentTime = 0) {
         $pager = new Pager();
-        $pager->setId($pageId);
+        $pager->pageId = $pageId;
         foreach ($data as $id => $item) {
             if (isset($item['id']) && $item['id'] > 0) {
                 $id = $item['id'];
@@ -118,11 +126,11 @@ class PagerRepository {
 
     private static function saveEvaluate(Pager $pager) {
         $res = $pager->toArray();
-        if ($res['id'] < 1) {
+        if ($res['page_id'] < 1) {
             return;
         }
         $model = PageEvaluateModel::create([
-            'page_id' => $res['id'],
+            'page_id' => $res['page_id'],
             'user_id' => auth()->id(),
             'spent_time' => 0,
             'right' => 0,
@@ -134,6 +142,7 @@ class PagerRepository {
         if (empty($model)) {
             throw new \Exception('保存失败');
         }
+        $pager->id = $model->id;
         foreach ($res['data'] as $item) {
             PageQuestionModel::create([
                 'page_id' => $model->page_id,
@@ -151,17 +160,17 @@ class PagerRepository {
     private static function saveReport(Pager $pager, int $spentTime = 0) {
         $res = $pager->toArray();
         static::logWrong($res['data']);
-        if ($res['id'] < 1) {
+        if ($res['page_id'] < 1) {
             return;
         }
         $model = PageEvaluateModel::where('user_id', auth()->id())
-            ->where('page_id', $res['id'])
-            ->where('status', PageEvaluateModel::STATUS_NONE)
+            ->where('page_id', $res['page_id'])
+            ->where('status', PageEvaluateEntity::STATUS_NONE)
             ->orderBy('id', 'desc')->first();
         $isNew = empty($model);
-        if (empty($isNew)) {
+        if ($isNew) {
             $model = PageEvaluateModel::create([
-                'page_id' => $res['id'],
+                'page_id' => $res['page_id'],
                 'user_id' => auth()->id(),
                 'spent_time' => $spentTime,
                 'right' => $res['report']['right'],

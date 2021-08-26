@@ -18,6 +18,8 @@ use Module\Exam\Domain\Entities\PageQuestionEntity;
  * @property integer $max_score
  * @property integer $score
  * @property integer $answer_type
+ * @property string $remark
+ * @property QuestionModel $question
  */
 class PageQuestionModel extends PageQuestionEntity {
 
@@ -30,8 +32,10 @@ class PageQuestionModel extends PageQuestionEntity {
     }
 
     public function format($i = 0, $finished = true) {
-        return $this->question->format($i,
+        $data = $this->question->format($i,
             $this->content,
             $finished);
+        $data['log'] = $this->get();
+        return $data;
     }
 }

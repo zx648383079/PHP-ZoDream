@@ -17,6 +17,7 @@ use Domain\Entities\Entity;
  * @property integer $max_score
  * @property integer $score
  * @property integer $answer_type
+ * @property string $remark
  */
 class PageQuestionEntity extends Entity {
     public static function tableName() {
@@ -36,6 +37,7 @@ class PageQuestionEntity extends Entity {
             'max_score' => 'int',
             'score' => 'int',
             'answer_type' => 'int:0,127',
+            'remark' => '',
         ];
     }
 

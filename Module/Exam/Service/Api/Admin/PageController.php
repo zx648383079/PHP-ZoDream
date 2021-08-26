@@ -59,6 +59,10 @@ class PageController extends Controller {
         );
     }
 
+    public function evaluateDetailAction(int $id) {
+        return $this->render(PageRepository::evaluateDetail($id));
+    }
+
     public function evaluateDeleteAction(int $id) {
         try {
             PageRepository::evaluateRemove($id);
