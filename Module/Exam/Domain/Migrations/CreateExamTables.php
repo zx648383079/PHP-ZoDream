@@ -160,6 +160,7 @@ class CreateExamTables extends Migration {
             $table->short('score')->default(0);
             $table->uint('status', 1)->default(0)->comment('状态');
             $table->string('remark')->default('')->comment('评语');
+            $table->uint('marker_id')->default(0)->comment('阅卷人');
             $table->timestamps();
         })->autoUp();
     }

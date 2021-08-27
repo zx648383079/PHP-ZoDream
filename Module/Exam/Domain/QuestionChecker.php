@@ -54,12 +54,12 @@ class QuestionChecker {
 
     private static function checkType4(QuestionEntity $question, $answer, $dynamic): float {
         $answer = (array)$answer;
-        $items = explode("\n", $question->answer);
+        $items = explode("\n", (string)$question->answer);
         $total = count($items);
         $right = 0;
         foreach ($items as $i => $line) {
             $line = trim($line);
-            if (substr($line, 0, 1) === '=') {
+            if (str_starts_with($line, '=')) {
                 $line = QuestionCompiler::compilerValue(substr($line, 1), $dynamic);
             }
             if (!isset($answer[$i]) || $answer[$i] !== $line) {

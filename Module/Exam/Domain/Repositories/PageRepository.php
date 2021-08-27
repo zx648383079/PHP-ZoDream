@@ -4,6 +4,7 @@ namespace Module\Exam\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Module\Exam\Domain\Entities\PageEvaluateEntity;
 use Module\Exam\Domain\Model\PageEvaluateModel;
 use Module\Exam\Domain\Model\PageModel;
 use Module\Exam\Domain\Model\PageQuestionModel;
@@ -265,5 +266,36 @@ class PageRepository {
             $data['data'][] = $item->format($i + 1, $model->status > 0);
         }
         return $data;
+    }
+
+    public static function questionScoring(int $id, array $data) {
+        $model = PageEvaluateModel::findOrThrow($id, '不存在');
+        if ($model->status == PageEvaluateEntity::STATUS_FINISH) {
+            throw new \Exception('无法更改试卷');
+        }
+        $model->marker_id = auth()->id();
+        $model->status = PageEvaluateEntity::STATUS_SCORING;
+        foreach ($data as $qId => $item) {
+            if (isset($item['id']) && $item['id'] > 0) {
+                $qId = $item['id'];
+            }
+            PageQuestionModel::where('evaluate_id', $model->id)->where('question_id', $qId)
+                ->update([
+                    'score' => $item['score'] ?? 0,
+                    'remark' => $item['remark'] ?? '',
+                ]);
+        }
+        $model->save();
+    }
+
+    public static function scoring(int $id, string $remark = '') {
+        $model = PageEvaluateModel::findOrThrow($id, '不存在');
+        if (!empty($remark)) {
+            $model->remark = $remark;
+        }
+        $model->marker_id = auth()->id();
+        $model->status = PageEvaluateEntity::STATUS_FINISH;
+        $model->score = PageQuestionModel::where('evaluate_id', $model->id)->sum('score');
+        $model->save();
     }
 }

@@ -21,22 +21,62 @@ class PagerRepository {
             throw new \Exception('请选择试卷');
         }
         $model = PageModel::findOrThrow($id, '书卷不存在');
+        $pager = static::findLastPage($model);
+        if (!empty($pager)) {
+            return $pager;
+        }
+        return static::createNewPage($model);
+    }
+
+    protected static function findLastPage(PageModel $model): ?Pager {
+        if (auth()->guest()) {
+            return null;
+        }
+        /** @var PageEvaluateModel $log */
+        $log = PageEvaluateModel::where('page_id', $model->id)
+            ->where('user_id', auth()->id())
+            ->where('status', PageEvaluateEntity::STATUS_NONE)
+            ->where('created_at', '>', time() - $model->limit_time * 60)
+            ->first();
+        if (empty($log)) {
+            return null;
+        }
+        $items = PageQuestionModel::with('question')->where('evaluate_id', $log->id)->orderBy('id', 'asc')->get();
+        $pager = new Pager();
+        $pager->id = $log->id;
+        $pager->pageId = $model->id;
+        $pager->startTime = $log->getAttributeSource('created_at');
+        $pager->title = $model->name;
+        $pager->limitTime = $model->limit_time;
+        $pager->items = array_map(function (PageQuestionModel $item) {
+            return [
+                'id' => $item->question_id,
+                'model' => $item->question,
+                'answer' => $item->answer,
+                'dynamic' => $item->content
+            ];
+        }, $items);
+        return $pager;
+    }
+
+    protected static function createNewPage(PageModel $model): Pager {
         // 判断是否有答题记录 是否允许重复答题
+        /** @var array $questionItems */
+        $questionItems = $model->rule_value;
         if ($model->rule_type < 1) {
             return PageGenerator::createId(
-                    PageGenerator::questionByRule($model->rule_value)
-                )
-                ->setPageId($id)
+                PageGenerator::questionByRule($questionItems)
+            )
+                ->setPageId($model->id)
                 ->setTitle($model->name)
                 ->setLimitTime($model->limit_time);
         }
-        $questionItems = $model->rule_value;
         // 固定题目取最后一次的试卷
         $lastId = PageEvaluateModel::where('page_id', $model->id)
             ->max('id');
         if ($lastId < 1) {
             return PageGenerator::createId($questionItems)
-                ->setPageId($id)
+                ->setPageId($model->id)
                 ->setTitle($model->name)
                 ->setLimitTime($model->limit_time);
         }
@@ -47,12 +87,12 @@ class PagerRepository {
             ->get();
         if (!empty($lastQuestionItems)) {
             return PageGenerator::createId($lastQuestionItems, false)
-                ->setPageId($id)
+                ->setPageId($model->id)
                 ->setTitle($model->name)
                 ->setLimitTime($model->limit_time);
         }
         return PageGenerator::createId($questionItems)
-            ->setPageId($id)
+            ->setPageId($model->id)
             ->setTitle($model->name)
             ->setLimitTime($model->limit_time);
     }
@@ -62,26 +102,28 @@ class PagerRepository {
         if ($pager->count() < 1) {
             throw new \Exception('无题目');
         }
-        $pager->startTime = time();
-        if ($id > 0) {
+        if ($pager->startTime < 1) {
+            $pager->startTime = time();
+        }
+        if ($id > 0 && $pager->id < 1) {
             static::saveEvaluate($pager);
         }
         return $pager;
     }
 
-    public static function check(array $data, int $pageId = 0, int $spentTime = 0) {
+    public static function check(array $data, int $id = 0, int $pageId = 0) {
         $pager = new Pager();
+        $pager->id = $id;
         $pager->pageId = $pageId;
-        foreach ($data as $id => $item) {
+        foreach ($data as $qId => $item) {
             if (isset($item['id']) && $item['id'] > 0) {
-                $id = $item['id'];
+                $qId = $item['id'];
             }
-            $pager->append($id)
-                ->answer($item['answer'] ?? '',
-                    $item['dynamic'] ?? null);
+            $pager->append($qId)
+                ->answer($qId, $item['answer'] ?? '', $item['dynamic'] ?? null);
         }
         $pager->finish();
-        static::saveReport($pager, $spentTime);
+        static::saveReport($pager);
         return $pager;
     }
 
@@ -100,11 +142,11 @@ class PagerRepository {
 
     public static function questionCheck(array $data) {
         $items = [];
-        foreach ($data as $id => $item) {
+        foreach ($data as $qId => $item) {
             if (isset($item['id']) && $item['id'] > 0) {
-                $id = $item['id'];
+                $qId = $item['id'];
             }
-            $items[] = PageGenerator::formatQuestion(QuestionModel::find($id),
+            $items[] = PageGenerator::formatQuestion(QuestionModel::find($qId),
                 $item['answer'] ?? '',
                 $item['dynamic'] ?? null, false);
         }
@@ -157,14 +199,16 @@ class PagerRepository {
         }
     }
 
-    private static function saveReport(Pager $pager, int $spentTime = 0) {
+    private static function saveReport(Pager $pager) {
         $res = $pager->toArray();
         static::logWrong($res['data']);
-        if ($res['page_id'] < 1) {
+        if ($pager->pageId < 1 && $pager->id < 1) {
             return;
         }
-        $model = PageEvaluateModel::where('user_id', auth()->id())
-            ->where('page_id', $res['page_id'])
+        $model = $pager->id > 0 ? PageEvaluateModel::where('user_id', auth()->id())
+            ->where('id', $pager->id)
+            ->where('status', PageEvaluateEntity::STATUS_NONE)->first() : PageEvaluateModel::where('user_id', auth()->id())
+            ->where('page_id', $pager->pageId)
             ->where('status', PageEvaluateEntity::STATUS_NONE)
             ->orderBy('id', 'desc')->first();
         $isNew = empty($model);
@@ -172,7 +216,7 @@ class PagerRepository {
             $model = PageEvaluateModel::create([
                 'page_id' => $res['page_id'],
                 'user_id' => auth()->id(),
-                'spent_time' => $spentTime,
+                'spent_time' => $pager->limitTime,
                 'right' => $res['report']['right'],
                 'wrong' => $res['report']['wrong'],
                 'score' => $res['report']['score'],
@@ -242,5 +286,24 @@ class PagerRepository {
             'user_id' => $userId,
             'frequency' => $amount,
         ]);
+    }
+
+    public static function save(array $data, int $id = 0, int $pageId = 0) {
+        if ($id < 1) {
+            return;
+        }
+        $log = PageEvaluateModel::findWithAuth($id);
+        if (empty($log)) {
+            throw new \Exception('保存失败');
+        }
+        foreach ($data as $qId => $item) {
+            if (isset($item['id']) && $item['id'] > 0) {
+                $qId = $item['id'];
+            }
+            PageQuestionModel::where('evaluate_id', $log->id)->where('question_id', $qId)
+                ->update([
+                    'answer' => $item['answer'] ?? '',
+                ]);
+        }
     }
 }

@@ -8,6 +8,7 @@ use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Repositories\BookRepository;
 
 class BookController extends Controller {
     public function indexAction($keywords = null, $cat_id = null, $author_id = null, $classify = 0) {
@@ -112,34 +113,8 @@ class BookController extends Controller {
     }
 
     public function refreshAction() {
-        $this->deleteNoBookChapter();
-        $this->refreshBookSize();
+        BookRepository::refreshBook();
         return $this->renderData(true);
-    }
-
-    protected function refreshBookSize() {
-        $ids = BookModel::pluck('id');
-        foreach ($ids as $id) {
-            //$ids = BookChapterModel::where('book_id', $id)->pluck('id');
-            //$length = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');
-            $length = BookChapterModel::where('book_id', $id)->sum('size');
-            BookModel::where('id', $id)
-                ->update([
-                    'size' => $length
-                ]);
-        }
-    }
-
-    protected function deleteNoBookChapter(): void {
-        $ids = BookChapterModel::query()->alias('c')
-            ->left('book b', 'b.id', '=', 'c.book_id')
-            ->where('b.id')
-            ->select('c.id')
-            ->pluck();
-        if (!empty($ids)) {
-            BookChapterModel::whereIn('id', $ids)->delete();
-            BookChapterBodyModel::whereIn('id', $ids)->delete();
-        }
     }
 
     public function importAction() {

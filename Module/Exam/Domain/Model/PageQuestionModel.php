@@ -35,7 +35,8 @@ class PageQuestionModel extends PageQuestionEntity {
         $data = $this->question->format($i,
             $this->content,
             $finished);
-        $data['log'] = $this->get();
+        $data['log'] = $this->toArray();
+        unset($data['log']['question']);
         return $data;
     }
 }

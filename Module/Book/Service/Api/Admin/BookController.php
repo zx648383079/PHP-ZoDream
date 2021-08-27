@@ -113,4 +113,13 @@ class BookController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function sortOutAction() {
+        try {
+            BookRepository::sortOut();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

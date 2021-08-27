@@ -12,6 +12,7 @@ use Domain\Entities\Entity;
  * @property integer $wrong
  * @property integer $score
  * @property integer $status
+ * @property integer $marker_id
  * @property string $remark
  * @property integer $created_at
  * @property integer $updated_at
@@ -19,7 +20,9 @@ use Domain\Entities\Entity;
 class PageEvaluateEntity extends Entity {
 
     const STATUS_NONE = 0;
-    const STATUS_FINISH = 3;
+    const STATUS_SUBMIT = 1; // 已交卷
+    const STATUS_SCORING = 2; // 阅卷中
+    const STATUS_FINISH = 3; // 已完成
 
     public static function tableName() {
         return 'exam_page_evaluate';
@@ -33,6 +36,7 @@ class PageEvaluateEntity extends Entity {
             'wrong' => 'int:0,9999',
             'score' => 'int:0,999',
             'status' => 'int:0,127',
+            'marker_id' => 'int',
             'remark' => 'string:0,255',
             'created_at' => 'int',
             'updated_at' => 'int',

@@ -186,7 +186,7 @@ class Pager implements ArrayAble {
         return $data;
     }
 
-    private function merge(array $data, $i = -1) {
+    private function merge(array $data, int $i = -1) {
         if ($i < 0) {
             $i = $this->index;
         }

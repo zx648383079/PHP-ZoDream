@@ -2,12 +2,19 @@
 namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookFullModel;
+use Module\Book\Domain\Model\BookHistoryModel;
+use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookPageModel;
+use Module\Book\Domain\Model\BookRoleModel;
+use Module\Book\Domain\Model\BookSourceModel;
+use Module\Book\Domain\Model\ListItemModel;
+use Zodream\Database\Model\Query;
 use Zodream\Html\Tree;
 
 class BookRepository {
@@ -262,5 +269,48 @@ class BookRepository {
         return BookModel::isOpen()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
         })->limit(4)->pluck('name');
+    }
+
+    /**
+     * 整理小说id，及目录id
+     */
+    public static function sortOut() {
+        set_time_limit(0);
+        BookModel::refreshPk(function ($old_id, $new_id) {
+            foreach ([
+                         BookChapterModel::class,
+                         BookSourceModel::class,
+                         BookHistoryModel::class,
+                         BookBuyLogModel::class,
+                         BookClickLogModel::class,
+                         BookRoleModel::class,
+                         ListItemModel::class
+                     ] as $class) {
+                /** @var Query $query */
+                $query = call_user_func($class.'::query');
+                $query->where('book_id', $old_id)->update([
+                    'book_id' => $new_id
+                ]);
+            }
+            BookLogModel::where('item_type', 0)->where('item_id', $old_id)->update([
+                'item_id' => $new_id
+            ]);
+        });
+        BookChapterModel::refreshPk(function ($old_id, $new_id) {
+            foreach ([
+                         BookHistoryModel::class,
+                         BookBuyLogModel::class,
+                     ] as $class) {
+                /** @var Query $query */
+                $query = call_user_func($class.'::query');
+                $query->where('book_id', $old_id)->update([
+                    'book_id' => $new_id
+                ]);
+            }
+            BookChapterBodyModel::where('id', $old_id)
+                ->update([
+                   'id' => $new_id
+                ]);
+        });
     }
 }

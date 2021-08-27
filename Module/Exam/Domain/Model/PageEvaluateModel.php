@@ -13,6 +13,7 @@ use Module\Exam\Domain\Entities\PageEvaluateEntity;
  * @property integer $wrong
  * @property integer $score
  * @property integer $status
+ * @property integer $marker_id
  * @property string $remark
  * @property integer $created_at
  * @property integer $updated_at

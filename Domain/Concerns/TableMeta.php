@@ -37,11 +37,11 @@ trait TableMeta {
      * @param int $id
      * @param array $data
      */
-    public static function saveBatch(int $id, array $data) {
+    public static function saveBatch(int $id, array $data, array $defItems = []) {
         if (empty($data)) {
             return;
         }
-        $metaKeys = array_keys(static::$defaultItems);
+        $metaKeys = array_keys(empty($defItems) ? static::$defaultItems : $defItems);
         $items = static::getMap($id);
         $add = [];
         foreach ($data as $name => $content) {

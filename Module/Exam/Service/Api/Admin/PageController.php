@@ -71,4 +71,21 @@ class PageController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function questionScoringAction(array $question, int $id) {
+        try {
+            PageRepository::questionScoring($id, $question);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+    public function scoringAction(int $id, string $remark = '') {
+        try {
+            PageRepository::scoring($id, $remark);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

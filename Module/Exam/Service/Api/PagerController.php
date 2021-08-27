@@ -14,13 +14,21 @@ class PagerController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-
     }
 
-    public function checkAction(array $question, int $id = 0, int $spent_time = 0) {
+    public function checkAction(array $question, int $id = 0, int $page_id = 0) {
         return $this->render(
-            PagerRepository::check($question, $id, $spent_time)
+            PagerRepository::check($question, $id, $page_id)
         );
+    }
+
+    public function saveAction(array $question, int $id = 0, int $page_id = 0) {
+        try {
+            PagerRepository::save($question, $id, $page_id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 
 }
