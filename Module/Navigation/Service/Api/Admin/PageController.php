@@ -28,7 +28,7 @@ final class PageController extends Controller {
                 'thumb' => 'string:0,255',
                 'link' => 'required|string:0,255',
                 'site_id' => 'string:0,255',
-                'page_rank' => 'string:0,255',
+                'score' => 'int:0,127',
                 'keywords' => '',
             ]);
             return $this->render(PageRepository::save($data));

@@ -34,7 +34,7 @@ class BookChapterBodyModel extends Model {
     }
 
     public function getHtmlAttribute() {
-        $args = explode(PHP_EOL, $this->content);
+        $args = explode("\n", $this->content);
         return implode('', array_map(function ($line) {
             if (empty($line)) {
                 return '<p></p>';

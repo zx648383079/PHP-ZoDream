@@ -10,6 +10,7 @@ use Module\Navigation\Domain\Models\KeywordModel;
 use Module\Navigation\Domain\Models\PageKeywordModel;
 use Module\Navigation\Domain\Models\PageModel;
 use Module\Navigation\Domain\Models\SiteModel;
+use Module\Navigation\Domain\Models\SiteScoringLogModel;
 use Module\Navigation\Domain\Models\SiteTagModel;
 use Module\Navigation\Domain\Models\TagModel;
 use Zodream\Database\Migrations\Migration;
@@ -34,7 +35,17 @@ final class CreateNavigationTables extends Migration {
             $table->uint('cat_id')->default(0);
             $table->uint('user_id')->default(0);
             $table->uint('top_type', 1)->default(0)->comment('推荐类型');
+            $table->uint('score', 1)->default(60)->comment('站点评分/百分制');
             $table->timestamps();
+        })->append(SiteScoringLogModel::tableName(), function (Table $table) {
+            $table->comment('站点评分记录表');
+            $table->id();
+            $table->uint('site_id');
+            $table->uint('user_id');
+            $table->uint('score', 1)->comment('站点评分/百分制');
+            $table->uint('last_score', 1)->comment('上次的评分');
+            $table->string('change_reason')->default('')->comment('评分变动原因');
+            $table->timestamp('created_at');
         })->append(TagModel::tableName(), function (Table $table) {
             $table->comment('标签表');
             $table->id();
@@ -51,7 +62,7 @@ final class CreateNavigationTables extends Migration {
             $table->string('thumb')->default('');
             $table->string('link');
             $table->string('site_id')->default(0);
-            $table->string('page_rank')->default(0)->comment('页面评分');
+            $table->uint('score', 1)->default(60)->comment('页面评分');
             $table->uint('user_id')->default(0);
             $table->timestamps();
         })->append(KeywordModel::tableName(), function (Table $table) {

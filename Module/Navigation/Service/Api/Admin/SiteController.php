@@ -46,4 +46,21 @@ final class SiteController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function scoringAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'required|int',
+                'score' => 'required|int:0,127',
+                'change_reason' => 'required|string'
+            ]);
+            return $this->render(SiteRepository::scoring($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function scoreLogAction(int $site) {
+        return $this->renderPage(SiteRepository::getScoreLog($site));
+    }
 }

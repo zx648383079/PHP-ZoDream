@@ -15,6 +15,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $cat_id
  * @property integer $user_id
  * @property integer $top_type
+ * @property integer $score
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -32,7 +33,8 @@ class SiteModel extends Model {
             'description' => 'string:0,255',
             'cat_id' => 'int',
             'user_id' => 'int',
-            'top_type' => 'int:0,100',
+            'top_type' => 'int:0,127',
+            'score' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -49,6 +51,7 @@ class SiteModel extends Model {
             'cat_id' => 'Cat Id',
             'user_id' => 'User Id',
             'top_type' => 'Top Type',
+            'score' => 'Score',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];

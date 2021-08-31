@@ -12,7 +12,7 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property string $thumb
  * @property string $link
  * @property string $site_id
- * @property string $page_rank
+ * @property integer $score
  * @property integer $user_id
  * @property integer $updated_at
  * @property integer $created_at
@@ -29,7 +29,7 @@ class PageModel extends Model {
             'thumb' => 'string:0,255',
             'link' => 'required|string:0,255',
             'site_id' => 'string:0,255',
-            'page_rank' => 'string:0,255',
+            'score' => 'int:0,127',
             'user_id' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
@@ -44,7 +44,7 @@ class PageModel extends Model {
             'thumb' => 'Thumb',
             'link' => 'Link',
             'site_id' => 'Site Id',
-            'page_rank' => 'Page Rank',
+            'score' => 'Score',
             'user_id' => 'User Id',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',

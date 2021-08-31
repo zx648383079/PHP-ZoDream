@@ -4,6 +4,7 @@ namespace Module\Navigation\Domain\Repositories\Admin;
 
 use Domain\Model\SearchModel;
 use Module\Navigation\Domain\Models\SiteModel;
+use Module\Navigation\Domain\Models\SiteScoringLogModel;
 use Module\Navigation\Domain\Models\SiteTagModel;
 
 final class SiteRepository {
@@ -60,5 +61,26 @@ final class SiteRepository {
         }
         $host = parse_url($link, PHP_URL_HOST);
         return intval(SiteModel::query()->where('`domain`', $host)->max('id'));
+    }
+
+    public static function scoring(array $data) {
+        $model = SiteModel::findOrThrow($data['id'], '数据有误');
+        $score = intval($data['score']);
+        SiteScoringLogModel::createOrThrow([
+            'site_id' => $model->id,
+            'user_id' => auth()->id(),
+            'score' => $score,
+            'last_score' => $model->score,
+            'change_reason' => $data['change_reason'] ?? '',
+        ]);
+        $model->score = $score;
+        $model->save();
+        return $model;
+    }
+
+    public static function getScoreLog(int $site) {
+        return SiteScoringLogModel::where('site_id', $site)
+            ->orderBy('created_at', 'desc')
+            ->page();
     }
 }
