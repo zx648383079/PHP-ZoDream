@@ -50,8 +50,7 @@ class UserModel extends BaseModel {
 	public $roles = [];
 
     public function getSexLabelAttribute() {
-	    return isset($this->sex_list[$this->sex])
-            ? $this->sex_list[$this->sex] : $this->sex_list[0];
+	    return $this->sex_list[$this->sex] ?? $this->sex_list[0];
     }
 
     public function getAvatarAttribute() {

@@ -78,4 +78,12 @@ class LoginController extends Controller {
         $data['token'] = $token;
         return $this->render($data);
     }
+
+    public function refreshAction() {
+        $token = auth()->refreshToken();
+        if (empty($token)) {
+            return $this->renderFailure('token is expired');
+        }
+        return $this->render(compact('token'));
+    }
 }

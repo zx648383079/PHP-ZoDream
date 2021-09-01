@@ -10,6 +10,7 @@ use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\OptionRepository;
+use Module\Blog\Domain\Repositories\StatisticsRepository;
 
 class HomeController extends Controller {
 
@@ -66,7 +67,7 @@ class HomeController extends Controller {
     }
 
     public function subtotalAction() {
-        return $this->render(BlogRepository::subtotal());
+        return $this->render(StatisticsRepository::subtotal(auth()->id()));
     }
 
     public function editOptionAction() {
