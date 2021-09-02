@@ -52,10 +52,10 @@ class LogModel extends LogEntity {
     /**
      * 获取一个月每天的记录
      * @param array $log_list
-     * @param $day_length
+     * @param int|string $day_length
      * @return array
      */
-    public static function getMonthLogs(array $log_list, $day_length) {
+    public static function getMonthLogs(array $log_list, int|string $day_length): array {
         $days = [];
         foreach ($log_list as $item) {
             $day = intval($item->day);
@@ -67,7 +67,7 @@ class LogModel extends LogEntity {
         }
         $data = [];
         for ($i = 1; $i <= $day_length; $i++) {
-            $data[$i] = isset($days[$i]) ? $days[$i] : 0;
+            $data[$i] = $days[$i] ?? 0;
         }
         return $data;
     }

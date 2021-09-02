@@ -6,7 +6,7 @@ use Module\Finance\Domain\Repositories\StatisticsRepository;
 
 final class StatisticsController extends Controller {
 
-    public function indexAction() {
-        return $this->render(StatisticsRepository::subtotal());
+    public function indexAction(string $start_at = '', string $end_at = '', int $type = 0) {
+        return $this->render(StatisticsRepository::subtotal($start_at, $end_at, $type));
     }
 }
