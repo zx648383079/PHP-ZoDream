@@ -18,7 +18,7 @@ final class SiteRepository {
                 $query->where('cat_id', $category);
             })->when(!empty($domain), function ($query) use ($domain) {
                 $query->where('domain', $domain);
-            })->page();
+            })->orderBy('score', 'desc')->page();
     }
 
     public static function get(int $id) {

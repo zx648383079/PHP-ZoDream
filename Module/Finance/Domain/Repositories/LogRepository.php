@@ -3,6 +3,9 @@ declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Finance\Domain\Importers\AlipayImporter;
+use Module\Finance\Domain\Importers\IImporter;
+use Module\Finance\Domain\Importers\WxImporter;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
@@ -121,7 +124,7 @@ class LogRepository {
                 'project_id' => 0,
                 'budget_id' => intval($budget_id),
                 'remark' => $item['remark'],
-                'trading_object' => isset($item['trading_object']) ? $item['trading_object'] : '',
+                'trading_object' => $item['trading_object'] ?? '',
                 'user_id' => auth()->id(),
                 'created_at' => time(),
                 'updated_at' => time(),
@@ -141,80 +144,18 @@ class LogRepository {
         if (!$handle) {
             return false;
         }
-        $status = 0;
-        $column = [];
-        $type = 0;
-        $account_id = 0;
-        while (($data = fgetcsv($handle)) !== false) {
-            if ($type === 0 && isset($data[0])) {
-                $type = str_contains($data[0], '微信') ? 1 : 2;
-            }
-            if ($status === 0) {
-                if (str_starts_with($data[0], '---')) {
-                    $status = 1;
-                }
+        foreach ([
+                     WxImporter::class,
+                     AlipayImporter::class
+                 ] as $importer) {
+            /** @var IImporter $instance */
+            $instance = new $importer;
+            if (!$instance->is($handle)) {
                 continue;
             }
-            if (str_starts_with($data[0], '---')) {
-                break;
-            }
-            $items = [];
-            foreach ($data as $item) {
-                // 修复utf8下分割不准确问题
-                $items = array_merge($items, explode(',', $item));
-            }
-            $data = $items;
-            unset($items);
-            if ($type === 2) {
-                $data = array_map(function ($item) {
-                    return trim(iconv('GB2312', 'UTF-8', $item));
-                }, $data);
-            }
-            if ($status === 1) {
-                $column = $data;
-                $status = 2;
-                $account_id = MoneyAccountModel::auth()->where('name', $type == 1 ? '微信' : '支付宝')
-                    ->value('id');
-                continue;
-            }
-            $item = array_combine($column, $data);
-
-            if ($type === 1) {
-                // 微信
-                LogModel::createIfNot([
-                    'type' => $item['收/支'] == '支出' ? 0 : 1,
-                    'money' => preg_replace('/[^\d\.]+/', '', $item['金额(元)']),
-                    'frozen_money' => 0,
-                    'account_id' => $account_id,
-                    'channel_id' => 0,
-                    'project_id' => 0,
-                    'budget_id' => 0,
-                    'remark' => sprintf('%s %s', $item['交易对方'], $item['商品']),
-                    'user_id' => auth()->id(),
-                    'out_trade_no' => 'wx'.$item['交易单号'],
-                    'created_at' => time(),
-                    'updated_at' => time(),
-                    'happened_at' => $item['交易时间'],
-                ]);
-            } elseif ($type === 2) {
-                // 支付宝
-                LogModel::createIfNot([
-                    'type' => $item['收/支'] == '支出' ? 0 : 1,
-                    'money' => $item['金额（元）'],
-                    'frozen_money' => 0,
-                    'account_id' => $account_id,
-                    'channel_id' => 0,
-                    'project_id' => 0,
-                    'budget_id' => 0,
-                    'remark' => sprintf('%s %s',$item['交易对方'], $item['商品名称']),
-                    'user_id' => auth()->id(),
-                    'out_trade_no' => 'ali'.$item['交易号'],
-                    'created_at' => time(),
-                    'updated_at' => time(),
-                    'happened_at' => !empty($item['付款时间'])
-                        ? $item['付款时间'] : $item['交易创建时间'],
-                ]);
-            }
+            $instance->readCallback($handle, function (array $item) {
+                LogModel::createIfNot($item);
+            });
         }
         fclose($handle);
         return true;

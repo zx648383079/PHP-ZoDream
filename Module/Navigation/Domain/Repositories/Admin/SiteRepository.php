@@ -29,6 +29,9 @@ final class SiteRepository {
         unset($data['id']);
         $model = SiteModel::findOrNew($id);
         $model->load($data);
+        if ($model->user_id < 1) {
+            $model->user_id = auth()->id();
+        }
         if (static::exist($model)) {
             throw new \Exception('站点已存在！');
         }
@@ -55,12 +58,12 @@ final class SiteRepository {
         SiteTagModel::where('site_id', $id)->delete();
     }
 
-    public static function findIdByLink(string $link): int {
+    public static function findIdByLink(string $link): ?SiteModel {
         if (empty($link)) {
-            return 0;
+            return null;
         }
         $host = parse_url($link, PHP_URL_HOST);
-        return intval(SiteModel::query()->where('`domain`', $host)->max('id'));
+        return SiteModel::query()->where('`domain`', $host)->orderBy('id', 'desc')->first();
     }
 
     public static function scoring(array $data) {

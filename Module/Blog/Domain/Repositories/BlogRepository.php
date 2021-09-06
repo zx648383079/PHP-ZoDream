@@ -259,10 +259,22 @@ class BlogRepository {
         }
         $data = $blog->toArray();
         $data['content'] = $blog->toHtml();
-        $data = array_merge($data, BlogMetaModel::getOrDefault($id));
+        $data = array_merge($data, static::renderAsset(BlogMetaModel::getOrDefault($id)));
         $data['previous'] = $blog->previous;
         $data['next'] = $blog->next;
         $data['languages'] = BlogRepository::languageList($blog->parent_id > 0 ? $blog->parent_id : $blog->id);
+        return $data;
+    }
+
+    protected static function renderAsset(array $data): array {
+        foreach ([
+                     'audio_url',
+                     'video_url',
+                 ] as $key) {
+            if (isset($data[$key]) && !empty($data[$key])) {
+                $data[$key] = url()->asset($data[$key]);
+            }
+        }
         return $data;
     }
 

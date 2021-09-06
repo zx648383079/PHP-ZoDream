@@ -31,7 +31,11 @@ final class PageRepository {
         if (static::exist($model)) {
             throw new \Exception('网页已存在');
         }
-        $model->site_id = SiteRepository::findIdByLink($model->link);
+        $site = SiteRepository::findIdByLink($model->link);
+        if (!empty($site)) {
+            $model->site_id = $site->id;
+            $model->score = $site->score;
+        }
         if (!$model->save() && !$model->isNotChangedError()) {
             throw new \Exception($model->getFirstError());
         }

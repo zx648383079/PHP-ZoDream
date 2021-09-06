@@ -28,14 +28,14 @@ final class SearchRepository {
         if (empty($items)) {
             return $page;
         }
-        $page->setPage(PageModel::whereIn('id', $items)->get());
+        $page->setPage(PageModel::with('site')->whereIn('id', $items)->orderBy('score', 'desc')->get());
         return $page;
     }
 
     public static function renderPage(int $total = 0, array $pageId = []): Page {
         $page = new Page($total);
         if (!empty($pageId)) {
-            $page->setPage(PageModel::whereIn('id', $pageId)->get());
+            $page->setPage(PageModel::with('site')->whereIn('id', $pageId)->orderBy('score', 'desc')->get());
         }
         return $page;
     }
