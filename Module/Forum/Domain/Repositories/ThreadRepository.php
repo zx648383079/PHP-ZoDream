@@ -128,7 +128,8 @@ class ThreadRepository {
     }
 
     public static function postList(
-        int $thread_id, int $user_id = 0, int $post_id = 0, int $per_page = 20, string $type = '') {
+        int $thread_id, int $user_id = 0, int $post_id = 0, int $status = 0, string $sort = '', string $order = '',
+        int $per_page = 20, string $type = '') {
         $page = -1;
         if ($post_id > 0) {
             $maps = ThreadPostModel::when($user_id > 0, function ($query) use ($user_id) {
@@ -143,13 +144,20 @@ class ThreadRepository {
             }
             $page = (int)ceil(($count + 1) / $per_page);
         }
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
+            'grade', 'status'
+        ], 'asc');
         $items = ThreadPostModel::with('user', 'thread')
             ->when($user_id > 0, function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
             })
+            ->when($status > 0, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
             ->where('thread_id', $thread_id)
-            ->orderBy('grade', 'asc')
-            ->orderBy('created_at', 'asc')->page($per_page, 'page', $page);
+            ->orderBy($sort, $order)
+            ->orderBy('created_at', 'asc')
+            ->page($per_page, 'page', $page);
         foreach ($items as $item) {
             $item->is_public_post = $item->getIsPublicPostAttribute();
             $item->content = $item->is_public_post ? Parser::create($item, request())

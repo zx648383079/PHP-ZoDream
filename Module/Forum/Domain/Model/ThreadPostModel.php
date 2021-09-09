@@ -23,6 +23,8 @@ use Zodream\Helpers\Time;
 */
 class ThreadPostModel extends Model {
 
+    const STATUS_MAP = ['无', '已阅', 'Done', '正方', '反方'];
+
     protected array $hidden = ['ip'];
 
 	public static function tableName() {

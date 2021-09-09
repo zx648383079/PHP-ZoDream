@@ -13,7 +13,9 @@ class DownloadRepository {
 
     public static function txt(int $id): File {
         $book = BookModel::find($id);
-        return static::getFile($book);
+        $file = static::getFile($book);
+        $file->setName(sprintf('%s.txt', $book->name));
+        return $file;
     }
 
     public static function zip(int $id): File {

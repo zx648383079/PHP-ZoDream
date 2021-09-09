@@ -32,10 +32,10 @@ class ThreadController extends Controller {
         );
     }
 
-    public function postAction(int $thread, int $user = 0, int $post = 0, int $per_page = 20) {
+    public function postAction(int $thread, int $user = 0, int $post = 0, int $status = 0, string $sort = '', string $order = '', int $per_page = 20) {
         try {
             return $this->renderPage(
-                ThreadRepository::postList($thread, $user, $post, $per_page, 'json')
+                ThreadRepository::postList($thread, $user, $post, $status, $sort, $order, $per_page, 'json')
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
