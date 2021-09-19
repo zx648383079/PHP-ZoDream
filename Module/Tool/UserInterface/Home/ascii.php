@@ -166,7 +166,7 @@ $this->title = 'ASCII编解码';
             <td>
                 LF/NL(Line Feed/New Line)</td>
             <td>
-                换行键</td>
+                换行键 \n</td>
         </tr>
         <tr class="bg-ctrl">
             <td>
@@ -202,7 +202,8 @@ $this->title = 'ASCII编解码';
             <td>
                 CR (Carriage Return)</td>
             <td>
-                回车键</td>
+                回车键 \r
+            </td>
         </tr>
         <tr class="bg-ctrl">
             <td>
