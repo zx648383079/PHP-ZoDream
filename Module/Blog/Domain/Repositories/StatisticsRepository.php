@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
+use Module\Blog\Domain\Model\BlogClickLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TermModel;
@@ -22,7 +23,7 @@ final class StatisticsRepository {
         $blog_count = BlogModel::query()->count();
         $blog_today = BlogModel::where('created_at', '>=', $todayStart)->count();
         $view_count = BlogModel::query()->sum('click_count');
-        $view_today = 0; // 不好算
+        $view_today = BlogClickLogModel::where('happen_day', date('Y-m-d'))->sum('click_count');
         $comment_count = CommentModel::query()->count();
         $comment_today = CommentModel::where('created_at', '>=', $todayStart)->count();
         return compact('term_count',

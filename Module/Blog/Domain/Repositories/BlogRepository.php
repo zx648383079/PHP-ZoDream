@@ -7,6 +7,7 @@ use Exception;
 use Infrastructure\Bot;
 use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Helpers\Html;
+use Module\Blog\Domain\Model\BlogClickLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
@@ -252,7 +253,7 @@ class BlogRepository {
      * @throws Exception
      */
     public static function detail(int $id) {
-        BlogModel::where('id', $id)->updateIncrement('click_count');
+        static::addClick($id);
         $blog = BlogModel::find($id);
         if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
             throw new Exception('id 错误！');
@@ -402,5 +403,22 @@ class BlogRepository {
             ];
         }
         return $data;
+    }
+
+    public static function addClick(int $blogId, int $amount = 1) {
+        BlogModel::where('id', $blogId)->updateIncrement('click_count', $amount);
+        $day = date('Y-m-d');
+        $log = BlogClickLogModel::where('happen_day', $day)->where('blog_id', $blogId)
+            ->first();
+        if (empty($log)) {
+            BlogClickLogModel::create([
+                'happen_day' => $day,
+                'blog_id' => $blogId,
+                'click_count' => $amount,
+            ]);
+            return;
+        }
+        BlogClickLogModel::query()->where('happen_day', $day)->where('blog_id', $blogId)
+            ->updateIncrement('click_count', $amount);
     }
 }

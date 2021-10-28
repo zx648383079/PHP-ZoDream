@@ -42,7 +42,7 @@ class HomeController extends Controller {
     }
 
     public function contentAction(int $id) {
-        BlogModel::where('id', $id)->updateIncrement('click_count');
+        BlogRepository::addClick($id);
         $blog = BlogContentModel::find($id);
         if (empty($blog)) {
             return $this->renderFailure('id 错误！');

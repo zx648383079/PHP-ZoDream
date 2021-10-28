@@ -2,6 +2,7 @@
 namespace Module\Blog\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
+use Module\Blog\Domain\Model\BlogClickLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
@@ -89,6 +90,11 @@ class CreateBlogTables extends Migration {
             $table->uint('tag_id');
             $table->uint('blog_id');
             $table->uint('position', 2)->default(99);
+        })->append(BlogClickLogModel::tableName(), function(Table $table) {
+            $table->id();
+            $table->date('happen_day');
+            $table->uint('blog_id');
+            $table->uint('click_count')->default(0);
         })->autoUp();
     }
 
