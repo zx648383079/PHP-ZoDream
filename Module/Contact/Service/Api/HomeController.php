@@ -9,7 +9,7 @@ class HomeController extends Controller {
 
     public function feedbackAction(Request $request) {
         try {
-            ContactRepository::saveSubscribe($request->get());
+            ContactRepository::saveFeedback($request->get());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
