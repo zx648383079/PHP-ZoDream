@@ -3,6 +3,7 @@ namespace Module\Contact\Domain\Migrations;
 
 use Module\Contact\Domain\Model\FeedbackModel;
 use Module\Contact\Domain\Model\FriendLinkModel;
+use Module\Contact\Domain\Model\ReportModel;
 use Module\Contact\Domain\Model\SubscribeModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
@@ -37,6 +38,20 @@ class CreateContactTables extends Migration {
             $table->id();
             $table->string('email', 50);
             $table->bool('status')->default(0);
+            $table->timestamps();
+        })->append(ReportModel::tableName(), function (Table $table) {
+            $table->comment('举报和投诉');
+            $table->id();
+            $table->string('email', 50)->default('');
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_id')->default(0);
+            $table->uint('type', 1)->default(0);
+            $table->string('title')->default('');
+            $table->string('content')->default('');
+            $table->string('files')->default('');
+            $table->bool('status')->default(0);
+            $table->uint('user_id')->default(0);
+            $table->string('ip', 120)->default('');
             $table->timestamps();
         })->autoUp();
     }

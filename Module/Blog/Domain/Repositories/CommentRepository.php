@@ -1,11 +1,13 @@
 <?php
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Constants;
 use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentFullModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\CommentPageModel;
+use Module\Contact\Domain\Repositories\ReportRepository;
 use Zodream\Html\Page;
 use Exception;
 
@@ -20,8 +22,8 @@ class CommentRepository {
      * @param int $per_page
      * @return Page<CommentPageModel>
      */
-    public static function getList(int $blog_id, int $parent_id = 0, $is_hot = false, $sort = 'created_at',
-                                   $order = 'desc', int $per_page = 20) {
+    public static function getList(int $blog_id, int $parent_id = 0, bool $is_hot = false, string $sort = 'created_at',
+                                    string $order = 'desc', int $per_page = 20) {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
         return CommentPageModel::with('replies')
             ->where([
@@ -103,5 +105,11 @@ class CommentRepository {
     public static function newList() {
         return CommentModel::with('blog')
             ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->get();
+    }
+
+    public static function report(int $id) {
+        $model = CommentModel::findOrThrow($id);
+        ReportRepository::quickCreate(Constants::TYPE_BLOG_COMMENT, $id,
+            sprintf('“%s”', $model->content), '举报博客评论');
     }
 }

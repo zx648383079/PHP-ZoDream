@@ -19,7 +19,10 @@ final class CollectController extends Controller {
     public function saveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'name' => 'required|string:0,20',
+                'link' => 'required|string:0,255',
+                'group_id' => 'int',
+                'position' => 'int:0,127',
             ]);
             return $this->render(CollectRepository::save($data));
         } catch (\Exception $ex) {
@@ -56,7 +59,8 @@ final class CollectController extends Controller {
     public function groupSaveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'name' => 'required|string:0,20',
+                'position' => 'int:0,127',
             ]);
             return $this->render(CollectRepository::groupSave($data));
         } catch (\Exception $ex) {

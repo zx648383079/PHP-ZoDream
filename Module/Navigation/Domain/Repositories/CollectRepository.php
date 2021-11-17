@@ -30,10 +30,35 @@ final class CollectRepository {
         }
         $model->load($data);
         $model->user_id = auth()->id();
+        if (!static::check($model)) {
+            throw new \Exception('网址已存在');
+        }
+        if ($model->isNewRecord && $model->group_id < 1) {
+             $model->group_id = static::getDefaultGroup($model->user_id);
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         return $model;
+    }
+
+    private static function check(CollectModel $model) {
+        return static::where('link', $model->link)
+            ->where('user_id', $model->user_id)->where('id', '<>', intval($model->id))
+            ->count() < 1;
+    }
+
+    public static function getDefaultGroup($user) {
+        $id = CollectGroupModel::where('user_id', $user)
+            ->value('id');
+        if ($id > 0) {
+            return $id;
+        }
+        $model = CollectGroupModel::createOrThrow([
+            'name' => '默认分组',
+            'user_id' => $user
+        ]);
+        return $model->id;
     }
 
     public static function remove(int $id) {
@@ -74,4 +99,6 @@ final class CollectRepository {
     public static function isCollected(string $link): bool {
         return CollectModel::where('link', $link)->where('user_id', auth()->id())->count() > 0;
     }
+
+
 }

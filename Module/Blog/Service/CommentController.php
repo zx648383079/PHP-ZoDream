@@ -73,6 +73,11 @@ class CommentController extends ModuleController {
     }
 
     public function reportAction(int $id) {
-
+        try {
+            CommentRepository::report($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 }

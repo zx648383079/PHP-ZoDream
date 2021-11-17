@@ -54,7 +54,7 @@ class FriendLinkModel extends Model {
         if (empty($value)) {
             return;
         }
-        $this->__attributes['url'] = strpos($value, '://') === false ? 'http://'. $value : $value;
+        $this->__attributes['url'] = !str_contains($value, '://') ? 'http://'. $value : $value;
     }
 
 }

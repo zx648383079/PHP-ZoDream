@@ -15,7 +15,8 @@ class CommentController extends Controller {
         ];
     }
 
-    public function indexAction(int $blog_id, int $parent_id = 0, $is_hot = false, $sort = 'created_at', $order = 'desc') {
+    public function indexAction(int $blog_id, int $parent_id = 0, bool $is_hot = false,
+                                string $sort = 'created_at', string $order = 'desc') {
         $comment_list = CommentRepository::getList($blog_id, $parent_id, $is_hot, $sort, $order);
         return $this->renderPage($comment_list);
     }
@@ -48,6 +49,11 @@ class CommentController extends Controller {
     }
 
     public function reportAction(int $id) {
-
+        try {
+            CommentRepository::report($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 }
