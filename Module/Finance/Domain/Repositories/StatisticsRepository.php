@@ -122,7 +122,7 @@ final class StatisticsRepository {
             list($year, $month) = static::formatYearMonth($year, $month + 1);
             $data[1] = date(sprintf('%d-%d-01', $year, $month));
             list($year, $month) = static::formatYearMonth($year, $month - 2);
-            $data[2] = strtotime(date(sprintf('%d-%d-01', $year, $month)));
+            $data[2] = date(sprintf('%d-%d-01', $year, $month));
             $data[3] = $data[0];
             return $data;
         }

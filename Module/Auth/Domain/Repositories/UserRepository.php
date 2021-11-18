@@ -92,7 +92,7 @@ class UserRepository {
     }
 
     public static function saveRoles(int $user, array $roles) {
-        list($add, $_, $del) = ModelHelper::splitId((array)$roles,
+        list($add, $_, $del) = ModelHelper::splitId($roles,
             UserRoleModel::where('user_id', $user)->pluck('role_id')
         );
         if (!empty($del)) {

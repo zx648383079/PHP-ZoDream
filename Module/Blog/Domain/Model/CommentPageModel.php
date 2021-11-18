@@ -22,4 +22,8 @@ namespace Module\Blog\Domain\Model;
  */
 class CommentPageModel extends CommentModel {
     protected array $append = ['reply_count', 'replies'];
+
+    public function getReplyCountAttribute() {
+        return $this->getReplyCount();
+    }
 }

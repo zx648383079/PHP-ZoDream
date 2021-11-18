@@ -72,6 +72,19 @@ class LinkRule {
         ];
     }
 
+    /**
+     * 跳转到id
+     * @param string $word
+     * @param string $id
+     * @return string[]
+     */
+    public static function formatId(string $word, string $id): array {
+        return [
+            's' => $word,
+            'l' => '#'.$id
+        ];
+    }
+
     public static function formatLink(string $word, string $link, array $params = []): array {
         return [
             's' => $word,

@@ -23,7 +23,15 @@ class CommentController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $comment = CommentRepository::create($request->get('name,email,url,content,parent_id,blog_id'));
+            $data = $request->validate([
+                'content' => 'required|string:0,255',
+                'name' => 'string:0,30',
+                'email' => 'string:0,50',
+                'url' => 'string:0,50',
+                'parent_id' => 'int',
+                'blog_id' => 'required|int',
+            ]);
+            $comment = CommentRepository::create($data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

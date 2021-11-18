@@ -21,7 +21,7 @@ class Deeplink {
     }
 
     public static function decode(string $link): string {
-        if (empty($link) || substr($link, 0, 1) === '#' || str_starts_with($link, 'javascript:')) {
+        if (empty($link) || str_starts_with($link, '#') || str_starts_with($link, 'javascript:')) {
             return $link;
         }
         $data = parse_url($link);
