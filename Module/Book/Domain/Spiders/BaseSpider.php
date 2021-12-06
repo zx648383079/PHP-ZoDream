@@ -42,7 +42,8 @@ abstract class BaseSpider implements GetBookInterface {
             if (is_array($chapter)) {
                 $chapter = new BookChapterModel([
                     'title' => $chapter['title'],
-                    'content' => $chapter['content']
+                    'content' => $chapter['content'],
+                    'book_id' => 0,
                 ]);
             }
             if ($chapter instanceof Model) {
@@ -74,7 +75,6 @@ abstract class BaseSpider implements GetBookInterface {
         $this->isNewChapter = false;
         $chapters = $this->getCatalog($html, $uri);
         $this->downloadChapter($book, $chapters, $next);
-        return;
     }
 
     protected function isNewChapter($num) {
@@ -105,12 +105,12 @@ abstract class BaseSpider implements GetBookInterface {
             if (!request()->isCli()) {
                 return null;
             }
-            $arg = request()->read('', '是否继续(Y/N):');
+            $arg = request()->post('是否继续(Y/N):');
             if (strtolower($arg) != 'y') {
                 return null;
             }
         }
-        return BookModel::where('name', $book->name)->one();
+        return BookModel::where('name', $book->name)->first();
     }
 
     public function decode(Html $html) {

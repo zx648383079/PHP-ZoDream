@@ -1,7 +1,6 @@
 <?php
 namespace Module\Book\Domain\Spiders;
 
-
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Helpers\Json;
@@ -81,10 +80,10 @@ class AutoSpider extends BaseSpider {
     }
 
     protected function getAbsoluteUri($url, Uri $baseUri) {
-        if (strpos($url, '//') !== false) {
+        if (str_contains($url, '//')) {
             return $url;
         }
-        if (strpos($url, '/') === 0) {
+        if (str_starts_with($url, '/')) {
             return $baseUri->setPath($url)->encode();
         }
         return $baseUri->setPath(
@@ -127,7 +126,7 @@ class AutoSpider extends BaseSpider {
             return [];
         }
         $tag = $tags[$index];
-        if (strpos($tag['tag'], 'a') !== false) {
+        if (str_contains($tag['tag'], 'a')) {
             return $this->getChapters(
                 $this->getChaptersStart($tags, $index), $this->getChaptersEnd($tags, $index), $html);
         }

@@ -29,8 +29,8 @@ class CommentRepository {
     public static function getList(int $blog_id, int $parent_id = 0, bool $is_hot = false, string $sort = 'created_at',
                                     string $order = 'desc', int $per_page = 20) {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
-        return CommentPageModel::with('replies')
-            ->where([
+        $query = $parent_id > 0 ? CommentModel::query() : CommentPageModel::with('replies');
+        return $query->where([
                 'blog_id' => $blog_id,
                 'parent_id' => $parent_id
             ])->when($is_hot, function ($query) {
