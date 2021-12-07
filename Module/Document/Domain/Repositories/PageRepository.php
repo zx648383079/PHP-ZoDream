@@ -4,7 +4,7 @@ namespace Module\Document\Domain\Repositories;
 
 use Exception;
 use Module\Document\Domain\Model\PageModel;
-use Parsedown;
+use Zodream\Html\MarkDown;
 use Zodream\Html\Tree;
 
 class PageRepository {
@@ -45,7 +45,7 @@ class PageRepository {
         return array_merge(
               $model->toArray(),
               [
-                  'content' => (new Parsedown())->setSafeMode(true)->text($model->content)
+                  'content' => MarkDown::parse($model->content, true)
               ]
         );
     }
