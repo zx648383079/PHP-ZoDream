@@ -57,4 +57,26 @@ class CouponController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function codeAction(int $coupon, string $keywords = '') {
+        return $this->renderPage(CouponRepository::codeList($coupon, $keywords));
+    }
+
+    public function codeGenerateAction(int $coupon, int $amount) {
+        CouponRepository::codeGenerate($coupon, $amount);
+        return $this->renderData(true);
+    }
+
+    public function codeAddAction(int $coupon, array $code) {
+        CouponRepository::codeAdd($coupon, $code);
+        return $this->renderData(true);
+    }
+
+    public function codeImportAction(int $coupon) {
+
+    }
+
+    public function codeExportAction(int $coupon) {
+
+    }
 }

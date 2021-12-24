@@ -2,6 +2,7 @@
 namespace Module\Shop\Domain\Models;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class CouponLogModel
@@ -47,7 +48,11 @@ class CouponLogModel extends Model {
     }
 
     public function coupon() {
-        return $this->hasOne(CouponModel::className(), 'id', 'coupon_id');
+        return $this->hasOne(CouponModel::class, 'id', 'coupon_id');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
 }

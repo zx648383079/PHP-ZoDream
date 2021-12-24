@@ -55,6 +55,24 @@ class ShippingRepository {
     }
 
     /**
+     * 根据配送地址获取配送设置
+     * @param int $shipping
+     * @param int $region
+     * @return array|null
+     */
+    public static function getGroup(int $shipping, int $region): array|null {
+        $groupId = ShippingRegionModel::where('shipping_id', $shipping)
+            ->where('region_id', $region)->value('group_id');
+        if ($groupId > 0) {
+            return ShippingGroupModel::query()->where('id', $groupId)
+                ->asArray()->first();
+        }
+        return ShippingGroupModel::query()->where('shipping_id', $shipping)
+            ->where('is_all', 1)
+            ->asArray()->first();
+    }
+
+    /**
      * 计算配送费
      * @param ShippingModel $shipping
      * @param array $settings

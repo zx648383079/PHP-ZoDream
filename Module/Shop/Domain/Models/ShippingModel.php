@@ -34,7 +34,7 @@ class ShippingModel extends Model {
             'method' => 'int:0,99',
             'icon' => 'string:0,100',
             'description' => 'string:0,255',
-            'position' => 'int:0,99',
+            'position' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

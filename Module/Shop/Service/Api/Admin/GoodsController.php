@@ -84,12 +84,12 @@ class GoodsController extends Controller {
         return $this->renderData(true);
     }
 
-    public function cardAction(int $id, string $keywords = '') {
-        return $this->renderPage(GoodsRepository::cardList($id, $keywords));
+    public function cardAction(int $goods, string $keywords = '') {
+        return $this->renderPage(GoodsRepository::cardList($goods, $keywords));
     }
 
-    public function cardGenerateAction(int $id, int $amount = 1) {
-        GoodsRepository::cardGenerate($id, $amount);
+    public function cardGenerateAction(int $goods, int $amount = 1) {
+        GoodsRepository::cardGenerate($goods, $amount);
         return $this->renderData(true);
     }
 
@@ -98,11 +98,11 @@ class GoodsController extends Controller {
         return $this->renderData(true);
     }
 
-    public function cardImportAction(int $id) {
+    public function cardImportAction(int $goods) {
 
     }
 
-    public function cardExportAction(int $id) {
+    public function cardExportAction(int $goods) {
 
     }
 

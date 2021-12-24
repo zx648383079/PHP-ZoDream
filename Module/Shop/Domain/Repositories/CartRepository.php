@@ -131,14 +131,15 @@ class CartRepository {
             throw new InvalidArgumentException('请选择支付方式');
         }
         if ($shipping > 0) {
-            $group_id = ShippingRegionModel::where('shipping_id', $shipping)
-                ->where('region_id', $address->region_id)->value('group_id');
-            if ($group_id < 1) {
+            $ship = ShippingModel::find($shipping);
+            if (empty($ship)) {
+                throw new InvalidArgumentException('配送方式不存在');
+            }
+            $shipGroup = ShippingRepository::getGroup($shipping, $address->region_id);
+            if (empty($shipGroup)) {
                 throw new InvalidArgumentException('当前地址不支持此配送方式');
             }
-            $ship = ShippingModel::find($shipping);
-            $ship->settings = ShippingGroupModel::query()->where('id', $group_id)
-                ->asArray()->first();
+            $ship->settings = $shipGroup;
             if (!$order->setShipping($ship) && !$isPreview) {
                 throw new InvalidArgumentException('请选择配送方式');
             }

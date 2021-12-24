@@ -2,6 +2,7 @@
 namespace Module\Shop\Domain\Repositories;
 
 use Module\Shop\Domain\Entities\CouponEntity;
+use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Models\CouponLogModel;
@@ -103,7 +104,7 @@ class CouponRepository {
      * @param GoodsModel $goods
      * @return bool
      */
-    protected static function canUseCheckGoods($rule, array $range, GoodsModel $goods) {
+    protected static function canUseCheckGoods($rule, array $range, GoodsEntity $goods) {
         if ($rule == CouponModel::RULE_GOODS) {
             return in_array($goods->id, $range);
         }
