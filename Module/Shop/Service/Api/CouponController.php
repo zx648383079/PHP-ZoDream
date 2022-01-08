@@ -30,4 +30,13 @@ class CouponController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function exchangeAction(string $code) {
+        try {
+            CouponRepository::exchange($code);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

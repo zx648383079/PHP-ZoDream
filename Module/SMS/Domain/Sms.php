@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\SMS\Domain;
-
 
 use Module\SMS\Domain\Model\SmsLogModel;
 use Zodream\Helpers\Str;
-
 
 class Sms {
 
@@ -13,14 +12,14 @@ class Sms {
     const MOBILE_KEY = 'mobile';
     const CODE_KEY = 'code';
 
-    private $configs = [
+    private array $configs = [
         'space' => 120,
         'everyone' => 20,
         'everyday' => 2000
     ];
 
-    public function send($mobile, $content) {
-        $log = SmsLogModel::create([
+    public function send(string $mobile, string $content): bool {
+        $log = SmsLogModel::createOrThrow([
             'mobile' => $mobile,
             'content' => $content,
             'ip' => request()->ip(),
@@ -33,7 +32,7 @@ class Sms {
         return true;
     }
 
-    public function sendCode($mobile) {
+    public function sendCode(string $mobile): bool {
         $code = Str::randomNumber(6);
         if (!$this->send($mobile, $code)) {
             return false;
@@ -46,14 +45,14 @@ class Sms {
         return true;
     }
 
-    public function verifyCode($mobile, $code) {
+    public function verifyCode(string $mobile, string $code): bool {
         $log = session(self::KEY);
         return !empty($log) && isset($log[self::CODE_KEY])
             && $log[self::MOBILE_KEY] == $mobile
             && $log[self::CODE_KEY] == $code;
     }
 
-    public function verifySpace() {
+    public function verifySpace(): bool {
         $log = session(self::KEY);
         if (empty($log)) {
             return true;
@@ -61,13 +60,13 @@ class Sms {
         return time() - $log[self::TIME_KEY] > $this->configs['space'];
     }
 
-    public function verifyIp() {
+    public function verifyIp(): bool {
         $time = strtotime(date('Y-m-d'));
         $count = SmsLogModel::where('ip', request()->ip())->where('created_at', '>=', $time)->count();
         return $count < $this->configs['everyone'];
     }
 
-    public function verifyCount() {
+    public function verifyCount(): bool {
         $time = strtotime(date('Y-m-d'));
         $count = SmsLogModel::where('created_at', '>=', $time)->count();
         return $count < $this->configs['everyday'];

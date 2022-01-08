@@ -183,10 +183,6 @@ class OrderModel extends Model {
         return $this->hasOne(ShippingModel::class, 'id', 'shipping_id');
     }
 
-    public function pay() {
-        $this->payment->pay($this);
-    }
-
     public function getTotalAttribute() {
         return $this->goods_amount + $this->pay_fee + $this->shipping_fee - $this->discount;
     }

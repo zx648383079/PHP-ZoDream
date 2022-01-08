@@ -71,7 +71,7 @@ class PaymentRepository {
     public static function callback(PaymentModel $payment) {
         $res = self::getPayee($payment)
             ->callback(request()->get());
-        $res['output'] = isset($res['output']) ? $res['output'] : '';
+        $res['output'] = $res['output'] ?? '';
         if ($res['status'] !== 'SUCCESS') {
             return $res['output'];
         }
@@ -90,7 +90,7 @@ class PaymentRepository {
         if (isset($res['money']) && $res['money'] != $log->currency_money) {
             // 金额不对
         }
-        $log->confirm_at = isset($res['payed_at']) ? $res['payed_at'] : time();
+        $log->confirm_at = $res['payed_at'] ?? time();
         $log->status = $res['status'] === 'SUCCESS'
             ? PayLogModel::STATUS_SUCCESS : PayLogModel::STATUS_FAILURE;
         if (!$log->save() || $res['status'] !== 'SUCCESS') {

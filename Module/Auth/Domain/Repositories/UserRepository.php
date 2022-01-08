@@ -7,6 +7,7 @@ use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Events\ManageAction;
+use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
@@ -17,6 +18,8 @@ class UserRepository {
         /** @var UserModel $user */
         $user = auth()->user();
         $data = $user->toArray();
+        $data['email'] = AuthRepository::isEmptyEmail($data['email']) ? '' : Helpers::hideEmail($data['email']);
+        $data['mobile'] = Helpers::hideTel($data['mobile']);
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
         return $data;
     }

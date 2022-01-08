@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
-use Infrastructure\Uploader;
+use Domain\Repositories\FileRepository;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\OptionRepository;
@@ -20,8 +21,7 @@ class UserController extends Controller {
     }
 
     public function indexAction() {
-        $data = UserRepository::getCurrentProfile();
-        return $this->render($data);
+        return $this->render(UserRepository::getCurrentProfile());
     }
 
     /**
@@ -29,14 +29,10 @@ class UserController extends Controller {
      * @throws \Exception
      */
     public function avatarAction() {
-        $upload = new Uploader('file', [
-            'pathFormat' => '/assets/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}',
-            'maxSize' => 2048000,
-            'allowFiles' => ['.png', '.jpg', '.jpeg', '.gif', '.bmp']
-        ]);
-        $data = $upload->getFileInfo();
-        if ($data['state'] !== 'SUCCESS') {
-            return $this->renderFailure($data['state']);
+        try {
+            $data = FileRepository::uploadImage();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         $user = auth()->user();
         $user->avatar = $data['url'];
@@ -64,7 +60,7 @@ class UserController extends Controller {
      * @param $email
      * @throws \Exception
      */
-    public function checkAction($email) {
+    public function checkAction(string $email) {
         $user = UserModel::findByEmail($email);
         if (empty($user)) {
             return $this->renderFailure('email error');

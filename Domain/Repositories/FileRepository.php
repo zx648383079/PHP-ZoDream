@@ -183,8 +183,8 @@ class FileRepository {
         if (!$upload->upload($fieldName)) {
             throw new Exception('请选择上传文件');
         }
-        $allowType = array_map(function ($item) {
-            return substr($item, 1);
+        $allowType = array_map(function (string $item) {
+            return $item[0] === '.' ? substr($item, 1) : $item;
         }, static::config('imageAllowFiles'));
         $files = [];
         $upload->each(function (BaseUpload $file) use ($allowType, &$files) {

@@ -21,8 +21,8 @@ class HomeController extends Controller {
     public function indexAction(Request $request) {
         try {
             AuthRepository::login(
-                $request->get('email'),
-                $request->get('password'),
+                (string)$request->get('email'),
+                (string)$request->get('password'),
                 $request->has('rememberMe'));
             return $this->redirect($request->get('redirect_uri', '/'));
         } catch (\Exception $ex) {}

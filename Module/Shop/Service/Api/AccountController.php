@@ -2,11 +2,13 @@
 namespace Module\Shop\Service\Api;
 
 
+use Domain\Repositories\FileRepository;
 use Infrastructure\Uploader;
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
+use Module\Shop\Domain\Repositories\AccountRepository as ShopAccount;
 use Module\Shop\Domain\Models\BankCardModel;
 use Module\Shop\Domain\Models\CertificationModel;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AccountController extends Controller {
 
@@ -20,24 +22,17 @@ class AccountController extends Controller {
     }
 
     public function logAction() {
-        $log_list = AccountLogModel::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
-        return $this->renderPage($log_list);
+        return $this->renderPage(
+            ShopAccount::logList()
+        );
     }
 
     public function cardAction() {
-        $card_list = BankCardModel::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
-        foreach ($card_list as $item) {
-            $item['icon'] = url()->asset('assets/images/wap_logo.png');
-        }
-        return $this->renderPage($card_list);
+        return $this->renderPage(ShopAccount::bankCardList());
     }
 
     public function addCardAction() {
-        return $this->render([
-            'data' => false
-        ]);
+        return $this->renderData(false);
     }
 
     public function connectAction() {
@@ -46,10 +41,7 @@ class AccountController extends Controller {
     }
 
     public function certificationAction() {
-        $cert = CertificationModel::where('user_id', auth()->id())->first();
-        return $this->render([
-            'data' => $cert ? $cert : false
-        ]);
+        return $this->renderData(ShopAccount::certification());
     }
 
     public function uploadCertificationAction() {
@@ -62,24 +54,28 @@ class AccountController extends Controller {
         if ($data['state'] !== 'SUCCESS') {
             return $this->renderFailure($data['state']);
         }
-        return $this->render([
-            'data' => $data['url']
-        ]);
+        return $this->renderData($data['url']);
     }
 
-    public function saveCertificationAction() {
-        $cert = CertificationModel::where('user_id', auth()->id())->first();
-        if (empty($cert)) {
-            $cert = new CertificationModel();
+    public function saveCertificationAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'name' => 'required|string:0,20',
+                'sex' => 'string',
+                'country' => 'string:0,20',
+                'type' => 'int:0,127',
+                'card_no' => 'required|string:0,30',
+                'expiry_date' => 'string:0,30',
+                'profession' => 'string:0,30',
+                'address' => 'string:0,200',
+                'front_side' => 'string:0,200',
+                'back_side' => 'string:0,200',
+            ]);
+            ShopAccount::saveCertification($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $cert->load();
-        $cert->user_id = auth()->id();
-        if (!$cert->save()) {
-            return $this->renderFailure($cert->getFirstError());
-        }
-        return $this->render([
-            'data' => true
-        ]);
+        return $this->renderData(true);
     }
 
     public function subtotalAction() {

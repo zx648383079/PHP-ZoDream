@@ -26,19 +26,18 @@ class OrderController extends Controller {
         return $this->sendWithShare()->show(compact('order_list', 'status', 'order_subtotal'));
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $order = OrderModel::find($id);
         $goods_list = OrderGoodsModel::where('order_id', $id)->all();
         $address = OrderAddressModel::where('order_id', $id)->one();
         return $this->sendWithShare()->show(compact('order', 'goods_list', 'address'));
     }
 
-    public function payAction($id) {
-        $order = OrderModel::find($id);
-        $order->pay();
+    public function payAction(int $id) {
+
     }
 
-    public function receiveAction($id) {
+    public function receiveAction(int $id) {
         try {
             OrderRepository::receive($id);
         } catch (\Exception $ex) {

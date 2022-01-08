@@ -13,6 +13,7 @@ use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\SEO\Domain\Option;
+use Module\SMS\Domain\Sms;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
@@ -61,7 +62,7 @@ class AuthRepository {
      * @return bool|mixed
      * @throws Exception
      */
-    public static function login($email, $password, $remember = false, $replaceToken = true) {
+    public static function login(string $email, string $password, bool $remember = false, bool $replaceToken = true) {
         if (empty($email) || empty($password)) {
             throw AuthException::invalidLogin();
         }
@@ -75,27 +76,42 @@ class AuthRepository {
         if (!$user->validatePassword($password)) {
             throw AuthException::invalidLogin();
         }
-        if ($user->status != UserModel::STATUS_ACTIVE) {
-            throw AuthException::disableAccount();
-        }
-        if ($remember) {
-            if ($replaceToken) {
-                $user->setRememberToken(Str::random(60));
-            }
-            return self::doLogin($user, $remember);
-        }
-        if (!$user->save()) {
+        return static::loginUser($user, $remember, $replaceToken);
+    }
+
+    public static function loginMobile(string $mobile, string $password, bool $remember = false, bool $replaceToken = true) {
+        if (empty($mobile) || empty($password)) {
             throw AuthException::invalidLogin();
         }
-        return self::doLogin($user, $remember);
+        if (!Validator::phone()->validate($mobile)) {
+            throw AuthException::invalidLogin();
+        }
+        $user = UserModel::where('mobile', $mobile)->first();
+        if (empty($user)) {
+            throw AuthException::invalidLogin();
+        }
+        if (!$user->validatePassword($password)) {
+            throw AuthException::invalidLogin();
+        }
+        return self::loginUser($user, $remember, $replaceToken);
     }
 
-    public static function loginMobile($mobile, $password, $remember = false, $replaceToken = true) {
-        throw new Exception('暂不支持手机号登录');
-    }
-
-    public static function loginMobileCode($mobile, $code, $remember = false, $replaceToken = true) {
-        throw new Exception('暂不支持手机号登录');
+    public static function loginMobileCode(string $mobile, string $code, bool $remember = false, bool $replaceToken = true) {
+        if (empty($mobile) || empty($code)) {
+            throw AuthException::invalidLogin();
+        }
+        if (!Validator::phone()->validate($mobile)) {
+            throw AuthException::invalidLogin();
+        }
+        $sms = new Sms();
+        if (!$sms->verifyCode($mobile, $code)) {
+            throw new Exception('验证码错误');
+        }
+        $user = UserModel::where('mobile', $mobile)->first();
+        if (empty($user)) {
+            return static::quickRegisterMobile($mobile, $remember);
+        }
+        return self::loginUser($user, $remember, $replaceToken);
     }
 
     /**
@@ -108,7 +124,7 @@ class AuthRepository {
      * @throws Exception
      */
     public static function register(
-        $name, $email, $password, $confirmPassword, $agreement = false) {
+        string $name, string $email, string $password, string $confirmPassword, bool $agreement = false) {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
@@ -131,35 +147,84 @@ class AuthRepository {
     }
 
     public static function registerMobile(
-        $name, $mobile, $code, $password, $confirmPassword, $agreement = false) {
-        throw new Exception('暂不支持手机号注册');
+        string $name, string $mobile, string $code, string $password, string $confirmPassword, bool $agreement = false) {
+        if (!$agreement) {
+            throw new Exception('必须同意相关协议');
+        }
+        $name = Html::text($name);
+        if (empty($name)) {
+            throw new Exception('请输入昵称');
+        }
+        if (empty($mobile) || empty($code)) {
+            throw AuthException::invalidLogin();
+        }
+        if (!Validator::phone()->validate($mobile)) {
+            throw AuthException::invalidLogin();
+        }
+        if (!self::verifyPassword($password)) {
+            throw new Exception('密码长度必须不小于6位');
+        }
+        if ($confirmPassword !== $password) {
+            throw new Exception('两次密码不一致');
+        }
+        $sms = new Sms();
+        if (!$sms->verifyCode($mobile, $code)) {
+            throw new Exception('验证码错误');
+        }
+        $user = self::createUser($mobile, $name, $password, [
+            'email' => static::emptyEmail()
+        ], 'mobile');
+        event(new Register($user, request()->ip(), time()));
+        return self::doLogin($user);
+    }
+
+    public static function emptyEmail(): string {
+        return sprintf('zreno_%s@zodream.cn', \time());
+    }
+
+    public static function isEmptyEmail(string $email): bool {
+        return empty($email) || preg_match('/^zreno_\d{11}@zodream\.cn$/', $email);
     }
 
     /**
-     * @param $email
-     * @param $name
-     * @param $password
+     * @param string $username
+     * @param string $name
+     * @param string $password
+     * @param array $extra
+     * @param string $usernameType
      * @return UserModel
      * @throws Exception
      */
-    private static function createUser($email, $name, $password) {
-        $count = UserModel::where('email', $email)->orWhere('name', $name)
+    private static function createUser(string $username, string $name, string $password,
+                                       array $extra = [],
+                                       string $usernameType = 'email') {
+        $count = UserModel::where($usernameType, $username)->orWhere('name', $name)
             ->count();
         if ($count > 0) {
-            throw new Exception('昵称或邮箱已存在');
+            throw new Exception($usernameType === 'email' ? '昵称或邮箱已存在' : '昵称或手机号已存在');
         }
-        $user = new UserModel(compact('name', 'email'));
-        $user->setPassword($password);
+        $data = array_merge([
+            'avatar' => '/assets/images/avatar/'.Str::randomInt(0, 48).'.png',
+            'sex' => UserModel::SEX_FEMALE
+        ], $extra, [
+           $usernameType => $username,
+           'name' => $name
+        ]);
+        $user = new UserModel($data);
+        if (empty($password)) {
+            $user->password = self::UNSET_PASSWORD;
+
+        } else {
+            $user->setPassword($password);
+        }
         $user->created_at = time();
-        $user->avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
-        $user->sex = UserModel::SEX_FEMALE;
         if (!$user->save()) {
             throw new Exception($user->getFirstError());
         }
         return $user;
     }
 
-    private static function doLogin(UserModel $user, $remember = false, $vendor = LoginLogModel::MODE_WEB) {
+    private static function doLogin(UserModel $user, bool $remember = false, string $vendor = LoginLogModel::MODE_WEB) {
         $res = $user->login($remember);
         if (!$res) {
             return $res;
@@ -170,7 +235,7 @@ class AuthRepository {
         return $res;
     }
 
-    public static function logout($cancelRemember = false) {
+    public static function logout(bool $cancelRemember = false) {
         if (auth()->guest()) {
             return;
         }
@@ -179,7 +244,7 @@ class AuthRepository {
     }
 
     public static function oauth(
-        $type, $openid, callable $infoCallback, $unionId = null, $platform_id = 0) {
+        string $type, string $openid, callable $infoCallback, ?string $unionId = null, int $platform_id = 0) {
         $user = OAuthModel::findUserWithUnion($openid, $unionId, $type, $platform_id);
         if (!empty($user)) {
             if ($user->status !== UserModel::STATUS_ACTIVE) {
@@ -203,7 +268,7 @@ class AuthRepository {
             $email = null;
         }
         if (empty($email) || !Validator::email()->validate($email)) {
-            $email = sprintf('%s_%s@zodream.cn', $type, $openid);
+            $email = static::emptyEmail();
         }
         if (empty($avatar)) {
             $avatar = '/assets/images/avatar/'.Str::randomInt(0, 48).'.png';
@@ -220,12 +285,12 @@ class AuthRepository {
         return $user;
     }
 
-    private static function successBindUser($type, $user, $nickname, $openid, $unionId = null, $platform_id = 0) {
+    private static function successBindUser(string $type, $user, string $nickname, string $openid, ?string $unionId = null, $platform_id = 0) {
         OAuthModel::bindUser($user, $openid, $unionId, $type, $nickname, $platform_id);
     }
 
     public static function password(
-        $oldPassword, $password, $confirmPassword) {
+        string $oldPassword, string $password, string $confirmPassword) {
         if (empty($oldPassword) || empty($password) || empty($confirmPassword)) {
             throw AuthException::invalidPassword();
         }
@@ -250,8 +315,17 @@ class AuthRepository {
         return true;
     }
 
-    public static function sendSmsCode($mobile, $type = 'login') {
-        throw new Exception('暂不支持手机注册');
+    public static function sendSmsCode(string $mobile, string $type = 'login') {
+        if (empty($mobile) || !Validator::phone()->validate($mobile)) {
+            throw new Exception('手机号不正确');
+        }
+        $sms = new Sms();
+        if (!$sms->verifyIp() || !$sms->verifyCount() || !$sms->verifySpace()) {
+            throw new Exception('验证码发送失败');
+        }
+        if (!$sms->sendCode($mobile)) {
+            throw new Exception('验证码发送失败');
+        }
     }
 
     /**
@@ -259,7 +333,7 @@ class AuthRepository {
      * @return MailLogModel
      * @throws Exception
      */
-    public static function verifyEmailCode($code) {
+    public static function verifyEmailCode(string $code) {
         if (empty($code)) {
             throw new Exception('重置码错误');
         }
@@ -273,7 +347,7 @@ class AuthRepository {
         return $log;
     }
 
-    public static function sendEmail($email, $code) {
+    public static function sendEmail(string $email, string $code) {
         if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入有效邮箱');
         }
@@ -312,7 +386,7 @@ class AuthRepository {
         return $res;
     }
 
-    public static function resetPassword($code, $password, $confirmPassword, $email) {
+    public static function resetPassword(string $code, string $password, string $confirmPassword, string $email) {
         if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入有效邮箱');
         }
@@ -380,7 +454,7 @@ class AuthRepository {
         }
     }
 
-    public static function verifyPassword($password) {
+    public static function verifyPassword(string $password) {
         return !empty($password) && mb_strlen($password) >= 6;
     }
 
@@ -390,7 +464,7 @@ class AuthRepository {
      * @param $password
      * @throws Exception
      */
-    public static function createAdmin($email, $password) {
+    public static function createAdmin(string $email, string $password) {
         $user = self::createUser($email, 'admin', $password);
         UserRoleModel::query()->insert([
            'user_id' => $user->id,
@@ -398,7 +472,7 @@ class AuthRepository {
         ]);
     }
 
-    public static function updateOAuthData($type, $openid, $data, $unionId = null, $platform_id = 0) {
+    public static function updateOAuthData(string $type, string $openid, ?string $data, ?string $unionId = null, int $platform_id = 0) {
         $model = OAuthModel::where('vendor', $type)
             ->where('platform_id', $platform_id)
             ->where('identity', $openid)->first();
@@ -438,5 +512,52 @@ class AuthRepository {
             'data' => $data,
             'platform_id' => $platform_id,
         ]);
+    }
+
+    /**
+     * @param $user
+     * @param mixed $remember
+     * @param mixed $replaceToken
+     * @return bool|null
+     * @throws Exception
+     */
+    private static function loginUser(UserModel $user, bool $remember = false, bool $replaceToken = true): ?bool {
+        if ($user->status != UserModel::STATUS_ACTIVE) {
+            throw AuthException::disableAccount();
+        }
+        if ($remember) {
+            if ($replaceToken) {
+                $user->setRememberToken(Str::random(60));
+            }
+            return self::doLogin($user, $remember);
+        }
+        if (!$user->save()) {
+            throw AuthException::invalidLogin();
+        }
+        return self::doLogin($user, $remember);
+    }
+
+    private static function quickRegisterMobile(string $mobile, bool $remember) {
+        $user = self::createUser($mobile, sprintf('zre_%s', time()), '', [
+            'email' => sprintf('%s@zodream.cn', $mobile)
+        ], 'mobile');
+        event(new Register($user, request()->ip(), time()));
+        return self::doLogin($user);
+    }
+
+    public static function sendCodeByUser(string $name) {
+
+    }
+
+    public static function verifyCodeByUser(string $name, string $code) {
+
+    }
+
+    public static function sendCodeByFind(string $name, string $value) {
+
+    }
+
+    public static function verifyCodeByFind(string $name, string $value, string $code) {
+
     }
 }

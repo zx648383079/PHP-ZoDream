@@ -18,7 +18,7 @@ class PasswordController extends Controller {
         ]);
     }
 
-    public function sendFindEmailAction($email) {
+    public function sendFindEmailAction(string $email) {
         try {
             AuthRepository::sendEmail(
                 $email,
@@ -33,7 +33,7 @@ class PasswordController extends Controller {
         ]);
     }
 
-    public function sendMobileCodeAction($mobile, $type = 'login') {
+    public function sendMobileCodeAction(string $mobile, string $type = 'login') {
         try {
             AuthRepository::sendSmsCode(
                 $mobile,

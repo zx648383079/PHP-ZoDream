@@ -34,7 +34,8 @@ class CreateAuthTables extends Migration {
         $this->append(UserModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('email', 200);
+            $table->string('email', 200)->default('');
+            $table->string('mobile', 20)->default('');
             $table->string('password', 100);
             $table->uint('sex', 1)->default(0);
             $table->string('avatar')->default('');

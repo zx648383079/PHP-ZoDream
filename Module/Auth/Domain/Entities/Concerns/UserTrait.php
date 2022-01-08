@@ -12,24 +12,28 @@ trait UserTrait {
         return [
             'name' => 'required|string:0,100',
             'email' => 'required|string:0,200',
+            'mobile' => 'string:0,20',
             'password' => 'required|string:0,100',
-            'sex' => 'int:0,9',
+            'sex' => 'int:0,127',
             'avatar' => 'string:0,255',
-            'birthday' => 'string:0,30',
+            'birthday' => 'string',
             'money' => 'int',
+            'credits' => 'int',
             'parent_id' => 'int',
             'token' => 'string:0,60',
-            'status' => 'int:0,99',
-            'created_at' => 'int',
+            'status' => 'int:0,127',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
+
 
     protected function labels() {
         return [
             'id' => 'Id',
             'name' => '昵称',
             'email' => '邮箱',
+            'mobile' => '手机号',
             'password' => '密码',
             'sex' => '性别',
             'avatar' => '头像',

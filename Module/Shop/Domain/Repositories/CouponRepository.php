@@ -134,4 +134,18 @@ class CouponRepository {
             return CouponRepository::canUseGoods($item, $goods);
         });
     }
+
+    public static function exchange(string $code) {
+        if (empty($code)) {
+            throw new \Exception('优惠码错误');
+        }
+        $log = CouponLogModel::where('serial_number', $code)
+            ->where('user_id', 0)->orderBy('id', 'desc')->first();
+        if (empty($log)) {
+            throw new \Exception('优惠码错误');
+        }
+        $log->user_id = auth()->id();
+        $log->save();
+        return $log;
+    }
 }

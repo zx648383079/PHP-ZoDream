@@ -4,10 +4,10 @@ namespace Module\Shop\Service;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
-use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\AddressRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Exception;
+use Module\Shop\Domain\Repositories\CashierRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
 
 /**
@@ -16,8 +16,8 @@ use Module\Shop\Domain\Repositories\ShippingRepository;
  */
 class CashierController extends Controller {
 
-    public function indexAction($cart = '', $type = 0) {
-        $goods_list = CartRepository::getGoodsList($cart, $type);
+    public function indexAction($cart = '', int $type = 0) {
+        $goods_list = CashierRepository::getGoodsList($cart, $type);
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./', '请选择结算的商品');
         }
@@ -32,9 +32,9 @@ class CashierController extends Controller {
     }
 
 
-    public function checkoutAction($address, $shipping, $payment, $cart = '', $type = 0) {
+    public function checkoutAction(int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', int $type = 0) {
         try {
-            $order = CartRepository::checkout($address, $shipping, $payment, $cart, $type);
+            $order = CashierRepository::checkout($address, $shipping, $payment, $coupon, $cart, $type);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
@@ -43,10 +43,10 @@ class CashierController extends Controller {
         ], '提交订单成功！');
     }
 
-    public function previewAction($address, $shipping = 0, $payment = 0, $cart = '', $type = 0) {
+    public function previewAction(int $address, int $shipping = 0, int $payment = 0, int $coupon = 0, $cart = '', int $type = 0) {
         try {
-            $goods_list = CartRepository::getGoodsList($cart, $type);
-            $order = CartRepository::preview($goods_list, $address, $shipping, $payment);
+            $goods_list = CashierRepository::getGoodsList($cart, $type);
+            $order = CashierRepository::preview($goods_list, $address, $shipping, $payment, $coupon);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
@@ -56,7 +56,7 @@ class CashierController extends Controller {
         return $this->renderData($data);
     }
 
-    public function editAddressAction($id = 0, $prev = 0) {
+    public function editAddressAction(int $id = 0, $prev = 0) {
         $this->layout = false;
         $address = $id > 0 ? AddressModel::findOrNew($id) : null;
         if ($id > 0) {
@@ -65,7 +65,7 @@ class CashierController extends Controller {
         return $this->show('addressEdit', compact('address', 'prev'));
     }
 
-    public function addressAction($id) {
+    public function addressAction(int $id) {
         $this->layout = false;
         $address = AddressModel::find($id);
         return $this->show(empty($address) ? 'addressEdit' : 'address', compact('address'));
@@ -88,7 +88,7 @@ class CashierController extends Controller {
         return $this->show('addressList', compact('address_list', 'selected'));
     }
 
-    public function payAction($id) {
+    public function payAction(int $id) {
         $order = OrderModel::find($id);
         $payment_list = PaymentModel::all();
         return $this->sendWithShare()->show(compact('order', 'payment_list'));
