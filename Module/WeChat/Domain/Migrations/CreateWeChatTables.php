@@ -35,15 +35,16 @@ class CreateWeChatTables extends Migration {
             $table->string('keywords', 60)->default('')->comment('关键词');
             $table->bool('match')->default(0)->comment('关键词匹配模式');
             $table->text('content')->comment('微信返回数据');
-            $table->string('type', 10)->comment('素材类型');
+            $table->uint('type', 1)->default(0)->comment('素材类型');
+            $table->bool('status')->default(1)->comment('激活');
             $table->timestamps();
         })->append(MenuModel::tableName(), function(Table $table) {
             $table->comment('微信菜单');
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');
             $table->string('name', 100)->comment('菜单名称');
-            $table->string('type', 100)->comment('菜单类型');
-            $table->text('content')->comment('菜单数据');
+            $table->uint('type', 1)->default(0)->comment('菜单类型');
+            $table->string('content', 500)->default('')->comment('菜单数据');
             $table->uint('parent_id')->default(0);
             $table->timestamps();
         })->append(MediaTemplateModel::tableName(), function(Table $table) {

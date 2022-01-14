@@ -34,7 +34,7 @@ class MenuController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData(true);
+        return $this->renderData(MenuRepository::getList($this->weChatId()));
     }
 
     public function deleteAction(int $id) {

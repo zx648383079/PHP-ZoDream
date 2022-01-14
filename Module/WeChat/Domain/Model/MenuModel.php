@@ -12,10 +12,11 @@ use Zodream\ThirdParty\WeChat\MenuItem;
  * @property integer $id
  * @property integer $wid
  * @property string $name
- * @property string $pages
+ * @property integer $type
+ * @property string $content
  * @property integer $parent_id
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
  */
 class MenuModel extends EditorModel {
 
@@ -27,11 +28,11 @@ class MenuModel extends EditorModel {
         return [
             'wid' => 'required|int',
             'name' => 'required|string:0,100',
-            'type' => 'required|string:0,100',
-            'content' => 'required',
+            'type' => 'int:0,127',
+            'content' => 'string:0,500',
             'parent_id' => 'int',
-            'created_at' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
 

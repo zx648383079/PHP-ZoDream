@@ -11,8 +11,11 @@ use Zodream\ThirdParty\WeChat\EventEnum;
  * @property string $event
  * @property string $keywords
  * @property integer $match
- * @property integer $created_at
+ * @property string $content
+ * @property integer $type
  * @property integer $updated_at
+ * @property integer $created_at
+ * @property integer $status
  */
 class ReplyModel extends EditorModel {
 
@@ -42,11 +45,12 @@ class ReplyModel extends EditorModel {
             'wid' => 'required|int',
             'event' => 'required|string:0,20',
             'keywords' => 'string:0,60',
-            'match' => 'required|int:0,9',
+            'match' => 'int:0,127',
             'content' => 'required',
-            'type' => 'required|string:0,10',
-            'created_at' => 'int',
+            'type' => 'int:0,127',
             'updated_at' => 'int',
+            'created_at' => 'int',
+            'status' => 'int:0,127',
         ];
     }
 
@@ -65,6 +69,7 @@ class ReplyModel extends EditorModel {
             'type' => 'Type',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'status' => 'Status',
         ];
     }
 
@@ -112,7 +117,7 @@ class ReplyModel extends EditorModel {
             if ($item['match'] > 0) {
                 continue;
             }
-            if (strpos($content, $key.'') !== false) {
+            if (str_contains($content, $key . '')) {
                 return $item['id'];
             }
         }

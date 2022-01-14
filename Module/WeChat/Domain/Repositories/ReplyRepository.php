@@ -43,7 +43,7 @@ class ReplyRepository {
         $model = new ReplyModel();
         $model->load();
         if ($model->event != EventEnum::Message) {
-            $model->keywords = null;
+            $model->keywords = '';
         }
         EditorInput::save($model, $input);
         $model->wid = $wid;
@@ -129,5 +129,13 @@ class ReplyRepository {
             throw new \Exception('模板不存在');
         }
         return $model->preview($data);
+    }
+
+    public static function sceneList(): array {
+        $data = [];
+        foreach (EditorInput::$scene_list as $value => $name) {
+            $data[] = compact('name', 'value');
+        }
+        return $data;
     }
 }

@@ -6,6 +6,7 @@ use Module\WeChat\Domain\Editors\InputInterface;
 use Module\WeChat\Domain\Editors\Media;
 use Module\WeChat\Domain\Editors\Mini;
 use Module\WeChat\Domain\Editors\News;
+use Module\WeChat\Domain\Editors\None;
 use Module\WeChat\Domain\Editors\Scene;
 use Module\WeChat\Domain\Editors\Template;
 use Module\WeChat\Domain\Editors\Text;
@@ -54,7 +55,8 @@ class EditorInput {
         self::TYPE_EVENT => Event::class,
         self::TYPE_URL => Url::class,
         self::TYPE_MINI => Mini::class,
-        self::TYPE_SCENE => Scene::class
+        self::TYPE_SCENE => Scene::class,
+        99 => None::class
     ];
 
     /**

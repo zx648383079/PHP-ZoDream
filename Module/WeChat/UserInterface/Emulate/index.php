@@ -1,14 +1,16 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\WeChat\Domain\EditorInput;
 use Zodream\Template\View;
 use Module\WeChat\Domain\Model\MenuModel;
 /** @var $this View */
 $this->title = '仿真模拟器';
 function wxMenuItem(MenuModel $item) {
-    if ($item->type == MenuModel::TYPE_URL) {
+    if ($item->type == EditorInput::TYPE_URL) {
         return sprintf('<li><a href="%s" target="_blank">%s</a></li>', $item->content, $item->name);
     }
-    if ($item->type == MenuModel::TYPE_MINI) {
+    if ($item->type == EditorInput::TYPE_MINI) {
         return sprintf('<li><a href="%s" target="_blank">%s</a></li>', $item->content, $item->name);
     }
     return sprintf('<li data-event="%s">%s</li>', $item->content, $item->name);

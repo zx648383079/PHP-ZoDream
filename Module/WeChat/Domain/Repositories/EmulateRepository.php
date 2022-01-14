@@ -23,8 +23,7 @@ class EmulateRepository {
         if (empty($model)) {
             throw new \Exception('公众号不存在');
         }
-        $model->menu_list = MenuModel::with('children')->where('wid', $model->id)->where('parent_id', 0)
-            ->get();
+        $model->menu_list = MenuRepository::getList($model->id);
         $model->news_list = MediaModel::where('wid', $model->id)->where('type', MediaModel::TYPE_NEWS)
             ->orderBy('created_at', 'desc')->limit(6)
             ->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')

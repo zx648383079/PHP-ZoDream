@@ -1,13 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service\Api;
 
-use Module\WeChat\Domain\EmulateResponse;
-use Module\WeChat\Domain\Model\MediaModel;
-use Module\WeChat\Domain\Model\MenuModel;
-use Module\WeChat\Domain\Model\WeChatModel;
-use Module\WeChat\Domain\Model\WeChatSimpleModel;
 use Module\WeChat\Domain\Repositories\EmulateRepository;
-use Module\WeChat\Module;
 
 class EmulateController extends Controller {
 
@@ -21,7 +16,7 @@ class EmulateController extends Controller {
 
     public function replyAction(int $id, string $content, string $type = '') {
         try {
-            return $this->render(EmulateRepository::reply($id, $content, $type));
+            return $this->renderData(EmulateRepository::reply($id, $content, $type));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

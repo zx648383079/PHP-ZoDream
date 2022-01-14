@@ -145,10 +145,10 @@ class MediaModel extends Model {
     }
 
     public function getContent(Media $api) {
-        $content = preg_replace('/src=["\']?([^\s"\'>]+)/', function ($match) use ($api) {
+        $content = preg_replace_callback('/src=["\']?([^\s"\'>]+)/', function ($match) use ($api) {
             return str_replace($match[1], $this->getImgUrl($api, $match[1]), $match[0]);
         }, $this->content);
-        return preg_replace('/url\(["\']?([^\s"\'>)]+)/', function ($match) use ($api) {
+        return preg_replace_callback('/url\(["\']?([^\s"\'>)]+)/', function ($match) use ($api) {
             return str_replace($match[1], $this->getImgUrl($api, $match[1]), $match[0]);
         }, $content);
     }

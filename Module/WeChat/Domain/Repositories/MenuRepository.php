@@ -13,7 +13,6 @@ use Zodream\ThirdParty\WeChat\MenuItem;
 class MenuRepository {
 
     public static function getList(int $wid) {
-
         return (new Tree(MenuModel::where('wid', $wid)->orderBy('parent_id', 'asc')->get()))
             ->makeTree();
     }
@@ -44,8 +43,8 @@ class MenuRepository {
             $exist[] = $model->id;
             if (isset($item['children']) && !empty($item['children'])) {
                 foreach ($item['children'] as $child) {
+                    $child['parent_id'] = $model->id;
                     $m = static::save($wid, $child);
-                    $m->parent_id = $model->id;
                     $exist[] = $m->id;
                 }
             }

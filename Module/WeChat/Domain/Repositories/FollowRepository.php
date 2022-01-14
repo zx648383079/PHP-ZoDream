@@ -21,7 +21,7 @@ class FollowRepository {
     public static function async(int $wid) {
         $next_openid = null;
         /** @var User $api */
-        $api = WeChatModel::find($wid)
+        $api = WeChatModel::findOrThrow($wid, '公众号错误')
             ->sdk(User::class);
         while (true) {
             $openid_list = $api->userList($next_openid);

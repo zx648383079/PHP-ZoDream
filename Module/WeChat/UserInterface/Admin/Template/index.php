@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Module\WeChat\Domain\Model\TemplateModel;
+use Module\WeChat\Domain\Model\MediaTemplateModel;
 /** @var $this View */
 $this->title = '图文模板管理';
 ?>
@@ -30,7 +30,7 @@ $this->title = '图文模板管理';
            <tr>
                 <td><?=$item->id?></td>
                 <td><?=$item->name?></td>
-                <td><?=TemplateModel::$type_list[$item->type]?></td>
+                <td><?=MediaTemplateModel::$type_list[$item->type]?></td>
                 <td>
                     <div class="rich_media_content" style="width: 320px">
                         <?=$item->content?>

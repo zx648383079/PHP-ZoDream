@@ -28,4 +28,12 @@ class TemplateRepository {
         }
         return $model;
     }
+
+    public static function typeList(): array {
+        $data = [];
+        foreach (MediaTemplateModel::$type_list as $value => $name) {
+            $data[] = compact('name', 'value');
+        }
+        return $data;
+    }
 }
