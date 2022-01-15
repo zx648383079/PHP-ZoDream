@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Domain;
 
 use Module\WeChat\Domain\Model\MediaModel;
@@ -7,14 +8,70 @@ use Zodream\ThirdParty\WeChat\MessageResponse;
 
 class EmulateResponse extends MessageResponse implements ArrayAble {
 
+    protected array $sourceData = [];
+
+    public function setText($arg) {
+        $this->sourceData = [
+            'type' => 'text',
+            'content' => $arg
+        ];
+        return $this;
+    }
+
+    public function setUrl(string $url) {
+        $this->sourceData = [
+            'type' => 'url',
+            'content' => $url
+        ];
+        return $this;
+    }
+
+    public function setMedia(MediaModel $model) {
+        if ($model->type !== MediaModel::TYPE_NEWS) {
+            $this->sourceData = [
+                'type' => $model->type,
+                'content' => $model->content,
+                'title' => $model->title,
+                'thumb' => $model->thumb
+            ];
+            return $this;
+        }
+        $items = [$model];
+        $data = MediaModel::where('type', MediaModel::TYPE_NEWS)
+            ->where('parent_id', $model->id)->get();
+        if (!empty($data)) {
+            $items = array_merge($items, $data);
+        }
+        $this->sourceData = [
+            'type' => 'news',
+            'items' => array_map(function ($item) {
+                return $this->formatNews($item);
+            }, $items)
+        ];
+        return $this;
+    }
+
+    private function formatNews(MediaModel $item) {
+        return [
+            'id' => $item->id,
+            'title' => $item->title,
+            'thumb' => $item->thumb,
+            'url' => url('./emulate/media', ['id' => $item->id]),
+        ];
+    }
+
     public function toArray() {
-        if ($this->data['MsgType']['@cdata'] === 'text') {
+        return $this->sourceData;
+    }
+
+    protected function parseData(array $data): array {
+        if ($data['MsgType']['@cdata'] === 'text') {
             return [
                 'type' => 'text',
-                'content' => $this->data['Content']['@cdata']
+                'content' => $data['Content']['@cdata']
             ];
         }
-        if ($this->data['MsgType']['@cdata'] === 'news') {
+        if ($data['MsgType']['@cdata'] === 'news') {
             return [
                 'type' => 'news',
                 'items' => array_map(function ($item) {
@@ -24,7 +81,7 @@ class EmulateResponse extends MessageResponse implements ArrayAble {
                         'url' => url('./emulate/media', ['id' =>
                             MediaModel::where('title', $item['Title']['@cdata'])->value('id')])
                     ];
-                }, $this->data['Articles']['item'])
+                }, $data['Articles']['item'])
             ];
         }
         return [];

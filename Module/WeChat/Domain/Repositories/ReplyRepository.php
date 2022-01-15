@@ -19,7 +19,7 @@ class ReplyRepository {
         return ReplyModel::where('wid', $wid)
             ->when(!empty($event), function ($query) use ($event) {
                 $query->where('event', $event);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
     }
 
     public static function get(int $id) {
@@ -41,7 +41,15 @@ class ReplyRepository {
 
     public static function save(int $wid, Input $input) {
         $model = new ReplyModel();
-        $model->load();
+        $model->load($input->validate([
+            'id' => 'int',
+            'event' => 'required|string:0,20',
+            'keywords' => 'string:0,60',
+            'match' => 'int:0,127',
+            'content' => 'required',
+            'type' => 'int:0,127',
+            'status' => 'int:0,127',
+        ]));
         if ($model->event != EventEnum::Message) {
             $model->keywords = '';
         }

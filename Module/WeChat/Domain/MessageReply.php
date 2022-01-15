@@ -73,7 +73,7 @@ class MessageReply {
             })->on(EventEnum::Click,
             function(Message $message) {
                 if (!empty($message->eventKey)
-                    && strpos($message->eventKey, 'menu_') === 0) {
+                    && str_starts_with($message->eventKey, 'menu_')) {
                     $this->replyMenu(substr($message->eventKey, 5));
                 }
             })->invoke($this->message->getEvent(), [$this->message, $this->response, $this]);

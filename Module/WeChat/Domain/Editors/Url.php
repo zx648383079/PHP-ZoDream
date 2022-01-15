@@ -1,6 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\EditorModel;
 use Zodream\Html\Dark\Theme;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -19,6 +20,9 @@ class Url implements InputInterface {
     }
 
     public function render(EditorModel $model, MessageResponse $response) {
+        if ($response instanceof EmulateResponse) {
+            return $response->setUrl($model->content);
+        }
         return $response->setText($model->content);
     }
 

@@ -1,11 +1,10 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\EditorModel;
 use Zodream\Helpers\Json;
-use Zodream\Html\Dark\Theme;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Infrastructure\Support\Html;
 use Zodream\ThirdParty\WeChat\MenuItem;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 
@@ -36,6 +35,10 @@ HTML;
     }
 
     public function render(EditorModel $model, MessageResponse $response) {
+        if ($response instanceof EmulateResponse) {
+            $editor = Json::decode($model->getAttributeSource('content'));
+            return $response->setUrl($editor['url']);
+        }
         return $response;
     }
 

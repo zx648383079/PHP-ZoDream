@@ -19,7 +19,7 @@ class Event implements InputInterface {
     }
 
     public function render(EditorModel $model, MessageResponse $response) {
-        return $response->setText($model->content);
+        return $response;
     }
 
 

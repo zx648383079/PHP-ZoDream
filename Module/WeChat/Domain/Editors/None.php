@@ -16,7 +16,7 @@ class None implements InputInterface {
     }
 
     public function render(EditorModel $model, MessageResponse $response) {
-        return '';
+        return $response;
     }
 
 

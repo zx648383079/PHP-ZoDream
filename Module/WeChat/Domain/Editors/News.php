@@ -1,11 +1,10 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Model\MediaModel;
-use Zodream\Html\Dark\Theme;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Infrastructure\Support\Html;
 use Zodream\ThirdParty\WeChat\MenuItem;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 
@@ -39,11 +38,13 @@ HTML;
     }
 
     public function render(EditorModel $reply, MessageResponse $response) {
+        if ($response instanceof EmulateResponse) {
+            return $response->setMedia(MediaModel::find($reply->content));
+        }
         $model_list = MediaModel::where('id', $reply->content)
             ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
         foreach ($model_list as $item) {
             /** @var $item MediaModel */
-
             $picUrl = empty($this->message) ? $item->thumb : MediaModel::where('type', MediaModel::TYPE_IMAGE)
                 ->where('content', $item->thumb)->value('url');
             $response->addNews($item->title, $item->title,

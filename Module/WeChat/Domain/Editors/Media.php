@@ -1,6 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -43,6 +44,9 @@ HTML;
 
     public function render(EditorModel $reply, MessageResponse $response) {
         $model = MediaModel::find($reply->content);
+        if ($response instanceof EmulateResponse) {
+            return $response->setMedia($model);
+        }
         if (!$model->media_id) {
             return $response->setText('内容有误');
         }

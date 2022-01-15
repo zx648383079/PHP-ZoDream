@@ -66,4 +66,10 @@ class MediaController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function searchAction(string $keywords = '', string $type = '', int|array $id = 0) {
+        return $this->renderPage(MediaRepository::search(
+            $this->weChatId(),
+            $keywords, $type, $id));
+    }
 }

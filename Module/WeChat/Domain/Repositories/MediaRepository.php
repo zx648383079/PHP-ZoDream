@@ -5,6 +5,7 @@ namespace Module\WeChat\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\Html\Page;
 use Zodream\ThirdParty\WeChat\Media;
 
 class MediaRepository {
@@ -15,7 +16,8 @@ class MediaRepository {
                 $query->where('type', $type);
             })->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
-            })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb')->page();
+            })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')
+            ->orderBy('id', 'desc')->page();
     }
 
     public static function get(int $id) {
@@ -52,5 +54,20 @@ class MediaRepository {
             ->sdk(Media::class))) {
             throw new \Exception('创建失败');
         }
+    }
+
+    public static function search(int $wid, string $keywords = '', string $type = '', int|array $id = 0) {
+        return MediaModel::where('wid', $wid)
+            ->when(!empty($type), function ($query) use ($type) {
+                $query->where('type', $type);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'title');
+            })->when(!empty($id), function ($query) use ($id) {
+                if (is_array($id)) {
+                    $query->whereIn('id', $id);
+                    return;
+                }
+                $query->where('id', $id);
+            })->select('id', 'title', 'type', 'thumb', 'created_at')->page();
     }
 }

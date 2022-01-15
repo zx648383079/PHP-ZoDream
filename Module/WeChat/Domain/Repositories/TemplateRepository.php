@@ -7,7 +7,9 @@ use Module\WeChat\Domain\Model\MediaTemplateModel;
 class TemplateRepository {
 
     public static function getList(int $type = 0) {
-        return MediaTemplateModel::where('type', $type)->page();
+        return MediaTemplateModel::when($type >= 0, function ($query) use ($type) {
+            $query->where('type', $type);
+        })->page();
     }
 
     public static function get(int $id) {
