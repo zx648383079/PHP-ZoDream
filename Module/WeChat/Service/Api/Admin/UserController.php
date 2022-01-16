@@ -7,9 +7,13 @@ use Module\WeChat\Domain\Repositories\FollowRepository;
 class UserController extends Controller {
 
     public function indexAction(string $keywords = '', bool $blacklist = false) {
-        return $this->renderPage(
-            FollowRepository::getList($this->weChatId(), $keywords, $blacklist)
-        );
+        try {
+            return $this->renderPage(
+                FollowRepository::getList($this->weChatId(), $keywords, $blacklist)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function refreshAction() {

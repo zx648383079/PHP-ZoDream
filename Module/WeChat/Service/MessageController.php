@@ -5,7 +5,6 @@ use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Module;
-use Zodream\ThirdParty\WeChat\AccessToken;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 
@@ -16,7 +15,7 @@ class MessageController extends Controller {
      */
     protected $model;
 
-    public function indexAction($id) {
+    public function indexAction(int $id) {
         $reply = Module::reply()->setModel($this->model = WeChatModel::find($id));
         $message = $this->model->sdk(Message::class);
         if ($message->isValid()) {
@@ -54,7 +53,7 @@ class MessageController extends Controller {
         return $this->indexAction($action);
     }
 
-    private function subscribe($openid) {
+    private function subscribe(string $openid) {
         $model = FansModel::where('openid', $openid)
             ->where('wid', $this->model->id)->first();
         if (empty($model)) {
@@ -67,7 +66,7 @@ class MessageController extends Controller {
         $model->save() && $model->updateUser(true);
     }
 
-    private function unsubscribe($openid) {
+    private function unsubscribe(string $openid) {
         FansModel::where('openid', $openid)
             ->where('wid', $this->model->id)->update([
                 'status' => FansModel::STATUS_UNSUBSCRIBED,

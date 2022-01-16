@@ -7,6 +7,7 @@ use Module\WeChat\Domain\Model\QrcodeModel;
 
 class QrcodeRepository {
     public static function getList(int $wid, string $keywords = '') {
+        AccountRepository::isSelf($wid);
         return QrcodeModel::where('wid', $wid)->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
         })->page();
@@ -16,16 +17,29 @@ class QrcodeRepository {
         return QrcodeModel::findOrThrow($id, '数据有误');
     }
 
+    public static function getSelf(int $id) {
+        $model = static::get($id);
+        AccountRepository::isSelf($model->wid);
+        return $model;
+    }
+
     public static function remove(int $id) {
-        QrcodeModel::where('id', $id)->delete();
+        $model = QrcodeModel::find($id);
+        AccountRepository::isSelf($model->wid);
+        $model->delete();
     }
 
     public static function save(int $wid, array $data) {
         $id = $data['id'] ?? 0;
-        unset($data['id']);
-        $model = QrcodeModel::findOrNew($id);
+        unset($data['id'], $data['wid']);
+        if ($id > 0) {
+            $model = static::getSelf($id);
+        } else {
+            $model = new QrcodeModel();
+            $model->wid = $wid;
+            AccountRepository::isSelf($model->wid);
+        }
         $model->load($data);
-        $model->wid = $wid;
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }

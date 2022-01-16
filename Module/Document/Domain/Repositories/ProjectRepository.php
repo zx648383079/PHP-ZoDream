@@ -66,7 +66,7 @@ class ProjectRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = $id > 0 ? self::getSelf($id) : new ProjectModel();
         $model->load($data);

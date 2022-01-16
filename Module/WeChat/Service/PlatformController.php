@@ -2,7 +2,6 @@
 namespace Module\WeChat\Service;
 
 use Module\ModuleController;
-use Zodream\Infrastructure\Http\Response;
 use Zodream\ThirdParty\WeChat\Platform\Manage;
 use Zodream\ThirdParty\WeChat\Platform\Notify;
 
@@ -25,7 +24,6 @@ class PlatformController extends ModuleController {
 
     /**
      * 公众号授权
-     * @return Response
      * @throws \Exception
      */
     public function loginAction() {
@@ -47,7 +45,7 @@ class PlatformController extends ModuleController {
      * 公众号事件推送
      * @param $openid
      */
-    public function messageAction($openid) {
+    public function messageAction(string $openid) {
         dd($openid);
         /*$message = WeChat::instance()->message();
         $response = $message->on(EventEnum::Message, function(Message $message, MessageResponse $response) {

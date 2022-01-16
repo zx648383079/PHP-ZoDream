@@ -11,15 +11,19 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class ReplyController extends Controller {
 
     public function indexAction(string $event = '') {
-        return $this->renderPage(
-            ReplyRepository::getList($this->weChatId(), $event)
-        );
+        try {
+            return $this->renderPage(
+                ReplyRepository::getList($this->weChatId(), $event)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                ReplyRepository::get($id)
+                ReplyRepository::getSelf($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -28,7 +32,25 @@ class ReplyController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            $model = ReplyRepository::save($this->weChatId(), $request);
+            $data = $request->validate([
+                'id' => 'int',
+                'event' => 'required|string:0,20',
+                'keywords' => 'string:0,60',
+                'match' => 'int:0,127',
+                'content' => 'required',
+                'type' => 'int:0,127',
+                'status' => 'int:0,127',
+            ]);
+            $model = ReplyRepository::save($this->weChatId(), $data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
+    public function updateAction(int $id, array $data) {
+        try {
+            $model = ReplyRepository::update($id, $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -45,9 +67,13 @@ class ReplyController extends Controller {
     }
 
     public function allAction(string $keywords = '') {
-        return $this->renderData(
-            FollowRepository::searchFans($this->weChatId(), $keywords)
-        );
+        try {
+            return $this->renderData(
+                FollowRepository::searchFans($this->weChatId(), $keywords)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function sendAllAction(int $user_id = 0, array $editor = []) {
@@ -60,9 +86,13 @@ class ReplyController extends Controller {
     }
 
     public function templateAction() {
-        return $this->renderPage(
-            ReplyRepository::templateList($this->weChatId())
-        );
+        try {
+            return $this->renderPage(
+                ReplyRepository::templateList($this->weChatId())
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function refreshTemplateAction() {

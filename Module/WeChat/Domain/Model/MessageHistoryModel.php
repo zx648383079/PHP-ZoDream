@@ -8,27 +8,27 @@ use Domain\Model\Model;
  * 微信请求消息历史记录
  * @property integer $id
  * @property integer $wid
- * @property integer $rid
- * @property integer $kid
  * @property string $from
  * @property string $to
- * @property string $message
- * @property string $type
  * @property integer $created_at
+ * @property integer $item_type
+ * @property integer $item_id
+ * @property string $content
+ * @property integer $is_mark
  */
 class MessageHistoryModel extends Model {
     /**
      * 微信请求信息
      */
-    const TYPE_REQUEST = 'request';
+    const TYPE_REQUEST = 1;
     /**
      * 微信请求后的系统响应信息
      */
-    const TYPE_RESPONSE = 'response';
+    const TYPE_RESPONSE = 2;
     /**
      * 主动客服消息
      */
-    const TYPE_CUSTOM = 'custom';
+    const TYPE_CUSTOM = 3;
     /**
      * @inheritdoc
      */
@@ -39,13 +39,13 @@ class MessageHistoryModel extends Model {
     protected function rules() {
         return [
             'wid' => 'required|int',
-            'rid' => 'required|int',
-            'kid' => 'required|int',
             'from' => 'required|string:0,50',
             'to' => 'required|string:0,50',
-            'message' => 'required',
-            'type' => 'required|string:0,10',
             'created_at' => 'int',
+            'item_type' => 'int:0,127',
+            'item_id' => 'required|int',
+            'content' => '',
+            'is_mark' => 'int:0,127',
         ];
     }
 

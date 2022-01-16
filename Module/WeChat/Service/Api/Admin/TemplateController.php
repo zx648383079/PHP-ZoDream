@@ -1,15 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-
-use Module\WeChat\Domain\Model\MediaTemplateModel;
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\WeChat\Domain\Repositories\TemplateRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class TemplateController extends Controller {
-    public function indexAction(int $type = 0) {
+
+    use AdminRole;
+
+    public function indexAction(string $keywords = '', int $type = 0, int $category = 0) {
         return $this->renderPage(
-            TemplateRepository::getList($type)
+            TemplateRepository::getList($keywords, $type, $category)
         );
     }
 
@@ -28,7 +31,7 @@ class TemplateController extends Controller {
             $data = $input->validate([
                 'id' => 'int',
                 'type' => 'int:0,999',
-                'category' => 'int',
+                'cat_id' => 'int',
                 'name' => 'required|string:0,100',
                 'content' => 'required',
             ]);
@@ -43,6 +46,36 @@ class TemplateController extends Controller {
     public function deleteAction(int $id) {
         try {
             TemplateRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function categoryAction(string $keywords = '') {
+        return $this->renderPage(
+            TemplateRepository::categoryList($keywords)
+        );
+    }
+
+    public function categorySaveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,20',
+                'parent_id' => 'int',
+            ]);
+            return $this->render(
+                TemplateRepository::categorySave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function categoryDeleteAction(int $id) {
+        try {
+            TemplateRepository::categoryRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

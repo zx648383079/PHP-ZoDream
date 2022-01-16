@@ -1,13 +1,16 @@
 <?php
 namespace Module\WeChat\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
+use Module\WeChat\Domain\Model\EditorTemplateCategoryModel;
+use Module\WeChat\Domain\Model\EditorTemplateModel;
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MediaModel;
-use Module\WeChat\Domain\Model\MediaTemplateModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
 use Module\WeChat\Domain\Model\QrcodeModel;
 use Module\WeChat\Domain\Model\TemplateModel;
+use Module\WeChat\Domain\Model\UserGroupModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
@@ -21,6 +24,7 @@ class CreateWeChatTables extends Migration {
      * @return void
      */
     public function up() {
+        $this->initEditor();
         $this->initWechatTable();
         $this->initFansTable();
         $this->initUserTable();
@@ -47,14 +51,6 @@ class CreateWeChatTables extends Migration {
             $table->string('content', 500)->default('')->comment('菜单数据');
             $table->uint('parent_id')->default(0);
             $table->timestamps();
-        })->append(MediaTemplateModel::tableName(), function(Table $table) {
-            $table->comment('微信图文模板');
-            $table->id();
-            $table->uint('type', 2)->default(0)->comment('类型：素材、节日、行业');
-            $table->uint('category')->default(0)->comment('详细分类');
-            $table->string('name', 100)->comment('模板标题');
-            $table->text('content')->comment('模板内容');
-            $table->timestamps();
         })->append(TemplateModel::tableName(), function(Table $table) {
             $table->comment('微信模板消息模板');
             $table->id();
@@ -78,6 +74,28 @@ class CreateWeChatTables extends Migration {
         })->autoUp();
     }
 
+    public function seed() {
+        RoleRepository::newPermission([
+            'wechat_manage' => '公众号管理'
+        ]);
+    }
+
+    public function initEditor() {
+        $this->append(EditorTemplateModel::tableName(), function(Table $table) {
+            $table->comment('微信图文模板');
+            $table->id();
+            $table->uint('type', 2)->default(0)->comment('类型：素材、节日、行业');
+            $table->uint('cat_id')->default(0)->comment('详细分类');
+            $table->string('name', 100)->comment('模板标题');
+            $table->text('content')->comment('模板内容');
+            $table->timestamps();
+        })->append(EditorTemplateCategoryModel::tableName(), function(Table $table) {
+            $table->comment('微信图文模板分类');
+            $table->id();
+            $table->string('name', 20)->comment('模板标题');
+            $table->uint('parent_id')->default(0);
+        });
+    }
 
     /**
      * 公众号表
@@ -140,6 +158,9 @@ class CreateWeChatTables extends Migration {
             $table->string('remark')->default('')->comment('备注');
             $table->uint('group_id');
             $table->timestamp('updated_at');
+        })->append(UserGroupModel::tableName(), function (Table $table) {
+            $table->id()->comment('分组');
+            $table->string('name', 20)->comment('昵称');
         });
     }
     /**
@@ -149,13 +170,12 @@ class CreateWeChatTables extends Migration {
         $this->append(MessageHistoryModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');
-            $table->uint('rid')->comment('相应规则ID');
-            $table->uint('kid')->comment('所属关键字ID');
+            $table->uint('item_type', 1)->default(0)->comment('发送类型');
+            $table->uint('item_id')->comment('相应规则ID');
             $table->string('from', 50)->comment('请求用户ID');
             $table->string('to', 50)->comment('相应用户ID');
-            $table->text('message')->comment('消息体内容');
-            $table->string('type', 10)->comment('发送类型');
-            $table->bool('mark')->default(0)->comment('是否标记');
+            $table->text('content')->nullable()->comment('消息体内容');
+            $table->bool('is_mark')->default(0)->comment('是否标记');
             $table->timestamp('created_at');
         });
     }

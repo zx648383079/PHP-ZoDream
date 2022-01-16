@@ -9,15 +9,19 @@ class MediaController extends Controller {
 
 
     public function indexAction(string $keywords = '', string $type = '') {
-        return $this->renderPage(MediaRepository::getList(
-            $this->weChatId(),
-            $keywords, $type));
+        try {
+            return $this->renderPage(MediaRepository::getList(
+                $this->weChatId(),
+                $keywords, $type));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                MediaRepository::get($id)
+                MediaRepository::getSelf($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -40,9 +44,8 @@ class MediaController extends Controller {
                 'media_id' => 'string:0,100',
                 'url' => 'string:0,255',
             ]);
-            $data['wid'] = $this->weChatId();
             return $this->render(
-                MediaRepository::save($data)
+                MediaRepository::save($this->weChatId(), $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -68,8 +71,12 @@ class MediaController extends Controller {
     }
 
     public function searchAction(string $keywords = '', string $type = '', int|array $id = 0) {
-        return $this->renderPage(MediaRepository::search(
-            $this->weChatId(),
-            $keywords, $type, $id));
+        try {
+            return $this->renderPage(MediaRepository::search(
+                $this->weChatId(),
+                $keywords, $type, $id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

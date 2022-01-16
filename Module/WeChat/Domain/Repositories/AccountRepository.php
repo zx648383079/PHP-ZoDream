@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\WeChat\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Document\Domain\Model\ProjectModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 
 class AccountRepository {
@@ -37,7 +38,7 @@ class AccountRepository {
     public static function save(array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        $model = WeChatModel::findOrNew($id);
+        $model = $id > 0 ? self::getSelf($id) : new ProjectModel();;
         $model->load($data);
         $model->user_id = auth()->id();
         if (!$model->save()) {

@@ -34,7 +34,7 @@ class ReplyController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = ReplyModel::findOrNew($id);
         $request = request();
         if ($request->has('type')) {
@@ -48,7 +48,16 @@ class ReplyController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            ReplyRepository::save($this->weChatId(), $request);
+            $data = $request->validate([
+                'id' => 'int',
+                'event' => 'required|string:0,20',
+                'keywords' => 'string:0,60',
+                'match' => 'int:0,127',
+                'content' => 'required',
+                'type' => 'int:0,127',
+                'status' => 'int:0,127',
+            ]);
+            ReplyRepository::save($this->weChatId(), $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

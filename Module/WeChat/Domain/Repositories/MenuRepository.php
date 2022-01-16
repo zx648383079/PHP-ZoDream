@@ -13,6 +13,7 @@ use Zodream\ThirdParty\WeChat\MenuItem;
 class MenuRepository {
 
     public static function getList(int $wid) {
+        AccountRepository::isSelf($wid);
         return (new Tree(MenuModel::where('wid', $wid)->orderBy('parent_id', 'asc')->get()))
             ->makeTree();
     }
@@ -21,16 +22,34 @@ class MenuRepository {
         return MenuModel::findOrThrow($id, '菜单项错误');
     }
 
-    public static function remove(int $id) {
-        MenuModel::where('id', $id)->delete();
+    public static function getSelf(int $id) {
+        $model = static::get($id);
+        AccountRepository::isSelf($model->wid);
+        return $model;
     }
 
-    public static function save(int $wid, Input|array $input) {
-        $model = new MenuModel();
-        $model->load(!is_array($input) ? $input->get() : $input);
+    public static function remove(int $id) {
+        $model = MenuModel::find($id);
+        AccountRepository::isSelf($model->wid);
+        $model->delete();
+    }
+
+    public static function save(int $wid, array $input) {
+        $id = $input['id'] ?? 0;
+        unset($input['id'], $input['wid']);
+        if ($id > 0) {
+            $model = static::getSelf($id);
+            if ($model->wid != $wid) {
+                throw new \Exception('不同公众号的菜单不能共用');
+            }
+        } else {
+            $model = new MenuModel();
+            $model->wid = $wid;
+            AccountRepository::isSelf($model->wid);
+        }
+        $model->load($input);
         EditorInput::save($model, $input);
-        $model->wid = $wid;
-        if (!$model->autoIsNew()->save()) {
+        if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         return $model;
@@ -53,6 +72,7 @@ class MenuRepository {
     }
 
     public static function async(int $wid) {
+        AccountRepository::isSelf($wid);
         $menu_list = static::getList($wid);
         WeChatModel::find($wid)
             ->sdk(Menu::class)

@@ -16,6 +16,7 @@ use Zodream\ThirdParty\WeChat\Template;
 class ReplyRepository {
 
     public static function getList(int $wid, string $event = '') {
+        AccountRepository::isSelf($wid);
         return ReplyModel::where('wid', $wid)
             ->when(!empty($event), function ($query) use ($event) {
                 $query->where('event', $event);
@@ -24,6 +25,18 @@ class ReplyRepository {
 
     public static function get(int $id) {
         return ReplyModel::findOrThrow($id, '数据有误');
+    }
+
+    public static function getSelf(int $id) {
+        $model = static::get($id);
+        AccountRepository::isSelf($model->wid);
+        return $model;
+    }
+
+    public static function remove(int $id) {
+        $model = ReplyModel::find($id);
+        AccountRepository::isSelf($model->wid);
+        $model->delete();
     }
 
     public static function getByEvent(int $wid, string $event) {
@@ -35,29 +48,45 @@ class ReplyRepository {
         return $model;
     }
 
-    public static function remove(int $id) {
-        ReplyModel::where('id', $id)->delete();
-    }
-
-    public static function save(int $wid, Input $input) {
-        $model = new ReplyModel();
-        $model->load($input->validate([
-            'id' => 'int',
-            'event' => 'required|string:0,20',
-            'keywords' => 'string:0,60',
-            'match' => 'int:0,127',
-            'content' => 'required',
-            'type' => 'int:0,127',
-            'status' => 'int:0,127',
-        ]));
+    public static function save(int $wid, array $input) {
+        $id = $input['id'] ?? 0;
+        unset($input['id'], $input['wid']);
+        if ($id > 0) {
+            $model = static::getSelf($id);
+        } else {
+            $model = new ReplyModel();
+            $model->wid = $wid;
+            AccountRepository::isSelf($model->wid);
+        }
+        $model->load($input);
         if ($model->event != EventEnum::Message) {
             $model->keywords = '';
         }
         EditorInput::save($model, $input);
-        $model->wid = $wid;
-        if (!$model->autoIsNew()->save()) {
+        if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        ReplyModel::cacheReply($model->wid, true);
+        return $model;
+    }
+
+    public static function update(int $id, array $data) {
+        $model = ReplyModel::find($id);
+        AccountRepository::isSelf($model->wid);
+        $maps = ['status'];
+        foreach ($data as $action => $val) {
+            if (is_int($action)) {
+                if (empty($val)) {
+                    continue;
+                }
+                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
+            }
+            if (empty($action) || !in_array($action, $maps)) {
+                continue;
+            }
+            $model->{$action} = intval($val);
+        }
+        $model->save();
         ReplyModel::cacheReply($model->wid, true);
         return $model;
     }
@@ -66,6 +95,7 @@ class ReplyRepository {
         if ($editor['type'] === 3) {
             return static::sendTemplate($wid, $user_id, $editor['template_id'], $editor['template_url'], $editor['template_data']);
         }
+        AccountRepository::isSelf($wid);
         $data = '';
         $type = Mass::TEXT;
         if ($editor['type'] < 1) {
@@ -82,6 +112,7 @@ class ReplyRepository {
     }
 
     public static function sendTemplate(int $wid, int $user_id, string $template_id, string $url, array|string $data) {
+        AccountRepository::isSelf($wid);
         if ($user_id < 1) {
             throw new \Exception('模板消息只能发给单个用户');
         }
@@ -100,10 +131,12 @@ class ReplyRepository {
     }
 
     public static function templateList(int $wid) {
+        AccountRepository::isSelf($wid);
         return TemplateModel::where('wid', $wid)->page();
     }
 
     public static function asyncTemplate(int $wid) {
+        AccountRepository::isSelf($wid);
         /** @var Template $api */
         $api = WeChatModel::find($wid)
             ->sdk(Template::class);
@@ -128,6 +161,7 @@ class ReplyRepository {
         if (empty($model)) {
             throw new \Exception('模板不存在');
         }
+        AccountRepository::isSelf($model->wid);
         return $model->getFields();
     }
 
@@ -136,6 +170,7 @@ class ReplyRepository {
         if (empty($model)) {
             throw new \Exception('模板不存在');
         }
+        AccountRepository::isSelf($model->wid);
         return $model->preview($data);
     }
 

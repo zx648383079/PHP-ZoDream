@@ -76,8 +76,10 @@ class ReplyModel extends EditorModel {
     public static function getMessageReply($wid) {
         $data = static::where('event', EventEnum::Message)
             ->where('wid', $wid)
+            ->where('status', 1)
             ->orderBy('`match`', 'asc')
-            ->orderBy('updated_at', 'asc')->get('id', 'keywords', '`match`');
+            ->orderBy('updated_at', 'asc')
+            ->get('id', 'keywords', '`match`');
         $args = [];
         foreach ($data as $item) {
             foreach (explode(',', $item->keywords) as $val) {
@@ -136,7 +138,7 @@ class ReplyModel extends EditorModel {
 
     public static function findWithEvent($event, $wid) {
         return static::where('event', $event)
-            ->where('wid', $wid)->first();
+            ->where('wid', $wid)->where('status', 1)->first();
     }
 
 }

@@ -11,6 +11,7 @@ use Zodream\ThirdParty\WeChat\User;
 class FollowRepository {
 
     public static function getList(int $wid, string $keywords = '', bool $blacklist = false) {
+        AccountRepository::isSelf($wid);
         return FansModel::with('user')
             ->where('wid', $wid)
             ->when(!empty($blacklist), function ($query) {
@@ -19,6 +20,7 @@ class FollowRepository {
     }
 
     public static function async(int $wid) {
+        AccountRepository::isSelf($wid);
         $next_openid = null;
         /** @var User $api */
         $api = WeChatModel::findOrThrow($wid, '公众号错误')
@@ -40,6 +42,7 @@ class FollowRepository {
     }
 
     public static function searchFans(int $wid, string $keywords = '') {
+        AccountRepository::isSelf($wid);
         return FansModel::query()->alias('f')
             ->where('f.wid', $wid)
             ->where('f.status', FansModel::STATUS_SUBSCRIBED)

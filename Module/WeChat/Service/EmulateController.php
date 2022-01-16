@@ -22,7 +22,7 @@ class EmulateController extends Controller {
         return $this->show(compact('wx', 'menu_list', 'news_list'));
     }
 
-    public function replyAction($id, $content, $type = '') {
+    public function replyAction(int $id, string $content, string $type = '') {
         $model = WeChatModel::find($id);
         $reply = Module::reply()->setModel($model);
         $reply->setResponse(new EmulateResponse());
@@ -34,7 +34,7 @@ class EmulateController extends Controller {
         return $this->renderData($reply->getResponse());
     }
 
-    public function mediaAction($id) {
+    public function mediaAction(int $id) {
         $model = MediaModel::find($id);
         if (empty($model)) {
             return $this->redirect('./');

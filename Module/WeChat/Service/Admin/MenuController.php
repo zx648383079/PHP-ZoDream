@@ -22,11 +22,11 @@ class MenuController extends Controller {
         return $this->show(compact('menu_list'));
     }
 
-    public function addAction($parent_id = 0) {
+    public function addAction(int $parent_id = 0) {
         return $this->editAction(0, $parent_id);
     }
 
-    public function editAction($id, $parent_id = 0) {
+    public function editAction(int $id, int $parent_id = 0) {
         $model = MenuModel::findOrNew($id);
         $request = request();
         if ($request->has('type')) {
@@ -43,7 +43,13 @@ class MenuController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            MenuRepository::save($this->weChatId(), $request);
+            $data = $request->validate([
+                'name' => 'required|string:0,100',
+                'type' => 'int:0,127',
+                'content' => 'string:0,500',
+                'parent_id' => 'int',
+            ]);
+            MenuRepository::save($this->weChatId(), $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

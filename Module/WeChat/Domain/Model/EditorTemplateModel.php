@@ -4,17 +4,15 @@ namespace Module\WeChat\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class MediaTemplateModel
- * @package Module\WeChat\Domain\Model
  * @property integer $id
  * @property integer $type
- * @property integer $category
+ * @property integer $cat_id
  * @property string $name
  * @property string $content
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
  */
-class MediaTemplateModel extends Model {
+class EditorTemplateModel extends Model {
 
     public static $type_list = [
         '标题样式',
@@ -32,17 +30,17 @@ class MediaTemplateModel extends Model {
     ];
 
     public static function tableName() {
-        return 'wechat_media_template';
+        return 'wechat_editor_template';
     }
 
     protected function rules() {
         return [
-            'type' => 'int:0,999',
-            'category' => 'int',
+            'type' => 'int:0,127',
+            'cat_id' => 'int',
             'name' => 'required|string:0,100',
             'content' => 'required',
-            'created_at' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
 
@@ -50,7 +48,7 @@ class MediaTemplateModel extends Model {
         return [
             'id' => 'Id',
             'type' => '类型',
-            'category' => '分类',
+            'cat_id' => '分类',
             'name' => '名称',
             'content' => '内容',
             'created_at' => 'Created At',

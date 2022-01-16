@@ -9,15 +9,20 @@ class QrcodeController extends Controller {
 
 
     public function indexAction(string $keywords = '') {
-        return $this->renderPage(QrcodeRepository::getList(
-            $this->weChatId(),
-            $keywords));
+        try {
+            return $this->renderPage(QrcodeRepository::getList(
+                $this->weChatId(),
+                $keywords));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                QrcodeRepository::get($id)
+                QrcodeRepository::getSelf($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
