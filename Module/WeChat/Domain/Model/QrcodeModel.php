@@ -10,6 +10,7 @@ use Zodream\ThirdParty\WeChat\User;
  * @property integer $id
  * @property integer $wid
  * @property integer $type
+ * @property integer $scene_type
  * @property string $scene_str
  * @property integer $scene_id
  * @property integer $expire_time
@@ -30,6 +31,7 @@ class QrcodeModel extends Model {
             'wid' => 'required|int',
             'name' => 'required|string:0,255',
             'type' => 'int:0,127',
+            'scene_type' => 'int:0,2',
             'scene_str' => 'string:0,255',
             'scene_id' => 'int',
             'expire_time' => 'int',

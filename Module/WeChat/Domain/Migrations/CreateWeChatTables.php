@@ -64,7 +64,8 @@ class CreateWeChatTables extends Migration {
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');
             $table->string('name')->comment('使用用途');
-            $table->bool('type')->default(0);
+            $table->bool('type')->default(0)->comment('永久或临时');
+            $table->bool('scene_type')->default(0)->comment('数字或字符串');
             $table->string('scene_str')->default('')->comment('场景值');
             $table->uint('scene_id')->default(0)->comment('场景值ID，临时二维码时为32位非0整型，永久二维码时最大值为100000');
             $table->uint('expire_time')->default(0)->comment('过期事件/s');

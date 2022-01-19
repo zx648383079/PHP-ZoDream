@@ -74,10 +74,30 @@ class MenuRepository {
     public static function async(int $wid) {
         AccountRepository::isSelf($wid);
         $menu_list = static::getList($wid);
-        WeChatModel::find($wid)
-            ->sdk(Menu::class)
-            ->create(MenuItem::menu(array_map(function (MenuModel $menu) {
-                return $menu->toMenu();
+        /** @var Menu $api */
+        $api = WeChatModel::find($wid)
+            ->sdk(Menu::class);
+        if (count($menu_list) < 1) {
+            $api->deleteMenu();
+            return;
+        }
+        $api->create(MenuItem::menu(array_map(function ($menu) {
+                return static::renderMenu($menu);
             }, $menu_list)));
+    }
+
+    private static function renderMenu($data) {
+        if (is_array($data)) {
+            $data = new MenuModel($data);
+        }
+        $menu = MenuItem::name($data->name);
+        $children = $data->children;
+        if (!empty($children)) {
+            return $menu->setMenu(array_map(function ($model) {
+                return static::renderMenu($model);
+            }, $children));
+        }
+        EditorInput::renderMenu($data, $menu);
+        return $menu;
     }
 }

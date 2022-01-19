@@ -171,7 +171,7 @@ class MediaModel extends Model {
         if ($this->type == self::TYPE_NEWS) {
             return $this->asyncNews($api);
         }
-        $file = public_path($this->content);
+        $file = public_path(strpos($this->content, '://') != false ? parse_url($this->content, PHP_URL_PATH) : $this->content);
         if ($this->material_type != self::MATERIAL_PERMANENT) {
             $res = $api->uploadTemp($file, $this->type);
         } else {
@@ -196,12 +196,17 @@ class MediaModel extends Model {
         foreach ($child as $item) {
             $news->setArticle(static::converterNews($item, $api));
         }
-        $media_id = $api->addNews($news);
-        if (empty($media_id)) {
-            return false;
+        if (!$this->media_id) {
+            $media_id = $api->addNews($news);
+            if (empty($media_id)) {
+                return false;
+            }
+            $this->media_id = $media_id;
+            $this->save();
+        } else {
+            $news->setMediaId($this->media_id);
+            $api->updateNews($news);
         }
-        $this->media_id = $media_id;
-        $this->save();
         return true;
     }
 
@@ -220,7 +225,4 @@ class MediaModel extends Model {
             ->setOnlyFansCanComment($model->only_comment)
             ->setNeedOpenComment($model->open_comment);
     }
-
-
-
 }

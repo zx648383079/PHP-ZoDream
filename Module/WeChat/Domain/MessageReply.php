@@ -7,6 +7,7 @@ use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Scene\SceneInterface;
+use Zodream\Helpers\Json;
 use Zodream\Infrastructure\Pipeline\InterruptibleProcessor;
 use Zodream\Infrastructure\Pipeline\PipelineBuilder;
 use Zodream\Infrastructure\Concerns\EventTrait;
@@ -72,8 +73,7 @@ class MessageReply {
                 $this->replyEvent(EventEnum::UnSubscribe);
             })->on(EventEnum::Click,
             function(Message $message) {
-                if (!empty($message->eventKey)
-                    && str_starts_with($message->eventKey, 'menu_')) {
+                if (!$message->eventKey && str_starts_with($message->eventKey, 'menu_')) {
                     $this->replyMenu(substr($message->eventKey, 5));
                 }
             })->invoke($this->message->getEvent(), [$this->message, $this->response, $this]);

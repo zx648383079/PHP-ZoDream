@@ -109,7 +109,7 @@ class ModelHelper {
             if (empty($action) || !in_array($action, $checkMap)) {
                 continue;
             }
-            $model->{$action} = intval($val);
+            $model->{$action} = $val;
         }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());

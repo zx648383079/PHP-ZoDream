@@ -4,6 +4,8 @@ namespace Module\WeChat\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\WeChat\Domain\Model\QrcodeModel;
+use Module\WeChat\Domain\Model\WeChatModel;
+use Zodream\ThirdParty\WeChat\Account;
 
 class QrcodeRepository {
     public static function getList(int $wid, string $keywords = '') {
@@ -24,8 +26,7 @@ class QrcodeRepository {
     }
 
     public static function remove(int $id) {
-        $model = QrcodeModel::find($id);
-        AccountRepository::isSelf($model->wid);
+        $model = static::getSelf($id);
         $model->delete();
     }
 
@@ -43,6 +44,20 @@ class QrcodeRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        if (empty($model->url)) {
+            static::async($model);
+        }
         return $model;
+    }
+
+    public static function async(QrcodeModel $model) {
+        /** @var Account $api */
+        $api = WeChatModel::findOrThrow($model->wid, '公众号不存在')
+            ->sdk(Account::class);
+        $res = $api->qrCode($model->scene_type < 1 ? $model->scene_str : intval($model->scene_id),
+            $model->type > 0 ? false : intval($model->expire_time));
+        $model->qr_url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.urlencode($res['ticket']);
+        $model->url = $res['url'];
+        $model->save();
     }
 }

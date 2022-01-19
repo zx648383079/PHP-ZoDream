@@ -35,10 +35,11 @@ class QrcodeController extends Controller {
                 'id' => 'int',
                 'name' => 'required|string:0,255',
                 'type' => 'int:0,127',
+                'scene_type' => 'int:0,2',
+                'scene_id' => 'int',
                 'scene_str' => 'string:0,255',
                 'expire_time' => 'int',
             ]);
-            $data['wid'] = $this->weChatId();
             return $this->render(
                 QrcodeRepository::save($this->weChatId(), $data)
             );
