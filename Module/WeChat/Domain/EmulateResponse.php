@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\WeChat\Domain;
 
 use Module\WeChat\Domain\Model\MediaModel;
+use Module\WeChat\Domain\Model\TemplateModel;
 use Zodream\Infrastructure\Contracts\ArrayAble;
 use Zodream\ThirdParty\WeChat\MessageResponse;
 
@@ -22,6 +23,20 @@ class EmulateResponse extends MessageResponse implements ArrayAble {
         $this->sourceData = [
             'type' => 'url',
             'content' => $url
+        ];
+        return $this;
+    }
+
+    public function setTemplate(string $templateId, array|string $data, string $url) {
+        /** @var TemplateModel $model */
+        $model = TemplateModel::where('template_id', $templateId)->first();
+        if (empty($model)) {
+            return $this->setText('模板不存在');
+        }
+        $this->sourceData = [
+            'type' => 'template',
+            'content' => $model->preview($data),
+            'url' => $url,
         ];
         return $this;
     }

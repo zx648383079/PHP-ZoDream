@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\WeChat\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\UserModel;
@@ -53,6 +54,12 @@ class FollowRepository {
             })
             ->asArray()
             ->get('f.id,u.nickname as name');
+    }
+
+    public static function update(int $id, array $data) {
+        $model = FansModel::findOrThrow($id, '会员不存在');
+        AccountRepository::isSelf($model->wid);
+        return ModelHelper::updateField($model, ['is_black', 'name'], $data);
     }
 
 }

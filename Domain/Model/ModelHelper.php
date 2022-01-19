@@ -97,4 +97,23 @@ class ModelHelper {
         }
         return $items;
     }
+
+    public static function updateField(Model $model, array $checkMap, array $data) {
+        foreach ($data as $action => $val) {
+            if (is_int($action)) {
+                if (empty($val)) {
+                    continue;
+                }
+                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
+            }
+            if (empty($action) || !in_array($action, $checkMap)) {
+                continue;
+            }
+            $model->{$action} = intval($val);
+        }
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
 }

@@ -58,7 +58,7 @@ class CreateWeChatTables extends Migration {
             $table->string('template_id', 64)->comment('模板id');
             $table->string('title', 100)->comment('标题');
             $table->string('content')->comment('内容');
-            $table->string('example')->comment('示例');
+            $table->string('example')->default('')->comment('示例');
         })->append(QrcodeModel::tableName(), function(Table $table) {
             $table->comment('微信二维码');
             $table->id();
@@ -119,7 +119,7 @@ class CreateWeChatTables extends Migration {
             $table->string('description')->default('')->comment('公众号简介');
             $table->string('username', 40)->default('')->comment('微信官网登录名');
             $table->string('password', 32)->default('')->comment('微信官网登录密码');
-            $table->bool('status')->default(0)->comment('状态');
+            $table->bool('status')->default(WeChatModel::STATUS_INACTIVE)->comment('状态');
             $table->timestamps();
         });
     }
@@ -132,6 +132,7 @@ class CreateWeChatTables extends Migration {
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');
             $table->string('openid', 50)->comment('微信ID');
+            $table->string('name', 50)->default('')->comment('备注名');
             $table->bool('status')->default(FansModel::STATUS_SUBSCRIBED)
                 ->comment('关注状态');
             $table->bool('is_black')->default(0)->comment('是否是黑名单');
@@ -146,17 +147,17 @@ class CreateWeChatTables extends Migration {
         $this->append(UserModel::tableName(), function(Table $table) {
             $table->id()->comment('粉丝ID');
             $table->string('openid', 50)->comment('微信ID');
-            $table->string('nickname', 20)->comment('昵称');
+            $table->string('nickname', 20)->default('')->comment('昵称');
             $table->bool('sex')->default(0)->comment('性别');
-            $table->string('city', 40)->comment('所在城市');
-            $table->string('country', 40)->comment('所在国家');
-            $table->string('province', 40)->comment('所在省');
-            $table->string('language', 40)->comment('用户语言');
+            $table->string('city', 40)->default('')->comment('所在城市');
+            $table->string('country', 40)->default('')->comment('所在国家');
+            $table->string('province', 40)->default('')->comment('所在省');
+            $table->string('language', 40)->default('')->comment('用户语言');
             $table->string('avatar')->comment('用户头像');
             $table->timestamp('subscribe_time');
-            $table->string('union_id', 30)->comment('微信ID');
+            $table->string('union_id', 30)->default('')->comment('微信ID');
             $table->string('remark')->default('')->comment('备注');
-            $table->uint('group_id');
+            $table->uint('group_id')->default(0);
             $table->timestamp('updated_at');
         })->append(UserGroupModel::tableName(), function (Table $table) {
             $table->id()->comment('分组');

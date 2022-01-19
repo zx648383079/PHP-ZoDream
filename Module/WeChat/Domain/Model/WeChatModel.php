@@ -34,15 +34,15 @@ class WeChatModel extends WeChatEntity {
     /**
      * 未激活状态
      */
-    const STATUS_INACTIVE = 0;
+    const STATUS_INACTIVE = 4;
     /**
      * 激活状态
      */
-    const STATUS_ACTIVE = 1;
+    const STATUS_ACTIVE = 5;
     /**
      * 删除状态
      */
-    const STATUS_DELETED = -1;
+    const STATUS_DELETED = 0;
     /**
      * 普通订阅号
      */

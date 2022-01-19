@@ -5,6 +5,7 @@ use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Module;
+use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\ThirdParty\WeChat\EventEnum;
 use Zodream\ThirdParty\WeChat\Message;
 
@@ -15,8 +16,12 @@ class MessageController extends Controller {
      */
     protected $model;
 
-    public function indexAction(int $id) {
-        $reply = Module::reply()->setModel($this->model = WeChatModel::find($id));
+    public function indexAction(Output $output, int $id) {
+        $this->model = WeChatModel::find($id);
+        if (empty($this->model) || $this->model->status < 0) {
+            return $output->statusCode(400);
+        }
+        $reply = Module::reply()->setModel($this->model);
         $message = $this->model->sdk(Message::class);
         if ($message->isValid()) {
             // 准备接入
@@ -29,7 +34,7 @@ class MessageController extends Controller {
             //return $message->getResponse();
         }
         $reply->setMessage($message, $message->getResponse());
-        return $this->bindEvent($reply)->reply();
+        return $this->bindEvent($reply)->reply()->ready($output);
     }
 
     /**

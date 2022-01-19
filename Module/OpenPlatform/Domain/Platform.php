@@ -181,7 +181,7 @@ class Platform {
             if (empty($rule)) {
                 continue;
             }
-            if (substr($rule, 0, 1) === '-') {
+            if (str_starts_with($rule, '-')) {
                 if ($this->verifyOneRule(substr($rule, 1), $module, $path)) {
                     return false;
                 }
@@ -288,7 +288,7 @@ class Platform {
     }
 
     public static function createAuto(string $key = 'appid') {
-        $appId = request()->get($key);
+        $appId = isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] :  request()->get($key);
         if (empty($appId)) {
             throw new \Exception(__('APP ID error'));
         }

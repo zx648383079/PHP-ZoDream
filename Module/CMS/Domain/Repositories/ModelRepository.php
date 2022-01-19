@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -109,22 +110,8 @@ class ModelRepository {
     }
 
     public static function fieldToggle(int $id, array $data) {
-        $model = ModelFieldModel::find($id);
-        $maps = ['is_disable'];
-        foreach ($data as $action => $val) {
-            if (is_int($action)) {
-                if (empty($val)) {
-                    continue;
-                }
-                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
-            }
-            if (empty($action) || !in_array($action, $maps)) {
-                continue;
-            }
-            $model->{$action} = intval($val);
-        }
-        $model->save();
-        return $model;
+        $model = ModelFieldModel::findOrThrow($id);
+        return ModelHelper::updateField($model, ['is_disable'], $data);
     }
 
     /**

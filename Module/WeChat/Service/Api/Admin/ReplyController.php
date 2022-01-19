@@ -114,6 +114,16 @@ class ReplyController extends Controller {
         }
     }
 
+    public function templateDetailAction(string $id) {
+        try {
+            return $this->render(
+                ReplyRepository::templateDetail($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function templatePreviewAction(string $id, array $data) {
         try {
             return $this->renderData(

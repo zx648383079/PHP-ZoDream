@@ -16,6 +16,15 @@ class UserController extends Controller {
         }
     }
 
+    public function updateAction(int $id, array $data) {
+        try {
+            $model = FollowRepository::update($id, $data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
     public function refreshAction() {
         try {
             FollowRepository::async($this->weChatId());

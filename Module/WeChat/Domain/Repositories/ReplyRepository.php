@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\WeChat\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\TemplateModel;
@@ -71,22 +72,9 @@ class ReplyRepository {
     }
 
     public static function update(int $id, array $data) {
-        $model = ReplyModel::find($id);
+        $model = ReplyModel::findOrThrow($id);
         AccountRepository::isSelf($model->wid);
-        $maps = ['status'];
-        foreach ($data as $action => $val) {
-            if (is_int($action)) {
-                if (empty($val)) {
-                    continue;
-                }
-                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
-            }
-            if (empty($action) || !in_array($action, $maps)) {
-                continue;
-            }
-            $model->{$action} = intval($val);
-        }
-        $model->save();
+        ModelHelper::updateField($model, ['status'], $data);
         ReplyModel::cacheReply($model->wid, true);
         return $model;
     }
@@ -157,20 +145,21 @@ class ReplyRepository {
     }
 
     public static function template(string $id) {
-        $model = TemplateModel::where('template_id', $id)->first();
-        if (empty($model)) {
-            throw new \Exception('模板不存在');
-        }
-        AccountRepository::isSelf($model->wid);
+        $model = static::templateDetail($id);
         return $model->getFields();
     }
 
-    public static function templatePreview(string $id, array $data) {
+    public static function templateDetail(string $id): TemplateModel {
         $model = TemplateModel::where('template_id', $id)->first();
         if (empty($model)) {
             throw new \Exception('模板不存在');
         }
         AccountRepository::isSelf($model->wid);
+        return $model;
+    }
+
+    public static function templatePreview(string $id, array $data) {
+        $model = static::templateDetail($id);
         return $model->preview($data);
     }
 

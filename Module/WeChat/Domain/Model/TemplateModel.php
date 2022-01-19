@@ -26,7 +26,7 @@ class TemplateModel extends Model {
             'template_id' => 'required|string:0,64',
             'title' => 'required|string:0,100',
             'content' => 'required|string:0,255',
-            'example' => 'required|string:0,255',
+            'example' => 'string:0,255',
         ];
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\EditorModel;
 use Zodream\Helpers\Json;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -31,6 +32,10 @@ HTML;
     }
 
     public function render(EditorModel $model, MessageResponse $response) {
+        $editor = Json::decode($model->getAttributeSource('content'));
+        if ($response instanceof EmulateResponse) {
+            return $response->setTemplate($editor['template_id'], $editor['template_data'], $editor['template_url']);
+        }
         return $response;
     }
 

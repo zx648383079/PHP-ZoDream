@@ -10,6 +10,7 @@ use Zodream\ThirdParty\WeChat\User;
  * @property integer $id
  * @property integer $wid
  * @property string $openid
+ * @property string $name
  * @property integer $status
  * @property integer $is_black
  * @property integer $created_at
@@ -21,11 +22,11 @@ class FansModel extends Model {
     /**
      * 取消关注
      */
-    const STATUS_UNSUBSCRIBED = -1;
+    const STATUS_UNSUBSCRIBED = 0;
     /**
      * 关注状态
      */
-    const STATUS_SUBSCRIBED = 0;
+    const STATUS_SUBSCRIBED = 1;
     public static $statuses = [
         self::STATUS_SUBSCRIBED => '关注',
         self::STATUS_UNSUBSCRIBED => '取消关注'
@@ -42,7 +43,8 @@ class FansModel extends Model {
         return [
             'wid' => 'required|int',
             'openid' => 'required|string:0,50',
-            'status' => 'required|int:0,9',
+            'name' => 'string:0,50',
+            'status' => 'int:0,9',
             'is_black' => 'int:0,9',
             'created_at' => 'int',
             'updated_at' => 'int',
