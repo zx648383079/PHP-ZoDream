@@ -76,9 +76,15 @@ class ReplyController extends Controller {
         }
     }
 
-    public function sendAllAction(int $user_id = 0, array $editor = []) {
+    public function sendAction(int $to_type = 0, array|int $to = [], int $type = 0, array|string $content = []) {
         try {
-            ReplyRepository::send($this->weChatId(), $user_id, $editor);
+            $data = compact('type');
+            if ($type < 1) {
+                $data['text'] = $content;
+            } else if (is_array($content)) {
+                $data = array_merge($content, $data);
+            }
+            ReplyRepository::send($this->weChatId(), $to_type, $to, $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -132,6 +138,32 @@ class ReplyController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
+    }
+
+    public function templateSaveAction(Request $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'template_id' => 'required|string:0,64',
+                'title' => 'required|string:0,100',
+                'content' => 'required|string:0,255',
+                'example' => 'string:0,255',
+            ]);
+            return $this->render(
+                ReplyRepository::templateSave($this->weChatId(), $data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function templateDeleteAction(int $id) {
+        try {
+            ReplyRepository::templateRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 
     /**

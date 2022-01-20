@@ -80,7 +80,7 @@ class ReplyController extends Controller {
 
     public function sendAllAction(int $user_id = 0, array $editor = []) {
         try {
-            ReplyRepository::send($this->weChatId(), $user_id, $editor);
+            ReplyRepository::send($this->weChatId(), empty($user_id) ? 0 : 2, $user_id, $editor);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

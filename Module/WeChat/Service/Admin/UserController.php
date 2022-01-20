@@ -1,13 +1,7 @@
 <?php
 namespace Module\WeChat\Service\Admin;
 
-use Module\WeChat\Domain\Model\FansModel;
-use Module\WeChat\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Repositories\FollowRepository;
-use Module\WeChat\Domain\Repositories\WxRepository;
-use phpDocumentor\Reflection\Types\This;
-use Zodream\ThirdParty\WeChat\User;
 
 class UserController extends Controller {
 
@@ -18,7 +12,7 @@ class UserController extends Controller {
     }
 
     public function indexAction(bool $blacklist = false) {
-        $model_list = FollowRepository::getList($this->weChatId(), '', $blacklist);
+        $model_list = FollowRepository::getList($this->weChatId(), '', 0, $blacklist);
         return $this->show(compact('model_list'));
     }
 

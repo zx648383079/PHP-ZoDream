@@ -29,8 +29,8 @@ $this->title = '用户管理';
            <tr>
                 <td><?=$item->id?></td>
                 <td><?=$item->openid?></td>
-                <td><?=$item->user ? $item->user->nickname : ''?></td>
-                <td><?=$item->status_label?></td>
+                <td><?=$item->nickname ?? ''?></td>
+                <td><?=$item->status > 0 ? '已关注' : '未关注' ?></td>
                 <td>
                     <?php if($item->status === 0):?>
                      <a href="<?=$this->url('./@admin/reply/all', ['user_id' => $item->id])?>">群发消息</a>

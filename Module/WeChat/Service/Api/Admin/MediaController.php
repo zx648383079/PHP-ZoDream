@@ -70,6 +70,15 @@ class MediaController extends Controller {
         return $this->renderData(true);
     }
 
+    public function pullAction(string $type = '') {
+        try {
+            MediaRepository::pull($this->weChatId(), $type);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
     public function searchAction(string $keywords = '', string $type = '', int|array $id = 0) {
         try {
             return $this->renderPage(MediaRepository::search(

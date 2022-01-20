@@ -8,10 +8,10 @@ class LogRepository {
 
     public static function getList(int $wid, bool $mark = false) {
         AccountRepository::isSelf($wid);
-        return MessageHistoryModel::where('wid', $wid)
+        return MessageHistoryModel::with('to_user', 'from_user')->where('wid', $wid)
             ->when($mark !== false, function ($query) use ($mark) {
                 $query->where('mark', intval($mark));
-            })
+            })->orderBy('id', 'desc')
             ->page();
     }
 

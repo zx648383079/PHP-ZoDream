@@ -4,7 +4,6 @@ namespace Module\WeChat\Domain\Migrations;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\WeChat\Domain\Model\EditorTemplateCategoryModel;
 use Module\WeChat\Domain\Model\EditorTemplateModel;
-use Module\WeChat\Domain\Model\FansModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\MessageHistoryModel;
@@ -26,7 +25,6 @@ class CreateWeChatTables extends Migration {
     public function up() {
         $this->initEditor();
         $this->initWechatTable();
-        $this->initFansTable();
         $this->initUserTable();
         $this->initMessageHistoryTable();
         $this->initMediaTable();
@@ -126,21 +124,6 @@ class CreateWeChatTables extends Migration {
     }
 
     /**
-     * 粉丝表
-     */
-    public function initFansTable() {
-        $this->append(FansModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->uint('wid')->comment('所属微信公众号ID');
-            $table->string('openid', 50)->comment('微信ID');
-            $table->string('name', 50)->default('')->comment('备注名');
-            $table->bool('status')->default(FansModel::STATUS_SUBSCRIBED)
-                ->comment('关注状态');
-            $table->bool('is_black')->default(0)->comment('是否是黑名单');
-            $table->timestamps();
-        });
-    }
-    /**
      * 粉丝用户表
      */
     public function initUserTable() {
@@ -155,14 +138,21 @@ class CreateWeChatTables extends Migration {
             $table->string('province', 40)->default('')->comment('所在省');
             $table->string('language', 40)->default('')->comment('用户语言');
             $table->string('avatar')->comment('用户头像');
-            $table->timestamp('subscribe_time');
+            $table->timestamp('subscribe_at');
             $table->string('union_id', 30)->default('')->comment('微信ID');
             $table->string('remark')->default('')->comment('备注');
             $table->uint('group_id')->default(0);
-            $table->timestamp('updated_at');
+            $table->uint('wid')->comment('所属微信公众号ID');
+            $table->string('note_name', 20)->default('')->comment('备注名');
+            $table->bool('status')->default(UserModel::STATUS_SUBSCRIBED)
+                ->comment('关注状态');
+            $table->bool('is_black')->default(0)->comment('是否是黑名单');
+            $table->timestamps();
         })->append(UserGroupModel::tableName(), function (Table $table) {
             $table->id()->comment('分组');
-            $table->string('name', 20)->comment('昵称');
+            $table->uint('wid')->comment('所属微信公众号ID');
+            $table->string('name', 20)->comment('名称');
+            $table->string('tag_id', 20)->default('')->comment('公众平台标签id');
         });
     }
     /**
@@ -172,8 +162,9 @@ class CreateWeChatTables extends Migration {
         $this->append(MessageHistoryModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');
+            $table->uint('type', 1)->default(0)->comment('消息类型');
             $table->uint('item_type', 1)->default(0)->comment('发送类型');
-            $table->uint('item_id')->comment('相应规则ID');
+            $table->uint('item_id')->default(0)->comment('相应规则ID');
             $table->string('from', 50)->comment('请求用户ID');
             $table->string('to', 50)->comment('相应用户ID');
             $table->text('content')->nullable()->comment('消息体内容');

@@ -6,6 +6,7 @@ use Domain\Model\ModelHelper;
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\TemplateModel;
+use Module\WeChat\Domain\Model\UserGroupModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Database\Model\Model;
@@ -79,39 +80,51 @@ class ReplyRepository {
         return $model;
     }
 
-    public static function send(int $wid, int $user_id = 0, array $editor = []) {
-        if ($editor['type'] === 3) {
-            return static::sendTemplate($wid, $user_id, $editor['template_id'], $editor['template_url'], $editor['template_data']);
+    public static function send(int $wid, int $toType, array|int $to, array $data = []) {
+        if ($data['type'] == 3) {
+            return static::sendTemplate($wid, is_array($to) ? reset($to) : $to, $data);
         }
         AccountRepository::isSelf($wid);
-        $data = '';
+        $content = '';
         $type = Mass::TEXT;
-        if ($editor['type'] < 1) {
-            $data = $editor['text'];
+        if ($data['type'] < 1) {
+            $content = $data['text'];
         }
         /** @var Mass $api */
         $api = WeChatModel::find($wid)
             ->sdk(Mass::class);
-        $openid = null;
-        if ($user_id > 0) {
-            $openid = UserModel::where('id', $user_id)->value('openid');
+        if ($toType < 1) {
+            return $api->sendAll($content, $type);
         }
-        return empty($openid) ? $api->sendAll($data, $type) : $api->send([$openid], $data, $type);
+        if ($toType == 1) {
+            $groupId = UserGroupModel::whereIn('id', (array)$to)
+                ->whereNot('tag_id', '')
+                ->value('tag_id');
+            return $api->sendAll($content, $type, $groupId);
+        }
+        $openId = UserModel::whereIn('id', (array)$to)->pluck('openid');
+        return $api->send($openId, $content, $type);
     }
 
-    public static function sendTemplate(int $wid, int $user_id, string $template_id, string $url, array|string $data) {
+    public static function sendTemplate(int $wid, int $userId, array $data) {
         AccountRepository::isSelf($wid);
-        if ($user_id < 1) {
+        if ($userId < 1) {
             throw new \Exception('模板消息只能发给单个用户');
         }
-        $openid = UserModel::where('id', $user_id)->value('openid');
+        $openid = UserModel::where('id', $userId)->value('openid');
         if (empty($openid)) {
             throw new \Exception('用户未关注公众号');
         }
         /** @var Template $api */
         $api = WeChatModel::find($wid)
             ->sdk(Template::class);
-        $res = $api->send($openid, $template_id, url($url), TemplateModel::strToArr($data));
+        $res = $api->send($openid, $data['template_id'],
+            isset($data['template_url']) && !empty($data['template_url']) ? url($data['template_url']) : '',
+            TemplateModel::strToArr($data['template_data']),
+            isset($data['appid']) && !empty($data['appid']) ? [
+                'appid' => $data['appid'],
+                'pagepath' => $data['path']
+            ] : []);
         if (!$res) {
             throw new \Exception('发送失败');
         }
@@ -169,5 +182,29 @@ class ReplyRepository {
             $data[] = compact('name', 'value');
         }
         return $data;
+    }
+
+    public static function templateSave(int $wid, array $data) {
+        $id = $data['id'] ?? 0;
+        unset($data['id'], $data['wid']);
+        if ($id > 0) {
+            AccountRepository::isSelf($wid);
+            $model = TemplateModel::where('id', $id)->where('wid', $wid)->first();
+        } else {
+            $model = new TemplateModel();
+            $model->wid = $wid;
+            AccountRepository::isSelf($model->wid);
+        }
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function templateRemove(int $id) {
+        $model = TemplateModel::findOrThrow($id, '模板不存在');
+        AccountRepository::isSelf($model->wid);
+        $model->delete();
     }
 }

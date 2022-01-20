@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * 微信请求消息历史记录
  * @property integer $id
  * @property integer $wid
+ * @property integer $type
  * @property string $from
  * @property string $to
  * @property integer $created_at
@@ -42,8 +43,9 @@ class MessageHistoryModel extends Model {
             'from' => 'required|string:0,50',
             'to' => 'required|string:0,50',
             'created_at' => 'int',
+            'type' => 'int:0,127',
             'item_type' => 'int:0,127',
-            'item_id' => 'required|int',
+            'item_id' => 'int',
             'content' => '',
             'is_mark' => 'int:0,127',
         ];
@@ -65,5 +67,15 @@ class MessageHistoryModel extends Model {
             'type' => '发送类型',
             'created_at' => '创建时间',
         ];
+    }
+
+    public function from_user() {
+        return $this->hasOne(UserModel::class, 'openid', 'from')
+            ->select('id', 'openid', 'nickname', 'note_name', 'avatar');
+    }
+
+    public function to_user() {
+        return $this->hasOne(UserModel::class, 'openid', 'to')
+            ->select('id', 'openid', 'nickname', 'note_name', 'avatar');
     }
 }

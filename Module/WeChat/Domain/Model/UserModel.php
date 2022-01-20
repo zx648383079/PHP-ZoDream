@@ -16,35 +16,52 @@ use Domain\Model\Model;
  * @property string $province
  * @property string $language
  * @property string $avatar
- * @property integer $subscribe_time
+ * @property integer $subscribe_at
  * @property string $union_id
  * @property string $remark
  * @property integer $group_id
+ * @property integer $wid
+ * @property string $note_name
+ * @property integer $status
+ * @property integer $is_black
  * @property integer $updated_at
+ * @property integer $created_at
  */
 class UserModel extends Model {
+
     /**
-     * @inheritdoc
+     * 取消关注
      */
+    const STATUS_UNSUBSCRIBED = 0;
+    /**
+     * 关注状态
+     */
+    const STATUS_SUBSCRIBED = 1;
+
     public static function tableName() {
         return 'wechat_user';
     }
 
     protected function rules() {
         return [
+            'wid' => 'required|int',
             'openid' => 'required|string:0,50',
             'nickname' => 'string:0,20',
-            'sex' => 'int:0,9',
+            'sex' => 'int:0,127',
             'city' => 'string:0,40',
             'country' => 'string:0,40',
             'province' => 'string:0,40',
             'language' => 'string:0,40',
             'avatar' => 'string:0,255',
-            'subscribe_time' => 'int',
+            'subscribe_at' => 'int',
             'union_id' => 'string:0,30',
             'remark' => 'string:0,255',
-            'group_id' => 'string:0,5',
+            'group_id' => 'int',
+            'note_name' => 'string:0,20',
+            'status' => 'int:0,127',
+            'is_black' => 'int:0,127',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
 
@@ -66,7 +83,14 @@ class UserModel extends Model {
             'union_id' => '用户头像',
             'remark' => '备注',
             'group_id' => '分组ID',
+            'note_name' => '备注名',
+            'status' => '是否关注',
+            'is_black' => '是否黑名单',
             'updated_at' => '修改时间',
         ];
+    }
+
+    public function group() {
+        return $this->hasOne(UserGroupModel::class, 'id', 'group_id');
     }
 }

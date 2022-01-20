@@ -3,10 +3,14 @@ namespace Module\WeChat\Domain;
 
 use Module\WeChat\Domain\Editors\Event;
 use Module\WeChat\Domain\Editors\InputInterface;
+use Module\WeChat\Domain\Editors\Location;
 use Module\WeChat\Domain\Editors\Media;
 use Module\WeChat\Domain\Editors\Mini;
 use Module\WeChat\Domain\Editors\News;
 use Module\WeChat\Domain\Editors\None;
+use Module\WeChat\Domain\Editors\Photo;
+use Module\WeChat\Domain\Editors\Picture;
+use Module\WeChat\Domain\Editors\Scan;
 use Module\WeChat\Domain\Editors\Scene;
 use Module\WeChat\Domain\Editors\Template;
 use Module\WeChat\Domain\Editors\Text;
@@ -56,6 +60,10 @@ class EditorInput {
         self::TYPE_URL => Url::class,
         self::TYPE_MINI => Mini::class,
         self::TYPE_SCENE => Scene::class,
+        20 => Scan::class,
+        21 => Picture::class,
+        22 => Photo::class,
+        23 => Location::class,
         99 => None::class
     ];
 

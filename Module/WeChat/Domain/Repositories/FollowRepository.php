@@ -4,20 +4,24 @@ namespace Module\WeChat\Domain\Repositories;
 
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
-use Module\WeChat\Domain\Model\FansModel;
+use Module\WeChat\Domain\Model\UserGroupModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\ThirdParty\WeChat\User;
 
 class FollowRepository {
 
-    public static function getList(int $wid, string $keywords = '', bool $blacklist = false) {
+    public static function getList(int $wid, string $keywords = '', int $group = 0, bool $blacklist = false) {
         AccountRepository::isSelf($wid);
-        return FansModel::with('user')
-            ->where('wid', $wid)
+        return UserModel::where('wid', $wid)
             ->when(!empty($blacklist), function ($query) {
                 $query->where('is_black', 1);
-            })->page();
+            })->when($group > 0, function ($query) use ($group) {
+                $query->where('group_id', $group);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['note_name', 'nickname']);
+            })->orderBy('status', 'desc')->orderBy('is_black', 'asc')
+            ->orderBy('subscribe_at', 'desc')->page();
     }
 
     public static function async(int $wid) {
@@ -44,22 +48,76 @@ class FollowRepository {
 
     public static function searchFans(int $wid, string $keywords = '') {
         AccountRepository::isSelf($wid);
-        return FansModel::query()->alias('f')
-            ->where('f.wid', $wid)
-            ->where('f.status', FansModel::STATUS_SUBSCRIBED)
-            ->leftJoin(UserModel::tableName().' u', 'f.id', 'u.id')
-            ->whereNotNull('u.id')
+        return UserModel::query()->where('wid', $wid)
+            ->where('status', UserModel::STATUS_SUBSCRIBED)
             ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, ['u.nickname']);
+                SearchModel::searchWhere($query, ['nickname', 'note_name']);
             })
             ->asArray()
-            ->get('f.id,u.nickname as name');
+            ->get('id,nickname as name');
     }
 
     public static function update(int $id, array $data) {
-        $model = FansModel::findOrThrow($id, '会员不存在');
+        $model = UserModel::findOrThrow($id, '会员不存在');
         AccountRepository::isSelf($model->wid);
-        return ModelHelper::updateField($model, ['is_black', 'name'], $data);
+        return ModelHelper::updateField($model, ['is_black', 'note_name', 'remark', 'group_id'], $data);
+    }
+
+    public static function search(int $wid, string $keywords = '', int|array $id = 0) {
+        AccountRepository::isSelf($wid);
+        return SearchModel::searchOption(
+            UserModel::query()->where('wid', $wid)->select('id', 'nickname', 'note_name'),
+            ['nickname', 'note_name'],
+            $keywords,
+            $id === 0 ? [] : compact('id')
+        );
+    }
+
+    public static function groupSearch(int $wid, string $keywords = '', int|array $id = 0) {
+        AccountRepository::isSelf($wid);
+        return SearchModel::searchOption(
+            UserGroupModel::query()->where('wid', $wid),
+            ['name'],
+            $keywords,
+            $id === 0 ? [] : compact('id')
+        );
+    }
+
+    public static function groupList(int $wid, string $keywords = '') {
+        AccountRepository::isSelf($wid);
+        return UserGroupModel::where('wid', $wid)
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['name']);
+            })->page();
+    }
+
+    public static function groupSave(int $wid, $data) {
+        $id = $data['id'] ?? 0;
+        unset($data['id'], $data['wid']);
+        if ($id > 0) {
+            $model = UserGroupModel::where('wid', $wid)->where('id', $id)->first();
+            if (empty($model)) {
+                throw new \Exception('分组不存在');
+            }
+        } else {
+            $model = new UserGroupModel();
+            $model->wid = $wid;
+        }
+        AccountRepository::isSelf($model->wid);
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function groupRemove(int $wid, int $id) {
+        AccountRepository::isSelf($wid);
+        $model = UserGroupModel::where('wid', $wid)->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception('分组不存在');
+        }
+        $model->delete();
     }
 
 }

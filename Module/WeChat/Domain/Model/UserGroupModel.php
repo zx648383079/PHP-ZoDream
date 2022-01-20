@@ -6,6 +6,8 @@ use Domain\Model\Model;
 /**
  * @property integer $id
  * @property string $name
+ * @property integer $wid
+ * @property string $tag_id
  */
 class UserGroupModel extends Model {
     /**
@@ -18,6 +20,8 @@ class UserGroupModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,20',
+            'wid' => 'required|int',
+            'tag_id' => 'string:0,20',
         ];
     }
 
@@ -25,6 +29,8 @@ class UserGroupModel extends Model {
         return [
             'id' => 'Id',
             'name' => 'Name',
+            'wid' => 'Wid',
+            'tag_id' => 'Tag Id',
         ];
     }
 
