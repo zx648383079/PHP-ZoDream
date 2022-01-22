@@ -154,7 +154,8 @@ class MediaRepository {
         return $news->setTitle($model->title)
             ->setShowCover($model->show_cover)
             ->setOnlyFansCanComment($model->only_comment)
-            ->setNeedOpenComment($model->open_comment);
+            ->setNeedOpenComment($model->open_comment)
+            ->setUrl(url('./emulate/media', ['id' => $model->id]));
     }
 
     private static function getThumbMediaId(Media $api, MediaModel $parent) {

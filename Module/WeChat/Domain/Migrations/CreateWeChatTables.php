@@ -191,6 +191,8 @@ class CreateWeChatTables extends Migration {
             $table->uint('parent_id')->default(0)->comment('图文父id');
             $table->string('media_id', 100)->default('')->comment('素材ID');
             $table->string('url')->default('')->comment('图片的url');
+            $table->uint('publish_status', 1)->default(0)->comment('当前发布的状态');
+            $table->string('publish_id', 50)->default('')->comment('当前发布的id, publish_status=6,为草稿=7,为发布中publish_id；为草稿=8,为发布成功，article_id');
             $table->timestamp('expired_at')->comment('临时素材的过期时间');
             $table->timestamps();
         });

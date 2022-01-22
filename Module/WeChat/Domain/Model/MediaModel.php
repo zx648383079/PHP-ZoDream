@@ -18,6 +18,8 @@ use Domain\Model\Model;
  * @property integer $parent_id
  * @property string $media_id
  * @property string $url
+ * @property integer $publish_status
+ * @property string $publish_id
  * @property integer $expired_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -55,6 +57,12 @@ class MediaModel extends Model {
      * 永久素材
      */
     const MATERIAL_PERMANENT = 1;
+
+    const PUBLISH_NONE = 0;
+    const PUBLISH_DRAFT = 6;
+    const PUBLISH_WAITING = 7;
+    const PUBLISH_SUCCESS = 8;
+
     /**
      * 素材类型
      * @var array
@@ -96,6 +104,8 @@ class MediaModel extends Model {
             'parent_id' => 'int',
             'media_id' => 'string:0,100',
             'url' => 'string:0,255',
+            'publish_status' => 'int:0,127',
+            'publish_id' => 'string:0,50',
             'expired_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -117,6 +127,8 @@ class MediaModel extends Model {
             'parent_id' => '主素材',
             'media_id' => 'Media Id',
             'url' => 'Url',
+            'publish_status' => 'Publish Status',
+            'publish_id' => 'Publish Id',
             'expired_at' => 'Expired At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
