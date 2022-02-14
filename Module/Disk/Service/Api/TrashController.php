@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Service\Api;
 
 use Module\Disk\Domain\Repositories\TrashRepository;
@@ -10,12 +11,12 @@ class TrashController extends Controller {
         return $this->renderData($data);
     }
 
-    public function resetAction($id) {
+    public function resetAction(int $id) {
         TrashRepository::reset($id);
         return $this->renderData(true);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         TrashRepository::remove($id);
         return $this->renderData(true);
     }

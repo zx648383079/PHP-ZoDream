@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Service\Api;
 
 use Exception;
@@ -8,8 +9,35 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 
 class HomeController extends Controller {
 
-    public function indexAction($id, $path = '') {
+    public function indexAction(string $id, string $path = '') {
         return $this->renderPage(DiskRepository::driver()->catalog($id, $path));
+    }
+
+    public function createAction(string $name, string $parent_id = '') {
+        try {
+            return $this->renderData(DiskRepository::driver()
+                ->create($name, $parent_id));
+        } catch (Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function renameAction(int $id, string $name) {
+        try {
+            return $this->renderData(DiskRepository::driver()
+                ->rename($id, $name));
+        } catch (Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deleteAction(string $id) {
+        try {
+            DiskRepository::driver()->remove($id);
+        } catch (Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 
     /**
@@ -18,7 +46,7 @@ class HomeController extends Controller {
      * @return Output
      * @throws Exception
      */
-    public function allowAction($url) {
+    public function allowAction(string $url) {
         if (empty($url)) {
             return $this->renderFailure('网址必传');
         }
@@ -31,7 +59,7 @@ class HomeController extends Controller {
         }
     }
 
-    public function fileAction($id) {
+    public function fileAction(string $id) {
         try {
             $disk = DiskRepository::driver()->file($id);
         } catch (\Exception $ex) {
@@ -40,7 +68,7 @@ class HomeController extends Controller {
         foreach ([
             'thumb', 'url', 'subtitles'
                  ] as $key) {
-            if (!isset($disk[$key]) || empty($disk[$key])) {
+            if (empty($disk[$key])) {
                 continue;
             }
             if ($key !== 'subtitles') {

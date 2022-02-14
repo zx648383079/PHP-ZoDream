@@ -23,7 +23,7 @@ final class PageRepository {
         return PageModel::findOrThrow($id, '数据有误');
     }
 
-    public static function save(array $data) {
+    public static function save(array $data, bool $checkSite = true) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = PageModel::findOrNew($id);
@@ -31,19 +31,27 @@ final class PageRepository {
         if (static::exist($model)) {
             throw new \Exception('网页已存在');
         }
-        $site = SiteRepository::findIdByLink($model->link);
-        if (!empty($site)) {
-            $model->site_id = $site->id;
-            $model->score = $site->score;
+        if ($checkSite) {
+            $site = SiteRepository::findIdByLink($model->link);
+            if (!empty($site)) {
+                $model->site_id = $site->id;
+                $model->score = $site->score;
+            }
         }
+
         if (!$model->save() && !$model->isNotChangedError()) {
             throw new \Exception($model->getFirstError());
+        }
+        if (!isset($data['keywords'])) {
+            $data['keywords'] = [];
+        } elseif (is_string($data['keywords'])) {
+            $data['keywords'] = explode(',', $data['keywords']);
         }
         KeywordRepository::bindTag(
             PageKeywordModel::query(),
             $model->id,
             'page_id',
-            isset($data['keywords']) && !empty($data['keywords']) ? $data['keywords'] : [],
+            $data['keywords'],
             [],
             'word_id'
         );

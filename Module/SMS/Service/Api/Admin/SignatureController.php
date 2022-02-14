@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\SMS\Service\Api\Admin;
 
 use Domain\Model\SearchModel;
@@ -6,7 +7,7 @@ use Module\SMS\Domain\Model\SmsSignatureModel;
 
 class SignatureController extends Controller {
 
-    public function indexAction($keywords = '') {
+    public function indexAction(string $keywords = '') {
         $model_list = SmsSignatureModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
@@ -14,7 +15,7 @@ class SignatureController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = SmsSignatureModel::find($id);
         if (empty($model)) {
             return $this->renderFailure('签名不存在');
@@ -30,12 +31,12 @@ class SignatureController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         SmsSignatureModel::where('id', $id)->delete();
         return $this->renderData(true);
     }
 
-    public function defaultAction($id) {
+    public function defaultAction(int $id) {
         SmsSignatureModel::where('id', $id)->update([
             'is_default' => 1
         ]);

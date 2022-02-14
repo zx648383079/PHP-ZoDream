@@ -120,37 +120,22 @@ class DiskController extends Controller {
     /**
      * 增加文件夹
      */
-    public function createAction(Request $request) {
-        $model = new DiskModel();
-        $model->name = $request->get('name');
-        $model->parent_id = intval($request->get('parent_id', 0));
-        $model->created_at = $model->updated_at = time();
-        $model->user_id = auth()->id();
-        $model->file_id = 0;
-        if ($model->isSameName()) {
-            return $this->renderFailure('文件已重名');
+    public function createAction(string $name, int $parent_id = 0) {
+        try {
+            return $this->renderData(DiskRepository::driver()
+                ->create($name, $parent_id));
+        } catch (Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!$model->addAsLast()) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        return $this->renderData($model->toArray());
     }
 
-    function renameAction(Request $request) {
-        $data = $request->get('id,name');
-        $model = DiskModel::find($data['id']);
-        if (empty($model)) {
-            return $this->renderFailure('选择错误的文件！');
+    function renameAction(int $id, string $name) {
+        try {
+            return $this->renderData(DiskRepository::driver()
+                ->rename($id, $name));
+        } catch (Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->name = $data['name'];
-        $model->updated_at = time();
-        if ($model->isSameName()) {
-            return $this->renderFailure('文件已重名');
-        }
-        if (!$model->save()) {
-            return $this->renderFailure('修改失败！');
-        }
-        return $this->renderData($model);
     }
 
     function checkAction(Request $request) {

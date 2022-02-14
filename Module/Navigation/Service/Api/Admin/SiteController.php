@@ -30,7 +30,9 @@ final class SiteController extends Controller {
                 'description' => 'string:0,255',
                 'cat_id' => 'int',
                 'top_type' => 'int:0,100',
-                'tags' => ''
+                'tags' => '',
+                'also_page' => '',
+                'keywords' => '',
             ]);
             return $this->render(SiteRepository::save($data));
         } catch (\Exception $ex) {

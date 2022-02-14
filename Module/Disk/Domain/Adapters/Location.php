@@ -2,10 +2,13 @@
 declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
+use Exception;
 use Module\Disk\Domain\Model\FileModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\FileObject;
+use Zodream\Disk\FileSystem;
+use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Helpers\Time;
 use Zodream\Html\Page;
 
@@ -18,18 +21,21 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         $page = new Page($items);
         $items = [];
         foreach ($page as $item) {
-            /** @var $item FileObject */
-            $fileId = $item->getRelative($root);
-            $items[] = [
-                'id' => $fileId,
-                'name' => $item->getName(),
-                'file_id' => $item instanceof Directory ? 0 : 1,
-                'created_at' => Time::format($item instanceof Directory ? 0 : $item->createTime()),
-                'updated_at' => Time::format($item instanceof Directory ? 0 : $item->modifyTime()),
-                'file' => $item instanceof Directory ? null : $this->formatFile($item, $fileId)
-            ];
+            $items[] = $this->formatPageFile($root, $item);
         }
         return $page->setPage($items);
+    }
+
+    private function formatPageFile(Directory $root, FileObject $item): array {
+        $fileId = $item->getRelative($root);
+        return [
+            'id' => $fileId,
+            'name' => $item->getName(),
+            'file_id' => $item instanceof Directory ? 0 : 1,
+            'created_at' => Time::format($item instanceof Directory ? 0 : $item->createTime()),
+            'updated_at' => Time::format($item instanceof Directory ? 0 : $item->modifyTime()),
+            'file' => $item instanceof Directory ? null : $this->formatFile($item, $fileId)
+        ];
     }
 
     private function formatFile(File $item, $fileId) {
@@ -49,7 +55,12 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
     }
 
     public function remove($id) {
-
+        $root = $this->root();
+        $file = $root->file($id);
+        if (!$file->exist()) {
+            throw new \Exception('文件不存在');
+        }
+        $file->delete();
     }
 
     protected function getRealFolder($path) {
@@ -59,24 +70,90 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         return parent::getRealFolder($path);
     }
 
-    public function create(array $data)
+    public function create(string $name, $parentId = '')
     {
-        // TODO: Implement create() method.
+        $root = $this->root();
+        $folder = empty($parentId) ? $root : $root->directory($parentId);
+        $item = $folder->addDirectory($name);
+        return $this->formatPageFile($root, $item);
     }
 
-    public function upload($file)
-    {
-        // TODO: Implement upload() method.
+    public function upload(BaseUpload $file, string $md5) {
+        set_time_limit(0);
+        $result = $file->setName($md5)
+            ->setFile($this->cacheFolder()->file($md5))
+            ->save();
+        if (!$result) {
+            throw new Exception($file->getError().'');
+        }
+        return [
+            'name' => $file->getName(),
+            'size' => $file->getSize(),
+            'type' => $file->getType()
+        ];
     }
 
-    public function checkMd5(array $data)
-    {
-        // TODO: Implement checkMd5() method.
+    public function uploadChunk(array $fileData, string $md5) {
+        set_time_limit(0);
+        $file = $this->cacheFolder()->file($md5);
+        $file->append(file_get_contents($fileData['tmp_name']));
+        return [
+            'name' => $md5,
+            'size' => $file->size(),
+            'type' => ''
+        ];
     }
 
-    public function rename(array $data)
+    public function uploadFinish(string $md5, string $name, $parentId = '') {
+        $file = $this->cacheFolder()->file($md5);
+        if (!$file->exist() || $file->md5() !== $md5) {
+            throw new Exception('uploaded file error');
+        }
+        $root = $this->root();
+        $folder = empty($parentId) ? $root : $root->directory($parentId);
+        $distFile = $folder->file($name);
+        $i = 0;
+        $dotIndex = strpos($name, '.');
+        while ($distFile->exist()) {
+            $i ++;
+            if ($dotIndex < 0) {
+                $tempName = sprintf('%s(%d)', $name, $i);
+            } elseif ($dotIndex === 0) {
+                $tempName = sprintf('(%d)%s', $i, $name);
+            } else {
+                $tempName = sprintf('%s(%d)%s', substr($name, 0, $dotIndex), $i,
+                    substr($name, $dotIndex));
+            }
+            $distFile = $folder->file($tempName);
+        }
+        $file->move($distFile);
+        return $this->formatPageFile($root, $distFile);
+    }
+
+
+
+    public function uploadCheck(string $md5, string $name, $parentId = ''): array {
+        return [
+            'code' => 2,
+            'message' => 'MD5 Error'
+        ];
+    }
+
+    public function rename($id, string $name)
     {
-        // TODO: Implement rename() method.
+        $root = $this->root();
+        $file = $root->file($id);
+        if (!$file->exist()) {
+            throw new \Exception('文件不存在');
+        }
+        $dist = $file->getDirectory()->file($name);
+        if ($dist->exist()) {
+            throw new \Exception('文件名重复');
+        }
+        if (!$file->rename($dist)) {
+            throw new \Exception('重命名失败');
+        }
+        return $this->formatPageFile($root, $dist);
     }
 
     public function copy(array $data)

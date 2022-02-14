@@ -32,6 +32,7 @@ final class SiteRepository {
         if ($model->user_id < 1) {
             $model->user_id = auth()->id();
         }
+        $model->domain = trim($model->domain, '/');
         if (static::exist($model)) {
             throw new \Exception('站点已存在！');
         }
@@ -44,6 +45,19 @@ final class SiteRepository {
             'site_id',
             isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : [],
         );
+        if ($id < 1 && isset($data['also_page']) && $data['also_page'] > 0) {
+            try {
+                PageRepository::save([
+                    'title' => $model->name,
+                    'description' => $model->description,
+                    'thumb' => $model->logo,
+                    'link' => sprintf('%s://%s', $model->schema, $model->domain),
+                    'site_id' => $model->id,
+                    'score' => 80,
+                    'keywords' => $data['keywords'] ?? [],
+                ], false);
+            } catch (\Exception) {}
+        }
         return $model;
     }
 

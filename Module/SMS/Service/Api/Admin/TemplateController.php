@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\SMS\Service\Api\Admin;
 
 use Domain\Model\SearchModel;
@@ -6,7 +7,7 @@ use Module\SMS\Domain\Model\SmsTemplateModel;
 
 class TemplateController extends Controller {
 
-    public function indexAction($type = 0, $keywords = '') {
+    public function indexAction(int $type = 0, string $keywords = '') {
         $model_list = SmsTemplateModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
@@ -16,7 +17,7 @@ class TemplateController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $model = SmsTemplateModel::find($id);
         if (empty($model)) {
             return $this->renderFailure('短信不存在');
@@ -32,7 +33,7 @@ class TemplateController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         SmsTemplateModel::where('id', $id)->delete();
         return $this->renderData(true);
     }
