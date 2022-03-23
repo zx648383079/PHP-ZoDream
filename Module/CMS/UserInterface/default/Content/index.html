@@ -1,5 +1,12 @@
 {layout:main}
 {this.title=$data.title}
+{if:$data.is_gray}
+{>css}
+html {
+    filter: grayscale(100%);
+}
+{/>}
+{/if}
 <div class="banner-bg" style="background-image:url({$cat.image});">
 
 </div>
@@ -25,6 +32,10 @@
                     {$data.content}
                 </article>
             </div>
+
+            {if:$data.comment_open}
+            {tpl file=layouts/comment}
+            {/if}
         </div>
         <div class="col-md-3">
             {tpl file=layouts/right}

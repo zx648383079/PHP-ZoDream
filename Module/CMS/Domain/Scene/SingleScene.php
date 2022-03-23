@@ -3,76 +3,43 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Migrations\CreateCmsTables;
+use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Schema\Table;
+use Zodream\Html\Page;
 
 class SingleScene extends BaseScene {
 
-    public function getMainTable() {
+    public function getMainTable(): string {
         return sprintf('cms_content_%s', $this->site);
     }
 
-    public function getExtendTable() {
+    public function getExtendTable(): string {
         return sprintf('%s_%s', $this->getMainTable(), $this->model->table);
     }
 
+    public function getCommentTable(): string {
+        return sprintf('cms_comment_%d', $this->site);
+    }
+
+    public function boot(): void {
+        CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
+            $this->initMainTableField($table);
+        });
+        $this->initCommentTable();
+    }
 
     /**
      * 初始化建立表
      * @return mixed
      * @throws \Exception
      */
-    public function initModel() {
-        ModelFieldModel::query()->insert([
-            [
-                'name' => '标题',
-                'field' => 'title',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 1,
-                'type' => 'text'
-            ],
-            [
-                'name' => '关键字',
-                'field' => 'keywords',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 0,
-                'type' => 'text'
-            ],
-            [
-                'name' => '简介',
-                'field' => 'description',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 0,
-                'type' => 'textarea'
-            ],
-            [
-                'name' => '缩略图',
-                'field' => 'thumb',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 0,
-                'type' => 'image'
-            ],
-        ]);
-        ModelFieldModel::create([
-            'name' => '内容',
-            'field' => 'content',
-            'model_id' => $this->model->id,
-            'is_main' => 0,
-            'is_system' => 1,
-            'type' => 'editor',
-        ]);
+    public function initModel(): bool {
+        $this->initDefaultModelField();
         return $this->initTable();
     }
 
-    public function initTable() {
+    public function initTable(): bool {
         $field_list = array_filter($this->fieldList(), function ($item) {
             return $item->is_system < 1;
         });
@@ -90,7 +57,7 @@ class SingleScene extends BaseScene {
      * 删除表
      * @return mixed
      */
-    public function removeTable() {
+    public function removeTable(): bool {
         CreateCmsTables::dropTable($this->getExtendTable());
         return true;
     }
@@ -101,7 +68,7 @@ class SingleScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function addField(ModelFieldModel $field) {
+    public function addField(ModelFieldModel $field): bool {
         if ($field->is_system > 0) {
             return true;
         }
@@ -119,7 +86,7 @@ class SingleScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function updateField(ModelFieldModel $field) {
+    public function updateField(ModelFieldModel $field): bool {
         if ($field->is_system > 0) {
             return true;
         }
@@ -137,7 +104,7 @@ class SingleScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function removeField(ModelFieldModel $field) {
+    public function removeField(ModelFieldModel $field): bool {
         if ($field->is_system > 0) {
             return true;
         }
@@ -151,23 +118,23 @@ class SingleScene extends BaseScene {
 
 
     /**
-     * @param $keywords
-     * @param $params
-     * @param null $order
+     * @param string $keywords
+     * @param array $params
+     * @param string $order
      * @param int $page
-     * @param int $per_page
-     * @param null $fields
-     * @return \Zodream\Html\Page
+     * @param int $perPage
+     * @param string $fields
+     * @return Page
      * @throws \Exception
      */
-    public function search($keywords, $params = [], $order = null, $page = 1, $per_page = 20, $fields = null) {
+    public function search(string $keywords, array $params = [], string $order = '', int $page = 1, int $perPage = 20, string $fields = ''): Page {
         if (empty($fields)) {
             $fields = '*';
         }
         return $this->addQuery($this->query(), $params, $order, $fields)
             ->when(!empty($keywords), function ($query) use ($keywords) {
             $this->addSearchQuery($query, $keywords);
-        })->page($per_page, 'page', $page);
+        })->page($perPage, 'page', $page);
     }
 
 

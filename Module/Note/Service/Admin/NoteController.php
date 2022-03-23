@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Note\Service\Admin;
 
 use Domain\Model\SearchModel;
@@ -14,7 +15,7 @@ class NoteController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         NoteModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => $this->getUrl('note')

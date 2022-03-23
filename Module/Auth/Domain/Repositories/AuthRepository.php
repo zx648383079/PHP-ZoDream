@@ -24,6 +24,15 @@ use Zodream\Validate\Validator;
 class AuthRepository {
 
     const UNSET_PASSWORD = 'no_password';
+    const OPTION_REGISTER_CODE = 'auth_register';
+
+    /**
+     * 注册方式
+     * @return int {0:默认注册, 1:邀请码注册, 2:关闭注册}
+     */
+    public static function registerType(): int {
+        return Option::value(static::OPTION_REGISTER_CODE);
+    }
 
     public static function loginPreCheck($ip, $account, $captcha = '') {
         $today = strtotime(date('Y-m-d 00:00:00'));
@@ -55,8 +64,8 @@ class AuthRepository {
 
     /**
      * 登录
-     * @param $email
-     * @param $password
+     * @param string $email
+     * @param string $password
      * @param bool $remember
      * @param bool $replaceToken 是否替换记住我的token
      * @return bool|mixed
@@ -115,16 +124,16 @@ class AuthRepository {
     }
 
     /**
-     * @param $name
-     * @param $email
-     * @param $password
-     * @param $confirmPassword
+     * @param string $name
+     * @param string $email
+     * @param string $password
+     * @param string $confirmPassword
      * @param bool $agreement
      * @return bool|mixed
      * @throws Exception
      */
     public static function register(
-        string $name, string $email, string $password, string $confirmPassword, bool $agreement = false) {
+        string $name, string $email, string $password, string $confirmPassword, bool $agreement = false, string $inviteCode = '') {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
@@ -147,7 +156,7 @@ class AuthRepository {
     }
 
     public static function registerMobile(
-        string $name, string $mobile, string $code, string $password, string $confirmPassword, bool $agreement = false) {
+        string $name, string $mobile, string $code, string $password, string $confirmPassword, bool $agreement = false, string $inviteCode = '') {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
@@ -260,7 +269,7 @@ class AuthRepository {
             self::successBindUser($type, $user, $nickname, $openid, $unionId, $platform_id);
             return $user;
         }
-        if (Option::value('auth_close') > 0) {
+        if (static::registerType() > 1) {
             throw AuthException::disableRegister();
         }
         if (!empty($email)

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Module\OpenPlatform\Domain;
 
+use Module\Auth\Domain\IAuthPlatform;
 use Module\Auth\Domain\Model\UserModel;
 use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Model\PlatformOptionModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
-use Zodream\Database\Model\UserModel as UserObject;
 use Zodream\Domain\Access\JWTAuth;
 use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
@@ -14,9 +14,10 @@ use Zodream\Helpers\Security\Rsa;
 use Zodream\Helpers\Xml;
 use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Output;
+use Zodream\Infrastructure\Contracts\UserObject;
 use Zodream\Route\Response\RestResponse;
 
-class Platform {
+class Platform implements IAuthPlatform {
 
     /**
      * 全局的平台key
@@ -35,7 +36,7 @@ class Platform {
         $this->request = request();
     }
 
-    public function id() {
+    public function id(): string|int {
         return $this->app['id'];
     }
 
@@ -46,10 +47,10 @@ class Platform {
     /**
      * 获取设置
      * @param string $store
-     * @param string $name
+     * @param string|null $name
      * @return array|string
      */
-    public function option(string $store, $name = null) {
+    public function option(string $store, ?string $name = null): mixed {
         if (!isset($this->options[$store])) {
             $this->options[$store] = PlatformOptionModel::options($this->id(), $store);
         }
@@ -259,7 +260,7 @@ class Platform {
 
     /**
      * 验证token
-     * @param $token
+     * @param string $token
      * @return bool
      */
     public function verifyToken(string $token): bool

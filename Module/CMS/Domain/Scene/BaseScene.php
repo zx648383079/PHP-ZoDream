@@ -4,37 +4,40 @@ namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
+use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
+use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Str;
+use Zodream\Html\Page;
 use Zodream\Infrastructure\Concerns\ErrorTrait;
 
 abstract class BaseScene implements SceneInterface {
 
     use ErrorTrait;
 
-    protected $site = 1;
+    protected int $site = 1;
 
     /**
      * @var ModelModel
      */
-    protected $model;
+    protected mixed $model;
 
-    public function setModel(ModelModel $model, $site = 0) {
+    public function setModel(ModelModel $model, int $site = 0) {
         $this->model = $model;
         $this->site = $site > 0 ? $site : CMSRepository::siteId();
         return $this;
     }
 
-    public function modelId() {
+    public function modelId(): int {
         return $this->model['id'];
     }
 
-    public function remove($id) {
+    public function remove(int|array|callable $id): bool {
         $main = null;
         foreach ([
                      $this->query(),
@@ -53,13 +56,14 @@ abstract class BaseScene implements SceneInterface {
                 $query->where('model_id', $this->model->id);
             }
             if (($main = call_user_func($id, $query, $main, $i)) === false) {
-                return;
+                return true;
             }
             $query->delete();
         }
+        return true;
     }
 
-    public function find($id) {
+    public function find(int|callable $id): array {
         $data = [];
         if (!is_callable($id) && $id < 1) {
             return [];
@@ -88,7 +92,7 @@ abstract class BaseScene implements SceneInterface {
         }));
     }
 
-    public function insert(array $data) {
+    public function insert(array $data): bool|int {
         $count = $this->query()
             ->where('title', $data['title'])->count();
         if ($count > 0) {
@@ -100,13 +104,21 @@ abstract class BaseScene implements SceneInterface {
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
         $main['model_id'] = $this->model->id;
         $main['user_id'] = auth()->id();
-        $id = $this->query()->insert($main);
+        $id = intval($this->query()->insert($main));
+        if ($id <= 0) {
+            return false;
+        }
         $extend['id'] = $id;
         $this->extendQuery()->insert($extend);
-        return intval($id);
+        $this->onDataUpdated($id, $main, $extend);
+        return $id;
     }
 
-    public function update($id, array $data) {
+    protected function onDataUpdated(int $id, array $main, array $extend): void {
+
+    }
+
+    public function update(int $id, array $data): bool {
         if (isset($data['title'])) {
             $count = $this->query()->where('id', '<>', $id)
                 ->where('title', $data['title'])->count();
@@ -123,41 +135,55 @@ abstract class BaseScene implements SceneInterface {
             $this->extendQuery()
                 ->where('id', $id)->update($extend);
         }
+        $this->onDataUpdated($id, $main, $extend);
         return true;
     }
 
     /**
      * @return Builder
      */
-    public function query() {
+    public function query(): Builder {
         return DB::table($this->getMainTable());
     }
 
     /**
      * @return Builder
      */
-    public function extendQuery() {
+    public function extendQuery(): Builder {
         return DB::table($this->getExtendTable());
     }
 
     /**
      * @return ModelFieldModel[]
      */
-    public function fieldList() {
+    public function fieldList(): array {
         return FuncHelper::fieldList($this->model->id);
+    }
+
+    public function searchComment(string $keywords, string $order = '', int $page = 1, int $perPage = 20): Page {
+
+    }
+    public function insertComment(array $data): Page {
+
+    }
+    public function removeComment(int $id): Page {
+
+    }
+    public function updateComment(int $id, array $data): Page {
+
     }
 
     /**
      * 主表一些默认的字段名 这里的字段不会进行转化
      * @return string[]
      */
-    protected function mainDefaultField() {
+    protected function mainDefaultField(): array {
         return ['id', 'cat_id', 'model_id', 'user_id',
-            'status', 'view_count',
+            'status', 'view_count', 'comment_count', 'comment_open',
             'updated_at', 'created_at', 'parent_id'];
     }
 
-    protected function getGroupFieldName() {
+    protected function getGroupFieldName(): array {
         $field_list = $this->fieldList();
         $main = $this->mainDefaultField();
         $extra = [];
@@ -171,7 +197,7 @@ abstract class BaseScene implements SceneInterface {
         return [$main, $extra];
     }
 
-    protected function splitByField(array $params) {
+    protected function splitByField(array $params): array {
         list($mainNames, $extraNames) = $this->getGroupFieldName();
         $main = [];
         $extra = [];
@@ -192,11 +218,11 @@ abstract class BaseScene implements SceneInterface {
      * 添加
      * @param Builder $query
      * @param array $params
-     * @param null $order
+     * @param string $order
      * @param string $field
      * @return Builder
      */
-    protected function addQuery(Builder $query, $params = [], $order = null, $field = '') {
+    protected function addQuery(Builder $query, array $params = [], string $order = '', string $field = ''): Builder {
         list($order, $hasExtra) = $this->filterQuery($order);
         list($field, $hasExtra2) = $this->filterQuery($field);
         $hasExtra = $hasExtra || $hasExtra2;
@@ -229,7 +255,7 @@ abstract class BaseScene implements SceneInterface {
         return $this->addWhereOrIn($query, $main);
     }
 
-    private function filterQuery($order) {
+    private function filterQuery(string $order): array {
         if (empty($order)) {
             return [$order, false];
         }
@@ -244,7 +270,7 @@ abstract class BaseScene implements SceneInterface {
         return [$order, $hasExtra];
     }
 
-    private function addWhereOrIn(Builder $query, array $params, $prefix = '') {
+    private function addWhereOrIn(Builder $query, array $params, string $prefix = ''): Builder {
         if (empty($params)) {
             return $query;
         }
@@ -258,7 +284,7 @@ abstract class BaseScene implements SceneInterface {
         return $query;
     }
 
-    protected function addSearchQuery(Builder $query, $keywords) {
+    protected function addSearchQuery(Builder $query, string $keywords): Builder {
         if (empty($keywords)) {
             return $query;
         }
@@ -309,8 +335,89 @@ abstract class BaseScene implements SceneInterface {
         return $query->whereIn($this->getMainTable().'.id', $ids);
     }
 
-    protected function getResultByField(Builder $query, $field = '*') {
+    protected function getResultByField(Builder $query, string $field = '*') {
 
+    }
+
+    protected function initCommentTable() {
+        CreateCmsTables::createTable($this->getCommentTable(), function (Table $table) {
+            $table->id();
+            $table->string('content');
+            $table->uint('parent_id')->default(0);
+            $table->uint('position')->default(1);
+            $table->uint('user_id');
+            $table->uint('model_id');
+            $table->uint('content_id');
+            $table->uint('agree_count')->default(0);
+            $table->uint('disagree_count')->default(0);
+            $table->timestamp('created_at');
+        });
+    }
+
+    protected function initMainTableField(Table $table) {
+        $table->id();
+        $table->string('title', 100);
+        $table->uint('cat_id');
+        $table->uint('model_id');
+        $table->uint('parent_id')->default(0);
+        $table->uint('user_id')->default(0);
+        $table->string('keywords')->default('');
+        $table->string('thumb')->default('');
+        $table->string('description')->default('');
+        $table->bool('status')->default(0);
+        $table->uint('view_count')->default(0);
+        $table->uint('comment_count')->default(0);
+        $table->bool('comment_open')->default(0);
+        $table->timestamps();
+    }
+
+    protected function initDefaultModelField() {
+        ModelFieldModel::query()->insert([
+            [
+                'name' => '标题',
+                'field' => 'title',
+                'model_id' => $this->model->id,
+                'is_main' => 1,
+                'is_system' => 1,
+                'is_required' => 1,
+                'type' => 'text'
+            ],
+            [
+                'name' => '关键字',
+                'field' => 'keywords',
+                'model_id' => $this->model->id,
+                'is_main' => 1,
+                'is_system' => 1,
+                'is_required' => 0,
+                'type' => 'text'
+            ],
+            [
+                'name' => '简介',
+                'field' => 'description',
+                'model_id' => $this->model->id,
+                'is_main' => 1,
+                'is_system' => 1,
+                'is_required' => 0,
+                'type' => 'textarea'
+            ],
+            [
+                'name' => '缩略图',
+                'field' => 'thumb',
+                'model_id' => $this->model->id,
+                'is_main' => 1,
+                'is_system' => 1,
+                'is_required' => 0,
+                'type' => 'image'
+            ],
+        ]);
+        ModelFieldModel::create([
+            'name' => '内容',
+            'field' => 'content',
+            'model_id' => $this->model->id,
+            'is_main' => 0,
+            'is_system' => 1,
+            'type' => 'editor',
+        ]);
     }
 
     public function toInput(ModelFieldModel $field, array $data = [], bool $isJson = false) {
@@ -326,7 +433,7 @@ abstract class BaseScene implements SceneInterface {
      * @return array [main, extend]
      * @throws \Exception
      */
-    public function filterInput(array $data, $isNew = true) {
+    public function filterInput(array $data, bool $isNew = true): array {
         $extend = $main = [];
         foreach ($this->mainDefaultField() as $key) {
             if (!array_key_exists($key, $data)) {
@@ -354,11 +461,11 @@ abstract class BaseScene implements SceneInterface {
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @return BaseField
      * @throws \Exception
      */
-    public static function newField($type) {
+    public static function newField(string $type) {
         $maps = [
             'switch' => 'SwitchBox',
         ];

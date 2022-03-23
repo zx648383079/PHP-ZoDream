@@ -44,7 +44,7 @@ class FuncHelper {
             call_user_func($callback) : $callback;
     }
 
-    public static function option($code) {
+    public static function option(string $code) {
         if (empty($code)) {
             return null;
         }
@@ -89,7 +89,7 @@ class FuncHelper {
             });
         } elseif (isset($params['tree'])) {
             $data = static::getOrSet(__FUNCTION__,
-                sprintf('tree-%s', isset($params['group']) ? $params['group'] : ''),
+                sprintf('tree-%s', $params['group'] ?? ''),
                 function () use ($data) {
                     return (new Tree($data))->makeIdTree();
                 });

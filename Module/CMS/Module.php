@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS;
 
 use Module\CMS\Domain\Migrations\CreateCmsTables;

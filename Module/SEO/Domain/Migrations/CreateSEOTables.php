@@ -21,7 +21,7 @@ class CreateSEOTables extends Migration {
             $table->string('code', 20)->default('');
             $table->uint('parent_id')->default(0);
             $table->string('type', 20)->default('text');
-            $table->bool('visibility')->default(1)->comment('是否对外显示');
+            $table->uint('visibility', 1)->default(1)->comment('是否对外显示, 0 页面不可见，1 编辑可见 2 前台可见');
             $table->string('default_value')->default('')->comment('默认值或候选值');
             $table->text('value')->nullable();
             $table->uint('position', 2)->default(99);
@@ -66,20 +66,24 @@ class CreateSEOTables extends Migration {
                 [
                     'name' => '站点名',
                     'code' => 'site_title',
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '站点关键字',
                     'code' => 'site_keywords',
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '站点介绍',
                     'code' => 'site_description',
                     'type' => 'textarea',
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '站点LOGO',
                     'code' => 'site_logo',
                     'type' => 'image',
+                    'visibility' => 2,
                 ],
             ];
         });
@@ -89,23 +93,27 @@ class CreateSEOTables extends Migration {
                     'name' => '关站',
                     'code' => 'site_close',
                     'type' => 'switch',
-                    'value' => 0
+                    'value' => 0,
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '关站说明',
                     'code' => 'site_close_tip',
-                    'type' => 'basic_editor'
+                    'type' => 'basic_editor',
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '预计开站时间',
                     'code' => 'site_close_retry',
-                    'type' => 'text'
+                    'type' => 'text',
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '开启灰度',
                     'code' => 'site_gray',
                     'type' => 'switch',
-                    'value' => 0
+                    'value' => 0,
+                    'visibility' => 2,
                 ],
             ];
         });

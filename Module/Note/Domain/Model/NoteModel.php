@@ -16,6 +16,7 @@ use Zodream\Infrastructure\Support\Html;
  */
 class NoteModel extends Model {
 
+    protected array $append = ['editable'];
 
 	public static function tableName() {
         return 'note';
@@ -53,8 +54,11 @@ class NoteModel extends Model {
         return Time::isTimeAgo($this->getAttributeSource('created_at'), 30 * 86400);
     }
 
-    public static function getNew($limit) {
-        return static::orderBy('created_at desc')->limit($limit ?? 5)->all();
+    public function getEditableAttribute() {
+        if (auth()->guest()) {
+            return false;
+        }
+        return auth()->id() === $this->user_id;
     }
 
 }

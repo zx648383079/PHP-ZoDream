@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain;
 
+use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
@@ -10,7 +12,6 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
-use Module\CMS\Domain\Scene\SingleScene;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Database\DB;
@@ -111,7 +112,7 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packFields($model_id) {
+    protected function packFields(int $model_id) {
         $data = [];
         $fields = ModelFieldModel::query()->where('model_id', $model_id)->asArray()->all();
         foreach ($fields as $item) {
@@ -131,7 +132,7 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packChannel($parent_id = 0) {
+    protected function packChannel(int $parent_id = 0) {
         $data = [];
         $model_list = CategoryModel::query()->where('parent_id', $parent_id)
             ->asArray()->all();
@@ -153,11 +154,11 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packChannelType($item) {
-        if ($item['type'] === CategoryModel::TYPE_LINK) {
+    protected function packChannelType(array $item) {
+        if ($item['type'] === CategoryEntity::TYPE_LINK) {
             return 'link';
         }
-        if ($item['type'] === CategoryModel::TYPE_PAGE) {
+        if ($item['type'] === CategoryEntity::TYPE_PAGE) {
             return 'page';
         }
         return $this->getCacheId($item['model_id'], 'model');
@@ -201,7 +202,7 @@ class ThemeManager {
         $this->apply('theme');
     }
 
-    public function apply($theme = null) {
+    public function apply(string $theme = '') {
         if (!empty($theme)) {
             $this->src = $this->src->directory($theme);
         }
@@ -216,18 +217,18 @@ class ThemeManager {
         $this->runScript($configs['script']);
     }
 
-    protected function setCache($data, $prefix) {
+    protected function setCache(array $data, string $prefix) {
         foreach ($data as $name => $id) {
             $this->cache[sprintf('@%s:%s', $prefix, $name)] = $id;
         }
     }
 
-    protected function getCacheId($name, $prefix = null) {
-        $key = empty($prefix) && substr($name, 0, 1) === '@' ? $name : sprintf('@%s:%s', $prefix, $name);
+    protected function getCacheId(string $name, string $prefix = '') {
+        $key = empty($prefix) && str_starts_with($name, '@') ? $name : sprintf('@%s:%s', $prefix, $name);
         return $this->cache[$key] ?? 0;
     }
 
-    protected function runScript($data) {
+    protected function runScript(array $data) {
         usort($data, function ($pre, $next) {
             $maps = ['group' => 1, 'linkage' => 2, 'model' => 3, 'form' => 4, 'field' => 5, 'channel' => 6, 'content' => 7];
             if (!isset($maps[$pre['action']])) {
@@ -251,22 +252,22 @@ class ThemeManager {
 
 
 
-    protected function runActionCopy($data) {
+    protected function runActionCopy(array $data) {
         $this->src->directory($data['src'])->copy($this->dist->directory($data['dist']));
     }
 
-    protected function runActionGroup($data) {
+    protected function runActionGroup(array $data) {
         if (!isset($data['data'])) {
             $this->insertGroup($data);
         }
     }
 
-    protected function runActionForm($data) {
+    protected function runActionForm(array $data) {
         $data['type'] = 1;
-        return $this->runActionModel($data);
+        $this->runActionModel($data);
     }
 
-    protected function runActionLinkage($data) {
+    protected function runActionLinkage(array $data) {
         $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
         $model = LinkageModel::where('code', $data['code'])->first();
@@ -295,8 +296,8 @@ class ThemeManager {
         }
     }
 
-    protected function runActionModel($data) {
-        $fields = isset($data['fields']) ? $data['fields'] : [];
+    protected function runActionModel(array $data) {
+        $fields = $data['fields'] ?? [];
         if (isset($data['child'])) {
             $data['child_model'] = $this->getCacheId($data['child']);
         }
@@ -319,7 +320,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionField($data) {
+    protected function runActionField(array $data) {
         if (isset($data['model'])) {
             $data['model_id'] = $this->getCacheId($data['model']);
         }
@@ -355,17 +356,17 @@ class ThemeManager {
         $scene->addField($model);
     }
 
-    protected function runActionChannel($data) {
+    protected function runActionChannel(array $data) {
         $type = $data['type'] ?? null;
         if (empty($type)) {
 
         } elseif ($type === 'page') {
-            $data['type'] = CategoryModel::TYPE_PAGE;
+            $data['type'] = CategoryEntity::TYPE_PAGE;
         } elseif ($type === 'link') {
-            $data['type'] = CategoryModel::TYPE_LINK;
+            $data['type'] = CategoryEntity::TYPE_LINK;
         } else {
             $data['model_id'] = $this->getCacheId($type);
-            $data['type'] = CategoryModel::TYPE_CONTENT;
+            $data['type'] = CategoryEntity::TYPE_CONTENT;
         }
         $children = $data['children'] ?? [];
         if (isset($data['setting']) && is_array($data['setting'])) {
@@ -396,7 +397,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionContent($data) {
+    protected function runActionContent(array $data) {
         if (isset($data['cat_id']) && !is_numeric($data['cat_id'])) {
             $data['cat_id'] = $this->getCacheId($data['cat_id']);
         } elseif (isset($data['type'])) {
@@ -409,7 +410,7 @@ class ThemeManager {
         $scene->insert($data);
     }
 
-    protected function insertGroup($item) {
+    protected function insertGroup(array $item) {
         if ($this->getCacheId($item['name'], 'group') > 0) {
             return;
         }
@@ -437,7 +438,7 @@ class ThemeManager {
         CMSRepository::site()->saveOption($newOptions);
     }
 
-    protected function getOptionParent($code) {
+    protected function getOptionParent(string $code) {
         $code = substr($code, 8);
         return intval(OptionModel::where('code', $code)->value('id'));
     }
