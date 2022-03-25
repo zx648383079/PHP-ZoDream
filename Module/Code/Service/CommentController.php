@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Code\Service;
 
 use Domain\Model\SearchModel;
 use Module\Code\Domain\Model\CommentModel;
 use Module\Code\Domain\Repositories\CodeRepository;
+use Module\Code\Domain\Repositories\CommentRepository;
 use Module\ModuleController;
-use Zodream\Service\Config;
 
 class CommentController extends ModuleController {
 
@@ -18,15 +19,15 @@ class CommentController extends ModuleController {
         ];
     }
 
-    public function indexAction($id, $sort = 'created_at', $order = 'desc') {
+    public function indexAction(int $id, string $sort = 'created_at', string $order = 'desc') {
         $comment_list = CommentModel::where([
-            'code_id' => intval($id),
+            'code_id' => $id,
             'parent_id' => 0,
         ])->orderBy($sort, $order)->page();
         return $this->show(compact('comment_list', 'id'));
     }
 
-    public function moreAction($id, $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+    public function moreAction(int $id, int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id']);
         $comment_list = CommentModel::with('replies')
             ->where([
@@ -39,10 +40,10 @@ class CommentController extends ModuleController {
         return $this->show(compact('comment_list'));
     }
 
-    public function saveAction($content,
-                               $code_id,
-                               $parent_id = 0,
-                               $is_forward = false) {
+    public function saveAction(string $content,
+                               int $code_id,
+                               int $parent_id = 0,
+                               bool $is_forward = false) {
         try {
             $model = CodeRepository::comment($content,
                 $code_id,
@@ -55,31 +56,31 @@ class CommentController extends ModuleController {
         ]);
     }
 
-    public function disagreeAction($id) {
+    public function disagreeAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
-            $model = CodeRepository::disagree($id);
+            $model = CommentRepository::disagree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData($model);
     }
 
-    public function agreeAction($id) {
+    public function agreeAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
         try {
-            $model = CodeRepository::agree($id);
+            $model = CommentRepository::agree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -92,6 +93,6 @@ class CommentController extends ModuleController {
     }
 
     public function redirectWithAuth() {
-        return $this->redirect([Config::auth('home'), 'redirect_uri' => url('./')]);
+        return $this->redirect([config('auth.home'), 'redirect_uri' => url('./')]);
     }
 }

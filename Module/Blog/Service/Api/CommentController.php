@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Api;
 
-use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
@@ -39,21 +39,21 @@ class CommentController extends Controller {
     }
 
     public function disagreeAction(int $id) {
-        if (!CommentModel::canAgree($id)) {
-            return $this->renderFailure('一个用户只能操作一次！');
+        try {
+            $model = CommentRepository::disagree($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $comment = CommentModel::find($id);
-        $comment->agreeThis(false);
-        return $this->render($comment->toArray());
+        return $this->render($model->toArray());
     }
 
     public function agreeAction(int $id) {
-        if (!CommentModel::canAgree($id)) {
-            return $this->renderFailure('一个用户只能操作一次！');
+        try {
+            $model = CommentRepository::agree($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $comment = CommentModel::find($id);
-        $comment->agreeThis();
-        return $this->render($comment->toArray());
+        return $this->render($model->toArray());
     }
 
     public function reportAction(int $id) {

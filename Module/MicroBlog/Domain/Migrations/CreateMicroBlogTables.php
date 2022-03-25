@@ -46,8 +46,8 @@ class CreateMicroBlogTables extends Migration {
             $table->uint('parent_id');
             $table->uint('user_id')->default(0);
             $table->uint('micro_id');
-            $table->uint('agree')->default(0);
-            $table->uint('disagree')->default(0);
+            $table->uint('agree_count')->default(0);
+            $table->uint('disagree_count')->default(0);
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
             $table->id();

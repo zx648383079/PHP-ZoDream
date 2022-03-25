@@ -22,6 +22,7 @@ use Module\Blog\Domain\Entities\CommentEntity;
  * @property integer $agree_count
  * @property integer $disagree_count
  * @property integer $position
+ * @property integer $agree_type {0:无，1:同意 2:不同意}
  */
 class CommentModel extends CommentEntity {
 
@@ -83,35 +84,4 @@ class CommentModel extends CommentEntity {
             ->limit(5)->asArray()->all();
     }
 
-    public static function canAgree($id) {
-	    return BlogLogModel::where([
-	        'user_id' => auth()->id(),
-            'item_type' => BlogLogModel::TYPE_COMMENT,
-            'item_id' => $id,
-            'action' => ['in', [BlogLogModel::ACTION_AGREE, BlogLogModel::ACTION_DISAGREE]]
-        ])->count() < 1;
-    }
-
-    /**
-     * 是否赞同此评论
-     * @param bool $isAgree
-     * @return bool
-     * @throws \Exception
-     */
-    public function agreeThis($isAgree = true) {
-        if ($isAgree) {
-            $this->agree_count ++;
-        } else {
-            $this->disagree_count ++;
-        }
-        if (!$this->save()) {
-            return false;
-        }
-        return !!BlogLogModel::create([
-            'item_type' => BlogLogModel::TYPE_COMMENT,
-            'action' => $isAgree ? BlogLogModel::ACTION_AGREE : BlogLogModel::ACTION_DISAGREE,
-            'item_id' => $this->id,
-            'user_id' => auth()->id()
-        ]);
-    }
 }

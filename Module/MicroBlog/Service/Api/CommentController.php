@@ -39,7 +39,7 @@ class CommentController extends Controller {
 
     public function disagreeAction(int $id) {
         try {
-            $model = MicroRepository::disagree($id);
+            $model = CommentRepository::disagree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -48,7 +48,7 @@ class CommentController extends Controller {
 
     public function agreeAction(int $id) {
         try {
-            $model = MicroRepository::agree($id);
+            $model = CommentRepository::agree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

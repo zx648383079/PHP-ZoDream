@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\CMS\Service\Api;
+namespace Module\CMS\Service;
 
 use Module\CMS\Domain\Repositories\CommentRepository;
 
@@ -15,9 +15,8 @@ class CommentController extends Controller {
     public function indexAction(int $article, int|string $category, int|string $model, string $keywords = '',
                                 int $parent_id = 0, string $sort = 'created_at', string $order = 'desc',
                                 string $extra = '', int $page = 1, int $pre_page = 20) {
-        return $this->renderPage(
-            CommentRepository::getList($article, $category, $model, $keywords, $parent_id, $sort, $order, $extra, $page, $pre_page)
-        );
+        $items = CommentRepository::getList($article, $category, $model, $keywords, $parent_id, $sort, $order, $extra, $page, $pre_page);
+        return $this->show(compact('items'));
     }
 
     public function createAction(string $content,
@@ -32,7 +31,9 @@ class CommentController extends Controller {
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($model);
+        return $this->renderData([
+            'url' => './'
+        ]);
     }
 
     public function disagreeAction(int $id, int $article, int|string $category, int|string $model) {

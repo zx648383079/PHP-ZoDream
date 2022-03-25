@@ -15,8 +15,8 @@ use Module\MicroBlog\Domain\Repositories\LogRepository;
  * @property integer $parent_id
  * @property integer $user_id
  * @property integer $micro_id
- * @property integer $agree
- * @property integer $disagree
+ * @property integer $agree_count
+ * @property integer $disagree_count
  * @property integer $created_at
  */
 class CommentModel extends Model {
@@ -36,8 +36,8 @@ class CommentModel extends Model {
             'parent_id' => 'int',
             'user_id' => 'int',
             'micro_id' => 'required|int',
-            'agree' => 'int',
-            'disagree' => 'int',
+            'agree_count' => 'int',
+            'disagree_count' => 'int',
             'created_at' => 'int',
         ];
     }
@@ -50,8 +50,8 @@ class CommentModel extends Model {
             'parent_id' => 'Parent Id',
             'user_id' => 'User Id',
             'micro_id' => 'Micro Id',
-            'agree' => 'Agree',
-            'disagree' => 'Disagree',
+            'agree_count' => 'Agree',
+            'disagree_count' => 'Disagree',
             'created_at' => 'Created At',
         ];
     }

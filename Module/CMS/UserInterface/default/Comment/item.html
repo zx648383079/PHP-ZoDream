@@ -1,0 +1,40 @@
+<div class="comment-item">
+    <article class="comment">
+        <div class="comment-author">
+            <img src="{$item.user.avatar}" alt="">
+            <div class="comment-meta">
+                <span class="name">{$item.user.name}</span>
+                <div class="date">{this.ago:$item.created_at}</div>
+            </div>
+        </div>
+        <div class="comment-content">
+            <p>{$item.content}</p>
+        </div>
+        <div class="comment-footer">
+            <i class="fa fa-reply"></i>
+            <a href="">回复</a>
+        </div>
+    </article>
+    <div class="children">
+        {for:$item.children,$reply}
+        <div class="comment-item">
+            <article class="comment">
+                <div class="comment-author">
+                    <img src="{$reply.user.avatar}" alt="">
+                    <div class="comment-meta">
+                        <span class="name">{$reply.user.name}</span>
+                        <div class="date">{$reply.created_at}</div>
+                    </div>
+                </div>
+                <div class="comment-content">
+                    <p>{$reply.content}</p>
+                </div>
+                <div class="comment-footer">
+                    <i class="fa fa-reply"></i>
+                    <a href="">回复</a>
+                </div>
+            </article>
+        </div>
+        {/for}
+    </div>
+</div>

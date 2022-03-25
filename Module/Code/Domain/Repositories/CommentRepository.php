@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Module\MicroBlog\Domain\Repositories;
+namespace Module\Code\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception;
-use Module\MicroBlog\Domain\Model\CommentModel;
-use Module\MicroBlog\Domain\Model\LogModel;
+use Module\Code\Domain\Model\CommentModel;
+use Module\Code\Domain\Model\LogModel;
 
 class CommentRepository {
     public static function getList(string $keywords = '', int $user = 0, int $micro = 0) {

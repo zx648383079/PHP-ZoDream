@@ -51,12 +51,12 @@ class HomeController extends Controller {
     }
 
     public function recommendAction(int $id) {
-        if (!BlogModel::canRecommend($id)) {
-            return $this->renderFailure('一个用户只能操作一次！');
+        try {
+            $model = BlogRepository::recommend($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $blog = BlogPageModel::find($id);
-        $blog->recommendThis();
-        return $this->render($blog);
+        return $this->render($model);
     }
 
     public function suggestAction(string $keywords) {

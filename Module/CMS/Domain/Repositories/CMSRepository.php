@@ -7,10 +7,12 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\CommentModel;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Model\SiteLogModel;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
+use Module\SEO\Domain\Option;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 use Zodream\Http\Uri;
@@ -88,6 +90,20 @@ class CMSRepository {
         return self::$cacheSite = $default;
     }
 
+    public static function options() {
+        $site = static::site();
+        $items = [];
+        foreach ($site['options'] as $item) {
+            $items[$item['code']] = Option::formatOption($item['value'], $item['type']);
+        }
+        foreach (
+            ['title', 'keywords', 'description', 'logo'] as $code
+        ) {
+            $items[$code] = $code === 'logo' ? url()->asset($site[$code]) : $site[$code];
+        }
+        return $items;
+    }
+
     public static function siteId() {
         return static::site()->id;
     }
@@ -114,6 +130,15 @@ class CMSRepository {
             $table->string('show_template', 20)->default('');
             $table->text('setting')->nullable();
             $table->timestamps();
+        });
+        CreateCmsTables::createTable(SiteLogModel::tableName(), function (Table $table) {
+            $table->id();
+            $table->uint('model_id');
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_id');
+            $table->uint('user_id');
+            $table->uint('action');
+            $table->timestamp('created_at');
         });
         static::scene()->boot();
         (new ThemeManager())->apply($site->theme);

@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Auth\Domain\Repositories\BulletinRepository;
+use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentFullModel;
 use Module\Blog\Domain\Model\CommentModel;
@@ -192,5 +193,51 @@ class CommentRepository {
         $model = CommentModel::findOrThrow($id);
         ReportRepository::quickCreate(Constants::TYPE_BLOG_COMMENT, $id,
             sprintf('“%s”', $model->content), '举报博客评论');
+    }
+
+    public static function disagree(int $id) {
+        $model = CommentModel::find($id);
+        if (empty($model)) {
+            throw new \Exception('评论不存在');
+        }
+        $res = LogRepository::toggleLog(BlogLogModel::TYPE_COMMENT,
+            BlogLogModel::ACTION_DISAGREE, $id,
+            [BlogLogModel::ACTION_AGREE, BlogLogModel::ACTION_DISAGREE]);
+        if ($res < 1) {
+            $model->disagree_count --;
+            $model->agree_type = 0;
+        } elseif ($res == 1) {
+            $model->agree_count --;
+            $model->disagree_count ++;
+            $model->agree_type = 2;
+        } elseif ($res == 2) {
+            $model->disagree_count ++;
+            $model->agree_type = 2;
+        }
+        $model->save();
+        return $model;
+    }
+
+    public static function agree(int $id) {
+        $model = CommentModel::find($id);
+        if (empty($model)) {
+            throw new \Exception('评论不存在');
+        }
+        $res = LogRepository::toggleLog(BlogLogModel::TYPE_COMMENT,
+            BlogLogModel::ACTION_AGREE, $id,
+            [BlogLogModel::ACTION_AGREE, BlogLogModel::ACTION_DISAGREE]);
+        if ($res < 1) {
+            $model->agree_count --;
+            $model->agree_type = 0;
+        } elseif ($res == 1) {
+            $model->agree_count ++;
+            $model->disagree_count --;
+            $model->agree_type = 1;
+        } elseif ($res == 2) {
+            $model->agree_count ++;
+            $model->agree_type = 1;
+        }
+        $model->save();
+        return $model;
     }
 }

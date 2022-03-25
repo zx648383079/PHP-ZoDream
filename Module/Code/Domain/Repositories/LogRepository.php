@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\MicroBlog\Domain\Repositories;
+namespace Module\Code\Domain\Repositories;
 
-use Module\MicroBlog\Domain\Model\LogModel;
+use Module\Code\Domain\Model\LogModel;
 
 class LogRepository {
 
@@ -23,11 +23,11 @@ class LogRepository {
             return false;
         }
         return LogModel::where([
-            'user_id' => auth()->id(),
-            'item_type' => LogModel::TYPE_MICRO_BLOG,
-            'item_id' => $micro,
-            'action' => LogModel::ACTION_RECOMMEND
-        ])->count() > 0;
+                'user_id' => auth()->id(),
+                'item_type' => LogModel::TYPE_CODE,
+                'item_id' => $micro,
+                'action' => LogModel::ACTION_RECOMMEND
+            ])->count() > 0;
     }
 
     public static function isCollect(int $micro): bool {
@@ -36,7 +36,7 @@ class LogRepository {
         }
         return LogModel::where([
                 'user_id' => auth()->id(),
-                'item_type' => LogModel::TYPE_MICRO_BLOG,
+                'item_type' => LogModel::TYPE_CODE,
                 'item_id' => $micro,
                 'action' => LogModel::ACTION_COLLECT
             ])->count() > 0;

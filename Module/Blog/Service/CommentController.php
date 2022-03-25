@@ -51,12 +51,11 @@ class CommentController extends ModuleController {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
-        $id = intval($id);
-        if (!CommentModel::canAgree($id)) {
-            return $this->renderFailure('一个用户只能操作一次！');
+        try {
+            $model = CommentRepository::disagree($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model = CommentModel::find($id);
-        $model->agreeThis(false);
         return $this->renderData($model->disagree_count);
     }
 
@@ -64,11 +63,11 @@ class CommentController extends ModuleController {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
-        if (!CommentModel::canAgree($id)) {
-            return $this->renderFailure('一个用户只能操作一次！');
+        try {
+            $model = CommentRepository::agree($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model = CommentModel::find($id);
-        $model->agreeThis();
         return $this->renderData($model->agree_count);
     }
 

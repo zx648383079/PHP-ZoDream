@@ -13,6 +13,7 @@ use Module\SEO\Domain\Option;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
+use Zodream\Html\Form;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
 use Zodream\Infrastructure\Support\Html;
@@ -48,15 +49,8 @@ class FuncHelper {
         if (empty($code)) {
             return null;
         }
-        if (in_array($code, ['title', 'keywords', 'description', 'logo'])) {
-            return CMSRepository::site()->$code;
-        }
         $options = static::getOrSet(__FUNCTION__, 'all', function () {
-            $items = [];
-            foreach (CMSRepository::site()['options'] as $item) {
-                $items[$item['code']] = Option::formatOption($item['value'], $item['type']);
-            }
-            return $items;
+            return CMSRepository::options();
         });
         return $options[$code] ?? null;
     }
@@ -118,7 +112,7 @@ class FuncHelper {
      * @param string|int $model
      * @return ModelModel
      */
-    public static function model($model) {
+    public static function model(string|int $model) {
         static::getOrSet(__FUNCTION__, 'all', function () use ($model) {
             $data = ModelModel::query()->all();
             static::setModel(...$data);
@@ -183,10 +177,10 @@ class FuncHelper {
         } else {
             $data['cat_id'] = self::getCategoryId($param);
         }
-        $keywords = static::getVal($param, ['keywords', 'keyword', 'query']);
+        $keywords = static::getVal($param, ['keywords', 'keyword', 'query'], '');
         $page = intval(static::getVal($param, ['page'], 1));
         $param['parent_id'] = static::getVal($param, ['parent_id', 'parent'], 0);
-        $fields = static::getVal($param, ['field', 'fields']);
+        $fields = static::getVal($param, ['field', 'fields'], '');
         $order = static::getVal($param, ['order', 'orderBy'], 'updated_at desc');
         if (strpos($order, '_') > 0) {
             $order = preg_replace('/_(desc|asc)/i', ' $1', $order);
@@ -229,7 +223,7 @@ class FuncHelper {
         return static::contents($params);
     }
 
-    public static function locationPath() {
+    public static function locationPath(): array {
         $path = static::getOrSet(__FUNCTION__, __FUNCTION__, function () {
             $path = TreeHelper::getTreeParent(static::channels(), static::$current['channel']);
             $path[] = static::$current['channel'];
@@ -244,7 +238,7 @@ class FuncHelper {
         }, $path);
     }
 
-    public static function location() {
+    public static function location(): string {
         return implode('', array_map(function ($item) {
             return Html::li(Html::a($item['title'],
                 $item['url']));
@@ -300,7 +294,7 @@ class FuncHelper {
         return static::getOrSet(__FUNCTION__,
             $model_id,
             function () use ($model_id) {
-                return ModelFieldModel::query()->where('model_id', $model_id)->all();
+                return ModelFieldModel::query()->where('model_id', $model_id)->get();
             });
     }
 
@@ -515,6 +509,15 @@ class FuncHelper {
         return $default;
     }
 
+    protected static function hasVal(array $data, array|string $columns): bool {
+        foreach ((array)$columns as $column) {
+            if (!empty($column) && isset($data[$column])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function linkage($id) {
         if (!is_numeric($id)) {
             $id = LinkageModel::query()->where('code', $id)->value('id');
@@ -534,7 +537,7 @@ class FuncHelper {
         });
     }
 
-    public static function range($start, $end, $step = 1) {
+    public static function range(string|int $start, string|int $end, string|int $step = 1) {
         if (empty($step)) {
             $step = 1;
         }
@@ -566,7 +569,7 @@ class FuncHelper {
      * @param $id
      * @return string
      */
-    public static function formAction($id) {
+    public static function formAction(int $id) {
         return url('./form/save', compact('id'));
     }
 
@@ -612,7 +615,7 @@ class FuncHelper {
         return url('./content', $args);
     }
 
-    public static function url($data) {
+    public static function url(mixed $data) {
         if (is_array($data)) {
             return self::contentUrl($data);
         }
@@ -626,7 +629,77 @@ class FuncHelper {
         return url($data, $args);
     }
 
-    public static function search($name, $val = '') {
+    protected static function getCommentQuery(array $param) {
+        $data = [];
+        $contentId = static::getVal($param, ['content_id', 'article'], '');
+        if (!empty($contentId)) {
+            $param['content_id'] = $contentId;
+        }
+        if (static::hasVal($param, ['model', 'model_id'])) {
+            if (isset($param['model'])) {
+                $data['model_id'] = self::model($param['model'])->id;
+            }
+        } elseif (static::hasVal($param, ['category', 'cat_id', 'cat', 'channel'])) {
+            $category = self::getCategoryId($param);
+            $modelId = static::channel($category, 'model_id');
+            if (!empty($modelId)) {
+                $data['model_id'] = $modelId;
+            }
+        } else {
+            $data['model_id'] = static::$current['model'];
+            if (empty($contentId)) {
+                $param['content_id'] = static::$current['content'];
+            }
+        }
+        $keywords = static::getVal($param, ['keywords', 'keyword', 'query'], '');
+        $extra = static::getVal($param, ['extra'], '');
+        $page = intval(static::getVal($param, ['page'], 1));
+        $param['parent_id'] = static::getVal($param, ['parent_id', 'parent'], 0);
+        $order = static::getVal($param, ['order', 'orderBy'], 'created_at desc');
+        if (strpos($order, '_') > 0) {
+            $order = preg_replace('/_(desc|asc)/i', ' $1', $order);
+        }
+        if ($order === 'hot') {
+            $order = 'agree_count desc';
+        }
+        $perPage = static::getVal($param, ['per_page', 'size', 'num', 'limit'], 20);
+        $tags = ['user_id', 'parent_id', 'model_id', 'content_id'];
+        // 通过标签提前过滤
+        foreach ($param as $key => $value) {
+            if (in_array($key, $tags)) {
+                continue;
+            }
+            $data[$key] = $value;
+        }
+        return [$keywords, $data, $order, $extra, $page, $perPage];
+    }
+
+    public static function comments(array $params = []) {
+        $data = self::getCommentQuery($params);
+        return static::getOrSet(__FUNCTION__,
+            md5(Json::encode($data)),
+            function () use ($data) {
+                if (!isset($data[1]['model_id'])) {
+                    return new Page(0);
+                }
+                $scene = CMSRepository::scene()->setModel(self::model($data[1]['model_id']));
+                return $scene->searchComment(...$data);
+            });
+    }
+
+    public static function commentHidden(): string {
+        return sprintf('%s%s%s%s', Form::hidden('model', static::$current['model']),
+            Form::hidden('article', static::$current['content']), Form::hidden('category', static::$current['channel']), Form::token());
+    }
+
+    /**
+     * 生成搜索链接
+     * @param string $name
+     * @param string $val
+     * @return string
+     * @throws \Exception
+     */
+    public static function search(string $name, string $val = '') {
         $data = request()->get();
         unset($data['page']);
         if (empty($val)) {
@@ -636,14 +709,26 @@ class FuncHelper {
         return url('./category/list', $data);
     }
 
-    public static function searchActive($name, $val = '') {
+    /**
+     *
+     * @param string $name
+     * @param string $val
+     * @return string
+     * @throws \Exception
+     */
+    public static function searchActive(string $name, string $val = '') {
         $request = request();
-        if ($request->get($name, '') === (string)$val) {
+        if ($request->get($name, '') === $val) {
             return ' active';
         }
         return '';
     }
 
+    /**
+     * 搜索表单中的隐藏字段
+     * @return string
+     * @throws \Exception
+     */
     public static function searchHidden() {
         $data = request()->get();
         unset($data['page'], $data['keywords']);
@@ -653,17 +738,11 @@ class FuncHelper {
                 continue;
             }
             if (!is_array($value)) {
-                $html .= Html::input('hidden', [
-                    'name' => HtmlHelper::text($key),
-                    'value' => HtmlHelper::text($value),
-                ]);
+                $html .= Form::hidden(HtmlHelper::text($key), HtmlHelper::text($value));
                 continue;
             }
             foreach ($value as $val) {
-                $html .= Html::input('hidden', [
-                    'name' => HtmlHelper::text($key).'[]',
-                    'value' => HtmlHelper::text($val),
-                ]);
+                $html .= Form::hidden(HtmlHelper::text($key).'[]', HtmlHelper::text($val));
             }
         }
         return $html;
@@ -711,9 +790,11 @@ class FuncHelper {
             'search',
             'searchActive',
             'searchHidden',
+            'commentHidden',
             'linkageText',
             'extendContent',
         ]);
+        static::registerBlock($compiler, 'comments', 'comment');
         static::registerBlock($compiler, 'channels', 'channel');
         static::registerBlock($compiler, 'contents', 'content');
         static::registerBlock($compiler, 'linkage');

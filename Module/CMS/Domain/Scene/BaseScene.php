@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
+use Domain\Model\SearchModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
@@ -11,6 +13,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
+use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
@@ -153,6 +156,10 @@ abstract class BaseScene implements SceneInterface {
         return DB::table($this->getExtendTable());
     }
 
+    public function commentQuery(): Builder {
+        return DB::table($this->getCommentTable());
+    }
+
     /**
      * @return ModelFieldModel[]
      */
@@ -160,17 +167,32 @@ abstract class BaseScene implements SceneInterface {
         return FuncHelper::fieldList($this->model->id);
     }
 
-    public function searchComment(string $keywords, string $order = '', int $page = 1, int $perPage = 20): Page {
-
+    public function searchComment(string $keywords, array $params = [], string $order = '', string $extra = '', int $page = 1, int $perPage = 20): Page {
+        $items = $this->addWhereOrIn($this->commentQuery(), $params)->when(!empty($keywords), function ($query) use ($keywords) {
+            SearchModel::searchWhere($query, ['content'], false, '', $keywords);
+        })->when(!empty($order), function ($query) use ($order) {
+            $query->orderBy($order);
+        })->page($perPage, 'page', $page);
+        $linkItems = [
+            'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
+        ];
+        if (!empty($extra) && str_contains($extra, 'children')) {
+            $linkItems['children'] = Relation::make($this->commentQuery(), 'id', 'parent_id');
+        }
+        $items->setPage(Relation::create($items->getPage(), $linkItems));
+        return $items;
     }
-    public function insertComment(array $data): Page {
-
+    public function insertComment(array $data): bool|int {
+        $id = $this->commentQuery()->insert($data);
+        return empty($id) ? false : intval($id);
     }
-    public function removeComment(int $id): Page {
-
+    public function removeComment(int $id): bool {
+        $this->commentQuery()->where('id', $id)->delete();
+        return true;
     }
-    public function updateComment(int $id, array $data): Page {
-
+    public function updateComment(int $id, array $data): bool {
+        $this->commentQuery()->where('id', $id)->update($data);
+        return true;
     }
 
     /**
@@ -343,8 +365,11 @@ abstract class BaseScene implements SceneInterface {
         CreateCmsTables::createTable($this->getCommentTable(), function (Table $table) {
             $table->id();
             $table->string('content');
+            $table->string('extra_rule', 300)->default('')
+                ->comment('内容的一些附加规则');
             $table->uint('parent_id')->default(0);
             $table->uint('position')->default(1);
+            $table->uint('reply_count')->default(0);
             $table->uint('user_id');
             $table->uint('model_id');
             $table->uint('content_id');
@@ -408,6 +433,15 @@ abstract class BaseScene implements SceneInterface {
                 'is_system' => 1,
                 'is_required' => 0,
                 'type' => 'image'
+            ],
+            [
+                'name' => '开启评论',
+                'field' => 'comment_open',
+                'model_id' => $this->model->id,
+                'is_main' => 1,
+                'is_system' => 1,
+                'is_required' => 0,
+                'type' => 'switch'
             ],
         ]);
         ModelFieldModel::create([

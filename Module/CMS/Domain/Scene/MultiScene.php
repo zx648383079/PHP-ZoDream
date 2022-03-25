@@ -19,7 +19,7 @@ class MultiScene extends BaseScene {
     }
 
     public function getCommentTable(): string {
-        return sprintf('cms_comment_%d_%d', $this->site, $this->modelId());
+        return sprintf('cms_comment_%d_%s', $this->site, $this->model->table);
     }
 
     public function getTableByMain(mixed $isMain): string {

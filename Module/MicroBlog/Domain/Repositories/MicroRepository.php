@@ -182,9 +182,14 @@ class MicroRepository {
         if ($model->user_id == auth()->id()) {
             throw new Exception('自己无法收藏');
         }
-        $res = self::toggleLog($id,
-            LogModel::ACTION_COLLECT, LogModel::TYPE_MICRO_BLOG);
-        $model->collect_count += $res ? 1 : -1;
+        $res = LogRepository::toggleLog(LogModel::TYPE_MICRO_BLOG, LogModel::ACTION_COLLECT, $id);
+        if ($res > 0) {
+            $model->collect_count ++;
+            $model->is_collected = true;
+        } else {
+            $model->collect_count --;
+            $model->is_collected = false;
+        }
         $model->save();
         return $model;
     }
@@ -229,36 +234,14 @@ class MicroRepository {
         return $model;
     }
 
-    public static function toggleLog(int $id,
-                                     int $action = LogModel::ACTION_RECOMMEND,
-                                     int $type = LogModel::TYPE_MICRO_BLOG) {
-        $log = LogModel::where([
-            'user_id' => auth()->id(),
-            'item_type' => $type,
-            'item_id' => $id,
-            'action' => $action
-        ])->first();
-        if ($log) {
-            $log->delete();
-            return false;
-        }
-        LogModel::createOrThrow([
-            'item_type' => $type,
-            'item_id' => $id,
-            'action' => $action,
-            'user_id' => auth()->id()
-        ]);
-        return true;
-    }
 
     public static function recommend(int $id) {
         $model = MicroBlogModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');
         }
-        $res = self::toggleLog($id,
-            LogModel::ACTION_RECOMMEND, LogModel::TYPE_MICRO_BLOG);
-        $model->recommend_count += $res ? 1 : -1;
+        $res = LogRepository::toggleLog(LogModel::TYPE_MICRO_BLOG, LogModel::ACTION_RECOMMEND, $id);
+        $model->recommend_count += $res > 0 ? 1 : -1;
         $model->save();
         return $model;
     }
@@ -271,7 +254,7 @@ class MicroRepository {
      * @return MicroBlogModel
      * @throws Exception
      */
-    public static function forward($id, $content, $is_comment = false) {
+    public static function forward($id, $content, bool $is_comment = false) {
         $source = MicroBlogModel::find($id);
         if (!$source) {
             throw new Exception('id 错误');
@@ -310,82 +293,6 @@ class MicroRepository {
         return $model;
     }
 
-    /**
-     * @param $id
-     * @return LogModel|bool
-     * @throws Exception
-     */
-    public static function getCommentLog($id) {
-        return LogModel::where([
-            'user_id' => auth()->id(),
-            'item_type' => LogModel::TYPE_COMMENT,
-            'item_id' => $id,
-        ])->whereIn('action', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE])->first();
-    }
-
-    public static function agree($id) {
-        $model = CommentModel::find($id);
-        if (!$model) {
-            throw new Exception('评论不存在');
-        }
-        $log = self::getCommentLog($id);
-        if ($log && $log->action == LogModel::ACTION_AGREE) {
-            $log->delete();
-            $model->agree --;
-            $model->save();
-            return $model;
-        }
-        if ($log && $log->action == LogModel::ACTION_DISAGREE) {
-            $log->action = LogModel::ACTION_AGREE;
-            $log->created_at = time();
-            $log->save();
-            $model->agree ++;
-            $model->disagree --;
-            $model->save();
-            return $model;
-        }
-        LogModel::create([
-            'item_type' => LogModel::TYPE_COMMENT,
-            'item_id' => $id,
-            'action' => LogModel::ACTION_AGREE,
-            'user_id' => auth()->id()
-        ]);
-        $model->agree ++;
-        $model->save();
-        return $model;
-    }
-
-    public static function disagree($id) {
-        $model = CommentModel::find($id);
-        if (!$model) {
-            throw new Exception('评论不存在');
-        }
-        $log = self::getCommentLog($id);
-        if ($log && $log->action == LogModel::ACTION_DISAGREE) {
-            $log->delete();
-            $model->disagree --;
-            $model->save();
-            return $model;
-        }
-        if ($log && $log->action == LogModel::ACTION_AGREE) {
-            $log->action = LogModel::ACTION_DISAGREE;
-            $log->created_at = time();
-            $log->save();
-            $model->agree --;
-            $model->disagree ++;
-            $model->save();
-            return $model;
-        }
-        LogModel::create([
-            'item_type' => LogModel::TYPE_COMMENT,
-            'item_id' => $id,
-            'action' => LogModel::ACTION_DISAGREE,
-            'user_id' => auth()->id()
-        ]);
-        $model->disagree ++;
-        $model->save();
-        return $model;
-    }
 
     /**
      * at 人

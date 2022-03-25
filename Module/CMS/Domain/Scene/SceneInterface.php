@@ -86,10 +86,10 @@ interface SceneInterface {
 
     public function find(int|callable $id): array;
 
-    public function searchComment(string $keywords, string $order = '', int $page = 1, int $perPage = 20): Page;
-    public function insertComment(array $data): Page;
-    public function removeComment(int $id): Page;
-    public function updateComment(int $id, array $data): Page;
+    public function searchComment(string $keywords, array $params = [], string $order = '', string $extra = '', int $page = 1, int $perPage = 20): Page;
+    public function insertComment(array $data): bool|int;
+    public function removeComment(int $id): bool;
+    public function updateComment(int $id, array $data): bool;
 
     /**
      * @return Builder
