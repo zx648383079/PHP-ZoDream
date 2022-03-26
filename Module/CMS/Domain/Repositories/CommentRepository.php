@@ -163,6 +163,11 @@ class CommentRepository {
     {
         /** @var SceneInterface $scene */
         list($scene, $_) = static::scene($article, $category, $model);
+        $count = $scene->commentQuery()->where('id', $id)->where('user_id', auth()->id())
+            ->count();
+        if ($count < 1) {
+            throw new Exception('操作失败');
+        }
         if ($scene->removeComment($id)) {
             $scene->query()->where('id', $article)->updateDecrement('comment_count');
         }
@@ -187,21 +192,32 @@ class CommentRepository {
         return [CMSRepository::scene()->setModel($model), $model->id];
     }
 
-    public static function getManageList(int $site, int $article, int|string $category, int|string $model, string $keywords, int $parent_id, int $user)
+    public static function getManageList(int $site, int $article, int|string $category, int|string $model,
+                                         string $keywords = '', int $parent_id = 0, int $user = 0,
+                                         string $extra = '', int $page = 1, int $prePage = 20)
     {
         SiteRepository::apply($site);
-        return CMSRepository::scene()->searchComment($keywords, [
+        /** @var SceneInterface $scene */
+        list($scene, $modelId) = static::scene($article, $category, $model);
+        $data = [
             'parent_id' => $parent_id,
             'content_id' => $article,
-            'model_id' => $model,
-            'user_id' => $user,
-        ], 'created_at desc');
+            'model_id' => $modelId,
+        ];
+        if ($user > 0) {
+            $data['user_id'] = $user;
+        }
+        return $scene->searchComment($keywords, $data, 'created_at desc', $extra, $page, $prePage);
     }
 
     public static function manageRemove(int $site, int $id, int $article, int|string $category, int|string $model)
     {
         SiteRepository::apply($site);
-        CMSRepository::scene()->removeComment($id);
+        /** @var SceneInterface $scene */
+        list($scene) = static::scene($article, $category, $model);
+        if ($scene->removeComment($id)) {
+            $scene->query()->where('id', $article)->updateDecrement('comment_count');
+        }
     }
 
 }

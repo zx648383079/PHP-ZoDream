@@ -7,9 +7,10 @@ use Module\CMS\Domain\Repositories\CommentRepository;
 class CommentController extends Controller {
 
     public function indexAction(int $site, int $article, int|string $category, int|string $model, string $keywords = '',
-                                int $parent_id = 0, int $user = 0) {
+                                int $parent_id = 0, int $user = 0,
+                                string $extra = '', int $page = 1, int $prePage = 20) {
         return $this->renderPage(
-            CommentRepository::getManageList($site, $article, $category, $model, $keywords, $parent_id, $user)
+            CommentRepository::getManageList($site, $article, $category, $model, $keywords, $parent_id, $user, $extra, $page, $prePage)
         );
     }
 

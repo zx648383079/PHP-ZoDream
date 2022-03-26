@@ -28,7 +28,7 @@ abstract class BaseScene implements SceneInterface {
     /**
      * @var ModelModel
      */
-    protected mixed $model;
+    protected mixed $model = null;
 
     public function setModel(ModelModel $model, int $site = 0) {
         $this->model = $model;
