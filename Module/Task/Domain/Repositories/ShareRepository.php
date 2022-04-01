@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Domain\Repositories;
 
 use Module\Auth\Domain\Model\UserSimpleModel;
@@ -40,8 +41,8 @@ class ShareRepository {
         $share = TaskShareModel::create([
             'user_id' => auth()->id(),
             'task_id' => $task->id,
-            'share_type' => isset($data['share_type']) ? $data['share_type'] : 0,
-            'share_rule' => isset($data['share_rule']) ? $data['share_rule'] : '',
+            'share_type' => $data['share_type'] ?? 0,
+            'share_rule' => $data['share_rule'] ?? '',
         ]);
         if (empty($share)) {
             throw new \Exception('创建分享失败');

@@ -5,6 +5,7 @@ use Module\Task\Domain\Model\TaskCommentModel;
 use Module\Task\Domain\Model\TaskDayModel;
 use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
+use Module\Task\Domain\Model\TaskPlanModel;
 use Module\Task\Domain\Model\TaskShareModel;
 use Module\Task\Domain\Model\TaskShareUserModel;
 use Zodream\Database\Migrations\Migration;
@@ -39,6 +40,16 @@ class CreateTaskTables extends Migration {
                 ->comment('打扰时间');
             $table->timestamp('end_at');
             $table->timestamp('created_at');
+        })->append(TaskPlanModel::tableName(), function (Table $table) {
+            $table->comment('任务计划');
+            $table->id();
+            $table->uint('user_id');
+            $table->uint('task_id');
+            $table->uint('plan_type', 1)->default(0)->comment('计划类型：按天，按周，按月');
+            $table->uint('plan_time');
+            $table->uint('amount', 1)->default(1);
+            $table->uint('priority', 1)->default(8)->comment('优先级');
+            $table->timestamps();
         })->append(TaskDayModel::tableName(), function (Table $table) {
             $table->comment('每日代办任务');
             $table->id();

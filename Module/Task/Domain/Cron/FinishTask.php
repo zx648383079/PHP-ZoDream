@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Domain\Cron;
 
 use Module\Task\Domain\Model\TaskDayModel;

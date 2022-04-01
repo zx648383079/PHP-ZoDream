@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Domain\Repositories;
 
 use Module\Task\Domain\Model\TaskCommentModel;
@@ -48,7 +49,7 @@ class CommentRepository {
             'task_id' => $task->id,
             'log_id' => intval($log_id),
             'content' => $data['content'],
-            'type' => isset($data['type']) ? $data['type'] : 0,
+            'type' => $data['type'] ?? 0,
             'status' => 0,
         ]);
         if (empty($comment)) {
