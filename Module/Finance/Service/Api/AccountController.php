@@ -29,7 +29,7 @@ class AccountController extends Controller {
                 'id' => 'int',
                 'name' => 'required|string:0,35',
                 'money' => 'numeric',
-                'status' => 'int:0,9',
+                'status' => 'bool',
                 'frozen_money' => 'numeric',
                 'remark' => '',
             ]));

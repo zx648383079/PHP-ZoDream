@@ -102,8 +102,8 @@ class LogRepository {
             return 0;
         }
         return LogModel::query()->where('user_id', auth()->id())
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'remark');
+            ->where(function ($query) {
+                SearchModel::search($query, 'remark');
         })->update($data);
     }
 
@@ -119,10 +119,10 @@ class LogRepository {
                 'type' => LogModel::TYPE_EXPENDITURE,
                 'money' => $item['money'],
                 'frozen_money' => 0,
-                'account_id' => intval($account_id),
-                'channel_id' => intval($channel_id),
+                'account_id' => $account_id,
+                'channel_id' => $channel_id,
                 'project_id' => 0,
-                'budget_id' => intval($budget_id),
+                'budget_id' => $budget_id,
                 'remark' => $item['remark'],
                 'trading_object' => $item['trading_object'] ?? '',
                 'user_id' => auth()->id(),

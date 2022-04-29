@@ -12,7 +12,7 @@ use Module\Finance\Domain\Entities\AccountEntity;
  * @property float $money
  * @property float $frozen_money
  * @property float $total
- * @property boolean $status
+ * @property integer $status
  * @property string $remark
  * @property integer $user_id
  * @property integer $deleted_at

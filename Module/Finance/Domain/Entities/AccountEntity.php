@@ -9,7 +9,7 @@ use Domain\Entities\Entity;
  * @property string $name
  * @property float $money
  * @property float $frozen_money
- * @property boolean $status
+ * @property integer $status
  * @property string $remark
  * @property integer $user_id
  * @property integer $deleted_at
@@ -25,7 +25,7 @@ class AccountEntity extends Entity {
         return [
             'name' => 'required|string:0,35',
             'money' => 'numeric',
-            'status' => 'int:0,9',
+            'status' => 'bool',
             'frozen_money' => 'numeric',
             'remark' => '',
             'user_id' => 'required|int',
