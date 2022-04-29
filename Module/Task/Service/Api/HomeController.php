@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Service\Api;
 
 use Module\Task\Domain\Model\TaskDayModel;

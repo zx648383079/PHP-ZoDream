@@ -1,11 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service;
 
+use Module\Auth\Domain\IAuthPlatform;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
-use Module\OpenPlatform\Domain\Model\PlatformModel;
-use Module\OpenPlatform\Domain\Platform;
-use Zodream\Infrastructure\Cookie;
 use Zodream\Module\OAuth\Domain\Client;
 use Zodream\ThirdParty\OAuth\BaseOAuth;
 
@@ -26,12 +25,12 @@ class OauthController extends Controller {
     }
 
     public function callbackAction($type = 'qq') {
-        /** @var Platform $platform */
+        /** @var IAuthPlatform $platform */
         $platform = session('platform');
         try {
             $auth = $this->getOAuth($type);
             if (!$auth->callback()) {
-                return $this->failureCallback('授权回调失败！');
+                return $this->failureCallback('授权回调失败！', $platform);
             }
             $user = AuthRepository::oauth($type, $auth->identity,
                 function () use ($auth) {
@@ -51,10 +50,8 @@ class OauthController extends Controller {
         return $this->successCallback($user, $platform);
     }
 
-    protected function failureCallback($error) {
+    protected function failureCallback(string $error, ?IAuthPlatform $platform = null) {
         $redirect_uri = session('redirect_uri');
-        /** @var PlatformModel $platform */
-        $platform = session('platform');
         if (empty($platform) || empty($redirect_uri)) {
             return $this->redirectWithMessage('/', $error);
         }
@@ -62,26 +59,26 @@ class OauthController extends Controller {
         if ($domain === 'localhost') {
             $domain = '';
         }
-        Cookie::set($platform->getCookieTokenKey(), json_encode([
+        response()->cookie($platform->getCookieTokenKey(), json_encode([
             'code' => 400,
             'error' => $error
-        ]), 600, null, $domain, false);
+        ]), 600, '', $domain, false);
         return $this->redirect($redirect_uri);
     }
 
-    protected function successCallback(UserModel $user, $platform) {
+    protected function successCallback(UserModel $user, ?IAuthPlatform $platform = null) {
         $redirect_uri = session('redirect_uri');
         if (empty($platform) || empty($redirect_uri)) {
-            return $this->redirect($redirect_uri ? $redirect_uri : '/');
+            return $this->redirect($redirect_uri ?: '/');
         }
         $domain = parse_url($redirect_uri, PHP_URL_HOST);
         if ($domain === 'localhost') {
             $domain = '';
         }
-        Cookie::set($platform->getCookieTokenKey(), json_encode([
+        response()->cookie($platform->getCookieTokenKey(), json_encode([
             'code' => 200,
             'token' => $platform->generateToken($user)
-        ]), 600, null, $domain, false);
+        ]), 600, '', $domain, false);
         return $this->redirect($redirect_uri);
     }
 
@@ -89,7 +86,7 @@ class OauthController extends Controller {
      * @param string $type
      * @return BaseOAuth
      */
-    protected function getOAuth($type = 'qq') {
+    protected function getOAuth(string $type = 'qq'): BaseOAuth {
         if ($type == 'zd') {
             return new Client([
                 'client_id' => '101321779',

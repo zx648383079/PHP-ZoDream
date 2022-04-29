@@ -86,11 +86,11 @@ class HomeController extends Controller {
     }
 
     public function recommendAction(int $id) {
-        if (!BlogModel::canRecommend($id)) {
-            return $this->renderFailure('一个用户只能操作一次！');
+        try {
+            $model = BlogRepository::recommend($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model = BlogModel::find($id);
-        $model->recommendThis();
         return $this->renderData($model->recommend_count);
     }
 

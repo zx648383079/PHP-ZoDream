@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Service\Api;
 
 use Domain\Repositories\FileRepository;
 use Module\Task\Domain\Repositories\CommentRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Validate\ValidationException;
 
 class CommentController extends Controller {
 

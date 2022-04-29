@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
+use Module\Auth\Domain\IAuthPlatform;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Module\OpenPlatform\Domain\Platform;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\ThirdParty\WeChat\MiniProgram\OAuth as MiniOAuth;
@@ -22,7 +22,7 @@ class OauthController extends Controller {
     }
 
     public function miniAction(string $code, string $nickname, string $avatar = '', int $gender = 2) {
-        /** @var Platform $platform */
+        /** @var IAuthPlatform $platform */
         $platform = app('platform');
         $mini = new MiniOAuth($platform->option('mini_auth'));
         $guest = auth()->guest();
@@ -63,7 +63,7 @@ class OauthController extends Controller {
      * @throws \Exception
      */
     public function miniLoginAction(string $code) {
-        /** @var Platform $platform */
+        /** @var IAuthPlatform $platform */
         $platform = app('platform');
         $mini = new MiniOAuth($platform->option('mini_auth'));
         try {
@@ -80,7 +80,7 @@ class OauthController extends Controller {
     }
 
     public function miniDecryptAction(Request $request, string $data, string $iv) {
-        /** @var Platform $platform */
+        /** @var IAuthPlatform $platform */
         $platform = app('platform');
         $mini = new MiniOAuth($platform->option('mini_auth'));
         try {

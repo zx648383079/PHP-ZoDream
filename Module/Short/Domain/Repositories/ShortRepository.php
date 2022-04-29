@@ -13,10 +13,10 @@ class ShortRepository {
     /**
      * 系统内部创建
      * @param string $path
-     * @param $parameters
+     * @param array $parameters
      * @return string
      */
-    public static function systemCreate(string $path, $parameters): string {
+    public static function systemCreate(string $path, array $parameters): string {
         try {
             $url = url($path, $parameters, true, false);
             return static::createShort($url, true)->complete_short_url;
@@ -44,12 +44,12 @@ class ShortRepository {
     }
 
     /**
-     * @param $source_url
+     * @param string $source_url
      * @param bool $is_system
      * @return false|ShortUrlModel
      * @throws Exception
      */
-    private static function createShort($source_url, $is_system = false) {
+    private static function createShort(string $source_url, bool $is_system = false) {
         /** @var ShortUrlModel $model */
         $model = ShortUrlModel::where('source_url', $source_url)->first();
         if (!empty($model)) {

@@ -6,81 +6,45 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\DB;
 use Zodream\Database\Schema\Table;
+use Zodream\Html\Page;
 
 class MultiScene extends BaseScene {
 
-    public function getMainTable() {
+    public function getMainTable(): string {
         return sprintf('cms_content_%s_%s', $this->site, $this->model->table);
     }
 
-    public function getExtendTable() {
+    public function getExtendTable(): string {
         return sprintf('%s_data', $this->getMainTable());
     }
 
-    public function getTableByMain($is_main) {
-        if ($is_main instanceof ModelFieldModel) {
-            $is_main = $is_main->is_main;
-        }
-        return $is_main ? $this->getMainTable() : $this->getExtendTable();
+    public function getCommentTable(): string {
+        return sprintf('cms_comment_%d_%s', $this->site, $this->model->table);
     }
 
+    public function getTableByMain(mixed $isMain): string {
+        if ($isMain instanceof ModelFieldModel) {
+            $isMain = $isMain->is_main;
+        }
+        return $isMain ? $this->getMainTable() : $this->getExtendTable();
+    }
+
+
+    public function boot(): void {
+
+    }
 
 
     /**
      * 初始化建立表
      * @return mixed
      */
-    public function initModel() {
-        ModelFieldModel::query()->insert([
-            [
-                'name' => '标题',
-                'field' => 'title',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 1,
-                'type' => 'text'
-            ],
-            [
-                'name' => '关键字',
-                'field' => 'keywords',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 0,
-                'type' => 'text'
-            ],
-            [
-                'name' => '简介',
-                'field' => 'description',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 0,
-                'type' => 'textarea'
-            ],
-            [
-                'name' => '缩略图',
-                'field' => 'thumb',
-                'model_id' => $this->model->id,
-                'is_main' => 1,
-                'is_system' => 1,
-                'is_required' => 0,
-                'type' => 'image'
-            ],
-        ]);
-        ModelFieldModel::create([
-            'name' => '内容',
-            'field' => 'content',
-            'model_id' => $this->model->id,
-            'is_main' => 0,
-            'is_system' => 1,
-            'type' => 'editor',
-        ]);
+    public function initModel(): bool {
+        $this->initDefaultModelField();
         return $this->initTable();
     }
 
-    public function initTable() {
+    public function initTable(): bool {
         $extend_list = array_filter($this->fieldList(), function ($item) {
             return $item->is_main < 1;
         });
@@ -88,21 +52,10 @@ class MultiScene extends BaseScene {
             return $item->is_main > 0 && $item->is_system < 1;
         });
         CreateCmsTables::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
-            $table->id();
-            $table->string('title', 100);
-            $table->uint('cat_id');
-            $table->uint('model_id');
-            $table->uint('parent_id')->default(0);
-            $table->uint('user_id')->default(0);
-            $table->string('keywords')->default('');
-            $table->string('thumb')->default('');
-            $table->string('description')->default('');
-            $table->bool('status')->default(0);
-            $table->uint('view_count')->default(0);
+            $this->initMainTableField($table);
             foreach ($field_list as $item) {
                 static::converterTableField($table->column($item->field), $item);
             }
-            $table->timestamps();
         });
         CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($extend_list) {
             $table->column('id')->int(10)->pk(true);
@@ -118,7 +71,7 @@ class MultiScene extends BaseScene {
      * 删除表
      * @return mixed
      */
-    public function removeTable() {
+    public function removeTable(): bool {
         CreateCmsTables::dropTable($this->getMainTable());
         CreateCmsTables::dropTable($this->getExtendTable());
         return true;
@@ -130,7 +83,7 @@ class MultiScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function addField(ModelFieldModel $field) {
+    public function addField(ModelFieldModel $field): bool {
         if ($field->is_system > 0) {
             return true;
         }
@@ -148,7 +101,7 @@ class MultiScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function updateField(ModelFieldModel $field) {
+    public function updateField(ModelFieldModel $field): bool {
         if ($field->is_system > 0) {
             return true;
         }
@@ -183,7 +136,7 @@ class MultiScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function removeField(ModelFieldModel $field) {
+    public function removeField(ModelFieldModel $field): bool {
         if ($field->is_system > 0) {
             return true;
         }
@@ -195,23 +148,30 @@ class MultiScene extends BaseScene {
         return true;
     }
 
+    protected function onDataUpdated(int $id, array $main, array $extend): void {
+        if (empty($main['comment_open'])) {
+            return;
+        }
+        $this->initCommentTable();
+    }
+
     /**
-     * @param $keywords
+     * @param string $keywords
      * @param array $params
-     * @param null $order
+     * @param string $order
      * @param int $page
-     * @param int $per_page
-     * @param null $fields
-     * @return \Zodream\Html\Page
+     * @param int $perPage
+     * @param string $fields
+     * @return Page
      * @throws \Exception
      */
-    public function search($keywords, $params = [], $order = null, $page = 1, $per_page = 20, $fields = null) {
+    public function search(string $keywords, array $params = [], string $order = '', int $page = 1, int $perPage = 20, string $fields = ''): Page {
         if (empty($fields)) {
             $fields = '*';
         }
         return $this->addQuery($this->query(), $params, $order, $fields)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $this->addSearchQuery($query, $keywords);
-            })->page($per_page, 'page', $page);
+            })->page($perPage, 'page', $page);
     }
 }

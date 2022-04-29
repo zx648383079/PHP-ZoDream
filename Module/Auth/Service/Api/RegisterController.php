@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Module\SEO\Domain\Option;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class RegisterController extends Controller {
@@ -18,7 +18,7 @@ class RegisterController extends Controller {
 
     public function indexAction(Request $request) {
         try {
-            if (Option::value('auth_close') > 0) {
+            if (AuthRepository::registerType() > 1) {
                 throw AuthException::disableRegister();
             }
             $mobile = $request->get('mobile');
@@ -29,7 +29,7 @@ class RegisterController extends Controller {
                     $request->get('code'),
                     $request->get('password'),
                     $request->get('rePassword') ?: $request->get('confirm_password'),
-                    $request->has('agree')
+                    $request->has('agree'), $request->get('invite_code')
                 );
             } else {
                 AuthRepository::register(
@@ -37,7 +37,7 @@ class RegisterController extends Controller {
                     $request->get('email'),
                     $request->get('password'),
                     $request->get('rePassword') ?: $request->get('confirm_password'),
-                    $request->has('agree')
+                    $request->has('agree'), $request->get('invite_code')
                 );
             }
         } catch (\Exception $ex) {

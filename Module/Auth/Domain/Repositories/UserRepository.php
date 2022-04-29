@@ -15,6 +15,9 @@ use Module\Auth\Domain\Model\UserSimpleModel;
 class UserRepository {
 
     public static function getCurrentProfile() {
+        if (auth()->guest()) {
+            return null;
+        }
         /** @var UserModel $user */
         $user = auth()->user();
         $data = $user->toArray();

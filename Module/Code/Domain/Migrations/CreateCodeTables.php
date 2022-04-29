@@ -32,16 +32,18 @@ class CreateCodeTables extends Migration {
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('content');
+            $table->string('extra_rule', 300)->default('')
+                ->comment('内容的一些附加规则');
             $table->uint('parent_id');
             $table->uint('user_id')->default(0);
             $table->uint('code_id');
-            $table->uint('agree')->default(0);
-            $table->uint('disagree')->default(0);
+            $table->uint('agree_count')->default(0);
+            $table->uint('disagree_count')->default(0);
             $table->timestamp('created_at');
         })->append(LogModel::tableName(), function(Table $table) {
             $table->id();
-            $table->uint('type', 2)->unsigned()->default(0);
-            $table->uint('id_value');
+            $table->uint('item_type', 2)->default(0);
+            $table->uint('item_id');
             $table->uint('user_id');
             $table->uint('action');
             $table->timestamp('created_at');

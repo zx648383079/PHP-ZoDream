@@ -9,6 +9,8 @@ use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\CreditLogModel;
 use Module\Auth\Domain\Model\EquityCardModel;
+use Module\Auth\Domain\Model\InviteCodeModel;
+use Module\Auth\Domain\Model\InviteLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\MailLogModel;
@@ -19,6 +21,7 @@ use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
@@ -76,6 +79,14 @@ class CreateAuthTables extends Migration {
             $table->uint('status', 2)->default(0);
             $table->timestamp('expired_at');
             $table->timestamps();
+        })->append(InviteCodeModel::tableName(), function(Table $table) {
+            $table->comment('邀请码生成');
+            $table->id();
+            $table->uint('user_id')->default(0);
+            $table->char('code', 6);
+            $table->uint('amount')->default(1);
+            $table->timestamp('expired_at');
+            $table->timestamps();
         });
         $this->createLog();
         $this->createRole();
@@ -91,10 +102,12 @@ class CreateAuthTables extends Migration {
         Option::group('高级', function () {
             return [
                 [
-                    'name' => '关闭注册',
-                    'code' => 'auth_close',
-                    'type' => 'switch',
-                    'value' => 0
+                    'name' => '注册方式',
+                    'code' => AuthRepository::OPTION_REGISTER_CODE,
+                    'type' => 'radio',
+                    'value' => 0,
+                    'default_value' => "默认注册\n邀请码注册\n关闭注册",
+                    'visibility' => 2,
                 ],
             ];
         });
@@ -199,6 +212,13 @@ class CreateAuthTables extends Migration {
             $table->string('remark')->default('');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
+        })->append(InviteLogModel::tableName(), function(Table $table) {
+            $table->comment('邀请记录');
+            $table->id();
+            $table->uint('user_id');
+            $table->uint('parent_id')->default(0);
+            $table->string('code', 20)->default('');
+            $table->timestamp('created_at');
         })->append(MailLogModel::tableName(), function (Table $table) {
             $table->comment('发送邮件记录');
             $table->id();

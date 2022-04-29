@@ -58,7 +58,7 @@ class HomeController extends ModuleController {
 
     }
 
-    public function recommendAction($id) {
+    public function recommendAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -70,7 +70,7 @@ class HomeController extends ModuleController {
         return $this->renderData($model);
     }
 
-    public function collectAction($id) {
+    public function collectAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }
@@ -82,7 +82,7 @@ class HomeController extends ModuleController {
         return $this->renderData($model);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         if (!request()->isAjax()) {
             return $this->redirect('./');
         }

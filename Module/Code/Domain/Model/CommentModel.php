@@ -1,36 +1,41 @@
 <?php
 namespace Module\Code\Domain\Model;
 
+use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
- * Class CodeCommentModel
+ * Class CommentModel
  * @property integer $id
  * @property string $content
+ * @property string $extra_rule
  * @property integer $parent_id
  * @property integer $user_id
- * @property integer $code_id
- * @property integer $agree
- * @property integer $disagree
+ * @property integer $micro_id
+ * @property integer $agree_count
+ * @property integer $disagree_count
  * @property integer $created_at
  */
 class CommentModel extends Model {
 
-    protected array $append = ['is_agree', 'reply_count'];
+    use ExtraRule;
 
-	public static function tableName() {
-        return 'code_comment';
+    protected array $append = ['agree_type', 'reply_count'];
+
+    public static function tableName() {
+        return 'micro_comment';
     }
 
     protected function rules() {
         return [
             'content' => 'required|string:0,255',
+            'extra_rule' => '',
             'parent_id' => 'int',
             'user_id' => 'int',
-            'code_id' => 'required|int',
-            'agree' => 'int',
-            'disagree' => 'int',
+            'micro_id' => 'required|int',
+            'agree_count' => 'int',
+            'disagree_count' => 'int',
             'created_at' => 'int',
         ];
     }
@@ -39,11 +44,12 @@ class CommentModel extends Model {
         return [
             'id' => 'Id',
             'content' => 'Content',
+            'extra_rule' => 'Extra Rule',
             'parent_id' => 'Parent Id',
             'user_id' => 'User Id',
-            'code_id' => 'Micro Id',
-            'agree' => 'Agree',
-            'disagree' => 'Disagree',
+            'micro_id' => 'Micro Id',
+            'agree_count' => 'Agree',
+            'disagree_count' => 'Disagree',
             'created_at' => 'Created At',
         ];
     }
@@ -53,24 +59,19 @@ class CommentModel extends Model {
     }
 
     public function replies() {
-	    return $this->hasMany(static::class, 'parent_id');
+        return $this->hasMany(static::class, 'parent_id')->with('user');
     }
 
     public function code() {
-	    return $this->hasOne(CodeModel::class, 'id', 'code_id');
+        return $this->hasOne(CodeModel::class, 'id', 'micro_id');
     }
 
     public function getReplyCountAttribute() {
-	    return static::where('parent_id', $this->id)->count();
+        return static::where('parent_id', $this->id)->count();
     }
 
     public function getAgreeTypeAttribute() {
-	    $log = LogModel::where([
-            'user_id' => auth()->id(),
-            'type' => LogModel::TYPE_COMMENT,
-            'id_value' => $this->id,
-            'action' => ['in', [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]]
-        ])->first('action');
-	    return !$log ? 0 : $log->action;
+        return LogRepository::commentAgreeType($this->id);
     }
+
 }

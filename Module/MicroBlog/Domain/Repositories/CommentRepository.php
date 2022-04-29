@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Exception;
 use Module\MicroBlog\Domain\Model\CommentModel;
+use Module\MicroBlog\Domain\Model\LogModel;
 
 class CommentRepository {
     public static function getList(string $keywords = '', int $user = 0, int $micro = 0) {
@@ -28,5 +30,44 @@ class CommentRepository {
         return CommentModel::with('replies', 'user')
             ->where('micro_id', $micro)
             ->where('parent_id', $parent_id)->orderBy($sort, $order)->page();
+    }
+
+    public static function agree(int $id) {
+        $model = CommentModel::find($id);
+        if (!$model) {
+            throw new Exception('评论不存在');
+        }
+        $res = LogRepository::toggleLog(LogModel::TYPE_COMMENT,
+            LogModel::ACTION_AGREE, $id,
+            [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]);
+        if ($res < 1) {
+            $model->agree_count --;
+        } elseif ($res == 1) {
+            $model->agree_count ++;
+            $model->disagree_count --;
+        } elseif ($res == 2) {
+            $model->agree_count ++;
+        }
+        $model->save();
+        return $model;
+    }
+
+    public static function disagree(int $id) {
+        $model = CommentModel::find($id);
+        if (!$model) {
+            throw new Exception('评论不存在');
+        }
+        $res = LogRepository::toggleLog(LogModel::TYPE_COMMENT,
+            LogModel::ACTION_DISAGREE, $id,
+            [LogModel::ACTION_AGREE, LogModel::ACTION_DISAGREE]);
+        if ($res < 1) {
+            $model->disagree_count --;
+        } elseif ($res == 1) {
+            $model->agree_count --;
+            $model->disagree_count ++;
+        } elseif ($res == 2) {
+            $model->disagree_count ++;
+        }
+        return $model;
     }
 }

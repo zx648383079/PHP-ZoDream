@@ -1,34 +1,36 @@
 <?php
+declare(strict_types=1);
 namespace Module\Note\Service;
 
-use Module\Note\Domain\Model\NoteModel;
 use Module\ModuleController;
+use Module\Note\Domain\Repositories\NoteRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class NoteController extends ModuleController {
 
-	protected $rules = array(
+	protected array $rules = array(
 		'*' => '@'
 	);
-	
-	public function indexAction() {
 
-	}
-
-    public function saveAction() {
-        $model = new NoteModel();
-        $model->user_id = auth()->id();
-        if ($model->load() && $model->save()) {
-            return $this->renderData([
-                'refresh' => true
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'content' => 'required|string:0,255',
             ]);
+            NoteRepository::saveSelf($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
+        return $this->renderData([
+            'refresh' => true
+        ]);
     }
 
-    public function deleteAction($id) {
-        NoteModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        NoteRepository::removeSelf($id);
         if (request()->isAjax()) {
-            return $this->renderData();
+            return $this->renderData(true);
         }
         return $this->redirect('./');
 	}

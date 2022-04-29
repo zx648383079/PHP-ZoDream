@@ -12,6 +12,7 @@ use Domain\Model\Model;
  * @property integer $star
  * @property integer $agree_count
  * @property integer $disagree_count
+ * @property integer $agree_type {0:无，1:同意 2:不同意}
  * @property integer $created_at
  * @property integer $updated_at
  */

@@ -54,7 +54,7 @@ class CommentController extends Controller {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::disagree($id);
+            $model = CommentRepository::disagree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -66,7 +66,7 @@ class CommentController extends Controller {
             return $this->redirect('./');
         }
         try {
-            $model = MicroRepository::agree($id);
+            $model = CommentRepository::agree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

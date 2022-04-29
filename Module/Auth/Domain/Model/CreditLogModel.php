@@ -5,7 +5,7 @@ namespace Module\Auth\Domain\Model;
 use Domain\Model\Model;
 
 /**
- * Class CreditLogModel
+ * 账户积分变动表
  * @property integer $id
  * @property integer $user_id
  * @property integer $type

@@ -28,6 +28,10 @@ $this->extend('layouts/header')
                     <input type="password" name="rePassword" placeholder="请确认密码" required>
                     <i class="fa fa-redo" aria-hidden="true"></i>
                 </div>
+                <div class="input-group">
+                    <input type="text" name="invite_code" placeholder="请输入邀请码">
+                    <i class="fa fa-gift" aria-hidden="true"></i>
+                </div>
 
                 <div class="input-group">
                     <div class="checkbox">

@@ -1,24 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace Module\Note\Service;
 
-use Domain\Model\SearchModel;
 use Module\ModuleController;
-use Module\Note\Domain\Model\NoteModel;
+use Module\Note\Domain\Repositories\NoteRepository;
 use Zodream\Disk\File;
-
 
 class HomeController extends ModuleController {
 
     public File|string $layout = 'main';
 	
-	public function indexAction($keywords = null, $id = 0) {
-	    $model_list = NoteModel::with('user')
-            ->when($id > 0, function($query) use ($id) {
-                $query->where('id', $id);
-            })
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'content');
-            })->orderBy('id desc')->page();
+	public function indexAction(string $keywords = '', int $id = 0, int $user = 0) {
+	    $model_list = NoteRepository::getList($keywords, $user, $id);
         if (request()->isAjax()) {
             return $this->renderData([
                 'html' => $this->renderHtml('page', compact('model_list', 'keywords')),
@@ -28,11 +21,8 @@ class HomeController extends ModuleController {
 		return $this->show(compact('model_list', 'keywords'));
 	}
 
-    public function suggestionAction($keywords = null) {
-        $data = NoteModel::when(!empty($keywords), function($query) {
-            NoteModel::searchWhere($query, ['content']);
-        })->groupBy('content')->limit(4)->pluck('content');
-        return $this->renderData($data);
+    public function suggestionAction(string $keywords = '') {
+        return $this->renderData(NoteRepository::suggestion($keywords));
     }
 
     public function findLayoutFile(): File|string {

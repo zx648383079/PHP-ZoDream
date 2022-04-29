@@ -17,10 +17,10 @@ class Module extends BaseModule {
     }
 
     public function invokeRoute($path, HttpContext $context) {
-        if (strpos($path, 'preview') !== 1) {
+        if (!str_starts_with($path, 'preview')) {
             return;
         }
-        $uri = request()->path();
+        $uri = $context['request']->path();
         if (!preg_match('#preview/view/\d+/id/(\d+)/file/(.*)$#', $uri, $match)) {
             return;
         }

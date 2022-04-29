@@ -98,6 +98,10 @@ class ContentRepository {
                 'label' => '浏览数',
             ],
             [
+                'name' => 'comment_count',
+                'label' => '评论数',
+            ],
+            [
                 'name' => 'created_at',
                 'label' => '发布时间',
             ],

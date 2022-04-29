@@ -52,6 +52,12 @@
                     "name": "源网址",
                     "field": "source_url",
                     "type": "text"
+                },
+                {
+                    "name": "显示灰色",
+                    "field": "is_gray",
+                    "type": "switch",
+                    "is_main": true
                 }
             ]
         },

@@ -12,78 +12,91 @@ interface SceneInterface {
      * 获取主表
      * @return string
      */
-    public function getMainTable();
+    public function getMainTable(): string;
 
     /**
      * 获取附表（不参与搜索）
      * @return string
      */
-    public function getExtendTable();
+    public function getExtendTable(): string;
+
+    public function getCommentTable(): string;
+
+    /**
+     * 创建站点时触发
+     * @return void
+     */
+    public function boot(): void;
 
     /**
      * 初始化建立表
      * @return mixed
      */
-    public function initTable();
+    public function initTable(): bool;
 
     /**
      * 初始化表数据并建立表
      * @return mixed
      */
-    public function initModel();
+    public function initModel(): bool;
 
     /**
      * 删除表
      * @return mixed
      */
-    public function removeTable();
+    public function removeTable(): bool;
 
     /**
      * 新建字段
      * @param ModelFieldModel $field
      * @return mixed
      */
-    public function addField(ModelFieldModel $field);
+    public function addField(ModelFieldModel $field): bool;
 
     /**
      * 更新字段
      * @param ModelFieldModel $field
      * @return mixed
      */
-    public function updateField(ModelFieldModel $field);
+    public function updateField(ModelFieldModel $field): bool;
 
     /**
      * 删除字段
      * @param ModelFieldModel $field
      * @return mixed
      */
-    public function removeField(ModelFieldModel $field);
+    public function removeField(ModelFieldModel $field): bool;
 
-    public function insert(array $data);
+    public function insert(array $data): bool|int;
 
-    public function update($id, array $data);
+    public function update(int $id, array $data): bool;
 
-    public function remove($id);
+    public function remove(int|array|callable $id): bool;
 
     /**
-     * @param $keywords
-     * @param $params
-     * @param null $order
+     * @param string $keywords
+     * @param array $params
+     * @param string $order
      * @param int $page
-     * @param int $per_page
-     * @param null $fields
+     * @param int $perPage
+     * @param string $fields
      * @return Page
      */
-    public function search($keywords, $params = [], $order = null, $page = 1, $per_page = 20, $fields = null);
+    public function search(string $keywords, array $params = [], string $order = '', int $page = 1, int $perPage = 20, string $fields = ''): Page;
 
-    public function find($id);
+    public function find(int|callable $id): array;
+
+    public function searchComment(string $keywords, array $params = [], string $order = '', string $extra = '', int $page = 1, int $perPage = 20): Page;
+    public function insertComment(array $data): bool|int;
+    public function removeComment(int $id): bool;
+    public function updateComment(int $id, array $data): bool;
 
     /**
      * @return Builder
      */
-    public function query();
+    public function query(): Builder;
 
-    public function extendQuery();
+    public function extendQuery(): Builder;
 
 
 

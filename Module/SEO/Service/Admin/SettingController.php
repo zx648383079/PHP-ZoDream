@@ -3,7 +3,7 @@ namespace Module\SEO\Service\Admin;
 
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Events\OptionUpdated;
-use Module\SEO\Domain\Repositories\SEORepository;
+use Module\SEO\Domain\Repositories\OptionRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class SettingController extends Controller {
@@ -17,20 +17,20 @@ class SettingController extends Controller {
 
     public function saveAction(Request $request) {
         try {
-            SEORepository::saveNewOption($request->get('field'));
+            OptionRepository::saveNewOption($request->get('field'));
         } catch (\Exception $ex) {}
-        SEORepository::saveOption($request->get('option'));
+        OptionRepository::saveOption($request->get('option'));
         event(new OptionUpdated());
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         return $this->renderData(OptionModel::find($id));
     }
 
-    public function updateAction($id) {
+    public function updateAction(int $id) {
         $model = OptionModel::find($id);
         $model->load();
         if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
@@ -44,8 +44,8 @@ class SettingController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
-        OptionModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        OptionRepository::remove($id);
         event(new OptionUpdated());
         return $this->renderData([
             'refresh' => true

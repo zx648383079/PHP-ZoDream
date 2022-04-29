@@ -553,4 +553,5 @@ $(function() {
     $('img.lazy').lazyload({
         callback: 'img'
     });
+    $(".template-lazy").lazyload({callback: 'tpl'});
 });

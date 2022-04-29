@@ -117,7 +117,16 @@ class ListRepository {
         ListItemModel::where('list_id', $model->id)->delete();
     }
 
-    public static function toggleLog($type, $action, $id, $searchAction = null) {
+    /**
+     * 切换记录
+     * @param int $type
+     * @param int $action
+     * @param int $id
+     * @param array|int|null $searchAction
+     * @return int {0: 取消，1: 更新为，2：新增}
+     * @throws \Exception
+     */
+    public static function toggleLog(int $type, int $action, int $id, array|int|null $searchAction = null): int {
         if (empty($searchAction)) {
             $searchAction = $action;
         }
@@ -140,7 +149,7 @@ class ListRepository {
             $log->save();
             return 1;
         }
-        BookLogModel::create([
+        BookLogModel::createOrThrow([
             'item_type' => $type,
             'item_id' => $id,
             'action' => $action,
@@ -176,14 +185,14 @@ class ListRepository {
             [BookLogModel::ACTION_AGREE, BookLogModel::ACTION_DISAGREE]);
         if ($res < 1) {
             $model->agree_count --;
-            $model->is_agree = 0;
+            $model->agree_type = 0;
         } elseif ($res == 1) {
             $model->agree_count ++;
             $model->disagree_count --;
-            $model->is_agree = 1;
+            $model->agree_type = 1;
         } elseif ($res == 2) {
             $model->agree_count ++;
-            $model->is_agree = 1;
+            $model->agree_type = 1;
         }
         $model->save();
         return $model;
@@ -199,14 +208,14 @@ class ListRepository {
             [BookLogModel::ACTION_AGREE, BookLogModel::ACTION_DISAGREE]);
         if ($res < 1) {
             $model->disagree_count --;
-            $model->is_agree = 0;
+            $model->agree_type = 0;
         } elseif ($res == 1) {
             $model->agree_count --;
             $model->disagree_count ++;
-            $model->is_agree = 2;
+            $model->agree_type = 2;
         } elseif ($res == 2) {
             $model->disagree_count ++;
-            $model->is_agree = 2;
+            $model->agree_type = 2;
         }
         $model->save();
         return $model;

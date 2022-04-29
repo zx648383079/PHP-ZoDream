@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Service\Api;
 
 use Module\OpenPlatform\Domain\Model\PlatformSimpleModel;

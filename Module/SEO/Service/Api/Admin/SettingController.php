@@ -4,36 +4,29 @@ namespace Module\SEO\Service\Api\Admin;
 
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Events\OptionUpdated;
-use Module\SEO\Domain\Repositories\SEORepository;
+use Module\SEO\Domain\Repositories\OptionRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class SettingController extends Controller {
 
     public function indexAction() {
-        /** @var OptionModel[] $group_list */
-        $group_list = OptionModel::with('children')->where('parent_id', 0)
-            ->where('type', 'group')
-            ->orderBy('position', 'asc', 'id', 'asc')->all();
-        foreach ($group_list as $group) {
-            $group->setAppend('children');
-        }
-        return $this->renderData($group_list);
+        return $this->renderData(OptionRepository::getEditList());
     }
 
     public function saveAction(Request $request) {
         try {
-            SEORepository::saveNewOption($request->get('field'));
+            OptionRepository::saveNewOption($request->get('field'));
         } catch (\Exception $ex) {}
-        SEORepository::saveOption($request->get('option'));
+        OptionRepository::saveOption($request->get('option'));
         event(new OptionUpdated());
         return $this->renderData(true);
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         return $this->render(OptionModel::find($id));
     }
 
-    public function updateAction($id) {
+    public function updateAction(int $id) {
         $model = OptionModel::find($id);
         $model->load();
         if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
@@ -51,7 +44,7 @@ class SettingController extends Controller {
             return $this->updateAction($id);
         }
         try {
-            $model = SEORepository::saveNewOption($request->get());
+            $model = OptionRepository::saveNewOption($request->get());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -59,9 +52,8 @@ class SettingController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction($id) {
-        OptionModel::where('id', $id)->delete();
-        OptionModel::where('parent_id', $id)->delete();
+    public function deleteAction(int $id) {
+        OptionRepository::remove($id);
         event(new OptionUpdated());
         return $this->renderData(true);
     }

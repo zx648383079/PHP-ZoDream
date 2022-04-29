@@ -8,6 +8,7 @@ use Infrastructure\Bot;
 use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Helpers\Html;
 use Module\Blog\Domain\Model\BlogClickLogModel;
+use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
@@ -420,5 +421,13 @@ class BlogRepository {
         }
         BlogClickLogModel::query()->where('happen_day', $day)->where('blog_id', $blogId)
             ->updateIncrement('click_count', $amount);
+    }
+
+    public static function recommend(int $id) {
+        $model = BlogModel::findOrNew($id, 'id 错误');
+        $res = LogRepository::toggleLog(BlogLogModel::TYPE_BLOG, BlogLogModel::ACTION_RECOMMEND, $id);
+        $model->recommend_count += $res > 0 ? 1 : -1;
+        $model->save();
+        return $model;
     }
 }

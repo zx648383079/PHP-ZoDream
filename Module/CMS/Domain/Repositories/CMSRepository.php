@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
 use Module\CMS\Domain\Migrations\CreateCmsTables;
@@ -6,10 +7,12 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\CommentModel;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Model\SiteLogModel;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
+use Module\SEO\Domain\Option;
 use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 use Zodream\Http\Uri;
@@ -19,12 +22,12 @@ class CMSRepository {
     /**
      * @var SiteModel
      */
-    private static $cacheSite;
+    private static mixed $cacheSite;
 
     /**
      * @var string
      */
-    private static $cacheTheme;
+    private static string $cacheTheme = '';
 
     public static function theme() {
         if (!empty(self::$cacheTheme)) {
@@ -87,6 +90,20 @@ class CMSRepository {
         return self::$cacheSite = $default;
     }
 
+    public static function options() {
+        $site = static::site();
+        $items = [];
+        foreach ($site['options'] as $item) {
+            $items[$item['code']] = Option::formatOption($item['value'], $item['type']);
+        }
+        foreach (
+            ['title', 'keywords', 'description', 'logo'] as $code
+        ) {
+            $items[$code] = $code === 'logo' ? url()->asset($site[$code]) : $site[$code];
+        }
+        return $items;
+    }
+
     public static function siteId() {
         return static::site()->id;
     }
@@ -114,32 +131,16 @@ class CMSRepository {
             $table->text('setting')->nullable();
             $table->timestamps();
         });
-        CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
+        CreateCmsTables::createTable(SiteLogModel::tableName(), function (Table $table) {
             $table->id();
-            $table->string('title', 100);
-            $table->uint('cat_id');
             $table->uint('model_id');
-            $table->uint('parent_id')->default(0);
-            $table->uint('user_id')->default(0);
-            $table->string('keywords')->default('');
-            $table->string('thumb')->default('');
-            $table->string('description')->default('');
-            $table->bool('status')->default(0);
-            $table->uint('view_count')->default(0);
-            $table->timestamps();
-        });
-        CreateCmsTables::createTable(CommentModel::tableName(), function (Table $table) {
-            $table->id();
-            $table->string('content');
-            $table->uint('parent_id')->default(0);
-            $table->uint('position')->default(1);
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_id');
             $table->uint('user_id');
-            $table->uint('model_id');
-            $table->uint('content_id');
-            $table->uint('agree_count')->default(0);
-            $table->uint('disagree_count')->default(0);
+            $table->uint('action');
             $table->timestamp('created_at');
         });
+        static::scene()->boot();
         (new ThemeManager())->apply($site->theme);
     }
 
@@ -147,7 +148,7 @@ class CMSRepository {
         if ($model->type > 0 || !$model->model) {
             return;
         }
-        CMSRepository::scene()->setModel($model->model)->initTable();
+        static::scene()->setModel($model->model)->initTable();
     }
 
     public static function removeSite(SiteModel $site) {

@@ -4,6 +4,7 @@ namespace Module\SEO\Domain;
 
 use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Helpers\Json;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Concerns\SingletonPattern;
 
 class Option {
@@ -76,8 +77,7 @@ class Option {
 
     public static function formatOption(string $value, string $type) {
         if ($type === 'switch') {
-            return (is_numeric($value) && $value == 1) ||
-                (is_bool($value) && $value) || $value === 'true';
+            return Str::toBool($value);
         }
         if ($type === 'json') {
             return empty($value) ? [] : Json::decode($value);

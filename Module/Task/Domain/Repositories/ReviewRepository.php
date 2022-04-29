@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Domain\Repositories;
 
 use Module\Task\Domain\Model\LogPageModel;
@@ -37,8 +38,8 @@ class ReviewRepository {
     }
 
     /**
-     * @param $start_at
-     * @param $end_at
+     * @param int $start_at
+     * @param int $end_at
      * @param bool $isAll
      * @return Page<LogPageModel>|LogPageModel[]
      * @throws Exception
