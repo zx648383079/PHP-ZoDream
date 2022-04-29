@@ -2,102 +2,100 @@
 
 [Zodream](https://github.com/zodream/zodream) is a web application framework. There contains some examples of [zodream](https://github.com/zodream/zodream).
 
-# 开发说明
+👉[中文](README.zh.md)
 
-当前系统不以速度或安全为主要目的。请不要将本系统用于生产环境。如有相关BUG或优化建议，请提交issue。最快24小时进行处理。
+# Development Notes
 
-下一步，不再注重新模块的开发，将改造优化现有模块。
+The current system does not have speed or safety as its primary purpose. Please do not use this system in a production environment. If you have related bugs or optimization suggestions, please submit an issue.
 
-增加各模块内部的联动。
+In the next step, instead of focusing on the development of new modules, the existing modules will be transformed and optimized.
+
+Increase the linkage within each module.
 
 
-### 忽略PHP版本检查
+### Ignore PHP version check
 ```shell
 composer install --ignore-platform-reqs
 ```
 
-### 资源文件编译说明
+### Resource file compilation instructions
 
 ```cmd
 
 npm i
 
-gulp // 编译主目录  UserInterface/assets
+gulp //build home directory  UserInterface/assets
 
-gulp Blog  // 编译博客  Module/Blog/UserInterface/assets
+gulp Blog  //build blog  Module/Blog/UserInterface/assets
 
-gulp --prod  // 编译主目录并进行代码压缩   UserInterface/assets
+gulp --prod  //build home directory and do code compression   UserInterface/assets
 
-gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface/default/assets
+gulp CMS-default //build default theme resources under CMS  Module/CMS/UserInterface/default/assets
 
 ```
 
-# 目录
 
+# Module list
 
-# 模块列表
-
-| 模块名                                                                                   | 介绍                                                                                         | 状态                                                           | DEMO                              |
+| Module Name                                                                                   | Introduce                                                                                         | Status                                                           | DEMO                              |
 | :--------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------- | :------------------------------------------------------------: | :-------------------------------- |
-| [博客系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Blog)           | 普通的博客系统                                                                               | 已完成1.0                                                      | [demo](https://zodream.cn/blog)    |
-| [API文档系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Document)    | API文档系统，支持代码生成                                                                                 | 已完成1.0                                                      | [demo](https://zodream.cn/doc)                            |
-| [个人财务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Finance)    | 个人财务系统                                                                                 | 已完成1.0                                                      | [demo](https://zodream.cn/finance) |
-| [小说系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Book)           | 小说系统，已完成pc手机端，自动爬虫功能待开发                                                 | 已完成1.0                                                      | [demo](https://zodream.cn/book)                            |
-| [公众号管理系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/WeChat)   | 公众号管理系统，支持多公众号管理，支持不同场景（类似账号绑定，签到，文字游戏等场景） ，支持模拟微信自动回复                                                           | 后台开发中                                                     | 未上线                            |
-| [网盘系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Disk)           | 网盘系统                                                                                     | 开发中，已完成上传、下载，播放视频、音乐、分享、APP下载安装 | 未上线                            |
-| [OAUTH 2.0 系统](https://github.com/zodream/oauth)                                       | 基于OAUTH 2.0 的服务端，对接功能已完成                                                       | 后台开发中                                                     | 未上线                            |
-| [模板生成系统](https://github.com/zodream/gzo)                                           | 可视化便捷操作开放模块，适用于代码生成                                                       | 已完成1.0                                                      | 本地使用                          |
-| [用户管理系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Auth)       | 暂时只完成第三方登录、本地登录、注册功能，权限控制待开发                                     | 已完成1.0                                                      | [demo](https://zodream.cn/auth)    |
-| [CMS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/CMS)             | 内容管理系统，支持模板主题导入，已完成网址导航、游戏榜单、视频主题等                                                                                | 已完成1.0                                                         | [demo](https://zodream.cn/cms)                            |
-| [CAS系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Cas)             | 基于cas的单点登录                                                                            | 已完成1.0                                                         | 未上线                            |
-| [RPC模块](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/RPC)             | json rpc                                                                            | 开发中                                                         | 未上线                            |
-| [聊天系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Chat)           | 聊天室                                                                                       | 待开发                                                         | 未上线                            |
-| [BBS论坛系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Forum)       | BBS论坛系统                                                                                  | 已完成1.0                                                         | [demo](https://zodream.cn/forum)                            |
-| [任务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)       | 系统计划任务系统，指定时间自动运行后台任务                                                                                | 已完成1.0                                                         | 未上线                            |
-| [个人计划系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Task)       | 个人计划任务系统，新增番茄时间管理，及时间记录统计                                                                                 | 已完成1.0                                                         | [demo](https://zodream.cn/task)                           |
-| [题库系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Exam)       | 分科目题库，刷题用，待开发技能进阶树、技能专属认证，最终目标：实现对任何技能明确分阶，指导用户进阶，验证用户自身技能缺陷，支持试卷               | 已完成1.0                                                         | 未上线                            |
-| [商城系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Shop)           | 商城系统，包括手机PC端，计划angular化及开发APP（Flutter、UWP）、小程序、Vue手机版                                                                                   | 开发中                                                         | 未上线                            |
-| [LOG查看系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/LogView)     | LOG查看系统，主要实现对iis日志的读取显示，可以标记，并根据标记进行推断整理，进行可疑访问查找 | 已完成1.0                                                         | 未上线                            |
-| [可视化编辑系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Template) | 可视化拖拽编辑系统系统                                                                       | 待开发                                                         | 未上线                            |
-| [微博系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/MicroBlog) | 支持发微博基本的发布文字、图片、视频，支持转发，支持评论                                                                       | 开发中                                                         | 未上线                            |
-| [族谱系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Family) | 支持添加人员，待开发功能：前台：关系树、生成族谱pdf及打印，根据账号绑定可查询其他人的称呼（有可能引入人脸识别，ar智能识别显示称呼）  后台：支持多任配偶，弹窗选择关系任务，支持赘婿，支持时间时辰转化                                                                       | 开发中                                                         | 未上线                            |
-| [跑腿服务系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Legwork) | 支持自定义表单下单，支持自主接单                                                                       | 已完成1.0                                                         | 未上线                            |
-| [短视频系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Video) | 支持用户上传视频及选择背景音乐，目前只有小程序，暂不支持基于用户标签推荐                                                                       | 已完成1.0                                                         | 未上线                            |
-| [短链接系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Short) | 支持外部链接（直接重定向到链接），支持内部链接（直接进行程序处理，网址显示依旧是短链接，但实际执行的地址和参数为正式链接）                                                                       | 已完成1.0                                                         | 未上线                            |
-| [SEO系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/SEO) |   为基本功能，包括系统设置、缓存处理、站点地图等基本功能                                                                     | 已完成1.0                                                         | 已上线                            |
-| [Demo系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Demo) |  支持模板打包上传                                                                     | 已完成1.0                                                         | [demo](https://zodream.cn/demo)                        |
-| [反馈系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Contact) |  包括友情链接管理、反馈管理、订阅管理                                                                     | 已完成1.0                                                         | [demo](https://zodream.cn/)                        |
-| [在线客服系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OnlineService) |  只提供api，界面及管理后台见[Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream)                                                                     | 已完成1.0                                                         | 未上线                        |
-| [开发平台系统](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OpenPlatform) |  应用（包括客户端、接口）appid的申请管理                                                                     | 已完成1.0                                                         | [demo](https://zodream.cn/)                        |
+| [Blog](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Blog)           | common blog system                                                                               | Completed 1.0                                                      | [demo](https://zodream.cn/blog)    |
+| [API Document](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Document)    | API documentation system, supporting code generation                                                                                 | Completed 1.0                                                      | [demo](https://zodream.cn/doc)                            |
+| [Finance](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Finance)    | personal financial system                                                                                 | Completed 1.0                                                      | [demo](https://zodream.cn/finance) |
+| [Novel](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Book)           | Novel system, include web and h5, automatic crawler function to be developed                                                 | Completed 1.0                                                      | [demo](https://zodream.cn/book)                            |
+| [WeChat Manage](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/WeChat)   | Official account management system, supports multiple official account management, supports different scenarios (similar to account binding, sign-in, word games, etc.), supports simulated WeChat automatic reply                                                           | in development                                                    | not online                            |
+| [Online Disk](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Disk)  | Online Disk | in development, Uploading, downloading, playing video, music, sharing, APP download and installation have been completed | not online                            |
+| [OAUTH 2.0](https://github.com/zodream/oauth) | Based on OAUTH 2.0 server, the docking function has been completed                                                       | in development                                                     | not online                            |
+| [Generate Helper](https://github.com/zodream/gzo)| Visual and convenient operation of open modules, suitable for code generation   | Completed 1.0  | local use |
+| [Auth](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Auth) | For the time being, only third-party login, local login, and registration functions are completed, and permission control is to be developed | Completed 1.0                                                      | [demo](https://zodream.cn/auth)    |
+| [CMS](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/CMS)             | Content management system, support template theme import, complete URL navigation, game list, video theme etc | Completed 1.0                                                         | [demo](https://zodream.cn/cms)                            |
+| [CAS](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Cas) | cas-based single sign-on  | Completed 1.0                                          | not online                            |
+| [RPC](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/RPC)             | json rpc                                                                            | in development | not online                            |
+| [Online Chat ](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Chat) | Online Chat| TODO | not online                            |
+| [BBS](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Forum)       | BBS Forum| Completed 1.0 | [demo](https://zodream.cn/forum) |
+| [Schedule](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Schedule)       | System scheduled task system, automatically run background tasks at specified time | Completed 1.0                                                         | not online                            |
+| [My plan](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Task)       | Personal plan task system, add Pomodoro time management, and time record statistics  | Completed 1.0 | [demo](https://zodream.cn/task)                           |
+| [Exam](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Exam)       | Subject-based question bank, used for brushing questions, advanced tree of skills to be developed, and exclusive certification of skills, the ultimate goal: to achieve clear grading of any skills, guide users to advance, verify users' own skills deficiencies, and support test papers               | Completed 1.0                                                         | not online                            |
+| [Shop](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Shop)  | Mall system, including mobile PC terminal, plan to angularize and develop APP (Flutter, UWP), applet, Vue mobile version | In development   | not online                           |
+| [LOG Viewer](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/LogView)    | The LOG viewing system mainly realizes the reading and display of iis logs, which can be marked, inferred and sorted according to the mark, and searched for suspicious access. | Completed 1.0                                                         | not online                            |
+| [Micro Blog](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/MicroBlog) | Support basic posting of text, pictures, and videos on Weibo, support forwarding, and support comments  | Completed 1.0       | not online                           |                     |
+| [Legwork](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Legwork) | Support custom forms to place orders, support independent orders | Completed 1.0  | not online                           |
+| [Short video](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Video) | Support users to upload videos and select background music | Completed 1.0  | not online                            |
+| [Short url](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Short) |Support external links (directly redirect to links), support internal links (direct program processing, the URL display is still a short link, but the actual execution address and parameters are official links)| Completed 1.0 | not online                            |
+| [SEO](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/SEO) |  For basic functions, including system settings, cache processing, sitemaps and other basic functions | Completed 1.0  | online                            |
+| [Demo](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Demo) |  Support template package upload | Completed 1.0 | [demo](https://zodream.cn/demo)                        |
+| [Feedback](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Contact) |  Including link management, feedback management, subscription management  | Completed 1.0 | [demo](https://zodream.cn/)                        |
+| [Online service](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OnlineService) |  Only provide api, interface and management background see [Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream) | Completed 1.0   | not online                        |
+| [Open Platform](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OpenPlatform) | Application management of application (including client and interface) appid | Completed 1.0 | [demo](https://zodream.cn/)                        |
 
 
-# 进度
+# Live
 
-官网：https://zodream.cn
+URL：https://zodream.cn
 
-## 前后端分离版本
+## Version
 
-### 后端：
+### Backend
 
-[PHP-ZoDream](https://github.com/zx648383079/PHP-ZoDream)：完整版，使用 PHP 编程语言，自制框架
+[PHP-ZoDream](https://github.com/zx648383079/PHP-ZoDream)：Full version, using PHP programming language, self-made framework
 
-[godream](https://github.com/zx648383079/godream)：博客及聊天室模块，使用 Go 编程语言，基于 gin 框架
+[godream](https://github.com/zx648383079/godream)：Blog and chat room modules, using the Go programming language, based on the gin framework
 
-[netdream](https://github.com/zx648383079/netdream)：博客模块，使用 C# 编程语言，基于 Net Core 框架
+[netdream](https://github.com/zx648383079/netdream)：Blog module, using C# programming language, based on Net Core framework
 
-### 前端：
+### Frontend
 
-[Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream)：大部分模块，包括管理后台，使用 typescript 语言，基于 angular 11 框架
+[Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream)：Most modules, including the admin backend, use the typescript language and are based on the angular 13 framework
 
-### 客户端
+### App
 
-[Flutter-Shop](https://github.com/zx648383079/Flutter-Shop): 商城模块，使用 dart 语言，基于 flutter 框架
+[Flutter-Shop](https://github.com/zx648383079/Flutter-Shop): Mall module, using dart language, based on flutter framework
 
-[Mini-Shop](https://github.com/zx648383079/Mini-Shop)：商城模块，使用 typescript 语言，微信小程序 依赖 gulp-vue2mini 代码转换
+[Mini-Shop](https://github.com/zx648383079/Mini-Shop)：Mall module, using typescript language, WeChat Mini Program depends on gulp-vue2mini code conversion
 
-[Vue-Shop](https://github.com/zx648383079/Mini-Shop)：商城模块，使用 typescript 语言，基于 vu2 框架，vue3版本等正式版再更新
+[Vue-Shop](https://github.com/zx648383079/Mini-Shop)：Mall module, using typescript language, based on vu3 framework
 
-还有其他客户端，但是都不完善。
+There are other project, but none are perfect.
 
 
 ## Thanks
@@ -105,6 +103,5 @@ gulp CMS-default // 编译CMS下的default主题资源  Module/CMS/UserInterface
 [![JetBrains](html/assets/images/jetbrains.svg)](https://www.jetbrains.com/?from=PHP-ZoDream)
 
 
-
-更新时间：2021/04/23
+Updated: 2022/04/29
 
