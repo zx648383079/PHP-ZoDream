@@ -10,13 +10,13 @@ function parseArr($value) {
         return [];
     }
     $data = [];
-    foreach (explode("\n", $value) as $item) {
+    foreach (explode("\n", $value) as $i => $item) {
         if (strpos($item, ':') > 0) {
             list($key, $item) = explode(':', $item, 2);
             $data[$key] = $item;
             continue;
         }
-        $data[$item] = $item;
+        $data[$i] = $item;
     }
     return $data;
 }

@@ -15,7 +15,7 @@ use Zodream\Helpers\Json;
  * @property string $type
  * @property integer $visibility // 是否对外显示, 0 页面不可见，1 编辑可见 2 前台可见
  * @property string $default_value
- * @property string $value // type 为 'select', 'radio', 'checkbox' 时，值都为序号，方便进行多语言切换
+ * @property string $value // type 为 'select', 'radio', 'checkbox' 时，值都为序号，方便进行多语言切换，或者 key:label 组合中的key
  * @property integer $position
  */
 class OptionModel extends Model {

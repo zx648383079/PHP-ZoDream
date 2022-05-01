@@ -79,10 +79,29 @@ class Option {
         if ($type === 'switch') {
             return Str::toBool($value);
         }
+        if ($type === 'radio' || $type === 'select') {
+            return self::formatIfInt($value);
+        }
+        if ($type === 'checkbox') {
+            return array_map('self::formatIfInt', explode(',', $value));
+        }
+        if ($type === 'image' || $type === 'file') {
+            return empty($value) ? $value : url()->asset($value);
+        }
         if ($type === 'json') {
             return empty($value) ? [] : Json::decode($value);
         }
         return $value;
+    }
+
+    private static function formatIfInt(?string $val): mixed {
+        if (is_null($val)) {
+            return '';
+        }
+        if (is_numeric($val)) {
+            return intval($val);
+        }
+        return trim($val);
     }
 
     public static function group(string|array $name, callable $cb) {
