@@ -322,6 +322,7 @@ class CreateShopTables extends Migration {
                     'code' => 'shop_guest_buy',
                     'type' => 'switch',
                     'value' => 0,
+                    'visibility' => 2,
                 ],
                 [
                     'name' => '开启仓库',

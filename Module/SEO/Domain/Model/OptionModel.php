@@ -13,9 +13,9 @@ use Zodream\Helpers\Json;
  * @property string $code
  * @property integer $parent_id
  * @property string $type
- * @property integer $visibility
+ * @property integer $visibility // 是否对外显示, 0 页面不可见，1 编辑可见 2 前台可见
  * @property string $default_value
- * @property string $value
+ * @property string $value // type 为 'select', 'radio', 'checkbox' 时，值都为序号，方便进行多语言切换
  * @property integer $position
  */
 class OptionModel extends Model {
@@ -174,7 +174,7 @@ class OptionModel extends Model {
             'value' => '',
         ], $data);
         unset($data['id']);
-        if (!isset($data['code']) || empty($data['code'])) {
+        if (empty($data['code'])) {
             return 0;
         }
         $id = static::where('code', $data['code'])->value('id');

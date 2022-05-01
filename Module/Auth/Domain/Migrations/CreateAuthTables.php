@@ -85,6 +85,7 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id')->default(0);
             $table->char('code', 6);
             $table->uint('amount')->default(1);
+            $table->uint('invite_count')->default(0);
             $table->timestamp('expired_at');
             $table->timestamps();
         });

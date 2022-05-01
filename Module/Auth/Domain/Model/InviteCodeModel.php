@@ -11,6 +11,7 @@ use Domain\Model\Model;
  * @property integer $user_id
  * @property string $code
  * @property integer $amount
+ * @property integer $invite_count
  * @property integer $expired_at
  * @property integer $updated_at
  * @property integer $created_at
@@ -26,6 +27,7 @@ class InviteCodeModel extends Model {
             'user_id' => 'int',
             'code' => 'required|string:0,6',
             'amount' => 'int',
+            'invite_count' => 'int',
             'expired_at' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',

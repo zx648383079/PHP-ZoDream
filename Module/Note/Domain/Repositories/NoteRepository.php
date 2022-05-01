@@ -89,6 +89,6 @@ final class NoteRepository {
     }
 
     public static function getNewList(int $limit) {
-        return NoteModel::with('user')::orderBy('created_at', 'desc')->limit($limit ?? 5)->get();
+        return NoteModel::with('user')->orderBy('created_at', 'desc')->limit($limit ?? 5)->get();
     }
 }

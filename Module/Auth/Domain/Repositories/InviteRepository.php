@@ -37,12 +37,25 @@ class InviteRepository {
             })->count() > 0;
     }
 
+    /**
+     * 判断邀请码是否有效
+     * @param string $code
+     * @return InviteCodeModel|null
+     */
     public static function findCode(string $code): ?InviteCodeModel {
-        return InviteCodeModel::where('code', $code)
+        if (empty($code)) {
+            return null;
+        }
+        /** @var InviteCodeModel $model */
+        $model = InviteCodeModel::where('code', $code)
             ->where(function ($query) {
                 $query->where('expired_at', '>', time())
                     ->orWhere('expired_at', 0);
             })->first();
+        if (empty($model) || $model->amount > 0 && $model->invite_count == $model->amount) {
+            return null;
+        }
+        return $model;
     }
 
     public static function codeRemove(int $id) {
@@ -62,5 +75,18 @@ class InviteRepository {
             })->when($inviter > 0, function ($query) use ($inviter) {
                 $query->where('parent_id', $inviter);
             })->orderBy('id', 'desc')->page();
+    }
+
+    public static function addLog(InviteCodeModel $model, mixed $userId) {
+        $model->invite_count ++;
+        if ($model->amount > 0 && $model->invite_count == $model->amount) {
+            $model->expired_at = \time() - 1;
+        }
+        $model->save();
+        InviteLogModel::create([
+            'user_id' => $userId,
+            'parent_id' => $model->user_id,
+            'code' => $model->code,
+        ]);
     }
 }

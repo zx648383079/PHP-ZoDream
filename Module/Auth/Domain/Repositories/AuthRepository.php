@@ -31,7 +31,7 @@ class AuthRepository {
      * @return int {0:默认注册, 1:邀请码注册, 2:关闭注册}
      */
     public static function registerType(): int {
-        return Option::value(static::OPTION_REGISTER_CODE);
+        return intval(Option::value(static::OPTION_REGISTER_CODE));
     }
 
     public static function loginPreCheck($ip, $account, $captcha = '') {
@@ -105,7 +105,8 @@ class AuthRepository {
         return self::loginUser($user, $remember, $replaceToken);
     }
 
-    public static function loginMobileCode(string $mobile, string $code, bool $remember = false, bool $replaceToken = true) {
+    public static function loginMobileCode(string $mobile, string $code, bool $remember = false,
+                                           bool $replaceToken = true) {
         if (empty($mobile) || empty($code)) {
             throw AuthException::invalidLogin();
         }
@@ -133,7 +134,8 @@ class AuthRepository {
      * @throws Exception
      */
     public static function register(
-        string $name, string $email, string $password, string $confirmPassword, bool $agreement = false, string $inviteCode = '') {
+        string $name, string $email, string $password, string $confirmPassword,
+        bool $agreement = false, string $inviteCode = '') {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
@@ -150,13 +152,16 @@ class AuthRepository {
         if ($confirmPassword !== $password) {
             throw new Exception('两次密码不一致');
         }
-        $user = self::createUser($email, $name, $password);
+        $user = static::checkInviteCode($inviteCode, function ($parent_id) use ($email, $name, $password) {
+            return self::createUser($email, $name, $password, compact('parent_id'));
+        });
         event(new Register($user, request()->ip(), time()));
         return self::doLogin($user);
     }
 
     public static function registerMobile(
-        string $name, string $mobile, string $code, string $password, string $confirmPassword, bool $agreement = false, string $inviteCode = '') {
+        string $name, string $mobile, string $code, string $password, string $confirmPassword,
+        bool $agreement = false, string $inviteCode = '') {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
@@ -180,9 +185,12 @@ class AuthRepository {
         if (!$sms->verifyCode($mobile, $code)) {
             throw new Exception('验证码错误');
         }
-        $user = self::createUser($mobile, $name, $password, [
-            'email' => static::emptyEmail()
-        ], 'mobile');
+        $user = static::checkInviteCode($inviteCode, function ($parent_id) use ($mobile, $name, $password) {
+            return self::createUser($mobile, $name, $password, [
+                'email' => static::emptyEmail(),
+                'parent_id' => $parent_id
+            ], 'mobile');
+        });
         event(new Register($user, request()->ip(), time()));
         return self::doLogin($user);
     }
@@ -193,6 +201,20 @@ class AuthRepository {
 
     public static function isEmptyEmail(string $email): bool {
         return empty($email) || preg_match('/^zreno_\d{11}@zodream\.cn$/', $email);
+    }
+
+
+    protected static function checkInviteCode(string $inviteCode, callable $func): UserModel {
+        $model = InviteRepository::findCode($inviteCode);
+        if (empty($model) && static::registerType() === 1) {
+            throw new Exception('必须输入邀请码');
+        }
+        if (empty($model)) {
+            return call_user_func($func, 0);
+        }
+        $user = call_user_func($func, $model->user_id);
+        InviteRepository::addLog($model, $user->id);
+        return $user;
     }
 
     /**

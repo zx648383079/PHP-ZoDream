@@ -80,6 +80,7 @@ class CreateMicroBlogTables extends Migration {
                     'code' => 'micro_time_limit',
                     'type' => 'text',
                     'value' => 300,
+                    'visibility' => 2,
                 ],
             ];
         });
