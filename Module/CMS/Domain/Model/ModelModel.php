@@ -15,6 +15,7 @@ use Zodream\Helpers\Json;
  * @property string $category_template
  * @property string $list_template
  * @property string $show_template
+ * @property string $edit_template
  * @property string $setting
  */
 class ModelModel extends BaseModel {
@@ -33,6 +34,7 @@ class ModelModel extends BaseModel {
             'category_template' => 'string:0,20',
             'list_template' => 'string:0,20',
             'show_template' => 'string:0,20',
+            'edit_template' => 'string:0,20',
             'setting' => '',
         ];
     }
@@ -48,6 +50,7 @@ class ModelModel extends BaseModel {
             'category_template' => '分类模板',
             'list_template' => '列表模板',
             'show_template' => '详情模板',
+            'edit_template' => '编辑模板',
             'setting' => 'Setting',
         ];
     }

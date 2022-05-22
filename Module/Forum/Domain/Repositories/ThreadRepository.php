@@ -200,19 +200,27 @@ class ThreadRepository {
         if (empty($model)) {
             throw new Exception('回复不存在');
         }
-        $oldAction = -1;
-        $action = LogRepository::changeAction($model->id, ThreadLogModel::TYPE_THREAD_POST,
-            $agree ? ThreadLogModel::ACTION_AGREE :ThreadLogModel::ACTION_DISAGREE,
-            [ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE], $oldAction);
-        if ($oldAction === ThreadLogModel::ACTION_AGREE) {
-            $model->agree_count --;
-        } elseif ($oldAction === ThreadLogModel::ACTION_DISAGREE) {
-            $model->disagree_count --;
-        }
-        if ($action === ThreadLogModel::ACTION_AGREE) {
-            $model->agree_count ++;
-        } elseif ($action === ThreadLogModel::ACTION_DISAGREE) {
-            $model->disagree_count ++;
+        $action = $agree ? ThreadLogModel::ACTION_AGREE :ThreadLogModel::ACTION_DISAGREE;
+        $res = LogRepository::toggleLog(ThreadLogModel::TYPE_THREAD_POST,
+            $action,
+            $model->id,
+            [ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE]);
+        if ($res < 1) {
+            if ($action === ThreadLogModel::ACTION_AGREE) {
+                $model->agree_count --;
+            } else {
+                $model->disagree_count --;
+            }
+        } elseif ($res === 1) {
+            $plus = $action === ThreadLogModel::ACTION_AGREE ? 1 : -1;
+            $model->agree_count += $plus;
+            $model->disagree_count -= $plus;
+        } else {
+            if ($action === ThreadLogModel::ACTION_AGREE) {
+                $model->agree_count ++;
+            } else {
+                $model->disagree_count ++;
+            }
         }
         $model->save();
         return [

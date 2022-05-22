@@ -175,7 +175,7 @@ footer {
     }
     .tags {
         line-height: 30px;
-        margin: -5px 0 10px;
+        margin: 5px 0 10px;
         span {
             margin: 0 5px;
             color: #9baab6;
@@ -669,9 +669,11 @@ footer {
     margin-bottom: .8rem;
     .thumb {
         width: 5rem;
+        height: 5rem;
+        overflow: hidden;
         img {
-            width: 5rem;
-            height: 5rem;
+            height: 100%;
+            transition: all .4s;
         }
     }
     .info {
@@ -685,10 +687,19 @@ footer {
         .desc {
             color: #666;
             min-height: 2rem;
+            max-height: 2.8rem;
+            overflow: hidden;
         }
         .tags {
             font-size: .8rem;
             color: #777;
+        }
+    }
+    &:hover {
+        .thumb {
+            img {
+                transform: scale(1.2);
+            }
         }
     }
 }

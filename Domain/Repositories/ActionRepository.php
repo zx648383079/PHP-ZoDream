@@ -43,19 +43,25 @@ abstract class ActionRepository {
      * 判断当前用户执行了那一个操作
      * @param int $item_id
      * @param int $item_type
-     * @param array $action
-     * @return int
+     * @param array $onlyAction
+     * @return int|null
      * @throws \Exception
      */
-    public static function userActionValue(int $item_id, int $item_type, array $action): int {
+    public static function userActionValue(int $item_id, int $item_type, array $onlyAction): ?int {
         if (auth()->guest()) {
-            return -1;
+            return null;
         }
-        $log = static::query()->where('item_id', $item_id)
-            ->where('item_type', $item_type)
-            ->where('user_id', auth()->id())
-            ->whereIn('action', $action)->first('action');
-        return empty($log) ? -1 : intval($log['action']);
+        $log = static::query()->where('user_id', auth()->id())
+            ->where('item_type', $item_type)->where('item_id', $item_id)
+            ->when(!empty($onlyAction), function ($query) use ($onlyAction) {
+                if (count($onlyAction) === 1) {
+                    $query->where('action', current($onlyAction));
+                    return;
+                }
+                $query->whereIn('action', $onlyAction);
+            })
+            ->first('action');
+        return !empty($log) ? intval($log['action']) : null;
     }
 
     /**
@@ -67,67 +73,61 @@ abstract class ActionRepository {
      * @throws \Exception
      */
     public static function toggleAction(int $item_id, int $item_type, int $action): bool {
+        return static::toggleLog($item_type, $action, $item_id) > 0;
+    }
+
+    /**
+     * 切换记录
+     * @param int $type
+     * @param int $action
+     * @param int $id
+     * @param array|int|null $searchAction
+     * @return int {0: 取消，1: 更新为，2：新增}
+     * @throws \Exception
+     */
+    public static function toggleLog(int $type, int $action,
+                              int $id,
+                              array|int|null $searchAction = null): int {
         if (auth()->guest()) {
-            return false;
+            return 0;
+        }
+        if (empty($searchAction)) {
+            $searchAction = $action;
         }
         $userId = auth()->id();
-        if (static::userAction($item_id, $item_type, $action)) {
-            static::query()->where('item_id', $item_id)
-                ->where('item_type', $item_type)
-                ->where('user_id', $userId)
-                ->where('action', $action)->delete();
-            return false;
+        $log = static::query()->where('user_id', $userId)
+            ->where('item_type', $type)
+            ->when(is_array($searchAction), function ($query) use ($searchAction) {
+                if (count($searchAction) === 1) {
+                    $query->where('action', current($searchAction));
+                    return;
+                }
+                $query->whereIn('action', $searchAction);
+            }, function ($query) use ($searchAction) {
+                $query->where('action', $searchAction);
+            })
+            ->where('item_id', $id)
+            ->first();
+        if (!empty($log) && intval($log['action']) === $action) {
+            static::query()->where('id', $log['id'])->delete();
+            return 0;
+        }
+        if (!empty($log)) {
+            static::query()->where('id', $log['id'])->update([
+                    'action' => $action,
+                    'created_at' => time()
+                ]);
+            return 1;
         }
         static::query()->insert([
-            'item_id' => $item_id,
-            'item_type' => $item_type,
+            'item_id' => $id,
+            'item_type' => $type,
             'user_id' => $userId,
             'action' => $action,
             'created_at' => time()
         ]);
-        return true;
+        return 2;
     }
 
-    /**
-     * 在一组操作中切换到某个操作
-     * @param int $item_id
-     * @param int $item_type
-     * @param int $action
-     * @param array $actionMap
-     * @param int $oldAction
-     * @return int
-     * @throws \Exception
-     */
-    public static function changeAction(int $item_id, int $item_type, int $action, array $actionMap, int &$oldAction = -1): int {
-        if (auth()->guest()) {
-            return -1;
-        }
-        $userId = auth()->id();
-        $oldAction = static::userActionValue($item_id, $item_type, $actionMap);
-        if ($oldAction < 0) {
-            static::query()->insert([
-                'item_id' => $item_id,
-                'item_type' => $item_type,
-                'user_id' => $userId,
-                'action' => $action,
-                'created_at' => time()
-            ]);
-            return $action;
-        }
-        if ($oldAction === $action) {
-            static::query()->where('item_id', $item_id)
-                ->where('item_type', $item_type)
-                ->where('user_id', $userId)
-                ->whereIn('action', $actionMap)->delete();
-            return -1;
-        }
-        static::query()->where('item_id', $item_id)
-            ->where('item_type', $item_type)
-            ->where('user_id', $userId)
-            ->whereIn('action', $actionMap)->update([
-                'action' => $action,
-                'created_at' => time()
-            ]);
-        return $action;
-    }
+
 }

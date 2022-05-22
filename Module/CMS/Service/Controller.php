@@ -11,17 +11,7 @@ use Zodream\Template\Engine\ParserCompiler;
 class Controller extends ModuleController {
 
     public function prepare() {
-        $dir = view()->getDirectory()
-            ->directory(CMSRepository::theme());
-        if (!$dir->exist()) {
-            throw new Exception('THEME IS ERROR!');
-        }
-        view()
-            ->setDirectory($dir)
-            ->setEngine(FuncHelper::register(new ParserCompiler()))
-            ->setConfigs([
-                'suffix' => '.html'
-            ]);
+        CMSRepository::registerView();
         $categories_tree = FuncHelper::channels(['tree' => true]);
         $this->send(compact('categories_tree'));
     }

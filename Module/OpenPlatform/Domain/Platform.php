@@ -23,6 +23,10 @@ class Platform implements IAuthPlatform {
      * 全局的平台key
      */
     const PLATFORM_KEY = 'platform';
+    /**
+     * GET key 和 Response Key
+     */
+    const APPID_KEY = 'appid';
 
 
     private $app;
@@ -139,7 +143,7 @@ class Platform implements IAuthPlatform {
             $data['encrypt'] = $this->encrypt($response->text());
             //$data['encrypt_type'] = $this->encrypt_type_list[$this->encrypt_type];
         }
-        $data['appid'] = $this->app['appid'];
+        $data[self::APPID_KEY] = $this->app['appid'];
         $data['timestamp'] = date('Y-m-d H:i:s');
         if ($this->app['sign_type'] > 0) {
             //$data['sign_type'] = $this->sign_type_list[$this->sign_type];
@@ -288,7 +292,7 @@ class Platform implements IAuthPlatform {
         return new static($platform);
     }
 
-    public static function createAuto(string $key = 'appid') {
+    public static function createAuto(string $key = self::APPID_KEY) {
         $appId = isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] :  request()->get($key);
         if (empty($appId)) {
             throw new \Exception(__('APP ID error'));

@@ -84,7 +84,7 @@ final class NoteRepository {
 
     public static function suggestion(string $keywords) {
         return NoteModel::when(!empty($keywords), function($query) {
-            NoteModel::searchWhere($query, ['content']);
+            SearchModel::searchWhere($query, ['content']);
         })->groupBy('content')->limit(4)->pluck('content');
     }
 

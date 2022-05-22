@@ -52,9 +52,9 @@ $this->registerCssFile([
                 <?=$this->node('friend-link')?>
                 <div class="copyright">
                     <p>Copyright ©zodream.cn, All Rights Reserved.</p>
-                    <a href="http://www.beian.miit.gov.cn" target="_blank">湘ICP备16003508号</a>
+                    <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16003508号</a>
                     <p>
-                        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43052402000190">
+                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43052402000190">
                             <img src="<?=$this->asset('images/beian.png')?>" alt="备案图标">
                         湘公网安备 43052402000190号
                         </a>

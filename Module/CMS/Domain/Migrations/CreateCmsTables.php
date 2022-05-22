@@ -45,6 +45,7 @@ class CreateCmsTables extends Migration {
             $table->string('category_template', 20)->default('');
             $table->string('list_template', 20)->default('');
             $table->string('show_template', 20)->default('');
+            $table->string('edit_template', 20)->default('');
             $table->text('setting')->nullable();
         })->append(GroupModel::tableName(), function (Table $table) {
             $table->id();

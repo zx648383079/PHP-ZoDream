@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Providers\ActionLogProvider;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;

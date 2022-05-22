@@ -103,39 +103,29 @@
             "category_template": "app",
             "list_template": "app_list",
             "show_template": "app",
+            "child": "@model:apps_version",
             "fields": [
                 {
-                    "name": "wind",
-                    "field": "win",
-                    "type": "file",
-                    "is_required": false
+                    "name": "免费应用",
+                    "field": "is_free",
+                    "type": "switch",
+                    "is_main": true,
+                    "is_search": true
                 },
                 {
-                    "name": "linux",
-                    "field": "linux",
-                    "type": "file",
-                    "is_required": false
+                    "name": "开源应用",
+                    "field": "is_open_source",
+                    "type": "switch",
+                    "is_main": true,
+                    "is_search": true
                 },
                 {
-                    "name": "APK",
-                    "field": "apk",
-                    "type": "file",
-                    "is_required": false
+                    "name": "官网",
+                    "field": "uri",
+                    "type": "text"
                 },
                 {
-                    "name": "IPA",
-                    "field": "ipa",
-                    "type": "file",
-                    "is_required": false
-                },
-                {
-                    "name": "UWP",
-                    "field": "uwp",
-                    "type": "file",
-                    "is_required": false
-                },
-                {
-                    "name": "当前版本",
+                    "name": "最新版本",
                     "field": "version",
                     "type": "text"
                 },
@@ -148,6 +138,19 @@
                     "name": "使用说明",
                     "field": "instruction",
                     "type": "editor"
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "应用版本",
+            "table": "apps_version",
+            "fields": [
+                {
+                    "name": "文件",
+                    "field": "file",
+                    "type": "file",
+                    "is_main": true
                 }
             ]
         },

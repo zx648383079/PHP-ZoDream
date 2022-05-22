@@ -10,7 +10,6 @@ namespace Domain\Model;
 
 use Zodream\Database\DB;
 use Zodream\Database\Model\Model as BaseModel;
-use Zodream\Infrastructure\Contracts\Database;
 
 
 abstract class Model extends BaseModel {

@@ -2,15 +2,30 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Repositories;
 
-use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
+use Domain\Providers\ActionLogProvider;
+use Domain\Providers\CommentProvider;
+use Domain\Providers\TagProvider;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\Video\Domain\Models\LogModel;
-use Module\Video\Domain\Models\TagModel;
 use Module\Video\Domain\Models\VideoModel;
-use Module\Video\Domain\Models\VideoTagModel;
 
-class VideoRepository {
+final class VideoRepository {
+
+    const LOG_TYPE_VIDEO = 7;
+    const LOG_ACTION_LIKE = 1;
+    const BASE_KEY = 'video';
+
+    public static function comment(): CommentProvider {
+        return new CommentProvider(self::BASE_KEY);
+    }
+
+    public static function log(): ActionLogProvider {
+        return new ActionLogProvider(self::BASE_KEY);
+    }
+
+    public static function tag(): TagProvider {
+        return new TagProvider(self::BASE_KEY);
+    }
 
     public static function getList(string $keywords = '', int $user = 0, int $music = 0, $id = null) {
         return VideoModel::with('user', 'music')->when(!empty($keywords), function ($query) {
@@ -74,40 +89,16 @@ class VideoRepository {
         return $model;
     }
 
-    public static function likeLog(int $id) {
-        if (auth()->guest()) {
-            throw new \Exception('请先登录', 401);
-        }
-        return LogModel::where('item_type', LogModel::TYPE_VIDEO)
-            ->where('action', LogModel::ACTION_LIKE)
-            ->where('user_id', auth()->id())
-            ->where('item_id', $id)->first();
-    }
-
     public static function isLiked(int $id) {
-        if (auth()->guest()) {
-            return false;
-        }
-        return LogModel::where('item_type', LogModel::TYPE_VIDEO)
-            ->where('action', LogModel::ACTION_LIKE)
-            ->where('user_id', auth()->id())
-            ->where('item_id', $id)->count() > 0;
+        return static::log()->has(self::LOG_TYPE_VIDEO, self::LOG_ACTION_LIKE, $id);
     }
 
     public static function like(int $id) {
         $model = VideoModel::findOrThrow($id, '视频不存在');
-        $log = static::likeLog($id);
-        if (empty($log)) {
-            LogModel::createOrThrow([
-                'item_type' => LogModel::TYPE_VIDEO,
-                'item_id' => $id,
-                'user_id' => auth()->id(),
-                'action' => LogModel::ACTION_LIKE,
-            ]);
+        $res = static::log()->toggleLog(self::LOG_TYPE_VIDEO, self::LOG_ACTION_LIKE, $id);
+        if ($res > 0) {
             $model->like_count ++;
-
         } else {
-            $log->delete();
             $model->like_count --;
         }
         $model->save();
@@ -135,22 +126,10 @@ class VideoRepository {
     }
 
     public static function addTag(int $video, string|array $tags) {
-        TagRepository::bindTag(
-            VideoTagModel::query(),
-            $video,
-            'video_id',
-            $tags,
-            [
-                'created_at' => time(),
-            ],
-        );
+        static::tag()->bindTag($video, $tags);
     }
 
     public static function searchVideoTag(string $keywords): array {
-        return TagRepository::searchTag(
-            VideoTagModel::query(),
-            'video_id',
-            $keywords
-        );
+        return static::tag()->searchTag($keywords);
     }
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\CommentModel;
@@ -13,9 +14,11 @@ use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Module\SEO\Domain\Option;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 use Zodream\Http\Uri;
+use Zodream\Infrastructure\Error\Exception;
+use Zodream\Template\Engine\ParserCompiler;
+use Zodream\Template\ViewFactory;
 
 class CMSRepository {
 
@@ -41,6 +44,26 @@ class CMSRepository {
             return self::$cacheTheme = 'default';
         }
         return self::$cacheTheme = static::site()->theme;
+    }
+
+    public static function registerView(string|SiteModel $theme = ''): ViewFactory {
+        if (empty($theme)) {
+            $theme = static::theme();
+        } elseif ($theme instanceof SiteModel) {
+            $theme = $theme->theme;
+        }
+        $provider = view();
+        $dir = $provider->getDirectory()
+            ->directory($theme);
+        if (!$dir->exist()) {
+            throw new Exception('THEME IS ERROR!');
+        }
+        $provider->setDirectory($dir)
+            ->setEngine(FuncHelper::register(new ParserCompiler()))
+            ->setConfigs([
+                'suffix' => '.html'
+            ]);
+        return $provider;
     }
 
     /**

@@ -1,19 +1,19 @@
 <?php
+declare(strict_types=1);
 namespace Module\Video\Domain\Migrations;
 
+use Module\AppStore\Domain\Repositories\AppRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
-use Module\Video\Domain\Models\CommentModel;
-use Module\Video\Domain\Models\LogModel;
 use Module\Video\Domain\Models\MusicModel;
-use Module\Video\Domain\Models\TagModel;
 use Module\Video\Domain\Models\VideoModel;
-use Module\Video\Domain\Models\VideoTagModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateVideoTables extends Migration {
 
     public function up() {
+        AppRepository::comment()->migration($this);
+        AppRepository::tag()->migration($this);
         $this->append(MusicModel::tableName(), function (Table $table) {
             $table->comment('背景音乐库');
             $table->id();
@@ -49,30 +49,6 @@ class CreateVideoTables extends Migration {
                 ->comment('评论的人数');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
-        })->append(CommentModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('content');
-            $table->uint('parent_id');
-            $table->uint('user_id')->default(0);
-            $table->uint('video_id');
-            $table->uint('agree')->default(0);
-            $table->uint('disagree')->default(0);
-            $table->timestamp('created_at');
-        })->append(LogModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->uint('item_type', 2)->default(0);
-            $table->uint('item_id');
-            $table->uint('user_id');
-            $table->uint('action');
-            $table->timestamp('created_at');
-        })->append(TagModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('name', 20);
-            $table->timestamp('created_at');
-        })->append(VideoTagModel::tableName(), function(Table $table) {
-            $table->comment('视频标签关联表');
-            $table->uint('tag_id');
-            $table->uint('video_id');
         })->autoUp();
     }
 

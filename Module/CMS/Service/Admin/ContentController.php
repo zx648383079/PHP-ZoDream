@@ -28,10 +28,11 @@ class ContentController extends Controller {
 
     /**
      * 为了适配可能出现的多表
-     * @param $id
-     * @param $cat_id
-     * @param $model_id
+     * @param int $id
+     * @param int $cat_id
+     * @param int $model_id
      * @param int $parent_id
+     * @return \Zodream\Infrastructure\Contracts\Http\Output
      * @throws \Exception
      */
     public function editAction(int $id, int $cat_id, int $model_id, int $parent_id = 0) {
@@ -42,6 +43,12 @@ class ContentController extends Controller {
             'parent_id' => $parent_id
         ];
         $tab_list = ModelRepository::fieldGroupByTab($model->id);
+        if ($model->edit_template) {
+            CMSRepository::registerView();
+            return $this->show($model->edit_template, compact('id',
+                'cat_id', 'cat', 'scene', 'model',
+                'data', 'tab_list'));
+        }
         return $this->show('edit', compact('id',
             'cat_id', 'cat', 'scene', 'model',
             'data', 'tab_list'));
