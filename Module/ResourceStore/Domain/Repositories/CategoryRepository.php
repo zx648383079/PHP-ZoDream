@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\ResourceStore\Domain\Repositories;
 
 use Domain\Model\Model;
+use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
 use Module\ResourceStore\Domain\Models\CategoryModel;
 use Zodream\Database\Contracts\SqlBuilder;
@@ -21,12 +22,14 @@ final class CategoryRepository extends CRUDRepository {
     }
 
 
-    public static function toTree() {
-        return new Tree(self::query()->get());
+    public static function toTree(bool $full = false) {
+        return new Tree(CategoryModel::query()->when(!$full, function ($query) {
+            $query->select('id', 'name', 'parent_id');
+        })->get());
     }
 
     public static function levelTree(array $excludes = []) {
-        $data = self::toTree()->makeTreeForHtml();
+        $data = self::all(false);
         if (empty($excludes)) {
             return $data;
         }
@@ -43,8 +46,20 @@ final class CategoryRepository extends CRUDRepository {
     }
 
     public static function tree() {
-        return self::toTree()->makeIdTree();
+        return self::toTree(false)->makeIdTree();
     }
 
+    public static function all(bool $full = false) {
+        return self::toTree($full)->makeTreeForHtml();
+    }
+
+    public static function search(string $keywords = '', int|array $id = 0) {
+        return SearchModel::searchOption(
+            static::query(),
+            ['name'],
+            $keywords,
+            $id === 0 ? [] : compact('id')
+        );
+    }
 
 }

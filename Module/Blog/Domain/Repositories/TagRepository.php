@@ -4,7 +4,6 @@ namespace Module\Blog\Domain\Repositories;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Zodream\Database\Contracts\SqlBuilder;
-use Zodream\Infrastructure\Support\Html;
 use Domain\Repositories\TagRepository as TagBase;
 
 class TagRepository extends TagBase {

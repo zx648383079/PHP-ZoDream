@@ -50,6 +50,7 @@ class ProjectController extends Controller {
         }
     }
 
+
     public function versionNewAction(int $project, int $version, string $name) {
         try {
             ProjectRepository::createVersion($project, $version, $name);

@@ -24,6 +24,8 @@ class CreateAppTables extends Migration {
             $table->uint('parent_id')->default(0);
         })->append(AppModel::tableName(), function(Table $table) {
             $table->id();
+            $table->uint('cat_id');
+            $table->uint('user_id');
             $table->string('name', 20);
             $table->string('keywords')->default('');
             $table->string('description')->default('');
@@ -36,7 +38,7 @@ class CreateAppTables extends Migration {
             $table->uint('comment_count')->default(0);
             $table->uint('download_count')->default(0);
             $table->uint('view_count')->default(0);
-            $table->decimal('sore', 4,2)->default(6)->comment('评分');
+            $table->decimal('score', 4,2)->default(6)->comment('评分');
             $table->timestamps();
         })->append(AppVersionModel::tableName(), function(Table $table) {
             $table->id();
@@ -52,6 +54,7 @@ class CreateAppTables extends Migration {
             $table->string('framework', 10)->default('')->comment('架构:x64,x86');
             $table->bool('url_type')->default(0)->comment('下载地址');
             $table->string('url')->default('')->comment('下载地址');
+            $table->uint('size')->default(0)->comment('文件大小');
             $table->uint('view_count')->default(0);
             $table->timestamps();
         })->autoUp();

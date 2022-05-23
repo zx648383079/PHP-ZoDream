@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Module\Navigation\Service\Api\Admin;
 
-use Module\Navigation\Domain\Repositories\Admin\TagRepository;
+use Module\Navigation\Domain\Repositories\SiteRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 final class TagController extends Controller {
 
     public function indexAction(string $keywords = '') {
-        return $this->renderPage(TagRepository::getList($keywords));
+        return $this->renderPage(SiteRepository::tag()->getList($keywords));
     }
 
 
@@ -18,7 +18,7 @@ final class TagController extends Controller {
                 'id' => 'int',
                 'name' => 'required|string:0,30',
             ]);
-            return $this->render(TagRepository::save($data));
+            return $this->render(SiteRepository::tag()->save($data));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -26,7 +26,7 @@ final class TagController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            TagRepository::remove($id);
+            SiteRepository::tag()->remove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

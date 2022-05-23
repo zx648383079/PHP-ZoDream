@@ -5,7 +5,7 @@ namespace Module\Navigation\Domain\Repositories\Admin;
 use Domain\Model\SearchModel;
 use Module\Navigation\Domain\Models\SiteModel;
 use Module\Navigation\Domain\Models\SiteScoringLogModel;
-use Module\Navigation\Domain\Models\SiteTagModel;
+use Module\Navigation\Domain\Repositories\SiteRepository as BaseSite;
 
 final class SiteRepository {
     public static function getList(string $keywords = '', int $category = 0, int $user = 0, string $domain = '') {
@@ -39,12 +39,8 @@ final class SiteRepository {
         if (!$model->save() && !$model->isNotChangedError()) {
             throw new \Exception($model->getFirstError());
         }
-        TagRepository::bindTag(
-            SiteTagModel::query(),
-            $model->id,
-            'site_id',
-            isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : [],
-        );
+        BaseSite::tag()->bindTag($model->id,
+            isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : []);
         if ($id < 1 && isset($data['also_page']) && $data['also_page'] > 0) {
             try {
                 PageRepository::save([
@@ -69,7 +65,7 @@ final class SiteRepository {
 
     public static function remove(int $id) {
         SiteModel::where('id', $id)->delete();
-        SiteTagModel::where('site_id', $id)->delete();
+        BaseSite::tag()->removeLink($id);
     }
 
     public static function findIdByLink(string $link): ?SiteModel {

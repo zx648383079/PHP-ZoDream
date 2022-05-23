@@ -5,23 +5,22 @@ namespace Module\OnlineTV\Domain\Migrations;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\OnlineTV\Domain\Models\AreaModel;
 use Module\OnlineTV\Domain\Models\CategoryModel;
-use Module\OnlineTV\Domain\Models\CommentModel;
 use Module\OnlineTV\Domain\Models\LiveModel;
-use Module\OnlineTV\Domain\Models\LogModel;
 use Module\OnlineTV\Domain\Models\MovieFileModel;
 use Module\OnlineTV\Domain\Models\MovieModel;
 use Module\OnlineTV\Domain\Models\MovieScoreModel;
 use Module\OnlineTV\Domain\Models\MovieSeriesModel;
-use Module\OnlineTV\Domain\Models\MovieTagModel;
 use Module\OnlineTV\Domain\Models\MusicFileModel;
 use Module\OnlineTV\Domain\Models\MusicModel;
-use Module\OnlineTV\Domain\Models\TagModel;
+use Module\OnlineTV\Domain\Repositories\TVRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateTVTables extends Migration {
 
     public function up() {
+        TVRepository::comment()->migration($this);
+        TVRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function(Table $table) {
             $table->comment('分类');
             $table->id();
@@ -98,32 +97,6 @@ class CreateTVTables extends Migration {
             $table->uint('definition', 1)->default(0)->comment('清晰度');
             $table->string('file');
             $table->string('subtitle_file')->default('')->comment('字幕');
-        })->append(TagModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('name', 20);
-            $table->timestamp('created_at');
-        })->append(MovieTagModel::tableName(), function(Table $table) {
-            $table->comment('视频标签关联表');
-            $table->uint('tag_id');
-            $table->uint('movie_id');
-        })->append(CommentModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('content');
-            $table->string('extra_rule', 300)->default('')
-                ->comment('内容的一些附加规则');
-            $table->uint('parent_id');
-            $table->uint('user_id')->default(0);
-            $table->uint('movie_id');
-            $table->uint('agree_count')->default(0);
-            $table->uint('disagree_count')->default(0);
-            $table->timestamp('created_at');
-        })->append(LogModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->uint('item_type', 2)->default(0);
-            $table->uint('item_id');
-            $table->uint('user_id');
-            $table->uint('action');
-            $table->timestamp('created_at');
         })->autoUp();
     }
 

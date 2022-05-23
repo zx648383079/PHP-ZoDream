@@ -1,13 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\LogView\Service;
-
 
 use Module\LogView\Domain\Model\FileModel;
 use Module\LogView\Domain\Model\LogModel;
 use Module\LogView\Domain\Parser\IIS;
 use Module\LogView\Service\Controller;
 use Zodream\Disk\File;
-
 
 class FileController extends Controller {
 
@@ -19,7 +18,7 @@ class FileController extends Controller {
         ];
     }
 
-    public function indexAction($input) {
+    public function indexAction(string $input) {
         $file = app_path()->getFile($input);
         if (!$file->exist()) {
             return $this->showContent('文件不存在！');

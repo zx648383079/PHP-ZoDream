@@ -124,7 +124,7 @@ class ProjectRepository {
         foreach ($items as $item) {
             $item['version_id'] = $distVersion;
             if ($item['parent_id'] > 0) {
-                $item['parent_id'] = isset($mapId[$item['parent_id']]) ? $mapId[$item['parent_id']] : 0;
+                $item['parent_id'] = $mapId[$item['parent_id']] ?? 0;
             }
             $id = $item['id'];
             unset($item['id']);
@@ -140,7 +140,7 @@ class ProjectRepository {
         foreach ($items as $item) {
             $item['version_id'] = $distVersion;
             if ($item['parent_id'] > 0) {
-                $item['parent_id'] = isset($mapId[$item['parent_id']]) ? $mapId[$item['parent_id']] : 0;
+                $item['parent_id'] = $mapId[$item['parent_id']] ?? 0;
             }
             $id = $item['id'];
             unset($item['id']);
@@ -155,7 +155,7 @@ class ProjectRepository {
         foreach ($items as $item) {
             $item['api_id'] = $mapId[$item['api_id']];
             if ($item['parent_id'] > 0) {
-                $item['parent_id'] = isset($fieldMap[$item['parent_id']]) ? $fieldMap[$item['parent_id']] : 0;
+                $item['parent_id'] = $fieldMap[$item['parent_id']] ?? 0;
             }
             $id = $item['id'];
             unset($item['id']);

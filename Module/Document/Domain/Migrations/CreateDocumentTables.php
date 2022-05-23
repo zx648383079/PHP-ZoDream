@@ -4,6 +4,7 @@ namespace Module\Document\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Document\Domain\Model\ApiModel;
+use Module\Document\Domain\Model\CategoryModel;
 use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
@@ -18,10 +19,17 @@ class CreateDocumentTables extends Migration {
      * @return void
      */
     public function up() {
-        $this->append(ProjectModel::tableName(), function(Table $table) {
+        $this->append(CategoryModel::tableName(), function(Table $table) {
+            $table->comment('分类');
+            $table->id();
+            $table->string('name', 30);
+            $table->string('icon')->default('');
+            $table->uint('parent_id')->default(0);
+        })->append(ProjectModel::tableName(), function(Table $table) {
             $table->comment('项目表');
             $table->id();
             $table->uint('user_id');
+            $table->uint('cat_id');
             $table->string('name', 35)->comment('项目名');
             $table->string('cover', 200)->default('')
                 ->comment('项目封面');

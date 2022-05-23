@@ -155,13 +155,13 @@ class TagProvider {
 
     /**
      * 关联标签
-     * @param int $lindId 其他表的主键值
+     * @param int $target 其他表的主键值
      * @param string|array $tags 标签
      * @param array $append
      * @param callable|null $afterBind ($tagId: int[], $add: int[], $del: int[])
      * @throws \Exception
      */
-    public function bindTag(int $lindId,
+    public function bindTag(int $target,
                                    string|array $tags,
                                    array $append = [], ?callable $afterBind = null) {
         $tagId = $this->save($tags, $append);
@@ -170,23 +170,27 @@ class TagProvider {
         }
         list($add, $_, $del) = ModelHelper::splitId(
             $tagId,
-            $this->linkQuery()->where('target_id', $lindId)
+            $this->linkQuery()->where('target_id', $target)
                 ->pluck('tag_id'),
         );
         if (!empty($del)) {
-            $this->linkQuery()->where('target_id', $lindId)
+            $this->linkQuery()->where('target_id', $target)
                 ->whereIn('tag_id', $del)->delete();
         }
         if (!empty($add)) {
-            $this->linkQuery()->insert(array_map(function ($tag_id) use ($lindId) {
+            $this->linkQuery()->insert(array_map(function ($tag_id) use ($target) {
                 return [
                     'tag_id' => $tag_id,
-                    'target_id' => $lindId,
+                    'target_id' => $target,
                 ];
             }, $add));
         }
         if ($afterBind) {
             call_user_func($afterBind, $tagId, $add, $del);
         }
+    }
+
+    public function removeLink(int $target) {
+        $this->linkQuery()->where('target_id', $target)->delete();
     }
 }

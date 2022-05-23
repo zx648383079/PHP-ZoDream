@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Module\ResourceStore\Domain\Migrations;
 
-use Module\ResourceStore\Domain\Models\CommentModel;
-use Module\ResourceStore\Domain\Models\LogModel;
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
-use Module\ResourceStore\Domain\Models\TagModel;
-use Module\ResourceStore\Domain\Models\TagRelationshipModel;
 use Module\ResourceStore\Domain\Models\CategoryModel;
+use Module\ResourceStore\Domain\Repositories\ResourceRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateResourceTables extends Migration {
 
     public function up() {
+        ResourceRepository::comment()->migration($this);
+        ResourceRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 40);
@@ -48,34 +48,13 @@ class CreateResourceTables extends Migration {
             $table->string('file');
             $table->uint('click_count')->default(0);
             $table->timestamps();
-        })->append(LogModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->uint('item_type', 1)->default(0);
-            $table->uint('item_id');
-            $table->uint('user_id');
-            $table->uint('action');
-            $table->string('ip', 120)->default('');
-            $table->timestamp('created_at');
-        })->append(TagModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('name', 40);
-            $table->string('description')->default('');
-            $table->uint('post_count')->default(0);
-        })->append(TagRelationshipModel::tableName(), function(Table $table) {
-            $table->uint('tag_id');
-            $table->uint('post_id');
-            $table->uint('position', 1)->default(99);
-        })->append(CommentModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('content');
-            $table->string('extra_rule', 300)->default('')
-                ->comment('内容的一些附加规则');
-            $table->uint('parent_id');
-            $table->uint('user_id')->default(0);
-            $table->uint('res_id');
-            $table->uint('agree_count')->default(0);
-            $table->uint('disagree_count')->default(0);
-            $table->timestamp('created_at');
         })->autoUp();
+    }
+
+    public function seed()
+    {
+        RoleRepository::newPermission([
+            'res_manage' => '资源商店管理'
+        ]);
     }
 }

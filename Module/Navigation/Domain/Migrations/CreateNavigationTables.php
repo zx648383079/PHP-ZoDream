@@ -11,13 +11,13 @@ use Module\Navigation\Domain\Models\PageKeywordModel;
 use Module\Navigation\Domain\Models\PageModel;
 use Module\Navigation\Domain\Models\SiteModel;
 use Module\Navigation\Domain\Models\SiteScoringLogModel;
-use Module\Navigation\Domain\Models\SiteTagModel;
-use Module\Navigation\Domain\Models\TagModel;
+use Module\Navigation\Domain\Repositories\SiteRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 final class CreateNavigationTables extends Migration {
     public function up() {
+        SiteRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function (Table $table) {
             $table->comment('站点分类表');
             $table->id();
@@ -46,14 +46,6 @@ final class CreateNavigationTables extends Migration {
             $table->uint('last_score', 1)->comment('上次的评分');
             $table->string('change_reason')->default('')->comment('评分变动原因');
             $table->timestamp('created_at');
-        })->append(TagModel::tableName(), function (Table $table) {
-            $table->comment('标签表');
-            $table->id();
-            $table->string('name', 30);
-        })->append(SiteTagModel::tableName(), function (Table $table) {
-            $table->comment('站点关联标签表');
-            $table->uint('tag_id');
-            $table->uint('site_id');
         })->append(PageModel::tableName(), function (Table $table) {
             $table->comment('网页表');
             $table->id();

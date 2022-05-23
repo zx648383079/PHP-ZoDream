@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Proxy\Service;
 
 use Module\Proxy\Domain\Spider;

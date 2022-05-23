@@ -3,13 +3,18 @@ declare(strict_types=1);
 namespace Module\Navigation\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Providers\TagProvider;
 use Module\Navigation\Domain\Models\CategoryModel;
 use Module\Navigation\Domain\Models\SiteModel;
-use Module\Navigation\Domain\Models\SiteTagModel;
-use Module\Navigation\Domain\Models\TagModel;
 use Zodream\Html\Tree;
 
 final class SiteRepository {
+
+    const BASE_KEY = 'search';
+
+    public static function tag(): TagProvider {
+        return new TagProvider(self::BASE_KEY);
+    }
 
     public static function getList(string $keywords = '', int $category = 0, string $domain = '') {
         return SiteModel::when(!empty($keywords), function ($query) {
@@ -29,11 +34,7 @@ final class SiteRepository {
     }
 
     public static function getTag(int $site): array {
-        $tagIds = SiteTagModel::where('site_id', $site)->pluck('tag_id');
-        if (empty($tagIds)) {
-            return [];
-        }
-        return TagModel::whereIn('id', $tagIds)->get();
+        return self::tag()->getTags($site);
     }
 
     public static function categories() {

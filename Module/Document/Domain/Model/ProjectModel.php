@@ -12,6 +12,7 @@ use Zodream\Helpers\Json;
  * @package Module\Document\Domain\Model
  * @property integer $id
  * @property integer $user_id
+ * @property integer $cat_id
  * @property string $name
  * @property string $cover
  * @property string $description
@@ -37,6 +38,7 @@ class ProjectModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'required|int',
+            'cat_id' => 'required|int',
             'name' => 'required|string:0,35',
             'description' => 'string:0,255',
             'cover' => 'string:0,255',
@@ -53,6 +55,7 @@ class ProjectModel extends Model {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',
+            'cat_id' => 'Cat Id',
             'name' => '项目名称',
             'description' => '项目描述',
             'cover' => '项目封面',

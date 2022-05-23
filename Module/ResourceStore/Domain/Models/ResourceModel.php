@@ -8,22 +8,24 @@ use Zodream\Helpers\Time;
 
 /**
  * Class PostModel
- * @package Module\Demo\Domain\Model
  * @property integer $id
  * @property string $title
  * @property string $description
  * @property string $keywords
  * @property string $thumb
  * @property string $content
- * @property string $file
  * @property integer $size
  * @property integer $user_id
+ * @property integer $type
  * @property integer $cat_id
+ * @property integer $price
+ * @property integer $is_commercial
+ * @property integer $is_reprint
  * @property integer $comment_count
  * @property integer $click_count
  * @property integer $download_count
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
  */
 class ResourceModel extends Model {
     public static function tableName() {
@@ -36,16 +38,19 @@ class ResourceModel extends Model {
             'description' => 'string:0,255',
             'keywords' => 'string:0,255',
             'thumb' => 'string:0,255',
-            'content' => '',
-            'file' => 'string:0,255',
+            'content' => 'required',
             'size' => 'int',
             'user_id' => 'required|int',
+            'type' => 'int:0,127',
             'cat_id' => 'required|int',
+            'price' => 'int',
+            'is_commercial' => 'int:0,127',
+            'is_reprint' => 'int:0,127',
             'comment_count' => 'int',
             'click_count' => 'int',
             'download_count' => 'int',
-            'created_at' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
 

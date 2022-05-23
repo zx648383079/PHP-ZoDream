@@ -6,7 +6,6 @@ use Domain\Model\Model;
 
 /**
  * Class CategoryModel
- * @package Module\Demo\Domain\Model
  * @property integer $id
  * @property string $name
  * @property integer $parent_id

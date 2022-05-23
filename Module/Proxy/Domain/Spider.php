@@ -29,7 +29,7 @@ class Spider {
         return array_merge(...$data);
     }
 
-    public function getXiCi($url) {
+    public function getXiCi(string $url) {
         $content = file_get_contents($url);
         $html = new Html($content);
         $tr_list = $html->find('#ip_list', 0)->find('tr');

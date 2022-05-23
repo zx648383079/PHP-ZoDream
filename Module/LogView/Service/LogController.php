@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\LogView\Service;
-
 
 use Module\LogView\Domain\Model\FileModel;
 use Module\LogView\Domain\Model\LogModel;
@@ -9,16 +9,19 @@ use Module\LogView\Domain\Tag;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 
-
-
 class LogController extends Controller {
 
-    public function indexAction($id, $keywords = null, $operator = null, $name = null, $sort = 'id', $order = 'desc', $auto = null) {
+    public function indexAction(int $id, string $keywords = '',
+                                string $operator = '',
+                                string|array $name = '',
+                                string $sort = 'id',
+                                string $order = 'desc',
+                                bool $auto = false) {
         $file = FileModel::find($id);
         $log_list = LogModel::ofType($name, $operator, $keywords)
             ->sortOrder($sort, $order)
             ->where('file_id', $id)
-            ->when(!empty($auto), function ($query) {
+            ->when($auto, function ($query) {
                 $query->where('sc_status', 200)
                     ->where('cs_method', 'POST');
             })
@@ -73,10 +76,10 @@ class LogController extends Controller {
         return $this->redirectWithMessage(['./log', 'id' => $model->id],  '上传成功！');
     }
 
-    public function tagAction($name) {
+    public function tagAction(string $name) {
         $value = request()->get('value');
         Tag::toggle($name, $value);
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
     public function clearAction() {

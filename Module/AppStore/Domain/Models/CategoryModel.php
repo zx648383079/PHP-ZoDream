@@ -4,27 +4,36 @@ namespace Module\AppStore\Domain\Models;
 
 use Domain\Model\Model;
 
+/**
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $icon
+ * @property integer $parent_id
+ */
 class CategoryModel extends Model {
 
 	public static function tableName() {
         return 'app_category';
     }
 
-	protected function rules() {
-		return [
-            'content' => 'string:0,255',
-            'user_id' => 'required|int',
-            'created_at' => 'int',
+    protected function rules() {
+        return [
+            'name' => 'required|string:0,30',
+            'icon' => 'string:0,255',
+            'parent_id' => 'int',
         ];
-	}
+    }
 
-	protected function labels() {
-		return [
+    protected function labels() {
+        return [
             'id' => 'Id',
-            'content' => 'Content',
-            'user_id' => 'User Id',
-            'created_at' => 'Created At',
+            'name' => 'Name',
+            'icon' => 'Icon',
+            'parent_id' => 'Parent Id',
         ];
-	}
+    }
+
+
 
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Module\Document\Domain\Model;
 
-
 use Domain\Model\Model;
 
 /**

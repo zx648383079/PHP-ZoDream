@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\LogView\Service;
 
 
@@ -9,14 +10,14 @@ use Zhuzhichao\IpLocationZh\Ip;
 class AnalysisController extends Controller {
 
 
-    public function indexAction($name, $value, $type = 'hour') {
+    public function indexAction(string $name, string $value, string $type = 'hour') {
         $data = LogModel::countByTime()->where($name, $value)->asArray()->all();
         $round = LogModel::selectRaw('MAX(`time`) as max, MIN(`time`) as min')->asArray()->one();
         $data = LogModel::getRoundLogs($data);
         return $this->show(compact('data', 'name', 'value'));
     }
 
-    public function topAction($name) {
+    public function topAction(string $name) {
         $model = new LogModel();
         if (!$model->hasColumn($name)) {
             return $this->redirect('./');
