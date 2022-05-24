@@ -27,6 +27,8 @@ class CreateAppTables extends Migration {
             $table->uint('cat_id');
             $table->uint('user_id');
             $table->string('name', 20);
+            $table->string('package_name', 60)->default('')
+                ->comment('软件的包名');
             $table->string('keywords')->default('');
             $table->string('description')->default('');
             $table->text('content')->nullable()->comment('介绍和使用说明');
@@ -50,11 +52,12 @@ class CreateAppTables extends Migration {
             $table->id();
             $table->uint('app_id');
             $table->uint('version_id');
+            $table->string('name', 40)->comment('文件名');
             $table->string('os', 20)->default('')->comment('系统:windows,ios');
             $table->string('framework', 10)->default('')->comment('架构:x64,x86');
             $table->bool('url_type')->default(0)->comment('下载地址');
             $table->string('url')->default('')->comment('下载地址');
-            $table->uint('size')->default(0)->comment('文件大小');
+            $table->string('size', 20)->default('0')->comment('文件大小');
             $table->uint('view_count')->default(0);
             $table->timestamps();
         })->autoUp();

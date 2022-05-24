@@ -13,10 +13,10 @@ class SoftwareController extends Controller {
         );
     }
 
-    public function detailAction(int $id) {
+    public function detailAction(int $id, int $version = 0) {
         try {
             return $this->render(
-                AppRepository::get($id)
+                AppRepository::getEdit($id, $version)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -40,7 +40,7 @@ class SoftwareController extends Controller {
                 'score' => 'numeric',
             ]);
             return $this->render(
-                AppRepository::save($data)
+                AppRepository::save($data, $input->get('tags', []))
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -56,10 +56,10 @@ class SoftwareController extends Controller {
         return $this->renderData(true);
     }
 
-    public function versionAction(int $id, string $keywords = '') {
+    public function versionAction(int $software, string $keywords = '') {
         try {
-            AppRepository::getSelf($id);
-            return $this->renderPage(AppRepository::versionList($id, $keywords));
+            AppRepository::getSelf($software);
+            return $this->renderPage(AppRepository::versionList($software, $keywords));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -87,10 +87,10 @@ class SoftwareController extends Controller {
         return $this->renderData(true);
     }
 
-    public function packageAction(int $id, int $version = 0, string $keywords = '') {
+    public function packageAction(int $software, int $version = 0, string $keywords = '') {
         try {
-            AppRepository::getSelf($id);
-            return $this->renderPage(AppRepository::packageList($id, $version, $keywords));
+            AppRepository::getSelf($software);
+            return $this->renderPage(AppRepository::packageList($software, $version, $keywords));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

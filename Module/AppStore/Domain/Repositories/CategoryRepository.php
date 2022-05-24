@@ -27,6 +27,11 @@ final class CategoryRepository extends CRUDRepository {
         })->get());
     }
 
+
+    public static function getChildren(int $parent = 0) {
+        return static::query()->where('parent_id', $parent)->get();
+    }
+
     public static function levelTree(array $excludes = []) {
         $data = self::all(false);
         if (empty($excludes)) {

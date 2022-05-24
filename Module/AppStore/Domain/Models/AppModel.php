@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\AppStore\Domain\Models;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  *
@@ -10,6 +11,7 @@ use Domain\Model\Model;
  * @property integer $cat_id
  * @property integer $user_id
  * @property string $name
+ * @property string $package_name
  * @property string $keywords
  * @property string $description
  * @property string $content
@@ -36,6 +38,7 @@ class AppModel extends Model {
             'user_id' => 'required|int',
             'cat_id' => 'required|int',
             'name' => 'required|string:0,20',
+            'package_name' => 'string:0,60',
             'keywords' => 'string:0,255',
             'description' => 'string:0,255',
             'content' => '',
@@ -72,6 +75,14 @@ class AppModel extends Model {
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
 }

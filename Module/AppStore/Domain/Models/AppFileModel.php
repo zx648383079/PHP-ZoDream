@@ -9,6 +9,7 @@ use Domain\Model\Model;
  * @property integer $id
  * @property integer $app_id
  * @property integer $version_id
+ * @property string $name
  * @property string $os
  * @property string $framework
  * @property integer $url_type
@@ -28,6 +29,7 @@ class AppFileModel extends Model {
         return [
             'app_id' => 'required|int',
             'version_id' => 'required|int',
+            'name' => 'required|string:0,40',
             'os' => 'string:0,20',
             'framework' => 'string:0,10',
             'url_type' => 'int:0,127',

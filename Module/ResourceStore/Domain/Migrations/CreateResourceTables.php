@@ -29,7 +29,7 @@ class CreateResourceTables extends Migration {
             $table->string('keywords')->default('');
             $table->string('thumb')->default('');
             $table->text('content');
-            $table->uint('size')->default(0);
+            $table->string('size', 20)->default('0');
             $table->uint('user_id');
             $table->uint('type', 2)->default(0)->comment('资源类型');
             $table->uint('cat_id');

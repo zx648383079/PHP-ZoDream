@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\ResourceStore\Domain\Repositories;
 
+use Module\ResourceStore\Domain\Models\ResourceFileModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
@@ -30,18 +31,20 @@ final class UploadRepository {
         throw new \Exception($upload->getError() ?? '上传失败');
     }
 
-    public static function file(ResourceModel $model) {
+    public static function file(ResourceFileModel $model) {
         return self::folder()->file($model->file);
     }
 
     public static function resourceFolder($id): Directory {
         if ($id instanceof ResourceModel) {
             $id = $id->id;
+        } elseif ($id instanceof ResourceFileModel) {
+            $id = $id->res_id;
         }
         return self::folder()->directory($id.'');
     }
 
-    public static function unzipFile(ResourceModel $model) {
+    public static function unzipFile(ResourceFileModel $model) {
         $folder = self::resourceFolder($model);
         if ($folder->exist()) {
             $folder->delete();

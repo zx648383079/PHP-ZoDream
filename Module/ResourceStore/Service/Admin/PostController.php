@@ -11,7 +11,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 class PostController extends Controller {
 
     public function indexAction(string $keywords = '', int $cat_id = 0) {
-        $post_list = ResourceRepository::getList($keywords, $cat_id);
+        $post_list = ResourceRepository::getManageList($keywords, 0, $cat_id);
         $cat_list = CategoryRepository::levelTree();
         return $this->show(compact('post_list', 'cat_list', 'keywords', 'cat_id'));
     }
@@ -43,7 +43,7 @@ class PostController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            ResourceRepository::remove($id);
+            ResourceRepository::removeSelf($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

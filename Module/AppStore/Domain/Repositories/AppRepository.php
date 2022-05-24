@@ -30,8 +30,9 @@ final class AppRepository {
     public static function getManageList(
         string $keywords = '',
         int $user = 0, int $category = 0) {
-        return AppModel::when(!empty($keywords), function ($query) use ($keywords) {
-                SearchModel::searchWhere($query, ['name'], true, '', $keywords);
+        return AppModel::with('user', 'category')
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, ['name', 'package_name'], true, '', $keywords);
             })
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
@@ -43,15 +44,13 @@ final class AppRepository {
 
     public static function getList(
         string $keywords = '',
-        int $user = 0, int $id = 0) {
-        return AppModel::when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, ['name']);
+        int $category = 0) {
+        return AppModel::with('category')
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, ['name', 'package_name'], true, '', $keywords);
             })
-            ->when($id > 0, function($query) use ($id) {
-                $query->where('id', $id);
-            })
-            ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', $user);
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
             })->orderBy('id', 'desc')
             ->page();
     }
@@ -64,6 +63,16 @@ final class AppRepository {
         return $model;
     }
 
+    public static function getEdit(int $id, int $version = 0) {
+        $model = self::get($id);
+        if ($version > 0) {
+            $model->version = AppVersionModel::where('app_id', $id)
+                ->where('id', $version)->first();
+        }
+        $model->tags = self::tag()->getTags($id);
+        return $model;
+    }
+
     public static function getSelf(int $id) {
         $model = AppModel::findWithAuth($id);
         if (empty($model)) {
@@ -73,7 +82,7 @@ final class AppRepository {
     }
 
 
-    public static function save(array $data) {
+    public static function save(array $data, array $tags = []) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = $id > 0 ? self::getSelf($id) : new AppModel();
@@ -82,15 +91,20 @@ final class AppRepository {
         if (!$model->save()) {
             throw new Exception($model->getFirstError());
         }
+        self::tag()->bindTag($model->id, $tags);
         return $model;
     }
 
     public static function remove(int $id) {
         AppModel::where('id', $id)->delete();
+        self::tag()->removeLink($id);
+        AppVersionModel::where('app_id', $id)->delete();
+        AppFileModel::where('app_id', $id)->delete();
     }
 
     public static function removeSelf(int $id) {
-        self::getSelf($id)->delete();
+        self::getSelf($id);
+        self::remove($id);
     }
 
     public static function versionList(int $software, string $keywords = '') {
@@ -129,9 +143,9 @@ final class AppRepository {
 
     public static function packageList(int $software, int $version = 0, string $keywords = '')
     {
-        return AppVersionModel::where('app_id', $software)
+        return AppFileModel::where('app_id', $software)
             ->when(!empty($keywords), function($query) use ($keywords) {
-                SearchModel::searchWhere($query, ['os'], false, '', $keywords);
+                SearchModel::searchWhere($query, ['os', 'name'], false, '', $keywords);
             })
             ->when($version > 0, function($query) use ($version) {
                 $query->where('version_id', $version);
@@ -153,6 +167,60 @@ final class AppRepository {
 
     public static function packageRemove(int $id) {
         AppFileModel::where('id', $id)->delete();
+    }
+
+    public static function getFull(int $id, int $version) {
+        $model = AppModel::findOrThrow($id, '应用不存在');
+        $_ = $model->category;
+        $model->version = AppVersionModel::when($version > 0, function ($query) use ($version) {
+            $query->where('id', $version);
+        }, function ($query) {
+            $query->orderBy('id', 'desc');
+        })->where('app_id', $id)->first();
+        if (!$model->version) {
+            throw new Exception('应用为空或没有相关版本');
+        }
+        $model->packages = AppFileModel::where('app_id', $id)
+            ->where('version_id', $model->version->id)->get();
+        return $model;
+    }
+
+    public static function check(array $items) {
+        $data = [];
+        foreach ($items as $packageName => $version) {
+            if (is_array($version)) {
+                if (isset($version['package_name'])) {
+                    $packageName = $version['package_name'];
+                }
+                $version = $version['version'];
+            }
+            if (empty($packageName) || empty($version)) {
+                continue;
+            }
+            $package = AppModel::where('package_name', $packageName)
+                ->first();
+            if (empty($package)) {
+                continue;
+            }
+            $lastVersion = AppVersionModel::where('app_id', $package->id)
+                ->orderBy('id', 'desc')->first();
+            if (empty($lastVersion) || $lastVersion->name === $version) {
+                continue;
+            }
+            $file = AppFileModel::where('app_id', $package->id)
+                ->where('version_id', $lastVersion->id)
+                ->orderBy('url_type', 'asc')
+                ->first();
+            if (empty($file)) {
+                continue;
+            }
+            $data[] = [
+                'package' => $package,
+                'version' => $lastVersion,
+                'file' => $file
+            ];
+        }
+        return $data;
     }
 
 }
