@@ -28,7 +28,7 @@ class ListRepository {
             $item->is_agree = self::hasLog(BookLogModel::TYPE_LIST, [BookLogModel::ACTION_AGREE, BookLogModel::ACTION_DISAGREE], $id);
             $item->on_shelf = HistoryRepository::hasBook($item->book_id);
         }
-        $model->user;
+        $_ = $model->user;
         $model->items = $items;
         BookListModel::query()->where('id', $model->id)
             ->updateIncrement('click_count', 1);

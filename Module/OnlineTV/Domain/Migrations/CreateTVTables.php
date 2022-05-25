@@ -37,6 +37,7 @@ class CreateTVTables extends Migration {
             $table->string('title');
             $table->string('thumb')->default('');
             $table->string('source');
+            $table->bool('status')->default(1);
             $table->timestamps();
         })->append(MusicModel::tableName(), function(Table $table) {
             $table->comment('音乐');
@@ -78,7 +79,7 @@ class CreateTVTables extends Migration {
         })->append(MovieScoreModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('movie_id');
-            $table->uint('score_type', 1);
+            $table->string('name', 20);
             $table->string('score', 10);
             $table->string('url')->default('')->comment('评分站点页面');
             $table->timestamps();
@@ -90,12 +91,14 @@ class CreateTVTables extends Migration {
             $table->timestamps();
         })->append(MovieFileModel::tableName(), function(Table $table) {
             $table->id();
+            $table->string('name');
             $table->uint('movie_id');
             $table->uint('series_id')->default(0);
             $table->uint('file_type', 1)->default(0)
                 ->comment('文件类型,文件还是种子');
             $table->uint('definition', 1)->default(0)->comment('清晰度');
             $table->string('file');
+            $table->string('size', 20)->default('0');
             $table->string('subtitle_file')->default('')->comment('字幕');
         })->autoUp();
     }

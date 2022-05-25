@@ -10,6 +10,7 @@ use Domain\Model\Model;
  * @property string $title
  * @property string $thumb
  * @property string $source
+ * @property integer $status
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -24,6 +25,7 @@ class LiveModel extends Model {
             'title' => 'required|string:0,255',
             'thumb' => 'string:0,255',
             'source' => 'required|string:0,255',
+            'status' => 'int:0,1',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];

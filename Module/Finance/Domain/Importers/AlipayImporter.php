@@ -8,7 +8,7 @@ final class AlipayImporter extends CsvImporter {
 
     protected mixed $accountId = '';
 
-    public function is($resource): bool {
+    public function is($resource, string $fileName): bool {
         return $this->firstRowContains($resource, '支付宝');
     }
 

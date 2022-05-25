@@ -49,6 +49,34 @@ class MovieController extends Controller {
         return $this->renderData(true);
     }
 
+    public function areaAction() {
+        return $this->renderData(
+            MovieRepository::areaList()
+        );
+    }
+
+    public function areaSaveAction(Input $input) {
+        try {
+            return $this->render(
+                MovieRepository::areaSave($input->validate([
+                    'id' => 'int',
+                    'name' => 'string:0,255',
+                ]))
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function areaDeleteAction(int $id) {
+        try {
+            MovieRepository::areaRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
     public function scoreAction(int $movie) {
         return $this->renderData(
             MovieRepository::scoreList($movie)
@@ -61,7 +89,7 @@ class MovieController extends Controller {
                 MovieRepository::scoreSave($input->validate([
                     'id' => 'int',
                     'movie_id' => 'required|int',
-                    'score_type' => 'required|int:0,127',
+                    'name' => 'required|string:0,20',
                     'score' => 'required|string:0,10',
                     'url' => 'string:0,255',
                 ]))

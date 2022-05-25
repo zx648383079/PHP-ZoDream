@@ -5,6 +5,7 @@ namespace Module\OnlineTV\Domain\Repositories;
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
+use Module\OnlineTV\Domain\Models\AreaModel;
 use Module\OnlineTV\Domain\Models\MovieFileModel;
 use Module\OnlineTV\Domain\Models\MovieModel;
 use Module\OnlineTV\Domain\Models\MovieScoreModel;
@@ -79,6 +80,28 @@ final class MovieRepository extends CRUDRepository {
     public static function scoreRemove(int $id)
     {
         MovieScoreModel::where('id', $id)->delete();
+    }
+
+    public static function areaList()
+    {
+        return AreaModel::query()->get();
+    }
+
+    public static function areaSave(array $data)
+    {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = AreaModel::findOrNew($id);
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function areaRemove(int $id)
+    {
+        AreaModel::where('id', $id)->delete();
     }
 
     protected static function query(): SqlBuilder

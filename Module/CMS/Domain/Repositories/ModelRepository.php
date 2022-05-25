@@ -88,7 +88,7 @@ class ModelRepository {
             throw new \Exception($model->getFirstError());
         }
         if ($id > 0) {
-            $model->setOldAttribute($old);
+            $model->setAttributeToOld($old);
             $scene->setModel($model->model)->updateField($model);
         } else {
             $scene->setModel($model->model)->addField($model);

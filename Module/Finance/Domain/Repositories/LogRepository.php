@@ -3,11 +3,10 @@ declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Infrastructure\IImporter;
 use Module\Finance\Domain\Importers\AlipayImporter;
-use Module\Finance\Domain\Importers\IImporter;
 use Module\Finance\Domain\Importers\WxImporter;
 use Module\Finance\Domain\Model\LogModel;
-use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Excel\Exporter;
@@ -150,12 +149,13 @@ class LogRepository {
                  ] as $importer) {
             /** @var IImporter $instance */
             $instance = new $importer;
-            if (!$instance->is($handle)) {
+            if (!$instance->is($handle, $file)) {
                 continue;
             }
             $instance->readCallback($handle, function (array $item) {
                 LogModel::createIfNot($item);
             });
+            break;
         }
         fclose($handle);
         return true;

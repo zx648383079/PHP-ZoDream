@@ -2,35 +2,14 @@
 declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
+use Domain\Model\Model;
 use Domain\Model\SearchModel;
+use Domain\Repositories\CRUDRepository;
 use Module\Book\Domain\Model\BookAuthorModel;
 use Module\Book\Domain\Model\BookModel;
+use Zodream\Database\Contracts\SqlBuilder;
 
-class AuthorRepository {
-    public static function getList(string $keywords = '') {
-        return BookAuthorModel::query()->when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, ['name']);
-        })->page();
-    }
-
-    public static function get(int $id) {
-        return BookAuthorModel::findOrThrow($id, '数据有误');
-    }
-
-    public static function save(array $data) {
-        $id = $data['id'] ?? 0;
-        unset($data['id']);
-        $model = BookAuthorModel::findOrNew($id);
-        $model->load($data);
-        if (!$model->save()) {
-            throw new \Exception($model->getFirstError());
-        }
-        return $model;
-    }
-
-    public static function remove(int $id) {
-        BookAuthorModel::where('id', $id)->delete();
-    }
+class AuthorRepository extends CRUDRepository {
 
     public static function search(string $keywords = '', int|array $id = 0) {
         return SearchModel::searchOption(
@@ -86,5 +65,15 @@ class AuthorRepository {
             'user_id' => $user->id,
         ]);
         return intval($model->id);
+    }
+
+    protected static function query(): SqlBuilder
+    {
+        return BookAuthorModel::query();
+    }
+
+    protected static function createNew(): Model
+    {
+        return new BookAuthorModel();
     }
 }

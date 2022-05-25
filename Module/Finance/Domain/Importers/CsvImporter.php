@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Module\Finance\Domain\Importers;
 
+use Infrastructure\IImporter;
+
 abstract class CsvImporter implements IImporter {
 
     protected function firstRowContains($resource, string $tag): bool {

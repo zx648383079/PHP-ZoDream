@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Module\Finance\Domain\Importers;
+namespace Infrastructure;
 
 interface IImporter {
 
     /**
      * 判断是否是
      * @param resource $resource
+     * @param string $fileName 文件的真实名字带后缀
      * @return bool
      */
-    public function is($resource): bool;
+    public function is($resource, string $fileName): bool;
 
     /**
      * 读取所有的数据
