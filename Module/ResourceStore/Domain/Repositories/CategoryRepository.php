@@ -21,9 +21,12 @@ final class CategoryRepository extends CRUDRepository {
         return new CategoryModel();
     }
 
+    public static function getChildren(int $parent = 0) {
+        return static::query()->where('parent_id', $parent)->get();
+    }
 
     public static function toTree(bool $full = false) {
-        return new Tree(CategoryModel::query()->when(!$full, function ($query) {
+        return new Tree(self::query()->when(!$full, function ($query) {
             $query->select('id', 'name', 'parent_id');
         })->get());
     }

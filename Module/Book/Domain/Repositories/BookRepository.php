@@ -1,14 +1,16 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Providers\ActionLogProvider;
+use Domain\Providers\DayLogProvider;
+use Domain\Providers\TagProvider;
 use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookFullModel;
 use Module\Book\Domain\Model\BookHistoryModel;
-use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookPageModel;
 use Module\Book\Domain\Model\BookRoleModel;
@@ -19,7 +21,27 @@ use Zodream\Html\Tree;
 
 class BookRepository {
 
+    const BASE_KEY = 'book';
     const DEFAULT_COVER = '/assets/images/book_default.jpg';
+    const LOG_TYPE_BOOK = 0;
+    const LOG_TYPE_LIST = 1;
+
+    const LOG_ACTION_CLICK = 0;
+    const LOG_ACTION_COLLECT = 3;
+    const LOG_ACTION_AGREE = 1;
+    const LOG_ACTION_DISAGREE = 2;
+
+    public static function log(): ActionLogProvider {
+        return new ActionLogProvider(self::BASE_KEY);
+    }
+
+    public static function tag(): TagProvider {
+        return new TagProvider(self::BASE_KEY);
+    }
+
+    public static function clickLog(): DayLogProvider {
+        return new DayLogProvider(self::BASE_KEY);
+    }
 
     /**
      * 前台请求
@@ -102,16 +124,16 @@ class BookRepository {
         if ($model->status != 1) {
             throw new \Exception('小说不存在');
         }
-        $model->category;
-        $model->author;
+        $_ = $model->category;
+        $_ = $model->author;
         $model->on_shelf = HistoryRepository::hasBook($model->id);
         return $model;
     }
 
     public static function getManage(int $id) {
         $model = BookModel::findOrThrow($id, '小说不存在');
-        $model->category;
-        $model->author;
+        $_ = $model->category;
+        $_ = $model->author;
         return $model;
     }
 
@@ -178,7 +200,7 @@ class BookRepository {
         if (empty($chapter)) {
             throw new \Exception('id 错误！');
         }
-        BookClickLogModel::logBook($chapter->book_id);
+        self::clickLog()->add(self::LOG_TYPE_BOOK, $chapter->book_id, 0);
         $data = $chapter->toArray();
         $data['content'] = $chapter->type < 1 ? $chapter->body->content : '';
         $data['previous'] = $chapter->previous;
@@ -282,7 +304,6 @@ class BookRepository {
                          BookSourceModel::class,
                          BookHistoryModel::class,
                          BookBuyLogModel::class,
-                         BookClickLogModel::class,
                          BookRoleModel::class,
                          ListItemModel::class
                      ] as $class) {
@@ -292,7 +313,14 @@ class BookRepository {
                     'book_id' => $new_id
                 ]);
             }
-            BookLogModel::where('item_type', 0)->where('item_id', $old_id)->update([
+            self::log()->query()->where('item_type', self::LOG_TYPE_BOOK)->where('item_id', $old_id)->update([
+                'item_id' => $new_id
+            ]);
+            self::clickLog()->query()->where('item_type', self::LOG_TYPE_BOOK)->where('item_id', $old_id)->update([
+                'item_id' => $new_id
+            ]);
+            self::clickLog()->dayQuery()
+                ->where('item_type', self::LOG_TYPE_BOOK)->where('item_id', $old_id)->update([
                 'item_id' => $new_id
             ]);
         });

@@ -5,6 +5,7 @@ namespace Module\ResourceStore\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
+use Domain\Providers\StorageProvider;
 use Domain\Providers\TagProvider;
 use Exception;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
@@ -16,6 +17,18 @@ class ResourceRepository {
     const LOG_ACTION_BUY = 66;
     const LOG_ACTION_DOWNLOAD = 1;
     const BASE_KEY = 'res';
+    const RES_PAGE_FILED = [
+        'id', 'user_id', 'cat_id', 'title', 'description', 'thumb',
+        'size',
+        'type',
+        'price',
+        'is_commercial',
+        'is_reprint',
+        'comment_count',
+        'download_count',
+        'view_count',
+        'updated_at',
+        'created_at',];
 
     public static function comment(): CommentProvider {
         return new CommentProvider(self::BASE_KEY);
@@ -27,6 +40,10 @@ class ResourceRepository {
 
     public static function tag(): TagProvider {
         return new TagProvider(self::BASE_KEY);
+    }
+
+    public static function storage(): StorageProvider {
+        return StorageProvider::privateStore();
     }
 
     public static function getList(string $keywords = '', int $category = 0,
@@ -60,7 +77,7 @@ class ResourceRepository {
                     return;
                 }
                 $query->whereIn('id', $ids);
-            })->page();
+            })->select(self::RES_PAGE_FILED)->page();
     }
 
     public static function get(int $id): ResourceModel {
@@ -207,4 +224,24 @@ class ResourceRepository {
         self::removeFile(ResourceFileModel::findOrThrow($id, '文件不存在'));
     }
 
+    public static function download(int $id, int $file = 0) {
+        $model = self::get($id);
+        self::log()->insert([
+            'item_type' => ResourceRepository::LOG_TYPE_RES,
+            'item_id' => $id,
+            'action' => ResourceRepository::LOG_ACTION_DOWNLOAD,
+        ]);
+        $fileModel = ResourceFileModel::where('res_id', $id)
+            ->when($file < 1, function ($query) use ($file) {
+                $query->where('id', $file);
+            }, function ($query) use ($file) {
+                $query->where('file_type', 0)->orderBy('file_type', 'asc');
+            })->first();
+        if (empty($fileModel)) {
+            throw new Exception('没有可下载的文件');
+        }
+        $model->download_count ++;
+        $model->save();
+        return UploadRepository::file($fileModel);
+    }
 }

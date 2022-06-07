@@ -20,7 +20,6 @@ class BatchController extends Controller {
             return $this->render($this->invokeBatch([
                 'categories' => CategoryRepository::levelTree(),
                 'areas' => MovieRepository::areaList(),
-                ''
             ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

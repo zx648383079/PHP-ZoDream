@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\AppStore\Service\Api;
 
 use Module\AppStore\Domain\Repositories\AppRepository;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class SoftwareController extends Controller {
 
@@ -22,8 +23,13 @@ class SoftwareController extends Controller {
         }
     }
 
-    public function downloadAction(int $id) {
-
+    public function downloadAction(int $id, Output $output) {
+        try {
+            return  AppRepository::storage()->output($output, AppRepository::download($id));
+        } catch (\Exception $ex) {
+            $output->header->setContentDisposition('error.txt');
+            return $output->custom($ex->getMessage(), 'txt');
+        }
     }
 
     public function checkAction(array $items) {

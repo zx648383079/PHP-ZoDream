@@ -65,4 +65,8 @@ final class LiveRepository extends CRUDRepository {
     public static function export(): ExportObject {
         return new DplImporter();
     }
+
+    public static function getActiveList() {
+        return self::query()->where('status', 1)->get();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
@@ -7,22 +8,25 @@ use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookListModel;
-use Module\Book\Domain\Model\BookLogModel;
+use Module\Book\Domain\Model\BookMetaModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookRoleModel;
 use Module\Book\Domain\Model\BookSourceModel;
 use Module\Book\Domain\Model\BookSourceSiteModel;
 use Module\Book\Domain\Model\ListItemModel;
 use Module\Book\Domain\Model\RoleRelationModel;
+use Module\Book\Domain\Repositories\BookRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateBookTables extends Migration {
 
     public function up() {
+        BookRepository::tag()->migration($this);
+        BookRepository::log()->migration($this);
+        BookRepository::clickLog()->migration($this);
         $this->append(BookModel::tableName(), function(Table $table) {
             $table->comment('小说');
             $table->id();
@@ -42,6 +46,12 @@ class CreateBookTables extends Migration {
             $table->uint('source_type', 2)->default(0)->comment('来源类型，原创或转载');
             $table->softDeletes();
             $table->timestamps();
+        })->append(BookMetaModel::tableName(), function(Table $table) {
+            $table->comment('小说附加信息');
+            $table->id();
+            $table->uint('target_id');
+            $table->string('name', 50);
+            $table->string('content')->default('');
         })->append(BookSourceSiteModel::tableName(), function(Table $table) {
             $table->comment('小说来源站点');
             $table->id();
@@ -103,20 +113,6 @@ class CreateBookTables extends Migration {
             $table->uint('chapter_id');
             $table->uint('user_id');
             $table->timestamp('created_at');
-        })->append(BookLogModel::tableName(), function(Table $table) {
-            $table->comment('小说记录统计');
-            $table->id();
-            $table->uint('item_type', 2)->default(0);
-            $table->uint('item_id');
-            $table->uint('user_id');
-            $table->uint('action');
-            $table->timestamp('created_at');
-        })->append(BookClickLogModel::tableName(), function(Table $table) {
-            $table->comment('小说点击统计');
-            $table->id();
-            $table->uint('book_id');
-            $table->uint('hits')->default(0);
-            $table->date('created_at');
         })->append(BookRoleModel::tableName(), function(Table $table) {
             $table->comment('小说角色');
             $table->id();

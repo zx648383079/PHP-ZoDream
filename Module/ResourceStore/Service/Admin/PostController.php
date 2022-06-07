@@ -54,10 +54,9 @@ class PostController extends Controller {
 
     public function uploadAction(Input $input) {
         try {
-            $file = UploadRepository::saveFile($input);
+            return $this->render(UploadRepository::saveFile($input));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($file);
     }
 }

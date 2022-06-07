@@ -7,7 +7,6 @@ use Module\ResourceStore\Domain\Models\ResourceModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
-use Zodream\Domain\Upload\UploadFile;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 final class UploadRepository {
@@ -17,22 +16,11 @@ final class UploadRepository {
     }
 
     public static function saveFile(Input $input) {
-        $folder = self::folder();
-        $folder->create();
-        $file = $input->file('file');
-        if (empty($file)) {
-            throw new \Exception('上传失败');
-        }
-        $upload = new UploadFile($file);
-        $upload->setFile($folder->file($file['name']));
-        if ($upload->save()) {
-            return $file['name'];
-        }
-        throw new \Exception($upload->getError() ?? '上传失败');
+        return ResourceRepository::storage()->addFile($input->file('file'));
     }
 
     public static function file(ResourceFileModel $model) {
-        return self::folder()->file($model->file);
+        return ResourceRepository::storage()->getFile($model->file);
     }
 
     public static function resourceFolder($id): Directory {

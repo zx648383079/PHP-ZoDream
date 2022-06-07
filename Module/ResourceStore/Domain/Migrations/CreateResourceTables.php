@@ -37,7 +37,7 @@ class CreateResourceTables extends Migration {
             $table->bool('is_commercial')->default(0)->comment('是否允许商用');
             $table->bool('is_reprint')->default(0)->comment('是否允许转载');
             $table->uint('comment_count')->default(0);
-            $table->uint('click_count')->default(0);
+            $table->uint('view_count')->default(0);
             $table->uint('download_count')->default(0);
             $table->timestamps();
         })->append(ResourceFileModel::tableName(), function (Table $table) {

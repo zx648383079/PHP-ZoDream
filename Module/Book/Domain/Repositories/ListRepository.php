@@ -4,7 +4,6 @@ namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookListModel;
-use Module\Book\Domain\Model\BookLogModel;
 use Module\Book\Domain\Model\ListItemModel;
 
 class ListRepository {
@@ -21,11 +20,11 @@ class ListRepository {
         if (empty($model)) {
             throw new \Exception('书单不存在');
         }
-        $model->is_collected = self::hasLog(BookLogModel::TYPE_LIST,
-                BookLogModel::ACTION_COLLECT, $model->id);
+        $model->is_collected = self::hasLog(BookRepository::LOG_TYPE_LIST,
+            BookRepository::LOG_ACTION_COLLECT, $model->id);
         $items = ListItemModel::with('book')->where('list_id', $id)->get();
         foreach ($items as $item) {
-            $item->is_agree = self::hasLog(BookLogModel::TYPE_LIST, [BookLogModel::ACTION_AGREE, BookLogModel::ACTION_DISAGREE], $id);
+            $item->is_agree = self::hasLog(BookRepository::LOG_TYPE_LIST, [BookRepository::LOG_ACTION_AGREE, BookRepository::LOG_ACTION_DISAGREE], $id);
             $item->on_shelf = HistoryRepository::hasBook($item->book_id);
         }
         $_ = $model->user;
@@ -35,21 +34,9 @@ class ListRepository {
         return $model;
     }
 
-    private static function hasLog($type, $action, $id) {
-        if (auth()->guest()) {
-            return is_array($action) ? 0 : false;
-        }
-        $query = BookLogModel::where('user_id', auth()->id())
-            ->where('item_type', $type)
-            ->where('item_id', $id);
-        if (!is_array($action)) {
-            return $query->where('action', $action)->count() > 0;
-        }
-        $log = $query->whereIn('action', $action)->first(['action']);
-        if (empty($log)) {
-            return 0;
-        }
-        return array_search(intval($log->action), $action, true) + 1;
+    private static function hasLog(int $type, array|int $action, int $id) {
+        $res = BookRepository::log()->getAction($type, $id, (array)$action);
+        return is_array($action) ? $res : !is_null($res);
     }
 
     public static function save(array $data) {
@@ -117,53 +104,13 @@ class ListRepository {
         ListItemModel::where('list_id', $model->id)->delete();
     }
 
-    /**
-     * 切换记录
-     * @param int $type
-     * @param int $action
-     * @param int $id
-     * @param array|int|null $searchAction
-     * @return int {0: 取消，1: 更新为，2：新增}
-     * @throws \Exception
-     */
-    public static function toggleLog(int $type, int $action, int $id, array|int|null $searchAction = null): int {
-        if (empty($searchAction)) {
-            $searchAction = $action;
-        }
-        $log = BookLogModel::where('user_id', auth()->id())
-            ->where('item_type', $type)
-            ->when(is_array($searchAction), function ($query) use ($searchAction) {
-                $query->whereIn('action', $searchAction);
-            }, function ($query) use ($searchAction) {
-                $query->where('action', $searchAction);
-            })
-            ->where('item_id', $id)
-            ->first();
-        if (!empty($log) && $log->action === $action) {
-            $log->delete();
-            return 0;
-        }
-        if (!empty($log)) {
-            $log->action = $action;
-            $log->created_at = time();
-            $log->save();
-            return 1;
-        }
-        BookLogModel::createOrThrow([
-            'item_type' => $type,
-            'item_id' => $id,
-            'action' => $action,
-            'user_id' => auth()->id()
-        ]);
-        return 2;
-    }
-
     public static function collect(int $id) {
         $model = BookListModel::find($id);
         if (empty($model)) {
             throw new \Exception('书单不存在');
         }
-        $res = self::toggleLog(BookLogModel::TYPE_LIST, BookLogModel::ACTION_COLLECT, $id);
+        $res = BookRepository::log()->toggleLog(BookRepository::LOG_TYPE_LIST,
+            BookRepository::LOG_ACTION_COLLECT, $id);
         if ($res > 0) {
             $model->collect_count ++;
             $model->is_collected = true;
@@ -180,9 +127,9 @@ class ListRepository {
         if (empty($model)) {
             throw new \Exception('书单不存在');
         }
-        $res = self::toggleLog(BookLogModel::TYPE_LIST,
-            BookLogModel::ACTION_AGREE, $id,
-            [BookLogModel::ACTION_AGREE, BookLogModel::ACTION_DISAGREE]);
+        $res = BookRepository::log()->toggleLog(BookRepository::LOG_TYPE_LIST,
+            BookRepository::LOG_ACTION_AGREE, $id,
+            [BookRepository::LOG_ACTION_AGREE, BookRepository::LOG_ACTION_DISAGREE]);
         if ($res < 1) {
             $model->agree_count --;
             $model->agree_type = 0;
@@ -203,9 +150,9 @@ class ListRepository {
         if (empty($model)) {
             throw new \Exception('书单不存在');
         }
-        $res = self::toggleLog(BookLogModel::TYPE_LIST,
-            BookLogModel::ACTION_DISAGREE, $id,
-            [BookLogModel::ACTION_AGREE, BookLogModel::ACTION_DISAGREE]);
+        $res = BookRepository::log()->toggleLog(BookRepository::LOG_TYPE_LIST,
+            BookRepository::LOG_ACTION_DISAGREE, $id,
+            [BookRepository::LOG_ACTION_AGREE, BookRepository::LOG_ACTION_DISAGREE]);
         if ($res < 1) {
             $model->disagree_count --;
             $model->agree_type = 0;

@@ -1,6 +1,7 @@
 <?php
 namespace Module\SEO\Domain\Migrations;
 
+use Domain\Providers\StorageProvider;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Model\AgreementModel;
 use Module\SEO\Domain\Model\BlackWordModel;
@@ -14,6 +15,7 @@ use Module\SEO\Domain\Model\OptionModel;
 class CreateSEOTables extends Migration {
 
     public function up() {
+        StorageProvider::privateStore()->migration($this);
         $this->append(OptionModel::tableName(), function(Table $table) {
             $table->comment('全局设置');
             $table->id();

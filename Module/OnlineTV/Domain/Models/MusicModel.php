@@ -48,4 +48,8 @@ class MusicModel extends Model {
             'created_at' => 'Created At',
         ];
     }
+
+    public function files() {
+        return $this->hasMany(MusicFileModel::class, 'music_id', 'id');
+    }
 }

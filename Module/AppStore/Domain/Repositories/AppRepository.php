@@ -5,6 +5,7 @@ namespace Module\AppStore\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
+use Domain\Providers\StorageProvider;
 use Domain\Providers\TagProvider;
 use Exception;
 use Module\AppStore\Domain\Models\AppFileModel;
@@ -14,6 +15,16 @@ use Module\AppStore\Domain\Models\AppVersionModel;
 final class AppRepository {
 
     const BASE_KEY = 'app';
+    const SOFTWARE_PAGE_FILED = [
+        'id', 'user_id', 'cat_id', 'name', 'description', 'icon',
+        'is_free',
+        'is_open_source',
+        'comment_count',
+        'download_count',
+        'view_count',
+        'score',
+        'updated_at',
+        'created_at',];
 
     public static function comment(): CommentProvider {
         return new CommentProvider(self::BASE_KEY);
@@ -25,6 +36,10 @@ final class AppRepository {
 
     public static function tag(): TagProvider {
         return new TagProvider(self::BASE_KEY);
+    }
+
+    public static function storage(): StorageProvider {
+        return StorageProvider::privateStore();
     }
 
     public static function getManageList(
@@ -52,6 +67,7 @@ final class AppRepository {
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
             })->orderBy('id', 'desc')
+            ->select(self::SOFTWARE_PAGE_FILED)
             ->page();
     }
 
@@ -183,6 +199,14 @@ final class AppRepository {
         $model->packages = AppFileModel::where('app_id', $id)
             ->where('version_id', $model->version->id)->get();
         return $model;
+    }
+
+    public static function download(int $id): string {
+        $model = AppFileModel::where('id', $id)->first();
+        if (empty($model) || $model->url_type > 0) {
+            throw new Exception('文件不存在');
+        }
+        return $model->url;
     }
 
     public static function check(array $items) {

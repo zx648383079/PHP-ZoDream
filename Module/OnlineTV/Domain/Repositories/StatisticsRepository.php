@@ -2,15 +2,21 @@
 declare(strict_types=1);
 namespace Module\OnlineTV\Domain\Repositories;
 
-
-use Module\Note\Domain\Model\NoteModel;
+use Module\OnlineTV\Domain\Models\LiveModel;
+use Module\OnlineTV\Domain\Models\MovieModel;
+use Module\OnlineTV\Domain\Models\MusicModel;
 
 final class StatisticsRepository {
 
     public static function subtotal(): array {
         $todayStart = strtotime(date('Y-m-d 00:00:00'));
-        $note_count = NoteModel::query()->count();
-        $note_today = $note_count < 1 ? 0 : NoteModel::where('created_at', '>=', $todayStart)->count();
-        return compact('note_count', 'note_today');
+        $live_count = LiveModel::query()->where('status', 1)->count();
+        $music_count = MusicModel::query()->count();
+        $music_today = $music_count < 1 ? 0 : MusicModel::where('created_at', '>=', $todayStart)->count();
+        $movie_count = MovieModel::query()->count();
+        $movie_today = $movie_count < 1 ? 0 : MovieModel::where('created_at', '>=', $todayStart)->count();
+
+        return compact('live_count', 'music_count', 'music_today',
+            'movie_count', 'movie_today');
     }
 }

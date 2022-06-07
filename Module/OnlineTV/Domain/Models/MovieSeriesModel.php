@@ -40,4 +40,7 @@ class MovieSeriesModel extends Model {
         ];
     }
 
+    public function files() {
+        return $this->hasMany(MovieFileModel::class, 'series_id', 'id');
+    }
 }

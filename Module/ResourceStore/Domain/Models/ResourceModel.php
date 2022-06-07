@@ -22,7 +22,7 @@ use Zodream\Helpers\Time;
  * @property integer $is_commercial
  * @property integer $is_reprint
  * @property integer $comment_count
- * @property integer $click_count
+ * @property integer $view_count
  * @property integer $download_count
  * @property integer $updated_at
  * @property integer $created_at
@@ -47,7 +47,7 @@ class ResourceModel extends Model {
             'is_commercial' => 'int:0,127',
             'is_reprint' => 'int:0,127',
             'comment_count' => 'int',
-            'click_count' => 'int',
+            'view_count' => 'int',
             'download_count' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
@@ -66,7 +66,7 @@ class ResourceModel extends Model {
             'user_id' => '作者',
             'cat_id' => '分类',
             'comment_count' => 'Comment Count',
-            'click_count' => 'Click Count',
+            'view_count' => 'Click Count',
             'download_count' => 'Download Count',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

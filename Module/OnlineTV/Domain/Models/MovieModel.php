@@ -78,4 +78,12 @@ class MovieModel extends Model {
             'created_at' => 'Created At',
         ];
     }
+
+    public function category() {
+        return $this->hasOne(CategoryModel::class, 'id', 'cat_id');
+    }
+
+    public function area() {
+        return $this->hasOne(AreaModel::class, 'id', 'area_id');
+    }
 }

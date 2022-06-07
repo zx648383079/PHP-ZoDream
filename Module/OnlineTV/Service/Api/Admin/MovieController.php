@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\OnlineTV\Service\Api\Admin;
 
 use Module\OnlineTV\Domain\Repositories\MovieRepository;
+use Module\OnlineTV\Domain\Repositories\TVRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class MovieController extends Controller {
@@ -11,6 +12,14 @@ class MovieController extends Controller {
         return $this->renderPage(
             MovieRepository::getList($keywords)
         );
+    }
+
+    public function detailAction(int $id) {
+        try {
+            return $this->render(MovieRepository::getEdit($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
     }
 
     public function saveAction(Input $input) {
@@ -170,5 +179,13 @@ class MovieController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function uploadAction(Input $input) {
+        try {
+            return $this->render(TvRepository::storage()->addFile($input->file('file')));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

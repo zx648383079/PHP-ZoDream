@@ -19,7 +19,7 @@ use Zodream\Database\Schema\Table;
 class CreateTVTables extends Migration {
 
     public function up() {
-        TVRepository::comment()->migration($this);
+        TVRepository::log()->migration($this);
         TVRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function(Table $table) {
             $table->comment('分类');

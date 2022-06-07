@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\ResourceStore\Service\Api\Admin;
 
 use Module\ResourceStore\Domain\Repositories\ResourceRepository;
+use Module\ResourceStore\Domain\Repositories\UploadRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class HomeController extends Controller {
@@ -90,5 +91,13 @@ class HomeController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function uploadAction(Input $input) {
+        try {
+            return $this->render(UploadRepository::saveFile($input));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

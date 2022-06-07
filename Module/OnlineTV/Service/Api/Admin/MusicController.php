@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\OnlineTV\Service\Api\Admin;
 
 use Module\OnlineTV\Domain\Repositories\MusicRepository;
+use Module\OnlineTV\Domain\Repositories\TVRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class MusicController extends Controller {
@@ -68,5 +69,13 @@ class MusicController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function uploadAction(Input $input) {
+        try {
+            return $this->render(TvRepository::storage()->addFile($input->file('file')));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

@@ -14,7 +14,7 @@ final class StatisticsRepository {
         $download_yesterday = 0;
         $download_count = ResourceModel::query()->sum('download_count');
         $view_today = 0;
-        $view_count = ResourceModel::query()->sum('click_count');
+        $view_count = ResourceModel::query()->sum('view_count');
         $comment = ResourceRepository::comment();
         $comment_today = $comment->query()->where('created_at', '>=', $todayStart)->count();
         $comment_count = $comment->query()->count();

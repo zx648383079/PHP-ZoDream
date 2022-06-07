@@ -122,4 +122,12 @@ class SoftwareController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function uploadAction(Input $input) {
+        try {
+            return $this->render(AppRepository::storage()->addFile($input->file('file')));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }
