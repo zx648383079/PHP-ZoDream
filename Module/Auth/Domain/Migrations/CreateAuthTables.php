@@ -5,6 +5,7 @@ use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\AdminLogModel;
 use Module\Auth\Domain\Model\ApplyLogModel;
+use Module\Auth\Domain\Model\BanAccountModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\CreditLogModel;
@@ -64,11 +65,19 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id');
             $table->string('name', 100);
             $table->text('content');
+        })->append(BanAccountModel::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('user_id')->default(0);
+            $table->string('item_key', 100);
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('platform_id')->default(0)->comment('平台id');
+            $table->timestamps();
         })->append(LoginQrModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id')->default(0);
             $table->string('token', 32);
             $table->uint('status', 2)->default(0);
+            $table->uint('platform_id')->default(0)->comment('平台id');
             $table->timestamp('expired_at');
             $table->timestamps();
         })->append(EquityCardModel::tableName(), function(Table $table) {
@@ -185,6 +194,7 @@ class CreateAuthTables extends Migration {
             $table->string('user', 100)->comment('登陆账户');
             $table->bool('status')->default(0);
             $table->string('mode', 20)->default(LoginLogModel::MODE_WEB);
+            $table->uint('platform_id')->default(0)->comment('平台id');
             $table->timestamp('created_at');
         })->append(ActionLogModel::tableName(), function (Table $table) {
             $table->comment('操作记录');

@@ -69,6 +69,7 @@ class StorageProvider {
             $table->uint('file_id');
             $table->uint('item_type')->default(0);
             $table->uint('item_id');
+            $table->uint('user_id')->default(0);
             $table->timestamp('created_at');
         });
     }
@@ -149,6 +150,7 @@ class StorageProvider {
             'file_id' => $id,
             'item_id' => $itemId,
             'item_type' => $itemType,
+            'user_id' => auth()->id(),
             'created_at' => time(),
         ]);
     }

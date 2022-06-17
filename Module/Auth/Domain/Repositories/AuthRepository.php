@@ -23,6 +23,19 @@ use Zodream\Validate\Validator;
 
 class AuthRepository {
 
+    const ACCOUNT_TYPE_NAME = 1;
+    const ACCOUNT_TYPE_EMAIL = 2;
+    const ACCOUNT_TYPE_MOBILE = 3;
+    const ACCOUNT_TYPE_OAUTH_QQ = 11;
+    const ACCOUNT_TYPE_OAUTH_WX = 12;
+    const ACCOUNT_TYPE_OAUTH_WX_MINI = 13;
+    const ACCOUNT_TYPE_OAUTH_WEIBO = 14;
+    const ACCOUNT_TYPE_OAUTH_TAOBAO = 15;
+    const ACCOUNT_TYPE_OAUTH_ALIPAY = 16;
+    const ACCOUNT_TYPE_OAUTH_GITHUB = 21;
+    const ACCOUNT_TYPE_OAUTH_GOOGLE = 21;
+    const ACCOUNT_TYPE_IP = 99;
+
     const UNSET_PASSWORD = 'no_password';
     const OPTION_REGISTER_CODE = 'auth_register';
 
@@ -78,6 +91,9 @@ class AuthRepository {
         if (!Validator::email()->validate($email)) {
             throw AuthException::invalidLogin();
         }
+        if (BanRepository::isBan($email, self::ACCOUNT_TYPE_EMAIL)) {
+            throw AuthException::disableAccount();
+        }
         $user = UserModel::findByEmail($email);
         if (empty($user)) {
             throw AuthException::invalidLogin();
@@ -95,6 +111,9 @@ class AuthRepository {
         if (!Validator::phone()->validate($mobile)) {
             throw AuthException::invalidLogin();
         }
+        if (BanRepository::isBan($mobile, self::ACCOUNT_TYPE_MOBILE)) {
+            throw AuthException::disableAccount();
+        }
         $user = UserModel::where('mobile', $mobile)->first();
         if (empty($user)) {
             throw AuthException::invalidLogin();
@@ -105,7 +124,8 @@ class AuthRepository {
         return self::loginUser($user, $remember, $replaceToken);
     }
 
-    public static function loginMobileCode(string $mobile, string $code, bool $remember = false,
+    public static function loginMobileCode(string $mobile, string $code,
+                                           bool $remember = false,
                                            bool $replaceToken = true) {
         if (empty($mobile) || empty($code)) {
             throw AuthException::invalidLogin();
@@ -116,6 +136,9 @@ class AuthRepository {
         $sms = new Sms();
         if (!$sms->verifyCode($mobile, $code)) {
             throw new Exception('验证码错误');
+        }
+        if (BanRepository::isBan($mobile, self::ACCOUNT_TYPE_MOBILE)) {
+            throw AuthException::disableAccount();
         }
         $user = UserModel::where('mobile', $mobile)->first();
         if (empty($user)) {
@@ -146,6 +169,9 @@ class AuthRepository {
         if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入正确的邮箱');
         }
+        if (BanRepository::isBan($email, self::ACCOUNT_TYPE_EMAIL)) {
+            throw AuthException::disableAccount();
+        }
         if (!self::verifyPassword($password)) {
             throw new Exception('密码长度必须不小于6位');
         }
@@ -174,6 +200,9 @@ class AuthRepository {
         }
         if (!Validator::phone()->validate($mobile)) {
             throw AuthException::invalidLogin();
+        }
+        if (BanRepository::isBan($mobile, self::ACCOUNT_TYPE_MOBILE)) {
+            throw AuthException::disableAccount();
         }
         if (!self::verifyPassword($password)) {
             throw new Exception('密码长度必须不小于6位');
@@ -276,6 +305,9 @@ class AuthRepository {
 
     public static function oauth(
         string $type, string $openid, callable $infoCallback, ?string $unionId = null, int $platform_id = 0) {
+        if (BanRepository::isBanOAuth($openid, $unionId, $type, $platform_id)) {
+            throw AuthException::disableAccount();
+        }
         $user = OAuthModel::findUserWithUnion($openid, $unionId, $type, $platform_id);
         if (!empty($user)) {
             if ($user->status !== UserModel::STATUS_ACTIVE) {
@@ -350,6 +382,9 @@ class AuthRepository {
         if (empty($mobile) || !Validator::phone()->validate($mobile)) {
             throw new Exception('手机号不正确');
         }
+        if (BanRepository::isBan($mobile, self::ACCOUNT_TYPE_MOBILE)) {
+            throw new Exception('手机号已列入黑名单');
+        }
         $sms = new Sms();
         if (!$sms->verifyIp() || !$sms->verifyCount() || !$sms->verifySpace()) {
             throw new Exception('验证码发送失败');
@@ -381,6 +416,9 @@ class AuthRepository {
     public static function sendEmail(string $email, string $code) {
         if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入有效邮箱');
+        }
+        if (BanRepository::isBan($email, self::ACCOUNT_TYPE_EMAIL)) {
+            throw new Exception('邮箱已列入黑名单');
         }
         $user = UserModel::findByEmail($email);
         if (empty($user)) {
