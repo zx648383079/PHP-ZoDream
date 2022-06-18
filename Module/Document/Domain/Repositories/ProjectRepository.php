@@ -216,7 +216,7 @@ class ProjectRepository {
     }
 
     public static function page(int $project, int $id) {
-        $model = ProjectRepository::get($project);
+        $model = static::get($project);
         if ($model->type < 1) {
             $page = PageRepository::get($id);
             if ($page->project_id !== $project) {
@@ -229,5 +229,11 @@ class ProjectRepository {
             throw new Exception('文档错误');
         }
         return ApiRepository::getRead($api);
+    }
+
+    public static function suggest(string $keywords) {
+        return ProjectModel::when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, 'name');
+        })->where('status', ProjectModel::STATUS_PUBLIC)->limit(4)->get('id', 'name');
     }
 }

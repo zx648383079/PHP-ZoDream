@@ -5,14 +5,36 @@ namespace Module\Auth\Domain\Repositories;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
+use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Module\Auth\Domain\Model\Scene\User;
+use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Zodream\Html\Page;
 
 class UserRepository {
+
+    /**
+     * 判断账户是否已实名认证
+     * @param UserModel|array|null $user
+     * @return bool
+     */
+    public static function isVerified(UserModel|array|null $user): bool {
+        return !empty($user) && $user['status'] == UserModel::STATUS_ACTIVE_VERIFIED;
+    }
+
+    /**
+     * 判断账户是否激活
+     * @param UserModel|array|null $user
+     * @return bool
+     */
+    public static function isActive(UserModel|array|null $user): bool {
+        return !empty($user) && $user['status'] >= UserModel::STATUS_ACTIVE;
+    }
 
     public static function getCurrentProfile() {
         if (auth()->guest()) {
@@ -20,17 +42,35 @@ class UserRepository {
         }
         /** @var UserModel $user */
         $user = auth()->user();
-        $data = $user->toArray();
-        $data['email'] = AuthRepository::isEmptyEmail($data['email']) ? '' : Helpers::hideEmail($data['email']);
-        $data['mobile'] = Helpers::hideTel($data['mobile']);
+        $data = static::format($user);
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
         return $data;
     }
 
-    public static function getAll(string $keywords = '') {
-        return UserModel::when(!empty($keywords), function ($query) {
+    public static function format(UserEntity|UserModel|array $user, bool $hide = true): array {
+        $data = is_array($user) ? $user : $user->toArray();
+        if ($hide) {
+            $data['email'] = AuthRepository::isEmptyEmail($data['email']) ? '' : Helpers::hideEmail($data['email']);
+            $data['mobile'] = Helpers::hideTel($data['mobile']);
+        }
+        $data['is_verified'] = static::isVerified($user);
+        return $data;
+    }
+
+    public static function getAll(string $keywords = '', string $sort = 'id', string|bool|int $order = 'desc') {
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
+           'id', 'created_at',
+            'name', 'email',
+            'status', 'sex', 'money', 'credits'
+        ]);
+
+        /** @var Page $page */
+        $page = UserModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->orderBy('id', 'desc')->page();
+        })->orderBy($sort, $order)->page();
+        return $page->map(function ($item) {
+            return static::format($item, false);
+        });
     }
 
     public static function searchUser(string $keywords = '') {
@@ -50,6 +90,15 @@ class UserRepository {
             throw new Exception('会员不存在');
         }
         return $model;
+    }
+
+    public static function saveIDCard(int $id, string $idCard = '') {
+        UserMetaModel::saveBatch($id, [
+            'id_card' => $idCard
+        ]);
+        UserModel::where('id', $id)->where('status', '>=', UserModel::STATUS_ACTIVE)->update([
+           'status' => empty($idCard) ? UserModel::STATUS_ACTIVE : UserModel::STATUS_ACTIVE_VERIFIED
+        ]);
     }
 
     /**

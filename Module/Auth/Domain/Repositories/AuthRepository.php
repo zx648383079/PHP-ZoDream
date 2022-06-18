@@ -34,6 +34,7 @@ class AuthRepository {
     const ACCOUNT_TYPE_OAUTH_ALIPAY = 16;
     const ACCOUNT_TYPE_OAUTH_GITHUB = 21;
     const ACCOUNT_TYPE_OAUTH_GOOGLE = 21;
+    const ACCOUNT_TYPE_ID_CARD = 98;
     const ACCOUNT_TYPE_IP = 99;
 
     const UNSET_PASSWORD = 'no_password';
@@ -47,7 +48,7 @@ class AuthRepository {
         return intval(Option::value(static::OPTION_REGISTER_CODE));
     }
 
-    public static function loginPreCheck($ip, $account, $captcha = '') {
+    public static function loginPreCheck(string $ip, string $account, string $captcha = '') {
         $today = strtotime(date('Y-m-d 00:00:00'));
         // 判断 ip 是否登录次数过多
         $count = LoginLogModel::where('ip', $ip)
@@ -95,7 +96,7 @@ class AuthRepository {
             throw AuthException::disableAccount();
         }
         $user = UserModel::findByEmail($email);
-        if (empty($user)) {
+        if (!UserRepository::isActive($user)) {
             throw AuthException::invalidLogin();
         }
         if (!$user->validatePassword($password)) {
@@ -115,7 +116,7 @@ class AuthRepository {
             throw AuthException::disableAccount();
         }
         $user = UserModel::where('mobile', $mobile)->first();
-        if (empty($user)) {
+        if (!UserRepository::isActive($user)) {
             throw AuthException::invalidLogin();
         }
         if (!$user->validatePassword($password)) {
@@ -141,7 +142,7 @@ class AuthRepository {
             throw AuthException::disableAccount();
         }
         $user = UserModel::where('mobile', $mobile)->first();
-        if (empty($user)) {
+        if (!UserRepository::isActive($user)) {
             return static::quickRegisterMobile($mobile, $remember);
         }
         return self::loginUser($user, $remember, $replaceToken);
@@ -310,7 +311,7 @@ class AuthRepository {
         }
         $user = OAuthModel::findUserWithUnion($openid, $unionId, $type, $platform_id);
         if (!empty($user)) {
-            if ($user->status !== UserModel::STATUS_ACTIVE) {
+            if (!UserRepository::isActive($user)) {
                 throw AuthException::disableAccount();
             }
             self::doLogin($user, false, $type);
@@ -467,7 +468,7 @@ class AuthRepository {
         }
         $log = self::verifyEmailCode($code);
         $user = UserModel::find($log->user_id);
-        if (empty($user) || $user->status != UserModel::STATUS_ACTIVE) {
+        if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }
         if ($user->email !== $email) {
@@ -591,7 +592,7 @@ class AuthRepository {
      * @throws Exception
      */
     private static function loginUser(UserModel $user, bool $remember = false, bool $replaceToken = true): ?bool {
-        if ($user->status != UserModel::STATUS_ACTIVE) {
+        if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }
         if ($remember) {

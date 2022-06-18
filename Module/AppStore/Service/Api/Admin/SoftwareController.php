@@ -101,6 +101,7 @@ class SoftwareController extends Controller {
             return $this->render(
                 AppRepository::packageSave($input->validate([
                     'id' => 'int',
+                    'name' => 'required|string:0,40',
                     'app_id' => 'required|int',
                     'version_id' => 'required|int',
                     'os' => 'string:0,20',
@@ -114,7 +115,7 @@ class SoftwareController extends Controller {
         }
     }
 
-    public function packageRemoveAction(int $id) {
+    public function packageDeleteAction(int $id) {
         try {
             AppRepository::packageRemove($id);
         } catch (\Exception $ex) {

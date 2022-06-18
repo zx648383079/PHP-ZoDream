@@ -34,5 +34,8 @@ final class Constants {
     const TYPE_WECHAT_ACCOUNT = 45;
     const TYPE_WECHAT_MEDIA = 46;
 
+    const TYPE_APP_STORE = 50;
+    const TYPE_RESOURCE_STORE = 55;
+
 
 }

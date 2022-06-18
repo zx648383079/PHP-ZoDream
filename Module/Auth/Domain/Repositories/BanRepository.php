@@ -19,7 +19,10 @@ final class BanRepository {
     ];
 
     public static function banUser(int $userId) {
-        $user = UserModel::where('user_id', $userId)
+        if ($userId == auth()->id()) {
+            throw new \Exception('不能拉黑自己');
+        }
+        $user = UserModel::where('id', $userId)
             ->first('email', 'mobile');
         if (empty($user)) {
             return;
@@ -32,8 +35,19 @@ final class BanRepository {
             self::ban($item['identity'], $type, $item['platform_id']);
             self::ban($item['unionid'], $type, $item['platform_id']);
         }
+        UserModel::where('id', $userId)->where('status', '>=', UserModel::STATUS_ACTIVE)->update([
+            'status' => UserModel::STATUS_FROZEN,
+        ]);
     }
 
+    /**
+     * 屏蔽
+     * @param string $itemKey
+     * @param int $itemType
+     * @param int $platformId
+     * @return void
+     * @throws \Exception
+     */
     public static function ban(string $itemKey, int $itemType = 0, int $platformId = 0) {
         if (empty($itemKey)) {
             return;
@@ -68,6 +82,21 @@ final class BanRepository {
         return false;
     }
 
+    /**
+     * 取消屏蔽
+     * @param string $itemKey
+     * @param int $itemType
+     * @param int $platformId
+     */
+    public static function unban(string $itemKey, int $itemType = -1, int $platformId = 0): void {
+        if ($itemType < 0) {
+            BanAccountModel::where('item_key', $itemKey)->delete();
+            return;
+        }
+        BanAccountModel::where('item_key', $itemKey)
+                ->where('item_type', $itemType)->where('platform_id', $platformId)->delete();
+    }
+
     public static function getList(string $keywords) {
         return BanAccountModel::when(!empty($keywords), function ($query) use ($keywords) {
             $query->where('item_key', $keywords);
@@ -76,5 +105,24 @@ final class BanRepository {
 
     public static function remove(int $id) {
         BanAccountModel::where('id', $id)->delete();
+    }
+
+    public static function removeUser(int $userId) {
+        $user = UserModel::where('id', $userId)
+            ->first('email', 'mobile');
+        if (empty($user)) {
+            return;
+        }
+        self::unban($user['email'], AuthRepository::ACCOUNT_TYPE_EMAIL);
+        self::unban($user['mobile'], AuthRepository::ACCOUNT_TYPE_MOBILE);
+        $items = OAuthModel::where('user_id', $userId)->get();
+        foreach ($items as $item) {
+            $type = self::OAUTH_TYPE_MAPS[$item['vendor']];
+            self::unban($item['identity'], $type, $item['platform_id']);
+            self::unban($item['unionid'], $type, $item['platform_id']);
+        }
+        UserModel::where('id', $userId)->where('status', '<', UserModel::STATUS_ACTIVE)->update([
+            'status' => UserModel::STATUS_ACTIVE,
+        ]);
     }
 }

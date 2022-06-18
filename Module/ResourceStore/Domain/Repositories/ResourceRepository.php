@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\ResourceStore\Domain\Repositories;
 
+use Domain\Constants;
 use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
@@ -118,11 +119,13 @@ class ResourceRepository {
         $fileId = [];
         foreach ($files as $item) {
             $item['res_id'] = $model->id;
+            $item['user_id'] = $model->user_id;
             $fileModel = self::fileSave($item);
             $fileId[] = $fileModel->id;
             if ($fileModel->file_type > 0) {
                 continue;
             }
+            self::storage()->addQuote($fileModel->file, Constants::TYPE_RESOURCE_STORE, $model->id);
             $file = UploadRepository::file($fileModel);
             if ($file->exist()) {
                 $model->size = $file->size();
@@ -185,7 +188,7 @@ class ResourceRepository {
                 $query->where('user_id', $user);
             })->when(!empty($keywords), function ($query) use ($keywords)  {
                 SearchModel::searchWhere($query, ['title'], true, '', $keywords);
-            })->page();
+            })->orderBy('id', 'desc')->page();
     }
 
     public static function getSelf(int $id) {

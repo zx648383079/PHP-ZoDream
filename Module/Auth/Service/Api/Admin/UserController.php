@@ -8,8 +8,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class UserController extends Controller {
 
-    public function indexAction(string $keywords = '') {
-        return $this->renderPage(UserRepository::getAll($keywords));
+    public function indexAction(string $keywords = '', string $sort = 'id', string|bool|int $order = 'desc') {
+        return $this->renderPage(UserRepository::getAll($keywords, $sort, $order));
     }
 
     public function profileAction(int $id) {
@@ -52,6 +52,15 @@ class UserController extends Controller {
     public function deleteAction(int $id) {
         try {
             UserRepository::remove($id);
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function verifyAction(int $id, string $id_card = '') {
+        try {
+            UserRepository::saveIDCard($id, $id_card);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

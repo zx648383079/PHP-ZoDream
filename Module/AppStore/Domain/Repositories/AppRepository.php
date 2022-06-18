@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\AppStore\Domain\Repositories;
 
+use Domain\Constants;
 use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
@@ -177,6 +178,9 @@ final class AppRepository {
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        if ($model->url_type < 1) {
+            self::storage()->addQuote($model->url, Constants::TYPE_APP_STORE, $model->app_id);
         }
         return $model;
     }

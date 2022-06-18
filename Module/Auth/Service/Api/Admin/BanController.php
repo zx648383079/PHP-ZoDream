@@ -23,12 +23,9 @@ class BanController extends Controller {
         return $this->renderData(true);
     }
 
-    public function clearAction() {
-        InviteRepository::codeClear();
+    public function deleteUserAction(int $user) {
+        BanRepository::removeUser($user);
         return $this->renderData(true);
     }
 
-    public function logAction(string $keywords = '', int $user = 0, int $inviter = 0) {
-        return $this->renderPage(InviteRepository::logList($keywords, $user, $inviter));
-    }
 }

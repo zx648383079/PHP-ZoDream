@@ -9,10 +9,10 @@ use Module\Auth\Domain\Repositories\UserRepository;
 
 class AccountController extends Controller {
 
-    public function indexAction(int $user_id = 0) {
+    public function indexAction(int $user = 0) {
         $log_list = AccountLogModel::with('user')
-            ->when($user_id > 0, function ($query) use ($user_id) {
-                $query->where('user_id', $user_id);
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
             })->orderBy('id', 'desc')
             ->page();
         return $this->renderPage($log_list);

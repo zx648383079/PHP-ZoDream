@@ -137,6 +137,9 @@ class StorageProvider {
     }
 
     public function addQuote(string $url, int $itemType, int $itemId) {
+        if (empty($url)) {
+            return;
+        }
         $id = $this->query()->where('path', $url)->value('id');
         if ($id < 1) {
             throw new \Exception('not found file');

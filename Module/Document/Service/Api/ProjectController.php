@@ -53,4 +53,8 @@ class ProjectController extends Controller {
         }
     }
 
+    public function suggestAction(string $keywords) {
+        return $this->renderData(ProjectRepository::suggest($keywords));
+    }
+
 }

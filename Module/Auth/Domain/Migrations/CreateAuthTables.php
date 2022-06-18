@@ -69,7 +69,7 @@ class CreateAuthTables extends Migration {
             $table->id();
             $table->uint('user_id')->default(0);
             $table->string('item_key', 100);
-            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_type', 2)->default(0);
             $table->uint('platform_id')->default(0)->comment('平台id');
             $table->timestamps();
         })->append(LoginQrModel::tableName(), function(Table $table) {

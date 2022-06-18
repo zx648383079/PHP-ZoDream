@@ -20,6 +20,7 @@ class UserMetaModel extends Model {
     protected static string $idKey = 'user_id';
     protected static array $defaultItems = [
         'address_id' => 0, // 默认收货地址
+        'id_card' => '', // 身份证
     ];
 
     public static function tableName() {
@@ -43,18 +44,18 @@ class UserMetaModel extends Model {
         ];
     }
 
-    public static function getVal($key) {
+    public static function getVal(string $key) {
         return self::where('user_id', auth()->id())->where('name', $key)->value('content');
     }
 
-    public static function updateVal($key, $value) {
+    public static function updateVal(string $key, mixed $value) {
         self::where('user_id', auth()->id())->where('name', $key)
             ->update([
                 'content' => is_array($value) ? serialize($value) : $value
             ]);
     }
 
-    public static function insertVal($key, $value) {
+    public static function insertVal(string $key, mixed $value) {
         static::create([
             'user_id' => auth()->id(),
             'name' => $key,
@@ -62,16 +63,16 @@ class UserMetaModel extends Model {
         ]);
     }
 
-    public static function getArr($key) {
+    public static function getArr(string $key): array {
         $value = static::getVal($key);
         return empty($value) ? [] : unserialize($value);
     }
 
-    public static function updateArr($key, array $value) {
+    public static function updateArr(string $key, array $value) {
         static::updateVal($key, $value);
     }
 
-    public static function insertArr($key, array $value) {
+    public static function insertArr(string $key, array $value) {
         static::insertVal($key, $value);
     }
 }

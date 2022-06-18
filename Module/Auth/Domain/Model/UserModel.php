@@ -35,6 +35,7 @@ class UserModel extends BaseModel {
     const STATUS_DELETED = 0; // 已删除
     const STATUS_FROZEN = 2; // 账户已冻结
     const STATUS_ACTIVE = 10; // 账户正常
+    const STATUS_ACTIVE_VERIFIED = 15; // 账户正常&实名认证了
 
     const SEX_MALE = 1; // 性别男
     const SEX_FEMALE = 2; //性别女
@@ -45,7 +46,7 @@ class UserModel extends BaseModel {
         '女'
     ];
 
-    protected array $hidden = ['password', 'token', 'status'];
+    protected array $hidden = ['password', 'token'];
 
     protected array $append = ['sex_label'];
 
@@ -67,11 +68,11 @@ class UserModel extends BaseModel {
         return BulletinUserModel::where('user_id', $this->id)->where('status', 0)->count();
     }
 
-	public function setPassword($password) {
+	public function setPassword(string $password) {
 		$this->password = Hash::make($password);
 	}
 
-	public function validatePassword($password) {
+	public function validatePassword(string $password) {
 		return Hash::verify($password, $this->password);
 	}
 
@@ -82,11 +83,11 @@ class UserModel extends BaseModel {
      * @return LoginLogModel
      * @throws \Exception
      */
-    public function logLogin($status = true, $model = LoginLogModel::MODE_WEB) {
+    public function logLogin(bool $status = true, string $model = LoginLogModel::MODE_WEB) {
         return LoginLogModel::addLoginLog($this->email, $this->id, $status, $model);
     }
 
-    public static function validateEmail($email) {
+    public static function validateEmail(string $email) {
 	    return !empty($email) && self::where('email', $email)->count() < 1;
     }
 
@@ -100,7 +101,7 @@ class UserModel extends BaseModel {
      * @throws \Exception
      */
 	public static function findIdentity($id) {
-		return static::where('id', $id)->where('status', self::STATUS_ACTIVE)->first();
+		return static::where('id', $id)->first();
 	}
 
     /**
@@ -126,8 +127,8 @@ class UserModel extends BaseModel {
      * @return UserModel|boolean
      * @throws \Exception
      */
-	public static function findByName($name) {
-		return static::where('name', $name)->where('status', self::STATUS_ACTIVE)->first();
+	public static function findByName(string $name) {
+		return static::where('name', $name)->first();
 	}
 
     /**
@@ -135,8 +136,8 @@ class UserModel extends BaseModel {
      * @return UserModel|boolean
      * @throws \Exception
      */
-	public static function findByEmail($email) {
-		return static::where('email', $email)->where('status', self::STATUS_ACTIVE)->first();
+	public static function findByEmail(string $email) {
+		return static::where('email', $email)->first();
 	}
 
 }

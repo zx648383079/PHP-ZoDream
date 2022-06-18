@@ -140,8 +140,7 @@ trait UserRoleTrait {
      * @return bool
      * @throws Exception
      */
-    public function isAdministrator(): bool
-    {
+    public function isAdministrator(): bool {
         return $this->hasRole('administrator');
     }
 
