@@ -2,17 +2,25 @@
 declare(strict_types=1);
 namespace Domain\Repositories;
 
+use Domain\Providers\StorageProvider;
 use Exception;
 use Infrastructure\Environment;
-use Infrastructure\Uploader;
 use Module\Disk\Domain\FFmpeg;
+use Zodream\Disk\FileSystem;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
+use Zodream\Domain\Upload\UploadBase64;
+use Zodream\Domain\Upload\UploadFile;
+use Zodream\Domain\Upload\UploadRemote;
 use Zodream\Html\Page;
 
 class FileRepository {
 
     private static array $configs = [];
+
+    public static function storage() {
+        return StorageProvider::publicStore();
+    }
 
     public static function config(string $key = '', $default = null) {
         if (empty(static::$configs)) {
@@ -57,7 +65,7 @@ class FileRepository {
     }
 
     /**
-     * 删除文件
+     * 上传文件
      * @param string $fieldName
      * @param array $config
      * @param string $base64
@@ -65,19 +73,44 @@ class FileRepository {
      * @throws Exception
      */
     public static function upload(string $fieldName, array $config, string $base64 = 'upload') {
-        $upload = new Uploader($fieldName, $config, $base64);
-        $res = $upload->getFileInfo();
-        if ($res['state'] !== 'SUCCESS') {
-            throw new Exception($res['state']);
+        return static::uploadFromData($base64 === 'base64' || $base64 === 'remote' ? request()->get($fieldName) :
+            request()->file($fieldName), $config, $base64);
+    }
+
+    /**
+     * 上传文件
+     * @param string|array $data
+     * @param array $config
+     * @param string $base64
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
+     * @throws Exception
+     */
+    public static function uploadFromData(array|string $data, array $config, string $base64 = 'upload') {
+        if ($base64 === 'base64') {
+            $upload = new UploadBase64($data);
+        } elseif ($base64 === 'remote') {
+            $upload = new UploadRemote($data);
+        } else {
+            $upload = new UploadFile($data);
         }
+        if (!$upload->checkSize($config['maxSize'])) {
+            throw new Exception($upload->getError());
+        }
+        if ($upload instanceof UploadRemote && !$upload->checkType(static::formatExtension($config['allowFiles']))) {
+            throw new Exception($upload->getError());
+        }
+        if (isset($config['oriName'])) {
+            $upload->setType(FileSystem::getExtension($config['oriName']));
+        }
+        $upload->setFile(public_path($upload->getRandomName($config['pathFormat'])));
+        $res = static::storage()->addFile($upload);
         $url = url()->asset($res['url']);
-        $ext = strtolower(strrchr($res['original'], '.'));
         $thumb = url()->asset('assets/images/thumb.jpg');
-        if (in_array($ext, static::config('imageAllowFiles'))) {
-            $thumb = $ext;
-        } elseif (in_array($ext, static::config('videoAllowFiles'))) {
+        if (in_array($res['extension'], static::config('imageAllowFiles'))) {
+            $thumb = $url;
+        } elseif (in_array($res['extension'], static::config('videoAllowFiles'))) {
             try {
-                $videoFile = public_path($res['url']);
+                $videoFile = $upload->getFile();
                 $thumbFile = $videoFile->getDirectory()
                     ->file($videoFile->getNameWithoutExtension().'_thumb.jpg');
                 if (!$thumbFile->exist()) {
@@ -95,8 +128,8 @@ class FileRepository {
         return [
             'url' => $url,
             'title' => $res['title'],
-            'original' => $res['original'],
-            'type' => $res['type'],
+            'original' => $res['title'],
+            'type' => $res['extension'],
             'size' => $res['size'],
             'thumb' => $thumb,
         ];
@@ -183,11 +216,10 @@ class FileRepository {
         if (!$upload->upload($fieldName)) {
             throw new Exception('请选择上传文件');
         }
-        $allowType = array_map(function (string $item) {
-            return $item[0] === '.' ? substr($item, 1) : $item;
-        }, static::config('imageAllowFiles'));
+        $allowType = static::formatExtension(static::config('imageAllowFiles'));
+        $storage = static::storage();
         $files = [];
-        $upload->each(function (BaseUpload $file) use ($allowType, &$files) {
+        $upload->each(function (BaseUpload $file) use ($allowType, $storage, &$files) {
             if (!$file->checkSize(static::config('imageMaxSize'))) {
                 $file->setError('超出最大尺寸限制');
                 return;
@@ -201,16 +233,19 @@ class FileRepository {
                 return;
             }
             $file->setFile(public_path($file->getRandomName(static::config('imagePathFormat'))));
-            if (!$file->save()) {
+            try {
+                $res = $storage->addFile($file);
+            } catch (Exception $ex) {
+                $file->setError($ex->getMessage());
                 return;
             }
-            $url = url()->asset($file->getFile()->getRelative(public_path()));
+            $url = url()->asset($res['url']);
             $files[] = [
                 'url' => $url,
                 'title' => $file->getFile()->getName(),
-                'original' => $file->getName(),
-                'type' => '.'.$file->getType(),
-                'size' => $file->getSize(),
+                'original' => $res['title'],
+                'type' => $res['extension'],
+                'size' => $res['size'],
                 'thumb' => $url
             ];
         }, $count);
@@ -218,5 +253,11 @@ class FileRepository {
             throw new Exception(implode(',', $upload->getError()));
         }
         return $files;
+    }
+
+    protected static function formatExtension(array $data): array {
+        return array_map(function (string $item) {
+            return $item[0] === '.' ? substr($item, 1) : $item;
+        }, $data);
     }
 }

@@ -10,6 +10,7 @@ use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
+use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -103,5 +104,17 @@ class CreateBlogTables extends Migration {
         RoleRepository::newPermission([
             'blog_term_edit' => '博客分类管理'
         ]);
+        Option::group('高级', function () {
+            return [
+                [
+                    'name' => '博客列表显示',
+                    'code' => 'blog_list_view',
+                    'type' => 'select',
+                    'value' => 0,
+                    'default_value' => "无图\n左图\n右图",
+                    'visibility' => 2,
+                ],
+            ];
+        });
     }
 }

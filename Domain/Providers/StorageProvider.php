@@ -18,20 +18,21 @@ class StorageProvider {
     const FILE_LOG_TABLE = 'base_file_log';
     const FILE_QUOTE_TABLE = 'base_file_quote';
 
-    public static function store(Directory $root): StorageProvider {
-        return new static($root);
+    public static function store(Directory $root, int $tag = 3): StorageProvider {
+        return new static($root, $tag);
     }
 
     public static function publicStore(): StorageProvider {
-        return static::store(public_path()->directory(config('view.asset_directory')));
+        return static::store(public_path()->directory(config('view.asset_directory')), 1);
     }
 
     public static function privateStore(): StorageProvider {
-        return static::store(app_path()->directory('data/storage'));
+        return static::store(app_path()->directory('data/storage'), 2);
     }
 
     public function __construct(
-        protected Directory $root
+        protected Directory $root,
+        protected int $tag = 3
     ) {
         $this->root->create();
     }
@@ -55,6 +56,7 @@ class StorageProvider {
             $table->string('extension', 10);
             $table->char('md5', 32)->unique();
             $table->string('path', 200);
+            $table->uint('folder', 2)->default(1);
             $table->string('size')->default('0');
             $table->timestamps();
         })->append(static::FILE_LOG_TABLE, function(Table $table) {
@@ -94,8 +96,10 @@ class StorageProvider {
         if (is_array($upload)) {
             $upload = new UploadFile($upload);
         }
-        $file = $this->root->file($upload->getRandomName());
-        $upload->setFile($file);
+        if (empty($upload->getFile())) {
+            $file = $this->root->file($upload->getRandomName());
+            $upload->setFile($file);
+        }
         if (!$upload->save()) {
             throw new \Exception('add file error');
         }
@@ -112,6 +116,7 @@ class StorageProvider {
             'path' => $file->getRelative($this->root),
             'size' => $file->size(),
             'md5' => $md5,
+            'folder' => $this->tag,
             'created_at' => time(),
             'updated_at' => time(),
         ];
@@ -123,13 +128,13 @@ class StorageProvider {
         return [
             'url' => $model['path'],
             'title' => $model['name'],
-            'extension' => '.'.$model['extension'],
+            'extension' => !empty($model['extension']) ? '.'.$model['extension'] : '',
             'size' => $model['size'],
         ];
     }
 
     public function get(string $url): array {
-        $model = $this->query()->where('path', $url)->first();
+        $model = $this->query()->where('folder', $this->tag)->where('path', $url)->first();
         if (empty($model)) {
             throw new \Exception('not found file');
         }
@@ -140,7 +145,7 @@ class StorageProvider {
         if (empty($url)) {
             return;
         }
-        $id = $this->query()->where('path', $url)->value('id');
+        $id = $this->query()->where('folder', $this->tag)->where('path', $url)->value('id');
         if ($id < 1) {
             throw new \Exception('not found file');
         }
@@ -161,6 +166,19 @@ class StorageProvider {
     public function removeQuote(int $itemType, int $itemId) {
         $this->quoteQuery()->where('item_type', $itemType)
             ->where('item_id', $itemId)->delete();
+    }
+
+    public function removeFile(string $url) {
+        if (empty($url)) {
+            return;
+        }
+        $id = $this->query()->where('folder', $this->tag)->where('path', $url)->value('id');
+        if ($id < 1) {
+            throw new \Exception('not found file');
+        }
+        $this->quoteQuery()->where('file_id', $id)->delete();
+        $this->logQuery()->where('file_id', $id)->delete();
+        $this->query()->where('id', $id)->delete();
     }
 
     public function getFile(string $url): File {

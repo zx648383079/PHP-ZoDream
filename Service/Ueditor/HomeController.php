@@ -1,18 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace Service\Ueditor;
 
+use Domain\Repositories\FileRepository;
 use Infrastructure\Environment;
 use Zodream\Infrastructure\Contracts\Response\JsonResponse;
 use Zodream\Route\Response\Json;
-
-use Infrastructure\Uploader;
 use Zodream\Service\Http\Request;
 
 class HomeController extends Controller {
 
-	protected $configs = array();
+	protected array $configs = [];
 
-	protected function jsonReturn($data) {
+	protected function jsonReturn(array $data) {
 	    /** @var Json $json */
         $json = $this->httpContext(JsonResponse::class);
 		$callback = $this->httpContext('request')->get('callback');
@@ -41,12 +41,20 @@ class HomeController extends Controller {
      * @param $config
      * @param string $base64
      */
-	protected function upload($fieldName, $config, $base64 = 'upload') {
-		$upload = new Uploader($fieldName, $config, $base64);
-		return $this->jsonReturn($upload->getFileInfo());
+	protected function upload(string $fieldName, array $config, string $base64 = 'upload') {
+        try {
+            $res = FileRepository::upload($fieldName, $config, $base64);
+            return $this->jsonReturn(array_merge($res, [
+                'state' => 'SUCCESS'
+            ]));
+        } catch (\Exception $ex) {
+            return $this->jsonReturn([
+                'state' => $ex->getMessage(),
+            ]);
+        }
 	}
 
-	protected function fileList($allowFiles, $listSize, $path) {
+	protected function fileList(array $allowFiles, int $listSize, string $path) {
 		$allowFiles = substr(str_replace('.', '|', join('', $allowFiles)), 1);
 
 		$request = $this->httpContext('request');
@@ -89,7 +97,7 @@ class HomeController extends Controller {
 
 	public function indexAction(Request $request) {
 		$action = strtolower($request->get('action'));
-		if (is_null($action) || !method_exists($this, $action. 'Action')) {
+		if (empty($action) || !method_exists($this, $action. 'Action')) {
 			return $this->jsonReturn(array(
 				'state'=> '请求地址出错'
 			));
@@ -167,33 +175,35 @@ class HomeController extends Controller {
 	function catchimageAction() {
 		set_time_limit(0);
 		$config = array(
-				'pathFormat' => $this->configs['catcherPathFormat'],
-				'maxSize' => $this->configs['catcherMaxSize'],
-				'allowFiles' => $this->configs['catcherAllowFiles'],
-				'oriName' => 'remote.png'
+            'pathFormat' => $this->configs['catcherPathFormat'],
+            'maxSize' => $this->configs['catcherMaxSize'],
+            'allowFiles' => $this->configs['catcherAllowFiles'],
+            'oriName' => 'remote.png'
 		);
 		$fieldName = $this->configs['catcherFieldName'];
 		
 		/* 抓取远程图片 */
 		$list = array();
-		$source = request()->get($fieldName, request()->get($fieldName));
-		foreach ($source as $imgUrl) {
-			$item = new Uploader($imgUrl, $config, 'remote');
-			$info = $item->getFileInfo();
-			array_push($list, array(
-					'state' => $info['state'],
-					'url' => $info['url'],
-					'size' => $info['size'],
-					'title' => htmlspecialchars($info['title']),
-					'original' => htmlspecialchars($info['original']),
-					'source' => htmlspecialchars($imgUrl)
-			));
+		$source = request()->get($fieldName, []);
+		foreach ((array)$source as $imgUrl) {
+            try {
+                $res = FileRepository::uploadFromData($imgUrl, $config, 'remote');
+                $list[] = array_merge($res, [
+                    'state' => 'SUCCESS',
+                    'source' => htmlspecialchars($imgUrl)
+                ]);
+            } catch (\Exception $ex) {
+                $list[] = [
+                    'state' => $ex->getMessage(),
+                    'source' => htmlspecialchars($imgUrl)
+                ];
+            }
 		}
 		
 		/* 返回抓取数据 */
 		return $this->jsonReturn(array(
-				'state'=> count($list) ? 'SUCCESS':'ERROR',
-				'list'=> $list
+            'state'=> count($list) ? 'SUCCESS' : 'ERROR',
+            'list'=> $list
 		));
 	}
 }
