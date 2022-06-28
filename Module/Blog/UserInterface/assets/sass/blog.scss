@@ -179,36 +179,56 @@ $acolor: $fg;
             }
         }
         .book-item {
-            margin: 0 -15px;
-            padding: 15px 20px 5px;
+            display: flex;
+            margin: 0 -0.9375rem;
             animation-duration: 1.5s;
             animation-timing-function: linear;
             transition: box-shadow 1s;
+            .item-body {
+                padding: 1rem 1.25rem;
+                flex: 1;
+                margin: 0;
+            }
+            .item-cover {
+                width: 10em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img {
+                    max-width: 100%;
+                    max-height: 100%;
+                }        
+            }
+            .book-time {
+                float: right;
+                text-align: right;
+            }
+            a {
+                text-decoration: none;
+                color: #333;
+            }
             dt {
-                font-size: 20px;
+                font-size: 1.25rem;
                 font-weight: 600;
-                .book-time {
-                    float: right;
-                    text-align: right;
-                }
+                
             }
             dd {
                 //display: none;
-                p {
-                    margin: 5px 0;
-                    min-height: 40px;
-                }
-                .author,
-                .comment,
-                .category,
-                .language {
-                    margin-right: 20px;
-                }
-                .agree,
-                .disagree {
-                    float: right;
-                    margin-left: 10px;
-                }
+            }
+            p {
+                margin: 0.3125rem 0;
+                min-height: 2.5rem;
+            }
+            .author,
+            .comment,
+            .category,
+            .language {
+                margin-right: 1.25rem;
+            }
+            .agree,
+            .disagree {
+                float: right;
+                margin-left: 0.625rem;
             }
             &:hover,
             &:nth-child(2),
@@ -219,17 +239,17 @@ $acolor: $fg;
                 }
             }
             &:hover {
-                box-shadow: $shadow 0 0 10px ;
+                box-shadow: rgba(51,51,51,.7) 0 0 10px;
             }
             &:not(:last-child) {
-                border-bottom: 1px solid $activeColor;
+                border-bottom: 1px solid #a10000;
             }
             &.fade-pre-item {
                 visibility: hidden;
             }
             &.fade-item {
                 animation-name: fadeInLeft;
-                background: $defaultColor;
+                background: #fff;
                 border-bottom: none;
                 visibility: visible;
             }
@@ -961,26 +981,33 @@ $acolor: $fg;
             margin-right: 0;
             padding: 30px 8px;
             .book-item {
-                margin: 0 -8px;
-                padding: 15px 13px 5px;
+                margin: 0 -0.5rem;
+                .item-cover {
+                    width: 7em;
+                }
                 dd {
                     display: block;
-                    .author,
-                    .category,
-                    .comment,
-                    .agree,
-                    .disagree,
-                    .click {
-                        font-size: 12px;
-                    }
-                    .agree,
-                    .disagree {
-                        margin-top: 3px;
-                    }
+                }
+                .disagree,
+                .agree {
+                    float: none;
+                    margin-left: 0;
+                }
+                .author,
+                .category,
+                .comment,
+                .agree,
+                .disagree,
+                .click {
+                    font-size: 0.75rem;
+                    margin-right: .4rem;
+                }
+                .click {
+                    margin-right: 0;
                 }
                 .book-time {
-                    font-size: 12px;
-                    width: 70px;
+                    font-size: 0.75rem;
+                    width: 4.375rem;
                 }
             }
             .info,
