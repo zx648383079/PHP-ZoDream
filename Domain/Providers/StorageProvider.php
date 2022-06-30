@@ -23,11 +23,11 @@ class StorageProvider {
     }
 
     public static function publicStore(): StorageProvider {
-        return static::store(public_path()->directory(config('view.asset_directory')), 1);
+        return static::store(public_path()->childDirectory(config('view.asset_directory')), 1);
     }
 
     public static function privateStore(): StorageProvider {
-        return static::store(app_path()->directory('data/storage'), 2);
+        return static::store(app_path()->childDirectory('data/storage'), 2);
     }
 
     public function __construct(
@@ -76,6 +76,11 @@ class StorageProvider {
         });
     }
 
+    /**
+     * @param string $md5
+     * @return array{url: string, title: string, extension: string, size: int}
+     * @throws \Exception
+     */
     public function addMd5(string $md5): array {
         if (empty($md5)) {
             throw new \Exception('not found');
@@ -92,15 +97,24 @@ class StorageProvider {
         ];
     }
 
+    /**
+     *
+     * @param BaseUpload|array $upload
+     * @return array{url: string, title: string, extension: string, size: int}
+     * @throws \Exception
+     */
     public function addFile(BaseUpload|array $upload): array {
         if (is_array($upload)) {
             $upload = new UploadFile($upload);
         }
-        if (empty($upload->getFile())) {
+        $file = $upload->getFile();
+        if (empty($file)) {
             $file = $this->root->file($upload->getRandomName());
             $upload->setFile($file);
         }
-        if (!$upload->save()) {
+        $path = $file->getRelative($this->root);
+        if (empty($path) || !$upload->save()) {
+            // 保存文件位置可能不在目录下
             throw new \Exception('add file error');
         }
         $md5 = $file->md5();
@@ -113,7 +127,7 @@ class StorageProvider {
         $model = [
             'name' => $upload->getName(),
             'extension' => $upload->getType(),
-            'path' => $file->getRelative($this->root),
+            'path' => $path,
             'size' => $file->size(),
             'md5' => $md5,
             'folder' => $this->tag,
@@ -125,6 +139,7 @@ class StorageProvider {
             $file->delete();
             throw new \Exception('add file error');
         }
+
         return [
             'url' => $model['path'],
             'title' => $model['name'],

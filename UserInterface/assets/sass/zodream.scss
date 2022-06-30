@@ -15,6 +15,29 @@
 //@import "metro";
 
 
+.error-tag {
+    position: relative;
+    margin-bottom: 2rem;
+    .tag-icon {
+        color: #fff;
+        font-size: 10rem;
+        font-weight: 900;
+        transform: rotate(15deg);
+        display: inline-block;
+    }
+    .tag-cover {
+        display: block;
+        background-color: rgba($color: #ccc, $alpha: .4);
+        position: absolute;
+        top: 2rem;
+        left: 50%;
+        margin-left: -8rem;
+        width: 6rem;
+        height: 1.5rem;
+        z-index: 3;
+    }
+}
+
 
 @media (min-width: 780px) {
     .demo-tip {

@@ -102,9 +102,10 @@ class FileRepository {
         if (isset($config['oriName'])) {
             $upload->setType(FileSystem::getExtension($config['oriName']));
         }
-        $upload->setFile(public_path($upload->getRandomName($config['pathFormat'])));
+        $fileName = $upload->getRandomName($config['pathFormat']);
+        $upload->setFile(public_path($fileName));
         $res = static::storage()->addFile($upload);
-        $url = url()->asset($res['url']);
+        $url = url()->asset($fileName);
         $thumb = url()->asset('assets/images/thumb.jpg');
         if (in_array($res['extension'], static::config('imageAllowFiles'))) {
             $thumb = $url;
@@ -232,14 +233,15 @@ class FileRepository {
                 $file->setError('图片尺寸有误');
                 return;
             }
-            $file->setFile(public_path($file->getRandomName(static::config('imagePathFormat'))));
+            $fileName = $file->getRandomName(static::config('imagePathFormat'));
+            $file->setFile(public_path($fileName));
             try {
                 $res = $storage->addFile($file);
             } catch (Exception $ex) {
                 $file->setError($ex->getMessage());
                 return;
             }
-            $url = url()->asset($res['url']);
+            $url = url()->asset($fileName);
             $files[] = [
                 'url' => $url,
                 'title' => $file->getFile()->getName(),
