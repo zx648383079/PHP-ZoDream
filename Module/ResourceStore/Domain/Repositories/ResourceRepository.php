@@ -48,7 +48,9 @@ class ResourceRepository {
     }
 
     public static function getList(string $keywords = '', int $category = 0,
-                                   int $user = 0, array|string $sort = '', string $tag = '') {
+                                   int $user = 0, string $tag = '',
+                                   string|array $sort = 'created_at',
+                                   string|int|bool $order = 'desc') {
         return ResourceModel::with('user', 'category')
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
@@ -56,7 +58,7 @@ class ResourceRepository {
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })
-            ->when(!empty($sort), function ($query) use ($sort) {
+            ->when(!empty($sort), function ($query) use ($sort, $order) {
                 if (is_array($sort)) {
                     // 增加直接放id
                     $query->whereIn('id', $sort)->orderBy('created_at', 'desc');
@@ -68,7 +70,12 @@ class ResourceRepository {
                 }
                 if ($sort === 'hot') {
                     $query->orderBy('download_count', 'desc');
+                    return;
                 }
+                list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
+                    'id', 'created_at', 'download_count', 'view_count', 'comment_count'
+                ]);
+                $query->orderBy($sort, $order);
             })->when(!empty($keywords), function ($query) use ($keywords)  {
                 SearchModel::searchWhere($query, ['title'], true, '', $keywords);
             })->when(!empty($tag), function ($query) use ($tag) {

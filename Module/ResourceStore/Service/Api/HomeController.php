@@ -8,9 +8,12 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 
 class HomeController extends Controller {
 
-    public function indexAction(string $keywords = '', int $user = 0, int $category = 0) {
+    public function indexAction(string $keywords = '', int $user = 0, int $category = 0,
+                                string $tag = '',
+                                string $sort = 'created_at',
+                                string|int|bool $order = 'desc') {
         return $this->renderPage(
-            ResourceRepository::getList($keywords, $user, $category)
+            ResourceRepository::getList($keywords, $user, $category, $tag, $sort, $order)
         );
     }
 
