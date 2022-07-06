@@ -63,6 +63,16 @@ class ThreadController extends Controller {
         }
     }
 
+    public function userAction(int $id) {
+        try {
+            return $this->render(
+                ThreadRepository::getUser($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function detailAction(int $id) {
         try {
             return $this->render(

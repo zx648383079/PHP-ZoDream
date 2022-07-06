@@ -10,6 +10,16 @@ class CategoryController extends Controller {
         return $this->render(CategoryRepository::getChildren($parent));
     }
 
+    public function detailAction(int $id) {
+        try {
+            return $this->render(
+                CategoryRepository::getFull($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function levelAction() {
         return $this->render(CategoryRepository::levelTree());
     }

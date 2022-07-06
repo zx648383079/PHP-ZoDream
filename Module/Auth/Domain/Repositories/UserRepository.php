@@ -36,6 +36,11 @@ class UserRepository {
         return !empty($user) && $user['status'] >= UserModel::STATUS_ACTIVE;
     }
 
+    public static function getPublicProfile(int $id): array {
+        $user = UserModel::findOrThrow($id, 'User error');
+        return static::format($user, true);
+    }
+
     public static function getCurrentProfile() {
         if (auth()->guest()) {
             return null;

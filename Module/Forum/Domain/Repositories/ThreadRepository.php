@@ -527,4 +527,22 @@ class ThreadRepository {
         ]);
         return $model;
     }
+
+    /**
+     * 获取用户的统计信息
+     * @param int $id
+     * @return array
+     */
+    public static function getUser(int $id): array {
+        $user = UserRepository::getPublicProfile($id);
+        $user['count_items'] = [
+            ['name' => '主题', 'count' => ThreadModel::where('user_id', $id)->count()],
+            ['name' => '帖子', 'count' => ThreadPostModel::where('user_id', $id)->count()],
+            ['name' => '积分', 'count' => 0],
+        ];
+        $user['medal_items'] = [
+            // ['name' => '', 'icon' => url()->asset('')],
+        ];
+        return $user;
+    }
 }
