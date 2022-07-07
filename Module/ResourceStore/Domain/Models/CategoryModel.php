@@ -12,6 +12,7 @@ use Domain\Model\Model;
  * @property string $keywords
  * @property string $description
  * @property string $thumb
+ * @property integer $is_hot
  */
 class CategoryModel extends Model {
     public static function tableName() {
@@ -25,6 +26,7 @@ class CategoryModel extends Model {
             'keywords' => 'string:0,255',
             'description' => 'string:0,255',
             'thumb' => 'string:0,255',
+            'is_hot' => 'int:0,9'
         ];
     }
 

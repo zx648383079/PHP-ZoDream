@@ -22,6 +22,7 @@ class CreateResourceTables extends Migration {
             $table->string('keywords')->default('');
             $table->string('description')->default('');
             $table->string('thumb')->default('');
+            $table->bool('is_hot')->default(0);
         })->append(ResourceModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('title', 200);

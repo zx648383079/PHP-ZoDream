@@ -13,7 +13,7 @@ class HomeController extends Controller {
                                 string $sort = 'created_at',
                                 string|int|bool $order = 'desc') {
         return $this->renderPage(
-            ResourceRepository::getList($keywords, $user, $category, $tag, $sort, $order)
+            ResourceRepository::getList($keywords, $category, $user, $tag, $sort, $order)
         );
     }
 

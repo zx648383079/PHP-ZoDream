@@ -18,8 +18,8 @@ class BatchController extends Controller {
     public function indexAction() {
         try {
             return $this->render($this->invokeBatch([
-                'categories' => CategoryRepository::levelTree(),
-                'areas' => MovieRepository::areaList(),
+                'categories' => sprintf('%s::%s', CategoryRepository::class, 'levelTree'),
+                'areas' => sprintf('%s::%s', MovieRepository::class, 'areaList'),
             ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

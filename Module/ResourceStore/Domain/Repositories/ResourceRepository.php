@@ -11,6 +11,7 @@ use Domain\Providers\TagProvider;
 use Exception;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
+use Zodream\Validate\Validator;
 
 
 class ResourceRepository {
@@ -101,7 +102,7 @@ class ResourceRepository {
 
     public static function getFull(int $id) {
         $model = static::get($id);
-        ResourceModel::query()->where('id', $id)->updateIncrement('click_count');
+        ResourceModel::query()->where('id', $id)->updateIncrement('view_count');
         $_ = $model->user;
         $_ = $model->category;
         $model->tags = static::tag()->getTags($id);
@@ -125,6 +126,11 @@ class ResourceRepository {
         static::tag()->bindTag($model->id, $tags);
         $fileId = [];
         foreach ($files as $item) {
+            $item = Validator::filter($item, [
+                'id' => 'int',
+                'file_type' => 'int',
+                'file' => 'required|string:0,255',
+            ]);
             $item['res_id'] = $model->id;
             $item['user_id'] = $model->user_id;
             $fileModel = self::fileSave($item);

@@ -23,6 +23,7 @@ class CategoryController extends Controller {
                   'keywords' => 'string:0,255',
                   'description' => 'string:0,255',
                   'thumb' => 'string:0,255',
+                  'is_hot' => 'int'
               ]))
             );
         } catch (\Exception $ex) {

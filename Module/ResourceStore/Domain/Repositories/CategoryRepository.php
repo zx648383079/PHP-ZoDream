@@ -57,7 +57,7 @@ final class CategoryRepository extends CRUDRepository {
     }
 
     public static function tree() {
-        return self::toTree(false)->makeIdTree();
+        return self::toTree(false)->makeTree();
     }
 
     public static function all(bool $full = false) {
@@ -71,6 +71,10 @@ final class CategoryRepository extends CRUDRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function recommend() {
+        return CategoryModel::where('is_hot', 1)->get();
     }
 
 }
