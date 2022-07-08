@@ -139,7 +139,6 @@ class StorageProvider {
             $file->delete();
             throw new \Exception('add file error');
         }
-
         return [
             'url' => $model['path'],
             'title' => $model['name'],

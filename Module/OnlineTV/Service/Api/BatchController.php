@@ -20,6 +20,8 @@ class BatchController extends Controller {
             return $this->render($this->invokeBatch([
                 'categories' => sprintf('%s::%s', CategoryRepository::class, 'levelTree'),
                 'areas' => sprintf('%s::%s', MovieRepository::class, 'areaList'),
+                'recommend' => sprintf('%s::%s', MovieRepository::class, 'recommend'),
+                'recommend_categories' => sprintf('%s::%s', CategoryRepository::class, 'recommend'),
             ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

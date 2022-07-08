@@ -157,6 +157,10 @@ final class MovieRepository extends CRUDRepository {
         })->limit(4)->asArray()->get('id', 'title');
     }
 
+    public static function recommend() {
+        return static::query()->limit(6)->get(self::MOVIE_PAGE_FILED);
+    }
+
     public static function download(int $id): string {
         $model = MovieFileModel::where('id', $id)->first();
         if (empty($model) || $model->file_type > 0) {

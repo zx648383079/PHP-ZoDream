@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\OnlineTV\Service\Api\Admin;
 
-use Module\ResourceStore\Domain\Repositories\CategoryRepository;
+use Module\OnlineTV\Domain\Repositories\CategoryRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {

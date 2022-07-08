@@ -14,6 +14,15 @@ class MusicController extends Controller {
         );
     }
 
+
+    public function detailAction(int $id) {
+        try {
+            return $this->render(MusicRepository::getEdit($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+    }
+
     public function saveAction(Input $input) {
         try {
             return $this->render(
@@ -25,6 +34,7 @@ class MusicController extends Controller {
                     'artist' => 'string:0,20',
                     'duration' => 'int',
                     'status' => 'int:0,127',
+                    'files' => ''
               ]))
             );
         } catch (\Exception $ex) {

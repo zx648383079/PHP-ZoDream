@@ -5,6 +5,7 @@ namespace Domain\Repositories;
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Zodream\Database\Contracts\SqlBuilder;
+use Zodream\Validate\Validator;
 
 abstract class CRUDRepository {
 
@@ -37,6 +38,17 @@ abstract class CRUDRepository {
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        if (isset($data['files'])) {
+            foreach ($data['files'] as $item) {
+                $item = Validator::filter($item, [
+                    'id' => 'int',
+                    'file_type' => 'int:0,127',
+                    'file' => 'required|string:0,255',
+                ]);
+                $item['music_id'] = $model->id;
+                static::fileSave($item);
+            }
         }
         return $model;
     }

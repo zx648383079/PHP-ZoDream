@@ -73,6 +73,10 @@ final class CategoryRepository extends CRUDRepository {
         return self::toTree($full)->makeTreeForHtml();
     }
 
+    public static function recommend() {
+        return CategoryModel::limit(6)->get();
+    }
+
     public static function search(string $keywords = '', int|array $id = 0) {
         return SearchModel::searchOption(
             static::query(),

@@ -65,6 +65,11 @@ final class MusicRepository extends CRUDRepository {
         return MusicModel::query();
     }
 
+    public static function getEdit(int $id) {
+        $model = static::get($id);
+        $model->files = MusicRepository::fileList($id);
+        return $model;
+    }
 
 
     protected static function createNew(): Model
