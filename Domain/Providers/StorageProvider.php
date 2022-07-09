@@ -195,9 +195,20 @@ class StorageProvider {
         $this->query()->where('id', $id)->delete();
     }
 
-    public function getFile(string $url): File {
+    /***
+     * 返回本地文件 问
+     * @param string $url
+     * @param bool $useOriginalName 使用原文件名
+     * @return File
+     * @throws \Exception
+     */
+    public function getFile(string $url, bool $useOriginalName = true): File {
         $model = $this->get($url);
-        return $this->root->file($model['path']);
+        $file = $this->root->file($model['path']);
+        if (!$useOriginalName) {
+            return $file;
+        }
+        return $file->setName($model['name']);
     }
 
     public function output(Output $output, string $url): Output {

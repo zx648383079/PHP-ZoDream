@@ -2,8 +2,6 @@
 namespace Module\Shop\Service\Mobile;
 
 use Module\ModuleController;
-use Module\Shop\Domain\Models\ArticleModel;
-use Module\Shop\Domain\Models\CategoryModel;
 use Zodream\Disk\File;
 
 

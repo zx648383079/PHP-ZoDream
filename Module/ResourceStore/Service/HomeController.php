@@ -14,7 +14,7 @@ class HomeController extends Controller {
         if ($id > 0) {
             return $this->detailAction($id);
         }
-        $post_list  = ResourceRepository::getList($keywords, $category, $user, $sort, $tag);
+        $post_list  = ResourceRepository::getList($keywords, $category, $user, '', $sort, $tag);
         $cat_list = CategoryRepository::levelTree();
         $cat = null;
         if ($category > 0) {

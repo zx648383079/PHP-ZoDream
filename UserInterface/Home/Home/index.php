@@ -31,7 +31,7 @@ $module_list = [
 //        __('Exam')
 //    ],
     [
-        'demo',
+        'res',
         __('Template')
     ],
 ];

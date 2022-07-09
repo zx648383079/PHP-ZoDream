@@ -248,9 +248,9 @@ class ResourceRepository {
             'action' => ResourceRepository::LOG_ACTION_DOWNLOAD,
         ]);
         $fileModel = ResourceFileModel::where('res_id', $id)
-            ->when($file < 1, function ($query) use ($file) {
+            ->when($file > 0, function ($query) use ($file) {
                 $query->where('id', $file);
-            }, function ($query) use ($file) {
+            }, function ($query) {
                 $query->where('file_type', 0)->orderBy('file_type', 'asc');
             })->first();
         if (empty($fileModel)) {
