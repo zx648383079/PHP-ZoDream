@@ -1,26 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace Module\Code\Service\Admin;
 
-use Module\Code\Domain\Model\CommentModel;
+use Module\Code\Domain\Repositories\CodeRepository;
 
 class CommentController extends Controller {
 
-    public function indexAction($code_id = null, $keywords = null, $email = null, $name = null) {
-        $comment_list = CommentModel::with('code')
-            ->when(!empty($code_id), function ($query) use ($code_id) {
-                $query->where('code_id', intval($code_id));
-            })->when(!empty($email), function ($query) use ($email) {
-                $query->where('email', $email);
-            })->when(!empty($keywords), function ($query) {
-                CommentModel::searchWhere($query, 'content');
-            })->when(!empty($name), function ($query) {
-                CommentModel::searchWhere($query, 'name', false, 'name');
-            })->orderBy('id', 'desc')->page();
+    public function indexAction(int $code_id = 0, string $keywords = '') {
+        $comment_list = CodeRepository::comment()->search($keywords, 0, $code_id);
         return $this->show(compact('comment_list'));
     }
 
-    public function deleteAction($id) {
-        CommentModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        CodeRepository::comment()->remove($id);
         return $this->renderData([
             'url' => $this->getUrl('comment')
         ]);

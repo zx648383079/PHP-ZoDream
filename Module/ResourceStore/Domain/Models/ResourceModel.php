@@ -15,6 +15,7 @@ use Zodream\Helpers\Time;
  * @property string $thumb
  * @property string $content
  * @property integer $size
+ * @property float $score
  * @property integer $user_id
  * @property integer $type
  * @property integer $cat_id
@@ -40,6 +41,7 @@ class ResourceModel extends Model {
             'thumb' => 'string:0,255',
             'content' => 'required',
             'size' => 'int',
+            'score' => 'float',
             'user_id' => 'required|int',
             'type' => 'int:0,127',
             'cat_id' => 'required|int',
@@ -75,7 +77,7 @@ class ResourceModel extends Model {
 
     public function getThumbAttribute() {
         $thumb = $this->getAttributeSource('thumb');
-        return url()->asset(empty($thumb) ? '/assets/images/banner.jpg' : $thumb);
+        return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
     }
 
     public function getCreatedAtAttribute() {

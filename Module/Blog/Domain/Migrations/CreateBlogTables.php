@@ -114,6 +114,14 @@ class CreateBlogTables extends Migration {
                     'default_value' => "无图\n左图\n右图",
                     'visibility' => 2,
                 ],
+                [
+                    'name' => '博客评论',
+                    'code' => 'blog_comment',
+                    'type' => 'select',
+                    'value' => 0,
+                    'default_value' => "关闭\n开启\n仅登录",
+                    'visibility' => 2,
+                ],
             ];
         });
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\OrderModel;
@@ -12,7 +13,7 @@ class PayController extends Controller {
         return ['index' => ['POST']];
     }
 
-    public function indexAction($order, $payment) {
+    public function indexAction(int $order, int $payment) {
         $order = OrderModel::find($order);
         if ($order->status != OrderModel::STATUS_UN_PAY) {
             return $this->renderFailure('此订单不能支付');

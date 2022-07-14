@@ -9,7 +9,8 @@ abstract class Controller extends ModuleController {
 
 
     public function findLayoutFile(): File|string {
-        if ($this->httpContext('action') !== 'index') {
+        if (get_called_class() === CommentController::class
+            || $this->httpContext('action') !== 'index') {
             return '';
         }
         return app_path()->file('UserInterface/Home/layouts/main.php');

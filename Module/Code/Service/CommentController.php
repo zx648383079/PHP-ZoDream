@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace Module\Code\Service;
 
-use Domain\Model\SearchModel;
-use Module\Code\Domain\Model\CommentModel;
 use Module\Code\Domain\Repositories\CodeRepository;
-use Module\Code\Domain\Repositories\CommentRepository;
 use Module\ModuleController;
 
 class CommentController extends ModuleController {
@@ -19,33 +16,26 @@ class CommentController extends ModuleController {
         ];
     }
 
-    public function indexAction(int $id, string $sort = 'created_at', string $order = 'desc') {
-        $comment_list = CommentModel::where([
-            'code_id' => $id,
-            'parent_id' => 0,
-        ])->orderBy($sort, $order)->page();
+    public function indexAction(int $id, $sort = 'created_at', $order = 'desc') {
+        $comment_list = CodeRepository::comment()
+            ->search('', 0, $id, 0, $sort, $order);
         return $this->show(compact('comment_list', 'id'));
     }
 
-    public function moreAction(int $id, int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
-        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id']);
-        $comment_list = CommentModel::with('replies')
-            ->where([
-            'code_id' => intval($id),
-            'parent_id' => intval($parent_id)
-        ])->orderBy($sort, $order)->page();
+    public function moreAction(int $id, int $parent_id = 0, $sort = 'created_at', $order = 'desc') {
+        $comment_list = CodeRepository::comment()
+            ->search('', 0, $id, $parent_id, $sort, $order);
         if ($parent_id > 0) {
             return $this->show('rely', compact('comment_list', 'parent_id'));
         }
         return $this->show(compact('comment_list'));
     }
 
-    public function saveAction(string $content,
+    public function saveAction($content,
                                int $code_id,
-                               int $parent_id = 0,
-                               bool $is_forward = false) {
+                               int $parent_id = 0) {
         try {
-            $model = CodeRepository::comment($content,
+            $model = CodeRepository::commentSave($content,
                 $code_id,
                 $parent_id);
         }catch (\Exception $ex) {
@@ -61,7 +51,7 @@ class CommentController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = CommentRepository::disagree($id);
+            $model = CodeRepository::comment()->disagree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -73,7 +63,7 @@ class CommentController extends ModuleController {
             return $this->redirect('./');
         }
         try {
-            $model = CommentRepository::agree($id);
+            $model = CodeRepository::comment()->agree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -6,6 +6,7 @@ use Domain\Constants;
 use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
+use Domain\Providers\ScoreProvider;
 use Domain\Providers\StorageProvider;
 use Domain\Providers\TagProvider;
 use Exception;
@@ -34,6 +35,10 @@ class ResourceRepository {
 
     public static function comment(): CommentProvider {
         return new CommentProvider(self::BASE_KEY);
+    }
+
+    public static function score(): ScoreProvider {
+        return new ScoreProvider(self::BASE_KEY);
     }
 
     public static function log(): ActionLogProvider {
@@ -107,7 +112,36 @@ class ResourceRepository {
         $_ = $model->category;
         $model->tags = static::tag()->getTags($id);
         $model->files = ResourceFileModel::where('res_id', $id)->get();
+        $model->is_gradable = static::isGradable($id);
         return $model;
+    }
+
+    public static function isGradable(int $id): bool {
+        if (!self::log()->has(ResourceRepository::LOG_TYPE_RES, $id,
+            ResourceRepository::LOG_ACTION_DOWNLOAD)) {
+            return false;
+        }
+        return !self::score()->has($id);
+    }
+
+    public static function gradeScore(int $id, int $score): array {
+        if ($score < 1 || $score > 10) {
+            throw new Exception('分数不正确');
+        }
+        if (!self::log()->has(ResourceRepository::LOG_TYPE_RES, $id,
+            ResourceRepository::LOG_ACTION_DOWNLOAD)) {
+            throw new Exception('请先使用后再来评价');
+        }
+        if (self::score()->has($id)) {
+            throw new Exception('已评价过，不能更改');
+        }
+        $data = self::score()->add($score, $id);
+        $avg = self::score()->avg($id);
+        ResourceModel::where('id', $id)->update([
+            'score' => $avg
+        ]);
+        $data['avg'] = $avg;
+        return $data;
     }
 
     public static function save(array $data, array $tags, array $files) {

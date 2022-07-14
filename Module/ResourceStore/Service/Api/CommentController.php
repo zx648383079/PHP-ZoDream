@@ -63,4 +63,34 @@ class CommentController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
     }
+
+    public function scoreAction(int $id) {
+        try {
+            return $this->render(
+                ResourceRepository::score()->search($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function scoreCountAction(int $id) {
+        try {
+            return $this->render(
+                ResourceRepository::score()->count($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function gradeAction(int $id, int $score) {
+        try {
+            return $this->render(
+                ResourceRepository::gradeScore($id, $score)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
-namespace Module\MicroBlog\Service\Api\Admin;
+namespace Module\Document\Service\Api\Admin;
 
-
-use Module\MicroBlog\Domain\Repositories\MicroRepository;
+use Module\Document\Domain\Repositories\ProjectRepository;
 
 class CommentController extends Controller {
-    public function indexAction(string $keywords = '', int $user = 0, int $micro = 0) {
+
+    public function indexAction(string $keywords = '', int $target = 0, int $user = 0) {
         return $this->renderPage(
-            MicroRepository::comment()->search($keywords, $user, $micro)
+            ProjectRepository::comment()->search($keywords, $user, $target)
         );
     }
 
     public function deleteAction(int $id) {
         try {
-            MicroRepository::comment()->remove($id);
+            ProjectRepository::comment()->remove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -2,23 +2,25 @@
 namespace Module\Shop\Service\Mobile;
 
 use Module\ModuleController;
+use Module\Shop\Domain\Repositories\ShopRepository;
 use Zodream\Disk\File;
 
 
 class Controller extends ModuleController {
 
     public File|string $layout = '/Mobile/layouts/main';
-    protected $disallow = true;
-
-    protected function getUrl($path, $args = []) {
-        return url('./mobile/'.$path, $args);
+    public function __construct() {
+        parent::__construct();
+        $this->middleware(function ($passable, callable $next) {
+            if (!ShopRepository::isOpen()) {
+                return $this->redirectWithMessage('/', '禁止访问');
+            }
+            return $next($passable);
+        });
     }
 
-    protected function runActionMethod($action, $vars = array()) {
-        if (app()->isDebug() || !$this->disallow) {
-            return parent::runActionMethod($action, $vars);
-        }
-        return $this->redirect('/');
+    protected function getUrl(string $path, array $args = []) {
+        return url('./mobile/'.$path, $args);
     }
 
 

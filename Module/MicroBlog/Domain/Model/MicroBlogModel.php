@@ -6,7 +6,7 @@ use Domain\Concerns\ExtraRule;
 use Domain\Model\Model;
 use Module\MicroBlog\Domain\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\MicroBlog\Domain\Repositories\LogRepository;
+use Module\MicroBlog\Domain\Repositories\MicroRepository;
 
 
 /**
@@ -82,11 +82,13 @@ class MicroBlogModel extends Model {
     }
 
     public function getIsRecommendedAttribute() {
-	    return LogRepository::isRecommend($this->id);
+	    return MicroRepository::log()->has(MicroRepository::LOG_TYPE_MICRO_BLOG, $this->id,
+            MicroRepository::LOG_ACTION_RECOMMEND);
     }
 
     public function getIsCollectedAttribute() {
-	    return LogRepository::isCollect($this->id);
+	    return MicroRepository::log()->has(MicroRepository::LOG_TYPE_MICRO_BLOG, $this->id,
+            MicroRepository::LOG_ACTION_COLLECT);
     }
 
     public function getEditableAttribute() {

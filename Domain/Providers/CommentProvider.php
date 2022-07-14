@@ -137,6 +137,10 @@ class CommentProvider {
         return $data;
     }
 
+    public function removeByTarget(int $id) {
+        $this->query()->where('target_id', $id)->delete();
+    }
+
     public function removeBySelf(int $id) {
         $row = $this->query()->where('id', $id)->where('user_id', auth()->id())->delete();
         if (empty($row)) {

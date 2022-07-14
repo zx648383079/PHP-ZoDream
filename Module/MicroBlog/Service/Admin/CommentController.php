@@ -1,27 +1,18 @@
 <?php
+declare(strict_types=1);
 namespace Module\MicroBlog\Service\Admin;
 
-use Domain\Model\SearchModel;
-use Module\MicroBlog\Domain\Model\CommentModel;
+use Module\MicroBlog\Domain\Repositories\MicroRepository;
 
 class CommentController extends Controller {
 
-    public function indexAction($micro_id = null, $keywords = null, $email = null, $name = null) {
-        $comment_list = CommentModel::with('micro')
-            ->when(!empty($micro_id), function ($query) use ($micro_id) {
-                $query->where('micro_id', intval($micro_id));
-            })->when(!empty($email), function ($query) use ($email) {
-                $query->where('email', $email);
-            })->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'content');
-            })->when(!empty($name), function ($query) {
-                SearchModel::searchWhere($query, 'name', false, 'name');
-            })->orderBy('id', 'desc')->page();
+    public function indexAction(int $micro_id = 0, string $keywords = '') {
+        $comment_list = MicroRepository::comment()->search($keywords, 0, $micro_id);
         return $this->show(compact('comment_list'));
     }
 
-    public function deleteAction($id) {
-        CommentModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        MicroRepository::comment()->remove($id);
         return $this->renderData([
             'url' => $this->getUrl('comment')
         ]);

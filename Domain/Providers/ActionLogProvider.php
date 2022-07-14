@@ -115,7 +115,7 @@ class ActionLogProvider {
             ->where('action', $action)->count();
     }
 
-    public function has(int $type, int $action, int $id): bool {
+    public function has(int $type, int $id, int $action = 0): bool {
         if (auth()->guest()) {
             return false;
         }

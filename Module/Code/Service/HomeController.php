@@ -1,9 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Code\Service;
 
-use Domain\Model\SearchModel;
 use Module\Code\Domain\Model\CodeModel;
-use Module\Code\Domain\Model\TagModel;
 use Module\Code\Domain\Repositories\CodeRepository;
 use Module\ModuleController;
 use Zodream\Disk\File;
@@ -32,8 +31,8 @@ class HomeController extends ModuleController {
                 if ($sort == 'recommend') {
                     return $query->orderBy('recommend_count', 'desc');
                 }
-            })->when(!empty($keywords) && $id < 1, function ($query) {
-                $ids = SearchModel::searchWhere(TagModel::query(), ['content'])->pluck('code_id');
+            })->when(!empty($keywords) && $id < 1, function ($query) use ($keywords) {
+                $ids = CodeRepository::tag()->searchTag($keywords);
                 if (empty($ids)) {
                     $query->isEmpty();
                     return;
@@ -94,16 +93,14 @@ class HomeController extends ModuleController {
         return $this->renderData(true);
     }
 
-    public function suggestionAction($keywords = null) {
-        $data = TagModel::when(!empty($keywords), function($query) {
-            TagModel::searchWhere($query, ['content']);
-        })->groupBy('content')->limit(4)->pluck('content');
+    public function suggestionAction(string $keywords = '') {
+        $data = CodeRepository::tag()->suggest($keywords);
         return $this->renderData($data);
     }
 
     public function findLayoutFile(): File|string {
         if ($this->httpContext()->make('action') !== 'index') {
-            return false;
+            return '';
         }
         return app_path()->file('UserInterface/Home/layouts/main.php');
     }

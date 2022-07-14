@@ -9,6 +9,7 @@ use Module\Document\Domain\Model\FieldModel;
 use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
 use Module\Document\Domain\Model\ProjectVersionModel;
+use Module\Document\Domain\Repositories\ProjectRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -19,6 +20,7 @@ class CreateDocumentTables extends Migration {
      * @return void
      */
     public function up() {
+        ProjectRepository::comment()->migration($this);
         $this->append(CategoryModel::tableName(), function(Table $table) {
             $table->comment('分类');
             $table->id();

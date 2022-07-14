@@ -3,6 +3,7 @@ namespace Module\Code\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Code\Domain\Repositories\CodeRepository;
 
 
 /**
@@ -62,30 +63,16 @@ class CodeModel extends Model {
     }
 
     public function tags() {
-	    return $this->hasMany(TagModel::class, 'code_id', 'id');
+	    return CodeRepository::tag()->bindRelation('id');
     }
 
     public function getIsRecommendedAttribute() {
-	    if (auth()->guest()) {
-	        return false;
-        }
-        return LogModel::where([
-                'user_id' => auth()->id(),
-                'type' => LogModel::TYPE_MICRO_BLOG,
-                'id_value' => $this->id,
-                'action' => LogModel::ACTION_RECOMMEND
-            ])->count() > 0;
+        return CodeRepository::log()->has(CodeRepository::LOG_TYPE_CODE, $this->id,
+            CodeRepository::LOG_ACTION_RECOMMEND);
     }
 
     public function getIsCollectedAttribute() {
-	    if (auth()->guest()) {
-	        return false;
-        }
-        return LogModel::where([
-                'user_id' => auth()->id(),
-                'type' => LogModel::TYPE_MICRO_BLOG,
-                'id_value' => $this->id,
-                'action' => LogModel::ACTION_COLLECT
-            ])->count() > 0;
+        return CodeRepository::log()->has(CodeRepository::LOG_TYPE_CODE, $this->id,
+            CodeRepository::LOG_ACTION_COLLECT);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 use Module\OpenPlatform\Domain\Platform;
@@ -9,9 +10,11 @@ use Module\Shop\Domain\Repositories\PaymentRepository;
 
 class PayController extends Controller {
 
-    protected bool $disallow = false;
+    protected function allowAccess(): bool {
+        return true;
+    }
 
-    public function indexAction($order, $payment) {
+    public function indexAction(int $order, int $payment) {
         $order = OrderModel::find($order);
         if ($order->status != OrderModel::STATUS_UN_PAY) {
             return;
@@ -34,10 +37,10 @@ class PayController extends Controller {
         return $this->sendWithShare()->show($data);
     }
 
-    public function notifyAction($payment, $platform = 0) {
+    public function notifyAction(int $payment, int $platform = 0) {
         try {
             if ($platform > 0) {
-                Platform::enterPlatform(intval($platform));
+                Platform::enterPlatform($platform);
             }
             return PaymentRepository::callback(PaymentModel::find($payment));
         } catch (\Exception $ex) {
@@ -48,7 +51,7 @@ class PayController extends Controller {
         }
     }
 
-    public function resultAction($id) {
+    public function resultAction(int $id) {
         $log = PayLogModel::find($id);
         return $this->sendWithShare()->show(compact('log'));
     }

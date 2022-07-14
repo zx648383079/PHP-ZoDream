@@ -59,6 +59,6 @@ class Deeplink {
         if (!$isBackend && $host === 'micro' && is_numeric($path)) {
             return url('/micro', ['id' => $path]);
         }
-
+        return '';
     }
 }

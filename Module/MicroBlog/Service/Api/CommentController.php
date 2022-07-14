@@ -16,9 +16,9 @@ class CommentController extends Controller {
         ];
     }
 
-    public function indexAction(int $id, int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
+    public function indexAction(int $id, string $keywords = '', int $parent_id = 0, string $sort = 'created_at', string $order = 'desc') {
         return $this->renderPage(
-            CommentRepository::commentList($id, $parent_id, $sort, $order)
+            MicroRepository::comment()->search($keywords, 0, $id, $parent_id, $sort, $order)
         );
     }
 
@@ -27,7 +27,7 @@ class CommentController extends Controller {
                                int $parent_id = 0,
                                bool $is_forward = false) {
         try {
-            $model = MicroRepository::comment($content,
+            $model = MicroRepository::commentSave($content,
                 $micro_id,
                 $parent_id,
                 $is_forward);
@@ -37,22 +37,24 @@ class CommentController extends Controller {
         return $this->render($model);
     }
 
-    public function disagreeAction(int $id) {
-        try {
-            $model = CommentRepository::disagree($id);
-        }catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-        return $this->render($model);
-    }
-
     public function agreeAction(int $id) {
         try {
-            $model = CommentRepository::agree($id);
-        }catch (\Exception $ex) {
+            return $this->render(
+                MicroRepository::comment()->agree($id)
+            );
+        } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($model);
+    }
+
+    public function disagreeAction(int $id) {
+        try {
+            return $this->render(
+                MicroRepository::comment()->disagree($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function deleteAction(int $id) {

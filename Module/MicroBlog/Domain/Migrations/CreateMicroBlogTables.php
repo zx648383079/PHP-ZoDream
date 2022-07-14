@@ -4,10 +4,9 @@ namespace Module\MicroBlog\Domain\Migrations;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\BlogTopicModel;
-use Module\MicroBlog\Domain\Model\CommentModel;
-use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Model\TopicModel;
+use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
@@ -19,6 +18,7 @@ class CreateMicroBlogTables extends Migration {
      * @return void
      */
     public function up() {
+        MicroRepository::comment()->migration($this);
         $this->append(MicroBlogModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
@@ -38,24 +38,6 @@ class CreateMicroBlogTables extends Migration {
             $table->uint('micro_id');
             $table->string('thumb');
             $table->string('file');
-        })->append(CommentModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->string('content');
-            $table->string('extra_rule', 300)->default('')
-                ->comment('内容的一些附加规则');
-            $table->uint('parent_id');
-            $table->uint('user_id')->default(0);
-            $table->uint('micro_id');
-            $table->uint('agree_count')->default(0);
-            $table->uint('disagree_count')->default(0);
-            $table->timestamp('created_at');
-        })->append(LogModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->uint('item_type', 2)->default(0);
-            $table->uint('item_id');
-            $table->uint('user_id');
-            $table->uint('action');
-            $table->timestamp('created_at');
         })->append(TopicModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 200);

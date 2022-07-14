@@ -15,6 +15,7 @@ class CreateResourceTables extends Migration {
     public function up() {
         ResourceRepository::comment()->migration($this);
         ResourceRepository::tag()->migration($this);
+        ResourceRepository::score()->migration($this);
         $this->append(CategoryModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 40);
@@ -31,6 +32,7 @@ class CreateResourceTables extends Migration {
             $table->string('thumb')->default('');
             $table->text('content');
             $table->string('size', 20)->default('0');
+            $table->string('score', 5)->default('6');
             $table->uint('user_id');
             $table->uint('type', 2)->default(0)->comment('资源类型');
             $table->uint('cat_id');

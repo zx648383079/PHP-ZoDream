@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Module\Document\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Providers\ActionLogProvider;
+use Domain\Providers\CommentProvider;
 use Exception;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
@@ -11,6 +13,20 @@ use Module\Document\Domain\Model\ProjectModel;
 use Module\Document\Domain\Model\ProjectVersionModel;
 
 class ProjectRepository {
+
+    const BASE_KEY = 'doc';
+
+    /**
+     * 针对页面和API的评论可以设置target_id = id . '1/2'
+     * @return CommentProvider
+     */
+    public static function comment(): CommentProvider {
+        return new CommentProvider(self::BASE_KEY);
+    }
+
+    public static function log(): ActionLogProvider {
+        return new ActionLogProvider(self::BASE_KEY);
+    }
 
     public static function getList(string $keywords = '', int $type = 0) {
         return ProjectModel::when(!empty($keywords), function ($query) {

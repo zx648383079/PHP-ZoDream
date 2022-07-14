@@ -6,7 +6,7 @@ use Zodream\Template\View;
 <?php foreach ($comment_list as $reply) :?>
 <div class="comment-item" data-id="<?=$parent_id?>">
     <div class="text">
-        <a href="">123123</a>：
+        <a href=""><?=$reply['user']['name']?></a>：
         <?=$this->text($reply['content'])?>
     </div>
     <div class="actions">

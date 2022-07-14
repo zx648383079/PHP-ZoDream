@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\MicroBlog\Service\Admin;
 
 use Domain\Model\SearchModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
+use Module\MicroBlog\Domain\Repositories\MicroRepository;
 
 class MicroController extends Controller {
 
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $model_list  = MicroBlogModel::with('user')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['content']);
@@ -14,8 +16,8 @@ class MicroController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function deleteAction($id) {
-        MicroBlogModel::where('id', $id)->delete();
+    public function deleteAction(int $id) {
+        MicroRepository::remove($id);
         return $this->renderData([
             'url' => $this->getUrl('micro')
         ]);

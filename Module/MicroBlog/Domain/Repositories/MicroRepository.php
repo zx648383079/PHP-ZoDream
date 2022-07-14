@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Providers\ActionLogProvider;
+use Domain\Providers\CommentProvider;
 use Module\Auth\Domain\Repositories\BulletinRepository;
 use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\MicroBlog\Domain\LinkRule;
@@ -10,14 +12,30 @@ use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\MicroBlog\Domain\Model\AttachmentModel;
 use Module\MicroBlog\Domain\Model\BlogTopicModel;
-use Module\MicroBlog\Domain\Model\CommentModel;
-use Module\MicroBlog\Domain\Model\LogModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Exception;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\Html;
 
 class MicroRepository {
+
+    const BASE_KEY = 'micro';
+
+    const LOG_TYPE_MICRO_BLOG = 0;
+    const LOG_TYPE_COMMENT = 1;
+
+    const LOG_ACTION_RECOMMEND = 1;
+    const LOG_ACTION_COLLECT = 2;
+    const LOG_ACTION_AGREE = 3;
+    const LOG_ACTION_DISAGREE = 4;
+
+    public static function comment(): CommentProvider {
+        return new CommentProvider(self::BASE_KEY);
+    }
+
+    public static function log(): ActionLogProvider {
+        return new ActionLogProvider(self::BASE_KEY);
+    }
 
     public static function getList(
         string $sort = 'new', string $keywords = '',
@@ -118,10 +136,10 @@ class MicroRepository {
      * @param int $micro_id
      * @param int $parent_id
      * @param bool $is_forward 是否转发
-     * @return CommentModel
+     * @return array
      * @throws Exception
      */
-    public static function comment(string $content,
+    public static function commentSave(string $content,
                                    int $micro_id,
                                    int $parent_id = 0,
                                    bool $is_forward = false) {
@@ -130,19 +148,20 @@ class MicroRepository {
             throw new Exception('id 错误');
         }
         $content = Html::text($content);
-        $comment = CommentModel::createOrThrow([
+        $comment = self::comment()->save([
             'content' => $content,
             'parent_id' => $parent_id,
-            'user_id' => auth()->id(),
-            'micro_id' => $model->id,
+            'target_id' => $model->id,
         ]);
         $extraRules = array_merge(
             self::at($content, 0, 1),
             EmojiRepository::renderRule($content),
         );
         if (!empty($extraRules)) {
-            $comment->extra_rule = $extraRules;
-            $comment->save();
+            $comment['extra_rule'] = $extraRules;
+            self::comment()->update($comment['id'], [
+                'extra_rule' => $extraRules
+            ]);
         }
         if ($is_forward) {
             if ($model->forward_id > 0) {
@@ -182,7 +201,7 @@ class MicroRepository {
         if ($model->user_id == auth()->id()) {
             throw new Exception('自己无法收藏');
         }
-        $res = LogRepository::toggleLog(LogModel::TYPE_MICRO_BLOG, LogModel::ACTION_COLLECT, $id);
+        $res = self::log()->toggleLog(self::LOG_TYPE_MICRO_BLOG, self::LOG_ACTION_COLLECT, $id);
         if ($res > 0) {
             $model->collect_count ++;
             $model->is_collected = true;
@@ -203,7 +222,7 @@ class MicroRepository {
             throw new Exception('无法删除');
         }
         $model->delete();
-        CommentModel::where('micro_id', $id)->delete();
+        self::comment()->removeByTarget($id);
         AttachmentModel::where('micro_id', $id)->delete();
         return true;
     }
@@ -214,21 +233,21 @@ class MicroRepository {
             throw new Exception('id 错误');
         }
         $model->delete();
-        CommentModel::where('micro_id', $id)->delete();
+        self::comment()->removeByTarget($id);
         AttachmentModel::where('micro_id', $id)->delete();
         BlogTopicModel::where('micro_id', $id)->delete();
     }
 
     public static function deleteComment(int $id) {
-        $comment = CommentModel::find($id);
+        $comment = self::comment()->get($id);
         if (!$comment) {
             throw new Exception('id 错误');
         }
-        $model = MicroBlogModel::find($comment->micro_id);
-        if ($model->user_id != auth()->id() && $comment->user_id != auth()->id()) {
+        $model = MicroBlogModel::find($comment['target_id']);
+        if ($model->user_id != auth()->id() && $comment['user_id'] != auth()->id()) {
             throw new Exception('无法删除');
         }
-        $comment->delete();
+        self::comment()->remove($comment['id']);
         $model->comment_count --;
         $model->save();
         return $model;
@@ -240,7 +259,7 @@ class MicroRepository {
         if (!$model) {
             throw new Exception('id 错误');
         }
-        $res = LogRepository::toggleLog(LogModel::TYPE_MICRO_BLOG, LogModel::ACTION_RECOMMEND, $id);
+        $res = self::log()->toggleLog(self::LOG_TYPE_MICRO_BLOG, self::LOG_ACTION_RECOMMEND, $id);
         $model->recommend_count += $res > 0 ? 1 : -1;
         $model->save();
         return $model;
@@ -279,11 +298,10 @@ class MicroRepository {
             $model->save();
         }
         if ($is_comment) {
-            CommentModel::create([
+            self::comment()->save([
                 'content' => $content,
                 'extra_rule' => $extraRules,
-                'user_id' => auth()->id(),
-                'micro_id' => $source->id,
+                'target_id' => $source->id,
             ]);
             $source->comment_count ++;
         }

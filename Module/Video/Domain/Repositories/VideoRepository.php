@@ -90,7 +90,7 @@ final class VideoRepository {
     }
 
     public static function isLiked(int $id) {
-        return static::log()->has(self::LOG_TYPE_VIDEO, self::LOG_ACTION_LIKE, $id);
+        return static::log()->has(self::LOG_TYPE_VIDEO, $id, self::LOG_ACTION_LIKE);
     }
 
     public static function like(int $id) {

@@ -7,6 +7,7 @@ use Domain\Model\SearchModel;
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Query\Builder;
+use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
 
 class TagProvider {
@@ -96,6 +97,17 @@ class TagProvider {
         })->page($perPage);
     }
 
+    /**
+     * @param string $keywords
+     * @param int $count
+     * @return string[]
+     */
+    public function suggest(string $keywords = '', int $count = 5): array {
+        return $this->tagQuery()->when(!empty($keywords), function ($query) use ($keywords) {
+            SearchModel::searchWhere($query, ['name'], false, '', $keywords);
+        })->limit($count)->pluck('name');
+    }
+
     public function all() {
         return $this->tagQuery()->get(['id', 'name']);
     }
@@ -106,6 +118,25 @@ class TagProvider {
             return [];
         }
         return $this->tagQuery()->whereIn('id', $tagId)->get();
+    }
+
+    public function bindRelation(string $linkName): Relation {
+        return Relation::parse([
+            'query' => $this->linkQuery(),
+            'type' => Relation::TYPE_MANY,
+            'link' => [
+                $linkName => 'target_id'
+            ],
+            'relation' => [
+                [
+                    'query' => $this->tagQuery(),
+                    'type' => Relation::TYPE_ONE,
+                    'link' => [
+                        'tag_id' => 'id'
+                    ],
+                ]
+            ]
+        ]);
     }
 
     public function getManyTags(array $target): array {

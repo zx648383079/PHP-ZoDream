@@ -1,8 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Module\MicroBlog\Service;
 
-use Module\MicroBlog\Domain\Model\CommentModel;
-use Module\MicroBlog\Domain\Repositories\CommentRepository;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 
 class CommentController extends Controller {
@@ -17,15 +16,14 @@ class CommentController extends Controller {
     }
 
     public function indexAction(int $id, $sort = 'created_at', $order = 'desc') {
-        $comment_list = CommentModel::where([
-            'micro_id' => intval($id),
-            'parent_id' => 0,
-        ])->orderBy($sort, $order)->page();
+        $comment_list = MicroRepository::comment()
+            ->search('', 0, $id, 0, $sort, $order);
         return $this->show(compact('comment_list', 'id'));
     }
 
     public function moreAction(int $id, int $parent_id = 0, $sort = 'created_at', $order = 'desc') {
-        $comment_list = CommentRepository::commentList($id, $parent_id, $sort, $order);
+        $comment_list = MicroRepository::comment()
+            ->search('', 0, $id, $parent_id, $sort, $order);
         if ($parent_id > 0) {
             return $this->show('rely', compact('comment_list', 'parent_id'));
         }
@@ -37,7 +35,7 @@ class CommentController extends Controller {
                                int $parent_id = 0,
                                bool $is_forward = false) {
         try {
-            $model = MicroRepository::comment($content,
+            $model = MicroRepository::commentSave($content,
                 $micro_id,
                 $parent_id,
                 $is_forward);
@@ -54,7 +52,7 @@ class CommentController extends Controller {
             return $this->redirect('./');
         }
         try {
-            $model = CommentRepository::disagree($id);
+            $model = MicroRepository::comment()->disagree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -66,7 +64,7 @@ class CommentController extends Controller {
             return $this->redirect('./');
         }
         try {
-            $model = CommentRepository::agree($id);
+            $model = MicroRepository::comment()->agree($id);
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

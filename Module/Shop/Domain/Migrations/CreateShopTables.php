@@ -318,6 +318,12 @@ class CreateShopTables extends Migration {
         Option::group('商城设置', function () {
             return [
                 [
+                    'name' => '商城开启状态',
+                    'code' => 'shop_open_status',
+                    'type' => 'switch',
+                    'value' => 1,
+                ],
+                [
                     'name' => '开启游客购买',
                     'code' => 'shop_guest_buy',
                     'type' => 'switch',

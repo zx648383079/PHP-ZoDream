@@ -4,21 +4,25 @@ namespace Module\Shop\Service;
 use Module\ModuleController;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Repositories\ArticleRepository;
+use Module\Shop\Domain\Repositories\ShopRepository;
 use Module\Shop\Module;
 use Zodream\Disk\File;
 
 class Controller extends ModuleController {
     public File|string $layout = 'main';
-    protected bool $disallow = true;
 
     public function __construct() {
         parent::__construct();
         $this->middleware(function ($passable, callable $next) {
-            if (!app()->isDebug() && $this->disallow) {
+            if (!$this->allowAccess()) {
                 return $this->redirectWithMessage('/', '禁止访问');
             }
             return $next($passable);
         });
+    }
+
+    protected function allowAccess(): bool {
+        return ShopRepository::isOpen();
     }
 
     public function sendWithShare() {
