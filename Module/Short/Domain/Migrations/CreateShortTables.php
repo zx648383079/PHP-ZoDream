@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Short\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Short\Domain\Model\ShortLogModel;
 use Module\Short\Domain\Model\ShortUrlModel;
 use Zodream\Database\Migrations\Migration;
@@ -29,5 +30,11 @@ class CreateShortTables extends Migration {
             $table->string('ip', 120)->comment('ip');
             $table->timestamp('created_at');
         })->autoUp();
+    }
+
+    public function seed() {
+        RoleRepository::newPermission([
+            'short_link_manage' => '短链接管理'
+        ]);
     }
 }

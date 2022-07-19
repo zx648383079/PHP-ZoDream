@@ -4,6 +4,7 @@ namespace Module\Short\Service;
 
 use Module\Short\Domain\Repositories\ShortRepository;
 use Zodream\Disk\File;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 
 class HomeController extends Controller {
@@ -18,9 +19,13 @@ class HomeController extends Controller {
 		return $this->show();
 	}
 
-	public function createAction(string $source_url) {
+	public function createAction(Input $input) {
         try {
-            $model = ShortRepository::create($source_url);
+            $model = ShortRepository::saveSelf($input->validate([
+                'id' => 'int',
+                'title' => 'string:0,30',
+                'source_url' => 'required|string:0,60',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

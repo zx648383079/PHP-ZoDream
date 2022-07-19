@@ -13,12 +13,13 @@ class Module extends BaseModule {
         return new CreateShortTables();
     }
 
-    public function invokeRoute($path) {
+    public function invokeRoute(?string $path) {
         $path = trim($path, '/');
         if (empty($path)) {
             return;
         }
-        if ($path === 'home' || str_starts_with($path, 'home/')) {
+        $prefix = explode('/', $path, 2)[0];
+        if ($prefix === 'home' || $prefix === 'api') {
             return;
         }
         $response = response();

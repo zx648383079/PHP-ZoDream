@@ -314,7 +314,7 @@ class Platform implements IAuthPlatform {
      * @throws \Exception
      */
     public static function platformId() {
-        return app()->has(static::PLATFORM_KEY) ? app(static::PLATFORM_KEY)->id() : 0;
+        return static::isPlatform() ? app(static::PLATFORM_KEY)->id() : 0;
     }
 
     /**
@@ -329,5 +329,14 @@ class Platform implements IAuthPlatform {
             $platform = static::create($platform);
         }
         app()->instance(static::PLATFORM_KEY, $platform);
+    }
+
+    /**
+     * 当前环境是否通过平台访问
+     * @return bool
+     * @throws \Exception
+     */
+    public static function isPlatform(): bool {
+        return app()->has(static::PLATFORM_KEY);
     }
 }

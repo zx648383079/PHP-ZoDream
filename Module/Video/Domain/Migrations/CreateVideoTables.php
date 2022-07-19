@@ -52,8 +52,7 @@ class CreateVideoTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
-    {
+    public function seed() {
         RoleRepository::newPermission([
             'video_manage' => '短视频管理'
         ]);

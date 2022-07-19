@@ -23,8 +23,8 @@ class HomeController extends Controller {
             return $this->render(
                 ShortRepository::saveSelf($input->validate([
                     'id' => 'int',
-                    'title' => 'required|string:0,30',
-                    'short_url' => 'required|string:0,60',
+                    'title' => 'string:0,30',
+                    'source_url' => 'required|string:0,60',
                 ]))
             );
         } catch (\Exception $ex) {

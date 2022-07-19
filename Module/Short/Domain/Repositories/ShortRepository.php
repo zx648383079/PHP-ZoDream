@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Short\Domain\Repositories;
 
 use Domain\Model\SearchModel;
@@ -146,6 +147,16 @@ class ShortRepository {
     public static function save(array $data, int $userId = 0) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
+        if ($id < 1) {
+            $model = ShortUrlModel::where('source_url', $data['source_url'])
+                ->where('user_id', auth()->id())->first();
+            if ($model) {
+                return $model;
+            }
+            if (empty($data['title'])) {
+                $data['title'] = 'unknown';
+            }
+        }
         $model = ShortUrlModel::findOrNew($id);
         if ($id > 0 && $userId > 0 && $model->user_id != $userId) {
             throw new Exception('url error');
