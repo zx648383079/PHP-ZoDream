@@ -8,6 +8,7 @@ use Domain\Model\Model;
  * @package Module\Short\Domain\Model
  * @property integer $id
  * @property integer $user_id
+ * @property string $title
  * @property string $short_url
  * @property string $source_url
  * @property integer $click_count
@@ -29,6 +30,7 @@ class ShortUrlModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'int',
+            'title' => 'required|string:0,30',
             'short_url' => 'required|string:0,60',
             'source_url' => 'required|string:0,255',
             'click_count' => 'int',

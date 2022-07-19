@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Module\Short\Domain\Model;
 
 use Domain\Model\Model;

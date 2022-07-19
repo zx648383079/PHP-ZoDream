@@ -1,6 +1,7 @@
 <?php
 namespace Module\Short\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Short\Domain\Model\ShortLogModel;
 use Module\Short\Domain\Model\ShortUrlModel;
@@ -61,6 +62,7 @@ class ShortRepository {
         }
         $short_url = static::generateShort(Str::randomInt(4, 8));
         $model = ShortUrlModel::create([
+            'title' => 'unknown',
             'user_id' => auth()->id(),
             'short_url' => $short_url,
             'source_url' => $source_url,
@@ -110,5 +112,66 @@ class ShortRepository {
 
     public static function check(string $short): bool {
         return ShortUrlModel::query()->where('short_url', $short)->count() < 1;
+    }
+
+    public static function getManageList(
+        string $keywords = '',
+        int $user = 0) {
+        return ShortUrlModel::with('user')
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['title', 'source_url']);
+            })
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })->orderBy('id', 'desc')
+            ->page();
+    }
+
+    public static function getList(
+        string $keywords = '',
+        int $user = 0, int $id = 0) {
+        return ShortUrlModel::with('user')
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query,  ['title', 'source_url']);
+            })
+            ->when($id > 0, function($query) use ($id) {
+                $query->where('id', $id);
+            })
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })->orderBy('id', 'desc')
+            ->page();
+    }
+
+    public static function save(array $data, int $userId = 0) {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = ShortUrlModel::findOrNew($id);
+        if ($id > 0 && $userId > 0 && $model->user_id != $userId) {
+            throw new Exception('url error');
+        }
+        $model->load($data);
+        if ($userId > 0) {
+            $model->user_id = $userId;
+        }
+        if ($model->isNewRecord) {
+            $model->short_url = self::generateShort();
+        }
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function saveSelf(array $data) {
+        return static::save($data, auth()->id());
+    }
+
+    public static function remove(int $id) {
+        ShortUrlModel::where('id', $id)->delete();
+    }
+
+    public static function removeSelf(int $id) {
+        ShortUrlModel::where('id', $id)->where('user_id', auth()->id())->delete();
     }
 }

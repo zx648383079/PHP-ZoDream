@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Short\Service;
 
 use Module\Short\Domain\Repositories\ShortRepository;
