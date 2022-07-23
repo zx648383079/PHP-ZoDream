@@ -18,14 +18,14 @@ class LoginController extends Controller {
     }
 
     public function indexAction(Request $request) {
-        $remember = $request->get('rememberMe')
-            || $request->get('remember');
-        $mobile = $request->get('mobile');
+        $remember = $request->bool('rememberMe')
+            || $request->bool('remember');
+        $mobile = $request->string('mobile');
         $account = !empty($mobile) ?
-            $mobile : $request->get('email');
-        $captchaKey = $request->get('captcha_token');
+            $mobile : $request->string('email');
+        $captchaKey = $request->string('captcha_token');
         try {
-            $captcha = $request->get('captcha');
+            $captcha = $request->string('captcha');
             AuthRepository::loginPreCheck($request->ip(), $account, $captcha);
             if (!empty($captcha)) {
                 if (empty($captchaKey)) {
@@ -37,7 +37,7 @@ class LoginController extends Controller {
                 }
             }
             if (!empty($mobile)) {
-                $code = $request->get('code');
+                $code = $request->string('code');
                 if (!empty($code)) {
                     AuthRepository::loginMobileCode(
                         $mobile,
@@ -46,13 +46,13 @@ class LoginController extends Controller {
                 } else {
                     AuthRepository::loginMobile(
                         $mobile,
-                        $request->get('password'),
+                        $request->string('password'),
                         $remember, false);
                 }
             } else {
                 AuthRepository::login(
-                    $request->get('email'),
-                    $request->get('password'),
+                    $request->string('email'),
+                    $request->string('password'),
                     $remember, false);
             }
 

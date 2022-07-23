@@ -4,7 +4,6 @@ namespace Module\Disk\Service\Api;
 
 use Exception;
 use Module\Disk\Domain\Repositories\DiskRepository;
-use Zodream\Http\Uri;
 use Zodream\Infrastructure\Contracts\Http\Output;
 
 class HomeController extends Controller {
@@ -61,26 +60,17 @@ class HomeController extends Controller {
 
     public function fileAction(string $id) {
         try {
-            $disk = DiskRepository::driver()->file($id);
+            return $this->render(DiskRepository::file($id));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        foreach ([
-            'thumb', 'url', 'subtitles'
-                 ] as $key) {
-            if (empty($disk[$key])) {
-                continue;
-            }
-            if ($key !== 'subtitles') {
-                $disk[$key] = DiskRepository::allowUrl($disk[$key]);
-                continue;
-            }
-            $disk[$key] = array_map(function ($item) {
-                $item['url'] = DiskRepository::allowUrl(url('./file/subtitles', ['id' => $item['id']]));
-                return $item;
-            }, $disk[$key]);
+    }
+
+    public function filesAction(array $id) {
+        try {
+            return $this->render(DiskRepository::files($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        unset($disk['path']);
-        return $this->render($disk);
     }
 }

@@ -43,12 +43,19 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
             'extension' => strtolower($item->getExtension()),
         ];
         $data['type'] = FileModel::getType($data['extension']);
-        if ($data['type'] === FileModel::TYPE_IMAGE) {
-            $data['thumb'] = $data['url'] = url('./file/image', ['id' => $fileId]);
-        } elseif ($data['type'] === FileModel::TYPE_VIDEO) {
-            $data['thumb'] = url('./file/thumb', ['id' => $fileId]);
-            // $data['url'] = url('./file/m3u8', ['id' => $fileId]);
-             $data['url'] = url('./file/video', ['id' => $fileId]);
+        switch ($data['type']) {
+            case FileModel::TYPE_IMAGE:
+                $data['thumb'] = $data['url'] = url('./file/image', ['id' => $fileId]);
+                break;
+            case FileModel::TYPE_VIDEO:
+                $data['thumb'] = url('./file/thumb', ['id' => $fileId]);
+                // $data['url'] = url('./file/m3u8', ['id' => $fileId]);
+                $data['url'] = url('./file/video', ['id' => $fileId]);
+                break;
+            case FileModel::TYPE_MUSIC:
+                $data['thumb'] = url('./file/thumb', ['id' => $fileId]);
+                $data['url'] = url('./file/music', ['id' => $fileId]);
+                break;
         }
         return $data;
     }
@@ -188,6 +195,15 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
                     ];
                 }, $subtitles);
             }
+        } elseif ($data['type'] === FileModel::TYPE_MUSIC) {
+            $lyrics = $this->getLyrics($file);
+            if (!empty($lyrics)) {
+                $data['lyrics'] = array_map(function (File $item) use ($root) {
+                    return [
+                        'id' => $item->getRelative($root),
+                    ];
+                }, $lyrics);
+            }
         }
         return $data;
     }
@@ -198,7 +214,20 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
      * @return array
      */
     protected function getSubtitles(File $file) {
-        $extItems = config('disk.subtitles');
+        return $this->getLinkByExtension($file, config('disk.subtitles'));
+    }
+
+    protected function getLyrics(File $file) {
+        return $this->getLinkByExtension($file, config('disk.lyrics'));
+    }
+
+    /**
+     * 根据拓展名获取关联文件
+     * @param File $file
+     * @param array|string $extItems
+     * @return array
+     */
+    protected function getLinkByExtension(File $file, array|string $extItems): array {
         if (empty($extItems)) {
             return [];
         }

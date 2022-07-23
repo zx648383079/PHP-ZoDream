@@ -54,7 +54,7 @@ class FileController extends Controller {
             $response->header->setContentDisposition('error.plist');
             return $response->custom($ex->getMessage(), 'plist');
         }
-        $data['path'];
+        $_ = $data['path'];
         // TODO 解析安装包
         $response->header->setContentDisposition($data['name'].'.plist');
         return $response->custom(Ipa::getPlist($data['name'], '',
@@ -166,6 +166,20 @@ class FileController extends Controller {
             ->setName($data['name']);
         $vtt = new WebVTT($data['name'], WebVTT::parseCuesFromFile($data['path'], $data['extension']));
         return $response->export($vtt);
+    }
+
+    public function lyricsAction($id, Output $response) {
+        $response->allowCors();
+        try {
+            $this->enableThrow();
+            $data = DiskRepository::driver()->file($id);
+        } catch (\Exception $ex) {
+            $response->header->setContentDisposition('error.lrc');
+            return $response->custom($ex->getMessage(), 'txt');
+        }
+        $data['path']->setExtension($data['extension'])
+            ->setName($data['name']);
+        return $response->file($data['path']);
     }
 
     public function musicAction($id, Output $response) {

@@ -21,10 +21,10 @@ class HomeController extends Controller {
     public function indexAction(Request $request) {
         try {
             AuthRepository::login(
-                (string)$request->get('email'),
-                (string)$request->get('password'),
+                $request->string('email'),
+                $request->string('password'),
                 $request->has('rememberMe'));
-            return $this->redirect($request->get('redirect_uri', '/'));
+            return $this->redirect($request->string('redirect_uri', '/'));
         } catch (\Exception $ex) {}
         if ($request->isAjax() && $request->isGet()) {
             return $this->render([
@@ -42,16 +42,16 @@ class HomeController extends Controller {
             session()->set('level', $count);
             $isCaptcha = true;
         }
-        $redirect_uri = $request->get('redirect_uri');
+        $redirect_uri = $request->string('redirect_uri');
         $title = '用户登录';
         return $this->show(compact('redirect_uri', 'title', 'isCaptcha'));
     }
 
-    public function checkAction($name, $value) {
+    public function checkAction(string $name, string $value) {
         if (!in_array($name, ['name', 'email'])) {
             return $this->renderFailure('查询失败！');
         }
-        $count = UserModel::where([$name => $value])->count('id');
+        $count = UserModel::where($name, $value)->count('id');
         return $this->renderData($count > 0);
     }
 
@@ -65,7 +65,7 @@ class HomeController extends Controller {
      */
     public function loginAction(Request $request, $email = null) {
         try {
-            $captcha = $request->get('captcha');
+            $captcha = $request->string('captcha');
             AuthRepository::loginPreCheck($request->ip(), $email, $captcha);
             if (!empty($captcha)) {
                 $verifier = new Captcha();
@@ -75,7 +75,7 @@ class HomeController extends Controller {
             }
             AuthRepository::login(
                 $email,
-                $request->get('password'),
+                $request->string('password'),
                 $request->has('rememberMe'));
         } catch (\Exception $ex) {
             // 是否需要显示验证码

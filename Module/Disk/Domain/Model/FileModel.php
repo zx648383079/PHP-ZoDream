@@ -32,19 +32,19 @@ class FileModel extends Model {
 
     public static $extensionMaps = [
         self::TYPE_IMAGE => [
-            'png', 'jpg', 'jpeg'
+            'png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'
         ],
         self::TYPE_DOCUMENT => [
             'doc', 'docs', 'txt'
         ],
         self::TYPE_VIDEO => [
-            'avi', 'mp4', 'rmvb'
+            'avi', 'mp4', 'rmvb', 'mkv', '3gp', 'm3u8'
         ],
         self::TYPE_BT => [
             'torrent'
         ],
         self::TYPE_MUSIC => [
-            'mp3', 'wav', 'ape', 'flac'
+            'mp3', 'flac', 'ape', 'wav'
         ],
         self::TYPE_ZIP => [
             'rar', 'zip', '7z'

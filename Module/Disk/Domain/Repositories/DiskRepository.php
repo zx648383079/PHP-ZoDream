@@ -61,4 +61,36 @@ class DiskRepository {
         }
         return array_map($cb, $items);
     }
+
+    public static function file(string $id): array {
+        $disk = DiskRepository::driver()->file($id);
+        foreach ([
+                     'thumb', 'url', 'subtitles', 'lyrics'
+                 ] as $key) {
+            if (empty($disk[$key])) {
+                continue;
+            }
+            if ($key !== 'subtitles' && $key !== 'lyrics') {
+                $disk[$key] = DiskRepository::allowUrl($disk[$key]);
+                continue;
+            }
+            $disk[$key] = array_map(function ($item) use ($key) {
+                $item['url'] = DiskRepository::allowUrl(url('./file/'.$key, ['id' => $item['id']]));
+                return $item;
+            }, $disk[$key]);
+        }
+        unset($disk['path']);
+        return $disk;
+    }
+
+    public static function files(array $id): array {
+        $items = [];
+        foreach ($id as $i) {
+            try {
+                $items[] = self::file($i);
+            } catch (\Exception) {}
+        }
+        return $items;
+    }
+
 }
