@@ -183,6 +183,7 @@ class FileController extends Controller {
     }
 
     public function musicAction($id, Output $response) {
+        $response->allowCors();
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -199,6 +200,7 @@ class FileController extends Controller {
     }
 
     public function videoAction($id, Output $response) {
+        $response->allowCors();
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
