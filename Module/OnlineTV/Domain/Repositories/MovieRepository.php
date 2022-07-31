@@ -132,7 +132,6 @@ final class MovieRepository extends CRUDRepository {
 
     public static function getFull(int $id) {
         $model = static::get($id);
-        self::query()->where('id', $id)->updateIncrement('click_count');
         $_ = $model->category;
         $_ = $model->area;
         $model->tags = TVRepository::tag()->getTags($id);

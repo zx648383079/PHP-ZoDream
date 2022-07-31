@@ -63,8 +63,9 @@ class CreateTVTables extends Migration {
             $table->string('film_title')->default('');
             $table->string('translation_title')->default('');
             $table->string('cover')->default('')->comment('封面');
-            $table->string('director', 20)->default('')->comment('导演');
-            $table->string('leader', 20)->default('')->comment('主演');
+            $table->string('director')->default('')->comment('导演');
+            $table->string('leader', 500)->default('')->comment('主演');
+            $table->string('screenwriter')->default('')->comment('编剧');
             $table->uint('cat_id')->default(0);
             $table->uint('area_id')->default(0);
             $table->char('age', 4)->default(date('Y'));

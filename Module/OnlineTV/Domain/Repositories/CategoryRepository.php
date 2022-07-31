@@ -32,7 +32,7 @@ final class CategoryRepository extends CRUDRepository {
                     ->orderBy('release_date')
                         ->limit(6)->get(MovieRepository::MOVIE_PAGE_FILED);
             }
-            if (in_array('new_items', $extra)) {
+            if (in_array('new', $extra)) {
                 $item['new_items'] =
                     MovieModel::query()->where('cat_id', $item['id'])->orderBy('updated_at', 'desc')
                         ->limit(5)->get(MovieRepository::MOVIE_PAGE_FILED);

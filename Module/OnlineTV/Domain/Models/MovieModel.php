@@ -12,6 +12,7 @@ use Domain\Model\Model;
  * @property string $translation_title
  * @property string $cover
  * @property string $director
+ * @property string $screenwriter
  * @property string $leader
  * @property integer $cat_id
  * @property integer $area_id
@@ -38,8 +39,9 @@ class MovieModel extends Model {
             'film_title' => 'string:0,255',
             'translation_title' => 'string:0,255',
             'cover' => 'string:0,255',
-            'director' => 'string:0,20',
-            'leader' => 'string:0,20',
+            'director' => 'string',
+            'leader' => 'string',
+            'screenwriter' => 'string',
             'cat_id' => 'int',
             'area_id' => 'int',
             'age' => 'string:0,4',

@@ -8,9 +8,10 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class MovieController extends Controller {
 
-    public function indexAction(string $keywords = '') {
+    public function indexAction(string $keywords = '', int $category = 0, int $area = 0,
+                                  int $age = 0) {
         return $this->renderPage(
-            MovieRepository::getList($keywords)
+            MovieRepository::search($keywords, $category, $area, $age)
         );
     }
 
@@ -31,8 +32,9 @@ class MovieController extends Controller {
                     'film_title' => 'string:0,255',
                     'translation_title' => 'string:0,255',
                     'cover' => 'string:0,255',
-                    'director' => 'string:0,20',
-                    'leader' => 'string:0,20',
+                    'director' => 'string',
+                    'leader' => 'string',
+                    'screenwriter' => 'string',
                     'cat_id' => 'int',
                     'area_id' => 'int',
                     'age' => 'string:0,4',
