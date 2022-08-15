@@ -157,7 +157,7 @@ class ScoreProvider {
     public function count(int $itemId, int $itemType = 0): array {
         $data = $this->query()->where('item_id', $itemId)
             ->where('item_type', $itemType)
-            ->groupBy('score')->asArray()
+            ->groupBy('score')
             ->get('score,COUNT(*) AS `count`');
         $args = [
             'total' => 0,

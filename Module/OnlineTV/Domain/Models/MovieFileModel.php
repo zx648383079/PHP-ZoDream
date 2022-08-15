@@ -12,9 +12,12 @@ use Domain\Model\Model;
  * @property integer $file_type
  * @property integer $definition
  * @property string $file
- * @property string $subtitle_file
+ * @property string $name
+ * @property string $size
  */
 class MovieFileModel extends Model {
+
+    protected array $append = ['url'];
 
 	public static function tableName() {
         return 'tv_movie_file';
@@ -27,7 +30,8 @@ class MovieFileModel extends Model {
             'file_type' => 'int:0,127',
             'definition' => 'int:0,127',
             'file' => 'required|string:0,255',
-            'subtitle_file' => 'string:0,255',
+            'name' => 'required|string:0,255',
+            'size' => 'string:0,20',
         ];
     }
 
@@ -39,7 +43,12 @@ class MovieFileModel extends Model {
             'file_type' => 'File Type',
             'definition' => 'Definition',
             'file' => 'File',
-            'subtitle_file' => 'Subtitle File',
+            'name' => 'Name',
+            'size' => 'Size',
         ];
+    }
+
+    public function getUrlAttribute() {
+        return url('./movie/file', ['id' => $this->id]);
     }
 }

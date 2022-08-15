@@ -14,6 +14,8 @@ use Domain\Model\Model;
  */
 class MusicFileModel extends Model {
 
+    protected array $append = ['url'];
+
 	public static function tableName() {
         return 'tv_music_file';
     }
@@ -35,5 +37,9 @@ class MusicFileModel extends Model {
             'file' => 'File',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function getUrlAttribute() {
+        return url('./music/file', ['id' => $this->id]);
     }
 }

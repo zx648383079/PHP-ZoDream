@@ -100,7 +100,6 @@ class CreateTVTables extends Migration {
             $table->uint('definition', 1)->default(0)->comment('清晰度');
             $table->string('file');
             $table->string('size', 20)->default('0');
-            $table->string('subtitle_file')->default('')->comment('字幕');
         })->autoUp();
     }
 

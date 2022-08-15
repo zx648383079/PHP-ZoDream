@@ -151,7 +151,7 @@ class MovieController extends Controller {
     }
 
     public function fileAction(int $movie, int $series = 0) {
-        return $this->renderData(
+        return $this->render(
             MovieRepository::fileList($movie, $series)
         );
     }
@@ -166,7 +166,8 @@ class MovieController extends Controller {
                     'file_type' => 'int:0,127',
                     'definition' => 'int:0,127',
                     'file' => 'required|string:0,255',
-                    'subtitle_file' => 'string:0,255',
+                    'name' => 'required|string:0,255',
+                    'size' => 'string:0,20',
                 ]))
             );
         } catch (\Exception $ex) {
