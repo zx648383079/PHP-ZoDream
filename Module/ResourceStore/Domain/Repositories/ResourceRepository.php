@@ -25,7 +25,7 @@ class ResourceRepository {
     const RES_PAGE_FILED = [
         'id', 'user_id', 'cat_id', 'title', 'description', 'thumb',
         'size',
-        'type',
+        'preview_type',
         'price',
         'is_commercial',
         'is_reprint',
@@ -121,6 +121,14 @@ class ResourceRepository {
         if (isset($data['file_catalog'])) {
             $data['file_catalog'] = Json::decode($data['file_catalog']);
         }
+        return $data;
+    }
+
+    public static function getPreview(int $id) {
+        $model = static::get($id);
+        $data = $model->toArray();
+        // $data = array_merge($data, ResourceMetaModel::getOrDefault($id));
+        $data['preview_url'] = url('./preview/view/0/id/'.$id.'/file/0/', [], null,false);
         return $data;
     }
 

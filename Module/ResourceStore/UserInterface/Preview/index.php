@@ -30,7 +30,7 @@ $this->registerCssFile('@demo.css')
     <a href="">768x1024</a>
     <a href="">1024x768</a>
     <a href="">375x812</a>
-    <a href="">812x275</a>
+    <a href="">812x375</a>
 </div>
 
 <div class="frame-box">

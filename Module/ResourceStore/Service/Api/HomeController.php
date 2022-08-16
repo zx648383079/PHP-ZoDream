@@ -27,6 +27,16 @@ class HomeController extends Controller {
         }
     }
 
+    public function previewAction(int $id) {
+        try {
+            return $this->render(
+                ResourceRepository::getPreview($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function downloadAction(int $id, Output $output, int $file = 0) {
         try {
             return $output

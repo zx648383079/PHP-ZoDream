@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\ResourceStore\Domain\Repositories;
 
-use Domain\Providers\StorageProvider;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
 use Module\ResourceStore\Domain\Models\ResourceMetaModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
@@ -51,12 +50,12 @@ final class UploadRepository {
         }
         $previewFile = ResourceMetaModel::where('res_id', $id)->where('name', 'preview_file')->value('content');
         if ($model->preview_type != 3) {
-            return StorageProvider::publicStore()->getFile($previewFile);
+            return ResourceRepository::storage()->getFile($previewFile);
         }
         $folder = self::previewFolder($id);
         if (!$folder->exist()) {
             $folder->create();
-            $zip = new ZipStream(StorageProvider::publicStore()->getFile($previewFile));
+            $zip = new ZipStream(ResourceRepository::storage()->getFile($previewFile));
             $zip->extractTo($folder);
         }
         if (!empty($file)) {
