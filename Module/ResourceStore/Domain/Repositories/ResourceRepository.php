@@ -11,7 +11,9 @@ use Domain\Providers\StorageProvider;
 use Domain\Providers\TagProvider;
 use Exception;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
+use Module\ResourceStore\Domain\Models\ResourceMetaModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
+use Zodream\Helpers\Json;
 use Zodream\Validate\Validator;
 
 
@@ -100,20 +102,26 @@ class ResourceRepository {
 
     public static function getEdit(int $id) {
         $model = self::get($id);
-        $model->tags = self::tag()->getTags($id);
-        $model->files = ResourceFileModel::where('res_id', $id)->get();
-        return $model;
+        $data = $model->toArray();
+        $data['tags'] = self::tag()->getTags($id);
+        $data['files'] = ResourceFileModel::where('res_id', $id)->get();
+        return array_merge($data, ResourceMetaModel::getOrDefault($id));
     }
 
     public static function getFull(int $id) {
         $model = static::get($id);
         ResourceModel::query()->where('id', $id)->updateIncrement('view_count');
-        $_ = $model->user;
-        $_ = $model->category;
-        $model->tags = static::tag()->getTags($id);
-        $model->files = ResourceFileModel::where('res_id', $id)->get();
-        $model->is_gradable = static::isGradable($id);
-        return $model;
+        $data = $model->toArray();
+        $data['user'] = $model->user;
+        $data['category'] = $model->category;
+        $data['is_gradable'] = static::isGradable($id);
+        $data['tags'] = self::tag()->getTags($id);
+        $data['files'] = ResourceFileModel::where('res_id', $id)->get();
+        $data = array_merge($data, ResourceMetaModel::getOrDefault($id));
+        if (isset($data['file_catalog'])) {
+            $data['file_catalog'] = Json::decode($data['file_catalog']);
+        }
+        return $data;
     }
 
     public static function isGradable(int $id): bool {
@@ -159,6 +167,7 @@ class ResourceRepository {
         }
         static::tag()->bindTag($model->id, $tags);
         $fileId = [];
+        unset($data['file_catalog']);
         foreach ($files as $item) {
             $item = Validator::filter($item, [
                 'id' => 'int',
@@ -177,10 +186,11 @@ class ResourceRepository {
             if ($file->exist()) {
                 $model->size = $file->size();
             }
-            UploadRepository::unzipFile($fileModel);
+            $data['file_catalog'] = UploadRepository::catalog($fileModel);
         }
         ResourceFileModel::where('res_id', $model->id)
             ->whereNotIn('id', $fileId)->delete();
+        ResourceMetaModel::saveBatch($model->id, $data);
         return $model;
     }
 
@@ -216,8 +226,14 @@ class ResourceRepository {
     }
 
     public static function getCatalog(int $id) {
-        $model = ResourceModel::findOrThrow($id, '资源不存在');
-        return UploadRepository::fileMap($model);
+        // $model = ResourceModel::findOrThrow($id, '资源不存在');
+        // return UploadRepository::fileMap($model);
+        $catalog = ResourceMetaModel::query()->where('res_id', $id)->where('name', 'file_catalog')
+            ->value('content');
+        if (empty($catalog)) {
+            return [];
+        }
+        return Json::decode($catalog);
     }
 
     public static function suggestion(string $keywords) {

@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Api;
 
-use Infrastructure\Uploader;
+use Domain\Repositories\FileRepository;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
@@ -42,16 +43,12 @@ class PublishController extends Controller {
     }
 
     public function uploadAction() {
-        $upload = new Uploader('file', [
-            'pathFormat' => '/assets/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}',
-            'maxSize' => 2048000,
-            'allowFiles' => ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp']
-        ]);
-        $data = $upload->getFileInfo();
-        if ($data['state'] !== 'SUCCESS') {
-            return $this->renderFailure($data['state']);
+        try {
+            $res = FileRepository::uploadImage();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($data);
+        return $this->render($res);
     }
 
     public function deleteAction(int $id) {

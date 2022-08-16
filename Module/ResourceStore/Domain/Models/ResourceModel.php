@@ -17,7 +17,7 @@ use Zodream\Helpers\Time;
  * @property integer $size
  * @property float $score
  * @property integer $user_id
- * @property integer $type
+ * @property integer $preview_type
  * @property integer $cat_id
  * @property integer $price
  * @property integer $is_commercial
@@ -43,7 +43,7 @@ class ResourceModel extends Model {
             'size' => 'int',
             'score' => 'float',
             'user_id' => 'required|int',
-            'type' => 'int:0,127',
+            'preview_type' => 'int:0,127',
             'cat_id' => 'required|int',
             'price' => 'int',
             'is_commercial' => 'int:0,127',
@@ -79,11 +79,6 @@ class ResourceModel extends Model {
         $thumb = $this->getAttributeSource('thumb');
         return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
     }
-
-    public function getCreatedAtAttribute() {
-        return Time::isTimeAgo($this->getAttributeValue('created_at'), 2678400);
-    }
-
 
     public function category() {
         return $this->hasOne(CategoryModel::class, 'id', 'cat_id');

@@ -4,6 +4,7 @@ namespace Module\ResourceStore\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
+use Module\ResourceStore\Domain\Models\ResourceMetaModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
 use Module\ResourceStore\Domain\Models\CategoryModel;
 use Module\ResourceStore\Domain\Repositories\ResourceRepository;
@@ -34,7 +35,7 @@ class CreateResourceTables extends Migration {
             $table->string('size', 20)->default('0');
             $table->string('score', 5)->default('6');
             $table->uint('user_id');
-            $table->uint('type', 2)->default(0)->comment('资源类型');
+            $table->uint('preview_type', 1)->default(0)->comment('预览文件类型');
             $table->uint('cat_id');
             $table->uint('price')->default(0)->comment('价格');
             $table->bool('is_commercial')->default(0)->comment('是否允许商用');
@@ -43,6 +44,11 @@ class CreateResourceTables extends Migration {
             $table->uint('view_count')->default(0);
             $table->uint('download_count')->default(0);
             $table->timestamps();
+        })->append(ResourceMetaModel::tableName(), function (Table $table) {
+            $table->id();
+            $table->uint('res_id');
+            $table->string('name', 40);
+            $table->text('content');
         })->append(ResourceFileModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('user_id');
