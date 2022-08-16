@@ -33,7 +33,7 @@ class CreateResourceTables extends Migration {
             $table->string('thumb')->default('');
             $table->text('content');
             $table->string('size', 20)->default('0');
-            $table->string('score', 5)->default('6');
+            $table->string('score', 5)->default('10');
             $table->uint('user_id');
             $table->uint('preview_type', 1)->default(0)->comment('预览文件类型');
             $table->uint('cat_id');
