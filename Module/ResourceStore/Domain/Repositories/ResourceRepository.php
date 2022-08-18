@@ -61,7 +61,7 @@ class ResourceRepository {
                                    string|int|bool $order = 'desc') {
         return ResourceModel::with('user', 'category')
             ->when($category > 0, function ($query) use ($category) {
-                $query->where('cat_id', $category);
+                $query->whereIn('cat_id', CategoryRepository::getAllChildrenId($category));
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);

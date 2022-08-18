@@ -14,6 +14,7 @@ use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Model\ThreadSimpleModel;
 use Module\Forum\Domain\Parsers\Parser;
 use Zodream\Helpers\Json;
+use Zodream\Html\Page;
 
 class ThreadRepository {
 
@@ -147,6 +148,7 @@ class ThreadRepository {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
             'grade', 'status'
         ], 'asc');
+        /** @var Page<ThreadPostModel> $items */
         $items = ThreadPostModel::with('user', 'thread')
             ->when($user_id > 0, function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
@@ -158,13 +160,20 @@ class ThreadRepository {
             ->orderBy($sort, $order)
             ->orderBy('created_at', 'asc')
             ->page($per_page, 'page', $page);
-        foreach ($items as $item) {
+        $data = $items->getPage();
+        foreach ($data as $item) {
             $item->is_public_post = $item->getIsPublicPostAttribute();
             $item->content = $item->is_public_post ? Parser::create($item, request())
                 ->render($type) : '';
             $item->deleteable = static::canRemovePost($item->thread, $item);
         }
-        return $items;
+        usort($data, function ($a, $b) {
+            if ($a['grade'] < 1 || $b['grade'] < 1) {
+                return $a['grade'] > $b['grade'] ? 1 : -1;
+            }
+            return 0;
+        });
+        return $items->setPage($data);
     }
 
     /**

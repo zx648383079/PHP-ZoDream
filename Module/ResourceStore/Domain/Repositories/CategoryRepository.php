@@ -8,6 +8,7 @@ use Domain\Repositories\CRUDRepository;
 use Module\ResourceStore\Domain\Models\CategoryModel;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Tree;
+use Zodream\Helpers\Tree as TreeHelper;
 
 final class CategoryRepository extends CRUDRepository {
 
@@ -77,4 +78,9 @@ final class CategoryRepository extends CRUDRepository {
         return CategoryModel::where('is_hot', 1)->get();
     }
 
+    public static function getAllChildrenId(int $id) {
+        $data = TreeHelper::getTreeChild(static::query()->get('id', 'parent_id'), $id);
+        $data[] = $id;
+        return $data;
+    }
 }
