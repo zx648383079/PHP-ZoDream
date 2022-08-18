@@ -14,6 +14,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\TagModel;
+use Module\OpenPlatform\Domain\Platform;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
@@ -214,24 +215,28 @@ class BlogRepository {
      * @throws Exception
      */
     public static function renderContent(BlogModel $blog) {
-        return static::renderLazyContent($blog, !app('platform') && !Bot::isSpider());
+        $isPlatform = Platform::isPlatform();
+        return static::renderLazyContent($blog, !$isPlatform && Bot::isSpider(), $isPlatform);
     }
 
     /**
      * 缓存博客内容编译
      * @param BlogModel $blog
      * @param bool $imgLazy 是否延迟加载图片
+     * @param bool $useDeeplink 是否使用深度链接
      * @return string
      * @throws Exception
      */
-    public static function renderLazyContent(BlogModel $blog, bool $imgLazy = false) {
-        $cb = function () use ($blog, $imgLazy) {
-            return Html::render($blog->getAttributeValue('content'),  TagRepository::getTags($blog->id), $blog->edit_type == 1, $imgLazy);
+    public static function renderLazyContent(BlogModel $blog, bool $imgLazy = false, bool $useDeeplink = false) {
+        $cb = function () use ($blog, $imgLazy, $useDeeplink) {
+            return Html::render($blog->getAttributeValue('content'),
+                TagRepository::getTags($blog->id), $blog->edit_type == 1, $imgLazy, $useDeeplink);
         };
         if (app()->isDebug()) {
             return $cb();
         }
-        return cache()->store('pages')->getOrSet(sprintf('blog_%d_%s_content', $blog->id, $imgLazy), $cb, 3600);
+        return cache()->store('pages')
+            ->getOrSet(sprintf('blog_%d_%d_%d_content', $blog->id, $imgLazy, $useDeeplink), $cb, 3600);
     }
 
     public static function sourceBlog(int $id, string $language = '') {
@@ -260,7 +265,7 @@ class BlogRepository {
             throw new Exception('id 错误！');
         }
         $data = $blog->toArray();
-        $data['content'] = $blog->toHtml();
+        $data['content'] = BlogRepository::renderContent($blog);
         $data = array_merge($data, static::renderAsset(BlogMetaModel::getOrDefault($id)));
         $data['previous'] = $blog->previous;
         $data['next'] = $blog->next;

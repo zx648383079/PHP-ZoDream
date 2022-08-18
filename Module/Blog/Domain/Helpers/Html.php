@@ -2,11 +2,16 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Helpers;
 
+use Infrastructure\Deeplink;
 use Infrastructure\HtmlExpand;
+use Zodream\Helpers\Html as HtmlHelper;
+use Module\Blog\Domain\Model\BlogSimpleModel;
+use Zodream\Helpers\Time;
 use Zodream\Html\MarkDown;
 
 class Html {
-    public static function render($content, array $tags = [], bool $isMarkDown = false, bool $imgLazy = false): string {
+    public static function render($content, array $tags = [], bool $isMarkDown = false,
+        bool $imgLazy = false, bool $useDeeplink = false): string {
         if ($isMarkDown) {
             $content = MarkDown::parse($content, true);
         }
@@ -36,14 +41,58 @@ class Html {
         }
         if (!empty($tags)) {
             $tags = array_column($tags, 'name');
-            $content = str_replace($tags, array_map(function ($tag) {
-                $url = url('./', ['tag' => $tag]);
+            $content = str_replace($tags, array_map(function ($tag) use ($useDeeplink) {
+                $url = $useDeeplink ? Deeplink::encode('blog/search', ['tag' => $tag]) : url('./', ['tag' => $tag]);
                 return <<<HTML
 <a href="{$url}" title="{$tag}">{$tag}</a>
 HTML;
             }, $tags), $content);
         }
+        $content = preg_replace_callback('/catalog:([\d, ]+)+/', function ($match) use ($useDeeplink) {
+            return static::renderCatalog(explode(',', $match[1]), $useDeeplink);
+        }, $content);
         return str_replace(array_keys($replace), array_values($replace), $content);
+    }
+
+    /**
+     * 生成引入目录
+     * @param array $idItems
+     * @return string
+     * @throws \Exception
+     */
+    protected static function renderCatalog(array $idItems, bool $useDeeplink = false): string {
+        $filters = [];
+        foreach ($idItems as $id) {
+            $id = intval($id);
+            if ($id > 0 && !in_array($id, $filters)) {
+                $filters[] = $id;
+            }
+        }
+        if (empty($filters)) {
+            return '';
+        }
+        $items = BlogSimpleModel::whereIn('id', $filters)->get();
+        if (empty($items)) {
+            return '';
+        }
+        $html = '';
+        foreach ($items as $item) {
+            $url = $useDeeplink ? Deeplink::encode('blog/'.$item->id) : url('./', ['id' => $item->id]);
+            $title = HtmlHelper::text($item->title);
+            $meta = HtmlHelper::text($item->description);
+            $ago = Time::isTimeAgo($item->getAttributeSource('created_at'), 2678400);
+            $target = $useDeeplink ? '' : ' target="_blank"';
+            $html .= <<<HTML
+<li class="book-catalog-item">
+    <div class="item-title"><a class="name" href="{$url}"{$target}>{$title}</a><div class="time">{$ago}</div></div>
+    <div class="item-meta">{$meta}</div>
+</li>
+HTML;
+        }
+        return <<<HTML
+<ul class="book-catalog-inner">{$html}</ul>
+HTML;
+
     }
 
     protected static function renderImg(string $line, bool $imgLazy, string $defaultImage) {

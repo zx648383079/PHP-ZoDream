@@ -8,7 +8,7 @@ namespace Module\Blog\Domain\Model;
 */
 class BlogSimpleModel extends BlogModel {
 
-    const SIMPLE_MODE = ['id', 'title', 'parent_id', 'description', 'created_at'];
+    const SIMPLE_MODE = ['id', 'title', 'thumb', 'parent_id', 'description', 'created_at'];
 
     protected array $append = ['url'];
 

@@ -47,18 +47,31 @@ class Deeplink {
         if (empty($path)) {
             return url('/');
         }
-        if ($isBackend && $path === 'user' && !empty($params) && is_numeric($params[0])) {
-            return url('/auth/admin/user/edit', ['id' => $params[0]]);
+        if ($isBackend) {
+            if ($path === 'user' && !empty($params) && is_numeric($params[0])) {
+                return url('/auth/admin/user/edit', ['id' => $params[0]]);
+            }
+            if ($path === 'friend_link') {
+                return url('/contact/admin/friend_link');
+            }
+            if ($path === 'order' && !empty($params) && is_numeric($params[0])) {
+                return url('/shop/admin/order/info', ['id' => $params[0]]);
+            }
+            return '';
         }
-        if ($isBackend && $path === 'friend_link') {
-            return url('/contact/admin/friend_link');
-        }
-        if ($isBackend && $path === 'order' && !empty($params) && is_numeric($params[0])) {
-            return url('/shop/admin/order/info', ['id' => $params[0]]);
-        }
-        if (!$isBackend && $host === 'micro' && is_numeric($path)) {
+
+        if ($host === 'micro' && is_numeric($path)) {
             return url('/micro', ['id' => $path]);
         }
+        if ($host === 'blog') {
+            if (is_numeric($path)) {
+                return url('/blog', ['id' => $path]);
+            }
+            if ($path === 'search') {
+                return url('/blog', $queries);
+            }
+        }
+
         return '';
     }
 }

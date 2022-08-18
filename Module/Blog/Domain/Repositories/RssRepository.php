@@ -28,7 +28,7 @@ class RssRepository {
             $rssItem->setTitle($item->title)
                 ->setLink(url('blog', ['id' => $item->id]))
                 ->setPubDate($item->getAttributeSource('created_at'))
-                ->setDescription(BlogRepository::renderLazyContent($item, false))
+                ->setDescription(BlogRepository::renderLazyContent($item, false, false))
                 ->addTag('category', $item->term->name);
             if (isset($metaItems[$item->id]['video_url'])) {
                 $file = static::toFile($metaItems[$item->id]['video_url']);
