@@ -89,6 +89,31 @@ class CreateSEOTables extends Migration {
                 ],
             ];
         });
+        OptionModel::group('上传', function () {
+            return [
+                [
+                    'name' => '添加水印',
+                    'code' => 'upload_add_water',
+                    'type' => 'switch',
+                    'value' => 0,
+                    'visibility' => 1,
+                ],
+                [
+                    'name' => '水印文字',
+                    'code' => 'upload_water_text',
+                    'type' => 'text',
+                    'visibility' => 1,
+                ],
+                [
+                    'name' => '水印位置',
+                    'code' => 'upload_water_position',
+                    'type' => 'select',
+                    'value' => 0,
+                    'default_value' => "左上\n右上\n左下\n右下",
+                    'visibility' => 1,
+                ],
+            ];
+        });
         OptionModel::group('高级', function () {
             return [
                 [

@@ -6,6 +6,7 @@ use Domain\Providers\StorageProvider;
 use Exception;
 use Infrastructure\Environment;
 use Module\Disk\Domain\FFmpeg;
+use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
@@ -13,6 +14,8 @@ use Zodream\Domain\Upload\UploadBase64;
 use Zodream\Domain\Upload\UploadFile;
 use Zodream\Domain\Upload\UploadRemote;
 use Zodream\Html\Page;
+use Zodream\Image\Base\Font;
+use Zodream\Image\WaterMark;
 
 class FileRepository {
 
@@ -255,6 +258,30 @@ class FileRepository {
             throw new Exception(implode(',', $upload->getError()));
         }
         return $files;
+    }
+
+    /**
+     * 添加水印文字
+     * @param File $file
+     * @param string $text
+     * @param int $position
+     * @return void
+     * @throws Exception
+     */
+    public static function addWater(File $file, string $text, int $position) {
+        $image = new WaterMark();
+        $image->instance()->loadResource($file);
+        $font = new Font((string)app_path(config('disk.font')), 12, '#fff');
+        $textBox = $image->instance()->fontSize($text, $font);
+        list($x, $y) = $image->getPointByDirection(match ($position) {
+            3 => WaterMark::RightBottom,
+            2 => WaterMark::LeftBottom,
+            1 => WaterMark::RightTop,
+            default => WaterMark::LeftTop,
+        }, $textBox->getWidth(), $textBox->getHeight(), 20);
+        $image->addText($text, $x + 2, $y + 2, $font->getSize(), '#777', $font->getFile());
+        $image->addText($text, $x, $y, $font->getSize(), $font->getColor(), $font->getFile());
+        $image->save();
     }
 
     protected static function formatExtension(array $data): array {
