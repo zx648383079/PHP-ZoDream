@@ -105,7 +105,7 @@ class OrderRepository {
         return $data;
     }
 
-    public static function operate(int $id, string $operate = '', array $data) {
+    public static function operate(int $id, string $operate, array $data) {
         $order = OrderModel::findOrThrow($id, '订单不存在');
         switch ($operate) {
             case 'shipping':
