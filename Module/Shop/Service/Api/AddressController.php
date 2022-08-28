@@ -13,7 +13,7 @@ class AddressController extends Controller {
         ];
     }
 
-    public function indexAction($id = 0) {
+    public function indexAction(int $id = 0) {
         if ($id > 0) {
             return $this->infoAction($id);
         }
@@ -21,7 +21,7 @@ class AddressController extends Controller {
         return $this->renderPage($address_list);
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         $address = AddressRepository::get($id);
         if (!$address) {
             $this->renderFailure('地址有误');

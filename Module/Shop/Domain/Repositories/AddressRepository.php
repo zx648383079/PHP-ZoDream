@@ -1,6 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Module\Shop\Domain\Models\RegionModel;
 use Module\Shop\Domain\Models\Scene\Address;
 use Exception;
@@ -75,5 +76,13 @@ class AddressRepository {
             return Address::where('id', $id)->where('user_id', auth()->id())->first();
         }
         return Address::where('user_id', auth()->id())->first();
+    }
+
+    public static function search(int $user, string $keywords) {
+        return Address::with('region')->where('user_id', $user)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, ['name', 'address', 'tel'], false, '', $keywords);
+            })
+            ->orderBy('id', 'desc')->page();;
     }
 }
