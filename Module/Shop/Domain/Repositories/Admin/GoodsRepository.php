@@ -385,6 +385,19 @@ class GoodsRepository {
         GoodsCardModel::refreshStock($model->goods_id);
     }
 
+    public static function preview(int $id) {
+        $goods = GoodsModel::findOrThrow($id);
+        $data = $goods->toArray();
+        unset($data['cost_price']);
+        $data['properties'] = $goods->properties;
+        $data['category'] = $goods->category;
+        $data['brand'] = $goods->brand;
+        $data['static_properties'] = $goods->static_properties;
+        $data['products'] = $goods->products;
+        $data['gallery'] = $goods->gallery;
+        return $data;
+    }
+
     public function cardImport(int $goods) {
 
     }

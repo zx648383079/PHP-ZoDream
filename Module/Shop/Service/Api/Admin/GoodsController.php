@@ -106,5 +106,13 @@ class GoodsController extends Controller {
 
     }
 
+    public function previewAction(int $id) {
+        try {
+            $data = GoodsRepository::preview($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($data);
+    }
 
 }

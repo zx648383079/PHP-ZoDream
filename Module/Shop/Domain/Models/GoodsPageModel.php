@@ -43,7 +43,10 @@ use Module\Shop\Domain\Entities\GoodsEntity;
 class GoodsPageModel extends GoodsEntity {
 
 
-    protected array $visible = ['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'shop', 'category', 'brand', 'is_best', 'is_new', 'is_hot', 'stock'];
+
+    protected array $visible = ['id', 'name', 'series_number', 'thumb', 'price',
+        'market_price', 'shop', 'category', 'brand', 'is_best',
+        'is_new', 'is_hot', 'stock', 'attribute_group_id'];
 
     protected array $append = ['category', 'brand'];
 
@@ -56,6 +59,8 @@ class GoodsPageModel extends GoodsEntity {
     }
 
     public static function query() {
-        return parent::query()->select(['id', 'name', 'series_number', 'thumb', 'price', 'market_price', 'cat_id', 'brand_id', 'is_best', 'is_new', 'is_hot', 'stock']);
+        return parent::query()->select(['id', 'name', 'series_number', 'thumb',
+            'price', 'market_price', 'cat_id', 'brand_id',
+            'is_best', 'is_new', 'is_hot', 'stock', 'attribute_group_id']);
     }
 }
