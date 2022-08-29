@@ -4,6 +4,7 @@ namespace Module\Shop\Domain\Repositories\Admin;
 
 use Domain\Model\SearchModel;
 use Exception;
+use Module\Shop\Domain\Entities\AttributeEntity;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\AttributeUniqueModel;
 use Module\Shop\Domain\Models\CartModel;
@@ -24,6 +25,7 @@ use Zodream\Database\Model\Query;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
+use Zodream\Validate\Validator;
 
 class GoodsRepository {
 
@@ -53,6 +55,7 @@ class GoodsRepository {
     public static function getFull(int $id) {
         $goods = GoodsModel::findOrThrow($id, '商品不存在');
         $data = $goods->toArray();
+        $data['gallery'] = $goods->gallery;
         return array_merge($data, GoodsMetaModel::getOrDefault($id));
     }
 
@@ -61,7 +64,7 @@ class GoodsRepository {
         unset($data['id']);
         $model = GoodsModel::findOrNew($id);
         $model->load($data);
-        if (!$model->save()) {
+        if (!$model->save() && $id < 1) {
             throw new \Exception($model->getFirstError());
         }
         if ($id < 1) {
@@ -70,15 +73,121 @@ class GoodsRepository {
             ]);
         }
         GoodsMetaModel::saveBatch($model->id, $data);
-        if (isset($data['product'])) {
-            ProductModel::batchSave(is_array($data['product']) ? $data['product'] :
-                Json::decode($data['product']), $model->id);
+        if (isset($data['attr'])) {
+            static::batchSaveAttribute($data['attr'], $model->id, $model->attribute_group_id);
+        }
+        if (isset($data['products'])) {
+            static::batchSaveProduct(is_array($data['products']) ? $data['products'] :
+                Json::decode($data['products']), $model->id);
         }
         if (isset($data['gallery'])) {
-            GoodsGalleryModel::batchSave($data['gallery'], $model->id);
+            static::batchSaveGallery($data['gallery'], $model->id);
         }
-        if (isset($data['attr'])) {
-            AttributeUniqueModel::batchSave($model, $data['attr']);
+        return $model;
+    }
+
+    public static function batchSaveProduct(array $data, int $goodsId) {
+        $exist = [];
+        foreach ($data as $item) {
+            $item = Validator::filter($item, [
+                'id' => 'int',
+                'price' => '',
+                'market_price' => '',
+                'stock' => 'int',
+                'series_number' => 'string:0,50',
+                'attributes' => 'string:0,100',
+                'weight' => 'numeric'
+            ]);
+            $attributes = [];
+            foreach (explode(ProductModel::ATTRIBUTE_LINK, $item['attributes']) as $label) {
+                $attrId = GoodsAttributeModel::where('value', $label)
+                    ->where('goods_id', $goodsId)->value('id');
+                if ($attrId < 1) {
+                    continue;
+                }
+                $attributes[] = $attrId;
+            }
+            sort($attributes);
+            $item['attributes'] = implode(ProductModel::ATTRIBUTE_LINK, $attributes);
+            $item['goods_id'] = $goodsId;
+            $model = static::productSave($item);
+            $exist[] = $model->id;
+        }
+        ProductModel::where('goods_id', $goodsId)
+            ->whereNotIn('id', $exist)->delete();
+    }
+
+    public static function productSave(array $data) {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = ProductModel::findOrNew($id);
+        $model->load($data);
+        if (!$model->save() && $id < 1) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function batchSaveAttribute(array $data, int $goodsId, int $groupId) {
+        $allow = AttributeEntity::where('group_id', $groupId)->pluck('id');
+        if (empty($allow)) {
+            return;
+        }
+        $attrId = [];
+        foreach ($data as $item) {
+            if (!in_array($item['attribute_id'], $allow)) {
+                continue;
+            }
+            $item = Validator::filter($item, [
+                'id' => 'int',
+                'attribute_id' => 'required|int',
+                'value' => 'required|string:0,255',
+                'price' => '',
+            ]);
+            $item['goods_id'] = $goodsId;
+            $model = static::attributeSave($item);
+            $attrId[] = $model->id;
+        }
+        GoodsAttributeModel::where('goods_id', $goodsId)
+            ->whereNotIn('id', $attrId)->delete();
+    }
+
+    public static function attributeSave(array $data) {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = GoodsAttributeModel::findOrNew($id);
+        $model->load($data);
+        if (!$model->save() && $id < 1) {
+            throw new \Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function batchSaveGallery(array $files, int $goodsId) {
+        $fileId = [];
+        foreach ($files as $item) {
+            $item = Validator::filter($item, [
+                'id' => 'int',
+                'goods_id' => 'required|int',
+                'type' => 'int:0,100',
+                'thumb' => 'required|string:0,255',
+                'file' => 'required|string:0,255',
+            ]);
+            $item['goods_id'] = $goodsId;
+            $fileModel = static::gallerySave($item);
+            $fileId[] = $fileModel->id;
+        }
+        GoodsGalleryModel::where('goods_id', $goodsId)
+            ->whereNotIn('id', $fileId)->delete();
+    }
+
+    public static function gallerySave(array $data) {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = GoodsGalleryModel::findOrNew($id);
+        $model->load($data);
+        if (!$model->save() && $id < 1) {
+            throw new \Exception($model->getFirstError());
         }
         return $model;
     }
@@ -192,7 +301,7 @@ class GoodsRepository {
     public static function attributeList(int $group_id, int $goods_id = 0) {
         $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position asc')->orderBy('type asc')->asArray()->get();
         foreach ($attr_list as &$item) {
-            $item['default_value'] = empty($item['default_value']) || $item['input_type'] < 1 ? [] : explode(PHP_EOL, trim($item['default_value']));
+            $item['default_value'] = empty($item['default_value']) || $item['input_type'] < 1 ? [] : explode("\n", trim($item['default_value']));
             $item['attr_items'] = GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $item['id'])->get();
         }
         unset($item);

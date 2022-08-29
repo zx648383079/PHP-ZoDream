@@ -7,7 +7,9 @@ use Domain\Model\Model;
  * Class GoodsImageModel
  * @property integer $id
  * @property integer $goods_id
- * @property string $image
+ * @property string $thumb
+ * @property string $file
+ * @property integer $type
  */
 class GoodsGalleryModel extends Model {
     public static function tableName() {
@@ -17,7 +19,9 @@ class GoodsGalleryModel extends Model {
     public function rules() {
         return [
             'goods_id' => 'required|int',
-            'image' => 'required|string:0,255',
+            'type' => 'int:0,100',
+            'thumb' => 'required|string:0,255',
+            'file' => 'required|string:0,255',
         ];
     }
 
@@ -29,8 +33,16 @@ class GoodsGalleryModel extends Model {
         ];
     }
 
-    public function getImageAttribute() {
-        $thumb = $this->getAttributeSource('image');
+    public function getThumbAttribute() {
+        $thumb = $this->getAttributeSource('thumb');
+        if (empty($thumb)) {
+            return '';
+        }
+        return url()->asset($thumb);
+    }
+
+    public function getFileAttribute() {
+        $thumb = $this->getAttributeSource('file');
         if (empty($thumb)) {
             return '';
         }
@@ -41,13 +53,14 @@ class GoodsGalleryModel extends Model {
         if (empty($data)) {
             return;
         }
-        $exist = static::where('goods_id', $id)->pluck('image');
+        $exist = static::where('goods_id', $id)->where('type', 0)->pluck('file');
         $diff = empty($exist) ? $data : array_diff($data, $exist);
         if (!empty($diff)) {
             $diff = array_map(function ($item) use ($id) {
                 return [
                     'goods_id' => $id,
-                    'image' => $item,
+                    'thumb' => $item,
+                    'file' => $item
                 ];
             }, $diff);
             static::query()->insert($diff);
@@ -59,7 +72,7 @@ class GoodsGalleryModel extends Model {
         if (empty($del)) {
             return;
         }
-        static::where('goods_id', $id)->whereIn('image', $del)->delete();
+        static::where('goods_id', $id)->where('type', 0)->whereIn('file', $del)->delete();
     }
 
 }

@@ -36,11 +36,14 @@ class GoodsRepository {
 
     /**
      * 商品详情
-     * @param $id
+     * @param int $id
      * @return array|bool
      * @throws \Exception
      */
-    public static function detail(int $id, bool $full = true) {
+    public static function detail(int $id, bool $full = true, int $product = 0) {
+        if ($product > 0 && $id < 1) {
+            $id = intval(ProductModel::where('id', $product)->value('goods_id'));
+        }
         $goods = GoodsModel::find($id);
         if (empty($goods)) {
             return false;
@@ -52,6 +55,7 @@ class GoodsRepository {
         $data['category'] = $goods->category;
         $data['brand'] = $goods->brand;
         $data['static_properties'] = $goods->static_properties;
+        $data['products'] = $goods->products;
         $data['is_collect'] = $goods->is_collect;
         $data['gallery'] = $goods->gallery;
         if ($full) {

@@ -3,7 +3,6 @@ namespace Module\Shop\Domain\Models;
 
 
 use Domain\Model\Model;
-use function Matrix\inverse;
 
 /**
  * Class ProductModel
@@ -16,8 +15,11 @@ use function Matrix\inverse;
  * @property string $series_number
  * @property string $attributes
  * @property string $attributes_value
+ * @property float $weight
  */
 class ProductModel extends Model {
+
+    const ATTRIBUTE_LINK = ',';
 
     public static function tableName() {
         return 'shop_product';
@@ -31,6 +33,7 @@ class ProductModel extends Model {
             'stock' => 'int',
             'series_number' => 'string:0,50',
             'attributes' => 'string:0,100',
+            'weight' => 'numeric'
         ];
     }
 
@@ -47,7 +50,7 @@ class ProductModel extends Model {
     }
 
     public function getAttributesValue() {
-        $ids = explode('_', $this->attributes);
+        $ids = explode(self::ATTRIBUTE_LINK, $this->attributes);
         $data = AttributeModel::whereIn('id', $ids)->where('goods_id', $this->goods_id)->pluck('value');
         return implode(',', $data);
     }
@@ -59,7 +62,7 @@ class ProductModel extends Model {
      */
     public static function findByAttribute(array $data, $goods_id) {
         sort($data);
-        $attributes = implode('_', $data);
+        $attributes = implode(self::ATTRIBUTE_LINK, $data);
         return static::where('attributes', $attributes)->where('goods_id', $goods_id)->first();
     }
 

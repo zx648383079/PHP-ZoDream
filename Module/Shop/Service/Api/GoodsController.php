@@ -26,10 +26,14 @@ class GoodsController extends Controller {
         return $this->render($data);
     }
 
-    public function infoAction(int $id, int $region = 0) {
-        $data = GoodsRepository::detail($id);
+    public function infoAction(int $id = 0, int $product = 0, int $region = 0) {
+        try {
+            $data = GoodsRepository::detail($id, true, $product);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         if (empty($data)) {
-            return $this->renderFailure('商品错误！');
+            return $this->renderFailure('商品不存在');
         }
         return $this->render($data);
     }

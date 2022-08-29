@@ -21,12 +21,14 @@ class FileController extends Controller {
 
     public function indexAction() {
         try {
-            return $this->render(
-                FileRepository::uploadFile()
-            );
+            $items = FileRepository::uploadFiles();
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
+        if (is_array($_FILES['file']['name'])) {
+            return $this->renderData($items);
+        }
+        return $this->render(current($items));
     }
 
     public function base64Action() {

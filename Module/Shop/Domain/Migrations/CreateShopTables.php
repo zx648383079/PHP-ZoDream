@@ -613,7 +613,9 @@ class CreateShopTables extends Migration {
         })->append(GoodsGalleryModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('goods_id');
-            $table->string('image');
+            $table->uint('type', 1)->default(0)->comment('文件类型，图片或视频');
+            $table->string('thumb');
+            $table->string('file');
         });
     }
 

@@ -83,7 +83,7 @@ class FileRepository {
     /**
      * 上传文件
      * @param string|array $data
-     * @param array $config
+     * @param array{maxSize: int, pathFormat: string, allowFiles: string[], oriName: string} $config
      * @param string $base64
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
@@ -96,22 +96,49 @@ class FileRepository {
         } else {
             $upload = new UploadFile($data);
         }
+        $config['allowFiles'] = static::formatExtension($config['allowFiles']);
+        return static::uploading($upload, $config);
+    }
+
+    /**
+     * @param BaseUpload $upload
+     * @param array{maxSize: int, pathFormat: string, allowFiles: string[], oriName: string} $config
+     * @param bool $isImage
+     * @return array
+     * @throws Exception
+     */
+    protected static function uploading(BaseUpload $upload, array $config, bool $isImage = false): array {
         if (!$upload->checkSize($config['maxSize'])) {
             throw new Exception($upload->getError());
         }
-        if ($upload instanceof UploadRemote && !$upload->checkType(static::formatExtension($config['allowFiles']))) {
+        if ($upload instanceof UploadRemote && !$upload->checkType($config['allowFiles'])) {
             throw new Exception($upload->getError());
         }
         if (isset($config['oriName'])) {
             $upload->setType(FileSystem::getExtension($config['oriName']));
         }
+        if ($isImage && !$upload->validateDimensions()) {
+            throw new Exception('图片尺寸有误');
+        }
         $fileName = $upload->getRandomName($config['pathFormat']);
         $upload->setFile(public_path($fileName));
         $res = static::storage()->addFile($upload);
         $url = url()->asset($fileName);
+        $thumb = static::loadThumb($res, $url, $upload);
+        return [
+            'url' => $url,
+            'title' => $res['title'],
+            'original' => $res['title'],
+            'type' => $res['extension'],
+            'size' => $res['size'],
+            'thumb' => $thumb,
+        ];
+    }
+
+    protected static function loadThumb(array $res, string $file, BaseUpload $upload): string {
         $thumb = url()->asset('assets/images/thumb.jpg');
         if (in_array($res['extension'], static::config('imageAllowFiles'))) {
-            $thumb = $url;
+            $thumb = $file;
         } elseif (in_array($res['extension'], static::config('videoAllowFiles'))) {
             try {
                 $videoFile = $upload->getFile();
@@ -129,14 +156,7 @@ class FileRepository {
                 }
             } catch (Exception) {}
         }
-        return [
-            'url' => $url,
-            'title' => $res['title'],
-            'original' => $res['title'],
-            'type' => $res['extension'],
-            'size' => $res['size'],
-            'thumb' => $thumb,
-        ];
+        return $thumb;
     }
 
     /**
@@ -210,6 +230,57 @@ class FileRepository {
     }
 
     /**
+     * 批量上传多媒体文件，图片/视频
+     * @param string $fieldName
+     * @param int $count
+     * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}[]
+     * @throws Exception
+     */
+    public static function uploadFiles(string $fieldName = 'file', int $count = 0) {
+        $upload = new Upload();
+        if (!$upload->upload($fieldName)) {
+            throw new Exception('请选择上传文件');
+        }
+        $configs = [
+            [
+                'allowFiles' => static::formatExtension(static::config('imageAllowFiles')),
+                'maxSize' => static::config('imageMaxSize'),
+                'pathFormat' => static::config('imagePathFormat'),
+            ],
+            [
+                'allowFiles' => static::formatExtension(static::config('videoAllowFiles')),
+                'maxSize' => static::config('videoMaxSize'),
+                'pathFormat' => static::config('videoPathFormat')
+            ],
+            [
+                'pathFormat' => static::config('filePathFormat'),
+                'maxSize' => static::config('fileMaxSize'),
+                'allowFiles' => static::formatExtension(static::config('fileAllowFiles'))
+            ]
+        ];
+        $files = [];
+        $upload->each(function (BaseUpload $file) use ($configs, &$files) {
+            foreach ($configs as $i => $config) {
+                if (!$file->checkType($config['allowFiles'])) {
+                    continue;
+                }
+                try {
+                    $files[] = static::uploading($file, $config, $i < 1);
+                } catch (Exception $ex) {
+                    $file->setError($ex->getMessage());
+                }
+                return;
+            }
+            $file->setError('不允许上传此类型文件');
+        }, $count);
+        if (empty($files)) {
+            throw new Exception(implode(',', $upload->getError()));
+        }
+        return $files;
+    }
+
+    /**
+     * 批量上传图片
      * @param string $fieldName
      * @param int $count
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}[]
@@ -220,39 +291,18 @@ class FileRepository {
         if (!$upload->upload($fieldName)) {
             throw new Exception('请选择上传文件');
         }
-        $allowType = static::formatExtension(static::config('imageAllowFiles'));
-        $storage = static::storage();
         $files = [];
-        $upload->each(function (BaseUpload $file) use ($allowType, $storage, &$files) {
-            if (!$file->checkSize(static::config('imageMaxSize'))) {
-                $file->setError('超出最大尺寸限制');
-                return;
-            }
-            if (!$file->checkType($allowType)) {
-                $file->setError('不允许上传此类型文件');
-                return;
-            }
-            if (!$file->validateDimensions()) {
-                $file->setError('图片尺寸有误');
-                return;
-            }
-            $fileName = $file->getRandomName(static::config('imagePathFormat'));
-            $file->setFile(public_path($fileName));
+        $config = [
+            'allowFiles' => static::formatExtension(static::config('imageAllowFiles')),
+            'maxSize' => static::config('imageMaxSize'),
+            'pathFormat' => static::config('imagePathFormat'),
+        ];
+        $upload->each(function (BaseUpload $file) use ($config, &$files) {
             try {
-                $res = $storage->addFile($file);
+                $files[] = static::uploading($file, $config, true);
             } catch (Exception $ex) {
                 $file->setError($ex->getMessage());
-                return;
             }
-            $url = url()->asset($fileName);
-            $files[] = [
-                'url' => $url,
-                'title' => $file->getFile()->getName(),
-                'original' => $res['title'],
-                'type' => $res['extension'],
-                'size' => $res['size'],
-                'thumb' => $url
-            ];
         }, $count);
         if (empty($files)) {
             throw new Exception(implode(',', $upload->getError()));
