@@ -17,9 +17,14 @@ use Zodream\Helpers\Json;
 
 final class CashierRepository {
 
-    public static function shipList(array $goods, int $address, int $type = 0) {
+    public static function shipList(int $userId, array $goods, int $addressId, int $type = 0) {
+        $address = AddressModel::where('id', $addressId)
+            ->where('user_id', $userId)->first();
+        if (empty($address)) {
+            throw new Exception('地址错误');
+        }
         $goods_list = static::getGoodsList($goods, $type);
-        $data = ShippingRepository::getByAddress(AddressModel::findWithAuth($address));
+        $data = ShippingRepository::getByAddress($address);
         if (empty($data)) {
             throw new Exception('当前地址不在配送范围内');
         }
@@ -34,21 +39,23 @@ final class CashierRepository {
         return $data;
     }
 
-    public static function couponList(array $goods, int $type = 0) {
+    public static function couponList(int $userId, array $goods, int $type = 0) {
         $goods_list = static::getGoodsList($goods, $type);
-        return CouponRepository::getMyUseGoods($goods_list);
+        return CouponRepository::getUserUseGoods($userId, $goods_list);
     }
 
     /**
-     * @param $goods_list
-     * @param $address
-     * @param $shipping
-     * @param $payment
+     * @param int $userId
+     * @param array $goods_list
+     * @param int $address
+     * @param int $shipping
+     * @param int $payment
+     * @param int $coupon
      * @param bool $isPreview // 如果只验证，则配送方式和支付方式可空
      * @return OrderModel
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function preview(array $goods_list,
+    public static function preview(int $userId, array $goods_list,
                                    int $address,
                                    int $shipping,
                                    int $payment,
@@ -61,8 +68,9 @@ final class CashierRepository {
         if (empty($address)) {
             throw new Exception('请选择收货地址');
         }
-        $address = AddressModel::findWithAuth($address);
-        if (!$order->setAddress($address)) {
+        $address = AddressModel::where('id', $address)
+            ->where('user_id', $userId)->first();
+        if (empty($address) || !$order->setAddress($address)) {
             throw new InvalidArgumentException('请选择收货地址');
         }
         if ($payment > 0 && !$order->setPayment(PaymentModel::find($payment)) && !$isPreview) {
@@ -91,17 +99,20 @@ final class CashierRepository {
         }
         return $order;
     }
+
     /**
      * 结算
-     * @param $address
-     * @param $shipping
-     * @param $payment
+     * @param int $userId
+     * @param int $address
+     * @param int $shipping
+     * @param int $payment
+     * @param int $coupon
      * @param string $cart
      * @param int $type
      * @return OrderModel
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function checkout(int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', $type = 0) {
+    public static function checkout(int $userId, int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
         $store = new Store();
         if (!$store->frozen($goods_list)) {
@@ -109,8 +120,8 @@ final class CashierRepository {
         }
         $success = false;
         try {
-            $order = static::preview($goods_list, $address, $shipping, $payment, $coupon, false);
-            if ($order->createOrder()) {
+            $order = static::preview($userId, $goods_list, $address, $shipping, $payment, $coupon, false);
+            if ($order->createOrder($userId)) {
                 $success = true;
                 $store->clear();
             } else {
@@ -131,7 +142,7 @@ final class CashierRepository {
 
     /**
      * 获取结算商品
-     * @param string $cart
+     * @param mixed $cart
      * @param int $type
      * @return ICartItem[]
      * @throws \Exception

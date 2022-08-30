@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
 use Module\Shop\Domain\Entities\CouponEntity;
@@ -44,10 +45,14 @@ class CouponRepository {
     }
 
     public static function getMyUseGoods(array $goods_list) {
+        return static::getUserUseGoods(auth()->id(), $goods_list);
+    }
+
+    public static function getUserUseGoods(int $userId, array $goods_list) {
         if (empty($goods_list)) {
             return [];
         }
-        $ids = CouponLogModel::where('user_id', auth()->id())->where('used_at', 0)->pluck('coupon_id');
+        $ids = CouponLogModel::where('user_id', $userId)->where('used_at', 0)->pluck('coupon_id');
         if (empty($ids)) {
             return [];
         }
@@ -147,5 +152,23 @@ class CouponRepository {
         $log->user_id = auth()->id();
         $log->save();
         return $log;
+    }
+
+    public static function checkCode(string $code) {
+        if (empty($code)) {
+            throw new \Exception('优惠码错误');
+        }
+        $log = CouponLogModel::where('serial_number', $code)
+            ->where('user_id', 0)->orderBy('id', 'desc')->first();
+        if (empty($log)) {
+            throw new \Exception('优惠码错误');
+        }
+        $time = time();
+        $coupon = CouponModel::where('id', $log->coupon_id)->where('start_at', '<=', $time)
+            ->where('end_at', '>', $time)->first();
+        if (empty($coupon)) {
+            throw new \Exception('优惠码错误');
+        }
+        return $coupon;
     }
 }

@@ -219,10 +219,10 @@ class OrderModel extends Model {
         return true;
     }
 
-    public function createOrder() {
+    public function createOrder(int $userId) {
         $this->status = self::STATUS_UN_PAY;
         $this->order_amount = $this->getTotalAttribute();
-        $this->user_id = auth()->id();
+        $this->user_id = $userId;
         $this->series_number = self::generateSeriesNumber();
         if (!$this->save()) {
             return false;

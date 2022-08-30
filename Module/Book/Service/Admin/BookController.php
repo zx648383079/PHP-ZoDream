@@ -57,7 +57,7 @@ class BookController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         BookModel::where('id', $id)->delete();
         $ids = BookChapterModel::where('book_id', $id)->pluck('id');
         if (!empty($ids)) {
@@ -70,9 +70,6 @@ class BookController extends Controller {
     }
 
     public function chapterAction($book, $keywords = null) {
-        url([
-            'p' => 1
-        ]);
         $book = BookModel::find($book);
         $model_list = BookChapterModel::where('book_id', $book->id)
             ->when(!empty($keywords), function ($query) {
@@ -81,11 +78,11 @@ class BookController extends Controller {
         return $this->show(compact('model_list',  'book', 'keywords'));
     }
 
-    public function createChapterAction($book) {
+    public function createChapterAction(int $book) {
         return $this->editChapterAction(0, $book);
     }
 
-    public function editChapterAction($id, $book = 0) {
+    public function editChapterAction(int $id, int $book = 0) {
         $model = BookChapterModel::findOrNew($id);
         if ($model->book_id < 1) {
             $model->book_id = intval($book);

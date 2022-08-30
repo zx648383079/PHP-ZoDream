@@ -7,6 +7,7 @@ use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookClickLogModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Repositories\BookRepository;
 use Module\Book\Domain\Repositories\DownloadRepository;
 use Module\Book\Domain\Repositories\HistoryRepository;
 use Module\Book\Domain\Setting;
@@ -52,7 +53,7 @@ class BookController extends Controller {
             return $this->redirect(['./mobile/book/read', 'id' => $id]);
         }
         $chapter = BookChapterModel::find($id);
-        BookClickLogModel::logBook($chapter->book_id);
+        BookRepository::clickLog()->add(BookRepository::LOG_TYPE_BOOK, $chapter->book_id, 0);
         $book = BookModel::find($chapter->book_id);
         if (auth()->guest() && $book->classify > 0) {
             return $this->redirectWithAuth();

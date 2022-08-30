@@ -17,6 +17,8 @@ use Module\Book\Domain\Model\BookRoleModel;
 use Module\Book\Domain\Model\BookSourceModel;
 use Module\Book\Domain\Model\ListItemModel;
 use Zodream\Database\Model\Query;
+use Zodream\Database\Query\Builder;
+use Zodream\Html\Page;
 use Zodream\Html\Tree;
 
 class BookRepository {
@@ -58,7 +60,7 @@ class BookRepository {
     public static function getList($id = [],
                                    int $category = 0,
                                    string $keywords = '',
-                                   bool $top = false,
+                                   string|bool $top = false,
                                    int $status = 0,
                                    int $author = 0,
                                    int $page = 1, int $per_page = 20) {
@@ -82,8 +84,49 @@ class BookRepository {
                 $query->where('cat_id', $category);
             });
         return !empty($top) ?
-            BookClickLogModel::getPage($query, $top, $page, $per_page)
+            static::sortByClick($query, $top, $page, $per_page)
             : $query->page($per_page);
+    }
+
+    protected static function sortByClick(Builder $query, string $type, int $page = 1, int $per_page = 20) {
+        $logs = static::clickLogs($type);
+        $pager = new Page(count($logs), $per_page, $page);
+        if (empty($logs) || $pager->getTotal() < $pager->getStart()) {
+            return $pager->setPage([]);
+        }
+        $logs = array_splice($logs, $pager->getStart(), $pager->getPageSize());
+        if (empty($logs)) {
+            return $pager->setPage([]);
+        }
+        $logs = array_column($logs, 'count', 'item_id');
+        $book_list = $query->whereIn('id', array_keys($logs))->get();
+        foreach ($book_list as $item) {
+            $item->click_count = $logs[$item->id];
+        }
+        usort($book_list, function (BookModel $a, BookModel $b) {
+            if ($a->click_count > $b->click_count) {
+                return 1;
+            }
+            if ($a->click_count == $b->click_count) {
+                return 0;
+            }
+            return -1;
+        });
+        return $pager->setPage($book_list);
+    }
+
+    public static function clickLogs(string $type) {
+        return cache()->getOrSet('book_top_'.$type, function () use ($type) {
+            switch ($type) {
+                case 'month':
+                    return static::clickLog()->sortByMonth(self::LOG_TYPE_BOOK, self::LOG_ACTION_CLICK);
+                case 'week':
+                    return static::clickLog()->sortByWeek(self::LOG_TYPE_BOOK, self::LOG_ACTION_CLICK);
+                case 'day':
+                    return static::clickLog()->sortByDay(self::LOG_TYPE_BOOK, self::LOG_ACTION_CLICK);
+            }
+            return [];
+        }, 3600);
     }
 
     public static function getManageList(string $keywords = '',

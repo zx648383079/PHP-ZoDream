@@ -1,16 +1,13 @@
 <?php
 namespace Module\Book\Service;
 
-
-use Module\Book\Domain\Model\BookModel;
+use Module\Book\Domain\Repositories\SpiderRepository;
 use Module\Book\Domain\SiteCrawl;
-use Module\Book\Domain\SpiderProgress;
 use Module\Book\Domain\Spiders\Txt;
-use Module\Book\Domain\Spiders\ZhiShuShenQi;
 use Zodream\Disk\File;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Spider\Support\Uri;
-use Zodream\Validate\Validator;
 
 class SpiderController extends Controller {
 
@@ -71,54 +68,25 @@ class SpiderController extends Controller {
         return $this->showContent('爬虫执行完成！');
     }
 
-    public function searchAction($keywords) {
-        if (empty($keywords)) {
-            return $this->renderFailure('请输入搜索内容');
+    public function searchAction(string $keywords) {
+        try {
+            return $this->renderData(SpiderRepository::search($keywords));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if (!Validator::url()->validate($keywords)) {
-            return $this->renderData((new ZhiShuShenQi())->search($keywords));
-        }
-        $spider = SiteCrawl::getSpider(new Uri($keywords));
-        if (empty($spider)) {
-            return $this->renderFailure('爬虫不存在');
-        }
-        $book = $spider->book($keywords);
-        if (empty($book)) {
-            return $this->renderFailure('爬取失败');
-        }
-        $book['url'] = $keywords;
-        unset($book['chapters']);
-        return $this->renderData([$book]);
     }
 
-    public function asyncAction() {
-        set_time_limit(0);
+    public function asyncAction(Input $input) {
         try {
-            $progress = $this->getProgress();
-            if (empty($progress)) {
-                return $this->renderFailure('不能存在进程');
-            }
-            return $this->renderData($progress());
+            return $this->renderData(
+                SpiderRepository::async($input->post())
+            );
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
 
-    private function getProgress() {
-        if (isset($_POST['key'])) {
-            return cache($_POST['key']);
-        }
-        $book = $_POST;
-        if (isset($book['url'])) {
-            $spider = SiteCrawl::getSpider(new Uri($book['url']));
-        } else {
-            $spider = new ZhiShuShenQi();
-        }
-        return new SpiderProgress([
-            'book' => $book,
-            'spider' => $spider
-        ]);
-    }
+
 
 
 }

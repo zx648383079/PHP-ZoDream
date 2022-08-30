@@ -7,6 +7,8 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Arr;
+use Zodream\Helpers\Time;
+
 /*
  * 按天统计的记录
  */
@@ -103,7 +105,7 @@ class DayLogProvider {
             ->where('item_type', $itemType)
             ->where('item_id', $itemId)
             ->where('action', $action)->where('created_at', '>=', $start)
-            ->where('<=', $end)->delete();
+            ->where('created_at', '<=', $end)->delete();
     }
 
     protected function mergeCount(int $itemType, int $itemId, int $action, string $to, array $from) {
@@ -142,7 +144,9 @@ class DayLogProvider {
     public function dayCount(int $itemType, int $itemId, int $action, string $day): int {
         $log = $this->dayQuery()
             ->where('item_type', $itemType)
-            ->where('item_id', $itemId)
+            ->when($itemId > 0, function ($query) use ($itemId) {
+                $query->where('item_id', $itemId);
+            })
             ->where('action', $action)->where('happen_day', $day)->first('happen_count');
         if (!empty($log)) {
             return intval($log['happen_count']);
@@ -150,10 +154,12 @@ class DayLogProvider {
         $start = strtotime($day.' 00:00:00');
         return $this->query()
             ->where('item_type', $itemType)
-            ->where('item_id', $itemId)
+            ->when($itemId > 0, function ($query) use ($itemId) {
+                $query->where('item_id', $itemId);
+            })
             ->where('action', $action)
             ->where('created_at', '>=', $start)
-            ->where('<', $start + 86400)->count();
+            ->where('created_at', '<', $start + 86400)->count();
     }
 
     public function todayCount(int $itemType, int $itemId, int $action): int {
@@ -234,6 +240,41 @@ class DayLogProvider {
     }
 
     public function countByYear(int $itemType, int $itemId, int $action): array {
+        return [];
+    }
+
+    public function sortByDay(int $itemType, int $action): array {
+        $start = strtotime(date('Y-m-d').' 00:00:00');
+        return $this->query()
+            ->where('item_type', $itemType)
+            ->where('action', $action)
+            ->where('created_at', '>=', $start)
+             ->groupBy('item_id')
+             ->selectRaw('item_id, COUNT(*) as count')
+             ->orderBy('count', 'desc')->get();
+    }
+
+    public function sortByWeek(int $itemType, int $action): array {
+        list($start, $end) = Time::week(\time());
+        $dayItems = Time::rangeDate($start, $end);
+        return $this->dayQuery()->where('item_type', $itemType)
+            ->where('action', $action)
+            ->whereIn('happen_day', $dayItems)
+            ->selectRaw('item_id, SUM(happen_count) as count')
+            ->orderBy('count', 'desc')->get();
+    }
+
+    public function sortByMonth(int $itemType, int $action): array {
+        list($start, $end) = Time::month(\time());
+        $dayItems = Time::rangeDate($start, $end);
+        return $this->dayQuery()->where('item_type', $itemType)
+            ->where('action', $action)
+            ->whereIn('happen_day', $dayItems)
+            ->selectRaw('item_id, SUM(happen_count) as count')
+            ->orderBy('count', 'desc')->get();
+    }
+
+    public function sortByYear(int $itemType, int $action): array {
         return [];
     }
 

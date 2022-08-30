@@ -14,9 +14,9 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     /**
      * @var Group[]
      */
-    protected $groups = [];
+    protected array $groups = [];
 
-    protected $booted = false;
+    protected bool $booted = false;
 
     public function __construct() {
         $this->loadFromDb();
@@ -88,7 +88,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @param int $productId
      * @return ICartItem|null
      */
-    public function getGoods($goodsId, $productId = 0) {
+    public function getGoods($goodsId, int $productId = 0) {
         foreach ($this->groups as $group) {
             if ($item = $group->getGoods($goodsId, $productId)) {
                 return $item;

@@ -11,14 +11,14 @@ class Group implements \IteratorAggregate, ArrayAble {
     /**
      * @var ICartItem[]
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
      * @var ShippingModel
      */
     protected $shipping;
 
-    protected $name = '';
+    protected string $name = '';
 
     public function __construct(ICartItem $item) {
         $this->name = $item->getGroupName();
@@ -68,7 +68,7 @@ class Group implements \IteratorAggregate, ArrayAble {
      * @param int $productId
      * @return ICartItem|null
      */
-    public function getGoods($goodsId, $productId = 0) {
+    public function getGoods($goodsId, int $productId = 0) {
         foreach ($this->items as $item) {
             if ($item->goodsId() == $goodsId && $item->productId() == $productId) {
                 return $item;

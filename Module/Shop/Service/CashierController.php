@@ -34,7 +34,7 @@ class CashierController extends Controller {
 
     public function checkoutAction(int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', int $type = 0) {
         try {
-            $order = CashierRepository::checkout($address, $shipping, $payment, $coupon, $cart, $type);
+            $order = CashierRepository::checkout(auth()->id(), $address, $shipping, $payment, $coupon, $cart, $type);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
@@ -46,7 +46,7 @@ class CashierController extends Controller {
     public function previewAction(int $address, int $shipping = 0, int $payment = 0, int $coupon = 0, $cart = '', int $type = 0) {
         try {
             $goods_list = CashierRepository::getGoodsList($cart, $type);
-            $order = CashierRepository::preview($goods_list, $address, $shipping, $payment, $coupon);
+            $order = CashierRepository::preview(auth()->id(), $goods_list, $address, $shipping, $payment, $coupon);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
