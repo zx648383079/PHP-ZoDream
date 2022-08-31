@@ -34,7 +34,7 @@ class CashierController extends Controller {
 
     public function checkoutAction(int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', int $type = 0) {
         try {
-            $order = CashierRepository::checkout(auth()->id(), $address, $shipping, $payment, $coupon, $cart, $type);
+            $order = CashierRepository::checkout(auth()->id(), $address, $shipping, $payment, $coupon, '', $cart, $type);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }

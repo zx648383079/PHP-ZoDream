@@ -85,7 +85,11 @@ class CouponRepository {
      * @param CartModel[] $goods_list
      * @return bool
      */
-    public static function canUse(CouponEntity $item, array $goods_list) {
+    public static function canUse(CouponEntity $item, array $goods_list): bool {
+        $time = time();
+        if ($item->start_at > $time || $item->end_at < $time) {
+            return false;
+        }
         if ($item->rule == CouponModel::RULE_NONE) {
             return true;
         }
@@ -98,7 +102,7 @@ class CouponRepository {
         return false;
     }
 
-    public static function canUseGoods(CouponEntity $item, GoodsModel $goods) {
+    public static function canUseGoods(CouponEntity $item, GoodsModel $goods): bool {
         return static::canUseCheckGoods($item->rule, explode(',', $item->rule_value), $goods);
     }
 
@@ -109,7 +113,7 @@ class CouponRepository {
      * @param GoodsModel $goods
      * @return bool
      */
-    protected static function canUseCheckGoods($rule, array $range, GoodsEntity $goods) {
+    protected static function canUseCheckGoods($rule, array $range, GoodsEntity $goods): bool {
         if ($rule == CouponModel::RULE_GOODS) {
             return in_array($goods->id, $range);
         }

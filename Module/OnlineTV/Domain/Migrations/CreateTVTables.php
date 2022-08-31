@@ -82,6 +82,7 @@ class CreateTVTables extends Migration {
             $table->uint('movie_id');
             $table->string('name', 20);
             $table->string('score', 10);
+            $table->uint('amount')->default(0)->comment('参与评分人数');
             $table->string('url')->default('')->comment('评分站点页面');
             $table->timestamps();
         })->append(MovieSeriesModel::tableName(), function(Table $table) {

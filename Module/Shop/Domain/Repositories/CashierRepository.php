@@ -8,6 +8,7 @@ use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Store;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\CouponLogModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
@@ -15,11 +16,73 @@ use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Module;
 use Zodream\Helpers\Json;
 
+/**
+ *
+ */
 final class CashierRepository {
 
-    public static function shipList(int $userId, array $goods, int $addressId, int $type = 0) {
-        $address = AddressModel::where('id', $addressId)
-            ->where('user_id', $userId)->first();
+    public static function formatAddress(int $user, int|array $address): ?AddressModel {
+        if (is_array($address) && isset($address['id']) && $address['id'] > 0) {
+            $address = intval($address['id']);
+        }
+        if (is_array($address)) {
+            $data = new AddressModel($address);
+        } else {
+            $data = AddressModel::where('id', $address)
+                ->where('user_id', $user)->first();
+        }
+        if (empty($data) || $data->region_id < 1 || !$data->tel || !$data->address) {
+            return null;
+        }
+        return $data;
+//        return [
+//            'goods' => [
+//                [
+//                    'name' => '',
+//                    'activity' => '',
+//                    'items' => [
+//                        [
+//                            'id' => '',
+//                            'type' => '',
+//                            'goods_id' => '',
+//                            'product_id' => '',
+//                            'price' => '',
+//                            'amount' => '',
+//                            'selected_activity' => '',
+//                            'attribute_id' => '',
+//                            'attribute_value' => '',
+//                            'goods' => '',
+//                        ]
+//                    ]
+//                ]
+//            ],
+//            'address' => '',
+//            'coupon' => '',
+//            'shipping' => '',
+//            'payment' => '',
+//            'activity' => [],
+//            'total' => '',
+//            'discount' => '',
+//        ];
+    }
+
+    public static function formatCoupon(int $user, int $coupon, string $couponCode): ?CouponLogModel {
+        if ($coupon > 0) {
+            return CouponLogModel::where('user_id', $user)
+                ->where('id', $coupon)
+                ->where('order_id', 0)->first();
+        }
+        if (empty($couponCode)) {
+            return null;
+        }
+        return CouponLogModel::where(function ($query) use ($user) {
+            $query->where('user_id', $user)
+                ->orWhere('user_id', 0);
+        })->where('serial_number', $couponCode)->where('id', $coupon)->where('order_id', 0)->first();
+    }
+
+    public static function shipList(int $userId, array $goods, int|array $addressId, int $type = 0) {
+        $address = self::formatAddress($userId, $addressId);
         if (empty($address)) {
             throw new Exception('地址错误');
         }
@@ -56,22 +119,27 @@ final class CashierRepository {
      * @throws Exception
      */
     public static function preview(int $userId, array $goods_list,
-                                   int $address,
+                                   int|array $address,
                                    int $shipping,
                                    int $payment,
                                    int $coupon = 0,
+                                   string $coupon_code = '',
                                    bool $isPreview = true) {
         if (empty($goods_list)) {
             throw new InvalidArgumentException('请选择结算的商品');
         }
         $order = OrderModel::preview($goods_list);
         if (empty($address)) {
-            throw new Exception('请选择收货地址');
+            throw new Exception('收货地址无效或不完整');
         }
-        $address = AddressModel::where('id', $address)
-            ->where('user_id', $userId)->first();
+        $address = self::formatAddress($userId, $address);
         if (empty($address) || !$order->setAddress($address)) {
             throw new InvalidArgumentException('请选择收货地址');
+        }
+        $coupon = self::formatCoupon($userId, $coupon, $coupon_code);
+        if (!empty($coupon) && !CouponRepository::canUse($coupon->coupon, $goods_list)) {
+            throw new InvalidArgumentException('优惠卷不能使用在此订单');
+            // TODO 减去优惠金额
         }
         if ($payment > 0 && !$order->setPayment(PaymentModel::find($payment)) && !$isPreview) {
             throw new InvalidArgumentException('请选择支付方式');
@@ -103,16 +171,18 @@ final class CashierRepository {
     /**
      * 结算
      * @param int $userId
-     * @param int $address
+     * @param int|array $address
      * @param int $shipping
      * @param int $payment
      * @param int $coupon
+     * @param string $coupon_code
      * @param string $cart
      * @param int $type
      * @return OrderModel
      * @throws Exception
      */
-    public static function checkout(int $userId, int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', $type = 0) {
+    public static function checkout(int $userId, int|array $address, int $shipping, int $payment,
+                                    int $coupon = 0, string $coupon_code = '', $cart = '', int $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
         $store = new Store();
         if (!$store->frozen($goods_list)) {
@@ -120,7 +190,7 @@ final class CashierRepository {
         }
         $success = false;
         try {
-            $order = static::preview($userId, $goods_list, $address, $shipping, $payment, $coupon, false);
+            $order = static::preview($userId, $goods_list, $address, $shipping, $payment, $coupon, $coupon_code, false);
             if ($order->createOrder($userId)) {
                 $success = true;
                 $store->clear();
