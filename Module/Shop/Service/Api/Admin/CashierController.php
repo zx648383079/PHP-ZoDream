@@ -14,7 +14,7 @@ class CashierController extends Controller {
         );
     }
 
-    public function shippingAction(int $user, array $goods, int|array $address) {
+    public function shippingAction(int $user, array $goods, mixed $address) {
         return $this->renderData(
             CashierRepository::shipList($user, $goods, $address, 1)
         );
@@ -34,7 +34,7 @@ class CashierController extends Controller {
 
     public function previewAction(
         int $user,
-        array $goods, int|array $address = 0, int $shipping = 0, int $payment = 0, int $coupon = 0, string $coupon_code = '') {
+        array $goods, mixed $address = 0, int $shipping = 0, int $payment = 0, int $coupon = 0, string $coupon_code = '') {
         try {
             $goods_list = CashierRepository::getGoodsList($goods, 1);
             $order = CashierRepository::preview($user, $goods_list, $address, $shipping, $payment, $coupon, $coupon_code);
@@ -45,7 +45,7 @@ class CashierController extends Controller {
     }
 
     public function checkoutAction(int $user, array $goods,
-                                   int|array $address, int $shipping, int $payment, int $coupon = 0, string $coupon_code = '') {
+                                   mixed $address, int $shipping, int $payment, int $coupon = 0, string $coupon_code = '') {
         try {
             $order = CashierRepository::checkout($user, $address, $shipping, $payment, $coupon, $coupon_code, $goods, 1);
         } catch (Exception $e) {

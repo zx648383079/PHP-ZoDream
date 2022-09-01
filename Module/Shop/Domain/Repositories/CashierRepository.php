@@ -21,14 +21,14 @@ use Zodream\Helpers\Json;
  */
 final class CashierRepository {
 
-    public static function formatAddress(int $user, int|array $address): ?AddressModel {
+    public static function formatAddress(int $user, mixed $address): ?AddressModel {
         if (is_array($address) && isset($address['id']) && $address['id'] > 0) {
-            $address = intval($address['id']);
+            $address = $address['id'];
         }
         if (is_array($address)) {
             $data = new AddressModel($address);
         } else {
-            $data = AddressModel::where('id', $address)
+            $data = AddressModel::where('id', intval($address))
                 ->where('user_id', $user)->first();
         }
         if (empty($data) || $data->region_id < 1 || !$data->tel || !$data->address) {
@@ -81,7 +81,7 @@ final class CashierRepository {
         })->where('serial_number', $couponCode)->where('id', $coupon)->where('order_id', 0)->first();
     }
 
-    public static function shipList(int $userId, array $goods, int|array $addressId, int $type = 0) {
+    public static function shipList(int $userId, array $goods, mixed $addressId, int $type = 0) {
         $address = self::formatAddress($userId, $addressId);
         if (empty($address)) {
             throw new Exception('地址错误');
@@ -119,7 +119,7 @@ final class CashierRepository {
      * @throws Exception
      */
     public static function preview(int $userId, array $goods_list,
-                                   int|array $address,
+                                   mixed $address,
                                    int $shipping,
                                    int $payment,
                                    int $coupon = 0,
@@ -181,7 +181,7 @@ final class CashierRepository {
      * @return OrderModel
      * @throws Exception
      */
-    public static function checkout(int $userId, int|array $address, int $shipping, int $payment,
+    public static function checkout(int $userId, mixed $address, int $shipping, int $payment,
                                     int $coupon = 0, string $coupon_code = '', $cart = '', int $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
         $store = new Store();
