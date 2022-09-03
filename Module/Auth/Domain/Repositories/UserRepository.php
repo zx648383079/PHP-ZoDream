@@ -41,7 +41,7 @@ class UserRepository {
         return static::format($user, true);
     }
 
-    public static function getCurrentProfile() {
+    public static function getCurrentProfile(string $extra = ''): ?array {
         if (auth()->guest()) {
             return null;
         }

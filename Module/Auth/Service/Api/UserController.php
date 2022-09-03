@@ -20,8 +20,8 @@ class UserController extends Controller {
         ];
     }
 
-    public function indexAction() {
-        return $this->render(UserRepository::getCurrentProfile());
+    public function indexAction(string $extra = '') {
+        return $this->render(UserRepository::getCurrentProfile($extra));
     }
 
     /**
@@ -47,7 +47,22 @@ class UserController extends Controller {
      */
     public function updateAction(Request $request) {
         try {
-            $user = AuthRepository::updateProfile($request);
+            $user = AuthRepository::updateProfile($request->all());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($user);
+    }
+
+    public function updateAccountAction(Request $request) {
+        try {
+            $user = AuthRepository::updateAccount($request->validate([
+                'verify_type' => 'required',
+                'verify' => 'required',
+                'name' => 'required',
+                'value' => 'required',
+                'code' => 'required'
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

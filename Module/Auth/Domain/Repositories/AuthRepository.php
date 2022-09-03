@@ -17,7 +17,6 @@ use Module\SMS\Domain\Sms;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
 
@@ -353,47 +352,44 @@ class AuthRepository {
         OAuthModel::bindUser($user, $openid, $unionId, $type, $nickname, $platform_id);
     }
 
-    public static function password(
-        string $oldPassword, string $password, string $confirmPassword) {
-        if (empty($oldPassword) || empty($password) || empty($confirmPassword)) {
+    /**
+     * @param array{verify_type: string, verify: string, password: string, confirm_password: string} $data
+     * @return bool
+     * @throws Exception
+     */
+    public static function password(array $data) {
+        if (empty($data['verify']) || empty($data['password']) || empty($data['confirm_password'])) {
             throw AuthException::invalidPassword();
         }
-        if (!self::verifyPassword($password)) {
+        if (!self::verifyPassword($data['password'])) {
             throw new Exception('密码长度必须不小于6位');
         }
-        if ($confirmPassword !== $password) {
+        if ($data['confirm_password'] !== $data['password']) {
             throw new Exception('两次密码不一致');
         }
         /** @var UserModel $user */
         $user = auth()->user();
-        if ($user->password !== self::UNSET_PASSWORD && !$user->validatePassword($oldPassword)) {
-            throw new Exception('密码不正确！');
+        if ($data['verify_type'] === 'password') {
+            if ($user->password !== self::UNSET_PASSWORD && !$user->validatePassword($data['verify'])) {
+                throw new Exception('密码不正确！');
+            }
+        } elseif ($data['verify_type'] === 'email') {
+            if (!VerifyCodeRepository::verify('verify_old', $user->email, $data['verify'], true)) {
+                throw new Exception('验证码不正确！');
+            }
+        } else if (!VerifyCodeRepository::verify('verify_old', $user->mobile, $data['verify'], true)) {
+            throw new Exception('验证码不正确！');
         }
-        if ($user->validatePassword($password)) {
+        if ($user->validatePassword($data['password'])) {
             throw AuthException::samePassword();
         }
-        $user->setPassword($password);
+        $user->setPassword($data['password']);
         if (!$user->save()) {
             throw new Exception($user->getFirstError());
         }
         return true;
     }
 
-    public static function sendSmsCode(string $mobile, string $type = 'login') {
-        if (empty($mobile) || !Validator::phone()->validate($mobile)) {
-            throw new Exception('手机号不正确');
-        }
-        if (BanRepository::isBan($mobile, self::ACCOUNT_TYPE_MOBILE)) {
-            throw new Exception('手机号已列入黑名单');
-        }
-        $sms = new Sms();
-        if (!$sms->verifyIp() || !$sms->verifyCount() || !$sms->verifySpace()) {
-            throw new Exception('验证码发送失败');
-        }
-        if (!$sms->sendCode($mobile)) {
-            throw new Exception('验证码发送失败');
-        }
-    }
 
     /**
      * @param $code
@@ -488,13 +484,13 @@ class AuthRepository {
         return true;
     }
 
-    public static function updateProfile(Request $request) {
+    public static function updateProfile(array $data) {
         $user = auth()->user();
         foreach (['name', 'sex', 'birthday', 'avatar'] as $key) {
-            if (!$request->has($key)) {
+            if (!isset($data[$key])) {
                 continue;
             }
-            $value = Html::text($request->get($key));
+            $value = Html::text($data[$key]);
             if (empty($value)) {
                 continue;
             }
@@ -530,8 +526,8 @@ class AuthRepository {
 
     /**
      * 创建管理员账户
-     * @param $email
-     * @param $password
+     * @param string $email
+     * @param string $password
      * @throws Exception
      */
     public static function createAdmin(string $email, string $password) {
@@ -609,25 +605,40 @@ class AuthRepository {
 
     private static function quickRegisterMobile(string $mobile, bool $remember) {
         $user = self::createUser($mobile, sprintf('zre_%s', time()), '', [
-            'email' => sprintf('%s@zodream.cn', $mobile)
+            'email' => static::emptyEmail()
         ], 'mobile');
         event(new Register($user, request()->ip(), time()));
         return self::doLogin($user);
     }
 
-    public static function sendCodeByUser(string $name) {
-
+    /**
+     * @param array{verify_type: string, verify: string, name: string, value: string, code: string} $data
+     * @return array
+     * @throws Exception
+     */
+    public static function updateAccount(array $data): array {
+        if (!in_array($data['verify_type'], ['email', 'mobile']) ||
+            !in_array($data['name'], ['email', 'mobile'])) {
+            throw new Exception('数据错误');
+        }
+        if (UserModel::where($data['name'], $data['value'])->count() > 0) {
+            throw new Exception('账户已被使用');
+        }
+        /** @var UserModel $user */
+        $user = auth()->user();
+        if ($data['verify_type'] === 'email') {
+            if (!VerifyCodeRepository::verify('verify_old', $user->email, $data['verify'], true)) {
+                throw new Exception('验证码不正确！');
+            }
+        } else if (!VerifyCodeRepository::verify('verify_old', $user->mobile, $data['verify'], true)) {
+            throw new Exception('验证码不正确！');
+        }
+        if (!VerifyCodeRepository::verify('verify_new', $data['value'],  $data['code'],true)) {
+            throw new Exception('验证码不正确！');
+        }
+        $user->{$data['name']} = $data['value'];
+        $user->save();
+        return $user;
     }
 
-    public static function verifyCodeByUser(string $name, string $code) {
-
-    }
-
-    public static function sendCodeByFind(string $name, string $value) {
-
-    }
-
-    public static function verifyCodeByFind(string $name, string $value, string $code) {
-
-    }
 }
