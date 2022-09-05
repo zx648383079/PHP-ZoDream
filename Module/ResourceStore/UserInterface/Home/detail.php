@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Helpers\Disk;
 /** @var $this View */
-$this->title = $post->title;
+$this->title = $post['title'];
 $this->registerCssFile('@demo.css')
     ->registerJsFile([
         '@jquery.lazyload.min.js',
@@ -19,7 +19,7 @@ $this->registerCssFile('@demo.css')
             <a href="<?=$this->url('./')?>">资源商店首页</a>
         </li>
         <li class="active">
-            <?=$this->text($post->title)?>
+            <?=$this->text($post['title'])?>
         </li>
     </ul>
 </div>
@@ -28,14 +28,19 @@ $this->registerCssFile('@demo.css')
     <div class="row">
         <div class="col-md-8">
             <div class="detail-header">
-                <div class="title"><?=$this->text($post->title)?></div>
+                <div class="title"><?=$this->text($post['title'])?></div>
                 <div class="tags">
-                    <?php foreach($tags as $item):?>
-                        <a class="link-btn" href="<?=$this->url('./', ['tag' => $item['name']])?>"><?=__($item['name'])?></a>，
+                    <?php foreach($tags as $i => $item):?>
+                        <?php if ($i > 0):?>
+                            ，
+                        <?php endif;?>
+                        <a class="link-btn" href="<?=$this->url('./', ['tag' => $item['name']])?>">
+                            <?=__($item['name'])?>
+                        </a>
                     <?php endforeach;?>
                 </div>
                 <div class="thumb">
-                    <img src="<?=$post->thumb?>" alt="">
+                    <img src="<?=$post['thumb']?>" alt="">
                     <a class="preview-btn" href="<?=$this->url('./preview', ['id' => $post['id']])?>">
                         <i class="fa fa-eye"></i>
                     </a>
@@ -48,11 +53,11 @@ $this->registerCssFile('@demo.css')
                     <a class="link-btn" href="<?=$this->url('./download', ['id' => $post['id']])?>" target="_blank">下载</a>
                     <a class="link-btn" href="<?=$this->url('./preview', ['id' => $post['id']])?>" target="_blank">在线预览</a>
                 </div>
-                <?php if($post->category):?>
+                <?php if($post['category']):?>
                 <div class="line-item">
                     <i class="fa fa-th"></i>
                     分类：
-                    <a href="<?=$this->url('./', ['category' => $post['cat_id']])?>"><?=$post->category->name?></a>
+                    <a href="<?=$this->url('./', ['category' => $post['cat_id']])?>"><?=$post['category']['name']?></a>
                 </div>
                 <?php endif;?>
                 <div class="line-item">
@@ -65,11 +70,11 @@ $this->registerCssFile('@demo.css')
                 </a>
                 <div class="line-item">
                     <i class="fa fa-calendar-check"></i>
-                    更新时间：<?=$post->created_at?>
+                    更新时间：<?=$post['created_at']?>
                 </div>
                 <div class="line-item">
                     <i class="fa fa-file"></i>
-                    文件大小：<?=Disk::size($post->size)?>
+                    文件大小：<?=Disk::size($post['size'])?>
                 </div>
             </div>
         </div>

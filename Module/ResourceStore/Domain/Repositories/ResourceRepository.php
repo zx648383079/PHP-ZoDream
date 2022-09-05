@@ -25,6 +25,7 @@ class ResourceRepository {
     const RES_PAGE_FILED = [
         'id', 'user_id', 'cat_id', 'title', 'description', 'thumb',
         'size',
+        'score',
         'preview_type',
         'price',
         'is_commercial',
@@ -76,12 +77,20 @@ class ResourceRepository {
                     $query->orderBy('created_at', 'desc');
                     return;
                 }
+                if ($sort === 'trending') {
+                    $query->where('is_commercial', 1)->orderBy('price', 'asc');
+                    return;
+                }
+                if ($sort === 'free') {
+                    $query->where('price', 0);
+                    return;
+                }
                 if ($sort === 'hot') {
                     $query->orderBy('download_count', 'desc');
                     return;
                 }
                 list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
-                    'id', 'created_at', 'download_count', 'view_count', 'comment_count'
+                    'id', 'price', 'score', 'created_at', 'download_count', 'view_count', 'comment_count'
                 ]);
                 $query->orderBy($sort, $order);
             })->when(!empty($keywords), function ($query) use ($keywords)  {

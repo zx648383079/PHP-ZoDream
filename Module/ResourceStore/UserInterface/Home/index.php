@@ -42,7 +42,7 @@ $this->registerCssFile('@demo.css')
             <div class="item-footer">
                 <div class="line-item">
                     <i class="fa fa-calendar-check"></i>
-                    更新时间：<?=$item->created_at?>
+                    更新时间：<?=$this->ago($item->getAttributeSource('created_at'))?>
                 </div>
                 <div class="line-item">
                     <i class="fa fa-file"></i>

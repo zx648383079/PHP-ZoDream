@@ -59,7 +59,10 @@
         padding-left: 5px;
         height: 200px;
         .bottom {
-            margin-top: 80px;
+            position: absolute;
+            bottom: .8rem;
+            left: .4rem;
+            right: .8rem;
         }
     }
     
