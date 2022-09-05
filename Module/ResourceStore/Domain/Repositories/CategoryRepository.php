@@ -6,6 +6,7 @@ use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
 use Module\ResourceStore\Domain\Models\CategoryModel;
+use Module\ResourceStore\Domain\Models\ResourceModel;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Tree;
 use Zodream\Helpers\Tree as TreeHelper;
@@ -74,8 +75,16 @@ final class CategoryRepository extends CRUDRepository {
         );
     }
 
-    public static function recommend() {
-        return CategoryModel::where('is_hot', 1)->get();
+    public static function recommend(string $extra = '') {
+        $items = CategoryModel::where('is_hot', 1)->get();
+        $extraTags = explode(',', $extra);
+        if (in_array('items', $extraTags)) {
+            foreach ($items as $item) {
+                $item->items = ResourceModel::where('cat_id', $item->id)
+                    ->limit(5)->get(ResourceRepository::RES_PAGE_FILED);
+            }
+        }
+        return $items;
     }
 
     public static function getAllChildrenId(int $id) {

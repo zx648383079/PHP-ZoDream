@@ -16,7 +16,7 @@ $this->registerCssFile('@demo.css')
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li>
-            <a href="<?=$this->url('./')?>">Demo首页</a>
+            <a href="<?=$this->url('./')?>">资源商店首页</a>
         </li>
         <li class="active">
             <?=$this->text($post->title)?>
