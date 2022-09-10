@@ -5,7 +5,8 @@ namespace Module\AppStore\Domain\Repositories;
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
-use Module\OnlineTV\Domain\Models\CategoryModel;
+use Module\AppStore\Domain\Models\AppModel;
+use Module\AppStore\Domain\Models\CategoryModel;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Tree;
 
@@ -64,5 +65,17 @@ final class CategoryRepository extends CRUDRepository {
             $keywords,
             $id === 0 ? [] : compact('id')
         );
+    }
+
+    public static function recommend(string $extra = '') {
+        $items = CategoryModel::limit(5)->get();
+        $extraTags = explode(',', $extra);
+        if (in_array('items', $extraTags)) {
+            foreach ($items as $item) {
+                $item->items = AppModel::where('cat_id', $item->id)
+                    ->limit(5)->get(AppRepository::SOFTWARE_PAGE_FILED);
+            }
+        }
+        return $items;
     }
 }

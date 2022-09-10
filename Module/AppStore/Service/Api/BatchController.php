@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\AppStore\Service\Api;
 
+use Module\AppStore\Domain\Repositories\CategoryRepository;
 use Zodream\Route\Controller\Concerns\BatchAction;
 
 class BatchController extends Controller {
@@ -16,6 +17,8 @@ class BatchController extends Controller {
     public function indexAction() {
         try {
             return $this->render($this->invokeBatch([
+                'recommend' => sprintf('%s::%s', CategoryRepository::class, 'recommend'),
+                'categories' => sprintf('%s::%s', CategoryRepository::class, 'tree'),
             ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
