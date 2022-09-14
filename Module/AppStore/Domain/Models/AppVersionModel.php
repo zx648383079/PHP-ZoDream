@@ -36,4 +36,8 @@ class AppVersionModel extends Model {
             'created_at' => 'Created At',
         ];
     }
+
+    public function files() {
+        return $this->hasMany(AppFileModel::class, 'version_id', 'id');
+    }
 }

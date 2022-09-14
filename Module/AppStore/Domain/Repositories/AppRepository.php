@@ -125,7 +125,7 @@ final class AppRepository {
     }
 
     public static function versionList(int $software, string $keywords = '') {
-        return AppVersionModel::where('app_id', $software)
+        return AppVersionModel::with('files')->where('app_id', $software)
             ->when(!empty($keywords), function($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['name'], false, '', $keywords);
             })
@@ -191,18 +191,20 @@ final class AppRepository {
 
     public static function getFull(int $id, int $version) {
         $model = AppModel::findOrThrow($id, '应用不存在');
-        $_ = $model->category;
-        $model->version = AppVersionModel::when($version > 0, function ($query) use ($version) {
+        $data = $model->toArray();
+        $data['category'] = $model->category;
+        $data['user'] = $model->user;
+        $data['version'] = AppVersionModel::when($version > 0, function ($query) use ($version) {
             $query->where('id', $version);
         }, function ($query) {
             $query->orderBy('id', 'desc');
         })->where('app_id', $id)->first();
-        if (!$model->version) {
+        if (!$data['version']) {
             throw new Exception('应用为空或没有相关版本');
         }
-        $model->packages = AppFileModel::where('app_id', $id)
-            ->where('version_id', $model->version->id)->get();
-        return $model;
+        $data['packages'] = AppFileModel::where('app_id', $id)
+            ->where('version_id', $data['version']->id)->get();
+        return $data;
     }
 
     public static function download(int $id): string {

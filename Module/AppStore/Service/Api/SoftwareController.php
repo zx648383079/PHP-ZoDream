@@ -32,6 +32,12 @@ class SoftwareController extends Controller {
         }
     }
 
+    public function versionAction(int $software, string $keywords = '') {
+        return $this->renderPage(
+            AppRepository::versionList($software, $keywords)
+        );
+    }
+
     public function checkAction(array $items) {
         try {
             return $this->render(
