@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin\Plugin;
 
-use Module\Shop\Domain\Repositories\Plugin\TbkRepository;
+use Module\Shop\Domain\Plugin\Tbk\TbkRepository;
 use Module\Shop\Service\Api\Admin\Controller;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class TbkController extends Controller {
 
-    public function indexAction(string $keywords = '', $page = 1) {
+    public function indexAction(string $keywords = '', int $page = 1) {
         return $this->renderData(TbkRepository::search($keywords, $page));
     }
 
     public function optionAction() {
-        return $this->render(TbkRepository::option());
+        return $this->renderData(TbkRepository::option());
     }
 
     public function saveOptionAction(Input $input) {
@@ -22,7 +22,7 @@ class TbkController extends Controller {
                 'app_key' => 'required|string',
                 'secret' => 'required|string',
             ]);
-            return $this->render(
+            return $this->renderData(
                 TbkRepository::saveOption($data)
             );
         } catch (\Exception $ex) {
@@ -38,10 +38,14 @@ class TbkController extends Controller {
                 'end_time' => 'required|string',
             ]);
             return $this->renderData(
-                TbkRepository::import($data)
+                TbkRepository::import($data['adzone_id'], $data['start_time'], $data['end_time'])
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
+    }
+
+    public function statisticsAction() {
+        return $this->render(TbkRepository::statistics());
     }
 }

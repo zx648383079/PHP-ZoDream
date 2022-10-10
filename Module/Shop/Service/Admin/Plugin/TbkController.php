@@ -1,12 +1,9 @@
 <?php
 namespace Module\Shop\Service\Admin\Plugin;
 
-use Module\Shop\Domain\Models\GoodsModel;
-use Module\Shop\Domain\Repositories\Plugin\TbkRepository;
+use Module\Shop\Domain\Plugin\Tbk\TbkRepository;
 use Module\Shop\Service\Admin\Controller;
-use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Infrastructure\Contracts\Http\Input;
-use Zodream\ThirdParty\ALi\TaoBaoKe;
 
 class TbkController extends Controller {
 

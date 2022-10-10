@@ -19,15 +19,15 @@ class Manager {
             'payment' => 'Module\Shop\Domain\Plugin\Payment\\',
             'shipping' => 'Module\Shop\Domain\Plugin\Shipping\\'
     ];
-    private static $instances = [];
+    private static array $instances = [];
 
     /**
-     * @param $code
+     * @param string $code
      * @param string $type
      * @return BaseShipping|BaseOAuth|BasePayment|mixed
      * @throws Exception
      */
-    public static function getInstance($code, $type = 'payment') {
+    public static function getInstance(string $code, string $type = 'payment') {
         $type = strtolower($type);
         $code = Str::studly($code);
         if (isset(self::$instances[$type][$code])) {

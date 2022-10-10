@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Shop\Domain\Repositories\Plugin;
+namespace Module\Shop\Domain\Plugin\Tbk;
 
 use Module\SEO\Domain\Model\OptionModel;
 use Module\Shop\Domain\Models\GoodsModel;
@@ -9,7 +9,7 @@ use Zodream\ThirdParty\ALi\TaoBaoKe;
 
 class TbkRepository {
 
-    const CODE = 'taobaoke';
+    const OPTION_CODE = 'taobaoke';
 
     public static function search(string $keywords, int $page = 1) {
         if (empty($keywords)) {
@@ -19,14 +19,19 @@ class TbkRepository {
     }
 
     public static function option() {
-        return OptionModel::findCodeJson(self::CODE, [
+        return OptionModel::findCodeJson(self::OPTION_CODE, [
             'app_key' => '',
             'secret' => ''
         ]);
     }
 
+    public static function isInstalled(): bool {
+        $option = static::option();
+        return !empty($option) && !empty($option['app_key']) && !empty($option['secret']);
+    }
+
     public static function saveOption(array $data) {
-        OptionModel::insertOrUpdate(self::CODE, Json::encode($data), '淘宝客');
+        OptionModel::insertOrUpdate(self::OPTION_CODE, Json::encode($data), '淘宝客');
         return $data;
     }
 
@@ -54,10 +59,22 @@ class TbkRepository {
     }
 
     protected static function getApi() {
-        $data = OptionModel::findCodeJson(self::CODE);
+        $data = OptionModel::findCodeJson(self::OPTION_CODE);
         if (empty($data)) {
             throw new \Exception('请先配置');
         }
         return new TaoBaoKe($data);
+    }
+
+    public static function statistics() {
+        $is_installed = static::isInstalled();
+        $income_today = 0;
+        $income_count = 0;
+        $display_today = 0;
+        $display_count = 0;
+        $click_count = 0;
+        $click_today = 0;
+        return compact('is_installed', 'income_today', 'income_count',
+            'display_count', 'display_today', 'click_count', 'click_today');
     }
 }

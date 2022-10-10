@@ -1,7 +1,8 @@
 <?php
-namespace Module\Shop\Domain\Models;
+namespace Module\Shop\Domain\Plugin\Affiliate;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
  * Class AffiliateLogModel
@@ -18,6 +19,12 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class AffiliateLogModel extends Model {
+
+    const TYPE_USER = 0;
+    const TYPE_ORDER = 1;
+    const STATUS_NONE = 0;
+    const STATUS_CANCEL = 9;
+    const STATUS_ARRIVAL = 5;// 到账
 
     public static function tableName() {
         return 'shop_affiliate_log';
@@ -50,5 +57,9 @@ class AffiliateLogModel extends Model {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 }

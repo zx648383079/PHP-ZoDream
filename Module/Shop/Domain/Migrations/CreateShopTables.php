@@ -17,7 +17,6 @@ use Module\Shop\Domain\Models\Activity\TrialReportModel;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
-use Module\Shop\Domain\Models\AffiliateLogModel;
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
 use Module\Shop\Domain\Models\AttributeGroupModel;
@@ -61,6 +60,7 @@ use Module\Shop\Domain\Models\WarehouseGoodsModel;
 use Module\Shop\Domain\Models\WarehouseLogModel;
 use Module\Shop\Domain\Models\WarehouseModel;
 use Module\Shop\Domain\Models\WarehouseRegionModel;
+use Module\Shop\Domain\Plugin\Affiliate\AffiliateLogModel;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
@@ -176,16 +176,13 @@ class CreateShopTables extends Migration {
             $table->uint('item_type', 1)->default(0)->comment('类型: 0 用户 1 订单');
             $table->uint('item_id')->comment('订单号/被推荐的用户');
             $table->string('order_sn', 30)->default('')->comment('订单号');
-            $table->decimal('order_amount', 8, 2)->default(0)->comment('卡有效期');
-            $table->decimal('money', 8, 2)->default(0)->comment('卡有效期');
+            $table->decimal('order_amount', 8, 2)->default(0)->comment('订单金额');
+            $table->decimal('money', 8, 2)->default(0)->comment('佣金');
             $table->uint('status', 2)->default(0)->comment('审核状态');
             $table->timestamps();
         });
         $this->createAttribute();
-
         $this->createComment();
-
-
         $this->append(NavigationModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('type', 10)->default('middle');
@@ -233,7 +230,8 @@ class CreateShopTables extends Migration {
             $table->decimal('discount', 8, 2)->default(0);
             $table->decimal('shipping_fee', 8, 2)->default(0);
             $table->decimal('pay_fee', 8, 2)->default(0);
-            $table->uint('reference')->default(0)->comment('推荐人');
+            $table->uint('reference_type', 1)->default(0)->comment('来源类型');
+            $table->uint('reference_id')->default(0)->comment('来源相关id');
             $table->timestamp('pay_at')->comment('支付时间');
             $table->timestamp('shipping_at')->comment('发货时间');
             $table->timestamp('receive_at')->comment('签收时间');

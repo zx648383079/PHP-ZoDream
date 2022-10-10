@@ -1,9 +1,8 @@
 <?php
 namespace Module\Shop\Service\Api;
 
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\Shop\Domain\Models\AffiliateLogModel;
+use Module\Shop\Domain\Plugin\Affiliate\AffiliateLogModel;
 
 class AffiliateController extends Controller {
 

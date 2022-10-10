@@ -29,7 +29,8 @@ use Zodream\Helpers\Time;
  * @property float $discount
  * @property float $shipping_fee
  * @property float $pay_fee
- * @property integer $reference
+ * @property integer $reference_type
+ * @property integer $reference_id
  * @property integer $pay_at
  * @property integer $shipping_at
  * @property integer $receive_at
@@ -56,6 +57,9 @@ class OrderModel extends Model {
     const TYPE_NONE = 0; //普通订单
     const TYPE_AUCTION = 1; //拍卖订单
     const TYPE_PRESELL = 2; //预售订单
+
+    const REFERENCE_USER = 1;
+    const REFERENCE_AD = 2;
 
     public static $status_list = [
         self::STATUS_UN_PAY => '待支付',
@@ -87,7 +91,8 @@ class OrderModel extends Model {
             'discount' => '',
             'shipping_fee' => '',
             'pay_fee' => '',
-            'reference' => 'int',
+            'reference_type' => 'int',
+            'reference_id' => 'int',
             'pay_at' => 'int',
             'shipping_at' => 'int',
             'receive_at' => 'int',

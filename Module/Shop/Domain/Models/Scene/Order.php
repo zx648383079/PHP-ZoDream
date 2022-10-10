@@ -19,7 +19,8 @@ use Module\Shop\Domain\Models\OrderModel;
  * @property float $discount
  * @property float $shipping_fee
  * @property float $pay_fee
- * @property integer $reference
+ * @property integer $reference_type
+ * @property integer $reference_id
  * @property integer $pay_at
  * @property integer $shipping_at
  * @property integer $receive_at
