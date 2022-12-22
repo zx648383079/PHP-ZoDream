@@ -12,7 +12,7 @@ class ThreadController extends Controller {
         );
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(array|int $id) {
         try {
             ThreadRepository::manageRemove($id);
         } catch (\Exception $ex) {

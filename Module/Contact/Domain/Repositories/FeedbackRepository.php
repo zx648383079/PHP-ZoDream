@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Contact\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Contact\Domain\Model\FeedbackModel;
 
@@ -26,7 +27,11 @@ class FeedbackRepository {
         return $model;
     }
 
-    public static function remove(int $id) {
-        FeedbackModel::where('id', $id)->delete();
+    public static function remove(array|int $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items)) {
+            return;
+        }
+        FeedbackModel::whereIn('id', $items)->delete();
     }
 }

@@ -12,6 +12,12 @@ class HomeController extends Controller {
         );
     }
 
+    public function logAction(string $keywords = '', string $date = '') {
+        return $this->render(
+            CheckinRepository::logList($keywords, $date)
+        );
+    }
+
     public function optionAction() {
         return $this->render(
             CheckinRepository::option()

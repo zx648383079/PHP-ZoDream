@@ -10,7 +10,7 @@ class ModelHelper {
      * @param string|array $selected 字符串可以json或者以,分割的
      * @return int[]
      */
-    public static function parseArrInt($selected): array {
+    public static function parseArrInt(mixed $selected): array {
         if (!empty($selected) && is_string($selected)) {
             if (!str_contains($selected, '[') && !str_contains($selected, '{')) {
                 $selected = explode(',', $selected);

@@ -5,6 +5,7 @@ namespace Module\Game\CheckIn\Domain\Model;
 use Domain\Model\Model;
 use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\Json;
 
@@ -55,6 +56,10 @@ class CheckInModel extends Model {
             'method' => 'Method',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function scopeMonth($query, $time) {

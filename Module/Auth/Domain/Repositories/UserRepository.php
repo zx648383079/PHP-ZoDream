@@ -14,6 +14,8 @@ use Module\Auth\Domain\Model\Scene\User;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
+use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 
 class UserRepository {
@@ -49,7 +51,30 @@ class UserRepository {
         $user = auth()->user();
         $data = static::format($user);
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
+        $extraWords = explode(',', $extra);
+        foreach ([
+            'bulletin_count',
+            'today_checkin'
+                 ] as $word) {
+            if (!in_array($word, $extraWords)) {
+                continue;
+            }
+            $func = sprintf('%s::get%s',
+                UserRepository::class, Str::studly($word));
+            if (!is_callable($func)) {
+                continue;
+            }
+            $data[$word] = call_user_func($func, $user);
+        }
         return $data;
+    }
+
+    public static function getBulletinCount(UserModel $user) {
+        return $user->bulletin_count;
+    }
+
+    public static function getTodayCheckin(UserModel $user) {
+        return CheckinRepository::todayIsChecked($user->id);
     }
 
     public static function format(UserEntity|UserModel|array $user, bool $hide = true): array {

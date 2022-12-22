@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\FundAccount;
@@ -24,7 +25,7 @@ class ThreadRepository {
             })
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
-            })->page();
+            })->orderBy('updated_at', 'desc')->page();
     }
 
     /**
@@ -60,9 +61,13 @@ class ThreadRepository {
         return $model;
     }
 
-    public static function manageRemove(int $id) {
-        ThreadModel::where('id', $id)->delete();
-        ThreadPostModel::where('thread_id', $id)->delete();
+    public static function manageRemove(array|int $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items)) {
+            return;
+        }
+        ThreadModel::whereIn('id', $items)->delete();
+        ThreadPostModel::whereIn('thread_id', $items)->delete();
     }
 
     public static function getList(int $forum,
@@ -242,17 +247,22 @@ class ThreadRepository {
 
     public static function create(string $title, string $content,
                                  int $forum_id, int $classify_id = 0, int $is_private_post = 0) {
+        $title = trim($title);
         if (empty($title)) {
             throw new Exception('标题不能为空');
         }
         if ($forum_id < 1) {
             throw new Exception('请选择版块');
         }
+        $userId = auth()->id();
+        if (!static::canPublish($userId, $title)) {
+            throw new Exception('你的操作太频繁了，请五分钟后再试');
+        }
         $thread = ThreadModel::create([
-            'title' => $title,
+            'title' => $title ,
             'forum_id' => $forum_id,
             'classify_id' => $classify_id,
-            'user_id' => auth()->id(),
+            'user_id' => $userId,
             'is_private_post' => $is_private_post
         ]);
         if (empty($thread)) {
@@ -260,13 +270,25 @@ class ThreadRepository {
         }
         $model = ThreadPostModel::create([
             'content' => $content,
-            'user_id' => auth()->id(),
+            'user_id' => $userId,
             'thread_id' => $thread->id,
             'grade' => 0,
             'ip' => request()->ip()
         ]);
         ForumRepository::updateCount($thread->forum_id, 'thread_count');
         return $model;
+    }
+
+    public static function canPublish(int $userId, string $title): bool {
+        $count = ThreadModel::where('user_id', $userId)->where('created_at', '>',
+            time() - 300)->count();
+        if ($count > 0) {
+            return false;
+        }
+        $count = ThreadModel::where('user_id', $userId)
+            ->where('title', $title)->where('created_at', '>',
+            time() - 3600)->count();
+        return $count < 1;
     }
 
     public static function update(int $id, array $data) {

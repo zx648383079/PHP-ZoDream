@@ -20,7 +20,7 @@ class FriendLinkController extends Controller {
         }
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(array|int $id) {
         try {
             FriendLinkRepository::remove($id);
         } catch (\Exception $ex) {

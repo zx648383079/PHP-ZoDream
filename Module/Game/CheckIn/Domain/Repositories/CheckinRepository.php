@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\CheckIn\Domain\Repositories;
 
 
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Module\OpenPlatform\Domain\Platform;
 use Module\SEO\Domain\Model\OptionModel;
@@ -18,6 +20,13 @@ class CheckinRepository {
             return null;
         }
         return CheckInModel::today()->where('user_id', auth()->id())->first();
+    }
+
+    public static function todayIsChecked(int $userId): bool {
+        if ($userId < 1) {
+            return false;
+        }
+        return CheckInModel::today()->where('user_id', $userId)->count() > 0;
     }
 
     public static function check($method = CheckInModel::METHOD_WEB) {
@@ -74,5 +83,20 @@ class CheckinRepository {
         OptionModel::insertOrUpdate('checkin', Json::encode(
             compact('basic', 'loop', $plus)
         ), '签到');
+    }
+
+    public static function logList(string $keywords = '', string $date = '') {
+        $time = empty($date) ? time() : strtotime($date);
+        return CheckInModel::time(date('Y-m-d 00:00:00', $time), date('Y-m-d 23:59:59', $time))
+            ->with('user')->when(!empty($keywords), function ($query) use ($keywords) {
+                $userId = UserRepository::searchUserId($keywords);
+                if (empty($userId)) {
+                    $query->isEmpty();
+                    return;
+                }
+                $query->whereIn('user_id', $userId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->page();
     }
 }

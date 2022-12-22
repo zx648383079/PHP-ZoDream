@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Contact\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Contact\Domain\Model\FriendLinkModel;
 use Module\Contact\Domain\Weights\FriendLink;
@@ -40,8 +41,12 @@ class FriendLinkRepository {
         return $model;
     }
 
-    public static function remove(int $id) {
-        FriendLinkModel::where('id', $id)->delete();
+    public static function remove(array|int $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items)) {
+            return;
+        }
+        FriendLinkModel::whereIn('id', $items)->delete();
         cache()->delete(FriendLink::KEY);
     }
 }

@@ -25,7 +25,7 @@ class FeedbackController extends Controller {
         }
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(array|int $id) {
         try {
             FeedbackRepository::remove($id);
         } catch (\Exception $ex) {
