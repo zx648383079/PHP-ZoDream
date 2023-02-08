@@ -5,6 +5,7 @@ use Module\Disk\Domain\Adapters\BaseDiskAdapter;
 use Module\Disk\Domain\Adapters\Database;
 use Module\Disk\Domain\Adapters\IDiskAdapter;
 use Module\Disk\Domain\FFmpeg;
+use Module\Disk\Domain\Model\FileModel;
 use Zodream\Http\Uri;
 
 class DiskRepository {
@@ -28,6 +29,14 @@ class DiskRepository {
         }
         $driver = $configs['driver'];
         return static::$driver = new $driver($configs);
+    }
+
+    /**
+     * 是否启用分布式存储
+     * @return bool
+     */
+    public static function useDistributed(): bool {
+        return true;
     }
 
     /**
@@ -93,4 +102,20 @@ class DiskRepository {
         return $items;
     }
 
+    public static function typeToExtension(string|int $type): array {
+        if (empty($type) && !is_numeric($type)) {
+            return [];
+        }
+        $maps = [
+            'image' => FileModel::TYPE_IMAGE,
+            'app' => FileModel::TYPE_APP,
+            'bt' => FileModel::TYPE_BT,
+            'movie' => FileModel::TYPE_VIDEO,
+            'music' => FileModel::TYPE_MUSIC,
+            'doc' => FileModel::TYPE_DOCUMENT,
+            'archive' => FileModel::TYPE_ZIP,
+        ];
+        $index = is_numeric($type) ? intval($type) : ($maps[$type] ?? FileModel::TYPE_UNKNOWN);
+        return FileModel::$extensionMaps[$index];
+    }
 }

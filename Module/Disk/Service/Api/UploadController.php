@@ -4,25 +4,23 @@ namespace Module\Disk\Service\Api;
 
 use Exception;
 use Module\Disk\Domain\Repositories\DiskRepository;
-use Zodream\Domain\Upload\UploadInput;
 use Zodream\Service\Http\Request;
 
 class UploadController extends Controller {
     
-    public function indexAction(Request $request) {
-        $md5 = $request->server('HTTP_X_FILENAME');
+    public function indexAction(Request $request, string $name, string $md5, string $parent_id = '') {
         try {
             return $this->render(DiskRepository::driver()
-                ->upload(new UploadInput(), $md5));
+                ->uploadFile($request->file('file'), $md5, $name, $parent_id));
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
 
-    public function chunkAction(Request $request, string $md5) {
+    public function chunkAction(Request $request, string $name) {
         try {
             return $this->render(DiskRepository::driver()
-                ->uploadChunk($request->file('file'), $md5));
+                ->uploadChunk($request->file('file'), $name));
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -37,10 +35,10 @@ class UploadController extends Controller {
         }
     }
 
-    public function finishAction(string $md5, string $name, string $parent_id = '') {
+    public function finishAction(string $md5, string $name, array $files, string $parent_id = '') {
         try {
             return $this->render(DiskRepository::driver()
-                ->uploadFinish($md5, $name, $parent_id));
+                ->uploadFinish($md5, $name, $files, $parent_id));
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -28,9 +28,9 @@ class FileModel extends Model {
     const TYPE_MUSIC = 5;
     const TYPE_ZIP = 6;
     const TYPE_APP = 7;
-    const TYPE_UNKNOW = 0;
+    const TYPE_UNKNOWN = 0;
 
-    public static $extensionMaps = [
+    public static array $extensionMaps = [
         self::TYPE_IMAGE => [
             'png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'
         ],
@@ -122,7 +122,7 @@ class FileModel extends Model {
                 return $key;
             }
         }
-        return self::TYPE_UNKNOW;
+        return self::TYPE_UNKNOWN;
     }
 
     public function getTypeAttribute() {

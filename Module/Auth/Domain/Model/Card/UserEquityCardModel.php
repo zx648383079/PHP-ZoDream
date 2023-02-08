@@ -1,21 +1,22 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Model\Card;
 
 
 use Domain\Model\Model;
 
 /**
  *
- * 有期限的权益卡
+ * 用户的权益卡
  * @property integer $id
  * @property integer $user_id
- * @property string $name
  * @property integer $status
  * @property integer $expired_at
  * @property integer $updated_at
  * @property integer $created_at
+ * @property integer $card_id
+ * @property integer $exp
  */
-class EquityCardModel extends Model {
+class UserEquityCardModel extends Model {
 
     public static function tableName() {
         return 'user_equity_card';
@@ -24,11 +25,12 @@ class EquityCardModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'int',
-            'name' => 'required|string:0,32',
             'status' => 'int:0,127',
             'expired_at' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
+            'card_id' => 'required|int',
+            'exp' => 'required|int',
         ];
     }
 
@@ -36,12 +38,12 @@ class EquityCardModel extends Model {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',
-            'name' => 'Name',
             'status' => 'Status',
             'expired_at' => 'Expired At',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
+            'card_id' => 'Card Id',
+            'exp' => 'Exp',
         ];
     }
-
 }

@@ -9,17 +9,48 @@ interface IDiskAdapter {
 
     public function catalog($id, $path): Page;
 
+    public function search(string $keywords, string $type): Page;
+
     public function remove($id);
 
     public function create(string $name, $parentId = '');
 
-    public function upload(BaseUpload $file, string $md5);
+    /**
+     * 上传单个文件
+     * @param array $fileData
+     * @param string $md5
+     * @param string $name
+     * @param string|int $parentId
+     * @return mixed
+     */
+    public function uploadFile(array $fileData, string $md5, string $name, string|int $parentId = '');
 
-    public function uploadChunk(array $fileData, string $md5);
+    /**
+     * 上传分块
+     * @param array $fileData
+     * @param string $cacheName
+     * @return mixed
+     */
+    public function uploadChunk(array $fileData, string $cacheName);
 
-    public function uploadFinish(string $md5, string $name, $parentId = '');
+    /**
+     * 合并分块
+     * @param string $md5
+     * @param string $name
+     * @param array $chunkNames
+     * @param string|int $parentId
+     * @return mixed
+     */
+    public function uploadFinish(string $md5, string $name, array $chunkNames, string|int $parentId = '');
 
-    public function uploadCheck(string $md5, string $name, $parentId = ''): array;
+    /**
+     * 验证MD5
+     * @param string $md5
+     * @param string $name
+     * @param string|int $parentId
+     * @return array
+     */
+    public function uploadCheck(string $md5, string $name, string|int $parentId = ''): array;
 
     public function rename($id, string $name);
 

@@ -14,6 +14,7 @@ use Zodream\Database\Model\Query;
  * @property integer $user_id
  * @property integer $file_id 默认为文件名
  * @property string $name 文件名
+ * @property string $extension
  * @property integer $left_id 左值
  * @property integer $right_id 右值
  * @property integer $parent_id 上级
@@ -33,6 +34,7 @@ class DiskModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,100',
+            'extension' => 'required|string:0,20',
             'file_id' => 'int',
             'user_id' => 'int',
             'left_id' => 'int',

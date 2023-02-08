@@ -4,9 +4,11 @@ namespace Module\Disk\Domain\Adapters;
 
 use Exception;
 use Module\Disk\Domain\Model\FileModel;
+use Module\Disk\Domain\Repositories\DiskRepository;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\FileObject;
+use Zodream\Disk\FileSystem;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Helpers\Time;
 use Zodream\Html\Page;
@@ -17,6 +19,27 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         $root = $this->root();
         $folder = empty($id) ? $root : $root->directory($id);
         $items = $folder->children();
+        $page = new Page($items);
+        $items = [];
+        foreach ($page as $item) {
+            $items[] = $this->formatPageFile($root, $item);
+        }
+        return $page->setPage($items);
+    }
+
+    public function search(string $keywords, string $type): Page {
+        $root = $this->root();
+        $filter = '*';
+        $filterFlag = 0;
+        if (!empty($keywords)) {
+            $filter = sprintf('*%s*', $keywords);
+        }
+        $extItems = DiskRepository::typeToExtension($type);
+        if (!empty($extItems)) {
+            $filter = sprintf('%s.{%s}', $filter, implode(',', $extItems));
+            $filterFlag = GLOB_BRACE;
+        }
+        $items = $root->glob($filter, $filterFlag);
         $page = new Page($items);
         $items = [];
         foreach ($page as $item) {
@@ -84,37 +107,35 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         return $this->formatPageFile($root, $item);
     }
 
-    public function upload(BaseUpload $file, string $md5) {
+    public function uploadFile(array $fileData, string $md5, string $name, string|int  $parentId = '') {
         set_time_limit(0);
-        $result = $file->setName($md5)
-            ->setFile($this->cacheFolder()->file($md5))
-            ->save();
-        if (!$result) {
-            throw new Exception($file->getError().'');
+        $root = $this->root();
+        $file = $this->makeFile($name, $parentId);
+        if (!move_uploaded_file($fileData['tmp_name'], $file->getFullName()) ||
+            !$file->exist()) {
+            throw new Exception('error move file');
         }
-        return [
-            'name' => $file->getName(),
-            'size' => $file->getSize(),
-            'type' => $file->getType()
-        ];
+        if ($file->md5() !== $md5) {
+            throw new Exception('uploaded chunk is not complete');
+        }
+        return $this->formatPageFile($root, $file);
     }
 
-    public function uploadChunk(array $fileData, string $md5) {
+    public function uploadChunk(array $fileData, string $cacheName) {
         set_time_limit(0);
-        $file = $this->cacheFolder()->file($md5);
-        $file->append(file_get_contents($fileData['tmp_name']));
+        $file = $this->cacheFolder()->file($cacheName);
+        if (!move_uploaded_file($fileData['tmp_name'], $file->getFullName()) ||
+            !$file->exist()) {
+            throw new Exception('error move file');
+        }
         return [
-            'name' => $md5,
+            'name' => $cacheName,
             'size' => $file->size(),
             'type' => ''
         ];
     }
 
-    public function uploadFinish(string $md5, string $name, $parentId = '') {
-        $file = $this->cacheFolder()->file($md5);
-        if (!$file->exist() || $file->md5() !== $md5) {
-            throw new Exception('uploaded file error');
-        }
+    private function makeFile(string $name, string|int $parentId = ''): File {
         $root = $this->root();
         $folder = empty($parentId) ? $root : $root->directory($parentId);
         $distFile = $folder->file($name);
@@ -132,13 +153,29 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
             }
             $distFile = $folder->file($tempName);
         }
-        $file->move($distFile);
+        return $distFile;
+    }
+
+    public function uploadFinish(string $md5, string $name, array $chunkNames, string|int $parentId = '') {
+        $root = $this->root();
+        $distFile = $this->makeFile($name, $parentId);
+        foreach ($chunkNames as $key => $cacheName) {
+            $cacheFile = $this->cacheFolder()->file($cacheName);
+            if (!$cacheFile->exist()) {
+                throw new Exception('not found chunk');
+            }
+            $distFile->write($cacheFile->read(), $key > 0 ? FILE_APPEND : false);
+            $cacheFile->delete();
+        }
+        if ($distFile->md5() !== $md5) {
+            throw new Exception('uploaded chunk is not complete');
+        }
         return $this->formatPageFile($root, $distFile);
     }
 
 
 
-    public function uploadCheck(string $md5, string $name, $parentId = ''): array {
+    public function uploadCheck(string $md5, string $name, string|int $parentId = ''): array {
         return [
             'code' => 2,
             'message' => 'MD5 Error'

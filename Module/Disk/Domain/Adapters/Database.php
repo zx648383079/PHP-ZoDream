@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Disk\Domain\Model\DiskModel;
 use Module\Disk\Domain\Model\FileModel;
+use Module\Disk\Domain\Repositories\DiskRepository;
 use Zodream\Disk\FileSystem;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Html\Page;
@@ -14,6 +16,18 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
     public function catalog($id, $path): Page {
         return DiskModel::with('file')
             ->auth()->where('parent_id', $id)
+            ->where('deleted_at', 0)
+            ->page();
+    }
+
+    public function search(string $keywords, string $type): Page {
+        $extItems = DiskRepository::typeToExtension($type);
+        return DiskModel::with('file')
+            ->auth()->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, 'name', false, '', $keywords);
+            })->when(!empty($extItems), function ($query) use ($extItems) {
+                $query->whereIn('extension', $extItems);
+            })
             ->where('deleted_at', 0)
             ->page();
     }
@@ -46,50 +60,51 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         return $model;
     }
 
-    public function upload(BaseUpload $file, string $md5) {
+    public function uploadFile(array $fileData, string $md5, string $name, string|int $parentId = '') {
         set_time_limit(0);
-        $name = cache(sprintf('file_%s_%s', $md5, auth()->id()));
-        if (empty($name)) {
-            $name = $md5;
-        }
-        $result = $file->setName($name)
-            ->setFile($this->cacheFolder()->file($md5))
-            ->save();
-        if (!$result) {
-            throw new Exception($file->getError().'');
-        }
-        return [
-            'name' => $file->getName(),
-            'size' => $file->getSize(),
-            'type' => $file->getType()
-        ];
-    }
-
-    public function uploadChunk(array $fileData, string $md5) {
-        set_time_limit(0);
-        $file = $this->cacheFolder()->file($md5);
-        $file->append(file_get_contents($fileData['tmp_name']));
-        $name = cache(sprintf('file_%s_%s', $md5, auth()->id()));
-        if (empty($name)) {
-            $name = $md5;
-        }
-        return [
-            'name' => $name,
-            'size' => $file->size(),
-            'type' => FileSystem::getExtension($name)
-        ];
-    }
-
-    public function uploadFinish(string $md5, string $name, $parentId = '') {
-        $file = $this->cacheFolder()->file($md5);
-        if (!$file->exist() || $file->md5() !== $md5) {
-            throw new Exception('uploaded file error');
-        }
-        $size = $file->size();
         $location = md5($name.time()).FileSystem::getExtension($name, true);
-        if (!$file->move($this->root()->file($location))) {
-            throw new Exception('MOVE FILE ERROR!');
+        $file = $this->root()->file($location);
+        if (!move_uploaded_file($fileData['tmp_name'], $file->getFullName()) ||
+            !$file->exist()) {
+            throw new Exception('error move file');
         }
+        if ($file->md5() !== $md5) {
+            throw new Exception('uploaded chunk is not complete');
+        }
+        return $this->saveUpload($name, $md5, $location, $file->size(), $parentId);
+    }
+
+    public function uploadChunk(array $fileData, string $cacheName) {
+        set_time_limit(0);
+        $file = $this->cacheFolder()->file($cacheName);
+        if (!move_uploaded_file($fileData['tmp_name'], $file->getFullName()) ||
+            !$file->exist()) {
+            throw new Exception('error move file');
+        }
+        return [
+            'name' => $cacheName,
+            'size' => $file->size(),
+        ];
+    }
+
+    public function uploadFinish(string $md5, string $name, array $chunkNames, string|int $parentId = '') {
+        $location = md5($name.time()).FileSystem::getExtension($name, true);
+        $file = $this->root()->file($location);
+        foreach ($chunkNames as $i => $cacheName) {
+            $cacheFile = $this->cacheFolder()->file($cacheName);
+            if (!$cacheFile->exist()) {
+                throw new Exception('not found chunk');
+            }
+            $file->write($cacheFile->read(), $i > 0 ? FILE_APPEND : false);
+            $cacheFile->delete();
+        }
+        if ($file->md5() !== $md5) {
+            throw new Exception('uploaded chunk is not complete');
+        }
+        return $this->saveUpload($name, $md5, $location, $file->size(), $parentId);
+    }
+
+    private function saveUpload(string $name, string $md5, string $location, int $size, string|int $parentId) {
         $fileModel = FileModel::createOrThrow([
             'name' => $name,
             'extension' => FileSystem::getExtension($name),
@@ -101,6 +116,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         $model->user_id = auth()->id();
         $model->file_id = $fileModel->id;
         $model->name = $fileModel->name;
+        $model->extension = $fileModel->extension;
         $model->parent_id = $parentId;
         if (!$model->addAsLast()) {
             throw new Exception($model->getFirstError());
@@ -109,23 +125,23 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         return $model->toArray();
     }
 
-    public function uploadCheck(string $md5, string $name, $parentId = ''): array {
+    public function uploadCheck(string $md5, string $name, string|int $parentId = ''): array {
         if (empty($md5) || empty($name)) {
             throw new \Exception('不能为空！');
         }
         $model = FileModel::where('md5', $md5)->first();
         if (empty($model)) {
-            // 保存文件名等待上传获取
-            cache()->set(sprintf('file_%s_%s', $md5, auth()->id()), $name, 86400);
             return [
                 'code' => 2,
-                'message' => 'MD5 Error'
+                'message' => 'MD5 Error',
+                // 'upload_url' => ''
             ];
         }
         $disk = new DiskModel();
         $disk->user_id = auth()->id();
         $disk->file_id = $model->id;
-        $disk->name = $model->name;
+        $disk->name = $name;
+        $disk->extension = FileSystem::getExtension($name);
         $disk->parent_id = intval($parentId);
         if (!$disk->addAsLast()) {
             throw new \Exception($model->getFirstError());

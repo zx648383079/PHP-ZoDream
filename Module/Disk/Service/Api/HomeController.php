@@ -12,6 +12,10 @@ class HomeController extends Controller {
         return $this->renderPage(DiskRepository::driver()->catalog($id, $path));
     }
 
+    public function searchAction(string $keywords = '', string $type = '') {
+        return $this->renderPage(DiskRepository::driver()->search($keywords, $type));
+    }
+
     public function createAction(string $name, string $parent_id = '') {
         try {
             return $this->renderData(DiskRepository::driver()
