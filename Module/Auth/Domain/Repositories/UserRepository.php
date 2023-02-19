@@ -40,7 +40,9 @@ class UserRepository {
 
     public static function getPublicProfile(int $id): array {
         $user = UserModel::findOrThrow($id, 'User error');
-        return static::format($user, true);
+        $data = static::format($user, true);
+        $data['card_items'] = CardRepository::getUserCard($id);
+        return $data;
     }
 
     public static function getCurrentProfile(string $extra = ''): ?array {

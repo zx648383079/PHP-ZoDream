@@ -43,5 +43,4 @@ class EquityCardModel extends Model {
             'created_at' => 'Created At',
         ];
     }
-
 }

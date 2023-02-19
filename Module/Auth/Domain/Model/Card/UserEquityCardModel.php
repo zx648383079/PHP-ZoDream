@@ -24,13 +24,13 @@ class UserEquityCardModel extends Model {
 
     protected function rules() {
         return [
-            'user_id' => 'int',
+            'user_id' => 'required|int',
             'status' => 'int:0,127',
             'expired_at' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
             'card_id' => 'required|int',
-            'exp' => 'required|int',
+            'exp' => 'int',
         ];
     }
 
@@ -45,5 +45,9 @@ class UserEquityCardModel extends Model {
             'card_id' => 'Card Id',
             'exp' => 'Exp',
         ];
+    }
+
+    public function card() {
+        return $this->hasOne(EquityCardModel::class, 'id', 'card_id');
     }
 }

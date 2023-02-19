@@ -30,5 +30,26 @@ class CardController extends Controller {
         return $this->renderData(true);
     }
 
+    public function userAction(int $user) {
+        return $this->renderPage(CardRepository::userCardList($user));
+    }
+
+    public function userUpdateAction(Input $request) {
+        try {
+            CardRepository::userUpdate($request->validate([
+                'card_id' => 'required|int',
+                'user_id' => 'required|int',
+                'expired_at' => 'required|string',
+            ]));
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function searchAction(string $keywords = '',
+                                 int|array $id = 0) {
+        return $this->renderPage(CardRepository::search($keywords, $id));
+    }
 
 }

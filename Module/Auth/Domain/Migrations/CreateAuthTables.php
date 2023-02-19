@@ -92,9 +92,9 @@ class CreateAuthTables extends Migration {
         })->append(UserEquityCardModel::tableName(), function(Table $table) {
             $table->comment('用户的权益卡');
             $table->id();
-            $table->uint('user_id')->default(0);
+            $table->uint('user_id');
             $table->uint('card_id');
-            $table->uint('exp');
+            $table->uint('exp')->default(0);
             $table->uint('status', 2)->default(0);
             $table->timestamp('expired_at');
             $table->timestamps();
