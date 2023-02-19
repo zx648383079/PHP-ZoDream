@@ -22,10 +22,10 @@ $module_list = [
         'tool',
         __('Tool')
     ],
-    [
-        'code',
-        __('Code Block')
-    ],
+//    [
+//        'code',
+//        __('Code Block')
+//    ],
 //    [
 //        'exam',
 //        __('Exam')

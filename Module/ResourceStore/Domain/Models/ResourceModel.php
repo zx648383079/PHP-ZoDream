@@ -41,7 +41,7 @@ class ResourceModel extends Model {
             'thumb' => 'string:0,255',
             'content' => 'required',
             'size' => 'int',
-            'score' => 'float',
+            'score' => 'numeric',
             'user_id' => 'required|int',
             'preview_type' => 'int:0,127',
             'cat_id' => 'required|int',
